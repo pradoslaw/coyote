@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		{% block head %}
+		<title>{% block title %}:: 4programmers.net{% endblock %}</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet" href="/css/main.css">
+		{% endblock %}
+	</head>
+	<body>
+		{% block body %}
+		<div id="container-fluid">
+			{% block container %}
+
+			{% endblock %}
+		</div>
+
+		{% endblock %}
+	</body>
+</html>

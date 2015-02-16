@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: Coyote
+        psr4_prefix: Coyote
+        src_path: app
