@@ -1,1 +1,7 @@
-@import "bootstrap";
+@import "vendors/_bootstrap";
+@import "vendors/font-awesome";
+
+@import "helpers/variables";
+@import "base/reset";
+@import "layout/header";
+@import "layout/footer";

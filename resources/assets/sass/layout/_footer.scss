@@ -1,0 +1,155 @@
+@charset "UTF-8";
+
+footer {
+  background-color: #3e3e3e;
+}
+
+#footer-top {
+  padding: 10px 0;
+
+  ul.breadcrumb {
+    font-size: $font-size-small;
+    margin: 0;
+    background: url('/img/home-white.png') no-repeat 0 3px;
+    padding: 2px 0 2px 22px;
+    li {
+      display: inline;
+      color: #f2f2f2;
+      a {
+        color: #969696;
+      }
+      &:last-child a {
+        color: #f2f2f2;
+      }
+    }
+
+    li + li:before {
+      content: "»";
+      color: #f2f2f2;
+      padding: 0 2px;
+      font-size: $font-size-base;
+    }
+  }
+}
+
+#facebook-button {
+  position: absolute;
+  display: block;
+  width: 39px;
+  height: 53px;
+  background: url('/img/facebook-image.png') no-repeat;
+  top: -10px;
+  right: 45px;
+}
+
+#feed-button {
+  position: absolute;
+  display: block;
+  width: 39px;
+  height: 53px;
+  top: -10px;
+  background: url('/img/feed-image.png') no-repeat;
+  right: 0;
+}
+
+#footer-inner {
+  background-color: #454545;
+  overflow: hidden;
+  padding: 17px 0 21px;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding-left: 3px;
+
+    li {
+      padding: 4px 0 4px 0;
+    }
+  }
+
+  h6 {
+    color: #f2f2f2;
+    text-transform: uppercase;
+  }
+
+  a {
+    font-size: $font-size-small;
+    color: #969696;
+  }
+
+  h6 a {
+    color: #f2f2f2;
+  }
+
+  .col-md-2 {
+    border-left: 1px solid #575757;
+
+    &:first-child {
+      border-left: none;
+    }
+  }
+
+  .footer-bubble {
+    background-color: #717171;
+    border-radius: 20px;
+    padding: 10px 20px;
+    position: relative;
+    max-width: 280px;
+
+    &:after {
+      position: absolute;
+      display: block;
+      content: '';
+      background: url('/img/bubble-footer-bottom.png') no-repeat;
+      width: 44px;
+      height: 35px;
+    }
+
+    ol {
+      margin: 11px 0;
+      list-style-type: none;
+      padding: 0;
+
+      li {
+        padding: 6px 0;
+        a {
+          color: #CACACA;
+        }
+      }
+    }
+
+    // gdy rozdzielczosc jest mniejsza - chowamy chmurke
+    @media screen and (max-width: $screen-md) {
+      background: none;
+      padding: 0;
+
+      &:after {
+        display: none;
+      }
+
+      ol {
+        margin: 0;
+      }
+
+    }
+  }
+}
+
+#footer-copyright {
+  font-size: 11px;
+  color: #7f7f7f;
+  padding: 10px 0;
+
+  a {
+    color: #7f7f7f;
+  }
+
+  .logo {
+    background: url('/img/logo-small.png') no-repeat 10px 0;
+    width: 110px;
+    height: 14px;
+    text-indent: -9999px;
+    white-space: nowrap;
+    display: inline-block;
+  }
+}

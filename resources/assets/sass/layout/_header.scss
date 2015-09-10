@@ -1,0 +1,106 @@
+header {
+  border-bottom: 1px solid #ddd;
+  background: url('/img/background.png') repeat-x;
+
+  #navbar-border-top {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQIW2Ps3MD5n0+AlQEEPn34zcA4/QDffxADBEASmALIWkCqAPDNEnJoA/jxAAAAAElFTkSuQmCC');
+    border-bottom: 1px solid #888;
+    height: 5px;
+  }
+
+  a {
+    color: #3C3C3C;
+
+    &:hover {
+      color: #80A41A;
+    }
+  }
+
+  // dzieki temu menu jest bardziej wyposrodkowane w pionie
+  .navbar-brand {
+    padding-top: 10px;
+  }
+
+  //.alerts a, .messages a, .user a {
+  //  padding-left: 10px;
+  //  padding-right: 10px;
+  //}
+
+  .alerts {
+    a {
+      position: relative;
+
+      .badge {
+        position: absolute;
+        font-size: 10px;
+        top: 5px;
+        right: 0;
+        background-color: #FF4A00;
+      }
+    }
+  }
+}
+
+#logo {
+  @media screen and (max-width: $screen-md) {
+    display: none;
+  }
+}
+
+#logo-mobile {
+  display: none;
+
+  @media screen and (max-width: $screen-md) {
+    display: block;
+  }
+}
+
+#navbar-header-search {
+
+  background: url('/img/main-menu-separator.png') no-repeat 100% 100%;
+
+  > div {
+    background: #fff;
+    border-radius: 13px;
+    height: 30px;
+    /* dla Opera, FF */
+    box-shadow: 0 0 5px #DFDFDF inset;
+    border: 1px solid #ccc;
+    padding: 3px;
+    position: relative;
+
+    input {
+      border: none;
+      font-family: Arial, sans-serif;
+      width: 120px;
+      margin-left: 5px;
+      margin-right: 25px;
+      margin-top: 3px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+      padding-left: 5px;
+      font-size: $font-size-small;
+
+      &:focus {
+        outline: none;
+      }
+
+      &[type=submit] {
+        background: url('/img/main-menu-search-button.png') no-repeat;
+        width: 31px;
+        height: 22px;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        position: absolute;
+        right: 3px;
+        top: 3px;
+        box-shadow: none;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1100px) {
+    display: none;
+  }
+}
