@@ -8,8 +8,6 @@ footer {
   padding: 10px 0;
 
   ul.breadcrumb {
-    font-size: $font-size-small;
-    margin: 0;
     background: url('/img/home-white.png') no-repeat 0 3px;
     padding: 2px 0 2px 22px;
     li {
@@ -24,10 +22,7 @@ footer {
     }
 
     li + li:before {
-      content: "»";
       color: #f2f2f2;
-      padding: 0 2px;
-      font-size: $font-size-base;
     }
   }
 }

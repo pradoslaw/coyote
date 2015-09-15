@@ -1,7 +1,12 @@
+@charset "UTF-8";
+
+@import url("//fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext");
 @import "vendors/_bootstrap";
 @import "vendors/font-awesome";
 
 @import "helpers/variables";
 @import "base/reset";
+@import "components/breadcrumb";
+@import "components/buttons";
 @import "layout/header";
 @import "layout/footer";

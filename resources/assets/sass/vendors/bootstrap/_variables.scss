@@ -16,7 +16,8 @@ $gray-light:             lighten($gray-base, 46.7%) !default; // #777
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
 //$brand-primary:         darken(#428bca, 6.5%) !default; // #337ab7
-$brand-primary:         #648017 !default; // #648017 <-- zmiana
+//$brand-primary:         #648017 !default; // #648017 <-- zmiana
+$brand-primary:         #80a41a !default; // #648017 <-- zmiana
 $brand-success:         #5cb85c !default;
 $brand-info:            #5bc0de !default;
 $brand-warning:         #f0ad4e !default;
@@ -54,8 +55,10 @@ $font-size-base:          14px !default;
 $font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
 $font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
 
-$font-size-h1:            floor(($font-size-base * 2.6)) !default; // ~36px
-$font-size-h2:            floor(($font-size-base * 2.15)) !default; // ~30px
+//$font-size-h1:            floor(($font-size-base * 2.6)) !default; // ~36px
+$font-size-h1:            floor(($font-size-base * 1.7)) !default; // ~24px (zmiana)
+//$font-size-h2:            floor(($font-size-base * 2.15)) !default; // ~30px
+$font-size-h2:            floor(($font-size-base * 1.5)) !default; // ~21px (zmiana)
 $font-size-h3:            ceil(($font-size-base * 1.7)) !default; // ~24px
 $font-size-h4:            ceil(($font-size-base * 1.25)) !default; // ~18px
 $font-size-h5:            $font-size-base !default;
@@ -67,10 +70,12 @@ $line-height-base:        1.428571429 !default; // 20/14
 $line-height-computed:    floor(($font-size-base * $line-height-base)) !default; // ~20px
 
 //** By default, this inherits from the `<body>`.
-$headings-font-family:    inherit !default;
-$headings-font-weight:    500 !default;
+$headings-font-family:    'Open Sans', Arial, sans-serif !default;
+//$headings-font-weight:    500 !default;
+$headings-font-weight:    normal !default; // <!-- zmiana
 $headings-line-height:    1.1 !default;
-$headings-color:          inherit !default;
+//$headings-color:          inherit !default;
+$headings-color:          #80a41a !default; // <!-- zmiana
 
 
 //== Iconography
@@ -206,7 +211,8 @@ $input-border-radius-large:      $border-radius-large !default;
 $input-border-radius-small:      $border-radius-small !default;
 
 //** Border color for inputs on focus
-$input-border-focus:             #66afe9 !default;
+//$input-border-focus:             #66afe9 !default;
+$input-border-focus:             #FDCDA7 !default; // <!-- zmiana
 
 //** Placeholder text color
 $input-color-placeholder:        #999 !default;

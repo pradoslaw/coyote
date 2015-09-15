@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+ul.breadcrumb {
+  font-size: $font-size-small;
+  margin: 0;
+  background: none;
+  padding: 10px 0;
+
+  li {
+    a {
+      color: #626262;
+    }
+  }
+
+  li + li:before {
+    content: "»";
+    padding: 0 2px;
+    font-size: $font-size-base;
+    color: lighten($brand-primary, 5);
+  }
+}

@@ -1,0 +1,35 @@
+@charset "UTF-8";
+@import "../helpers/variables";
+
+#box-login {
+  border-right: 1px solid $border-color;
+
+  > form {
+    margin-top: 30px;
+  }
+}
+
+#box-login-sidebar {
+
+  > div {
+    padding: 40px;
+  }
+
+  blockquote {
+    font-style: italic;
+    padding: 0 0 0 30px;
+    position: relative;
+    border-left: none;
+    font-size: 17px;
+    margin: 12% 0;
+
+    &:after {
+      position: absolute;
+      content: "\f10e";
+      color: $border-color;
+      font-family: FontAwesome;
+      top: 0;
+      left: 0;
+    }
+  }
+}

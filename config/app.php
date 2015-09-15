@@ -135,9 +135,11 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
+		'Illuminate\Broadcasting\BroadcastServiceProvider',
 
 		'Barryvdh\Debugbar\ServiceProvider',
 		'TwigBridge\ServiceProvider',
+		'Collective\Html\HtmlServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -198,6 +200,9 @@ return [
 
 		'Debugbar'  => 'Barryvdh\Debugbar\Facade',
 		'Twig' 		=> 'TwigBridge\Facade\Twig',
+
+		'Form' 		=> 'Collective\Html\FormFacade',
+		'Html' 		=> 'Collective\Html\HtmlFacade',
 
 
 	],

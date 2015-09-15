@@ -2,11 +2,11 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		{% block head %}
 		<title>{% block title %}:: 4programmers.net{% endblock %}</title>
-
-		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link rel="stylesheet" href="/css/main.css">
 		{% endblock %}
@@ -80,10 +80,28 @@
 				</div>
 			</header>
 
-			<div class="container">
-				{% block container %}
+			<div class="row max-width">
+				<div class="col-xs-12">
+					<ul class="breadcrumb">
+						<li>
+							<a href="http://4programmers.net/">4programmers.net</a>
+						</li>
+						<li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+							<a itemprop="url" href="http://forum.4programmers.net"><span itemprop="title">Forum</span></a>
+						</li>
+						<li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+							<a itemprop="url" href="http://forum.4programmers.net/Kariera"><strong itemprop="title">Kariera</strong></a>
+						</li>
+					</ul>
+				</div>
+			</div>
 
-				{% endblock %}
+			<div class="row max-width">
+				<div class="col-xs-12">
+					{% block container %}
+
+					{% endblock %}
+				</div>
 			</div>
 
 			<footer>
