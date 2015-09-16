@@ -12,11 +12,9 @@
 */
 
 Route::get('/', 'HomeController@index');
-Route::controller('login', 'LoginController');
-Route::controller('register', 'RegisterController');
-Route::controller('password', 'PasswordController');
 
-//Route::controllers([
-//	'auth' => 'Auth\AuthController',
-//	'password' => 'Auth\PasswordController',
-//]);
+Route::controllers([
+	'login' => 'Auth\LoginController',
+	'password' => 'Auth\PasswordController',
+	'register' => 'Auth\RegisterController'
+]);

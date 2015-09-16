@@ -1,4 +1,7 @@
-<?php namespace Coyote\Http\Controllers;
+<?php
+
+namespace Coyote\Http\Controllers\Auth;
+use Coyote\Http\Controllers\Controller;
 
 class LoginController extends Controller {
 
@@ -7,7 +10,7 @@ class LoginController extends Controller {
      */
     public function getIndex()
     {
-        return view('login');
+        return view('auth/login');
     }
 
     public function postIndex()

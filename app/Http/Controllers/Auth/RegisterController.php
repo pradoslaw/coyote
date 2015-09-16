@@ -1,4 +1,7 @@
-<?php namespace Coyote\Http\Controllers;
+<?php
+
+namespace Coyote\Http\Controllers\Auth;
+use Coyote\Http\Controllers\Controller;
 
 class RegisterController extends Controller {
 
@@ -7,7 +10,7 @@ class RegisterController extends Controller {
      */
     public function getIndex()
     {
-        return view('register');
+        return view('auth/register');
     }
 
     public function postIndex()
