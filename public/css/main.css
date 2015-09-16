@@ -6866,7 +6866,7 @@ ul.breadcrumb {
     color: #626262; }
   ul.breadcrumb li + li:before {
     content: "»";
-    padding: 0 2px;
+    padding: 0;
     font-size: 14px;
     color: #91ba1d; }
 
@@ -6899,12 +6899,12 @@ header #navbar-border-top {
 header .navbar-brand {
   padding-top: 10px; }
 
-header .alerts a, header .messages a, header .user a {
+header .alerts > a, header .messages > a, header .user > a {
   padding-left: 9px;
   padding-right: 9px;
   padding-top: 16px;
   padding-bottom: 12px; }
-  header .alerts a i, header .messages a i, header .user a i {
+  header .alerts > a i, header .messages > a i, header .user > a i {
     font-size: 18px; }
 
 header .alerts a {
@@ -6915,6 +6915,10 @@ header .alerts a {
     top: 5px;
     right: 0;
     background-color: #FF4A00; }
+
+header .btn-register {
+  margin-left: 10px;
+  box-shadow: none; }
 
 .navbar-default {
   background: url("/img/background.png") repeat;
@@ -6939,8 +6943,9 @@ header .alerts a {
       display: block; } }
 
 #navbar-header-search {
-  background: url("/img/main-menu-separator.png") no-repeat 100% 100%;
-  padding-right: 20px; }
+  background: url("/img/main-menu-separator.png") no-repeat 0 100%;
+  padding-left: 20px;
+  margin-left: 20px; }
   #navbar-header-search > div {
     position: relative; }
     #navbar-header-search > div input {

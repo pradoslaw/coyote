@@ -13,7 +13,7 @@ header {
     padding-top: 10px;
   }
 
-  .alerts a, .messages a, .user a {
+  .alerts > a, .messages > a, .user > a {
     padding-left: 9px;
     padding-right: 9px;
     padding-top: 16px;
@@ -36,6 +36,11 @@ header {
         background-color: #FF4A00;
       }
     }
+  }
+
+  .btn-register {
+    margin-left: 10px;
+    box-shadow: none;
   }
 }
 
@@ -123,8 +128,9 @@ header {
 
 #navbar-header-search {
 
-  background: url('/img/main-menu-separator.png') no-repeat 100% 100%;
-  padding-right: 20px;
+  background: url('/img/main-menu-separator.png') no-repeat 0 100%;
+  padding-left: 20px;
+  margin-left: 20px;
 
   > div {
 
