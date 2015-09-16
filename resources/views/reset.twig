@@ -1,0 +1,26 @@
+{% extends 'layout.twig' %}
+{% block title %}Przypominanie hasła{{ parent() }}{% endblock %}
+
+{% import 'vendor/forms.twig' as forms %}
+
+{% block container %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Formularz przypominania hasła
+        </div>
+        <div class="panel-body">
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': '/password/reset', 'class': 'form-horizontal'}) }}
+            {{ forms.text('email', 'E-mail', input_old('email'), errors.first('email')) }}
+            {{ forms.password('password', 'Hasło', '', errors.first('password')) }}
+            {{ forms.password('password_confirm', 'Hasło (powtórnie)', '', errors.first('password_confirm')) }}
+            {{ forms.submit('Wyślij link resetujący hasło') }}
+            {{ form_close() }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+{% endblock %}
+

@@ -14,6 +14,7 @@
 Route::get('/', 'HomeController@index');
 Route::controller('login', 'LoginController');
 Route::controller('register', 'RegisterController');
+Route::controller('password', 'PasswordController');
 
 //Route::controllers([
 //	'auth' => 'Auth\AuthController',

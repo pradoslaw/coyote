@@ -1,0 +1,12 @@
+@charset "UTF-8";
+@import "../vendors/bootstrap/variables";
+
+.alert-warning {
+  border-width: 2px;
+  font-size: $font-size-small;
+  
+  a {
+    font-weight: bold;
+    color: darken($state-warning-text, 10%);
+  }
+}
