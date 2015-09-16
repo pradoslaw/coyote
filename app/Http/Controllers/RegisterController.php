@@ -1,13 +1,13 @@
 <?php namespace Coyote\Http\Controllers;
 
-class LoginController extends Controller {
+class RegisterController extends Controller {
 
     /**
      * @return Response
      */
     public function getIndex()
     {
-        return view('login');
+        return view('register');
     }
 
     public function postIndex()

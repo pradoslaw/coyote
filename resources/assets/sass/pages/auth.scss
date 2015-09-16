@@ -1,7 +1,9 @@
 @charset "UTF-8";
 @import "../helpers/variables";
+@import "../vendors/bootstrap/variables";
+@import "../vendors/font-awesome/variables";
 
-#box-login {
+#box-login, #box-register {
   border-right: 1px solid $border-color;
 
   > form {
@@ -9,7 +11,7 @@
   }
 }
 
-#box-login-sidebar {
+#box-login-sidebar, #box-register-sidebar {
 
   > div {
     padding: 40px;
@@ -30,6 +32,43 @@
       font-family: FontAwesome;
       top: 0;
       left: 0;
+    }
+  }
+}
+
+#box-register-sidebar {
+
+  > div {
+    padding-top: 0;
+  }
+
+  h2 {
+    font-size: $font-size-large;
+    margin-bottom: 20px;
+  }
+
+  blockquote {
+    margin-bottom: 7%;
+  }
+
+  ul {
+    margin: 10px 0;
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      padding: 10px 0 10px 25px;
+      position: relative;
+
+      &:after {
+        position: absolute;
+        content: $fa-var-check;
+        color: $brand-success;
+        font-family: FontAwesome;
+        left: 0;
+        top: 10px;
+        font-weight: bold;
+      }
     }
   }
 }

@@ -14,7 +14,7 @@ ul.breadcrumb {
 
   li + li:before {
     content: "»";
-    padding: 0 2px;
+    padding: 0;
     font-size: $font-size-base;
     color: lighten($brand-primary, 5);
   }

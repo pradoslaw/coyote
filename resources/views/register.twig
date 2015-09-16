@@ -1,0 +1,43 @@
+{% extends 'layout.twig' %}
+{% block title %}Rejestracja{{ parent() }}{% endblock %}
+
+{% import 'vendor/forms.twig' as forms %}
+
+{% block container %}
+    <div class="row">
+        <div id="box-register" class="col-xs-7">
+            <h1>Darmowa rejestracja - stwórz swój profil</h1>
+
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': '/login', 'class': 'form-horizontal'}) }}
+                {{ forms.text('name', 'Nazwa użytkownika', input_old('name'), errors.first('name')) }}
+                {{ forms.password('password', 'Hasło', '', errors.first('password')) }}
+                {{ forms.password('password_confirm', 'Hasło (powtórnie)', '', errors.first('password_confirm')) }}
+                {{ forms.text('email', 'E-mail', input_old('email'), errors.first('email')) }}
+                {{ forms.checkbox('random', 'Wygeneruj losowe hasło i wyślij na e-mail', 1, input_old('remember', true)) }}
+                {{ forms.submit('Rejestracja') }}
+            {{ form_close() }}
+        </div>
+
+        <div id="box-register-sidebar" class="col-xs-5">
+            <div>
+                <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
+
+                <h2>Korzyści wynikające z rejestracji konta</h2>
+
+                <ul>
+                    <li>Możliwość edycji oraz pisania artykułów</li>
+                    <li>Obserwowanie wątków na forum</li>
+                    <li>Śledzenie zmian w artykułach czy komentarzach</li>
+                    <li>System szeregu powiadomień o aktywności na stronie</li>
+                    <li>Pisanie własnego mikrobloga</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/auth.css">
+{% endblock %}
