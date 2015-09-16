@@ -22,7 +22,8 @@
 	},
 	"autoload": {
 		"classmap": [
-			"database"
+			"database",
+			"app/Libs"
 		],
 		"psr-4": {
 			"Coyote\\": "app/"

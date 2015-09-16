@@ -89,21 +89,7 @@
                 </div>
             </header>
 
-            <div class="row max-width">
-                <div class="col-xs-12">
-                    <ul class="breadcrumb">
-                        <li>
-                            <a href="http://4programmers.net/">4programmers.net</a>
-                        </li>
-                        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                            <a itemprop="url" href="http://forum.4programmers.net"><span itemprop="title">Forum</span></a>
-                        </li>
-                        <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                            <a itemprop="url" href="http://forum.4programmers.net/Kariera"><strong itemprop="title">Kariera</strong></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            {{ breadcrumb|raw }}
 
             <div class="row max-width">
                 <div class="col-xs-12">
@@ -116,25 +102,13 @@
             <footer>
                 <div id="footer-top">
                     <div class="row max-width">
-                        <div class="col-lg-12">
-                            <ul class="breadcrumb">
-                                <li>
-                                    <a href="http://4programmers.net/">4programmers.net</a>
-                                </li>
-                                <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                                    <a itemprop="url" href="http://forum.4programmers.net"><span itemprop="title">Forum</span></a>
-                                </li>
-                                <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                                    <a itemprop="url" href="http://forum.4programmers.net/Kariera"><strong itemprop="title">Kariera</strong></a>
-                                </li>
-                            </ul>
-
+                        <div class="col-xs-12">
                             <a href="http://4programmers.net/atom.xml" id="feed-button"></a>
                             <a href="https://www.facebook.com/4programmers.net" id="facebook-button"></a>
                         </div>
-
-
                     </div>
+
+                    {{ breadcrumb|raw }}
                 </div>
 
                 <div id="footer-inner">

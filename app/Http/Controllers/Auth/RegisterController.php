@@ -1,6 +1,7 @@
 <?php
 
 namespace Coyote\Http\Controllers\Auth;
+use Breadcrumb\Breadcrumb;
 use Coyote\Http\Controllers\Controller;
 
 class RegisterController extends Controller {
@@ -10,7 +11,9 @@ class RegisterController extends Controller {
      */
     public function getIndex()
     {
-        return view('auth/register');
+        $this->breadcrumb->push('Rejestracja', '/register');
+
+        return view('auth/register', ['breadcrumb' => $this->breadcrumb->render()]);
     }
 
     public function postIndex()

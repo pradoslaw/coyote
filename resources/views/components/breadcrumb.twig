@@ -1,0 +1,21 @@
+<div class="row max-width">
+    <div class="col-xs-12">
+        <ul class="breadcrumb">
+            <li>
+                <a href="{{ route('home') }}">{{ config_get('app.name') }}</a>
+            </li>
+
+            {% for breadcrumb in breadcrumbs %}
+            <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                <a itemprop="url" href="{{ breadcrumb.url }}">
+                    {% if loop.last %}
+                    <strong itemprop="title">{{ breadcrumb.name }}</strong>
+                    {% else %}
+                    <span itemprop="title">{{ breadcrumb.name }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

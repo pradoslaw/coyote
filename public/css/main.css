@@ -6867,7 +6867,7 @@ ul.breadcrumb {
   ul.breadcrumb li + li:before {
     content: "»";
     padding: 0;
-    font-size: 13px;
+    font-size: 14px;
     color: #91ba1d; }
 
 .btn-primary {
