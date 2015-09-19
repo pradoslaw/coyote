@@ -1,0 +1,71 @@
+@charset "UTF-8";
+@import "../vendors/font-awesome/variables";
+@import "../vendors/bootstrap/variables";
+@import "../helpers/mixins";
+@import "../helpers/variables";
+
+#box-who-is-online {
+  margin-top: 20px;
+
+  h4 {
+    @include box-header-icon($fa-var-users);
+  }
+}
+
+#box-reputation {
+  margin-top: 10px;
+
+  > h4 {
+    @include box-header-icon($fa-var-star);
+  }
+
+  .media-heading {
+    margin-bottom: 3px;
+
+    a {
+      color: $gray-dark;
+      font-size: 14px;
+    }
+  }
+
+  img {
+    border-radius: 4px;
+  }
+
+  .progress {
+    width: 70%;
+    height: 23px;
+    margin-bottom: 0;
+  }
+
+  .media {
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-bottom: 0;
+    margin-top: 0;
+    position: relative;
+
+    &:last-child {
+      border-bottom: none;
+    }
+    &:after {
+      content: '1';
+      font-size: 40px;
+      color: $border-color;
+      position: absolute;
+      right: 10px;
+      top: 9px;
+    }
+    &:nth-child(2):after {
+      content: '2';
+    }
+    &:nth-child(3):after {
+      content: '3';
+    }
+  }
+}
+
+#box-whats-new {
+
+}

@@ -1,0 +1,100 @@
+@charset "UTF-8";
+@import "../vendors/bootstrap/variables";
+@import "../helpers/variables";
+
+.nav-panel {
+
+  position: relative;
+  text-align: left;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: 24px;
+  height: 26px;
+  overflow: hidden;
+  font-family: 'Open Sans', Arial, sans-serif;
+
+  li {
+    border: 1px solid $border-color;
+    background: #D1D1D1;
+    background: -o-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
+    background: -ms-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
+    background: -moz-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
+    background: -webkit-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
+    background: linear-gradient(to bottom, #ececec 50%, #d1d1d1 100%);
+    display: inline-block;
+    position: relative;
+    z-index: 0;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 white;
+    text-shadow: 0 1px #FFF;
+    margin: 0 -5px;
+    padding: 0 20px;
+    cursor: pointer;
+    font-size: 11px;
+
+    &:first-child {
+      margin: 0;
+    }
+    &:before, &:after {
+      border: 1px solid #D0D0D0;
+      position: absolute;
+      bottom: -1px;
+      width: 5px;
+      height: 5px;
+      content: " ";
+    }
+    &:before {
+      left: -6px;
+      border-bottom-right-radius: 6px;
+      border-width: 0 1px 1px 0;
+      box-shadow: 2px 2px 0 #D1D1D1;
+    }
+    &:after {
+      right: -6px;
+      border-bottom-left-radius: 6px;
+      border-width: 0 0 1px 1px;
+      box-shadow: -2px 2px 0 #d1d1d1;
+    }
+    &.active {
+      background: #FFF;
+      color: #333;
+      z-index: 2;
+      border-bottom-color: #FFF;
+
+      &:before {
+        box-shadow: 2px 2px 0 #FFF;
+      }
+      &:after {
+        box-shadow: -2px 2px 0 white;
+      }
+    }
+
+    a {
+      color: $gray;
+      padding: 0;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+
+  &:before {
+    position: absolute;
+    content: " ";
+    width: 1px;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    display: block;
+    z-index: 3;
+    background-color: #D0D0D0;
+  }
+}
+
+.nav-panel + .panel {
+  border-top-left-radius: 0;
+  margin-top:             -1px;
+}

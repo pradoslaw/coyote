@@ -1,0 +1,8 @@
+@mixin box-header-icon($icon) {
+  &:before {
+    position: absolute;
+    font-family: FontAwesome;
+    content: $icon;
+    left: 0;
+  }
+}

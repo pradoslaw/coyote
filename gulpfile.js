@@ -15,6 +15,7 @@ elixir(function(mix) {
 
     mix.scripts(['jquery-last.min.js', 'bootstrap/tooltip.js', 'bootstrap/modal.js', 'bootstrap/dropdown.js', 'bootstrap/collapse.js'], 'public/js/main.js');
     mix.sass('main.scss')
-       .sass('pages/auth.scss');
+       .sass('pages/auth.scss')
+       .sass('pages/homepage.scss');
 });
 

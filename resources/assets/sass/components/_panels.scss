@@ -1,0 +1,23 @@
+@charset "UTF-8";
+@import "../helpers/variables";
+@import "../vendors/bootstrap/variables";
+
+.box {
+
+  > h4 {
+    position: relative;
+    color: $box-header-color;
+    padding-left: 25px;
+    font-size: ceil($font-size-base * 1.05);
+  }
+
+  .border {
+    border-bottom: 1px solid $box-border-color;
+    padding: 0 0 10px 25px;
+    box-shadow: 0 2px 0 #FFF;
+  }
+
+  > h4 + .nav-panel {
+    margin-top: 15px;
+  }
+}
