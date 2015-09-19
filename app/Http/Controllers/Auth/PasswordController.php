@@ -10,12 +10,16 @@ class PasswordController extends Controller {
      */
     public function getReset()
     {
-        return view('auth/reset');
+        $this->breadcrumb->push('Odzyskiwanie hasła', '/password/reset');
+
+        return parent::view('auth/reset');
     }
 
     public function getIndex()
     {
-        return view('auth/password');
+        $this->breadcrumb->push('Odzyskiwanie hasła', '/password');
+
+        return parent::view('auth/password');
     }
 
 }

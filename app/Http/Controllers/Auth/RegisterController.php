@@ -13,7 +13,7 @@ class RegisterController extends Controller {
     {
         $this->breadcrumb->push('Rejestracja', '/register');
 
-        return view('auth/register', ['breadcrumb' => $this->breadcrumb->render()]);
+        return parent::view('auth/register');
     }
 
     public function postIndex()

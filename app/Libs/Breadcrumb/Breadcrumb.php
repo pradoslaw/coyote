@@ -2,9 +2,14 @@
 
 namespace Breadcrumb;
 
-class Breadcrumb
+class Breadcrumb implements \Countable
 {
     private $breadcrumbs = [];
+
+    public function count()
+    {
+        return count($this->breadcrumbs);
+    }
 
     public function push($name, $url)
     {

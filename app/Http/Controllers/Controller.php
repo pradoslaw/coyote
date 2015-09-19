@@ -16,4 +16,12 @@ abstract class Controller extends BaseController {
 		$this->breadcrumb = new Breadcrumb();
 	}
 
+	protected function view($view = null, $data = [])
+	{
+		if (count($this->breadcrumb)) {
+			$data['breadcrumb'] = $this->breadcrumb->render();
+		}
+		return view($view, $data);
+	}
+
 }

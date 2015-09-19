@@ -10,7 +10,9 @@ class LoginController extends Controller {
      */
     public function getIndex()
     {
-        return view('auth/login');
+        $this->breadcrumb->push('Logowanie', '/login');
+
+        return parent::view('auth/login');
     }
 
     public function postIndex()
