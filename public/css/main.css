@@ -6912,6 +6912,20 @@ button[type=submit] {
 .box > h4 + .nav-panel {
   margin-top: 15px; }
 
+.nav-pills {
+  border-bottom: 1px solid #c7c7c7;
+  box-shadow: 0 2px 0 #FFF; }
+  .nav-pills a {
+    color: #777777; }
+    .nav-pills a:hover {
+      background: transparent !important; }
+  .nav-pills > li.active > a, .nav-pills > li.active > a:hover {
+    background: transparent;
+    color: #80a41a;
+    border-bottom: 2px solid #80a41a;
+    border-radius: 0;
+    margin-bottom: -2px; }
+
 .progress {
   background: #444444;
   padding: 5px;

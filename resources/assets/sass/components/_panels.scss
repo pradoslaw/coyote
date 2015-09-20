@@ -21,3 +21,24 @@
     margin-top: 15px;
   }
 }
+
+.nav-pills {
+  border-bottom: 1px solid $box-border-color;
+  box-shadow: 0 2px 0 #FFF;
+
+  a {
+    color: $gray-light;
+
+    &:hover {
+      background: transparent !important;
+    }
+  }
+
+  > li.active > a, > li.active > a:hover {
+    background: transparent;
+    color: $brand-primary;
+    border-bottom: 2px solid $brand-primary;
+    border-radius: 0;
+    margin-bottom: -2px;
+  }
+}
