@@ -1,0 +1,46 @@
+@charset "UTF-8";
+@import "../helpers/variables";
+@import "../helpers/mixins";
+@import "../vendors/bootstrap/variables";
+@import "../vendors/font-awesome/variables";
+
+#box-job-offers {
+  h4 {
+    @include box-header-icon($fa-var-suitcase);
+
+    a {
+      color: inherit;
+    }
+  }
+
+  .media {
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  h5 {
+    @include text-overflow;
+    font-size: 14px;
+  }
+
+  small {
+    color: $gray-light;
+    font-size: 10px;
+
+    a {
+      color: $gray-light;
+    }
+  }
+
+  p {
+    font-size: 11px;
+    margin: 0;
+
+    a {
+      color: $gray;
+    }
+  }
+}
