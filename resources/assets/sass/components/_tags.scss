@@ -1,0 +1,35 @@
+@charset "UTF-8";
+@import "../vendors/bootstrap/variables";
+
+.tag-clouds {
+  list-style: none;
+  margin: 0;
+  padding: 15px 0;
+  overflow: hidden;
+
+  li {
+    background: $gray-lighter;
+    margin: 5px 5px 0 5px;
+    border-radius: 5px;
+    display: inline;
+    float: left;
+
+    a {
+      color: $gray-light;
+      font-size: 11px;
+      display: block;
+      padding: 5px 10px;
+      text-shadow: 1px 1px 1px white;
+
+      &:hover {
+        text-decoration: none;
+        color: #D7661C;
+      }
+
+      small {
+        font-size: 10px;
+        color: lighten($gray-light, 10%);
+      }
+    }
+  }
+}

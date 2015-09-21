@@ -1,0 +1,29 @@
+@charset "UTF-8";
+@import "../helpers/variables";
+@import "../vendors/bootstrap/variables";
+
+.pagination > li > a, .pagination > li > span, .pagination > .disabled > a {
+  background-color: #ddd;
+  color: $text-color;
+  border: none;
+  border-radius: 5px;
+  margin: 0 2px;
+
+  &:first-child, &:last-child {
+    border-radius: 5px;
+  }
+
+  &:hover {
+    background-color: $border-color;
+  }
+}
+
+.pagination > .active > a {
+  background-color: $gray-dark;
+  color: #fff;
+  font-weight: bold;
+
+  &:hover {
+    background-color: $gray-dark;
+  }
+}

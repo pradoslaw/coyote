@@ -7040,6 +7040,24 @@ small {
   border-top-left-radius: 0;
   margin-top: -1px; }
 
+.pagination > li > a, .pagination > li > span, .pagination > .disabled > a {
+  background-color: #ddd;
+  color: #333333;
+  border: none;
+  border-radius: 5px;
+  margin: 0 2px; }
+  .pagination > li > a:first-child, .pagination > li > a:last-child, .pagination > li > span:first-child, .pagination > li > span:last-child, .pagination > .disabled > a:first-child, .pagination > .disabled > a:last-child {
+    border-radius: 5px; }
+  .pagination > li > a:hover, .pagination > li > span:hover, .pagination > .disabled > a:hover {
+    background-color: #d0d0d0; }
+
+.pagination > .active > a {
+  background-color: #333333;
+  color: #fff;
+  font-weight: bold; }
+  .pagination > .active > a:hover {
+    background-color: #333333; }
+
 header #navbar-border-top {
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQIW2Ps3MD5n0+AlQEEPn34zcA4/QDffxADBEASmALIWkCqAPDNEnJoA/jxAAAAAElFTkSuQmCC");
   border-bottom: 1px solid #888;

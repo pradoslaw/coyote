@@ -1,0 +1,77 @@
+@charset "UTF-8";
+@import "../helpers/mixins";
+@import "../helpers/variables";
+@import "../vendors/font-awesome/variables";
+@import "../vendors/bootstrap/variables";
+@import "../components/tags";
+@import "../vendors/bootstrap/mixins/gradients";
+
+.nav-pills {
+  margin: 0 0 20px 0;
+}
+
+#box-popular-tags {
+  h4 {
+    @include box-header-icon($fa-var-tag);
+  }
+}
+
+#box-popular-entries {
+  h4 {
+    @include box-header-icon($fa-var-star);
+  }
+}
+
+.microblog {
+  .media-heading a {
+    font-size: 14px;
+    color: $gray-dark;
+    font-weight: bold;
+  }
+
+  .media-body {
+    overflow: visible;
+
+    a.timestamp {
+      font-size: 11px;
+      color: $gray-light;
+    }
+  }
+}
+
+.microblog-content {
+  color: $gray-light;
+  padding: 20px 0;
+}
+
+.microblog-footer {
+  .btn-thumbs, .btn-reply {
+    padding: 2px 7px 2px 25px;
+    color: $gray-light;
+    position: relative;
+
+    &:before {
+      font-family: FontAwesome;
+      position: absolute;
+      left: 5px;
+      color: $text-color;
+    }
+
+    &:hover {
+      border: 1px solid $border-color;
+      @include gradient-vertical(#fff, $gray-lighter);
+    }
+  }
+
+  .btn-thumbs:before {
+    content: $fa-var-thumbs-up;
+  }
+
+  .btn-reply:before {
+    content: $fa-var-comment;
+  }
+
+  .thumbs-on:before {
+    color: $brand-primary;
+  }
+}

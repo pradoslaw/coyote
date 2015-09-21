@@ -1,0 +1,149 @@
+{% extends 'layout.twig' %}
+{% block title %}Mikroblogi{{ parent() }}{% endblock %}
+
+{% import 'vendor/forms.twig' as forms %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-md-9">
+            <ul class="nav nav-pills">
+                <li role="presentation" class="active"><a href="#">Wszystkie wpisy</a></li>
+                <li role="presentation"><a href="#">Nowe</a></li>
+                <li role="presentation"><a href="#">Obserwowani</a></li>
+            </ul>
+
+            <nav class="text-center">
+                <ul class="pagination pagination-sm">
+                    <li class="disabled">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="active"><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <article id="entry-123" data-id="123" class="microblog">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object img-thumbnail" src="/img/shalom.png" style="width: 37px; height: 37px;" alt="">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <div class="dropdown pull-right">
+                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                                        <li><a href="#">Edytuj</a></li>
+                                        <li><a href="#">Usuń</a></li>
+                                    </ul>
+                                </div>
+
+                                <h5 class="media-heading"><a href="#">Shalom</a></h5>
+                                <a href="#entry-8673" class="timestamp" data-timestamp="1442841210">dzisiaj, 15:13</a>
+                            </div>
+                        </div>
+
+                        <div class="microblog-text microblog-content" data-id="123">
+                            Standard SD 1.0 przewidywał karty o rozmiarze do 1 GB.<br>
+                            SD 1.01 do 2 GB (sztuczne ograniczenie, istniały niestandardowe karty 4 GB, formalnie niezgodne ze standardem)<br>
+                            SDHC do 32 GB<br>
+                            SDXC do 2 TB<br>
+                            <br>
+                            czy oni się kurna na błędach nie nauczą? "2 TB powinny wystarczyć każdemu"?
+                        </div>
+
+                        <div class="microblog-footer">
+                            <a href="#" class="pull-left btn btn-thumbs thumbs-on" data-toggle="tooltip" data-placement="top" title="Shalom<br>Adam Boduch">2 głosy</a>
+                            <a href="#" class="pull-right btn btn-reply">Dodaj komentarz</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+        <aside class="col-md-3">
+            <div id="box-popular-tags" class="box">
+                <h4 class="border">Popularne tagi</h4>
+
+                <ul class="tag-clouds">
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/coyote">coyote <small>(78)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/humor">humor <small>(57)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/java">java <small>(48)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/koziolekweb">koziolekweb <small>(38)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/4programmers.net">4programmers.net <small>(35)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/blog">blog <small>(23)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/praca">praca <small>(22)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/wtf">wtf <small>(20)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/korpo">korpo <small>(17)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/esa">esa <small>(12)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/jestętrenerę">jestętrenerę <small>(12)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/guava">guava <small>(11)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/pracaholandia">pracaholandia <small>(10)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/fasadin">fasadin <small>(10)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/konferencja">konferencja <small>(9)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/interview">interview <small>(9)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/konkurs">konkurs <small>(8)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/technicalblog">technicalblog <small>(8)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/c">c <small>(7)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/unity3d">unity3d <small>(7)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/sscript">sscript <small>(7)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/suchar">suchar <small>(7)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/vaadin">vaadin <small>(7)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/windows">windows <small>(6)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/event">event <small>(6)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/4programmers">4programmers <small>(6)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/eropost">eropost <small>(6)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/java8">java8 <small>(6)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/pakistanski_ninja">pakistanski_ninja <small>(6)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/furiat-saper">furiat-saper <small>(5)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/mały-wpis">mały-wpis <small>(5)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/git">git <small>(5)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/edukacja">edukacja <small>(5)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/microsoft">microsoft <small>(5)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/delphi">delphi <small>(5)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/csharp">csharp <small>(5)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/heheszki">heheszki <small>(5)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/cern">cern <small>(4)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/arduino">arduino <small>(4)</small></a></li>
+                    <li><a href="http://4programmers.net/Mikroblogi/Tag/treestructinfo">treestructinfo <small>(4)</small></a></li>
+                </ul>
+            </div>
+
+            <div id="box-popular-entries" class="box">
+                <h4 class="border">Popularne wpisy</h4>
+            </div>
+        </aside>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/microblog.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function () {
+            $('.btn-thumbs').tooltip({html: true});
+        });
+    </script>
+{% endblock %}
