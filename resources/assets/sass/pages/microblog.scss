@@ -10,6 +10,10 @@
   margin: 0 0 20px 0;
 }
 
+#microblog {
+  margin-top: 20px;
+}
+
 #box-popular-tags {
   h4 {
     @include box-header-icon($fa-var-tag);
@@ -22,11 +26,60 @@
   }
 }
 
+.microblog-submit {
+
+  textarea {
+    width: 100%;
+    resize: none;
+    border: none;
+    box-sizing: border-box;
+    padding: 4px 6px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .text-area > div {
+    border: 1px solid $border-color;
+    padding: 0;
+  }
+
+  .submit-area > div {
+    background: #f6f6f6;
+    border-left: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+    border-bottom: 1px solid $border-color;
+    padding: 4px 5px;
+    overflow: hidden;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+
+  button {
+    box-shadow: none;
+    text-shadow: none;
+    border: none;
+    background: transparent;
+    margin: 0;
+    font-family: 'Open Sans', Arial, sans-serif;
+    color: $gray-dark;
+
+    &:hover {
+      background: none;
+    }
+  }
+}
+
 .microblog {
   .media-heading a {
     font-size: 14px;
     color: $gray-dark;
     font-weight: bold;
+  }
+
+  .media {
+    overflow: visible;
   }
 
   .media-body {
@@ -39,9 +92,13 @@
   }
 }
 
-.microblog-content {
+.microblog-text {
   color: $gray-light;
   padding: 20px 0;
+}
+
+.microblog-comment-text {
+  color: $gray-light;
 }
 
 .microblog-footer {
@@ -74,4 +131,37 @@
   .thumbs-on:before {
     color: $brand-primary;
   }
+}
+
+.microblog-comment {
+
+  .list-inline {
+    color: $gray-light;
+    font-size: 11px;
+
+    a {
+      color: $gray-light;
+    }
+
+    li {
+      padding-right: 0;
+    }
+
+    li:after {
+      content: "●";
+      margin-left: 5px;
+    }
+
+    li:last-child:after {
+      content: "\00a0 ";
+    }
+  }
+
+  // bootstrap nie umozliwia umieszczenia mniejszego przycisku niz btn-xs. pomniejszamy dodatkowo usuwajac obramowanie
+  .dropdown-toggle {
+    border: none;
+    font-size: 10px;
+    background-color: transparent;
+  }
+
 }

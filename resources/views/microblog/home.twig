@@ -4,13 +4,36 @@
 {% import 'vendor/forms.twig' as forms %}
 
 {% block container %}
-    <div class="row">
+    <div id="microblog" class="row">
         <div class="col-md-9">
             <ul class="nav nav-pills">
-                <li role="presentation" class="active"><a href="#">Wszystkie wpisy</a></li>
-                <li role="presentation"><a href="#">Nowe</a></li>
-                <li role="presentation"><a href="#">Obserwowani</a></li>
+                <li role="presentation" class="active"><a href="#">Wszystkie wpisy <small>(1977)</small></a></li>
+                <li role="presentation"><a href="#">Nowe <small>(0)</small></a></li>
+                <li role="presentation"><a href="#">Obserwowani <small>(0)</small></a></li>
             </ul>
+
+            <form method="POST" class="microblog-submit" action="http://4programmers.net/Mikroblogi/Submit">
+                <input type="hidden" value="0" name="parent_id">
+                <div class="text-area">
+                    <div class="col-md-12">
+                        <textarea cols="110" rows="2" placeholder="Kliknij, aby dodać wpis" tabindex="1" name="content" style="height: 30px;"></textarea>
+                    </div>
+                </div>
+                <div class="submit-area">
+                    <div class="col-md-12">
+                        <div class="pull-left">
+                            <button title="Kliknij, aby dodać zdjęcie" class="image-button" type="button">
+                                <i class="fa fa-desktop"></i>
+                            </button>
+                        </div>
+                        <div class="pull-right">
+                            <button title="Kliknij, aby wysłać (Ctrl+Enter)" tabindex="2" type="submit">
+                                <i class="fa fa-send"></i> Wyślij
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
             <nav class="text-center">
                 <ul class="pagination pagination-sm">
@@ -33,7 +56,7 @@
             </nav>
 
             <article id="entry-123" data-id="123" class="microblog">
-                <div class="panel panel-default">
+                <div class="panel panel-default panel-microblog">
                     <div class="panel-body">
                         <div class="media">
                             <div class="media-left">
@@ -43,11 +66,11 @@
                             </div>
                             <div class="media-body">
                                 <div class="dropdown pull-right">
-                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="microblog-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="caret"></span>
                                     </button>
 
-                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="microblog-menu">
                                         <li><a href="#">Edytuj</a></li>
                                         <li><a href="#">Usuń</a></li>
                                     </ul>
@@ -58,7 +81,7 @@
                             </div>
                         </div>
 
-                        <div class="microblog-text microblog-content" data-id="123">
+                        <div class="microblog-text" data-id="123">
                             Standard SD 1.0 przewidywał karty o rozmiarze do 1 GB.<br>
                             SD 1.01 do 2 GB (sztuczne ograniczenie, istniały niestandardowe karty 4 GB, formalnie niezgodne ze standardem)<br>
                             SDHC do 32 GB<br>
@@ -70,6 +93,39 @@
                         <div class="microblog-footer">
                             <a href="#" class="pull-left btn btn-thumbs thumbs-on" data-toggle="tooltip" data-placement="top" title="Shalom<br>Adam Boduch">2 głosy</a>
                             <a href="#" class="pull-right btn btn-reply">Dodaj komentarz</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <div class="microblog-comment">
+                            <div class="dropdown pull-right">
+                                <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="comment-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu">
+                                    <li><a href="#">Edytuj</a></li>
+                                    <li><a href="#">Usuń</a></li>
+                                </ul>
+                            </div>
+
+                            <ul class="list-inline">
+                                <li>
+                                    <a data-user-id="71123" href="#">nz</a>
+                                </li>
+                                <li>
+                                    <a href="#" class="timestamp" data-timestamp="1442898090">dzisiaj, 07:01</a>
+                                </li>
+                                <li>
+                                    <a href="#">0 głosów</a>
+                                </li>
+                            </ul>
+
+                            <div class="microblog-comment-text" data-id="8693">
+                                <a class="login" data-user-id="52899" href="#">@adriano1995</a>: Może serwery mają w Javie i ludzie już luki tu opublikowane testują od rana...
+                            </div>
                         </div>
                     </div>
                 </div>
