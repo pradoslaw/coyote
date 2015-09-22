@@ -234,6 +234,10 @@
   .overview {
     border-left: 1px solid $border-color;
     margin: 10px 0 0 0;
+
+    @media screen and (max-width: $screen-xs) {
+      border-left: none;
+    }
   }
 
   .media {
@@ -265,6 +269,10 @@
     
     span.i-b3ce7:after {
         content: $fa-var-comments;
+    }
+
+    @media screen and (max-width: $screen-xs) {
+      padding: 0;
     }
   }
 
@@ -309,7 +317,7 @@
     padding: 4px 0 4px 0;
     margin: 0;
 
-    span.col-xs-2 {
+    span.col-sm-2 {
       strong {
         display: block;
         text-align: center;
