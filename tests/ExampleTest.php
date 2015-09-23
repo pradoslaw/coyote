@@ -2,7 +2,6 @@
 
 class ExampleTest extends TestCase
 {
-
     /**
      * A basic functional test example.
      *
@@ -14,5 +13,4 @@ class ExampleTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
     }
-
 }

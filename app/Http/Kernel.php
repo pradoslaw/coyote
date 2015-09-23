@@ -1,10 +1,11 @@
-<?php namespace Coyote\Http;
+<?php
+
+namespace Coyote\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
-
     /**
      * The application's global HTTP middleware stack.
      *
@@ -29,5 +30,4 @@ class Kernel extends HttpKernel
         'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
         'guest'      => 'Coyote\Http\Middleware\RedirectIfAuthenticated',
     ];
-
 }

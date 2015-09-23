@@ -28,10 +28,10 @@ return [
     'stores'  => [
 
         'apc'       => [
-            'driver' => 'apc'
+            'driver' => 'apc',
         ],
         'array'     => [
-            'driver' => 'array'
+            'driver' => 'array',
         ],
         'database'  => [
             'driver'     => 'database',
@@ -40,7 +40,7 @@ return [
         ],
         'file'      => [
             'driver' => 'file',
-            'path'   => storage_path() . '/framework/cache',
+            'path'   => storage_path().'/framework/cache',
         ],
         'memcached' => [
             'driver'  => 'memcached',
@@ -48,7 +48,7 @@ return [
                 [
                     'host'   => '127.0.0.1',
                     'port'   => 11211,
-                    'weight' => 100
+                    'weight' => 100,
                 ],
             ],
         ],

@@ -1,8 +1,9 @@
-<?php namespace Coyote\Http\Controllers;
+<?php
+
+namespace Coyote\Http\Controllers;
 
 class HomeController extends Controller
 {
-
     /*
     |--------------------------------------------------------------------------
     | Home Controller
@@ -33,5 +34,4 @@ class HomeController extends Controller
     {
         return view('home');
     }
-
 }

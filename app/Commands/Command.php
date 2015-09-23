@@ -1,8 +1,8 @@
-<?php namespace Coyote\Commands;
+<?php
+
+namespace Coyote\Commands;
 
 abstract class Command
 {
-
     //
-
 }
