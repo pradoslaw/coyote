@@ -14,9 +14,8 @@
 Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 
 Route::controllers([
-	'login' => 'Auth\LoginController',
-	'password' => 'Auth\PasswordController',
-	'register' => 'Auth\RegisterController',
-
-	'Mikroblogi' => 'Microblog\HomeController'
+    'login'      => 'Auth\LoginController',
+    'password'   => 'Auth\PasswordController',
+    'register'   => 'Auth\RegisterController',
+    'Mikroblogi' => 'Microblog\HomeController'
 ]);

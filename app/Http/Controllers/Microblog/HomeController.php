@@ -1,9 +1,11 @@
 <?php
 
 namespace Coyote\Http\Controllers\Microblog;
+
 use Coyote\Http\Controllers\Controller;
 
-class HomeController extends Controller {
+class HomeController extends Controller
+{
 
     /**
      * @return Response
