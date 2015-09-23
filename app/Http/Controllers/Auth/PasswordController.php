@@ -6,7 +6,6 @@ use Coyote\Http\Controllers\Controller;
 
 class PasswordController extends Controller
 {
-
     /**
      * @return Response
      */
@@ -23,5 +22,4 @@ class PasswordController extends Controller
 
         return parent::view('auth/password');
     }
-
 }

@@ -1,8 +1,8 @@
-<?php namespace Coyote\Events;
+<?php
+
+namespace Coyote\Events;
 
 abstract class Event
 {
-
     //
-
 }
