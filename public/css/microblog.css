@@ -1,0 +1,141 @@
+@charset "UTF-8";
+.tag-clouds {
+  list-style: none;
+  margin: 0;
+  padding: 15px 0;
+  overflow: hidden; }
+  .tag-clouds li {
+    background: #eeeeee;
+    margin: 5px 5px 0 5px;
+    border-radius: 5px;
+    display: inline;
+    float: left; }
+    .tag-clouds li a {
+      color: #777777;
+      font-size: 11px;
+      display: block;
+      padding: 5px 10px;
+      text-shadow: 1px 1px 1px white; }
+      .tag-clouds li a:hover {
+        text-decoration: none;
+        color: #D7661C; }
+      .tag-clouds li a small {
+        font-size: 10px;
+        color: #919191; }
+
+.nav-pills {
+  margin: 0 0 20px 0; }
+
+#microblog {
+  margin-top: 20px; }
+
+#box-popular-tags h4:before {
+  position: absolute;
+  font-family: FontAwesome;
+  content: "";
+  left: 0; }
+
+#box-popular-entries h4:before {
+  position: absolute;
+  font-family: FontAwesome;
+  content: "";
+  left: 0; }
+
+.microblog-submit textarea {
+  width: 100%;
+  resize: none;
+  border: none;
+  box-sizing: border-box;
+  padding: 4px 6px; }
+  .microblog-submit textarea:focus {
+    outline: none; }
+
+.microblog-submit .text-area > div {
+  border: 1px solid #d0d0d0;
+  padding: 0; }
+
+.microblog-submit .submit-area > div {
+  background: #f6f6f6;
+  border-left: 1px solid #d0d0d0;
+  border-right: 1px solid #d0d0d0;
+  border-bottom: 1px solid #d0d0d0;
+  padding: 4px 5px;
+  overflow: hidden;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px; }
+
+.microblog-submit button {
+  box-shadow: none;
+  text-shadow: none;
+  border: none;
+  background: transparent;
+  margin: 0;
+  font-family: 'Open Sans', Arial, sans-serif;
+  color: #333333; }
+  .microblog-submit button:hover {
+    background: none; }
+
+.microblog .media-heading a {
+  font-size: 14px;
+  color: #333333;
+  font-weight: bold; }
+
+.microblog .media {
+  overflow: visible; }
+
+.microblog .media-body {
+  overflow: visible; }
+  .microblog .media-body a.timestamp {
+    font-size: 11px;
+    color: #777777; }
+
+.microblog-text {
+  color: #777777;
+  padding: 20px 0; }
+
+.microblog-comment-text {
+  color: #777777; }
+
+.microblog-footer .btn-thumbs, .microblog-footer .btn-reply {
+  padding: 2px 7px 2px 25px;
+  color: #777777;
+  position: relative; }
+  .microblog-footer .btn-thumbs:before, .microblog-footer .btn-reply:before {
+    font-family: FontAwesome;
+    position: absolute;
+    left: 5px;
+    color: #333333; }
+  .microblog-footer .btn-thumbs:hover, .microblog-footer .btn-reply:hover {
+    border: 1px solid #d0d0d0;
+    background-image: linear-gradient(to bottom, #fff 0%, #eeeeee 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFEEEEEE', GradientType=0); }
+
+.microblog-footer .btn-thumbs:before {
+  content: ""; }
+
+.microblog-footer .btn-reply:before {
+  content: ""; }
+
+.microblog-footer .thumbs-on:before {
+  color: #80a41a; }
+
+.microblog-comment .list-inline {
+  color: #777777;
+  font-size: 11px; }
+  .microblog-comment .list-inline a {
+    color: #777777; }
+  .microblog-comment .list-inline li {
+    padding-right: 0; }
+  .microblog-comment .list-inline li:after {
+    content: "●";
+    margin-left: 5px; }
+  .microblog-comment .list-inline li:last-child:after {
+    content: "\00a0 "; }
+
+.microblog-comment .dropdown-toggle {
+  border: none;
+  font-size: 10px;
+  background-color: transparent; }
+
+/*# sourceMappingURL=microblog.css.map */
