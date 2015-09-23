@@ -7,12 +7,11 @@ use Illuminate\Routing\Controller as BaseController;
 
 abstract class Controller extends BaseController
 {
-
     use DispatchesCommands, ValidatesRequests;
 
     protected $breadcrumb;
 
-    function __construct()
+    public function __construct()
     {
         $this->breadcrumb = new Breadcrumb();
     }
@@ -25,5 +24,4 @@ abstract class Controller extends BaseController
 
         return view($view, $data);
     }
-
 }

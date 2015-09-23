@@ -6,7 +6,6 @@ use Coyote\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
-
     /**
      * @return Response
      */
@@ -19,7 +18,5 @@ class HomeController extends Controller
 
     public function postIndex()
     {
-
     }
-
 }

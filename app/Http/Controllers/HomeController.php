@@ -2,7 +2,6 @@
 
 class HomeController extends Controller
 {
-
     /*
     |--------------------------------------------------------------------------
     | Home Controller
@@ -33,5 +32,4 @@ class HomeController extends Controller
     {
         return view('home');
     }
-
 }
