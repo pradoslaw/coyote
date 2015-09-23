@@ -2,7 +2,5 @@
 
 abstract class Command
 {
-
     //
-
 }

@@ -6,7 +6,6 @@ use Illuminate\Http\RedirectResponse;
 
 class RedirectIfAuthenticated
 {
-
     /**
      * The Guard implementation.
      *
@@ -40,5 +39,4 @@ class RedirectIfAuthenticated
 
         return $next($request);
     }
-
 }

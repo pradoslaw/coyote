@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputOption;
 
 class Inspire extends Command
 {
-
     /**
      * The console command name.
      *
@@ -31,5 +30,4 @@ class Inspire extends Command
     {
         $this->comment(PHP_EOL . Inspiring::quote() . PHP_EOL);
     }
-
 }
