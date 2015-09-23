@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\Auth;
 
-use Breadcrumb\Breadcrumb;
 use Coyote\Http\Controllers\Controller;
 
 class RegisterController extends Controller

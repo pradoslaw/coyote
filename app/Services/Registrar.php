@@ -1,8 +1,8 @@
 <?php namespace Coyote\Services;
 
 use Coyote\User;
-use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
+use Validator;
 
 class Registrar implements RegistrarContract
 {

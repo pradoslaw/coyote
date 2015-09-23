@@ -11,8 +11,7 @@ return array(
      |
      */
 
-    'enabled' => config('app.debug'),
-
+    'enabled'         => config('app.debug'),
     /*
      |--------------------------------------------------------------------------
      | Storage settings
@@ -25,13 +24,12 @@ return array(
      | can also be used. For PDO, run the package migrations first.
      |
      */
-    'storage' => array(
-        'enabled' => true,
-        'driver' => 'file', // redis, file, pdo
-        'path' => storage_path() . '/debugbar', // For file driver
+    'storage'         => array(
+        'enabled'    => true,
+        'driver'     => 'file', // redis, file, pdo
+        'path'       => storage_path() . '/debugbar', // For file driver
         'connection' => null,   // Leave null for default connection (Redis/PDO)
     ),
-
     /*
      |--------------------------------------------------------------------------
      | Vendors
@@ -47,7 +45,6 @@ return array(
      */
 
     'include_vendors' => true,
-
     /*
      |--------------------------------------------------------------------------
      | Capture Ajax Requests
@@ -58,8 +55,7 @@ return array(
      |
      */
 
-    'capture_ajax' => true,
-
+    'capture_ajax'    => true,
     /*
      |--------------------------------------------------------------------------
      | DataCollectors
@@ -69,7 +65,7 @@ return array(
      |
      */
 
-    'collectors' => array(
+    'collectors'      => array(
         'phpinfo'         => true,  // Php version
         'messages'        => true,  // Messages
         'time'            => true,  // Time Datalogger
@@ -90,7 +86,6 @@ return array(
         'auth'            => false, // Display Laravel authentication status
         'session'         => false, // Display session data in a separate tab
     ),
-
     /*
      |--------------------------------------------------------------------------
      | Extra options
@@ -100,21 +95,21 @@ return array(
      |
      */
 
-    'options' => array(
-        'auth' => array(
+    'options'         => array(
+        'auth'  => array(
             'show_name' => false,   // Also show the users name/email in the debugbar
         ),
-        'db' => array(
-            'with_params'       => true,   // Render SQL with the parameters substituted
-            'timeline'          => false,  // Add the queries to the timeline
-            'backtrace'         => false,  // EXPERIMENTAL: Use a backtrace to find the origin of the query in your files.
-            'explain' => array(            // EXPERIMENTAL: Show EXPLAIN output on queries
+        'db'    => array(
+            'with_params' => true,   // Render SQL with the parameters substituted
+            'timeline'    => false,  // Add the queries to the timeline
+            'backtrace'   => false,  // EXPERIMENTAL: Use a backtrace to find the origin of the query in your files.
+            'explain'     => array(            // EXPERIMENTAL: Show EXPLAIN output on queries
                 'enabled' => false,
-                'types' => array('SELECT'), // array('SELECT', 'INSERT', 'UPDATE', 'DELETE'); for MySQL 5.6.3+
+                'types'   => array('SELECT'), // array('SELECT', 'INSERT', 'UPDATE', 'DELETE'); for MySQL 5.6.3+
             ),
-            'hints'             => true,    // Show hints for common mistakes
+            'hints'       => true,    // Show hints for common mistakes
         ),
-        'mail' => array(
+        'mail'  => array(
             'full_log' => false
         ),
         'views' => array(
@@ -123,11 +118,10 @@ return array(
         'route' => array(
             'label' => true  // show complete route on bar
         ),
-        'logs' => array(
+        'logs'  => array(
             'file' => null
         ),
     ),
-
     /*
      |--------------------------------------------------------------------------
      | Inject Debugbar in Response
@@ -139,6 +133,6 @@ return array(
      |
      */
 
-    'inject' => true,
+    'inject'          => true,
 
 );
