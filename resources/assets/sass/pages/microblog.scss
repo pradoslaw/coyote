@@ -24,6 +24,44 @@
   h4 {
     @include box-header-icon($fa-var-star);
   }
+
+  > .media {
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 15px;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  p {
+    line-height: 140%;
+    padding: 10px 0 0 0;
+    font-size: 12px;
+
+    a {
+      color: $gray-light;
+    }
+  }
+
+  small {
+    color: $gray-light;
+    font-size: 11px;
+    margin-left: 6px;
+    vertical-align: top;
+  }
+
+  .media-heading {
+    margin-left: 5px;
+
+    a {
+      color: $gray-darker;
+    }
+  }
+
+  .btn-thumbs {
+    font-size: 11px;
+  }
 }
 
 .microblog-submit {
@@ -101,36 +139,34 @@
   color: $gray-light;
 }
 
-.microblog-footer {
-  .btn-thumbs, .btn-reply {
-    padding: 2px 7px 2px 25px;
-    color: $gray-light;
-    position: relative;
+.btn-thumbs, .btn-reply {
+  padding: 2px 7px 2px 25px;
+  color: $gray-light;
+  position: relative;
 
-    &:before {
-      font-family: FontAwesome;
-      position: absolute;
-      left: 5px;
-      color: $text-color;
-    }
-
-    &:hover {
-      border: 1px solid $border-color;
-      @include gradient-vertical(#fff, $gray-lighter);
-    }
+  &:before {
+    font-family: FontAwesome;
+    position: absolute;
+    left: 5px;
+    color: $text-color;
   }
 
-  .btn-thumbs:before {
-    content: $fa-var-thumbs-up;
+  &:hover {
+    border: 1px solid $border-color;
+    @include gradient-vertical(#fff, $gray-lighter);
   }
+}
 
-  .btn-reply:before {
-    content: $fa-var-comment;
-  }
+.btn-thumbs:before {
+  content: $fa-var-thumbs-up;
+}
 
-  .thumbs-on:before {
-    color: $brand-primary;
-  }
+.btn-reply:before {
+  content: $fa-var-comment;
+}
+
+.thumbs-on:before {
+  color: $brand-primary;
 }
 
 .microblog-comment {

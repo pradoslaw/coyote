@@ -41,6 +41,33 @@
   content: "";
   left: 0; }
 
+#box-popular-entries > .media {
+  border-bottom: 1px solid #d0d0d0;
+  padding-bottom: 15px; }
+  #box-popular-entries > .media:last-child {
+    border-bottom: none; }
+
+#box-popular-entries p {
+  line-height: 140%;
+  padding: 10px 0 0 0;
+  font-size: 12px; }
+  #box-popular-entries p a {
+    color: #777777; }
+
+#box-popular-entries small {
+  color: #777777;
+  font-size: 11px;
+  margin-left: 6px;
+  vertical-align: top; }
+
+#box-popular-entries .media-heading {
+  margin-left: 5px; }
+  #box-popular-entries .media-heading a {
+    color: #222222; }
+
+#box-popular-entries .btn-thumbs {
+  font-size: 11px; }
+
 .microblog-submit textarea {
   width: 100%;
   resize: none;
@@ -96,28 +123,28 @@
 .microblog-comment-text {
   color: #777777; }
 
-.microblog-footer .btn-thumbs, .microblog-footer .btn-reply {
+.btn-thumbs, .btn-reply {
   padding: 2px 7px 2px 25px;
   color: #777777;
   position: relative; }
-  .microblog-footer .btn-thumbs:before, .microblog-footer .btn-reply:before {
+  .btn-thumbs:before, .btn-reply:before {
     font-family: FontAwesome;
     position: absolute;
     left: 5px;
     color: #333333; }
-  .microblog-footer .btn-thumbs:hover, .microblog-footer .btn-reply:hover {
+  .btn-thumbs:hover, .btn-reply:hover {
     border: 1px solid #d0d0d0;
     background-image: linear-gradient(to bottom, #fff 0%, #eeeeee 100%);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFEEEEEE', GradientType=0); }
 
-.microblog-footer .btn-thumbs:before {
+.btn-thumbs:before {
   content: ""; }
 
-.microblog-footer .btn-reply:before {
+.btn-reply:before {
   content: ""; }
 
-.microblog-footer .thumbs-on:before {
+.thumbs-on:before {
   color: #80a41a; }
 
 .microblog-comment .list-inline {
