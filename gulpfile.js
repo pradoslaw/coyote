@@ -17,6 +17,7 @@ elixir(function(mix) {
     mix.sass('main.scss')
        .sass('pages/auth.scss')
        .sass('pages/homepage.scss')
-       .sass('pages/microblog.scss');
+       .sass('pages/microblog.scss')
+       .sass('pages/forum.scss');
 });
 

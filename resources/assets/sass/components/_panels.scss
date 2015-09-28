@@ -26,3 +26,18 @@
   background-color: transparent;
   border: 1px solid $border-color;
 }
+
+// panel wykorzystywany np. na forum czy w panelu usera.
+.panel-wrapper {
+  box-shadow: inset 1px 1px #FFF;
+  background-color: #e2e7e1;
+  margin: 0 0 20px 0;
+
+  > .panel-body {
+    h2 {
+      font-size: 14px;
+      color: #464646;
+      text-shadow: white 0 1px 0;
+    }
+  }
+}

@@ -17,5 +17,6 @@ Route::controllers([
     'login'      => 'Auth\LoginController',
     'password'   => 'Auth\PasswordController',
     'register'   => 'Auth\RegisterController',
-    'Mikroblogi' => 'Microblog\HomeController'
+    'Mikroblogi' => 'Microblog\HomeController',
+    'Forum'      => 'Forum\HomeController'
 ]);

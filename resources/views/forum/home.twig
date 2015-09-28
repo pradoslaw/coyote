@@ -1,0 +1,76 @@
+{% extends 'layout.twig' %}
+{% block title %}Forum dyskusyjne{{ parent() }}{% endblock %}
+
+{% import 'vendor/forms.twig' as forms %}
+
+{% block container %}
+    <main id="mainbar">
+        <section class="panel panel-wrapper">
+            <div class="panel-body">
+                <h2>Podstawy programowania</h2>
+
+                <div class="box-forum">
+                    <table>
+                        <tbody>
+                            <tr id="forum-6">
+                                <td class="col-icon">
+                                    <span class="forum-icon-new" title="Kliknij, aby odnzaczyć jako przeczytane"></span>
+                                </td>
+                                <td class="col-forum-description">
+                                    <h3><a title="Algorytmy i struktury danych" data-category="Forum-Name" href="http://forum.4programmers.net/Algorytmy">Algorytmy i struktury danych</a></h3>
+
+                                    <p>Dział zawierający nieco trudniejsze zagadnienia programistyczne. Tutaj można również dyskutować o algorytmach oraz strukturach danych.</p>
+                                </td>
+
+                                <td class="col-stats">
+                                    <ul>
+                                        <li title="Ilość wątków"><strong>1,732</strong> <small>wątków</small></li>
+                                        <li title="Ilość postów"><strong>9,718</strong> <small>postów</small></li>
+                                    </ul>
+                                </td>
+                                <td class="col-avatar">
+
+                                    <a href="http://4programmers.net/Profile/70446">
+                                        <img class="img-thumbnail" src="http://4programmers.net/template/img/avatar.png">
+                                    </a>
+
+                                </td>
+                                <td class="col-post-preview">
+
+                                    <ul class="last-post">
+                                        <li>
+                                            <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="topic-last" href="http://forum.4programmers.net/Algorytmy/258268-porownywanie_czy_pliki_sa_takie_same?view=unread"></a>
+
+                                            <a title="Porównywanie czy pliki sa takie same" href="http://forum.4programmers.net/Algorytmy/258268-porownywanie_czy_pliki_sa_takie_same?p=1177861#id1177861">Porównywanie czy pliki sa takie same</a>							</li>
+                                        <li>
+                                            <abbr class="timestamp" data-timestamp="1442897046" title="22 wrzesień 2015, 06:44">22 wrzesień 2015, 06:44,</abbr>
+                                            <a data-user-id="70446" href="http://4programmers.net/Profile/70446">Mr.YaHooo</a>							</li>
+                                    </ul>
+                                </td>
+                            </tr>
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <aside id="sidebar">
+
+    </aside>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/forum.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+
+{% endblock %}

@@ -6916,6 +6916,15 @@ button[type=submit] {
   background-color: transparent;
   border: 1px solid #d0d0d0; }
 
+.panel-wrapper {
+  box-shadow: inset 1px 1px #FFF;
+  background-color: #e2e7e1;
+  margin: 0 0 20px 0; }
+  .panel-wrapper > .panel-body h2 {
+    font-size: 14px;
+    color: #464646;
+    text-shadow: white 0 1px 0; }
+
 .progress {
   background: #444444;
   padding: 5px;
