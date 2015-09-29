@@ -4,16 +4,42 @@
 @import "../vendors/font-awesome/variables";
 @import "../vendors/bootstrap/variables";
 @import "../components/tags";
+@import "../components/job-offers";
+
+#index.sidebar {
+  padding-right: 20%;
+}
 
 #mainbar {
   width: 100%;
   float: left;
+
+  .nav {
+    margin-bottom: 15px;
+  }
 }
 
 #sidebar {
   float: right;
   width: 23%;
   margin-right: -25%;
+}
+
+.panel-wrapper {
+
+  .panel-body {
+    padding: 5px 9px 10px 9px;
+
+    > h2 {
+      margin: 5px 2px;
+    }
+
+    .toggle {
+      color: $gray-dark;
+      margin: 5px 2px;
+      font-size: 11px;
+    }
+  }
 }
 
 .box-forum {
@@ -29,12 +55,41 @@
 
   tr {
     &:nth-child(even) {
-      background-color: darken(#fff, 5%);
+      background-color: #fafafa;
     }
 
     td {
       padding: 5px;
       border-bottom: 1px solid $border-color;
+    }
+  }
+}
+
+.col-icon {
+  width: 42px;
+  text-align: center;
+}
+
+.col-stats {
+  text-align: right;
+  width: 9%;
+  font-size: 12px;
+
+  p {
+    margin: 0;
+  }
+}
+
+.col-forum-description {
+  p {
+    margin: 0;
+
+    @media (max-width: $screen-md) {
+      font-size: 12px;
+    }
+
+    @media (max-width: $screen-xs) {
+      font-size: 11px;
     }
   }
 
@@ -46,20 +101,34 @@
   }
 }
 
-.col-icon {
-  width: 32px;
-  text-align: center;
-}
-
-.col-stats {
-  text-align: right;
-  width: 9%;
-}
-
 .col-avatar {
   width: 4%;
 }
 
 .col-post-preview {
   width: 25%;
+
+  p {
+    margin: 0;
+    padding: 2px 0;
+  }
+
+  a {
+    color: darken($brand-primary, 10%);
+  }
+}
+
+#box-who-is-online {
+  margin-top: 20px;
+  color: $gray-light;
+
+  h4 {
+    @include box-header-icon($fa-var-users);
+  }
+}
+
+#box-popular-tags, #box-my-tags {
+  h4 {
+    @include box-header-icon($fa-var-tag);
+  }
 }

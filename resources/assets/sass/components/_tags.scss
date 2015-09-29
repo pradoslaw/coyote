@@ -8,28 +8,31 @@
   overflow: hidden;
 
   li {
-    background: $gray-lighter;
-    margin: 5px 5px 0 5px;
-    border-radius: 5px;
     display: inline;
     float: left;
+    margin-right: 4px;
 
     a {
       color: $gray-light;
       font-size: 11px;
-      display: block;
-      padding: 5px 10px;
+      display: inline-block;
+      padding: 4px 10px;
       text-shadow: 1px 1px 1px white;
+      background: $gray-lighter;
+      margin: 5px 5px 0 1px;
+      border-radius: 5px;
+      transition: all .25s linear;
 
       &:hover {
         text-decoration: none;
         color: #D7661C;
+        background: darken($gray-lighter, 2%);
       }
+    }
 
-      small {
-        font-size: 10px;
-        color: lighten($gray-light, 10%);
-      }
+    small {
+      font-size: 10px;
+      color: lighten($gray-light, 10%);
     }
   }
 }

@@ -4,63 +4,195 @@
 {% import 'vendor/forms.twig' as forms %}
 
 {% block container %}
-    <main id="mainbar">
-        <section class="panel panel-wrapper">
-            <div class="panel-body">
-                <h2>Podstawy programowania</h2>
+    <div id="index" class="sidebar">
+        <main id="mainbar">
+            <ul class="nav nav-pills">
+                <li role="presentation" class="active"><a href="#">Kategorie</a></li>
+                <li role="presentation"><a href="#">Wszystkie</a></li>
+                <li role="presentation"><a href="#">Bez odpowiedzi</a></li>
+            </ul>
 
-                <div class="box-forum">
-                    <table>
-                        <tbody>
-                            <tr id="forum-6">
-                                <td class="col-icon">
-                                    <span class="forum-icon-new" title="Kliknij, aby odnzaczyć jako przeczytane"></span>
-                                </td>
-                                <td class="col-forum-description">
-                                    <h3><a title="Algorytmy i struktury danych" data-category="Forum-Name" href="http://forum.4programmers.net/Algorytmy">Algorytmy i struktury danych</a></h3>
+            <section class="panel panel-wrapper">
+                <div class="panel-body">
+                    <h2 class="pull-left">Podstawy programowania</h2>
+                    <a class="pull-right toggle"><i class="fa fa-minus-square-o"></i></a>
 
-                                    <p>Dział zawierający nieco trudniejsze zagadnienia programistyczne. Tutaj można również dyskutować o algorytmach oraz strukturach danych.</p>
-                                </td>
+                    <div class="box-forum">
+                        <table>
+                            <tbody>
+                                <tr id="forum-6">
+                                    <td class="col-icon">
+                                        <a href="#" title="Kliknij, aby odnzaczyć jako przeczytane">
+                                            <img class="img-responsive center-block" src="/img/forum-new.png">
+                                        </a>
+                                    </td>
+                                    <td class="col-forum-description">
+                                        <h3><a title="Algorytmy i struktury danych" data-category="Forum-Name" href="http://forum.4programmers.net/Algorytmy">Algorytmy i struktury danych</a></h3>
 
-                                <td class="col-stats">
-                                    <ul>
-                                        <li title="Ilość wątków"><strong>1,732</strong> <small>wątków</small></li>
-                                        <li title="Ilość postów"><strong>9,718</strong> <small>postów</small></li>
-                                    </ul>
-                                </td>
-                                <td class="col-avatar">
-
-                                    <a href="http://4programmers.net/Profile/70446">
-                                        <img class="img-thumbnail" src="http://4programmers.net/template/img/avatar.png">
-                                    </a>
-
-                                </td>
-                                <td class="col-post-preview">
-
-                                    <ul class="last-post">
-                                        <li>
+                                        <p>Dział zawierający nieco trudniejsze zagadnienia programistyczne. Tutaj można również dyskutować o algorytmach oraz strukturach danych.</p>
+                                    </td>
+                                    <td class="col-stats hidden-md hidden-sm hidden-xs">
+                                        <p title="Ilość wątków"><strong>1,732</strong> <small>wątków</small></p>
+                                        <p title="Ilość postów"><strong>9,718</strong> <small>postów</small></p>
+                                    </td>
+                                    <td class="col-avatar hidden-md hidden-sm hidden-xs">
+                                        <a href="http://4programmers.net/Profile/70446">
+                                            <img class="img-thumbnail" src="http://4programmers.net/template/img/avatar.png">
+                                        </a>
+                                    </td>
+                                    <td class="col-post-preview hidden-sm hidden-xs">
+                                        <p>
                                             <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="topic-last" href="http://forum.4programmers.net/Algorytmy/258268-porownywanie_czy_pliki_sa_takie_same?view=unread"></a>
 
-                                            <a title="Porównywanie czy pliki sa takie same" href="http://forum.4programmers.net/Algorytmy/258268-porownywanie_czy_pliki_sa_takie_same?p=1177861#id1177861">Porównywanie czy pliki sa takie same</a>							</li>
-                                        <li>
-                                            <abbr class="timestamp" data-timestamp="1442897046" title="22 wrzesień 2015, 06:44">22 wrzesień 2015, 06:44,</abbr>
-                                            <a data-user-id="70446" href="http://4programmers.net/Profile/70446">Mr.YaHooo</a>							</li>
-                                    </ul>
-                                </td>
-                            </tr>
+                                            <a title="Porównywanie czy pliki sa takie same" href="http://forum.4programmers.net/Algorytmy/258268-porownywanie_czy_pliki_sa_takie_same?p=1177861#id1177861">Porównywanie czy pliki sa takie same</a>
+                                        </p>
+                                        <p>
+                                            <span class="timestamp" data-timestamp="1442897046" title="22 wrzesień 2015, 06:44">22 wrzesień 2015, 06:44,</span>
+                                            <a data-user-id="70446" href="http://4programmers.net/Profile/70446">Mr.YaHooo</a>
+                                        </p>
+                                    </td>
+                                </tr>
 
+                                <tr id="forum-6">
+                                    <td class="col-icon">
+                                        <a href="#" title="Kliknij, aby odnzaczyć jako przeczytane">
+                                            <img class="img-responsive center-block" src="/img/forum-new.png">
+                                        </a>
+                                    </td>
+                                    <td class="col-forum-description">
+                                        <h3><a title="Algorytmy i struktury danych" data-category="Forum-Name" href="http://forum.4programmers.net/Algorytmy">Algorytmy i struktury danych</a></h3>
 
+                                        <p>Forum poświęcone zagadnieniom związanym z procesem wytwarzania oprogramowania, takim jak tworzenie, testowanie, debugowanie, UML itp.</p>
+                                    </td>
+                                    <td class="col-stats hidden-md hidden-sm hidden-xs">
+                                        <p title="Ilość wątków"><strong>1,732</strong> <small>wątków</small></p>
+                                        <p title="Ilość postów"><strong>9,718</strong> <small>postów</small></p>
+                                    </td>
+                                    <td class="col-avatar hidden-md hidden-sm hidden-xs">
+                                        <a href="http://4programmers.net/Profile/70446">
+                                            <img class="img-thumbnail" src="/img/shalom.png">
+                                        </a>
+                                    </td>
+                                    <td class="col-post-preview hidden-sm hidden-xs">
+                                        <p>
+                                            <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="topic-last" href="http://forum.4programmers.net/Algorytmy/258268-porownywanie_czy_pliki_sa_takie_same?view=unread"></a>
 
-                        </tbody>
-                    </table>
+                                            <a title="Porównywanie czy pliki sa takie same" href="http://forum.4programmers.net/Algorytmy/258268-porownywanie_czy_pliki_sa_takie_same?p=1177861#id1177861">Porównywanie czy pliki sa takie same</a>
+                                        </p>
+                                        <p>
+                                            <span class="timestamp" data-timestamp="1442897046" title="22 wrzesień 2015, 06:44">22 wrzesień 2015, 06:44,</span>
+                                            <a data-user-id="70446" href="http://4programmers.net/Profile/70446">Mr.YaHooo</a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+            </section>
+
+            <section class="panel panel-wrapper">
+                <div class="panel-body">
+                    <h2 class="pull-left">Rozwój zawodowy</h2>
+                    <a class="pull-right toggle"><i class="fa fa-minus-square-o"></i></a>
+
+                    <div class="box-forum">
+                        <table>
+                            <tbody>
+                                <tr id="forum-6">
+                                    <td class="col-icon">
+                                        <a href="#" title="Kliknij, aby odnzaczyć jako przeczytane">
+                                            <img class="img-responsive center-block" src="/img/forum-new.png">
+                                        </a>
+                                    </td>
+                                    <td class="col-forum-description">
+                                        <h3><a title="Algorytmy i struktury danych" data-category="Forum-Name" href="http://forum.4programmers.net/Algorytmy">Oferty pracy</a></h3>
+
+                                        <p>Poszukujesz pracownika? W tym miejscu możesz umieścić ogłoszenie o pracę</p>
+                                    </td>
+                                    <td class="col-stats hidden-md hidden-sm hidden-xs">
+
+                                    </td>
+                                    <td class="col-avatar hidden-md hidden-sm hidden-xs">
+
+                                    </td>
+                                    <td class="col-post-preview hidden-sm hidden-xs text-center">
+                                        Ilość przekierowań: 54414
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="box-who-is-online" class="box">
+                <h4 class="border">158 osób online</h4>
+
+                <p><strong>Administrator:</strong> Adam Boduch</p>
+            </section>
+        </main>
+
+        <aside id="sidebar">
+            <div id="box-my-tags" class="box">
+                <h4 class="border">Moje tagi</h4>
+
+                <ul class="tag-clouds">
+                    <li><a href="#">delphi</a><small>× 7970</small></li>
+                </ul>
             </div>
-        </section>
-    </main>
 
-    <aside id="sidebar">
+            <div id="box-popular-tags" class="box">
+                <h4 class="border">Popularne tagi</h4>
 
-    </aside>
+                <ul class="tag-clouds">
+                    <li><a href="http://forum.4programmers.net/Tag/c%23">c#</a><small>× 7970</small></li>
+                    <li><a href="http://forum.4programmers.net/Tag/java">java</a><small>× 7060</small></li>
+                    <li><a href="http://forum.4programmers.net/Tag/php">php</a><small>× 4115</small></li>
+                    <li><a href="http://forum.4programmers.net/Tag/c">c</a><small>× 3930</small></li>
+                </ul>
+            </div>
+
+            <section id="box-job-offers" class="box">
+                <h4><a href="#">Oferty pracy</a></h4>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object" src="/img/apple-touch.png" style="width: 35px; height: 35px;" alt="Power Media S.A.">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
+
+                                <p><a href="#">Power Media S.A.</a></p>
+                                <small><a href="#">Wrocław</a> • do 5000 zł</small>
+                            </div>
+                        </div>
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object" src="/img/apple-touch.png" style="width: 35px; height: 35px;" alt="Power Media S.A.">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
+
+                                <p><a href="#">Power Media S.A.</a></p>
+                                <small><a href="#">Wrocław</a> • do 5000 zł</small>
+                            </div>
+                        </div>
+
+                        <div class="media">
+                            <a href="#" class="text-align">Więcej ofert w pobliżu Wrocław</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </div>
 {% endblock %}
 
 {% block head %}
