@@ -20,3 +20,5 @@ Route::controllers([
     'Mikroblogi' => 'Microblog\HomeController',
     'Forum'      => 'Forum\HomeController'
 ]);
+
+Route::get('/Delphi', ['as' => 'page', 'uses' => 'Wiki\WikiController@category']);

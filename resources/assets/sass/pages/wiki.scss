@@ -1,0 +1,93 @@
+@charset "UTF-8";
+@import "../helpers/variables";
+@import "../vendors/bootstrap/variables";
+@import "../vendors/font-awesome/variables";
+@import "../vendors/bootstrap/mixins/text-overflow";
+
+#interface {
+  background: url('../img/horizontal.png') repeat-x 0 50%,url('../img/vertical.png') no-repeat 0 100%;
+  margin: 17px 0;
+  overflow: hidden;
+  width: 52.1%;
+  float: right;
+
+  @media screen and (max-width: $screen-xs) {
+    background: none;
+    float: none;
+    width: 100%;
+  }
+}
+
+#folder {
+  border: 1px solid $border-color;
+  background-color: #f6f6f6;
+
+  ol {
+    width: 80%;
+    margin: auto;
+
+    li {
+      border: none;
+      background: none;
+      padding: 2px 0 2px 20px;
+      position: relative;
+      @include text-overflow();
+
+      &:before {
+        font-family: FontAwesome;
+        content: $fa-var-folder-open-o;
+        position: absolute;
+        left: 0;
+      }
+
+      a {
+        color: $gray-darker;
+        font-size: 12px;
+      }
+
+      em {
+        color: $gray-light;
+      }
+    }
+  }
+}
+
+.panel-catalog {
+  h4 {
+    font-size: 15px;
+
+    a {
+      color: $gray-darker;
+    }
+  }
+
+  .list-inline {
+    font-size: 11px;
+    margin: 10px 0 0 2px;
+
+    li {
+      margin-right: 20px;
+      padding: 1px 0 2px 15px;
+      color: $gray-light;
+      position: relative;
+
+      &:before {
+        font-family: FontAwesome;
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+
+  .date:before {
+    content: $fa-var-calendar;
+  }
+
+  .comments:before {
+    content: $fa-var-comments;
+  }
+
+  .views:before {
+    content: $fa-var-lightbulb-o;
+  }
+}

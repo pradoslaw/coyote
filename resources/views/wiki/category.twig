@@ -1,0 +1,201 @@
+{% extends 'layout.twig' %}
+{% block title %}Delphi{{ parent() }}{% endblock %}
+
+{% import 'vendor/forms.twig' as forms %}
+
+{% block container %}
+    <div class="box">
+        <ul class="nav nav-panel">
+            <li role="presentation" class="active"><a href="javascript:"><i class="fa fa-paragraph"></i></a></li>
+            <li role="presentation"><a href="#">Edycja</a></li>
+            <li role="presentation"><a href="#">Napisz nowy artykuł w tym dziale</a></li>
+            <li role="presentation"><a href="#">Zakończ obserwację</a></li>
+            <li role="presentation"><a href="#">Historia i autorzy</a></li>
+        </ul>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <article>
+                    <header>
+                        <h1>Programowanie w języku Delphi</h1>
+                    </header>
+
+                    Witamy w wortalu tematycznym poświęconym językowi Delphi. Pomóż nam rozwijać encyklopedie tego języka. Wciąż pozostaje wiele do zrobienia. Naszym celem jest opisanie podstawowych mechanizmów Delphi, słów kluczowych, biblioteki RTL. W późniejszym etapie zajmiemy się opisaniem biblioteki VCL.
+
+                    Ac? Mauris purus massa odio in nec dolor sit massa, nunc arcu! Aliquam mus aliquam odio enim aliquet turpis adipiscing elementum dolor lacus lundium et! Velit augue! Quis? Nec phasellus? Mattis phasellus phasellus tristique amet ultrices enim sit, dis duis porta, mus parturient facilisis urna rhoncus montes turpis natoque tortor pulvinar turpis odio auctor ac, augue sagittis rhoncus amet nascetur. Natoque aenean pulvinar! Amet! Tortor porta turpis elit mid lundium lundium sit cursus tincidunt cras scelerisque nunc, etiam, facilisis magna pulvinar, urna hac urna! Cras, aliquet porta in, non cum, parturient, integer, integer non placerat turpis! Lorem mid aliquam tempor. Placerat, amet integer? Amet lorem. Platea et in! Vut augue montes porttitor, sed cursus, amet mattis purus, nascetur porttitor cras.
+                </article>
+            </div>
+        </div>
+
+        <div id="catalog">
+            <div id="interface">
+                <div class="btn-group pull-right" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default active"><i class="fa fa-th-large"></i> Kafelki</button>
+                    <button type="button" class="btn btn-default"><i class="fa fa-th-list"></i> Lista</button>
+                </div>
+
+                <div class="pull-right" style="width: 5px; height: 40px; background-color: #fafafa"></div>
+            </div>
+
+            <div class="clearfix">...</div>
+
+            <div class="panel panel-transparent">
+                <div class="panel-body">
+
+                    <div id="folder" class="panel">
+                        <div class="panel-body">
+                            <ol class="list-group">
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/NET">.NET (<em>22</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Artykuły">Artykuły (<em>164</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Data_i_czas">Data i czas (<em>84</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Dyrektywy_kompilatora">Dyrektywy kompilatora (<em>26</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/FAQ">FAQ (<em>486</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Gotowce">Gotowce (<em>218</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Kody_źródłowe">Kody źródłowe (<em>1</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Kompendium">Delphi 7. Kompendium programisty (<em>34</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Moduły">Moduły (<em>500</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/OOP">OOP (<em>38</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Operacje_liczbowe">Operacje liczbowe (<em>68</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Pliki">Pliki (<em>84</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Składnia_języka">Składnia języka (<em>28</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Typy_danych">Typy danych (<em>48</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Vademecum">Delphi 2005. Kompendium programisty (<em>16</em>)</a>
+                                </li>
+                                <li class="list-group-item col-sm-4">
+                                    <a href="http://4programmers.net/Delphi/Łańcuchy">Łańcuchy (<em>117</em>)</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <ul class="pagination pagination-sm">
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel panel-default panel-catalog">
+                                <div class="panel-body">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object img-thumbnail" src="/img/shalom.png" style="max-width: 45px;" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading"><a href="#">Implementacja listy dwukierunkowej ze znacznikiem</a></h4>
+
+                                            <ul class="list-inline">
+                                                <li class="date">04 wrzesień 2015, 21:30</li>
+                                                <li class="comments">0 komentarzy</li>
+                                                <li class="views">164 odsłony</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="panel panel-default panel-catalog">
+                                <div class="panel-body">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object img-thumbnail" src="/img/shalom.png" style="max-width: 45px;" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading"><a href="#">Implementacja listy dwukierunkowej ze znacznikiem</a></h4>
+
+                                            <ul class="list-inline">
+                                                <li class="date">04 wrzesień 2015, 21:30</li>
+                                                <li class="comments">0 komentarzy</li>
+                                                <li class="views">164 odsłony</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <ul class="pagination pagination-sm">
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/wiki.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
