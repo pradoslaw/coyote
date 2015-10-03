@@ -5,6 +5,8 @@
 @import "../vendors/bootstrap/variables";
 @import "../components/tags";
 @import "../components/job-offers";
+@import "../components/sidemenu";
+@import "../vendors/font-awesome/variables";
 
 #index.sidebar {
   padding-right: 20%;
@@ -23,6 +25,7 @@
   float: right;
   width: 23%;
   margin-right: -25%;
+  margin-top: 45px;
 }
 
 .panel-wrapper {
@@ -130,5 +133,56 @@
 #box-popular-tags, #box-my-tags {
   h4 {
     @include box-header-icon($fa-var-tag);
+  }
+
+  margin-bottom: 20px;
+}
+
+.btn-mark-read, .btn-atom, #btn-setting {
+  position: relative;
+
+  &:before {
+    font-family: FontAwesome;
+    position: absolute;
+    left: 3px;
+    top: 4px;
+    font-size: 17px;
+  }
+}
+
+.btn-mark-read:before {
+  content: $fa-var-check-square-o;
+}
+
+.btn-atom:before {
+  content: $fa-var-rss-square;
+}
+
+#btn-setting:before {
+  content: $fa-var-cog;
+}
+
+#btn-toggle-sidebar {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  right: 0;
+  top: -30px;
+
+  i {
+    font-size: 10px;
+    padding: 2px;
+    border-radius: 3px;
+    -webkit-transition: all .4s ease-in-out;
+    -moz-transition: all .4s ease-in-out;
+    display: block;
+    text-align: center;
+    color: $gray;
+
+    &:hover {
+      opacity: 1;
+      background-color: $border-color;
+      text-decoration: none;
+    }
   }
 }

@@ -5,6 +5,10 @@
 
 {% block container %}
     <div id="index" class="sidebar">
+        <a title="Zamknij/pokaż pasek narzędziowy" id="btn-toggle-sidebar" class="" href="javascript:" style="top: 16px">
+            <i class="fa fa-close"></i>
+        </a>
+
         <main id="mainbar">
             <ul class="nav nav-pills">
                 <li role="presentation" class="active"><a href="#">Kategorie</a></li>
@@ -134,6 +138,20 @@
         </main>
 
         <aside id="sidebar">
+            <div class="box">
+                <ul class="side-menu">
+                    <li class="btn-mark-read">
+                        <a title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
+                    </li>
+                    <li class="btn-atom">
+                        <a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
+                    </li>
+                    <li id="btn-setting">
+                        <a title="Zmień kolejność wyświetlanych kategorii" href="http://4programmers.net/User/Order" data-category="forum-sidebar-buttons" data-value="setting">Personalizacja forum</a>
+                    </li>
+                </ul>
+            </div>
+
             <div id="box-my-tags" class="box">
                 <h4 class="border">Moje tagi</h4>
 
