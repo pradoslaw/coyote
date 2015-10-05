@@ -10,6 +10,10 @@
 
 #index.sidebar {
   padding-right: 20%;
+
+  @media screen and (max-width: $screen-md) {
+    padding-right:            0;
+  }
 }
 
 #mainbar {
@@ -26,6 +30,18 @@
   width: 23%;
   margin-right: -25%;
   margin-top: 45px;
+
+  @media screen and (max-width: $screen-md) {
+    display:                  none;
+    position:                 absolute;
+    z-index:                  101;
+    font-size:                .9em;
+    right:                    25%;
+    background:               #F3F5F0;
+    border:                   2px solid $border-color;
+    padding:                  6px 10px;
+    box-shadow:               5px 5px 6px #AAA;
+  }
 }
 
 .panel-wrapper {
@@ -138,6 +154,48 @@
   margin-bottom: 20px;
 }
 
+.btn-mark-read-xs, .btn-atom-xs, #btn-toggle-sidebar {
+  position: absolute;
+  top: 18px;
+  width: 16px;
+  height: 16px;
+
+  i {
+    color: $gray;
+  }
+}
+
+#btn-toggle-sidebar {
+  right: 11px;
+
+  i {
+    font-size: 10px;
+    padding: 2px;
+    border-radius: 3px;
+    -webkit-transition: all .4s ease-in-out;
+    -moz-transition: all .4s ease-in-out;
+    display: block;
+    text-align: center;
+
+    &:hover {
+      opacity: 1;
+      background-color: $border-color;
+    }
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn-mark-read-xs {
+  right: 55px;
+}
+
+.btn-atom-xs {
+  right: 32px;
+}
+
 .btn-mark-read, .btn-atom, #btn-setting {
   position: relative;
 
@@ -160,29 +218,4 @@
 
 #btn-setting:before {
   content: $fa-var-cog;
-}
-
-#btn-toggle-sidebar {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  right: 0;
-  top: -30px;
-
-  i {
-    font-size: 10px;
-    padding: 2px;
-    border-radius: 3px;
-    -webkit-transition: all .4s ease-in-out;
-    -moz-transition: all .4s ease-in-out;
-    display: block;
-    text-align: center;
-    color: $gray;
-
-    &:hover {
-      opacity: 1;
-      background-color: $border-color;
-      text-decoration: none;
-    }
-  }
 }

@@ -13,7 +13,9 @@ var elixir = require('laravel-elixir');
 
 elixir(function(mix) {
 
-    mix.scripts(['jquery-last.min.js', 'bootstrap/tooltip.js', 'bootstrap/modal.js', 'bootstrap/dropdown.js', 'bootstrap/collapse.js'], 'public/js/main.js');
+    mix.scripts(['jquery-last.min.js', 'bootstrap/tooltip.js', 'bootstrap/modal.js', 'bootstrap/dropdown.js', 'bootstrap/collapse.js'], 'public/js/main.js')
+       .scripts(['forum/main.js'], 'public/js/forum.js');
+
     mix.sass('main.scss')
        .sass('pages/auth.scss')
        .sass('pages/homepage.scss')
