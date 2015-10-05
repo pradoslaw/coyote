@@ -8,6 +8,11 @@
 @import "../components/sidemenu";
 @import "../vendors/font-awesome/variables";
 
+#index {
+  margin-top: 20px;
+  position: relative;
+}
+
 #index.sidebar {
   padding-right: 20%;
 
@@ -156,12 +161,20 @@
 
 .btn-mark-read-xs, .btn-atom-xs, #btn-toggle-sidebar {
   position: absolute;
-  top: 18px;
+  top: 15px;
   width: 16px;
   height: 16px;
 
   i {
     color: $gray;
+  }
+}
+
+.btn-mark-read-xs, .btn-atom-xs {
+  display: none;
+
+  @media screen and (max-width: $screen-md) {
+    display: block;
   }
 }
 
@@ -183,7 +196,7 @@
     }
   }
 
-  &:hover {
+  &:hover, &:focus {
     text-decoration: none;
   }
 }

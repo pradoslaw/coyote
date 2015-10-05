@@ -5,7 +5,7 @@
 @import "../vendors/bootstrap/mixins/text-overflow";
 
 #interface {
-  background: url('../img/horizontal.png') repeat-x 0 50%,url('../img/vertical.png') no-repeat 0 100%;
+  background: url('/img/horizontal.png') repeat-x 0 50%,url('/img/vertical.png') no-repeat 0 100%;
   margin: 17px 0;
   overflow: hidden;
   width: 52.1%;

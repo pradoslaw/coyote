@@ -99,6 +99,14 @@
   margin-top:             -1px;
 }
 
+.nav-tabs {
+  border-bottom: 1px solid $box-border-color;
+
+  > li > a {
+    color: $gray-light;
+  }
+}
+
 .nav-pills {
   border-bottom: 1px solid $box-border-color;
   box-shadow: 0 2px 0 #FFF;

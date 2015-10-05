@@ -7038,6 +7038,11 @@ small {
   border-top-left-radius: 0;
   margin-top: -1px; }
 
+.nav-tabs {
+  border-bottom: 1px solid #c7c7c7; }
+  .nav-tabs > li > a {
+    color: #777777; }
+
 .nav-pills {
   border-bottom: 1px solid #c7c7c7;
   box-shadow: 0 2px 0 #FFF; }
