@@ -27,3 +27,7 @@
     background-color: $gray-dark;
   }
 }
+
+.pagination-xs {
+  @include pagination-size($padding-small-vertical, $padding-small-horizontal, ceil(($font-size-base * 0.78)), $line-height-small, $border-radius-small);
+}

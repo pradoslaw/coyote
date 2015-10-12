@@ -9,7 +9,6 @@
 @import "../vendors/font-awesome/variables";
 
 #index {
-  margin-top: 20px;
   position: relative;
 }
 
@@ -142,6 +141,73 @@
   }
 }
 
+.col-topic-icon {
+  width: 30px;
+}
+
+.col-subject {
+  h5 {
+    margin: 0;
+
+    a {
+      color: darken($brand-primary, 10%);
+    }
+  }
+
+  strong {
+    font-weight: normal;
+    font-size: 11px;
+    padding: 3px 0 0 0;
+    display: block;
+  }
+
+  > .tag-clouds {
+    margin: 0;
+    padding: 0;
+
+    li {
+      float: none;
+
+      a {
+        margin: 0;
+        padding: 2px 6px;
+      }
+    }
+  }
+}
+
+.col-last-post {
+  width: 22%;
+  min-width: 120px;
+
+  .img-thumbnail {
+    float: left;
+    margin-right: 5px;
+  }
+
+  .btn-watch {
+    opacity: .3;
+    float: right;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    margin: 8px 5px 0 0;
+    position: relative;
+    display: inline-block;
+
+    &:after {
+      position: absolute;
+      left: 0;
+      font-family: FontAwesome;
+      content: $fa-var-star-o;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
 #box-who-is-online {
   margin-top: 20px;
   color: $gray-light;
@@ -231,4 +297,88 @@
 
 #btn-setting:before {
   content: $fa-var-cog;
+}
+
+#box-topics {
+  margin-top: 9px;
+
+  table {
+    margin-top: 10px;
+  }
+}
+
+#box-count {
+  color: lighten($gray-light, 10%);
+  margin-bottom: 15px;
+
+  strong {
+    font-size: 270%;
+    display: block;
+  }
+
+  span {
+    letter-spacing: 2px;
+    font-size: 90%;
+  }
+}
+
+#sort {
+  list-style-type: none;
+  float: left;
+  margin: 0;
+  height: 30px;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    margin-right: 6px;
+
+    a {
+      display: block;
+      color: $text-color;
+      padding: 4px 10px;
+      font-size: 12px;
+      text-shadow: #fff 0 1px 0;
+      opacity: .8;
+      text-decoration: none;
+    }
+  }
+
+  .desc, .asc {
+    margin-right: 10px;
+
+    a {
+      padding-right: 20px;
+      background-color: #444;
+      border-radius: 10px;
+      color: #fff;
+      text-shadow: none;
+      opacity: 1.0;
+      position: relative;
+
+      &:after {
+        position: absolute;
+        font-family: FontAwesome;
+        right: 7px;
+        font-size: 13px;
+        top: 0;
+      }
+    }
+  }
+
+  .asc a {
+    &:after {
+      content: $fa-var-sort-asc;
+    }
+  }
+
+  .desc a {
+    &:after {
+      content: $fa-var-sort-desc;
+    }
+  }
+}
+
+.pagination {
+  margin: 8px 0;
 }

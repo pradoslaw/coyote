@@ -5,16 +5,7 @@
 
 {% block container %}
     <div id="index" class="sidebar">
-        <a class="btn-mark-read-xs" href="javascript:" title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
-            <i class="fa fa-check-square-o"></i>
-        </a>
-        <a class="btn-atom-xs" href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">
-            <i class="fa fa-rss-square"></i>
-        </a>
-
-        <a title="Zamknij/pokaż pasek narzędziowy" id="btn-toggle-sidebar" href="javascript:">
-            <i class="fa fa-close"></i>
-        </a>
+        {% include "forum/top.twig" %}
 
         <main id="mainbar">
             <ul class="nav nav-tabs">
@@ -38,9 +29,9 @@
                                         </a>
                                     </td>
                                     <td class="col-forum-description">
-                                        <h3><a title="Algorytmy i struktury danych" data-category="Forum-Name" href="http://forum.4programmers.net/Algorytmy">Algorytmy i struktury danych</a></h3>
+                                        <h3><a title="Python" data-category="Forum-Name" href="/Forum/Python">Python</a></h3>
 
-                                        <p>Dział zawierający nieco trudniejsze zagadnienia programistyczne. Tutaj można również dyskutować o algorytmach oraz strukturach danych.</p>
+                                        <p>Wszystkie tematy związane z językiem Python. W tym Django, Flask, Pyramid, Twisted czy Tornado.</p>
                                     </td>
                                     <td class="col-stats hidden-md hidden-sm hidden-xs">
                                         <p title="Ilość wątków"><strong>1,732</strong> <small>wątków</small></p>
@@ -137,11 +128,7 @@
                 </div>
             </section>
 
-            <section id="box-who-is-online" class="box">
-                <h4 class="border">158 osób online</h4>
-
-                <p><strong>Administrator:</strong> Adam Boduch</p>
-            </section>
+            {% include "forum/viewers_list.twig" %}
         </main>
 
         <aside id="sidebar">
@@ -159,63 +146,7 @@
                 </ul>
             </div>
 
-            <div id="box-my-tags" class="box">
-                <h4 class="border">Moje tagi</h4>
-
-                <ul class="tag-clouds">
-                    <li><a href="#">delphi</a><small>× 7970</small></li>
-                </ul>
-            </div>
-
-            <div id="box-popular-tags" class="box">
-                <h4 class="border">Popularne tagi</h4>
-
-                <ul class="tag-clouds">
-                    <li><a href="http://forum.4programmers.net/Tag/c%23">c#</a><small>× 7970</small></li>
-                    <li><a href="http://forum.4programmers.net/Tag/java">java</a><small>× 7060</small></li>
-                    <li><a href="http://forum.4programmers.net/Tag/php">php</a><small>× 4115</small></li>
-                    <li><a href="http://forum.4programmers.net/Tag/c">c</a><small>× 3930</small></li>
-                </ul>
-            </div>
-
-            <section id="box-job-offers" class="box">
-                <h4><a href="#">Oferty pracy</a></h4>
-
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object" src="/img/apple-touch.png" style="width: 35px; height: 35px;" alt="Power Media S.A.">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
-
-                                <p><a href="#">Power Media S.A.</a></p>
-                                <small><a href="#">Wrocław</a> • do 5000 zł</small>
-                            </div>
-                        </div>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object" src="/img/apple-touch.png" style="width: 35px; height: 35px;" alt="Power Media S.A.">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
-
-                                <p><a href="#">Power Media S.A.</a></p>
-                                <small><a href="#">Wrocław</a> • do 5000 zł</small>
-                            </div>
-                        </div>
-
-                        <div class="media">
-                            <a href="#" class="text-align">Więcej ofert w pobliżu Wrocław</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            {% include "forum/sidebar.twig" %}
         </aside>
     </div>
 {% endblock %}

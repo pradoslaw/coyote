@@ -12,6 +12,7 @@
 */
 
 Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
+Route::get('/Forum/Python', ['uses' => 'Forum\CategoryController@getIndex']);
 
 Route::controllers([
     'login'      => 'Auth\LoginController',
@@ -22,3 +23,4 @@ Route::controllers([
 ]);
 
 Route::get('/Delphi', ['as' => 'page', 'uses' => 'Wiki\WikiController@category']);
+
