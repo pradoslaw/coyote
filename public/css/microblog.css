@@ -26,6 +26,69 @@
       font-size: 10px;
       color: #919191; }
 
+.microblog .media-heading a {
+  font-size: 14px;
+  color: #333333;
+  font-weight: bold; }
+
+.microblog .media {
+  overflow: visible; }
+
+.microblog .media-body {
+  overflow: visible; }
+  .microblog .media-body a.timestamp {
+    font-size: 11px;
+    color: #777777; }
+
+.microblog-text {
+  color: #777777;
+  padding: 20px 0; }
+
+.microblog-comment-text {
+  color: #777777; }
+
+.btn-thumbs, .btn-reply {
+  padding: 2px 7px 2px 25px;
+  color: #777777;
+  position: relative; }
+  .btn-thumbs:before, .btn-reply:before {
+    font-family: FontAwesome;
+    position: absolute;
+    left: 5px;
+    color: #333333; }
+  .btn-thumbs:hover, .btn-reply:hover {
+    border: 1px solid #d0d0d0;
+    background-image: linear-gradient(to bottom, #fff 0%, #eeeeee 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFEEEEEE', GradientType=0); }
+
+.btn-thumbs:before {
+  content: ""; }
+
+.btn-reply:before {
+  content: ""; }
+
+.thumbs-on:before {
+  color: #80a41a; }
+
+.microblog-comment .list-inline {
+  color: #777777;
+  font-size: 11px; }
+  .microblog-comment .list-inline a {
+    color: #777777; }
+  .microblog-comment .list-inline li {
+    padding-right: 0; }
+  .microblog-comment .list-inline li:after {
+    content: "●";
+    margin-left: 5px; }
+  .microblog-comment .list-inline li:last-child:after {
+    content: "\00a0 "; }
+
+.microblog-comment .dropdown-toggle {
+  border: none;
+  font-size: 10px;
+  background-color: transparent; }
+
 .nav-tabs {
   margin: 0 0 20px 0; }
 
@@ -106,68 +169,5 @@
   color: #333333; }
   .microblog-submit button:hover {
     background: none; }
-
-.microblog .media-heading a {
-  font-size: 14px;
-  color: #333333;
-  font-weight: bold; }
-
-.microblog .media {
-  overflow: visible; }
-
-.microblog .media-body {
-  overflow: visible; }
-  .microblog .media-body a.timestamp {
-    font-size: 11px;
-    color: #777777; }
-
-.microblog-text {
-  color: #777777;
-  padding: 20px 0; }
-
-.microblog-comment-text {
-  color: #777777; }
-
-.btn-thumbs, .btn-reply {
-  padding: 2px 7px 2px 25px;
-  color: #777777;
-  position: relative; }
-  .btn-thumbs:before, .btn-reply:before {
-    font-family: FontAwesome;
-    position: absolute;
-    left: 5px;
-    color: #333333; }
-  .btn-thumbs:hover, .btn-reply:hover {
-    border: 1px solid #d0d0d0;
-    background-image: linear-gradient(to bottom, #fff 0%, #eeeeee 100%);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFEEEEEE', GradientType=0); }
-
-.btn-thumbs:before {
-  content: ""; }
-
-.btn-reply:before {
-  content: ""; }
-
-.thumbs-on:before {
-  color: #80a41a; }
-
-.microblog-comment .list-inline {
-  color: #777777;
-  font-size: 11px; }
-  .microblog-comment .list-inline a {
-    color: #777777; }
-  .microblog-comment .list-inline li {
-    padding-right: 0; }
-  .microblog-comment .list-inline li:after {
-    content: "●";
-    margin-left: 5px; }
-  .microblog-comment .list-inline li:last-child:after {
-    content: "\00a0 "; }
-
-.microblog-comment .dropdown-toggle {
-  border: none;
-  font-size: 10px;
-  background-color: transparent; }
 
 /*# sourceMappingURL=microblog.css.map */

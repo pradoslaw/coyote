@@ -92,6 +92,12 @@
 
                 </div>
             </section>
+
+            <section id="box-microblog" class="box">
+                <h4><a href="#">Popularne wpisy na mikroblogu</a></h4>
+
+                {% include "/microblog/partial.twig" %}
+            </section>
         </main>
 
         <aside class="col-md-4">
@@ -261,4 +267,14 @@
     {{ parent() }}
 
     <link rel="stylesheet" href="/css/homepage.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function () {
+            $('.btn-thumbs').tooltip({html: true});
+        });
+    </script>
 {% endblock %}

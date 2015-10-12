@@ -6903,6 +6903,8 @@ button[type=submit] {
   color: #646466;
   padding-left: 25px;
   font-size: 14px; }
+  .box > h4 a {
+    color: inherit; }
 
 .box .border {
   border-bottom: 1px solid #c7c7c7;

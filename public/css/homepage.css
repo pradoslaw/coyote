@@ -5,9 +5,6 @@
   content: "";
   left: 0; }
 
-#box-job-offers h4 a {
-  color: inherit; }
-
 #box-job-offers .media {
   border-bottom: 1px solid #d0d0d0;
   padding-bottom: 7px;
@@ -39,6 +36,69 @@
   margin: 0; }
   #box-job-offers p a {
     color: #555555; }
+
+.microblog .media-heading a {
+  font-size: 14px;
+  color: #333333;
+  font-weight: bold; }
+
+.microblog .media {
+  overflow: visible; }
+
+.microblog .media-body {
+  overflow: visible; }
+  .microblog .media-body a.timestamp {
+    font-size: 11px;
+    color: #777777; }
+
+.microblog-text {
+  color: #777777;
+  padding: 20px 0; }
+
+.microblog-comment-text {
+  color: #777777; }
+
+.btn-thumbs, .btn-reply {
+  padding: 2px 7px 2px 25px;
+  color: #777777;
+  position: relative; }
+  .btn-thumbs:before, .btn-reply:before {
+    font-family: FontAwesome;
+    position: absolute;
+    left: 5px;
+    color: #333333; }
+  .btn-thumbs:hover, .btn-reply:hover {
+    border: 1px solid #d0d0d0;
+    background-image: linear-gradient(to bottom, #fff 0%, #eeeeee 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFEEEEEE', GradientType=0); }
+
+.btn-thumbs:before {
+  content: ""; }
+
+.btn-reply:before {
+  content: ""; }
+
+.thumbs-on:before {
+  color: #80a41a; }
+
+.microblog-comment .list-inline {
+  color: #777777;
+  font-size: 11px; }
+  .microblog-comment .list-inline a {
+    color: #777777; }
+  .microblog-comment .list-inline li {
+    padding-right: 0; }
+  .microblog-comment .list-inline li:after {
+    content: "●";
+    margin-left: 5px; }
+  .microblog-comment .list-inline li:last-child:after {
+    content: "\00a0 "; }
+
+.microblog-comment .dropdown-toggle {
+  border: none;
+  font-size: 10px;
+  background-color: transparent; }
 
 #box-who-is-online {
   margin-top: 20px;
@@ -301,5 +361,11 @@
   #box-forum-headline .pull-right {
     color: #777777;
     font-size: 10px; }
+
+#box-microblog h4:before {
+  position: absolute;
+  font-family: FontAwesome;
+  content: "";
+  left: 0; }
 
 /*# sourceMappingURL=homepage.css.map */

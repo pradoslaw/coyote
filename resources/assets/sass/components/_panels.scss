@@ -9,6 +9,10 @@
     color: $box-header-color;
     padding-left: 25px;
     font-size: ceil($font-size-base * 1.05);
+
+    a {
+      color: inherit;
+    }
   }
 
   .border {

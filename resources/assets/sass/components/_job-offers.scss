@@ -7,10 +7,6 @@
 #box-job-offers {
   h4 {
     @include box-header-icon($fa-var-suitcase);
-
-    a {
-      color: inherit;
-    }
   }
 
   .media {

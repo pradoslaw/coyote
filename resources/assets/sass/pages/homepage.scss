@@ -4,6 +4,7 @@
 @import "../helpers/mixins";
 @import "../helpers/variables";
 @import "../components/job-offers";
+@import "../components/microblog";
 
 #box-who-is-online {
   margin-top: 20px;
@@ -350,5 +351,11 @@
   .pull-right {
     color: $gray-light;
     font-size: 10px;
+  }
+}
+
+#box-microblog {
+  h4 {
+    @include box-header-icon($fa-var-comments-o);
   }
 }
