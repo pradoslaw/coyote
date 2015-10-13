@@ -5,15 +5,15 @@
 
 {% block container %}
     <div id="index" class="sidebar">
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#">Kategorie</a></li>
+            <li role="presentation"><a href="#">Wszystkie</a></li>
+            <li role="presentation"><a href="#">Bez odpowiedzi</a></li>
+        </ul>
+
         {% include "forum/top.twig" %}
 
         <main id="mainbar">
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Kategorie</a></li>
-                <li role="presentation"><a href="#">Wszystkie</a></li>
-                <li role="presentation"><a href="#">Bez odpowiedzi</a></li>
-            </ul>
-
             <section class="panel panel-wrapper">
                 <div class="panel-body">
                     <h2 class="pull-left">Podstawy programowania</h2>
