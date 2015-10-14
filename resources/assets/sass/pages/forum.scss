@@ -231,11 +231,13 @@
   margin-bottom: 20px;
 }
 
+// Ikony wyswietlane po prawej stronie nad tabelka - np. z lista watkow. M.in. przycisk do ukrywania menu bocznego
+// -------------------------------------------------------------------------------------------
+
 .btn-mark-read-xs, .btn-atom-xs, #btn-toggle-sidebar {
   position: absolute;
   bottom: 5px;
-  width: 16px;
-  height: 16px;
+  font-size: 18px;
 
   i {
     color: $gray;
@@ -244,7 +246,6 @@
 
 .btn-mark-read-xs, .btn-atom-xs {
   display: none;
-  font-size: 18px;
 
   @media screen and (max-width: $screen-md) {
     display: block;
@@ -252,47 +253,35 @@
 }
 
 #btn-toggle-sidebar {
-  right: 4px;
-  font-size: 10px;
-  padding: 2px;
-  border-radius: 3px;
-  -webkit-transition: all .4s ease-in-out;
-  -moz-transition: all .4s ease-in-out;
+  right: 0;
 
-  i {
+  i.fa-close {
+    display: inline-block;
 
-    display: block;
-    text-align: center;
-
-    //&:hover {
-    //  opacity: 1;
-    //  background-color: $border-color;
-    //}
-
-    &:after {
-      position: absolute;
-      font-family: FontAwesome;
-      content: $fa-var-close;
-      left: 5px;
-    }
-  }
-
-  &:hover {
-    text-decoration: none;
-    opacity: 1;
-    background-color: $border-color;
-  }
-
-  &.sidebar-hidden {
-    font-size: 16px;
-
-    i:after {
-      content: $fa-var-bars;
-    }
+    font-size: 10px;
+    padding: 2px;
+    border-radius: 3px;
+    -webkit-transition: all .4s ease-in-out;
+    -moz-transition: all .4s ease-in-out;
 
     &:hover {
-      background-color: transparent;
+      opacity: 1;
+      background-color: $border-color;
     }
+  }
+
+  i.fa-bars {
+    display: none;
+  }
+}
+
+.sidebar-hidden {
+  i.fa-close {
+    display: none !important;
+  }
+
+  i.fa-bars {
+    display: inline-block !important;
   }
 }
 
@@ -304,7 +293,9 @@
   right: 28px;
 }
 
-// menu po prawej stronie w pasku narzedziowym forum
+// Menu po prawej stronie w pasku narzedziowym forum
+// ------------------------------------------------------------------------------------
+
 .btn-mark-read, .btn-atom, #btn-setting {
   position: relative;
 
