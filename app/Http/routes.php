@@ -12,6 +12,7 @@
 */
 
 Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
+Route::get('/Forum/Python/Test', ['uses' => 'Forum\TopicController@getIndex']);
 Route::get('/Forum/Python', ['uses' => 'Forum\CategoryController@getIndex']);
 
 Route::controllers([

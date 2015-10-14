@@ -1,0 +1,253 @@
+{% extends 'layout.twig' %}
+{% block title %}Forum dyskusyjne{{ parent() }}{% endblock %}
+
+{% import 'vendor/forms.twig' as forms %}
+
+{% block container %}
+
+    <div id="index" class="sidebar">
+        <h1>Python</h1>
+
+        <nav>
+            <ul class="pagination pagination-xs">
+                <li class="disabled">
+                    <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li>
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        {% include "forum/top.twig" %}
+
+        <main id="mainbar">
+
+            <section class="panel panel-wrapper">
+                <div class="panel-body">
+                    <div id="box-post" class="box-forum">
+                        <a href="#" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+
+                        <div class="clearfix"></div>
+
+                        <table cellspacing="1">
+                            <tbody>
+                                <tr>
+                                    <td class="col-user">
+                                        <h5 class="offline" title="Użytkownik jest offline">
+                                            <a data-user-id="62278" href="#">Wizzie</a>
+                                        </h5>
+                                    </td>
+
+                                    <td class="col-time" colspan="2">
+                                        <a title="Link do tego postu" id="id1182672" class="post-link" href="#">
+                                            <i class="fa fa-file-o"></i>
+                                        </a>
+
+                                        <span class="timestamp" title="09 październik 2015, 19:08" data-timestamp="1444410483">09 październik 2015, 19:08</span>
+                                        <small><a href="#" title="127.0.0.1" class="post-ip">(127.0.0.1)</a></small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-user">
+                                        <div class="row row-avatar">
+                                            <div class="col-xs-12">
+                                                <img src="/img/shalom.png">
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-4">Rejestracja:</div>
+                                            <div class="col-xs-8">25 maj 2014, 16:42</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4">Ostatnio:</div>
+                                            <div class="col-xs-8">22 minuty temu</div>
+                                        </div>
+                                    </td>
+                                    <td class="col-body">
+                                        <div class="post-content" data-post-id="1182672">Są takie tematy w większości
+                                            działów o językach, w tym też się przyda. Wrzucajcie co uważacie za dobre.<br>
+                                            <br>
+                                            Na początek pytanie, które zada sobie prawdopodobnie każdy zaczynający przygodę
+                                            z Pythonem:<br>
+                                            <b>Którą wersję wybrać?</b><br>
+                                            Python 3 jest nowszą "gałęzią" Pythona. Używaj tej wersji. Jeśli z jakiegoś
+                                            powodu musisz używać Pythona 2, prawdopodobnie o tym wiesz i nie czytasz tego
+                                            tematu <img alt=":)" title=":)"
+                                                        src="http://4programmers.net/template/img/smilies/smile.gif"><br>
+                                            <br>
+                                            <b>Początkujący</b><br>
+                                            <a href="https://www.codecademy.com/">Codecademy - interaktywna nauka
+                                                programowania, świetne głównie dla kompletnych programistycznych świeżaków
+                                                (choć nie tylko)</a><br>
+                                            <a href="http://learnpythonthehardway.org/book/">Learn Python The Hard Way -
+                                                specyficzne podejście do nauki, IMHO świetna pozycja</a><br>
+                                            <a href="https://docs.python.org/3/tutorial/index.html">Tutorial z oficjalnej
+                                                strony Pythona - również bardzo dobry</a><br>
+                                            <br>
+                                            <b>Dobre praktyki</b><br>
+                                            <a href="https://www.python.org/dev/peps/pep-0020/">PEP 20 - The Zen of Python,
+                                                czyli filozofia Pythona w 20 wersach <img alt=":)" title=":)"
+                                                                                          src="http://4programmers.net/template/img/smilies/smile.gif"></a><br>
+                                            <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8 - czyli jak formatować
+                                                i pisać ładny kod</a><br>
+                                            <a href="http://python.net/~goodger/projects/pycon/2007/idiomatic/handout.html">Code
+                                                Like a Pythonista: Idiomatic Python - czyli jak pisać bardziej "pytoński"
+                                                kod</a><br>
+                                            <a href="http://dirtsimple.org/2004/12/python-is-not-java.html">Python is Not
+                                                Java - dla ludzi z tendencją do pisania kodu w stylu poprzedniego znanego
+                                                języka, nie tylko Javy</a><br>
+                                            <br>
+                                            <b>Środowisko i narzędzia</b><br>
+                                            <a href="https://realpython.com/blog/python/setting-up-sublime-text-3-for-full-stack-python-development/">Sublime
+                                                Text 3 - konfiguracja środowiska pod pracę z Pythonem</a><br>
+                                            <a href="https://www.jetbrains.com/pycharm/">Pycharm - najlepsze IDE do Pythona,
+                                                studenty mają za darmo</a>
+                                        </div>
+
+                                        {#<div class="notice">#}
+                                            {#<a class="post-history-button" title="Zobacz historię zmian tego postu"#}
+                                               {#href="http://forum.4programmers.net/Post/Version/1182672"></a>#}
+
+                                            {#3x, ostatnio: <a href="http://4programmers.net/Profile/62278">Wizzie</a>,#}
+                                            {#<span class="timestamp"#}
+                                                  {#data-timestamp="1444416388">09 październik 2015, 20:46</span>#}
+                                        {#</div>#}
+
+                                        {#<div id="post-comment-1182672" data-post-id="1182672" class="comments">#}
+
+
+                                            {#<div id="comment-252713" data-comment-id="252713">#}
+                                                {#Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -#}
+                                                {#<a class="user-name" data-user-id="1"#}
+                                                   {#href="http://4programmers.net/Profile/1">Adam Boduch</a> <a#}
+                                                        {#href="#comment-252713" class="timestamp" data-timestamp="1444410721"#}
+                                                        {#title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>#}
+
+                                                {#<span title="Edytuj ten komentarz" class="comment-edit"></span>#}
+                                                {#<span title="Usuń ten komentarz" class="comment-delete"></span>#}
+                                            {#</div>#}
+                                            {#<div id="comment-252760" data-comment-id="252760">#}
+                                                {#Szkoda, ze nie udostepniaja juz skonfigurowanego sublime do sciagniecia. -#}
+                                                {#<a class="user-name" data-user-id="67403"#}
+                                                   {#href="http://4programmers.net/Profile/67403">H1ghlander</a> <a#}
+                                                        {#href="#comment-252760" class="timestamp" data-timestamp="1444425604"#}
+                                                        {#title="09 październik 2015, 23:20">09 październik 2015, 23:20</a>#}
+
+                                                {#<span title="Edytuj ten komentarz" class="comment-edit"></span>#}
+                                                {#<span title="Usuń ten komentarz" class="comment-delete"></span>#}
+                                            {#</div>#}
+
+                                            {#<form method="post" style="display: none;">#}
+                                                {#<fieldset>#}
+                                                    {#<input type="hidden" value="1182672" name="postId">#}
+                                                    {#<textarea cols="90" rows="2" style="width: 99%;"#}
+                                                              {#name="comment"></textarea>#}
+
+                                                    {#<p>Pozostało <strong>580</strong> znaków</p>#}
+                                                    {#<input type="submit" value="Dodaj komentarz"></fieldset>#}
+                                            {#</form>#}
+                                        {#</div>#}
+
+                                    </td>
+
+                                    <td class="col-vote">
+                                        <input type="hidden" value="1182672">
+                                        {#<a class="vote-count" title="Ocena postu">9</a>#}
+
+                                        {#<a class="vote-up "#}
+                                           {#title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">Głosuj#}
+                                            {#na ten post</a>#}
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-bottom">
+                                    </td>
+                                    <td class="col-bottom" colspan="2">
+
+                                        <a data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active"><i class="fa fa-search-plus"></i> Obserwuj</a>
+                                        <a data-category="postLinks" data-action="share" href="#" class="btn btn-xs btn-share"><i class="fa fa-share-alt"></i> Udostępnij</a>
+                                        <a data-category="postLinks" data-action="comment" data-post-id="1182672" class="btn btn-xs btn-comment"><i class="fa fa-comment-o"></i> Komentuj</a>
+    {##}
+                                        {#<a data-category="postLinks" data-action="report" rel="nofollow"#}
+                                           {#href="http://4programmers.net/User/Report?id=196293&amp;section=1182672&amp;anchor=cD0xMTgyNjcyI2lkMTE4MjY3Mg%3D%3D"#}
+                                           {#class="report-button post-button"><span>Raportuj</span></a>#}
+    {##}
+    {##}
+                                        {#<a data-category="postLinks" data-action="multi-quote" rel="nofollow"#}
+                                           {#class="multi-quote-button post-button " data-post-id="1182672"></a>#}
+                                        {#<a data-category="postLinks" data-action="quote" rel="nofollow"#}
+                                           {#href="http://forum.4programmers.net/Python/259138-jak_sie_uczyc_pythona_materialy_do_nauki?mode=submit&amp;postId=1182672"#}
+                                           {#class="quote-button post-button"><span>Cytuj</span></a>#}
+    {##}
+                                        {#<a data-category="postLinks" data-action="delete" href="#id1182672"#}
+                                           {#class="delete-button post-button"><span>Usuń</span></a>#}
+    {##}
+                                        {#<a data-category="postLinks" data-action="edit"#}
+                                           {#href="http://forum.4programmers.net/Python/259138-jak_sie_uczyc_pythona_materialy_do_nauki?mode=edit&amp;postId=1182672"#}
+                                           {#class="edit-button post-button"><span>Edytuj</span></a>#}
+                                        {#<a data-category="postLinks" data-action="fastEdit" data-post-id="1182672"#}
+                                           {#class="edit-button post-button fast-edit-button"><span>Szybka edycja</span></a>#}
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="col-end"></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" id="topic-toggle">
+                                        <a title="Pokaż/ukryj treść pytania"></a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            {% include "forum/viewers_list.twig" %}
+        </main>
+
+        <aside id="sidebar">
+
+            <div class="box">
+                <ul class="side-menu">
+                    <li class="btn-mark-read">
+                        <a title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">Obserwuj wątek</a>
+                    </li>
+                    <li class="btn-atom">
+                        <a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
+                    </li>
+                </ul>
+            </div>
+
+            {% include "forum/sidebar.twig" %}
+        </aside>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/forum.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="/js/forum.js" type="text/javascript"></script>
+{% endblock %}
