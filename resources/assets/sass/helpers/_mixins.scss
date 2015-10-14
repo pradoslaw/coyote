@@ -12,3 +12,9 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+@mixin font-awesome($icon) {
+  position: absolute;
+  font-family: FontAwesome;
+  content: $icon;
+}

@@ -25,6 +25,8 @@
     .tag-clouds li small {
       font-size: 10px;
       color: #919191; }
+    .tag-clouds li:last-child {
+      margin-right: 0; }
 
 .microblog .media-heading a {
   font-size: 14px;

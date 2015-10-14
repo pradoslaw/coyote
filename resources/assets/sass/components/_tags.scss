@@ -34,5 +34,9 @@
       font-size: 10px;
       color: lighten($gray-light, 10%);
     }
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }

@@ -160,6 +160,20 @@
     }
   }
 
+  .topic-pagination {
+    float: right;
+    margin: 0;
+    position: relative;
+    padding-left: 12px;
+    font-size: 12px;
+
+    &:before {
+      @include font-awesome($fa-var-file-o);
+      font-size: 10px;
+      left: 0;
+    }
+  }
+
   strong {
     font-weight: normal;
     font-size: 11px;
@@ -170,6 +184,7 @@
   > .tag-clouds {
     margin: 0;
     padding: 0;
+    clear: both;
 
     li {
       float: none;
