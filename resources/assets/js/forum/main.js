@@ -1,4 +1,4 @@
-var SCREEN_MD = 992;
+var SCREEN_MD = 1024;
 
 $(function () {
     function toggleSidebar(flag) {
@@ -18,6 +18,10 @@ $(function () {
             $('#sidebar').hide();
         }
     });
+
+    if ($(window).width() <= SCREEN_MD) {
+        $('#btn-toggle-sidebar').addClass('sidebar-hidden');
+    }
 
     $('#btn-toggle-sidebar').click(function () {
         if ($(window).width() <= SCREEN_MD) {
