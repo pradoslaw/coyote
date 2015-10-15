@@ -8,11 +8,11 @@
   padding: 0;
   list-style-type: none;
 
-  li {
+  > li {
     margin-bottom: 2px;
     border-bottom: 1px solid $border-color;
 
-    a {
+    > a {
       color: $gray-dark;
       cursor: pointer;
       display: block;

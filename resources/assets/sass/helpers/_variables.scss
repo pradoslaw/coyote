@@ -1,7 +1,12 @@
 @charset "UTF-8";
 @import "../vendors/bootstrap/variables";
 
+// nieco ciemniszy kolor linkow (w sytuacji gdy wiele linkow jest obok siebie domyslny kolor jest zbyt jasny)
 $link-color-darker: darken($brand-primary, 10%);
+
+// alternatywny kolor linkow uzywany po naprowadzeniu kursora myszy nad link
+// uzywany w niewielu sytuacjach w kontrascie do koloru zielonego dominujacego w serwisie
+$alt-link-hover-color: #d7661c;
 
 // obramowanie elementow typu "boksy" (tabele, div itp)
 $border-color: #d0d0d0;

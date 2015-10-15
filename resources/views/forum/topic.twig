@@ -35,6 +35,7 @@
             <section class="panel panel-wrapper">
                 <div class="panel-body">
                     <div id="box-post" class="box-forum">
+                        <a href="#" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                         <a href="#" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
 
                         <div class="clearfix"></div>
@@ -48,7 +49,7 @@
                                         </h5>
                                     </td>
 
-                                    <td class="col-time" colspan="2">
+                                    <td class="col-time">
                                         <a title="Link do tego postu" id="id1182672" class="post-link" href="#">
                                             <i class="fa fa-file-o"></i>
                                         </a>
@@ -56,6 +57,7 @@
                                         <span class="timestamp" title="09 październik 2015, 19:08" data-timestamp="1444410483">09 październik 2015, 19:08</span>
                                         <small><a href="#" title="127.0.0.1" class="post-ip">(127.0.0.1)</a></small>
                                     </td>
+                                    <td class="col-vote"></td>
                                 </tr>
                                 <tr>
                                     <td class="col-user">
@@ -75,132 +77,96 @@
                                         </div>
                                     </td>
                                     <td class="col-body">
-                                        <div class="post-content" data-post-id="1182672">Są takie tematy w większości
-                                            działów o językach, w tym też się przyda. Wrzucajcie co uważacie za dobre.<br>
-                                            <br>
-                                            Na początek pytanie, które zada sobie prawdopodobnie każdy zaczynający przygodę
-                                            z Pythonem:<br>
-                                            <b>Którą wersję wybrać?</b><br>
-                                            Python 3 jest nowszą "gałęzią" Pythona. Używaj tej wersji. Jeśli z jakiegoś
-                                            powodu musisz używać Pythona 2, prawdopodobnie o tym wiesz i nie czytasz tego
-                                            tematu <img alt=":)" title=":)"
-                                                        src="http://4programmers.net/template/img/smilies/smile.gif"><br>
-                                            <br>
-                                            <b>Początkujący</b><br>
-                                            <a href="https://www.codecademy.com/">Codecademy - interaktywna nauka
-                                                programowania, świetne głównie dla kompletnych programistycznych świeżaków
-                                                (choć nie tylko)</a><br>
-                                            <a href="http://learnpythonthehardway.org/book/">Learn Python The Hard Way -
-                                                specyficzne podejście do nauki, IMHO świetna pozycja</a><br>
-                                            <a href="https://docs.python.org/3/tutorial/index.html">Tutorial z oficjalnej
-                                                strony Pythona - również bardzo dobry</a><br>
-                                            <br>
-                                            <b>Dobre praktyki</b><br>
-                                            <a href="https://www.python.org/dev/peps/pep-0020/">PEP 20 - The Zen of Python,
-                                                czyli filozofia Pythona w 20 wersach <img alt=":)" title=":)"
-                                                                                          src="http://4programmers.net/template/img/smilies/smile.gif"></a><br>
-                                            <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8 - czyli jak formatować
-                                                i pisać ładny kod</a><br>
-                                            <a href="http://python.net/~goodger/projects/pycon/2007/idiomatic/handout.html">Code
-                                                Like a Pythonista: Idiomatic Python - czyli jak pisać bardziej "pytoński"
-                                                kod</a><br>
-                                            <a href="http://dirtsimple.org/2004/12/python-is-not-java.html">Python is Not
-                                                Java - dla ludzi z tendencją do pisania kodu w stylu poprzedniego znanego
-                                                języka, nie tylko Javy</a><br>
-                                            <br>
-                                            <b>Środowisko i narzędzia</b><br>
-                                            <a href="https://realpython.com/blog/python/setting-up-sublime-text-3-for-full-stack-python-development/">Sublime
-                                                Text 3 - konfiguracja środowiska pod pracę z Pythonem</a><br>
-                                            <a href="https://www.jetbrains.com/pycharm/">Pycharm - najlepsze IDE do Pythona,
-                                                studenty mają za darmo</a>
+                                        <div class="post-content" data-post-id="1182672">
+                                            Enim tincidunt vel facilisis, turpis magnis? Cras nunc et augue ac habitasse, nunc cras turpis, sit montes cras, magnis pulvinar, arcu scelerisque turpis magna nascetur eu magna pid in tortor, tincidunt amet vel habitasse mid magnis, porta mus enim ultrices! Mus pid. Porta scelerisque porttitor proin nec sociis. Porttitor scelerisque lorem pellentesque cum sit tristique odio dis! Facilisis pid enim. Et eros vel scelerisque purus nunc est sagittis magna rhoncus. Nascetur etiam! Est et elementum! Adipiscing! Mattis, sed. Placerat porta! Ac arcu dis tortor amet. Non dolor egestas augue magna nascetur integer? Turpis sit cras adipiscing arcu hac pulvinar ac. Vel augue scelerisque sit integer tincidunt rhoncus cras. Cursus ac, ut, eros. Ac tortor penatibus turpis sagittis risus, parturient mus.
+
+                                            Purus ut urna? Porta in? Tincidunt porta facilisis in eros? Augue, velit sit aenean, pid dapibus dictumst enim quis. Dolor? Placerat proin? Mattis nisi, nunc aliquam? Et scelerisque pulvinar a, nisi ultrices a dapibus natoque, facilisis hac nec nec aliquet et rhoncus nec! Lectus! Amet amet odio elementum mus mus porta? Mid vel sit, in, et porta scelerisque pulvinar, elit rhoncus, urna vel, et, amet tristique risus! Sed quis aliquam? Sociis ut, vut nascetur sed. Nisi aliquam? In turpis, augue? Montes non duis rhoncus ultricies, turpis, in? Nec, cum! Nisi urna hac augue tristique pulvinar! Aliquet! Porta ac velit. Pulvinar proin elementum amet, elementum lundium magna mid, risus, phasellus pulvinar dictumst. Diam phasellus, lundium mauris platea odio nisi nec.
+
+                                            <hr>
+                                            <footer>"Jeśli wyszkolisz pracownika, to niedobrze, bo odejdzie. Jeśli go nie wyszkolisz, to jeszcze gorzej, bo zostanie."</footer>
                                         </div>
 
-                                        {#<div class="notice">#}
-                                            {#<a class="post-history-button" title="Zobacz historię zmian tego postu"#}
-                                               {#href="http://forum.4programmers.net/Post/Version/1182672"></a>#}
+                                        <div class="edit-info">
+                                            <strong>
+                                                <a class="btn-history" title="Zobacz historię zmian tego postu" href="#">
+                                                    <i class="fa fa-external-link"></i>
+                                                </a>
 
-                                            {#3x, ostatnio: <a href="http://4programmers.net/Profile/62278">Wizzie</a>,#}
-                                            {#<span class="timestamp"#}
-                                                  {#data-timestamp="1444416388">09 październik 2015, 20:46</span>#}
-                                        {#</div>#}
+                                                3x, ostatnio: <a href="http://4programmers.net/Profile/62278">Wizzie</a>,
+                                            </strong>
+                                            <span class="timestamp" data-timestamp="1444416388">09 październik 2015, 20:46</span>
+                                        </div>
 
-                                        {#<div id="post-comment-1182672" data-post-id="1182672" class="comments">#}
+                                        <div id="post-comment-1182672" data-post-id="1182672" class="comments">
 
+                                            <div id="comment-252713" data-comment-id="252713">
+                                                Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
 
-                                            {#<div id="comment-252713" data-comment-id="252713">#}
-                                                {#Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -#}
-                                                {#<a class="user-name" data-user-id="1"#}
-                                                   {#href="http://4programmers.net/Profile/1">Adam Boduch</a> <a#}
-                                                        {#href="#comment-252713" class="timestamp" data-timestamp="1444410721"#}
-                                                        {#title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>#}
+                                                <a class="user-name" data-user-id="1" href="#">Adam Boduch</a>
+                                                <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
 
-                                                {#<span title="Edytuj ten komentarz" class="comment-edit"></span>#}
-                                                {#<span title="Usuń ten komentarz" class="comment-delete"></span>#}
-                                            {#</div>#}
-                                            {#<div id="comment-252760" data-comment-id="252760">#}
-                                                {#Szkoda, ze nie udostepniaja juz skonfigurowanego sublime do sciagniecia. -#}
-                                                {#<a class="user-name" data-user-id="67403"#}
-                                                   {#href="http://4programmers.net/Profile/67403">H1ghlander</a> <a#}
-                                                        {#href="#comment-252760" class="timestamp" data-timestamp="1444425604"#}
-                                                        {#title="09 październik 2015, 23:20">09 październik 2015, 23:20</a>#}
+                                                <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
+                                                    <i class="fa fa-remove"></i>
+                                                </a>
+                                                <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            </div>
+                                            <div id="comment-252713" data-comment-id="252713">
+                                                Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
 
-                                                {#<span title="Edytuj ten komentarz" class="comment-edit"></span>#}
-                                                {#<span title="Usuń ten komentarz" class="comment-delete"></span>#}
-                                            {#</div>#}
+                                                <a class="author user-name" data-user-id="1" href="#">Adam Boduch</a>
+                                                <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
 
-                                            {#<form method="post" style="display: none;">#}
-                                                {#<fieldset>#}
-                                                    {#<input type="hidden" value="1182672" name="postId">#}
-                                                    {#<textarea cols="90" rows="2" style="width: 99%;"#}
-                                                              {#name="comment"></textarea>#}
+                                                <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
+                                                    <i class="fa fa-remove"></i>
+                                                </a>
+                                                <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            </div>
 
-                                                    {#<p>Pozostało <strong>580</strong> znaków</p>#}
-                                                    {#<input type="submit" value="Dodaj komentarz"></fieldset>#}
-                                            {#</form>#}
-                                        {#</div>#}
+                                            <form method="post" class="collapse" id="form-1182672">
+                                                <input type="hidden" value="1182672" name="postId">
+                                                <textarea cols="90" rows="2" style="width: 100%;" name="comment"></textarea>
+
+                                                <p class="text-muted pull-left">Pozostało <strong>580</strong> znaków</p>
+                                                <input type="submit" class="btn btn-xs btn-primary pull-right" value="Dodaj komentarz">
+                                            </form>
+                                        </div>
 
                                     </td>
 
                                     <td class="col-vote">
                                         <input type="hidden" value="1182672">
-                                        {#<a class="vote-count" title="Ocena postu">9</a>#}
+                                        <strong class="vote-count" title="Ocena postu">9</strong>
 
-                                        {#<a class="vote-up "#}
-                                           {#title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">Głosuj#}
-                                            {#na ten post</a>#}
-
+                                        <a class="vote-up " href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+                                            <i class="fa fa-thumbs-o-up"></i>
+                                        </a>
+                                        <a class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tą odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+                                            <i class="fa fa-check-circle-o"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="col-bottom">
-                                    </td>
+                                    <td class="col-bottom"></td>
                                     <td class="col-bottom" colspan="2">
 
-                                        <a data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active"><i class="fa fa-search-plus"></i> Obserwuj</a>
-                                        <a data-category="postLinks" data-action="share" href="#" class="btn btn-xs btn-share"><i class="fa fa-share-alt"></i> Udostępnij</a>
-                                        <a data-category="postLinks" data-action="comment" data-post-id="1182672" class="btn btn-xs btn-comment"><i class="fa fa-comment-o"></i> Komentuj</a>
-    {##}
-                                        {#<a data-category="postLinks" data-action="report" rel="nofollow"#}
-                                           {#href="http://4programmers.net/User/Report?id=196293&amp;section=1182672&amp;anchor=cD0xMTgyNjcyI2lkMTE4MjY3Mg%3D%3D"#}
-                                           {#class="report-button post-button"><span>Raportuj</span></a>#}
-    {##}
-    {##}
-                                        {#<a data-category="postLinks" data-action="multi-quote" rel="nofollow"#}
-                                           {#class="multi-quote-button post-button " data-post-id="1182672"></a>#}
-                                        {#<a data-category="postLinks" data-action="quote" rel="nofollow"#}
-                                           {#href="http://forum.4programmers.net/Python/259138-jak_sie_uczyc_pythona_materialy_do_nauki?mode=submit&amp;postId=1182672"#}
-                                           {#class="quote-button post-button"><span>Cytuj</span></a>#}
-    {##}
-                                        {#<a data-category="postLinks" data-action="delete" href="#id1182672"#}
-                                           {#class="delete-button post-button"><span>Usuń</span></a>#}
-    {##}
-                                        {#<a data-category="postLinks" data-action="edit"#}
-                                           {#href="http://forum.4programmers.net/Python/259138-jak_sie_uczyc_pythona_materialy_do_nauki?mode=edit&amp;postId=1182672"#}
-                                           {#class="edit-button post-button"><span>Edytuj</span></a>#}
-                                        {#<a data-category="postLinks" data-action="fastEdit" data-post-id="1182672"#}
-                                           {#class="edit-button post-button fast-edit-button"><span>Szybka edycja</span></a>#}
+                                        <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active"><i class="fa fa-search-plus"></i> Obserwuj</a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="#" class="btn btn-xs btn-share"><i class="fa fa-share-alt"></i> Udostępnij</a>
+                                        <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" data-post-id="1182672" class="btn btn-xs btn-comment" href="#form-1182672"><i class="fa fa-comment-o"></i> Komentuj</a>
+
+                                        <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="#" class="btn btn-xs btn-report"><i class="fa fa-flag"></i> Raportuj</a>
 
 
+                                        <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672"><i class="fa fa-plus"></i> </a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="#" class="btn btn-xs btn-quote"><i class="fa fa-quote-right"></i> Cytuj</a>
+
+                                        <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="#id1182672" class="btn btn-xs btn-del"><i class="fa fa-remove"></i> Usuń</a>
+
+                                        <a data-toggle="tooltip" data-placement="top" title="Edytuj ten post data-category="postLinks" data-action="edit" href="#" class="btn btn-xs btn-edit"><i class="fa fa-pencil"></i> Edytuj</a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="1182672" class="btn btn-xs btn-fast-edit"><i class="fa fa-pencil"></i> Szybka edycja</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -232,6 +198,54 @@
                     <li class="btn-atom">
                         <a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
                     </li>
+
+                    <li id="btn-log"><a title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
+                    <li id="btn-edit-subject"><a title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
+                    <li id="btn-lock"><a title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">Zablokuj wątek</a></li>
+                    <li id="btn-move">
+                        <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
+
+                        <ul id="collapse-sub" class="collapse">
+                            <li title="Przenieś wątek do kategorii 'Newbie'"><a href="#@forum/Newbie">Newbie</a></li>
+                            <li title="Przenieś wątek do kategorii 'Delphi i Pascal'"><a href="#@forum/Delphi_Pascal">Delphi i Pascal</a></li>
+                            <li title="Przenieś wątek do kategorii 'C/C++'"><a href="#@forum/C_i_C++">C/C++</a></li>
+                            <li title="Przenieś wątek do kategorii 'C# i .NET'"><a href="#@forum/C_i_.NET">C# i .NET</a></li>
+                            <li title="Przenieś wątek do kategorii 'Java'"><a href="#@forum/Java">Java</a></li>
+                            <li title="Przenieś wątek do kategorii 'Python'"><a href="#@forum/Python">Python</a></li>
+                            <li title="Przenieś wątek do kategorii 'PHP'"><a href="#@forum/PHP">PHP</a></li>
+                            <li title="Przenieś wątek do kategorii 'Webmastering'"><a href="#@forum/Webmastering">Webmastering</a></li>
+                            <li title="Przenieś wątek do kategorii 'Inne języki programowania'"><a href="#@forum/Inne">Inne języki programowania</a></li>
+                            <li title="Przenieś wątek do kategorii 'Bazy danych'"><a href="#@forum/Bazy_danych">Bazy danych</a></li>
+                            <li title="Przenieś wątek do kategorii 'Algorytmy i struktury danych'"><a href="#@forum/Algorytmy">Algorytmy i struktury danych</a></li>
+                            <li title="Przenieś wątek do kategorii 'Inżynieria oprogramowania'"><a href="#@forum/Inzynieria_oprogramowania">Inżynieria oprogramowania</a></li>
+                            <li title="Przenieś wątek do kategorii 'Nietuzinkowe tematy'"><a href="#@forum/Nietuzinkowe_tematy">Nietuzinkowe tematy</a></li>
+                            <li title="Przenieś wątek do kategorii 'Oferty pracy'"><a href="#@forum/Praca">Oferty pracy</a></li>
+                            <li title="Przenieś wątek do kategorii 'Edukacja'"><a href="#@forum/Edukacja">Edukacja</a></li>
+                            <li title="Przenieś wątek do kategorii 'Kariera'"><a href="#@forum/Kariera">Kariera</a></li>
+                            <li title="Przenieś wątek do kategorii 'Szkolenia i konferencje'"><a href="#@forum/Szkolenia_i_konferencje">Szkolenia i konferencje</a></li>
+                            <li title="Przenieś wątek do kategorii 'Magazyn Programista'"><a href="#@forum/Magazyn_Programista">Magazyn Programista</a></li>
+                            <li title="Przenieś wątek do kategorii 'Off-Topic'"><a href="#@forum/Off-Topic">Off-Topic</a></li>
+                            <li title="Przenieś wątek do kategorii '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oceny i recenzje'"><a href="#@forum/Off-Topic/Oceny_i_recenzje">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oceny i recenzje</a></li>
+                            <li title="Przenieś wątek do kategorii 'Hardware/Software'"><a href="#@forum/Hardware_Software">Hardware/Software</a></li>
+                            <li title="Przenieś wątek do kategorii 'Moderatorzy'"><a href="#@forum/Moderatorzy">Moderatorzy</a></li>
+                            <li title="Przenieś wątek do kategorii '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kapownik'"><a href="#@forum/Moderatorzy/Kapownik">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kapownik</a></li>
+                            <li title="Przenieś wątek do kategorii '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administracja'"><a href="#@forum/Moderatorzy/Administracja">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administracja</a></li>
+                            <li title="Przenieś wątek do kategorii '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kartoteka'"><a href="#@forum/Moderatorzy/Kartoteka">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kartoteka</a></li>
+                            <li title="Przenieś wątek do kategorii 'Społeczność'"><a href="#@forum/Spolecznosc">Społeczność</a></li>
+                            <li title="Przenieś wątek do kategorii '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perełki'"><a href="#@forum/Spolecznosc/Perelki">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perełki</a></li>
+                            <li title="Przenieś wątek do kategorii '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Projekty Forumowe'"><a href="#@forum/Spolecznosc/Projekty">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Projekty Forumowe</a></li>
+                            <li title="Przenieś wątek do kategorii 'Flame'"><a href="#@forum/Flame">Flame</a></li>
+                            <li title="Przenieś wątek do kategorii 'Ogłoszenia drobne'"><a href="#@forum/Ogłoszenia_drobne">Ogłoszenia drobne</a></li>
+                            <li title="Przenieś wątek do kategorii 'Coyote'"><a href="#@forum/Coyote">Coyote</a></li>
+                            <li title="Przenieś wątek do kategorii '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Test'"><a href="#@forum/Coyote/Test">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Test</a></li>
+                            <li title="Przenieś wątek do kategorii 'Archiwum'"><a href="#@forum/Archiwum">Archiwum</a></li>
+                            <li title="Przenieś wątek do kategorii '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yosemite'"><a href="#@forum/Archiwum/Yosemite">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yosemite</a></li>
+                            <li title="Przenieś wątek do kategorii '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RoadRunner'"><a href="#@forum/Archiwum/RoadRunner">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RoadRunner</a></li>
+                            <li title="Przenieś wątek do kategorii 'Kosz'"><a href="#@forum/Kosz">Kosz</a></li>
+                        </ul>
+                    </li>
+
+                    <li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>
                 </ul>
             </div>
 
@@ -250,4 +264,10 @@
     {{ parent() }}
 
     <script src="/js/forum.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('.col-bottom a').tooltip();
+        });
+    </script>
 {% endblock %}
