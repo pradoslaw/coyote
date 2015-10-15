@@ -61,20 +61,18 @@
                                 </tr>
                                 <tr>
                                     <td class="col-user">
-                                        <div class="row row-avatar">
-                                            <div class="col-xs-12">
-                                                <img src="/img/shalom.png">
-                                            </div>
+                                        <div class="avatar">
+                                            <img class="img-responsive" src="/img/shalom.png">
                                         </div>
 
-                                        <div class="row">
-                                            <div class="col-xs-4">Rejestracja:</div>
-                                            <div class="col-xs-8">25 maj 2014, 16:42</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xs-4">Ostatnio:</div>
-                                            <div class="col-xs-8">22 minuty temu</div>
-                                        </div>
+                                        <p class="hidden-xs">
+                                            <strong>Rejestracja:</strong>
+                                            <small>25 maj 2014, 16:42</small>
+                                        </p>
+                                        <p class="hidden-xs">
+                                            <strong>Ostatnio:</strong>
+                                            <small>22 minuty temu</small>
+                                        </p>
                                     </td>
                                     <td class="col-body">
                                         <div class="post-content" data-post-id="1182672">
@@ -153,20 +151,46 @@
                                     <td class="col-bottom"></td>
                                     <td class="col-bottom" colspan="2">
 
-                                        <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active"><i class="fa fa-search-plus"></i> Obserwuj</a>
-                                        <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="#" class="btn btn-xs btn-share"><i class="fa fa-share-alt"></i> Udostępnij</a>
-                                        <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" data-post-id="1182672" class="btn btn-xs btn-comment" href="#form-1182672"><i class="fa fa-comment-o"></i> Komentuj</a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active">
+                                            <i class="fa fa-search-plus"></i>
+                                            <span class="hidden-xs">Obserwuj</span>
+                                        </a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="#" class="btn btn-xs btn-share">
+                                            <i class="fa fa-share-alt"></i>
+                                            <span class="hidden-xs">Udostępnij</span>
+                                        </a>
+                                        <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" data-post-id="1182672" class="btn btn-xs btn-comment" href="#form-1182672">
+                                            <i class="fa fa-comment-o"></i>
+                                            <span class="hidden-xs">Komentuj</span>
+                                        </a>
 
-                                        <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="#" class="btn btn-xs btn-report"><i class="fa fa-flag"></i> Raportuj</a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="#" class="btn btn-xs btn-report">
+                                            <i class="fa fa-flag"></i>
+                                            <span class="hidden-xs">Raportuj</span>
+                                        </a>
 
 
-                                        <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672"><i class="fa fa-plus"></i> </a>
-                                        <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="#" class="btn btn-xs btn-quote"><i class="fa fa-quote-right"></i> Cytuj</a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="#" class="btn btn-xs btn-quote">
+                                            <i class="fa fa-quote-right"></i>
+                                            <span class="hidden-xs">Cytuj</span>
+                                        </a>
 
-                                        <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="#id1182672" class="btn btn-xs btn-del"><i class="fa fa-remove"></i> Usuń</a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="#id1182672" class="btn btn-xs btn-del">
+                                            <i class="fa fa-remove"></i>
+                                            <span class="hidden-xs">Usuń</span>
+                                        </a>
 
-                                        <a data-toggle="tooltip" data-placement="top" title="Edytuj ten post data-category="postLinks" data-action="edit" href="#" class="btn btn-xs btn-edit"><i class="fa fa-pencil"></i> Edytuj</a>
-                                        <a data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="1182672" class="btn btn-xs btn-fast-edit"><i class="fa fa-pencil"></i> Szybka edycja</a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" href="#" class="btn btn-xs btn-edit">
+                                            <i class="fa fa-pencil"></i>
+                                            <span class="hidden-xs">Edytuj</span>
+                                        </a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="1182672" class="btn btn-xs btn-fast-edit">
+                                            <i class="fa fa-pencil"></i>
+                                            <span class="hidden-xs">Szybka edycja</span>
+                                        </a>
                                     </td>
                                 </tr>
                                 <tr>

@@ -492,21 +492,33 @@ $sidebar-media-max-width: 1024px;
   width: 15%;
   vertical-align: top;
 
-  .row {
+  p {
     padding: 2px 0;
   }
 
-  .row-avatar {
+  .avatar {
     margin: 5px 0 10px 0;
   }
 
-  .col-xs-4, .col-xs-8 {
+  p {
     font-size: 11px;
     color: $gray;
-  }
+    margin: 0;
 
-  .col-xs-8 {
-    color: $gray-light;
+    strong {
+      width: 40%;
+      display: inline-block;
+      font-weight: normal;
+
+      @media screen and (max-width: $screen-lg) {
+        display: block;
+        width: 100%;
+      }
+    }
+
+    small {
+      color: $gray-light;
+    }
   }
 
   h5 {
