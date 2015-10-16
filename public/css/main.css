@@ -7272,4 +7272,8 @@ footer {
     white-space: nowrap;
     display: inline-block; }
 
+@media (max-width: 480px) {
+  .hidden-xxs {
+    display: none !important; } }
+
 /*# sourceMappingURL=main.css.map */

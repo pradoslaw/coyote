@@ -482,20 +482,28 @@ $sidebar-media-max-width: 1024px;
 
 #box-post {
   margin-top: 5px;
+}
 
-  table {
-    margin-top: 10px;
+.post {
+  background-color: #fff;
+  border: 1px solid $border-color;
+  border-radius: 3px;
+
+  > div.row {
+    border-bottom: 1px solid $border-color;
+    margin: 0;
+  }
+
+  > div.row:nth-child(even) {
+    background-color: #fafafa;
+  }
+
+  div[class*="col-"] {
+    padding: 5px;
   }
 }
 
 .col-user {
-  width: 15%;
-  vertical-align: top;
-
-  p {
-    padding: 2px 0;
-  }
-
   .avatar {
     margin: 5px 0 10px 0;
   }
@@ -504,6 +512,7 @@ $sidebar-media-max-width: 1024px;
     font-size: 11px;
     color: $gray;
     margin: 0;
+    padding: 2px 0;
 
     strong {
       width: 40%;
@@ -524,11 +533,9 @@ $sidebar-media-max-width: 1024px;
   h5 {
     margin: 0;
     font-weight: bold;
-  }
-
-  h5 {
     padding-left: 18px;
     position: relative;
+    font-family: Arial, sans-serif;
 
     a {
       color: $link-color-darker;
@@ -566,11 +573,37 @@ $sidebar-media-max-width: 1024px;
 .col-body {
   vertical-align: top;
   line-height: 1.3em;
+  overflow: hidden;
 }
 
 .col-vote {
   width: 50px;
   vertical-align: top;
+  float: right;
+  line-height: 120%;
+}
+
+#col-toggle {
+  background-color: #fff;
+
+  a {
+    margin: 2px auto 2px auto;
+    display: block;
+    width: 67px;
+    height: 5px;
+
+    span {
+      display: block;
+      height: 1px;
+      border-radius: 1px;
+      background-color: $gray-light;
+    }
+
+    span + span {
+      margin-top: 1px;
+    }
+  }
+
 }
 
 // Ikony do zarzadzania pod spodem postu
@@ -625,6 +658,7 @@ $sidebar-media-max-width: 1024px;
   min-height: 50px;
   word-wrap: break-word;
   line-height: 139%;
+  overflow: hidden;
 
   a {
     color: $link-color-darker;
@@ -674,6 +708,7 @@ $sidebar-media-max-width: 1024px;
 .vote-count {
   font-size: 26px;
   margin: 5px 0 15px 0;
+  line-height: 120%;
 }
 
 .vote-up {
@@ -681,7 +716,7 @@ $sidebar-media-max-width: 1024px;
 }
 
 .vote-accept {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 div.tooltip-inner {
@@ -711,6 +746,10 @@ div.tooltip-inner {
     padding: 5px 0 5px 10px;
     margin-top: 1px;
     position: relative;
+
+    &:first-child {
+      border-top: 1px dotted $border-color;
+    }
 
     &:before {
       content: "▪";
