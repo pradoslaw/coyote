@@ -1,0 +1,160 @@
+#sidebar {
+  float: right;
+  width: 23%;
+  margin-right: -25%;
+
+  @media screen and (max-width: $sidebar-media-max-width) {
+    display:                  none;
+    position:                 absolute;
+    z-index:                  101;
+    font-size:                .9em;
+    right:                    25%;
+    background:               #F3F5F0;
+    border:                   2px solid $border-color;
+    padding:                  6px 10px;
+    box-shadow:               5px 5px 6px #AAA;
+  }
+}
+
+.side-menu {
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 0 9px;
+
+    a {
+      color: $gray-dark;
+      text-shadow: 1px 1px #FFF;
+      font-size: 11px;
+      padding: 1px 0 1px 21px;
+      opacity: .9;
+
+      &:hover {
+        opacity: 1;
+        color: $brand-primary;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.btn-mark-read, .btn-atom, #btn-setting, #btn-log, #btn-edit-subject, #btn-lock, #btn-move, #btn-status {
+  position: relative;
+
+  &:before {
+    font-family: FontAwesome;
+    position: absolute;
+    left: 3px;
+    top: 4px;
+    font-size: 17px;
+  }
+}
+
+.btn-mark-read:before {
+  content: $fa-var-check-square-o;
+}
+
+.btn-atom:before {
+  content: $fa-var-rss-square;
+}
+
+#btn-setting:before {
+  content: $fa-var-cog;
+}
+
+#btn-log:before {
+  content: $fa-var-pie-chart;
+}
+
+#btn-edit-subject:before {
+  content: $fa-var-pencil;
+}
+
+#btn-lock:before {
+  content: $fa-var-lock;
+}
+
+#btn-move:before {
+  content: $fa-var-arrow-circle-right;
+}
+
+#btn-status:before {
+  content: $fa-var-sticky-note-o;
+}
+
+// Ikony wyswietlane po prawej stronie nad tabelka - np. z lista watkow. M.in. przycisk do ukrywania menu bocznego
+// -------------------------------------------------------------------------------------------
+
+.btn-mark-read-xs, .btn-atom-xs, #btn-toggle-sidebar {
+  position: absolute;
+  bottom: 5px;
+  font-size: 18px;
+
+  i {
+    color: $gray;
+  }
+}
+
+.btn-mark-read-xs, .btn-atom-xs {
+  display: none;
+
+  @media screen and (max-width: $screen-md) {
+    display: block;
+  }
+}
+
+#btn-toggle-sidebar {
+  right: 0;
+
+  i.fa-close {
+    display: inline-block;
+
+    font-size: 10px;
+    padding: 2px;
+    border-radius: 3px;
+    -webkit-transition: all .4s ease-in-out;
+    -moz-transition: all .4s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+      background-color: $border-color;
+    }
+  }
+
+  i.fa-bars {
+    display: none;
+  }
+}
+
+.sidebar-hidden {
+  i.fa-close {
+    display: none !important;
+  }
+
+  i.fa-bars {
+    display: inline-block !important;
+  }
+}
+
+.btn-mark-read-xs {
+  right: 55px;
+}
+
+.btn-atom-xs {
+  right: 28px;
+}
+
+#box-count {
+  color: lighten($gray-light, 10%);
+  margin: 5px 0 15px 0;
+
+  strong {
+    font-size: 270%;
+    display: block;
+  }
+
+  span {
+    letter-spacing: 2px;
+    font-size: 90%;
+  }
+}
