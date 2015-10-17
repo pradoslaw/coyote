@@ -379,7 +379,9 @@
   .col-footer-nav .pagination {
     font-size: 80%; }
   .col-footer-nav select {
-    margin: 5px 0; }
+    margin: 3px 0;
+    border: 2px solid #d0d0d0;
+    padding: 3px; }
 
 #sort {
   list-style-type: none;

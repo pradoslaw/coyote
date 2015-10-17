@@ -113,6 +113,8 @@
   }
 
   select {
-    margin: 5px 0;
+    margin: 3px 0;
+    border: 2px solid $border-color;
+    padding: 3px;
   }
 }

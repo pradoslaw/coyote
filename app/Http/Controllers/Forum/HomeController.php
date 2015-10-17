@@ -21,5 +21,4 @@ class HomeController extends Controller
 
         return parent::view('forum/submit');
     }
-
 }
