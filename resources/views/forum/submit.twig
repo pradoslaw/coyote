@@ -1,0 +1,175 @@
+{% extends 'layout.twig' %}
+{% block title %}Nowy wątek na forum{{ parent() }}{% endblock %}
+
+{% import 'vendor/forms.twig' as forms %}
+
+{% block container %}
+    <div id="form-wrapper" class="row">
+        <div class="col-sm-9">
+            {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': '/Forum/submit', 'class': 'form-horizontal'}) }}
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Temat</label>
+                <div class="col-md-10">
+                    {{ form_text('subject', input_old('subject'), {'class': 'form-control'}) }}
+
+                    {% if errors.first('subject') %}
+                        <span class="help-block">{{ errors.first('subject') }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Autor</label>
+                <div class="col-md-10">
+                    {{ form_text('username', input_old('username'), {'class': 'form-control'}) }}
+
+                    <span class="help-block">Wpisz swoją nazwę użytkownika</span>
+                </div>
+            </div>
+
+            <div id="text-area" class="row">
+                <div class="col-xs-12">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
+                        <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Załączniki</a></li>
+                        <li role="presentation"><a href="#poll" aria-controls="poll" role="tab" data-toggle="tab">Ankieta</a></li>
+                        <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab">Podgląd</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="body">
+                            <textarea name="content" style="height: 160px; width: 100%"></textarea>
+                        </div>
+                        <div role="tabpanel" class="tab-pane active" id="attachments"></div>
+                        <div role="tabpanel" class="tab-pane active" id="poll"></div>
+                        <div role="tabpanel" class="tab-pane active" id="preview"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Tagi</label>
+                <div class="col-md-10">
+                    {{ form_text('tag', input_old('tag'), {'class': 'form-control', 'autocomplete': 'off'}) }}
+
+                    <span class="help-block">Możesz opisać swój wątek słowami kluczowymi - np. C#, CLR (max. 5 tagów)</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <label>
+                        {{ form_checkbox('sticky', input_old('sticky'), false) }}
+                        Przyklejony
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <label>
+                        {{ form_checkbox('watch', input_old('watch'), false) }}
+                        Obserwuj wątek
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <label>
+                        {{ form_checkbox('smilies', input_old('smilies'), false) }}
+                        Wyświetlaj emoticony
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <button type="submit" class="btn btn-primary">Wyślij</button>
+                </div>
+            </div>
+
+            {{ form_close() }}
+        </div>
+
+        <aside class="col-sm-3">
+            <div id="hint-subject" class="sidebar-hint" style="display: block;">
+                <h4>Jak tytułować wątki</h4>
+
+                <p>► Staraj się nadawać wątkom znaczące tematy!</p>
+                <p>► Unikaj jednowyrazowych tematów wątków!</p>
+                <p>► Wątki o temacie <cite>pomoc</cite>, <cite>pomocy</cite>, <cite>help</cite> będą usuwane!</p>
+                <p>► Sprawdź w wyszukiwarce, czy wątek podobny do Twojego nie pojawił się wcześniej na forum.</p>
+                <p>► Czy Twój wątek rzeczywiście pasuje do tej kategorii?</p>
+                <p>► Unikaj stosowania prefiksów w tytułach wątków! Zamiast tego używaj <strong>tagów</strong>!</p>
+            </div>
+            <div id="hint-content" class="sidebar-hint" style="display: none;">
+                <h4>Jak formatować treść postu</h4>
+
+                <p>► Kod źródłowy umieszczaj pomiędzy znacznikami <code>&lt;code&gt;</code> a <code>&lt;/code&gt;</code> np. <code>&lt;code=php&gt; &lt;/code&gt;</code></p>
+                <p>► Stosuj <code><strong>**pogrubienie**</strong> i <cite>//pochylenie//</cite></code></p>
+                <p>► <code><tt>''**brak formatowania**''</tt></code></p>
+                <p>► <code>`polecenia języka programowania`</code></p>
+                <p>► Symbole <code>*</code> i <code>#</code> na początku linii powodują wypunktowanie i numerowanie</p>
+                <p>► Zwracaj uwagę na gramatykę i ortografię!</p>
+                <p>► <cite>Ctrl+Enter</cite> publikuje post.</p>
+                <p>► <cite>Shift+Tab</cite> tworzy wcięcie.</p>
+                <p>► <cite>Ctrl+V</cite> wkleja obrazek ze schowka (<strong>tylko Chrome oraz Firefox</strong>)</p>
+            </div>
+            <div id="hint-tag" class="sidebar-hint" style="display: none;">
+                <h4>Jak tagować wątki</h4>
+
+                <p>► Tagi pozwalają grupować podobne wątki.</p>
+                <p>► Oddzielaj tagi spacją.</p>
+                <p>► Nie używaj synonimów.</p>
+                <p>► Unikaj zaimków i przyimków.</p>
+                <p>► Symbol <tt>-</tt> służy do łączenia wyrazów - np. <tt>bazy-danych</tt>.</p>
+            </div>
+            <div id="hint-username" class="sidebar-hint" style="display: none;">
+                <h4>Nazwa użytkownika</h4>
+
+                <p>► Jesteś anonimowym użytkownikiem - <a href="http://4programmers.net/Rejestracja">zarejestruj się</a>.</p>
+                <p>► Anonimowi użytkownicy nie mogą edytować ani komentować postów.</p>
+                <p>► Anonimowi użytkownicy nie dostają powiadomień (o usunięciu, przeniesieniu wątku).</p>
+            </div>
+        </aside>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/forum.css">
+    <link rel="stylesheet" href="/css/wikieditor.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="/js/forum.js" type="text/javascript"></script>
+    <script src="/js/jquery.wikieditor.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $('#submit-form textarea').wikiEditor(toolbarSet);
+
+            var toolTipHints = $('#hint-subject, #hint-content, #hint-tag, #hint-username');
+
+            $('#submit-form').delegate('input[name="subject"], textarea[name="content"], input[name="username"], .tag-editor input', 'focus', function()
+            {
+                var name = typeof $(this).attr('name') == 'undefined' ? 'tag' : $(this).attr('name');
+
+                if ('hint-' + name != $('.sidebar-hint:visible').attr('id'))
+                {
+                    toolTipHints.each(function()
+                    {
+                        $(this).hide();
+                    });
+
+                    $('#hint-' + name).fadeIn(1000);
+                }
+            });
+        });
+    </script>
+{% endblock %}

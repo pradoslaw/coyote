@@ -1,0 +1,136 @@
+@charset "UTF-8";
+.related {
+  margin-top: 20px; }
+  .related ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+    .related ul li {
+      border-bottom: 1px solid #eeeeee; }
+      .related ul li:last-child {
+        border-bottom: none; }
+      .related ul li a {
+        padding: 6px 0;
+        display: block;
+        font-size: 12px; }
+        .related ul li a:hover {
+          text-decoration: none; }
+          .related ul li a:hover strong {
+            color: #d7661c; }
+        .related ul li a small {
+          color: #777777;
+          display: block; }
+        .related ul li a strong {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 90%;
+          display: inline-block;
+          line-height: 1;
+          height: 13px;
+          color: #80a41a; }
+
+#interface {
+  background: url("/img/horizontal.png") repeat-x 0 50%, url("/img/vertical.png") no-repeat 0 100%;
+  margin: 17px 0;
+  overflow: hidden;
+  width: 52.1%;
+  float: right; }
+  @media screen and (max-width: 480px) {
+    #interface {
+      background: none;
+      float: none;
+      width: 100%; } }
+
+#folder {
+  border: 1px solid #d0d0d0;
+  background-color: #f6f6f6; }
+  #folder ol {
+    width: 80%;
+    margin: auto; }
+    #folder ol li {
+      border: none;
+      background: none;
+      padding: 2px 0 2px 20px;
+      position: relative;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap; }
+      #folder ol li:before {
+        font-family: FontAwesome;
+        content: "";
+        position: absolute;
+        left: 0; }
+      #folder ol li a {
+        color: #222222;
+        font-size: 12px; }
+      #folder ol li em {
+        color: #777777; }
+
+.panel-catalog h4 {
+  font-size: 15px; }
+  .panel-catalog h4 a {
+    color: #222222; }
+
+.panel-catalog .list-inline {
+  font-size: 11px;
+  margin: 10px 0 0 2px; }
+  .panel-catalog .list-inline li {
+    margin-right: 20px;
+    padding: 1px 0 2px 15px;
+    color: #777777;
+    position: relative; }
+    .panel-catalog .list-inline li:before {
+      font-family: FontAwesome;
+      position: absolute;
+      left: 0; }
+
+.panel-catalog .date:before {
+  content: ""; }
+
+.panel-catalog .comments:before {
+  content: ""; }
+
+.panel-catalog .views:before {
+  content: ""; }
+
+article > header h1 {
+  margin-top: 0; }
+
+article > header h5 {
+  font-size: 15px;
+  margin-top: 20px; }
+  article > header h5 a {
+    color: #777777; }
+
+article > header ul {
+  color: #777777;
+  border-top: 1px solid #d0d0d0;
+  padding-top: 12px;
+  margin: 13px 0 20px 0; }
+  article > header ul a {
+    color: inherit; }
+
+.box-header {
+  font-size: 13px;
+  margin: 0; }
+  .box-header a {
+    color: #555555; }
+  .box-header span {
+    color: #80a41a; }
+  .box-header a:last-child {
+    font-weight: bold; }
+
+#box-author blockquote {
+  border: none;
+  font-size: 14px;
+  position: relative;
+  padding: 0 0 0 25px; }
+  #box-author blockquote:before {
+    position: absolute;
+    font-family: FontAwesome;
+    content: "";
+    left: 0;
+    color: #777777; }
+
+/*# sourceMappingURL=wiki.css.map */

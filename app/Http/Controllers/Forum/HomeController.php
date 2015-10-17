@@ -13,7 +13,13 @@ class HomeController extends Controller
         return parent::view('forum/home');
     }
 
-    public function postIndex()
+    public function getSubmit()
     {
+        $this->breadcrumb->push('Forum', '/Forum');
+        $this->breadcrumb->push('Python', '/Forum/Python');
+        $this->breadcrumb->push('Nowy wątek', '/Forum/Python/Submit');
+
+        return parent::view('forum/submit');
     }
+
 }
