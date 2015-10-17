@@ -1,118 +1,306 @@
-#box-topics {
-  margin: 9px 0 9px 0;
+@charset "UTF-8";
+
+#box-post {
+  margin-top: 5px;
 }
 
-.col-topic-icon {
-  width: 30px;
+.post {
+  background-color: #fff;
+  border: 1px solid $border-color;
+  border-radius: 3px;
+
+  > div.row {
+    border-bottom: 1px solid $border-color;
+    margin: 0;
+  }
+
+  > div.row:nth-child(even) {
+    background-color: #fafafa;
+  }
+
+  div[class*="col-"] {
+    padding: 5px;
+  }
 }
 
-.col-subject {
-  padding-bottom: 1px !important;
+.col-user {
+  .avatar {
+    margin: 5px 0 10px 0;
+  }
+
+  p {
+    font-size: 11px;
+    color: $gray;
+    margin: 0;
+    padding: 2px 0;
+
+    strong {
+      width: 40%;
+      display: inline-block;
+      font-weight: normal;
+
+      @media screen and (max-width: $screen-lg) {
+        display: block;
+        width: 100%;
+      }
+    }
+
+    small {
+      color: $gray-light;
+    }
+  }
 
   h5 {
     margin: 0;
+    font-weight: bold;
+    padding-left: 18px;
+    position: relative;
+    font-family: Arial, sans-serif;
 
     a {
-      color: darken($brand-primary, 10%);
+      color: $link-color-darker;
     }
-  }
-
-  .btn-view {
-    padding: 8px 11px;
-    background: url('/img/topic-view.png') no-repeat 0 4px;
-    width: 22px;
-    height: 13px;
-    display: inline-block;
-    float: left;
-  }
-
-  .unread {
-    background-image: url('/img/topic-view-unread.png');
-  }
-
-  .topic-pagination {
-    float: right;
-    margin: 0;
-    position: relative;
-    padding-left: 12px;
-    font-size: 12px;
 
     &:before {
-      @include font-awesome($fa-var-file-o);
-      font-size: 10px;
+      @include font-awesome($fa-var-user);
+      color: $text-color;
       left: 0;
+      font-weight: normal;
     }
   }
 
-  strong {
-    font-weight: normal;
-    font-size: 11px;
-    padding: 3px 0 0 0;
-    display: block;
-  }
-
-  > .tag-clouds {
-    margin: 0;
-    padding: 0;
-    clear: both;
-
-    li {
-      float: none;
-
-      a {
-        margin: 0;
-        padding: 2px 6px;
-      }
+  h5.offline {
+    &:before {
+      color: $gray-light;
     }
   }
 }
 
-.col-views {
-  @extend .col-stats;
+.col-time {
+  font-size: 11px;
 
-  width: 110px;
-}
-
-.col-last-post {
-  width: 22%;
-  min-width: 120px;
-
-  .img-thumbnail {
-    float: left;
-    margin-right: 5px;
+  small a {
+    color: $gray-light;
   }
 
-  .btn-watch {
-    opacity: .3;
-    float: right;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-    margin: 8px 5px 0 0;
-    position: relative;
+  .post-link {
+    color: $gray;
+    margin-right: 3px;
     display: inline-block;
+  }
+}
 
-    &:after {
-      position: absolute;
-      left: 0;
-      font-family: FontAwesome;
-      content: $fa-var-star-o;
+.col-body {
+  vertical-align: top;
+  line-height: 1.3em;
+  overflow: hidden;
+}
+
+.col-vote {
+  width: 50px;
+  vertical-align: top;
+  float: right;
+  line-height: 120%;
+}
+
+#col-toggle {
+  background-color: #fff;
+
+  a {
+    margin: 2px auto 2px auto;
+    display: block;
+    width: 67px;
+    height: 5px;
+
+    span {
+      display: block;
+      height: 1px;
+      border-radius: 1px;
+      background-color: $gray-light;
     }
+
+    span + span {
+      margin-top: 1px;
+    }
+  }
+
+}
+
+// Ikony do zarzadzania pod spodem postu
+// -------------------------------------
+
+.col-bottom {
+  background-color: #ececec;
+
+  .btn-sub, .btn-share, .btn-comment, .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del {
+    color: $text-color;
+    opacity: .9;
+    border: 1px solid transparent;
 
     &:hover {
       opacity: 1;
+      border-color: $border-color;
     }
+
+    i {
+      font-size: $font-size-base;
+    }
+  }
+
+  .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del {
+    float: right;
+  }
+
+  .active {
+    border-color: $gray;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    opacity: 1;
+
+    &:hover {
+      border: 1px solid $gray !important;
+    }
+  }
+
+  .btn-multi-quote {
+    border-left: 1px solid $border-color;
+    margin-right: 5px;
   }
 }
 
-.col-footer-nav {
-  padding: 15px 5px 15px 15px !important;
+.col-end {
+  background-color: #dedddd;
+}
 
-  .pagination {
-    font-size: 80%;
+// Tresc posta wraz z ikonami do glosowania, stopka czy komentarzami
+// ------------------------------------------------------------------
+
+.post-content {
+  min-height: 50px;
+  word-wrap: break-word;
+  line-height: 139%;
+  overflow: hidden;
+
+  a {
+    color: $link-color-darker;
   }
 
-  select {
-    margin: 5px 0;
+  hr {
+    margin: 15px 0 5px 0;
+    border-top-color: darken($gray-lighter, 10%);
+    width: 25%;
+  }
+
+  footer {
+    color: $gray-light;
+    font-size: 90%;
+    background: transparent;
+  }
+}
+
+.edit-info {
+  font-size: 11px;
+  padding: 5px 0;
+  margin-top: 15px;
+  color: $text-color;
+
+  a {
+    color: $text-color;
+  }
+}
+
+.vote-count, .vote-up, .vote-accept {
+  color: lighten($gray-light, 10%);
+
+  width: 36px;
+  text-align: center;
+  display: block;
+}
+
+.vote-up, .vote-accept {
+  font-size: 18px;
+  opacity: .8;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.vote-count {
+  font-size: 26px;
+  margin: 5px 0 15px 0;
+  line-height: 120%;
+}
+
+.vote-up {
+
+}
+
+.vote-accept {
+  margin-top: 10px;
+}
+
+div.tooltip-inner {
+  font-size: 11px;
+}
+
+// Komentarze na forum
+// -----------------------
+
+.comments {
+  margin: 15px 0 5px 25px;
+  font-family: Tahoma,sans-serif;
+  font-size: 11px;
+
+  a {
+    color: $link-color-darker;
+  }
+
+  .btn-edit, .btn-del {
+    padding: 0 5px;
+    color: $gray;
+    display: none;
+  }
+
+  > div {
+    border-bottom: 1px dotted $border-color;
+    padding: 5px 0 5px 10px;
+    margin-top: 1px;
+    position: relative;
+
+    &:first-child {
+      border-top: 1px dotted $border-color;
+    }
+
+    &:before {
+      content: "▪";
+      left: 0;
+      position: absolute;
+    }
+
+    .timestamp {
+      color: $gray-light;
+
+      &:hover {
+        color: $alt-link-hover-color;
+      }
+    }
+
+    .user-name:hover {
+      text-decoration: none;
+    }
+
+    .author {
+      background-color: $gray-lighter;
+    }
+
+    &:hover {
+      .btn-edit, .btn-del {
+        display: inline-block;
+      }
+    }
+  }
+
+  form {
+    margin-top: 10px;
   }
 }

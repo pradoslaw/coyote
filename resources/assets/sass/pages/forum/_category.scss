@@ -1,0 +1,118 @@
+#box-topics {
+  margin: 9px 0 9px 0;
+}
+
+.col-topic-icon {
+  width: 30px;
+}
+
+.col-subject {
+  padding-bottom: 1px !important;
+
+  h5 {
+    margin: 0;
+
+    a {
+      color: darken($brand-primary, 10%);
+    }
+  }
+
+  .btn-view {
+    padding: 8px 11px;
+    background: url('/img/topic-view.png') no-repeat 0 4px;
+    width: 22px;
+    height: 13px;
+    display: inline-block;
+    float: left;
+  }
+
+  .unread {
+    background-image: url('/img/topic-view-unread.png');
+  }
+
+  .topic-pagination {
+    float: right;
+    margin: 0;
+    position: relative;
+    padding-left: 12px;
+    font-size: 12px;
+
+    &:before {
+      @include font-awesome($fa-var-file-o);
+      font-size: 10px;
+      left: 0;
+    }
+  }
+
+  strong {
+    font-weight: normal;
+    font-size: 11px;
+    padding: 3px 0 0 0;
+    display: block;
+  }
+
+  > .tag-clouds {
+    margin: 0;
+    padding: 0;
+    clear: both;
+
+    li {
+      float: none;
+
+      a {
+        margin: 0;
+        padding: 2px 6px;
+      }
+    }
+  }
+}
+
+.col-views {
+  @extend .col-stats;
+
+  width: 110px;
+}
+
+.col-last-post {
+  width: 22%;
+  min-width: 120px;
+
+  .img-thumbnail {
+    float: left;
+    margin-right: 5px;
+  }
+
+  .btn-watch {
+    opacity: .3;
+    float: right;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    margin: 8px 5px 0 0;
+    position: relative;
+    display: inline-block;
+
+    &:after {
+      position: absolute;
+      left: 0;
+      font-family: FontAwesome;
+      content: $fa-var-star-o;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.col-footer-nav {
+  padding: 15px 5px 15px 15px !important;
+
+  .pagination {
+    font-size: 80%;
+  }
+
+  select {
+    margin: 5px 0;
+  }
+}

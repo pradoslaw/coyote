@@ -100,7 +100,7 @@ $sidebar-media-max-width: 1024px;
 // Lista watkow
 // ----------------------------------------
 
-@import "forum/topic";
+@import "forum/category";
 
 // Element filtrowania i sortowania watkow w tabeli
 // -----------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ $sidebar-media-max-width: 1024px;
 // Wyswietlanie zawartosci watku
 // -----------------------------------------
 
-@import "forum/post";
+@import "forum/topic";
 
 // Formularz tworzenia nowego watku/edycji/odpowiadania w watku
 // -------------------------------------------------------------
