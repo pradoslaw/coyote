@@ -1,10 +1,4 @@
 @charset "UTF-8";
-#box-job-offers h4:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: "";
-  left: 0; }
-
 #box-job-offers .media {
   border-bottom: 1px solid #d0d0d0;
   padding-bottom: 7px;
@@ -103,19 +97,9 @@
 #box-who-is-online {
   margin-top: 20px;
   color: #777777; }
-  #box-who-is-online h4:before {
-    position: absolute;
-    font-family: FontAwesome;
-    content: "";
-    left: 0; }
 
 #box-reputation {
   margin-top: 10px; }
-  #box-reputation > h4:before {
-    position: absolute;
-    font-family: FontAwesome;
-    content: "";
-    left: 0; }
   #box-reputation .media-heading {
     margin-bottom: 3px; }
     #box-reputation .media-heading a {
@@ -249,22 +233,7 @@
     padding-top: 10px;
     margin-top: 10px; }
     .panel-patronage .patronage-footer a {
-      color: #777777;
-      padding-left: 20px;
-      position: relative; }
-      .panel-patronage .patronage-footer a:before {
-        position: absolute;
-        font-family: FontAwesome;
-        content: "";
-        left: 0; }
-
-#box-forum > h4 {
-  padding-left: 25px; }
-  #box-forum > h4:before {
-    position: absolute;
-    font-family: FontAwesome;
-    content: "";
-    left: 0; }
+      color: #777777; }
 
 #box-forum #stream-wrapper {
   background: url("/img/stream-last-feed.png") no-repeat;
@@ -361,11 +330,5 @@
   #box-forum-headline .pull-right {
     color: #777777;
     font-size: 10px; }
-
-#box-microblog h4:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: "";
-  left: 0; }
 
 /*# sourceMappingURL=homepage.css.map */

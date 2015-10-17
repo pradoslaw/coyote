@@ -16,6 +16,14 @@ class WikiController extends Controller
         return parent::view('wiki/category');
     }
 
+    public function article()
+    {
+        $this->breadcrumb->push('Delphi', '/Delphi');
+        $this->breadcrumb->push('Lorem ipsum lores', '/Delphi/Lorem_ipsum');
+
+        return parent::view('wiki/article');
+    }
+
     public function postIndex()
     {
     }

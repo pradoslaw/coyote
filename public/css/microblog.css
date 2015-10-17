@@ -99,17 +99,6 @@
 
 #box-popular-tags {
   margin-top: 13px; }
-  #box-popular-tags h4:before {
-    position: absolute;
-    font-family: FontAwesome;
-    content: "";
-    left: 0; }
-
-#box-popular-entries h4:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: "";
-  left: 0; }
 
 #box-popular-entries > .media {
   border-bottom: 1px solid #d0d0d0;

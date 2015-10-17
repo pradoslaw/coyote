@@ -7,7 +7,6 @@
   > h4 {
     position: relative;
     color: $box-header-color;
-    padding-left: 25px;
     font-size: ceil($font-size-base * 1.05);
 
     a {
@@ -17,7 +16,7 @@
 
   .border {
     border-bottom: 1px solid $box-border-color;
-    padding: 0 0 10px 25px;
+    padding: 0 0 10px 0;
     box-shadow: 0 2px 0 #FFF;
   }
 

@@ -5,10 +5,6 @@
 @import "../vendors/font-awesome/variables";
 
 #box-job-offers {
-  h4 {
-    @include box-header-icon($fa-var-suitcase);
-  }
-
   .media {
     border-bottom: 1px solid $border-color;
     padding-bottom: 7px;

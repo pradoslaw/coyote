@@ -1,8 +1,10 @@
 @charset "UTF-8";
 @import "../helpers/variables";
+@import "../helpers/mixins";
 @import "../vendors/bootstrap/variables";
 @import "../vendors/font-awesome/variables";
 @import "../vendors/bootstrap/mixins/text-overflow";
+@import "../components/related";
 
 #interface {
   background: url('/img/horizontal.png') repeat-x 0 50%,url('/img/vertical.png') no-repeat 0 100%;
@@ -89,5 +91,63 @@
 
   .views:before {
     content: $fa-var-lightbulb-o;
+  }
+}
+
+article > header {
+  h1 {
+    margin-top: 0;
+  }
+
+  h5 {
+    font-size: 15px;
+    margin-top: 20px;
+
+    a {
+      color: $gray-light;
+    }
+  }
+
+  ul {
+    color: $gray-light;
+    border-top: 1px solid $border-color;
+    padding-top: 12px;
+    margin: 13px 0 20px 0;
+
+    a {
+      color: inherit;
+    }
+  }
+}
+
+.box-header {
+  font-size: $font-size-base;
+  margin: 0;
+
+  a {
+    color: $gray;
+  }
+
+  span {
+    color: $brand-primary;
+  }
+
+  a:last-child {
+    font-weight: bold;
+  }
+}
+
+#box-author {
+  blockquote {
+    border: none;
+    font-size: 14px;
+    position: relative;
+    padding: 0 0 0 25px;
+
+    &:before {
+      @include font-awesome($fa-var-quote-left);
+      left: 0;
+      color: $gray-light;
+    }
   }
 }

@@ -1,0 +1,45 @@
+.related {
+  margin-top: 20px;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      border-bottom: 1px solid $gray-lighter;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      a {
+        padding: 6px 0;
+        display: block;
+        font-size: $font-size-small;
+
+        &:hover {
+          text-decoration: none;
+
+          strong {
+            color: $alt-link-hover-color;
+          }
+        }
+
+        small {
+          color: $gray-light;
+          display: block;
+        }
+
+        strong {
+          @include text-overflow();
+          width: 90%;
+          display: inline-block;
+          line-height: 1;
+          height: 13px;
+          color: $brand-primary;
+        }
+      }
+    }
+  }
+}

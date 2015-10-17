@@ -63,17 +63,9 @@ $sidebar-media-max-width: 1024px;
 #box-who-is-online {
   margin-top: 20px;
   color: $gray-light;
-
-  h4 {
-    @include box-header-icon($fa-var-users);
-  }
 }
 
 #box-popular-tags, #box-my-tags {
-  h4 {
-    @include box-header-icon($fa-var-tag);
-  }
-
   margin-bottom: 20px;
 }
 

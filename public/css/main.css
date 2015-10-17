@@ -6901,14 +6901,13 @@ button[type=submit] {
 .box > h4 {
   position: relative;
   color: #646466;
-  padding-left: 25px;
   font-size: 14px; }
   .box > h4 a {
     color: inherit; }
 
 .box .border {
   border-bottom: 1px solid #c7c7c7;
-  padding: 0 0 10px 25px;
+  padding: 0 0 10px 0;
   box-shadow: 0 2px 0 #FFF; }
 
 .box > h4 + .nav-panel {

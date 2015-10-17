@@ -9,18 +9,10 @@
 #box-who-is-online {
   margin-top: 20px;
   color: $gray-light;
-
-  h4 {
-    @include box-header-icon($fa-var-users);
-  }
 }
 
 #box-reputation {
   margin-top: 10px;
-
-  > h4 {
-    @include box-header-icon($fa-var-star);
-  }
 
   .media-heading {
     margin-bottom: 3px;
@@ -207,20 +199,11 @@
 
     a {
       color: $gray-light;
-      padding-left: 20px;
-      position: relative;
-
-      @include box-header-icon($fa-var-arrow-right);
     }
   }
 }
 
 #box-forum {
-
-  > h4 {
-    padding-left: 25px;
-    @include box-header-icon($fa-var-star);
-  }
 
   #stream-wrapper {
     background: url('/img/stream-last-feed.png') no-repeat;
@@ -351,11 +334,5 @@
   .pull-right {
     color: $gray-light;
     font-size: 10px;
-  }
-}
-
-#box-microblog {
-  h4 {
-    @include box-header-icon($fa-var-comments-o);
   }
 }
