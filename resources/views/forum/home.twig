@@ -11,7 +11,7 @@
             <li role="presentation"><a href="#">Bez odpowiedzi</a></li>
         </ul>
 
-        {% include "forum/top.twig" %}
+        {% include "forum/_top.twig" %}
 
         <main id="mainbar">
             <section class="panel panel-wrapper">
@@ -136,7 +136,7 @@
                 </div>
             </section>
 
-            {% include "forum/viewers_list.twig" %}
+            {% include "forum/_viewers.twig" %}
         </main>
 
         <aside id="sidebar">
@@ -154,7 +154,7 @@
                 </ul>
             </div>
 
-            {% include "forum/sidebar.twig" %}
+            {% include "forum/_sidebar.twig" %}
         </aside>
     </div>
 {% endblock %}
