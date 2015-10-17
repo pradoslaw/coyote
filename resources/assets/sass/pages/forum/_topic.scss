@@ -7,12 +7,27 @@
 }
 
 .col-subject {
+  padding-bottom: 1px;
+
   h5 {
     margin: 0;
 
     a {
       color: darken($brand-primary, 10%);
     }
+  }
+
+  .btn-view {
+    padding: 8px 11px;
+    background: url('/img/topic-view.png') no-repeat 0 4px;
+    width: 22px;
+    height: 13px;
+    display: inline-block;
+    float: left;
+  }
+
+  .unread {
+    background-image: url('/img/topic-view-unread.png');
   }
 
   .topic-pagination {
