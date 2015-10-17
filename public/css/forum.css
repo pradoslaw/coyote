@@ -89,6 +89,37 @@
     .side-menu > li:hover:before {
       opacity: 1; }
 
+.related {
+  margin-top: 20px; }
+  .related ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+    .related ul li {
+      border-bottom: 1px solid #eeeeee; }
+      .related ul li:last-child {
+        border-bottom: none; }
+      .related ul li a {
+        padding: 6px 0;
+        display: block;
+        font-size: 12px; }
+        .related ul li a:hover {
+          text-decoration: none; }
+          .related ul li a:hover strong {
+            color: #d7661c; }
+        .related ul li a small {
+          color: #777777;
+          display: block; }
+        .related ul li a strong {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 90%;
+          display: inline-block;
+          line-height: 1;
+          height: 13px;
+          color: #80a41a; }
+
 #index {
   position: relative;
   margin-top: 20px; }
