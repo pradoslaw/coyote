@@ -38,7 +38,7 @@
   }
 }
 
-.btn-mark-read, .btn-atom, #btn-setting, #btn-log, #btn-edit-subject, #btn-lock, #btn-move, #btn-status {
+.btn-mark-read, .btn-atom, #btn-setting, #btn-log, #btn-edit-subject, #btn-lock, #btn-move, #btn-status, .btn-watch {
   position: relative;
 
   &:before {
@@ -80,6 +80,19 @@
 
 #btn-status:before {
   content: $fa-var-sticky-note-o;
+}
+
+.btn-watch:before {
+  content: $fa-var-star-o;
+}
+
+.btn-watch.on:before {
+  content: $fa-var-star;
+  color: lighten($alt-link-hover-color, 5%);
+}
+
+.btn-watch small {
+  color: $gray-light;
 }
 
 // Ikony wyswietlane po prawej stronie nad tabelka - np. z lista watkow. M.in. przycisk do ukrywania menu bocznego

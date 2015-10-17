@@ -34,181 +34,49 @@
 
             <section class="panel panel-wrapper">
                 <div class="panel-body">
+
                     <div id="box-post" class="box-forum">
                         <a href="#" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                         <a href="#" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
 
                         <div class="clearfix"></div>
 
-                        <div class="post" style="margin-top: 10px">
+                        {% for i in 0..2 %}
+                            {{ include('forum/_post.twig', {index: i}) }}
+                        {% endfor %}
 
-                            <div class="row">
-                                <div class="col-xs-2 col-user">
-                                    <h5 class="offline" title="Użytkownik jest offline">
-                                        <a data-user-id="62278" href="#">Wizzie</a>
-                                    </h5>
-                                </div>
-
-                                <div class="col-xs-10 col-time">
-                                    <a title="Link do tego postu" id="id1182672" class="post-link" href="#">
-                                        <i class="fa fa-file-o"></i>
-                                    </a>
-
-                                    <span class="timestamp" title="09 październik 2015, 19:08" data-timestamp="1444410483">09 październik 2015, 19:08</span>
-                                    <small><a href="#" title="127.0.0.1" class="post-ip">(127.0.0.1)</a></small>
-                                </div>
-                                {#<td class="col-vote"></td>#}
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-2 col-user hidden-xss">
-                                    <div class="avatar">
-                                        <img class="img-responsive" src="/img/shalom.png">
-                                    </div>
-
-                                    <p class="hidden-xs">
-                                        <strong>Rejestracja:</strong>
-                                        <small>25 maj 2014, 16:42</small>
-                                    </p>
-                                    <p class="hidden-xs">
-                                        <strong>Ostatnio:</strong>
-                                        <small>22 minuty temu</small>
-                                    </p>
-                                </div>
-                                <div class="col-xs-10 col-body">
-
-                                    <div class="col-vote">
-                                        <input type="hidden" value="1182672">
-                                        <strong class="vote-count" title="Ocena postu">9</strong>
-
-                                        <a class="vote-up " href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
-                                            <i class="fa fa-thumbs-o-up"></i>
-                                        </a>
-                                        <a class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tą odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
-                                            <i class="fa fa-check-circle-o"></i>
-                                        </a>
-                                    </div>
-
-                                    <div class="post-content" data-post-id="1182672">
-                                        Enim tincidunt vel facilisis, turpis magnis? Cras nunc et augue ac habitasse, nunc cras turpis, sit montes cras, magnis pulvinar, arcu scelerisque turpis magna nascetur eu magna pid in tortor, tincidunt amet vel habitasse mid magnis, porta mus enim ultrices! Mus pid. Porta scelerisque porttitor proin nec sociis. Porttitor scelerisque lorem pellentesque cum sit tristique odio dis! Facilisis pid enim. Et eros vel scelerisque purus nunc est sagittis magna rhoncus. Nascetur etiam! Est et elementum! Adipiscing! Mattis, sed. Placerat porta! Ac arcu dis tortor amet. Non dolor egestas augue magna nascetur integer? Turpis sit cras adipiscing arcu hac pulvinar ac. Vel augue scelerisque sit integer tincidunt rhoncus cras. Cursus ac, ut, eros. Ac tortor penatibus turpis sagittis risus, parturient mus.
-
-                                        Purus ut urna? Porta in? Tincidunt porta facilisis in eros? Augue, velit sit aenean, pid dapibus dictumst enim quis. Dolor? Placerat proin? Mattis nisi, nunc aliquam? Et scelerisque pulvinar a, nisi ultrices a dapibus natoque, facilisis hac nec nec aliquet et rhoncus nec! Lectus! Amet amet odio elementum mus mus porta? Mid vel sit, in, et porta scelerisque pulvinar, elit rhoncus, urna vel, et, amet tristique risus! Sed quis aliquam? Sociis ut, vut nascetur sed. Nisi aliquam? In turpis, augue? Montes non duis rhoncus ultricies, turpis, in? Nec, cum! Nisi urna hac augue tristique pulvinar! Aliquet! Porta ac velit. Pulvinar proin elementum amet, elementum lundium magna mid, risus, phasellus pulvinar dictumst. Diam phasellus, lundium mauris platea odio nisi nec.
-
-                                        <hr>
-                                        <footer>"Jeśli wyszkolisz pracownika, to niedobrze, bo odejdzie. Jeśli go nie wyszkolisz, to jeszcze gorzej, bo zostanie."</footer>
-                                    </div>
-
-                                    <div class="clearfix"></div>
-
-                                    <div class="edit-info">
-                                        <strong>
-                                            <a class="btn-history" title="Zobacz historię zmian tego postu" href="#">
-                                                <i class="fa fa-external-link"></i>
+                        <div class="post last-post">
+                            <div class="col-footer-nav">
+                                <nav class="pull-left">
+                                    <ul class="pagination pagination-xs">
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
                                             </a>
-
-                                            3x, ostatnio: <a href="http://4programmers.net/Profile/62278">Wizzie</a>,
-                                        </strong>
-                                        <span class="timestamp" data-timestamp="1444416388">09 październik 2015, 20:46</span>
-                                    </div>
-
-                                    <div id="post-comment-1182672" data-post-id="1182672" class="comments">
-
-                                        <div id="comment-252713" data-comment-id="252713">
-                                            Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
-
-                                            <a class="user-name" data-user-id="1" href="#">Adam Boduch</a>
-                                            <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
-
-                                            <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
-                                                <i class="fa fa-remove"></i>
+                                        </li>
+                                        <li class="active"><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li><a href="#">4</a></li>
+                                        <li><a href="#">5</a></li>
+                                        <li>
+                                            <a href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
                                             </a>
-                                            <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                        </div>
-                                        <div id="comment-252713" data-comment-id="252713">
-                                            Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
+                                        </li>
+                                    </ul>
+                                </nav>
 
-                                            <a class="author user-name" data-user-id="1" href="#">Adam Boduch</a>
-                                            <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
-
-                                            <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
-                                                <i class="fa fa-remove"></i>
-                                            </a>
-                                            <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                        </div>
-
-                                        <form method="post" class="collapse" id="form-1182672">
-                                            <input type="hidden" value="1182672" name="postId">
-                                            <textarea cols="90" rows="2" style="width: 100%;" name="comment"></textarea>
-
-                                            <p class="text-muted pull-left">Pozostało <strong>580</strong> znaków</p>
-                                            <input type="submit" class="btn btn-xs btn-primary pull-right" value="Dodaj komentarz">
-                                        </form>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-2 col-bottom" style="height: 32px"></div>
-                                <div class="col-xs-10 col-bottom">
-
-                                    <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active">
-                                        <i class="fa fa-search-plus"></i>
-                                        <span class="hidden-xs">Obserwuj</span>
-                                    </a>
-                                    <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="#" class="btn btn-xs btn-share">
-                                        <i class="fa fa-share-alt"></i>
-                                        <span class="hidden-xs">Udostępnij</span>
-                                    </a>
-                                    <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" data-post-id="1182672" class="btn btn-xs btn-comment" href="#form-1182672">
-                                        <i class="fa fa-comment-o"></i>
-                                        <span class="hidden-xs">Komentuj</span>
-                                    </a>
-
-                                    <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="#" class="btn btn-xs btn-report">
-                                        <i class="fa fa-flag"></i>
-                                        <span class="hidden-xs">Raportuj</span>
-                                    </a>
-
-
-                                    <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">
-                                        <i class="fa fa-plus"></i>
-                                    </a>
-                                    <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="#" class="btn btn-xs btn-quote">
-                                        <i class="fa fa-quote-right"></i>
-                                        <span class="hidden-xs">Cytuj</span>
-                                    </a>
-
-                                    <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="#id1182672" class="btn btn-xs btn-del">
-                                        <i class="fa fa-remove"></i>
-                                        <span class="hidden-xs">Usuń</span>
-                                    </a>
-
-                                    <a data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" href="#" class="btn btn-xs btn-edit">
-                                        <i class="fa fa-pencil"></i>
-                                        <span class="hidden-xs">Edytuj</span>
-                                    </a>
-                                    <a data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="1182672" class="btn btn-xs btn-fast-edit">
-                                        <i class="fa fa-pencil"></i>
-                                        <span class="hidden-xs">Szybka edycja</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-end col-xs-12"></div>
-                            </div>
-
-                            <div id="col-toggle" class="row">
-                                <a title="Pokaż/ukryj treść pytania" href="javascript:">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
+                                <a class="btn pull-right" href="#">
+                                    <i class="fa fa-arrow-circle-right"></i>
                                 </a>
+                                <select name="forum" class="pull-right"><option value="http://forum.4programmers.net/Newbie">Newbie</option><option value="http://forum.4programmers.net/Delphi_Pascal">Delphi i Pascal</option><option value="http://forum.4programmers.net/C_i_C++">C/C++</option><option value="http://forum.4programmers.net/C_i_.NET">C# i .NET</option><option value="http://forum.4programmers.net/Java">Java</option><option value="http://forum.4programmers.net/Python">Python</option><option value="http://forum.4programmers.net/PHP">PHP</option><option value="http://forum.4programmers.net/Webmastering">Webmastering</option><option value="http://forum.4programmers.net/Inne">Inne języki programowania</option><option value="http://forum.4programmers.net/Bazy_danych">Bazy danych</option><option value="http://forum.4programmers.net/Algorytmy">Algorytmy i struktury danych</option><option value="http://forum.4programmers.net/Inzynieria_oprogramowania">Inżynieria oprogramowania</option><option value="http://forum.4programmers.net/Nietuzinkowe_tematy">Nietuzinkowe tematy</option><option value="http://forum.4programmers.net/Praca">Oferty pracy</option><option value="http://forum.4programmers.net/Edukacja">Edukacja</option><option value="http://forum.4programmers.net/Kariera">Kariera</option><option value="http://forum.4programmers.net/Szkolenia_i_konferencje">Szkolenia i konferencje</option><option value="http://forum.4programmers.net/Magazyn_Programista">Magazyn Programista</option><option value="http://forum.4programmers.net/Off-Topic">Off-Topic</option><option value="http://forum.4programmers.net/Off-Topic/Oceny_i_recenzje">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oceny i recenzje</option><option value="http://forum.4programmers.net/Hardware_Software">Hardware/Software</option><option value="http://forum.4programmers.net/Moderatorzy">Moderatorzy</option><option value="http://forum.4programmers.net/Moderatorzy/Kapownik">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kapownik</option><option value="http://forum.4programmers.net/Moderatorzy/Administracja">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administracja</option><option value="http://forum.4programmers.net/Moderatorzy/Kartoteka">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kartoteka</option><option value="http://forum.4programmers.net/Spolecznosc">Społeczność</option><option value="http://forum.4programmers.net/Spolecznosc/Perelki">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perełki</option><option value="http://forum.4programmers.net/Spolecznosc/Projekty">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Projekty Forumowe</option><option value="http://forum.4programmers.net/Flame">Flame</option><option value="http://forum.4programmers.net/Ogłoszenia_drobne">Ogłoszenia drobne</option><option value="http://forum.4programmers.net/Coyote" selected="selected">Coyote</option><option value="http://forum.4programmers.net/Coyote/Test">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Test</option><option value="http://forum.4programmers.net/Archiwum">Archiwum</option><option value="http://forum.4programmers.net/Archiwum/Yosemite">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yosemite</option><option value="http://forum.4programmers.net/Archiwum/RoadRunner">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RoadRunner</option><option value="http://forum.4programmers.net/Kosz">Kosz</option></select>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
 
+                        <a href="#" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
+                        <a href="#" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
                     </div>
                 </div>
             </section>
@@ -229,8 +97,11 @@
 
             <div class="box">
                 <ul class="side-menu">
-                    <li class="btn-mark-read">
-                        <a title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">Obserwuj wątek</a>
+                    <li class="btn-watch on">
+                        <a title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
+                            Obserwuj wątek
+                            <small>(1 obserwujący)</small>
+                        </a>
                     </li>
                     <li class="btn-atom">
                         <a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>

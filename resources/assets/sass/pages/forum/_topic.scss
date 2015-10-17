@@ -7,7 +7,6 @@
 .post {
   background-color: #fff;
   border: 1px solid $border-color;
-  border-radius: 3px;
 
   > div.row {
     border-bottom: 1px solid $border-color;
@@ -21,6 +20,18 @@
   div[class*="col-"] {
     padding: 5px;
   }
+}
+
+.post.first-post {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+}
+
+.post.last-post {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  margin-bottom: 10px;
 }
 
 .col-user {
