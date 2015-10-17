@@ -46,16 +46,34 @@ $sidebar-media-max-width: 1024px;
 
 .panel-wrapper {
   .panel-body {
-    padding: 5px 9px 10px 9px;
+    padding: 4px 8px 8px 8px;
 
     > h2 {
-      margin: 5px 2px;
+      margin: 5px 0 0 2px;
     }
 
     .toggle {
       color: $gray-dark;
-      margin: 5px 2px;
+      margin: 5px 2px 0 0;
       font-size: 11px;
+
+      .fa-plus-square-o {
+        display: inline-block;
+      }
+
+      .fa-minus-square-o {
+        display: none;
+      }
+    }
+
+    .toggle.in {
+      .fa-plus-square-o {
+        display: none;
+      }
+
+      .fa-minus-square-o {
+        display: inline-block;
+      }
     }
   }
 }

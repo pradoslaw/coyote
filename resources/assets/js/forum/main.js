@@ -56,4 +56,8 @@ $(function () {
             //    });
         }
     });
+
+    $('.toggle[data-toggle="collapse"]').click(function() {
+        $(this).toggleClass('in');
+    });
 });
