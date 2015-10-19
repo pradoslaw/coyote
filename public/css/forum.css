@@ -66,7 +66,8 @@
   list-style-type: none; }
   .side-menu > li {
     margin-bottom: 2px;
-    border-bottom: 1px solid #d0d0d0; }
+    border-bottom: 1px solid #d0d0d0;
+    position: relative; }
     .side-menu > li > a {
       color: #333333;
       cursor: pointer;
@@ -88,6 +89,12 @@
       border-bottom: none; }
     .side-menu > li:hover:before {
       opacity: 1; }
+    .side-menu > li:before {
+      font-family: FontAwesome;
+      position: absolute;
+      left: 3px;
+      top: 4px;
+      font-size: 17px; }
 
 .related {
   margin-top: 20px; }
@@ -247,15 +254,6 @@
       opacity: 1;
       color: #80a41a;
       text-decoration: none; }
-
-.btn-mark-read, .btn-atom, #btn-setting, #btn-log, #btn-edit-subject, #btn-lock, #btn-move, #btn-status, .btn-watch {
-  position: relative; }
-  .btn-mark-read:before, .btn-atom:before, #btn-setting:before, #btn-log:before, #btn-edit-subject:before, #btn-lock:before, #btn-move:before, #btn-status:before, .btn-watch:before {
-    font-family: FontAwesome;
-    position: absolute;
-    left: 3px;
-    top: 4px;
-    font-size: 17px; }
 
 .btn-mark-read:before {
   content: ""; }

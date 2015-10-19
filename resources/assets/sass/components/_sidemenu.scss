@@ -11,6 +11,7 @@
   > li {
     margin-bottom: 2px;
     border-bottom: 1px solid $border-color;
+    position: relative;
 
     > a {
       color: $gray-dark;
@@ -39,6 +40,14 @@
 
     &:hover:before {
       opacity: 1;
+    }
+
+    &:before {
+      font-family: FontAwesome;
+      position: absolute;
+      left: 3px;
+      top: 4px;
+      font-size: 17px;
     }
   }
 }

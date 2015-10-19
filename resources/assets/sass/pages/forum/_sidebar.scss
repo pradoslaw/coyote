@@ -38,18 +38,6 @@
   }
 }
 
-.btn-mark-read, .btn-atom, #btn-setting, #btn-log, #btn-edit-subject, #btn-lock, #btn-move, #btn-status, .btn-watch {
-  position: relative;
-
-  &:before {
-    font-family: FontAwesome;
-    position: absolute;
-    left: 3px;
-    top: 4px;
-    font-size: 17px;
-  }
-}
-
 .btn-mark-read:before {
   content: $fa-var-check-square-o;
 }

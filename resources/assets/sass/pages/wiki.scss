@@ -5,6 +5,10 @@
 @import "../vendors/font-awesome/variables";
 @import "../vendors/bootstrap/mixins/text-overflow";
 @import "../components/related";
+@import "../components/sidemenu";
+
+// Style zwiazane ze strona prezentujaca kategorie danego tekstu. Zawiera m.in. liste artykulow
+// ----------------------------------------------------------------------------------------------
 
 #interface {
   background: url('/img/horizontal.png') repeat-x 0 50%,url('/img/vertical.png') no-repeat 0 100%;
@@ -94,6 +98,9 @@
   }
 }
 
+// Wyswietlanie tresci artykulu
+// --------------------------------
+
 article > header {
   h1 {
     margin-top: 0;
@@ -117,6 +124,14 @@ article > header {
     a {
       color: inherit;
     }
+
+    li {
+      @media screen and (max-width: $screen-xs) {
+        display: block !important;
+        font-size: 90%;
+        margin-bottom: 5px;
+      }
+    }
   }
 }
 
@@ -137,6 +152,31 @@ article > header {
   }
 }
 
+#box-maintain {
+  margin: 13px 0 20px 0;
+  text-align: right;
+}
+
+.side-menu {
+  .btn-watch:before {
+    content: $fa-var-star-o;
+  }
+
+  .btn-history:before {
+    content: $fa-var-history;
+  }
+
+  .btn-delete:before {
+    content: $fa-var-remove;
+  }
+
+  .btn-purge:before {
+    content: $fa-var-trash-o;
+  }
+}
+
+// Wyswietlanie informacji o autorze
+// --------------------------------
 #box-author {
   blockquote {
     border: none;
@@ -149,5 +189,115 @@ article > header {
       left: 0;
       color: $gray-light;
     }
+  }
+
+  .img-thumbnail {
+    @media screen and (max-width: $screen-md) {
+      display: none;
+    }
+  }
+}
+
+// Wyswietlanie informacji o wspolautorach danej strony
+// -----------------------------------------------------
+#box-authors {
+  margin: 40px 0 20px 0;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      border-bottom: 1px solid $gray-lighter;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      a {
+        padding: 5px 0;
+        display: block;
+        font-size: $font-size-small;
+        text-shadow: 1px 1px 1px #FFF;
+        color: $gray;
+
+        &:hover {
+          text-decoration: none;
+          color: $alt-link-hover-color;
+        }
+
+        small {
+          color: lighten($gray-light, 15%);
+          display: block;
+          float: right;
+          padding-top: 7px;
+        }
+      }
+    }
+  }
+}
+
+#box-comment {
+  margin-bottom: 20px;
+
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  .form-group:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.comment {
+  color: $gray-light;
+  position: relative;
+
+  .list-inline {
+    font-size: 11px;
+
+    a {
+      color: $gray-light;
+    }
+
+    li {
+      padding-right: 0;
+    }
+
+    li:after {
+      content: "●";
+      margin-left: 5px;
+    }
+
+    li:last-child:after {
+      content: "\00a0 ";
+    }
+  }
+
+  &:after, &:before {
+    right: 100%;
+    top: 22px;
+    border: solid transparent;
+    //content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &:after {
+    //border-color: rgba(136, 183, 213, 0);
+    border-right-color: $body-bg;
+    border-width: 8px;
+    margin-top: -8px;
+  }
+
+  &:before {
+    //border-color: rgba(194, 225, 245, 0);
+    border-right-color: $border-color;
+    border-width: 9px;
+    margin-top: -9px;
   }
 }

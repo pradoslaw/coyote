@@ -8,8 +8,8 @@
                 <div class="panel-heading">
                     <h2 class="box-header">
                         <a title="Delphi" href="http://4programmers.net/Delphi">Programowanie w języku Delphi</a>
-                        <span>»</span>
-                        <a href="http://4programmers.net/Delphi/Kompendium">Delphi 7. Kompendium programisty</a>
+                        <span class="hidden-xs">»</span>
+                        <a class="hidden-xs" href="http://4programmers.net/Delphi/Kompendium">Delphi 7. Kompendium programisty</a>
                     </h2>
                 </div>
 
@@ -49,9 +49,87 @@
                     </article>
                 </div>
             </div>
+
+            <div id="box-comment">
+                <h4>0 komentarzy</h4>
+
+                <div class="row">
+                    <div class="col-sm-1 hidden-xs">
+                        <a href="#">
+                            <img src="/img/shalom.png" class="img-thumbnail">
+                        </a>
+                    </div>
+                    <div class="col-sm-11">
+                        <div class="panel panel-transparent">
+                            <div class="panel-body comment">
+                                {{ form_open() }}
+
+                                <div class="form-group">
+                                    <textarea name="content" class="form-control" placeholder="Kliknij, aby dodać nowy komentarz" required></textarea>
+                                    {#<span class="help-block">Formatowanie Markdown jest włączone</span>#}
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-sm btn-primary pull-right">Dodaj komentarz</button>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                {{ form_close() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-1 hidden-xs">
+                        <a href="#">
+                            <img src="/img/shalom.png" class="img-thumbnail">
+                        </a>
+                    </div>
+                    <div class="col-sm-11">
+                        <div class="panel panel-transparent">
+                            <div class="panel-body comment">
+                                <ul class="list-inline">
+                                    <li>
+                                        <a data-user-id="71123" href="#">Shalom</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="timestamp" data-timestamp="1442898090">dzisiaj, 07:01</a>
+                                    </li>
+                                </ul>
+
+                                <p>
+                                    Augue rhoncus sociis proin, rhoncus augue mus nec? Et arcu, et rhoncus, lundium proin magna habitasse. Duis dis adipiscing odio urna eros nunc porta. Lacus porta est non! Et cursus, nunc placerat? Nisi non, phasellus sociis. Lundium arcu lundium a, pellentesque adipiscing nisi tincidunt vut dolor placerat aliquam phasellus est tristique. Rhoncus, massa, lacus amet nec odio in amet sit elementum ac lacus? Adipiscing montes ac, pellentesque!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
         <aside class="col-sm-3">
+            <section id="box-maintain">
+                <a href="#" class="btn btn-sm btn-default">Edycja</a>
+                <a href="#" class="btn btn-sm btn-primary">Nowa strona</a>
+            </section>
+
+            <ul class="side-menu">
+                <li class="btn-watch">
+                    <a href="javascript:">Dodaj do ulubionych</a>
+                </li>
+                <li class="btn-history">
+                    <a href="javascript:">Historia i autorzy</a>
+                </li>
+                <li class="btn-delete">
+                    <a href="javascript:">Usuń artykuł</a>
+                </li>
+                <li class="btn-purge">
+                    <a href="javascript:">Usuń cache</a>
+                </li>
+            </ul>
+
             <section id="box-author" class="box">
                 <h4 class="border"><i class="fa fa-male fa-fw"></i> O autorze</h4>
 
@@ -68,6 +146,41 @@
                     </div>
                 </div>
             </section>
+
+            <section id="box-authors" class="box">
+                <h4 class="border"><i class="fa fa-users fa-fw"></i> Stronę współtworzą</h4>
+
+                <ul>
+                    <li>
+                        <a title="Udział w procesie tworzenia strony: 57.8603716%" href="#" data-user-id="1">
+                            <small>57,86%</small>
+
+                            <img src="/img/avatar.png" width="24" height="24">
+
+                            Adam Boduch
+                        </a>
+                    </li>
+                    <li>
+                        <a title="Udział w procesie tworzenia strony: 41.9889502%" href="#" data-user-id="9688">
+                            <small>41,99%</small>
+
+                            <img src="/img/avatar.png" width="24" height="24">
+
+                            rk7771
+                        </a>
+                    </li>
+                    <li>
+                        <a title="Udział w procesie tworzenia strony: 0.150678%" href="#" data-user-id="43956">
+                            <small>0,15%</small>
+
+                            <img src="/img/shalom.png" width="24" height="24">
+
+                            TomRiddle
+                        </a>
+                    </li>
+                </ul>
+            </section>
+            <div class="clearfix"></div>
 
             <section id="box-related" class="box related">
                 <h4 class="border"><i class="fa fa-eye fa-fw"></i> Zobacz też</h4>
@@ -135,6 +248,7 @@
                     </li>
                 </ul>
             </section>
+            <div class="clearfix"></div>
 
             <section class="related box">
                 <h4 class="border"><i class="fa fa-thumb-tack fa-fw"></i> Strony powiązane</h4>
