@@ -398,7 +398,7 @@
   .col-last-post .img-thumbnail {
     float: left;
     margin-right: 5px; }
-  .col-last-post .btn-watch {
+  .col-last-post .btn-watch-sm {
     opacity: .3;
     float: right;
     width: 16px;
@@ -407,12 +407,12 @@
     margin: 8px 5px 0 0;
     position: relative;
     display: inline-block; }
-    .col-last-post .btn-watch:after {
+    .col-last-post .btn-watch-sm:after {
       position: absolute;
       left: 0;
       font-family: FontAwesome;
       content: ""; }
-    .col-last-post .btn-watch:hover {
+    .col-last-post .btn-watch-sm:hover {
       opacity: 1; }
 
 .col-footer-nav {
