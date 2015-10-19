@@ -81,6 +81,15 @@
                 </div>
             </section>
 
+
+            <section id="box-quick-form" class="row">
+                <div class="col-xs-12">
+                    {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': '#', 'class': 'form-horizontal'}) }}
+                    <textarea rows="2" cols="60" name="content">Kliknij, aby napisać szybką odpowiedź...</textarea>
+                    {{ form_close() }}
+                </div>
+            </section>
+
             <section class="row">
                 <div class="col-xs-12">
                     <div class="pull-right">

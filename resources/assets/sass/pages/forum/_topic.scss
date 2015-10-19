@@ -315,3 +315,15 @@ div.tooltip-inner {
     margin-top: 10px;
   }
 }
+
+// Formularz szybkiej odpowiedzi
+// ----------------------------------------------------------
+
+#box-quick-form {
+  margin-bottom: 18px;
+
+  textarea {
+    width: 100%;
+    height: 50px;
+  }
+}
