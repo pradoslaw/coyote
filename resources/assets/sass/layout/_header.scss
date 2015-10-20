@@ -13,18 +13,29 @@ header {
     padding-top: 10px;
   }
 
-  .alerts > a, .messages > a, .user > a {
-    padding-left: 9px;
-    padding-right: 9px;
-    padding-top: 16px;
-    padding-bottom: 12px;
+  .avatar {
+    margin-top: 9px;
+    margin-left: 20px;
 
-    i {
-      font-size: 18px;
+    a {
+      color: $gray;
+
+      &:hover {
+        text-decoration: none;
+      }
     }
   }
 
-  .alerts {
+  .alerts > a, .messages > a {
+    padding: 18px 9px 10px 9px;
+    color: $gray-light !important;
+
+    i {
+      font-size: 14px;
+    }
+  }
+
+  .alerts, .messages {
     a {
       position: relative;
 

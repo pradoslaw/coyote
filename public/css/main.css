@@ -7099,17 +7099,23 @@ header #navbar-border-top {
 header .navbar-brand {
   padding-top: 10px; }
 
-header .alerts > a, header .messages > a, header .user > a {
-  padding-left: 9px;
-  padding-right: 9px;
-  padding-top: 16px;
-  padding-bottom: 12px; }
-  header .alerts > a i, header .messages > a i, header .user > a i {
-    font-size: 18px; }
+header .avatar {
+  margin-top: 9px;
+  margin-left: 20px; }
+  header .avatar a {
+    color: #555555; }
+    header .avatar a:hover {
+      text-decoration: none; }
 
-header .alerts a {
+header .alerts > a, header .messages > a {
+  padding: 18px 9px 10px 9px;
+  color: #777777 !important; }
+  header .alerts > a i, header .messages > a i {
+    font-size: 14px; }
+
+header .alerts a, header .messages a {
   position: relative; }
-  header .alerts a .badge {
+  header .alerts a .badge, header .messages a .badge {
     position: absolute;
     font-size: 10px;
     top: 5px;
