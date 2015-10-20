@@ -23,6 +23,7 @@ elixir(function(mix) {
        .sass('pages/microblog.scss')
        .sass('pages/forum.scss')
        .sass('pages/wiki.scss')
+       .sass('pages/user.scss')
        .sass('vendors/wikieditor.scss');
 });
 

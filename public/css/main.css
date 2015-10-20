@@ -6930,24 +6930,22 @@ button[type=submit] {
   background: #444444;
   padding: 5px;
   position: relative;
+  height: 23px;
+  margin-bottom: 0;
   border-radius: 10px;
   background: linear-gradient(to bottom, #444444 49%, #757575 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#444444', endColorstr='#757575', GradientType=0); }
-  .progress
-span {
+  .progress span {
     font-size: 12px;
     color: white;
     position: absolute; }
-    .progress
-span.rep {
+    .progress span.rep {
       top: 4px;
       left: 10px; }
-  .progress
-strong {
+  .progress strong {
     font-size: 1.0em;
     text-shadow: 1px 1px 2px #666; }
-  .progress
-small {
+  .progress small {
     font-size: 0.8em; }
 
 .progress-bar {

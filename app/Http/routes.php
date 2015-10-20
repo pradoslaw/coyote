@@ -25,5 +25,12 @@ Route::controllers([
     'Forum'      => 'Forum\HomeController'
 ]);
 
+Route::group(['namespace' => 'User'], function() {
+    Route::controllers([
+       'User/Settings'           => 'SettingsController',
+       'User'                    => 'HomeController',
+    ]);
+});
+
 
 

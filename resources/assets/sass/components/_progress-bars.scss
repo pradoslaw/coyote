@@ -5,7 +5,8 @@
   background: #444444;
   padding: 5px;
   position: relative;
-  //height: 13px;
+  height: 23px;
+  margin-bottom: 0;
   border-radius: 10px;
   background: -moz-linear-gradient(top, #444444 49%, #757575 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(49%, #444444), color-stop(100%, #757575));
@@ -15,24 +16,20 @@
   background: linear-gradient(to bottom, #444444 49%, #757575 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#444444', endColorstr='#757575', GradientType=0);
 
-  span
-  {
+  span {
     font-size: $font-size-small;
-    color:     white;
-    position:  absolute;
-    &.rep
-    {
-      top:  4px;
+    color: white;
+    position: absolute;
+    &.rep {
+      top: 4px;
       left: 10px;
     }
   }
-  strong
-  {
-    font-size:   1.0em;
+  strong {
+    font-size: 1.0em;
     text-shadow: 1px 1px 2px #666;
   }
-  small
-  {
+  small {
     font-size: 0.8em;
   }
 }
