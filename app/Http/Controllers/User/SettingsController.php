@@ -11,6 +11,7 @@ class SettingsController extends Controller
      */
     public function index()
     {
+        $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Ustawienia', route('user.settings'));
 
         return parent::view('user.settings');

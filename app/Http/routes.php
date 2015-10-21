@@ -74,6 +74,21 @@ Route::group(['namespace' => 'User'], function() {
 
     Route::get('User/Accepts', ['uses' => 'AcceptsController@index', 'as' => 'user.accepts']);
     Route::post('User/Accepts', 'AcceptsController@save');
+
+    Route::get('User/Skills', ['uses' => 'SkillsController@index', 'as' => 'user.skills']);
+    Route::post('User/Skills', 'SkillsController@save');
+
+    Route::get('User/Security', ['uses' => 'SecurityController@index', 'as' => 'user.security']);
+    Route::post('User/Security', 'SecurityController@save');
+
+    Route::get('User/Password', ['uses' => 'PasswordController@index', 'as' => 'user.password']);
+    Route::post('User/Password', 'PasswordController@save');
+
+    Route::get('User/Alerts/Settings', ['uses' => 'AlertsController@settings', 'as' => 'user.alerts.settings']);
+//    Route::post('User/Alerts/Settings', 'AlertsController@save');
+
+    Route::get('User/Forum', ['uses' => 'ForumController@index', 'as' => 'user.forum']);
+    Route::post('User/Forum', 'ForumController@save');
 });
 
 Route::get('Profile/{id}', ['uses' => 'ProfileController@index', 'as' => 'profile']);

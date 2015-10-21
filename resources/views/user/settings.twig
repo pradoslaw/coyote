@@ -1,8 +1,30 @@
 {% extends 'layout.twig' %}
 {% block title %}Ustawienia :: {{ parent() }}{% endblock %}
 
-{% block container %}
+{% import 'vendor/forms.twig' as forms %}
 
+{% block container %}
+    {{ include('user/_top', {active: 'home'}) }}
+
+    <div class="row">
+        {% include 'user/_settings-menu' %}
+
+        <main class="col-md-10">
+            <section class="panel panel-wrapper">
+                <div class="panel-body">
+                    <h2>Podstawowa konfiguracja</h2>
+
+                    <div id="box-start" class="panel panel-default">
+                        <div class="panel-body">
+                            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.settings'), 'class': 'form-horizontal'}) }}
+
+                            {{ form_close() }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 {% endblock %}
 
 {% block head %}
