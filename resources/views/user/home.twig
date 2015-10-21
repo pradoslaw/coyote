@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-md-12">
             <ul id="user-nav-tabs" class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Moje konto</a></li>
-                <li role="presentation"><a href="#">Ustawienia</a></li>
-                <li role="presentation"><a href="#">Profil</a></li>
+                <li role="presentation" class="active"><a href="{{ route('user.home') }}">Moje konto</a></li>
+                <li role="presentation"><a href="{{ route('user.settings') }}">Ustawienia</a></li>
+                <li role="presentation"><a href="{{ route('profile', {'id': 1}) }}">Profil</a></li>
             </ul>
         </div>
     </div>
@@ -16,31 +16,31 @@
         <menu class="col-md-2">
             <ul class="side-menu">
                 <li class="btn-start">
-                    <a href="#"><i class="fa fa-map-marker fa-fw"></i> Start</a>
+                    <a href="{{ route('user.home') }}"><i class="fa fa-map-marker fa-fw"></i> Start</a>
                 </li>
                 <li class="btn-visits">
-                    <a href="#"><i class="fa fa-user-md fa-fw"></i> Ostatnie wizyty</a>
+                    <a href="{{ route('user.visits') }}"><i class="fa fa-user-md fa-fw"></i> Ostatnie wizyty</a>
                 </li>
                 <li class="btn-notifies">
-                    <a href="#"><i class="fa fa-bell-o fa-fw"></i> Powiadomienia</a>
+                    <a href="{{ route('user.alerts') }}"><i class="fa fa-bell-o fa-fw"></i> Powiadomienia</a>
                 </li>
                 <li class="btn-pm">
-                    <a href="#"><i class="fa fa-envelope-o fa-fw"></i> Wiadomości prywatne <small>(0/200)</small></a>
+                    <a href="{{ route('user.pm') }}"><i class="fa fa-envelope-o fa-fw"></i> Wiadomości prywatne <small>(0/200)</small></a>
                 </li>
                 <li class="btn-favorites">
-                    <a href="#"><i class="fa fa-heart fa-fw"></i> Ulubione i obserwowane strony</a>
+                    <a href="{{ route('user.favorites') }}"><i class="fa fa-heart fa-fw"></i> Ulubione i obserwowane strony</a>
                 </li>
                 <li class="btn-profiles">
-                    <a href="#"><i class="fa fa-user fa-fw"></i> Obserwowane profile</a>
+                    <a href="{{ route('user.profiles') }}"><i class="fa fa-user fa-fw"></i> Obserwowane profile</a>
                 </li>
                 <li class="btn-rates">
-                    <a href="#"><i class="fa fa-star-half fa-fw"></i> Oceny moich postów</a>
+                    <a href="{{ route('user.rates') }}"><i class="fa fa-star-half fa-fw"></i> Oceny moich postów</a>
                 </li>
                 <li class="btn-stats">
-                    <a href="#"><i class="fa fa-area-chart fa-fw"></i> Statystyki moich postów</a>
+                    <a href="{{ route('user.stats') }}"><i class="fa fa-area-chart fa-fw"></i> Statystyki moich postów</a>
                 </li>
                 <li class="btn-accepts">
-                    <a href="#"><i class="fa fa-check fa-fw"></i> Zaakceptowane odpowiedzi</a>
+                    <a href="{{ route('user.accepts') }}"><i class="fa fa-check fa-fw"></i> Zaakceptowane odpowiedzi</a>
                 </li>
             </ul>
         </menu>

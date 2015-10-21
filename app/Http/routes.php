@@ -50,7 +50,33 @@ Route::group(['namespace' => 'User'], function() {
     // ustawienia uzytkownika
     Route::get('User/Settings', ['uses' => 'SettingsController@index', 'as' => 'user.settings']);
     Route::post('User/Settings', 'SettingsController@save');
+
+    Route::get('User/Visits', ['uses' => 'VisitsController@index', 'as' => 'user.visits']);
+    Route::post('User/Visits', 'VisitsController@save');
+
+    Route::get('User/Alerts', ['uses' => 'AlertsController@index', 'as' => 'user.alerts']);
+    Route::post('User/Alerts', 'AlertsController@save');
+
+    Route::get('User/Pm', ['uses' => 'PmController@index', 'as' => 'user.pm']);
+    Route::post('User/Pm', 'PmController@save');
+
+    Route::get('User/Favorites', ['uses' => 'FavoritesController@index', 'as' => 'user.favorites']);
+    Route::post('User/Favorites', 'FavoritesController@save');
+
+    Route::get('User/Profiles', ['uses' => 'ProfilesController@index', 'as' => 'user.profiles']);
+    Route::post('User/Profiles', 'ProfilesController@save');
+
+    Route::get('User/Rates', ['uses' => 'RatesController@index', 'as' => 'user.rates']);
+    Route::post('User/Rates', 'RatesController@save');
+
+    Route::get('User/Stats', ['uses' => 'StatsController@index', 'as' => 'user.stats']);
+    Route::post('User/Stats', 'StatsController@save');
+
+    Route::get('User/Accepts', ['uses' => 'AcceptsController@index', 'as' => 'user.accepts']);
+    Route::post('User/Accepts', 'AcceptsController@save');
 });
+
+Route::get('Profile/{id}', ['uses' => 'ProfileController@index', 'as' => 'profile']);
 
 Route::get('/{slug}', function($slug) {
     echo "404 $slug";
