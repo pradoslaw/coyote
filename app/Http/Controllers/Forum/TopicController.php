@@ -6,16 +6,15 @@ use Coyote\Http\Controllers\Controller;
 
 class TopicController extends Controller
 {
-    public function getIndex()
+    /**
+     * @return \Illuminate\View\View
+     */
+    public function index()
     {
-        $this->breadcrumb->push('Forum', '/Forum');
+        $this->breadcrumb->push('Forum', route('forum.home'));
         $this->breadcrumb->push('Python', '/Forum/Python');
         $this->breadcrumb->push('Python - wybór "najlepszego" GUI cross-platform', '/Forum/Python/Test');
 
-        return parent::view('forum/topic');
-    }
-
-    public function postIndex()
-    {
+        return parent::view('forum.topic');
     }
 }

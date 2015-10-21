@@ -7,16 +7,12 @@ use Coyote\Http\Controllers\Controller;
 class HomeController extends Controller
 {
     /**
-     * @return Response
+     * @return \Illuminate\View\View
      */
-    public function getIndex()
+    public function index()
     {
-        $this->breadcrumb->push('Mikroblog', '/Microblog');
+        $this->breadcrumb->push('Mikroblog', route('microblog.home'));
 
-        return parent::view('microblog/home');
-    }
-
-    public function postIndex()
-    {
+        return parent::view('microblog.home');
     }
 }

@@ -7,16 +7,12 @@ use Coyote\Http\Controllers\Controller;
 class HomeController extends Controller
 {
     /**
-     * @return Response
+     * @return \Illuminate\View\View
      */
-    public function getIndex()
+    public function index()
     {
-        $this->breadcrumb->push('Moje konto', '/User');
+        $this->breadcrumb->push('Moje konto', route('user.home'));
 
-        return parent::view('user/home');
-    }
-
-    public function postIndex()
-    {
+        return parent::view('user.home');
     }
 }

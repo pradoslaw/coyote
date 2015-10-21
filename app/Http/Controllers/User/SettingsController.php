@@ -7,16 +7,16 @@ use Coyote\Http\Controllers\Controller;
 class SettingsController extends Controller
 {
     /**
-     * @return Response
+     * @return \Illuminate\View\View
      */
-    public function getIndex()
+    public function index()
     {
-        $this->breadcrumb->push('Ustawienia', '/User/Settings');
+        $this->breadcrumb->push('Ustawienia', route('user.settings'));
 
-        return parent::view('user/settings');
+        return parent::view('user.settings');
     }
 
-    public function postIndex()
+    public function save()
     {
     }
 }

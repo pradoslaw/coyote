@@ -12,25 +12,50 @@
 */
 
 Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
-Route::get('/Forum/Python/Test', ['uses' => 'Forum\TopicController@getIndex']);
-Route::get('/Forum/Python', ['uses' => 'Forum\CategoryController@getIndex']);
+
+// logowanie uzytkownika
+Route::get('Login', ['uses' => 'Auth\LoginController@index', 'as' => 'login']);
+Route::post('Login', 'Auth\LoginController@signin');
+
+// rejestracja uzytkownika
+Route::get('Register', ['uses' => 'Auth\RegisterController@index', 'as' => 'register']);
+Route::post('Register', 'Auth\RegisterController@signup');
+
+// przypominanie hasla
+Route::controller('Password', 'Auth\PasswordController');
+
+// strona glowna forum
+Route::get('Forum', ['uses' => 'Forum\HomeController@index', 'as' => 'forum.home']);
+
+// formularz dodawania nowego watku na forum
+Route::get('Forum/Submit/{forum}', ['uses' => 'Forum\HomeController@getSubmit', 'as' => 'forum.submit']);
+Route::post('Forum/Submit/{forum}', 'Forum\HomeController@getSubmit');
+
+/*
+ * Tymczasowe reguly
+ */
 Route::get('/Delphi', ['as' => 'page', 'uses' => 'Wiki\WikiController@category']);
 Route::get('/Delphi/Lorem_ipsum', ['as' => 'article', 'uses' => 'Wiki\WikiController@article']);
+Route::get('Forum/Python/Test', ['uses' => 'Forum\TopicController@index']);
+Route::get('Forum/Python', ['uses' => 'Forum\CategoryController@index']);
 
-Route::controllers([
-    'login'      => 'Auth\LoginController',
-    'password'   => 'Auth\PasswordController',
-    'register'   => 'Auth\RegisterController',
-    'Mikroblogi' => 'Microblog\HomeController',
-    'Forum'      => 'Forum\HomeController'
-]);
+// Obsluga mikroblogow
+Route::get('Mikroblogi', ['uses' => 'Microblog\HomeController@index', 'as' => 'microblog.home']);
 
 Route::group(['namespace' => 'User'], function() {
-    Route::controllers([
-       'User/Settings'           => 'SettingsController',
-       'User'                    => 'HomeController',
-    ]);
+
+    // strona glowna panelu uzytkownika
+    Route::get('User', ['uses' => 'HomeController@index', 'as' => 'user.home']);
+
+    // ustawienia uzytkownika
+    Route::get('User/Settings', ['uses' => 'SettingsController@index', 'as' => 'user.settings']);
+    Route::post('User/Settings', 'SettingsController@save');
 });
+
+Route::get('/{slug}', function($slug) {
+    echo "404 $slug";
+
+})->where('slug', '.*');
 
 
 

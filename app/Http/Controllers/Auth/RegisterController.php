@@ -7,16 +7,16 @@ use Coyote\Http\Controllers\Controller;
 class RegisterController extends Controller
 {
     /**
-     * @return Response
+     * @return \Illuminate\View\View
      */
-    public function getIndex()
+    public function index()
     {
         $this->breadcrumb->push('Rejestracja', '/register');
 
-        return parent::view('auth/register');
+        return parent::view('auth.register');
     }
 
-    public function postIndex()
+    public function signup()
     {
     }
 }

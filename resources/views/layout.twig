@@ -41,9 +41,9 @@
                     <div class="collapse navbar-collapse" id="navbar-main">
                         <ul class="nav navbar-nav">
                             <li><a href="/Delphi">Kompendium wiedzy <span class="sr-only">(current)</span></a></li>
-                            <li><a href="/Forum">Forum</a></li>
+                            <li><a href="{{ route('forum.home') }}">Forum</a></li>
                             <li><a href="#">Pastebin</a></li>
-                            <li><a href="/Mikroblogi">Mikroblogi</a></li>
+                            <li><a href="{{ route('microblog.home') }}">Mikroblogi</a></li>
                             <li><a href="#">Praca</a></li>
 
                         </ul>
@@ -83,8 +83,8 @@
                             {#</li>#}
                         {#</ul>#}
 
-                        <a class="btn btn-primary btn-sm navbar-right navbar-btn btn-register" href="/register"><i class="fa fa-sign-in"></i> Rejestracja</a>
-                        <a class="btn btn-default btn-sm navbar-right navbar-btn" href="/login">Logowanie</a>
+                        <a class="btn btn-primary btn-sm navbar-right navbar-btn btn-register" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Rejestracja</a>
+                        <a class="btn btn-default btn-sm navbar-right navbar-btn" href="{{ route('login') }}">Logowanie</a>
 
 
                     </div>

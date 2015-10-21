@@ -7,19 +7,22 @@ use Coyote\Http\Controllers\Controller;
 class PasswordController extends Controller
 {
     /**
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function getReset()
     {
         $this->breadcrumb->push('Odzyskiwanie hasła', '/password/reset');
 
-        return parent::view('auth/reset');
+        return parent::view('auth.reset');
     }
 
+    /**
+     * @return \Illuminate\View\View
+     */
     public function getIndex()
     {
         $this->breadcrumb->push('Odzyskiwanie hasła', '/password');
 
-        return parent::view('auth/password');
+        return parent::view('auth.password');
     }
 }

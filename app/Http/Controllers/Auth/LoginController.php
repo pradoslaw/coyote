@@ -7,16 +7,16 @@ use Coyote\Http\Controllers\Controller;
 class LoginController extends Controller
 {
     /**
-     * @return Response
+     * @return \Illuminate\View\View
      */
-    public function getIndex()
+    public function index()
     {
         $this->breadcrumb->push('Logowanie', '/login');
 
-        return parent::view('auth/login');
+        return parent::view('auth.login');
     }
 
-    public function postIndex()
+    public function signin()
     {
     }
 }

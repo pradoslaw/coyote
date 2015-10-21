@@ -6,15 +6,14 @@ use Coyote\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
-    public function getIndex()
+    /**
+     * @return \Illuminate\View\View
+     */
+    public function index()
     {
-        $this->breadcrumb->push('Forum', '/Forum');
+        $this->breadcrumb->push('Forum', route('forum.home'));
         $this->breadcrumb->push('Python', '/Forum/Python');
 
-        return parent::view('forum/category');
-    }
-
-    public function postIndex()
-    {
+        return parent::view('forum.category');
     }
 }

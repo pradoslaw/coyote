@@ -6,19 +6,30 @@ use Coyote\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
-    public function getIndex()
+    /**
+     * @return \Illuminate\View\View
+     */
+    public function index()
     {
         $this->breadcrumb->push('Forum', '/Forum');
 
-        return parent::view('forum/home');
+        return parent::view('forum.home');
     }
 
-    public function getSubmit()
+    /**
+     * @return \Illuminate\View\View
+     */
+    public function getSubmit($forum)
     {
         $this->breadcrumb->push('Forum', '/Forum');
-        $this->breadcrumb->push('Python', '/Forum/Python');
-        $this->breadcrumb->push('Nowy wątek', '/Forum/Python/Submit');
+        $this->breadcrumb->push($forum, "/Forum/$forum");
+        $this->breadcrumb->push('Nowy wątek', "/Forum/Submit/$forum");
 
-        return parent::view('forum/submit');
+        return parent::view('forum.submit');
+    }
+
+    public function postSubmit($forum)
+    {
+
     }
 }
