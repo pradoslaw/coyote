@@ -27,7 +27,7 @@ header {
   }
 
   .alerts > a, .messages > a {
-    padding: 18px 9px 10px 9px;
+    padding: 19px 9px 13px 9px;
     color: $gray-light !important;
 
     i {
@@ -41,10 +41,11 @@ header {
 
       .badge {
         position: absolute;
-        font-size: 10px;
+        font-size: 9px;
         top: 5px;
         right: 0;
         background-color: #FF4A00;
+        border: 1px solid #fff;
       }
     }
   }
@@ -57,7 +58,7 @@ header {
 
 .navbar-default {
   background: url('/img/background.png') repeat;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid lighten($border-color, 2%);
 
   .navbar-nav {
     margin-left: 5px;
@@ -68,7 +69,7 @@ header {
     font-size: 13px;
 
     &:hover {
-      color: #80A41A;
+      color: $brand-primary;
     }
   }
 }
@@ -86,56 +87,6 @@ header {
     display: block;
   }
 }
-
-//#navbar-header-search {
-//
-//  background: url('/img/main-menu-separator.png') no-repeat 100% 100%;
-//
-//  > div {
-//    background: #fff;
-//    border-radius: 13px;
-//    height: 30px;
-//    /* dla Opera, FF */
-//    box-shadow: 0 0 5px #DFDFDF inset;
-//    border: 1px solid #ccc;
-//    padding: 3px;
-//    position: relative;
-//
-//    input {
-//      border: none;
-//      font-family: Arial, sans-serif;
-//      width: 120px;
-//      margin-left: 5px;
-//      margin-right: 25px;
-//      margin-top: 3px;
-//      padding-top: 1px;
-//      padding-bottom: 1px;
-//      padding-left: 5px;
-//      font-size: $font-size-small;
-//
-//      &:focus {
-//        outline: none;
-//      }
-//
-//      &[type=submit] {
-//        background: url('/img/main-menu-search-button.png') no-repeat;
-//        width: 31px;
-//        height: 22px;
-//        margin: 0;
-//        padding: 0;
-//        cursor: pointer;
-//        position: absolute;
-//        right: 3px;
-//        top: 3px;
-//        box-shadow: none;
-//      }
-//    }
-//  }
-//
-//  @media screen and (max-width: 1100px) {
-//    display: none;
-//  }
-//}
 
 #navbar-header-search {
 
