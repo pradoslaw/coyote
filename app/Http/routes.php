@@ -42,7 +42,7 @@ Route::get('Forum/Python', ['uses' => 'Forum\CategoryController@index']);
 // Obsluga mikroblogow
 Route::get('Mikroblogi', ['uses' => 'Microblog\HomeController@index', 'as' => 'microblog.home']);
 
-Route::group(['namespace' => 'User'], function() {
+Route::group(['namespace' => 'User'], function () {
 
     // strona glowna panelu uzytkownika
     Route::get('User', ['uses' => 'HomeController@index', 'as' => 'user.home']);
@@ -93,7 +93,7 @@ Route::group(['namespace' => 'User'], function() {
 
 Route::get('Profile/{id}', ['uses' => 'ProfileController@index', 'as' => 'profile']);
 
-Route::get('/{slug}', function($slug) {
+Route::get('/{slug}', function ($slug) {
     echo "404 $slug";
 
 })->where('slug', '.*');
