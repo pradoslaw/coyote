@@ -53,6 +53,8 @@ header {
   .btn-register {
     margin-left: 10px;
     box-shadow: none;
+    border: none;
+    background-color: lighten($brand-primary, 2%);
   }
 }
 
