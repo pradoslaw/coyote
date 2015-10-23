@@ -30,4 +30,44 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    public static $rules = [
+        'email'                         => 'email',
+        'website'                       => 'url',
+        'location'                      => 'string|size:50',
+        'birthyear'                     => 'integer',
+        'about'                         => 'string|size:255',
+        'sig'                           => 'string|size:255',
+        'allow_count'                   => 'boolean',
+        'allow_smilies'                 => 'boolean',
+        'allow_notify'                  => 'boolean',
+        'allow_sig'                     => 'boolean',
+    ];
+
+    public static function birthYearList()
+    {
+        $result = [0 => '--'];
+
+        for ($i = 1950; $i <= date('Y'); $i++) {
+            $result[$i] = $i;
+        }
+
+        return $result;
+    }
+
+    public static function dateFormatList()
+    {
+        $dateFormats = [
+            '%d-%m-%Y %H:%M',
+            '%Y-%m-%d %H:%M',
+            '%m/%d/%y %H:%M',
+            '%d-%m-%y %H:%M',
+            '%d %b %y %H:%M',
+            '%d %B %Y, %H:%M'
+        ];
+
+        return array_combine($dateFormats, array_map(function ($value) {
+            return strftime($value);
+        }, $dateFormats));
+    }
 }

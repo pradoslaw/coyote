@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-md-12">
         <ul id="user-nav-tabs" class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="{{ route('user.home') }}">Moje konto</a></li>
-            <li role="presentation"><a href="{{ route('user.settings') }}">Ustawienia</a></li>
-            <li role="presentation"><a href="{{ route('profile', {'id': 1}) }}">Profil</a></li>
+            <li role="presentation" {{ active == 'home' ? 'class="active"' }}><a href="{{ route('user.home') }}">Moje konto</a></li>
+            <li role="presentation" {{ active == 'settings' ? 'class="active"' }}><a href="{{ route('user.settings') }}">Ustawienia</a></li>
+            <li role="presentation" {{ active == 'profile' ? 'class="active"' }}><a href="{{ route('profile', {'id': 1}) }}">Profil</a></li>
         </ul>
     </div>
 </div>

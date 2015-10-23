@@ -1,107 +1,111 @@
-{% macro element(html, label, error, attr) %}
-	<div class="form-group {{ error ? 'has-error' }}"
-		{% spaceless %}
-			{% for key, value in attr %}
-			{{ key }}="{{ value }}"
-			{% endfor %}
-		{% endspaceless %}
-			>
-		<label class="col-md-4 control-label">{{ label }}</label>
-		<div class="col-md-6">
-			{{ html|raw }}
+{% macro element(html, label, error, attr, help) %}
+    <div class="form-group {{ error ? 'has-error' }}"
+        {% spaceless %}
+            {% for key, value in attr %}
+            {{ key }}="{{ value }}"
+            {% endfor %}
+        {% endspaceless %}
+            >
+        <label class="col-md-4 control-label">{{ label }}</label>
+        <div class="col-md-6">
+            {{ html|raw }}
 
-			{% if error %}
-			<span class="help-block">{{ error }}</span>
-			{% endif %}
-		</div>
-	</div>
+            {% if error %}
+            <span class="help-block">{{ error }}</span>
+            {% elseif help %}
+            <span class="help-block">{{ help }}</span>
+            {% endif %}
+        </div>
+    </div>
 {% endmacro %}
 
-{% macro text(name, label, value, error, attr) %}
-	{% import _self as forms %}
+{% macro text(name, label, value, error, attr, help) %}
+    {% import _self as forms %}
 
-	{{ forms.element(form_text(name, value, {'class': 'form-control'}), label, error, attr) }}
+    {{ forms.element(form_text(name, value, {'class': 'form-control'}), label, error, attr, help) }}
 {% endmacro %}
 
 {% macro password(name, label, value, error, attr) %}
-	{% import _self as forms %}
+    {% import _self as forms %}
 
-	{{ forms.element(form_password(name, {'class': 'form-control'}), label, error, attr) }}
+    {{ forms.element(form_password(name, {'class': 'form-control'}), label, error, attr) }}
 {% endmacro %}
 
-{% macro select(name, label, items, value, error, attr) %}
-	{% import _self as forms %}
+{% macro select(name, label, items, value, error, attr, help) %}
+    {% import _self as forms %}
 
-	{{ forms.element(form_select(name, items, value, {'class': 'form-control'}), label, error, attr) }}
+    {{ forms.element(form_select(name, items, value, {'class': 'form-control'}), label, error, attr, help) }}
 {% endmacro %}
 
-{% macro textarea(name, label, value, error, attr) %}
-	{% import _self as forms %}
+{% macro textarea(name, label, value, error, rows = 10, attr, help) %}
+    {% import _self as forms %}
 
-	{{ forms.element(form_textarea(name, value, {'class': 'form-control'}), label, error, attr) }}
+    {{ forms.element(form_textarea(name, value, {'class': 'form-control', 'rows': rows}), label, error, attr, help) }}
 {% endmacro %}
 
-{% macro checkbox(name, label, value, checked, attr) %}
-	{% import _self as forms %}
+{% macro checkbox(name, label, value, checked, attr, help) %}
+    {% import _self as forms %}
 
-	{% if not '[]' in name %}
-		{{ form_hidden(name, 0) }}
-	{% endif %}
+    {% if not '[]' in name %}
+        {{ form_hidden(name, 0) }}
+    {% endif %}
 
-	<div class="form-group {{ error ? 'has-error' }}"
-		{% spaceless %}
-			{% for key, value in attr %}
-			{{ key }}="{{ value }}"
-			{% endfor %}
-		{% endspaceless %}
-			>
+    <div class="form-group {{ error ? 'has-error' }}"
+        {% spaceless %}
+            {% for key, value in attr %}
+            {{ key }}="{{ value }}"
+            {% endfor %}
+        {% endspaceless %}
+            >
 
-		<div class="col-md-6 col-md-offset-4">
-			<div class="checkbox">
-				<label>
-					{{ form_checkbox(name, value, checked, attr) }}
-					{{ label }}
-				</label>
-			</div>
+        <div class="col-md-6 col-md-offset-4">
+            <div class="checkbox">
+                <label>
+                    {{ form_checkbox(name, value, checked, attr, help) }}
+                    {{ label }}
+                </label>
+            </div>
 
-			{% if error %}
-			<span class="help-block">{{ error }}</span>
-			{% endif %}
-		</div>
-	</div>
+            {% if error %}
+            <span class="help-block">{{ error }}</span>
+            {% elseif help %}
+            <span class="help-box">{{ help }}</span>
+            {% endif %}
+        </div>
+    </div>
 {% endmacro %}
 
 {% macro submit(value) %}
-	<div class="form-group">
-		<div class="col-md-6 col-md-offset-4">
-			<button type="submit" class="btn btn-primary" style="margin-right: 15px;">
-				{{ value }}
-			</button>
-		</div>
-	</div>
+    <div class="form-group">
+        <div class="col-md-6 col-md-offset-4">
+            <button type="submit" class="btn btn-primary" style="margin-right: 15px;">
+                {{ value }}
+            </button>
+        </div>
+    </div>
 
 
 {% endmacro %}
 
 {% macro submit_delete(label, delete_url) %}
-	<div class="form-group">
-		<div class="col-md-10 col-md-offset-2">
-			<a class="btn btn-default" href="javascript:window.history.back()"><i class="fa fa-undo"></i> Powrót</a>
-			<input type="submit" value="{{ label }}" class="btn btn-primary">
+    <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+            <a class="btn btn-default" href="javascript:window.history.back()"><i class="fa fa-undo"></i> Powrï¿½t</a>
+            <input type="submit" value="{{ label }}" class="btn btn-primary">
 
-			{% if delete_url %}
-				<a class="btn btn-danger" data-url="{{ delete_url }}" href="javascript:" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash"></i> Usuñ</a>
-			{% endif %}
-		</div>
-	</div>
+            {% if delete_url %}
+                <a class="btn btn-danger" data-url="{{ delete_url }}" href="javascript:" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash"></i> Usuï¿½</a>
+            {% endif %}
+        </div>
+    </div>
 {% endmacro %}
 
 {% macro back(url) %}
-	<div class="form-group">
-		<div class="col-sm-10 col-sm-offset-2">
-			<a class="btn btn-default" href="{{ url ? url : 'javascript:window.history.back()' }}"><i class="fa fa-undo"></i> Powrót</a>
-		</div>
-	</div>
+    <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+            <a class="btn btn-default" href="{{ url ? url : 'javascript:window.history.back()' }}"><i class="fa fa-undo"></i> Powrï¿½t</a>
+        </div>
+    </div>
 {% endmacro %}
 
 

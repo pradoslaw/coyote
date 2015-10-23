@@ -4,7 +4,7 @@
 {% import 'vendor/forms.twig' as forms %}
 
 {% block container %}
-    {{ include('user/_top', {active: 'home'}) }}
+    {{ include('user/_top', {active: 'settings'}) }}
 
     <div class="row">
         {% include 'user/_settings-menu' %}
@@ -18,6 +18,20 @@
                         <div class="panel-body">
                             {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.settings'), 'class': 'form-horizontal'}) }}
 
+                            {{ forms.text('email', 'E-mail', input_old('email'), errors.first('email'), {}, 'Jeżeli chcesz zmienić adres e-mail, na nową skrzynkę zostanie wygenerowany klucz aktywacyjny') }}
+                            {{ forms.select('dateformat', 'Format daty', formatList, input_old('dateformat')) }}
+                            {{ forms.text('website', 'Strona domowa', input_old('website'), errors.first('website'), {}, 'Strona domowa, portfolio itp (Potrzebujesz min. 50 punktów reputacji aby skorzystać z tej opcji)') }}
+                            {{ forms.text('location', 'Miejsce zamieszkania', input_old('location'), errors.first('location')) }}
+                            {{ forms.textarea('about', 'O sobie', input_old('about'), errors.first('about'), 3, {}, 'W tym polu możesz zamieścić krótką informację o sobie, czym się zajmujesz, co cię interesuje') }}
+                            {{ forms.select('birthyear', 'Rok urodzenia', yearList, input_old('birthyear'), errors.first('birthyear'), {}, 'Na podstawie roku urodzenia, w Twoim profilu będzie widoczny Twój wiek') }}
+
+                            {{ forms.checkbox('allow_count', 'Pokazuj licznik postów', 1, input_old('allow_count')) }}
+                            {{ forms.checkbox('allow_smilies', 'Pokazuj emotikony w poście', 1, input_old('allow_smilies')) }}
+                            {{ forms.checkbox('allow_notify', 'Automatycznie obserwuj wątki, w których biorę udział', 1, input_old('allow_notify')) }}
+                            {{ forms.checkbox('allow_sig', 'Wyświetlaj sygnaturki użytkowników', 1, input_old('allow_sig')) }}
+                            {{ forms.textarea('sig', 'Sygnatura', input_old('sig'), errors.first('sig'), 3, {}, 'Podpis będzie widoczny przy każdym Twoim poście. Uwaga! Użytkownicy posiadający mniej niż 50 punktów reputacji nie mogą umieszczać linków w tym polu') }}
+
+                            {{ forms.submit('Zapisz') }}
                             {{ form_close() }}
                         </div>
                     </div>
