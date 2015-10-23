@@ -146,6 +146,9 @@ return [
         'Coyote\Providers\EventServiceProvider',
         'Coyote\Providers\RouteServiceProvider',
 
+        AlfredoRamos\ParsedownExtra\ParsedownExtraServiceProvider::class,
+        Mews\Purifier\PurifierServiceProvider::class
+
     ],
     /*
     |--------------------------------------------------------------------------
@@ -197,7 +200,8 @@ return [
         'Form'      => 'Collective\Html\FormFacade',
         'Html'      => 'Collective\Html\HtmlFacade',
 
-
+        'Markdown'  => AlfredoRamos\ParsedownExtra\Facades\ParsedownExtra::class,
+        'Purifier'  => Mews\Purifier\Facades\Purifier::class
     ],
 
 ];
