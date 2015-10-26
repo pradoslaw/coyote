@@ -17,13 +17,14 @@
         "laravelcollective/html": "5.1.*",
         "twig/extensions": "^1.3",
         "barryvdh/laravel-debugbar": "^2.0",
-        "fabpot/php-cs-fixer": "^1.10",
         "codeception/codeception": "*",
         "mews/purifier": "~2.0",
         "alfredo-ramos/parsedown-extra-laravel": "~0.2"
     },
     "require-dev": {
-        "phpspec/phpspec": "~2.1"
+        "sebastian/phpcpd": "*",
+        "squizlabs/php_codesniffer": "2.*",
+        "phpmd/phpmd" : "@stable"
     },
     "autoload": {
         "classmap": [
