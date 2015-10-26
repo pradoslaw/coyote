@@ -4,6 +4,33 @@
   margin-top: 5px;
 }
 
+// Wyswietlanie tagow przypisanych do danego watku
+// --------------------------------------------------
+
+#box-topic-tags {
+  border: 1px solid $border-color;
+  background-color: $body-bg;
+  float: left;
+  border-radius: 3px;
+  padding: 3px 10px 3px 30px;
+  position: relative;
+
+  &:after {
+    @include font-awesome($fa-var-tags);
+    left: 8px;
+    top: 6px;
+  }
+
+  ul.tag-clouds {
+    margin: 0;
+    padding: 0;
+
+    a {
+      margin: 0 5px 0 0;
+    }
+  }
+}
+
 .post {
   background-color: #fff;
   border: 1px solid $border-color;
