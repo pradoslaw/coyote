@@ -31,6 +31,8 @@ Route::get('Forum', ['uses' => 'Forum\HomeController@index', 'as' => 'forum.home
 Route::get('Forum/Submit/{forum}', ['uses' => 'Forum\HomeController@getSubmit', 'as' => 'forum.submit']);
 Route::post('Forum/Submit/{forum}', 'Forum\HomeController@getSubmit');
 
+Route::get('Praca', ['uses' => 'Job\HomeController@index', 'as' => 'job.home']);
+
 /*
  * Tymczasowe reguly
  */
@@ -38,6 +40,7 @@ Route::get('/Delphi', ['as' => 'page', 'uses' => 'Wiki\WikiController@category']
 Route::get('/Delphi/Lorem_ipsum', ['as' => 'article', 'uses' => 'Wiki\WikiController@article']);
 Route::get('Forum/Python/Test', ['uses' => 'Forum\TopicController@index']);
 Route::get('Forum/Python', ['uses' => 'Forum\CategoryController@index']);
+Route::get('Praca/Lorem_ipsum', ['uses' => 'Job\OfferController@index', 'as' => 'job.offer']);
 
 // Obsluga mikroblogow
 Route::get('Mikroblogi', ['uses' => 'Microblog\HomeController@index', 'as' => 'microblog.home']);

@@ -1,0 +1,115 @@
+@charset "UTF-8";
+@import "../helpers/mixins";
+@import "../helpers/variables";
+@import "../vendors/font-awesome/variables";
+@import "../vendors/bootstrap/variables";
+@import "../components/tags";
+@import "../components/job-offers";
+@import "../components/sidemenu";
+
+// Wyswietlanie tresci artykulu
+// --------------------------------
+
+#job-offer {
+  padding: 0 20px;
+
+  blockquote {
+    font-style: italic;
+    padding: 0 0 0 30px;
+    position: relative;
+    border-left: none;
+    font-size: $font-size-large;
+    margin: 18px 0 17px 20px;
+
+    &:after {
+      @include font-awesome($fa-var-quote-left);
+      top: 0;
+      left: 0;
+      color: $gray-light;
+    }
+  }
+}
+
+// @todo Ponizszy blok jest uzywany rowniez w artykulach (plik wiki.scss). Moze nalezaloby zastosowac DRY?
+#metadata {
+  color: $gray-light;
+  margin: 20px 0 12px -5px;
+
+  i {
+    color: $gray;
+    font-size: $font-size-base + 1;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  li {
+    @media screen and (max-width: $screen-xs) {
+      display: block !important;
+      font-size: 90%;
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.tag-clouds {
+  padding: 5px 0;
+
+  li a {
+    font-size: $font-size-small;
+  }
+}
+
+#benefits {
+  i {
+    color: $brand-primary;
+  }
+
+  .list-group-item {
+    border: none;
+  }
+}
+
+.side-menu {
+  .btn-watch:before {
+    @include font-awesome($fa-var-star-o);
+  }
+
+  .btn-edit:before {
+    @include font-awesome($fa-var-edit);
+  }
+
+  .btn-delete:before {
+    @include font-awesome($fa-var-remove);
+  }
+
+  .btn-move:before {
+    @include font-awesome($fa-var-arrow-circle-o-right);
+  }
+
+  .btn-flag:before {
+    @include font-awesome($fa-var-flag);
+  }
+}
+
+#box-job-firm {
+  ul {
+    margin-bottom: 0;
+
+    li {
+      padding: 5px 0;
+      color: $gray;
+      font-size: $font-size-base - 1px;
+
+      a {
+        color: inherit;
+      }
+
+      i {
+        margin-right: 4px;
+        font-size: $font-size-base + 1;
+      }
+    }
+  }
+}

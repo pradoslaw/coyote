@@ -24,6 +24,7 @@ elixir(function(mix) {
        .sass('pages/forum.scss')
        .sass('pages/wiki.scss')
        .sass('pages/user.scss')
+       .sass('pages/job.scss')
        .sass('vendors/wikieditor.scss');
 });
 

@@ -121,6 +121,11 @@ article > header {
     padding-top: 12px;
     margin: 13px 0 20px 0;
 
+    i {
+      color: $gray;
+      font-size: $font-size-base + 1;
+    }
+
     a {
       color: inherit;
     }
