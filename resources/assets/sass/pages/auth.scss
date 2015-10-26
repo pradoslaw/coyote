@@ -2,6 +2,7 @@
 @import "../helpers/variables";
 @import "../vendors/bootstrap/variables";
 @import "../vendors/font-awesome/variables";
+@import "../helpers/mixins";
 
 #box-login, #box-register {
   border-right: 1px solid $border-color;
@@ -12,7 +13,6 @@
 }
 
 #box-login-sidebar, #box-register-sidebar {
-
   > div {
     padding: 40px;
   }
@@ -22,22 +22,19 @@
     padding: 0 0 0 30px;
     position: relative;
     border-left: none;
-    font-size: 17px;
-    margin: 12% 0;
+    font-size: $font-size-large;
+    margin: 3% 0;
 
     &:after {
-      position: absolute;
-      content: "\f10e";
-      color: $border-color;
-      font-family: FontAwesome;
+      @include font-awesome($fa-var-quote-right);
       top: 0;
       left: 0;
+      color: $border-color;
     }
   }
 }
 
 #box-register-sidebar {
-
   > div {
     padding-top: 0;
   }
@@ -53,21 +50,17 @@
 
   ul {
     margin: 10px 0;
-    list-style-type: none;
-    padding: 0;
 
     li {
       padding: 10px 0 10px 25px;
       position: relative;
 
       &:after {
-        position: absolute;
-        content: $fa-var-check;
         color: $brand-success;
-        font-family: FontAwesome;
         left: 0;
         top: 10px;
         font-weight: bold;
+        @include font-awesome($fa-var-check);
       }
     }
   }
