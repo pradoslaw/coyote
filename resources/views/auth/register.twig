@@ -8,12 +8,11 @@
         <div id="box-register" class="col-xs-7">
             <h1>Darmowa rejestracja - stwórz swój profil</h1>
 
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': '/login', 'class': 'form-horizontal'}) }}
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('register'), 'class': 'form-horizontal'}) }}
                 {{ forms.text('name', 'Nazwa użytkownika', input_old('name'), errors.first('name')) }}
-                {{ forms.password('password', 'Hasło', '', errors.first('password')) }}
-                {{ forms.password('password_confirm', 'Hasło (powtórnie)', '', errors.first('password_confirm')) }}
+                {{ forms.password('password', 'Hasło', input_old('password'), errors.first('password')) }}
+                {{ forms.password('password_confirmation', 'Hasło (powtórnie)', input_old('password_confirmation'), errors.first('password_confirmation')) }}
                 {{ forms.text('email', 'E-mail', input_old('email'), errors.first('email')) }}
-                {{ forms.checkbox('random', 'Wygeneruj losowe hasło i wyślij na e-mail', 1, input_old('remember', true)) }}
                 {{ forms.submit('Rejestracja') }}
             {{ form_close() }}
         </div>

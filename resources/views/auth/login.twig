@@ -8,8 +8,8 @@
         <div id="box-login" class="col-xs-7">
             <h1>Logowanie do systemu</h1>
 
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': '/login', 'class': 'form-horizontal'}) }}
-                {{ forms.text('name', 'Nazwa użytkownika / E-mail', input_old('name'), errors.first('name')) }}
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('login'), 'class': 'form-horizontal'}) }}
+                {{ forms.element(form_text('name', input_old('name'), {'class': 'form-control', 'autofocus': 'autofucs'}), 'Nazwa użytkownika', errors.first('name')) }}
                 {{ forms.password('password', 'Hasło', '', errors.first('password')) }}
                 {{ forms.checkbox('remember', 'Zapamiętaj mnie', 1, input_old('remember', true)) }}
 
@@ -19,7 +19,7 @@
                             Logowanie
                         </button>
 
-                        <a href="/password/email">Zapomniałeś hasła?</a>
+                        <a href="{{ url('Password') }}">Zapomniałeś hasła?</a>
                     </div>
                 </div>
             {{ form_close() }}
@@ -30,7 +30,7 @@
                 <h2>Nie masz konta?</h2>
 
                 <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
-                <a class="btn btn-primary" href="/register">Utwórz konto za darmo</a>
+                <a class="btn btn-primary" href="{{ route('register') }}">Utwórz konto za darmo</a>
             </div>
         </div>
     </div>

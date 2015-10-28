@@ -145,6 +145,8 @@ return [
         'Coyote\Providers\ConfigServiceProvider',
         'Coyote\Providers\EventServiceProvider',
         'Coyote\Providers\RouteServiceProvider',
+        // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
+        Coyote\Providers\SessionServiceProvider::class,
 
         AlfredoRamos\ParsedownExtra\ParsedownExtraServiceProvider::class,
         Mews\Purifier\PurifierServiceProvider::class

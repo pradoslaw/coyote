@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'default'     => 'mysql',
+    'default'     => 'pgsql',
     /*
     |--------------------------------------------------------------------------
     | Database Connections

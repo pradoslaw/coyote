@@ -19,7 +19,8 @@
         "barryvdh/laravel-debugbar": "^2.0",
         "codeception/codeception": "*",
         "mews/purifier": "~2.0",
-        "alfredo-ramos/parsedown-extra-laravel": "~0.2"
+        "alfredo-ramos/parsedown-extra-laravel": "~0.2",
+        "laravel/socialite": "^2.0"
     },
     "require-dev": {
         "sebastian/phpcpd": "*",
@@ -29,7 +30,8 @@
     "autoload": {
         "classmap": [
             "database",
-            "app/Libs"
+            "app/Libs",
+            "app/Models"
         ],
         "psr-4": {
             "Coyote\\": "app/"

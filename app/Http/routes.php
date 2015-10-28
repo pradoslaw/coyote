@@ -16,6 +16,8 @@ Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 // logowanie uzytkownika
 Route::get('Login', ['uses' => 'Auth\LoginController@index', 'as' => 'login']);
 Route::post('Login', 'Auth\LoginController@signin');
+// wylogowanie
+Route::get('Logout', ['uses' => 'Auth\LoginController@signout', 'as' => 'logout']);
 
 // rejestracja uzytkownika
 Route::get('Register', ['uses' => 'Auth\RegisterController@index', 'as' => 'register']);
