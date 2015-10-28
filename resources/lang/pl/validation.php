@@ -58,7 +58,7 @@ return [
     'not_in'               => 'The selected :attribute is invalid.',
     'numeric'              => 'The :attribute must be a number.',
     'regex'                => 'The :attribute format is invalid.',
-    'required'             => 'The :attribute field is required.',
+    'required'             => 'Pole :attribute jest wymagane.',
     'required_if'          => 'The :attribute field is required when :other is :value.',
     'required_with'        => 'The :attribute field is required when :values is present.',
     'required_with_all'    => 'The :attribute field is required when :values is present.',
@@ -75,6 +75,7 @@ return [
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => 'The :attribute has already been taken.',
     'url'                  => 'The :attribute format is invalid.',
+    'username'             => 'Nazwa użytkownika może zawierać litery, cyfry oraz znaki ._ -',
 
     /*
     |--------------------------------------------------------------------------
@@ -91,6 +92,11 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+
+        'name' => [
+            'unique'        => 'Konto o tym loginie już istnieje',
+            'email'         => 'Ten e-mail jest już przypisany do innego konta'
+        ]
     ],
 
     /*
@@ -104,6 +110,9 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'password'                  => 'hasło',
+        'name'                      => 'nazwa użytkownika'
+    ],
 
 ];

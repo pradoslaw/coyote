@@ -31,7 +31,8 @@
         "classmap": [
             "database",
             "app/Libs",
-            "app/Models"
+            "app/Models",
+            "app/Validators"
         ],
         "psr-4": {
             "Coyote\\": "app/"
