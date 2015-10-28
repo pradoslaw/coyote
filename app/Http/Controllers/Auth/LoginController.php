@@ -20,7 +20,7 @@ class LoginController extends Controller
      */
     public function index()
     {
-        $this->breadcrumb->push('Logowanie', '/login');
+        $this->breadcrumb->push('Logowanie', route('login'));
 
         return parent::view('auth.login');
     }
@@ -36,7 +36,7 @@ class LoginController extends Controller
             'password'              => 'required'
         ]);
 
-        if (Auth::attempt($request->only('name', 'password'), $request->has('remember'))) {
+        if (Auth::attempt($request->only('name', 'password') + ['is_active' => 1], $request->has('remember'))) {
             return redirect()->intended(route('home'));
         }
 
@@ -56,7 +56,7 @@ class LoginController extends Controller
             }
         }
 
-        return back()->withInput()->withErrors(['name' => 'Nazwa użytkownika lub hasło jest nieprawidłowe']);
+        return back()->withInput()->withErrors(['name' => 'Konto nie istnieje lub hasło jest nieprawidłowe']);
     }
 
     /**
