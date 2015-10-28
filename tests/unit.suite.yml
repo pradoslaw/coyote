@@ -7,3 +7,6 @@ modules:
     enabled:
         - Asserts
         - \Helper\Unit
+        - Laravel5:
+            environment_file: .env
+            part: ORM
