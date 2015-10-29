@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Auth;
 use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Coyote\User;
 
 class LoginController extends Controller
@@ -63,6 +64,14 @@ class LoginController extends Controller
      */
     public function signout()
     {
+        $user = User::findOrFail(auth()->user()->id);
+
+        $user->ip = request()->ip();
+        $user->browser = filter_var(request()->header('User-Agent'), FILTER_SANITIZE_STRING);
+        $user->visited_at = DB::raw('NOW()');
+        $user->visits = auth()->user()->visits + 1;
+        $user->save();
+
         Auth::logout();
         return back();
     }
