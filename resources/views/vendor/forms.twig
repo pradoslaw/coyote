@@ -43,7 +43,7 @@
     {{ forms.element(form_textarea(name, value, {'class': 'form-control', 'rows': rows}), label, error, attr, help) }}
 {% endmacro %}
 
-{% macro checkbox(name, label, value, checked, attr, help) %}
+{% macro checkbox(name, label, value, checked, error, attr, help) %}
     {% import _self as forms %}
 
     {% if not '[]' in name %}

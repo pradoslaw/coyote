@@ -10,5 +10,4 @@ $I->fillField('password_confirmation', '123');
 $I->click('button[type=submit]');
 
 $I->amOnPage('/');
-$I->seeRecord('users', ['email' => 'joe@doe.com']);
-$I->seeAuthentication();
+$I->dontSeeAuthentication();

@@ -40,3 +40,13 @@
 
     <link rel="stylesheet" href="/css/auth.css">
 {% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function() {
+            $('.form-horizontal').append('<input type="checkbox" name="human" value="1" checked="checked">');
+        });
+    </script>
+{% endblock %}

@@ -135,16 +135,18 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        // Profiler aplikacji
+        Barryvdh\Debugbar\ServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
-        'Coyote\Providers\AppServiceProvider',
-        'Coyote\Providers\BusServiceProvider',
-        'Coyote\Providers\ConfigServiceProvider',
-        'Coyote\Providers\EventServiceProvider',
-        'Coyote\Providers\RouteServiceProvider',
-        // Profiler aplikacji
-        Barryvdh\Debugbar\ServiceProvider::class,
+        Coyote\Providers\AppServiceProvider::class,
+        Coyote\Providers\BusServiceProvider::class,
+        Coyote\Providers\ConfigServiceProvider::class,
+        Coyote\Providers\EventServiceProvider::class,
+        Coyote\Providers\RouteServiceProvider::class,
+
         // Obsluga szablonow Twig
         TwigBridge\ServiceProvider::class,
         // Klasa wspierajaca budowanie znacznikow HTML
