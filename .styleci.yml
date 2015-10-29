@@ -2,3 +2,7 @@ preset: psr2
 
 disabled:
   - eof_ending
+
+finder:
+  exclude:
+    - "tests"

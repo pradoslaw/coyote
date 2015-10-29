@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/../../app/Libs/Declination/Declination.php';
+require __DIR__ . '/../../app/Libs/Declination/Declination.php';
 
 class DeclinationTest extends \Codeception\TestCase\Test
 {

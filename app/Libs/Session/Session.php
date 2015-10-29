@@ -35,7 +35,7 @@ class Session extends DatabaseSessionHandler
                     foreach ($cloudFlareIp as $cidr) {
 
                         list($subnet, $mask) = explode('/', $cidr);
-                        if ((ip2long($ip) & ~((1 << (32 - $mask)) - 1) ) == ip2long($subnet)) {
+                        if ((ip2long($ip) & ~((1 << (32 - $mask)) - 1)) == ip2long($subnet)) {
                             $ip = $xForwardedFor[0]; // przypisanie prawidlowego IP usera
                             break;
                         }
