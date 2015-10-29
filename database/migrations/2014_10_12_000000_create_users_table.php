@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             /*
              * @deprecated
-             * Musi zostac ze wzgledu na stare hashe
+             * Musi zostac ze wzgledu na stare hashe w poprzedniej wersji Coyote
              */
             $table->string('salt', 34)->nullable();
             $table->string('password', 64);
@@ -34,7 +34,7 @@ class CreateUsersTable extends Migration
             $table->timestampTz('visited_at')->nullable();
             $table->mediumInteger('visits')->default(0);
             $table->string('ip', 45)->nullable();
-            $table->string('user_agent')->nullable();
+            $table->string('browser')->nullable();
             $table->string('access_ip')->nullable();
 //            $table->string('ip_failure')->nullable();
             $table->tinyInteger('alert_login')->default(0);
