@@ -102,6 +102,3 @@ Route::get('/{slug}', function ($slug) {
     echo "404 $slug";
 
 })->where('slug', '.*');
-
-
-
