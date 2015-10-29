@@ -46,7 +46,6 @@ class LoginController extends Controller
             $user = User::where('name', $request->input('name'))->first();
 
             if ($user && $user->salt && $user->password === hash('sha256', $user->salt . $request->input('password'))) {
-
                 $user->password = bcrypt($request->input('password'));
                 $user->salt = null;
                 $user->save();
