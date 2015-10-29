@@ -15,5 +15,7 @@ before_script:
   - psql -c 'create database coyote_test;' -U postgres
   - cp .env.testing .env
   - php artisan migrate --seed --env="testing"
+  - phantomjs --webdriver=4444 2>&1 >/dev/null &
+  - sleep 5
 
 script: php vendor/bin/codecept run
