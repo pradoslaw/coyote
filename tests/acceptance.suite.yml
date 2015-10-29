@@ -10,3 +10,5 @@ modules:
         - PhpBrowser:
             url: http://coyote.dev
         - \Helper\Acceptance
+        - Laravel5
+            environment_file: .env.testing
