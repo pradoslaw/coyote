@@ -1,6 +1,6 @@
 <?php namespace Coyote\Http\Controllers;
 
-use Breadcrumb\Breadcrumb;
+use Coyote;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -14,7 +14,7 @@ abstract class Controller extends BaseController
 
     public function __construct()
     {
-        $this->breadcrumb = new Breadcrumb();
+        $this->breadcrumb = new Coyote\Breadcrumb();
     }
 
     protected function view($view = null, $data = [])

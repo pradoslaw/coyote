@@ -1,6 +1,6 @@
 <?php
 
-namespace Breadcrumb;
+namespace Coyote;
 
 class Breadcrumb implements \Countable
 {

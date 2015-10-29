@@ -1,7 +1,5 @@
 <?php
 
-require __DIR__ . '/../../app/Libs/Declination/Declination.php';
-
 class DeclinationTest extends \Codeception\TestCase\Test
 {
     /**
@@ -19,7 +17,7 @@ class DeclinationTest extends \Codeception\TestCase\Test
 
     private function getSeconds($value)
     {
-        return Declination\Declination::format($value, ['sekunda', 'sekundy', 'sekund']);
+        return Coyote\Declination::format($value, ['sekunda', 'sekundy', 'sekund']);
     }
 
     // tests
