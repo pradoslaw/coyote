@@ -1,6 +1,6 @@
 <?php
 $I = new FunctionalTester($scenario);
-$I->wantTo('register a user');
+$I->wantTo('attempt to register a user');
 
 $I->amOnPage('/Register');
 $I->fillField('name', 'Jan Kowalski');
