@@ -10,3 +10,6 @@
 * `git clone https://github.com/adam-boduch/coyote.git .`
 * `composer install`
 * `npm install`
+* `cp .env.production .env` (plik .env zawiera konfiguracje bazy danych)
+* `psql -c 'create database coyote;' -U postgres`
+* `php artisan migrate --seed`
