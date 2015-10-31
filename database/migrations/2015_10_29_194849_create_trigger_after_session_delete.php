@@ -25,7 +25,6 @@ END;$$;
 
 CREATE TRIGGER before_session_delete AFTER DELETE ON sessions FOR EACH ROW EXECUTE PROCEDURE "before_session_delete"();
         ');
-
     }
 
     /**

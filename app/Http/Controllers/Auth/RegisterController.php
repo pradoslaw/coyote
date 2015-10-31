@@ -69,7 +69,6 @@ class RegisterController extends Controller
 
             Auth::login($user, true);
             DB::commit();
-
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
