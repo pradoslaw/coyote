@@ -1,0 +1,12 @@
+{# Zawiera klucz umozliwiajacy potwierdzenie adresu e-mail #}
+{% extends 'emails/layout.twig' %}
+
+{% block container %}
+    Witamy na 4programmers.net<br><br>
+
+    Dziękujemy za rejestrację w serwisie 4programmers.net. Aby potwierdzić autentyczność tego adresu, e-mail, prosimy o kliknięcie w poniższy odnośnik:<br><br>
+
+    <a href="{{ url }}">{{ url }}</a><br><br>
+
+    Jeżeli nie rejestrowałeś się w serwisie 4programmers.net, prosimy o zignorowanie tego e-maila.
+{% endblock %}

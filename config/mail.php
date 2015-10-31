@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver'     => 'smtp',
+    'driver'     => env('MAIL_DRIVER', 'mail'),
     /*
     |--------------------------------------------------------------------------
     | SMTP Host Address
@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'from'       => ['address' => null, 'name' => null],
+    'from'       => ['address' => 'support@4programmers.net', 'name' => '4programmers.net'],
     /*
     |--------------------------------------------------------------------------
     | E-Mail Encryption Protocol

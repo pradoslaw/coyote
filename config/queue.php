@@ -43,7 +43,7 @@ return [
             'driver' => 'beanstalkd',
             'host'   => 'localhost',
             'queue'  => 'default',
-            'ttr'    => 60,
+            'ttr'    => 60
         ],
         'sqs'        => [
             'driver' => 'sqs',

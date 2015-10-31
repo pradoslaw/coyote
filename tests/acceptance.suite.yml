@@ -8,13 +8,10 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - WebDriver:
-            url: http://localhost
+            url: http://localhost/
             browser: phantomjs
             window_size: 1024x768
             capabilities:
                 javascriptEnabled: true
                 webStorageEnabled: true
                 unexpectedAlertBehaviour: 'accept'
-        - Laravel5:
-            environment_file: .env.testing
-        - \Helper\Acceptance

@@ -2,10 +2,14 @@
 
 namespace Coyote\Http\Controllers\Auth;
 
+use Coyote\Actkey;
 use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Coyote\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class RegisterController extends Controller
 {
@@ -40,13 +44,36 @@ class RegisterController extends Controller
             'human'                 => 'required'
         ]);
 
-        $user = User::create([
-            'name'     => $request->input('name'),
-            'email'    => $request->input('email'),
-            'password' => bcrypt($request->input('password'))
-        ]);
+        DB::beginTransaction();
 
-        Auth::login($user, true);
+        try {
+            $email = $request->input('email');
+
+            $user = User::create([
+                'name'     => $request->input('name'),
+                'email'    => $email,
+                'password' => bcrypt($request->input('password'))
+            ]);
+
+            $actkey = Actkey::create([
+                'actkey'   => str_random(),
+                'user_id'  => $user->id
+            ]);
+
+            $url = route('user.email') . '?id=' . $user->id . '&actkey=' . $actkey->actkey;
+
+            Mail::queue('emails.signup', ['url' => $url], function ($message) use ($email) {
+                $message->to($email);
+                $message->subject('Dziękujemy za rejestrację. Potwierdź autentyczność swojego adresu e-mail');
+            });
+
+            Auth::login($user, true);
+            DB::commit();
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
         return redirect()->intended(route('home'));
     }

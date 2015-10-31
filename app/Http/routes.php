@@ -94,6 +94,11 @@ Route::group(['namespace' => 'User'], function () {
 
     Route::get('User/Forum', ['uses' => 'ForumController@index', 'as' => 'user.forum']);
     Route::post('User/Forum', 'ForumController@save');
+
+    // Generowanie linka potwierdzajacego autentycznosc adresu e-mail
+    Route::get('User/Confirm', ['uses' => 'ConfirmController@index', 'as' => 'user.confirm']);
+    Route::post('User/Confirm', ['uses' => 'ConfirmController@send']);
+    Route::get('User/Confirm/Email', ['uses' => 'ConfirmController@email', 'as' => 'user.email']);
 });
 
 Route::get('Profile/{id}', ['uses' => 'ProfileController@index', 'as' => 'profile']);

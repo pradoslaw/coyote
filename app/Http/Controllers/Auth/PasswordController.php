@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class PasswordController extends Controller
 {
@@ -22,6 +23,7 @@ class PasswordController extends Controller
     public function getIndex()
     {
         $this->breadcrumb->push('Odzyskiwanie hasła', '/password');
+
 
         return parent::view('auth.password');
     }

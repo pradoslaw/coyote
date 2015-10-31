@@ -20,7 +20,10 @@
         "codeception/codeception": "2.1.2",
         "mews/purifier": "~2.0",
         "alfredo-ramos/parsedown-extra-laravel": "~0.2",
-        "laravel/socialite": "^2.0"
+        "laravel/socialite": "^2.0",
+        "pda/pheanstalk": "^3.1",
+        "predis/predis": "^1.0",
+        "fzaninotto/faker": "^1.5"
     },
     "require-dev": {
         "sebastian/phpcpd": "*",

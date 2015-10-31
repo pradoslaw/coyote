@@ -1,14 +1,22 @@
 <?php
+use Faker\Factory;
+
+$fake = Factory::create();
+$name = $fake->userName;
+
 $I = new AcceptanceTester($scenario);
 $I->wantTo('register a user');
 
 $I->amOnPage('/Register');
 $I->wait(1);
-$I->fillField('name', 'Joe Doe');
-$I->fillField('email', 'example@example.com');
+$I->fillField('name', $name);
+$I->fillField('email', $fake->email);
 $I->fillField('password', 'password');
 $I->fillField('password_confirmation', 'password');
+$I->canSeeCheckboxIsChecked('input[name=human]');
+
 $I->click('button[type=submit]');
 
-$I->amOnPage('/');
-$I->see('Joe Doe', '.dropdown-username');
+$I->seeInCurrentUrl('/');
+$I->click('.dropdown-toggle', '.avatar');
+$I->see($name, '.dropdown-username');
