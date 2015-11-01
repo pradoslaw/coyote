@@ -19,7 +19,7 @@ before_script:
   - chmod -R 777 storage/
   - phantomjs --webdriver=4444 2>&1 >/dev/null &
   - sleep 5
-  - php artisan serve 2>&1 >/dev/null &
+  - php artisan serve --port=80 2>&1 >/dev/null &
   - sleep 1
 
 script: php vendor/bin/codecept run
