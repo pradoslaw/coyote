@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers;
 class HomeController extends Controller
 {
     /**
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
