@@ -17,6 +17,8 @@ class LoginController extends Controller
     }
 
     /**
+     * Widok formularza logowania
+     *
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -27,6 +29,8 @@ class LoginController extends Controller
     }
 
     /**
+     * Logowanie uzytkownika
+     *
      * @param Request $request
      * @return $this|\Illuminate\Http\RedirectResponse
      */
@@ -60,6 +64,8 @@ class LoginController extends Controller
     }
 
     /**
+     * Wylogowanie uzytkownika
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function signout()

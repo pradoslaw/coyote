@@ -9,11 +9,12 @@
             Formularz przypominania hasła
         </div>
         <div class="panel-body">
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': '/password/reset', 'class': 'form-horizontal'}) }}
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': '/Password/reset', 'class': 'form-horizontal'}) }}
+            {{ form_hidden('token', token) }}
             {{ forms.text('email', 'E-mail', input_old('email'), errors.first('email')) }}
             {{ forms.password('password', 'Hasło', '', errors.first('password')) }}
-            {{ forms.password('password_confirm', 'Hasło (powtórnie)', '', errors.first('password_confirm')) }}
-            {{ forms.submit('Wyślij link resetujący hasło') }}
+            {{ forms.password('password_confirmation', 'Hasło (powtórnie)', '', errors.first('password_confirmation')) }}
+            {{ forms.submit('Ustaw nowe hasło') }}
             {{ form_close() }}
         </div>
     </div>
