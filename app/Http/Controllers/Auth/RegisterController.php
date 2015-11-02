@@ -60,6 +60,8 @@ class RegisterController extends Controller
                 'user_id'  => $user->id
             ]);
 
+            // taki format linku zachowany jest ze wzgledu na wsteczna kompatybilnosc.
+            // z czasem mozemy zmienic ten format aby wskazywal na /User/Confirm/Email/<id>/<actkey>
             $url = route('user.email') . '?id=' . $user->id . '&actkey=' . $actkey->actkey;
 
             Mail::queue('emails.signup', ['url' => $url], function ($message) use ($email) {

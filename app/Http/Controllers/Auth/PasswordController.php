@@ -98,7 +98,10 @@ class PasswordController extends Controller
             'email'                     => 'required|email'
         ]);
 
-        $response = Password::sendResetLink($request->only('email'), function (Message $message) {
+        // aby wygenerowac link konto musi byc aktywne oraz e-mail musi byc wczesniej potwierdzony
+        $credentials = $request->only('email') + ['is_active' => 1, 'is_confirm' => 1];
+
+        $response = Password::sendResetLink($credentials, function (Message $message) {
             $message->subject('Ustaw nowe hasło w serwisie 4programmers.net');
         });
 
@@ -107,7 +110,7 @@ class PasswordController extends Controller
                 return redirect()->back()->with('success', 'Na podany adres e-mail wysłane zostały dalsze instrukcje');
 
             case Password::INVALID_USER:
-                return redirect()->back()->withErrors(['email' => 'Konto o tym adresie e-mail nie istnieje']);
+                return redirect()->back()->withErrors(['email' => 'Konto o tym adresie e-mail nie istnieje lub e-mail nie został potwierdzony']);
         }
     }
 }
