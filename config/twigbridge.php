@@ -100,6 +100,9 @@ return [
             'TwigBridge\Extension\Laravel\Url',
             'TwigBridge\Extension\Laravel\Form',
             'TwigBridge\Extension\Laravel\Html',
+
+            'TwigBridge\Extensions\User',
+            'TwigBridge\Extensions\Misc'
 //             'TwigBridge\Extension\Laravel\Legacy\Facades',
         ],
         /*
