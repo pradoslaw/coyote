@@ -40,7 +40,7 @@
 
                     <div class="collapse navbar-collapse" id="navbar-main">
                         <ul class="nav navbar-nav">
-                            <li><a href="/Delphi">Kompendium wiedzy <span class="sr-only">(current)</span></a></li>
+                            <li><a href="#">Kompendium wiedzy <span class="sr-only">(current)</span></a></li>
                             <li><a href="{{ route('forum.home') }}">Forum</a></li>
                             <li><a href="#">Pastebin</a></li>
                             <li><a href="{{ route('microblog.home') }}">Mikroblogi</a></li>
@@ -64,8 +64,8 @@
                                 <ul id="dropdown-user" class="dropdown-menu">
                                     <li class="dropdown-username">{{ auth_user().name  }}</li>
                                     <li class="divider"></li>
-                                    <li><a href="#"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
-                                    <li><a href="#"><i class="fa fa-user fa-fw"></i> Profil</a></li>
+                                    <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
+                                    <li><a href="{{ route('profile', [auth_user().id]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
                                     <li><a href="#"><i class="fa fa-info-circle fa-fw"></i> Pomoc</a></li>
                                     <li class="divider"></li>
                                     <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a></li>
