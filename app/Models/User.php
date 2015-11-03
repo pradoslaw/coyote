@@ -24,7 +24,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'salt', 'password'];
+    protected $fillable = ['name', 'email', 'salt', 'password', 'date_format', 'location', 'website', 'bio', 'sig', 'birthyear', 'allow_count', 'allow_smilies', 'allow_sig', 'allow_notify'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -33,22 +33,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = ['password', 'remember_token', 'salt'];
 
-    public static $rules = [
-        'email'                         => 'email',
-        'website'                       => 'url',
-        'location'                      => 'string|size:50',
-        'birthyear'                     => 'integer',
-        'about'                         => 'string|size:255',
-        'sig'                           => 'string|size:255',
-        'allow_count'                   => 'boolean',
-        'allow_smilies'                 => 'boolean',
-        'allow_notify'                  => 'boolean',
-        'allow_sig'                     => 'boolean',
-    ];
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            foreach (['birthyear', 'website', 'location', 'sig', 'bio'] as $column) {
+                if (empty($model->$column)) {
+                    $model->$column = null;
+                }
+            }
+        });
+    }
 
     public static function birthYearList()
     {
-        $result = [0 => '--'];
+        $result = [null => '--'];
 
         for ($i = 1950; $i <= date('Y'); $i++) {
             $result[$i] = $i;

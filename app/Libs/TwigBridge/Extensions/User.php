@@ -18,6 +18,48 @@ class User extends Twig_Extension
     }
 
     /**
+     * Pobiera wartosc kolumny z tabli users
+     *
+     * @param $name
+     * @return string
+     */
+    public function getUserValue($name)
+    {
+        if (strpos($name, '.') !== false) {
+            list($name, $key) = explode('.', $name);
+        }
+
+        $element = auth()->user()->$name;
+        if (isset($key)) {
+            $element = isset($element[$key]) ? $element[$key] : '';
+        }
+
+        return $element;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFunctions()
+    {
+        return [
+            // umozliwia szybki dostep do danych zalogowanego uzytkownika. zamiast:
+            // auth()->user()->name mozemy napisac user('name')
+            new Twig_SimpleFunction('user', [$this, 'getUserValue'], ['is_safe' => ['html']]),
+
+            // robi to co funkcja powyzej z ta roznica ze najpierw sprawdza czy wartosc nie zostala
+            // przekazana przez POST/GET. jezeli tak to wazniejsze sa dane przekazane w naglowku niz te
+            // zapisane w bazie danych
+            new Twig_SimpleFunction(
+                'user_input',
+                function ($name) {
+                    return request($name, $this->getUserValue($name));
+                }
+            )
+        ];
+    }
+
+    /**
      * Dodatkowe filtry Twig zwiazane z formatowaniem danych uzytkownika
      *
      * @return array

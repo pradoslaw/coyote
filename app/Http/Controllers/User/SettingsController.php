@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\User;
-use Illuminate\Http\Request;
+use Coyote\Http\Requests\UserSettingsRequest;
 
 class SettingsController extends Controller
 {
@@ -19,10 +19,14 @@ class SettingsController extends Controller
         return parent::view('user.settings', ['formatList' => User::dateFormatList(), 'yearList' => User::birthYearList()]);
     }
 
-    public function save(Request $request)
+    /**
+     * @param UserSettingsRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function save(UserSettingsRequest $request)
     {
-        $this->validate($request, User::$rules);
+        User::find(auth()->user()->id)->fill($request->all())->save();
 
-        echo 'OK';
+        return back()->with('success', 'Zmiany zostały poprawie zapisane');
     }
 }

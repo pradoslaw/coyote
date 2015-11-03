@@ -46,7 +46,7 @@
 {% macro checkbox(name, label, value, checked, error, attr, help) %}
     {% import _self as forms %}
 
-    {% if not '[]' in name %}
+    {% if not ('[]' in name) %}
         {{ form_hidden(name, 0) }}
     {% endif %}
 

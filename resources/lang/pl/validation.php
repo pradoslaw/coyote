@@ -89,13 +89,11 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
-
         'name' => [
-            'unique'        => 'Konto o tym loginie już istnieje',
-            'email'         => 'Ten e-mail jest już przypisany do innego konta'
+            'unique'        => 'Konto o tym loginie już istnieje'
+        ],
+        'email' => [
+            'unique'        => 'Ten e-mail jest już przypisany do innego konta'
         ]
     ],
 
