@@ -135,7 +135,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
-        // Profiler aplikacji
+        // Profiler aplikacji (to musi byc w tym miejscu)
         Barryvdh\Debugbar\ServiceProvider::class,
 
         /*
@@ -146,6 +146,7 @@ return [
         Coyote\Providers\ConfigServiceProvider::class,
         Coyote\Providers\EventServiceProvider::class,
         Coyote\Providers\RouteServiceProvider::class,
+        Coyote\Providers\AuthServiceProvider::class,
 
         // Obsluga szablonow Twig
         TwigBridge\ServiceProvider::class,
