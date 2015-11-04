@@ -13,6 +13,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Validator::extend('username', 'UsernameValidator@validateUsername');
+        Validator::extend('password', 'PasswordValidator@validatePassword');
     }
 
     /**

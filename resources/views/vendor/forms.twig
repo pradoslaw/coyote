@@ -25,10 +25,10 @@
     {{ forms.element(form_text(name, value, {'class': 'form-control'}), label, error, attr, help) }}
 {% endmacro %}
 
-{% macro password(name, label, value, error, attr) %}
+{% macro password(name, label, value, error, attr, help) %}
     {% import _self as forms %}
 
-    {{ forms.element(form_password(name, {'class': 'form-control'}), label, error, attr) }}
+    {{ forms.element(form_password(name, {'class': 'form-control'}), label, error, attr, help) }}
 {% endmacro %}
 
 {% macro select(name, label, items, value, error, attr, help) %}

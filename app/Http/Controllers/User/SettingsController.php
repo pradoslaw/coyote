@@ -9,7 +9,7 @@ use Coyote\Http\Requests\UserSettingsRequest;
 class SettingsController extends Controller
 {
     /**
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {

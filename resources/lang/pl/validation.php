@@ -76,6 +76,7 @@ return [
     'unique'               => 'The :attribute has already been taken.',
     'url'                  => 'The :attribute format is invalid.',
     'username'             => 'Nazwa użytkownika może zawierać litery, cyfry oraz znaki ._ -',
+    'password'             => 'Podano nieprawidłowe hasło',
 
     /*
     |--------------------------------------------------------------------------
@@ -94,6 +95,12 @@ return [
         ],
         'email' => [
             'unique'        => 'Ten e-mail jest już przypisany do innego konta'
+        ],
+        'password' => [
+            'confirmed'     => 'Hasło w obu polach musi być identyczne'
+        ],
+        'password_old' => [
+            'required'      => 'Wymagane jest podanie obecnego hasła'
         ]
     ],
 

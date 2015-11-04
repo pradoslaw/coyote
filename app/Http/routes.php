@@ -47,7 +47,7 @@ Route::get('Praca/Lorem_ipsum', ['uses' => 'Job\OfferController@index', 'as' => 
 // Obsluga mikroblogow
 Route::get('Mikroblogi', ['uses' => 'Microblog\HomeController@index', 'as' => 'microblog.home']);
 
-Route::group(['namespace' => 'User'], function () {
+Route::group(['namespace' => 'User', 'middleware' => 'auth'], function () {
 
     // strona glowna panelu uzytkownika
     Route::get('User', ['uses' => 'HomeController@index', 'as' => 'user.home']);
