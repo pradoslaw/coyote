@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "91d7c0fe0caa1dc4af16e931d3b86a30",
-    "content-hash": "4e201d6a0a0f14031dec43814cbf2e29",
+    "hash": "b2c51f58bca022cd7e2da6862bb28227",
+    "content-hash": "a992f9cf72e98eb7d6b4ae5b6d020ee6",
     "packages": [
         {
             "name": "alfredo-ramos/parsedown-extra-laravel",
@@ -173,23 +173,23 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "2.1.2",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "521adbb2ee34e9debdd8508a2c41ab2b5c2f042b"
+                "reference": "cd810cb78a869408602e17271f9b7368b09a7ca8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/521adbb2ee34e9debdd8508a2c41ab2b5c2f042b",
-                "reference": "521adbb2ee34e9debdd8508a2c41ab2b5c2f042b",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/cd810cb78a869408602e17271f9b7368b09a7ca8",
+                "reference": "cd810cb78a869408602e17271f9b7368b09a7ca8",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "facebook/webdriver": ">=1.0.1",
-                "guzzlehttp/guzzle": ">=4.0|<7.0",
+                "guzzlehttp/guzzle": ">=4.1.4 <7.0",
                 "guzzlehttp/psr7": "~1.0",
                 "php": ">=5.4.0",
                 "phpunit/phpunit": "~4.8.0",
@@ -249,7 +249,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2015-08-09 13:48:55"
+            "time": "2015-10-02 09:38:59"
         },
         {
             "name": "danielstjules/stringy",
@@ -1096,16 +1096,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.1.22",
+            "version": "v5.1.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "11d9627c7cd4d12b6e884b87daa7a2f898cf54cb"
+                "reference": "a4ea877d2bb6a68796b244a741594968796c1c4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/11d9627c7cd4d12b6e884b87daa7a2f898cf54cb",
-                "reference": "11d9627c7cd4d12b6e884b87daa7a2f898cf54cb",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/a4ea877d2bb6a68796b244a741594968796c1c4e",
+                "reference": "a4ea877d2bb6a68796b244a741594968796c1c4e",
                 "shasum": ""
             },
             "require": {
@@ -1221,7 +1221,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-10-28 21:58:18"
+            "time": "2015-11-03 16:32:33"
         },
         {
             "name": "laravel/socialite",
@@ -2585,16 +2585,16 @@
         },
         {
             "name": "rcrowe/twigbridge",
-            "version": "v0.8.2",
+            "version": "v0.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rcrowe/TwigBridge.git",
-                "reference": "ef9ba9aadf63f48fd20d9b57a352a124d4320e4f"
+                "reference": "2db996707f969b464876bf4d18e45cf465d19ad6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rcrowe/TwigBridge/zipball/ef9ba9aadf63f48fd20d9b57a352a124d4320e4f",
-                "reference": "ef9ba9aadf63f48fd20d9b57a352a124d4320e4f",
+                "url": "https://api.github.com/repos/rcrowe/TwigBridge/zipball/2db996707f969b464876bf4d18e45cf465d19ad6",
+                "reference": "2db996707f969b464876bf4d18e45cf465d19ad6",
                 "shasum": ""
             },
             "require": {
@@ -2645,7 +2645,7 @@
                 "laravel",
                 "twig"
             ],
-            "time": "2015-10-19 09:52:54"
+            "time": "2015-08-13 09:31:19"
         },
         {
             "name": "sebastian/comparator",

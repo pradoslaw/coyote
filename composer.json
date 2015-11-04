@@ -13,11 +13,11 @@
     ],
     "require": {
         "laravel/framework": "5.1.*",
-        "rcrowe/twigbridge": "0.8.x",
+        "rcrowe/twigbridge": "0.8.1",
         "laravelcollective/html": "5.1.*",
         "twig/extensions": "^1.3",
         "barryvdh/laravel-debugbar": "^2.0",
-        "codeception/codeception": "2.1.2",
+        "codeception/codeception": "*",
         "mews/purifier": "~2.0",
         "alfredo-ramos/parsedown-extra-laravel": "~0.2",
         "laravel/socialite": "^2.0",

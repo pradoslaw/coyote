@@ -34,6 +34,11 @@ class Misc extends Twig_Extension
      */
     public function getGenerationTime()
     {
+        // w przypadku testow funkcjonalnych, stala ta nie jest deklarowana
+        if (!defined('LARAVEL_START')) {
+            return false;
+        }
+
         $timer = microtime(true) - LARAVEL_START;
 
         if ($timer < 1) {
