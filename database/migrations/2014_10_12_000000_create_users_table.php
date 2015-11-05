@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->timestampsTz();
             $table->tinyInteger('is_active')->default(1);
             $table->tinyInteger('is_confirm')->default(0);
+            $table->tinyInteger('is_banned')->default(0);
             $table->mediumInteger('group_id')->nullable();
             $table->json('settings')->nullable();
             $table->json('permissions')->nullable();
