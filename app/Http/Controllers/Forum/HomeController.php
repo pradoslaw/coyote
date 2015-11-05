@@ -21,9 +21,11 @@ class HomeController extends Controller
      */
     public function getSubmit($forum)
     {
-        $this->breadcrumb->push('Forum', route('forum.home'));
-        $this->breadcrumb->push($forum, route('forum.home') . "/$forum");
-        $this->breadcrumb->push('Nowy wątek', route('forum.submit', ['forum' => $forum]));
+        $this->breadcrumb->push([
+            'Forum'      => route('forum.home'),
+            $forum       => route('forum.home') . "/$forum",
+            'Nowy wątek' => route('forum.submit', ['forum' => $forum])
+        ]);
 
         return parent::view('forum.submit');
     }
