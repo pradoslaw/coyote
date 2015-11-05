@@ -35,4 +35,19 @@ class UserTest extends \Codeception\TestCase\Test
         $user = User::where('name', 'admin')->first();
         $this->assertEquals('admin@4programmers.net', $user->email);
     }
+
+    public function testSettingsSaving()
+    {
+        $user = User::where('name', 'admin')->first();
+        $user->setSetting('foo', 'bar');
+
+        $this->assertEquals('{"foo":"bar"}', $user->settings);
+        $this->assertEquals('bar', $user->getSetting('foo'));
+    }
+
+    public function testSettingsDefault()
+    {
+        $user = User::where('name', 'admin')->first();
+        $this->assertEquals('Lorem ipsum', $user->getSetting('non existing setting', 'Lorem ipsum'));
+    }
 }

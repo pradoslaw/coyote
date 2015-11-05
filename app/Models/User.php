@@ -111,4 +111,42 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return isset($acl[$ability]) ? $acl[$ability] : false;
     }
 
+    /**
+     * Zapis ustawienia dla danego uzytkownika (np. ukrycie danych elementow na stronie czy zamkniecie slidera)
+     * Typ kolumny settings w bazie danych to JSON wiec mozna zapisywac wiele roznych opcji dla danego usera
+     *
+     * @param $name
+     * @param $value
+     */
+    public function setSetting($name, $value)
+    {
+        if (is_null($this->settings)) {
+            $settings = [];
+        } else {
+            $settings = json_decode($this->settings, true);
+        }
+
+        $settings[$name] = $value;
+        $this->settings = json_encode($settings);
+        $this->save();
+    }
+
+    /**
+     * Zwraca ustawienie zapisane dla danego usera. Jezeli nie jest ustawione w rekordzie, zwraca domyslna
+     * wartosc okreslona w parametrze $default
+     *
+     * @param $name
+     * @param null $default
+     * @return null|mixed
+     */
+    public function getSetting($name, $default = null)
+    {
+        if (is_null($this->settings)) {
+            return $default;
+        } else {
+            $settings = json_decode($this->settings, true);
+
+            return isset($settings[$name]) ? $settings[$name] : null;
+        }
+    }
 }
