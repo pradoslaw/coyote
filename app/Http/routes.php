@@ -101,6 +101,11 @@ Route::group(['namespace' => 'User', 'middleware' => 'auth'], function () {
     Route::get('User/Confirm/Email', ['uses' => 'ConfirmController@email', 'as' => 'user.email']);
 });
 
+// dostep do panelu administracyjnego
+Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' => 'Adm'], function () {
+    Route::get('/', 'HomeController@index');
+});
+
 Route::get('Profile/{id}', ['uses' => 'ProfileController@index', 'as' => 'profile']);
 
 Route::get('/{slug}', function ($slug) {

@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Controllers;
 
+use Gate;
+
 class HomeController extends Controller
 {
     /**

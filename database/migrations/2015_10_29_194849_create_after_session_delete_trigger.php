@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateTriggerAfterSessionDelete extends Migration
+class CreateAfterSessionDeleteTrigger extends Migration
 {
     /**
      * Run the migrations.
