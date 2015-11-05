@@ -59,3 +59,4 @@ crashlytics-build.properties
 
 
 tests/_output/*
+tests/acceptance.suite.yml
