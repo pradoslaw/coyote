@@ -16,7 +16,7 @@ class CreateUserGroups extends Migration
             $table->integer('user_id');
             $table->mediumInteger('group_id');
 
-            $table->primary('user_id');
+            $table->index('user_id');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
