@@ -98,8 +98,11 @@ Route::group(['namespace' => 'User', 'middleware' => 'auth'], function () {
     // Generowanie linka potwierdzajacego autentycznosc adresu e-mail
     Route::get('User/Confirm', ['uses' => 'ConfirmController@index', 'as' => 'user.confirm']);
     Route::post('User/Confirm', ['uses' => 'ConfirmController@send']);
-    Route::get('User/Confirm/Email', ['uses' => 'ConfirmController@email', 'as' => 'user.email']);
 });
+
+// ta regula nie moze sprawdzac czy user jest zalogowany, czy nie. user moze potwierdzic adres e-mail
+// niekoniecznie bedac zalogowanym
+Route::get('User/Confirm/Email', ['uses' => 'User\ConfirmController@email', 'as' => 'user.email']);
 
 // dostep do panelu administracyjnego
 Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' => 'Adm'], function () {
