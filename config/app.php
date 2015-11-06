@@ -157,8 +157,6 @@ return [
         Coyote\Providers\SessionServiceProvider::class,
         // Mozliwosc logowania przez github, fb, google...
         Laravel\Socialite\SocialiteServiceProvider::class,
-        // Parser markdown
-        AlfredoRamos\ParsedownExtra\ParsedownExtraServiceProvider::class,
         // Biblioteka HTMLPurifier do usuwania zbednego kodu HTML
         Mews\Purifier\PurifierServiceProvider::class
 
@@ -214,7 +212,6 @@ return [
         'Twig'      => TwigBridge\Facade\Twig::class,
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
-        'Markdown'  => AlfredoRamos\ParsedownExtra\Facades\ParsedownExtra::class,
         'Purifier'  => Mews\Purifier\Facades\Purifier::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ],

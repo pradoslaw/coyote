@@ -20,14 +20,24 @@ return [
 
     'encoding'  => 'UTF-8',
     'finalize'  => true,
-    'cachePath' => storage_path('app/purifier'),
+    'cachePath' => getenv('APP_ENV') === 'local' ? null : storage_path('app/purifier'),
     'settings'  => [
         'default' => [
             'HTML.Doctype'             => 'XHTML 1.0 Strict',
-            'HTML.Allowed'             => 'div,b,strong,i,em,a[href|title],ul,ol,li,p[style],br,span[style],img[width|height|alt|src]',
-            'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,padding-left,color,background-color,text-align',
-            'AutoFormat.AutoParagraph' => true,
-            'AutoFormat.RemoveEmpty'   => true,
+            'HTML.Allowed'             => 'b,strong,i,em,a[href|title],p,br,ul,ol,li,span[style],img[width|height|alt|src],sub,sup,pre,code[class],kbd',
+            'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,text-align',
+            'AutoFormat.AutoParagraph' => false,
+            'AutoFormat.RemoveEmpty'   => false,
+            'HTML.TidyLevel'           => 'none',
+            'Core.ConvertDocumentToFragment' => false,
+            // nie usuwamy niepoprawnych znacznikow. jedynie zastepujemy znaki < oraz >
+            'Core.EscapeInvalidTags'    => true,
+            'Core.HiddenElements'       => [],
+            'Output.CommentScriptContents' => false,
+            'Output.FixInnerHTML'       => false,
+            'Core.LexerImpl'            => 'DirectLex',
+            'Output.Newline'            => "\n"
+
         ],
         'test'    => [
             'Attr.EnableID' => true

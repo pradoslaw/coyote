@@ -19,11 +19,11 @@
         "barryvdh/laravel-debugbar": "^2.0",
         "codeception/codeception": "*",
         "mews/purifier": "~2.0",
-        "alfredo-ramos/parsedown-extra-laravel": "~0.2",
         "laravel/socialite": "^2.0",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.0",
-        "fzaninotto/faker": "^1.5"
+        "fzaninotto/faker": "^1.5",
+        "erusev/parsedown-extra": "^0.7.0"
     },
     "require-dev": {
         "sebastian/phpcpd": "*",

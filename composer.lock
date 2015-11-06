@@ -4,65 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b2c51f58bca022cd7e2da6862bb28227",
-    "content-hash": "a992f9cf72e98eb7d6b4ae5b6d020ee6",
+    "hash": "7f9dc0d226d7c822ce3408f1a4e70c50",
+    "content-hash": "406ae9466cc9e4551520737e74993015",
     "packages": [
-        {
-            "name": "alfredo-ramos/parsedown-extra-laravel",
-            "version": "0.2.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/AlfredoRamos/parsedown-extra-laravel.git",
-                "reference": "9fd453500d615cd7b3eb1f6fe3f05570c925e956"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/AlfredoRamos/parsedown-extra-laravel/zipball/9fd453500d615cd7b3eb1f6fe3f05570c925e956",
-                "reference": "9fd453500d615cd7b3eb1f6fe3f05570c925e956",
-                "shasum": ""
-            },
-            "require": {
-                "erusev/parsedown-extra": "~0.7",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "~3.0"
-            },
-            "suggest": {
-                "mews/purifier": "HTML Purifier wrapper to filter HTML tags in the output."
-            },
-            "type": "package",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "AlfredoRamos\\ParsedownExtra\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Alfredo Ramos",
-                    "email": "alfredo.ramos@yandex.com",
-                    "homepage": "https://github.com/AlfredoRamos",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A Parsedown Extra package for Laravel 5",
-            "homepage": "https://github.com/AlfredoRamos/parsedown-extra-laravel",
-            "keywords": [
-                "Parsedown Extra",
-                "laravel 5",
-                "markdown extra"
-            ],
-            "time": "2015-05-24 17:23:45"
-        },
         {
             "name": "barryvdh/laravel-debugbar",
             "version": "v2.0.6",
@@ -342,16 +286,16 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604"
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/0bcb2e79d8571787f18b7eb036ed3d004908e604",
-                "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/90b2128806bfde671b6952ab8bea493942c1fdae",
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
                 "shasum": ""
             },
             "require": {
@@ -363,7 +307,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -405,7 +349,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2014-12-20 21:24:13"
+            "time": "2015-11-06 14:35:42"
         },
         {
             "name": "doctrine/instantiator",
@@ -1279,16 +1223,16 @@
         },
         {
             "name": "laravelcollective/html",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LaravelCollective/html.git",
-                "reference": "8b7c357e78b8fb6a2e48377cf2441441aac6dd1e"
+                "reference": "5ad8377968ba3b4da91fc60ca98b2eef4df380fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/8b7c357e78b8fb6a2e48377cf2441441aac6dd1e",
-                "reference": "8b7c357e78b8fb6a2e48377cf2441441aac6dd1e",
+                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/5ad8377968ba3b4da91fc60ca98b2eef4df380fc",
+                "reference": "5ad8377968ba3b4da91fc60ca98b2eef4df380fc",
                 "shasum": ""
             },
             "require": {
@@ -1325,7 +1269,7 @@
                     "email": "adam@laravelcollective.com"
                 }
             ],
-            "time": "2015-09-03 17:16:48"
+            "time": "2015-11-06 18:14:38"
         },
         {
             "name": "league/flysystem",
@@ -1712,16 +1656,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.20.0",
+            "version": "1.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "bfd3eaba109c9a2405c92174c8e17f20c2b9caf3"
+                "reference": "7b08ec6f75791e130012f206e3f7b0e76e18e3d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bfd3eaba109c9a2405c92174c8e17f20c2b9caf3",
-                "reference": "bfd3eaba109c9a2405c92174c8e17f20c2b9caf3",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/7b08ec6f75791e130012f206e3f7b0e76e18e3d7",
+                "reference": "7b08ec6f75791e130012f206e3f7b0e76e18e3d7",
                 "shasum": ""
             },
             "require": {
@@ -1729,12 +1673,12 @@
                 "symfony/translation": "~2.6|~3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "phpunit/phpunit": "~4.0|~5.0"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Carbon": "src"
+                "psr-4": {
+                    "Carbon\\": "src/Carbon/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1755,7 +1699,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2015-06-25 04:19:39"
+            "time": "2015-11-04 20:07:17"
         },
         {
             "name": "nikic/php-parser",
@@ -3903,16 +3847,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.23.0",
+            "version": "v1.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "5868cd822fd6cf626d5f805439575f9c323cee2a"
+                "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/5868cd822fd6cf626d5f805439575f9c323cee2a",
-                "reference": "5868cd822fd6cf626d5f805439575f9c323cee2a",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
+                "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
                 "shasum": ""
             },
             "require": {
@@ -3960,7 +3904,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-10-29 23:29:01"
+            "time": "2015-11-05 12:49:06"
         },
         {
             "name": "vlucas/phpdotenv",
