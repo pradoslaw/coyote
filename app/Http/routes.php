@@ -47,6 +47,11 @@ Route::get('Praca/Lorem_ipsum', ['uses' => 'Job\OfferController@index', 'as' => 
 // Obsluga mikroblogow
 Route::get('Mikroblogi', ['uses' => 'Microblog\HomeController@index', 'as' => 'microblog.home']);
 
+// Obsluga modulu pastebin
+Route::get('Pastebin', ['uses' => 'Pastebin\HomeController@index', 'as' => 'pastebin.home']);
+Route::get('Pastebin/{id}', ['uses' => 'Pastebin\HomeController@show', 'as' => 'pastebin.show'])->where('id', '\d+');
+Route::post('Pastebin', ['uses' => 'Pastebin\HomeController@save']);
+
 Route::group(['namespace' => 'User', 'middleware' => 'auth'], function () {
 
     // strona glowna panelu uzytkownika
