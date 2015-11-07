@@ -71,6 +71,10 @@
   }
 }
 
+#apply {
+  margin-top: 30px;
+}
+
 .side-menu {
   .btn-watch:before {
     @include font-awesome($fa-var-star-o);
@@ -91,6 +95,37 @@
   .btn-flag:before {
     @include font-awesome($fa-var-flag);
   }
+}
+
+#box-salary {
+  text-align: right;
+  box-shadow: 0 3px 1px rgba(0,0,0,0.09);
+  position: relative;
+}
+
+#box-salary:after, #box-salary:before {
+  right: 100%;
+  top: 25px;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+#box-salary:after {
+  border-color: rgba(251, 220, 154, 0);
+  border-right-color: #fefae4;
+  border-width: 12px;
+  margin-top: -12px;
+}
+
+#box-salary:before {
+  border-color: rgba(138, 109, 59, 0);
+  border-right-color: #fbdc9a;
+  border-width: 15px;
+  margin-top: -15px;
 }
 
 #box-job-firm {
