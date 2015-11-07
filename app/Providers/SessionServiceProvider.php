@@ -28,7 +28,7 @@ class SessionServiceProvider extends ServiceProvider
 
             $table = $databaseConnection->getTablePrefix() . $app['config']['session.table'];
 
-            return new \Coyote\Session($databaseConnection, $table);
+            return new \Coyote\Session\Handler($databaseConnection, $table);
         });
     }
 }

@@ -3,17 +3,22 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     /**
+     * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->breadcrumb->push('Forum', route('forum.home'));
 
-        return parent::view('forum.home');
+        // generuje widok osob czytajacych dana strone
+        $viewers = new \Coyote\Session\Viewers(new \Coyote\Session());
+
+        return parent::view('forum.home')->with('viewers', $viewers->render($request->getRequestUri()));
     }
 
     /**

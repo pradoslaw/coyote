@@ -2,8 +2,6 @@
 
 namespace Coyote\Http\Controllers;
 
-use Gate;
-
 class HomeController extends Controller
 {
     /**
@@ -11,6 +9,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $viewers = new \Coyote\Session\Viewers(new \Coyote\Session());
+
+        return view('home')->with('viewers', $viewers->render());
     }
 }

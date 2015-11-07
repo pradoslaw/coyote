@@ -1,0 +1,9 @@
+<section id="box-who-is-online" class="box">
+    <h4 class="border"><i class="fa fa-users fa-fw"></i> {{ total }} osób online (gości: {{ guests }}), w tym botów: {{ robots }}, ludzi: {{ people }}</h4>
+
+    {% for name, users in groups %}
+        {% if users|length > 0 %}
+            <p><strong>{{ name }}:</strong> {{ users|join(', ')|raw }}</p>
+        {% endif %}
+    {% endfor %}
+</section>
