@@ -24,7 +24,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'salt', 'password', 'date_format', 'location', 'website', 'bio', 'sig', 'birthyear', 'allow_count', 'allow_smilies', 'allow_sig', 'allow_notify'];
+    protected $fillable = ['name', 'email', 'salt', 'password', 'group_id', 'date_format', 'location', 'website', 'bio', 'sig', 'birthyear', 'allow_count', 'allow_smilies', 'allow_sig', 'allow_notify'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -39,7 +39,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         static::saving(function ($model) {
             // jezeli nie wypelniono tych kolumn - ustawiamy na null
-            foreach (['birthyear', 'website', 'location', 'sig', 'bio'] as $column) {
+            foreach (['group_id', 'birthyear', 'website', 'location', 'sig', 'bio'] as $column) {
                 if (empty($model->$column)) {
                     $model->$column = null;
                 }

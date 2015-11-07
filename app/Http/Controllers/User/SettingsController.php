@@ -16,7 +16,13 @@ class SettingsController extends Controller
         $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Ustawienia', route('user.settings'));
 
-        return parent::view('user.settings', ['formatList' => User::dateFormatList(), 'yearList' => User::birthYearList()]);
+        $groupList = [null => '-- wybierz --'] + User\Group::groupList(auth()->user()->id)->toArray();
+
+        return parent::view('user.settings', [
+            'formatList'        => User::dateFormatList(),
+            'yearList'          => User::birthYearList(),
+            'groupList'         => $groupList
+        ]);
     }
 
     /**

@@ -22,4 +22,18 @@ class Group extends Model
 
     public $timestamps = false;
     protected $primaryKey = 'group_id';
+
+    /**
+     * Pobranie listy grup do ktorych dostep ma user (ID, nazwa)
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public static function groupList($userId)
+    {
+        return self::select(['groups.id', 'name'])
+                    ->where('user_id', '=', $userId)
+                    ->join('groups', 'groups.id', '=', \DB::raw('group_id'))
+                    ->lists('name', 'id');
+    }
 }

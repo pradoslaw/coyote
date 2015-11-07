@@ -30,16 +30,17 @@ class UserSettingsRequest extends Request
     public function rules()
     {
         return [
-            'email'                         => 'required|email|unique:users,email,' . auth()->user()->id,
-            'website'                       => 'url',
-            'location'                      => 'string|max:50',
-            'birthyear'                     => 'sometimes|integer|between:1950,2015',
-            'about'                         => 'string|max:255',
-            'sig'                           => 'string|max:255',
-            'allow_count'                   => 'boolean',
-            'allow_smilies'                 => 'boolean',
-            'allow_notify'                  => 'boolean',
-            'allow_sig'                     => 'boolean',
+            'email'                  => 'required|email|unique:users,email,' . auth()->user()->id,
+            'website'                => 'url',
+            'location'               => 'string|max:50',
+            'birthyear'              => 'sometimes|integer|between:1950,2015',
+            'about'                  => 'string|max:255',
+            'sig'                    => 'string|max:255',
+            'allow_count'            => 'boolean',
+            'allow_smilies'          => 'boolean',
+            'allow_notify'           => 'boolean',
+            'allow_sig'              => 'boolean',
+            'group_id'               => 'sometimes|integer|exists:user_groups,group_id,user_id,' . auth()->user()->id
         ];
     }
 }

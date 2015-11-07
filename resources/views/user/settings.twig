@@ -25,6 +25,11 @@
                             {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.settings'), 'class': 'form-horizontal'}) }}
 
                             {{ forms.text('email', 'E-mail', user_input('email'), errors.first('email'), {}, 'Jeżeli chcesz zmienić adres e-mail, na nową skrzynkę zostanie wygenerowany klucz aktywacyjny') }}
+
+                            {% if groupList|length > 1 %}
+                            {{ forms.select('group_id', 'Domyślna grupa', groupList, user_input('group_id'), errors.first('group_id'), {}, 'Nazwa grupy będzie wyświetlana pod avatarem, np. na forum') }}
+                            {% endif %}
+
                             {{ forms.select('date_format', 'Format daty', formatList, user_input('date_format')) }}
                             {{ forms.text('website', 'Strona domowa', user_input('website'), errors.first('website'), {}, 'Strona domowa, portfolio itp (Potrzebujesz min. 50 punktów reputacji aby skorzystać z tej opcji)') }}
                             {{ forms.text('location', 'Miejsce zamieszkania', user_input('location'), errors.first('location')) }}
