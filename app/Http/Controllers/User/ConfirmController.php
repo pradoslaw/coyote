@@ -29,6 +29,10 @@ class ConfirmController extends Controller
 
         $user = User::find(request('id'));
         $user->is_confirm = 1;
+
+        if ($actkey->email) {
+            $user->email = $actkey->email;
+        }
         $user->save();
 
         $actkey->delete();

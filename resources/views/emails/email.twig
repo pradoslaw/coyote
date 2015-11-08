@@ -1,0 +1,8 @@
+{# Zawiera klucz umozliwiajacy zmiane adresu e-mail #}
+{% extends 'emails/layout.twig' %}
+
+{% block container %}
+    Prosimy o potwierdzenie nowego adresu e-mail, klikając w poniższy link:<br><br>
+
+    <a href="{{ url }}">{{ url }}</a><br><br>
+{% endblock %}
