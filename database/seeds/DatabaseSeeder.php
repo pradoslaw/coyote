@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GroupTableSeeder::class);
         $this->call(AclPermissionTableSeeder::class);
         $this->call(WordTableSeeder::class);
+        $this->call(TagTableSeeder::class);
     }
 }
