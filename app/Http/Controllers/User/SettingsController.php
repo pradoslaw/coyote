@@ -20,10 +20,13 @@ class SettingsController extends Controller
 
         $groupList = [null => '-- wybierz --'] + User\Group::groupList(auth()->user()->id)->toArray();
 
+        $actEmail = Actkey::where('user_id', auth()->user()->id)->pluck('email');
+
         return parent::view('user.settings', [
             'formatList'        => User::dateFormatList(),
             'yearList'          => User::birthYearList(),
-            'groupList'         => $groupList
+            'groupList'         => $groupList,
+            'actEmail'          => $actEmail
         ]);
     }
 

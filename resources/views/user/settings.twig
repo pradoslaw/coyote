@@ -61,9 +61,13 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript">
-        $(function () {
+    {% if actEmail %}
+        <script type="text/javascript" src="/js/popover.js"></script>
 
-        });
-    </script>
+        <script type="text/javascript">
+            $(function () {
+                $('input[name="email"]').popover({content: "Na adres {{ actEmail }} wysłaliśmy link umożliwiający zmianę adresu e-mail", placement: "top"}).popover('show');
+            });
+        </script>
+    {% endif %}
 {% endblock %}
