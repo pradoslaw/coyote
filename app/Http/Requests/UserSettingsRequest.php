@@ -31,7 +31,7 @@ class UserSettingsRequest extends Request
     {
         return [
             'email'                  => 'required|email|unique:users,email,' . auth()->user()->id,
-            'website'                => 'url',
+            'website'                => 'url|reputation:50',
             'location'               => 'string|max:50',
             'birthyear'              => 'sometimes|integer|between:1950,2015',
             'about'                  => 'string|max:255',

@@ -14,6 +14,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Validator::extend('username', 'UsernameValidator@validateUsername');
         Validator::extend('password', 'PasswordValidator@validatePassword');
+        Validator::extend('reputation', 'ReputationValidator@validateReputation');
+        Validator::replacer('reputation', function ($message, $attribute, $rule, $parameters) {
+            return str_replace(':point', $parameters[0], $message);
+        });
     }
 
     /**

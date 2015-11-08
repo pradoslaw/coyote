@@ -77,6 +77,7 @@ return [
     'url'                  => 'The :attribute format is invalid.',
     'username'             => 'Nazwa użytkownika może zawierać litery, cyfry oraz znaki ._ -',
     'password'             => 'Podano nieprawidłowe hasło',
+    'reputation'           => 'Potrzebujesz :point punktów reputacji aby zmienić zawartość tego pola',
 
     /*
     |--------------------------------------------------------------------------
