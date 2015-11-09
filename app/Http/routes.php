@@ -108,6 +108,8 @@ Route::group(['namespace' => 'User', 'middleware' => 'auth'], function () {
 // ta regula nie moze sprawdzac czy user jest zalogowany, czy nie. user moze potwierdzic adres e-mail
 // niekoniecznie bedac zalogowanym
 Route::get('User/Confirm/Email', ['uses' => 'User\ConfirmController@email', 'as' => 'user.email']);
+// wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera
+Route::get('User/Vcard/{id}', ['uses' => 'User\VcardController@index', 'as' => 'user.vcard'])->where('id', '\d+');
 
 // dostep do panelu administracyjnego
 Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' => 'Adm'], function () {
