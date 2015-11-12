@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-xs-3">
                 <img src="/img/avatar.png" class="img-thumbnail">
-                <span class="status {{ is_online ?: 'offline' }}">{{ is_online ? 'Online' : 'Offline' }}</span>
+                <span class="status {{ session_at ?: 'offline' }}">{{ session_at ? 'Online' : 'Offline' }}</span>
 
                 {% if user.group.name %}
                     <span class="label label-warning">{{ user.group.name }}</span>
@@ -17,7 +17,7 @@
             <div class="col-xs-9">
                 <ul class="list-inline">
                     <li title="Ostatnia wizyta">
-                        <i class="fa fa-sign-in fa-fw"></i> {{ user.visited_at|format_date }}
+                        <i class="fa fa-sign-in fa-fw"></i> {{ max(session_at, user.visited_at)|format_date }}
                     </li>
                     <li title="Data rejestracji">
                         <i class="fa fa-user-plus fa-fw"></i>

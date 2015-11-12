@@ -31,13 +31,17 @@ class Session extends Model
     }
 
     /**
-     * Sprawdza czy dany user jest online. Wykorzystywane np. na stronie profilu uzytkownika
+     * Sprawdza czy dany user jest online. Wykorzystywane np. na stronie profilu uzytkownika Zwracana
+     * jest data ostatniej aktywnosci uzytkownika (jezeli ten jest aktualnie online)
      *
      * @param $userId
-     * @return bool
+     * @return \Carbon\Carbon
      */
-    public static function isUserOnline($userId)
+    public static function getUserSessionTime($userId)
     {
-        return count(self::select(['user_id'])->where('user_id', $userId)->get()) > 0;
+        return self::select('updated_at')
+            ->where('user_id', $userId)
+            ->orderBy('updated_at', 'DESC')
+            ->pluck('updated_at');
     }
 }

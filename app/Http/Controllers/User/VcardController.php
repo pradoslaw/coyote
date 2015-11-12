@@ -20,7 +20,7 @@ class VcardController extends Controller
         }
 
         return view('components.vcard')->with('user', $user)->with([
-            'is_online'             => Session::isUserOnline($id),
+            'session_at'            => Session::getUserSessionTime(auth()->user()->id),
             'rank'                  => Reputation::getUserRank(auth()->user()->id),
             'total_users'           => Reputation::getTotalUsers()
         ]);
