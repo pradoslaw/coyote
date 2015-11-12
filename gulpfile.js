@@ -29,7 +29,8 @@ elixir(function(mix) {
        .scripts(['pages/forum.js'], 'public/js/forum.js')
        .scripts(['wikieditor/jquery.wikieditor.js', 'wikieditor/wikieditor.toolbar.js'], 'public/js/jquery.wikieditor.js')
        .scripts(['bootstrap/popover.js'], 'public/js/popover.js')
-       .scripts(['components/prompt.js'], 'public/js/prompt.js');
+       .scripts(['components/prompt.js'], 'public/js/prompt.js')
+       .scripts(['components/autogrow.js'], 'public/js/autogrow.js');
 
     mix.sass('main.scss')
        .sass('pages/auth.scss')
