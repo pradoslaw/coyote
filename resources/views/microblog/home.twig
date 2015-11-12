@@ -156,9 +156,12 @@
 {% block body %}
     {{ parent() }}
 
+    <script type="text/javascript" src="/js/prompt.js"></script>
+
     <script type="text/javascript">
         $(function () {
             $('.btn-thumbs').tooltip({html: true});
+            $('textarea').prompt('{{ route('user.prompt') }}');
         });
     </script>
 {% endblock %}
