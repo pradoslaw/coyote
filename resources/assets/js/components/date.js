@@ -11,7 +11,7 @@ Date.prototype.getMinute = function () {
 };
 
 function getTimeSpan(remote) {
-    return Math.abs(Math.round((new Date().getTime() / 1000) + (!tz ? 0 : tz / 60) - remote));
+    return Math.abs(Math.round((new Date().getTime() / 1000) - remote));
 }
 
 function getDiffMinute(remote) {
