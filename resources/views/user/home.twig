@@ -24,19 +24,20 @@
                                 <div class="col-sm-11" style="padding-left: 20px">
                                     <ul class="list-inline">
                                         <li title="Ostatnia wizyta">
-                                            <i class="fa fa-sign-in fa-fw"></i> dzisiaj, 12:03
+                                            <i class="fa fa-sign-in fa-fw"></i>
+                                            {{ user('visited_at')|format_date }}
                                         </li>
                                         <li title="Twoje aktualne IP">
                                             <i class="fa fa-home fa-fw"></i>
-                                            188.122.16.173
+                                            {{ ip }}
                                         </li>
                                         <li title="Data rejestracji">
                                             <i class="fa fa-user-plus fa-fw"></i>
-                                            18 luty 2002, 17:35
+                                            {{ user('created_at')|format_date }}
                                         </li>
                                         <li title="Ilość wizyt">
                                             <i class="fa fa-eye fa-fw"></i>
-                                            20 715
+                                            {{ user('visits')|number_format(0, ',', ' ') }}
                                         </li>
                                     </ul>
 
@@ -64,25 +65,22 @@
                     <h2 class="hidden-xs">Aktywne sesje</h2>
 
                     <div id="box-sessions" class="panel panel-default hidden-xs">
+                        {% for session in sessions %}
                         <div class="row">
                             <div class="col-xs-5">
                                 <i class="fa fa-user"></i>
-                                188.122.76.123
+                                {{ session.ip }}
                             </div>
                             <div class="col-xs-4">
                                 <i class="fa fa-clock-o"></i>
-                                18 październik 2015, 20:21
+                                {{ session.updated_at|format_date }}
                             </div>
-                            <div class="col-xs-2">
-                                <i class="fa fa-chrome"></i>
-                                Chrome
-                            </div>
-                            <div class="col-xs-1 text-center" style="padding-left: 0">
-                                <a href="javascript:">
-                                    <i class="fa fa-remove"></i>
-                                </a>
+                            <div class="col-xs-3">
+                                <i class="fa fa-{{ session.browser|lower }}"></i>
+                                {{ session.browser }}
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
 
                     <h2>Komunikaty</h2>

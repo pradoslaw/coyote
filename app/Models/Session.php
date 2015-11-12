@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Session extends Model
 {
     /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
      * Pobiera liste sesji uzytkownikow ktorzy odwiedzaja dana strone
      *
      * @param null $path
