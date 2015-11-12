@@ -83,7 +83,6 @@ class User extends Twig_Extension
                     } else {
                         return $dateTime->formatLocalized($format);
                     }
-
                 } else {
                     return strftime($format, strtotime($dateTime));
                 }
