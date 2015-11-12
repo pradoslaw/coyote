@@ -70,7 +70,7 @@
                 }
 
                 var onClick = function () {
-                    var $text = $('li.hover', $ul).text();
+                    var $text = $('li.hover span', $ul).text();
 
                     if ($text.length) {
                         if ($text.indexOf(' ') > -1 || $text.indexOf('.') > -1) {
