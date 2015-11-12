@@ -24,4 +24,15 @@ class Session extends Model
 
         return $sql->get();
     }
+
+    /**
+     * Sprawdza czy dany user jest online. Wykorzystywane np. na stronie profilu uzytkownika
+     *
+     * @param $userId
+     * @return bool
+     */
+    public static function isUserOnline($userId)
+    {
+        return count(self::select(['user_id'])->where('user_id', $userId)->get()) > 0;
+    }
 }

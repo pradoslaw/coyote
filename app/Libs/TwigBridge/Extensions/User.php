@@ -2,6 +2,7 @@
 
 namespace TwigBridge\Extensions;
 
+use Carbon\Carbon;
 use Twig_Extension;
 use Twig_SimpleFunction;
 use Twig_SimpleFilter;
@@ -70,7 +71,22 @@ class User extends Twig_Extension
             new Twig_SimpleFilter('format_date', function ($dateTime) {
                 $format = Auth::check() ? auth()->user()->date_format : '%Y-%m-%d %H:%M';
 
-                return strftime($format, strtotime($dateTime));
+                if ($dateTime instanceof Carbon) {
+                    $now = Carbon::now();
+
+                    if ($dateTime->diffInHours($now) < 1) {
+                        return $dateTime->diffForHumans();
+                    } elseif ($dateTime->isToday()) {
+                        return 'dziś, ' . $dateTime->format('H:i');
+                    } elseif ($dateTime->isYesterday()) {
+                        return 'wczoraj, ' . $dateTime->format('H:i');
+                    } else {
+                        return $dateTime->formatLocalized($format);
+                    }
+
+                } else {
+                    return strftime($format, strtotime($dateTime));
+                }
             })
         ];
     }

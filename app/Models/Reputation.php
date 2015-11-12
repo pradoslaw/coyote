@@ -14,4 +14,53 @@ class Reputation extends Model
     const WIKI_EDIT = 6;
     const CUSTOM = 7;
     const WIKI_RATE = 8;
+
+    /**
+     * Pobiera reputacje usera w procentach (jak i rowniez pozycje usera w rankingu)
+     *
+     * @param $userId
+     * @return null|array
+     */
+    public static function getUserRank($userId)
+    {
+        $sql = "SELECT u1.reputation AS reputation,
+                (
+                    u1.reputation / GREATEST(1, (
+
+                        SELECT reputation
+                        FROM users u2
+                        ORDER BY u2.reputation DESC
+                        LIMIT 1
+                    )) * 100
+
+                ) AS percentage,
+
+                (
+                    SELECT COUNT(*)
+                    FROM users
+                    WHERE reputation >= u1.reputation
+
+                ) AS rank
+                FROM users u1
+                WHERE id = ?";
+
+        $rowset = \DB::select($sql, [$userId]);
+
+        // select() zwraca kolekcje. nas interesuje tylko jeden rekord
+        if ($rowset) {
+            return $rowset[0];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Podaje liczbe userow ktorzy maja jakakolwiek reputacje w systemie
+     *
+     * @return int
+     */
+    public static function getTotalUsers()
+    {
+        return \DB::table('users')->where('reputation', '>', 0)->count();
+    }
 }

@@ -33,6 +33,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = ['password', 'remember_token', 'salt'];
 
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'visited_at'];
+
     public static function boot()
     {
         parent::boot();
@@ -82,6 +92,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return array_combine($dateFormats, array_map(function ($value) {
             return strftime($value);
         }, $dateFormats));
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function group()
+    {
+        return $this->hasOne('Coyote\Group', 'id', 'group_id');
     }
 
     /**
