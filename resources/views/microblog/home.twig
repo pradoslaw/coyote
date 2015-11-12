@@ -158,11 +158,12 @@
 
     <script type="text/javascript" src="/js/prompt.js"></script>
     <script type="text/javascript" src="/js/autogrow.js"></script>
+    <script type="text/javascript" src="/js/fast-submit.js"></script>
 
     <script type="text/javascript">
         $(function () {
             $('.btn-thumbs').tooltip({html: true});
-            $('textarea').prompt('{{ route('user.prompt') }}').autogrow();
+            $('textarea').prompt('{{ route('user.prompt') }}').fastSubmit().autogrow();
         });
     </script>
 {% endblock %}
