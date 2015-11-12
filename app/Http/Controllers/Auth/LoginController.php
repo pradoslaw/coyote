@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Auth;
 
+use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -74,7 +75,7 @@ class LoginController extends Controller
 
         $user->ip = request()->ip();
         $user->browser = filter_var(request()->header('User-Agent'), FILTER_SANITIZE_STRING);
-        $user->visited_at = DB::raw('NOW()');
+        $user->visited_at = Carbon::now();
         $user->visits = auth()->user()->visits + 1;
         $user->save();
 

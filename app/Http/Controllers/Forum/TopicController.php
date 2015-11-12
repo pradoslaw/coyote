@@ -17,7 +17,7 @@ class TopicController extends Controller
         $this->breadcrumb->push('Python', '/Forum/Python');
         $this->breadcrumb->push('Python - wybór "najlepszego" GUI cross-platform', '/Forum/Python/Test');
 
-        $viewers = new \Coyote\Session\Viewers(new \Coyote\Session());
+        $viewers = new \Coyote\Session\Viewers(new \Coyote\Session(), $request);
 
         return parent::view('forum.topic')->with('viewers', $viewers->render($request->getRequestUri()));
     }

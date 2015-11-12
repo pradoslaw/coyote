@@ -2,6 +2,8 @@
 
 namespace Coyote\Session;
 
+use Illuminate\Http\Request;
+
 /**
  * Generuje widok przedstawiajacy liste osob na danej stronie z podzialem na boty, zalogowane osoby itp
  *
@@ -14,13 +16,15 @@ class Viewers
     const ROBOT = 'Robot';
 
     private $session;
+    private $request;
 
     /**
      * @param \Coyote\Session $session
      */
-    public function __construct(\Coyote\Session $session)
+    public function __construct(\Coyote\Session $session, Request $request)
     {
         $this->session = $session;
+        $this->request = $request;
     }
 
     /**
@@ -57,12 +61,7 @@ class Viewers
 
             foreach ($rowset as $user) {
                 if ($user->user_id) {
-                    $groups[$name][] = link_to_route(
-                        'profile',
-                        $user->name,
-                        [$user->user_id],
-                        ['data-user-id' => $user->user_id]
-                    );
+                    $groups[$name][] = $this->makeProfileLink($user->id, $user->name);
                 }
             }
         }
@@ -73,6 +72,34 @@ class Viewers
             }
         }
 
+        // moze sie okazac ze wsrod sesji nie ma ID sesji aktualnego requestu poniewaz tabela session
+        // nie zostala jeszcze zaktualizowana. w takim przypadku bedziemy musieli dodac "recznie"
+        // uzytkownika ktory aktualnie dokonal tego zadania
+        if (!$collection->contains('id', $this->request->session()->getId())) {
+            $people++;
+            $total++;
+
+            if ($this->request->user()) {
+                $groupName = self::USER;
+
+                if ($this->request->user()->group_id) {
+                    $groupName = $this->request->user()->group->name;
+                }
+
+                $groups[$groupName] = $this->makeProfileLink($this->request->user()->id, $this->request->user()->name);
+            }
+        }
+
         return view('components/viewers', compact('groups', 'total', 'guests', 'people', 'robots'));
+    }
+
+    private function makeProfileLink($userId, $userName)
+    {
+        return link_to_route(
+            'profile',
+            $userName,
+            [$userId],
+            ['data-user-id' => $userId]
+        );
     }
 }

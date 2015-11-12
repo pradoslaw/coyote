@@ -19,7 +19,7 @@ class Session extends Model
      */
     public function getViewers($path = null)
     {
-        $sql = $this->select(['user_id', 'url', 'robot', 'users.name AS name', 'groups.name AS group'])
+        $sql = $this->select(['user_id', 'url', 'sessions.id', 'robot', 'users.name AS name', 'groups.name AS group'])
                     ->leftJoin('users', 'users.id', '=', \DB::raw('user_id'))
                     ->leftJoin('groups', 'groups.id', '=', \DB::raw('group_id'));
 

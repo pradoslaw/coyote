@@ -16,7 +16,7 @@ class HomeController extends Controller
         $this->breadcrumb->push('Forum', route('forum.home'));
 
         // generuje widok osob czytajacych dana strone
-        $viewers = new \Coyote\Session\Viewers(new \Coyote\Session());
+        $viewers = new \Coyote\Session\Viewers(new \Coyote\Session(), $request);
 
         return parent::view('forum.home')->with('viewers', $viewers->render($request->getRequestUri()));
     }
