@@ -1,5 +1,7 @@
 <?php
 
+namespace Coyote;
+
 use Illuminate\Support\Facades\Hash;
 
 /**

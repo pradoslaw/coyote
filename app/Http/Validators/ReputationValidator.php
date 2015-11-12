@@ -1,5 +1,7 @@
 <?php
 
+namespace Coyote;
+
 /**
  * Class ReputationValidator
  */

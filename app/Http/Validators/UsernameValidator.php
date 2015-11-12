@@ -1,5 +1,7 @@
 <?php
 
+namespace Coyote;
+
 /**
  * Walidator sprawdza poprawnosc nazwy uzytkownika pod katem uzytych znakow. Nazwa uzytkownika
  * moze zawierac jedynie okreslony zbior znakow

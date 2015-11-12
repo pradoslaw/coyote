@@ -12,9 +12,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Validator::extend('username', 'UsernameValidator@validateUsername');
-        Validator::extend('password', 'PasswordValidator@validatePassword');
-        Validator::extend('reputation', 'ReputationValidator@validateReputation');
+        Validator::extend('username', 'Coyote\UsernameValidator@validateUsername');
+        Validator::extend('password', 'Coyote\PasswordValidator@validatePassword');
+        Validator::extend('reputation', 'Coyote\ReputationValidator@validateReputation');
         Validator::replacer('reputation', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);
         });
