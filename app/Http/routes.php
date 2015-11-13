@@ -118,7 +118,7 @@ Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' =>
     Route::get('/', 'HomeController@index');
 });
 
-Route::get('Profile/{id}', ['uses' => 'ProfileController@index', 'as' => 'profile']);
+Route::get('Profile/{user}', ['uses' => 'Profile\HomeController@index', 'as' => 'profile']);
 
 Route::get('/{slug}', function ($slug) {
     echo "404 $slug";
