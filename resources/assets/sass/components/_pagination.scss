@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @import "../helpers/variables";
-@import "../vendors/bootstrap/variables";
+@import "../vendor/bootstrap/variables";
 
 .pagination > li > a, .pagination > li > span, .pagination > .disabled > a {
   background-color: #ddd;

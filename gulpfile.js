@@ -36,12 +36,12 @@ elixir(function(mix) {
 
     mix.sass('main.scss')
        .sass('pages/auth.scss')
-       .sass(['pages/homepage.scss', 'vendors/perfect-scrollbar.scss'], 'public/css/homepage.css')
+       .sass(['pages/homepage.scss', 'vendor/perfect-scrollbar.scss'], 'public/css/homepage.css')
        .sass('pages/microblog.scss')
        .sass('pages/forum.scss')
        .sass('pages/wiki.scss')
        .sass('pages/user.scss')
        .sass('pages/job.scss')
-       .sass('vendors/wikieditor.scss');
+       .sass('vendor/wikieditor.scss');
 });
 

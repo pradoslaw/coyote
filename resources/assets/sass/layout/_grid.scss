@@ -1,5 +1,5 @@
-@import "../vendors/bootstrap/variables";
-@import "../vendors/bootstrap/mixins/responsive-visibility";
+@import "../vendor/bootstrap/variables";
+@import "../vendor/bootstrap/mixins/responsive-visibility";
 
 @media (max-width: $screen-xs) {
   @include responsive-invisibility('.hidden-xxs');

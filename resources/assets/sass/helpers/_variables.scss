@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import "../vendors/bootstrap/variables";
+@import "../vendor/bootstrap/variables";
 
 // nieco ciemniszy kolor linkow (w sytuacji gdy wiele linkow jest obok siebie domyslny kolor jest zbyt jasny)
 $link-color-darker: darken($brand-primary, 10%);
