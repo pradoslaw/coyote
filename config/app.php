@@ -158,7 +158,9 @@ return [
         // Mozliwosc logowania przez github, fb, google...
         Laravel\Socialite\SocialiteServiceProvider::class,
         // Biblioteka HTMLPurifier do usuwania zbednego kodu HTML
-        Mews\Purifier\PurifierServiceProvider::class
+        Mews\Purifier\PurifierServiceProvider::class,
+        // Obsluga MongoDB w Laravel
+        Jenssegers\Mongodb\MongodbServiceProvider::class
 
     ],
     /*

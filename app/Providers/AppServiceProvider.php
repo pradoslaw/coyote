@@ -32,8 +32,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            'Illuminate\Contracts\Auth\Registrar',
-            'Coyote\Services\Registrar'
+            'Coyote\\Repositories\\Contracts\\UserRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\UserRepository'
         );
     }
 }
