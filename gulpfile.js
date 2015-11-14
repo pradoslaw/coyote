@@ -31,11 +31,12 @@ elixir(function(mix) {
        .scripts(['bootstrap/popover.js'], 'public/js/popover.js')
        .scripts(['components/prompt.js'], 'public/js/prompt.js')
        .scripts(['components/autogrow.js'], 'public/js/autogrow.js')
-       .scripts(['components/fast-submit.js'], 'public/js/fast-submit.js');
+       .scripts(['components/fast-submit.js'], 'public/js/fast-submit.js')
+       .scripts(['vendor/perfect-scrollbar.js'], 'public/js/perfect-scrollbar.js');
 
     mix.sass('main.scss')
        .sass('pages/auth.scss')
-       .sass('pages/homepage.scss')
+       .sass(['pages/homepage.scss', 'vendors/perfect-scrollbar.scss'], 'public/css/homepage.css')
        .sass('pages/microblog.scss')
        .sass('pages/forum.scss')
        .sass('pages/wiki.scss')
