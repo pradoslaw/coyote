@@ -59,47 +59,24 @@
 }
 
 .microblog-submit {
-
   textarea {
     width: 100%;
     resize: none;
     border: none;
     box-sizing: border-box;
-    padding: 4px 6px;
+    padding: 6px 0;
 
     &:focus {
       outline: none;
     }
   }
 
-  .text-area > div {
-    border: 1px solid $border-color;
-    padding: 0;
+  .submit-area {
+    border-top: 1px solid $border-color;
+    padding-top: 10px;
   }
 
-  .submit-area > div {
-    background: #f6f6f6;
-    border-left: 1px solid $border-color;
-    border-right: 1px solid $border-color;
-    border-bottom: 1px solid $border-color;
-    padding: 4px 5px;
-    overflow: hidden;
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-  }
-
-  button {
-    box-shadow: none;
-    text-shadow: none;
+  .img-thumbnail {
     border: none;
-    background: transparent;
-    margin: 0;
-    font-family: 'Open Sans', Arial, sans-serif;
-    color: $gray-dark;
-
-    &:hover {
-      background: none;
-    }
   }
 }
-

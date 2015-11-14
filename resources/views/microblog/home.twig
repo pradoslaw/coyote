@@ -4,7 +4,7 @@
 {% import 'components/forms.twig' as forms %}
 
 {% block container %}
-    <div id="microblog" class="row">
+    <div id="microblog" class="row" ng-app="Microblog">
         <div class="col-md-9">
             <ul class="nav nav-tabs">
                 <li role="presentation" class="active"><a href="#">Wszystkie wpisy <small>(1977)</small></a></li>
@@ -12,28 +12,43 @@
                 <li role="presentation"><a href="#">Obserwowani <small>(0)</small></a></li>
             </ul>
 
-            <form method="POST" class="microblog-submit" action="http://4programmers.net/Mikroblogi/Submit">
-                <input type="hidden" value="0" name="parent_id">
-                <div class="text-area">
-                    <div class="col-md-12">
-                        <textarea cols="110" rows="2" placeholder="Kliknij, aby dodać wpis" tabindex="1" name="content" style="height: 30px;"></textarea>
-                    </div>
-                </div>
-                <div class="submit-area">
-                    <div class="col-md-12">
-                        <div class="pull-left">
-                            <button title="Kliknij, aby dodać zdjęcie" class="image-button" type="button">
-                                <i class="fa fa-desktop"></i>
-                            </button>
-                        </div>
-                        <div class="pull-right">
-                            <button title="Kliknij, aby wysłać (Ctrl+Enter)" tabindex="2" type="submit">
-                                <i class="fa fa-send"></i> Wyślij
-                            </button>
+            <form method="POST" class="microblog-submit" ng-controller="PostController" ng-submit="submit()">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-left" style="padding-right: 15px">
+                                <a href="#">
+                                    <img class="media-object img-thumbnail" src="/img/shalom.png" style="width: 50px; height: 50px;" alt="">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                {#<input type="hidden" value="0" name="parent_id" ng-model="form.parent_id" ng-init="form.parent_id=0">#}
+                                <input type="hidden" ng-model="url" ng-init="url='{{ route('microblog.submit') }}'">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <textarea cols="110" rows="2" ng-model="form.text" placeholder="Kliknij, aby dodać wpis" tabindex="1" name="text" style="height: 45px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row submit-area">
+                                    <div class="col-xs-6">
+                                        <button title="Kliknij, aby dodać zdjęcie" class="btn btn-default btn-sm" type="button">
+                                            <i class="fa fa-camera"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <button title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary pull-right" tabindex="2" type="submit">
+                                            Opublikuj
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </form>
+
 
             <nav class="text-center">
                 <ul class="pagination pagination-sm">
@@ -156,9 +171,10 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="/js/prompt.js"></script>
-    <script type="text/javascript" src="/js/autogrow.js"></script>
-    <script type="text/javascript" src="/js/fast-submit.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.min.js"></script>
+
+    <script type="text/javascript" src="/js/microblog.js"></script>
 
     <script type="text/javascript">
         $(function () {

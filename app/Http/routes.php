@@ -46,6 +46,7 @@ Route::get('Praca/Lorem_ipsum', ['uses' => 'Job\OfferController@index', 'as' => 
 
 // Obsluga mikroblogow
 Route::get('Mikroblogi', ['uses' => 'Microblog\HomeController@index', 'as' => 'microblog.home']);
+Route::post('Mikroblogi/Submit', ['uses' => 'Microblog\SubmitController@index', 'as' => 'microblog.submit', 'middleware' => 'auth']);
 
 // Obsluga modulu pastebin
 Route::get('Pastebin', ['uses' => 'Pastebin\HomeController@index', 'as' => 'pastebin.home']);
