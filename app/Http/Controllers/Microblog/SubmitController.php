@@ -17,4 +17,21 @@ class SubmitController extends Controller
 
         Microblog::create($request->all() + ['user_id' => auth()->user()->id]);
     }
+
+    public function upload(Request $request)
+    {
+        $this->validate($request, [
+            'photo'             => 'required|image'
+        ]);
+
+        if ($request->file('photo')->isValid()) {
+            $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
+            $request->file('photo')->move(public_path() . '/storage/tmp/', $fileName);
+
+            return response()->json([
+                'url' => url('storage/tmp/' . $fileName),
+                'name' => $fileName
+            ]);
+        }
+    }
 }

@@ -22,7 +22,8 @@ elixir(function(mix) {
         'components/date.js',
         'components/notifications.js',
         'components/session.js',
-        'components/vcard.js'
+        'components/vcard.js',
+        'main.js'
     ];
 
     mix.scripts(base, 'public/js/main.js')

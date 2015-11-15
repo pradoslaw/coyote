@@ -1,26 +1,72 @@
-var app = angular.module('Microblog', ['ngRoute']);
+$(function() {
+    'use strict';
 
-app.config(['$interpolateProvider', function ($interpolateProvider) {
-    $interpolateProvider.startSymbol('[[');
-    $interpolateProvider.endSymbol(']]');
-}]);
+    var IMG_PLACEHOLDER = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAADIAQMAAAAk14GrAAAABlBMVEXd3d3///+uIkqAAAAAI0lEQVRoge3BMQEAAADCoPVPbQ0PoAAAAAAAAAAAAAAAAHg2MgAAAYXziG4AAAAASUVORK5CYII=';
 
-app.controller('PostController', ['$scope', '$http', function($scope, $http) {
+    function tmpl(id, data) {
+        var str = $(id).clone().html();
 
-    $scope.form = {};
+        for (var item in data) {
+            str = str.replace('[[' + item + ']]', data[item]);
+        }
 
-    $scope.submit = function() {
-        console.log($.param($scope.form));
+        return str;
+    }
 
-        $http({
-            method  : 'POST',
-            url     : $scope.url,
-            data    : $.param($scope.form),  // pass in data as strings
-            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
+    function initForm($form) {
+
+        var onThumbnailClick = function() {
+            $(this).parent().remove();
+        };
+
+        $form.submit(function() {
+
         })
-        .success(function(data) {
-            console.log(data);
+        .delegate('#btn-upload', 'click', function() {
+            $('.input-file', $form).click();
+        })
+        .delegate('.input-file', 'change', function() {
+            var file = this.files[0];
 
+            if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
+                $('#alert').modal('show');
+                $('.modal-body').text('Format pliku jest nieprawidłowy. Załącznik musi być zdjęciem JPG, PNG lub GIF');
+            }
+            else {
+                var formData = new FormData($form[0]);
+
+                $.ajax({
+                    url: uploadUrl,
+                    type: 'POST',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('.thumbnails').append(tmpl('#tmpl-thumbnail', {'src': IMG_PLACEHOLDER, 'class': 'spinner', 'fa': 'fa fa-spinner fa-spin fa-2x'}));
+                    },
+                    success: function(data) {
+                        var thumbnail = $('.thumbnail:last');
+
+                        $('.spinner', thumbnail).remove();
+                        $('img', thumbnail).attr('src', data.url);
+
+                        $('<div>', {'class': 'btn-delete'}).html('<i class="fa fa-remove fa-2x"></i>').click(onThumbnailClick).appendTo(thumbnail);
+                    },
+                    error: function(err) {
+                        $('#alert').modal('show');
+
+                        if (typeof err.responseJSON !== 'undefined') {
+                            $('.modal-body').text(err.responseJSON.photo[0]);
+                        }
+
+                        $('.thumbnail:last').remove();
+                    }
+                }, 'json');
+            }
         });
-    };
-}]);
+    }
+
+    initForm($('.microblog-submit'));
+
+});

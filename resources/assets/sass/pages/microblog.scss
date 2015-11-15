@@ -79,4 +79,42 @@
   .img-thumbnail {
     border: none;
   }
+
+  .btn-delete, .spinner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    vertical-align: middle;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-delete {
+    display: none;
+    background-color: #000;
+    opacity: .5;
+    color: #fff;
+  }
+
+  .spinner {
+    color: $gray;
+    display: flex;
+  }
+
+  .thumbnail {
+    position: relative;
+
+    &:hover {
+      .btn-delete {
+        display: flex;
+      }
+    }
+
+    img {
+      height: 81px;
+    }
+  }
 }
