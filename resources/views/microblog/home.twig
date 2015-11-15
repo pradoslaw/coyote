@@ -18,13 +18,13 @@
                     <div class="panel-body">
                         <div class="media">
                             <div class="media-left" style="padding-right: 15px">
-                                <a href="#">
-                                    <img class="media-object img-thumbnail" src="/img/shalom.png" style="width: 50px; height: 50px;" alt="">
+                                <a href="{{ route('profile', [user('id')]) }}">
+                                    <img class="media-object img-thumbnail" src="{{ user_photo(user('photo')) }}" style="width: 50px; height: 50px;" alt="">
                                 </a>
                             </div>
                             <div class="media-body">
                                 {#<input type="hidden" value="0" name="parent_id" ng-model="form.parent_id" ng-init="form.parent_id=0">#}
-                                <input class="input-file" type="file" name="photo" style="visibility: hidden">
+                                <input class="input-file" type="file" name="photo" style="visibility: hidden; height: 1px">
 
                                 <div class="row">
                                     <div class="col-md-12">
@@ -76,9 +76,13 @@
                         </a>
                     </li>
                 </ul>
+
+                {{ pagination|raw }}
             </nav>
 
-            {% include "/microblog/_partial.twig" %}
+            {% for microblog in microblogs %}
+                {% include "microblog/_partial.twig" with microblog only %}
+            {% endfor %}
 
         </div>
 
@@ -205,8 +209,6 @@
         $(function () {
             $('.btn-thumbs').tooltip({html: true});
             $('textarea').prompt('{{ route('user.prompt') }}').fastSubmit().autogrow();
-
-
         });
     </script>
 {% endblock %}

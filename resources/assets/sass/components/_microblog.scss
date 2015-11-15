@@ -92,8 +92,14 @@
       display: inline;
     }
 
-    .author {
+    .media-body {
+      overflow: visible;
+    }
+
+    h6 {
       color: $brand-primary;
+      font-size: 13px;
+      display: inline;
     }
 
     .list-inline {

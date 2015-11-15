@@ -3,6 +3,7 @@
 namespace TwigBridge\Extensions;
 
 use Carbon\Carbon;
+use Jenssegers\Eloquent\Model;
 use Twig_Extension;
 use Twig_SimpleFunction;
 use Twig_SimpleFilter;
@@ -56,6 +57,43 @@ class User extends Twig_Extension
                 function ($name) {
                     return request($name, $this->getUserValue($name));
                 }
+            ),
+
+            // w calym serwisie ciagle trzeba generowac link do profilu usera. ta funkcja umozliwia
+            // generowanie linku do profilu na podstawie dostarczonych parametrow. parametrzem moze
+            // byc albo tablica albo poszczegolne dane takie jak ID, login oraz informacje czy uzytkownik
+            // jest zablokowany lub zbanowany
+            new Twig_SimpleFunction(
+                'link_to_profile',
+                function () {
+                    $args = func_get_args();
+
+                    if (is_array($args[0])) {
+                        $userId     = isset($args['user_id']) ? $args['user_id'] : $args['id'];
+                        $name       = isset($args['user_name']) ? $args['user_name'] : $args['name'];
+                        $isActive   = $args['is_active'];
+                        $isBlocked  = $args['is_blocked'];
+                    } else {
+                        $userId     = array_shift($args);
+                        $name       = array_shift($args);
+                        $isActive   = array_shift($args);
+                        $isBlocked  = array_shift($args);
+                    }
+
+                    $attributes     = ['data-user-id' => $userId];
+                    if ($isBlocked || !$isActive) {
+                        $attributes['class'] = 'del';
+                    }
+                    return link_to_route('profile', $name, $userId, $attributes);
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            new Twig_SimpleFunction(
+                'user_photo',
+                function ($photo) {
+                    return $photo ? asset($photo) : asset('img/avatar.png');
+                }
             )
         ];
     }
@@ -85,6 +123,14 @@ class User extends Twig_Extension
                     }
                 } else {
                     return strftime($format, strtotime($dateTime));
+                }
+            }),
+
+            new Twig_SimpleFilter('timestamp', function ($dateTime) {
+                if ($dateTime instanceof Carbon) {
+                    return $dateTime->getTimestamp();
+                } else {
+                    return strtotime($dateTime);
                 }
             })
         ];

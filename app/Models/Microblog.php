@@ -12,4 +12,9 @@ class Microblog extends Model
      * @var array
      */
     protected $fillable = ['parent_id', 'user_id', 'text'];
+
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
 }

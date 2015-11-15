@@ -45,9 +45,14 @@ Route::get('Forum/Python', ['uses' => 'Forum\CategoryController@index']);
 Route::get('Praca/Lorem_ipsum', ['uses' => 'Job\OfferController@index', 'as' => 'job.offer']);
 
 // Obsluga mikroblogow
-Route::get('Mikroblogi', ['uses' => 'Microblog\HomeController@index', 'as' => 'microblog.home']);
-Route::post('Mikroblogi/Submit', ['uses' => 'Microblog\SubmitController@index', 'as' => 'microblog.submit', 'middleware' => 'auth']);
-Route::post('Mikroblogi/Upload', ['uses' => 'Microblog\SubmitController@upload', 'as' => 'microblog.upload', 'middleware' => 'auth']);
+Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi'], function () {
+    Route::get('/', ['uses' => 'HomeController@index', 'as' => 'microblog.home']);
+    Route::post('Submit', ['uses' => 'SubmitController@index', 'as' => 'microblog.submit', 'middleware' => 'auth']);
+    Route::post('Upload', ['uses' => 'SubmitController@upload', 'as' => 'microblog.upload', 'middleware' => 'auth']);
+    Route::get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'microblog.view']);
+    Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'microblog.vote']);
+    Route::get('Vote/{id}', ['uses' => 'VoteController@voters', 'as' => 'microblog.voters']);
+});
 
 // Obsluga modulu pastebin
 Route::get('Pastebin', ['uses' => 'Pastebin\HomeController@index', 'as' => 'pastebin.home']);
