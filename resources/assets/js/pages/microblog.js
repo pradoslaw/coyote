@@ -13,6 +13,68 @@ $(function() {
         return str;
     }
 
+    var timeoutId;
+
+    var Thumbs =
+    {
+        click: function () {
+            var count = parseInt($(this).data('count'));
+            var $this = $(this);
+
+            $this.addClass('loader').text('Proszę czekać...');
+
+            $.post(voteUrl + $this.data('id'), function (data) {
+                count = parseInt(data.count);
+                $this.toggleClass('thumbs-on');
+                $this.data('count', count);
+            })
+            .complete(function () {
+                $this.removeClass('loader');
+                $this.text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']));
+            })
+            .fail(function (err) {
+                $('#alert').modal('show');
+                $('.modal-body').text(err.responseJSON.error);
+            });
+        },
+        enter: function () {
+            var count = parseInt($(this).data('count'));
+
+            if (count > 0) {
+                var $this = $(this);
+
+                if (typeof $this.attr('title') === 'undefined') {
+                    timeoutId = setTimeout(function () {
+                        $.get(voteUrl + $this.data('id'), function (html) {
+                            $this.attr('title', html);
+
+                            if (html.length) {
+                                var count = html.split("\n").length;
+
+                                $this.attr('title', html.replace(/\n/g, '<br />'))
+                                     .data('count', count)
+                                     .text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']))
+                                     .tooltip({html: true})
+                                     .tooltip('show');
+                            }
+                        });
+
+                    }, 500);
+                }
+            }
+
+            $(this).off('mouseenter');
+        },
+        leave: function () {
+            clearTimeout(timeoutId);
+            $('.tooltip').remove();
+        }
+    };
+
+    $('#microblog').delegate('.btn-thumbs', 'click', Thumbs.click)
+    .delegate('.btn-thumbs', 'mouseenter', Thumbs.enter)
+    .delegate('.btn-thumbs', 'mouseleave', Thumbs.leave);
+
     function initForm($form) {
 
         var onThumbnailClick = function() {

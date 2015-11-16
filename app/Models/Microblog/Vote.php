@@ -23,5 +23,5 @@ class Vote extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at'];
+    public $timestamps = false;
 }

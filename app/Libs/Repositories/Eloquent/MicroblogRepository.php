@@ -46,7 +46,8 @@ class MicroblogRepository extends Repository
     }
 
     /**
-     * Pobierz X ostatnich wpisow z mikrobloga
+     * Pobierz X ostatnich wpisow z mikrobloga przy czym sortowane sa one wedlug oceny. Metoda
+     * ta jest wykorzystywana na stronie glownej serwisu
      *
      * @param int $limit
      * @return mixed
@@ -55,7 +56,8 @@ class MicroblogRepository extends Repository
     {
         $result = $this->buildQuery()
                 ->whereNull('parent_id')
-                ->orderBy('microblogs.id', 'DESC')
+                ->where('votes', '>=', 2)
+                ->orderBy('microblogs.score', 'DESC')
                 ->take($limit)
                 ->get();
 
@@ -110,5 +112,22 @@ class MicroblogRepository extends Repository
                 $join->on('mv.microblog_id', '=', 'microblogs.id')
                     ->where('mv.user_id', '=', \DB::raw(auth()->user()->id));
             });
+    }
+
+    /**
+     * Pobiera loginy osob ktore oddaly glos na dany wpis
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function getVoters($id)
+    {
+        return (new Microblog\Vote())
+            ->where('microblog_id', $id)
+            ->join('users', 'users.id', '=', 'user_id')
+            ->select(['users.name'])
+            ->get()
+            ->lists('name')
+            ->toArray();
     }
 }

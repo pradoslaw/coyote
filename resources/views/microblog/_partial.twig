@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="microblog-footer">
-                        <a href="javascript:" class="btn btn-thumbs {{ thumbs_on ? 'thumbs-on' }}" data-toggle="tooltip" data-placement="top" title="Shalom<br>Adam Boduch">{{ votes }} głosy</a>
+                        <a href="javascript:" class="btn btn-thumbs {{ thumbs_on ? 'thumbs-on' }}" data-id="{{ id }}" data-count="{{ votes }}" data-toggle="tooltip" data-placement="top">{{ votes }} głosy</a>
                         <a href="javascript:" class="btn btn-alerts alerts-on">Obserwuj</a>
                         <a href="javascript:" class="btn btn-reply">Komentarz</a>
                     </div>
@@ -61,7 +61,7 @@
                                         <a href="{{ route('microblog.view', [id]) }}#comment-{{ comment.id }}" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
                                     </li>
                                     <li>
-                                        <a href="#">{{ comment.votes }} głosów</a>
+                                        <a href="javascript:" class="btn-thumbs" data-id="{{ comment.id }}" data-count="{{ votes }}" data-toggle="tooltip" data-placement="top">{{ comment.votes }} głosów</a>
                                     </li>
                                 </ul>
                             </div>

@@ -19,6 +19,7 @@ elixir(function(mix) {
         'bootstrap/modal.js',
         'bootstrap/dropdown.js',
         'bootstrap/collapse.js',
+        'components/declination.js',
         'components/date.js',
         'components/notifications.js',
         'components/session.js',

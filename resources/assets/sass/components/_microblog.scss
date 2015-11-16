@@ -34,38 +34,41 @@
   padding: 10px 0 20px 0;
 }
 
-.btn-thumbs, .btn-reply, .btn-alerts {
-  padding: 2px 7px 2px 25px;
-  color: $gray-light;
-  position: relative;
+.microblog-footer {
+  .btn-thumbs, .btn-reply, .btn-alerts {
+    padding: 2px 7px 2px 25px;
+    color: $gray-light;
+    position: relative;
 
-  &:before {
-    font-family: FontAwesome;
-    position: absolute;
-    left: 5px;
-    color: $text-color;
+    &:before {
+      font-family: FontAwesome;
+      position: absolute;
+      left: 5px;
+      color: $text-color;
+    }
+
+    &:hover {
+      border: 1px solid $border-color;
+      @include gradient-vertical(#fff, $gray-lighter);
+    }
   }
 
-  &:hover {
-    border: 1px solid $border-color;
-    @include gradient-vertical(#fff, $gray-lighter);
+  .btn-thumbs:before {
+    content: $fa-var-thumbs-o-up;
   }
-}
 
-.btn-thumbs:before {
-  content: $fa-var-thumbs-up;
-}
+  .btn-alerts:before {
+    content: $fa-var-bell-o;
+  }
 
-.btn-alerts:before {
-  content: $fa-var-bell-o;
-}
+  .btn-reply:before {
+    content: $fa-var-comment-o;
+  }
 
-.btn-reply:before {
-  content: $fa-var-comment-o;
-}
-
-.thumbs-on:before {
-  color: $brand-primary;
+  .thumbs-on:before {
+    color: $brand-primary;
+    content: $fa-var-thumbs-up;
+  }
 }
 
 .microblog-comments {

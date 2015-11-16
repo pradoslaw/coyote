@@ -36,6 +36,26 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if ($request->isXmlHttpRequest()) { // moze lepiej bedzie uzyc wantsJson()?
+            $response = [
+                'error' => 'Przepraszamy, ale coś poszło nie tak. Prosimy o kontakt z administratorem.'
+            ];
+
+            if (config('app.debug')) {
+                $response['exception'] = get_class($e);
+                $response['message'] = $e->getMessage();
+                $response['trace'] = $e->getTrace();
+            }
+
+            $status = 500;
+
+            if ($this->isHttpException($e)) {
+                $status = $e->getStatusCode();
+            }
+
+            return response()->json($response, $status);
+        }
+
         return parent::render($request, $e);
     }
 }
