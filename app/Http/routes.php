@@ -52,6 +52,7 @@ Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi'], function ()
     Route::get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'microblog.view']);
     Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'microblog.vote']);
     Route::get('Vote/{id}', ['uses' => 'VoteController@voters', 'as' => 'microblog.voters']);
+    Route::post('Watch/{id}', ['uses' => 'WatchController@post', 'as' => 'microblog.watch']);
 });
 
 // Obsluga modulu pastebin

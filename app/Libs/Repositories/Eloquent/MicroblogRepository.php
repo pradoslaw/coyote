@@ -106,11 +106,17 @@ class MicroblogRepository extends Repository
      */
     private function buildQuery()
     {
-        return $this->model->select(['microblogs.*', 'users.name', 'is_active', 'is_blocked', 'mv.id AS thumbs_on'])
+        $userId = auth()->check() ? \DB::raw(auth()->user()->id) : null;
+
+        return $this->model->select(['microblogs.*', 'users.name', 'is_active', 'is_blocked', 'mv.id AS thumbs_on', 'mw.user_id AS watch_on'])
             ->join('users', 'users.id', '=', 'user_id')
-            ->leftJoin('microblog_votes AS mv', function ($join) {
+            ->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
                 $join->on('mv.microblog_id', '=', 'microblogs.id')
-                    ->where('mv.user_id', '=', \DB::raw(auth()->user()->id));
+                    ->where('mv.user_id', '=', $userId);
+            })
+            ->leftJoin('microblog_watch AS mw', function ($join) use ($userId) {
+                $join->on('mw.microblog_id', '=', 'microblogs.id')
+                    ->where('mw.user_id', '=', $userId);
             });
     }
 
@@ -123,11 +129,11 @@ class MicroblogRepository extends Repository
     public function getVoters($id)
     {
         return (new Microblog\Vote())
-            ->where('microblog_id', $id)
-            ->join('users', 'users.id', '=', 'user_id')
-            ->select(['users.name'])
-            ->get()
-            ->lists('name')
-            ->toArray();
+                ->where('microblog_id', $id)
+                ->join('users', 'users.id', '=', 'user_id')
+                ->select(['users.name'])
+                ->get()
+                ->lists('name')
+                ->toArray();
     }
 }

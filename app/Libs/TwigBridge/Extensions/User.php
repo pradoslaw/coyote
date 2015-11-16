@@ -27,6 +27,10 @@ class User extends Twig_Extension
      */
     public function getUserValue($name)
     {
+        if (auth()->guest()) {
+            return null;
+        }
+
         if (strpos($name, '.') !== false) {
             list($name, $key) = explode('.', $name);
         }

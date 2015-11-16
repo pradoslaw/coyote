@@ -35,7 +35,7 @@
 }
 
 .microblog-footer {
-  .btn-thumbs, .btn-reply, .btn-alerts {
+  .btn-thumbs, .btn-reply, .btn-watch {
     padding: 2px 7px 2px 25px;
     color: $gray-light;
     position: relative;
@@ -57,7 +57,7 @@
     content: $fa-var-thumbs-o-up;
   }
 
-  .btn-alerts:before {
+  .btn-watch:before {
     content: $fa-var-bell-o;
   }
 
@@ -68,6 +68,11 @@
   .thumbs-on:before {
     color: $brand-primary;
     content: $fa-var-thumbs-up;
+  }
+  
+  .watch-on:before {
+    color: $brand-primary;
+    content: $fa-var-bell;
   }
 }
 

@@ -26,7 +26,7 @@ class VoteController extends Controller
     public function post($id, Request $request)
     {
         if (auth()->guest()) {
-            return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.']);
+            return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
         }
 
         $microblog = Microblog::findOrFail($id);

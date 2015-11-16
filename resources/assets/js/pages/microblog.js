@@ -74,6 +74,17 @@ $(function() {
     $('#microblog').on('click', '.btn-reply', function() {
         $(this).parent().next('.microblog-comments').find('input').focus();
     })
+    .on('click', '.btn-watch', function() {
+        var $this = $(this);
+
+        $.post(microblogUrl + '/Watch/' + parseInt($this.data('id')), function() {
+            $this.toggleClass('watch-on');
+        })
+        .fail(function (err) {
+            $('#alert').modal('show');
+            $('.modal-body').text(err.responseJSON.error);
+        });
+    })
     .on('click', '.btn-thumbs', Thumbs.click)
     .on('mouseenter', '.btn-thumbs', Thumbs.enter)
     .on('mouseleave', '.btn-thumbs', Thumbs.leave);
