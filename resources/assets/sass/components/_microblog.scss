@@ -34,46 +34,44 @@
   padding: 10px 0 20px 0;
 }
 
-.microblog-footer {
-  .btn-thumbs, .btn-reply, .btn-watch {
-    padding: 2px 7px 2px 25px;
-    color: $gray-light;
-    position: relative;
+.btn-thumbs, .btn-reply, .btn-watch {
+  padding: 2px 7px 2px 25px;
+  color: $gray-light;
+  position: relative;
 
-    &:before {
-      font-family: FontAwesome;
-      position: absolute;
-      left: 5px;
-      color: $text-color;
-    }
-
-    &:hover {
-      border: 1px solid $border-color;
-      @include gradient-vertical(#fff, $gray-lighter);
-    }
+  &:before {
+    font-family: FontAwesome;
+    position: absolute;
+    left: 5px;
+    color: $text-color;
   }
 
-  .btn-thumbs:before {
-    content: $fa-var-thumbs-o-up;
+  &:hover {
+    border: 1px solid $border-color;
+    @include gradient-vertical(#fff, $gray-lighter);
   }
+}
 
-  .btn-watch:before {
-    content: $fa-var-bell-o;
-  }
+.btn-thumbs:before {
+  content: $fa-var-thumbs-o-up;
+}
 
-  .btn-reply:before {
-    content: $fa-var-comment-o;
-  }
+.btn-watch:before {
+  content: $fa-var-bell-o;
+}
 
-  .thumbs-on:before {
-    color: $brand-primary;
-    content: $fa-var-thumbs-up;
-  }
-  
-  .watch-on:before {
-    color: $brand-primary;
-    content: $fa-var-bell;
-  }
+.btn-reply:before {
+  content: $fa-var-comment-o;
+}
+
+.btn-thumbs.thumbs-on:before {
+  color: $brand-primary;
+  content: $fa-var-thumbs-up;
+}
+
+.watch-on:before {
+  color: $brand-primary;
+  content: $fa-var-bell;
 }
 
 .microblog-comments {

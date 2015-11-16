@@ -110,11 +110,8 @@ class MicroblogRepository extends Repository
         $userId = auth()->check() ? \DB::raw(auth()->user()->id) : null;
 
         if ($userId) {
-            $columns = $columns + ['mv.id AS thumbs_on', 'mw.user_id AS watch_on'];
-        } else {
-            $columns = $columns + [\DB::raw('NULL AS thumbs_on, NULL AS watch_on')];
+            $columns = array_merge($columns, ['mv.id AS thumbs_on', 'mw.user_id AS watch_on']);
         }
-
         $sql = $this->model->select($columns)->join('users', 'users.id', '=', 'user_id');
 
         if ($userId) {

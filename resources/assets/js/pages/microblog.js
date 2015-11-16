@@ -85,9 +85,9 @@ $(function() {
             $('.modal-body').text(err.responseJSON.error);
         });
     })
-    .on('click', '.btn-thumbs', Thumbs.click)
-    .on('mouseenter', '.btn-thumbs', Thumbs.enter)
-    .on('mouseleave', '.btn-thumbs', Thumbs.leave);
+    .on('click', '.btn-thumbs, .btn-sm-thumbs', Thumbs.click)
+    .on('mouseenter', '.btn-thumbs, .btn-sm-thumbs', Thumbs.enter)
+    .on('mouseleave', '.btn-thumbs, .btn-sm-thumbs', Thumbs.leave);
 
     function initForm($form) {
 
