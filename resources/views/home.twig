@@ -188,7 +188,9 @@
             <section id="box-microblog" class="box">
                 <h4><i class="fa fa-comments-o fa-fw"></i> <a href="#">Popularne wpisy na mikroblogu</a></h4>
 
-                {% include "/microblog/_partial.twig" %}
+                {% for microblog in microblogs %}
+                    {% include "microblog/_partial.twig" with microblog only %}
+                {% endfor %}
             </section>
         </main>
 

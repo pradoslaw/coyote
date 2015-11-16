@@ -3,17 +3,31 @@
 namespace Coyote\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Coyote\Repositories\Eloquent\MicroblogRepository;
 
 class HomeController extends Controller
 {
     /**
-     * @param $request Request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param MicroblogRepository $microblog
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index(Request $request, MicroblogRepository $microblog)
     {
         $viewers = new \Coyote\Session\Viewers(new \Coyote\Session(), $request);
 
-        return view('home')->with('viewers', $viewers->render());
+        $microblogs = $microblog->take(10);
+
+        foreach ($microblogs as &$microblog) {
+            if (isset($microblog['comments'])) {
+                $microblog['comments_count'] = count($microblog['comments']);
+                $microblog['comments'] = array_slice($microblog['comments'], -2);
+            }
+        }
+
+        return view('home', [
+            'viewers'                   => $viewers->render(),
+            'microblogs'                => $microblogs
+        ]);
     }
 }

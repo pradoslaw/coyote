@@ -46,6 +46,29 @@ class MicroblogRepository extends Repository
     }
 
     /**
+     * Pobierz X ostatnich wpisow z mikrobloga
+     *
+     * @param int $limit
+     * @return mixed
+     */
+    public function take($limit)
+    {
+        $result = $this->buildQuery()
+                ->whereNull('parent_id')
+                ->orderBy('microblogs.id', 'DESC')
+                ->take($limit)
+                ->get();
+
+        // wyciagamy ID rekordow aby pobrac komentarze do nich
+        $parentId = $result->pluck('id');
+        // taki kod zwroci tablice zawierajaca w kluczu ID rekordu z tabeli `microblogs`
+        $microblogs = $result->keyBy('id')->toArray();
+
+        $comments = $this->getComments($parentId);
+        return $this->merge($microblogs, $comments);
+    }
+
+    /**
      * Pobranie komentarzy od danego wpisu w mikroblogu
      *
      * @param int $parentId
