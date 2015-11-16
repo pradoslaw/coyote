@@ -106,11 +106,19 @@ class MicroblogRepository extends Repository
      */
     private function buildQuery()
     {
+        $columns = ['microblogs.*', 'users.name', 'is_active', 'is_blocked'];
         $userId = auth()->check() ? \DB::raw(auth()->user()->id) : null;
 
-        return $this->model->select(['microblogs.*', 'users.name', 'is_active', 'is_blocked', 'mv.id AS thumbs_on', 'mw.user_id AS watch_on'])
-            ->join('users', 'users.id', '=', 'user_id')
-            ->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
+        if ($userId) {
+            $columns = $columns + ['mv.id AS thumbs_on', 'mw.user_id AS watch_on'];
+        } else {
+            $columns = $columns + [\DB::raw('NULL AS thumbs_on, NULL AS watch_on')];
+        }
+
+        $sql = $this->model->select($columns)->join('users', 'users.id', '=', 'user_id');
+
+        if ($userId) {
+            $sql->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
                 $join->on('mv.microblog_id', '=', 'microblogs.id')
                     ->where('mv.user_id', '=', $userId);
             })
@@ -118,6 +126,9 @@ class MicroblogRepository extends Repository
                 $join->on('mw.microblog_id', '=', 'microblogs.id')
                     ->where('mw.user_id', '=', $userId);
             });
+        }
+
+        return $sql;
     }
 
     /**
