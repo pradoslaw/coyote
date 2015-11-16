@@ -71,9 +71,12 @@ $(function() {
         }
     };
 
-    $('#microblog').delegate('.btn-thumbs', 'click', Thumbs.click)
-    .delegate('.btn-thumbs', 'mouseenter', Thumbs.enter)
-    .delegate('.btn-thumbs', 'mouseleave', Thumbs.leave);
+    $('#microblog').on('click', '.btn-reply', function() {
+        $(this).parent().next('.microblog-comments').find('input').focus();
+    })
+    .on('click', '.btn-thumbs', Thumbs.click)
+    .on('mouseenter', '.btn-thumbs', Thumbs.enter)
+    .on('mouseleave', '.btn-thumbs', Thumbs.leave);
 
     function initForm($form) {
 
