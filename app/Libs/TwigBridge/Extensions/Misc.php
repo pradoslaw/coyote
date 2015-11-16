@@ -2,10 +2,9 @@
 
 namespace TwigBridge\Extensions;
 
+use Coyote\Declination;
 use Twig_Extension;
 use Twig_SimpleFunction;
-use Twig_SimpleFilter;
-use Illuminate\Support\Facades\Auth;
 
 class Misc extends Twig_Extension
 {
@@ -23,7 +22,8 @@ class Misc extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('timer', [$this, 'getGenerationTime'])
+            new Twig_SimpleFunction('timer', [$this, 'getGenerationTime']),
+            new Twig_SimpleFunction('declination', [Declination::class, 'format'])
         ];
     }
 
