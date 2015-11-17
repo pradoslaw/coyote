@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
+use Image;
 
 class HomeController extends Controller
 {

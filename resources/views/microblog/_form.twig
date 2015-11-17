@@ -1,0 +1,45 @@
+<input class="input-file" type="file" name="photo" style="visibility: hidden; height: 1px">
+
+<div class="row">
+    <div class="col-md-12">
+        <textarea cols="110" rows="2" placeholder="Kliknij, aby dodać wpis" tabindex="1" name="text" style="height: 45px;">{{ text }}</textarea>
+    </div>
+</div>
+
+<div class="row submit-area">
+    <div class="col-xs-12">
+        <div class="row thumbnails">
+            {% for name, image in thumbnails %}
+                <div class="col-sm-2">
+                    <a href="javascript:" class="thumbnail">
+                        <img src="{{ image }}">
+
+                        <div class="btn-flush">
+                            <i class="fa fa-remove fa-2x"></i>
+                            <input type="hidden" name="thumbnail[]" value="{{ name }}">
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6">
+                <button title="Kliknij, aby dodać zdjęcie" class="btn btn-default btn-sm" type="button" id="btn-upload">
+                    <i class="fa fa-camera"></i>
+                </button>
+            </div>
+            <div class="col-xs-6">
+                <button title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary pull-right" tabindex="2" type="submit">
+                    Opublikuj
+                </button>
+
+                {% if id is defined %}
+                <button data-id="{{ id }}" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger pull-right" style="margin-right: 10px" tabindex="3">
+                    Anuluj
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

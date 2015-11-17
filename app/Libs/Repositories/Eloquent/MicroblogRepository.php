@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Microblog;
+use Image;
 
 /**
  * Class MicroblogRepository
@@ -25,6 +26,7 @@ class MicroblogRepository extends Repository
     {
         $result = $this->buildQuery()
                 ->whereNull('parent_id')
+                ->orderBy('microblogs.is_sponsored', 'DESC')
                 ->orderBy('microblogs.id', 'DESC')
                 ->paginate($perPage);
 
@@ -35,6 +37,8 @@ class MicroblogRepository extends Repository
         $parentId = $result->pluck('id');
         // taki kod zwroci tablice zawierajaca w kluczu ID rekordu z tabeli `microblogs`
         $microblogs = $result->keyBy('id')->toArray();
+        // generuje url do miniaturek dolaczonych do wpisu
+        $microblogs = $this->thumbnails($microblogs);
 
         $comments = $this->getComments($parentId);
         $microblogs = $this->merge($microblogs, $comments);
@@ -56,7 +60,8 @@ class MicroblogRepository extends Repository
     {
         $result = $this->buildQuery()
                 ->whereNull('parent_id')
-                ->where('votes', '>=', 2)
+                ->where('votes', '>=', 2)->orWhere('bonus', '>', 0)
+                ->orderBy('microblogs.is_sponsored', 'DESC')
                 ->orderBy('microblogs.score', 'DESC')
                 ->take($limit)
                 ->get();
@@ -65,6 +70,8 @@ class MicroblogRepository extends Repository
         $parentId = $result->pluck('id');
         // taki kod zwroci tablice zawierajaca w kluczu ID rekordu z tabeli `microblogs`
         $microblogs = $result->keyBy('id')->toArray();
+        // generuje url do miniaturek dolaczonych do wpisu
+        $microblogs = $this->thumbnails($microblogs);
 
         $comments = $this->getComments($parentId);
         return $this->merge($microblogs, $comments);
@@ -96,6 +103,27 @@ class MicroblogRepository extends Repository
             }
 
             array_push($microblogs[$comment['parent_id']]['comments'], $comment);
+        }
+
+        return $microblogs;
+    }
+
+    /**
+     * Metoda generuje URL do miniaturek jezeli zostaly one dolaczone do wpisu
+     *
+     * @param $microblogs
+     * @return mixed
+     */
+    private function thumbnails($microblogs)
+    {
+        foreach ($microblogs as &$microblog) {
+            if (isset($microblog['media']['image'])) {
+                $microblog['thumbnails'] = [];
+
+                foreach ($microblog['media']['image'] as $name) {
+                    $microblog['thumbnails'][$name] = Image::url(url('/storage/microblog/' . $name), 180, 180);
+                }
+            }
         }
 
         return $microblogs;

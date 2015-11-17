@@ -137,6 +137,9 @@ return [
 
         // Profiler aplikacji (to musi byc w tym miejscu)
         Barryvdh\Debugbar\ServiceProvider::class,
+        // Mozliwosc tworzenia miniaturek zdjec. ten provider umieszczony jest tak wysoko poniewaz
+        // jego regula routingu musi byc nadrzedna nad regulami coyote
+        Folklore\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -216,6 +219,7 @@ return [
         'Html'      => Collective\Html\HtmlFacade::class,
         'Purifier'  => Mews\Purifier\Facades\Purifier::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Image'     => Folklore\Image\Facades\Image::class,
     ],
 
 ];

@@ -15,70 +15,25 @@
 
             {% if auth_check() %}
                 <form method="POST" class="microblog-submit" action="{{ route('microblog.submit') }}">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="media">
-                            <div class="media-left" style="padding-right: 15px">
-                                <a href="{{ route('profile', [user('id')]) }}">
-                                    <img class="media-object img-thumbnail" src="{{ user_photo(user('photo')) }}" style="width: 50px; height: 50px;" alt="">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                {#<input type="hidden" value="0" name="parent_id" ng-model="form.parent_id" ng-init="form.parent_id=0">#}
-                                <input class="input-file" type="file" name="photo" style="visibility: hidden; height: 1px">
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <textarea cols="110" rows="2" placeholder="Kliknij, aby dodać wpis" tabindex="1" name="text" style="height: 45px;"></textarea>
-                                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="media">
+                                <div class="media-left" style="padding-right: 15px">
+                                    <a href="{{ route('profile', [user('id')]) }}">
+                                        <img class="media-object img-thumbnail" src="{{ user_photo(user('photo')) }}" style="width: 50px; height: 50px;" alt="">
+                                    </a>
                                 </div>
-
-                                <div class="row submit-area">
-                                    <div class="col-xs-12">
-                                        <div class="row thumbnails">
-
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <button title="Kliknij, aby dodać zdjęcie" class="btn btn-default btn-sm" type="button" id="btn-upload">
-                                                    <i class="fa fa-camera"></i>
-                                                </button>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <button title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary pull-right" tabindex="2" type="submit">
-                                                    Opublikuj
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="media-body">
+                                    {#<input type="hidden" value="0" name="parent_id" ng-model="form.parent_id" ng-init="form.parent_id=0">#}
+                                    {% include 'microblog/_form.twig' %}
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
             {% endif %}
 
             <nav class="text-center">
-                <ul class="pagination pagination-sm">
-                    <li class="disabled">
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-
                 {{ pagination|raw }}
             </nav>
 

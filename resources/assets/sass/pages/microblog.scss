@@ -80,7 +80,7 @@
     border: none;
   }
 
-  .btn-delete, .spinner {
+  .btn-flush, .spinner {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -92,7 +92,7 @@
     align-items: center;
   }
 
-  .btn-delete {
+  .btn-flush {
     display: none;
     background-color: #000;
     opacity: .5;
@@ -108,7 +108,7 @@
     position: relative;
 
     &:hover {
-      .btn-delete {
+      .btn-flush {
         display: flex;
       }
     }

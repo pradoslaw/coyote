@@ -17,4 +17,15 @@ class Microblog extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    public function getMediaAttribute($media)
+    {
+        return json_decode($media, true);
+    }
+
+    public function setMediaAttribute($media)
+    {
+        $this->attributes['media'] = json_encode($media);
+    }
 }
+

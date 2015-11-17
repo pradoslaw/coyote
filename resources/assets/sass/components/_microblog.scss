@@ -32,6 +32,10 @@
 
 .microblog-text {
   padding: 10px 0 20px 0;
+
+  > .thumbnails {
+    margin-top: 20px;
+  }
 }
 
 .btn-thumbs, .btn-reply, .btn-watch {

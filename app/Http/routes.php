@@ -47,12 +47,14 @@ Route::get('Praca/Lorem_ipsum', ['uses' => 'Job\OfferController@index', 'as' => 
 // Obsluga mikroblogow
 Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi'], function () {
     Route::get('/', ['uses' => 'HomeController@index', 'as' => 'microblog.home']);
-    Route::post('Submit', ['uses' => 'SubmitController@index', 'as' => 'microblog.submit', 'middleware' => 'auth']);
+    Route::post('Submit/{id?}', ['uses' => 'SubmitController@index', 'as' => 'microblog.submit', 'middleware' => 'auth']);
     Route::post('Upload', ['uses' => 'SubmitController@upload', 'as' => 'microblog.upload', 'middleware' => 'auth']);
     Route::get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'microblog.view']);
-    Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'microblog.vote']);
+    Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'microblog.vote', 'middleware' => 'auth']);
     Route::get('Vote/{id}', ['uses' => 'VoteController@voters', 'as' => 'microblog.voters']);
-    Route::post('Watch/{id}', ['uses' => 'WatchController@post', 'as' => 'microblog.watch']);
+    Route::post('Watch/{id}', ['uses' => 'WatchController@post', 'as' => 'microblog.watch', 'middleware' => 'auth']);
+    Route::get('Edit/{id}', ['uses' => 'SubmitController@edit', 'as' => 'microblog.edit', 'middleware' => 'auth']);
+    Route::post('Delete/{id}', ['uses' => 'SubmitController@delete', 'as' => 'microblog.delete', 'middleware' => 'auth']);
 });
 
 // Obsluga modulu pastebin
