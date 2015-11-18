@@ -111,10 +111,10 @@ class MicroblogRepository extends Repository
     /**
      * Metoda generuje URL do miniaturek jezeli zostaly one dolaczone do wpisu
      *
-     * @param $microblogs
+     * @param array $microblogs
      * @return mixed
      */
-    public function thumbnails($microblogs)
+    public function thumbnails(array $microblogs)
     {
         foreach ($microblogs as &$microblog) {
             if (isset($microblog['media']['image'])) {

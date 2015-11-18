@@ -79,13 +79,18 @@ class SubmitController extends Controller
         $microblog->fill($data);
         $microblog->save();
 
+        // jezeli wpis zawiera jakies zdjecia, generujemy linki do miniatur
+        // metoda thumbnails() przyjmuje w parametrze tablice tablic (wpisow, tj. mikroblogow)
+        // stad takie zapis:
+        $microblog = $this->microblog->thumbnails([$microblog->toArray()])[0];
+
         return view('microblog._microblog', [
             'user_id'               => $user->id,
             'name'                  => $user->name,
             'is_blocked'            => $user->is_blocked,
             'is_active'             => $user->is_active,
             'photo'                 => $user->photo
-        ])->with($microblog->toArray());
+        ])->with($microblog);
     }
 
     /**
