@@ -3,8 +3,8 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Microblog;
-use Coyote\User;
+use Coyote\Repositories\Eloquent\MicroblogRepository as Microblog;
+use Coyote\Repositories\Eloquent\UserRepository as User;
 use Illuminate\Http\Request;
 
 /**
@@ -13,6 +13,21 @@ use Illuminate\Http\Request;
  */
 class SubmitController extends Controller
 {
+    private $microblog;
+    private $user;
+
+    /**
+     * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
+     *
+     * @param Microblog $microblog
+     * @param User $user
+     */
+    public function __construct(Microblog $microblog, User $user)
+    {
+        $this->microblog = $microblog;
+        $this->user = $user;
+    }
+
     /**
      * Publikowanie wpisu na mikroblogu
      *
@@ -26,7 +41,7 @@ class SubmitController extends Controller
             'parent_id'     => 'sometimes|integer|exists:microblogs,id'
         ]);
 
-        $microblog = Microblog::firstOrNew(['id' => $id]);
+        $microblog = $this->microblog->firstOrNew(['id' => $id]);
         $data = request()->all();
 
         if ($id === null) {
@@ -35,7 +50,7 @@ class SubmitController extends Controller
 
             $media = ['image' => []];
         } else {
-            $user = User::find($microblog->user_id);
+            $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
             $media = $microblog->media;
 
             if (empty($media['image'])) {
@@ -64,7 +79,7 @@ class SubmitController extends Controller
         $microblog->fill($data);
         $microblog->save();
 
-        return view('microblog._partial', [
+        return view('microblog._microblog', [
             'user_id'               => $user->id,
             'name'                  => $user->name,
             'is_blocked'            => $user->is_blocked,
@@ -81,7 +96,7 @@ class SubmitController extends Controller
      */
     public function edit($id)
     {
-        $microblog = Microblog::findOrFail($id);
+        $microblog = $this->microblog->findOrFail($id);
         $thumbnails = [];
 
         if (isset($microblog->media['image'])) {

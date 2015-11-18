@@ -114,7 +114,7 @@ class MicroblogRepository extends Repository
      * @param $microblogs
      * @return mixed
      */
-    private function thumbnails($microblogs)
+    public function thumbnails($microblogs)
     {
         foreach ($microblogs as &$microblog) {
             if (isset($microblog['media']['image'])) {
