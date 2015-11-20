@@ -1,3 +1,4 @@
 <form method="POST" class="microblog-submit" action="{{ route('microblog.submit', [id]) }}">
+    <input type="hidden" name="id" value="{{ id }}">
     {% include 'microblog/_form.twig' %}
 </form>

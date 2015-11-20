@@ -84,7 +84,7 @@ class SubmitController extends Controller
         // stad takie zapis:
         $microblog = $this->microblog->thumbnails([$microblog->toArray()])[0];
 
-        return view('microblog._microblog', [
+        return view($id ? 'microblog._text' : 'microblog._microblog', [
             'user_id'               => $user->id,
             'name'                  => $user->name,
             'is_blocked'            => $user->is_blocked,

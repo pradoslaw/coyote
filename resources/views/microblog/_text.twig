@@ -1,0 +1,13 @@
+{{ text }}
+
+{% if thumbnails|length > 0 %}
+    <div class="thumbnails row">
+        {% for name, image in thumbnails %}
+            <div class="col-xs-6 col-md-3">
+                <a href="{{ url('/storage/microblog/' ~ name) }}" class="thumbnail">
+                    <img src="{{ image }}">
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

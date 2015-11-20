@@ -23,19 +23,7 @@
                     <a href="{{ route('microblog.view', [id]) }}#entry-{{ id }}" class="timestamp" data-timestamp="{{ created_at|timestamp }}">{{ created_at|format_date }}</a>
 
                     <div class="microblog-text">
-                        {{ text }}
-
-                        {% if thumbnails|length > 0 %}
-                            <div class="thumbnails row">
-                                {% for name, image in thumbnails %}
-                                    <div class="col-xs-6 col-md-3">
-                                        <a href="{{ url('/storage/microblog/' ~ name) }}" class="thumbnail">
-                                            <img src="{{ image }}">
-                                        </a>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                        {% include 'microblog/_text.twig' %}
                     </div>
 
                     <div class="microblog-footer">
