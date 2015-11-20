@@ -123,7 +123,17 @@ $(function () {
 
             e.preventDefault();
         })
-        .on('click', '.btn-delete', function () {
+        .on('click', '.btn-remove', function () {
+            var $this = $(this);
+
+            $.post($this.attr('href'), function() {
+                $('#entry-' + $this.data('id')).fadeOut(1000);
+            })
+                .fail(function(err) {
+                    $('#alert').modal('show');
+                    $('.modal-body').text(err.responseJSON.error);
+                });
+
             return false;
         });
 

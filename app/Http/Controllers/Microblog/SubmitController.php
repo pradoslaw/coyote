@@ -114,6 +114,17 @@ class SubmitController extends Controller
     }
 
     /**
+     * Usuniecie wpisu z mikrobloga
+     *
+     * @param $id
+     */
+    public function delete($id)
+    {
+        $microblog = $this->microblog->findOrFail($id);
+        $microblog->delete();
+    }
+
+    /**
      * Upload pliku na serwer wraz z wczesniejsza walidacja
      *
      * @param Request $request

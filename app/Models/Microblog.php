@@ -3,9 +3,12 @@
 namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Microblog extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,6 +21,13 @@ class Microblog extends Model
      */
     protected $dateFormat = 'Y-m-d H:i:se';
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
     public function getMediaAttribute($media)
     {
         return json_decode($media, true);
@@ -28,4 +38,3 @@ class Microblog extends Model
         $this->attributes['media'] = json_encode($media);
     }
 }
-
