@@ -14,7 +14,7 @@
             </ul>
 
             {% if auth_check() %}
-                <form method="POST" class="microblog-submit" action="{{ route('microblog.submit') }}">
+                <form method="POST" class="microblog-submit" action="{{ route('microblog.save') }}">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="media">
@@ -163,7 +163,7 @@
 
     <script type="text/javascript">
         $(function () {
-//            $('.btn-thumbs').tooltip({html: true});
+            $('.btn-thumbs').tooltip({html: true});
             $('textarea').prompt('{{ route('user.prompt') }}').fastSubmit().autogrow();
         });
     </script>

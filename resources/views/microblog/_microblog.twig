@@ -14,7 +14,7 @@
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="microblog-menu">
-                            <li><a href="{{ route('microblog.edit', [id]) }}" class="btn-edit" data-id="{{ id }}"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
+                            <li><a href="{{ route('microblog.save', [id]) }}" class="btn-edit" data-id="{{ id }}"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
                             <li><a href="{{ route('microblog.delete', [id]) }}" class="btn-remove" data-id="{{ id }}"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
                         </ul>
                     </div>
@@ -23,7 +23,7 @@
                     <a href="{{ route('microblog.view', [id]) }}#entry-{{ id }}" class="timestamp" data-timestamp="{{ created_at|timestamp }}">{{ created_at|format_date }}</a>
 
                     <div class="microblog-text">
-                        {% include 'microblog/_text.twig' %}
+                        {% include 'microblog/_microblog_text.twig' %}
                     </div>
 
                     <div class="microblog-footer">
@@ -40,18 +40,19 @@
                             {% include 'microblog/_comment.twig' with {'comment': comment} %}
                         {% endfor %}
 
-                        <div class="media form">
-                            <div class="media-left">
-                                <a href="{{ route('profile', user('id')) }}">
-                                    <img class="media-object" src="{{ user_photo(user('photo')) }}" style="width: 32px; height: 32px">
-                                </a>
+                        <form class="comment-submit" method="POST" action="{{ route('microblog.comment.save') }}">
+                            <div class="media form">
+                                <div class="media-left">
+                                    <a href="{{ route('profile', user('id')) }}">
+                                        <img class="media-object" src="{{ user_photo(user('photo')) }}" style="width: 32px; height: 32px">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <input type="hidden" name="parent_id" value="{{ id }}">
+                                    <input type="text" name="text" placeholder="Napisz komentarz..." class="form-control">
+                                </div>
                             </div>
-                            <div class="media-body">
-                                <form>
-                                    <input type="text" placeholder="Napisz komentarz..." class="form-control">
-                                </form>
-                            </div>
-                        </div>
+                        </form>
                     </div>
 
                 </div>

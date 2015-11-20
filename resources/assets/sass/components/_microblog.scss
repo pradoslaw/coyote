@@ -146,4 +146,8 @@
     border-top: none;
     border-radius: $border-radius-small;
   }
+
+  .inline-edit .form-control {
+    width: 98%;
+  }
 }

@@ -13,9 +13,18 @@ $(function () {
         return str;
     }
 
+    $(document).ajaxError(function(event, jqxhr) {
+        $('#alert').modal('show');
+        $('.modal-body').text(jqxhr.responseJSON.error);
+    });
+
     // zawartosc tresci wpisow
     // dane do tego obiektu zapisywane sa w momencie klikniecia przycisku "Edytuj"
-    var content = {};
+    var entries = {};
+    // zawartosc komentarzy
+    // dane do tego boiektu zapisywane sa w momencie edycji komentarza. jezeli user zrezygnuje z edycji
+    // to przywracamy HTML-a z tego obiektu
+    var comments = {};
     var timeoutId;
 
     var Thumbs =
@@ -34,10 +43,6 @@ $(function () {
                 .complete(function () {
                     $this.removeClass('loader');
                     $this.text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']));
-                })
-                .fail(function (err) {
-                    $('#alert').modal('show');
-                    $('.modal-body').text(err.responseJSON.error);
                 });
 
             return false;
@@ -84,11 +89,7 @@ $(function () {
 
             $.post($this.attr('href'), function () {
                 $this.toggleClass('watch-on');
-            })
-                .fail(function (err) {
-                    $('#alert').modal('show');
-                    $('.modal-body').text(err.responseJSON.error);
-                });
+            });
 
             return false;
         })
@@ -101,23 +102,18 @@ $(function () {
             $.get($this.attr('href'), function (html) {
                 var entryText = $('#entry-' + $this.data('id')).find('.microblog-text');
 
-                content[$this.data('id')] = entryText.html();
+                entries[$this.data('id')] = entryText.html();
                 entryText.html(html);
 
                 var $form = initForm($('.microblog-submit', entryText));
 
                 $form.unbind('submit').submit(function() {
-                    $.post($form.attr('action'), $form.serialize(), function (html) {
+                    $.post($form.attr('action'), $form.serialize(), function(html) {
                         entryText.html(html);
-                        delete content[id];
-                    })
-                        .fail(function (err) {
-                            $('#alert').modal('show');
-                            $('.modal-body').text(err.responseJSON.error);
-                        });
+                        delete entries[$this.data('id')];
+                    });
 
                     return false;
-
                 });
             });
 
@@ -127,12 +123,68 @@ $(function () {
             var $this = $(this);
 
             $.post($this.attr('href'), function() {
-                $('#entry-' + $this.data('id')).fadeOut(1000);
+                $('#entry-' + $this.data('id')).fadeOut(500);
+            });
+
+            return false;
+        })
+        .on('submit', '.comment-submit', function() {
+            var $form = $(this);
+            var $input = $('input[type="text"]', $form);
+            var data = $form.serialize();
+
+            $input.attr('disabled', 'disabled');
+
+            $.post($form.attr('action'), data, function(html) {
+                $(html).hide().insertBefore($form).fadeIn(800);
+                $input.val('');
             })
-                .fail(function(err) {
-                    $('#alert').modal('show');
-                    $('.modal-body').text(err.responseJSON.error);
+                .always(function() {
+                    $input.removeAttr('disabled');
+            });
+
+            return false;
+        })
+        .on('click', '.btn-sm-edit', function(e) {
+            var $this = $(this);
+            var commentText = $('#comment-' + $this.data('id')).find('.inline-edit');
+
+            $.get($this.attr('href'), function(text) {
+                comments[$this.data('id')] = commentText.html();
+                commentText.html('');
+
+                var $form = $('<form>');
+                var $input = $('<input>', {'value': text, 'class': 'form-control', 'name': 'text'})
+                    .keydown(function(e) {
+                        if (e.keyCode === 27) {
+                            commentText.html(comments[$this.data('id')]);
+                            delete comments[$this.data('id')];
+                        }
+                    })
+                    .appendTo($form);
+
+                $form.submit(function() {
+                    var data = $form.serialize();
+                    $input.attr('disabled', 'disabled');
+
+                    $.post($this.attr('href'), data, function(html) {
+                        $('#comment-' + $this.data('id')).replaceWith(html);
+                    });
+
+                    return false;
                 });
+
+                $form.appendTo(commentText);
+            });
+
+            e.preventDefault();
+        })
+        .on('click', '.btn-sm-remove', function() {
+            var $this = $(this);
+
+            $.post($this.attr('href'), function() {
+                $('#comment-' + $this.data('id')).fadeOut(500);
+            });
 
             return false;
         });
@@ -147,19 +199,15 @@ $(function () {
             .submit(function () {
                 $.post($form.attr('action'), $form.serialize(), function (html) {
                         $(html).hide().insertAfter('nav.text-center').fadeIn(900);
-                })
-                    .fail(function (err) {
-                        $('#alert').modal('show');
-                        $('.modal-body').text(err.responseJSON.error);
-                    });
+                });
 
                 return false;
             })
             .on('click', '.btn-cancel', function () {
                 var id = parseInt($(this).data('id'));
-                $('#entry-' + id).find('.microblog-text').html(content[id]);
+                $('#entry-' + id).find('.microblog-text').html(entries[id]);
 
-                delete content[id];
+                delete entries[id];
                 return false;
             })
             .delegate('#btn-upload', 'click', function () {

@@ -34,15 +34,14 @@ class SubmitController extends Controller
      * @param null|int $id
      * @return $this
      */
-    public function index($id = null)
+    public function save($id = null)
     {
         $this->validate(request(), [
-            'text'          => 'required|string',
-            'parent_id'     => 'sometimes|integer|exists:microblogs,id'
+            'text'          => 'required|string'
         ]);
 
         $microblog = $this->microblog->firstOrNew(['id' => $id]);
-        $data = request()->all();
+        $data = request()->only(['text']);
 
         if ($id === null) {
             $user = auth()->user();
@@ -84,7 +83,7 @@ class SubmitController extends Controller
         // stad takie zapis:
         $microblog = $this->microblog->thumbnails([$microblog->toArray()])[0];
 
-        return view($id ? 'microblog._text' : 'microblog._microblog', [
+        return view($id ? 'microblog._microblog_text' : 'microblog._microblog', [
             'user_id'               => $user->id,
             'name'                  => $user->name,
             'is_blocked'            => $user->is_blocked,
