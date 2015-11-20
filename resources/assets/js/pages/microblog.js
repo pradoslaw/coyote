@@ -26,7 +26,7 @@ $(function () {
 
             $this.addClass('loader').text('Proszę czekać...');
 
-            $.post(voteUrl + $this.data('id'), function (data) {
+            $.post($this.attr('href'), function (data) {
                 count = parseInt(data.count);
                 $this.toggleClass('thumbs-on');
                 $this.data('count', count);
@@ -39,6 +39,8 @@ $(function () {
                     $('#alert').modal('show');
                     $('.modal-body').text(err.responseJSON.error);
                 });
+
+            return false;
         },
         enter: function () {
             var count = parseInt($(this).data('count'));
@@ -48,7 +50,7 @@ $(function () {
 
                 if (typeof $this.attr('title') === 'undefined') {
                     timeoutId = setTimeout(function () {
-                        $.get(voteUrl + $this.data('id'), function (html) {
+                        $.get($this.attr('href'), function (html) {
                             $this.attr('title', html);
 
                             if (html.length) {
@@ -80,13 +82,15 @@ $(function () {
         .on('click', '.btn-watch', function () {
             var $this = $(this);
 
-            $.post(microblogUrl + '/Watch/' + parseInt($this.data('id')), function () {
+            $.post($this.attr('href'), function () {
                 $this.toggleClass('watch-on');
             })
                 .fail(function (err) {
                     $('#alert').modal('show');
                     $('.modal-body').text(err.responseJSON.error);
                 });
+
+            return false;
         })
         .on('click', '.btn-thumbs, .btn-sm-thumbs', Thumbs.click)
         .on('mouseenter', '.btn-thumbs, .btn-sm-thumbs', Thumbs.enter)
