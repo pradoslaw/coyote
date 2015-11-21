@@ -18,10 +18,12 @@ class HomeController extends Controller
 
         $microblogs = $repository->paginate(25);
 
-        foreach ($microblogs as &$microblog) {
+        foreach ($microblogs as $index => $microblog) {
             if (isset($microblog['comments'])) {
                 $microblog['comments_count'] = count($microblog['comments']);
                 $microblog['comments'] = array_slice($microblog['comments'], -2);
+
+                $microblogs[$index] = $microblog;
             }
         }
 

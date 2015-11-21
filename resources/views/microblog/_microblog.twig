@@ -39,6 +39,12 @@
 
                     <div class="microblog-comments">
 
+                        {% if comments_count > comments|length %}
+                            <div class="show-all">
+                                <a href="{{ route('microblog.comment.show', [id]) }}">Zobacz pozostałe {{ declination(comments_count - comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}</a>
+                            </div>
+                        {% endif %}
+
                         {% for comment in comments %}
                             {% include 'microblog/_comment.twig' with {'comment': comment} %}
                         {% endfor %}

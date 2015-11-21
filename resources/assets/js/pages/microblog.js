@@ -232,6 +232,16 @@ $(function () {
             });
 
             return false;
+        })
+        .on('click', '.show-all a', function() {
+            var $this = $(this);
+            $this.text('Proszę czekać...');
+
+            $.get($this.attr('href'), function(html) {
+                $this.parent().replaceWith(html);
+            });
+
+            return false;
         });
 
     function initForm($form) {

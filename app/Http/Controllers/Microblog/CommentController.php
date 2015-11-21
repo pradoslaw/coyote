@@ -87,4 +87,16 @@ class CommentController extends Controller
         $microblog = $this->microblog->findOrFail($id);
         $microblog->delete();
     }
+
+    /**
+     * Pokaz pozostale komentarze do wpisu
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show($id)
+    {
+        $comments = $this->microblog->getComments([$id]);
+        return view('microblog._comments', ['id' => $id, 'comments' => $comments->slice(0, -2)]);
+    }
 }

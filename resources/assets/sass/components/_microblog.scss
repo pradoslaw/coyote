@@ -83,7 +83,7 @@
 
   .media {
     border-top: 1px solid lighten($border-color, 5%);
-    padding: 10px 5px;
+    padding: 10px 5px 6px 5px;
     margin-top: 5px;
 
     .dropdown button {
@@ -115,7 +115,7 @@
     .list-inline {
       color: $gray-light;
       font-size: 11px;
-      margin: 4px 0 0 0;
+      margin: 1px 0 0 0;
 
       a {
         color: $gray-light;
@@ -149,6 +149,27 @@
 
   .inline-edit .form-control {
     width: 98%;
+  }
+
+  .show-all {
+    padding: 2px 0 2px 5px;
+
+    a {
+      color: $gray;
+      font-size: 12px;
+      padding-left: 15px;
+      position: relative;
+
+      &:before {
+        @include font-awesome($fa-var-comments);
+        left: 0;
+      }
+
+      &:hover, &:focus {
+        text-decoration: none;
+        color: $alt-link-hover-color;
+      }
+    }
   }
 }
 

@@ -63,6 +63,8 @@ Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi'], function ()
     Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'microblog.comment.save', 'middleware' => 'auth']);
     Route::get('Comment/{id}', ['uses' => 'CommentController@edit', 'middleware' => 'auth']);
     Route::post('Comment/Delete/{id}', ['uses' => 'CommentController@delete', 'as' => 'microblog.comment.delete', 'middleware' => 'auth']);
+    // pokaz reszte komentarzy...
+    Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'microblog.comment.show']);
 });
 
 // Obsluga modulu pastebin

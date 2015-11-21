@@ -100,10 +100,10 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * Pobranie komentarzy od danego wpisu w mikroblogu
      *
-     * @param int $parentId
+     * @param array $parentId
      * @return mixed
      */
-    private function getComments($parentId)
+    public function getComments($parentId)
     {
         return $this->buildQuery()->whereIn('parent_id', $parentId)->orderBy('id')->get();
     }
