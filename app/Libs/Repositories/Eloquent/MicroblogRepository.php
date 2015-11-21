@@ -30,24 +30,12 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->orderBy('microblogs.id', 'DESC')
                 ->paginate($perPage);
 
-        // pobranie wartosci rekordow do obliczenia stronnicowania
-        $total = $result->total();
-
-        // wyciagamy ID rekordow aby pobrac komentarze do nich
-        $parentId = $result->pluck('id');
-        // taki kod zwroci tablice zawierajaca w kluczu ID rekordu z tabeli `microblogs`
-        $microblogs = $result->keyBy('id')->toArray();
         // generuje url do miniaturek dolaczonych do wpisu
-        $microblogs = $this->thumbnails($microblogs);
+        $result = $this->thumbnails($result);
+        // zostawiamy jedynie 2 ostatnie komentarze
+        $result = $this->slice($result);
 
-        // pobranie komentarzy do wpisow z mikrobloga
-        $comments = $this->getComments($parentId);
-        // polaczenie wpisow z komentarzami
-        $microblogs = $this->merge($microblogs, $comments);
-
-        return new \Illuminate\Pagination\LengthAwarePaginator($microblogs, $total, $perPage, null, [
-            'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()
-        ]);
+        return $result;
     }
 
     /**
@@ -68,15 +56,12 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->take($limit)
                 ->get();
 
-        // wyciagamy ID rekordow aby pobrac komentarze do nich
-        $parentId = $result->pluck('id');
-        // taki kod zwroci tablice zawierajaca w kluczu ID rekordu z tabeli `microblogs`
-        $microblogs = $result->keyBy('id')->toArray();
         // generuje url do miniaturek dolaczonych do wpisu
-        $microblogs = $this->thumbnails($microblogs);
+        $result = $this->thumbnails($result);
+        // zostawiamy jedynie 2 ostatnie komentarze
+        $result = $this->slice($result);
 
-        $comments = $this->getComments($parentId);
-        return $this->merge($microblogs, $comments);
+        return $result;
     }
 
     /**
@@ -87,7 +72,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function takePopular($limit)
     {
-        $result = $this->buildQuery()
+        $result = $this->buildQuery(false)
                 ->whereNull('parent_id')
                 ->where('microblogs.created_at', '>=', Carbon::now()->subWeek())
                 ->orderBy('microblogs.score', 'DESC')
@@ -105,45 +90,33 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function getComments($parentId)
     {
-        return $this->buildQuery()->whereIn('parent_id', $parentId)->orderBy('id')->get();
-    }
-
-    /**
-     * Metoda laczy ze soba dwie tablice: jedna zawierajaca wpisy mikrobloga a druga - komentarze do niej
-     *
-     * @param array $microblogs
-     * @param array $comments
-     * @return mixed
-     */
-    private function merge($microblogs, $comments)
-    {
-        foreach ($comments as $comment) {
-            if (!isset($microblogs[$comment['parent_id']]['comments'])) {
-                $microblogs[$comment['parent_id']]['comments'] = [];
-            }
-
-            array_push($microblogs[$comment['parent_id']]['comments'], $comment);
-        }
-
-        return $microblogs;
+        return $this->buildQuery(false)->whereIn('parent_id', $parentId)->orderBy('id')->get();
     }
 
     /**
      * Metoda generuje URL do miniaturek jezeli zostaly one dolaczone do wpisu
      *
-     * @param array $microblogs
+     * @param mixed $microblogs
      * @return mixed
      */
-    public function thumbnails(array $microblogs)
+    public function thumbnails($microblogs)
     {
-        foreach ($microblogs as &$microblog) {
-            if (isset($microblog['media']['image'])) {
-                $microblog['thumbnails'] = [];
+        $apply = function ($microblog) {
+            if (isset($microblog->media['image'])) {
+                $thumbnails = [];
 
-                foreach ($microblog['media']['image'] as $name) {
-                    $microblog['thumbnails'][$name] = Image::url(url('/storage/microblog/' . $name), 180, 180);
+                foreach ($microblog->media['image'] as $name) {
+                    $thumbnails[$name] = Image::url(url('/storage/microblog/' . $name), 180, 180);
                 }
+
+                $microblog->thumbnails = $thumbnails;
             }
+        };
+
+        if ($microblogs instanceof Microblog) {
+            $apply($microblogs);
+        } else {
+            $microblogs->each($apply);
         }
 
         return $microblogs;
@@ -152,18 +125,43 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @return mixed
      */
-    private function buildQuery()
+    private function buildQuery($withComments = true)
     {
         $columns = ['microblogs.*', 'users.name', 'is_active', 'is_blocked'];
+        $columnThumb = 'mv.id AS thumbs_on';
+        $columnWatch = 'mw.user_id AS watch_on';
+
         $userId = auth()->check() ? \DB::raw(auth()->user()->id) : null;
 
-        if ($userId) {
-            $columns = array_merge($columns, ['mv.id AS thumbs_on', 'mw.user_id AS watch_on']);
+        $query = $this->model;
+
+        if ($withComments) {
+            $hasMany = function ($sql) use ($columns, $userId, $columnThumb) {
+                $sql->join('users', 'users.id', '=', 'user_id')->orderBy('id', 'ASC');
+
+                if ($userId) {
+                    $sql->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
+                        $join->on('mv.microblog_id', '=', 'microblogs.id')
+                            ->where('mv.user_id', '=', $userId);
+                    });
+
+                    $columns = array_merge($columns, [$columnThumb]);
+                }
+
+                $sql->select($columns);
+            };
+
+            $query = $query->with(['comments' => $hasMany]);
         }
-        $sql = $this->model->select($columns)->join('users', 'users.id', '=', 'user_id');
 
         if ($userId) {
-            $sql->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
+            $columns = array_merge($columns, [$columnThumb, $columnWatch]);
+        }
+
+        $query = $query->select($columns)->join('users', 'users.id', '=', 'user_id');
+
+        if ($userId) {
+            $query->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
                 $join->on('mv.microblog_id', '=', 'microblogs.id')
                     ->where('mv.user_id', '=', $userId);
             })
@@ -173,7 +171,23 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             });
         }
 
-        return $sql;
+        return $query;
+    }
+
+    /**
+     * Zostawia jedynie 2 ostatnie komentarze do wpisu
+     *
+     * @param $microblogs
+     * @return mixed
+     */
+    private function slice($microblogs)
+    {
+        foreach ($microblogs as &$microblog) {
+            $microblog->comments_count = $microblog->comments->count();
+            $microblog->comments = $microblog->comments->slice(-2, 2);
+        }
+
+        return $microblogs;
     }
 
     /**

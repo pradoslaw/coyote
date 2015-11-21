@@ -56,6 +56,8 @@ class SubmitController extends Controller
 
             $media = ['image' => []];
         } else {
+            $this->authorize('update', $microblog);
+
             $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
             $media = $microblog->media;
 
@@ -88,15 +90,14 @@ class SubmitController extends Controller
         // jezeli wpis zawiera jakies zdjecia, generujemy linki do miniatur
         // metoda thumbnails() przyjmuje w parametrze tablice tablic (wpisow, tj. mikroblogow)
         // stad takie zapis:
-        $microblog = $this->microblog->thumbnails([$microblog->toArray()])[0];
+        $microblog = $this->microblog->thumbnails($microblog);
 
-        return view($id ? 'microblog._microblog_text' : 'microblog._microblog', [
-            'user_id'               => $user->id,
-            'name'                  => $user->name,
-            'is_blocked'            => $user->is_blocked,
-            'is_active'             => $user->is_active,
-            'photo'                 => $user->photo
-        ])->with($microblog);
+        // do przekazania do widoku...
+        foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
+            $microblog->$key = $user->$key;
+        }
+
+        return view($id ? 'microblog._microblog_text' : 'microblog._microblog')->with('microblog', $microblog);
     }
 
     /**
@@ -108,6 +109,8 @@ class SubmitController extends Controller
     public function edit($id)
     {
         $microblog = $this->microblog->findOrFail($id);
+        $this->authorize('update', $microblog);
+
         $thumbnails = [];
 
         if (isset($microblog->media['image'])) {
@@ -127,6 +130,8 @@ class SubmitController extends Controller
     public function delete($id)
     {
         $microblog = $this->microblog->findOrFail($id, ['id']);
+        $this->authorize('delete', $microblog);
+
         $microblog->delete();
     }
 

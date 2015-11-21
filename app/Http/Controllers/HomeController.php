@@ -17,19 +17,10 @@ class HomeController extends Controller
         $viewers = new \Coyote\Session\Viewers(new \Coyote\Session(), $request);
 
         $microblogs = $microblog->take(10);
-
-        foreach ($microblogs as $index => $microblog) {
-            if (isset($microblog['comments'])) {
-                $microblog['comments_count'] = count($microblog['comments']);
-                $microblog['comments'] = array_slice($microblog['comments'], -2);
-
-                $microblogs[$index] = $microblog;
-            }
-        }
-
+//dd($microblogs->all());
         return view('home', [
             'viewers'                   => $viewers->render(),
-            'microblogs'                => $microblogs
+            'microblogs'                => $microblogs->all()
         ]);
     }
 }

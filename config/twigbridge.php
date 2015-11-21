@@ -102,7 +102,7 @@ return [
             'TwigBridge\Extension\Laravel\Html',
 
             'TwigBridge\Extensions\User',
-            'TwigBridge\Extensions\Misc'
+            'TwigBridge\Extensions\Misc',
 //             'TwigBridge\Extension\Laravel\Legacy\Facades',
         ],
         /*

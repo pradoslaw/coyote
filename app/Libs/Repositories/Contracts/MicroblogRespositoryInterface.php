@@ -24,10 +24,10 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     /**
      * Metoda generuje URL do miniaturek jezeli zostaly one dolaczone do wpisu
      *
-     * @param array $microblogs
+     * @param mixed $microblogs
      * @return mixed
      */
-    public function thumbnails(array $microblogs);
+    public function thumbnails($microblogs);
 
     /**
      * Pobranie komentarzy od danego wpisu w mikroblogu

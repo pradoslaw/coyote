@@ -36,7 +36,10 @@
             </nav>
 
             {% for microblog in microblogs %}
-                {% include "microblog/_microblog.twig" with microblog only %}
+                {#{% include "microblog/_microblog.twig" with microblog.toArray() only %}#}
+                {#{% include "microblog/_microblog.twig" with {'microblog': microblog} only %}#}
+                {% include "microblog/_microblog.twig" %}
+                {#{{ microblog.text }}#}
             {% endfor %}
 
             <div class="text-center">

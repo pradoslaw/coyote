@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
-use Image;
 use Cache;
 
 class HomeController extends Controller
@@ -18,15 +17,6 @@ class HomeController extends Controller
 
         $microblogs = $repository->paginate(25);
 
-        foreach ($microblogs as $index => $microblog) {
-            if (isset($microblog['comments'])) {
-                $microblog['comments_count'] = count($microblog['comments']);
-                $microblog['comments'] = array_slice($microblog['comments'], -2);
-
-                $microblogs[$index] = $microblog;
-            }
-        }
-
         // tagi nie zmieniaja sie czesto, wiec mozemy wrzucic do cache na 30 min
         $tags = Cache::remember('microblogs-tags', 30, function () use ($repository) {
             return $repository->getTags();
@@ -37,7 +27,7 @@ class HomeController extends Controller
         return parent::view('microblog.home', [
             'total'                     => $microblogs->total(),
             'pagination'                => $microblogs->render(),
-            'microblogs'                => $microblogs->toArray()['data']
+            'microblogs'                => $microblogs->items()
         ])->with(compact('tags', 'popular'));
     }
 }

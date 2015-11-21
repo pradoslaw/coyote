@@ -49,6 +49,8 @@ class CommentController extends Controller
             $user = auth()->user();
             $data = request()->only(['text', 'parent_id']) + ['user_id' => $user->id];
         } else {
+            $this->authorize('update', $microblog);
+
             $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
             $data = request()->only(['text']);
         }
@@ -56,13 +58,11 @@ class CommentController extends Controller
         $microblog->fill($data);
         $microblog->save();
 
-        return view('microblog._comment')->with('comment', array_merge($microblog->toArray(), [
-            'user_id'               => $user->id,
-            'name'                  => $user->name,
-            'is_blocked'            => $user->is_blocked,
-            'is_active'             => $user->is_active,
-            'photo'                 => $user->photo
-        ]));
+        foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
+            $microblog->$key = $user->$key;
+        }
+
+        return view('microblog._comment')->with('comment', $microblog)->with('microblog', ['id' => $microblog->parent_id]);
     }
 
     /**
@@ -74,6 +74,8 @@ class CommentController extends Controller
     public function edit($id)
     {
         $microblog = $this->microblog->findOrFail($id);
+        $this->authorize('update', $microblog);
+
         return response($microblog->text);
     }
 
@@ -85,6 +87,8 @@ class CommentController extends Controller
     public function delete($id)
     {
         $microblog = $this->microblog->findOrFail($id);
+        $this->authorize('delete', $microblog);
+
         $microblog->delete();
     }
 

@@ -1,8 +1,8 @@
-{{ text }}
+{{ microblog.text }}
 
-{% if thumbnails|length > 0 %}
+{% if microblog.thumbnails|length > 0 %}
     <div class="thumbnails row">
-        {% for name, image in thumbnails %}
+        {% for name, image in microblog.thumbnails %}
             <div class="col-xs-6 col-md-3">
                 <a href="{{ url('/storage/microblog/' ~ name) }}" class="thumbnail">
                     <img src="{{ image }}">

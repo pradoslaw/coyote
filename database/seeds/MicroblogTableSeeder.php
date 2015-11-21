@@ -11,6 +11,18 @@ class MicroblogTableSeeder extends Seeder
      */
     public function run()
     {
+        \DB::table('acl_permissions')->insert([
+            'name'           => 'microblog-update',
+            'description'    => 'Edycja wpisów mikrobloga',
+            'default'        => false
+        ]);
+
+        \DB::table('acl_permissions')->insert([
+            'name'           => 'microblog-delete',
+            'description'    => 'Usuwanie wpisów mikrobloga',
+            'default'        => false
+        ]);
+
         $user = DB::table('users')->orderBy('id')->first();
 
         \Coyote\Microblog::create([

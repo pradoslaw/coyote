@@ -93,10 +93,18 @@ class User extends Twig_Extension
                 ['is_safe' => ['html']]
             ),
 
+            // funkcja generuje URL do zdjecia usera lub domyslny avatar jezeli brak
             new Twig_SimpleFunction(
                 'user_photo',
                 function ($photo) {
                     return $photo ? asset($photo) : asset('img/avatar.png');
+                }
+            ),
+
+            new Twig_SimpleFunction(
+                'can',
+                function ($ability, $policy) {
+                    return Auth::guest() ? false : policy($policy)->$ability(auth()->user(), $policy);
                 }
             )
         ];

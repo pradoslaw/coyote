@@ -189,7 +189,7 @@
                 <h4><i class="fa fa-comments-o fa-fw"></i> <a href="#">Popularne wpisy na mikroblogu</a></h4>
 
                 {% for microblog in microblogs %}
-                    {% include "microblog/_microblog.twig" with microblog only %}
+                    {% include "microblog/_microblog.twig" %}
                 {% endfor %}
             </section>
         </main>

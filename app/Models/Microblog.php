@@ -71,4 +71,9 @@ class Microblog extends Model
     {
         $this->attributes['media'] = json_encode($media);
     }
+
+    public function comments()
+    {
+        return $this->hasMany('Coyote\Microblog', 'parent_id', 'id');
+    }
 }
