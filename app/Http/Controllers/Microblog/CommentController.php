@@ -25,7 +25,7 @@ class CommentController extends Controller
     }
 
     /**
-     * Publikowanie wpisu na mikroblogu
+     * Publikowanie komentarza na mikroblogu
      *
      * @param null|int $id
      * @return $this

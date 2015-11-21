@@ -110,23 +110,25 @@ class User extends Twig_Extension
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter('format_date', function ($dateTime) {
+            new Twig_SimpleFilter('format_date', function ($dateTime, $diffForHumans = true) {
                 $format = Auth::check() ? auth()->user()->date_format : '%Y-%m-%d %H:%M';
 
-                if ($dateTime instanceof Carbon) {
-                    $now = Carbon::now();
+                if (!$dateTime instanceof Carbon) {
+                    $dateTime = new Carbon($dateTime);
+                }
 
-                    if ($dateTime->diffInHours($now) < 1) {
-                        return $dateTime->diffForHumans();
-                    } elseif ($dateTime->isToday()) {
-                        return 'dziś, ' . $dateTime->format('H:i');
-                    } elseif ($dateTime->isYesterday()) {
-                        return 'wczoraj, ' . $dateTime->format('H:i');
-                    } else {
-                        return $dateTime->formatLocalized($format);
-                    }
+                $now = Carbon::now();
+
+                if (!$diffForHumans) {
+                    return $dateTime->formatLocalized($format);
+                } elseif ($dateTime->diffInHours($now) < 1) {
+                    return $dateTime->diffForHumans();
+                } elseif ($dateTime->isToday()) {
+                    return 'dziś, ' . $dateTime->format('H:i');
+                } elseif ($dateTime->isYesterday()) {
+                    return 'wczoraj, ' . $dateTime->format('H:i');
                 } else {
-                    return strftime($format, strtotime($dateTime));
+                    return $dateTime->formatLocalized($format);
                 }
             }),
 

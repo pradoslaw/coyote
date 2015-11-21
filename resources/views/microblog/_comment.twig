@@ -22,7 +22,7 @@
 
             <ul class="list-inline">
                 <li>
-                    <a href="{{ route('microblog.view', [id]) }}#comment-{{ comment.id }}" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
+                    <a href="{{ route('microblog.view', [id]) }}#comment-{{ comment.id }}" title="{{ comment.created_at|format_date(false) }}" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
                 </li>
                 <li>
                     <a href="javascript:" class="btn-sm-thumbs" data-id="{{ comment.id }}" data-count="{{ comment.votes }}" data-toggle="tooltip" data-placement="top">

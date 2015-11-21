@@ -20,7 +20,7 @@
                     </div>
 
                     <h5 class="media-heading">{{ link_to_profile(user_id, name, is_active, is_blocked) }}</h5>
-                    <a href="{{ route('microblog.view', [id]) }}#entry-{{ id }}" class="timestamp" data-timestamp="{{ created_at|timestamp }}">{{ created_at|format_date }}</a>
+                    <a href="{{ route('microblog.view', [id]) }}#entry-{{ id }}" title="{{ created_at|format_date(false) }}" class="timestamp" data-timestamp="{{ created_at|timestamp }}">{{ created_at|format_date }}</a>
 
                     <div class="microblog-text">
                         {% include 'microblog/_microblog_text.twig' %}
