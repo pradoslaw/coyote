@@ -185,7 +185,7 @@
                 </div>
             </section>
 
-            <section id="box-microblog" class="box">
+            <section id="microblog" class="box">
                 <h4><i class="fa fa-comments-o fa-fw"></i> <a href="#">Popularne wpisy na mikroblogu</a></h4>
 
                 {% for microblog in microblogs %}
@@ -358,12 +358,18 @@
     {{ parent() }}
 
     <link rel="stylesheet" href="/css/homepage.css">
+
+    <script type="text/javascript">
+        var uploadUrl = '{{ route('microblog.upload') }}';
+        var promptUrl = '{{ route('user.prompt') }}';
+    </script>
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
 
     <script type="text/javascript" src="/js/perfect-scrollbar.js"></script>
+    <script type="text/javascript" src="/js/microblog.js"></script>
     <script type="text/javascript">
         $(function () {
             $('.btn-thumbs').tooltip({html: true});
