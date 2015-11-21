@@ -156,6 +156,7 @@
 
     <script type="text/javascript">
         var uploadUrl = '{{ route('microblog.upload') }}';
+        var promptUrl = '{{ route('user.prompt') }}';
     </script>
 
 {% endblock %}
@@ -168,7 +169,6 @@
     <script type="text/javascript">
         $(function () {
             $('.btn-thumbs').tooltip({html: true});
-            $('textarea').prompt('{{ route('user.prompt') }}').fastSubmit().autogrow();
         });
     </script>
 {% endblock %}

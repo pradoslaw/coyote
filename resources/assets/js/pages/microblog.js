@@ -108,10 +108,16 @@ $(function () {
                 var $form = initForm($('.microblog-submit', entryText));
 
                 $form.unbind('submit').submit(function() {
-                    $.post($form.attr('action'), $form.serialize(), function(html) {
+                    var data = $form.serialize();
+                    $(':input', $form).attr('disabled', 'disabled');
+
+                    $.post($form.attr('action'), data, function(html) {
                         entryText.html(html);
                         delete entries[$this.data('id')];
-                    });
+                    })
+                        .always(function() {
+                            $(':input', $form).removeAttr('disabled');
+                        });
 
                     return false;
                 });
@@ -169,12 +175,16 @@ $(function () {
 
                     $.post($this.attr('href'), data, function(html) {
                         $('#comment-' + $this.data('id')).replaceWith(html);
-                    });
+                    })
+                        .always(function() {
+                            $input.removeAttr('disabled');
+                        });
 
                     return false;
                 });
 
                 $form.appendTo(commentText);
+                $input.focus().prompt(promptUrl);
             });
 
             e.preventDefault();
@@ -191,15 +201,25 @@ $(function () {
 
     function initForm($form) {
 
-        var onThumbnailClick = function () {
+        var removeThumbnail = function () {
             $(this).parent().parent().remove();
         };
 
-        $form.on('click', '.btn-flush', onThumbnailClick)
+        $('textarea', $form).prompt(promptUrl).fastSubmit().autogrow().focus();
+
+        $form.on('click', '.btn-flush', removeThumbnail)
             .submit(function () {
-                $.post($form.attr('action'), $form.serialize(), function (html) {
-                        $(html).hide().insertAfter('nav.text-center').fadeIn(900);
-                });
+                var data = $form.serialize();
+                $(':input', $form).attr('disabled', 'disabled');
+
+                $.post($form.attr('action'), data, function(html) {
+                    $(html).hide().insertAfter('nav.text-center').fadeIn(900);
+                    $('textarea', $form).val('').trigger('keydown');
+                    $('.thumbnails', $form).html('');
+                })
+                    .always(function() {
+                        $(':input', $form).removeAttr('disabled');
+                    });
 
                 return false;
             })
@@ -243,7 +263,7 @@ $(function () {
                             $('.spinner', thumbnail).remove();
                             $('img', thumbnail).attr('src', data.url);
 
-                            $('<div>', {'class': 'btn-flush'}).html('<i class="fa fa-remove fa-2x"></i>').click(onThumbnailClick).appendTo(thumbnail);
+                            $('<div>', {'class': 'btn-flush'}).html('<i class="fa fa-remove fa-2x"></i>').click(removeThumbnail).appendTo(thumbnail);
                             $('<input type="hidden" name="thumbnail[]" value="' + data.name + '">').appendTo(thumbnail);
                         },
                         error: function (err) {

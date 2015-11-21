@@ -41,10 +41,10 @@ class CommentController extends Controller
 
         if ($id === null) {
             $user = auth()->user();
-            $data = request()->only(['text']) + ['user_id' => $user->id];
+            $data = request()->only(['text', 'parent_id']) + ['user_id' => $user->id];
         } else {
             $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
-            $data = request()->only(['text', 'parent_id']);
+            $data = request()->only(['text']);
         }
 
         $microblog->fill($data);
