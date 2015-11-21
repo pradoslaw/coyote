@@ -8,9 +8,8 @@
     <div id="microblog" class="row">
         <div class="col-md-9">
             <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Wszystkie wpisy <small>(1977)</small></a></li>
-                <li role="presentation"><a href="#">Nowe <small>(0)</small></a></li>
-                <li role="presentation"><a href="#">Obserwowani <small>(0)</small></a></li>
+                <li role="presentation" class="active"><a href="#">Wszystkie wpisy <small>({{ total }})</small></a></li>
+                <li role="presentation"><a href="#">Moje <small>(0)</small></a></li>
             </ul>
 
             {% if auth_check() %}
@@ -51,84 +50,35 @@
                 <h4 class="border"><i class="fa fa-tag fa-fw"></i> Popularne tagi</h4>
 
                 <ul class="tag-clouds">
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/coyote">coyote <small>(78)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/humor">humor <small>(57)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/java">java <small>(48)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/koziolekweb">koziolekweb <small>(38)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/4programmers.net">4programmers.net <small>(35)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/blog">blog <small>(23)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/praca">praca <small>(22)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/wtf">wtf <small>(20)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/korpo">korpo <small>(17)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/esa">esa <small>(12)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/jestętrenerę">jestętrenerę <small>(12)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/guava">guava <small>(11)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/pracaholandia">pracaholandia <small>(10)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/fasadin">fasadin <small>(10)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/konferencja">konferencja <small>(9)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/interview">interview <small>(9)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/konkurs">konkurs <small>(8)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/technicalblog">technicalblog <small>(8)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/c">c <small>(7)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/unity3d">unity3d <small>(7)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/sscript">sscript <small>(7)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/suchar">suchar <small>(7)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/vaadin">vaadin <small>(7)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/windows">windows <small>(6)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/event">event <small>(6)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/4programmers">4programmers <small>(6)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/eropost">eropost <small>(6)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/java8">java8 <small>(6)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/pakistanski_ninja">pakistanski_ninja <small>(6)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/furiat-saper">furiat-saper <small>(5)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/mały-wpis">mały-wpis <small>(5)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/git">git <small>(5)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/edukacja">edukacja <small>(5)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/microsoft">microsoft <small>(5)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/delphi">delphi <small>(5)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/csharp">csharp <small>(5)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/heheszki">heheszki <small>(5)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/cern">cern <small>(4)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/arduino">arduino <small>(4)</small></a></li>
-                    <li><a href="http://4programmers.net/Mikroblogi/Tag/treestructinfo">treestructinfo <small>(4)</small></a></li>
+                    {% for name, count in tags %}
+                        <li><a href="{{ route('microblog.tag', [name]) }}">{{ name }} <small>({{ count }})</small></a></li>
+                    {% endfor %}
                 </ul>
             </div>
 
             <div id="box-popular-entries" class="box">
                 <h4 class="border"><i class="fa fa-star fa-fw"></i> Popularne wpisy</h4>
 
-                <div class="media">
-                    <div class="media-body">
-                        <img class="media-object pull-left" src="/img/shalom.png" style="width: 16px; height: 16px;" alt="">
+                {% for microblog in popular %}
+                    <div class="media">
+                        <div class="media-body">
+                            <img class="media-object pull-left" src="{{ user_photo(microblog.user_photo) }}" style="width: 16px; height: 16px;" alt="">
 
-                        <h5 class="media-heading pull-left"><a href="#">Shalom</a></h5>
-                        <small> • 26 wrzesień 2015, 11:21</small>
+                            <h5 class="media-heading pull-left">
+                                {{ link_to_profile(microblog.user_id, microblog.name, microblog.is_active, microblog.is_blocked) }}
+                            </h5>
+                            <small> • {{ microblog.created_at|format_date }}</small>
 
-                        <p>
-                            <a href="http://4programmers.net/Mikroblogi/View/8771">"To nie ma sensu" - powiedział umysł. "To jest absurdalne" - powiedziało doświadczenie. "To jest nieprzydatne" - dodał zdrowy rozsądek. "Och, to jest to, tak!" - wykrzyknął zadowolony klient.</a>
-                        </p>
+                            <p>
+                                <a href="{{ route('microblog.view', [microblog.id]) }}">{{ microblog.text|str_limit(250) }}</a>
+                            </p>
 
-
-
-                        <a href="#" class="btn btn-thumbs thumbs-on" data-toggle="tooltip" data-placement="top" title="Shalom<br>Adam Boduch">2 głosy</a>
+                            <a href="{{ route('microblog.vote', [microblog.id]) }}" class="btn btn-thumbs {{ microblog.thumbs_on ? 'thumbs-on' }}" data-count="{{ microblog.votes }}" data-toggle="tooltip" data-placement="top">
+                                {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="media">
-                    <div class="media-body">
-                        <img class="media-object pull-left" src="/img/shalom.png" style="width: 16px; height: 16px;" alt="">
-
-                        <h5 class="media-heading pull-left"><a href="#">Shalom</a></h5>
-                        <small> • 26 wrzesień 2015, 11:21</small>
-
-                        <p>
-                            <a href="http://4programmers.net/Mikroblogi/View/8771">"To nie ma sensu" - powiedział umysł. "To jest absurdalne" - powiedziało doświadczenie. "To jest nieprzydatne" - dodał zdrowy rozsądek. "Och, to jest to, tak!" - wykrzyknął zadowolony klient.</a>
-                        </p>
-
-
-
-                        <a href="#" class="btn btn-thumbs" data-toggle="tooltip" data-placement="top" title="Shalom<br>Adam Boduch">2 głosy</a>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </aside>
     </div>

@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Carbon\Carbon;
 use Coyote\Microblog;
 use Image;
 
@@ -40,7 +41,9 @@ class MicroblogRepository extends Repository
         // generuje url do miniaturek dolaczonych do wpisu
         $microblogs = $this->thumbnails($microblogs);
 
+        // pobranie komentarzy do wpisow z mikrobloga
         $comments = $this->getComments($parentId);
+        // polaczenie wpisow z komentarzami
         $microblogs = $this->merge($microblogs, $comments);
 
         return new \Illuminate\Pagination\LengthAwarePaginator($microblogs, $total, $perPage, $page, [
@@ -60,7 +63,8 @@ class MicroblogRepository extends Repository
     {
         $result = $this->buildQuery()
                 ->whereNull('parent_id')
-                ->where('votes', '>=', 2)->orWhere('bonus', '>', 0)
+                ->where('votes', '>=', 2)
+                    ->orWhere('bonus', '>', 0)
                 ->orderBy('microblogs.is_sponsored', 'DESC')
                 ->orderBy('microblogs.score', 'DESC')
                 ->take($limit)
@@ -75,6 +79,24 @@ class MicroblogRepository extends Repository
 
         $comments = $this->getComments($parentId);
         return $this->merge($microblogs, $comments);
+    }
+
+    /**
+     * Pobiera $limit najpopularniejszych wpisow z mikrobloga z ostatniego tygodnia
+     *
+     * @param $limit
+     * @return mixed
+     */
+    public function takePopular($limit)
+    {
+        $result = $this->buildQuery()
+                ->whereNull('parent_id')
+                ->where('microblogs.created_at', '>=', Carbon::now()->subWeek())
+                ->orderBy('microblogs.score', 'DESC')
+                ->take($limit)
+                ->get();
+
+        return $result;
     }
 
     /**
@@ -170,6 +192,25 @@ class MicroblogRepository extends Repository
                 ->select(['users.name'])
                 ->get()
                 ->lists('name')
+                ->toArray();
+    }
+
+    /**
+     * Pobiera najpopularniejsze tagi w mikroblogach
+     *
+     * @return mixed
+     */
+    public function getTags()
+    {
+        return (new Microblog\Tag())
+                ->select(['name', \DB::raw('COUNT(*) AS count')])
+                ->join('microblogs', 'microblogs.id', '=', 'microblog_id')
+                    ->whereNull('deleted_at')
+                ->groupBy('name')
+                ->orderBy(\DB::raw('COUNT(*)'), 'DESC')
+                ->limit(30)
+                ->get()
+                ->lists('count', 'name')
                 ->toArray();
     }
 }

@@ -35,6 +35,33 @@ class Microblog extends Model
      */
     protected $attributes  = ['votes' => 0];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // nadajemy domyslna wartosc sortowania przy dodawaniu elementu
+            $model->score = Microblog::getScore(0, (int) $model->bonus, time());
+        });
+    }
+
+    /**
+     * Prosty "algorytm" do generowania rankingu danego wpisu na podstawie ocen i czasu dodania
+     *
+     * @param $votes
+     * @param $bonus
+     * @param $timestamp
+     * @return int
+     */
+    public static function getScore($votes, $bonus, $timestamp)
+    {
+        $log = $votes || $bonus ? log($votes + $bonus, 2) : 0;
+
+        // magia dzieje sie tutaj :) ustalanie "mocy" danego wpisu. na tej podstawie wyswietlane
+        // sa wpisy na stronie glownej. liczba glosow swiadczy o ich popularnosci
+        return (int) ($log + ($timestamp / 45000));
+    }
+
     public function getMediaAttribute($media)
     {
         return json_decode($media, true);

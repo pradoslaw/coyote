@@ -49,10 +49,11 @@ class VoteController extends Controller
                 $microblog->votes++;
             }
 
-            // magia dzieje sie tutaj :) ustalanie "mocy" danego wpisu. na tej podstawie wyswietlane
-            // sa wpisy na stronie glownej. liczba glosow swiadczy o ich popularnosci
-            $microblog->score = $microblog->votes ? (int) (log($microblog->votes + $microblog->bonus, 2)
-                + $microblog->created_at->getTimestamp() / 45000) : null;
+            $microblog->score = Microblog::getScore(
+                $microblog->votes,
+                $microblog->bonus,
+                $microblog->created_at->getTimestamp()
+            );
 
             $microblog->save();
 

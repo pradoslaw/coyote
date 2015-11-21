@@ -50,6 +50,8 @@ Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi'], function ()
     Route::post('Edit/{id?}', ['uses' => 'SubmitController@save', 'as' => 'microblog.save', 'middleware' => 'auth']);
     Route::get('Edit/{id}', ['uses' => 'SubmitController@edit', 'middleware' => 'auth']);
 
+    Route::get('/{tag}', ['as' => 'microblog.tag']);
+
     Route::post('Upload', ['uses' => 'SubmitController@upload', 'as' => 'microblog.upload', 'middleware' => 'auth']);
     Route::get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'microblog.view']);
     Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'microblog.vote', 'middleware' => 'auth']);

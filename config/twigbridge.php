@@ -195,6 +195,8 @@ return [
         | </code>
         |
         */
-        'filters'   => [],
+        'filters'   => [
+            'str_limit' => ['is_safe' => ['html']]
+        ],
     ],
 ];

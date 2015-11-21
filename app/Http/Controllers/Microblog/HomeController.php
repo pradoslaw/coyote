@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Image;
+use Cache;
 
 class HomeController extends Controller
 {
@@ -24,9 +25,17 @@ class HomeController extends Controller
             }
         }
 
+        // tagi nie zmieniaja sie czesto, wiec mozemy wrzucic do cache na 30 min
+        $tags = Cache::remember('microblogs-tags', 30, function () use ($repository) {
+            return $repository->getTags();
+        });
+
+        $popular = $repository->takePopular(5);
+
         return parent::view('microblog.home', [
+            'total'                     => $microblogs->total(),
             'pagination'                => $microblogs->render(),
             'microblogs'                => $microblogs->toArray()['data']
-        ]);
+        ])->with(compact('tags', 'popular'));
     }
 }

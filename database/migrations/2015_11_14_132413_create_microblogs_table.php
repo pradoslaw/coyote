@@ -14,16 +14,20 @@ class CreateMicroblogsTable extends Migration
     {
         Schema::create('microblogs', function (Blueprint $table) {
             $table->mediumInteger('id', true);
-            $table->mediumInteger('parent_id')->nullable()->index();
+            $table->mediumInteger('parent_id')->nullable();
             $table->mediumInteger('user_id');
             $table->timestampsTz();
             $table->softDeletes();
             $table->text('text');
             $table->smallInteger('votes')->default(0);
-            $table->integer('score')->nullable()->index();
+            $table->integer('score');
             $table->tinyInteger('is_sponsored')->default(0);
             $table->smallInteger('bonus')->nullable();
             $table->json('media')->nullable();
+
+            $table->index(['parent_id', 'deleted_at']);
+            $table->index('user_id');
+            $table->index('score');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('microblogs');
