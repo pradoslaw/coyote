@@ -28,6 +28,13 @@ class Microblog extends Model
      */
     protected $dates = ['deleted_at'];
 
+    /**
+     * Domyslne wartosci dla nowego modelu
+     *
+     * @var array
+     */
+    protected $attributes  = ['votes' => 0];
+
     public function getMediaAttribute($media)
     {
         return json_decode($media, true);
