@@ -107,30 +107,34 @@ $(function () {
         .on('mouseleave', '.btn-thumbs, .btn-sm-thumbs', Thumbs.leave)
         .on('click', '.btn-edit', function (e) {
             var $this = $(this);
+            var entryText = $('#entry-' + $this.data('id')).find('.microblog-text');
 
-            $.get($this.attr('href'), function (html) {
-                var entryText = $('#entry-' + $this.data('id')).find('.microblog-text');
+            if (typeof entries[$this.data('id')] === 'undefined') {
+                $.get($this.attr('href'), function (html) {
+                    entries[$this.data('id')] = entryText.html();
+                    entryText.html(html);
 
-                entries[$this.data('id')] = entryText.html();
-                entryText.html(html);
+                    var $form = initForm($('.microblog-submit', entryText));
 
-                var $form = initForm($('.microblog-submit', entryText));
+                    $form.unbind('submit').submit(function() {
+                        var data = $form.serialize();
+                        $(':input', $form).attr('disabled', 'disabled');
 
-                $form.unbind('submit').submit(function() {
-                    var data = $form.serialize();
-                    $(':input', $form).attr('disabled', 'disabled');
+                        $.post($form.attr('action'), data, function(html) {
+                            entryText.html(html);
+                            delete entries[$this.data('id')];
+                        })
+                            .always(function() {
+                                $(':input', $form).removeAttr('disabled');
+                            });
 
-                    $.post($form.attr('action'), data, function(html) {
-                        entryText.html(html);
-                        delete entries[$this.data('id')];
-                    })
-                        .always(function() {
-                            $(':input', $form).removeAttr('disabled');
-                        });
-
-                    return false;
+                        return false;
+                    });
                 });
-            });
+            } else {
+                entryText.html(entries[$this.data('id')]);
+                delete entries[$this.data('id')];
+            }
 
             e.preventDefault();
         })
@@ -173,38 +177,46 @@ $(function () {
             var $this = $(this);
             var commentText = $('#comment-' + $this.data('id')).find('.inline-edit');
 
-            $.get($this.attr('href'), function(text) {
-                comments[$this.data('id')] = commentText.html();
-                commentText.html('');
+            var cancel = function() {
+                commentText.html(comments[$this.data('id')]);
+                delete comments[$this.data('id')];
+            };
 
-                var $form = $('<form>');
-                var $input = $('<input>', {'value': text, 'class': 'form-control', 'name': 'text'})
-                    .keydown(function(e) {
-                        if (e.keyCode === 27) {
-                            commentText.html(comments[$this.data('id')]);
+            if (typeof comments[$this.data('id')] === 'undefined') {
+                $.get($this.attr('href'), function(text) {
+                    comments[$this.data('id')] = commentText.html();
+                    commentText.html('');
+
+                    var $form = $('<form>');
+                    var $input = $('<input>', {'value': text, 'class': 'form-control', 'name': 'text'})
+                        .keydown(function(e) {
+                            if (e.keyCode === 27) {
+                                cancel();
+                            }
+                        })
+                        .appendTo($form);
+
+                    $form.submit(function() {
+                        var data = $form.serialize();
+                        $input.attr('disabled', 'disabled');
+
+                        $.post($this.attr('href'), data, function(html) {
+                            $('#comment-' + $this.data('id')).replaceWith(html);
                             delete comments[$this.data('id')];
-                        }
-                    })
-                    .appendTo($form);
+                        })
+                            .always(function() {
+                                $input.removeAttr('disabled');
+                            });
 
-                $form.submit(function() {
-                    var data = $form.serialize();
-                    $input.attr('disabled', 'disabled');
+                        return false;
+                    });
 
-                    $.post($this.attr('href'), data, function(html) {
-                        $('#comment-' + $this.data('id')).replaceWith(html);
-                        delete comments[$this.data('id')];
-                    })
-                        .always(function() {
-                            $input.removeAttr('disabled');
-                        });
-
-                    return false;
+                    $form.appendTo(commentText);
+                    $input.focus().prompt(promptUrl);
                 });
-
-                $form.appendTo(commentText);
-                $input.focus().prompt(promptUrl);
-            });
+            } else {
+                cancel();
+            }
 
             e.preventDefault();
         })
