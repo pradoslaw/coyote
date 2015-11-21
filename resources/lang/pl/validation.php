@@ -102,6 +102,10 @@ return [
         ],
         'password_old' => [
             'required'      => 'Wymagane jest podanie obecnego hasła'
+        ],
+        // m.in. w mikroblogach
+        'text' => [
+            'required'      => 'Proszę wpisać treść'
         ]
     ],
 

@@ -15,7 +15,15 @@ $(function () {
 
     $(document).ajaxError(function(event, jqxhr) {
         $('#alert').modal('show');
-        $('.modal-body').text(jqxhr.responseJSON.error);
+        var error;
+
+        if (typeof jqxhr.responseJSON.error !== 'undefined') {
+            error = jqxhr.responseJSON.error;
+        } else {
+            error = jqxhr.responseJSON.text;
+        }
+
+        $('.modal-body').text(error);
     });
 
     // zawartosc tresci wpisow
@@ -81,9 +89,10 @@ $(function () {
         }
     };
 
-    $('#microblog').on('click', '.btn-reply', function () {
-        $(this).parent().next('.microblog-comments').find('input').focus();
-    })
+    $('#microblog')
+        .on('click', '.btn-reply', function () {
+            $(this).parent().next('.microblog-comments').find('input').focus();
+        })
         .on('click', '.btn-watch', function () {
             var $this = $(this);
 
@@ -128,11 +137,20 @@ $(function () {
         .on('click', '.btn-remove', function () {
             var $this = $(this);
 
-            $.post($this.attr('href'), function() {
-                $('#entry-' + $this.data('id')).fadeOut(500);
+            $('#confirm').modal('show').one('click', '.danger', function() {
+                $.post($this.attr('href'), function() {
+                    $('#entry-' + $this.data('id')).fadeOut(500);
+                });
+
+                $('#confirm').modal('hide');
             });
 
             return false;
+        })
+        .on('focus', '.comment-submit input', function() {
+            if (typeof $(this).data('prompt') === 'undefined') {
+                $(this).prompt(promptUrl).data('prompt', 'yes');
+            }
         })
         .on('submit', '.comment-submit', function() {
             var $form = $(this);
@@ -175,6 +193,7 @@ $(function () {
 
                     $.post($this.attr('href'), data, function(html) {
                         $('#comment-' + $this.data('id')).replaceWith(html);
+                        delete comments[$this.data('id')];
                     })
                         .always(function() {
                             $input.removeAttr('disabled');
@@ -192,8 +211,12 @@ $(function () {
         .on('click', '.btn-sm-remove', function() {
             var $this = $(this);
 
-            $.post($this.attr('href'), function() {
-                $('#comment-' + $this.data('id')).fadeOut(500);
+            $('#confirm').modal('show').one('click', '.danger', function() {
+                $.post($this.attr('href'), function() {
+                    $('#comment-' + $this.data('id')).fadeOut(500);
+                });
+
+                $('#confirm').modal('hide');
             });
 
             return false;

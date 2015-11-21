@@ -133,7 +133,8 @@
         </aside>
     </div>
 
-    {{ modal.alert('Błąd', 'Nie można dodać załącznika. Być może plik ma nieprawidłowy format lub jest zbyt duży?') }}
+    {{ modal.alert('Nie można dodać załącznika. Być może plik ma nieprawidłowy format lub jest zbyt duży?') }}
+    {{ modal.confirm('Czy na pewno usunąć ten wpis?') }}
 
     <script type="text/html" id="tmpl-thumbnail">
         <div class="col-sm-2">

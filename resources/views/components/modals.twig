@@ -1,9 +1,9 @@
-{% macro confirm(message) %}
-    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">
+{% macro confirm(message, title='Czy chcesz kontynuować?', id='confirm') %}
+    <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Usuwanie</h4>
+                    <h4 class="modal-title">{{ title }}</h4>
                 </div>
                 <div class="modal-body">
                     {{ message|raw }}
@@ -17,8 +17,8 @@
     </div>
 {% endmacro %}
 
-{% macro alert(title, message) %}
-    <div class="modal fade" id="alert" tabindex="-1" role="dialog" aria-labelledby="alert-modal" aria-hidden="true">
+{% macro alert(message, title='Błąd', id='alert') %}
+    <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="alert-modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
