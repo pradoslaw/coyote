@@ -40,6 +40,10 @@
                 {% include "microblog/_microblog.twig" with microblog only %}
             {% endfor %}
 
+            <div class="text-center">
+                {{ pagination|raw }}
+            </div>
+
         </div>
 
         <aside class="col-md-3">
