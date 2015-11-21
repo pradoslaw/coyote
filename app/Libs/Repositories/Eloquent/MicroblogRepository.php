@@ -4,13 +4,14 @@ namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
 use Coyote\Microblog;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Image;
 
 /**
  * Class MicroblogRepository
  * @package Coyote\Repositories\Eloquent
  */
-class MicroblogRepository extends Repository
+class MicroblogRepository extends Repository implements MicroblogRepositoryInterface
 {
     public function model()
     {
@@ -18,12 +19,10 @@ class MicroblogRepository extends Repository
     }
 
     /**
-     * @param null $perPage
-     * @param string $pageName
-     * @param null $page
+     * @param null|int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = null, $pageName = 'page', $page = null)
+    public function paginate($perPage = 10)
     {
         $result = $this->buildQuery()
                 ->whereNull('parent_id')
@@ -46,9 +45,8 @@ class MicroblogRepository extends Repository
         // polaczenie wpisow z komentarzami
         $microblogs = $this->merge($microblogs, $comments);
 
-        return new \Illuminate\Pagination\LengthAwarePaginator($microblogs, $total, $perPage, $page, [
-            'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
-            'pageName' => $pageName,
+        return new \Illuminate\Pagination\LengthAwarePaginator($microblogs, $total, $perPage, null, [
+            'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()
         ]);
     }
 
@@ -107,7 +105,7 @@ class MicroblogRepository extends Repository
      */
     private function getComments($parentId)
     {
-        return $this->buildQuery()->whereIn('parent_id', $parentId)->get();
+        return $this->buildQuery()->whereIn('parent_id', $parentId)->orderBy('id')->get();
     }
 
     /**

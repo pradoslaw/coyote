@@ -45,6 +45,20 @@ interface RepositoryInterface
     public function find($id, $columns = ['*']);
 
     /**
+     * @param $id
+     * @param array $columns
+     * @return mixed
+     */
+    public function findOrFail($id, $columns = ['*']);
+
+    /**
+     * @param $id
+     * @param array $columns
+     * @return mixed
+     */
+    public function findOrNew($id, $columns = ['*']);
+
+    /**
      * @param $attribute
      * @param $value
      * @param array $columns

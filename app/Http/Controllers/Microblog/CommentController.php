@@ -3,13 +3,19 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Eloquent\MicroblogRepository as Microblog;
-use Coyote\Repositories\Eloquent\UserRepository as User;
-use Illuminate\Http\Request;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 
 class CommentController extends Controller
 {
+    /**
+     * @var Microblog
+     */
     private $microblog;
+
+    /**
+     * @var User
+     */
     private $user;
 
     /**
@@ -37,7 +43,7 @@ class CommentController extends Controller
             'parent_id'     => 'sometimes|integer|exists:microblogs,id'
         ]);
 
-        $microblog = $this->microblog->firstOrNew(['id' => $id]);
+        $microblog = $this->microblog->findOrNew($id);
 
         if ($id === null) {
             $user = auth()->user();

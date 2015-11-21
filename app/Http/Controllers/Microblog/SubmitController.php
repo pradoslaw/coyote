@@ -3,8 +3,8 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Eloquent\MicroblogRepository as Microblog;
-use Coyote\Repositories\Eloquent\UserRepository as User;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
 
 /**
@@ -13,7 +13,14 @@ use Illuminate\Http\Request;
  */
 class SubmitController extends Controller
 {
+    /**
+     * @var Microblog
+     */
     private $microblog;
+
+    /**
+     * @var User
+     */
     private $user;
 
     /**
@@ -40,7 +47,7 @@ class SubmitController extends Controller
             'text'          => 'required|string'
         ]);
 
-        $microblog = $this->microblog->firstOrNew(['id' => $id]);
+        $microblog = $this->microblog->findOrNew($id);
         $data = request()->only(['text']);
 
         if ($id === null) {
@@ -119,7 +126,7 @@ class SubmitController extends Controller
      */
     public function delete($id)
     {
-        $microblog = $this->microblog->findOrFail($id);
+        $microblog = $this->microblog->findOrFail($id, ['id']);
         $microblog->delete();
     }
 

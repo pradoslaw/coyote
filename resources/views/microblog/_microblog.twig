@@ -30,8 +30,11 @@
                         <a href="{{ route('microblog.vote', [id]) }}" class="btn btn-thumbs {{ thumbs_on ? 'thumbs-on' }}" data-count="{{ votes }}" data-toggle="tooltip" data-placement="top">
                             {{ declination(votes, ['głos', 'głosy', 'głosów']) }}
                         </a>
-                        <a href="{{ route('microblog.watch', [id]) }}" class="btn btn-watch {{ watch_on ? 'watch-on' }}">Obserwuj</a>
-                        <a href="javascript:" class="btn btn-reply">Komentarz</a>
+
+                        {% if auth_check() %}
+                            <a href="{{ route('microblog.watch', [id]) }}" class="btn btn-watch {{ watch_on ? 'watch-on' }}">Obserwuj</a>
+                            <a href="javascript:" class="btn btn-reply">Komentarz</a>
+                        {% endif %}
                     </div>
 
                     <div class="microblog-comments">
@@ -40,19 +43,21 @@
                             {% include 'microblog/_comment.twig' with {'comment': comment} %}
                         {% endfor %}
 
-                        <form class="comment-submit" method="POST" action="{{ route('microblog.comment.save') }}">
-                            <div class="media form">
-                                <div class="media-left">
-                                    <a href="{{ route('profile', user('id')) }}">
-                                        <img class="media-object" src="{{ user_photo(user('photo')) }}" style="width: 32px; height: 32px">
-                                    </a>
+                        {% if auth_check() %}
+                            <form class="comment-submit" method="POST" action="{{ route('microblog.comment.save') }}">
+                                <div class="media form">
+                                    <div class="media-left">
+                                        <a href="{{ route('profile', user('id')) }}">
+                                            <img class="media-object" src="{{ user_photo(user('photo')) }}" style="width: 32px; height: 32px">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <input type="hidden" name="parent_id" value="{{ id }}">
+                                        <input type="text" name="text" placeholder="Napisz komentarz..." class="form-control">
+                                    </div>
                                 </div>
-                                <div class="media-body">
-                                    <input type="hidden" name="parent_id" value="{{ id }}">
-                                    <input type="text" name="text" placeholder="Napisz komentarz..." class="form-control">
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        {% endif %}
                     </div>
 
                 </div>

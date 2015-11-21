@@ -35,5 +35,10 @@ class AppServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Contracts\\UserRepositoryInterface',
             'Coyote\\Repositories\\Eloquent\\UserRepository'
         );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\MicroblogRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\MicroblogRepository'
+        );
     }
 }
