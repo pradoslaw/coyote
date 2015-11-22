@@ -48,8 +48,16 @@
 
 .dropdown-username {
   padding: 7px 10px 4px 10px;
-  font-weight: bold;
-  color: $gray-light;
+}
+
+.dropdown-userhome {
+  font-weight: bold !important;
+  color: $gray-light !important;
+  padding: 0 !important;
+
+  &:hover {
+    background-color: transparent !important;
+  }
 }
 
 .dropdown-header {

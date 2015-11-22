@@ -172,7 +172,7 @@
                             uploadIcon.removeClass('fa-upload').addClass('fa-spinner fa-spin');
                         },
                         success: function (data) {
-                            $('#photo img, .navbar-default .img-thumbnail').attr('src', data.url);
+                            $('#photo img, .avatar img').attr('src', data.url);
                             var deleteUrl = '{{ route('user.photo.delete') }}';
 
                             if (!$('#btn-delete-photo').length) {
@@ -195,7 +195,7 @@
 
             $('#btn-delete-photo').on('click', function() {
                 $.post($(this).attr('href'), function() {
-                    $('#photo img, .navbar-default .img-thumbnail').attr('src', '{{ asset('img/avatar.png') }}');
+                    $('#photo img, .avatar img').attr('src', '{{ asset('img/avatar.png') }}');
                     $('#btn-delete-photo').remove();
                 });
 

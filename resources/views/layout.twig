@@ -61,16 +61,16 @@
 
                         {% if auth_check()  %}
                             <div class="navbar-right dropdown avatar">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail" style="width: 35px">
                                     <span class="caret"></span>
                                 </a>
 
                                 <ul id="dropdown-user" class="dropdown-menu">
-                                    <li class="dropdown-username">{{ auth_user().name  }}</li>
+                                    <li class="dropdown-username"><a class="dropdown-userhome" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
                                     <li class="divider"></li>
                                     <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
-                                    <li><a href="{{ route('profile', [auth_user().id]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
+                                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
                                     <li><a href="#"><i class="fa fa-info-circle fa-fw"></i> Pomoc</a></li>
                                     <li class="divider"></li>
                                     <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a></li>

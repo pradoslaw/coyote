@@ -66,6 +66,7 @@ header {
   .navbar-nav {
     margin-left: 5px;
   }
+
   .navbar-nav > li > a {
     color: #3C3C3C;
     font-family: "Open Sans", Arial, sans-serif;
@@ -92,13 +93,11 @@ header {
 }
 
 #navbar-header-search {
-
   background: url('/img/main-menu-separator.png') no-repeat 0 100%;
   padding-left: 20px;
   margin-left: 20px;
 
   > div {
-
     position: relative;
 
     input {
