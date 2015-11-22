@@ -12,10 +12,60 @@ class UserRepository extends Repository implements UserRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * @param $name
+     * @return mixed
      */
     public function findByName($name)
     {
         return $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%')->get();
+    }
+
+    /**
+     * Pobiera reputacje usera w procentach (jak i rowniez pozycje usera w rankingu)
+     *
+     * @param $userId
+     * @return null|array
+     */
+    public function rank($userId)
+    {
+        $sql = "SELECT u1.reputation AS reputation,
+                (
+                    u1.reputation / GREATEST(1, (
+
+                        SELECT reputation
+                        FROM users u2
+                        ORDER BY u2.reputation DESC
+                        LIMIT 1
+                    )) * 100
+
+                ) AS percentage,
+
+                (
+                    SELECT COUNT(*)
+                    FROM users
+                    WHERE reputation >= u1.reputation
+
+                ) AS rank
+                FROM users u1
+                WHERE id = ?";
+
+        $rowset = \DB::select($sql, [$userId]);
+
+        // select() zwraca kolekcje. nas interesuje tylko jeden rekord
+        if ($rowset) {
+            return $rowset[0];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Podaje liczbe userow ktorzy maja jakakolwiek reputacje w systemie
+     *
+     * @return int
+     */
+    public function countUsersWithReputation()
+    {
+        return $this->model->where('reputation', '>', 0)->count();
     }
 }

@@ -11,7 +11,7 @@ use Coyote\Reputation\ReputationInterface;
  */
 class Create extends Reputation implements ReputationInterface
 {
-    const ID = 3;
+    const ID = \Coyote\Reputation::MICROBLOG;
 
     /**
      * Cofniecie pkt reputacji za dany wpis (np. przy usuwaniu wpisu)

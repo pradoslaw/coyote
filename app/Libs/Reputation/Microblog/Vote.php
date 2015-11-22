@@ -11,5 +11,5 @@ use Coyote\Reputation\ReputationInterface;
  */
 class Vote extends Reputation implements ReputationInterface
 {
-    const ID = 4;
+    const ID = \Coyote\Reputation::MICROBLOG_VOTE;
 }

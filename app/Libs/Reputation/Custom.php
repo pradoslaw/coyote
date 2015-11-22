@@ -8,5 +8,5 @@ namespace Coyote\Reputation;
  */
 class Custom extends Reputation implements ReputationInterface
 {
-    const ID = 1;
+    const ID = \Coyote\Reputation::CUSTOM;
 }

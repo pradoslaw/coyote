@@ -15,7 +15,7 @@ class HomeController extends Controller
     /**
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(UserRepositoryInterface $user)
     {
         $this->breadcrumb->push('Moje konto', route('user.home'));
 
@@ -44,8 +44,8 @@ class HomeController extends Controller
         }
 
         return parent::view('user.home', [
-            'rank'                  => Reputation::getUserRank(auth()->user()->id),
-            'total_users'           => Reputation::getTotalUsers(),
+            'rank'                  => $user->rank(auth()->user()->id),
+            'total_users'           => $user->countUsersWithReputation(),
             'ip'                    => request()->ip(),
             'sessions'              => $sessions
         ]);
