@@ -10,4 +10,12 @@ class UserRepository extends Repository implements UserRepositoryInterface
     {
         return 'Coyote\User';
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function findByName($name)
+    {
+        return $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%')->get();
+    }
 }

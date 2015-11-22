@@ -3,15 +3,19 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\User;
+use Illuminate\Http\Request;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
 
 class PromptController extends Controller
 {
     /**
-     * @return \Illuminate\View\View
+     * @param Request $request
+     * @param UserRepositoryInterface $user
+     * @return $this
      */
-    public function index()
+    public function index(Request $request, UserRepositoryInterface $user)
     {
-        return view('components.prompt')->with('users', User::all());
+        $this->validate($request, ['q' => 'username']);
+        return view('components.prompt')->with('users', $user->findByName($request['q']));
     }
 }
