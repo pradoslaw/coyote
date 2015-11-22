@@ -86,7 +86,7 @@ class CommentController extends Controller
      */
     public function delete($id)
     {
-        $microblog = $this->microblog->findOrFail($id);
+        $microblog = $this->microblog->findOrFail($id, ['id', 'user_id']);
         $this->authorize('delete', $microblog);
 
         $microblog->delete();
