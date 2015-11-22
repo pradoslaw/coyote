@@ -54,6 +54,18 @@
   .img-thumbnail {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    position: relative;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    &:hover {
+      #btn-delete-photo {
+        display: flex;
+      }
+    }
   }
 
   .btn-upload {
@@ -62,6 +74,26 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     color: #fff;
+  }
+
+  #btn-delete-photo {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    vertical-align: middle;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: none;
+    background-color: #000;
+    opacity: .5;
+    color: #fff;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 

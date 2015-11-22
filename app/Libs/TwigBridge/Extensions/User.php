@@ -97,7 +97,7 @@ class User extends Twig_Extension
             new Twig_SimpleFunction(
                 'user_photo',
                 function ($photo) {
-                    return $photo ? asset($photo) : asset('img/avatar.png');
+                    return $photo ? asset('storage/photo/' . $photo) : asset('img/avatar.png');
                 }
             ),
 

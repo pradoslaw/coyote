@@ -76,6 +76,9 @@ Route::group(['namespace' => 'User', 'middleware' => 'auth'], function () {
 
     // strona glowna panelu uzytkownika
     Route::get('User', ['uses' => 'HomeController@index', 'as' => 'user.home']);
+    // dodawanie i usuwanie zdjecia uzytkownika
+    Route::post('User/Photo/Upload', ['uses' => 'HomeController@upload', 'as' => 'user.photo.upload']);
+    Route::post('User/Photo/Delete', ['uses' => 'HomeController@delete', 'as' => 'user.photo.delete']);
 
     // ustawienia uzytkownika
     Route::get('User/Settings', ['uses' => 'SettingsController@index', 'as' => 'user.settings']);

@@ -1,6 +1,8 @@
 {% extends 'layout.twig' %}
 {% block title %}Moje konto :: {{ parent() }}{% endblock %}
 
+{% import 'components/modals.twig' as modal %}
+
 {% block container %}
     {{ include('user/_top', {active: 'home'}) }}
 
@@ -17,9 +19,22 @@
 
                             <div class="row">
                                 <div class="col-sm-1 hidden-xs">
-                                    <img src="/img/avatar.png" class="img-thumbnail">
-                                    <a href="javascript:" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
+                                    <div id="photo" class="img-thumbnail">
+                                        <img src="{{ user_photo(user('photo')) }}">
+
+                                        {% if user('photo') %}
+                                            <a href="{{ route('user.photo.delete') }}" id="btn-delete-photo">
+                                                <i class="fa fa-remove fa-2x"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+
+                                    <a id="upload" href="javascript:" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
                                 </div>
+
+                                <form id="upload-form" action="{{ route('user.photo.upload') }}">
+                                    <input type="file" id="input-file" name="photo" style="visibility: hidden; height: 0">
+                                </form>
 
                                 <div class="col-sm-11" style="padding-left: 20px">
                                     <ul class="list-inline">
@@ -114,7 +129,10 @@
             </section>
         </main>
     </div>
+
+    {{ modal.alert('Uups. Coś poszło nie tak w trakcie dodawania fotografii.') }}
 {% endblock %}
+
 
 {% block head %}
     {{ parent() }}
@@ -127,7 +145,62 @@
 
     <script type="text/javascript">
         $(function () {
+            $('#upload').click(function() {
+                $('#input-file').click();
+            });
 
+            $('#input-file').change(function() {
+                var file = this.files[0];
+
+                if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
+                    $('#alert').modal('show');
+                    $('.modal-body').text('Format pliku jest nieprawidłowy. Załącznik musi być zdjęciem JPG, PNG lub GIF');
+                }
+                else {
+                    var $form = $('#upload-form');
+                    var formData = new FormData($form[0]);
+                    var uploadIcon = $('#upload i');
+
+                    $.ajax({
+                        url: $form.attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function () {
+                            uploadIcon.removeClass('fa-upload').addClass('fa-spinner fa-spin');
+                        },
+                        success: function (data) {
+                            $('#photo img, .navbar-default .img-thumbnail').attr('src', data.url);
+                            var deleteUrl = '{{ route('user.photo.delete') }}';
+
+                            if (!$('#btn-delete-photo').length) {
+                                $('<a href="' + deleteUrl + '" id="btn-delete-photo"><i class="fa fa-remove fa-2x"></i></a>').appendTo('#photo');
+                            }
+                        },
+                        complete: function() {
+                            uploadIcon.removeClass('fa-spinner fa-spin').addClass('fa-upload');
+                        },
+                        error: function (err) {
+                            $('#alert').modal('show');
+
+                            if (typeof err.responseJSON !== 'undefined') {
+                                $('.modal-body').text(err.responseJSON.photo[0]);
+                            }
+                        }
+                    }, 'json');
+                }
+            });
+
+            $('#btn-delete-photo').on('click', function() {
+                $.post($(this).attr('href'), function() {
+                    $('#photo img, .navbar-default .img-thumbnail').attr('src', '{{ asset('img/avatar.png') }}');
+                    $('#btn-delete-photo').remove();
+                });
+
+                return false;
+            });
         });
     </script>
 {% endblock %}
