@@ -20,7 +20,11 @@ class Create extends Reputation implements ReputationInterface
      */
     public function undo($microblogId)
     {
-        $result = $this->reputation->whereRaw("metadata->>'microblog_id' = ?", [$microblogId])->first();
+        $result = $this->reputation
+            ->where('type_id', '=', self::ID)
+            ->whereRaw("metadata->>'microblog_id' = ?", [$microblogId])
+            ->first();
+
         if ($result) {
             $this->setIsPositive(false);
 

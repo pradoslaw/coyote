@@ -7,7 +7,8 @@ use Coyote\Microblog;
 use Coyote\Microblog\Vote;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Illuminate\Http\Request;
-use Log;
+use Coyote\Reputation\Microblog\Vote as ReputationVote;
+use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 
 /**
  * Ocena glosow na dany wpis na mikro (lub wyswietlanie loginow ktorzy oddali ow glos)
@@ -17,6 +18,19 @@ use Log;
  */
 class VoteController extends Controller
 {
+    /**
+     * @var Reputation
+     */
+    private $reputation;
+
+    /**
+     * @param Reputation $reputation
+     */
+    public function __construct(Reputation $reputation)
+    {
+        $this->reputation = $reputation;
+    }
+
     /**
      * @param $id
      * @param Request $request
@@ -54,6 +68,16 @@ class VoteController extends Controller
                 $microblog->bonus,
                 $microblog->created_at->getTimestamp()
             );
+
+            if (!$microblog->parent_id) {
+                (new ReputationVote($this->reputation))->save([
+                    'userId'            => auth()->user()->id,
+                    'excerpt'           => str_limit($microblog->text, 200),
+                    'url'               => route('microblog.view', [$microblog->id]),
+                    'microblogId'       => $microblog->id,
+                    'isPositive'        => !$vote
+                ]);
+            }
 
             $microblog->save();
 
