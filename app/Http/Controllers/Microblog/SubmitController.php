@@ -5,6 +5,8 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
+use Coyote\Reputation\Microblog\Create as ReputationCreate;
 use Illuminate\Http\Request;
 
 /**
@@ -24,15 +26,22 @@ class SubmitController extends Controller
     private $user;
 
     /**
+     * @var Reputation
+     */
+    private $reputation;
+
+    /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
      *
      * @param Microblog $microblog
      * @param User $user
+     * @param Reputation $reputation
      */
-    public function __construct(Microblog $microblog, User $user)
+    public function __construct(Microblog $microblog, User $user, Reputation $reputation)
     {
         $this->microblog = $microblog;
         $this->user = $user;
+        $this->reputation = $reputation;
     }
 
     /**
@@ -85,7 +94,22 @@ class SubmitController extends Controller
         }
 
         $microblog->fill($data);
-        $microblog->save();
+
+        \DB::transaction(function () use ($microblog, $id, $user) {
+            $microblog->save();
+
+            if (!$id) {
+                $reputation = [
+                    'microblogId'   => $microblog->id,
+                    'url'           => route('microblog.view', [$microblog->id]),
+                    'userId'        => $user->id,
+                    'excerpt'       => str_limit($microblog->text, 250)
+                ];
+
+                // zwiekszenie pkt reputacji
+                (new ReputationCreate($this->reputation))->save($reputation);
+            }
+        });
 
         // jezeli wpis zawiera jakies zdjecia, generujemy linki do miniatur
         // metoda thumbnails() przyjmuje w parametrze tablice tablic (wpisow, tj. mikroblogow)
@@ -132,7 +156,11 @@ class SubmitController extends Controller
         $microblog = $this->microblog->findOrFail($id, ['id', 'user_id']);
         $this->authorize('delete', $microblog);
 
-        $microblog->delete();
+        \DB::transaction(function () use ($microblog) {
+            $microblog->delete();
+            // cofniecie pkt reputacji
+            (new ReputationCreate($this->reputation))->undo($microblog->id);
+        });
     }
 
     /**

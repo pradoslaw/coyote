@@ -16,6 +16,28 @@ class Reputation extends Model
     const WIKI_RATE = 8;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['type_id', 'user_id', 'value', 'excerpt', 'url', 'metadata'];
+
+    /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    public function getMetadataAttribute($metadata)
+    {
+        return json_decode($metadata, true);
+    }
+
+    public function setMetadataAttribute($metadata)
+    {
+        $this->attributes['metadata'] = json_encode($metadata);
+    }
+
+    /**
      * Pobiera reputacje usera w procentach (jak i rowniez pozycje usera w rankingu)
      *
      * @param $userId

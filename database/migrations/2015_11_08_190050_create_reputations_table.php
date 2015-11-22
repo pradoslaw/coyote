@@ -17,10 +17,13 @@ class CreateReputationsTable extends Migration
             $table->smallInteger('type_id');
             $table->mediumInteger('user_id');
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
-            $table->smallInteger('points');
-            $table->string('subject')->nullable();
+            $table->smallInteger('value');
+            $table->string('excerpt')->nullable();
             $table->string('url')->nullable();
             $table->json('metadata')->nullable();
+
+            $table->index('user_id');
+            $table->index('metadata');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('reputation_type');
