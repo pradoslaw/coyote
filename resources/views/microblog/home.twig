@@ -62,7 +62,7 @@
                 {% for microblog in popular %}
                     <div class="media">
                         <div class="media-body">
-                            <img class="media-object pull-left" src="{{ user_photo(microblog.user_photo) }}" style="width: 16px; height: 16px;" alt="">
+                            <img class="media-object pull-left" src="{{ user_photo(microblog.photo) }}" style="width: 16px; height: 16px;" alt="">
 
                             <h5 class="media-heading pull-left">
                                 {{ link_to_profile(microblog.user_id, microblog.name, microblog.is_active, microblog.is_blocked) }}

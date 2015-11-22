@@ -127,7 +127,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     private function buildQuery($withComments = true)
     {
-        $columns = ['microblogs.*', 'users.name', 'is_active', 'is_blocked'];
+        $columns = ['microblogs.*', 'users.name', 'is_active', 'is_blocked', 'photo'];
         $columnThumb = 'mv.id AS thumbs_on';
         $columnWatch = 'mw.user_id AS watch_on';
 
