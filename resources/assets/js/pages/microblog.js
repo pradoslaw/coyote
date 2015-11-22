@@ -62,8 +62,8 @@ $(function () {
                 var $this = $(this);
 
                 if (typeof $this.attr('title') === 'undefined') {
-                    timeoutId = setTimeout(function () {
-                        $.get($this.attr('href'), function (html) {
+                    timeoutId = setTimeout(function() {
+                        $.get($this.attr('href'), function(html) {
                             $this.attr('title', html);
 
                             if (html.length) {
@@ -85,7 +85,6 @@ $(function () {
         },
         leave: function () {
             clearTimeout(timeoutId);
-            $('.tooltip').remove();
         }
     };
 
