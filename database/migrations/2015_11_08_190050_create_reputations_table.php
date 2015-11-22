@@ -22,6 +22,7 @@ class CreateReputationsTable extends Migration
             $table->string('url')->nullable();
             $table->json('metadata')->nullable();
 
+            $table->index('type_id');
             $table->index('user_id');
             $table->index('metadata');
 
