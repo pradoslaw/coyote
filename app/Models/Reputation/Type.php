@@ -11,7 +11,7 @@ class Type extends Model
      *
      * @var string
      */
-    protected $table = 'reputation_type';
+    protected $table = 'reputation_types';
     /**
      * The attributes that are mass assignable.
      *

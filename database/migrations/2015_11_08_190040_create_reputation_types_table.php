@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateReputationTypeTable extends Migration
+class CreateReputationTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateReputationTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('reputation_type', function (Blueprint $table) {
+        Schema::create('reputation_types', function (Blueprint $table) {
             $table->mediumInteger('id')->unique();
             $table->string('name');
             $table->smallInteger('points');
@@ -26,6 +26,6 @@ class CreateReputationTypeTable extends Migration
      */
     public function down()
     {
-        Schema::drop('reputation_type');
+        Schema::drop('reputation_types');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Coyote\Reputation\Type;
 use Coyote\Reputation;
 
-class ReputationTypeTableSeeder extends Seeder
+class ReputationTypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

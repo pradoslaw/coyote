@@ -26,7 +26,7 @@ class CreateReputationsTable extends Migration
             $table->index('user_id');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('type_id')->references('id')->on('reputation_type');
+            $table->foreign('type_id')->references('id')->on('reputation_types');
         });
     }
 

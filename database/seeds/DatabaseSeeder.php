@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AclPermissionTableSeeder::class);
         $this->call(WordTableSeeder::class);
         $this->call(TagTableSeeder::class);
-        $this->call(ReputationTypeTableSeeder::class);
+        $this->call(ReputationTypesTableSeeder::class);
         $this->call(MicroblogTableSeeder::class);
     }
 }
