@@ -45,5 +45,10 @@ class AppServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Contracts\\ReputationRepositoryInterface',
             'Coyote\\Repositories\\Eloquent\\ReputationRepository'
         );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\AlertRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\AlertRepository'
+        );
     }
 }
