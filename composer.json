@@ -41,7 +41,10 @@
         ],
         "psr-4": {
             "Coyote\\": "app/"
-        }
+        },
+        "files": [
+            "app/Helpers/Text.php"
+        ]
     },
     "autoload-dev": {
         "classmap": [

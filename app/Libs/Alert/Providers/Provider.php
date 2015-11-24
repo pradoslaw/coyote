@@ -72,6 +72,11 @@ abstract class Provider implements ProviderInterface
             throw new \Exception('Uuups. Could not find record in alert_types table.');
         }
 
+        $this->with($args);
+    }
+
+    public function with(array $args = [])
+    {
         if ($args) {
             foreach ($args as $arg => $value) {
                 $this->{'set' . camel_case($arg)}($value);

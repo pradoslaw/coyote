@@ -94,7 +94,7 @@ class VoteController extends Controller
                 (new Alert_Vote($this->alert))
                     ->setMicroblogId($microblog->id)
                     ->addUserId($microblog->user_id)
-                    ->setSubject($microblog->text)
+                    ->setSubject(excerpt($microblog->text))
                     ->setSenderId(auth()->user()->id)
                     ->setSenderName(auth()->user()->name)
                     ->setUrl($url)
