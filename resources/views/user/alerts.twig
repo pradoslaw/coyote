@@ -1,0 +1,66 @@
+{% extends 'layout.twig' %}
+{% block title %}Powiadomienia {{ parent() }}{% endblock %}
+
+{% block container %}
+    {{ include('user/_top', {active: 'home'}) }}
+
+    <div class="row">
+        {% include 'user/_home-menu' %}
+
+        <main class="col-md-10">
+            <section class="panel panel-wrapper">
+                <div class="panel-body">
+                    <h2>Powiadomienia</h2>
+
+                    <div id="box-alerts" class="panel panel-default">
+                        <div class="panel-body">
+                            <h2>15 listopada 2015</h2>
+
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object" src="/img/avatar.png" style="width: 49px; height: 49px;" alt="">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <header>
+                                        <h4 class="pull-left"><a href="#">furious programming dodał odpowiedź w wątku</a></h4>
+                                        <small class="pull-right">dzisiaj, 14:39</small>
+                                    </header>
+                                    <h3><a href="#">Widok wątku: co z wyszukiwarką czy tagami?</a></h3>
+                                    <p><a href="#">2) Co znaczy przenieś na prawą stronę? Do tej dodatkowej kolu...</a></p>
+                                </div>
+                            </div>
+
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object" src="/img/avatar.png" style="width: 49px; height: 49px;" alt="">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <header>
+                                        <h4 class="pull-left"><a href="#">furious programming dodał odpowiedź w wątku</a></h4>
+                                        <small class="pull-right">dzisiaj, 14:39</small>
+                                    </header>
+                                    <h3><a href="#">Widok wątku: co z wyszukiwarką czy tagami?</a></h3>
+                                    <p><a href="#">2) Co znaczy przenieś na prawą stronę? Do tej dodatkowej kolu...</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/user.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}

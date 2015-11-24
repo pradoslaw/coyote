@@ -36,4 +36,14 @@ class Alert extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function type()
+    {
+        return $this->hasOne('Coyote\Alert\Type', 'id', 'type_id');
+    }
+
+    public function senders()
+    {
+        return $this->hasMany('Coyote\Alert\Sender')->leftJoin('users', 'users.id', '=', 'alert_senders.user_id');
+    }
 }

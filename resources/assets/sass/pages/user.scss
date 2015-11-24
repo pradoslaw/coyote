@@ -123,3 +123,52 @@
     margin-bottom: 0;
   }
 }
+
+#box-alerts {
+  a {
+    color: inherit;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .media {
+    border-bottom: 1px solid $border-color;
+    padding: 8px 0;
+    margin-top: 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  header {
+    overflow: hidden;
+
+    h4 {
+      color: $gray-light;
+      font-size: 11px;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    small {
+      color: $gray-light;
+      font-size: 10px;
+      margin-top: -2px;
+    }
+  }
+
+  h3 {
+    font-size: 100%;
+    margin: 3px 0;
+    font-weight: 700;
+    font-family: Arial,sans-serif;
+  }
+
+  p {
+    margin: 0;
+    color: $gray;
+  }
+}

@@ -88,7 +88,9 @@ Route::group(['namespace' => 'User', 'middleware' => 'auth'], function () {
     Route::post('User/Visits', 'VisitsController@save');
 
     Route::get('User/Alerts', ['uses' => 'AlertsController@index', 'as' => 'user.alerts']);
-    Route::post('User/Alerts', 'AlertsController@save');
+    Route::get('User/Alerts/Settings', ['uses' => 'AlertsController@settings', 'as' => 'user.alerts.settings']);
+    Route::post('User/Alerts/Settings', 'AlertsController@save');
+//    Route::post('User/Alerts', 'AlertsController@save');
 
     Route::get('User/Pm', ['uses' => 'PmController@index', 'as' => 'user.pm']);
     Route::post('User/Pm', 'PmController@save');
@@ -116,9 +118,6 @@ Route::group(['namespace' => 'User', 'middleware' => 'auth'], function () {
 
     Route::get('User/Password', ['uses' => 'PasswordController@index', 'as' => 'user.password']);
     Route::post('User/Password', 'PasswordController@save');
-
-    Route::get('User/Alerts/Settings', ['uses' => 'AlertsController@settings', 'as' => 'user.alerts.settings']);
-//    Route::post('User/Alerts/Settings', 'AlertsController@save');
 
     Route::get('User/Forum', ['uses' => 'ForumController@index', 'as' => 'user.forum']);
     Route::post('User/Forum', 'ForumController@save');

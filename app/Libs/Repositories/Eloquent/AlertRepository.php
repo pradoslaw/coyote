@@ -14,6 +14,17 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
         return 'Coyote\Alert';
     }
 
+    public function takeForUser($userId, $limit = 10)
+    {
+        return $this->model
+                ->where('user_id', $userId)
+                ->with(['senders' => function ($sql) {
+                    $sql->select(['users.name AS user_name', 'photo', 'is_blocked', 'is_active', 'alert_senders.name']);
+                }])
+                ->take($limit)
+                ->get();
+    }
+
     public function headlinePattern($typeId)
     {
         return (new Type())->find($typeId, ['headline'])['headline'];
