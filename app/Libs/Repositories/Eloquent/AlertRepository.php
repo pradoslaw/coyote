@@ -16,17 +16,28 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
 
     public function headlinePattern($typeId)
     {
-        return (new Type())->find($typeId, ['headline'])->pluck('headline');
-    }
-
-    public function userSettings($typeId, $usersId)
-    {
-        return (new Setting())->where('type_id', '=', $typeId)->whereIn('user_id', $usersId)->get();
+        return (new Type())->find($typeId, ['headline'])['headline'];
     }
 
     /**
-     * Pobiera pierwszy znaleziony alert odpowiadajacy ponizszemu zapytaniu (czyli nieczytany)
-     * Metoda uzywana do grupowania nieprzeczytanych alertow
+     * Gets notification settings for given user and notification type
+     *
+     * @param $typeId
+     * @param $usersId
+     * @return mixed
+     */
+    public function userSettings($typeId, $usersId)
+    {
+        return (new Setting())
+                ->select(['alert_settings.*', 'users.email AS user_email', 'is_active', 'is_blocked', 'is_confirm'])
+                ->where('type_id', '=', $typeId)
+                ->whereIn('user_id', $usersId)
+                ->join('users', 'users.id', '=', 'user_id')
+                ->get();
+    }
+
+    /**
+     * Gets first unread notification for given user and notification id (object_id)
      *
      * @param int $userId
      * @param string $objectId
@@ -42,6 +53,14 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
                 ->first();
     }
 
+    /**
+     * One notification can have multiple senders (users). Few users can post comment to your post.
+     * In that case notification can be grouped
+     *
+     * @param $alertId
+     * @param $userId
+     * @param $senderName
+     */
     public function addSender($alertId, $userId, $senderName)
     {
         (new Sender())->create(['alert_id' => $alertId, 'user_id' => $userId, 'name' => $senderName]);

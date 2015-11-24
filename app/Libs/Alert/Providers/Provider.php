@@ -59,9 +59,10 @@ abstract class Provider implements ProviderInterface
 
     /**
      * @param AlertRepositoryInterface $repository
+     * @param array $args
      * @throws \Exception
      */
-    public function __construct(AlertRepositoryInterface $repository)
+    public function __construct(AlertRepositoryInterface $repository, array $args = [])
     {
         $this->repository = $repository;
         $this->typeId = static::ID;
@@ -69,6 +70,12 @@ abstract class Provider implements ProviderInterface
         $this->headline = $this->repository->headlinePattern($this->typeId);
         if (!$this->headline) {
             throw new \Exception('Uuups. Could not find record in alert_types table.');
+        }
+
+        if ($args) {
+            foreach ($args as $arg => $value) {
+                $this->{'set' . camel_case($arg)}($value);
+            }
         }
     }
 
@@ -84,26 +91,32 @@ abstract class Provider implements ProviderInterface
 
     /**
      * @param int $userId
+     * @return mixed
      */
     public function addUserId($userId)
     {
         $this->usersId[] = $userId;
+        return $this;
     }
 
     /**
      * @param int $userId
+     * @return mixed
      */
     public function setUserId($userId)
     {
         $this->usersId = [$userId];
+        return $this;
     }
 
     /**
      * @param array $usersId
+     * @return mixed
      */
     public function setUsersId(array $usersId)
     {
         $this->usersId = $usersId;
+        return $this;
     }
 
     /**
@@ -118,10 +131,12 @@ abstract class Provider implements ProviderInterface
      * Tytul powiadomienia - np. tytul watku na forum czy nazwa oferty pracy
      *
      * @param string $subject
+     * @return mixed
      */
     public function setSubject($subject)
     {
         $this->subject = $subject;
+        return $this;
     }
 
     /**
@@ -136,10 +151,12 @@ abstract class Provider implements ProviderInterface
      * Krótka zajawka powiadomienia (np. pierwsze kilkadziesiat znakow wpisu czy komentarza)
      *
      * @param string $excerpt
+     * @return mixed
      */
     public function setExcerpt($excerpt)
     {
         $this->excerpt = $excerpt;
+        return $this;
     }
 
     /**
@@ -172,10 +189,12 @@ abstract class Provider implements ProviderInterface
      * URL do powiadonienie (najlepiej nierelatywny)
      *
      * @param string $url
+     * @return mixed
      */
     public function setUrl($url)
     {
         $this->url = $url;
+        return $this;
     }
 
     /**
@@ -190,10 +209,12 @@ abstract class Provider implements ProviderInterface
      * ID usera ktory generuje powiadomienie (np. autora posta na forum)
      *
      * @param int $senderId
+     * @return mixed
      */
     public function setSenderId($senderId)
     {
         $this->senderId = $senderId;
+        return $this;
     }
 
     /**
@@ -209,10 +230,12 @@ abstract class Provider implements ProviderInterface
      * na forum jezeli uzytkownik nie jest zalogowany
      *
      * @param $senderName
+     * @return mixed
      */
     public function setSenderName($senderName)
     {
         $this->senderName = $senderName;
+        return $this;
     }
 
     /**
@@ -248,7 +271,7 @@ abstract class Provider implements ProviderInterface
      */
     public function email()
     {
-        return null;
+        return static::EMAIL;
     }
 
     /**
@@ -271,7 +294,11 @@ abstract class Provider implements ProviderInterface
                 $recipients[] = $user['user_id'];
             }
 
-            if ($user['email']) {
+            if ($user['email'] && $this->email() && $user['user_email'] && $user['is_active']
+                && $user['is_confirm'] && !$user['is_blocked']) {
+                $notifier = new Email_Emitter($this->email(), $user['user_email']);
+                $notifier->send($this);
+
                 $recipients[] = $user['user_id'];
             }
         }

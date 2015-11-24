@@ -17,16 +17,19 @@ interface ProviderInterface
 
     /**
      * @param int $userId
+     * @return mixed
      */
     public function addUserId($userId);
 
     /**
      * @param int $userId
+     * @return mixed
      */
     public function setUserId($userId);
 
     /**
      * @param array $usersId
+     * @return mixed
      */
     public function setUsersId(array $usersId);
 
@@ -39,6 +42,7 @@ interface ProviderInterface
      * Tytul powiadomienia - np. tytul watku na forum czy nazwa oferty pracy
      *
      * @param string $subject
+     * @return mixed
      */
     public function setSubject($subject);
 
@@ -51,6 +55,7 @@ interface ProviderInterface
      * Krótka zajawka powiadomienia (np. pierwsze kilkadziesiat znakow wpisu czy komentarza)
      *
      * @param string $excerpt
+     * @return mixed
      */
     public function setExcerpt($excerpt);
 
@@ -68,6 +73,7 @@ interface ProviderInterface
      * URL do powiadonienie (najlepiej nierelatywny)
      *
      * @param string $url
+     * @return mixed
      */
     public function setUrl($url);
 
@@ -80,6 +86,7 @@ interface ProviderInterface
      * ID usera ktory generuje powiadomienie (np. autora posta na forum)
      *
      * @param int $senderId
+     * @return mixed
      */
     public function setSenderId($senderId);
 
@@ -93,6 +100,7 @@ interface ProviderInterface
      * na forum jezeli uzytkownik nie jest zalogowany
      *
      * @param $senderName
+     * @return mixed
      */
     public function setSenderName($senderName);
 

@@ -5,14 +5,40 @@ namespace Coyote\Alert\Emitters;
 use Coyote\Alert\Providers\ProviderInterface;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class Email
+ * @package Coyote\Alert\Emitters
+ */
 class Email extends Emitter
 {
     /**
-     * @param Mail $mail
+     * @var string
      */
-    public function __construct(Mail $mail)
+    private $email;
+
+    /**
+     * @var string
+     */
+    private $view;
+
+    /**
+     * @param $view
+     * @param $email
+     */
+    public function __construct($view, $email)
     {
-        //
+        $this->view = $view;
+        $this->email = $email;
+    }
+
+    private function parse(array $data, $content)
+    {
+        $template = [];
+
+        foreach ($data as $key => $value) {
+            $template['{' . $key . '}'] = $value;
+        }
+        return str_ireplace(array_keys($template), array_values($template), $content);
     }
 
     /**
@@ -20,22 +46,30 @@ class Email extends Emitter
      */
     public function send(ProviderInterface $alert)
     {
-        $template = [];
+        $data = [];
 
-        foreach (get_class_methods($this) as $methodName) {
+        foreach (get_class_methods($alert) as $methodName) {
             if (substr($methodName, 0, 3) == 'get') {
-                $reflect = new \ReflectionMethod($this, $methodName);
+                $reflect = new \ReflectionMethod($alert, $methodName);
 
                 if (!$reflect->getNumberOfRequiredParameters()) {
-                    $value = $this->$methodName();
+                    $value = $alert->$methodName();
 
                     if (is_string($value) || is_numeric($value)) {
-                        $template[(strtolower(substr($methodName, 3)))] = $value;
+                        $data[snake_case(substr($methodName, 3))] = $value;
                     }
                 }
 
                 unset($reflect);
             }
         }
+
+        $data['headline'] = $this->parse($data, $data['headline']);
+
+        Mail::queue($this->view, $data, function ($message) use ($data) {
+            $message->subject($data['headline']);
+            $message->to($this->email);
+            $message->from('no-reply@4programmers.net', $data['sender_name']);
+        });
     }
 }

@@ -16,22 +16,12 @@ class Db extends Emitter
         $this->userId = $userId;
     }
 
-//    protected function parse(array $data, $content)
-//    {
-//        $template = [];
-//
-//        foreach ($data as $key => $value) {
-//            $template['{' . $key . '}'] = $value;
-//        }
-//        return str_ireplace(array_keys($template), array_values($template), $content);
-//    }
-
     public function send(ProviderInterface $alert)
     {
         $result = $this->repository->findByObjectId($this->userId, $alert->objectId(), ['id']);
 
         if (!$result) {
-            $alertId = $this->repository->create([
+            $object = $this->repository->create([
                 'type_id'           => $alert->getTypeId(),
                 'user_id'           => $this->userId,
                 'subject'           => $alert->getSubject(),
@@ -39,6 +29,8 @@ class Db extends Emitter
                 'url'               => $alert->getUrl(),
                 'object_id'         => $alert->objectId()
             ]);
+
+            $alertId = $object->id;
         } else {
             $alertId = $result->id;
         }

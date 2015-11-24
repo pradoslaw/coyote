@@ -12,17 +12,26 @@ use Coyote\Alert\Providers\Provider;
 class Vote extends Provider implements Alert\Providers\ProviderInterface
 {
     const ID = Alert::MICROBLOG_VOTE;
+    const EMAIL = 'emails.alerts.microblog.vote';
 
     /**
      * @var int
      */
     protected $microblogId;
 
+    /**
+     * @param int $microblogId
+     * @return $this
+     */
     public function setMicroblogId($microblogId)
     {
         $this->microblogId = $microblogId;
+        return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getMicroblogId()
     {
         return $this->microblogId;

@@ -5,10 +5,12 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Microblog;
 use Coyote\Microblog\Vote;
+use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Illuminate\Http\Request;
-use Coyote\Reputation\Microblog\Vote as ReputationVote;
+use Coyote\Reputation\Microblog\Vote as Reputation_Vote;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
+use Coyote\Alert\Providers\Microblog\Vote as Alert_Vote;
 
 /**
  * Ocena glosow na dany wpis na mikro (lub wyswietlanie loginow ktorzy oddali ow glos)
@@ -22,13 +24,15 @@ class VoteController extends Controller
      * @var Reputation
      */
     private $reputation;
+    private $alert;
 
     /**
      * @param Reputation $reputation
      */
-    public function __construct(Reputation $reputation)
+    public function __construct(Reputation $reputation, Alert $alert)
     {
         $this->reputation = $reputation;
+        $this->alert = $alert;
     }
 
     /**
@@ -69,17 +73,33 @@ class VoteController extends Controller
                 $microblog->created_at->getTimestamp()
             );
 
+            // reputacje przypisujemy tylko za ocene wpisu a nie komentarza!!
             if (!$microblog->parent_id) {
-                (new ReputationVote($this->reputation))->save([
+                $url = route('microblog.view', [$microblog->id], false) . '#entry-' . $microblog->id;
+
+                (new Reputation_Vote($this->reputation))->save([
                     'userId'            => auth()->user()->id,
                     'excerpt'           => str_limit($microblog->text, 200),
-                    'url'               => route('microblog.view', [$microblog->id]),
+                    'url'               => $url,
                     'microblogId'       => $microblog->id,
                     'isPositive'        => !$vote
                 ]);
+            } else {
+                $url = route('microblog.view', [$microblog->parent_id], false) . '#comment-' . $microblog->id;
             }
 
             $microblog->save();
+
+            if (!$vote) {
+                (new Alert_Vote($this->alert))
+                    ->setMicroblogId($microblog->id)
+                    ->addUserId($microblog->user_id)
+                    ->setSubject($microblog->text)
+                    ->setSenderId(auth()->user()->id)
+                    ->setSenderName(auth()->user()->name)
+                    ->setUrl($url)
+                    ->notify();
+            }
 
             \DB::commit();
         } catch (\Exception $e) {
