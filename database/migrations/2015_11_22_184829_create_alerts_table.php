@@ -25,7 +25,7 @@ class CreateAlertsTable extends Migration
             $table->tinyInteger('is_marked')->default(0);
 
             $table->index('user_id');
-            $table->index('object');
+            $table->index('object_id');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('alert_types');
