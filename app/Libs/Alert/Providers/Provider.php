@@ -35,6 +35,11 @@ abstract class Provider implements ProviderInterface
     /**
      * @var string
      */
+    protected $content;
+
+    /**
+     * @var string
+     */
     protected $excerpt;
 
     /**
@@ -82,6 +87,8 @@ abstract class Provider implements ProviderInterface
                 $this->{'set' . camel_case($arg)}($value);
             }
         }
+
+        return $this;
     }
 
     /**
@@ -150,6 +157,24 @@ abstract class Provider implements ProviderInterface
     public function getSubject()
     {
         return $this->subject;
+    }
+
+    /**
+     * @param string $content
+     * @return $this
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 
     /**
@@ -286,25 +311,34 @@ abstract class Provider implements ProviderInterface
      */
     public function notify()
     {
-        // pobranie ustawien powiadomienia dla userow. byc moze maja oni wylaczone powiadomienie tego typu?
-        $users = $this->repository->userSettings($this->typeId, $this->getUsersId());
         $recipients = [];
 
-        foreach ($users as $user) {
-            // wysylamy powiadomienie ktore bedzie widoczne w profilu uzytkownika
-            if ($user['profile']) {
-                $notifier = new Db_Emitter($this->repository, $user['user_id']);
-                $notifier->send($this);
+        // we don't want to send a notification to ourselves
+        $index = array_search($this->getSenderId(), $this->usersId);
+        if (false !== $index) {
+            unset($this->usersId[$index]);
+        }
 
-                $recipients[] = $user['user_id'];
-            }
+        if ($this->getUsersId()) {
+            // pobranie ustawien powiadomienia dla userow. byc moze maja oni wylaczone powiadomienie tego typu?
+            $users = $this->repository->userSettings($this->typeId, $this->getUsersId());
 
-            if ($user['email'] && $this->email() && $user['user_email'] && $user['is_active']
-                && $user['is_confirm'] && !$user['is_blocked']) {
-                $notifier = new Email_Emitter($this->email(), $user['user_email']);
-                $notifier->send($this);
+            foreach ($users as $user) {
+                // wysylamy powiadomienie ktore bedzie widoczne w profilu uzytkownika
+                if ($user['profile']) {
+                    $notifier = new Db_Emitter($this->repository, $user['user_id']);
+                    $notifier->send($this);
 
-                $recipients[] = $user['user_id'];
+                    $recipients[] = $user['user_id'];
+                }
+
+                if ($user['email'] && $this->email() && $user['user_email'] && $user['is_active']
+                    && $user['is_confirm'] && !$user['is_blocked']) {
+                    $notifier = new Email_Emitter($this->email(), $user['user_email']);
+                    $notifier->send($this);
+
+                    $recipients[] = $user['user_id'];
+                }
             }
         }
 

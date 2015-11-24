@@ -225,4 +225,17 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->lists('count', 'name')
                 ->toArray();
     }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function getWatchers($id)
+    {
+        return (new Microblog\Watch())
+                ->where('microblog_id', $id)
+                ->get()
+                ->lists('user_id')
+                ->toArray();
+    }
 }

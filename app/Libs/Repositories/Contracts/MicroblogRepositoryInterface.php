@@ -51,4 +51,6 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getTags();
+
+    public function getWatchers($id);
 }

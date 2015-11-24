@@ -52,6 +52,17 @@ interface ProviderInterface
     public function getSubject();
 
     /**
+     * @param string $content
+     * @return $this
+     */
+    public function setContent($content);
+
+    /**
+     * @return string
+     */
+    public function getContent();
+
+    /**
      * Krótka zajawka powiadomienia (np. pierwsze kilkadziesiat znakow wpisu czy komentarza)
      *
      * @param string $excerpt

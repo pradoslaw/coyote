@@ -5,6 +5,8 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
+use Coyote\Alert\Providers\Microblog\Watch as Alert_Watch;
 
 class CommentController extends Controller
 {
@@ -17,6 +19,7 @@ class CommentController extends Controller
      * @var User
      */
     private $user;
+    private $alert;
 
     /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
@@ -24,10 +27,11 @@ class CommentController extends Controller
      * @param Microblog $microblog
      * @param User $user
      */
-    public function __construct(Microblog $microblog, User $user)
+    public function __construct(Microblog $microblog, User $user, Alert $alert)
     {
         $this->microblog = $microblog;
         $this->user = $user;
+        $this->alert = $alert;
     }
 
     /**
@@ -60,6 +64,25 @@ class CommentController extends Controller
 
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
             $microblog->$key = $user->$key;
+        }
+
+        if (!$id) {
+            $watchers = $this->microblog->getWatchers($microblog->parent_id);
+
+            if ($watchers) {
+                $parentText = $this->microblog->find($microblog->parent_id, ['text'])['text'];
+
+                // new comment. should we send a notification?
+                (new Alert_Watch($this->alert))->with([
+                    'users_id'    => $watchers,
+                    'content'     => $microblog->text,
+                    'excerpt'     => excerpt($microblog->text),
+                    'sender_id'   => $user->id,
+                    'sender_name' => $user->name,
+                    'subject'     => excerpt($parentText, 48), // original exerpt of parent entry
+                    'url'         => route('microblog.view', [$microblog->parent_id], false) . '#comment-' . $microblog->id
+                ])->notify();
+            }
         }
 
         return view('microblog._comment')->with('comment', $microblog)->with('microblog', ['id' => $microblog->parent_id]);
