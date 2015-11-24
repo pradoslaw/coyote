@@ -21,6 +21,6 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
      */
     public function getDefaultValue($typeId)
     {
-        return Type::find($typeId, ['points'])->pluck('points');
+        return Type::find($typeId, ['points'])['points'];
     }
 }
