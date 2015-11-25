@@ -80,7 +80,10 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="alerts">
                                     <a href="javascript:" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <span class="badge">4</span>
+                                        {% if user('alerts_unread') %}
+                                            <span class="badge">{{ user('alerts_unread') }}</span>
+                                        {% endif %}
+
                                         <i class="fa fa-bell fa-fw"></i>
                                     </a>
 

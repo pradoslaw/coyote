@@ -24,10 +24,10 @@
                                     {% set head_date = alert.created_at|date('d F Y') %}
                                 {% endif %}
 
-                                <div class="media {{ alert.read_at < session.created_at or alert.is_marked ? '' : 'unread' }}">
+                                <div class="media {{ (alert.read_at and alert.read_at|timestamp < session.created_at|timestamp) or alert.is_marked ? '' : 'unread' }}">
                                     <div class="media-left">
-                                        <a href="{{ route('profile', [alert.user.id]) }}">
-                                            <img class="media-object" src="{{ user_photo(alert.user.photo) }}" style="width: 49px; height: 49px;" alt="">
+                                        <a href="{{ route('profile', [alert.user.user_id]) }}">
+                                            <img class="media-object" src="{{ user_photo(alert.user.photo) }}" style="width: 49px; height: 49px;" alt="{{ alert.user.name }}" title="{{ alert.user.name }}">
                                         </a>
                                     </div>
                                     <div class="media-body">
@@ -39,6 +39,8 @@
                                         <p><a href="{{ url(alert.url) }}">{{ alert.excerpt }}</a></p>
                                     </div>
                                 </div>
+                            {% else %}
+                                <p class="alert alert-info">Nie masz żadnych powiadomień.</p>
                             {% endfor %}
 
                             {{ alerts.render() }}

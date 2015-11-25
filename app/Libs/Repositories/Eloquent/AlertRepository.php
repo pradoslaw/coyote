@@ -66,6 +66,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
                 ->with(['senders' => function ($sql) {
                     $sql->select([
                         'alert_id',
+                        'user_id',
                         \DB::raw('COALESCE(users.name, alert_senders.name) AS name'),
                         'photo',
                         'is_blocked',
