@@ -3,26 +3,29 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\User;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Session;
-use Coyote\Reputation;
 
 class VcardController extends Controller
 {
     /**
-     * @return \Illuminate\View\View
+     * @param $id
+     * @param UserRepositoryInterface $user
+     * @param SessionRepositoryInterface $session
+     * @return mixed
      */
-    public function index($id)
+    public function index($id, UserRepositoryInterface $user, SessionRepositoryInterface $session)
     {
-        $user = User::find($id);
-        if (!$user) {
+        $data = $user->find($id);
+        if (!$data) {
             exit;
         }
 
-        return view('components.vcard')->with('user', $user)->with([
-            'session_at'            => Session::getUserSessionTime(auth()->user()->id),
-            'rank'                  => Reputation::getUserRank(auth()->user()->id),
-            'total_users'           => Reputation::getTotalUsers()
+        return view('components.vcard')->with('user', $data)->with([
+            'session_at'            => $session->userLastActivity(auth()->user()->id),
+            'rank'                  => $user->rank(auth()->user()->id),
+            'total_users'           => $user->countUsersWithReputation()
         ]);
     }
 }

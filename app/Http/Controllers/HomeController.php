@@ -2,22 +2,18 @@
 
 namespace Coyote\Http\Controllers;
 
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Illuminate\Http\Request;
-use Coyote\Repositories\Eloquent\MicroblogRepository;
 
 class HomeController extends Controller
 {
-    /**
-     * @param Request $request
-     * @param MicroblogRepository $microblog
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(Request $request, MicroblogRepository $microblog)
+    public function index(Request $request, Session $session, Microblog $microblog)
     {
-        $viewers = new \Coyote\Session\Viewers(new \Coyote\Session(), $request);
+        $viewers = new \Coyote\Session\Viewers($session, $request);
 
         $microblogs = $microblog->take(10);
-//dd($microblogs->all());
+
         return view('home', [
             'viewers'                   => $viewers->render(),
             'microblogs'                => $microblogs->all()

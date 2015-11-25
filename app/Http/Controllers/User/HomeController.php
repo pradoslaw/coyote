@@ -4,9 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Coyote\Reputation;
 use Coyote\Session;
-use Coyote\User;
 use Illuminate\Http\Request;
 use Image;
 

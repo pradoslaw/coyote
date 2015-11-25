@@ -2,6 +2,7 @@
 
 namespace Coyote\Session;
 
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Illuminate\Http\Request;
 
 /**
@@ -15,13 +16,21 @@ class Viewers
     const USER = 'Użytkownik';
     const ROBOT = 'Robot';
 
+    /**
+     * @var Session
+     */
     private $session;
+
+    /**
+     * @var Request
+     */
     private $request;
 
     /**
-     * @param \Coyote\Session $session
+     * @param Session $session
+     * @param Request $request
      */
-    public function __construct(\Coyote\Session $session, Request $request)
+    public function __construct(Session $session, Request $request)
     {
         $this->session = $session;
         $this->request = $request;
@@ -36,7 +45,7 @@ class Viewers
     public function render($path = null)
     {
         $groups = [self::USER => [], self::ROBOT => []];
-        $collection = $this->session->getViewers($path);
+        $collection = $this->session->viewers($path);
 
         // zlicza liczbe userow
         $total = $collection->count();
