@@ -24,7 +24,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function paginate($perPage = 10)
     {
-        $result = $this->buildQuery()
+        $result = $this->prepare()
                 ->whereNull('parent_id')
                 ->orderBy('microblogs.is_sponsored', 'DESC')
                 ->orderBy('microblogs.id', 'DESC')
@@ -47,7 +47,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function take($limit)
     {
-        $result = $this->buildQuery()
+        $result = $this->prepare()
                 ->whereNull('parent_id')
                 ->where('votes', '>=', 2)
                     ->orWhere('bonus', '>', 0)
@@ -72,7 +72,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function takePopular($limit)
     {
-        $result = $this->buildQuery(false)
+        $result = $this->prepare(false)
                 ->whereNull('parent_id')
                 ->where('microblogs.created_at', '>=', Carbon::now()->subWeek())
                 ->orderBy('microblogs.score', 'DESC')
@@ -90,7 +90,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function getComments($parentId)
     {
-        return $this->buildQuery(false)->whereIn('parent_id', $parentId)->orderBy('id')->get();
+        return $this->prepare(false)->whereIn('parent_id', $parentId)->orderBy('id')->get();
     }
 
     /**
@@ -125,7 +125,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @return mixed
      */
-    private function buildQuery($withComments = true)
+    private function prepare($withComments = true)
     {
         $columns = ['microblogs.*', 'users.name', 'is_active', 'is_blocked', 'photo'];
         $columnThumb = 'mv.id AS thumbs_on';

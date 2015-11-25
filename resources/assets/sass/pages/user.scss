@@ -141,6 +141,14 @@
     &:last-child {
       border-bottom: none;
     }
+
+    &.unread {
+      background-color: #FFF3CD;
+
+      &:hover {
+        background-color: #FFDCA5;
+      }
+    }
   }
 
   header {

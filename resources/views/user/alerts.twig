@@ -14,39 +14,34 @@
 
                     <div id="box-alerts" class="panel panel-default">
                         <div class="panel-body">
-                            <h2>15 listopada 2015</h2>
+                            {% set head_date = '' %}
 
-                            <div class="media">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object" src="/img/avatar.png" style="width: 49px; height: 49px;" alt="">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <header>
-                                        <h4 class="pull-left"><a href="#">furious programming dodał odpowiedź w wątku</a></h4>
-                                        <small class="pull-right">dzisiaj, 14:39</small>
-                                    </header>
-                                    <h3><a href="#">Widok wątku: co z wyszukiwarką czy tagami?</a></h3>
-                                    <p><a href="#">2) Co znaczy przenieś na prawą stronę? Do tej dodatkowej kolu...</a></p>
-                                </div>
-                            </div>
+                            {{ alerts.render() }}
 
-                            <div class="media">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object" src="/img/avatar.png" style="width: 49px; height: 49px;" alt="">
-                                    </a>
+                            {% for alert in alerts %}
+                                {% if head_date != alert.created_at|date('d F Y') %}
+                                    <h2>{{ alert.created_at|date('d F Y') }}</h2>
+                                    {% set head_date = alert.created_at|date('d F Y') %}
+                                {% endif %}
+
+                                <div class="media {{ alert.read_at < session.created_at or alert.is_marked ? '' : 'unread' }}">
+                                    <div class="media-left">
+                                        <a href="{{ route('profile', [alert.user.id]) }}">
+                                            <img class="media-object" src="{{ user_photo(alert.user.photo) }}" style="width: 49px; height: 49px;" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <header>
+                                            <h4 class="pull-left"><a href="{{ url(alert.url) }}">{{ alert.headline }}</a></h4>
+                                            <small class="pull-right">{{ alert.created_at|format_date }}</small>
+                                        </header>
+                                        <h3><a href="{{ url(alert.url) }}">{{ alert.subject }}</a></h3>
+                                        <p><a href="{{ url(alert.url) }}">{{ alert.excerpt }}</a></p>
+                                    </div>
                                 </div>
-                                <div class="media-body">
-                                    <header>
-                                        <h4 class="pull-left"><a href="#">furious programming dodał odpowiedź w wątku</a></h4>
-                                        <small class="pull-right">dzisiaj, 14:39</small>
-                                    </header>
-                                    <h3><a href="#">Widok wątku: co z wyszukiwarką czy tagami?</a></h3>
-                                    <p><a href="#">2) Co znaczy przenieś na prawą stronę? Do tej dodatkowej kolu...</a></p>
-                                </div>
-                            </div>
+                            {% endfor %}
+
+                            {{ alerts.render() }}
                         </div>
                     </div>
                 </div>
@@ -59,8 +54,4 @@
     {{ parent() }}
 
     <link rel="stylesheet" href="/css/user.css">
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
 {% endblock %}

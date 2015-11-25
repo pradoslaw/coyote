@@ -2,9 +2,9 @@
 
 namespace Coyote\Repositories\Eloquent;
 
-use Coyote\Repositories\Contracts\RepositoryInterface;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 
-class SessionRepository extends Repository implements RepositoryInterface
+class SessionRepository extends Repository implements SessionRepositoryInterface
 {
     public function model()
     {

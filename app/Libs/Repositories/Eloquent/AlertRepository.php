@@ -2,10 +2,12 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Carbon\Carbon;
 use Coyote\Alert\Setting;
 use Coyote\Alert\Sender;
 use Coyote\Alert\Type;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface;
+use Coyote\Declination;
 
 class AlertRepository extends Repository implements AlertRepositoryInterface
 {
@@ -14,15 +16,64 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
         return 'Coyote\Alert';
     }
 
+    public function paginate($userId, $perPage = 20)
+    {
+        $alerts = $this->prepare($userId, $perPage)->paginate($perPage);
+        $alerts = $this->parse($alerts);
+
+        return $alerts;
+    }
+
     public function takeForUser($userId, $limit = 10)
     {
+        $alerts = $this->prepare($userId)->take($limit)->get();
+        $alerts = $this->parse($alerts);
+
+        return $alerts;
+    }
+
+    public function markAsRead($id)
+    {
+        $this->model->whereIn('id', $id)->update(['read_at' => Carbon::now()]);
+    }
+
+    private function parse($alerts)
+    {
+        $alerts->each(function ($alert) {
+            $alert->user = $alert->senders->first();
+            $count = $alert->senders->count();
+
+            if ($count === 2 && $alert->user->name !== $alert->senders[1]->name) {
+                $sender = $alert->user->name . ' (oraz ' . $alert->senders[1]->name . ')';
+            } elseif ($count > 2) {
+                $sender = $alert->user->name . ' (oraz ' . $count . ' ' .
+                    Declination::format($count, ['osoba', 'osoby', 'osób']) . ')';
+            } else {
+                $sender = $alert->user->name;
+            }
+
+            $alert->headline = str_replace('{sender}', $sender, $alert->headline);
+        });
+
+        return $alerts;
+    }
+
+    private function prepare($userId)
+    {
         return $this->model
+                ->select(['alerts.*', 'alert_types.headline'])
                 ->where('user_id', $userId)
                 ->with(['senders' => function ($sql) {
-                    $sql->select(['users.name AS user_name', 'photo', 'is_blocked', 'is_active', 'alert_senders.name']);
+                    $sql->select([
+                        'alert_id',
+                        \DB::raw('COALESCE(users.name, alert_senders.name) AS name'),
+                        'photo',
+                        'is_blocked',
+                        'is_active'
+                    ]);
                 }])
-                ->take($limit)
-                ->get();
+                ->join('alert_types', 'alert_types.id', '=', 'type_id')
+                ->orderBy('alerts.id', 'DESC');
     }
 
     public function headlinePattern($typeId)

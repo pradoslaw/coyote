@@ -17,11 +17,12 @@ class HomeController extends Controller
 
         $microblogs = $repository->paginate(25);
 
-        // tagi nie zmieniaja sie czesto, wiec mozemy wrzucic do cache na 30 min
+        // let's cache microblog tags. we don't need to run this query every time
         $tags = Cache::remember('microblogs-tags', 30, function () use ($repository) {
             return $repository->getTags();
         });
 
+        // we MUST NOT cache popular entries because it may contains current user's data
         $popular = $repository->takePopular(5);
 
         return parent::view('microblog.home', [

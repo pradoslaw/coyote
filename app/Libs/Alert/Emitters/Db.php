@@ -35,6 +35,6 @@ class Db extends Emitter
             $alertId = $result->id;
         }
 
-        $this->repository->addSender($alertId, $this->userId, $alert->getSenderName());
+        $this->repository->addSender($alertId, $alert->getSenderId(), $alert->getSenderName());
     }
 }

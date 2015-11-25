@@ -37,13 +37,20 @@ class Alert extends Model
      */
     public $timestamps = false;
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function type()
     {
         return $this->hasOne('Coyote\Alert\Type', 'id', 'type_id');
     }
 
+    /**
+     * @return mixed
+     */
     public function senders()
     {
+        // LEFT JOIN is on purpose. notification sender can be anonymous user (for example: post author)
         return $this->hasMany('Coyote\Alert\Sender')->leftJoin('users', 'users.id', '=', 'alert_senders.user_id');
     }
 }
