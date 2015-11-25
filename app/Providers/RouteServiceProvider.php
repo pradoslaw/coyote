@@ -25,6 +25,7 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot($router);
 
         $router->model('user', 'Coyote\User');
+        $router->pattern('id', '[0-9]+');
     }
 
     /**

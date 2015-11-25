@@ -131,7 +131,7 @@ Route::group(['namespace' => 'User', 'middleware' => 'auth'], function () {
 // niekoniecznie bedac zalogowanym
 Route::get('User/Confirm/Email', ['uses' => 'User\ConfirmController@email', 'as' => 'user.email']);
 // wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera
-Route::get('User/Vcard/{id}', ['uses' => 'User\VcardController@index', 'as' => 'user.vcard'])->where('id', '\d+');
+Route::get('User/Vcard/{id}', ['uses' => 'User\VcardController@index', 'as' => 'user.vcard']);
 // zadanie AJAX z lista loginow (podpowiedzi)
 Route::get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'user.prompt']);
 
