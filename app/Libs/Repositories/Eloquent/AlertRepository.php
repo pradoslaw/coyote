@@ -39,11 +39,12 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
     /**
      * @param int $userId
      * @param int $limit
+     * @param int $offset
      * @return mixed
      */
-    public function takeForUser($userId, $limit = 10)
+    public function takeForUser($userId, $limit = 10, $offset = 0)
     {
-        $alerts = $this->prepare($userId)->take($limit)->get();
+        $alerts = $this->prepare($userId)->take($limit)->skip($offset)->get();
         $alerts = $this->parse($alerts);
 
         return $alerts;
@@ -52,6 +53,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
     /**
      * Mark notifications as read
      *
+     * @use Coyote\Http\Controllers\User\AlertsController
      * @param array $id
      */
     public function markAsRead(array $id)
@@ -74,8 +76,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
             if ($count === 2 && $alert->user->name !== $alert->senders[1]->name) {
                 $sender = $alert->user->name . ' (oraz ' . $alert->senders[1]->name . ')';
             } elseif ($count > 2) {
-                $sender = $alert->user->name . ' (oraz ' . $count . ' ' .
-                    Declination::format($count, ['osoba', 'osoby', 'osób']) . ')';
+                $sender = $alert->user->name . ' (oraz ' . Declination::format($count, ['osoba', 'osoby', 'osób']) .')';
             } else {
                 $sender = $alert->user->name;
             }

@@ -12,7 +12,7 @@ use Coyote\Alert\Providers\Provider;
 class Watch extends Provider implements Alert\Providers\ProviderInterface
 {
     const ID = Alert::MICROBLOG_WATCH;
-//    const EMAIL = 'emails.alerts.microblog.vote';
+    const EMAIL = null;
 
     /**
      * @var int

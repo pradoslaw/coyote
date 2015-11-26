@@ -18,9 +18,10 @@ interface AlertRepositoryInterface extends RepositoryInterface
     /**
      * @param int $userId
      * @param int $limit
+     * @param int $offset
      * @return mixed
      */
-    public function takeForUser($userId, $limit = 10);
+    public function takeForUser($userId, $limit = 10, $offset = 0);
 
     /**
      * Mark notifications as read

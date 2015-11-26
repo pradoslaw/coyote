@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
 use Coyote\Alert\Setting;
+use Carbon;
 
 class AlertsController extends Controller
 {
@@ -44,6 +45,20 @@ class AlertsController extends Controller
         $alerts = $this->alert->paginate(auth()->user()->id);
         $session = $session->findBy('user_id', auth()->user()->id, ['created_at']);
 
+        // mark as read
+        $this->mark($alerts);
+
+        return parent::view('user.alerts')->with(compact('alerts', 'session'));
+    }
+
+    /**
+     * Mark alerts as read and returns number of marked alerts
+     *
+     * @param $alerts
+     * @return int
+     */
+    private function mark($alerts)
+    {
         $markId = [];
         foreach ($alerts as $alert) {
             if (!$alert->read_at) {
@@ -55,7 +70,7 @@ class AlertsController extends Controller
             $this->alert->markAsRead($markId);
         }
 
-        return parent::view('user.alerts')->with(compact('alerts', 'session'));
+        return count($markId);
     }
 
     /**
@@ -85,5 +100,53 @@ class AlertsController extends Controller
             }
         }
         return back()->with('success', 'Zmiany zostały zapisane');
+    }
+
+    /**
+     * @param Session $session
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ajax(Session $session)
+    {
+        $alerts = $this->alert->takeForUser(auth()->user()->id);
+        $unread = auth()->user()->alerts_unread - $this->mark($alerts);
+
+        $view = view('user.alerts._ajax', [
+            'alerts'    => $alerts,
+            'session'   => $session->findBy('user_id', auth()->user()->id, ['created_at']),
+        ])->render();
+
+        return response()->json([
+            'html'      => $view,
+            'unread'    => $unread
+        ]);
+    }
+
+    /**
+     * @param int $id
+     */
+    public function delete($id)
+    {
+        $this->alert->delete($id);
+    }
+
+    /**
+     * Marks one or more alerts as read
+     *
+     * @param null|int $id
+     */
+    public function markAsRead($id = null)
+    {
+        if ($id) {
+            $this->alert->update(['is_marked' => true], $id);
+        } else {
+            if (auth()->user()->alerts_unread) {
+                $this->alert->where('user_id', auth()->user()>id)->where('read_at', 'IS', null)->update([
+                    'read_at' => Carbon::now()
+                ]);
+            }
+
+            $this->alert->where('user_id', auth()->user()->id)->update(['is_marked' => true]);
+        }
     }
 }

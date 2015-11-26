@@ -1,0 +1,21 @@
+{% for alert in alerts %}
+    <li class="{{ (alert.read_at and alert.read_at|timestamp < session.created_at|timestamp) or alert.is_marked ? '' : 'unread' }}">
+        <a data-id="{{ alert.id }}" href="{{ url(alert.url) }}" title="{{ alert.headline }}">
+            <img src="{{ user_photo(alert.user.photo) }}">
+
+            <div>
+                <header>
+                    <h4>{{ alert.headline }}</h4>
+                    <small>{{ alert.created_at|format_date }}</small>
+                </header>
+
+                <h3>{{ alert.subject }}</h3>
+                <p>{{ alert.excerpt }}</p>
+            </div>
+        </a>
+
+        <a class="btn-delete-alert" href="javascript:" title="Usuń">
+            <i class="fa fa-remove"></i>
+        </a>
+    </li>
+{% endfor %}

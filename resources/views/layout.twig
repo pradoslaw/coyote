@@ -78,7 +78,7 @@
                             </div>
 
                             <ul class="nav navbar-nav navbar-right">
-                                <li class="alerts">
+                                <li id="alerts" class="alerts">
                                     <a href="javascript:" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('alerts_unread') %}
                                             <span class="badge">{{ user('alerts_unread') }}</span>
@@ -97,44 +97,8 @@
                                         </div>
                                         <div class="dropdown-modal">
                                             <ul>
-                                                <li class="unread">
-                                                    <a data-id="1090991" href="#" title="furious programming dodał odpowiedź w wątku">
-                                                        <img src="/img/shalom.png">
-
-                                                        <div>
-                                                            <header>
-                                                                <h4>furious programming dodał odpowiedź w wątku</h4>
-                                                                <small>dzisiaj, 14:39</small>
-                                                            </header>
-
-                                                            <h3>Widok wątku: co z wyszukiwarką czy tagami?</h3>
-                                                            <p>2) Co znaczy przenieś na prawą stronę? Do tej dodatkowej kolu...</p>
-                                                        </div>
-                                                    </a>
-
-                                                    <a class="btn-delete-alert" href="javascript:" title="Usuń">
-                                                        <i class="fa fa-remove"></i>
-                                                    </a>
-                                                </li>
-
                                                 <li>
-                                                    <a data-id="1090894" href="#" title="Marooned dodał odpowiedź w wątku">
-                                                        <img src="http://4programmers.net/store/_a/4ccbfa1158d19">
-
-                                                        <div>
-                                                            <header>
-                                                                <h4>Marooned dodał odpowiedź w wątku</h4>
-                                                                <small>dzisiaj, 11:42</small>
-                                                            </header>
-
-                                                            <h3>Fingerptinting - baza wiedzy</h3>
-                                                            <p>Też jeszcze nie wiem, bo jej nie mamy. Zakładam, że musiałaby...</p>
-                                                        </div>
-                                                    </a>
-
-                                                    <a class="btn-delete-alert" href="javascript:" title="Usuń">
-                                                        <i class="fa fa-remove"></i>
-                                                    </a>
+                                                    <i class="fa fa-spin fa-spinner"></i>
                                                 </li>
                                             </ul>
                                         </div>
