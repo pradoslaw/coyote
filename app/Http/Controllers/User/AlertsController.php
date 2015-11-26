@@ -6,6 +6,8 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Illuminate\Http\Request;
+use Coyote\Alert\Setting;
 
 class AlertsController extends Controller
 {
@@ -54,5 +56,34 @@ class AlertsController extends Controller
         }
 
         return parent::view('user.alerts')->with(compact('alerts', 'session'));
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function settings()
+    {
+        $settings = Setting::select(['alert_settings.*', 'alert_types.name'])
+                ->join('alert_types', 'alert_types.id', '=', 'type_id')
+                ->where('user_id', auth()->user()->id)
+                ->get();
+
+        return parent::view('user.alerts.settings', compact('settings'));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function save(Request $request)
+    {
+        $settings = ['profile' => $request->get('profile'), 'email' => $request->get('email')];
+
+        foreach (array_keys($settings) as $mode) {
+            while (list($setting, $value) = each($settings[$mode])) {
+                Setting::where('id', $setting)->where('user_id', auth()->user()->id)->update([$mode => $value]);
+            }
+        }
+        return back()->with('success', 'Zmiany zostały zapisane');
     }
 }

@@ -1,0 +1,72 @@
+{% extends 'layout.twig' %}
+{% block title %}Ustawienia powiadomień :: {{ parent() }}{% endblock %}
+
+{% import 'components/forms.twig' as forms %}
+
+{% block container %}
+    {{ include('user/_top', {active: 'settings'}) }}
+
+    <div class="row">
+        {% include 'user/_settings-menu' %}
+
+        <main class="col-md-10">
+            <section class="panel panel-wrapper">
+                <div class="panel-body">
+                    <h2>Ustawienia powiadomień</h2>
+
+                    <div id="box-alerts-settings" class="panel panel-default">
+                        <div class="panel-body">
+                            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.alerts.settings'), 'class': 'form-horizontal'}) }}
+
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <strong>Powiadamiaj o...</strong>
+                                </div>
+                                <div class="col-xs-2">
+                                    <strong>Informacja w profilu</strong>
+                                </div>
+                                <div class="col-xs-2">
+                                    <strong>Informacja na e-mail</strong>
+                                </div>
+                            </div>
+                            {% for setting in settings %}
+                                <div class="row">
+                                    <div class="col-xs-8">
+                                        {{ setting.name }}
+                                    </div>
+                                    <div class="col-xs-2">
+                                        {{ form_hidden('profile[' ~ setting.id ~ ']', 0) }}
+                                        {{ form_checkbox('profile[' ~ setting.id ~ ']', 1, setting.profile) }}
+                                    </div>
+                                    <div class="col-xs-2">
+                                        {{ form_hidden('email[' ~ setting.id ~ ']', 0) }}
+                                        {{ form_checkbox('email[' ~ setting.id ~ ']', 1, setting.email) }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button type="submit" class="btn btn-primary" style="margin-right: 15px;">
+                                        Zapisz zmiany
+                                    </button>
+                                </div>
+                            </div>
+                            {{ form_close() }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/user.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}

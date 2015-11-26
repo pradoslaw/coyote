@@ -180,3 +180,42 @@
     color: $gray;
   }
 }
+
+#box-alerts-settings {
+  .row {
+    border-bottom: 1px solid $border-color;
+    margin: 0;
+
+    > div {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      font-size: 12px;
+      border-right: 1px solid $border-color;
+      text-align: center;
+
+      &:last-child {
+        border-right: none;
+      }
+
+      &:first-child {
+        text-align: left;
+      }
+
+      input[type=checkbox] {
+        margin: 0;
+      }
+    }
+
+    &:last-child {
+      border-bottom: none;
+
+      > div {
+        padding: 20px 0 0 0;
+      }
+    }
+
+    &:nth-child(even) {
+      background-color: $body-bg;
+    }
+  }
+}
