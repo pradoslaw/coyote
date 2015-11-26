@@ -9,13 +9,25 @@ use Coyote\Alert\Type;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 use Coyote\Declination;
 
+/**
+ * Class AlertRepository
+ * @package Coyote\Repositories\Eloquent
+ */
 class AlertRepository extends Repository implements AlertRepositoryInterface
 {
+    /**
+     * @return \Coyote\Alert
+     */
     public function model()
     {
         return 'Coyote\Alert';
     }
 
+    /**
+     * @param int $userId
+     * @param int $perPage
+     * @return mixed
+     */
     public function paginate($userId, $perPage = 20)
     {
         $alerts = $this->prepare($userId, $perPage)->paginate($perPage);
@@ -24,6 +36,11 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
         return $alerts;
     }
 
+    /**
+     * @param int $userId
+     * @param int $limit
+     * @return mixed
+     */
     public function takeForUser($userId, $limit = 10)
     {
         $alerts = $this->prepare($userId)->take($limit)->get();
@@ -32,11 +49,22 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
         return $alerts;
     }
 
-    public function markAsRead($id)
+    /**
+     * Mark notifications as read
+     *
+     * @param array $id
+     */
+    public function markAsRead(array $id)
     {
         $this->model->whereIn('id', $id)->update(['read_at' => Carbon::now()]);
     }
 
+    /**
+     * Format notification's headline
+     *
+     * @param $alerts
+     * @return mixed
+     */
     private function parse($alerts)
     {
         $alerts->each(function ($alert) {
@@ -58,6 +86,12 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
         return $alerts;
     }
 
+    /**
+     * Build query for repository
+     *
+     * @param int $userId
+     * @return mixed
+     */
     private function prepare($userId)
     {
         return $this->model
@@ -77,6 +111,12 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
                 ->orderBy('alerts.id', 'DESC');
     }
 
+    /**
+     * Gets notification headline for given type. This template is used for Db_Email() class for emails subject
+     *
+     * @param $typeId
+     * @return mixed
+     */
     public function headlinePattern($typeId)
     {
         return (new Type())->find($typeId, ['headline'])['headline'];
