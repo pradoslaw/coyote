@@ -19,6 +19,21 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
+     * @param $id
+     * @param array $columns
+     * @return mixed
+     */
+    public function findOrFail($id, $columns = ['*'])
+    {
+        $result = $this->prepare()->findOrFail($id);
+
+        // generuje url do miniaturek dolaczonych do wpisu
+        $result = $this->thumbnails($result);
+
+        return $result;
+    }
+
+    /**
      * @param null|int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
