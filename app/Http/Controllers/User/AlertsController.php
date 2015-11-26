@@ -48,7 +48,7 @@ class AlertsController extends Controller
         // mark as read
         $this->mark($alerts);
 
-        return parent::view('user.alerts')->with(compact('alerts', 'session'));
+        return parent::view('user.alerts.home')->with(compact('alerts', 'session'));
     }
 
     /**
