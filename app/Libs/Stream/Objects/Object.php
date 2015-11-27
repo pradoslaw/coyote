@@ -8,6 +8,10 @@ abstract class Object implements ObjectInterface
 {
     use Builder;
 
+    public $id;
+    public $url;
+    public $displayName;
+
     public function __construct(array $data = [])
     {
         foreach ($data as $field => $value) {

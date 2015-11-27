@@ -2,6 +2,7 @@
 
 namespace Coyote\Reputation\Microblog;
 
+use Coyote\Microblog;
 use Coyote\Reputation\Reputation;
 use Coyote\Reputation\ReputationInterface;
 
@@ -30,5 +31,15 @@ class Create extends Reputation implements ReputationInterface
 
             $this->save($result->toArray());
         }
+    }
+
+    public function map(Microblog $microblog)
+    {
+        $this->setMicroblogId($microblog->id);
+        $this->setUrl(route('microblog.view', [$microblog->id], false));
+        $this->setUserId($microblog->user_id);
+        $this->setExcerpt(excerpt($microblog->text));
+
+        return $this;
     }
 }

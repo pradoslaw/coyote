@@ -21,6 +21,8 @@ abstract class Activity implements ObjectInterface
         $this->actor = $actor;
         $this->object = $object;
         $this->target = $target;
+        $this->ip = request()->getClientIp();
+
     }
 
     public function build()

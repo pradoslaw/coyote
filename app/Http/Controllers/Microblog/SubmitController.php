@@ -4,9 +4,14 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
-use Coyote\Reputation\Microblog\Create as ReputationCreate;
+use Coyote\Reputation\Microblog\Create as Reputation_Create;
+use Coyote\Stream\Activities\Create as Stream_Create;
+use Coyote\Stream\Objects\Microblog as Stream_Microblog;
+use Coyote\Stream\Actor;
+use Coyote\Stream\Stream;
 use Illuminate\Http\Request;
 
 /**
@@ -30,18 +35,22 @@ class SubmitController extends Controller
      */
     private $reputation;
 
+    private $stream;
+
     /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
      *
      * @param Microblog $microblog
      * @param User $user
      * @param Reputation $reputation
+     * @param Stream $stream
      */
-    public function __construct(Microblog $microblog, User $user, Reputation $reputation)
+    public function __construct(Microblog $microblog, User $user, Reputation $reputation, StreamRepositoryInterface $stream)
     {
         $this->microblog = $microblog;
         $this->user = $user;
         $this->reputation = $reputation;
+        $this->stream = $stream;
     }
 
     /**
@@ -99,15 +108,12 @@ class SubmitController extends Controller
             $microblog->save();
 
             if (!$id) {
-                $reputation = [
-                    'microblogId'   => $microblog->id,
-                    'url'           => route('microblog.view', [$microblog->id]),
-                    'userId'        => $user->id,
-                    'excerpt'       => str_limit($microblog->text, 250)
-                ];
-
                 // zwiekszenie pkt reputacji
-                (new ReputationCreate($this->reputation))->save($reputation);
+                (new Reputation_Create($this->reputation))->map($microblog)->save();
+
+                // put this to activity stream
+                $create = new Stream_Create(new Stream_Actor($user), (new Stream_Microblog())->map($microblog));
+                (new Stream($this->stream))->add($create);
             }
         });
 
@@ -159,7 +165,7 @@ class SubmitController extends Controller
         \DB::transaction(function () use ($microblog) {
             $microblog->delete();
             // cofniecie pkt reputacji
-            (new ReputationCreate($this->reputation))->undo($microblog->id);
+            (new Reputation_Create($this->reputation))->undo($microblog->id);
         });
     }
 

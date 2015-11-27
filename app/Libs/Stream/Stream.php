@@ -2,14 +2,14 @@
 
 namespace Coyote\Stream;
 
-use Coyote\Repositories\Mongodb\StreamRepository;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Stream\Objects\ObjectInterface;
 
 class Stream
 {
     private $model;
 
-    public function __construct(StreamRepository $model)
+    public function __construct(StreamRepositoryInterface $model)
     {
         $this->model = $model;
     }
@@ -17,5 +17,6 @@ class Stream
     public function add(ObjectInterface $activity)
     {
         $this->model->create($activity->build());
+        return $this;
     }
 }
