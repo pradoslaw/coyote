@@ -2,15 +2,13 @@
 
 namespace Coyote\Reputation\Microblog;
 
-use Coyote\Microblog;
-use Coyote\Reputation\Reputation;
 use Coyote\Reputation\ReputationInterface;
 
 /**
  * Class Create
  * @package Coyote\Reputation\Microblog
  */
-class Create extends Reputation implements ReputationInterface
+class Create extends Microblog implements ReputationInterface
 {
     const ID = \Coyote\Reputation::MICROBLOG;
 
@@ -22,24 +20,14 @@ class Create extends Reputation implements ReputationInterface
     public function undo($microblogId)
     {
         $result = $this->reputation
-            ->where('type_id', '=', self::ID)
-            ->whereRaw("metadata->>'microblog_id' = ?", [$microblogId])
-            ->first();
+                ->where('type_id', '=', self::ID)
+                ->whereRaw("metadata->>'microblog_id' = ?", [$microblogId])
+                ->first();
 
         if ($result) {
             $this->setIsPositive(false);
 
             $this->save($result->toArray());
         }
-    }
-
-    public function map(Microblog $microblog)
-    {
-        $this->setMicroblogId($microblog->id);
-        $this->setUrl(route('microblog.view', [$microblog->id], false));
-        $this->setUserId($microblog->user_id);
-        $this->setExcerpt(excerpt($microblog->text));
-
-        return $this;
     }
 }

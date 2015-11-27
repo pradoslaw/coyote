@@ -4,14 +4,14 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
-use Coyote\Repositories\Contracts\StreamRepositoryInterface;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 use Coyote\Reputation\Microblog\Create as Reputation_Create;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
-use Coyote\Stream\Actor;
-use Coyote\Stream\Stream;
+use Coyote\Stream\Actor as Stream_Actor;
+use Coyote\Stream\Stream as Stream_Activity;
 use Illuminate\Http\Request;
 
 /**
@@ -45,7 +45,7 @@ class SubmitController extends Controller
      * @param Reputation $reputation
      * @param Stream $stream
      */
-    public function __construct(Microblog $microblog, User $user, Reputation $reputation, StreamRepositoryInterface $stream)
+    public function __construct(Microblog $microblog, User $user, Reputation $reputation, Stream $stream)
     {
         $this->microblog = $microblog;
         $this->user = $user;
@@ -113,7 +113,7 @@ class SubmitController extends Controller
 
                 // put this to activity stream
                 $create = new Stream_Create(new Stream_Actor($user), (new Stream_Microblog())->map($microblog));
-                (new Stream($this->stream))->add($create);
+                (new Stream_Activity($this->stream))->add($create);
             }
         });
 

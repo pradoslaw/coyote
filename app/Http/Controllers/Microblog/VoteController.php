@@ -24,6 +24,10 @@ class VoteController extends Controller
      * @var Reputation
      */
     private $reputation;
+
+    /**
+     * @var Alert
+     */
     private $alert;
 
     /**
@@ -77,13 +81,7 @@ class VoteController extends Controller
             if (!$microblog->parent_id) {
                 $url = route('microblog.view', [$microblog->id], false) . '#entry-' . $microblog->id;
 
-                (new Reputation_Vote($this->reputation))->save([
-                    'userId'            => auth()->user()->id,
-                    'excerpt'           => str_limit($microblog->text, 200),
-                    'url'               => $url,
-                    'microblogId'       => $microblog->id,
-                    'isPositive'        => !$vote
-                ]);
+                (new Reputation_Vote($this->reputation))->map($microblog)->setUrl($url)->setIsPositive(!$vote)->save();
             } else {
                 $url = route('microblog.view', [$microblog->parent_id], false) . '#comment-' . $microblog->id;
             }
