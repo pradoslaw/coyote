@@ -51,8 +51,10 @@ abstract class Activity implements ObjectInterface
         $this->object = $object;
         $this->target = $target;
         $this->ip = request()->ip();
-        $this->browser = request()->browser();
 
+        if (method_exists(request(), 'browser')) {
+            $this->browser = request()->browser();
+        }
     }
 
     public function build()

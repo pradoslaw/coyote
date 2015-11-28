@@ -15,7 +15,13 @@ class Handler extends DatabaseSessionHandler
         $userId  = auth()->check() ? auth()->user()->id : null;
         $url     = request()->fullUrl();
         $ip      = request()->ip();
-        $browser = request()->browser();
+        $browser = '';
+
+        // nie korzystamy ze standardowej klasy Request. Testy funkcjonalne "nie widza"
+        // metody browser() z klasy CostomRequest
+        if (method_exists(request(), 'browser')) {
+            $browser = request()->browser();
+        }
 
         $data = [
             'payload'       => base64_encode($data),
