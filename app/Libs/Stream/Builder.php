@@ -2,6 +2,10 @@
 
 namespace Coyote\Stream;
 
+/**
+ * Class Builder
+ * @package Coyote\Stream
+ */
 trait Builder
 {
     public function build()

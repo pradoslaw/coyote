@@ -5,23 +5,53 @@ namespace Coyote\Stream\Activities;
 use Coyote\Stream\Builder;
 use Coyote\Stream\Objects\ObjectInterface;
 
+/**
+ * Class Activity
+ * @package Coyote\Stream\Activities
+ */
 abstract class Activity implements ObjectInterface
 {
     use Builder {
         buildObject as buildChildObject;
     }
 
+    /**
+     * @var ObjectInterface
+     */
     protected $actor;
+
+    /**
+     * @var ObjectInterface
+     */
     protected $object;
+
+    /**
+     * @var ObjectInterface|null
+     */
     protected $target;
+
+    /**
+     * @var string
+     */
     public $ip;
 
+    /**
+     * @var string
+     */
+    public $browser;
+
+    /**
+     * @param ObjectInterface $actor
+     * @param ObjectInterface $object
+     * @param ObjectInterface|null $target
+     */
     public function __construct(ObjectInterface $actor, ObjectInterface $object, ObjectInterface $target = null)
     {
         $this->actor = $actor;
         $this->object = $object;
         $this->target = $target;
-        $this->ip = request()->getClientIp();
+        $this->ip = request()->ip();
+        $this->browser = request()->browser();
 
     }
 

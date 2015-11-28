@@ -13,7 +13,7 @@ class Actor extends Object
             $data = array_merge([
                 'displayName'   => $user->name,
                 'id'            => $user->id,
-                'url'           => route('profile', [$this->id], false)
+                'url'           => route('profile', [$user->id], false)
             ]);
         }
 

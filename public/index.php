@@ -35,6 +35,12 @@ require __DIR__ . '/../bootstrap/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
 /*
+| Custom request class. 4programmers.net uses cloud flare so we have to provide method for
+| retrieving actual IP address.
+ */
+$app->alias('request', 'Coyote\Http\CustomRequest');
+
+/*
 |--------------------------------------------------------------------------
 | Run The Application
 |--------------------------------------------------------------------------
@@ -49,7 +55,7 @@ $app = require_once __DIR__ . '/../bootstrap/app.php';
 $kernel = $app->make('Illuminate\Contracts\Http\Kernel');
 
 $response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
+    $request = Coyote\Http\CustomRequest::capture()
 );
 
 $response->send();
