@@ -26,6 +26,8 @@ class MicroblogCest
     {
         $I->wantTo('post a comment');
 
+        $I->amOnPage('/Mikroblogi');
+        $I->canSeeElement('.comment-submit');
         $I->submitForm('.comment-submit', ['text' => 'To jest unikalny komentarz']);
         $I->wait(1);
         $I->canSee('To jest unikalny komentarz');
