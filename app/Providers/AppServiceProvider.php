@@ -60,5 +60,10 @@ class AppServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Contracts\\StreamRepositoryInterface',
             'Coyote\\Repositories\\Mongodb\\StreamRepository'
         );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\PmRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\PmRepository'
+        );
     }
 }

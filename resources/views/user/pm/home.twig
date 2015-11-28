@@ -1,0 +1,35 @@
+{% extends 'layout.twig' %}
+{% block title %}Wiadomości prywatne {{ parent() }}{% endblock %}
+
+{% block container %}
+    {{ include('user/_top', {active: 'home'}) }}
+
+    <div class="row">
+        {% include 'user/_home-menu' %}
+
+        <main class="col-md-10">
+            <section class="panel panel-wrapper">
+                <div class="panel-body">
+                    <h2>Wiadomości prywatne</h2>
+
+                    <div id="box-pm" class="panel panel-default">
+                        <div class="panel-body">
+
+                            {{ pm.render() }}
+
+
+
+                            {{ pm.render() }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/user.css">
+{% endblock %}
