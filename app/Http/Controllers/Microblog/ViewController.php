@@ -3,15 +3,13 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Parser\Parser;
-use Coyote\Parser\Providers\Markdown;
-use Coyote\Parser\Providers\Purifier;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Parser\Scenarios\Microblog as Parser_Microblog;
 
 class ViewController extends Controller
 {
-    public function index($id, MicroblogRepositoryInterface $repository, UserRepositoryInterface $user)
+    public function index($id, Microblog $repository, User $user)
     {
         $microblog = $repository->findOrFail($id);
         $excerpt = excerpt($microblog->text);
@@ -19,11 +17,7 @@ class ViewController extends Controller
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));
         $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
 
-        $parser = new Parser();
-        $parser->attach((new Markdown($user))->setEnableHashParser(true));
-        $parser->attach(new Purifier());
-
-        $microblog->text = $parser->parse($microblog->text);
+        $microblog->text = (new Parser_Microblog($user))->parse($microblog->text);
 
         return parent::view('microblog.view')->with(['microblog' => $microblog, 'excerpt' => $excerpt]);
     }
