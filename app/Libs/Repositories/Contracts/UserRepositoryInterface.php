@@ -8,6 +8,12 @@ interface UserRepositoryInterface extends RepositoryInterface
      * @param $name
      * @return mixed
      */
+    public function lookupName($name);
+
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function findByName($name);
 
     /**

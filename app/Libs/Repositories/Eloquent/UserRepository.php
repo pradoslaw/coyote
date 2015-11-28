@@ -15,9 +15,18 @@ class UserRepository extends Repository implements UserRepositoryInterface
      * @param $name
      * @return mixed
      */
-    public function findByName($name)
+    public function lookupName($name)
     {
         return $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%')->get();
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function findByName($name)
+    {
+        return $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name)->first();
     }
 
     /**

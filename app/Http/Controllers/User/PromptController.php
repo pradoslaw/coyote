@@ -16,6 +16,6 @@ class PromptController extends Controller
     public function index(Request $request, UserRepositoryInterface $user)
     {
         $this->validate($request, ['q' => 'username']);
-        return view('components.prompt')->with('users', $user->findByName($request['q']));
+        return view('components.prompt')->with('users', $user->lookupName($request['q']));
     }
 }
