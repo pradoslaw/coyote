@@ -9,10 +9,75 @@ namespace Coyote\Parser\Providers;
  * Class SimpleMarkdown
  * @package Coyote\Parser\Providers
  */
-class SimpleMarkdown extends \Parsedown implements ProviderInterface
+class SimpleMarkdown extends Markdown implements ProviderInterface
 {
-    public function parse($text)
+    protected function blockHeader($line)
     {
-        //
+        return null;
+    }
+
+    protected function blockCode($line)
+    {
+        return null;
+    }
+
+    protected function blockCodeContinue($line, $block)
+    {
+        return null;
+    }
+
+    protected function blockCodeComplete($block)
+    {
+        return null;
+    }
+
+    protected function blockComment($line)
+    {
+        return null;
+    }
+
+    protected function blockFencedCode($line)
+    {
+        return null;
+    }
+
+    protected function blockList($line)
+    {
+        return null;
+    }
+
+    protected function blockQuote($line)
+    {
+        return null;
+    }
+
+    protected function blockRule($line)
+    {
+        return null;
+    }
+
+    protected function blockSetextHeader($line, array $block = null)
+    {
+        return null;
+    }
+
+    protected function blockReference($line)
+    {
+        return null;
+    }
+
+    protected function blockTable($line, array $block = null)
+    {
+        return null;
+    }
+
+    protected function inlineImage($excerpt)
+    {
+        return null;
+    }
+
+    protected function inlineStrikethrough($excerpt)
+    {
+        return null;
     }
 }
