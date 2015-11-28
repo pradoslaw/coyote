@@ -6,11 +6,16 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Microblog;
 use Coyote\Microblog\Vote;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Illuminate\Http\Request;
 use Coyote\Reputation\Microblog\Vote as Reputation_Vote;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 use Coyote\Alert\Providers\Microblog\Vote as Alert_Vote;
+use Coyote\Stream\Activities\Vote as Stream_Vote;
+use Coyote\Stream\Objects\Microblog as Stream_Microblog;
+use Coyote\Stream\Actor as Stream_Actor;
+use Coyote\Stream\Stream as Stream_Activity;
 
 /**
  * Ocena glosow na dany wpis na mikro (lub wyswietlanie loginow ktorzy oddali ow glos)
@@ -31,12 +36,20 @@ class VoteController extends Controller
     private $alert;
 
     /**
-     * @param Reputation $reputation
+     * @var Stream
      */
-    public function __construct(Reputation $reputation, Alert $alert)
+    private $stream;
+
+    /**
+     * @param Reputation $reputation
+     * @param Alert $alert
+     * @param Stream $stream
+     */
+    public function __construct(Reputation $reputation, Alert $alert, Stream $stream)
     {
         $this->reputation = $reputation;
         $this->alert = $alert;
+        $this->stream = $stream;
     }
 
     /**
@@ -87,6 +100,10 @@ class VoteController extends Controller
             }
 
             $microblog->save();
+
+            // put this to activity stream
+            $activity = new Stream_Vote(new Stream_Actor(auth()->user()), (new Stream_Microblog())->map($microblog));
+            (new Stream_Activity($this->stream))->add($activity);
 
             if (!$vote) {
                 (new Alert_Vote($this->alert))

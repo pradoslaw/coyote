@@ -9,6 +9,8 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 use Coyote\Reputation\Microblog\Create as Reputation_Create;
 use Coyote\Stream\Activities\Create as Stream_Create;
+use Coyote\Stream\Activities\Update as Stream_Update;
+use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Stream\Actor as Stream_Actor;
 use Coyote\Stream\Stream as Stream_Activity;
@@ -107,14 +109,20 @@ class SubmitController extends Controller
         \DB::transaction(function () use ($microblog, $id, $user) {
             $microblog->save();
 
+            $object = (new Stream_Microblog())->map($microblog);
+            $actor = new Stream_Actor($user);
+
             if (!$id) {
                 // zwiekszenie pkt reputacji
                 (new Reputation_Create($this->reputation))->map($microblog)->save();
 
-                // put this to activity stream
-                $create = new Stream_Create(new Stream_Actor($user), (new Stream_Microblog())->map($microblog));
-                (new Stream_Activity($this->stream))->add($create);
+                $activity = new Stream_Create($actor, $object);
+            } else {
+                $activity = new Stream_Update($actor, $object);
             }
+
+            // put this to activity stream
+            (new Stream_Activity($this->stream))->add($activity);
         });
 
         // jezeli wpis zawiera jakies zdjecia, generujemy linki do miniatur
@@ -166,6 +174,10 @@ class SubmitController extends Controller
             $microblog->delete();
             // cofniecie pkt reputacji
             (new Reputation_Create($this->reputation))->undo($microblog->id);
+
+            // put this to activity stream
+            $delete = new Stream_Delete(new Stream_Actor(auth()->user()), (new Stream_Microblog())->map($microblog));
+            (new Stream_Activity($this->stream))->add($delete);
         });
     }
 
