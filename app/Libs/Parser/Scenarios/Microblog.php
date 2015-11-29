@@ -11,6 +11,7 @@ use Coyote\Parser\Providers\Purifier;
 use Coyote\Parser\Providers\Smilies;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
+use Debugbar;
 
 class Microblog
 {
@@ -25,18 +26,23 @@ class Microblog
 
     public function parse($text)
     {
+        Debugbar::startMeasure('parsing', 'Time for parsing');
+
         $parser = new Parser();
 
         $text = $parser->cache($text, function ($parser) {
             $parser->attach((new Markdown($this->user))->setEnableHashParser(true));
             $parser->attach(new Purifier());
-//            $parser->attach(new Link());
+            $parser->attach(new Link());
             $parser->attach(new Censore($this->word));
             $parser->attach(new Geshi());
         });
 
         $parser->attach(new Smilies());
 
-        return $parser->parse($text);
+        $text = $parser->parse($text);
+        Debugbar::stopMeasure('parsing');
+
+        return $text;
     }
 }

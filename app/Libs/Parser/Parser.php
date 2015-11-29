@@ -4,7 +4,6 @@ namespace Coyote\Parser;
 
 use Coyote\Parser\Providers\ProviderInterface;
 use Cache;
-use Debugbar;
 
 final class Parser
 {
@@ -56,13 +55,10 @@ final class Parser
 
     public function parse($text)
     {
-        Debugbar::startMeasure('parsing', 'Time for parsing');
-
         foreach ($this->parsers as $parser) {
             $text = $parser->parse($text);
         }
 
-        Debugbar::stopMeasure('parsing');
         return $text;
     }
 }
