@@ -15,7 +15,8 @@ class MarkdownTest extends \Codeception\TestCase\Test
 
     protected function _before()
     {
-        $this->markdown = new Markdown();
+        $user = new \Coyote\Repositories\Eloquent\UserRepository(app());
+        $this->markdown = new Markdown($user);
     }
 
     protected function _after()
@@ -25,6 +26,10 @@ class MarkdownTest extends \Codeception\TestCase\Test
     // tests
     public function testParseUserName()
     {
-        //
+        $input = $this->markdown->parse('@admin lorem ipsum');
+        $this->tester->assertRegExp('/<a href=".*">@admin<\/a> lorem ipsum/', $input);
+
+        $input = $this->markdown->parse('@admin lorem ipsum `@admin`');
+        $this->tester->assertRegExp('/<a href=".*">@admin<\/a> lorem ipsum <code>@admin<\/code>/', $input);
     }
 }
