@@ -15,15 +15,32 @@ use Debugbar;
 
 class Microblog
 {
+    /**
+     * @var User
+     */
     private $user;
+
+    /**
+     * @var Word
+     */
     private $word;
 
+    /**
+     * @param User $user
+     * @param Word $word
+     */
     public function __construct(User $user, Word $word)
     {
         $this->user = $user;
         $this->word = $word;
     }
 
+    /**
+     * Parse microblog
+     *
+     * @param string $text
+     * @return string
+     */
     public function parse($text)
     {
         Debugbar::startMeasure('parsing', 'Time for parsing');

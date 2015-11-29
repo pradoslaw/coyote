@@ -25,6 +25,12 @@ class HomeController extends Controller
         // we MUST NOT cache popular entries because it may contains current user's data
         $popular = $repository->takePopular(5);
 
+        $parser = app()->make('Parser\Microblog');
+
+        foreach ($microblogs->items() as &$microblog) {
+            $microblog->text = $parser->parse($microblog->text);
+        }
+
         return parent::view('microblog.home', [
             'total'                     => $microblogs->total(),
             'pagination'                => $microblogs->render(),

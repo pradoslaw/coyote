@@ -44,7 +44,6 @@ final class Parser
                 Cache::put($crc32, $text, 60 * 24 * 30); // 30d
             } else {
                 $text = Cache::get($crc32);
-                Cache::increment($crc32, 60 * 24);
             }
         } else {
             $text = $this->parse($text);
