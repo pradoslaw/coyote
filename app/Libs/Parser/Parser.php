@@ -8,7 +8,7 @@ use Cache;
 final class Parser
 {
     private $parsers = [];
-    private $enableCache = false;
+    private $enableCache = true;
 
     public function setEnableCache($flag)
     {
@@ -36,14 +36,15 @@ final class Parser
         if ($closure) {
             $closure($this);
         }
-        $crc32 = hash('crc32b', $text);
+        $crc32 = 'text:' . hash('crc32b', $text);
 
         if ($this->enableCache) {
             if (!Cache::has($crc32)) {
                 $text = $this->parse($text);
-                Cache::forever($crc32, $text);
+                Cache::put($crc32, $text, 60 * 24 * 30); // 30d
             } else {
                 $text = Cache::get($crc32);
+                Cache::increment($crc32, 60 * 24);
             }
         } else {
             $text = $this->parse($text);
