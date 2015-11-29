@@ -21,6 +21,11 @@ class ViewController extends Controller
         $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
 
         $microblog->text = app()->make('Parser\Microblog')->parse($microblog->text);
+        $parser = app()->make('Parser\Comment');
+
+        foreach ($microblog->comments as &$comment) {
+            $comment->text = $parser->parse($comment->text);
+        }
 
         return parent::view('microblog.view')->with(['microblog' => $microblog, 'excerpt' => $excerpt]);
     }

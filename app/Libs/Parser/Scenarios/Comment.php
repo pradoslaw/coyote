@@ -8,12 +8,13 @@ use Coyote\Parser\Providers\Geshi;
 use Coyote\Parser\Providers\Link;
 use Coyote\Parser\Providers\Markdown;
 use Coyote\Parser\Providers\Purifier;
+use Coyote\Parser\Providers\SimpleMarkdown;
 use Coyote\Parser\Providers\Smilies;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 use Debugbar;
 
-class Microblog
+class Comment
 {
     /**
      * @var User
@@ -48,11 +49,10 @@ class Microblog
         $parser = new Parser();
 
         $text = $parser->cache($text, function ($parser) {
-            $parser->attach((new Markdown($this->user))->setBreaksEnabled(true)->setEnableHashParser(true));
+            $parser->attach(new SimpleMarkdown($this->user));
             $parser->attach(new Purifier());
             $parser->attach(new Link());
             $parser->attach(new Censore($this->word));
-            $parser->attach(new Geshi());
         });
 
         if (auth()->guest() || auth()->user()->allow_smilies) {

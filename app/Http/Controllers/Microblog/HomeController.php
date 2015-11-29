@@ -15,7 +15,7 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));
 
-        $microblogs = $repository->paginate(25);
+        $microblogs = $repository->paginate(10);
 
         // let's cache microblog tags. we don't need to run this query every time
         $tags = Cache::remember('microblogs-tags', 30, function () use ($repository) {
@@ -25,10 +25,14 @@ class HomeController extends Controller
         // we MUST NOT cache popular entries because it may contains current user's data
         $popular = $repository->takePopular(5);
 
-        $parser = app()->make('Parser\Microblog');
+        $parser = ['main' => app()->make('Parser\Microblog'), 'comment' => app()->make('Parser\Comment')];
 
         foreach ($microblogs->items() as &$microblog) {
-            $microblog->text = $parser->parse($microblog->text);
+            $microblog->text = $parser['main']->parse($microblog->text);
+
+            foreach ($microblog->comments as &$comment) {
+                $comment->text = $parser['comment']->parse($comment->text);
+            }
         }
 
         return parent::view('microblog.home', [

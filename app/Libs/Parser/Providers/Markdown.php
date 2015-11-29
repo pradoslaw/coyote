@@ -151,6 +151,6 @@ class Markdown extends \ParsedownExtra implements ProviderInterface
      */
     public function parse($text)
     {
-        return $this->setBreaksEnabled(true)->text($text);
+        return $this->text($text);
     }
 }

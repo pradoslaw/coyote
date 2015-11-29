@@ -3,11 +3,14 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
+use Coyote\Alert\Alert as Alerts;
 use Coyote\Alert\Providers\Microblog\Watch as Alert_Watch;
+use Coyote\Alert\Providers\Microblog\Login as Alert_Login;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
@@ -90,33 +93,53 @@ class CommentController extends Controller
         $stream = new Stream_Activity($this->stream);
 
         if (!$id) {
-            $watchers = $this->microblog->getWatchers($microblog->parent_id);
+            $activity = new Stream_Create($actor, $object, $target);
+        } else {
+            $activity = new Stream_Update($actor, $object, $target);
+        }
 
-            if ($watchers) {
-                // new comment. should we send a notification?
-                $alert->with([
-                    'users_id'    => $watchers,
+        \DB::transaction(function () use ($id, &$microblog, $activity, $alert, $stream, $object, $user, $parent) {
+            $microblog->save();
+
+            // we need to parse text first (and store it in cache)
+            $parser = app()->make('Parser\Comment');
+            $microblog->text = $parser->parse($microblog->text);
+
+            if (!$id) {
+                $watchers = $this->microblog->getWatchers($microblog->parent_id);
+                $alert = new Alerts();
+
+                // we need to send alerts AFTER saving comment to database because we need ID of comment
+                $alertData = [
+                    'microblog_id'=> $microblog->id,
                     'content'     => $microblog->text,
                     'excerpt'     => excerpt($microblog->text),
                     'sender_id'   => $user->id,
                     'sender_name' => $user->name,
                     'subject'     => excerpt($parent->text, 48), // original exerpt of parent entry
                     'url'         => route('microblog.view', [$parent->id], false) . '#comment-' . $microblog->id
-                ]);
+                ];
+
+                if ($watchers) {
+                    // new comment. should we send a notification?
+                    $alert->attach((new Alert_Watch($this->alert, $alertData))->setUsersId($watchers));
+                }
+
+                $ref = new Ref_Login();
+                // get id of users that were mentioned in the text
+                $usersId = $ref->grab($microblog->text);
+
+                if ($usersId) {
+                    $alert->attach((new Alert_Login($this->alert, $alertData))->setUsersId($usersId));
+                }
+
+                // send a notify
+                $alert->notify();
             }
-
-            $activity = new Stream_Create($actor, $object, $target);
-        } else {
-            $activity = new Stream_Update($actor, $object, $target);
-        }
-
-        \DB::transaction(function () use ($microblog, $activity, $alert, $stream, $object) {
-            $microblog->save();
 
             // map microblog object into stream activity object
             $object->map($microblog);
-            // send a notify
-            $alert->notify();
+
             // put item into stream activity
             $stream->add($activity);
         });
@@ -172,7 +195,12 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        $comments = $this->microblog->getComments([$id]);
-        return view('microblog._comments', ['id' => $id, 'comments' => $comments->slice(0, -2)]);
+        $parser = app()->make('Parser\Comment');
+        $comments = $this->microblog->getComments([$id])->slice(0, -2);
+
+        foreach ($comments as &$comment) {
+            $comment->text = $parser->parse($comment->text);
+        }
+        return view('microblog._comments', ['id' => $id, 'comments' => $comments]);
     }
 }

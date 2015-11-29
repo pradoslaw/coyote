@@ -16,7 +16,7 @@ class SimpleMarkdown extends Markdown implements ProviderInterface
         return null;
     }
 
-    protected function blockCode($line)
+    protected function blockCode($line, $block = null)
     {
         return null;
     }
@@ -79,5 +79,14 @@ class SimpleMarkdown extends Markdown implements ProviderInterface
     protected function inlineStrikethrough($excerpt)
     {
         return null;
+    }
+
+    /**
+     * @param string $text
+     * @return mixed|string
+     */
+    public function parse($text)
+    {
+        return $this->line($text);
     }
 }

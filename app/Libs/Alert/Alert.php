@@ -40,8 +40,12 @@ class Alert
      */
     public function notify()
     {
+        $recipients = [];
+
         foreach ($this->alerts as $alert) {
-            $alert->notify();
+            $alert->setUsersId(array_diff($alert->getUsersId(), $recipients));
+
+            $recipients = array_merge($recipients, $alert->notify());
         }
     }
 }
