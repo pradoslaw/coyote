@@ -18,14 +18,14 @@
         "twig/extensions": "^1.3",
         "barryvdh/laravel-debugbar": "^2.0",
         "codeception/codeception": "*",
-        "mews/purifier": "~2.0",
         "laravel/socialite": "^2.0",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.0",
         "fzaninotto/faker": "^1.5",
         "erusev/parsedown-extra": "^0.7.0",
         "jenssegers/mongodb": "^2.2",
-        "folklore/image": "^0.2.4"
+        "folklore/image": "^0.2.4",
+        "ezyang/htmlpurifier": "^4.7"
     },
     "require-dev": {
         "sebastian/phpcpd": "*",

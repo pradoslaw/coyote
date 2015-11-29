@@ -17,35 +17,21 @@
  */
 
 return [
-
-    'encoding'  => 'UTF-8',
-    'finalize'  => true,
-    'cachePath' => getenv('APP_ENV') === 'local' ? null : storage_path('app/purifier'),
-    'settings'  => [
-        'default' => [
-            'HTML.Doctype'             => 'XHTML 1.0 Strict',
-            'HTML.Allowed'             => 'b,strong,i,em,a[href|title|data-user-id],p,br,ul,ol,li,span[style],img[width|height|alt|src],sub,sup,pre,code[class],kbd,h2,h3,h4,h5,h6',
-            'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,text-align',
-            'AutoFormat.AutoParagraph' => false,
-            'AutoFormat.RemoveEmpty'   => false,
-            'HTML.TidyLevel'           => 'none',
-            'Core.ConvertDocumentToFragment' => false,
-            // nie usuwamy niepoprawnych znacznikow. jedynie zastepujemy znaki < oraz >
-            'Core.EscapeInvalidTags'    => true,
-            'Core.HiddenElements'       => [],
-            'Output.CommentScriptContents' => false,
-            'Output.FixInnerHTML'       => false,
-            'Core.LexerImpl'            => 'DirectLex',
-            'Output.Newline'            => "\n"
-
-        ],
-        'test'    => [
-            'Attr.EnableID' => true
-        ],
-        "youtube" => [
-            "HTML.SafeIframe"      => 'true',
-            "URI.SafeIframeRegexp" => "%^(http://|https://|//)(www.youtube.com/embed/|player.vimeo.com/video/)%",
-        ],
-    ],
-
+    'Core.Encoding'            => 'UTF-8',
+    'Cache.SerializerPath'     => getenv('APP_ENV') === 'local' ? null : storage_path('app/purifier'),
+    'HTML.Doctype'             => 'XHTML 1.0 Strict',
+    'HTML.Allowed'             => 'b,strong,i,em,a[href|title|data-user-id],p,br,ul,ol,li,span[style],img[width|height|alt|src|title],sub,sup,pre,code[class],kbd,h2,h3,h4,h5,h6',
+    'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,text-align',
+    'AutoFormat.AutoParagraph' => false,
+    'AutoFormat.RemoveEmpty'   => true,
+    'HTML.TidyLevel'           => 'none',
+    'Core.ConvertDocumentToFragment' => false,
+    // nie usuwamy niepoprawnych znacznikow. jedynie zastepujemy znaki < oraz >
+    'Core.EscapeInvalidTags'    => true,
+    'Core.HiddenElements'       => [],
+    'Output.CommentScriptContents' => false,
+    'Output.FixInnerHTML'       => false,
+//    'Core.LexerImpl'            => 'DirectLex', // <-- nie wlaczac. psuje parsowanie atrybutow
+    'Core.AggressivelyFixLt'    => false,
+    'Output.Newline'            => "\n"
 ];

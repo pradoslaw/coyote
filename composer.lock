@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e45bedb41550163802ddca91d438f842",
-    "content-hash": "0070ef338e046d14a822a0b2545c3a85",
+    "hash": "cb79c545f49cdfd106fa55860075a80e",
+    "content-hash": "bc7814dce9e0c78415a6d5d09cb2f67d",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -1649,65 +1649,6 @@
                 "debug"
             ],
             "time": "2015-10-19 20:35:12"
-        },
-        {
-            "name": "mews/purifier",
-            "version": "2.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mewebstudio/Purifier.git",
-                "reference": "83dd3c9403ab732147c6c030a297f19e442d0534"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mewebstudio/Purifier/zipball/83dd3c9403ab732147c6c030a297f19e442d0534",
-                "reference": "83dd3c9403ab732147c6c030a297f19e442d0534",
-                "shasum": ""
-            },
-            "require": {
-                "ezyang/htmlpurifier": "4.7.*",
-                "illuminate/config": "~5.1",
-                "illuminate/filesystem": "~5.1",
-                "laravel/framework": "~5.1",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "mockery/mockery": "dev-master",
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "package",
-            "autoload": {
-                "psr-4": {
-                    "Mews\\Purifier\\": "src/"
-                },
-                "files": [
-                    "src/helpers.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Muharrem ERİN",
-                    "email": "me@mewebstudio.com",
-                    "homepage": "https://github.com/mewebstudio",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Laravel 5 HtmlPurifier Package",
-            "homepage": "https://github.com/mewebstudio/purifier",
-            "keywords": [
-                "Purifier",
-                "htmlpurifier",
-                "laravel5 HtmlPurifier",
-                "laravel5 Purifier",
-                "laravel5 Security",
-                "security",
-                "xss"
-            ],
-            "time": "2015-08-31 13:25:43"
         },
         {
             "name": "monolog/monolog",

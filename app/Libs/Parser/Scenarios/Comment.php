@@ -50,7 +50,7 @@ class Comment
 
         $text = $parser->cache($text, function ($parser) {
             $parser->attach(new SimpleMarkdown($this->user));
-            $parser->attach(new Purifier());
+            $parser->attach((new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id],code'));
             $parser->attach(new Link());
             $parser->attach(new Censore($this->word));
         });

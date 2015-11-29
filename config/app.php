@@ -164,8 +164,6 @@ return [
         Coyote\Providers\SessionServiceProvider::class,
         // Mozliwosc logowania przez github, fb, google...
         Laravel\Socialite\SocialiteServiceProvider::class,
-        // Biblioteka HTMLPurifier do usuwania zbednego kodu HTML
-        Mews\Purifier\PurifierServiceProvider::class,
         // Obsluga MongoDB w Laravel
         Jenssegers\Mongodb\MongodbServiceProvider::class
 
@@ -221,7 +219,6 @@ return [
         'Twig'      => TwigBridge\Facade\Twig::class,
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
-        'Purifier'  => Mews\Purifier\Facades\Purifier::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Image'     => Folklore\Image\Facades\Image::class,
     ],
