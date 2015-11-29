@@ -150,6 +150,10 @@ return [
         Coyote\Providers\EventServiceProvider::class,
         Coyote\Providers\RouteServiceProvider::class,
         Coyote\Providers\AuthServiceProvider::class,
+        // mozliwosc wczytania gotowych "scenariuszy" parsowania elementow strony, takich jak
+        // mikroblogi, czy forum. w takim scenariuszu zaladowane sa odpowiednie klasy
+        // do parsowania tekstu w zaleznosci od tego, czy mamy do czynienia z postem, komentarzem itd
+        Coyote\Providers\ParserServiceProvider::class,
 
         // Obsluga szablonow Twig
         TwigBridge\ServiceProvider::class,
