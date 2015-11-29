@@ -9,7 +9,7 @@ use Debugbar;
 final class Parser
 {
     private $parsers = [];
-    private $enableCache = true;
+    private $enableCache = false;
 
     public function setEnableCache($flag)
     {
@@ -46,6 +46,8 @@ final class Parser
             } else {
                 $text = Cache::get($crc32);
             }
+        } else {
+            $text = $this->parse($text);
         }
 
         $this->parsers = [];

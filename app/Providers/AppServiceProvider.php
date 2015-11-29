@@ -65,5 +65,10 @@ class AppServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Contracts\\PmRepositoryInterface',
             'Coyote\\Repositories\\Eloquent\\PmRepository'
         );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\WordRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\WordRepository'
+        );
     }
 }

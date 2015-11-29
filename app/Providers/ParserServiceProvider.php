@@ -25,7 +25,10 @@ class ParserServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('Parser\Microblog', function ($app) {
-            return new Parser_Microblog($app['Coyote\Repositories\Eloquent\UserRepository']);
+            return new Parser_Microblog(
+                $app['Coyote\Repositories\Eloquent\UserRepository'],
+                $app['Coyote\Repositories\Eloquent\WordRepository']
+            );
         });
     }
 }
