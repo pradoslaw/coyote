@@ -8,7 +8,7 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
  * Class Markdown
  * @package Coyote\Parser\Providers
  */
-class Markdown extends \ParsedownExtra implements ProviderInterface
+class Markdown extends \Parsedown implements ProviderInterface
 {
     /**
      * @var User
@@ -31,7 +31,7 @@ class Markdown extends \ParsedownExtra implements ProviderInterface
      */
     public function __construct(User $user)
     {
-        parent::__construct();
+//        parent::__construct();
 
         $this->InlineTypes['@'][] = 'UserTag';
         $this->inlineMarkerList .= '@';
