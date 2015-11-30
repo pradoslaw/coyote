@@ -4,21 +4,19 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 
 class HomeController extends Controller
 {
     /**
      * @param Request $request
-     * @param Session $session
      * @return $this
      */
-    public function index(Request $request, Session $session)
+    public function index(Request $request)
     {
         $this->breadcrumb->push('Forum', route('forum.home'));
 
         // generuje widok osob czytajacych dana strone
-        $viewers = new \Coyote\Session\Viewers($session, $request);
+        $viewers = app('Session\Viewers');
 
         return parent::view('forum.home')->with('viewers', $viewers->render($request->getRequestUri()));
     }
