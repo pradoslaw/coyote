@@ -46,6 +46,14 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     public function getVoters($id);
 
     /**
+     * Save microblog's tags
+     *
+     * @param int $microblogId
+     * @param array $tags
+     */
+    public function setTags($microblogId, array $tags);
+
+    /**
      * Pobiera najpopularniejsze tagi w mikroblogach
      *
      * @return mixed

@@ -223,6 +223,21 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
+     * Save microblog's tags
+     *
+     * @param int $microblogId
+     * @param array $tags
+     */
+    public function setTags($microblogId, array $tags)
+    {
+        Microblog\Tag::where('microblog_id', $microblogId)->delete();
+
+        foreach ($tags as $name) {
+            Microblog\Tag::create(['microblog_id' => $microblogId, 'name' => $name]);
+        }
+    }
+
+    /**
      * Pobiera najpopularniejsze tagi w mikroblogach
      *
      * @return mixed

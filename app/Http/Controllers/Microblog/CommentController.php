@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -136,6 +137,9 @@ class CommentController extends Controller
                 // send a notify
                 $alert->notify();
             }
+
+            $ref = new Ref_Hash();
+            $this->microblog->setTags($microblog->id, $ref->grab($microblog->text));
 
             // map microblog object into stream activity object
             $object->map($microblog);

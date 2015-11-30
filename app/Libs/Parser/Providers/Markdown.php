@@ -63,7 +63,7 @@ class Markdown extends \Parsedown implements ProviderInterface
         }
 
         if (preg_match('~#([\p{L}\p{Mn}0-9\._+-]+)~u', $excerpt['text'], $matches)) {
-            $tag = $matches[1];
+            $tag = mb_strtolower($matches[1]);
 
             return [
                 'extent' => strlen($matches[0]),

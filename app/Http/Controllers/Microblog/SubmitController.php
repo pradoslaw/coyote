@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
@@ -152,6 +153,9 @@ class SubmitController extends Controller
             } else {
                 $stream->add(new Stream_Update($actor, $object));
             }
+
+            $ref = new Ref_Hash();
+            $this->microblog->setTags($microblog->id, $ref->grab($microblog->text));
         });
 
         // jezeli wpis zawiera jakies zdjecia, generujemy linki do miniatur
