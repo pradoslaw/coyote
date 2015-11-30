@@ -48,134 +48,23 @@
                                 <div id="stream">
                                     <div class="overview">
 
-                                        <div class="media">
-                                            <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
+                                        {% for activity in activities %}
+                                            <div class="media">
+                                                <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
 
-                                            <div class="media-left hidden-xs">
-                                                <a href="#">
-                                                    <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
-                                                </a>
+                                                <div class="media-left hidden-xs">
+                                                    <a href="#">
+                                                        <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <p>{{ activity.headline|raw }}</p>
+                                                    <small>{{ activity.created_at|format_date }}</small>
+
+                                                    <strong>{{ activity.excerpt|raw }}</strong>
+                                                </div>
                                             </div>
-                                            <div class="media-body">
-                                                <p><a data-user-id="55639" href="http://4programmers.net/Profile/55639" title="kacper546">kacper546</a> dodał nowy komentarz do postu w wątku <a href="http://forum.4programmers.net/C_i_C++/258265-menadzer_zasobow?p=1177391#comment-249246" title="Menadzer zasobów">Menadzer zasobów</a></p>
-                                                <small>35 sekund temu</small>
-
-                                                <strong>@spartanPAGE masz na myśli jakiś menadżer zasobów który ma w ...</strong>
-                                            </div>
-                                        </div>
-
-                                        <div class="media">
-                                            <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
-
-                                            <div class="media-left hidden-xs">
-                                                <a href="#">
-                                                    <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <p><a data-user-id="55639" href="http://4programmers.net/Profile/55639" title="kacper546">kacper546</a> dodał nowy komentarz do postu w wątku <a href="http://forum.4programmers.net/C_i_C++/258265-menadzer_zasobow?p=1177391#comment-249246" title="Menadzer zasobów">Menadzer zasobów szwankuje na Windows</a></p>
-                                                <small>35 sekund temu</small>
-
-                                                <strong>@spartanPAGE masz na myśli jakiś menadżer zasobów który ma w Lorem ipsum lores...</strong>
-                                            </div>
-                                        </div>
-
-                                        <div class="media">
-                                            <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
-
-                                            <div class="media-left hidden-xs">
-                                                <a href="#">
-                                                    <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <p><a data-user-id="55639" href="http://4programmers.net/Profile/55639" title="kacper546">kacper546</a> dodał nowy komentarz do postu w wątku <a href="http://forum.4programmers.net/C_i_C++/258265-menadzer_zasobow?p=1177391#comment-249246" title="Menadzer zasobów">Menadzer zasobów</a></p>
-                                                <small>35 sekund temu</small>
-
-                                                <strong>@spartanPAGE masz na myśli jakiś menadżer zasobów który ma w ...</strong>
-                                            </div>
-                                        </div>
-
-                                        <div class="media">
-                                            <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
-
-                                            <div class="media-left hidden-xs">
-                                                <a href="#">
-                                                    <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <p><a data-user-id="55639" href="http://4programmers.net/Profile/55639" title="kacper546">kacper546</a> dodał nowy komentarz do postu w wątku <a href="http://forum.4programmers.net/C_i_C++/258265-menadzer_zasobow?p=1177391#comment-249246" title="Menadzer zasobów">Menadzer zasobów</a></p>
-                                                <small>35 sekund temu</small>
-
-                                                <strong>@spartanPAGE masz na myśli jakiś menadżer zasobów który ma w ...</strong>
-                                            </div>
-                                        </div>
-
-                                        <div class="media">
-                                            <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
-
-                                            <div class="media-left hidden-xs">
-                                                <a href="#">
-                                                    <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <p><a data-user-id="55639" href="http://4programmers.net/Profile/55639" title="kacper546">kacper546</a> dodał nowy komentarz do postu w wątku <a href="http://forum.4programmers.net/C_i_C++/258265-menadzer_zasobow?p=1177391#comment-249246" title="Menadzer zasobów">Menadzer zasobów</a></p>
-                                                <small>35 sekund temu</small>
-
-                                                <strong>@spartanPAGE masz na myśli jakiś menadżer zasobów który ma w ...</strong>
-                                            </div>
-                                        </div>
-
-                                        <div class="media">
-                                            <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
-
-                                            <div class="media-left hidden-xs">
-                                                <a href="#">
-                                                    <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <p><a data-user-id="55639" href="http://4programmers.net/Profile/55639" title="kacper546">kacper546</a> dodał nowy komentarz do postu w wątku <a href="http://forum.4programmers.net/C_i_C++/258265-menadzer_zasobow?p=1177391#comment-249246" title="Menadzer zasobów">Menadzer zasobów</a></p>
-                                                <small>35 sekund temu</small>
-
-                                                <strong>@spartanPAGE masz na myśli jakiś menadżer zasobów który ma w ...</strong>
-                                            </div>
-                                        </div>
-
-                                        <div class="media">
-                                            <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
-
-                                            <div class="media-left hidden-xs">
-                                                <a href="#">
-                                                    <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <p><a data-user-id="55639" href="http://4programmers.net/Profile/55639" title="kacper546">kacper546</a> dodał nowy komentarz do postu w wątku <a href="http://forum.4programmers.net/C_i_C++/258265-menadzer_zasobow?p=1177391#comment-249246" title="Menadzer zasobów">Menadzer zasobów</a></p>
-                                                <small>35 sekund temu</small>
-
-                                                <strong>@spartanPAGE masz na myśli jakiś menadżer zasobów który ma w ...</strong>
-                                            </div>
-                                        </div>
-
-                                        <div class="media">
-                                            <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
-
-                                            <div class="media-left hidden-xs">
-                                                <a href="#">
-                                                    <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <p><a data-user-id="55639" href="http://4programmers.net/Profile/55639" title="kacper546">kacper546</a> dodał nowy komentarz do postu w wątku <a href="http://forum.4programmers.net/C_i_C++/258265-menadzer_zasobow?p=1177391#comment-249246" title="Menadzer zasobów">Menadzer zasobów</a></p>
-                                                <small>35 sekund temu</small>
-
-                                                <strong>@spartanPAGE masz na myśli jakiś menadżer zasobów który ma w ...</strong>
-                                            </div>
-                                        </div>
-
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
