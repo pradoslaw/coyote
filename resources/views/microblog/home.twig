@@ -70,7 +70,7 @@
                             <small> • {{ microblog.created_at|format_date }}</small>
 
                             <p>
-                                <a href="{{ route('microblog.view', [microblog.id]) }}">{{ microblog.text|str_limit(250) }}</a>
+                                <a href="{{ route('microblog.view', [microblog.id]) }}">{{ excerpt(microblog.text, 200) }}</a>
                             </p>
 
                             <a href="{{ route('microblog.vote', [microblog.id]) }}" class="btn btn-thumbs {{ microblog.thumbs_on ? 'thumbs-on' }}" data-count="{{ microblog.votes }}" data-toggle="tooltip" data-placement="top">
