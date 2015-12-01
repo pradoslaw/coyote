@@ -28,6 +28,7 @@ elixir(function(mix) {
     ];
 
     mix.scripts(base, 'public/js/main.js')
+       .scripts(['bootstrap/tab.js', 'vendor/perfect-scrollbar.js'], 'public/js/homepage.js')
        .scripts(['pages/forum.js'], 'public/js/forum.js')
        .scripts(['pages/microblog.js', 'components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js'], 'public/js/microblog.js')
        .scripts(['wikieditor/jquery.wikieditor.js', 'wikieditor/wikieditor.toolbar.js'], 'public/js/jquery.wikieditor.js')

@@ -18,7 +18,7 @@ class HomeController extends Controller
         $microblogs = $repository->paginate(10);
 
         // let's cache microblog tags. we don't need to run this query every time
-        $tags = Cache::remember('microblogs-tags', 30, function () use ($repository) {
+        $tags = Cache::remember('microblog:tags', 30, function () use ($repository) {
             return $repository->getTags();
         });
 
