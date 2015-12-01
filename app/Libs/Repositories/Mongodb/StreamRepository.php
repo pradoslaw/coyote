@@ -12,6 +12,13 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
         return 'Coyote\Stream';
     }
 
+    /**
+     * @param $limit
+     * @param int $offset
+     * @param array $objects
+     * @param array $verbs
+     * @return mixed
+     */
     public function take($limit, $offset = 0, $objects = [], $verbs = [])
     {
         $result = $this->model

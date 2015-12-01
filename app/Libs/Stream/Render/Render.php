@@ -4,10 +4,17 @@ namespace Coyote\Stream\Render;
 
 use Coyote\Stream;
 
+/**
+ * Class Render
+ * @package Coyote\Stream\Render
+ */
 abstract class Render
 {
     protected $stream;
 
+    /**
+     * @param Stream $stream
+     */
     public function __construct(Stream $stream)
     {
         $this->stream = $stream;

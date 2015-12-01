@@ -11,9 +11,7 @@ use Coyote\Stream\Objects\ObjectInterface;
  */
 abstract class Activity implements ObjectInterface
 {
-    use Builder {
-        buildObject as buildChildObject;
-    }
+    use Builder;
 
     /**
      * @var ObjectInterface
@@ -29,6 +27,11 @@ abstract class Activity implements ObjectInterface
      * @var ObjectInterface|null
      */
     protected $target;
+
+    /**
+     * @var string
+     */
+    public $verb;
 
     /**
      * @var string
@@ -55,15 +58,22 @@ abstract class Activity implements ObjectInterface
         if (method_exists(request(), 'browser')) {
             $this->browser = request()->browser();
         }
+
+        if (empty($this->verb)) {
+            $this->verb = strtolower(class_basename($this));
+        }
     }
 
+    /**
+     * @return array
+     */
     public function build()
     {
-        $result = $this->buildObject($this);
+        $result = $this->toArray($this);
 
         foreach (['actor', 'object', 'target'] as $field) {
             if (is_object($this->$field)) {
-                $result[$field] = $this->buildChildObject($this->$field);
+                $result[$field] = $this->toArray($this->$field);
             }
         }
 

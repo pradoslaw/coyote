@@ -12,13 +12,23 @@ use Coyote\Stream\Objects;
  */
 class Stream
 {
+    /**
+     * @var StreamRepositoryInterface
+     */
     private $model;
 
+    /**
+     * @param StreamRepositoryInterface $model
+     */
     public function __construct(StreamRepositoryInterface $model)
     {
         $this->model = $model;
     }
 
+    /**
+     * @param ObjectInterface $activity
+     * @return $this
+     */
     public function add(ObjectInterface $activity)
     {
         $this->model->create($activity->build());

@@ -8,12 +8,21 @@ namespace Coyote\Stream;
  */
 trait Builder
 {
+    /**
+     * @return array
+     */
     public function build()
     {
-        return $this->buildObject($this);
+        return $this->toArray($this);
     }
 
-    protected function buildObject($object)
+    /**
+     * Converts object to array
+     *
+     * @param mixed $object
+     * @return array
+     */
+    protected function toArray($object)
     {
         $reflect = new \ReflectionObject($object);
         $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);

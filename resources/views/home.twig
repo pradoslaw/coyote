@@ -47,14 +47,13 @@
                             <div id="stream-wrapper" class="col-lg-6">
                                 <div id="stream">
                                     <div class="overview">
-
                                         {% for activity in activities %}
                                             <div class="media">
-                                                <span class="i-b3ce7 hidden-xs" title="Dodanie komentarza"></span>
+                                                <span class="{{ activity.object.objectType }} hidden-xs" title="{{ activity.headline|striptags }}"></span>
 
                                                 <div class="media-left hidden-xs">
-                                                    <a href="#">
-                                                        <img class="media-object" src="/img/shalom.png" style="width: 38px; height: 38px;" alt="">
+                                                    <a href="{{ activity.actor.url }}">
+                                                        <img class="media-object" src="{{ user_photo(activity.actor.image) }}" style="width: 38px; height: 38px;" alt="">
                                                     </a>
                                                 </div>
                                                 <div class="media-body">

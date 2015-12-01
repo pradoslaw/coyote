@@ -6,8 +6,6 @@ use Coyote\Microblog as Model;
 
 class Microblog extends Object
 {
-    public $objectType = 'microblog';
-
     public function map(Model $microblog)
     {
         $this->id = $microblog->id;

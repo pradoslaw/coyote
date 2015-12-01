@@ -6,8 +6,6 @@ use Coyote\Microblog as Model;
 
 class Comment extends Object
 {
-    public $objectType = 'comment';
-
     public function map($object)
     {
         $class = class_basename($object);
