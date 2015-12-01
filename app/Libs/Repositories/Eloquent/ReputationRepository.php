@@ -51,7 +51,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
      */
     private function percentage($result)
     {
-        $max = $result->first()->reputation;
+        $max = $result->count() > 0 ? $result->first()->reputation : 0;
 
         foreach ($result as $row) {
             $row->percentage = $max > 0 ? ($row->reputation * 1.0 / $max) * 100 : 0;
