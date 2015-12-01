@@ -31,8 +31,6 @@ class Markdown extends \Parsedown implements ProviderInterface
      */
     public function __construct(User $user)
     {
-//        parent::__construct();
-
         $this->InlineTypes['@'][] = 'UserTag';
         $this->inlineMarkerList .= '@';
 
