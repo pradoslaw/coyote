@@ -7,7 +7,6 @@ class Link implements ProviderInterface
     public function __construct()
     {
         //
-
     }
 
     public function parse($text)
@@ -17,7 +16,6 @@ class Link implements ProviderInterface
 //        if (preg_match_all("/$regexp/siU", $text, $matches, PREG_SET_ORDER)) {
 //            $links[] = $matches[2];
 //        }
-
         return $text;
     }
 
