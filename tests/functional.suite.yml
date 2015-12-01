@@ -11,3 +11,4 @@ modules:
         - Laravel5:
             environment_file: .env
         - \Helper\Functional
+        - Asserts
