@@ -28,7 +28,6 @@ class Pm extends Model
 
     public function text()
     {
-//        return $this->belongsTo('Coyote\Pm\Text', 'id', 'text_id');
         return $this->belongsTo('Coyote\Pm\Text');
     }
 }

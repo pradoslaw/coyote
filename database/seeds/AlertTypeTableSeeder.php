@@ -123,6 +123,5 @@ class AlertTypeTableSeeder extends Seeder
                       'profile'  => true,
                       'email'    => false
         ]);
-
     }
 }
