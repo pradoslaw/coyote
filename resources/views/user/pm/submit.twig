@@ -63,3 +63,16 @@
 
     <link rel="stylesheet" href="/css/user.css">
 {% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="/js/autogrow.js"></script>
+    <script type="text/javascript" src="/js/fast-submit.js"></script>
+    <script type="text/javascript" src="/js/prompt.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('textarea[name="text"]').prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
+        });
+    </script>
+{% endblock %}

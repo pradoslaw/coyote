@@ -35,12 +35,17 @@
     {{ parent() }}
 
     <script type="text/javascript" src="/js/perfect-scrollbar.js"></script>
+    <script type="text/javascript" src="/js/autogrow.js"></script>
+    <script type="text/javascript" src="/js/fast-submit.js"></script>
+    <script type="text/javascript" src="/js/prompt.js"></script>
     <script type="text/javascript">
         $(function () {
-            $('#wrap').perfectScrollbar();
-
             var wrap = $('#wrap');
+
+            wrap.perfectScrollbar();
             wrap.scrollTop(wrap.height());
+
+            $('textarea[name="text"]').prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
         });
     </script>
 {% endblock %}
