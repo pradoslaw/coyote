@@ -10,7 +10,7 @@
             <a href="{{ route('user.alerts') }}"><i class="fa fa-bell-o fa-fw"></i> Powiadomienia</a>
         </li>
         <li class="btn-pm">
-            <a href="{{ route('user.pm') }}"><i class="fa fa-envelope-o fa-fw"></i> Wiadomości prywatne <small>(0/200)</small></a>
+            <a href="{{ route('user.pm') }}"><i class="fa fa-envelope-o fa-fw"></i> Wiadomości prywatne <small>({{ user('pm_unread') }}/{{ user('pm') }})</small></a>
         </li>
         <li class="btn-favorites">
             <a href="{{ route('user.favorites') }}"><i class="fa fa-heart fa-fw"></i> Ulubione i obserwowane strony</a>

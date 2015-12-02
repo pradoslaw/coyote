@@ -44,7 +44,7 @@ elixir(function(mix) {
        .sass('pages/microblog.scss')
        .sass('pages/forum.scss')
        .sass('pages/wiki.scss')
-       .sass('pages/user.scss')
+       .sass(['pages/user.scss', 'vendor/perfect-scrollbar.scss'], 'public/css/user.css')
        .sass('pages/job.scss')
        .sass('vendor/wikieditor.scss');
 });

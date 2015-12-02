@@ -1,51 +1,11 @@
-{% extends 'layout.twig' %}
-{% block title %}Wiadomości prywatne {{ parent() }}{% endblock %}
+{% extends 'user/pm/base.twig' %}
 
-{% block container %}
-    {{ include('user/_top', {active: 'home'}) }}
+{% block pm %}
+    {{ pm.render() }}
 
-    <div class="row">
-        {% include 'user/_home-menu' %}
+    {% for item in pm %}
+        {% include 'user/pm/_message.twig' with {'content': '<p><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255) ~ '</a></p>'} %}
+    {% endfor %}
 
-        <main class="col-md-10">
-            <section class="panel panel-wrapper">
-                <div class="panel-body">
-                    <h2>Wiadomości prywatne</h2>
-
-                    <ul class="nav nav-panel">
-                        <li role="presentation" class="active"><a href="{{ route('user.pm') }}">Wiadomości (0/1000)</a></li>
-                        <li role="presentation"><a href="{{ route('user.pm.submit') }}">Napisz wiadomość</a></li>
-                    </ul>
-
-                    <div id="box-pm" class="panel panel-default">
-                        <div class="panel-body">
-
-                            {{ pm.render() }}
-
-                            <div class="media">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object" src="/img/apple-touch.png" style="width: 50px; height: 50px;" alt="Power Media S.A.">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h5 class="media-heading"><a href="#">Shalom</a></h5>
-
-                                    <p><a href="#">Lorem ipsum lores</a></p>
-                                </div>
-                            </div>
-
-                            {{ pm.render() }}
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-{% endblock %}
-
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="/css/user.css">
+    {{ pm.render() }}
 {% endblock %}

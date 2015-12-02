@@ -164,7 +164,6 @@
     small {
       color: $gray-light;
       font-size: 10px;
-      margin-top: -2px;
     }
   }
 
@@ -179,6 +178,43 @@
     margin: 0;
     color: $gray;
   }
+}
+
+#box-pm {
+  @extend #box-alerts;
+
+  .media {
+    small {
+      color: $gray-light;
+      font-size: 10px;
+    }
+
+    .pm-text {
+      padding: 0 20px 0 0;
+      color: $gray;
+    }
+  }
+
+  p {
+    margin-right: 15px !important;
+  }
+
+  .btn-delete-pm {
+    color: $brand-primary;
+  }
+}
+
+#wrap {
+  border-bottom: 1px solid $border-color;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  position: relative;
+  max-height: 300px;
+  overflow: hidden;
+}
+
+#overview {
+  margin-right: 15px;
 }
 
 #box-alerts-settings {

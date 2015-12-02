@@ -106,6 +106,10 @@ return [
         // m.in. w mikroblogach
         'text' => [
             'required'      => 'Proszę wpisać treść'
+        ],
+        // m.in. w wiadomosciach prywatnych
+        'author' => [
+            'required'      => 'Proszę wpisać nadawcę wiadomości'
         ]
     ],
 

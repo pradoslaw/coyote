@@ -1,0 +1,46 @@
+{% extends 'user/pm/base.twig' %}
+
+{% block pm %}
+    <div id="wrap">
+        <div id="overview">
+            {% for item in talk %}
+                {% include 'user/pm/_message.twig' with {'content': '<div class="pm-text">' ~ item.text ~ '</div>'} %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {{ form_open({'url': route('user.pm.submit'), 'method': 'POST', 'class': 'form-horizontal'}) }}
+    {{ form_hidden('root_id', pm.root_id) }}
+    {{ form_hidden('author', talk[0].name) }}
+    <div class="form-group">
+        <div class="col-md-12 {{ errors.has('text') > 0 ? 'has-error' }}">
+            <textarea name="text" class="form-control" rows="2" placeholder="Kliknij, aby odpowiedzieć"></textarea>
+
+            {% if errors.first('text') %}
+                <span class="help-block">{{ errors.first('text') }}</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary btn-sm">
+                Wyślij
+            </button>
+        </div>
+    </div>
+    {{ form_close() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="/js/perfect-scrollbar.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#wrap').perfectScrollbar();
+
+            var wrap = $('#wrap');
+            wrap.scrollTop(wrap.height());
+        });
+    </script>
+{% endblock %}

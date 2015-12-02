@@ -14,7 +14,7 @@ class CreatePmTable extends Migration
     {
         Schema::create('pm', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('root_id');
+            $table->string('root_id', 10);
             $table->mediumInteger('user_id');
             $table->mediumInteger('author_id');
             $table->tinyInteger('folder');

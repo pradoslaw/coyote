@@ -15,7 +15,7 @@ class CreatePmTextTable extends Migration
         Schema::create('pm_text', function (Blueprint $table) {
             $table->increments('id');
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
-            $table->string('text');
+            $table->text('text');
         });
     }
 

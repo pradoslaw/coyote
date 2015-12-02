@@ -44,21 +44,36 @@ class PmController extends Controller
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
-        return parent::view('user.pm.home');
+        $pm = $this->pm->paginate(auth()->user()->id);
+
+        return parent::view('user.pm.home')->with(compact('pm'));
     }
 
     public function show($id)
     {
-        //
+        $pm = $this->pm->findOrFail($id, ['user_id', 'root_id']);
+        $talk = $this->pm->talk(auth()->user()->id, $pm->root_id);
+
+        return parent::view('user.pm.show')->with(compact('pm', 'talk'));
     }
 
     public function submit()
     {
-        //
+        $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
+        $this->breadcrumb->push('Napisz wiadomość', route('user.pm.submit'));
+
+        return parent::view('user.pm.submit');
     }
 
     public function save(Request $request)
     {
-        //
+        $this->validate($request, [
+            'author'             => 'required|username|exists:users,name',
+            'text'               => 'required',
+            'root_id'            => 'sometimes|exists:pm'
+        ]);
+
+        $pm = $this->pm->submit(auth()->user(), $request);
+        return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
     }
 }

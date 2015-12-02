@@ -23,8 +23,8 @@ class VcardController extends Controller
         }
 
         return view('components.vcard')->with('user', $data)->with([
-            'session_at'            => $session->userLastActivity(auth()->user()->id),
-            'rank'                  => $user->rank(auth()->user()->id),
+            'session_at'            => $session->userLastActivity($data->id),
+            'rank'                  => $user->rank($data->id),
             'total_users'           => $user->countUsersWithReputation()
         ]);
     }
