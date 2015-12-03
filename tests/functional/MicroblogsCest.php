@@ -57,9 +57,14 @@ class MicroblogsCest
 
         $I->disableMiddleware();
         $I->amOnRoute('microblog.home');
+        $I->seeElement('.microblog-submit');
         $I->submitForm('.microblog-submit', ['text' => $text]);
 
+        $I->amOnRoute('microblog.home');
+        $I->see($login);
+
         $I->seeRecord('microblogs', ['text' => $text]);
+
         $alert = $I->grabRecord('alerts', ['user_id' => $userId]);
 
         // tytul powiadomienia
@@ -67,9 +72,6 @@ class MicroblogsCest
 
         $sender = $I->grabRecord('alert_senders', ['alert_id' => $alert->id, 'user_id' => $this->user->id]);
         $I->assertEquals($sender->name, $this->user->name);
-
-        $I->amOnRoute('microblog.home');
-        $I->see($login);
     }
 
     public function tryingToCreateWithEmptyContent(FunctionalTester $I)
