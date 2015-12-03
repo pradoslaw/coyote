@@ -23,22 +23,22 @@ class MicroblogsCest
     }
 
     // tests
-    public function createMicroblogAndReceiveReputationPoints(FunctionalTester $I)
-    {
-        $before = $this->grabUser($I);
-
-        $fake = Factory::create();
-        $text = $fake->realText();
-
-        $I->disableMiddleware();
-        $I->amOnRoute('microblog.home');
-        $I->submitForm('.microblog-submit', ['text' => $text]);
-
-        $I->seeRecord('microblogs', ['text' => $text]);
-
-        $after = $this->grabUser($I);
-        $I->assertGreaterThan($before->reputation, $after->reputation);
-    }
+//    public function createMicroblogAndReceiveReputationPoints(FunctionalTester $I)
+//    {
+//        $before = $this->grabUser($I);
+//
+//        $fake = Factory::create();
+//        $text = $fake->realText();
+//
+//        $I->disableMiddleware();
+//        $I->amOnRoute('microblog.home');
+//        $I->submitForm('.microblog-submit', ['text' => $text]);
+//
+//        $I->seeRecord('microblogs', ['text' => $text]);
+//
+//        $after = $this->grabUser($I);
+//        $I->assertGreaterThan($before->reputation, $after->reputation);
+//    }
 
     public function createMicroblogWithUserMentions(FunctionalTester $I)
     {
