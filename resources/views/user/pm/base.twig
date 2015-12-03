@@ -1,6 +1,8 @@
 {% extends 'layout.twig' %}
 {% block title %}Wiadomości prywatne {{ parent() }}{% endblock %}
 
+{% import 'components/modals.twig' as modal %}
+
 {% block container %}
     {{ include('user/_top', {active: 'home'}) }}
 
@@ -27,10 +29,33 @@
             </section>
         </main>
     </div>
+
+    {{ modal.confirm('Czy na pewno usunąć tę wiadomość? Tej operacji nie będzie można cofnąć.') }}
 {% endblock %}
 
 {% block head %}
     {{ parent() }}
 
     <link rel="stylesheet" href="/css/user.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function() {
+            $('.btn-delete-pm').click(function() {
+                var $this = $(this);
+
+                $('#confirm').modal('show').one('click', '.danger', function() {
+                    $('<form>', {'method': 'POST', 'action': $this.attr('href')})
+                            .append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">')
+                            .appendTo('body')
+                            .submit();
+                });
+
+                return false;
+            });
+        });
+    </script>
 {% endblock %}

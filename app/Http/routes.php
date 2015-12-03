@@ -98,6 +98,7 @@ Route::group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth']
     Route::get('Pm/Show/{id}', ['uses' => 'PmController@show', 'as' => 'user.pm.show']);
     Route::get('Pm/Submit', ['uses' => 'PmController@submit', 'as' => 'user.pm.submit']);
     Route::post('Pm/Submit', 'PmController@save');
+    Route::post('Pm/Delete/{id}', 'PmController@delete')->name('user.pm.delete');
 
     Route::get('Favorites', ['uses' => 'FavoritesController@index', 'as' => 'user.favorites']);
     Route::post('Favorites', 'FavoritesController@save');

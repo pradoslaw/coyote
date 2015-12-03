@@ -84,4 +84,15 @@ class PmController extends Controller
         $pm = $this->pm->submit(auth()->user(), $request);
         return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
     }
+
+    public function delete($id)
+    {
+        $pm = $this->pm->findOrFail($id, ['id', 'user_id', 'root_id']);
+        if ($pm->user_id !== auth()->user()->id) {
+            abort(500);
+        }
+
+        $pm->delete();
+        return back()->with('success', 'Wiadomość poprawnie usunięta');
+    }
 }

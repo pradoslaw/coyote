@@ -137,7 +137,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
     private function prepare($userId)
     {
         return \DB::table(\DB::raw('(' . $this->subSql($userId)->toSql() . ') AS m'))
-            ->select(['m.id', 'pm_text.text', 'pm_text.created_at', 'name', 'is_active', 'is_blocked', 'photo'])
+            ->select(['m.id', 'm.author_id', 'pm_text.text', 'pm_text.created_at', 'name', 'is_active', 'is_blocked', 'photo'])
             ->join('pm_text', 'pm_text.id', '=', 'text_id')
             ->join('users', 'users.id', '=', 'author_id')
             ->orderBy('m.id', 'DESC');
