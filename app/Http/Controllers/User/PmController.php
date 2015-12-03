@@ -52,7 +52,15 @@ class PmController extends Controller
     public function show($id)
     {
         $pm = $this->pm->findOrFail($id, ['user_id', 'root_id']);
+        if ($pm->user_id !== auth()->user()->id) {
+            abort(500);
+        }
         $talk = $this->pm->talk(auth()->user()->id, $pm->root_id);
+        $parser = app()->make('Parser\Pm');
+
+        foreach ($talk as &$row) {
+            $row['text'] = $parser->parse($row['text']);
+        }
 
         return parent::view('user.pm.show')->with(compact('pm', 'talk'));
     }

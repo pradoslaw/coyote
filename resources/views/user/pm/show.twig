@@ -43,7 +43,7 @@
             var wrap = $('#wrap');
 
             wrap.perfectScrollbar();
-            wrap.scrollTop(wrap.height());
+            wrap.scrollTop($('#overview').outerHeight());
 
             $('textarea[name="text"]').prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
         });

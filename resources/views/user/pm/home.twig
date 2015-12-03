@@ -4,7 +4,7 @@
     {{ pm.render() }}
 
     {% for item in pm %}
-        {% include 'user/pm/_message.twig' with {'content': '<p><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255) ~ '</a></p>'} %}
+        {% include 'user/pm/_message.twig' with {'content': '<p class="pm-excerpt"><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255) ~ '</a></p>'} %}
     {% endfor %}
 
     {{ pm.render() }}
