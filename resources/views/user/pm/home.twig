@@ -5,6 +5,8 @@
 
     {% for item in pm %}
         {% include 'user/pm/message.twig' with {'content': '<p class="pm-excerpt"><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255) ~ '</a></p>'} %}
+    {% else %}
+        <p class="alert alert-warning">Brak wiadomości prywatnych.</p>
     {% endfor %}
 
     {{ pm.render() }}

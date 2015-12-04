@@ -79,6 +79,11 @@ class PmController extends Controller
             if (!$row['read_at'] && $row['folder'] == \Coyote\Pm::INBOX) {
                 $this->pm->markAsRead($row['id']);
             }
+
+            /*
+             * @todo Jezeli do wiadomosci przypisany zostal jakis alert, to trzeba go oznaczyc
+             * jako przeczytany...
+             */
         }
 
         return parent::view('user.pm.show')->with(compact('pm', 'talk'));

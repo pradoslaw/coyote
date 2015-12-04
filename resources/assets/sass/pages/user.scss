@@ -135,10 +135,10 @@
     }
 
     &.unread {
-      background-color: #FFF3CD;
+      background-color: $unread-bg;
 
       &:hover {
-        background-color: #FFDCA5;
+        background-color: $unread-bg-hover;
       }
     }
   }

@@ -15,3 +15,8 @@ $border-color: #d0d0d0;
 $box-header-color: #646466;
 // kolor border-bottom dla elementu <h4> znajdujacego sie w elemencie .box
 $box-border-color: #c7c7c7;
+
+// kolor tla dla nieprzeczytanych elementow
+$unread-bg: #FFF3CD;
+// :hover dla nowych elementow (powiadomienia, wiadomosci)
+$unread-bg-hover: #FFDCA5;
