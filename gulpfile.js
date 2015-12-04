@@ -33,6 +33,7 @@ elixir(function(mix) {
        .scripts(['pages/microblog.js', 'components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js'], 'public/js/microblog.js')
        .scripts(['wikieditor/jquery.wikieditor.js', 'wikieditor/wikieditor.toolbar.js'], 'public/js/jquery.wikieditor.js')
        .scripts(['bootstrap/popover.js'], 'public/js/popover.js')
+       .scripts(['bootstrap/tab.js'], 'public/js/tab.js')
        .scripts(['components/prompt.js'], 'public/js/prompt.js')
        .scripts(['components/autogrow.js'], 'public/js/autogrow.js')
        .scripts(['components/fast-submit.js'], 'public/js/fast-submit.js')

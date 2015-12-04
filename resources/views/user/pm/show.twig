@@ -4,7 +4,7 @@
     <div id="wrap">
         <div id="overview">
             {% for item in talk %}
-                {% include 'user/pm/_message.twig' with {'content': '<div class="pm-text">' ~ item.text ~ '</div>'} %}
+                {% include 'user/pm/message.twig' with {'content': '<div class="pm-text">' ~ item.text ~ '</div>'} %}
             {% endfor %}
         </div>
     </div>
@@ -14,7 +14,17 @@
     {{ form_hidden('author', talk[0].name) }}
     <div class="form-group">
         <div class="col-md-12 {{ errors.has('text') > 0 ? 'has-error' }}">
-            <textarea name="text" class="form-control" rows="2" placeholder="Kliknij, aby odpowiedzieć"></textarea>
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
+                <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab">Podgląd</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="body">
+                    <textarea name="text" class="form-control" rows="2" placeholder="Kliknij, aby odpowiedzieć">{{ input_old('text') }}</textarea>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="preview"></div>
+            </div>
 
             {% if errors.first('text') %}
                 <span class="help-block">{{ errors.first('text') }}</span>
@@ -38,6 +48,7 @@
     <script type="text/javascript" src="/js/autogrow.js"></script>
     <script type="text/javascript" src="/js/fast-submit.js"></script>
     <script type="text/javascript" src="/js/prompt.js"></script>
+    <script type="text/javascript" src="/js/tab.js"></script>
     <script type="text/javascript">
         $(function () {
             var wrap = $('#wrap');

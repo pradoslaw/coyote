@@ -51,6 +51,8 @@ class PmController extends Controller
 
     public function show($id)
     {
+        $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
+
         $pm = $this->pm->findOrFail($id, ['user_id', 'root_id']);
         if ($pm->user_id !== auth()->user()->id) {
             abort(500);
@@ -71,6 +73,12 @@ class PmController extends Controller
         $this->breadcrumb->push('Napisz wiadomość', route('user.pm.submit'));
 
         return parent::view('user.pm.submit');
+    }
+
+    public function preview(Request $request)
+    {
+        $parser = app()->make('Parser\Pm');
+        return response($parser->parse($request->get('text')));
     }
 
     public function save(Request $request)

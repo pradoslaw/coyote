@@ -265,3 +265,15 @@
     }
   }
 }
+
+.tab-content {
+  margin-top: 10px;
+}
+
+// nie chcemy aby zakladki na bialym tle mialy szare tlo
+#box-pm {
+  .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    background-color: transparent;
+    border-bottom-color: #fff;
+  }
+}

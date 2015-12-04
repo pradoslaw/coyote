@@ -15,8 +15,8 @@
                     <h2>Wiadomości prywatne</h2>
 
                     <ul class="nav nav-panel">
-                        <li role="presentation" class="active"><a href="{{ route('user.pm') }}">Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</a></li>
-                        <li role="presentation"><a href="{{ route('user.pm.submit') }}">Napisz wiadomość</a></li>
+                        <li role="presentation" {{ parent != 'user.pm.submit' ? 'class="active"' }}><a href="{{ route('user.pm') }}">Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</a></li>
+                        <li role="presentation" {{ parent == 'user.pm.submit' ? 'class="active"' }}><a href="{{ route('user.pm.submit') }}">Napisz wiadomość</a></li>
                     </ul>
 
                     <div id="box-pm" class="panel panel-default">
@@ -55,6 +55,18 @@
                 });
 
                 return false;
+            });
+
+            $('#box-pm a[data-toggle="tab"]').click(function(e) {
+                if ($(e.target).attr('aria-controls') == 'preview') {
+                    $.post('{{ route('user.pm.preview') }}', {'text': $('textarea[name="text"]').val()}, function(html) {
+                        $('#preview').html(html);
+                    });
+                }
+            });
+
+            $('form').submit(function() {
+                $(':submit', this).attr('disabled', 'disabled');
             });
         });
     </script>
