@@ -134,4 +134,14 @@ $(function () {
 
         return false;
     });
+
+    $('#messages').click(function() {
+        var messages = $('#dropdown-messages ul');
+
+        if ($('li', messages).length <= 1) {
+            $.get(baseUrl + '/User/Pm/Ajax', function (html) {
+                messages.html(html);
+            });
+        }
+    });
 });

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Container\Container as App;
 use Coyote\Pm;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Carbon\Carbon;
 
 /**
  * Class PmRepository
@@ -129,6 +130,16 @@ class PmRepository extends Repository implements PmRepositoryInterface
     }
 
     /**
+     * Mark notifications as read
+     *
+     * @param int $id
+     */
+    public function markAsRead($id)
+    {
+        $this->model->where('id', $id)->update(['read_at' => Carbon::now()]);
+    }
+
+    /**
      * Prepare statement with subquery
      *
      * @param int $userId
@@ -137,7 +148,18 @@ class PmRepository extends Repository implements PmRepositoryInterface
     private function prepare($userId)
     {
         return \DB::table(\DB::raw('(' . $this->subSql($userId)->toSql() . ') AS m'))
-            ->select(['m.id', 'm.author_id', 'pm_text.text', 'pm_text.created_at', 'name', 'is_active', 'is_blocked', 'photo'])
+            ->select([
+                'm.id',
+                'm.author_id',
+                'm.folder',
+                'm.read_at',
+                'pm_text.text',
+                'pm_text.created_at',
+                'name',
+                'is_active',
+                'is_blocked',
+                'photo'
+            ])
             ->join('pm_text', 'pm_text.id', '=', 'text_id')
             ->join('users', 'users.id', '=', 'author_id')
             ->orderBy('m.id', 'DESC');

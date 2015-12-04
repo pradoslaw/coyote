@@ -89,7 +89,7 @@
 
                                     <div id="dropdown-alerts" class="dropdown-menu">
                                         <div class="dropdown-header">
-                                            <a title="Przejdź do listy powiadomień" href="javascript:">Powiadomienia</a>
+                                            <a title="Przejdź do listy powiadomień" href="{{ user('user.alert') }}">Powiadomienia</a>
 
                                             <a id="btn-mark-read" title="Oznacz jako przeczytane" href="javascript:">
                                                 <i class="fa fa-calendar-check-o"></i>
@@ -105,35 +105,26 @@
                                     </div>
                                 </li>
 
-                                <li class="messages">
+                                <li id="messages" class="messages">
                                     <a href="javascript:" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {% if user('pm_unread') %}
+                                            <span class="badge">{{ user('pm_unread') }}</span>
+                                        {% endif %}
+
                                         <i class="fa fa-envelope fa-fw"></i>
                                     </a>
 
                                     <div id="dropdown-messages" class="dropdown-menu">
                                         <div class="dropdown-header">
-                                            <a title="Przejdź do listy wiadomości" href="javascript:">Wiadomości</a>
+                                            <a title="Przejdź do listy wiadomości" href="{{ route('user.pm') }}">Wiadomości</a>
 
-                                            <a id="btn-write-message" href="#">
+                                            <a id="btn-write-message" href="{{ route('user.pm.submit') }}">
                                                 Wyślij wiadomość
                                             </a>
                                         </div>
                                         <div class="dropdown-modal">
                                             <ul>
-                                                <li title="Nie ma problemu polecam się na przyszłość :)">
-                                                    <a href="#">
-                                                        <img src="/img/avatar.png">
-
-                                                        <div>
-                                                            <header>
-                                                                <h4>woolfik</h4>
-                                                                <small>29 wrzesień 2015, 10:48</small>
-                                                            </header>
-
-                                                            <p> Nie ma problemu polecam się na przyszłość :)</p>
-                                                        </div>
-                                                    </a>
-                                                </li>
+                                                <i class="fa fa-spin fa-spinner"></i>
                                             </ul>
                                         </div>
                                     </div>

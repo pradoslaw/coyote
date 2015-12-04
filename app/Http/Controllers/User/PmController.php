@@ -9,6 +9,10 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
 use Carbon;
 
+/**
+ * Class PmController
+ * @package Coyote\Http\Controllers\User
+ */
 class PmController extends Controller
 {
     /**
@@ -40,6 +44,9 @@ class PmController extends Controller
         $this->pm = $pm;
     }
 
+    /**
+     * @return $this
+     */
     public function index()
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
@@ -49,6 +56,12 @@ class PmController extends Controller
         return parent::view('user.pm.home')->with(compact('pm'));
     }
 
+    /**
+     * Show conversation
+     *
+     * @param int $id
+     * @return $this
+     */
     public function show($id)
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
@@ -62,11 +75,30 @@ class PmController extends Controller
 
         foreach ($talk as &$row) {
             $row['text'] = $parser->parse($row['text']);
+
+            if (!$row['read_at'] && $row['folder'] == \Coyote\Pm::INBOX) {
+                $this->pm->markAsRead($row['id']);
+            }
         }
 
         return parent::view('user.pm.show')->with(compact('pm', 'talk'));
     }
 
+    /**
+     * Get last 10 conversations
+     *
+     * @return $this
+     */
+    public function ajax()
+    {
+        $pm = $this->pm->takeForUser(auth()->user()->id);
+
+        return view('user.pm.ajax')->with(compact('pm'));
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function submit()
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
@@ -75,12 +107,20 @@ class PmController extends Controller
         return parent::view('user.pm.submit');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function preview(Request $request)
     {
         $parser = app()->make('Parser\Pm');
         return response($parser->parse($request->get('text')));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save(Request $request)
     {
         $this->validate($request, [
@@ -93,6 +133,10 @@ class PmController extends Controller
         return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
     }
 
+    /**
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function delete($id)
     {
         $pm = $this->pm->findOrFail($id, ['id', 'user_id', 'root_id']);

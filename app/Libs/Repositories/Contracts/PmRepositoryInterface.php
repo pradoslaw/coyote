@@ -41,4 +41,11 @@ interface PmRepositoryInterface extends RepositoryInterface
      * @throws \Exception
      */
     public function submit(\Coyote\User $user, Request $request);
+
+    /**
+     * Mark notifications as read
+     *
+     * @param int $id
+     */
+    public function markAsRead($id);
 }
