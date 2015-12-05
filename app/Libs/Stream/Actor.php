@@ -11,9 +11,9 @@ class Actor extends Object
      * @param User $user
      * @param array $data
      */
-    public function __construct(User $user, array $data = [])
+    public function __construct($user, array $data = [])
     {
-        if ($user) {
+        if ($user && $user instanceof User) {
             $data = array_merge([
                 'displayName'   => $user->name,
                 'id'            => $user->id,

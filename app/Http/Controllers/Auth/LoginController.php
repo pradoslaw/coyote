@@ -6,8 +6,9 @@ use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Coyote\User;
+use Coyote\Stream\Activities\Login as Stream_Login;
+use Coyote\Stream\Activities\Logout as Stream_Logout;
 
 class LoginController extends Controller
 {
@@ -43,6 +44,8 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only('name', 'password') + ['is_active' => 1], $request->has('remember'))) {
+            // put information into the activity stream...
+            stream(Stream_Login::class);
             return redirect()->intended(route('home'));
         }
 
@@ -78,6 +81,8 @@ class LoginController extends Controller
         $user->visited_at = Carbon::now();
         $user->visits = auth()->user()->visits + 1;
         $user->save();
+
+        stream(Stream_Logout::class);
 
         Auth::logout();
         return back();

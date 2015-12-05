@@ -48,7 +48,7 @@ abstract class Activity implements ObjectInterface
      * @param ObjectInterface $object
      * @param ObjectInterface|null $target
      */
-    public function __construct(ObjectInterface $actor, ObjectInterface $object, ObjectInterface $target = null)
+    public function __construct(ObjectInterface $actor, ObjectInterface $object = null, ObjectInterface $target = null)
     {
         $this->actor = $actor;
         $this->object = $object;

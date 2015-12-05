@@ -9,7 +9,8 @@ use Coyote\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Config\Definition\Exception\Exception;
+use Coyote\Stream\Activities\Create as Stream_Create;
+use Coyote\Stream\Objects\Person as Stream_Person;
 
 class RegisterController extends Controller
 {
@@ -70,8 +71,10 @@ class RegisterController extends Controller
             });
 
             Auth::login($user, true);
+            stream(Stream_Create::class, new Stream_Person());
+
             DB::commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }

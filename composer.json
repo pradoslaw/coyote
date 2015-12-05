@@ -44,7 +44,8 @@
             "Coyote\\": "app/"
         },
         "files": [
-            "app/Helpers/Text.php"
+            "app/Helpers/Text.php",
+            "app/Helpers/Stream.php"
         ]
     },
     "autoload-dev": {
