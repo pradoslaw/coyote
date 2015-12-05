@@ -18,6 +18,7 @@ elixir(function(mix) {
         'bootstrap/tooltip.js',
         'bootstrap/dropdown.js',// menu jest na kazdej stronie (dla uzytkownikow zalogowanych)
         'bootstrap/collapse.js', // to musi sie znajdowac na kazdej podstronie (zwijanie menu dla urzadzen mobilnych)
+        'components/state.js',
         'components/declination.js',
         'components/date.js',
         'components/notifications.js',
