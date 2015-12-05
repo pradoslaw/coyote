@@ -37,7 +37,7 @@ elixir(function(mix) {
         // komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
         // rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
        .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js'], 'public/js/posting.js')
-       .scripts(['wikieditor/jquery.wikieditor.js', 'wikieditor/wikieditor.toolbar.js'], 'public/js/jquery.wikieditor.js')
+       .scripts(['components/wikieditor.js'], 'public/js/wikieditor.js')
         // komponent bootstrapa umozliwiajacy wyswietlanie statycznych dymkow
        .scripts(['bootstrap/popover.js'], 'public/js/popover.js')
         // uzywane na niewielu stronach. tam gdzie trzeba przelaczac sie miedzy zakladkami

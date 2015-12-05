@@ -24,6 +24,7 @@
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="body">
+                    {% include 'components/toolbar' %}
                     <textarea name="text" class="form-control" rows="5">{{ input_old('text') }}</textarea>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="preview"></div>
@@ -49,9 +50,10 @@
 
     <script type="text/javascript" src="/js/posting.js"></script>
     <script type="text/javascript" src="/js/tab.js"></script>
+    <script type="text/javascript" src="/js/wikieditor.js"></script>
     <script type="text/javascript">
         $(function () {
-            $('textarea[name="text"]').prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
+            $('textarea[name="text"]').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
         });
     </script>
 {% endblock %}

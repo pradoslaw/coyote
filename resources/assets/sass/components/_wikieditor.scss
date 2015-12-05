@@ -1,0 +1,5 @@
+#wiki-toolbar {
+  .btn-sm {
+    @include gradient-vertical(#f6f6f6, #ddd);
+  }
+}
