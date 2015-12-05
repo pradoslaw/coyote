@@ -6,6 +6,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Alert\Providers\Pm as Alert_Pm;
 use Illuminate\Http\Request;
 use Carbon;
 
@@ -143,8 +144,20 @@ class PmController extends Controller
             'root_id'            => 'sometimes|exists:pm'
         ]);
 
-        $pm = $this->pm->submit(auth()->user(), $request);
-        return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
+        return \DB::transaction(function () use ($request) {
+            $user = auth()->user();
+            $pm = $this->pm->submit($user, $request);
+
+            (new Alert_Pm($this->alert))->with([
+                'user_id'     => $pm->author_id,
+                'sender_id'   => $user->id,
+                'sender_name' => $user->name,
+                'subject'     => excerpt($request->get('text'), 48),
+                'url'         => route('user.pm.show', [$pm->id], false)
+            ])->notify();
+
+            return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
+        });
     }
 
     /**

@@ -11,7 +11,7 @@
 
                 <p>
                     {{ item.folder == 2 ? 'Ty: ' }}
-                    {{ excerpt(item.text, 50) }}
+                    {{ excerpt(item.text, 50)|raw }}
                 </p>
             </div>
         </a>
