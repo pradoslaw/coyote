@@ -46,6 +46,7 @@ $(function () {
      */
     var setAlertsNumber = function (value) {
         var alerts = $('#alerts');
+        Session.setItem('alerts', value);
 
         if (value > 0) {
             if (!$('.badge', alerts).length) {
@@ -63,16 +64,10 @@ $(function () {
         }
     };
 
-    /**
-     * Ilosc NIEprzeczytanych powiadomien
-     */
-    var alertsUnread = 0;
-    var pmUnread = 0;
-
     Session.addListener(function (e) {
-        if (e.key === 'notify' && e.newValue !== e.oldValue) {
-            alertsUnread = e.newValue;
+        if (e.key === 'alerts' && e.newValue !== e.oldValue) {
             setAlertsNumber(e.newValue);
+            $('#dropdown-alerts li').remove();
         }
     });
 
@@ -85,7 +80,6 @@ $(function () {
             $.get(baseUrl + '/User/Alerts/Ajax', function (json) {
                 alerts.html(json.html);
 
-                Session.setItem('alerts', json.unread);
                 setAlertsNumber(json.unread);
 
                 // default max height of alerts area
@@ -150,12 +144,9 @@ $(function () {
 
         return false;
     })
-    .delegate('#btn-mark-read', 'click', function()
-    {
+    .delegate('#btn-mark-read', 'click', function() {
         var alerts = $('#alerts');
-
         $('li', alerts).removeClass('unread');
-        Session.setItem('alerts', 0);
 
         if ($('.badge', alerts).length) {
             setAlertsNumber(0);
