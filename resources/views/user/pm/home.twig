@@ -1,7 +1,9 @@
 {% extends 'user/pm/base.twig' %}
 
 {% block pm %}
-    {{ pm.render() }}
+    <nav class="text-center">
+        {{ pm.render()|raw }}
+    </nav>
 
     {% for item in pm %}
         {% include 'user/pm/message.twig' with {'content': '<p class="pm-excerpt"><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255) ~ '</a></p>'} %}
@@ -9,5 +11,7 @@
         <p class="alert alert-warning">Brak wiadomości prywatnych.</p>
     {% endfor %}
 
-    {{ pm.render() }}
+    <nav class="text-center">
+        {{ pm.render()|raw }}
+    </nav>
 {% endblock %}

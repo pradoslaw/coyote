@@ -58,7 +58,12 @@ class PmRepository extends Repository implements PmRepositoryInterface
      */
     public function paginate($userId, $perPage = 10)
     {
-        $count = $this->model->where('user_id', $userId)->groupBy('root_id')->count();
+        $count = $this->model
+                ->select(\DB::raw('COUNT(*)'))
+                ->where('user_id', $userId)
+                ->groupBy('root_id')
+                ->get()
+                ->count();
 
         $result = $this->prepare($userId)
                 ->limit($perPage)
