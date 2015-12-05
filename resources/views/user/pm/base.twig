@@ -60,6 +60,8 @@
 
             $('#box-pm a[data-toggle="tab"]').click(function(e) {
                 if ($(e.target).attr('aria-controls') == 'preview') {
+                    $('#preview').html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
+
                     $.post('{{ route('user.pm.preview') }}', {'text': $('textarea[name="text"]').val()}, function(html) {
                         $('#preview').html(html);
                     });
