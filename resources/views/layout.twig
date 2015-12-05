@@ -69,6 +69,7 @@
                                 <ul id="dropdown-user" class="dropdown-menu">
                                     <li class="dropdown-username"><a class="dropdown-userhome" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
                                     <li class="divider"></li>
+                                    <li><a href="{{ route('user.pm') }}"><i class="fa fa-envelope fa-fw"></i> Wiadomości</a></li>
                                     <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
                                     <li><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
                                     <li><a href="#"><i class="fa fa-info-circle fa-fw"></i> Pomoc</a></li>
