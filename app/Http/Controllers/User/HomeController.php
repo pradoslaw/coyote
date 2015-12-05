@@ -68,10 +68,6 @@ class HomeController extends Controller
 
             $request->file('photo')->move($path, $fileName);
 
-            if (auth()->user()->photo) {
-                @unlink(public_path('storage/photo/' . auth()->user()->photo));
-            }
-
             $thumbnail = Image::open($path . $fileName)->thumbnail(
                 new \Imagine\Image\Box(120, 120),
                 \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND
@@ -93,7 +89,6 @@ class HomeController extends Controller
      */
     public function delete(UserRepositoryInterface $user)
     {
-        @unlink(public_path('storage/photo/' . auth()->user()->photo));
         $user->update(['photo' => null], auth()->user()->id);
     }
 }

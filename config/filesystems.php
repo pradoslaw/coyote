@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => 'local',
+    'default' => 'public',
     /*
     |--------------------------------------------------------------------------
     | Default Cloud Filesystem Disk
@@ -44,6 +44,10 @@ return [
         'local'     => [
             'driver' => 'local',
             'root'   => storage_path() . '/app',
+        ],
+        'public'     => [
+            'driver' => 'local',
+            'root'   => public_path() . '/storage',
         ],
         's3'        => [
             'driver' => 's3',
