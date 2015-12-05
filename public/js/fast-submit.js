@@ -1,2 +1,0 @@
-!function(t){"use strict";t.fn.fastSubmit=function(){return this.each(function(){t(this).keydown(function(i){if(13===i.keyCode){var n=t(this).closest("form");i.ctrlKey&&n.submit()}})})}}(jQuery);
-//# sourceMappingURL=fast-submit.js.map
