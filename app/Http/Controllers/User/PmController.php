@@ -53,6 +53,11 @@ class PmController extends Controller
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
         $pm = $this->pm->paginate(auth()->user()->id);
+        $parser = app()->make('Parser\Pm');
+
+        foreach ($pm as &$row) {
+            $row->text = $parser->parse($row->text);
+        }
 
         return parent::view('user.pm.home')->with(compact('pm'));
     }
