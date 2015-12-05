@@ -45,6 +45,7 @@
     {{ parent() }}
 
     <script type="text/javascript" src="/js/perfect-scrollbar.js"></script>
+    <script type="text/javascript" src="/js/animate-colors.js"></script>
     <script type="text/javascript" src="/js/autogrow.js"></script>
     <script type="text/javascript" src="/js/fast-submit.js"></script>
     <script type="text/javascript" src="/js/prompt.js"></script>
@@ -52,11 +53,32 @@
     <script type="text/javascript">
         $(function () {
             var wrap = $('#wrap');
+            var overview = $('#overview');
 
             wrap.perfectScrollbar();
-            wrap.scrollTop($('#overview').outerHeight());
+            wrap.scrollTop(overview.outerHeight());
 
             $('textarea[name="text"]').prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
+
+            wrap.on('mouseenter', '.unread', function() {
+                $(this).off('mouseenter');
+                $(this).animate({backgroundColor: '#fff'});
+            });
+
+            var isProcessing = false;
+
+            wrap.bind('scroll', function() {
+                if (0 === $(this).scrollTop() && !isProcessing) {
+                    isProcessing = true;
+
+                    $.get('{{ route('user.pm.show', [pm.id]) }}', {'offset': $('.media', overview).length}, function(html) {
+                        overview.prepend(html);
+
+                        // jezeli nie ma wiecej wiadomosci, to ajax nie bedzie kolejny raz wyslany
+                        isProcessing = $.trim(html) === '';
+                    });
+                }
+            });
         });
     </script>
 {% endblock %}

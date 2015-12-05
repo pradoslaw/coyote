@@ -37,7 +37,8 @@ elixir(function(mix) {
        .scripts(['components/prompt.js'], 'public/js/prompt.js')
        .scripts(['components/autogrow.js'], 'public/js/autogrow.js')
        .scripts(['components/fast-submit.js'], 'public/js/fast-submit.js')
-       .scripts(['vendor/perfect-scrollbar.js'], 'public/js/perfect-scrollbar.js');
+       .scripts(['vendor/perfect-scrollbar.js'], 'public/js/perfect-scrollbar.js')
+       .scripts(['vendor/animate-colors.js'], 'public/js/animate-colors.js');
 
     mix.sass('main.scss')
        .sass('pages/auth.scss')

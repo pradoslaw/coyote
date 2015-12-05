@@ -60,17 +60,22 @@ class PmController extends Controller
      * Show conversation
      *
      * @param int $id
+     * @param Request $request
      * @return $this
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
-        $pm = $this->pm->findOrFail($id, ['user_id', 'root_id']);
+        $pm = $this->pm->find($id, ['user_id', 'root_id', 'id']);
+
+        if (!$pm) {
+            return redirect()->route('user.pm');
+        }
         if ($pm->user_id !== auth()->user()->id) {
             abort(500);
         }
-        $talk = $this->pm->talk(auth()->user()->id, $pm->root_id);
+        $talk = $this->pm->talk(auth()->user()->id, $pm->root_id, 10, $request->query('offset', 0));
         $parser = app()->make('Parser\Pm');
 
         foreach ($talk as &$row) {
@@ -84,6 +89,10 @@ class PmController extends Controller
              * @todo Jezeli do wiadomosci przypisany zostal jakis alert, to trzeba go oznaczyc
              * jako przeczytany...
              */
+        }
+
+        if ($request->ajax()) {
+            return view('user.pm.infinite')->with('talk', $talk);
         }
 
         return parent::view('user.pm.show')->with(compact('pm', 'talk'));
