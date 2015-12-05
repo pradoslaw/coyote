@@ -44,7 +44,8 @@ elixir(function(mix) {
         // okna modalne, tj. wyswietlanie komunikatow - np. zapytanie czy na pewno usunac post
        .scripts(['bootstrap/modal.js'], 'public/js/modal.js')
        .scripts(['vendor/perfect-scrollbar.js'], 'public/js/perfect-scrollbar.js')
-       .scripts(['vendor/animate-colors.js'], 'public/js/animate-colors.js');
+       .scripts(['vendor/animate-colors.js'], 'public/js/animate-colors.js')
+       .scripts(['vendor/ui-resizer.js'], 'public/js/ui-resizer.js');
 
     mix.sass('main.scss')
        .sass('pages/auth.scss')

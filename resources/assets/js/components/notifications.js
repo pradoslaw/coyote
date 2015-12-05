@@ -76,15 +76,51 @@ $(function () {
         }
     });
 
-    $('#alerts').click(function () {
-        var alerts = $('#dropdown-alerts ul');
+    $('#alerts').click(function (e) {
+        var wrapper = $('#dropdown-alerts');
+        var modal = wrapper.find('.dropdown-modal');
+        var alerts = modal.find('ul');
 
         if ($('li', alerts).length <= 1) {
             $.get(baseUrl + '/User/Alerts/Ajax', function (json) {
                 alerts.html(json.html);
 
-                Session.setItem('notify', json.unread);
+                Session.setItem('alerts', json.unread);
                 setAlertsNumber(json.unread);
+
+                // default max height of alerts area
+                var maxHeight = 390;
+                var margin = wrapper.find('.dropdown-header').outerHeight() + 7;
+
+                if (parseInt(Session.getItem('box-notify-h'))) {
+                    maxHeight = Math.min(alerts.height(), Math.max(190, parseInt(Session.getItem('box-notify-h'))));
+                    modal.css('max-height', maxHeight); // max wysokosc obszaru powiadomien
+                }
+
+                if (parseInt(Session.getItem('box-notify-w'))) {
+                    wrapper.width(parseInt(Session.getItem('box-notify-w')));
+                }
+
+                $.getScript(baseUrl + '/js/ui-resizer.js', function() {
+                    wrapper.resizable({
+                        maxHeight: alerts.height(), // max rozmiar obszaru powiadomien odpowiada ilosci znajdujacych sie tam powiadomien
+                        minHeight: 190,
+                        minWidth: 362,
+                        resize: function(e, ui) {
+                            modal.css('max-height', (ui.size.height - margin));
+                        },
+                        stop: function(e, ui) {
+                            Session.setItem('box-notify-w', ui.size.width);
+                            Session.setItem('box-notify-h', ui.size.height - margin);
+
+                            maxHeight = ui.size.height;
+                        }
+                    });
+                });
+
+                $.getScript(baseUrl + '/js/perfect-scrollbar.js', function() {
+                    modal.perfectScrollbar({suppressScrollX: true});
+                });
             });
         }
     })
@@ -136,7 +172,7 @@ $(function () {
     });
 
     $('#messages').click(function() {
-        var messages = $('#dropdown-messages ul');
+        var messages = $('#dropdown-messages').find('ul');
 
         if ($('li', messages).length <= 1) {
             $.get(baseUrl + '/User/Pm/Ajax', function (html) {
