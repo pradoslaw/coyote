@@ -29,7 +29,7 @@ class HomeController extends Controller
 
         return parent::view('profile.home')->with([
             'user'          => $user,
-            'rank'          => $this->user->rank(auth()->user()->id),
+            'rank'          => $this->user->rank($user->id),
             'total_users'   => $this->user->countUsersWithReputation(),
         ]);
     }
