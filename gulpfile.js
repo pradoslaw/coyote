@@ -48,7 +48,8 @@ elixir(function(mix) {
        .scripts(['bootstrap/modal.js'], 'public/js/modal.js')
        .scripts(['vendor/perfect-scrollbar.js'], 'public/js/perfect-scrollbar.js')
        .scripts(['vendor/animate-colors.js'], 'public/js/animate-colors.js')
-       .scripts(['vendor/ui-resizer.js'], 'public/js/ui-resizer.js');
+       .scripts(['vendor/ui-resizer.js'], 'public/js/ui-resizer.js')
+       .scripts(['vendor/jquery-ui.js'], 'public/js/jquery-ui.js');
 
     mix.sass('main.scss')
        .sass('pages/auth.scss')

@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @import "../helpers/variables";
+@import "../helpers/mixins";
 @import "../components/sidemenu";
 @import "../vendor/font-awesome/variables";
 
@@ -275,5 +276,49 @@
   .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
     background-color: transparent;
     border-bottom-color: #fff;
+  }
+}
+
+#box-skills {
+  .rate {
+    //width: 16px;
+    //height: 16px;
+    display: inline-block;
+    width: 1.28571429em;
+
+    &:before {
+      font-family: FontAwesome;
+      content: $fa-var-star-o;
+      //width: 16px;
+      //height: 16px;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .rate-large {
+    cursor: pointer;
+
+    &:before {
+      font-size: $font-size-large;
+    }
+  }
+
+  .rate.mark {
+    &:before {
+      content: $fa-var-star;
+    }
+  }
+
+  .form-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .fa-arrows {
+    color: $gray-light;
+    margin-right: 5px;
+    cursor: move;
   }
 }

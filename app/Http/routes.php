@@ -119,6 +119,8 @@ Route::group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth']
 
     Route::get('Skills', ['uses' => 'SkillsController@index', 'as' => 'user.skills']);
     Route::post('Skills', 'SkillsController@save');
+    Route::post('Skills/Order', ['uses' => 'SkillsController@order', 'as' => 'user.skills.order']);
+    Route::post('Skills/{id}', ['uses' => 'SkillsController@delete', 'as' => 'user.skills.delete']);
 
     Route::get('Security', ['uses' => 'SecurityController@index', 'as' => 'user.security']);
     Route::post('Security', 'SecurityController@save');

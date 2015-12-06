@@ -1,0 +1,154 @@
+{% extends 'layout.twig' %}
+{% block title %}Umiejętności {{ parent() }}{% endblock %}
+
+{% import 'components/forms.twig' as forms %}
+{% import 'components/modals.twig' as modals %}
+
+{% block container %}
+    {{ include('user/_top', {active: 'settings'}) }}
+
+    <div class="row">
+        {% include 'user/_settings-menu' %}
+
+        <main class="col-md-10">
+            <section class="panel panel-wrapper">
+                <div class="panel-body">
+                    <h2>Umiejętności</h2>
+
+                    <div id="box-skills" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="list-group">
+                                {% for item in skills %}
+                                    {% include 'user.skills.list' %}
+                                {% endfor %}
+                            </div>
+
+                            {{ form_open({'id': 'rate-form', 'method': 'POST', 'role': 'form', 'url': route('user.skills'), 'class': 'form-horizontal'}) }}
+                            {{ form_hidden('rate', 0) }}
+
+                            <div class="form-group">
+                                <div class="col-xs-11">
+                                    {{ form_text('name', '', {'class': 'form-control', 'placeholder': 'Np. java, c#'}) }}
+                                </div>
+                                <div class="col-xs-1">
+                                    <button type="submit" class="btn btn-primary">
+                                        Dodaj
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="rate-container col-xs-12">
+                                    <a class="rate rate-large" title="Słabo"></a>
+                                    <a class="rate rate-large" title="Podstawy"></a>
+                                    <a class="rate rate-large" title="Przeciętnie"></a>
+                                    <a class="rate rate-large" title="Dobrze"></a>
+                                    <a class="rate rate-large" title="Bardzo dobrze"></a>
+                                    <a class="rate rate-large" title="Ekspert"></a>
+                                </div>
+                            </div>
+
+                            {{ form_close() }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    {{ modals.alert('') }}
+    {{ modals.confirm('Czy chcesz usunąć te umiejętność ze swojej listy?') }}
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/user.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="/js/modal.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var container = $('.rate-container');
+            var rates = $('.rate', container);
+            rates.tooltip();
+
+            rates.hover(function() {
+                var rate = rates.index(this);
+                $('.rate:lt(' + rate + '), .rate:eq(' + rate + ')', container).addClass('mark');
+                $('.rate:gt(' + rate + ')', container).removeClass('mark');
+            })
+            .click(function() {
+                $(':hidden[name=rate]').val(rates.index(this) + 1);
+            });
+
+            container.mouseleave(function() {
+                var rate = $(':hidden[name=rate]').val() - 1;
+                $('.rate', container).removeClass('mark');
+
+                if (rate > -1) {
+                    $('.rate:lt(' + rate + '), .rate:eq(' + rate + ')', container).addClass('mark');
+                }
+            });
+
+            $('#rate-form').submit(function() {
+                var $form = $(this);
+                $(':submit', $form).attr('disabled', 'disabled');
+
+                $.post($form.attr('action'), $form.serialize(), function(html) {
+                    $('.list-group').append(html);
+
+                    $('input[name="name"]', $form).val('');
+                    $('input[name="rate"]', $form).val(0);
+
+                    rates.removeClass('.mark');
+                })
+                .always(function() {
+                    $(':submit', $form).removeAttr('disabled');
+                })
+                .error(function(e) {
+                    var result = e.responseJSON;
+
+                    $('#alert').modal('show');
+                    $('.modal-body').text(result[Object.keys(result)[0]]);
+                });
+
+                return false;
+            });
+
+            $('#box-skills').on('click', '.btn-delete', function() {
+                var $this = $(this);
+
+                $('#confirm').modal('show').one('click', '.danger', function() {
+                    $.post($this.attr('href'), function() {
+                        $this.parent().fadeOut(500, function() {
+                            $(this).remove();
+                        });
+                    });
+
+                    $('#confirm').modal('hide');
+                });
+
+                return false;
+            });
+
+            $('.list-group').sortable({
+                update: function() {
+                    var order = {};
+
+                    $('.list-group-item').each(function(index) {
+                        order[$(this).data('id')] = index;
+                    });
+
+                    $.post('{{ route('user.skills.order') }}', {'order': order});
+                }
+            });
+
+        });
+    </script>
+
+{% endblock %}
