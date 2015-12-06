@@ -3,17 +3,34 @@
 namespace Coyote\Http\Controllers\Profile;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\User;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 
 class HomeController extends Controller
 {
+    private $user;
+    private $session;
+
+    public function __construct(User $user, Session $session)
+    {
+        parent::__construct();
+
+        $this->user = $user;
+        $this->session = $session;
+    }
+
     /**
+     * @param \Coyote\User $user
      * @return \Illuminate\View\View
      */
-    public function index(User $user)
+    public function index($user)
     {
         $this->breadcrumb->push('Profil: ' . $user->name, route('profile', ['user' => 1]));
 
-        return parent::view('profile.home');
+        return parent::view('profile.home')->with([
+            'user'          => $user,
+            'rank'          => $this->user->rank(auth()->user()->id),
+            'total_users'   => $this->user->countUsersWithReputation(),
+        ]);
     }
 }

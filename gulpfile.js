@@ -34,6 +34,8 @@ elixir(function(mix) {
        .scripts(['pages/forum.js'], 'public/js/forum.js')
         // mikroblogi
        .scripts(['pages/microblog.js'], 'public/js/microblog.js')
+        // strona profilu uzytkownika
+       //.scripts(['pages/profile.js'], 'public/js/profile.js')
         // komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
         // rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
        .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js'], 'public/js/posting.js')
@@ -55,6 +57,7 @@ elixir(function(mix) {
        .sass('pages/forum.scss')
        .sass('pages/wiki.scss')
        .sass('pages/user.scss')
+       .sass('pages/profile.scss')
        .sass('pages/job.scss')
        .sass('vendor/wikieditor.scss');
 });

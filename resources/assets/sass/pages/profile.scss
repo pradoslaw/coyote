@@ -1,0 +1,98 @@
+@charset "UTF-8";
+@import "../helpers/variables";
+@import "../helpers/mixins";
+@import "../vendor/font-awesome/variables";
+@import "../components/tags";
+@import "../components/progress-bars";
+
+#user-nav-tabs {
+  margin: 20px 0;
+}
+
+#profile-info {
+  img {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid $border-color;
+  }
+
+  .btn-sm {
+    margin-top: 10px;
+  }
+}
+
+#profile {
+  h2, h3 {
+    color: $box-header-color;
+
+    a {
+      color: inherit;
+    }
+  }
+
+  h1 {
+    margin-top: 0;
+  }
+
+  h3 {
+    margin-top: 0;
+    font-size: 15px;
+
+    small {
+      font-size: 80%;
+    }
+  }
+}
+
+#box-stat {
+  color: lighten($gray-light, 10%);
+
+  strong {
+    font-size: 150%;
+    display: block;
+  }
+
+  span {
+    letter-spacing: 1px;
+    font-size: 90%;
+  }
+}
+
+#user-links {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0 0 0;
+
+  li {
+    padding: 4px 0;
+    text-shadow: 1px 1px 1px #FFF;
+    color: $gray-light;
+
+    a {
+      color: inherit;
+    }
+  }
+}
+
+#box-reputation {
+  margin-top: 22px;
+
+  h5 {
+    color: $gray;
+    font-family: Arial, sans-serif;
+  }
+}
+
+#statement {
+  padding: 0 0 0 30px;
+  position: relative;
+  font-size: 14px;
+  margin: 20px 0 17px 2px;
+
+  &:after {
+    @include font-awesome($fa-var-quote-left);
+    top: 0;
+    left: 0;
+    color: $gray-light;
+  }
+}
