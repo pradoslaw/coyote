@@ -22,10 +22,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        parent::boot($router);
-
         $router->model('user', 'Coyote\User');
         $router->pattern('id', '[0-9]+');
+
+        parent::boot($router);
     }
 
     /**
