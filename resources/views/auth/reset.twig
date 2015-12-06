@@ -14,7 +14,7 @@
             {{ forms.text('email', 'E-mail', input_old('email'), errors.first('email')) }}
             {{ forms.password('password', 'Hasło', '', errors.first('password')) }}
             {{ forms.password('password_confirmation', 'Hasło (powtórnie)', '', errors.first('password_confirmation')) }}
-            {{ forms.submit('Ustaw nowe hasło') }}
+            {{ forms.submit('Ustaw nowe hasło', 'Wysyłanie...') }}
             {{ form_close() }}
         </div>
     </div>

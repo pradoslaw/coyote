@@ -13,7 +13,7 @@
                 {{ forms.password('password', 'Hasło', input_old('password'), errors.first('password')) }}
                 {{ forms.password('password_confirmation', 'Hasło (powtórnie)', input_old('password_confirmation'), errors.first('password_confirmation')) }}
                 {{ forms.text('email', 'E-mail', input_old('email'), errors.first('email')) }}
-                {{ forms.submit('Rejestracja') }}
+                {{ forms.submit('Utwórz konto', 'Rejestracja...') }}
             {{ form_close() }}
         </div>
 
