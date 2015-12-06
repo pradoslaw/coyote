@@ -109,7 +109,8 @@ return [
         ],
         // m.in. w wiadomosciach prywatnych
         'author' => [
-            'required'      => 'Proszę wpisać nadawcę wiadomości'
+            'required'      => 'Proszę wpisać nadawcę wiadomości',
+            'exists'        => 'Użytkownik o tej nazwie nie istnieje'
         ]
     ],
 

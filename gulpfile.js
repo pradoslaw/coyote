@@ -40,6 +40,8 @@ elixir(function(mix) {
         // rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
        .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js'], 'public/js/posting.js')
        .scripts(['components/wikieditor.js'], 'public/js/wikieditor.js')
+        // auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
+       .scripts(['components/auto-complete.js'], 'public/js/auto-complete.js')
         // komponent bootstrapa umozliwiajacy wyswietlanie statycznych dymkow
        .scripts(['bootstrap/popover.js'], 'public/js/popover.js')
         // uzywane na niewielu stronach. tam gdzie trzeba przelaczac sie miedzy zakladkami

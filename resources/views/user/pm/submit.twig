@@ -8,7 +8,7 @@
 
     <div class="form-group">
         <div class="col-md-12 {{ errors.has('author') > 0 ? 'has-error' }}">
-            {{ form_text('author', input_old('author'), {'class': 'form-control', 'placeholder': 'Nadawca...'}) }}
+            {{ form_text('author', input_old('author'), {'class': 'form-control', 'placeholder': 'Nadawca...', 'id': 'author'}) }}
 
             {% if errors.first('author') %}
                 <span class="help-block">{{ errors.first('author') }}</span>
@@ -50,10 +50,14 @@
 
     <script type="text/javascript" src="/js/posting.js"></script>
     <script type="text/javascript" src="/js/tab.js"></script>
+    <script type="text/javascript" src="/js/auto-complete.js"></script>
     <script type="text/javascript" src="/js/wikieditor.js"></script>
     <script type="text/javascript">
         $(function () {
             $('textarea[name="text"]').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
+            $('#author').autocomplete({
+                url: '{{ route('user.prompt') }}'
+            });
         });
     </script>
 {% endblock %}
