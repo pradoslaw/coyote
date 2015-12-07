@@ -111,7 +111,7 @@ class AlertsController extends Controller
         $alerts = $this->alert->takeForUser(auth()->user()->id);
         $unread = auth()->user()->alerts_unread - $this->mark($alerts);
 
-        $view = view('user.alerts._ajax', [
+        $view = view('user.alerts.ajax', [
             'alerts'    => $alerts,
             'session'   => $session->findBy('user_id', auth()->user()->id, ['created_at']),
         ])->render();
