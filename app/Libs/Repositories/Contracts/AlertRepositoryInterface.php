@@ -31,6 +31,14 @@ interface AlertRepositoryInterface extends RepositoryInterface
     public function markAsRead(array $id);
 
     /**
+     * Find notification by url and mark it as read
+     *
+     * @param int $userId
+     * @param string $url
+     */
+    public function markAsReadByUrl($userId, $url);
+
+    /**
      * Gets notification headline for given type. This template is used for Db_Email() class for emails subject
      *
      * @param $typeId

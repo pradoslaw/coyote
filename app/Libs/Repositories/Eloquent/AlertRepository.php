@@ -62,6 +62,20 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
     }
 
     /**
+     * Find notification by url and mark it as read
+     *
+     * @param int $userId
+     * @param string $url
+     */
+    public function markAsReadByUrl($userId, $url)
+    {
+        $this->model->where('user_id', $userId)
+                    ->whereNull('read_at')
+                    ->where('url', $url)
+                    ->update(['read_at' => Carbon::now()]);
+    }
+
+    /**
      * Format notification's headline
      *
      * @param $alerts

@@ -87,14 +87,15 @@ class PmController extends Controller
         foreach ($talk as &$row) {
             $row['text'] = $parser->parse($row['text']);
 
+            // we have to mark this message as read
             if (!$row['read_at'] && $row['folder'] == \Coyote\Pm::INBOX) {
                 $this->pm->markAsRead($row['id']);
             }
 
-            /*
-             * @todo Jezeli do wiadomosci przypisany zostal jakis alert, to trzeba go oznaczyc
-             * jako przeczytany...
-             */
+            // IF we have unread alert that is connected with that message... then we also have to mark it as read
+            if (auth()->user()->alerts_unread) {
+                $this->alert->markAsReadByUrl(auth()->user()->id, route('user.pm.show', [$row['id']], false));
+            }
         }
 
         if ($request->ajax()) {
@@ -158,7 +159,7 @@ class PmController extends Controller
                 'sender_id'   => $user->id,
                 'sender_name' => $user->name,
                 'subject'     => excerpt($request->get('text'), 48),
-                'url'         => route('user.pm.show', [$pm->id], false)
+                'url'         => route('user.pm.show', [$pm->id - 1], false)
             ])->notify();
 
             return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
