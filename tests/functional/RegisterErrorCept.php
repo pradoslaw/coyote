@@ -3,7 +3,7 @@ $I = new FunctionalTester($scenario);
 $I->wantTo('test form error assertions');
 
 $I->amOnPage('/');
-$I->click('Rejestracja', '.btn-register');
+$I->click('Utwórz konto', '.btn-register');
 
 $I->seeCurrentUrlEquals('/Register');
 $I->click('button[type=submit]');
