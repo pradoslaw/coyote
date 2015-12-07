@@ -40,6 +40,7 @@ class AlertsController extends Controller
      */
     public function index(Session $session)
     {
+        $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Powiadomienia', route('user.alerts'));
 
         $alerts = $this->alert->paginate(auth()->user()->id);
@@ -78,6 +79,9 @@ class AlertsController extends Controller
      */
     public function settings()
     {
+        $this->breadcrumb->push('Moje konto', route('user.home'));
+        $this->breadcrumb->push('Ustawienia powiadomień', route('user.alerts.settings'));
+
         $settings = Setting::select(['alert_settings.*', 'alert_types.name'])
                 ->join('alert_types', 'alert_types.id', '=', 'type_id')
                 ->where('user_id', auth()->user()->id)
