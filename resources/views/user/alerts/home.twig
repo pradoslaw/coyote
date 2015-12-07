@@ -35,8 +35,8 @@
                                             <h4 class="pull-left"><a href="{{ url(alert.url) }}">{{ alert.headline }}</a></h4>
                                             <small class="pull-right">{{ alert.created_at|format_date }}</small>
                                         </header>
-                                        <h3><a href="{{ url(alert.url) }}">{{ alert.subject }}</a></h3>
-                                        <p><a href="{{ url(alert.url) }}">{{ alert.excerpt }}</a></p>
+                                        <h3><a href="{{ url(alert.url) }}">{{ alert.subject|raw }}</a></h3>
+                                        <p><a href="{{ url(alert.url) }}">{{ alert.excerpt|raw }}</a></p>
                                     </div>
                                 </div>
                             {% else %}
