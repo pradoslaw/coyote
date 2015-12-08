@@ -27,6 +27,6 @@ class SecurityController extends Controller
      */
     public function save(Request $request)
     {
-
+        //
     }
 }
