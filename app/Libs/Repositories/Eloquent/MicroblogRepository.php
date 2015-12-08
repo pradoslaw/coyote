@@ -13,9 +13,32 @@ use Image;
  */
 class MicroblogRepository extends Repository implements MicroblogRepositoryInterface
 {
+    /**
+     * @var int
+     */
+    private $userId;
+
     public function model()
     {
         return 'Coyote\Microblog';
+    }
+
+    /**
+     * @param int $userId
+     * @return $this
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     /**
@@ -39,6 +62,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function paginate($perPage = 10)
     {
+        $this->applyCriteria();
         $result = $this->prepare()
                 ->whereNull('parent_id')
                 ->orderBy('microblogs.is_sponsored', 'DESC')
@@ -137,6 +161,16 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         return $microblogs;
     }
 
+    public function count()
+    {
+        return $this->model->whereNull('parent_id')->count();
+    }
+
+    public function countForUser()
+    {
+        return $this->userId ? $this->model->whereNull('parent_id')->where('user_id', $this->userId)->count() : 0;
+    }
+
     /**
      * @return mixed
      */
@@ -147,11 +181,10 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         $columnWatch = 'mw.user_id AS watch_on';
 
         $userId = auth()->check() ? \DB::raw(auth()->user()->id) : null;
-
-        $query = $this->model;
+        $with = [];
 
         if ($withComments) {
-            $hasMany = function ($sql) use ($columns, $userId, $columnThumb) {
+            $with['comments'] = function ($sql) use ($columns, $userId, $columnThumb) {
                 $sql->join('users', 'users.id', '=', 'user_id')->orderBy('id', 'ASC');
 
                 if ($userId) {
@@ -165,15 +198,13 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
 
                 $sql->select($columns);
             };
-
-            $query = $query->with(['comments' => $hasMany]);
         }
 
         if ($userId) {
             $columns = array_merge($columns, [$columnThumb, $columnWatch]);
         }
 
-        $query = $query->select($columns)->join('users', 'users.id', '=', 'user_id');
+        $query = $this->model->select($columns)->with($with)->join('users', 'users.id', '=', 'user_id');
 
         if ($userId) {
             $query->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
@@ -248,6 +279,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->select(['name', \DB::raw('COUNT(*) AS count')])
                 ->join('microblogs', 'microblogs.id', '=', 'microblog_id')
                     ->whereNull('deleted_at')
+                    ->whereNull('parent_id')
                 ->groupBy('name')
                 ->orderBy(\DB::raw('COUNT(*)'), 'DESC')
                 ->limit(30)

@@ -8,8 +8,11 @@
     <div id="microblog" class="row">
         <div class="col-md-9">
             <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Wszystkie wpisy <small>({{ total }})</small></a></li>
-                <li role="presentation"><a href="#">Moje <small>(0)</small></a></li>
+                <li role="presentation" {{ route != 'microblog.mine' ? 'class="active"' }}><a href="{{ route('microblog.home') }}">Wszystkie wpisy <small>({{ count }})</small></a></li>
+
+                {% if auth_check() %}
+                    <li role="presentation" {{ route == 'microblog.mine' ? 'class="active"' }} title="Kliknij, aby zobaczyć swoje wpisy"><a href="{{ route('microblog.mine') }}">Moje <small>({{ count_user }})</small></a></li>
+                {% endif %}
             </ul>
 
             {% if auth_check() %}

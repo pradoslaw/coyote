@@ -2,15 +2,38 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Coyote\Repositories\Contracts\CriteriaInterface;
 use Coyote\Repositories\Contracts\RepositoryInterface;
+use Coyote\Repositories\Criteria\Criteria;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
 
-abstract class Repository implements RepositoryInterface
+abstract class Repository implements RepositoryInterface, CriteriaInterface
 {
+    /**
+     * @var App
+     */
     private $app;
+
+    /**
+     * @var mixed
+     */
     protected $model;
 
+    /**
+     * @var array
+     */
+    protected $criteria = [];
+
+    /**
+     * @var bool
+     */
+    protected $skipCriteria = false;
+
+    /**
+     * @param App $app
+     * @throws \Exception
+     */
     public function __construct(App $app)
     {
         $this->app = $app;
@@ -19,6 +42,12 @@ abstract class Repository implements RepositoryInterface
 
     abstract protected function model();
 
+    /**
+     * Creates instance of model
+     *
+     * @return Model
+     * @throws \Exception
+     */
     public function makeModel()
     {
         $model = $this->app->make($this->model());
@@ -28,6 +57,73 @@ abstract class Repository implements RepositoryInterface
         }
 
         return $this->model = $model;
+    }
+
+    /**
+     * @return $this
+     */
+    public function resetCriteria()
+    {
+        if ($this->criteria) {
+            $this->criteria = [];
+            $this->makeModel();
+        }
+        return $this;
+    }
+
+    /**
+     * @param bool $flag
+     * @return $this
+     */
+    public function skipCriteria($flag = true)
+    {
+        $this->skipCriteria = $flag;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCriteria()
+    {
+        return $this->criteria;
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @return $this
+     */
+    public function getByCriteria(Criteria $criteria)
+    {
+        $this->model = $criteria->apply($this->model, $this);
+        return $this;
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @return $this
+     */
+    public function pushCriteria(Criteria $criteria)
+    {
+        $this->criteria[] = $criteria;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function applyCriteria()
+    {
+        if ($this->skipCriteria === true) {
+            return $this;
+        }
+
+        foreach ($this->getCriteria() as $criteria) {
+            if ($criteria instanceof Criteria) {
+                $this->model = $criteria->apply($this->model, $this);
+            }
+        }
+        return $this;
     }
 
     /**
@@ -45,6 +141,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function all($columns = ['*'])
     {
+        $this->applyCriteria();
         return $this->model->get($columns);
     }
 
@@ -55,6 +152,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function lists($value, $key = null)
     {
+        $this->applyCriteria();
         $lists = $this->model->lists($value, $key);
 
         if (is_array($lists)) {
@@ -90,6 +188,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function find($id, $columns = ['*'])
     {
+        $this->applyCriteria();
         return $this->model->find($id, $columns);
     }
 
@@ -100,6 +199,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function findOrFail($id, $columns = ['*'])
     {
+        $this->applyCriteria();
         return $this->model->findOrFail($id, $columns);
     }
 
@@ -121,6 +221,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function findBy($attribute, $value, $columns = ['*'])
     {
+        $this->applyCriteria();
         return $this->model->where($attribute, '=', $value)->first($columns);
     }
 
@@ -132,6 +233,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function findAllBy($attribute, $value, $columns = ['*'])
     {
+        $this->applyCriteria();
         return $this->model->where($attribute, '=', $value)->get($columns);
     }
 
@@ -143,6 +245,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function findWhere($where, $columns = ['*'])
     {
+        $this->applyCriteria();
         foreach ($where as $field => $value) {
             $this->model->where($field, $value);
         }

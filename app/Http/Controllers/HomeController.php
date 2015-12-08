@@ -12,6 +12,7 @@ class HomeController extends Controller
 {
     public function index(Microblog $microblog, Reputation $reputation, Stream $stream)
     {
+        $microblog->setUserId(auth()->check() ? auth()->user()->id : null);
         $viewers = app('Session\Viewers');
 
         Debugbar::startMeasure('stream', 'Stream activities');
