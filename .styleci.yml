@@ -6,4 +6,3 @@ disabled:
 finder:
   exclude:
     - "tests"
-    - "app/Libs/Parser/Geshi"
