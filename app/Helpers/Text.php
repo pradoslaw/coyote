@@ -15,7 +15,7 @@ function html_limit($value, $limit = 100, $end = '...')
 }
 
 /**
- * Metoda "oczyszcza" tekst ze znacznikow HTML, znakowej nowej linii czy zbednych spacji
+ * Removes all html tags and converts entities to their applicable characters
  *
  * @param string $value
  * @return string
@@ -25,10 +25,8 @@ function plain($value, $stripTags = true)
     if ($stripTags) {
         $value = strip_tags($value);
     }
-    $value = str_replace(["\n", "\t", "\r"], ' ', $value);
-    $value = trim(preg_replace('/ {2,}/', ' ', htmlspecialchars($value, ENT_COMPAT, 'UTF-8', false)));
 
-    return $value;
+    return html_entity_decode($value, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 }
 
 /**
@@ -38,5 +36,10 @@ function plain($value, $stripTags = true)
  */
 function excerpt($value, $limit = 64)
 {
+    $value = str_replace(["\n", "\t", "\r"], ' ', plain($value));
+    $value = trim(preg_replace('/ {2,}/', ' ', $value));
+
+    $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8', false);
+
     return html_limit(plain($value), $limit);
 }
