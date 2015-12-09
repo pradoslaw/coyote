@@ -24,6 +24,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router->model('user', 'Coyote\User');
         $router->pattern('id', '[0-9]+');
+        $router->pattern('category', '[A-Za-z_\/]+');
         $router->pattern('tag', '([\p{L}\p{Mn}0-9\._+-]+)');
 
         parent::boot($router);

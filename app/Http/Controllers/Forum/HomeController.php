@@ -24,7 +24,7 @@ class HomeController extends Controller
     /**
      * @return \Illuminate\View\View
      */
-    public function getSubmit($forum)
+    public function submit($forum)
     {
         $this->breadcrumb->push([
             'Forum'      => route('forum.home'),
@@ -35,7 +35,7 @@ class HomeController extends Controller
         return parent::view('forum.submit');
     }
 
-    public function postSubmit($forum)
+    public function save($forum)
     {
     }
 }

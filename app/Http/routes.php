@@ -26,12 +26,20 @@ Route::post('Register', 'Auth\RegisterController@signup');
 // przypominanie hasla
 Route::controller('Password', 'Auth\PasswordController');
 
-// strona glowna forum
-Route::get('Forum', ['uses' => 'Forum\HomeController@index', 'as' => 'forum.home']);
 
-// formularz dodawania nowego watku na forum
-Route::get('Forum/Submit/{forum}', ['uses' => 'Forum\HomeController@getSubmit', 'as' => 'forum.submit']);
-Route::post('Forum/Submit/{forum}', 'Forum\HomeController@getSubmit');
+Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], function () {
+    // strona glowna forum
+    Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
+
+    // formularz dodawania nowego watku na forum
+    Route::get('Submit/{forum}', ['uses' => 'HomeController@submit', 'as' => 'submit']);
+    Route::post('Submit/{forum}', 'HomeController@save');
+
+    // widok kategorii forum
+    Route::get('{category}', ['uses' => 'CategoryController@index', 'as' => 'category']);
+    // widok wyswietlania watku
+    Route::get('{category}/{id}-{slug}', 'TopicController@index');
+});
 
 Route::get('Praca', ['uses' => 'Job\HomeController@index', 'as' => 'job.home']);
 
@@ -40,8 +48,6 @@ Route::get('Praca', ['uses' => 'Job\HomeController@index', 'as' => 'job.home']);
  */
 Route::get('/Delphi', ['as' => 'page', 'uses' => 'Wiki\WikiController@category']);
 Route::get('/Delphi/Lorem_ipsum', ['as' => 'article', 'uses' => 'Wiki\WikiController@article']);
-Route::get('Forum/Python/Test', ['uses' => 'Forum\TopicController@index']);
-Route::get('Forum/Python', ['uses' => 'Forum\CategoryController@index']);
 Route::get('Praca/Lorem_ipsum', ['uses' => 'Job\OfferController@index', 'as' => 'job.offer']);
 
 // Obsluga mikroblogow
