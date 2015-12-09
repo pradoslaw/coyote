@@ -328,4 +328,27 @@ $(function () {
 
     initForm($('.microblog-submit'));
 
+    if ('onhashchange' in window) {
+        var onHashChange = function () {
+            var hash = window.location.hash;
+
+            if (hash.substring(1, 6) === 'entry' || hash.substring(1, 8) === 'comment') {
+                var object = $(window.location.hash);
+                var panel = object.find('.panel');
+
+                if (panel.length) {
+                    object = panel;
+                }
+
+                object.css('background-color', '#FFF3CD');
+                $('#container-fluid').one('mousemove', function () {
+                    object.animate({backgroundColor: '#FFF'}, 1500);
+                });
+            }
+        };
+
+        window.onhashchange = onHashChange;
+        onHashChange();
+    }
+
 });

@@ -33,7 +33,7 @@ elixir(function(mix) {
         // forum
        .scripts(['pages/forum.js'], 'public/js/forum.js')
         // mikroblogi
-       .scripts(['pages/microblog.js'], 'public/js/microblog.js')
+       .scripts(['vendor/animate-colors.js', 'pages/microblog.js'], 'public/js/microblog.js')
         // strona profilu uzytkownika
        //.scripts(['pages/profile.js'], 'public/js/profile.js')
         // komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
