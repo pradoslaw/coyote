@@ -50,7 +50,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Tera Term Macro',
     'COMMENT_SINGLE' => array(1 => ';'),
     'COMMENT_MULTI' => array(),
@@ -337,7 +337,7 @@ $language_data = array (
     'OOLANG' => false,
     'OBJECT_SPLITTERS' => array(),
     'REGEXPS' => array(
-        0 => array (
+        0 => array(
             GESHI_SEARCH => '(\:[_a-zA-Z][_a-zA-Z0-9]+)',
             GESHI_REPLACE => '\\1',
             GESHI_MODIFIERS => '',
@@ -350,5 +350,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(),
     'TAB_WIDTH' => 4
 );
-
-?>

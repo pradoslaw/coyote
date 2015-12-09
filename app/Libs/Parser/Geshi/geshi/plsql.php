@@ -40,7 +40,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'PL/SQL',
     'COMMENT_SINGLE' => array(1 =>'--'), //http://download-uk.oracle.com/docs/cd/B10501_01/appdev.920/a96624/02_funds.htm#2930
     'COMMENT_MULTI' => array('/*' => '*/'), //http://download-uk.oracle.com/docs/cd/B10501_01/appdev.920/a96624/02_funds.htm#2950
@@ -252,5 +252,3 @@ $language_data = array (
     'SCRIPT_DELIMITERS' => array(),
     'HIGHLIGHT_STRICT_BLOCK' => array()
 );
-
-?>

@@ -60,23 +60,36 @@
  *
  ************************************************************************************/
 
-if(!function_exists('geshi_langfile_algol68_vars')) {
-    function geshi_langfile_algol68_vars(){
+if (!function_exists('geshi_langfile_algol68_vars')) {
+    function geshi_langfile_algol68_vars()
+    {
         $pre='(?<![0-9a-z_\.])';
         $post='?(?![0-9a-z]|\.(?:[eE][+\-]?)?\d)';
         $post=""; # assuming the RegEx is greedy #
 
         $_="\s*";
 
-        $srad="Rr";        $rrad="[".$srad."]";  # either one digit, OR opt-space in digits #
-        $sbin="0-1";       $rbin="[".$sbin."]";  $_bin=$rbin."(?:[".$sbin."\s]*".$rbin."|)";
-        $snib="0-3";       $rnib="[".$snib."]";  $_nib=$rnib."(?:[".$snib."\s]*".$rnib."|)";
-        $soct="0-7";       $roct="[".$soct."]";  $_oct=$roct."(?:[".$soct."\s]*".$roct."|)";
-        $sdec="0-9";       $rdec="[".$sdec."]";  $_dec=$rdec."(?:[".$sdec."\s]*".$rdec."|)";
-        $shex="0-9A-Fa-f"; $rhex="[".$shex."]";  $_hex=$rhex."(?:[".$shex."\s]*".$rhex."|)";
+        $srad="Rr";
+        $rrad="[".$srad."]";  # either one digit, OR opt-space in digits #
+        $sbin="0-1";
+        $rbin="[".$sbin."]";
+        $_bin=$rbin."(?:[".$sbin."\s]*".$rbin."|)";
+        $snib="0-3";
+        $rnib="[".$snib."]";
+        $_nib=$rnib."(?:[".$snib."\s]*".$rnib."|)";
+        $soct="0-7";
+        $roct="[".$soct."]";
+        $_oct=$roct."(?:[".$soct."\s]*".$roct."|)";
+        $sdec="0-9";
+        $rdec="[".$sdec."]";
+        $_dec=$rdec."(?:[".$sdec."\s]*".$rdec."|)";
+        $shex="0-9A-Fa-f";
+        $rhex="[".$shex."]";
+        $_hex=$rhex."(?:[".$shex."\s]*".$rhex."|)";
 
         # Define BITS: #
-        $prebits=$pre; $postbits=$post;
+        $prebits=$pre;
+        $postbits=$post;
         $bl="2".$_.$rrad.$_.$_bin;
         $bl=$bl."|"."2".$_.$rrad.$_.$_bin;
         $bl=$bl."|"."4".$_.$rrad.$_.$_nib;
@@ -85,7 +98,8 @@ if(!function_exists('geshi_langfile_algol68_vars')) {
         $bl=$bl."|"."1".$_."6".$_.$rrad.$_.$_hex;
 
         # Define INT: #
-        $preint=$pre; $postint=$post;
+        $preint=$pre;
+        $postint=$post;
         # for some reason ".0 e - 2" is not recognised, but ".0 e + 2" IS!
         # work around: remove spaces between sign and digits! Maybe because
         # of the Unary '-' Operator
@@ -99,8 +113,10 @@ if(!function_exists('geshi_langfile_algol68_vars')) {
         $GESHI_NUMBER_INT_BASIC='(?:(?<![0-9a-z_\.%])|(?<=\.\.))(?<![\d\.]e[+\-])([1-9]\d*?|0)(?![0-9a-z]|\.(?:[eE][+\-]?)?\d)';
 
         # Define REAL: #
-        $prereal=$pre; $postreal=$post;
-        $sexp="Ee\\\\";   $_exp="(?:⏨|[".$sexp."])".$_.$_int;
+        $prereal=$pre;
+        $postreal=$post;
+        $sexp="Ee\\\\";
+        $_exp="(?:⏨|[".$sexp."])".$_.$_int;
         $_decimal="[.]".$_.$_dec;
 
         # Add permitted permutations of various parts #
@@ -326,4 +342,3 @@ $language_data = array(
 );
 
 unset($a68);
-?>

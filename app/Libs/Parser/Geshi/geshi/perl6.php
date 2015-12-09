@@ -45,7 +45,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Perl 6',
     'COMMENT_SINGLE' => array(1 => '#'),
     'COMMENT_MULTI' => array('=begin' => '=end'),
@@ -193,5 +193,3 @@ $language_data = array (
         )
     )
 );
-
-?>

@@ -49,7 +49,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'CSS',
     'COMMENT_SINGLE' => array(1 => '@'),
     'COMMENT_MULTI' => array('/*' => '*/'),
@@ -222,5 +222,3 @@ $language_data = array (
         )
     )
 );
-
-?>

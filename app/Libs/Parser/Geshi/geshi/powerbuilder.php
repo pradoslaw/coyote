@@ -40,7 +40,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'PowerBuilder',
     'COMMENT_SINGLE' => array(1 => '//'),
     'COMMENT_MULTI' => array('/*' => '*/'),
@@ -68,13 +68,13 @@ $language_data = array (
             'to', 'trigger', 'true', 'try', 'type', 'until', 'update', 'updateblob',
             'using', 'variables', 'where', 'while', 'with', 'within'
             ),
-        2 => array (
+        2 => array(
             'blob', 'boolean', 'char', 'character', 'date', 'datetime',
             'dec', 'decimal',
             'double', 'int', 'integer', 'long', 'real', 'string', 'time',
             'uint', 'ulong', 'unsignedint', 'unsignedinteger', 'unsignedlong'
             ),
-        3 => array (
+        3 => array(
             'abortretryignore!', 'actbegin!', 'acterror!', 'actesql!',
             'actgarbagecollect!', 'activate!', 'activatemanually!',
             'activateondoubleclick!',
@@ -414,5 +414,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-
-?>

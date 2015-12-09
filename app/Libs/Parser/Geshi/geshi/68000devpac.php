@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Motorola 68000 - HiSoft Devpac ST 2 Assembler format',
     'COMMENT_SINGLE' => array(1 => ';'),
     'COMMENT_MULTI' => array(),
@@ -164,5 +164,3 @@ $language_data = array (
             )
         )
 );
-
-?>

@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'KLone C++',
     'COMMENT_SINGLE' => array(1 => '//', 2 => '#'),//#pour precede les include de C
     'COMMENT_MULTI' => array('/*' => '*/', '<!--' => '-->' ),//comentaires C et KLone suivi de ceux pour HTML
@@ -306,5 +306,3 @@ $language_data = array (
         )
     )
 );
-
-?>

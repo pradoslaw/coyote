@@ -54,7 +54,7 @@ MA  02111-1307  USA
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'AutoIt',
     'COMMENT_SINGLE' => array(';'),
     'COMMENT_MULTI' => array(
@@ -1171,5 +1171,3 @@ $language_data = array (
         )
     )
 );
-
-?>

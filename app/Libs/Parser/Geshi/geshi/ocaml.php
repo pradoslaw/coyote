@@ -39,7 +39,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'OCaml',
     'COMMENT_SINGLE' => array(),
     'COMMENT_MULTI' => array('(*' => '*)'),
@@ -97,13 +97,13 @@ $language_data = array (
             'string_of_int', 'succ', 'tan', 'tanh', 'truncate'
             ),
         /* here Pervasives Types */
-        4 => array (
+        4 => array(
             'array','bool','char','exn','file_descr','format','fpclass',
             'in_channel','int','int32','int64','list','nativeint','open_flag',
             'out_channel','string','Sys_error','unit'
             ),
         /* finally Pervasives Exceptions */
-        5 => array (
+        5 => array(
             'Exit', 'Invalid_Argument', 'Failure', 'Division_by_zero'
             )
         ),
@@ -183,5 +183,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-
-?>

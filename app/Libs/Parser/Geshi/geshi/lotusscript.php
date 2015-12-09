@@ -39,7 +39,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'LotusScript',
     'COMMENT_SINGLE' => array(1 => "'"),
     'COMMENT_MULTI' => array('%REM' => '%END REM'),
@@ -47,7 +47,7 @@ $language_data = array (
     'QUOTEMARKS' => array('"' , "|"),
     'ESCAPE_CHAR' => '',
     'KEYWORDS' => array(
-        1 => array (
+        1 => array(
             'Yield', 'Year', 'Xor', 'Write', 'With', 'Width', 'While', 'Wend',
             'Weekday', 'VarType', 'Variant', 'Val', 'UString', 'UString$',
             'UseLSX', 'Use', 'Until', 'Unlock', 'Unicode', 'Uni', 'UChr',
@@ -101,7 +101,7 @@ $language_data = array (
             'And', 'Alias', 'ActivateApp', 'ACos', 'Access', 'Abs', '%Include',
             '%If', '%END', '%ElseIf', '%Else'
             ),
-        2 => array (
+        2 => array(
             'NotesXSLTransformer', 'NotesXMLProcessor', 'NotesViewNavigator',
             'NotesViewEntryCollection', 'NotesViewEntry', 'NotesViewColumn',
             'NotesView', 'NotesUIWorkspace', 'NotesUIView', 'NotesUIScheduler',
@@ -187,5 +187,3 @@ $language_data = array (
         ),
     'TAB_WIDTH' => 2
 );
-
-?>

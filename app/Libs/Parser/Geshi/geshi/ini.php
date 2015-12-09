@@ -42,7 +42,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'INI',
     'COMMENT_SINGLE' => array(0 => ';'),
     'COMMENT_MULTI' => array(),
@@ -124,5 +124,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-
-?>

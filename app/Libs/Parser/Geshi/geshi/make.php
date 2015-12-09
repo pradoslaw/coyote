@@ -36,7 +36,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'GNU make',
     'COMMENT_SINGLE' => array(1 => '#'),
     'COMMENT_REGEXP' => array(
@@ -148,4 +148,3 @@ $language_data = array (
     'TAB_WIDTH' => 8
 // vim: set sw=4 sts=4 :
 );
-?>

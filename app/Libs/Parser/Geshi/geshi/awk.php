@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'awk',
     'COMMENT_SINGLE' => array(
         1 => '#'
@@ -46,7 +46,7 @@ $language_data = array (
     'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,
     'QUOTEMARKS' => array('"'),
     'ESCAPE_CHAR' => '\\',
-    'KEYWORDS' => array (
+    'KEYWORDS' => array(
         1 => array(
             'for', 'in', 'if', 'else', 'while', 'do', 'continue', 'break'
             ),
@@ -71,7 +71,7 @@ $language_data = array (
             'function', 'return'
             )
         ),
-    'SYMBOLS' => array (
+    'SYMBOLS' => array(
         0 => array(
             '(',')','[',']','{','}'
             ),
@@ -146,13 +146,11 @@ $language_data = array (
         6 => ''
         ),
     'OOLANG' => false,
-    'OBJECT_SPLITTERS' => array (),
+    'OBJECT_SPLITTERS' => array(),
     'REGEXPS' => array(
         0 => "\\$[a-zA-Z0-9_]+"
         ),
     'STRICT_MODE_APPLIES' => GESHI_NEVER,
-    'SCRIPT_DELIMITERS' => array (),
+    'SCRIPT_DELIMITERS' => array(),
     'HIGHLIGHT_STRICT_BLOCK' => array()
 );
-
-?>

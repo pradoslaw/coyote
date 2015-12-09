@@ -43,7 +43,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Microchip Assembler',
     'COMMENT_SINGLE' => array(1 => ';'),
     'COMMENT_MULTI' => array(),
@@ -73,7 +73,7 @@ $language_data = array (
             'subcf', 'subdcf', 'tstf'
             ),
         /* 16-bit Specific Instructiob Set */
-        2 => array (
+        2 => array(
             'movfp', 'movlb', 'movlp', 'movpf', 'movwf', 'tablrd', 'tablwt', 'tlrd', 'tlwt',
             'addwfc', 'daw', 'mullw', 'negw', 'rlcf', 'rlncf', 'rrcf', 'rrncf', 'setf', 'subwfb',
             'btg', 'cpfseq', 'cpfsgt', 'cpfslt', 'dcfsnz', 'infsnz', 'tstfsz', 'lfsr', 'bnn',
@@ -160,5 +160,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-
-?>

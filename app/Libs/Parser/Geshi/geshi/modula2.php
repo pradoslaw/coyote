@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Modula-2',
     'COMMENT_MULTI' => array('(*' => '*)'),
     'COMMENT_SINGLE' => array(),
@@ -132,5 +132,3 @@ $language_data = array (
         ),
     'TAB_WIDTH' => 4
 );
-
-?>

@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Whois (RPSL format)',
     'COMMENT_SINGLE' => array(1 => '% ', 2 => '%ERROR:'),
     'COMMENT_MULTI' => array(),
@@ -177,5 +177,3 @@ $language_data = array (
             )
         ),
 );
-
-?>

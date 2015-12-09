@@ -44,7 +44,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'ASP',
     'COMMENT_SINGLE' => array(1 => "'", 2 => '//'),
     'COMMENT_MULTI' => array('/*' => '*/'),
@@ -160,5 +160,3 @@ $language_data = array (
         3 => true
         )
 );
-
-?>

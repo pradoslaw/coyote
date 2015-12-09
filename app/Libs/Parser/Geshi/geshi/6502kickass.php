@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'MOS 6502 (6510) Kick Assembler format',
     'COMMENT_SINGLE' => array(1 => '//'),
     'COMMENT_MULTI' => array('/*' => '*/'),
@@ -225,17 +225,15 @@ $language_data = array (
             'PRECHECK_RX' => '/[\da-fA-F\.\$\%]/'
             ),
         'KEYWORDS' => array(
-            5 => array (
+            5 => array(
                 'DISALLOWED_BEFORE' => "(?<![a-zA-Z0-9\$_\|\;>|^&'\"])"
                 ),
-            6 => array (
+            6 => array(
                 'DISALLOWED_BEFORE' => "(?<![a-zA-Z0-9\$_\|\;>|^&'\"])"
                 ),
-            8 => array (
+            8 => array(
                 'DISALLOWED_BEFORE' => "(?<![a-zA-Z0-9\$_\|\;>|^&'\"])"
                 )
             )
         ),
 );
-
-?>

@@ -38,7 +38,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'UPC',
     'COMMENT_SINGLE' => array(1 => '//', 2 => '#'),
     'COMMENT_MULTI' => array('/*' => '*/'),
@@ -266,5 +266,3 @@ $language_data = array (
         ),
     'TAB_WIDTH' => 4
 );
-
-?>

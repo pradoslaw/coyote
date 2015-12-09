@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'CIL',
     'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,
     'COMMENT_SINGLE' => array('//'),
@@ -192,5 +192,3 @@ $language_data = array (
         ),
     'TAB_WIDTH' => 4
 );
-
-?>

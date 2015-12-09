@@ -39,7 +39,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Lotus Notes @Formulas',
     'COMMENT_SINGLE' => array(1 => "'"),
     'COMMENT_MULTI' => array('REM' => ';'),
@@ -47,7 +47,7 @@ $language_data = array (
     'QUOTEMARKS' => array('"'),
     'ESCAPE_CHAR' => '',
     'KEYWORDS' => array(
-        1 => array (
+        1 => array(
             '[ZoomPreview]', '[WorkspaceStackReplicaIcons]',
             '[WorkspaceProperties]', '[WindowWorkspace]',
             '[WindowTile]', '[WindowRestore]', '[WindowNext]',
@@ -314,5 +314,3 @@ $language_data = array (
         ),
     'TAB_WIDTH' => 2
     );
-
-?>

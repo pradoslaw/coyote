@@ -43,7 +43,7 @@
 // http://en.wikipedia.org/wiki/BibTeX
 // http://www.fb10.uni-bremen.de/anglistik/langpro/bibliographies/jacobsen-bibtex.html
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'BibTeX',
     'OOLANG' => false,
     'COMMENT_SINGLE' => array(
@@ -179,5 +179,3 @@ $language_data = array (
             )
         )
 );
-
-?>
