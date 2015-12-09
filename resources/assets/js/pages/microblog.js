@@ -45,8 +45,13 @@ $(function () {
 
             $.post($this.attr('href'), function (data) {
                 count = parseInt(data.count);
-                $this.toggleClass('thumbs-on');
                 $this.data('count', count);
+
+                if (!$this.hasClass('thumbs-on')) {
+                    $this.next('.btn-watch').click(); // po doceneniu wpisu automatycznie go obserwujemy
+                }
+
+                $this.toggleClass('thumbs-on');
             })
                 .complete(function () {
                     $this.removeClass('loader');
