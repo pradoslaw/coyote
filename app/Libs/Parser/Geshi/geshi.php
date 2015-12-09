@@ -1,4 +1,7 @@
 <?php
+
+namespace Coyote\Parser;
+
 /**
  * GeSHi - Generic Syntax Highlighter
  *
@@ -257,7 +260,7 @@ define('GESHI_ERROR_INVALID_LINE_NUMBER_TYPE', 5);
  * @author    Nigel McNie <nigel@geshi.org>, Benny Baumann <BenBE@omorphia.de>
  * @copyright (C) 2004 - 2007 Nigel McNie, (C) 2007 - 2008 Benny Baumann
  */
-class geshi
+class Geshi
 {
     /**#@+
      * @access private
