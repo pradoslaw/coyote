@@ -3,10 +3,26 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    /**
+     * @var Forum
+     */
+    private $forum;
+
+    /**
+     * @param Forum $forum
+     */
+    public function __construct(Forum $forum)
+    {
+        parent::__construct();
+
+        $this->forum = $forum;
+    }
+
     /**
      * @param Request $request
      * @return $this
@@ -16,7 +32,7 @@ class HomeController extends Controller
         $this->breadcrumb->push('Forum', route('forum.home'));
 
         // generuje widok osob czytajacych dana strone
-        $viewers = app('Session\Viewers');
+        $viewers = app()->make('Session\Viewers');
 
         return parent::view('forum.home')->with('viewers', $viewers->render($request->getRequestUri()));
     }

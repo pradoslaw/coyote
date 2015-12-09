@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ReputationTypesTableSeeder::class);
         $this->call(MicroblogTableSeeder::class);
         $this->call(AlertTypeTableSeeder::class);
+        $this->call(ForumTableSeeder::class);
     }
 }
