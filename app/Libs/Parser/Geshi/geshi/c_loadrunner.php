@@ -41,7 +41,7 @@
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     // The First Indices
     'LANG_NAME' => 'C (LoadRunner)',
     'COMMENT_SINGLE' => array(1 => '//'),
@@ -319,5 +319,3 @@ $language_data = array (
     // Note that if you are using <pre> tags for your code, then the browser chooses how many spaces your tabs will translate to.
     'TAB_WIDTH' => 4
 );
-
-?>

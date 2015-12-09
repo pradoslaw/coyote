@@ -39,7 +39,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'ZXBasic',
     'COMMENT_SINGLE' => array(
         1 => "'",
@@ -146,5 +146,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-
-?>

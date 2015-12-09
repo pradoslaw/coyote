@@ -47,7 +47,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Objective-C',
     'COMMENT_SINGLE' => array(
         //Compiler directives
@@ -354,5 +354,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-
-?>

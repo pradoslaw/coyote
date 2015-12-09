@@ -52,7 +52,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Bash',
     // Bash DOES have single line comments with # markers. But bash also has
     // the  $# variable, so comments need special handling (see sf.net
@@ -436,5 +436,3 @@ $language_data = array (
             )
         )
 );
-
-?>

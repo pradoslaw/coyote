@@ -33,7 +33,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'POVRAY',
     'COMMENT_SINGLE' => array(1 => '//'),
     'COMMENT_MULTI' => array('/*' => '*/'),
@@ -91,11 +91,11 @@ $language_data = array (
             'sinh', 'sqrt', 'strcmp', 'strlen', 'tan', 'tanh', 'val', 'vdot',
             'vlenght',
             ),
-        3 => array (
+        3 => array(
             'x', 'y', 'z', 't', 'u', 'v', 'red', 'blue',
             'green', 'filter', 'transmit', 'gray', 'e',
             ),
-        4 => array (
+        4 => array(
             'camera', 'background', 'fog', 'sky_sphere', 'rainbow', 'global_settings', 'radiosity', 'photon',
             'object', 'blob', 'sphere', 'cylinder', 'box', 'cone', 'height_field', 'julia_fractal',
             'lathe', 'prism', 'sphere_sweep', 'superellipsoid', 'sor', 'text', 'torus', 'bicubic_patch',
@@ -196,4 +196,3 @@ $language_data = array (
         ),
     'TAB_WIDTH' => 4
 );
-?>

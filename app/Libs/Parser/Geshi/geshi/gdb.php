@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'GDB',
     'COMMENT_SINGLE' => array(),
     'COMMENT_MULTI' => array(),
@@ -193,6 +193,4 @@ $language_data = array (
         )
 );
 
-// kate: replace-tabs on; indent-width 4;
-
-?>
+// kate: replace-tabs on; indent-width 4;;

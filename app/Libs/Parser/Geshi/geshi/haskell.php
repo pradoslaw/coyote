@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Haskell',
     'COMMENT_SINGLE' => array( 1 => '--'),
     'COMMENT_MULTI' => array('{-' => '-}'),
@@ -108,7 +108,7 @@ $language_data = array (
             'readIO', 'readLn', 'ioError', 'userError', 'catch'
             ),
         /* here Prelude Types */
-        4 => array (
+        4 => array(
             'Bool', 'Maybe', 'Either', 'Ord', 'Ordering',
             'Char', 'String', 'Eq', 'Enum', 'Bounded',
             'Int', 'Integer', 'Float', 'Double', 'Rational',
@@ -118,7 +118,7 @@ $language_data = array (
             'IO'
             ),
         /* finally Prelude Exceptions */
-        5 => array (
+        5 => array(
             'IOError', 'IOException'
             )
         ),
@@ -198,5 +198,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-
-?>

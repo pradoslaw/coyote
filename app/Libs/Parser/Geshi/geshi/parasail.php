@@ -39,7 +39,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'ParaSail',
     'COMMENT_SINGLE' => array(1 => '//'),
     'COMMENT_MULTI' => array('{' => '}'),
@@ -58,10 +58,10 @@ $language_data = array (
             ),
         3 => array(
             'abstract', 'class',
-            'concurrent', 'const', 
-            'end', 'extends', 'exports', 
+            'concurrent', 'const',
+            'end', 'extends', 'exports',
             'func', 'global', 'implements', 'import',
-            'interface', 'is', 'lambda', 'locked', 
+            'interface', 'is', 'lambda', 'locked',
             'new', 'of', 'op', 'optional',
             'private', 'queued', 'ref',
             'separate', 'type', 'var',
@@ -129,5 +129,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-
-?>

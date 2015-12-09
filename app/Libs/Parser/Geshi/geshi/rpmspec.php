@@ -34,7 +34,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'RPM Specification File',
     'COMMENT_SINGLE' => array(1 => '#'),
     'COMMENT_MULTI' => array(),
@@ -105,7 +105,7 @@ $language_data = array (
             GESHI_BEFORE => '',
             GESHI_AFTER => '',
             ),
-        3 => array (
+        3 => array(
             // special definitions
             GESHI_SEARCH => '((?:summary|license|buildroot|buildrequires|provides|version|release|source\d*|group|buildarch|autoreqprov|provides|obsoletes|vendor|distribution|suggests|autoreq|autoprov|conflicts|name|url|requires|patch\d*):)',
             GESHI_REPLACE => '\\1',
@@ -113,7 +113,7 @@ $language_data = array (
             GESHI_BEFORE => '',
             GESHI_AFTER => '',
             ),
-        4 => array (
+        4 => array(
             // section delimiting words
             GESHI_SEARCH => '(%(?:description|package|prep|build|install|clean|postun|preun|post|pre|files|changelog))',
             GESHI_REPLACE => '\\1',
@@ -129,5 +129,3 @@ $language_data = array (
     'STRICT_MODE_APPLIES' => GESHI_NEVER,
     'SCRIPT_DELIMITERS' => array(),
 );
-
-?>

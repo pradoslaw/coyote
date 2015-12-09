@@ -46,7 +46,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'D',
     'COMMENT_SINGLE' => array(2 => '///', 1 => '//'),
     'COMMENT_MULTI' => array('/*' => '*/', '/+' => '+/'),
@@ -248,5 +248,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-
-?>

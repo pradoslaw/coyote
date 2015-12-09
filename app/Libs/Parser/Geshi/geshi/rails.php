@@ -29,7 +29,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Rails',
     'COMMENT_SINGLE' => array(1 => "#"),
     'COMMENT_MULTI' => array("=begin" => "=end"),
@@ -402,5 +402,3 @@ $language_data = array (
         0 => true,
         )
 );
-
-?>

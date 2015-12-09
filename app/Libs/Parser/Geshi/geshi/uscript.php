@@ -42,7 +42,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Unreal Script',
     'COMMENT_SINGLE' => array(
             1 => '//',
@@ -295,5 +295,3 @@ $language_data = array (
             )
         )
 );
-
-?>

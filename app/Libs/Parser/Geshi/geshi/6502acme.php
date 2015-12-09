@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'MOS 6502 (6510) ACME Cross Assembler format',
     'COMMENT_SINGLE' => array(1 => ';'),
     'COMMENT_MULTI' => array(),
@@ -226,5 +226,3 @@ $language_data = array (
             )
         )
 );
-
-?>

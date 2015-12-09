@@ -41,7 +41,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'ARM ASSEMBLER',
     'COMMENT_SINGLE' => array(
         1 => ';'
@@ -3314,5 +3314,3 @@ $language_data = array (
         )
     )
 );
-
-?>

@@ -37,7 +37,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Smarty',
     'COMMENT_SINGLE' => array(),
     'COMMENT_MULTI' => array('{*' => '*}'),
@@ -188,5 +188,3 @@ $language_data = array (
         )
     )
 );
-
-?>

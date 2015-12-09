@@ -40,7 +40,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'GNU Octave',
     'COMMENT_SINGLE' => array(1 => '#', 2 => '%'),
     // we can't use COMMENT_MULTI since start and end of block comments need to
@@ -398,7 +398,7 @@ $language_data = array (
             'WIFSTOPPED', 'WNOHANG', 'WSTOPSIG', 'WTERMSIG', 'WUNTRACED'
             ),
         // Constant functions
-        10 => array (
+        10 => array(
             'e', 'eps', 'inf', 'Inf', 'nan', 'NaN', 'NA', 'pi', 'i', 'I', 'j',
             'J', 'true', 'false'
             ),
@@ -511,5 +511,3 @@ $language_data = array (
         'SCRIPT' => array(),
         )
 );
-
-?>

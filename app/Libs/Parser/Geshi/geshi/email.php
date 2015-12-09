@@ -39,7 +39,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'eMail (mbox)',
     'COMMENT_SINGLE' => array(),
     'COMMENT_MULTI' => array(),
@@ -218,5 +218,3 @@ $language_data = array (
         )
     )
 );
-
-?>

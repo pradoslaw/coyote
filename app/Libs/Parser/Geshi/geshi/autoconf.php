@@ -29,7 +29,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Autoconf',
     'COMMENT_SINGLE' => array(2 => '#'),
     'COMMENT_MULTI' => array(),
@@ -508,5 +508,3 @@ $language_data = array (
             )
         )
 );
-
-?>

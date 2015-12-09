@@ -38,7 +38,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'FO (abas-ERP)',
     'COMMENT_SINGLE' => array(1 => '..'),
     'COMMENT_MULTI' => array(),
@@ -91,12 +91,12 @@ $language_data = array (
             ),
 
         // interpreter settings
-        5 => array (
+        5 => array(
             '..!INTERPRETER', 'DEBUG'
             ),
 
         // database commands
-        6 => array (
+        6 => array(
             '.hole', '.hol', '.select',
             '.lade', '.load',
             '.aktion', '.action',
@@ -155,7 +155,7 @@ $language_data = array (
             ),
 
         // output settings
-        7 => array (
+        7 => array(
             '.absatz', '.para',
             '.blocksatz', '.justified',
             '.flattersatz', '.unjustified',
@@ -175,7 +175,7 @@ $language_data = array (
             ),
 
         // text commands
-        8 => array (
+        8 => array(
             '.text',
             '.atext',
             '.println',
@@ -183,7 +183,7 @@ $language_data = array (
             ),
 
         // I/O commands
-        9 => array (
+        9 => array(
             '.aus', '.ausgabe', '.output',
             '.ein', '.eingabe', '.input',
             '.datei', '.file',
@@ -196,7 +196,7 @@ $language_data = array (
             ),
 
         //system
-        10 => array (
+        10 => array(
             '.browser',
             '.kommando', '.command',
             '.system', '.dde',
@@ -215,7 +215,7 @@ $language_data = array (
             ),
 
         //fibu/accounting specific commands
-        11 => array (
+        11 => array(
             '.budget',
             '.chart',
             'VKZ',
@@ -228,7 +228,7 @@ $language_data = array (
             ),
 
         // efop - extended flexible surface
-        12 => array (
+        12 => array(
             '.cursor',
             '.farbe', '.colour',
             '.fenster', '.window',
@@ -324,4 +324,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         )
 );
-?>

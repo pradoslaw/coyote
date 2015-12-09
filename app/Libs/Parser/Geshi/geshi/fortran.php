@@ -41,7 +41,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME'=>'Fortran',
     'COMMENT_SINGLE'=> array(1 =>'!',2=>'Cf2py'),
     'COMMENT_MULTI'=> array(),
@@ -156,5 +156,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK'=> array(
         )
 );
-
-?>

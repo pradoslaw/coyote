@@ -38,7 +38,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Autohotkey',
     'COMMENT_SINGLE' => array(
         1 => ';'
@@ -369,5 +369,3 @@ $language_data = array (
             )
         )
 );
-
-?>

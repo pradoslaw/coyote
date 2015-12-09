@@ -43,7 +43,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'ZiLOG Z80 Assembler',
     'COMMENT_SINGLE' => array(1 => ';'),
     'COMMENT_MULTI' => array(),
@@ -140,5 +140,3 @@ $language_data = array (
         ),
     'TAB_WIDTH' => 8
 );
-
-?>

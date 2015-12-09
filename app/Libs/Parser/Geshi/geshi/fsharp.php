@@ -100,7 +100,7 @@ $language_data = array(
             'async', 'seq', 'dict'
             ),
         /* 17.2 Exceptions */
-        5 => array (
+        5 => array(
             'failwith', 'invalidArg', 'raise', 'rethrow'
             ),
         /* 3.3 Conditional compilation & 13.3 Compiler Directives + light / light off */
@@ -209,5 +209,3 @@ $language_data = array(
         )
     )
 );
-
-?>

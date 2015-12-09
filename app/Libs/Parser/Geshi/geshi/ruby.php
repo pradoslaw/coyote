@@ -36,7 +36,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'Ruby',
     'COMMENT_SINGLE' => array(1 => "#"),
     'COMMENT_MULTI' => array("=begin" => "=end"),
@@ -227,5 +227,3 @@ $language_data = array (
         ),
     'TAB_WIDTH' => 2
 );
-
-?>

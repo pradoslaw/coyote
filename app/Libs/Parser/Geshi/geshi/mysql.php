@@ -44,7 +44,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'MySQL',
     //'COMMENT_SINGLE' => array(1 =>'--', 2 => '#'),    // '--' MUST be folowed by whitespace,not necessarily a space
     'COMMENT_SINGLE' => array(
@@ -471,5 +471,3 @@ $language_data = array (
             )
         )
 );
-
-?>

@@ -46,7 +46,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'PowerShell',
     'COMMENT_SINGLE' => array(1 => '#'),
     'COMMENT_MULTI' => array('<#' => '#>'),
@@ -235,7 +235,7 @@ $language_data = array (
             ),
         // Members
         // There's about a hundred million of these, add the ones you need as you need them
-        5 => array (
+        5 => array(
             GESHI_SEARCH => '(::)(ReflectionOnlyLoadFrom|ReflectionOnlyLoad|ReferenceEquals|LoadWithPartialName|LoadFrom|LoadFile|Load|GetExecutingAssembly|GetEntryAssembly|GetCallingAssembly|GetAssembly|Equals|DefaultNetworkCredentials|DefaultCredentials|CreateQualifiedName|Checkout|Draft|Published|IsPublishingWeb)',
             GESHI_REPLACE => '\2',
             GESHI_MODIFIERS => '',
@@ -273,5 +273,3 @@ $language_data = array (
             )
         )
 );
-
-?>

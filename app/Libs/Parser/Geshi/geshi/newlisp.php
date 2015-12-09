@@ -39,7 +39,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'newlisp',
     'COMMENT_SINGLE' => array(1 => ';', 2 => '#'),
     'COMMENT_MULTI' => array('[text]' => '[/text]', '{' => '}'), // also used for strings
@@ -187,5 +187,3 @@ $language_data = array (
         ),
 
 );
-
-?>

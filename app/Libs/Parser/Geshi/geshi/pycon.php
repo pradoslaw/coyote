@@ -54,11 +54,9 @@ $language_data['HIGHLIGHT_STRICT_BLOCK'][-1] = true;
 
 $language_data['STYLES']['SCRIPT'][-1] = 'color: #222222;';
 
-if(!isset($language_data['COMMENT_REGEXP'])) {
+if (!isset($language_data['COMMENT_REGEXP'])) {
     $language_data['COMMENT_REGEXP'] = array();
 }
 
 $language_data['COMMENT_REGEXP'][-1] = '/(?:^|\A\s)(?:>>>|\.\.\.)/m';
 $language_data['STYLES']['COMMENTS'][-1] = 'color: #444444;';
-
-?>

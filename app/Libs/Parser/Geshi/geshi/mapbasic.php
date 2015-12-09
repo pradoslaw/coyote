@@ -40,7 +40,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'MapBasic',
     'COMMENT_SINGLE' => array(1 => "'"),
     'COMMENT_MULTI' => array(),
@@ -904,5 +904,3 @@ $language_data = array (
     'HIGHLIGHT_STRICT_BLOCK' => array(
         ),
 );
-
-?>

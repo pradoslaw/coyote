@@ -43,7 +43,7 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'ESCAPE_CHAR' => null,
     'LANG_NAME' => 'MagikSF',
     'COMMENT_SINGLE' => array(1 => '##', 2 => '#%', 3 => '#'),
@@ -189,5 +189,3 @@ $language_data = array (
         ),
     'TAB_WIDTH' => 4
 );
-
-?>
