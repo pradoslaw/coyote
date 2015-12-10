@@ -18,7 +18,7 @@ class Geshi implements ProviderInterface
 
         $alias = ['html' => 'html5'];
 
-        $geshi = new \Coyote\Parser\Geshi('', '');
+        $geshi = new \Coyote\Parser\geshi('', '');
         $geshi->line_ending = "\n";
         /* tekst bedzie zawarty w	znaczniku <pre>	*/
         $geshi->set_header_type(GESHI_HEADER_NONE);
