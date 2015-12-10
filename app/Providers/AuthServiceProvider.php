@@ -2,8 +2,10 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Forum;
 use Coyote\Microblog;
 use Coyote\Policies\MicroblogPolicy;
+use Coyote\Policies\ForumPolicy;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -15,8 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-        Microblog::class => MicroblogPolicy::class
+        Microblog::class => MicroblogPolicy::class,
+        Forum::class => ForumPolicy::class
     ];
 
     /**
