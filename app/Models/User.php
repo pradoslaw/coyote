@@ -128,12 +128,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function check($ability)
     {
         if (is_null($this->permissions)) {
+            // get user's permissions
             $acl = $this->permissions()
-                        ->join('acl_permissions AS p', 'p.id', '=', 'acl_data.permission_id')
-                        ->orderBy('value')
-                        ->select(['name', 'value'])
-                        ->get()
-                        ->lists('value', 'name');
+                    ->join('acl_permissions AS p', 'p.id', '=', 'acl_data.permission_id')
+                    ->orderBy('value')
+                    ->select(['name', 'value'])
+                    ->get()
+                    ->lists('value', 'name');
 
             $this->permissions = json_encode($acl);
             $this->save();
