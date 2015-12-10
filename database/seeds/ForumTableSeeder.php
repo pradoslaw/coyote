@@ -11,47 +11,47 @@ class ForumTableSeeder extends Seeder
      */
     public function run()
     {
-//        \DB::table('acl_permissions')->insert([
-//            'name'           => 'forum-sticky',
-//            'description'    => 'Zakładanie przyklejonych tematów',
-//            'default'        => false
-//        ]);
-//
-//        \DB::table('acl_permissions')->insert([
-//            'name'           => 'forum-announcement',
-//            'description'    => 'Pisanie ogłoszeń',
-//            'default'        => false
-//        ]);
-//
-//        \DB::table('acl_permissions')->insert([
-//            'name'           => 'forum-delete',
-//            'description'    => 'Kasowanie wątków i komentarzy',
-//            'default'        => false
-//        ]);
-//
-//        \DB::table('acl_permissions')->insert([
-//            'name'           => 'forum-edit',
-//            'description'    => 'Edycja postów i komentarzy',
-//            'default'        => false
-//        ]);
-//
-//        \DB::table('acl_permissions')->insert([
-//            'name'           => 'forum-lock',
-//            'description'    => 'Blokowanie wątków',
-//            'default'        => false
-//        ]);
-//
-//        \DB::table('acl_permissions')->insert([
-//            'name'           => 'forum-move',
-//            'description'    => 'Przenoszenie wątków',
-//            'default'        => false
-//        ]);
-//
-//        \DB::table('acl_permissions')->insert([
-//            'name'           => 'forum-merge',
-//            'description'    => 'Łączenie postów',
-//            'default'        => false
-//        ]);
+        \DB::table('acl_permissions')->insert([
+            'name'           => 'forum-sticky',
+            'description'    => 'Zakładanie przyklejonych tematów',
+            'default'        => false
+        ]);
+
+        \DB::table('acl_permissions')->insert([
+            'name'           => 'forum-announcement',
+            'description'    => 'Pisanie ogłoszeń',
+            'default'        => false
+        ]);
+
+        \DB::table('acl_permissions')->insert([
+            'name'           => 'forum-delete',
+            'description'    => 'Kasowanie wątków i komentarzy',
+            'default'        => false
+        ]);
+
+        \DB::table('acl_permissions')->insert([
+            'name'           => 'forum-edit',
+            'description'    => 'Edycja postów i komentarzy',
+            'default'        => false
+        ]);
+
+        \DB::table('acl_permissions')->insert([
+            'name'           => 'forum-lock',
+            'description'    => 'Blokowanie wątków',
+            'default'        => false
+        ]);
+
+        \DB::table('acl_permissions')->insert([
+            'name'           => 'forum-move',
+            'description'    => 'Przenoszenie wątków',
+            'default'        => false
+        ]);
+
+        \DB::table('acl_permissions')->insert([
+            'name'           => 'forum-merge',
+            'description'    => 'Łączenie postów',
+            'default'        => false
+        ]);
 
         Coyote\Forum::create([
             'name' => 'Newbie',
