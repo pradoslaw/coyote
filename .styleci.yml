@@ -6,3 +6,4 @@ disabled:
 finder:
   exclude:
     - "tests"
+    - "Geshi"
