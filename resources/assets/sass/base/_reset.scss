@@ -1,13 +1,11 @@
 @charset "UTF-8";
 
-::selection
-{
+::selection {
   background-color: #444;
-  color:            #fff;
+  color: #fff;
 }
 
-::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder
-{
+::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
   color: #999;
 }
 
@@ -15,16 +13,7 @@
   max-width: 1600px;
   margin: auto;
 }
-//html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td
-//{
-//  margin:         0;
-//  padding:        0;
-//  border:         none;
-//  vertical-align: baseline;
-//  background:     transparent;
-//}
-//
-//header, footer, nav, aside
-//{
-//  display: block;
-//}
+
+pre {
+  background: rgba(234, 239, 242, 0.45) url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAL0lEQVQYV2NkwALevXuXJiQkNAtZinEAFb59+3YmuvWMjIxn////bzxY3Ej14AEA0LUraxfkjiYAAAAASUVORK5CYII=') repeat;
+}
