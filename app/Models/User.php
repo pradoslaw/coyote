@@ -103,6 +103,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function groups()
+    {
+        return $this->hasManyThrough('Coyote\Group', 'Coyote\User\Group', null, 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function permissions()
+    {
+        return $this->hasManyThrough('Coyote\Acl\Data', 'Coyote\User\Group');
+    }
+
+    /**
      * Sprawdza uprawnienie danego usera (w bazie danych) do wykonania danej czynnosci. Sprawdzane
      * sa wszystkie grupy uzytkownika do ktorych jest przypisany
      *
@@ -112,13 +128,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function check($ability)
     {
         if (is_null($this->permissions)) {
-            $acl = Acl\Data::select(['name', 'value'])
-                    ->join('user_groups AS ug', 'ug.user_id', '=', \DB::raw($this->id))
-                    ->join('acl_permissions AS p', 'p.id', '=', 'acl_data.permission_id')
-                    ->where('acl_data.group_id', '=', \DB::raw('ug.group_id'))
-                    ->orderBy('value')
-                    ->get()
-                    ->lists('value', 'name');
+            $acl = $this->permissions()
+                        ->join('acl_permissions AS p', 'p.id', '=', 'acl_data.permission_id')
+                        ->orderBy('value')
+                        ->select(['name', 'value'])
+                        ->get()
+                        ->lists('value', 'name');
 
             $this->permissions = json_encode($acl);
             $this->save();
