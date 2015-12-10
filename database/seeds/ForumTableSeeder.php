@@ -59,6 +59,5 @@ class ForumTableSeeder extends Seeder
             'section' => 'Podstawy programowania',
             'description' => 'Jeżeli jesteś kompletnym laikiem jeżeli chodzi o programowanie, to jest odpowiednia kategoria dla Ciebie. Tutaj możesz zadawać pytania o podstawy programowania, nie narażając się, że Twój temat zostanie skasowany z powodu niskiego poziomu merytorycznego.'
         ]);
-
     }
 }
