@@ -79,67 +79,67 @@ Route::get('Pastebin', ['uses' => 'Pastebin\HomeController@index', 'as' => 'past
 Route::get('Pastebin/{id}', ['uses' => 'Pastebin\HomeController@show', 'as' => 'pastebin.show'])->where('id', '\d+');
 Route::post('Pastebin', ['uses' => 'Pastebin\HomeController@save']);
 
-Route::group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth'], function () {
+Route::group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth', 'as' => 'user.'], function () {
 
     // strona glowna panelu uzytkownika
-    Route::get('/', ['uses' => 'HomeController@index', 'as' => 'user.home']);
+    Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
     // dodawanie i usuwanie zdjecia uzytkownika
-    Route::post('Photo/Upload', ['uses' => 'HomeController@upload', 'as' => 'user.photo.upload']);
-    Route::post('Photo/Delete', ['uses' => 'HomeController@delete', 'as' => 'user.photo.delete']);
+    Route::post('Photo/Upload', ['uses' => 'HomeController@upload', 'as' => 'photo.upload']);
+    Route::post('Photo/Delete', ['uses' => 'HomeController@delete', 'as' => 'photo.delete']);
 
     // ustawienia uzytkownika
-    Route::get('Settings', ['uses' => 'SettingsController@index', 'as' => 'user.settings']);
+    Route::get('Settings', ['uses' => 'SettingsController@index', 'as' => 'settings']);
     Route::post('Settings', 'SettingsController@save');
 
-    Route::get('Visits', ['uses' => 'VisitsController@index', 'as' => 'user.visits']);
+    Route::get('Visits', ['uses' => 'VisitsController@index', 'as' => 'visits']);
     Route::post('Visits', 'VisitsController@save');
 
-    Route::get('Alerts', ['uses' => 'AlertsController@index', 'as' => 'user.alerts']);
-    Route::get('Alerts/Settings', ['uses' => 'AlertsController@settings', 'as' => 'user.alerts.settings']);
+    Route::get('Alerts', ['uses' => 'AlertsController@index', 'as' => 'alerts']);
+    Route::get('Alerts/Settings', ['uses' => 'AlertsController@settings', 'as' => 'alerts.settings']);
     Route::post('Alerts/Settings', 'AlertsController@save');
     Route::get('Alerts/Ajax', 'AlertsController@ajax');
     Route::post('Alerts/Mark/{id?}', 'AlertsController@markAsRead');
     Route::post('Alerts/Delete/{id}', 'AlertsController@delete');
 
-    Route::get('Pm', ['uses' => 'PmController@index', 'as' => 'user.pm']);
-    Route::get('Pm/Show/{id}', ['uses' => 'PmController@show', 'as' => 'user.pm.show']);
-    Route::get('Pm/Submit', ['uses' => 'PmController@submit', 'as' => 'user.pm.submit']);
+    Route::get('Pm', ['uses' => 'PmController@index', 'as' => 'pm']);
+    Route::get('Pm/Show/{id}', ['uses' => 'PmController@show', 'as' => 'pm.show']);
+    Route::get('Pm/Submit', ['uses' => 'PmController@submit', 'as' => 'pm.submit']);
     Route::post('Pm/Submit', 'PmController@save');
-    Route::post('Pm/Delete/{id}', 'PmController@delete')->name('user.pm.delete');
-    Route::post('Pm/Preview', 'PmController@preview')->name('user.pm.preview');
-    Route::get('Pm/Ajax', 'PmController@ajax')->name('user.pm.ajax');
+    Route::post('Pm/Delete/{id}', 'PmController@delete')->name('pm.delete');
+    Route::post('Pm/Preview', 'PmController@preview')->name('pm.preview');
+    Route::get('Pm/Ajax', 'PmController@ajax')->name('pm.ajax');
 
-    Route::get('Favorites', ['uses' => 'FavoritesController@index', 'as' => 'user.favorites']);
+    Route::get('Favorites', ['uses' => 'FavoritesController@index', 'as' => 'favorites']);
     Route::post('Favorites', 'FavoritesController@save');
 
-    Route::get('Profiles', ['uses' => 'ProfilesController@index', 'as' => 'user.profiles']);
+    Route::get('Profiles', ['uses' => 'ProfilesController@index', 'as' => 'profiles']);
     Route::post('Profiles', 'ProfilesController@save');
 
-    Route::get('Rates', ['uses' => 'RatesController@index', 'as' => 'user.rates']);
+    Route::get('Rates', ['uses' => 'RatesController@index', 'as' => 'rates']);
     Route::post('Rates', 'RatesController@save');
 
-    Route::get('Stats', ['uses' => 'StatsController@index', 'as' => 'user.stats']);
+    Route::get('Stats', ['uses' => 'StatsController@index', 'as' => 'stats']);
     Route::post('Stats', 'StatsController@save');
 
-    Route::get('Accepts', ['uses' => 'AcceptsController@index', 'as' => 'user.accepts']);
+    Route::get('Accepts', ['uses' => 'AcceptsController@index', 'as' => 'accepts']);
     Route::post('Accepts', 'AcceptsController@save');
 
-    Route::get('Skills', ['uses' => 'SkillsController@index', 'as' => 'user.skills']);
+    Route::get('Skills', ['uses' => 'SkillsController@index', 'as' => 'skills']);
     Route::post('Skills', 'SkillsController@save');
-    Route::post('Skills/Order', ['uses' => 'SkillsController@order', 'as' => 'user.skills.order']);
-    Route::post('Skills/{id}', ['uses' => 'SkillsController@delete', 'as' => 'user.skills.delete']);
+    Route::post('Skills/Order', ['uses' => 'SkillsController@order', 'as' => 'skills.order']);
+    Route::post('Skills/{id}', ['uses' => 'SkillsController@delete', 'as' => 'skills.delete']);
 
-    Route::get('Security', ['uses' => 'SecurityController@index', 'as' => 'user.security']);
+    Route::get('Security', ['uses' => 'SecurityController@index', 'as' => 'security']);
     Route::post('Security', 'SecurityController@save');
 
-    Route::get('Password', ['uses' => 'PasswordController@index', 'as' => 'user.password']);
+    Route::get('Password', ['uses' => 'PasswordController@index', 'as' => 'password']);
     Route::post('Password', 'PasswordController@save');
 
-    Route::get('Forum', ['uses' => 'ForumController@index', 'as' => 'user.forum']);
+    Route::get('Forum', ['uses' => 'ForumController@index', 'as' => 'forum']);
     Route::post('Forum', 'ForumController@save');
 
     // Generowanie linka potwierdzajacego autentycznosc adresu e-mail
-    Route::get('Confirm', ['uses' => 'ConfirmController@index', 'as' => 'user.confirm']);
+    Route::get('Confirm', ['uses' => 'ConfirmController@index', 'as' => 'confirm']);
     Route::post('Confirm', ['uses' => 'ConfirmController@send']);
 });
 
