@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -31,10 +32,21 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Forum', route('forum.home'));
 
-        // generuje widok osob czytajacych dana strone
-        $viewers = app()->make('Session\Viewers');
+        if (auth()->check()) {
+            $groupsId = auth()->user()->groups()->lists('id');
 
-        return parent::view('forum.home')->with('viewers', $viewers->render($request->getRequestUri()));
+            if ($groupsId) {
+                $this->forum->pushCriteria(new OnlyThoseWithAccess($groupsId->toArray()));
+            }
+        }
+
+        // execute query: get all categories that user can has access
+        $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId());
+
+        // create view with online users
+        $viewers = app()->make('Session\Viewers')->render($request->getRequestUri());
+
+        return parent::view('forum.home')->with(compact('sections', 'viewers'));
     }
 
     /**

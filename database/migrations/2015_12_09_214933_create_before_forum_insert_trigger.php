@@ -15,7 +15,7 @@ class CreateBeforeForumInsertTrigger extends Migration
         DB::unprepared('
 CREATE FUNCTION before_forum_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
-	NEW."order" := (SELECT COALESCE(MAX("order"), 0) FROM forums) + 1;
+	NEW."order" := (SELECT COALESCE(MAX("order"), 0) FROM forums WHERE COALESCE(parent_id, 0) = COALESCE(NEW.parent_id, 0)) + 1;
 
 	RETURN NEW;
 END;$$;

@@ -14,90 +14,71 @@
         {% include "forum/_top.twig" %}
 
         <main id="mainbar">
-            <section class="panel panel-wrapper">
-                <div class="panel-body">
-                    <h2 class="pull-left">Podstawy programowania</h2>
+            {% for name, forums in sections %}
+                <section class="panel panel-wrapper">
+                    <div class="panel-body">
+                        <h2 class="pull-left">{{ name }}</h2>
 
-                    <a class="pull-right toggle in" data-toggle="collapse" href="#collapse-6" aria-expanded="true">
-                        <i class="fa fa-minus-square-o"></i>
-                        <i class="fa fa-plus-square-o"></i>
-                    </a>
+                        <a class="pull-right toggle in" data-toggle="collapse" href="#{{ name }}" aria-expanded="true">
+                            <i class="fa fa-minus-square-o"></i>
+                            <i class="fa fa-plus-square-o"></i>
+                        </a>
 
-                    <div class="clearfix"></div>
+                        <div class="clearfix"></div>
 
-                    <div class="box-forum collapse in" id="collapse-6">
-                        <table>
-                            <tbody>
-                                <tr id="forum-6">
-                                    <td class="col-icon">
-                                        <a href="#" title="Kliknij, aby odnzaczyć jako przeczytane">
-                                            <img class="img-responsive center-block" src="/img/forum-new.png">
-                                        </a>
-                                    </td>
-                                    <td class="col-forum-description">
-                                        <h3><a title="Python" data-category="Forum-Name" href="/Forum/Python">Python</a></h3>
+                        <div class="box-forum collapse in" id="{{ name }}">
+                            <table>
+                                <tbody>
+                                    {% for forum in forums %}
+                                        <tr id="forum-{{ forum.id }}">
+                                            <td class="col-icon">
+                                                <a href="#" title="Kliknij, aby odnzaczyć jako przeczytane">
+                                                    <img class="img-responsive center-block" src="/img/forum-new.png">
+                                                </a>
+                                            </td>
+                                            <td class="col-forum-description">
+                                                <h3><a title="{{ forum.name }}" data-category="Forum-Name" href="{{ route('forum.category', [forum.path]) }}">{{ forum.name }}</a></h3>
 
-                                        <p>Wszystkie tematy związane z językiem Python. W tym Django, Flask, Pyramid, Twisted czy Tornado.</p>
-                                    </td>
-                                    <td class="col-stats hidden-md hidden-sm hidden-xs">
-                                        <p title="Ilość wątków"><strong>1,732</strong> <small>wątków</small></p>
-                                        <p title="Ilość postów"><strong>9,718</strong> <small>postów</small></p>
-                                    </td>
-                                    <td class="col-avatar hidden-md hidden-sm hidden-xs">
-                                        <a href="http://4programmers.net/Profile/70446">
-                                            <img class="img-thumbnail" src="http://4programmers.net/template/img/avatar.png">
-                                        </a>
-                                    </td>
-                                    <td class="col-post-preview hidden-sm hidden-xs">
-                                        <p>
-                                            <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="topic-last" href="#?view=unread"></a>
+                                                <p>{{ forum.description }}</p>
 
-                                            <a title="Porównywanie czy pliki sa takie same" href="#?p=1177861#id1177861">Porównywanie czy pliki sa takie same</a>
-                                        </p>
-                                        <p>
-                                            <span class="timestamp" data-timestamp="1442897046" title="22 wrzesień 2015, 06:44">22 wrzesień 2015, 06:44,</span>
-                                            <a data-user-id="70446" href="http://4programmers.net/Profile/70446">Mr.YaHooo</a>
-                                        </p>
-                                    </td>
-                                </tr>
+                                                {% if forum.subs %}
+                                                    <ul class="list-unstyled">
+                                                        {% for sub in forum.subs %}
+                                                            <li>
+                                                                <a href="{{ route('forum.category', [forum.path]) }}">{{ sub.name }}</a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                            </td>
+                                            <td class="col-stats hidden-md hidden-sm hidden-xs">
+                                                <p title="Ilość wątków"><strong>{{ forum.topics|number_format(0, ',', ' ') }}</strong> <small>wątków</small></p>
+                                                <p title="Ilość postów"><strong>{{ forum.posts|number_format(0, ',', ' ') }}</strong> <small>postów</small></p>
+                                            </td>
+                                            <td class="col-avatar hidden-md hidden-sm hidden-xs">
+                                                <a href="http://4programmers.net/Profile/70446">
+                                                    <img class="img-thumbnail" src="http://4programmers.net/template/img/avatar.png">
+                                                </a>
+                                            </td>
+                                            <td class="col-post-preview hidden-sm hidden-xs">
+                                                <p>
+                                                    <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="topic-last" href="#?view=unread"></a>
 
-                                <tr id="forum-6">
-                                    <td class="col-icon">
-                                        <a href="#" title="Kliknij, aby odnzaczyć jako przeczytane">
-                                            <img class="img-responsive center-block" src="/img/forum-new.png">
-                                        </a>
-                                    </td>
-                                    <td class="col-forum-description">
-                                        <h3><a title="Algorytmy i struktury danych" data-category="Forum-Name" href="http://forum.4programmers.net/Algorytmy">Algorytmy i struktury danych</a></h3>
-
-                                        <p>Forum poświęcone zagadnieniom związanym z procesem wytwarzania oprogramowania, takim jak tworzenie, testowanie, debugowanie, UML itp.</p>
-                                    </td>
-                                    <td class="col-stats hidden-md hidden-sm hidden-xs">
-                                        <p title="Ilość wątków"><strong>1,732</strong> <small>wątków</small></p>
-                                        <p title="Ilość postów"><strong>9,718</strong> <small>postów</small></p>
-                                    </td>
-                                    <td class="col-avatar hidden-md hidden-sm hidden-xs">
-                                        <a href="http://4programmers.net/Profile/70446">
-                                            <img class="img-thumbnail" src="/img/shalom.png">
-                                        </a>
-                                    </td>
-                                    <td class="col-post-preview hidden-sm hidden-xs">
-                                        <p>
-                                            <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="topic-last" href="http://forum.4programmers.net/Algorytmy/258268-porownywanie_czy_pliki_sa_takie_same?view=unread"></a>
-
-                                            <a title="Porównywanie czy pliki sa takie same" href="http://forum.4programmers.net/Algorytmy/258268-porownywanie_czy_pliki_sa_takie_same?p=1177861#id1177861">Porównywanie czy pliki sa takie same</a>
-                                        </p>
-                                        <p>
-                                            <span class="timestamp" data-timestamp="1442897046" title="22 wrzesień 2015, 06:44">22 wrzesień 2015, 06:44,</span>
-                                            <a data-user-id="70446" href="http://4programmers.net/Profile/70446">Mr.YaHooo</a>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                                    <a title="Porównywanie czy pliki sa takie same" href="#?p=1177861#id1177861">Porównywanie czy pliki sa takie same</a>
+                                                </p>
+                                                <p>
+                                                    <span class="timestamp" data-timestamp="1442897046" title="22 wrzesień 2015, 06:44">22 wrzesień 2015, 06:44,</span>
+                                                    <a data-user-id="70446" href="http://4programmers.net/Profile/70446">Mr.YaHooo</a>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            {% endfor %}
 
             <section class="panel panel-wrapper">
                 <div class="panel-body">
