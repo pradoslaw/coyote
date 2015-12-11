@@ -27,6 +27,7 @@ class Kernel extends HttpKernel
         'auth'       => Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest'      => Middleware\RedirectIfAuthenticated::class,
-        'adm'        => Middleware\AdmAccess::class
+        'adm'        => Middleware\AdmAccess::class,
+        'forum.access' => Middleware\ForumAccess::class
     ];
 }

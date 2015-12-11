@@ -31,14 +31,31 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // strona glowna forum
     Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
-    // formularz dodawania nowego watku na forum
-    Route::get('Submit/{forum}', ['uses' => 'HomeController@submit', 'as' => 'submit']);
-    Route::post('Submit/{forum}', 'HomeController@save');
-
     // widok kategorii forum
-    Route::get('{category}', ['uses' => 'CategoryController@index', 'as' => 'category']);
-    // widok wyswietlania watku
-    Route::get('{category}/{id}-{slug}', 'TopicController@index');
+    Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category']);
+    // widok wyswietlania watku. {id} zawiera unikalne id watku
+    Route::get('{forum}/{id}-{slug}', ['TopicController@index', 'as' => 'topic']);
+
+    // formularz dodawania nowego watku na forum
+    Route::get('{forum}/Submit', ['uses' => 'TopicController@submit', 'as' => 'topic.submit']);
+    Route::post('{forum}/Submit', 'TopicController@save');
+
+    // dodawanie lub edycja posta na forum
+    Route::get('{forum}/{id}/Submit/{postId?}', ['uses' => 'PostController@submit', 'as' => 'post.submit']);
+    Route::post('{forum/{id}/Submit/{postId?}', 'PostController@save');
+
+    // usuwanie posta
+    Route::post('Delete/{id}', ['uses' => 'PostController@delete', 'as' => 'delete', 'middleware' => 'auth']);
+
+    // blokowanie watku
+    Route::post('Lock/{id}', ['uses' => 'TopicController@lock', 'as' => 'lock', 'middleware' => 'auth']);
+
+    // edycja/publikacja komentarza oraz jego usuniecie
+    Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);
+    Route::get('Comment/{id}', ['uses' => 'CommentController@edit', 'middleware' => 'auth']);
+    Route::post('Comment/Delete/{id}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
+    // pokaz reszte komentarzy...
+    Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
 });
 
 Route::get('Praca', ['uses' => 'Job\HomeController@index', 'as' => 'job.home']);
@@ -51,27 +68,27 @@ Route::get('/Delphi/Lorem_ipsum', ['as' => 'article', 'uses' => 'Wiki\WikiContro
 Route::get('Praca/Lorem_ipsum', ['uses' => 'Job\OfferController@index', 'as' => 'job.offer']);
 
 // Obsluga mikroblogow
-Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi'], function () {
-    Route::get('/', ['uses' => 'HomeController@index', 'as' => 'microblog.home']);
-    Route::post('Edit/{id?}', ['uses' => 'SubmitController@save', 'as' => 'microblog.save', 'middleware' => 'auth']);
+Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'microblog.'], function () {
+    Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
+    Route::post('Edit/{id?}', ['uses' => 'SubmitController@save', 'as' => 'save', 'middleware' => 'auth']);
     Route::get('Edit/{id}', ['uses' => 'SubmitController@edit', 'middleware' => 'auth']);
 
-    Route::post('Upload', ['uses' => 'SubmitController@upload', 'as' => 'microblog.upload', 'middleware' => 'auth']);
-    Route::get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'microblog.view']);
-    Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'microblog.vote', 'middleware' => 'auth']);
-    Route::get('Vote/{id}', ['uses' => 'VoteController@voters', 'as' => 'microblog.voters']);
-    Route::post('Watch/{id}', ['uses' => 'WatchController@post', 'as' => 'microblog.watch', 'middleware' => 'auth']);
-    Route::post('Delete/{id}', ['uses' => 'SubmitController@delete', 'as' => 'microblog.delete', 'middleware' => 'auth']);
+    Route::post('Upload', ['uses' => 'SubmitController@upload', 'as' => 'upload', 'middleware' => 'auth']);
+    Route::get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'view']);
+    Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'vote', 'middleware' => 'auth']);
+    Route::get('Vote/{id}', ['uses' => 'VoteController@voters', 'as' => 'voters']);
+    Route::post('Watch/{id}', ['uses' => 'WatchController@post', 'as' => 'watch', 'middleware' => 'auth']);
+    Route::post('Delete/{id}', ['uses' => 'SubmitController@delete', 'as' => 'delete', 'middleware' => 'auth']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
-    Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'microblog.comment.save', 'middleware' => 'auth']);
+    Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);
     Route::get('Comment/{id}', ['uses' => 'CommentController@edit', 'middleware' => 'auth']);
-    Route::post('Comment/Delete/{id}', ['uses' => 'CommentController@delete', 'as' => 'microblog.comment.delete', 'middleware' => 'auth']);
+    Route::post('Comment/Delete/{id}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
     // pokaz reszte komentarzy...
-    Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'microblog.comment.show']);
+    Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
 
-    Route::get('/Mine', ['uses' => 'HomeController@mine', 'as' => 'microblog.mine']);
-    Route::get('/{tag}', ['uses' => 'HomeController@tag', 'as' => 'microblog.tag']);
+    Route::get('/Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);
+    Route::get('/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
 });
 
 // Obsluga modulu pastebin

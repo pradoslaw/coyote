@@ -28,12 +28,7 @@ class OnlyThoseWithAccess extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        $query = $model->whereExists(function ($sub) {
-            return $sub->select('forum_id')
-                    ->from('forum_access')
-                    ->whereIn('group_id', $this->groupsId)
-                    ->where('forum_access.forum_id', '=', \DB::raw('forums.id'));
-        });
+        $query = $model->forGroups($this->groupsId);
 
         return $query;
     }

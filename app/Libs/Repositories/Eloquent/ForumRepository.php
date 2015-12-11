@@ -20,11 +20,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
         $sql = $this->model
                     ->select(['forums.*', 'forum_track.created_at AS forum_marked_at'])
-                    ->orWhereNotExists(function ($sub) {
-                        return $sub->select('forum_id')
-                                    ->from('forum_access')
-                                    ->where('forum_access.forum_id', '=', \DB::raw('forums.id'));
-                    })
+                    ->forAll()
                     ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
                         $join->on('forum_id', '=', 'forums.id');
 
