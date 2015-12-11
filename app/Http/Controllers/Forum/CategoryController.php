@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -31,7 +32,16 @@ class CategoryController extends Controller
         // create view with online users
         $viewers = app()->make('Session\Viewers')->render($request->getRequestUri());
 
+        if (auth()->check()) {
+            $groupsId = auth()->user()->groups()->lists('id');
 
-        return parent::view('forum.category')->with('viewers', $viewers);
+            if ($groupsId) {
+                $this->forum->pushCriteria(new OnlyThoseWithAccess($groupsId->toArray()));
+            }
+        }
+
+        $forumList = $this->forum->forumList();
+
+        return parent::view('forum.category')->with(compact('viewers', 'forumList'));
     }
 }
