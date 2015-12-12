@@ -48,6 +48,6 @@ class CategoryController extends Controller
 
         $forumList = $this->forum->forumList();
 
-        return parent::view('forum.category')->with(compact('viewers', 'forumList'));
+        return parent::view('forum.category')->with(compact('viewers', 'forumList', 'forum'));
     }
 }
