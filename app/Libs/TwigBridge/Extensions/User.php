@@ -69,9 +69,7 @@ class User extends Twig_Extension
             // jest zablokowany lub zbanowany
             new Twig_SimpleFunction(
                 'link_to_profile',
-                function () {
-                    $args = func_get_args();
-
+                function (...$args) {
                     if (is_array($args[0])) {
                         $userId     = isset($args['user_id']) ? $args['user_id'] : $args['id'];
                         $name       = isset($args['user_name']) ? $args['user_name'] : $args['name'];
@@ -130,7 +128,7 @@ class User extends Twig_Extension
                 if (!$diffForHumans) {
                     return $dateTime->formatLocalized($format);
                 } elseif ($dateTime->diffInHours($now) < 1) {
-                    return $dateTime->diffForHumans();
+                    return $dateTime->diffForHumans(null, true) . ' temu';
                 } elseif ($dateTime->isToday()) {
                     return 'dziś, ' . $dateTime->format('H:i');
                 } elseif ($dateTime->isYesterday()) {

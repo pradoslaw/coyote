@@ -27,13 +27,39 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         $this->applyCriteria();
 
         $sql = $this->model
-                    ->select(['forums.*', 'forum_track.created_at AS forum_marked_at'])
+                    ->select([
+                        'forums.*',
+                        'forum_track.created_at AS forum_marked_at',
+                        'topic_track.created_at AS topic_marked_at',
+                        'subject',
+                        'topics.id AS topic_id',
+                        'topics.path AS topic_path',
+                        'posts.user_id',
+                        'posts.created_at',
+                        'posts.user_name AS anonymous_name',
+                        'users.name AS user_name',
+                        'users.photo',
+                        'is_active',
+                        'is_confirm'
+                    ])
                     ->forAll()
                     ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
                         $join->on('forum_id', '=', 'forums.id');
 
                         if ($userId) {
-                            $join->on('user_id', '=', \DB::raw($userId));
+                            $join->on('forum_track.user_id', '=', \DB::raw($userId));
+                        } else {
+                            $join->on('session_id', '=', \DB::raw("'" . $sessionId . "'"));
+                        }
+                    })
+                    ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
+                    ->leftJoin('users', 'users.id', '=', 'posts.user_id')
+                    ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
+                    ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
+                        $join->on('topic_track.topic_id', '=', 'topics.id');
+
+                        if ($userId) {
+                            $join->on('topic_track.user_id', '=', \DB::raw($userId));
                         } else {
                             $join->on('session_id', '=', \DB::raw("'" . $sessionId . "'"));
                         }
@@ -44,8 +70,16 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             $sql->where('parent_id', $parentId);
         }
 
+        $result = $sql->get();
+
+        foreach ($result as &$row) {
+            $row->forum_unread = $row->created_at > $row->forum_marked_at;
+            $row->topic_unread = $row->created_at > $row->topic_marked_at && $row->created_at > $row->forum_marked_at;
+            $row->route = route('forum.topic', [$row->path, $row->topic_id, $row->topic_path]);
+        }
+
         // execute query and fetch all forum categories
-        $parents = $this->buildTree($sql->get());
+        $parents = $this->buildTree($result);
 
         // we must fill section field in every row just to group rows by section name.
         $section = '';
@@ -54,6 +88,30 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 $section = $parent->section;
             } else {
                 $parent->section = $section;
+            }
+
+            if (isset($parent->subs)) {
+                foreach ($parent->subs as $child) {
+                    $parent->topics += $child->topics;
+                    $parent->posts += $child->posts;
+
+                    if ($child->created_at > $parent->created_at) {
+                        if ($child->forum_unread) {
+                            $parent->forum_unread = true;
+                        }
+
+                        $parent->last_post_id = $child->last_post_id;
+                        $parent->created_at = $child->created_at;
+                        $parent->user_id = $child->user_id;
+                        $parent->photo = $child->photo;
+                        $parent->is_active = $child->is_active;
+                        $parent->is_confirm = $child->is_confirm;
+                        $parent->user_name = $child->user_name;
+                        $parent->anonymous_name = $child->anonymous_name;
+                        $parent->subject = $child->subject;
+                        $parent->route = $child->route;
+                    }
+                }
             }
         }
 

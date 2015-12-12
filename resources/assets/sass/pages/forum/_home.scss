@@ -23,6 +23,23 @@
 .col-icon {
   width: 42px;
   text-align: center;
+
+  .forum-icon {
+    display: block;
+    height: 26px;
+  }
+
+  .forum-icon.new {
+    background: url('/img/sprites.png') no-repeat 4px -172px;
+  }
+
+  .forum-icon.normal {
+    background: url('/img/sprites.png') no-repeat 4px -221px;
+  }
+
+  .forum-icon.lock {
+    background: url('/img/sprites.png') no-repeat 4px -123px;
+  }
 }
 
 .col-stats {
@@ -100,4 +117,17 @@
   a {
     color: darken($brand-primary, 10%);
   }
+}
+
+.btn-view {
+  padding: 8px 11px;
+  background: url('/img/topic-view.png') no-repeat 0 4px;
+  width: 22px;
+  height: 13px;
+  display: inline-block;
+  float: left;
+}
+
+.unread {
+  background-image: url('/img/topic-view-unread.png');
 }
