@@ -22,7 +22,6 @@ class CategoryController extends Controller
         parent::__construct();
 
         $this->forum = $forum;
-        $this->middleware('forum.access');
     }
 
     /**

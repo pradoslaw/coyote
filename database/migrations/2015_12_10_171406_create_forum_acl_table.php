@@ -13,7 +13,7 @@ class CreateForumAclTable extends Migration
     public function up()
     {
         Schema::create('forum_acl', function (Blueprint $table) {
-            $table->mediumInteger('id', false);
+            $table->mediumInteger('id', true);
             $table->smallInteger('forum_id');
             $table->mediumInteger('group_id');
             $table->mediumInteger('permission_id');

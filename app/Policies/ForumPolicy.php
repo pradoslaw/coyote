@@ -3,18 +3,40 @@
 namespace Coyote\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Coyote\Forum;
+use Coyote\User;
 
 class ForumPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Create a new policy instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    private function check($ability, User $user, Forum $forum)
     {
-        //
+        return $forum->check($ability, $user->id) || $user->check($ability);
+    }
+
+    public function sticky(User $user, Forum $forum)
+    {
+        return $this->check('forum-sticky', $user, $forum);
+    }
+
+    public function announcement(User $user, Forum $forum)
+    {
+        return $this->check('forum-announcement', $user, $forum);
+    }
+
+    public function lock(User $user, Forum $forum)
+    {
+        return $this->check('forum-lock', $user, $forum);
+    }
+
+    public function move(User $user, Forum $forum)
+    {
+        return $this->check('forum-move', $user, $forum);
+    }
+
+    public function merge(User $user, Forum $forum)
+    {
+        return $this->check('forum-merge', $user, $forum);
     }
 }

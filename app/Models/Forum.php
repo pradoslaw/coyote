@@ -55,6 +55,38 @@ class Forum extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function permissions()
+    {
+        return $this->hasMany('Coyote\Forum\Acl');
+    }
+
+    /**
+     * Checks ability for specified forum and user id
+     *
+     * @param string $ability
+     * @param int $userId
+     * @return bool
+     */
+    public function check($ability, $userId)
+    {
+        static $acl = null;
+
+        if (is_null($acl)) {
+            $acl = $this->permissions()
+                        ->join('acl_permissions AS p', 'p.id', '=', 'forum_acl.permission_id')
+                        ->join('user_groups AS ug', 'ug.group_id', '=', 'forum_acl.group_id')
+                        ->where('ug.user_id', $userId)
+                        ->orderBy('value')
+                        ->select(['name', 'value'])
+                        ->lists('value', 'name');
+        }
+
+        return isset($acl[$ability]) ? $acl[$ability] : false;
+    }
+
+    /**
      * Determines if user can access to forum
      *
      * @param int $userId
