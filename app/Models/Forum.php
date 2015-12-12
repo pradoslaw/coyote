@@ -59,7 +59,7 @@ class Forum extends Model
      */
     public function permissions()
     {
-        return $this->hasMany('Coyote\Forum\Acl');
+        return $this->hasMany('Coyote\Forum\Permission');
     }
 
     /**
@@ -75,8 +75,8 @@ class Forum extends Model
 
         if (is_null($acl)) {
             $acl = $this->permissions()
-                        ->join('acl_permissions AS p', 'p.id', '=', 'forum_acl.permission_id')
-                        ->join('user_groups AS ug', 'ug.group_id', '=', 'forum_acl.group_id')
+                        ->join('permissions AS p', 'p.id', '=', 'forum_permissions.permission_id')
+                        ->join('group_users AS ug', 'ug.group_id', '=', 'forum_permissions.group_id')
                         ->where('ug.user_id', $userId)
                         ->orderBy('value')
                         ->select(['name', 'value'])
@@ -96,7 +96,7 @@ class Forum extends Model
     {
         $usersId = $this->access()
                 ->select('user_id')
-                ->join('user_groups', 'user_groups.group_id', '=', 'forum_access.group_id')
+                ->join('group_users', 'group_users.group_id', '=', 'forum_access.group_id')
                 ->lists('user_id')
                 ->toArray();
 

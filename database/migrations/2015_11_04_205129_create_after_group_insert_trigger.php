@@ -15,11 +15,10 @@ class CreateAfterGroupInsertTrigger extends Migration
         DB::unprepared('
 CREATE FUNCTION after_group_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
-	INSERT INTO acl_data (group_id, permission_id, "value") SELECT NEW."id", "id", "default" FROM acl_permissions;
+	INSERT INTO group_permissions (group_id, permission_id, "value") SELECT NEW."id", "id", "default" FROM permissions;
 
 	IF NEW.leader_id > 0 THEN
-		INSERT INTO user_groups (user_id, group_id) VALUES(NEW.leader_id, NEW."id");
-		UPDATE users SET permissions = NULL WHERE "id" = NEW.leader_id;
+		INSERT INTO group_users (user_id, group_id) VALUES(NEW.leader_id, NEW."id");
 	END IF;
 
 	RETURN NEW;

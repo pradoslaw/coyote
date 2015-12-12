@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class AclPermissionTableSeeder extends Seeder
+class PermissionTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,12 +11,12 @@ class AclPermissionTableSeeder extends Seeder
      */
     public function run()
     {
-        $id = \DB::table('acl_permissions')->insert([
+        $id = \DB::table('permissions')->insert([
             'name'           => 'adm-access',
             'description'    => 'Dostęp do panelu administracyjnego',
             'default'        => false
         ]);
 
-        \DB::table('acl_data')->where('permission_id', '=', $id)->update(['value' => true]);
+        \DB::table('group_permissions')->where('permission_id', '=', $id)->update(['value' => true]);
     }
 }

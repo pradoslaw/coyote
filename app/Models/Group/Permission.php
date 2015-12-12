@@ -1,15 +1,15 @@
 <?php
 
-namespace Coyote\Acl;
+namespace Coyote\Group;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Data extends Model
+class Permission extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'acl_data';
+    protected $table = 'group_permissions';
 }

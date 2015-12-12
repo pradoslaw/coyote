@@ -11,13 +11,13 @@ class MicroblogTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('acl_permissions')->insert([
+        \DB::table('permissions')->insert([
             'name'           => 'microblog-update',
             'description'    => 'Edycja wpisów mikrobloga',
             'default'        => false
         ]);
 
-        \DB::table('acl_permissions')->insert([
+        \DB::table('permissions')->insert([
             'name'           => 'microblog-delete',
             'description'    => 'Usuwanie wpisów mikrobloga',
             'default'        => false

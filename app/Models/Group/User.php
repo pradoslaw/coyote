@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\User;
+namespace Coyote\Group;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Group extends Model
+class User extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -18,7 +18,7 @@ class Group extends Model
      *
      * @var string
      */
-    protected $table = 'user_groups';
+    protected $table = 'group_users';
 
     public $timestamps = false;
     protected $primaryKey = 'group_id';

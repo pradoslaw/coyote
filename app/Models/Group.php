@@ -12,4 +12,14 @@ class Group extends Model
      * @var array
      */
     protected $fillable = ['name', 'description', 'user_id'];
+
+    public function users()
+    {
+        // group belongs to many users
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany('Coyote\Permission', 'group_permissions');
+    }
 }

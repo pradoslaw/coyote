@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumAclTable extends Migration
+class CreateGroupPermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,18 +12,14 @@ class CreateForumAclTable extends Migration
      */
     public function up()
     {
-        Schema::create('forum_acl', function (Blueprint $table) {
+        Schema::create('group_permissions', function (Blueprint $table) {
             $table->mediumInteger('id', true);
-            $table->smallInteger('forum_id');
-            $table->mediumInteger('group_id');
+            $table->mediumInteger('group_id')->index();
             $table->mediumInteger('permission_id');
             $table->tinyInteger('value');
 
-            $table->index('forum_id');
-
-            $table->foreign('forum_id')->references('id')->on('forums')->onDelete('cascade');
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
-            $table->foreign('permission_id')->references('id')->on('acl_permissions')->onDelete('cascade');
         });
     }
 
@@ -34,6 +30,6 @@ class CreateForumAclTable extends Migration
      */
     public function down()
     {
-        Schema::drop('forum_acl');
+        Schema::drop('group_permissions');
     }
 }

@@ -32,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies($gate);
 
         $gate->define('adm-access', function ($user) {
-            return $user->check('adm-access');
+            return $user->ability('adm-access');
         });
     }
 }

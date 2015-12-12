@@ -12,7 +12,7 @@ class ForumPolicy
 
     private function check($ability, User $user, Forum $forum)
     {
-        return $forum->check($ability, $user->id) || $user->check($ability);
+        return $forum->check($ability, $user->id) || $user->ability($ability);
     }
 
     public function sticky(User $user, Forum $forum)

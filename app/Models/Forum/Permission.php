@@ -4,7 +4,7 @@ namespace Coyote\Forum;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Acl extends Model
+class Permission extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -18,7 +18,7 @@ class Acl extends Model
      *
      * @var string
      */
-    protected $table = 'forum_acl';
+    protected $table = 'forum_permissions';
 
     /**
      * @var array

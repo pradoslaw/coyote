@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UserTableSeeder::class);
         $this->call(GroupTableSeeder::class);
-        $this->call(AclPermissionTableSeeder::class);
+        $this->call(PermissionTableSeeder::class);
         $this->call(WordTableSeeder::class);
         $this->call(TagTableSeeder::class);
         $this->call(ReputationTypesTableSeeder::class);

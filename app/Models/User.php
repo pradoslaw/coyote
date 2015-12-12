@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -103,11 +104,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function groups()
     {
-        return $this->hasManyThrough('Coyote\Group', 'Coyote\User\Group', null, 'id');
+        return $this->belongsToMany('Coyote\Group', 'group_users');
     }
 
     /**
@@ -115,7 +116,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function permissions()
     {
-        return $this->hasManyThrough('Coyote\Acl\Data', 'Coyote\User\Group');
+        return $this->hasManyThrough('Coyote\Group\Permission', 'Coyote\Group\User', 'user_id', 'group_id');
+    }
+
+    private function getPermissions()
+    {
+        return Cache::tags('permissions')->rememberForever('permission:' . $this->id, function () {
+            return $this->permissions()
+                    ->join('permissions AS p', 'p.id', '=', 'group_permissions.permission_id')
+                    ->orderBy('value')
+                    ->select(['name', 'value'])
+                    ->get()
+                    ->lists('value', 'name');
+        });
     }
 
     /**
@@ -125,24 +138,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @param $ability
      * @return bool
      */
-    public function check($ability)
+    public function ability($ability)
     {
-        if (is_null($this->permissions)) {
-            // get user's permissions
-            $acl = $this->permissions()
-                    ->join('acl_permissions AS p', 'p.id', '=', 'acl_data.permission_id')
-                    ->orderBy('value')
-                    ->select(['name', 'value'])
-                    ->get()
-                    ->lists('value', 'name');
-
-            $this->permissions = json_encode($acl);
-            $this->save();
-        } else {
-            $acl = json_decode($this->permissions, true);
-        }
-
-        return isset($acl[$ability]) ? $acl[$ability] : false;
+        $permissions = $this->getPermissions();
+        return isset($permissions[$ability]) ? $permissions[$ability] : false;
     }
 
     /**

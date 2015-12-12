@@ -17,7 +17,7 @@ class GroupTableSeeder extends Seeder
 
         $user = DB::table('users')->orderBy('id')->first();
 
-        \Coyote\User\Group::create([
+        \Coyote\Group\User::create([
            'group_id'       => $group->id,
            'user_id'        => $user->id
         ]);

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAclPermissionsTable extends Migration
+class CreatePermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateAclPermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('acl_permissions', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->mediumInteger('id', true);
             $table->string('name', 50)->unique();
             $table->string('description')->nullable();
@@ -27,6 +27,6 @@ class CreateAclPermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('acl_permissions');
+        Schema::drop('permissions');
     }
 }
