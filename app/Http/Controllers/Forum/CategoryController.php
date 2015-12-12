@@ -9,8 +9,14 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    /**
+     * @var Forum
+     */
     private $forum;
 
+    /**
+     * @param Forum $forum
+     */
     public function __construct(Forum $forum)
     {
         parent::__construct();

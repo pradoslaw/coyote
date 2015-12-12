@@ -21,4 +21,22 @@ class TopicController extends Controller
 
         return parent::view('forum.topic')->with('viewers', $viewers->render($request->getRequestUri()));
     }
+
+    /**
+     * @return \Illuminate\View\View
+     */
+    public function submit($forum)
+    {
+        $this->breadcrumb->push([
+            'Forum'      => route('forum.home'),
+            $forum       => route('forum.home') . "/$forum",
+            'Nowy wątek' => route('forum.submit', ['forum' => $forum])
+        ]);
+
+        return parent::view('forum.submit');
+    }
+
+    public function save($forum)
+    {
+    }
 }

@@ -16,7 +16,15 @@ class ForumAccess
     public function handle($request, Closure $next)
     {
         $forum = $request->route('forum');
-//        $groupsId = $forum->access()->lists('group_id');
+        $hasAccess = $forum->userCanAccess($request->user() ? $request->user()->id : null);
+
+        if (!$hasAccess) {
+            if ($request->ajax()) {
+                return response('Unauthorized.', 401);
+            } else {
+                abort(401, 'Unauthorized');
+            }
+        }
 
         return $next($request);
     }
