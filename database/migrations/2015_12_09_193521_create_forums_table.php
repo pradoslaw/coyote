@@ -29,8 +29,9 @@ class CreateForumsTable extends Migration
             $table->tinyInteger('require_tag')->default(0);
             $table->tinyInteger('enable_prune')->default(0);
             $table->tinyInteger('enable_reputation')->default(1);
+            $table->tinyInteger('enable_anonymous')->default(1);
             $table->smallInteger('prune_days')->nullable();
-            $table->integer('prune_last')->nullable();
+            $table->integer('prune_last')->nullable(); // timestamp
         });
     }
 
