@@ -4,11 +4,12 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    use Base;
+
     /**
      * @var Forum
      */
@@ -31,20 +32,12 @@ class CategoryController extends Controller
      */
     public function index($forum, Request $request)
     {
-        $this->breadcrumb->push('Forum', route('forum.home'));
-        $this->breadcrumb->push($forum->name, $forum->path);
-
+        // builds breadcrumb for this category
+        $this->breadcrumb($forum);
         // create view with online users
         $viewers = app()->make('Session\Viewers')->render($request->getRequestUri());
 
-        if (auth()->check()) {
-            $groupsId = auth()->user()->groups()->lists('id');
-
-            if ($groupsId) {
-                $this->forum->pushCriteria(new OnlyThoseWithAccess($groupsId->toArray()));
-            }
-        }
-
+        $this->pushCriteria();
         $forumList = $this->forum->forumList();
 
         return parent::view('forum.category')->with(compact('viewers', 'forumList', 'forum'));

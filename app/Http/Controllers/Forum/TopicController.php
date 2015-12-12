@@ -3,10 +3,28 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Illuminate\Http\Request;
 
 class TopicController extends Controller
 {
+    use Base;
+
+    /**
+     * @var Forum
+     */
+    private $forum;
+
+    /**
+     * @param Forum $forum
+     */
+    public function __construct(Forum $forum)
+    {
+        parent::__construct();
+
+        $this->forum = $forum;
+    }
+
     /**
      * @param Request $request
      * @return $this
@@ -27,11 +45,8 @@ class TopicController extends Controller
      */
     public function submit($forum)
     {
-        $this->breadcrumb->push([
-            'Forum'      => route('forum.home'),
-            $forum       => route('forum.home') . "/$forum",
-            'Nowy wątek' => route('forum.submit', ['forum' => $forum])
-        ]);
+        $this->breadcrumb($forum);
+        $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
 
         return parent::view('forum.submit');
     }

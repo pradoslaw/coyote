@@ -6,7 +6,7 @@
 {% block container %}
 
     <div id="index" class="sidebar">
-        <h1>Python</h1>
+        <h1>{{ forum.title|default(forum.name) }}</h1>
 
         <nav>
             <ul class="pagination pagination-xs">
@@ -44,7 +44,7 @@
                             <li class="filter"><a href="javascript:">Filtruj</a></li>
                         </ul>
 
-                        <a href="#" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                        <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
                         <div class="clearfix"></div>
 
                         <table>
@@ -159,7 +159,7 @@
                         </table>
                     </div>
 
-                    <a href="#" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                    <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
                 </div>
             </section>
 

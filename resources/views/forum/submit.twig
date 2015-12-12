@@ -39,7 +39,8 @@
 
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="body">
-                            <textarea name="content" style="height: 160px; width: 100%"></textarea>
+                            {% include 'components/toolbar' %}
+                            <textarea name="text" class="form-control" style="height: 160px;">{{ input_old('text') }}</textarea>
                         </div>
                         <div role="tabpanel" class="tab-pane active" id="attachments"></div>
                         <div role="tabpanel" class="tab-pane active" id="poll"></div>
@@ -141,29 +142,26 @@
     {{ parent() }}
 
     <link rel="stylesheet" href="/css/forum.css">
-    <link rel="stylesheet" href="/css/wikieditor.css">
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
 
-    <script src="/js/forum.js" type="text/javascript"></script>
-    <script src="/js/jquery.wikieditor.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/forum.js" ></script>
+    <script type="text/javascript" src="/js/posting.js"></script>
+    <script type="text/javascript" src="/js/wikieditor.js"></script>
 
     <script type="text/javascript">
         $(function() {
-            $('#submit-form textarea').wikiEditor(toolbarSet);
+            $('#submit-form textarea').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
 
             var toolTipHints = $('#hint-subject, #hint-content, #hint-tag, #hint-username');
 
-            $('#submit-form').delegate('input[name="subject"], textarea[name="content"], input[name="username"], .tag-editor input', 'focus', function()
-            {
+            $('#submit-form').delegate('input[name="subject"], textarea[name="content"], input[name="username"], .tag-editor input', 'focus', function () {
                 var name = typeof $(this).attr('name') == 'undefined' ? 'tag' : $(this).attr('name');
 
-                if ('hint-' + name != $('.sidebar-hint:visible').attr('id'))
-                {
-                    toolTipHints.each(function()
-                    {
+                if ('hint-' + name != $('.sidebar-hint:visible').attr('id')) {
+                    toolTipHints.each(function () {
                         $(this).hide();
                     });
 

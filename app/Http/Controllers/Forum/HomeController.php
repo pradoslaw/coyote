@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    use Base;
+
     /**
      * @var Forum
      */
@@ -32,14 +34,7 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Forum', route('forum.home'));
 
-        if (auth()->check()) {
-            $groupsId = auth()->user()->groups()->lists('id');
-
-            if ($groupsId) {
-                $this->forum->pushCriteria(new OnlyThoseWithAccess($groupsId->toArray()));
-            }
-        }
-
+        $this->pushCriteria();
         // execute query: get all categories that user can has access
         $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId());
 

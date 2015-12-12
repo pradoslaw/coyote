@@ -28,7 +28,7 @@
                                 <ul class="list-unstyled">
                                     {% for sub in forum.subs %}
                                         <li>
-                                            <a href="{{ route('forum.category', [forum.path]) }}">{{ sub.name }}</a>
+                                            <a href="{{ route('forum.category', [sub.path]) }}">{{ sub.name }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>

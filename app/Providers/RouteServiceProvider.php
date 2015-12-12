@@ -24,10 +24,10 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router->model('user', 'Coyote\User');
         $router->pattern('id', '[0-9]+');
-        $router->pattern('category', '[A-Za-z_\/]+');
+        $router->pattern('forum', '[A-Za-z\_\/]+');
         $router->pattern('tag', '([\p{L}\p{Mn}0-9\._+-]+)');
-        $router->bind('forum', function ($category) {
-            return \Coyote\Forum::where('path', $category)->first();
+        $router->bind('forum', function ($path) {
+            return \Coyote\Forum::where('path', $path)->first();
         });
 
         parent::boot($router);
