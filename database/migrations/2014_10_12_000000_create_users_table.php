@@ -29,7 +29,6 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('is_blocked')->default(0);
             $table->mediumInteger('group_id')->nullable();
             $table->json('settings')->nullable();
-            $table->json('permissions')->nullable();
             $table->string('date_format', 32)->default('%Y-%m-%d %H:%M');
             $table->string('timezone')->default('Europe/Warsaw');
             $table->integer('flood')->default(0);
