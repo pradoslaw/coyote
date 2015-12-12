@@ -119,9 +119,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasManyThrough('Coyote\Group\Permission', 'Coyote\Group\User', 'user_id', 'group_id');
     }
 
+    /**
+     * Cache permissions for this user
+     *
+     * @return mixed
+     */
     private function getPermissions()
     {
-        return Cache::tags('permissions')->rememberForever('permission:' . $this->id, function () {
+        $key = 'permission:' . $this->id;
+
+        return Cache::tags(['permissions', $key])->rememberForever($key, function () {
             return $this->permissions()
                     ->join('permissions AS p', 'p.id', '=', 'group_permissions.permission_id')
                     ->orderBy('value')
@@ -142,6 +149,32 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         $permissions = $this->getPermissions();
         return isset($permissions[$ability]) ? $permissions[$ability] : false;
+    }
+
+    /**
+     * @param $group
+     */
+    public function attachGroup($group)
+    {
+        if (is_object($group)) {
+            $group = $group->getKey();
+        }
+
+        $this->groups()->attach($group);
+        Cache::tags('permission:' . $this->id)->flush();
+    }
+
+    /**
+     * @param $group
+     */
+    public function detachGroup($group)
+    {
+        if (is_object($group)) {
+            $group = $group->getKey();
+        }
+
+        $this->groups()->detach($group);
+        Cache::tags('permission:' . $this->id)->flush();
     }
 
     /**

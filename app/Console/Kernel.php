@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         'Coyote\Console\Commands\Inspire',
+        'Coyote\Console\Commands\ClearCache',
     ];
 
     /**
