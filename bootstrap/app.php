@@ -42,6 +42,16 @@ $app->singleton(
 );
 
 /*
+ | Load external plugins
+ */
+foreach (glob($app->path() . '/Plugins/*') as $dir) {
+    if (is_dir($dir)) {
+        $explode = explode('/', $dir);
+        $app->register('Coyote\\Plugins\\' . end($explode) . '\\ServiceProvider');
+    }
+}
+
+/*
 |--------------------------------------------------------------------------
 | Return The Application
 |--------------------------------------------------------------------------

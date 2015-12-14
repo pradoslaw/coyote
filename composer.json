@@ -38,7 +38,8 @@
             "app/Libs",
             "app/Models",
             "app/Http/Validators",
-            "app/Http/Requests"
+            "app/Http/Requests",
+            "app/Plugins"
         ],
         "psr-4": {
             "Coyote\\": "app/"

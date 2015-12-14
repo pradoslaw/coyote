@@ -49,21 +49,6 @@ class LoginController extends Controller
             return redirect()->intended(route('home'));
         }
 
-        // W starej wersji 4programmers.net hasla byly hashowane przy pomocy sha256 + sol. Jezeli w bazie
-        // danych jest stary hash, to zmieniamy hasha i zapisujemy do bazy danych
-        if (env('APP_ENV') == 'prod') {
-            $user = User::where('name', $request->input('name'))->first();
-
-            if ($user && $user->salt && $user->password === hash('sha256', $user->salt . $request->input('password'))) {
-                $user->password = bcrypt($request->input('password'));
-                $user->salt = null;
-                $user->save();
-
-                Auth::login($user);
-                return redirect()->intended(route('home'));
-            }
-        }
-
         return back()->withInput()->withErrors(['name' => 'Konto nie istnieje lub hasło jest nieprawidłowe']);
     }
 
