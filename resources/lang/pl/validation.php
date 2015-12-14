@@ -111,6 +111,19 @@ return [
         'author' => [
             'required'      => 'Proszę wpisać nadawcę wiadomości',
             'exists'        => 'Użytkownik o tej nazwie nie istnieje'
+        ],
+        // uzywany na forum
+        'subject' => [
+            'required'      => 'Temat musi posiadać minimum 3 znaki długości',
+            'min'           => 'Temat musi posiadać minimum 3 znaki długości',
+        ],
+        'tag' => [
+            'required'      => 'Wymagane jest przypisanie minimum jednego tagu do tego wątku'
+        ],
+        // w formularzu forum
+        'user_name' => [
+            'required'      => 'Proszę wpisać nazwę użytkownika',
+            'unique'        => 'Ta nazwa jest zajęta przez innego użytkownika',
         ]
     ],
 

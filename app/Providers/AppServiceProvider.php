@@ -75,5 +75,15 @@ class AppServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Contracts\\ForumRepositoryInterface',
             'Coyote\\Repositories\\Eloquent\\ForumRepository'
         );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\TopicRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\TopicRepository'
+        );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\PostRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\PostRepository'
+        );
     }
 }

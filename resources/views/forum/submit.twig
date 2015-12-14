@@ -6,9 +6,9 @@
 {% block container %}
     <div id="form-wrapper" class="row">
         <div class="col-sm-9">
-            {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': '/Forum/submit', 'class': 'form-horizontal'}) }}
+            {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': route('forum.topic.submit', [forum.path]), 'class': 'form-horizontal'}) }}
 
-            <div class="form-group">
+            <div class="form-group {{ errors.first('subject') ? 'has-error' }}">
                 <label class="col-md-2 control-label">Temat</label>
                 <div class="col-md-10">
                     {{ form_text('subject', input_old('subject'), {'class': 'form-control'}) }}
@@ -19,12 +19,16 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group {{ errors.first('user_name') ? 'has-error' }}">
                 <label class="col-md-2 control-label">Autor</label>
                 <div class="col-md-10">
-                    {{ form_text('username', input_old('username'), {'class': 'form-control'}) }}
+                    {{ form_text('user_name', input_old('user_name'), {'class': 'form-control'}) }}
 
-                    <span class="help-block">Wpisz swoją nazwę użytkownika</span>
+                    {% if errors.first('user_name') %}
+                        <span class="help-block">{{ errors.first('user_name') }}</span>
+                    {% else %}
+                        <span class="help-block">Wpisz swoją nazwę użytkownika</span>
+                    {% endif %}
                 </div>
             </div>
 
@@ -38,9 +42,13 @@
                     </ul>
 
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="body">
+                        <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
                             {% include 'components/toolbar' %}
                             <textarea name="text" class="form-control" style="height: 160px;">{{ input_old('text') }}</textarea>
+
+                            {% if errors.first('text') %}
+                                <span class="help-block">{{ errors.first('text') }}</span>
+                            {% endif %}
                         </div>
                         <div role="tabpanel" class="tab-pane active" id="attachments"></div>
                         <div role="tabpanel" class="tab-pane active" id="poll"></div>
@@ -50,11 +58,15 @@
             </div>
 
             <div class="form-group">
-                <label class="col-md-2 control-label">Tagi</label>
+                <label class="col-md-2 control-label {{ errors.first('tag') ? 'has-error' }}">Tagi</label>
                 <div class="col-md-10">
                     {{ form_text('tag', input_old('tag'), {'class': 'form-control', 'autocomplete': 'off'}) }}
 
-                    <span class="help-block">Możesz opisać swój wątek słowami kluczowymi - np. C#, CLR (max. 5 tagów)</span>
+                    {% if errors.first('tag') %}
+                        <span class="help-block">{{ errors.first('tag') }}</span>
+                    {% else %}
+                        <span class="help-block">Możesz opisać swój wątek słowami kluczowymi - np. C#, CLR (max. 5 tagów)</span>
+                    {% endif %}
                 </div>
             </div>
 

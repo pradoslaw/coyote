@@ -42,7 +42,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // widok kategorii forum
     Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);
     // widok wyswietlania watku. {id} zawiera unikalne id watku
-    Route::get('{forum}/{id}-{slug}', ['TopicController@index', 'as' => 'topic', 'middleware' => 'forum.access']);
+    Route::get('{forum}/{id}-{slug}', ['uses' => 'TopicController@index', 'as' => 'topic', 'middleware' => 'forum.access']);
 
     // usuwanie posta
     Route::post('Delete/{id}', ['uses' => 'PostController@delete', 'as' => 'delete', 'middleware' => 'auth']);

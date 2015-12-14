@@ -2,10 +2,9 @@
 
 namespace Coyote\Repositories\Eloquent;
 
-use Coyote\Repositories\Contracts\WordRepositoryInterface;
-use Cache;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 
-class TopicRepository extends Repository implements WordRepositoryInterface
+class TopicRepository extends Repository implements TopicRepositoryInterface
 {
     /**
      * @return \Coyote\Topic

@@ -20,7 +20,7 @@ class CreateTopicsTable extends Migration
             $table->timestampsTz();
             $table->softDeletes();
             $table->mediumInteger('views')->default(0);
-            $table->mediumInteger('replies')->default(0);
+            $table->mediumInteger('replies')->default(-1);
             $table->mediumInteger('replies_real')->default(0);
             $table->smallInteger('score')->default(0);
             $table->tinyInteger('is_sticky')->default(0);

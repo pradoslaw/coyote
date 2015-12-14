@@ -1,0 +1,88 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateAfterPostUpdateTrigger extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        DB::unprepared('
+CREATE FUNCTION after_post_update() RETURNS trigger LANGUAGE plpgsql AS $$
+DECLARE
+	_post_id INTEGER;
+	_post_time TIMESTAMP WITH TIME ZONE;
+BEGIN
+	IF COALESCE(NEW.deleted_at, 0) != COALESCE(OLD.deleted_at, 0) THEN
+
+		SELECT "id", created_at INTO _post_id, _post_time
+		FROM posts WHERE topic_id = OLD.topic_id AND deleted_at IS NULL
+		ORDER BY "id" DESC
+		LIMIT 1;
+
+		IF NEW.deleted_at IS NOT NULL THEN
+
+				UPDATE topics SET replies = (replies -1),
+									last_post_id = _post_id,
+									last_post_created_at = _post_time
+  			WHERE "id" = OLD.topic_id;
+
+  			UPDATE forums SET posts = (posts -1), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = OLD.forum_id;
+  			UPDATE topics SET is_solved = NULL WHERE "id" = NEW.topic_id AND is_solved = NEW."id";
+  			-- DELETE FROM post_accept WHERE accept_post = NEW.post_id;
+
+  			IF OLD.user_id IS NOT NULL THEN
+  				UPDATE users SET posts = posts - 1 WHERE "id" = OLD.user_id;
+
+				if !(SELECT COUNT("id") FROM posts WHERE topic_id = OLD.topic_id AND user_id = OLD.user_id AND deleted_at IS NULL) THEN
+		  			DELETE FROM topic_users WHERE topic_id = OLD.topic_id AND user_id = OLD.user_id;
+
+				END IF;
+			END IF;
+
+		ELSE IF NEW.deleted_at IS NULL THEN
+
+			UPDATE topics SET replies = (replies + 1),
+									last_post_id = _post_id,
+									last_post_created_at = _post_time
+  			WHERE "id" = OLD.topic_id;
+
+  			UPDATE forums SET posts = (posts + 1), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = OLD.forum_id;
+
+  			IF OLD.user_id IS NOT NULL THEN
+  				UPDATE users SET posts = posts + 1 WHERE "id" = OLD.user_id;
+
+					IF (SELECT COUNT(*) FROM topic_users WHERE topic_id = NEW.topic_id AND user_id = NEW.user_id) = 0 THEN
+						INSERT INTO topic_users (topic_id, user_id) VALUES(OLD.topic_id, OLD.user_id);
+					END IF;
+
+				END IF;
+			END IF;
+
+
+		END IF;
+	END IF;
+
+	RETURN NEW;
+END;$$;
+
+CREATE TRIGGER after_post_update AFTER UPDATE ON posts FOR EACH ROW EXECUTE PROCEDURE "after_post_update"();
+        ');
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        DB::unprepared('DROP TRIGGER IF EXISTS "after_post_update" ON posts;');
+        DB::unprepared('DROP FUNCTION after_post_update();');
+    }
+}
