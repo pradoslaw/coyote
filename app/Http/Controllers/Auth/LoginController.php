@@ -62,7 +62,7 @@ class LoginController extends Controller
         $user = User::findOrFail(auth()->user()->id);
 
         $user->ip = request()->ip();
-        $user->browser = filter_var(request()->header('User-Agent'), FILTER_SANITIZE_STRING);
+        $user->browser = request()->browser(); // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $user->visited_at = Carbon::now();
         $user->visits = auth()->user()->visits + 1;
         $user->save();
