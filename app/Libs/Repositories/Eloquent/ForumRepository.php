@@ -49,7 +49,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                         if ($userId) {
                             $join->on('forum_track.user_id', '=', \DB::raw($userId));
                         } else {
-                            $join->on('session_id', '=', \DB::raw("'" . $sessionId . "'"));
+                            $join->on('forum_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
                         }
                     })
                     ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
@@ -61,7 +61,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                         if ($userId) {
                             $join->on('topic_track.user_id', '=', \DB::raw($userId));
                         } else {
-                            $join->on('session_id', '=', \DB::raw("'" . $sessionId . "'"));
+                            $join->on('topic_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
                         }
                     })
                     ->orderBy('order');
