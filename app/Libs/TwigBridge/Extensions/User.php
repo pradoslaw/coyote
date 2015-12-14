@@ -69,7 +69,9 @@ class User extends Twig_Extension
             // jest zablokowany lub zbanowany
             new Twig_SimpleFunction(
                 'link_to_profile',
-                function (...$args) {
+                function () {
+                    $args = func_get_args();
+
                     if (is_array($args[0])) {
                         $userId     = isset($args['user_id']) ? $args['user_id'] : $args['id'];
                         $name       = isset($args['user_name']) ? $args['user_name'] : $args['name'];
