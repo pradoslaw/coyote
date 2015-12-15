@@ -24,21 +24,24 @@
   width: 42px;
   text-align: center;
 
-  .forum-icon {
+  .ico {
     display: block;
     height: 26px;
+    font-size: 23px;
   }
 
-  .forum-icon.new {
-    background: url('/img/sprites.png') no-repeat 4px -172px;
+  .lock {
+    opacity: .9;
+    color: $gray-light;
   }
 
-  .forum-icon.normal {
-    background: url('/img/sprites.png') no-repeat 4px -221px;
+  .ico.new {
+    //color: $alt-link-hover-color;
+    color: #FF9800;
   }
 
-  .forum-icon.lock {
-    background: url('/img/sprites.png') no-repeat 4px -123px;
+  .ico.normal {
+    color: $gray-light;
   }
 }
 
@@ -86,12 +89,14 @@
       margin-right: 9px;
 
       &:before {
-        @include font-awesome($fa-var-angle-right);
+        //@include font-awesome($fa-var-angle-right);
+        @include font-awesome($fa-var-file-o);
         left: 0;
       }
 
       a {
         color: $gray-light;
+        padding-left: 5px;
 
         &:hover {
           color: $alt-link-hover-color;
