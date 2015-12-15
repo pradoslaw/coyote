@@ -95,9 +95,15 @@ class TopicTest extends \Codeception\TestCase\Test
         $topic->delete();
 
         $this->tester->seeRecord('topics', ['forum_id' => $topic->forum_id]);
+        $topic = $this->tester->grabRecord('topics', ['forum_id' => $topic->forum_id]);
+
+        $this->assertEquals(0, $topic->replies);
+        $this->assertEquals(0, $topic->replies_real);
+
         $forum = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
 
         $this->assertEquals(0, $forum->topics);
+        $this->assertEquals(0, $forum->posts);
         $this->assertEquals(null, $forum->last_post_id);
         $this->tester->seeRecord('posts', ['forum_id' => $this->forum->id]);
 
@@ -114,7 +120,15 @@ class TopicTest extends \Codeception\TestCase\Test
         $after = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
 
         $this->assertEquals($before->topics, $after->topics);
+        $this->assertEquals(1, $after->posts);
+
         $this->tester->seeRecord('posts', ['forum_id' => $this->forum->id, 'deleted_at' => null]);
+
+        $forum = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
+
+        $this->assertEquals(1, $forum->topics);
+        $this->assertEquals(1, $forum->posts);
+        $this->assertNotNull($forum->last_post_id);
     }
 
     public function testTopicMove()

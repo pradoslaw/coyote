@@ -18,39 +18,15 @@ DECLARE
 	postCount INTEGER;
 BEGIN
 	IF OLD.deleted_at IS NULL AND NEW.deleted_at IS NOT NULL THEN -- kasowanie watku
-
-		UPDATE users
-		SET posts = posts - p.user_posts
-		FROM (
-			SELECT user_id, COUNT(*) AS user_posts
-			FROM posts
-			WHERE topic_id = OLD."id" AND deleted_at IS NULL AND user_id IS NOT NULL
-			GROUP BY user_id
-		) AS p
-		WHERE "id" = p.user_id;
-
-		postCount = (SELECT COUNT(*) FROM posts WHERE topic_id = OLD."id" AND deleted_at IS NULL);
 		UPDATE posts SET deleted_at = NOW() WHERE topic_id = OLD."id" AND deleted_at IS NULL;
 
-		UPDATE forums SET topics = (topics - 1), posts = (posts - postCount), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = OLD.forum_id;
+		UPDATE forums SET topics = (topics - 1), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = OLD.forum_id;
 		DELETE FROM topic_track WHERE "topic_id" = OLD."id";
 
 	ELSEIF OLD.deleted_at IS NOT NULL AND NEW.deleted_at IS NULL THEN
-
-		UPDATE users
-		SET posts = posts + p.user_posts
-		FROM (
-			SELECT user_id, COUNT(*) AS user_posts
-			FROM posts
-			WHERE topic_id = OLD."id" AND deleted_at IS NOT NULL AND user_id IS NOT NULL
-			GROUP BY user_id
-		) AS p
-		WHERE "id" = p.user_id;
-
-		postCount = (SELECT COUNT(*) FROM posts WHERE topic_id = OLD."id" AND deleted_at IS NOT NULL);
 		UPDATE posts SET deleted_at = NULL WHERE topic_id = OLD."id" AND deleted_at IS NOT NULL;
 
-		UPDATE forums SET topics = (topics + 1), posts = (posts + postCount), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = NEW.forum_id;
+		UPDATE forums SET topics = (topics + 1), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = NEW.forum_id;
 	END IF;
 
 

@@ -18,7 +18,7 @@ DECLARE
 	_post_id INTEGER;
 	_post_time TIMESTAMP WITH TIME ZONE;
 BEGIN
-	IF COALESCE(NEW.deleted_at, 0) != COALESCE(OLD.deleted_at, 0) THEN
+	IF (NEW.deleted_at IS NULL AND OLD.deleted_at IS NOT NULL) OR (NEW.deleted_at IS NOT NULL AND OLD.deleted_at IS NULL) THEN
 
 		SELECT "id", created_at INTO _post_id, _post_time
 		FROM posts WHERE topic_id = OLD.topic_id AND deleted_at IS NULL
@@ -27,10 +27,13 @@ BEGIN
 
 		IF NEW.deleted_at IS NOT NULL THEN
 
-				UPDATE topics SET replies = (replies -1),
-									last_post_id = _post_id,
-									last_post_created_at = _post_time
-  			WHERE "id" = OLD.topic_id;
+			IF _post_id IS NOT NULL THEN
+				UPDATE topics SET
+					replies = (replies -1),
+					last_post_id = _post_id,
+					last_post_created_at = _post_time
+				WHERE "id" = OLD.topic_id;
+			END IF;
 
   			UPDATE forums SET posts = (posts -1), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = OLD.forum_id;
   			UPDATE topics SET is_solved = NULL WHERE "id" = NEW.topic_id AND is_solved = NEW."id";
@@ -39,18 +42,20 @@ BEGIN
   			IF OLD.user_id IS NOT NULL THEN
   				UPDATE users SET posts = posts - 1 WHERE "id" = OLD.user_id;
 
-				if !(SELECT COUNT("id") FROM posts WHERE topic_id = OLD.topic_id AND user_id = OLD.user_id AND deleted_at IS NULL) THEN
+				if (SELECT COUNT("id") FROM posts WHERE topic_id = OLD.topic_id AND user_id = OLD.user_id AND deleted_at IS NULL) = 0 THEN
 		  			DELETE FROM topic_users WHERE topic_id = OLD.topic_id AND user_id = OLD.user_id;
-
 				END IF;
 			END IF;
 
 		ELSE IF NEW.deleted_at IS NULL THEN
 
-			UPDATE topics SET replies = (replies + 1),
-									last_post_id = _post_id,
-									last_post_created_at = _post_time
-  			WHERE "id" = OLD.topic_id;
+			IF _post_id IS NOT NULL THEN
+				UPDATE topics SET
+					replies = (replies + 1),
+					last_post_id = _post_id,
+					last_post_created_at = _post_time
+				WHERE "id" = OLD.topic_id;
+			END IF;
 
   			UPDATE forums SET posts = (posts + 1), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = OLD.forum_id;
 
@@ -63,8 +68,6 @@ BEGIN
 
 				END IF;
 			END IF;
-
-
 		END IF;
 	END IF;
 

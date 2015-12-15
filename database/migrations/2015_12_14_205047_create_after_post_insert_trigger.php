@@ -15,7 +15,14 @@ class CreateAfterPostInsertTrigger extends Migration
         DB::unprepared('
 CREATE FUNCTION after_post_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
-	UPDATE topics SET last_post_id = NEW."id", last_post_created_at = NEW.created_at, replies = (replies + 1), replies_real = (replies_real + 1) WHERE "id" = NEW.topic_id;
+	UPDATE topics SET
+		last_post_id = NEW."id",
+		last_post_created_at = NEW.created_at,
+		replies = (CASE WHEN first_post_id IS NULL THEN replies ELSE replies + 1 END),
+		replies_real = (CASE WHEN first_post_id IS NULL THEN replies_real ELSE replies_real + 1 END),
+		first_post_id = (CASE WHEN first_post_id IS NULL THEN NEW."id" ELSE first_post_id END)
+	WHERE "id" = NEW.topic_id;
+
 	UPDATE forums SET posts = (posts + 1), last_post_id = NEW."id" WHERE "id" = NEW.forum_id;
 
 	IF (SELECT first_post_id FROM topics WHERE "id" = NEW.topic_id) IS NULL THEN
