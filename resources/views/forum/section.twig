@@ -37,7 +37,7 @@
                             {% if forum.subs %}
                                 <ul class="list-unstyled">
                                     {% for sub in forum.subs %}
-                                        <li>
+                                        <li {{ sub.forum_unread ? 'class="sub-unread"' }}>
                                             <a href="{{ route('forum.category', [sub.path]) }}">{{ sub.name }}</a>
                                         </li>
                                     {% endfor %}

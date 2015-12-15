@@ -104,6 +104,12 @@
         }
       }
     }
+
+    li.sub-unread {
+      &:before {
+        color: $alt-link-hover-color;
+      }
+    }
   }
 }
 
