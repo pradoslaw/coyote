@@ -23,7 +23,34 @@ class Misc extends Twig_Extension
     {
         return [
             new Twig_SimpleFunction('timer', [$this, 'getGenerationTime']),
-            new Twig_SimpleFunction('declination', [Declination::class, 'format'])
+            new Twig_SimpleFunction('declination', [Declination::class, 'format']),
+            new Twig_SimpleFunction(
+                'sortable',
+                function ($name) {
+                    $args = func_get_args();
+
+                    $column = array_shift($args);
+                    $title = array_shift($args);
+                    $default = array_shift($args);
+
+                    $sort = request('sort', $default[0]);
+                    $order = request('order', $default[1]);
+
+                    $parameters = array_merge(
+                        request()->all(),
+                        ['sort' => $column, 'order' => $order == 'desc' ? 'asc' : 'desc']
+                    );
+
+                    return link_to(
+                        request()->path() . '?' . http_build_query($parameters),
+                        $title,
+                        ['class' => "sort " . ($sort == $column ? strtolower($order) : '')]
+                    );
+                },
+                [
+                    'is_safe' => ['html'],
+                ]
+            ),
         ];
     }
 

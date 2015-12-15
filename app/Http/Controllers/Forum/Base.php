@@ -26,7 +26,7 @@ trait Base
     /**
      * Applies repository criteria
      */
-    public function pushCriteria()
+    public function pushForumCriteria()
     {
         if (auth()->check()) {
             $groupsId = auth()->user()->groups()->lists('id');

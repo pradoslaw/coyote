@@ -9,23 +9,7 @@
         <h1>{{ forum.title|default(forum.name) }}</h1>
 
         <nav>
-            <ul class="pagination pagination-xs">
-                <li class="disabled">
-                    <a href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li>
-                    <a href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
+            {{ topics.render()|raw }}
         </nav>
 
         {% include "forum/_top.twig" %}
@@ -36,11 +20,11 @@
                 <div class="panel-body">
                     <div id="box-topics" class="box-forum">
                         <ul id="sort" class="hidden-xs">
-                            <li class="desc"><a rel="nofollow" title="Sortuj według daty napisania ostatniego postu" href="?sort=time&amp;order=ASC">Ostatni post</a></li>
-                            <li><a rel="nofollow" title="Sortuj według daty utworzenia wątku" href="?sort=id&amp;order=DESC">Data utworzenia</a></li>
-                            <li><a rel="nofollow" title="Sortuj według ilości odpowiedzi" href="?sort=replies&amp;order=DESC">Odpowiedzi</a></li>
-                            <li><a rel="nofollow" title="Sortuj według ilości wyświetleń" href="?sort=views&amp;order=DESC">Wyświetleń</a></li>
-                            <li><a rel="nofollow" title="Sortuj według ilości głosów" href="?sort=votes&amp;order=DESC">Głosów</a></li>
+                            <li>{{ sortable('last', 'Ostatni post', ['last', 'desc']) }}</li>
+                            <li>{{ sortable('id', 'Data utworzenia', ['last', 'desc']) }}</li>
+                            <li>{{ sortable('replies', 'Odpowiedzi', ['last', 'desc']) }}</li>
+                            <li>{{ sortable('views', 'Wyświetleń', ['last', 'desc']) }}</li>
+                            <li>{{ sortable('score', 'Głosów', ['last', 'desc']) }}</li>
                             <li class="filter"><a href="javascript:">Filtruj</a></li>
                         </ul>
 
@@ -48,105 +32,106 @@
                         <div class="clearfix"></div>
 
                         <table>
-                            <tr>
-                                <td class="col-topic-icon">
-                                    <img class="center-block" src="/img/topic-new.png">
-                                </td>
-                                <td class="col-subject">
-                                    <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view unread" href="/Forum/Python/Test?view=unread"></a>
+                            {% for topic in topics %}
+                                {% set url = route('forum.topic', [topic.forum_path, topic.id, topic.path]) %}
+                                <tr>
+                                    <td class="col-topic-icon">
+                                        <img class="center-block" src="/img/topic-new.png">
+                                    </td>
+                                    <td class="col-subject">
+                                        <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view {{ topic.unread ? 'unread' }}" href="{{ url }}?view=unread"></a>
 
-                                    <h5>
-                                        <a title="Python - wybór &quot;najlepszego&quot; GUI cross-platform" href="/Forum/Python/Test">Python - wybór "najlepszego" GUI cross-platform</a>
-                                    </h5>
+                                        <h5>
+                                            <a title="{{ topic.subject }}" href="{{ url }}">{{ topic.subject }}</a>
+                                        </h5>
 
-                                    <ul class="tag-clouds pull-right hidden-sm hidden-xs">
-                                        <li><a href="#">delphi</a></li>
-                                    </ul>
-                                    <strong>
-                                        <span class="timestamp" data-timestamp="1444559981" title="11 październik 2015, 12:39">wczoraj, 12:39</span>
-                                        Wielki Kaczor
-                                    </strong>
-                                </td>
-                                <td class="col-views hidden-xs">
-                                    <p title="Ilość odpowiedzi"><strong>4</strong> <small>odpowiedzi</small></p>
-                                    <p title="Ilość wyświetleń"><strong>196</strong> <small>wyświetleń</small></p>
-                                </td>
-                                <td class="col-last-post hidden-xs">
-                                    <a href="javascript:" class="btn-watch-sm"></a>
+                                        <ul class="tag-clouds pull-right hidden-sm hidden-xs">
+                                            <li><a href="#">delphi</a></li>
+                                        </ul>
+                                        <strong>
+                                            <span class="timestamp" data-timestamp="{{ topic.first_created_at|timestamp }}" title="{{ topic.first_created_at|format_date }}">{{ topic.first_created_at|format_date }}</span>
 
-                                    <a href="#" class="hidden-sm hidden-xs">
-                                        <img class="img-thumbnail" src="/img/shalom.png" width="35" height="35">
-                                    </a>
+                                            {% if topic.author_id %}
+                                                {{ link_to_profile(topic.author_id, topic.author_name, topic.author_is_active, topic.author_is_blocked) }}
+                                            {% else %}
+                                                {{ topic.first_user_name }}
+                                            {% endif %}
+                                        </strong>
+                                    </td>
+                                    <td class="col-views hidden-xs">
+                                        <p title="Ilość odpowiedzi"><strong>{{ topic.replies }}</strong> <small>odpowiedzi</small></p>
+                                        <p title="Ilość wyświetleń"><strong>{{ topic.views }}</strong> <small>wyświetleń</small></p>
+                                    </td>
+                                    <td class="col-last-post hidden-xs">
+                                        <a href="javascript:" class="btn-watch-sm"></a>
 
-                                    <span class="timestamp" data-timestamp="1444572566" title="11 październik 2015, 16:09">wczoraj, 16:09</span><br>
-                                    <a data-user-id="62278" href="#">Shalom</a>
-                                </td>
-                            </tr>
+                                        {% if topic.poster_id %}
+                                            <a href="{{ route('profile', [topic.poster_id]) }}" class="hidden-sm hidden-xs">
+                                                <img class="img-thumbnail" src="{{ user_photo(topic.poster_photo) }}" width="35" height="35">
+                                            </a>
+                                        {% else %}
+                                            <img class="img-thumbnail" src="{{ asset('img/avatar.png') }}" width="35" height="35">
+                                        {% endif %}
 
-                            <tr>
-                                <td class="col-topic-icon">
-                                    <img class="center-block" src="/img/topic-new.png">
-                                </td>
-                                <td class="col-subject">
-                                    <dl class="topic-pagination hidden-xs">
-                                        <dd>
-                                            <a href="#">1</a> ...
-                                            <a href="#">4</a>
-                                            <a href="#">5</a>
-                                            <a href="#">6</a>
-                                        </dd>
-                                    </dl>
+                                        <span class="timestamp" data-timestamp="{{ topic.last_created_at|timestamp }}" title="{{ topic.last_created_at|format_date(false) }}">{{ topic.last_created_at|format_date }}</span><br>
 
-                                    <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view unread" href="/Forum/Python/Test?view=unread"></a>
+                                        {% if topic.poster_id %}
+                                            {{ link_to_profile(topic.poster_id, topic.poster_name, topic.poster_is_active, topic.poster_is_blocked) }}
+                                        {% else %}
+                                            {{ topic.last_user_name }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
 
-                                    <h5>
-                                        <a title="Jaką kawę pijecie? Co wam to daje? Dlaczego pijecie?" href="/Forum/Python/Test">Jaką kawę pijecie? Co wam to daje? Dlaczego pijecie?</a>
-                                    </h5>
+                            {#<tr>#}
+                                {#<td class="col-topic-icon">#}
+                                    {#<img class="center-block" src="/img/topic-new.png">#}
+                                {#</td>#}
+                                {#<td class="col-subject">#}
+                                    {#<dl class="topic-pagination hidden-xs">#}
+                                        {#<dd>#}
+                                            {#<a href="#">1</a> ...#}
+                                            {#<a href="#">4</a>#}
+                                            {#<a href="#">5</a>#}
+                                            {#<a href="#">6</a>#}
+                                        {#</dd>#}
+                                    {#</dl>#}
 
-                                    <ul class="tag-clouds pull-right hidden-sm hidden-xs">
-                                        <li><a href="#">kawa</a></li>
-                                    </ul>
-                                    <strong>
-                                        <span class="timestamp" data-timestamp="1444559981" title="04 styczeń 2015, 19:55">04 styczeń 2015, 19:55</span>
-                                        Wielki Kaczor
-                                    </strong>
-                                </td>
-                                <td class="col-views hidden-xs">
-                                    <p title="Ilość odpowiedzi"><strong>4</strong> <small>odpowiedzi</small></p>
-                                    <p title="Ilość wyświetleń"><strong>196</strong> <small>wyświetleń</small></p>
-                                </td>
-                                <td class="col-last-post hidden-xs">
-                                    <a href="javascript:" class="btn-watch-sm"></a>
+                                    {#<a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view unread" href="/Forum/Python/Test?view=unread"></a>#}
 
-                                    <a href="#" class="hidden-sm hidden-xs">
-                                        <img class="img-thumbnail" src="/img/shalom.png" width="35" height="35">
-                                    </a>
+                                    {#<h5>#}
+                                        {#<a title="Jaką kawę pijecie? Co wam to daje? Dlaczego pijecie?" href="/Forum/Python/Test">Jaką kawę pijecie? Co wam to daje? Dlaczego pijecie?</a>#}
+                                    {#</h5>#}
 
-                                    <span class="timestamp" data-timestamp="1444572566" title="04 styczeń 2015, 19:55">04 styczeń 2015, 19:55</span><br>
-                                    <a data-user-id="62278" href="#">Shalom</a>
-                                </td>
-                            </tr>
+                                    {#<ul class="tag-clouds pull-right hidden-sm hidden-xs">#}
+                                        {#<li><a href="#">kawa</a></li>#}
+                                    {#</ul>#}
+                                    {#<strong>#}
+                                        {#<span class="timestamp" data-timestamp="1444559981" title="04 styczeń 2015, 19:55">04 styczeń 2015, 19:55</span>#}
+                                        {#Wielki Kaczor#}
+                                    {#</strong>#}
+                                {#</td>#}
+                                {#<td class="col-views hidden-xs">#}
+                                    {#<p title="Ilość odpowiedzi"><strong>4</strong> <small>odpowiedzi</small></p>#}
+                                    {#<p title="Ilość wyświetleń"><strong>196</strong> <small>wyświetleń</small></p>#}
+                                {#</td>#}
+                                {#<td class="col-last-post hidden-xs">#}
+                                    {#<a href="javascript:" class="btn-watch-sm"></a>#}
+
+                                    {#<a href="#" class="hidden-sm hidden-xs">#}
+                                        {#<img class="img-thumbnail" src="/img/shalom.png" width="35" height="35">#}
+                                    {#</a>#}
+
+                                    {#<span class="timestamp" data-timestamp="1444572566" title="04 styczeń 2015, 19:55">04 styczeń 2015, 19:55</span><br>#}
+                                    {#<a data-user-id="62278" href="#">Shalom</a>#}
+                                {#</td>#}
+                            {#</tr>#}
 
                             <tr>
                                 <td colspan="4" class="col-footer-nav">
                                     <nav class="pull-left">
-                                        <ul class="pagination pagination-xs">
-                                            <li class="disabled">
-                                                <a href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                </a>
-                                            </li>
-                                            <li class="active"><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li>
-                                                <a href="#" aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        {{ topics.render()|raw }}
                                     </nav>
 
                                     <a class="btn pull-right" href="#">
@@ -159,7 +144,9 @@
                         </table>
                     </div>
 
-                    <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                    {% if topics.count() > 10 %}
+                        <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                    {% endif %}
                 </div>
             </section>
 
@@ -168,8 +155,8 @@
 
         <aside id="sidebar">
             <div id="box-count" class="box">
-                <strong>5</strong>
-                <span>wątków</span>
+                <strong>{{ topics.total() }}</strong>
+                <span>{{ declination(topics.total(), ['wątek', 'wątki', 'wątków'], true) }}</span>
             </div>
 
             <div class="box">

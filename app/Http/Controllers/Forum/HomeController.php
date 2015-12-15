@@ -34,7 +34,7 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Forum', route('forum.home'));
 
-        $this->pushCriteria();
+        $this->pushForumCriteria();
         // execute query: get all categories that user can has access
         $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId());
 

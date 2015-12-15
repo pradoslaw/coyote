@@ -4,6 +4,8 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
+use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -16,13 +18,19 @@ class CategoryController extends Controller
     private $forum;
 
     /**
+     * @var Topic
+     */
+    private $topic;
+
+    /**
      * @param Forum $forum
      */
-    public function __construct(Forum $forum)
+    public function __construct(Forum $forum, Topic $topic)
     {
         parent::__construct();
 
         $this->forum = $forum;
+        $this->topic = $topic;
     }
 
     /**
@@ -37,9 +45,12 @@ class CategoryController extends Controller
         // create view with online users
         $viewers = app()->make('Session\Viewers')->render($request->getRequestUri());
 
-        $this->pushCriteria();
+        $this->pushForumCriteria();
         $forumList = $this->forum->forumList();
 
-        return parent::view('forum.category')->with(compact('viewers', 'forumList', 'forum'));
+        $this->topic->pushCriteria(new BelongsToForum($forum->id));
+        $topics = $this->topic->paginate(auth()->id(), $request->getSession()->getId());
+
+        return parent::view('forum.category')->with(compact('viewers', 'forumList', 'forum', 'topics'));
     }
 }
