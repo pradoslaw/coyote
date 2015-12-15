@@ -19,6 +19,7 @@
                 </div>
             </div>
 
+            {% if auth_guest() %}
             <div class="form-group {{ errors.first('user_name') ? 'has-error' }}">
                 <label class="col-md-2 control-label">Autor</label>
                 <div class="col-md-10">
@@ -31,6 +32,7 @@
                     {% endif %}
                 </div>
             </div>
+            {% endif %}
 
             <div id="text-area" class="row">
                 <div class="col-xs-12">
@@ -99,7 +101,7 @@
 
             <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
-                    <button type="submit" class="btn btn-primary">Wyślij</button>
+                    <button type="submit" class="btn btn-primary" data-submit-state="Wysyłanie...">Wyślij</button>
                 </div>
             </div>
 
