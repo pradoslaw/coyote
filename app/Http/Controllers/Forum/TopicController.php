@@ -3,9 +3,12 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
+use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Alert\Providers\Post\Login as Alert_Login;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
 
@@ -81,15 +84,18 @@ class TopicController extends Controller
 
     /**
      * @param $forum
+     * @param Alert $alert
      * @param PostRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($forum, PostRequest $request)
+    public function save($forum, Alert $alert, PostRequest $request)
     {
-        $url = \DB::transaction(function () use ($request, $forum) {
+        $url = \DB::transaction(function () use ($request, $forum, $alert) {
             $path = str_slug($request->get('subject'), '_');
 
+            // create new topic
             $topic = $this->topic->create($request->all() + ['path' => $path, 'forum_id' => $forum->id]);
+            // create new post and assign it to topic. don't worry about the rest: trigger will do the work
             $this->post->create($request->all() + [
                 'user_id'   => auth()->id(),
                 'topic_id'  => $topic->id,
@@ -98,6 +104,23 @@ class TopicController extends Controller
                 'browser'   => request()->browser(),
                 'host'      => request()->server('SERVER_NAME')
             ]);
+
+            // parsing text and store it in cache
+            $text = app()->make('Parser\Forum')->parse($request->text);
+
+            // get id of users that were mentioned in the text
+            $usersId = (new Ref_Login())->grab($text);
+
+            if ($usersId) {
+                (new Alert_Login($alert))->with([
+                    'users_id'    => $usersId,
+                    'sender_id'   => auth()->id(),
+                    'sender_name' => $request->get('user_name', auth()->user()->name),
+                    'subject'     => excerpt($request->subject, 48),
+                    'excerpt'     => excerpt($text),
+                    'url'         => route('forum.topic', [$forum->path, $topic->id, $path], false)
+                ])->notify();
+            }
 
             return route('forum.topic', [$forum->path, $topic->id, $path]);
         });
