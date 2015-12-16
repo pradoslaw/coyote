@@ -69,7 +69,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         $result = $sql->paginate($perPage);
 
         foreach ($result as $topic) {
-            $lastMarked = $topic->forum_marked_at ?: new \DateTime('last month');
+            $lastMarked = $topic->forum_marked_at ?: (new \DateTime('last month'))->format('Y-m-d H:i:s');
             /*
              * Jezeli data napisania ostatniego posta jest pozniejsza
              * niz data odznaczenia forum jako przeczytanego...
