@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\User;
 use Coyote\Http\Controllers\Controller;
 use Coyote\User;
 use Coyote\Actkey;
+use Coyote\Group;
 use Coyote\Http\Requests\UserSettingsRequest;
 use Illuminate\Support\Facades\Mail;
 
@@ -18,7 +19,7 @@ class SettingsController extends Controller
         $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Ustawienia', route('user.settings'));
 
-        $groupList = [null => '-- wybierz --'] + User\Group::groupList(auth()->user()->id)->toArray();
+        $groupList = [null => '-- wybierz --'] + Group\User::groupList(auth()->user()->id)->toArray();
 
         $actEmail = Actkey::where('user_id', auth()->user()->id)->pluck('email');
 
