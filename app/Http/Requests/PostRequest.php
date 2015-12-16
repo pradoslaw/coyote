@@ -35,6 +35,13 @@ class PostRequest extends Request
             'text'              => 'required'
         ];
 
+        $canSticky = $this->user()->can('sticky', $forum);
+        if (!$canSticky) {
+            $this['is_sticky'] = false;
+        } else {
+            $rules['is_sticky'] = 'bool';
+        }
+
         if (auth()->guest()) {
             $rules['user_name'] = 'required|unique:users,name';
         }

@@ -72,32 +72,27 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <label>
-                        {{ form_checkbox('sticky', input_old('sticky'), false) }}
-                        Przyklejony
-                    </label>
+            {% if can('sticky', forum) %}
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <label>
+                            {{ form_checkbox('is_sticky', 1, input_old('is_sticky')) }}
+                            Przyklejony
+                        </label>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <label>
-                        {{ form_checkbox('watch', input_old('watch'), false) }}
-                        Obserwuj wątek
-                    </label>
+            {% if auth_check() %}
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <label>
+                            {{ form_checkbox('watch', 1, input_old('watch', user('allow_notify'))) }}
+                            Obserwuj wątek
+                        </label>
+                    </div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <label>
-                        {{ form_checkbox('smilies', input_old('smilies'), false) }}
-                        Wyświetlaj emoticony
-                    </label>
-                </div>
-            </div>
+            {% endif %}
 
             <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">

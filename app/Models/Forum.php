@@ -65,11 +65,11 @@ class Forum extends Model
     /**
      * Checks ability for specified forum and user id
      *
-     * @param string $ability
+     * @param string $name
      * @param int $userId
      * @return bool
      */
-    public function check($ability, $userId)
+    public function ability($name, $userId)
     {
         static $acl = null;
 
@@ -83,7 +83,7 @@ class Forum extends Model
                         ->lists('value', 'name');
         }
 
-        return isset($acl[$ability]) ? $acl[$ability] : false;
+        return isset($acl[$name]) ? $acl[$name] : false;
     }
 
     /**
