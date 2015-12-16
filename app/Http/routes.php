@@ -30,6 +30,7 @@ Route::controller('Password', 'Auth\PasswordController');
 Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], function () {
     // strona glowna forum
     Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
+    Route::post('/Preview', ['uses' => 'HomeController@preview', 'as' => 'preview']);
 
     // formularz dodawania nowego watku na forum
     Route::get('{forum}/Submit', ['uses' => 'TopicController@submit', 'as' => 'topic.submit', 'middleware' => 'forum.access']);

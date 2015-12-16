@@ -43,4 +43,14 @@ class HomeController extends Controller
 
         return parent::view('forum.home')->with(compact('sections', 'viewers'));
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function preview(Request $request)
+    {
+        $parser = app()->make('Parser\Forum');
+        return response($parser->parse($request->get('text')));
+    }
 }

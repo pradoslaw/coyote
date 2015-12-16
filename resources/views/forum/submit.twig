@@ -161,6 +161,7 @@
 {% block body %}
     {{ parent() }}
 
+    <script type="text/javascript" src="/js/tab.js"></script>
     <script type="text/javascript" src="/js/forum.js" ></script>
     <script type="text/javascript" src="/js/posting.js"></script>
     <script type="text/javascript" src="/js/wikieditor.js"></script>
@@ -181,6 +182,14 @@
 
                     $('#hint-' + name).fadeIn(1000);
                 }
+            });
+
+            $('a[href="#preview"]').click(function(e) {
+                $('#preview').html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
+
+                $.post('{{ route('forum.preview') }}', {'text': $('textarea[name="text"]').val()}, function(html) {
+                    $('#preview').html(html);
+                });
             });
         });
     </script>
