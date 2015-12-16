@@ -154,6 +154,9 @@ return [
         // mikroblogi, czy forum. w takim scenariuszu zaladowane sa odpowiednie klasy
         // do parsowania tekstu w zaleznosci od tego, czy mamy do czynienia z postem, komentarzem itd
         Coyote\Providers\ParserServiceProvider::class,
+        // Klasy powiadomien
+        Coyote\Providers\AlertServiceProvider::class,
+
 
         // Obsluga szablonow Twig
         TwigBridge\ServiceProvider::class,

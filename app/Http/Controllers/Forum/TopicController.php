@@ -84,13 +84,12 @@ class TopicController extends Controller
 
     /**
      * @param $forum
-     * @param Alert $alert
      * @param PostRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($forum, Alert $alert, PostRequest $request)
+    public function save($forum, PostRequest $request)
     {
-        $url = \DB::transaction(function () use ($request, $forum, $alert) {
+        $url = \DB::transaction(function () use ($request, $forum) {
             $path = str_slug($request->get('subject'), '_');
 
             // create new topic
@@ -112,7 +111,7 @@ class TopicController extends Controller
             $usersId = (new Ref_Login())->grab($text);
 
             if ($usersId) {
-                (new Alert_Login($alert))->with([
+                app()->make('Alert\Post\Login')->with([
                     'users_id'    => $usersId,
                     'sender_id'   => auth()->id(),
                     'sender_name' => $request->get('user_name', auth()->user()->name),
