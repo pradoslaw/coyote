@@ -27,21 +27,19 @@
   .ico {
     display: block;
     height: 26px;
-    font-size: 23px;
+    background: url('/img/sprites.png') no-repeat;
   }
 
-  .lock {
-    opacity: .9;
-    color: $gray-light;
+  .ico.lock {
+     background-position: 4px -123px;
   }
 
   .ico.new {
-    //color: $alt-link-hover-color;
-    color: #FF9800;
+    background-position: 4px -172px;
   }
 
   .ico.normal {
-    color: $gray-light;
+    background-position: 4px -221px;
   }
 }
 
@@ -139,6 +137,6 @@
   float: left;
 }
 
-.unread {
+.btn-view.unread {
   background-image: url('/img/topic-view-unread.png');
 }

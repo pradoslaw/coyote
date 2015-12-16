@@ -16,17 +16,11 @@
                     <tr id="forum-{{ forum.id }}">
                         <td class="col-icon hidden-xxs">
                             {% if forum.is_locked %}
-                                <span class="ico lock {{ forum.forum_unread ? 'new' }}" title="Forum zablokowane">
-                                    <i class="fa fa-fw fa-lock"></i>
-                                </span>
+                                <span class="ico lock {{ forum.forum_unread ? 'new' }}" title="Forum zablokowane"></span>
                             {% elseif forum.forum_unread %}
-                                <span class="ico new" title="Kliknij, aby oznaczyć jako przeczytane">
-                                    <i class="fa fa-fw fa-file-o"></i>
-                                </span>
+                                <a class="ico new" title="Kliknij, aby oznaczyć jako przeczytane"></a>
                             {% else %}
-                                <span class="ico normal" title="Brak nowych postów">
-                                    <i class="fa fa-fw fa-file-o"></i>
-                                </span>
+                                <span class="ico normal" title="Brak nowych postów"></span>
                             {% endif %}
                         </td>
                         <td class="col-forum-description">
