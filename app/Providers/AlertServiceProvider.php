@@ -31,11 +31,19 @@ class AlertServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('Alert\Post\Login', function ($app) {
-            return new Alert_Post_Login(
-                $app['Coyote\Repositories\Eloquent\AlertRepository']
-            );
-        });
+        foreach ($this->provides() as $provider) {
+            $segments = explode('\\', $provider);
+            array_shift($segments);
+
+            $class = '\\Coyote\\Alert\\Providers\\' . implode('\\', $segments);
+
+            $this->app->bind($provider, function ($app) use ($class) {
+                return new $class(
+                    $app['Coyote\Repositories\Contracts\AlertRepositoryInterface']
+                );
+            });
+        }
+
     }
 
     /**
