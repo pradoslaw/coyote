@@ -15,12 +15,13 @@ class CreateMicroblogTagsTable extends Migration
         Schema::create('microblog_tags', function (Blueprint $table) {
             $table->mediumInteger('id', true);
             $table->mediumInteger('microblog_id');
-            $table->string('name', 100);
+            $table->integer('tag_id');
 
             $table->index('microblog_id');
             $table->index('name');
 
             $table->foreign('microblog_id')->references('id')->on('microblogs')->onDelete('cascade');
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
     }
 

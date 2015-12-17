@@ -11,7 +11,7 @@ class Tag extends Model
      *
      * @var array
      */
-    protected $fillable = ['microblog_id', 'name'];
+    protected $fillable = ['microblog_id', 'tag_id'];
 
     /**
      * The database table used by the model.
@@ -24,4 +24,9 @@ class Tag extends Model
      * @var array
      */
     public $timestamps = false;
+
+    public function tag()
+    {
+        return $this->hasOne('Coyote\Tag');
+    }
 }

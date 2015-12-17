@@ -17,10 +17,8 @@ class CreateTagsTable extends Migration
             $table->string('name', 100)->unique();
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->softDeletes();
-            $table->smallInteger('count')->default(0);
-            $table->mediumInteger('creator_id')->nullable();
 
-            $table->foreign('creator_id')->references('id')->on('users')->onDelete('set null');
+            $table->index('name');
         });
     }
 

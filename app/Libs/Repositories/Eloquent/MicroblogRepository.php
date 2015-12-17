@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Eloquent;
 use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
+use Coyote\Tag;
 use Image;
 
 /**
@@ -264,7 +265,8 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         Microblog\Tag::where('microblog_id', $microblogId)->delete();
 
         foreach ($tags as $name) {
-            Microblog\Tag::create(['microblog_id' => $microblogId, 'name' => $name]);
+            $tag = Tag::firstOrCreate(['name' => $name]);
+            Microblog\Tag::create(['microblog_id' => $microblogId, 'tag_id' => $tag->id]);
         }
     }
 
@@ -277,9 +279,10 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     {
         return (new Microblog\Tag())
                 ->select(['name', \DB::raw('COUNT(*) AS count')])
+                ->join('tags', 'tags.id', '=', 'tag_id')
                 ->join('microblogs', 'microblogs.id', '=', 'microblog_id')
-                    ->whereNull('deleted_at')
-                    ->whereNull('parent_id')
+                    ->whereNull('microblogs.deleted_at')
+                    ->whereNull('microblogs.parent_id')
                 ->groupBy('name')
                 ->orderBy(\DB::raw('COUNT(*)'), 'DESC')
                 ->limit(30)
