@@ -62,16 +62,18 @@
 
             <div class="clearfix"></div>
 
-            <div class="edit-info">
-                <strong>
-                    <a class="btn-history" title="Zobacz historię zmian tego postu" href="#">
-                        <i class="fa fa-external-link"></i>
-                    </a>
+            {% if post.edit_count %}
+                <div class="edit-info">
+                    <strong>
+                        <a class="btn-history" title="Zobacz historię zmian tego postu" href="#">
+                            <i class="fa fa-external-link"></i>
+                        </a>
 
-                    3x, ostatnio: <a href="#">Wizzie</a>,
-                </strong>
-                <span class="timestamp" data-timestamp="1444416388">09 październik 2015, 20:46</span>
-            </div>
+                        {{ post.edit_count }}x, ostatnio: {{ link_to_profile(post.editor_id, post.editor_name, post.editor_is_active, post.editor_is_blocked) }},
+                    </strong>
+                    <span class="timestamp" title="{{ post.updated_at|format_date(false) }}" data-timestamp="{{ post.updated_at|timestamp }}">{{ post.updated_at|format_date }}</span>
+                </div>
+            {% endif %}
 
             <div id="post-comment-1182672" data-post-id="1182672" class="comments">
 

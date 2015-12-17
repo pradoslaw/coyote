@@ -1,37 +1,39 @@
 {% extends 'layout.twig' %}
-{% block title %}Nowy wątek na forum{{ parent() }}{% endblock %}
+{% block title %}{{ title }}{{ parent() }}{% endblock %}
 
 {% import 'components/forms.twig' as forms %}
 
 {% block container %}
     <div id="form-wrapper" class="row">
         <div class="col-sm-9">
-            {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': route('forum.topic.submit', [forum.path]), 'class': 'form-horizontal'}) }}
+            {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': url(request().path), 'class': 'form-horizontal'}) }}
 
-            <div class="form-group {{ errors.first('subject') ? 'has-error' }}">
-                <label class="col-md-2 control-label">Temat</label>
-                <div class="col-md-10">
-                    {{ form_text('subject', input_old('subject'), {'class': 'form-control'}) }}
+            {% if topic is not defined or topic.first_post_id == post.id %}
+                <div class="form-group {{ errors.first('subject') ? 'has-error' }}">
+                    <label class="col-md-2 control-label">Temat</label>
+                    <div class="col-md-10">
+                        {{ form_text('subject', input_old('subject', topic.subject), {'class': 'form-control'}) }}
 
-                    {% if errors.first('subject') %}
-                        <span class="help-block">{{ errors.first('subject') }}</span>
-                    {% endif %}
+                        {% if errors.first('subject') %}
+                            <span class="help-block">{{ errors.first('subject') }}</span>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
-            {% if auth_guest() %}
-            <div class="form-group {{ errors.first('user_name') ? 'has-error' }}">
-                <label class="col-md-2 control-label">Autor</label>
-                <div class="col-md-10">
-                    {{ form_text('user_name', input_old('user_name'), {'class': 'form-control'}) }}
+            {% if auth_guest() or (post.id and not post.user_id) %}
+                <div class="form-group {{ errors.first('user_name') ? 'has-error' }}">
+                    <label class="col-md-2 control-label">Autor</label>
+                    <div class="col-md-10">
+                        {{ form_text('user_name', input_old('user_name', post.user_name), {'class': 'form-control'}) }}
 
-                    {% if errors.first('user_name') %}
-                        <span class="help-block">{{ errors.first('user_name') }}</span>
-                    {% else %}
-                        <span class="help-block">Wpisz swoją nazwę użytkownika</span>
-                    {% endif %}
+                        {% if errors.first('user_name') %}
+                            <span class="help-block">{{ errors.first('user_name') }}</span>
+                        {% else %}
+                            <span class="help-block">Wpisz swoją nazwę użytkownika</span>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
             {% endif %}
 
             <div id="text-area" class="row">
@@ -46,7 +48,7 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
                             {% include 'components/toolbar' %}
-                            <textarea name="text" class="form-control" style="height: 160px;">{{ input_old('text') }}</textarea>
+                            <textarea name="text" class="form-control" style="height: 160px;">{{ input_old('text', post.text) }}</textarea>
 
                             {% if errors.first('text') %}
                                 <span class="help-block">{{ errors.first('text') }}</span>
@@ -59,28 +61,30 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-md-2 control-label {{ errors.first('tag') ? 'has-error' }}">Tagi</label>
-                <div class="col-md-10">
-                    {{ form_text('tag', input_old('tag'), {'class': 'form-control', 'autocomplete': 'off'}) }}
-
-                    {% if errors.first('tag') %}
-                        <span class="help-block">{{ errors.first('tag') }}</span>
-                    {% else %}
-                        <span class="help-block">Możesz opisać swój wątek słowami kluczowymi - np. C#, CLR (max. 5 tagów)</span>
-                    {% endif %}
-                </div>
-            </div>
-
-            {% if can('sticky', forum) %}
+            {% if topic is not defined or topic.first_post_id == post.id %}
                 <div class="form-group">
-                    <div class="col-md-10 col-md-offset-2">
-                        <label>
-                            {{ form_checkbox('is_sticky', 1, input_old('is_sticky')) }}
-                            Przyklejony
-                        </label>
+                    <label class="col-md-2 control-label {{ errors.first('tag') ? 'has-error' }}">Tagi</label>
+                    <div class="col-md-10">
+                        {{ form_text('tag', input_old('tag'), {'class': 'form-control', 'autocomplete': 'off'}) }}
+
+                        {% if errors.first('tag') %}
+                            <span class="help-block">{{ errors.first('tag') }}</span>
+                        {% else %}
+                            <span class="help-block">Możesz opisać swój wątek słowami kluczowymi - np. C#, CLR (max. 5 tagów)</span>
+                        {% endif %}
                     </div>
                 </div>
+
+                {% if can('sticky', forum) %}
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-2">
+                            <label>
+                                {{ form_checkbox('is_sticky', 1, input_old('is_sticky', post.is_sticky)) }}
+                                Przyklejony
+                            </label>
+                        </div>
+                    </div>
+                {% endif %}
             {% endif %}
 
             {% if auth_check() %}

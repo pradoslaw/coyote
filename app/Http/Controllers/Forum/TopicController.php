@@ -3,12 +3,10 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
-use Coyote\Alert\Providers\Post\Login as Alert_Login;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\Paginator;
@@ -48,34 +46,30 @@ class TopicController extends Controller
 
     /**
      * @param \Coyote\Forum $forum
-     * @param int $id
+     * @param \Coyote\Topic $topic
      * @param string $slug
      * @param Request $request
      * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function index($forum, $id, $slug, Request $request)
+    public function index($forum, $topic, $slug, Request $request)
     {
-        $topic = $this->topic->findOrFail($id);
         if ($topic->forum_id !== $forum->id) {
-            return redirect(route('forum.topic', [$forum->path, $id, $topic->path]));
+            return redirect(route('forum.topic', [$forum->path, $topic->id, $topic->path]));
         }
-
-
-
-
 
         $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, auth()->id());
         $paginate = new Paginator($posts, 25, $request->page);
 
-        $parser = ['main' => app()->make('Parser\Post'), 'comment' => app()->make('Parser\Comment')];
+        $parser = ['post' => app()->make('Parser\Post'), 'comment' => app()->make('Parser\Comment')];
 
         foreach ($posts as &$post) {
-            $post->text = $parser['main']->parse($post->text);
+            $post->text = $parser['post']->parse($post->text);
         }
 
         $this->breadcrumb($forum);
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $id, $topic->path]));
+        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
+        // create forum list for current user (according to user's privileges)
         $this->pushForumCriteria();
         $forumList = $this->forum->forumList();
 
@@ -85,18 +79,18 @@ class TopicController extends Controller
     }
 
     /**
+     * @param Forum $forum
      * @return \Illuminate\View\View
      */
     public function submit($forum)
     {
-        if (auth()->guest() && !$forum->enable_anonymous) {
-            abort(403);
-        }
+        // make sure that user can write in this category
+        $this->authorizeForum($forum);
 
         $this->breadcrumb($forum);
         $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
 
-        return parent::view('forum.submit')->with('forum', $forum);
+        return parent::view('forum.submit', ['title' => 'Nowy wątek na ' . $forum->name])->with('forum', $forum);
     }
 
     /**
@@ -122,7 +116,7 @@ class TopicController extends Controller
             ]);
 
             // parsing text and store it in cache
-            $text = app()->make('Parser\Forum')->parse($request->text);
+            $text = app()->make('Parser\Post')->parse($request->text);
 
             // get id of users that were mentioned in the text
             $usersId = (new Ref_Login())->grab($text);

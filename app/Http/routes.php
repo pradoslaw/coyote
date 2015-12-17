@@ -37,13 +37,13 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('{forum}/Submit', ['uses' => 'TopicController@save', 'middleware' => 'forum.access']);
 
     // dodawanie lub edycja posta na forum
-    Route::get('{forum}/{id}/Submit/{postId?}', ['uses' => 'PostController@submit', 'as' => 'post.submit', 'middleware' => 'forum.access']);
-    Route::post('{forum/{id}/Submit/{postId?}', ['uses' => 'PostController@save', 'middleware' => 'forum.access']);
+    Route::get('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@submit', 'as' => 'post.submit', 'middleware' => 'forum.access']);
+    Route::post('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@save', 'middleware' => 'forum.access']);
 
     // widok kategorii forum
     Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);
-    // widok wyswietlania watku. {id} zawiera unikalne id watku
-    Route::get('{forum}/{id}-{slug}', ['uses' => 'TopicController@index', 'as' => 'topic', 'middleware' => 'forum.access']);
+    // widok wyswietlania watku. {topic}
+    Route::get('{forum}/{topic}-{slug}', ['uses' => 'TopicController@index', 'as' => 'topic', 'middleware' => 'forum.access']);
 
     // usuwanie posta
     Route::post('Delete/{id}', ['uses' => 'PostController@delete', 'as' => 'delete', 'middleware' => 'auth']);

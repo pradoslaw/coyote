@@ -14,7 +14,7 @@ class PostRequest extends Request
     public function authorize()
     {
         $forum = $this->route('forum');
-        return !(auth()->guest() && !$forum->enable_anonymous);
+        return !(auth()->guest() && !$forum->enable_anonymous) || !$forum->is_locked;
     }
 
     /**
@@ -25,25 +25,31 @@ class PostRequest extends Request
     public function rules()
     {
         $forum = $this->route('forum');
+        $topic = $this->route('topic');
+        $post = $this->route('post');
 
-        if ($forum->required_tag) {
-            $rules['tag'] = 'required';
+        // post requires text
+        $rules = ['text' => 'required'];
+
+        // if I create new topic as anonymous user (or edit anonymous' post as a moderator)...
+        if ((isset($post->id) && is_null($post->user_id)) || auth()->guest()) {
+            $rules = array_merge($rules, $this->userName());
         }
 
-        $rules = [
-            'subject'           => 'required|min:3|max:200',
-            'text'              => 'required'
-        ];
+        // if I create new topic or edit first post ...
+        if ((isset($post->id) && $post->id === $topic->first_post_id) || is_null($topic)) {
+            $rules = array_merge($rules, ['subject' => 'required|min:3|max:200', 'tag' => 'string']);
 
-        $canSticky = $this->user()->can('sticky', $forum);
-        if (!$canSticky) {
-            $this['is_sticky'] = false;
-        } else {
-            $rules['is_sticky'] = 'bool';
-        }
+            $canSticky = $this->user()->can('sticky', $forum);
+            if (!$canSticky) {
+//                $rules['is_sticky'] = false;
+            } else {
+                $rules['is_sticky'] = 'bool';
+            }
 
-        if (auth()->guest()) {
-            $rules['user_name'] = 'required|unique:users,name';
+            if ($forum->required_tag) {
+                $rules['tag'] .= 'required';
+            }
         }
 
         return $rules;

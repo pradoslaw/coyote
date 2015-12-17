@@ -6,6 +6,8 @@ use Coyote\Forum;
 use Coyote\Microblog;
 use Coyote\Policies\MicroblogPolicy;
 use Coyote\Policies\ForumPolicy;
+use Coyote\Policies\PostPolicy;
+use Coyote\Post;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -18,7 +20,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Microblog::class => MicroblogPolicy::class,
-        Forum::class => ForumPolicy::class
+        Forum::class => ForumPolicy::class,
+        Post::class => PostPolicy::class
     ];
 
     /**
