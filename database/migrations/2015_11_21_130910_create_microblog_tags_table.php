@@ -18,7 +18,6 @@ class CreateMicroblogTagsTable extends Migration
             $table->integer('tag_id');
 
             $table->index('microblog_id');
-            $table->index('name');
 
             $table->foreign('microblog_id')->references('id')->on('microblogs')->onDelete('cascade');
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
