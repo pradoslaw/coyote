@@ -13,7 +13,7 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 use Debugbar;
 
-class Forum
+class Post
 {
     /**
      * @var User

@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Coyote\Parser\Scenarios\Microblog as Parser_Microblog;
 use Coyote\Parser\Scenarios\Comment as Parser_Comment;
 use Coyote\Parser\Scenarios\Pm as Parser_Pm;
-use Coyote\Parser\Scenarios\Forum as Parser_Forum;
+use Coyote\Parser\Scenarios\Post as Parser_Post;
 
 class ParserServiceProvider extends ServiceProvider
 {
@@ -47,8 +47,8 @@ class ParserServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind('Parser\Forum', function ($app) {
-            return new Parser_Forum(
+        $this->app->bind('Parser\Post', function ($app) {
+            return new Parser_Post(
                 $app['Coyote\Repositories\Eloquent\UserRepository'],
                 $app['Coyote\Repositories\Eloquent\WordRepository']
             );

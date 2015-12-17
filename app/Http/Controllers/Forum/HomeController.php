@@ -50,7 +50,7 @@ class HomeController extends Controller
      */
     public function preview(Request $request)
     {
-        $parser = app()->make('Parser\Forum');
+        $parser = app()->make('Parser\Post');
         return response($parser->parse($request->get('text')));
     }
 }

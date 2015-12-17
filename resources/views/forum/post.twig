@@ -4,39 +4,46 @@
     <div class="row">
         <div class="col-xs-2 col-user">
             <h5 class="offline" title="Użytkownik jest offline">
-                <a data-user-id="62278" href="#">Wizzie</a>
+                {% if post.user_id %}
+                    {{ link_to_profile(post.user_id, post.author_name, post.is_active, post.is_blocked) }}
+                {% else %}
+                    {{ post.user_name }}
+                {% endif %}
             </h5>
         </div>
 
         <div class="col-xs-10 col-time">
-            <a title="Link do tego postu" id="id1182672" class="post-link" href="#">
+            <a title="Link do tego postu" id="id{{ post.id }}" class="post-link" href="#">
                 <i class="fa fa-file-o"></i>
             </a>
 
-            <span class="timestamp" title="09 październik 2015, 19:08" data-timestamp="1444410483">09 październik 2015, 19:08</span>
-            <small><a href="#" title="127.0.0.1" class="post-ip">(127.0.0.1)</a></small>
+            <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
+            {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
+            <small><a href="#" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-2 col-user hidden-xss">
-            <div class="avatar">
-                <img class="img-responsive" src="/img/shalom.png">
-            </div>
+            {% if post.user_id %}
+                <div class="avatar">
+                    <img class="img-responsive" src="{{ user_photo(post.photo) }}">
+                </div>
 
-            <p class="hidden-xs">
-                <strong>Rejestracja:</strong>
-                <small>25 maj 2014, 16:42</small>
-            </p>
-            <p class="hidden-xs">
-                <strong>Ostatnio:</strong>
-                <small>22 minuty temu</small>
-            </p>
+                <p class="hidden-xs">
+                    <strong>Rejestracja:</strong>
+                    <small>{{ post.author_created_at|format_date }}</small>
+                </p>
+                <p class="hidden-xs">
+                    <strong>Ostatnio:</strong>
+                    <small>{{ post.session_updated_at(post.author_visited_at)|format_date }}</small>
+                </p>
+            {% endif %}
         </div>
         <div class="col-xs-10 col-body">
 
             <div class="col-vote">
                 <input type="hidden" value="1182672">
-                <strong class="vote-count" title="Ocena postu">9</strong>
+                <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
                 <a class="vote-up " href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
                     <i class="fa fa-thumbs-o-up"></i>
@@ -47,9 +54,7 @@
             </div>
 
             <div class="post-content" data-post-id="1182672">
-                Enim tincidunt vel facilisis, turpis magnis? Cras nunc et augue ac habitasse, nunc cras turpis, sit montes cras, magnis pulvinar, arcu scelerisque turpis magna nascetur eu magna pid in tortor, tincidunt amet vel habitasse mid magnis, porta mus enim ultrices! Mus pid. Porta scelerisque porttitor proin nec sociis. Porttitor scelerisque lorem pellentesque cum sit tristique odio dis! Facilisis pid enim. Et eros vel scelerisque purus nunc est sagittis magna rhoncus. Nascetur etiam! Est et elementum! Adipiscing! Mattis, sed. Placerat porta! Ac arcu dis tortor amet. Non dolor egestas augue magna nascetur integer? Turpis sit cras adipiscing arcu hac pulvinar ac. Vel augue scelerisque sit integer tincidunt rhoncus cras. Cursus ac, ut, eros. Ac tortor penatibus turpis sagittis risus, parturient mus.
-
-                Purus ut urna? Porta in? Tincidunt porta facilisis in eros? Augue, velit sit aenean, pid dapibus dictumst enim quis. Dolor? Placerat proin? Mattis nisi, nunc aliquam? Et scelerisque pulvinar a, nisi ultrices a dapibus natoque, facilisis hac nec nec aliquet et rhoncus nec! Lectus! Amet amet odio elementum mus mus porta? Mid vel sit, in, et porta scelerisque pulvinar, elit rhoncus, urna vel, et, amet tristique risus! Sed quis aliquam? Sociis ut, vut nascetur sed. Nisi aliquam? In turpis, augue? Montes non duis rhoncus ultricies, turpis, in? Nec, cum! Nisi urna hac augue tristique pulvinar! Aliquet! Porta ac velit. Pulvinar proin elementum amet, elementum lundium magna mid, risus, phasellus pulvinar dictumst. Diam phasellus, lundium mauris platea odio nisi nec.
+                {{ post.text|raw }}
 
                 <hr>
                 <footer>"Jeśli wyszkolisz pracownika, to niedobrze, bo odejdzie. Jeśli go nie wyszkolisz, to jeszcze gorzej, bo zostanie."</footer>
@@ -144,7 +149,7 @@
                 <span class="hidden-xs">Usuń</span>
             </a>
 
-            <a data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" href="#" class="btn btn-xs btn-edit">
+            <a href="{{ route('forum.post.submit', [forum.path, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
                 <i class="fa fa-pencil"></i>
                 <span class="hidden-xs">Edytuj</span>
             </a>

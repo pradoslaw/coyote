@@ -11,6 +11,7 @@ use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Alert\Providers\Post\Login as Alert_Login;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
+use Illuminate\Pagination\Paginator;
 
 class TopicController extends Controller
 {
@@ -59,12 +60,28 @@ class TopicController extends Controller
             return redirect(route('forum.topic', [$forum->path, $id, $topic->path]));
         }
 
+
+
+
+
+        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, auth()->id());
+        $paginate = new Paginator($posts, 25, $request->page);
+
+        $parser = ['main' => app()->make('Parser\Post'), 'comment' => app()->make('Parser\Comment')];
+
+        foreach ($posts as &$post) {
+            $post->text = $parser['main']->parse($post->text);
+        }
+
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $id, $topic->path]));
 
+        $this->pushForumCriteria();
+        $forumList = $this->forum->forumList();
+
         $viewers = app('Session\Viewers')->render($request->getRequestUri());
 
-        return parent::view('forum.topic')->with('viewers', $viewers);
+        return parent::view('forum.topic')->with(compact('viewers', 'posts', 'forum', 'topic', 'paginate', 'forumList'));
     }
 
     /**
