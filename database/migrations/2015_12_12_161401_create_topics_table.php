@@ -26,7 +26,6 @@ class CreateTopicsTable extends Migration
             $table->tinyInteger('is_sticky')->default(0);
             $table->tinyInteger('is_announcement')->default(0);
             $table->tinyInteger('is_locked')->default(0);
-            $table->tinyInteger('is_solved')->default(0);
             $table->smallInteger('poll_id')->nullable();
             $table->smallInteger('prev_forum_id')->nullable();
             $table->integer('first_post_id')->nullable();
@@ -36,7 +35,6 @@ class CreateTopicsTable extends Migration
             $table->index('forum_id');
             $table->index('last_post_id');
             $table->index('last_post_created_at');
-            $table->index('is_solved');
             $table->index('views');
             $table->index(['deleted_at', 'forum_id', 'is_sticky']);
 
