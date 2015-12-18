@@ -36,7 +36,6 @@ BEGIN
 			END IF;
 
   			UPDATE forums SET posts = (posts -1), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = OLD.forum_id;
-  			UPDATE topics SET is_solved = NULL WHERE "id" = NEW.topic_id AND is_solved = NEW."id";
   			-- DELETE FROM post_accept WHERE accept_post = NEW.post_id;
 
   			IF OLD.user_id IS NOT NULL THEN
