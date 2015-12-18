@@ -41,9 +41,7 @@ class PostRequest extends Request
             $rules = array_merge($rules, ['subject' => 'required|min:3|max:200', 'tag' => 'string']);
 
             $canSticky = $this->user()->can('sticky', $forum);
-            if (!$canSticky) {
-//                $rules['is_sticky'] = false;
-            } else {
+            if ($canSticky) {
                 $rules['is_sticky'] = 'bool';
             }
 

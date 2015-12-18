@@ -21,9 +21,4 @@ class Post extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
-
-    public function scopeDistinctOn($query)
-    {echo DB::raw('DISTINCT ON(posts.id)');
-        return $query->select(DB::raw('DISTINCT ON(posts.id)'));
-    }
 }

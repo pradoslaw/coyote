@@ -43,7 +43,6 @@ class AlertServiceProvider extends ServiceProvider
                 );
             });
         }
-
     }
 
     /**
