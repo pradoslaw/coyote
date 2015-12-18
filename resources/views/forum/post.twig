@@ -26,7 +26,7 @@
         <div class="col-xs-2 col-user hidden-xss">
             {% if post.user_id %}
                 <div class="avatar">
-                    <img class="img-responsive" src="{{ user_photo(post.photo) }}">
+                    <img class="img-responsive" src="{{ user_photo(post.photo) }}" {{ not post.photo ? 'style="max-width: 75px"' }}>
                 </div>
 
                 <p class="hidden-xs">
