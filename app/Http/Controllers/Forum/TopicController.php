@@ -7,6 +7,8 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Stream\Activities\Create as Stream_Create;
+use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\Paginator;
@@ -132,6 +134,7 @@ class TopicController extends Controller
                 ])->notify();
             }
 
+            stream(Stream_Create::class, (new Stream_Topic)->map($topic, $forum, $text));
             return route('forum.topic', [$forum->path, $topic->id, $path]);
         });
 

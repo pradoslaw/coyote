@@ -265,7 +265,15 @@
     }
     
     span.comment:after {
-        content: $fa-var-comments;
+      content: $fa-var-comments;
+    }
+
+    span.topic:after {
+      content: $fa-var-file-o;
+    }
+
+    span.post:after {
+      content: $fa-var-file-text;
     }
 
     @media screen and (max-width: $screen-sm) {
