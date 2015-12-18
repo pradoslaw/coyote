@@ -8,6 +8,10 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Stream\Activities\Create as Stream_Create;
+use Coyote\Stream\Activities\Update as Stream_Update;
+use Coyote\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Stream\Objects\Post as Stream_Post;
 
 class PostController extends Controller
 {
@@ -71,6 +75,7 @@ class PostController extends Controller
         // parsing text and store it in cache
         $text = app()->make('Parser\Post')->parse($request->text);
 
+        // post has been modified...
         if ($post !== null) {
             $this->authorize('update', [$post, $forum]);
             $data = $request->only(['text', 'user_name']) + [
@@ -78,13 +83,17 @@ class PostController extends Controller
                 ];
 
             $post->fill($data)->save();
+            $activity = Stream_Update::class;
 
+            // user want to change the subject. we must update topics table
             if ($post->id === $topic->first_post_id) {
                 $path = str_slug($request->get('subject'), '_');
 
                 $topic->fill($request->all() + ['path' => $path])->save();
             }
         } else {
+            $activity = Stream_Create::class;
+
             // create new post and assign it to topic. don't worry about the rest: trigger will do the work
             $post = $this->post->create($request->all() + [
                 'user_id'   => auth()->id(),
@@ -110,6 +119,12 @@ class PostController extends Controller
             }
         }
 
-        return redirect(route('forum.topic', [$forum->path, $topic->id, $topic->path]) . '#id' . $post->id);
+        $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+        $url .= '?p=' . $post->id . '#id' . $post->id;
+
+        $object = (new Stream_Post(['url' => $url]))->map($post);
+        stream($activity, $object, (new Stream_Topic())->map($topic, $forum));
+
+        return redirect()->to($url);
     }
 }

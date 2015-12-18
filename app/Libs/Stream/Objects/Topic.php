@@ -10,16 +10,19 @@ class Topic extends Object
     /**
      * @param Model $topic
      * @param Forum $forum
-     * @param string $text
+     * @param string|null $text
      * @return $this
      */
-    public function map(Model $topic, Forum $forum, $text)
+    public function map(Model $topic, Forum $forum, $text = null)
     {
         $this->id = $topic->id;
         $this->url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
-        $this->excerpt = excerpt($text);
         $this->displayName = $topic->subject;
         $this->forum = ['name' => $forum->name, 'id' => $forum->id, 'path' => $forum->path];
+
+        if ($text) {
+            $this->excerpt = excerpt($text);
+        }
 
         return $this;
     }
