@@ -72,58 +72,62 @@ class PostController extends Controller
     {
         $this->authorizeForum($forum);
 
-        // parsing text and store it in cache
-        $text = app()->make('Parser\Post')->parse($request->text);
+        $url = \DB::transaction(function () use ($request, $forum, $topic, $post) {
+            // parsing text and store it in cache
+            $text = app()->make('Parser\Post')->parse($request->text);
 
-        // post has been modified...
-        if ($post !== null) {
-            $this->authorize('update', [$post, $forum]);
-            $data = $request->only(['text', 'user_name']) + [
-                    'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
-                ];
+            // post has been modified...
+            if ($post !== null) {
+                $this->authorize('update', [$post, $forum]);
+                $data = $request->only(['text', 'user_name']) + [
+                        'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
+                    ];
 
-            $post->fill($data)->save();
-            $activity = Stream_Update::class;
+                $post->fill($data)->save();
+                $activity = Stream_Update::class;
 
-            // user want to change the subject. we must update topics table
-            if ($post->id === $topic->first_post_id) {
-                $path = str_slug($request->get('subject'), '_');
+                // user want to change the subject. we must update topics table
+                if ($post->id === $topic->first_post_id) {
+                    $path = str_slug($request->get('subject'), '_');
 
-                $topic->fill($request->all() + ['path' => $path])->save();
+                    $topic->fill($request->all() + ['path' => $path])->save();
+                }
+            } else {
+                $activity = Stream_Create::class;
+
+                // create new post and assign it to topic. don't worry about the rest: trigger will do the work
+                $post = $this->post->create($request->all() + [
+                    'user_id'   => auth()->id(),
+                    'topic_id'  => $topic->id,
+                    'forum_id'  => $forum->id,
+                    'ip'        => request()->ip(),
+                    'browser'   => request()->browser(),
+                    'host'      => request()->server('SERVER_NAME')
+                ]);
+
+                // get id of users that were mentioned in the text
+                $usersId = (new Ref_Login())->grab($text);
+
+                if ($usersId) {
+                    app()->make('Alert\Post\Login')->with([
+                        'users_id'    => $usersId,
+                        'sender_id'   => auth()->id(),
+                        'sender_name' => $request->get('user_name', auth()->user()->name),
+                        'subject'     => excerpt($topic->subject, 48),
+                        'excerpt'     => excerpt($text),
+                        'url'         => route('forum.topic', [$forum->path, $topic->id, $topic->path], false)
+                    ])->notify();
+                }
             }
-        } else {
-            $activity = Stream_Create::class;
 
-            // create new post and assign it to topic. don't worry about the rest: trigger will do the work
-            $post = $this->post->create($request->all() + [
-                'user_id'   => auth()->id(),
-                'topic_id'  => $topic->id,
-                'forum_id'  => $forum->id,
-                'ip'        => request()->ip(),
-                'browser'   => request()->browser(),
-                'host'      => request()->server('SERVER_NAME')
-            ]);
+            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+            $url .= '?p=' . $post->id . '#id' . $post->id;
 
-            // get id of users that were mentioned in the text
-            $usersId = (new Ref_Login())->grab($text);
+            $object = (new Stream_Post(['url' => $url]))->map($post);
+            stream($activity, $object, (new Stream_Topic())->map($topic, $forum));
 
-            if ($usersId) {
-                app()->make('Alert\Post\Login')->with([
-                    'users_id'    => $usersId,
-                    'sender_id'   => auth()->id(),
-                    'sender_name' => $request->get('user_name', auth()->user()->name),
-                    'subject'     => excerpt($topic->subject, 48),
-                    'excerpt'     => excerpt($text),
-                    'url'         => route('forum.topic', [$forum->path, $topic->id, $topic->path], false)
-                ])->notify();
-            }
-        }
-
-        $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
-        $url .= '?p=' . $post->id . '#id' . $post->id;
-
-        $object = (new Stream_Post(['url' => $url]))->map($post);
-        stream($activity, $object, (new Stream_Topic())->map($topic, $forum));
+            return $url;
+        });
 
         return redirect()->to($url);
     }
