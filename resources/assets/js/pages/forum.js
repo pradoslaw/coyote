@@ -1,6 +1,8 @@
 var SCREEN_MD = 1024;
 
 $(function () {
+    'use strict';
+
     function toggleSidebar(flag) {
         $('#btn-toggle-sidebar').toggleClass('sidebar-hidden', !flag);
         $('#sidebar').toggle(flag);
@@ -57,7 +59,28 @@ $(function () {
         }
     });
 
+    /**
+     * Collapse forum category
+     */
     $('.toggle[data-toggle="collapse"]').click(function() {
         $(this).toggleClass('in');
     });
+
+    if ('onhashchange' in window) {
+        var onHashChange = function () {
+            var hash = window.location.hash;
+
+            if (hash.substring(1, 3) === 'id') {
+                var object = $(hash).parents('.post');
+
+                object.css('background-color', '#FFDCA5');
+                $('#container-fluid').one('mousemove', function () {
+                    object.animate({backgroundColor: '#FFF'}, 1500);
+                });
+            }
+        };
+
+        window.onhashchange = onHashChange;
+        onHashChange();
+    }
 });

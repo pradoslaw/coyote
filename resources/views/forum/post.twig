@@ -1,177 +1,178 @@
-{#<div class="post" style="margin-top: 10px">#}
-<div class="post {{ index == 0 ? 'first-post' }}">
+<div class="post" {{ index == 0 ? 'id="first-post"' }}>
+    <div {{ index == 0 ? 'id="question"' }} class="post-body {{ index == 0 ? 'collapse' }} {{ paginate.currentPage() > 1 and index == 0 ? '' : 'in' }}">
 
-    <div class="row">
-        <div class="col-xs-2 col-user">
-            <h5 class="offline" title="Użytkownik jest offline">
+        <div class="row">
+            <div class="col-xs-2 col-user">
+                <h5 class="offline" title="Użytkownik jest offline">
+                    {% if post.user_id %}
+                        {{ link_to_profile(post.user_id, post.author_name, post.is_active, post.is_blocked) }}
+                    {% else %}
+                        {{ post.user_name }}
+                    {% endif %}
+                </h5>
+            </div>
+
+            <div class="col-xs-10 col-time">
+                <a title="Link do tego postu" id="id{{ post.id }}" class="post-link" href="{{ route('forum.topic', [forum.path, topic.id, topic.path]) }}?p={{ post.id }}#id{{ post.id }}">
+                    <i class="fa fa-file-o"></i>
+                </a>
+
+                <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
+                {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
+                <small><a href="#" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2 col-user hidden-xss">
                 {% if post.user_id %}
-                    {{ link_to_profile(post.user_id, post.author_name, post.is_active, post.is_blocked) }}
-                {% else %}
-                    {{ post.user_name }}
+                    <div class="avatar">
+                        <img class="img-responsive" src="{{ user_photo(post.photo) }}" {{ not post.photo ? 'style="max-width: 75px"' }}>
+                    </div>
+
+                    <p class="hidden-xs">
+                        <strong>Rejestracja:</strong>
+                        <small>{{ post.author_created_at|format_date }}</small>
+                    </p>
+                    <p class="hidden-xs">
+                        <strong>Ostatnio:</strong>
+                        <small>{{ post.session_updated_at(post.author_visited_at)|format_date }}</small>
+                    </p>
                 {% endif %}
-            </h5>
-        </div>
+            </div>
+            <div class="col-xs-10 col-body">
 
-        <div class="col-xs-10 col-time">
-            <a title="Link do tego postu" id="id{{ post.id }}" class="post-link" href="{{ route('forum.topic', [forum.path, topic.id, topic.path]) }}?p={{ post.id }}#id{{ post.id }}">
-                <i class="fa fa-file-o"></i>
-            </a>
+                <div class="col-vote">
+                    <input type="hidden" value="1182672">
+                    <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
-            <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
-            {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
-            <small><a href="#" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2 col-user hidden-xss">
-            {% if post.user_id %}
-                <div class="avatar">
-                    <img class="img-responsive" src="{{ user_photo(post.photo) }}" {{ not post.photo ? 'style="max-width: 75px"' }}>
+                    <a class="vote-up " href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </a>
+                    <a class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tą odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+                        <i class="fa fa-check-circle-o"></i>
+                    </a>
                 </div>
 
-                <p class="hidden-xs">
-                    <strong>Rejestracja:</strong>
-                    <small>{{ post.author_created_at|format_date }}</small>
-                </p>
-                <p class="hidden-xs">
-                    <strong>Ostatnio:</strong>
-                    <small>{{ post.session_updated_at(post.author_visited_at)|format_date }}</small>
-                </p>
-            {% endif %}
-        </div>
-        <div class="col-xs-10 col-body">
+                <div class="post-content" data-post-id="1182672">
+                    {{ post.text|raw }}
 
-            <div class="col-vote">
-                <input type="hidden" value="1182672">
-                <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
+                    <hr>
+                    <footer>"Jeśli wyszkolisz pracownika, to niedobrze, bo odejdzie. Jeśli go nie wyszkolisz, to jeszcze gorzej, bo zostanie."</footer>
+                </div>
 
-                <a class="vote-up " href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
-                    <i class="fa fa-thumbs-o-up"></i>
-                </a>
-                <a class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tą odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
-                    <i class="fa fa-check-circle-o"></i>
-                </a>
-            </div>
+                <div class="clearfix"></div>
 
-            <div class="post-content" data-post-id="1182672">
-                {{ post.text|raw }}
+                {% if post.edit_count %}
+                    <div class="edit-info">
+                        <strong>
+                            <a class="btn-history" title="Zobacz historię zmian tego postu" href="#">
+                                <i class="fa fa-external-link"></i>
+                            </a>
 
-                <hr>
-                <footer>"Jeśli wyszkolisz pracownika, to niedobrze, bo odejdzie. Jeśli go nie wyszkolisz, to jeszcze gorzej, bo zostanie."</footer>
-            </div>
+                            {{ post.edit_count }}x, ostatnio: {{ link_to_profile(post.editor_id, post.editor_name, post.editor_is_active, post.editor_is_blocked) }},
+                        </strong>
+                        <span class="timestamp" title="{{ post.updated_at|format_date(false) }}" data-timestamp="{{ post.updated_at|timestamp }}">{{ post.updated_at|format_date }}</span>
+                    </div>
+                {% endif %}
 
-            <div class="clearfix"></div>
+                <div id="post-comment-1182672" data-post-id="1182672" class="comments">
 
-            {% if post.edit_count %}
-                <div class="edit-info">
-                    <strong>
-                        <a class="btn-history" title="Zobacz historię zmian tego postu" href="#">
-                            <i class="fa fa-external-link"></i>
+                    <div id="comment-252713" data-comment-id="252713">
+                        Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
+
+                        <a class="user-name" data-user-id="1" href="#">Adam Boduch</a>
+                        <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
+
+                        <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
+                            <i class="fa fa-remove"></i>
                         </a>
+                        <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </div>
+                    <div id="comment-252713" data-comment-id="252713">
+                        Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
 
-                        {{ post.edit_count }}x, ostatnio: {{ link_to_profile(post.editor_id, post.editor_name, post.editor_is_active, post.editor_is_blocked) }},
-                    </strong>
-                    <span class="timestamp" title="{{ post.updated_at|format_date(false) }}" data-timestamp="{{ post.updated_at|timestamp }}">{{ post.updated_at|format_date }}</span>
-                </div>
-            {% endif %}
+                        <a class="author user-name" data-user-id="1" href="#">Adam Boduch</a>
+                        <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
 
-            <div id="post-comment-1182672" data-post-id="1182672" class="comments">
+                        <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
+                            <i class="fa fa-remove"></i>
+                        </a>
+                        <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </div>
 
-                <div id="comment-252713" data-comment-id="252713">
-                    Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
+                    <form method="post" class="collapse" id="form-1182672">
+                        <input type="hidden" value="1182672" name="postId">
+                        <textarea cols="90" rows="2" class="form-control" name="comment"></textarea>
 
-                    <a class="user-name" data-user-id="1" href="#">Adam Boduch</a>
-                    <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
-
-                    <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
-                        <i class="fa fa-remove"></i>
-                    </a>
-                    <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-                </div>
-                <div id="comment-252713" data-comment-id="252713">
-                    Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
-
-                    <a class="author user-name" data-user-id="1" href="#">Adam Boduch</a>
-                    <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
-
-                    <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
-                        <i class="fa fa-remove"></i>
-                    </a>
-                    <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
-                        <i class="fa fa-pencil"></i>
-                    </a>
+                        <p class="text-muted pull-left">Pozostało <strong>580</strong> znaków</p>
+                        <input type="submit" class="btn btn-xs btn-primary pull-right" value="Dodaj komentarz">
+                    </form>
                 </div>
 
-                <form method="post" class="collapse" id="form-1182672">
-                    <input type="hidden" value="1182672" name="postId">
-                    <textarea cols="90" rows="2" class="form-control" name="comment"></textarea>
-
-                    <p class="text-muted pull-left">Pozostało <strong>580</strong> znaków</p>
-                    <input type="submit" class="btn btn-xs btn-primary pull-right" value="Dodaj komentarz">
-                </form>
             </div>
-
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-2 col-bottom" style="height: 32px"></div>
-        <div class="col-xs-10 col-bottom">
+        <div class="row">
+            <div class="col-xs-2 col-bottom" style="height: 32px"></div>
+            <div class="col-xs-10 col-bottom">
 
-            <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active">
-                <i class="fa fa-search-plus"></i>
-                <span class="hidden-xs">Obserwuj</span>
-            </a>
-            <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="#" class="btn btn-xs btn-share">
-                <i class="fa fa-share-alt"></i>
-                <span class="hidden-xs">Udostępnij</span>
-            </a>
-            <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" data-post-id="1182672" class="btn btn-xs btn-comment" href="#form-1182672">
-                <i class="fa fa-comment-o"></i>
-                <span class="hidden-xs">Komentuj</span>
-            </a>
+                <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active">
+                    <i class="fa fa-search-plus"></i>
+                    <span class="hidden-xs">Obserwuj</span>
+                </a>
+                <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="#" class="btn btn-xs btn-share">
+                    <i class="fa fa-share-alt"></i>
+                    <span class="hidden-xs">Udostępnij</span>
+                </a>
+                <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" data-post-id="1182672" class="btn btn-xs btn-comment" href="#form-1182672">
+                    <i class="fa fa-comment-o"></i>
+                    <span class="hidden-xs">Komentuj</span>
+                </a>
 
-            <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="#" class="btn btn-xs btn-report">
-                <i class="fa fa-flag"></i>
-                <span class="hidden-xs">Raportuj</span>
-            </a>
+                <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="#" class="btn btn-xs btn-report">
+                    <i class="fa fa-flag"></i>
+                    <span class="hidden-xs">Raportuj</span>
+                </a>
 
 
-            <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">
-                <i class="fa fa-plus"></i>
-            </a>
-            <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="#" class="btn btn-xs btn-quote">
-                <i class="fa fa-quote-right"></i>
-                <span class="hidden-xs">Cytuj</span>
-            </a>
+                <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">
+                    <i class="fa fa-plus"></i>
+                </a>
+                <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="#" class="btn btn-xs btn-quote">
+                    <i class="fa fa-quote-right"></i>
+                    <span class="hidden-xs">Cytuj</span>
+                </a>
 
-            <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="#id1182672" class="btn btn-xs btn-del">
-                <i class="fa fa-remove"></i>
-                <span class="hidden-xs">Usuń</span>
-            </a>
+                <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="#id1182672" class="btn btn-xs btn-del">
+                    <i class="fa fa-remove"></i>
+                    <span class="hidden-xs">Usuń</span>
+                </a>
 
-            <a href="{{ route('forum.post.submit', [forum.path, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
-                <i class="fa fa-pencil"></i>
-                <span class="hidden-xs">Edytuj</span>
-            </a>
-            <a data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="1182672" class="btn btn-xs btn-fast-edit">
-                <i class="fa fa-pencil"></i>
-                <span class="hidden-xs">Szybka edycja</span>
-            </a>
+                <a href="{{ route('forum.post.submit', [forum.path, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
+                    <i class="fa fa-pencil"></i>
+                    <span class="hidden-xs">Edytuj</span>
+                </a>
+                <a data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="1182672" class="btn btn-xs btn-fast-edit">
+                    <i class="fa fa-pencil"></i>
+                    <span class="hidden-xs">Szybka edycja</span>
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-end col-xs-12"></div>
+        <div class="row">
+            <div class="col-end col-xs-12"></div>
+        </div>
     </div>
 
     {% if index == 0 %}
-    <div id="col-toggle" class="row">
-        <a title="Pokaż/ukryj treść pytania" href="javascript:">
-            <span></span>
-            <span></span>
-            <span></span>
-        </a>
-    </div>
+        <div id="col-toggle">
+            <a title="Pokaż/ukryj treść pytania" href="#question" data-toggle="collapse">
+                <span></span>
+                <span></span>
+                <span></span>
+            </a>
+        </div>
     {% endif %}
 </div>

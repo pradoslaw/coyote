@@ -36,7 +36,7 @@
                             {{ include('forum/post.twig', {index: loop.index0}) }}
                         {% endfor %}
 
-                        <div class="post last-post">
+                        <div class="post" id="last-post">
                             <div class="col-footer-nav">
                                 <nav class="pull-left">
                                     {{ paginate|raw }}

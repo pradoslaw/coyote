@@ -338,14 +338,14 @@ $(function () {
             var hash = window.location.hash;
 
             if (hash.substring(1, 6) === 'entry' || hash.substring(1, 8) === 'comment') {
-                var object = $(window.location.hash);
+                var object = $(hash);
                 var panel = object.find('.panel');
 
                 if (panel.length) {
                     object = panel;
                 }
 
-                object.css('background-color', '#FFF3CD');
+                object.css('background-color', '#FFDCA5');
                 $('#container-fluid').one('mousemove', function () {
                     object.animate({backgroundColor: '#FFF'}, 1500);
                 });
