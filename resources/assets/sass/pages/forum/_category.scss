@@ -4,6 +4,45 @@
 
 .col-topic-icon {
   width: 30px;
+
+  .ico {
+    display: block;
+    height: 18px;
+    width: 20px;
+    background: url('/img/sprites.png') no-repeat;
+  }
+
+  .ico.new {
+    background-position: 0 -1234px;
+  }
+
+  .ico.normal {
+    background-position: 0 -1277px;
+  }
+
+  .ico.lock {
+    background-position: 0 -1148px;
+  }
+
+  .ico.lock.new {
+    background-position: 0 -1191px;
+  }
+
+  .ico.sticky {
+    background-position: 0 -1320px;
+  }
+
+  .ico.sticky.new {
+    background-position: 0 -1363px;
+  }
+
+  .ico.announcement {
+    background-position: 0 -1062px;
+  }
+
+  .ico.announcement.new {
+    background-position: 0 -1105px;
+  }
 }
 
 .col-subject {

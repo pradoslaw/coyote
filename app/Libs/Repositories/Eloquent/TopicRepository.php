@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
+use Coyote\Topic\Track;
 
 class TopicRepository extends Repository implements TopicRepositoryInterface
 {
@@ -91,5 +92,24 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param $topicId
+     * @param $userId
+     * @param $sessionId
+     * @return mixed
+     */
+    public function markTime($topicId, $userId, $sessionId)
+    {
+        $sql = Track::select('created_at')->where('topic_id', $topicId);
+
+        if ($userId) {
+            $sql->where('user_id', $userId);
+        } else {
+            $sql->where('session_id', $sessionId);
+        }
+
+        return $sql->pluck('created_at');
     }
 }

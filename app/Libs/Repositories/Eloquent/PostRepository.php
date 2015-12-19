@@ -104,4 +104,18 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $count = $this->model->where('topic_id', $topicId)->where('id', '<', $postId)->count();
         return max(0, floor(($count - 1) / $perPage)) + 1;
     }
+
+    /**
+     * @param $topicId
+     * @param $markTime
+     * @return mixed
+     */
+    public function getFirstUnreadPostId($topicId, $markTime)
+    {
+        return $this->model
+                    ->select('post_id')
+                    ->where('topic_id', $topicId)
+                        ->where('created_at', '>', $markTime)
+                    ->pluck('post_id');
+    }
 }

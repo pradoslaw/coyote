@@ -59,6 +59,26 @@ class TopicController extends Controller
             return redirect(route('forum.topic', [$forum->path, $topic->id, $topic->path]));
         }
 
+        if ($request->get('view') === 'unread') {
+            // pobranie daty i godziny ostatniego razu gdy uzytkownik przeczytal ten watek
+            $topicMarkTime = $this->topic->markTime($topic->id, auth()->id(), $request->session()->getId());
+            // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
+            $forumMarkTime = $this->forum->markTime($forum->id, auth()->id(), $request->session()->getId());
+
+            if ($topicMarkTime < $topic->last_post_created_at && $forumMarkTime < $topic->last_post_created_at) {
+                $markTime = max($topicMarkTime, $forumMarkTime);
+
+                if ($markTime) {
+                    $postId = $this->post->getFirstUnreadPostId($topic->id, $markTime);
+
+                    if ($postId && $postId !== $topic->first_post_id) {
+                        $url = route('forum.topic', [$forum->path, $topic->id, $topic->path]);
+                        return response($url) . '?p=' . $postId . '#id' . $postId;
+                    }
+                }
+            }
+        }
+
         $page = $request->page;
 
         if ($request->has('p')) {

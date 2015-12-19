@@ -20,4 +20,12 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * @return array
      */
     public function forumList();
+
+    /**
+     * @param $forumId
+     * @param $userId
+     * @param $sessionId
+     * @return mixed
+     */
+    public function markTime($forumId, $userId, $sessionId);
 }

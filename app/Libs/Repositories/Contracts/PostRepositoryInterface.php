@@ -34,4 +34,11 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getPage($postId, $topicId, $perPage = 10);
+
+    /**
+     * @param $topicId
+     * @param $markTime
+     * @return mixed
+     */
+    public function getFirstUnreadPostId($topicId, $markTime);
 }

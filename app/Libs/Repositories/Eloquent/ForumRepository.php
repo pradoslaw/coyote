@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
+use Coyote\Forum\Track;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
 {
@@ -165,5 +166,24 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         }
 
         return $list;
+    }
+
+    /**
+     * @param $forumId
+     * @param $userId
+     * @param $sessionId
+     * @return mixed
+     */
+    public function markTime($forumId, $userId, $sessionId)
+    {
+        $sql = Track::select('created_at')->where('forum_id', $forumId);
+
+        if ($userId) {
+            $sql->where('user_id', $userId);
+        } else {
+            $sql->where('session_id', $sessionId);
+        }
+
+        return $sql->pluck('created_at');
     }
 }

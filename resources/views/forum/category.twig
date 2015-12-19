@@ -36,7 +36,18 @@
                                 {% set url = route('forum.topic', [topic.forum_path, topic.id, topic.path]) %}
                                 <tr>
                                     <td class="col-topic-icon">
-                                        <img class="center-block" src="/img/topic-new.png">
+                                        {% set class = '' %}
+                                        {% set title = topic.unread ? 'Kliknij, aby oznaczyć jako przeczytane' %}
+
+                                        {% if topic.is_locked %}
+                                        {% set class = 'lock' %}
+                                        {% elseif topic.is_sticky %}
+                                        {% set class = 'sticky' %}
+                                        {% elseif topic.is_announcement %}
+                                        {% set class = 'announcement' %}
+                                        {% endif %}
+
+                                        <span title="{{ title }}" class="center-block ico {{ class }} {{ topic.unread ? 'new' }}"></span>
                                     </td>
                                     <td class="col-subject">
                                         {% if topic.replies > 10 %}
