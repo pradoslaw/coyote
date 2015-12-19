@@ -72,6 +72,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                             $join->on('topic_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
                         }
                     })
+                    ->with('tags')
                     ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id']);
 
         $result = $sql->paginate($perPage);

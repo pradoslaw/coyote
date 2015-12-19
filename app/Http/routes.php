@@ -57,6 +57,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Comment/Delete/{id}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
     // pokaz reszte komentarzy...
     Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
+
+    Route::get('/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
 });
 
 Route::get('Praca', ['uses' => 'Job\HomeController@index', 'as' => 'job.home']);

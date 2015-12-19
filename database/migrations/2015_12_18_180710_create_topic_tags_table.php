@@ -13,7 +13,7 @@ class CreateTopicTagsTable extends Migration
     public function up()
     {
         Schema::create('topic_tags', function (Blueprint $table) {
-            $table->integer('id');
+            $table->increments('id');
             $table->integer('topic_id');
             $table->integer('tag_id');
 

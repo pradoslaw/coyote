@@ -62,9 +62,14 @@
                                             <a title="{{ topic.subject }}" href="{{ url }}">{{ topic.subject }}</a>
                                         </h5>
 
+                                        {% if topic.tags %}
                                         <ul class="tag-clouds pull-right hidden-sm hidden-xs">
-                                            <li><a href="#">delphi</a></li>
+                                            {% for tag in topic.tags %}
+                                                <li><a href="{{ route('forum.tag', [tag.name]) }}">{{ tag.name }}</a></li>
+                                            {% endfor %}
                                         </ul>
+                                        {% endif %}
+
                                         <strong>
                                             <span class="timestamp" data-timestamp="{{ topic.first_created_at|timestamp }}" title="{{ topic.first_created_at|format_date }}">{{ topic.first_created_at|format_date }}</span>
 

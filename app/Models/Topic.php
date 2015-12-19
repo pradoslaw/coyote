@@ -15,4 +15,9 @@ class Topic extends Model
      * @var array
      */
     protected $fillable = ['subject', 'path', 'forum_id', 'is_sticky', 'is_announcement'];
+
+    public function tags()
+    {
+        return $this->hasMany('Coyote\Topic\Tag')->join('tags', 'tags.id', '=', 'tag_id');
+    }
 }
