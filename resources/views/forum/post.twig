@@ -56,8 +56,10 @@
                 <div class="post-content" data-post-id="1182672">
                     {{ post.text|raw }}
 
-                    <hr>
-                    <footer>"Jeśli wyszkolisz pracownika, to niedobrze, bo odejdzie. Jeśli go nie wyszkolisz, to jeszcze gorzej, bo zostanie."</footer>
+                    {% if post.sig %}
+                        <hr>
+                        <footer>{{ post.sig|raw }}</footer>
+                    {% endif %}
                 </div>
 
                 <div class="clearfix"></div>
@@ -75,37 +77,26 @@
                     </div>
                 {% endif %}
 
-                <div id="post-comment-1182672" data-post-id="1182672" class="comments">
+                <div class="comments">
 
-                    <div id="comment-252713" data-comment-id="252713">
-                        Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
+                    {% for comment in post.comments %}
+                        <div id="comment-{{ comment.id }}" data-comment-id="{{ comment.id }}">
+                            {{ comment.text }} -
 
-                        <a class="user-name" data-user-id="1" href="#">Adam Boduch</a>
-                        <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
+                            <a class="{{ post.user_id == comment.user_id ? 'user-name' }} {{ comment.is_blocked or not comment.is_active ? 'del' }}" data-user-id="{{ comment.user_id }}" href="{{ route('profile', [comment.user_id]) }}">{{ comment.name }}</a>
+                            <a href="#comment-{{ comment.id }}" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}" title="{{ comment.created_at|format_date(false) }}">{{ comment.created_at|format_date }}</a>
 
-                        <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
-                            <i class="fa fa-remove"></i>
-                        </a>
-                        <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                    </div>
-                    <div id="comment-252713" data-comment-id="252713">
-                        Przykleiłem ten wątek. Niech będzie widoczny na samej górze :) -
+                            <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
+                                <i class="fa fa-remove"></i>
+                            </a>
+                            <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </div>
+                    {% endfor %}
 
-                        <a class="author user-name" data-user-id="1" href="#">Adam Boduch</a>
-                        <a href="#comment-252713" class="timestamp" data-timestamp="1444410721" title="09 październik 2015, 19:12">09 październik 2015, 19:12</a>
-
-                        <a href="javascript:" title="Edytuj ten komentarz" class="btn-edit">
-                            <i class="fa fa-remove"></i>
-                        </a>
-                        <a href="javascript:" title="Usuń ten komentarz" class="btn-del">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                    </div>
-
-                    <form method="post" class="collapse" id="form-1182672">
-                        <input type="hidden" value="1182672" name="postId">
+                    <form method="post" class="collapse" id="form-{{ post.id }}">
+                        <input type="hidden" value="{{ post.id }}" name="post_id">
                         <textarea cols="90" rows="2" class="form-control" name="comment"></textarea>
 
                         <p class="text-muted pull-left">Pozostało <strong>580</strong> znaków</p>
@@ -127,7 +118,7 @@
                     <i class="fa fa-share-alt"></i>
                     <span class="hidden-xs">Udostępnij</span>
                 </a>
-                <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" data-post-id="1182672" class="btn btn-xs btn-comment" href="#form-1182672">
+                <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-xs btn-comment" href="#form-{{ post.id }}">
                     <i class="fa fa-comment-o"></i>
                     <span class="hidden-xs">Komentuj</span>
                 </a>

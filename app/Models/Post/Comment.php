@@ -1,12 +1,12 @@
 <?php
 
-namespace Coyote;
+namespace Coyote\Post;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 
-class Post extends Model
+class Comment extends Model
 {
     use SoftDeletes;
 
@@ -15,15 +15,17 @@ class Post extends Model
      *
      * @var array
      */
-    protected $fillable = ['topic_id', 'forum_id', 'user_id', 'user_name', 'text', 'ip', 'browser', 'host', 'edit_count', 'editor_id'];
+    protected $fillable = ['post_id', 'user_id', 'text'];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
 
-    public function comments()
-    {
-        return $this->hasMany('Coyote\Post\Comment');
-    }
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'post_comments';
 }

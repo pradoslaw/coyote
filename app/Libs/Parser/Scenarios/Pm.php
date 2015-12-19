@@ -46,7 +46,7 @@ class Pm
             $parser->attach(new Geshi());
         });
 
-        if (auth()->guest() || auth()->user()->allow_smilies) {
+        if (auth()->check() && auth()->user()->allow_smilies) {
             $parser->attach(new Smilies());
         }
 

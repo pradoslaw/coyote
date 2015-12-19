@@ -79,19 +79,30 @@ class TopicController extends Controller
             }
         }
 
+        // current page...
         $page = $request->page;
 
         if ($request->has('p')) {
             $page = $this->post->getPage($request->get('p'), $topic->id);
         }
 
+        // magic happens here. get posts for given topic
         $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, auth()->id(), $page);
         $paginate = new LengthAwarePaginator($posts, $topic->replies, 10, $page, ['path' => ' ']);
 
-        $parser = ['post' => app()->make('Parser\Post'), 'comment' => app()->make('Parser\Comment')];
+        $parser = [
+            'post' => app()->make('Parser\Post'),
+            'comment' => app()->make('Parser\Comment'),
+            'sig' => app()->make('Parser\Sig')
+        ];
 
         foreach ($posts as &$post) {
+            // parse post or get it from cache
             $post->text = $parser['post']->parse($post->text);
+
+            if ((auth()->guest() || (auth()->check() && auth()->user()->allow_sig)) && $post->sig) {
+                $post->sig = $parser['sig']->parse($post->sig);
+            }
         }
 
         $this->breadcrumb($forum);

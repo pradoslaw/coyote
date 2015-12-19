@@ -83,12 +83,15 @@ class PostRepository extends Repository implements PostRepositoryInterface
     {
         $first = $this->takeFirst($postId, $userId);
 
-        return $this->prepare($userId)
+        $sql = $this->prepare($userId)
                     ->where('topic_id', $topicId)
                     ->where('posts.id', '<>', $postId)
                     ->forPage($page, $perPage)
                     ->get()
                     ->prepend($first);
+
+        $sql->load('comments');
+        return $sql;
     }
 
     /**

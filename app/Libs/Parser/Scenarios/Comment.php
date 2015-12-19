@@ -55,7 +55,7 @@ class Comment
             $parser->attach(new Censore($this->word));
         });
 
-        if (auth()->guest() || auth()->user()->allow_smilies) {
+        if (auth()->check() && auth()->user()->allow_smilies) {
             $parser->attach(new Smilies());
         }
 
