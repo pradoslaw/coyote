@@ -1,9 +1,14 @@
+.pagination {
+  font-size: ceil(($font-size-base * 0.78));
+}
+
 .pagination > li > a, .pagination > li > span, .pagination > .disabled > span {
   background-color: #ddd;
   color: $text-color;
   border: none;
   border-radius: 5px;
   margin: 0 2px;
+  padding: 5px 8pt;
 
   &:first-child, &:last-child {
     border-radius: 5px;

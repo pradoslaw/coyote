@@ -11,7 +11,7 @@ use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TopicController extends Controller
 {
@@ -59,8 +59,14 @@ class TopicController extends Controller
             return redirect(route('forum.topic', [$forum->path, $topic->id, $topic->path]));
         }
 
-        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, auth()->id());
-        $paginate = new Paginator($posts, 25, $request->page);
+        $page = $request->page;
+
+        if ($request->has('p')) {
+            $page = $this->post->getPage($request->get('p'), $topic->id);
+        }
+
+        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, auth()->id(), $page);
+        $paginate = new LengthAwarePaginator($posts, $topic->replies, 10, $page, ['path' => ' ']);
 
         $parser = ['post' => app()->make('Parser\Post'), 'comment' => app()->make('Parser\Comment')];
 

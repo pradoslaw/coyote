@@ -23,5 +23,15 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @param int $perPage
      * @return mixed
      */
-    public function takeForTopic($topicId, $postId, $userId, $page = 0, $perPage = 25);
+    public function takeForTopic($topicId, $postId, $userId, $page = 0, $perPage = 10);
+
+    /**
+     * Return page number based on ID of post
+     *
+     * @param $postId
+     * @param $topicId
+     * @param int $perPage
+     * @return mixed
+     */
+    public function getPage($postId, $topicId, $perPage = 10);
 }
