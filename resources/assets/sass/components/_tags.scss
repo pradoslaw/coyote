@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import "../vendor/bootstrap/variables";
 
 .tag-clouds {
   list-style: none;
@@ -19,7 +18,7 @@
       padding: 4px 10px;
       text-shadow: 1px 1px 1px white;
       background: $gray-lighter;
-      margin: 5px 5px 0 1px;
+      margin: 4px 5px 0 1px;
       border-radius: 5px;
       transition: all .25s linear;
 
@@ -37,6 +36,97 @@
 
     &:last-child {
       margin-right: 0;
+    }
+  }
+}
+
+.tag-suggestions {
+  border: 2px solid #DDD;
+  list-style-type: none;
+  border-radius: 3px;
+  position: absolute;
+  display: none;
+  margin: -2px 0 0 0;
+  background-color: #FFF;
+  width: 100%;
+  top: 24px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 0;
+
+  li {
+    padding: 6px 5px;
+    cursor: pointer;
+
+    span {
+      font-size: .8em;
+      background: #EEE;
+      border-radius: 5px;
+      display: inline;
+      color: #7D7D7D;
+      padding: 4px 10px;
+      text-shadow: 1px 1px 1px #FFF;
+      position: relative;
+      transition: all .25s linear;
+    }
+    &.hover {
+      background-color: #F8F8F8;
+      color: #D7661C;
+    }
+
+    small {
+      font-size: 80%;
+    }
+  }
+}
+
+.tag-editor {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  padding: 0 0 0 10px;
+
+  input {
+    border: none;
+    width: 100%;
+    position: relative;
+    outline: none;
+    padding: 5px 0;
+  }
+
+  .tag-clouds {
+    padding: 0;
+    display: inline;
+    position: relative;
+  }
+
+  .tag-clouds li a {
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+      text-decoration: none;
+      background: #DDD;
+    }
+
+    &.remove:hover:after {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0.5;
+      border-radius: 5px;
+      top: 0;
+      left: 0;
+      background-color: black;
+      vertical-align: middle;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-shadow: none;
+      font-size: $font-size-large;
+      @include font-awesome($fa-var-remove);
     }
   }
 }

@@ -4,6 +4,8 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Topic\Track;
+use Coyote\Topic;
+use Coyote\Tag;
 
 class TopicRepository extends Repository implements TopicRepositoryInterface
 {
@@ -111,5 +113,21 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         }
 
         return $sql->pluck('created_at');
+    }
+
+    /**
+     * Save topic's tags
+     *
+     * @param int $topicId
+     * @param array $tags
+     */
+    public function setTags($topicId, array $tags)
+    {
+        Topic\Tag::where('topic_id', $topicId)->delete();
+
+        foreach ($tags as $name) {
+            $tag = Tag::firstOrCreate(['name' => $name]);
+            Topic\Tag::create(['topic_id' => $topicId, 'tag_id' => $tag->id]);
+        }
     }
 }

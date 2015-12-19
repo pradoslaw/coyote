@@ -42,6 +42,8 @@ elixir(function(mix) {
        .scripts(['components/wikieditor.js'], 'public/js/wikieditor.js')
         // auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
        .scripts(['components/auto-complete.js'], 'public/js/auto-complete.js')
+        // komponent z mozliwoscia wyboru tagow
+       .scripts(['components/tags.js'], 'public/js/tags.js')
         // komponent bootstrapa umozliwiajacy wyswietlanie statycznych dymkow
        .scripts(['bootstrap/popover.js'], 'public/js/popover.js')
         // uzywane na niewielu stronach. tam gdzie trzeba przelaczac sie miedzy zakladkami

@@ -75,9 +75,11 @@ return [
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => 'The :attribute has already been taken.',
     'url'                  => 'The :attribute format is invalid.',
+
     'username'             => 'Nazwa użytkownika może zawierać litery, cyfry oraz znaki ._ -',
     'password'             => 'Podano nieprawidłowe hasło',
     'reputation'           => 'Potrzebujesz :point punktów reputacji aby zmienić zawartość tego pola',
+    'tag'                  => 'Podany tag zawiera nieprawidłowe znaki',
 
     /*
     |--------------------------------------------------------------------------

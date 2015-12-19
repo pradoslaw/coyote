@@ -1,0 +1,6 @@
+{% for tag in tags %}
+    <li>
+        <span>{{ tag.name }}</span>
+        <small>×{{ tag.count }}</small>
+    </li>
+{% endfor %}

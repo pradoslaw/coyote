@@ -65,7 +65,8 @@ class PostController extends Controller
             $title = 'Edycja posta';
         }
 
-        return parent::view('forum.submit')->with(compact('forum', 'topic', 'post', 'title'));
+        $tags = $topic->tags->pluck('name')->toArray();
+        return parent::view('forum.submit')->with(compact('forum', 'topic', 'post', 'title', 'tags'));
     }
 
     public function save(PostRequest $request, $forum, $topic, $post = null)
@@ -91,6 +92,7 @@ class PostController extends Controller
                     $path = str_slug($request->get('subject'), '_');
 
                     $topic->fill($request->all() + ['path' => $path])->save();
+                    $this->topic->setTags($topic->id, $request->get('tag'));
                 }
             } else {
                 $activity = Stream_Create::class;

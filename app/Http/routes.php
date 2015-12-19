@@ -177,6 +177,8 @@ Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' =>
 });
 
 Route::get('Profile/{user}', ['uses' => 'Profile\HomeController@index', 'as' => 'profile']);
+Route::get('Tag/Prompt', ['uses' => 'Tag\PromptController@index', 'as' => 'tag.prompt']);
+Route::get('Tag/Validate', ['uses' => 'Tag\PromptController@valid', 'as' => 'tag.validate']);
 
 Route::get('/{slug}', function ($slug) {
     echo "404 $slug";

@@ -154,6 +154,8 @@ class TopicController extends Controller
                 'host'      => request()->server('SERVER_NAME')
             ]);
 
+            $this->topic->setTags($topic->id, $request->get('tag'));
+
             // parsing text and store it in cache
             $text = app()->make('Parser\Post')->parse($request->text);
 

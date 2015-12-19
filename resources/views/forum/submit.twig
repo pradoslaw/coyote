@@ -62,15 +62,22 @@
             </div>
 
             {% if topic is not defined or topic.first_post_id == post.id %}
-                <div class="form-group">
-                    <label class="col-md-2 control-label {{ errors.first('tag') ? 'has-error' }}">Tagi</label>
-                    <div class="col-md-10">
-                        {{ form_text('tag', input_old('tag'), {'class': 'form-control', 'autocomplete': 'off'}) }}
+                {% set error_tag = '' %}
+                {% for key in errors.keys() %}
+                    {% if 'tag' in key %}
+                        {% set error_tag = errors.first(key) %}
+                    {% endif %}
+                {% endfor %}
 
-                        {% if errors.first('tag') %}
-                            <span class="help-block">{{ errors.first('tag') }}</span>
+                <div class="form-group {{ error_tag != '' ? 'has-error' }}">
+                    <label class="col-md-2 control-label">Tagi</label>
+                    <div class="col-md-10">
+                        {{ form_text('custom_tags', input_old('tag', tags)|join(', '), {'id': 'tag', 'placeholder': forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'}) }}
+
+                        {% if error_tag != '' %}
+                            <span class="help-block">{{ error_tag }}</span>
                         {% else %}
-                            <span class="help-block">Możesz opisać swój wątek słowami kluczowymi - np. C#, CLR (max. 5 tagów)</span>
+                            <span class="help-block">Możesz opisać swój wątek słowami kluczowymi - np. c#, .net (max. 5 tagów)</span>
                         {% endif %}
                     </div>
                 </div>
@@ -149,6 +156,10 @@
             </div>
         </aside>
     </div>
+
+    {% import 'components/modals.twig' as modal %}
+
+    {{ modal.alert('Wystąpił błąd podczas dodawania tagu.') }}
 {% endblock %}
 
 {% block head %}
@@ -164,6 +175,8 @@
     <script type="text/javascript" src="/js/forum.js" ></script>
     <script type="text/javascript" src="/js/posting.js"></script>
     <script type="text/javascript" src="/js/wikieditor.js"></script>
+    <script type="text/javascript" src="/js/tags.js"></script>
+    <script type="text/javascript" src="/js/modal.js"></script>
 
     <script type="text/javascript">
         $(function() {
@@ -190,6 +203,8 @@
                     $('#preview').html(html);
                 });
             });
+
+            $('#tag').tag();
         });
     </script>
 {% endblock %}

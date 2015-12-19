@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('username', 'Coyote\UsernameValidator@validateUsername');
         Validator::extend('password', 'Coyote\PasswordValidator@validatePassword');
         Validator::extend('reputation', 'Coyote\ReputationValidator@validateReputation');
+        Validator::extend('tag', 'Coyote\TagValidator@validateTag');
         Validator::replacer('reputation', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);
         });
@@ -84,6 +85,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             'Coyote\\Repositories\\Contracts\\PostRepositoryInterface',
             'Coyote\\Repositories\\Eloquent\\PostRepository'
+        );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\TagRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\TagRepository'
         );
     }
 }

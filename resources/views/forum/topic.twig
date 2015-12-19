@@ -20,12 +20,15 @@
                 <div class="panel-body">
 
                     <div id="box-post" class="box-forum">
-                        <div id="box-topic-tags" class="hidden-xs">
-                            <ul class="tag-clouds">
-                                <li><a href="#">delphi</a></li>
-                                <li><a href="#">oop</a></li>
-                            </ul>
-                        </div>
+                        {% if topic.tags %}
+                            <div id="box-topic-tags" class="hidden-xs">
+                                <ul class="tag-clouds">
+                                    {% for tag in topic.tags %}
+                                        <li><a href="#">{{ tag.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
 
                         <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                         <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>

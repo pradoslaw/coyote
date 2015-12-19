@@ -38,7 +38,7 @@ class PostRequest extends Request
 
         // if I create new topic or edit first post ...
         if ((isset($post->id) && $post->id === $topic->first_post_id) || is_null($topic)) {
-            $rules = array_merge($rules, ['subject' => 'required|min:3|max:200', 'tag' => 'string']);
+            $rules = array_merge($rules, ['subject' => 'required|min:3|max:200', 'tag' => 'array']);
 
             $canSticky = $this->user()->can('sticky', $forum);
             if ($canSticky) {
@@ -46,7 +46,13 @@ class PostRequest extends Request
             }
 
             if ($forum->required_tag) {
-                $rules['tag'] .= 'required';
+                $rules['tag'] .= '|required';
+            }
+
+            if (is_array($this->request->get('tag'))) {
+                foreach ($this->request->get('tag') as $key => $val) {
+                    $rules['tag.' . $key] = 'required|max:25|tag';
+                }
             }
         }
 
