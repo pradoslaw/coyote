@@ -39,6 +39,23 @@
                                         <img class="center-block" src="/img/topic-new.png">
                                     </td>
                                     <td class="col-subject">
+                                        {% if topic.replies > 10 %}
+                                            {% set pages = (topic.replies / 10)|round(0, 'floor') + 1 %}
+                                            <dl class="topic-pagination hidden-xs">
+                                                <dd>
+                                                    <a href="{{ url }}?page=1">1</a>
+
+                                                    {% if pages > 3 %}
+                                                    ...
+                                                    {% endif %}
+
+                                                    {% for i in max(2, pages - 3)..pages %}
+                                                    <a href="{{ url }}?page={{ i }}">{{ i }}</a>
+                                                    {% endfor %}
+                                                </dd>
+                                            </dl>
+                                        {% endif %}
+
                                         <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view {{ topic.unread ? 'unread' }}" href="{{ url }}?view=unread"></a>
 
                                         <h5>
