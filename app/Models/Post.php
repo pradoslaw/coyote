@@ -15,7 +15,7 @@ class Post extends Model
      *
      * @var array
      */
-    protected $fillable = ['topic_id', 'forum_id', 'user_id', 'user_name', 'text', 'ip', 'browser', 'host'];
+    protected $fillable = ['topic_id', 'forum_id', 'user_id', 'user_name', 'text', 'ip', 'browser', 'host', 'edit_count', 'editor_id'];
 
     /**
      * @var string

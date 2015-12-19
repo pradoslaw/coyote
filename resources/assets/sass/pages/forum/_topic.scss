@@ -133,6 +133,7 @@
   vertical-align: top;
   line-height: 1.3em;
   overflow: hidden;
+  position: relative;
 }
 
 .col-vote {
@@ -140,6 +141,9 @@
   vertical-align: top;
   float: right;
   line-height: 120%;
+  height: 100%;
+  position: absolute;
+  right: 0;
 }
 
 #col-toggle {
@@ -218,6 +222,7 @@
   word-wrap: break-word;
   line-height: 139%;
   overflow: hidden;
+  padding-right: 50px;
 
   a {
     color: $link-color-darker;
@@ -289,6 +294,7 @@ div.tooltip-inner {
   margin: 15px 0 5px 25px;
   font-family: Tahoma,sans-serif;
   font-size: 11px;
+  padding-right: 50px;
 
   a {
     color: $link-color-darker;
