@@ -90,7 +90,11 @@ class PostRepository extends Repository implements PostRepositoryInterface
                     ->get()
                     ->prepend($first);
 
-        $sql->load('comments');
+        $sql->load(['comments' => function ($sub) {
+            $sub->select([
+                'post_comments.*', 'name', 'is_active', 'is_blocked'
+            ])->join('users', 'users.id', '=', 'user_id');
+        }]);
         return $sql;
     }
 
