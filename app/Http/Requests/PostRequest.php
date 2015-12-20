@@ -51,7 +51,7 @@ class PostRequest extends Request
 
             if (is_array($this->request->get('tag'))) {
                 foreach ($this->request->get('tag') as $key => $val) {
-                    $rules['tag.' . $key] = 'required|max:25|tag';
+                    $rules['tag.' . $key] = 'required|max:25|tag|tag_creation:2';
                 }
             }
         }

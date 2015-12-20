@@ -80,6 +80,7 @@ return [
     'password'             => 'Podano nieprawidłowe hasło',
     'reputation'           => 'Potrzebujesz :point punktów reputacji aby zmienić zawartość tego pola',
     'tag'                  => 'Podany tag zawiera nieprawidłowe znaki',
+    'tag_creation'         => 'Potrzebujesz :point punktów reputacji, aby utworzyć nowy tag. Wybierz już istniejący.',
 
     /*
     |--------------------------------------------------------------------------
@@ -144,5 +145,4 @@ return [
         'password'                  => 'hasło',
         'name'                      => 'nazwa użytkownika'
     ],
-
 ];

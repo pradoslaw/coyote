@@ -28,6 +28,6 @@ class PromptController extends Controller
      */
     public function valid(Request $request)
     {
-        $this->validate($request, ['t' => 'required|string|max:25|tag']);
+        $this->validate($request, ['t' => 'required|string|max:25|tag|tag_creation:2']);
     }
 }

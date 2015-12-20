@@ -114,6 +114,9 @@
                             if (typeof e.responseJSON.t !== 'undefined') {
                                 $('#alert').modal('show');
                                 $('.modal-body').text(e.responseJSON.t[0]);
+
+                                $('ul.tag-clouds li:last', editor).remove();
+                                setInputWidth();
                             }
                         }
                     });
@@ -200,7 +203,7 @@
                                 withCredentials: true
                             },
                             success: function (html) {
-                                if (html.length) {
+                                if ($.trim(html) !== '') {
                                     dropdown.html(html).css('top', editor.position().top + editor.outerHeight()).show();
                                 }
                                 else {
