@@ -47,7 +47,7 @@
                                         {% set class = 'announcement' %}
                                         {% endif %}
 
-                                        <span title="{{ title }}" class="center-block ico {{ class }} {{ topic.unread ? 'new' }}"></span>
+                                        <span title="{{ title }}" class="center-block ico {{ class }} {{ topic.unread ? 'new' : 'normal' }}"></span>
                                     </td>
                                     <td class="col-subject">
                                         {% if topic.replies > 10 %}

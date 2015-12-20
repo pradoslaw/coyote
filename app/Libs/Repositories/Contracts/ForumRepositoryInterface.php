@@ -33,4 +33,13 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * @return array
      */
     public function getTagClouds();
+
+    /**
+     * Mark forum as read
+     *
+     * @param $forumId
+     * @param $userId
+     * @param $sessionId
+     */
+    public function markAsRead($forumId, $userId, $sessionId);
 }

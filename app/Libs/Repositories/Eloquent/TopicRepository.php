@@ -130,4 +130,52 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
             Topic\Tag::create(['topic_id' => $topicId, 'tag_id' => $tag->id]);
         }
     }
+
+    /**
+     * Mark topic as read
+     *
+     * @param $topicId
+     * @param $forumId
+     * @param $markTime
+     * @param $userId
+     * @param $sessionId
+     */
+    public function markAsRead($topicId, $forumId, $markTime, $userId, $sessionId)
+    {
+        // builds data to update
+        $attributes = ['topic_id' => $topicId] + ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
+        // execute a query...
+        Track::updateOrCreate($attributes, $attributes + ['created_at' => $markTime, 'forum_id' => $forumId]);
+    }
+
+    /**
+     * Is there any unread topic in this category?
+     *
+     * @param $forumId
+     * @param $markTime
+     * @param $userId
+     * @param $sessionId
+     * @return mixed
+     */
+    public function isUnread($forumId, $markTime, $userId, $sessionId)
+    {
+        $sql = $this->model
+                    ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
+                        $join->on('topic_track.topic_id', '=', 'topics.id');
+
+                        if ($userId) {
+                            $join->on('topic_track.user_id', '=', \DB::raw($userId));
+                        } else {
+                            $join->on('topic_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
+                        }
+                    })
+                    ->where('topics.forum_id', $forumId)
+                    ->whereNull('topic_track.topic_id');
+
+        if ($markTime) {
+            $sql->where('last_post_created_at', '>', $markTime);
+        }
+
+        return $sql->count();
+    }
 }

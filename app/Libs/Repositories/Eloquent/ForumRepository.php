@@ -206,4 +206,19 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 ->lists('count', 'name')
                 ->toArray();
     }
+
+    /**
+     * Mark forum as read
+     *
+     * @param $forumId
+     * @param $userId
+     * @param $sessionId
+     */
+    public function markAsRead($forumId, $userId, $sessionId)
+    {
+        // builds data to update
+        $attributes = ['forum_id' => $forumId] + ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
+        // execute a query...
+        Track::updateOrCreate($attributes, $attributes + ['created_at' => \DB::raw('NOW()'), 'forum_id' => $forumId]);
+    }
 }

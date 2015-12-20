@@ -60,12 +60,15 @@ class TopicController extends Controller
             return redirect(route('forum.topic', [$forum->path, $topic->id, $topic->path]));
         }
 
-        if ($request->get('view') === 'unread') {
-            // pobranie daty i godziny ostatniego razu gdy uzytkownik przeczytal ten watek
-            $topicMarkTime = $this->topic->markTime($topic->id, auth()->id(), $request->session()->getId());
-            // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
-            $forumMarkTime = $this->forum->markTime($forum->id, auth()->id(), $request->session()->getId());
+        $userId = auth()->id();
+        $sessionId = $request->session()->getId();
 
+        // pobranie daty i godziny ostatniego razu gdy uzytkownik przeczytal ten watek
+        $topicMarkTime = $this->topic->markTime($topic->id, $userId, $sessionId);
+        // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
+        $forumMarkTime = $this->forum->markTime($forum->id, $userId, $sessionId);
+
+        if ($request->get('view') === 'unread') {
             if ($topicMarkTime < $topic->last_post_created_at && $forumMarkTime < $topic->last_post_created_at) {
                 $markTime = max($topicMarkTime, $forumMarkTime);
 
@@ -88,7 +91,7 @@ class TopicController extends Controller
         }
 
         // magic happens here. get posts for given topic
-        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, auth()->id(), $page);
+        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $userId, $page);
         $paginate = new LengthAwarePaginator($posts, $topic->replies, 10, $page, ['path' => ' ']);
 
         $parser = [
@@ -97,12 +100,30 @@ class TopicController extends Controller
             'sig' => app()->make('Parser\Sig')
         ];
 
+        $markTime = null;
+
         foreach ($posts as &$post) {
             // parse post or get it from cache
             $post->text = $parser['post']->parse($post->text);
 
             if ((auth()->guest() || (auth()->check() && auth()->user()->allow_sig)) && $post->sig) {
                 $post->sig = $parser['sig']->parse($post->sig);
+            }
+
+            $markTime = $post->created_at;
+        }
+
+        if ($topicMarkTime < $markTime && $forumMarkTime < $markTime) {
+            $this->topic->markAsRead($topic->id, $forum->id, $markTime, $userId, $sessionId);
+
+            $isUnread = true;
+
+            if ($forumMarkTime < $markTime) {
+                $isUnread = $this->topic->isUnread($forum->id, $forumMarkTime, $userId, $sessionId);
+            }
+
+            if (!$isUnread) {
+                $this->forum->markAsRead($forum->id, $userId, $sessionId);
             }
         }
 

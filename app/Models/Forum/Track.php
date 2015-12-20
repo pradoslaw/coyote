@@ -31,4 +31,11 @@ class Track extends Model
      * @var string
      */
     protected $primaryKey = null;
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 }
