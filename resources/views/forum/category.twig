@@ -28,7 +28,9 @@
                             <li class="filter"><a href="javascript:">Filtruj</a></li>
                         </ul>
 
-                        <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                        {% if not forum.is_locked %}
+                            <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                        {% endif %}
                         <div class="clearfix"></div>
 
                         <table>
