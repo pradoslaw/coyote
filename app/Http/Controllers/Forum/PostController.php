@@ -90,7 +90,7 @@ class PostController extends Controller
                     $path = str_slug($request->get('subject'), '_');
 
                     $topic->fill($request->all() + ['path' => $path])->save();
-                    $this->topic->setTags($topic->id, $request->get('tag'));
+                    $this->topic->setTags($topic->id, $request->get('tag', []));
                 }
             } else {
                 $activity = Stream_Create::class;
