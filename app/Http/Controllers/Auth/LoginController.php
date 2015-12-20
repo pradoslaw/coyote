@@ -26,6 +26,7 @@ class LoginController extends Controller
     public function index()
     {
         $this->breadcrumb->push('Logowanie', route('login'));
+        request()->session()->put('url.intended', request()->headers->get('referer'));
 
         return parent::view('auth.login');
     }
