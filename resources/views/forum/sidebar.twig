@@ -10,10 +10,9 @@
     <h4 class="border"><i class="fa fa-tag fa-fw"></i> Popularne tagi</h4>
 
     <ul class="tag-clouds">
-        <li><a href="http://forum.4programmers.net/Tag/c%23">c#</a><small>× 7970</small></li>
-        <li><a href="http://forum.4programmers.net/Tag/java">java</a><small>× 7060</small></li>
-        <li><a href="http://forum.4programmers.net/Tag/php">php</a><small>× 4115</small></li>
-        <li><a href="http://forum.4programmers.net/Tag/c">c</a><small>× 3930</small></li>
+        {% for name, count in tags %}
+            <li><a href="{{ route('forum.tag', [name]) }}">{{ name }}</a><small>× {{ count }}</small></li>
+        {% endfor %}
     </ul>
 </div>
 

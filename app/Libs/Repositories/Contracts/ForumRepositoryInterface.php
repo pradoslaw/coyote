@@ -28,4 +28,9 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function markTime($forumId, $userId, $sessionId);
+
+    /**
+     * @return array
+     */
+    public function getTagClouds();
 }

@@ -4,8 +4,8 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Illuminate\Http\Request;
+use Cache;
 
 class HomeController extends Controller
 {
@@ -38,10 +38,15 @@ class HomeController extends Controller
         // execute query: get all categories that user can has access
         $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId());
 
+        // let's cache tags. we don't need to run this query every time
+        $tags = Cache::remember('forum:tags', 60 * 24, function () {
+            return $this->forum->getTagClouds();
+        });
+
         // create view with online users
         $viewers = app()->make('Session\Viewers')->render($request->getRequestUri());
 
-        return parent::view('forum.home')->with(compact('sections', 'viewers'));
+        return parent::view('forum.home')->with(compact('sections', 'viewers', 'tags'));
     }
 
     /**

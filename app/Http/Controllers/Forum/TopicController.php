@@ -12,6 +12,7 @@ use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Cache;
 
 class TopicController extends Controller
 {
@@ -114,7 +115,12 @@ class TopicController extends Controller
 
         $viewers = app('Session\Viewers')->render($request->getRequestUri());
 
-        return parent::view('forum.topic')->with(compact('viewers', 'posts', 'forum', 'topic', 'paginate', 'forumList'));
+        // let's cache tags. we don't need to run this query every time
+        $tags = Cache::remember('forum:tags', 60 * 24, function () {
+            return $this->forum->getTagClouds();
+        });
+
+        return parent::view('forum.topic')->with(compact('viewers', 'posts', 'forum', 'topic', 'paginate', 'forumList', 'tags'));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Forum\Track;
+use Coyote\Topic;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
 {
@@ -185,5 +186,24 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         }
 
         return $sql->pluck('created_at');
+    }
+
+    /**
+     * @return array
+     */
+    public function getTagClouds()
+    {
+        return (new Topic\Tag())
+                ->select(['name', \DB::raw('COUNT(*) AS count')])
+                ->join('tags', 'tags.id', '=', 'tag_id')
+                ->join('topics', 'topics.id', '=', 'topic_id')
+                    ->whereNull('topics.deleted_at')
+                    ->whereNull('tags.deleted_at')
+                ->groupBy('name')
+                ->orderBy(\DB::raw('COUNT(*)'), 'DESC')
+                ->limit(10)
+                ->get()
+                ->lists('count', 'name')
+                ->toArray();
     }
 }
