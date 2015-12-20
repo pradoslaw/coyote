@@ -71,8 +71,6 @@ class PostController extends Controller
 
     public function save(PostRequest $request, $forum, $topic, $post = null)
     {
-        $this->authorizeForum($forum);
-
         $url = \DB::transaction(function () use ($request, $forum, $topic, $post) {
             // parsing text and store it in cache
             $text = app()->make('Parser\Post')->parse($request->text);
