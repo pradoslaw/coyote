@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MicroblogTableSeeder::class);
         $this->call(AlertTypeTableSeeder::class);
         $this->call(ForumTableSeeder::class);
+        $this->call(FlagTypeSeeder::class);
     }
 }

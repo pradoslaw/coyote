@@ -66,6 +66,16 @@ $(function () {
         $(this).toggleClass('in');
     });
 
+    $('.btn-report').click(function() {
+        var metadata = {'post_id': $(this).data('post-id')};
+
+        $.get(baseUrl + '/Flag', {url: $(this).data('url'), metadata: JSON.stringify(metadata)}, function(html) {
+            $(html).appendTo('body');
+
+            $('#flag').find('.modal').modal('show');
+        });
+    });
+
     if ('onhashchange' in window) {
         var onHashChange = function () {
             var hash = window.location.hash;

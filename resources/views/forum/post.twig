@@ -12,13 +12,16 @@
                 </h5>
             </div>
 
+            {% set url = route('forum.topic', [forum.path, topic.id, topic.path], false) ~ '?p=' ~ post.id ~ '#id' ~ post.id %}
+            {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
+
             <div class="col-xs-10 col-time">
-                <a title="Link do tego postu" id="id{{ post.id }}" class="post-link" href="{{ route('forum.topic', [forum.path, topic.id, topic.path]) }}?p={{ post.id }}#id{{ post.id }}">
+                <a title="Link do tego postu" id="id{{ post.id }}" class="post-link" href="{{ url }}">
                     <i class="fa fa-file-o"></i>
                 </a>
 
                 <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
-                {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
+
                 <small><a href="#" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
             </div>
         </div>
@@ -123,7 +126,7 @@
                     <span class="hidden-xs">Komentuj</span>
                 </a>
 
-                <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="#" class="btn btn-xs btn-report">
+                <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="javascript:" class="btn btn-xs btn-report" data-url="{{ url }}" data-post-id="{{ post.id }}">
                     <i class="fa fa-flag"></i>
                     <span class="hidden-xs">Raportuj</span>
                 </a>
