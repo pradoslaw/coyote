@@ -76,6 +76,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         }
                     })
                     ->with('tags')
+                    ->orderBy('is_sticky', 'DESC')
                     ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id']);
 
         $result = $sql->paginate($perPage);

@@ -34,8 +34,15 @@
                         <div class="clearfix"></div>
 
                         <table>
+                            {% set previous = null %}
                             {% for topic in topics %}
                                 {% set url = route('forum.topic', [topic.forum_path, topic.id, topic.path]) %}
+
+                                {% if not topic.is_sticky and previous.is_sticky  %}
+                                <tr>
+                                    <td colspan="4" class="sticky"></td>
+                                </tr>
+                                {% endif %}
                                 <tr>
                                     <td class="col-topic-icon">
                                         {% set class = '' %}
@@ -117,6 +124,8 @@
                                         {% endif %}
                                     </td>
                                 </tr>
+
+                                {% set previous = topic %}
                             {% endfor %}
 
                             {#<tr>#}
