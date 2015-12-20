@@ -30,8 +30,10 @@
                             </div>
                         {% endif %}
 
-                        <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
-                        <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                        {% if not forum.is_locked %}
+                            <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
+                            <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                        {% endif %}
 
                         <div class="clearfix"></div>
 
@@ -53,8 +55,10 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
-                        <a href="#" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
+                        {% if not forum.is_locked %}
+                            <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
+                            <a href="javascript:" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
+                        {% endif %}
                     </div>
                 </div>
             </section>
