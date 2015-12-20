@@ -72,8 +72,11 @@
 }
 
 .dropdown-modal {
-  overflow-y: auto;
-  overflow-x: hidden;
+  // zakomentowalem ponizsze linie ze wzgledu na problem z pluginem perfect-scrollbar. w przypadku
+  // odkomentowanych linii przy uaktywnieniu pluginu powstawal margines ktory znikal po najechaniu kursora
+  // myszy nad menu
+  //overflow-y: auto;
+  //overflow-x: hidden;
   max-height: 390px;
   position: relative;
   background-color: #fff;
