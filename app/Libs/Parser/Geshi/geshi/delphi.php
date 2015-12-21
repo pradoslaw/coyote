@@ -11,6 +11,8 @@
  *
  * CHANGES
  * -------
+ * 2015/12/21
+ *   -  Added a full set of reserved words - Delphi and Free Pascal
  * 2012/06/27 (1.0.8.11)
  *   -  Added some keywords
  *   -  fixed hex numbers and hex char literals (including WideChar)
@@ -61,19 +63,23 @@ $language_data = array(
 
     'KEYWORDS' => array(
         1 => array(
-            'Abstract', 'And', 'Array', 'As', 'Asm', 'At', 'Begin', 'Case',
-            'Class', 'Const', 'Constructor', 'Contains', 'Default', 'delayed', 'Destructor',
-            'DispInterface', 'Div', 'Do', 'DownTo', 'Else', 'End', 'Except',
-            'Export', 'Exports', 'External', 'File', 'Finalization', 'Finally', 'For',
-            'Function', 'Generic', 'Goto', 'If', 'Implementation', 'In', 'Inherited',
-            'Initialization', 'Inline', 'Interface', 'Is', 'Label', 'Library', 'Message',
-            'Mod', 'Nil', 'Not', 'Object', 'Of', 'On', 'Or', 'Overload', 'Override',
-            'Package', 'Packed', 'Private', 'Procedure', 'Program', 'Property',
-            'Protected', 'Public', 'Published', 'Read', 'Raise', 'Record', 'Register',
-            'Repeat', 'Requires', 'Resourcestring', 'Set', 'Shl', 'Shr', 'Specialize', 'Stored',
-            'Then', 'ThreadVar', 'To', 'Try', 'Type', 'Unit', 'Until', 'Uses', 'Var',
-            'Virtual', 'While', 'With', 'Write', 'Xor', 'assembler', 'far',
-            'near', 'pascal', 'cdecl', 'safecall', 'stdcall', 'varargs'
+            'absolute', 'abstract', 'alias', 'and', 'array', 'as', 'asm', 'assembler',
+            'at', 'automated', 'begin', 'break', 'case', 'cdecl', 'class', 'const',
+            'constructor', 'contains', 'continue', 'cppdecl', 'default', 'delayed',
+            'deprecated', 'destructor', 'dispid', 'dispinterface', 'dispose', 'div',
+            'do', 'downto', 'dynamic', 'else', 'end', 'except', 'exit', 'experimental',
+            'export', 'exports', 'external', 'false', 'far', 'file', 'final', 'finalization',
+            'finally', 'for', 'forward', 'function', 'goto', 'helper', 'if', 'implementation',
+            'implements', 'in', 'index', 'inherited', 'initialization', 'inline', 'interface',
+            'is', 'label', 'library', 'local', 'message', 'mod', 'name', 'near', 'new', 'nil',
+            'nodefault', 'nostackframe', 'not', 'object', 'of', 'oldfpccall', 'on', 'operator',
+            'or', 'out', 'overload', 'override', 'package', 'packed', 'pascal', 'platform',
+            'private', 'procedure', 'program', 'property', 'protected', 'public', 'published',
+            'raise', 'read', 'readonly', 'record', 'reference', 'register', 'reintroduce',
+            'repeat', 'requires', 'resident', 'resourcestring', 'safecall', 'sealed', 'self',
+            'set', 'shl', 'shr', 'softfloat', 'static', 'stdcall', 'stored', 'strict', 'string',
+            'then', 'threadvar', 'to', 'true', 'try', 'type', 'unit', 'unsafe', 'until', 'uses',
+            'var', 'varargs', 'virtual', 'while', 'winapi', 'with', 'write', 'writeonly', 'xor'
             ),
         2 => array(
             'false', 'self', 'true',
