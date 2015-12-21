@@ -31,6 +31,9 @@
   }
 }
 
+// "Kontener" dla posta
+// --------------------------------------------------
+
 .post {
   background-color: #fff;
   border: 1px solid $border-color;
@@ -46,6 +49,25 @@
 
   div[class*="col-"] {
     padding: 5px;
+  }
+
+  // w przypadku gdy post jest usuniety wyswietlamy go na pol-przezroczystym tle
+  .deleted {
+    opacity: .6;
+  }
+}
+
+.post-delete {
+  color: $alert-warning-text;
+  background-color: $alert-warning-bg;
+  padding: 4px 10px;
+  font-size: 11px;
+  border-bottom: 1px solid $alert-warning-border;
+
+  a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
   }
 }
 
@@ -175,7 +197,7 @@
 .col-bottom {
   background-color: #ececec;
 
-  .btn-sub, .btn-share, .btn-comment, .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del {
+  .btn-sub, .btn-share, .btn-comment, .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del, .btn-res {
     color: $text-color;
     opacity: .9;
     border: 1px solid transparent;
@@ -190,7 +212,7 @@
     }
   }
 
-  .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del {
+  .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del, .btn-res {
     float: right;
   }
 

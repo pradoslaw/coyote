@@ -4,6 +4,7 @@ return [
 
     'create' => 'dodał',
     'delete' => 'usunał',
+    'restore' => 'przywrócił',
     'update' => 'zmienił',
     'vote' => 'zagłosował',
 

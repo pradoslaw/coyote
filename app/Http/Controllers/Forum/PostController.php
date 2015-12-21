@@ -10,8 +10,12 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
+use Coyote\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Stream\Activities\Restore as Stream_Restore;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Post as Stream_Post;
+use Coyote\Stream\Objects\Forum as Stream_Forum;
+use Gate;
 
 class PostController extends Controller
 {
@@ -129,8 +133,73 @@ class PostController extends Controller
         return redirect()->to($url);
     }
 
-    public function delete()
+    /**
+     * Delete post or whole thread
+     *
+     * @param int $id post id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete($id)
     {
-        //
+        // Step 1. Does post really exist?
+        $post = $this->post->withTrashed()->findOrFail($id);
+        $forum = $this->forum->find($post->forum_id);
+
+        // Step 2. Does user really have permission to delete this post?
+        $this->authorize('delete', [$post, $forum]);
+
+        // Step 3. Maybe user does not have an access to this category?
+        if (!$forum->userCanAccess(auth()->user())) {
+            abort(401, 'Unauthorized');
+        }
+
+        $topic = $this->topic->withTrashed()->find($post->topic_id);
+
+        // Step 4. Only moderators can delete this post if topic (or forum) was locked
+        if (Gate::denies('delete', $forum)) {
+            if ($topic->is_locked || $forum->is_locked || $topic->last_post_id > $post->id || !$post->deleted_at) {
+                abort(401, 'Unauthorized');
+            }
+        }
+
+        $url = \DB::transaction(function () use ($post, $topic, $forum) {
+            // if this is the first post in topic... we must delete whole thread
+            if ($post->id === $topic->first_post_id) {
+                if (is_null($topic->deleted_at)) {
+                    $activity = Stream_Delete::class;
+                    $topic->delete();
+                    $redirect = redirect()->route('forum.category', [$forum->path]);
+                } else {
+                    $activity = Stream_Restore::class;
+                    $topic->restore();
+                    $redirect = redirecT()->route('forum.topic', [$forum->path, $topic->id, $topic->path]);
+                }
+
+                $object = (new Stream_Topic())->map($topic, $forum);
+                $target = (new Stream_Forum())->map($forum);
+            } else {
+                if (is_null($post->deleted_at)) {
+                    $activity = Stream_Delete::class;
+                    $post->delete();
+                } else {
+                    $activity = Stream_Restore::class;
+                    $post->restore();
+                }
+
+                $redirect = back();
+
+                // build url to post
+                $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+                $url .= '?p=' . $post->id . '#id' . $post->id;
+
+                $object = (new Stream_Post(['url' => $url]))->map($post);
+                $target = (new Stream_Topic())->map($topic, $forum);
+            }
+
+            stream($activity, $object, $target);
+            return $redirect->with('success', 'Operacja zakończona sukcesem.');
+        });
+
+        return $url;
     }
 }

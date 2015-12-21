@@ -7,12 +7,15 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Cache;
+use Gate;
 
 class TopicController extends Controller
 {
@@ -81,14 +84,22 @@ class TopicController extends Controller
 
         // current page...
         $page = $request->page;
+        // number of answers
+        $replies = $topic->replies;
 
         if ($request->has('p')) {
             $page = $this->post->getPage($request->get('p'), $topic->id);
         }
 
+        // user with forum-update ability WILL see every post
+        if (Gate::allows('delete', $forum)) {
+            $this->post->pushCriteria(new WithTrashed());
+            $replies = $topic->replies_real;
+        }
+
         // magic happens here. get posts for given topic
         $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $userId, $page);
-        $paginate = new LengthAwarePaginator($posts, $topic->replies, 10, $page, ['path' => ' ']);
+        $paginate = new LengthAwarePaginator($posts, $replies, 10, $page, ['path' => ' ']);
 
         $parser = [
             'post' => app()->make('Parser\Post'),
@@ -193,7 +204,11 @@ class TopicController extends Controller
                 ])->notify();
             }
 
-            stream(Stream_Create::class, (new Stream_Topic)->map($topic, $forum, $text));
+            stream(
+                Stream_Create::class,
+                (new Stream_Topic)->map($topic, $forum, $text),
+                (new Stream_Forum)->map($forum)
+            );
             return route('forum.topic', [$forum->path, $topic->id, $path]);
         });
 

@@ -83,6 +83,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
     {
         $first = $this->takeFirst($postId, $userId);
 
+        $this->applyCriteria();
         $sql = $this->prepare($userId)
                     ->where('topic_id', $topicId)
                     ->where('posts.id', '<>', $postId)

@@ -66,6 +66,9 @@ $(function () {
         $(this).toggleClass('in');
     });
 
+    /**
+     * Show "flag to report" page
+     */
     $('.btn-report').click(function() {
         var metadata = {'post_id': $(this).data('post-id')};
 
@@ -74,6 +77,20 @@ $(function () {
 
             $('#flag').find('.modal').modal('show');
         });
+    });
+
+    /**
+     * Delete post/topic
+     */
+    $('.btn-del').click(function() {
+        var $this = $(this);
+
+        $('#confirm-delete').modal('show').one('click', '.danger', function() {
+            $(this).attr('disabled', 'disabled').text('Usuwanie...');
+            window.location = $this.attr('href');
+        });
+
+        return false;
     });
 
     if ('onhashchange' in window) {

@@ -1,5 +1,14 @@
 <div class="post" {{ index == 0 ? 'id="first-post"' }}>
-    <div {{ index == 0 ? 'id="question"' }} class="post-body {{ index == 0 ? 'collapse' }} {{ paginate.currentPage() > 1 and index == 0 ? '' : 'in' }}">
+    {% if post.deleted_at %}
+        <div class="post-delete">
+            <a href="#post-{{ post.id }}" data-toggle="collapse">
+                <i class="fa fa-warning"></i>
+                Post usunięty
+            </a>
+        </div>
+    {% endif %}
+
+    <div id="post-{{ post.id }}" class="post-body {{ post.deleted_at ? 'deleted' }} {{ (index == 0 or post.deleted_at) ? 'collapse' }} {{ (paginate.currentPage() > 1 and index == 0) or post.deleted_at ? '' : 'in' }}">
 
         <div class="row">
             <div class="col-xs-2 col-user">
@@ -131,31 +140,40 @@
                     <span class="hidden-xs">Raportuj</span>
                 </a>
 
-                <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">
-                    <i class="fa fa-plus"></i>
-                </a>
+                {% if is_writeable %}
+                    <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">
+                        <i class="fa fa-plus"></i>
+                    </a>
 
-                {% if not forum.is_locked or can('update', forum) %}
                     <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="#" class="btn btn-xs btn-quote">
                         <i class="fa fa-quote-right"></i>
                         <span class="hidden-xs">Cytuj</span>
                     </a>
-                {% endif %}
 
-                <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="#id1182672" class="btn btn-xs btn-del">
-                    <i class="fa fa-remove"></i>
-                    <span class="hidden-xs">Usuń</span>
-                </a>
+                    {% if (post.id < topic.last_post_id and can('delete', post, forum)) or can('delete', forum) %}
+                        {% if post.deleted_at %}
+                            <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.delete', [post.id]) }}" class="btn btn-xs btn-res">
+                                <i class="fa fa-undo"></i>
+                                <span class="hidden-xs">Przywróć</span>
+                            </a>
+                        {% else %}
+                            <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="{{ route('forum.post.delete', [post.id]) }}" class="btn btn-xs btn-del">
+                                <i class="fa fa-remove"></i>
+                                <span class="hidden-xs">Usuń</span>
+                            </a>
+                        {% endif %}
+                    {% endif %}
 
-                {% if can('update', post, forum) %}
-                    <a href="{{ route('forum.post.submit', [forum.path, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
-                        <i class="fa fa-pencil"></i>
-                        <span class="hidden-xs">Edytuj</span>
-                    </a>
-                    <a data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="1182672" class="btn btn-xs btn-fast-edit">
-                        <i class="fa fa-pencil"></i>
-                        <span class="hidden-xs">Szybka edycja</span>
-                    </a>
+                    {% if can('update', post, forum) %}
+                        <a href="{{ route('forum.post.submit', [forum.path, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
+                            <i class="fa fa-pencil"></i>
+                            <span class="hidden-xs">Edytuj</span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="1182672" class="btn btn-xs btn-fast-edit">
+                            <i class="fa fa-pencil"></i>
+                            <span class="hidden-xs">Szybka edycja</span>
+                        </a>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -166,7 +184,7 @@
 
     {% if index == 0 %}
         <div id="col-toggle">
-            <a title="Pokaż/ukryj treść pytania" href="#question" data-toggle="collapse">
+            <a title="Pokaż/ukryj treść pytania" href="#post-{{ post.id }}" data-toggle="collapse">
                 <span></span>
                 <span></span>
                 <span></span>

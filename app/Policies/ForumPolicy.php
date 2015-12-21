@@ -44,4 +44,9 @@ class ForumPolicy
     {
         return $this->check('forum-update', $user, $forum);
     }
+
+    public function delete(User $user, Forum $forum)
+    {
+        return $this->check('forum-delete', $user, $forum);
+    }
 }

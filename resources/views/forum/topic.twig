@@ -2,6 +2,9 @@
 {% block title %}Forum dyskusyjne{{ parent() }}{% endblock %}
 
 {% import 'components/forms.twig' as forms %}
+{% import 'components/modals.twig' as modals %}
+
+{% set is_writeable = can('update', forum) ? true : (forum.is_locked or topic.is_locked) %}
 
 {% block container %}
 
@@ -30,7 +33,7 @@
                             </div>
                         {% endif %}
 
-                        {% if not forum.is_locked or can('update', forum) %}
+                        {% if is_writeable %}
                             <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                             <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
                         {% endif %}
@@ -55,7 +58,7 @@
                             </div>
                         </div>
 
-                        {% if not forum.is_locked or can('update', forum) %}
+                        {% if not is_locked %}
                             <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                             <a href="javascript:" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
                         {% endif %}
@@ -63,7 +66,7 @@
                 </div>
             </section>
 
-            {% if auth_check() and (not forum.is_locked or can('update', forum)) %}
+            {% if auth_check() and not is_locked %}
                 <section id="box-quick-form" class="row">
                     <div class="col-xs-12">
                         {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': '#', 'class': 'form-horizontal'}) }}
@@ -121,6 +124,11 @@
             {% include "forum/sidebar.twig" %}
         </aside>
     </div>
+
+    {% if auth_check() %}
+        {{ modals.confirm('Post zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'confirm-delete') }}
+    {% endif %}
+
 {% endblock %}
 
 {% block head %}

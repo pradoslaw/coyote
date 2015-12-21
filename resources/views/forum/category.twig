@@ -101,7 +101,14 @@
                                         </strong>
                                     </td>
                                     <td class="col-views hidden-xs">
-                                        <p title="Ilość odpowiedzi"><strong>{{ topic.replies }}</strong> <small>odpowiedzi</small></p>
+                                        <p title="Ilość odpowiedzi">
+                                            <strong>{{ topic.replies }}</strong>
+
+                                            {% if topic.replies != topic.replies_real and can('delete', forum) %}
+                                                <small class="col-replies-real">({{ topic.replies - topic.replies_real }})</small>
+                                            {% endif %}
+                                            <small>odpowiedzi</small>
+                                        </p>
                                         <p title="Ilość wyświetleń"><strong>{{ topic.views }}</strong> <small>wyświetleń</small></p>
                                     </td>
                                     <td class="col-last-post hidden-xs">

@@ -18,7 +18,6 @@ class Topic extends Object
         $this->id = $topic->id;
         $this->url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
         $this->displayName = $topic->subject;
-        $this->forum = ['name' => $forum->name, 'id' => $forum->id, 'path' => $forum->path];
 
         if ($text) {
             $this->excerpt = excerpt($text);

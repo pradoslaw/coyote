@@ -25,6 +25,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->model('user', 'Coyote\User');
         $router->model('post', 'Coyote\Post');
         $router->model('topic', 'Coyote\Topic');
+
         $router->pattern('id', '[0-9]+');
         $router->pattern('forum', '[A-Za-z\_\/]+');
         $router->pattern('tag', '([\p{L}\p{Mn}0-9\._+-]+)');
