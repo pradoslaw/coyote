@@ -33,7 +33,7 @@ class PostRequest extends Request
 
         // if I create new topic as anonymous user (or edit anonymous' post as a moderator)...
         if ((isset($post->id) && is_null($post->user_id)) || auth()->guest()) {
-            $rules = array_merge($rules, $this->userName());
+            $rules = $rules + ['user_name' => 'required|string|max:20|unique:users,name'];
         }
 
         // if I create new topic or edit first post ...
