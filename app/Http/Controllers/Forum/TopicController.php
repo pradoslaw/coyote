@@ -56,10 +56,6 @@ class TopicController extends Controller
      */
     public function index($forum, $topic, $slug, Request $request)
     {
-        if ($topic->forum_id !== $forum->id) {
-            return redirect(route('forum.topic', [$forum->path, $topic->id, $topic->path]));
-        }
-
         $userId = auth()->id();
         $sessionId = $request->session()->getId();
 

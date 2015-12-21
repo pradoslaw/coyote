@@ -103,8 +103,8 @@ class User extends Twig_Extension
 
             new Twig_SimpleFunction(
                 'can',
-                function ($ability, $policy) {
-                    return Auth::guest() ? false : policy($policy)->$ability(auth()->user(), $policy);
+                function ($ability, $policy, $object = null) {
+                    return Auth::guest() ? false : policy($policy)->$ability(auth()->user(), $policy, $object);
                 }
             )
         ];
