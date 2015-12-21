@@ -18,8 +18,15 @@ class ForumWrite
     {
         $forum = $request->route('forum');
 
-        if ((auth()->guest() && !$forum->enable_anonymous)
-            || ($forum->is_locked && !Gate::allows('update', $forum))) {
+        if (auth()->guest() && !$forum->enable_anonymous) {
+            if ($request->ajax()) {
+                return response('Unauthorized.', 401);
+            } else {
+                return redirect()->guest(route('login'));
+            }
+        }
+
+        if ($forum->is_locked && !Gate::allows('update', $forum)) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
