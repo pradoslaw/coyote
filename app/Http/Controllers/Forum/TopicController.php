@@ -150,9 +150,6 @@ class TopicController extends Controller
      */
     public function submit($forum)
     {
-        // make sure that user can write in this category
-        $this->authorizeForum($forum);
-
         $this->breadcrumb($forum);
         $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
 
@@ -181,7 +178,7 @@ class TopicController extends Controller
                 'host'      => request()->server('SERVER_NAME')
             ]);
 
-            $this->topic->setTags($topic->id, $request->get('tag'));
+            $this->topic->setTags($topic->id, $request->get('tag', []));
 
             // parsing text and store it in cache
             $text = app()->make('Parser\Post')->parse($request->text);

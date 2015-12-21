@@ -30,7 +30,7 @@
                             </div>
                         {% endif %}
 
-                        {% if not forum.is_locked %}
+                        {% if not forum.is_locked or can('update', forum) %}
                             <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                             <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
                         {% endif %}
@@ -55,7 +55,7 @@
                             </div>
                         </div>
 
-                        {% if not forum.is_locked %}
+                        {% if not forum.is_locked or can('update', forum) %}
                             <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                             <a href="javascript:" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
                         {% endif %}
@@ -63,14 +63,15 @@
                 </div>
             </section>
 
-
-            <section id="box-quick-form" class="row">
-                <div class="col-xs-12">
-                    {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': '#', 'class': 'form-horizontal'}) }}
-                    <textarea rows="2" cols="60" name="content" class="form-control" placeholder="Kliknij, aby napisać szybką odpowiedź..."></textarea>
-                    {{ form_close() }}
-                </div>
-            </section>
+            {% if auth_check() and (not forum.is_locked or can('update', forum)) %}
+                <section id="box-quick-form" class="row">
+                    <div class="col-xs-12">
+                        {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': '#', 'class': 'form-horizontal'}) }}
+                        <textarea rows="2" cols="60" name="content" class="form-control" placeholder="Kliknij, aby napisać szybką odpowiedź..."></textarea>
+                        {{ form_close() }}
+                    </div>
+                </section>
+            {% endif %}
 
             <section class="row">
                 <div class="col-xs-12">

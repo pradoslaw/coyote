@@ -48,9 +48,6 @@ class PostController extends Controller
 
     public function submit($forum, $topic, $post = null)
     {
-        // make sure that user can write in this category
-        $this->authorizeForum($forum);
-
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
@@ -130,5 +127,10 @@ class PostController extends Controller
         });
 
         return redirect()->to($url);
+    }
+
+    public function delete()
+    {
+        //
     }
 }

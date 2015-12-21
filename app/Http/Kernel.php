@@ -24,10 +24,11 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'       => Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest'      => Middleware\RedirectIfAuthenticated::class,
-        'adm'        => Middleware\AdmAccess::class,
-        'forum.access' => Middleware\ForumAccess::class
+        'auth'          => Middleware\Authenticate::class,
+        'auth.basic'    => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'guest'         => Middleware\RedirectIfAuthenticated::class,
+        'adm'           => Middleware\AdmAccess::class,
+        'forum.access'  => Middleware\ForumAccess::class,
+        'forum.write'   => Middleware\ForumWrite::class
     ];
 }

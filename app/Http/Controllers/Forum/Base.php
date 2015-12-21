@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Gate;
 
 trait Base
 {
@@ -34,13 +35,6 @@ trait Base
             if ($groupsId) {
                 $this->forum->pushCriteria(new OnlyThoseWithAccess($groupsId->toArray()));
             }
-        }
-    }
-
-    public function authorizeForum($forum)
-    {
-        if ((auth()->guest() && !$forum->enable_anonymous) || $forum->is_locked) {
-            abort(403);
         }
     }
 }

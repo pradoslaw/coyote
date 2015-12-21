@@ -33,12 +33,12 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('/Preview', ['uses' => 'HomeController@preview', 'as' => 'preview']);
 
     // formularz dodawania nowego watku na forum
-    Route::get('{forum}/Submit', ['uses' => 'TopicController@submit', 'as' => 'topic.submit', 'middleware' => 'forum.access']);
-    Route::post('{forum}/Submit', ['uses' => 'TopicController@save', 'middleware' => 'forum.access']);
+    Route::get('{forum}/Submit', ['uses' => 'TopicController@submit', 'as' => 'topic.submit', 'middleware' => ['forum.access', 'forum.write']]);
+    Route::post('{forum}/Submit', ['uses' => 'TopicController@save', 'middleware' => ['forum.access', 'forum.write']]);
 
     // dodawanie lub edycja posta na forum
-    Route::get('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@submit', 'as' => 'post.submit', 'middleware' => 'forum.access']);
-    Route::post('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@save', 'middleware' => 'forum.access']);
+    Route::get('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@submit', 'as' => 'post.submit', 'middleware' => ['forum.access', 'forum.write']]);
+    Route::post('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@save', 'middleware' => ['forum.access', 'forum.write']]);
 
     // widok kategorii forum
     Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);

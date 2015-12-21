@@ -39,4 +39,9 @@ class ForumPolicy
     {
         return $this->check('forum-merge', $user, $forum);
     }
+
+    public function update(User $user, Forum $forum)
+    {
+        return $this->check('forum-update', $user, $forum);
+    }
 }
