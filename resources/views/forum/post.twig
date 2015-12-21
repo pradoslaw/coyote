@@ -135,10 +135,12 @@
                     <span class="hidden-xs">Komentuj</span>
                 </a>
 
-                <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="javascript:" class="btn btn-xs btn-report" data-url="{{ url }}" data-post-id="{{ post.id }}">
-                    <i class="fa fa-flag"></i>
-                    <span class="hidden-xs">Raportuj</span>
-                </a>
+                {% if auth_check() %}
+                    <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="javascript:" class="btn btn-xs btn-report" data-url="{{ url }}" data-post-id="{{ post.id }}">
+                        <i class="fa fa-flag"></i>
+                        <span class="hidden-xs">Raportuj</span>
+                    </a>
+                {% endif %}
 
                 {% if is_writeable %}
                     <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">

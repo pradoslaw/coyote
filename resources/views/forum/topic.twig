@@ -4,7 +4,7 @@
 {% import 'components/forms.twig' as forms %}
 {% import 'components/modals.twig' as modals %}
 
-{% set is_writeable = can('update', forum) ? true : (forum.is_locked or topic.is_locked) %}
+{% set is_writeable = can('update', forum) ? true : (not (forum.is_locked or topic.is_locked)) %}
 
 {% block container %}
 
@@ -58,7 +58,7 @@
                             </div>
                         </div>
 
-                        {% if not is_locked %}
+                        {% if is_writeable %}
                             <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                             <a href="javascript:" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
                         {% endif %}
@@ -66,7 +66,7 @@
                 </div>
             </section>
 
-            {% if auth_check() and not is_locked %}
+            {% if auth_check() and is_writeable %}
                 <section id="box-quick-form" class="row">
                     <div class="col-xs-12">
                         {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': '#', 'class': 'form-horizontal'}) }}
