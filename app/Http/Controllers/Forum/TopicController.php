@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
@@ -37,17 +38,24 @@ class TopicController extends Controller
     private $post;
 
     /**
+     * @var Stream
+     */
+    private $stream;
+
+    /**
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
+     * @param Stream $stream
      */
-    public function __construct(Forum $forum, Topic $topic, Post $post)
+    public function __construct(Forum $forum, Topic $topic, Post $post, Stream $stream)
     {
         parent::__construct();
 
         $this->forum = $forum;
         $this->topic = $topic;
         $this->post = $post;
+        $this->stream = $stream;
     }
 
     /**
@@ -133,6 +141,18 @@ class TopicController extends Controller
             }
         }
 
+        if (Gate::allows('delete', $forum)) {
+            $activities = [];
+
+            // here we go. if user has delete ability, for sure he/she would like to know
+            // why posts were deleted and by whom
+            $collection = $this->stream->findByObject('Post', $posts->pluck('id'), 'Delete');
+
+            foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
+                $activities[$row->first()['object.id']] = $row->first();
+            }
+        }
+
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
@@ -147,7 +167,9 @@ class TopicController extends Controller
             return $this->forum->getTagClouds();
         });
 
-        return parent::view('forum.topic')->with(compact('viewers', 'posts', 'forum', 'topic', 'paginate', 'forumList', 'tags'));
+        return parent::view('forum.topic')->with(
+            compact('viewers', 'posts', 'forum', 'topic', 'paginate', 'forumList', 'tags', 'activities')
+        );
     }
 
     /**

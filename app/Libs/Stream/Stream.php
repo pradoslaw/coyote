@@ -36,6 +36,24 @@ class Stream
     }
 
     /**
+     * @param mixed $collection
+     * @return array
+     */
+    public function decorate($collection)
+    {
+        $result = [];
+
+        foreach ($collection as $index => $row) {
+            $class = __NAMESPACE__ . '\\Render\\' . ucfirst(camel_case($row['object.objectType']));
+            $decorator = new $class($row);
+
+            $result[$index] = $decorator->render();
+        }
+
+        return $result;
+    }
+
+    /**
      * @param $limit
      * @param int $offset
      * @param array $objects
@@ -44,16 +62,7 @@ class Stream
      */
     public function take($limit, $offset = 0, $objects = [], $verbs = [])
     {
-        $data = $this->model->take($limit, $offset, $objects, $verbs);
-        $result = [];
-
-        foreach ($data as $row) {
-            $class = __NAMESPACE__ . '\\Render\\' . ucfirst(camel_case($row['object.objectType']));
-            $decorator = new $class($row);
-
-            $result[] = $decorator->render();
-        }
-
-        return $result;
+        $collection = $this->model->take($limit, $offset, $objects, $verbs);
+        return $this->decorate($collection);
     }
 }

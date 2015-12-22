@@ -2,8 +2,43 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Repositories\Criteria\Criteria;
+
 interface RepositoryInterface
 {
+    /**
+     * @return $this
+     */
+    public function resetCriteria();
+
+    /**
+     * @param bool $flag
+     * @return $this
+     */
+    public function skipCriteria($flag = true);
+
+    /**
+     * @return mixed
+     */
+    public function getCriteria();
+
+    /**
+     * @param Criteria $criteria
+     * @return $this
+     */
+    public function getByCriteria(Criteria $criteria);
+
+    /**
+     * @param Criteria $criteria
+     * @return $this
+     */
+    public function pushCriteria(Criteria $criteria);
+
+    /**
+     * @return $this
+     */
+    public function applyCriteria();
+
     /**
      * @param array $data
      * @return mixed
