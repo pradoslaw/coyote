@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4783cdee2048ff2d6fdc4d0b6dc75be1",
-    "content-hash": "bc7814dce9e0c78415a6d5d09cb2f67d",
+    "hash": "a4aeca928c59afcbafbc80f47e43eb8e",
+    "content-hash": "a65b8b72b7c1a4a4938e19896edac3ce",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
-            "version": "v2.1.0",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-debugbar.git",
-                "reference": "25ce9052c89a262cfda1d410940a552efb9ae85c"
+                "reference": "974fd16e328ca851a081449100d9509af59cf0ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/25ce9052c89a262cfda1d410940a552efb9ae85c",
-                "reference": "25ce9052c89a262cfda1d410940a552efb9ae85c",
+                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/974fd16e328ca851a081449100d9509af59cf0ff",
+                "reference": "974fd16e328ca851a081449100d9509af59cf0ff",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,7 @@
                 "profiler",
                 "webprofiler"
             ],
-            "time": "2015-12-21 19:07:38"
+            "time": "2015-12-22 06:22:38"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -117,16 +117,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "2.1.5",
+            "version": "2.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "4ee562f421fd404139dd7b73ae46d075396a4baf"
+                "reference": "6a812e8a0d1b1db939a29b4dc14cb398b21b6112"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/4ee562f421fd404139dd7b73ae46d075396a4baf",
-                "reference": "4ee562f421fd404139dd7b73ae46d075396a4baf",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/6a812e8a0d1b1db939a29b4dc14cb398b21b6112",
+                "reference": "6a812e8a0d1b1db939a29b4dc14cb398b21b6112",
                 "shasum": ""
             },
             "require": {
@@ -137,13 +137,13 @@
                 "guzzlehttp/psr7": "~1.0",
                 "php": ">=5.4.0",
                 "phpunit/phpunit": "~4.8.0",
-                "symfony/browser-kit": ">=2.4|<3.1",
-                "symfony/console": ">=2.4|<3.1",
-                "symfony/css-selector": ">=2.4|<3.1",
-                "symfony/dom-crawler": ">=2.4|<3.1",
-                "symfony/event-dispatcher": ">=2.4|<3.1",
-                "symfony/finder": ">=2.4|<3.1",
-                "symfony/yaml": ">=2.4|<3.1"
+                "symfony/browser-kit": "~2.4",
+                "symfony/console": "~2.4",
+                "symfony/css-selector": "~2.4",
+                "symfony/dom-crawler": "~2.4,!=2.4.5",
+                "symfony/event-dispatcher": "~2.4",
+                "symfony/finder": "~2.4",
+                "symfony/yaml": "~2.4"
             },
             "require-dev": {
                 "codeception/specify": "~0.3",
@@ -193,7 +193,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2015-12-20 12:11:42"
+            "time": "2015-11-12 03:57:06"
         },
         {
             "name": "danielstjules/stringy",
@@ -4028,25 +4028,25 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.0.0",
+            "version": "v2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "177a015cb0e19ff4a49e0e2e2c5fc1c1bee07002"
+                "reference": "f79824187de95064a2f5038904c4d7f0227fedb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/177a015cb0e19ff4a49e0e2e2c5fc1c1bee07002",
-                "reference": "177a015cb0e19ff4a49e0e2e2c5fc1c1bee07002",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/f79824187de95064a2f5038904c4d7f0227fedb5",
+                "reference": "f79824187de95064a2f5038904c4d7f0227fedb5",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "php": ">=5.3.9"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "2.8-dev"
                 }
             },
             "autoload": {
@@ -4073,7 +4073,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 12:36:17"
+            "time": "2015-11-30 12:35:10"
         },
         {
             "name": "twig/extensions",
