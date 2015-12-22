@@ -13,10 +13,11 @@ class CreateTopicTrackTable extends Migration
     public function up()
     {
         Schema::create('topic_track', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('topic_id');
             $table->smallInteger('forum_id');
             $table->integer('user_id')->nullable();
-            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
+            $table->timestampTz('marked_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->string('session_id')->nullable();
 
             $table->index('forum_id');

@@ -121,9 +121,9 @@ class PostRepository extends Repository implements PostRepositoryInterface
     public function getFirstUnreadPostId($topicId, $markTime)
     {
         return $this->model
-                    ->select('post_id')
+                    ->select('id')
                     ->where('topic_id', $topicId)
                         ->where('created_at', '>', $markTime)
-                    ->pluck('post_id');
+                    ->pluck('id');
     }
 }

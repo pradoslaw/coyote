@@ -31,8 +31,8 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         $sql = $this->model
                     ->select([
                         'forums.*',
-                        'forum_track.created_at AS forum_marked_at',
-                        'topic_track.created_at AS topic_marked_at',
+                        'forum_track.marked_at AS forum_marked_at',
+                        'topic_track.marked_at AS topic_marked_at',
                         'subject',
                         'topics.id AS topic_id',
                         'topics.path AS topic_path',
@@ -177,7 +177,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function markTime($forumId, $userId, $sessionId)
     {
-        $sql = Track::select('created_at')->where('forum_id', $forumId);
+        $sql = Track::select('marked_at')->where('forum_id', $forumId);
 
         if ($userId) {
             $sql->where('user_id', $userId);
@@ -185,7 +185,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             $sql->where('session_id', $sessionId);
         }
 
-        return $sql->pluck('created_at');
+        return $sql->pluck('marked_at');
     }
 
     /**
@@ -219,6 +219,6 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         // builds data to update
         $attributes = ['forum_id' => $forumId] + ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
         // execute a query...
-        Track::updateOrCreate($attributes, $attributes + ['created_at' => \DB::raw('NOW()'), 'forum_id' => $forumId]);
+        Track::updateOrCreate($attributes, $attributes + ['marked_at' => \DB::raw('NOW()'), 'forum_id' => $forumId]);
     }
 }

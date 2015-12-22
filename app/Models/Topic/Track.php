@@ -11,7 +11,7 @@ class Track extends Model
      *
      * @var array
      */
-    protected $fillable = ['topic_id', 'forum_id', 'user_id', 'session_id'];
+    protected $fillable = ['topic_id', 'forum_id', 'user_id', 'marked_at', 'session_id'];
 
     /**
      * The database table used by the model.
@@ -24,18 +24,4 @@ class Track extends Model
      * @var array
      */
     public $timestamps = false;
-
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = null;
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
 }

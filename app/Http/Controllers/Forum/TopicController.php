@@ -76,7 +76,7 @@ class TopicController extends Controller
 
                     if ($postId && $postId !== $topic->first_post_id) {
                         $url = route('forum.topic', [$forum->path, $topic->id, $topic->path]);
-                        return response($url) . '?p=' . $postId . '#id' . $postId;
+                        return redirect()->to($url . '?p=' . $postId . '#id' . $postId);
                     }
                 }
             }
@@ -117,12 +117,11 @@ class TopicController extends Controller
                 $post->sig = $parser['sig']->parse($post->sig);
             }
 
-            $markTime = $post->created_at;
+            $markTime = $post->created_at->toDateTimeString();
         }
 
         if ($topicMarkTime < $markTime && $forumMarkTime < $markTime) {
             $this->topic->markAsRead($topic->id, $forum->id, $markTime, $userId, $sessionId);
-
             $isUnread = true;
 
             if ($forumMarkTime < $markTime) {
