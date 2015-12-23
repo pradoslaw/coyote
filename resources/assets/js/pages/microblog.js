@@ -48,7 +48,7 @@ $(function () {
                 $this.data('count', count);
 
                 if (!$this.hasClass('thumbs-on')) {
-                    $this.next('.btn-watch').click(); // po doceneniu wpisu automatycznie go obserwujemy
+                    $this.next('.btn-subscribe').click(); // po doceneniu wpisu automatycznie go obserwujemy
                 }
 
                 $this.toggleClass('thumbs-on');
@@ -97,11 +97,11 @@ $(function () {
         .on('click', '.btn-reply', function () {
             $(this).parent().next('.microblog-comments').find('input').focus();
         })
-        .on('click', '.btn-watch', function () {
+        .on('click', '.btn-subscribe', function () {
             var $this = $(this);
 
             $.post($this.attr('href'), function () {
-                $this.toggleClass('watch-on');
+                $this.toggleClass('subscribe-on');
             });
 
             return false;

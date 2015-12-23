@@ -20,4 +20,9 @@ class Topic extends Model
     {
         return $this->hasMany('Coyote\Topic\Tag')->join('tags', 'tags.id', '=', 'tag_id');
     }
+
+    public function subscribers()
+    {
+        return $this->hasMany('Coyote\Topic\Subscriber');
+    }
 }

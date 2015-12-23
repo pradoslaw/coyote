@@ -23,7 +23,7 @@ class Alert extends Model
     const MICROBLOG_LOGIN = 16;
     const POST_VOTE = 18;
     const MICROBLOG_VOTE = 19;
-    const MICROBLOG_WATCH = 20;
+    const MICROBLOG_SUBSCRIBER = 20;
 
     /**
      * The attributes that are mass assignable.

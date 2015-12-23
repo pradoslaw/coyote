@@ -80,7 +80,7 @@ Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     Route::get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'view']);
     Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'vote', 'middleware' => 'auth']);
     Route::get('Vote/{id}', ['uses' => 'VoteController@voters', 'as' => 'voters']);
-    Route::post('Watch/{id}', ['uses' => 'WatchController@post', 'as' => 'watch', 'middleware' => 'auth']);
+    Route::post('Subscribe/{id}', ['uses' => 'SubscribeController@post', 'as' => 'subscribe', 'middleware' => 'auth']);
     Route::post('Delete/{id}', ['uses' => 'SubmitController@delete', 'as' => 'delete', 'middleware' => 'auth']);
 
     // edycja/publikacja komentarza oraz jego usuniecie

@@ -6,12 +6,12 @@ use Coyote\Alert;
 use Coyote\Alert\Providers\Provider;
 
 /**
- * Class Watch
+ * Class Subscriber
  * @package Coyote\Alert\Providers\Microblog
  */
-class Watch extends Provider implements Alert\Providers\ProviderInterface
+class Subscriber extends Provider implements Alert\Providers\ProviderInterface
 {
-    const ID = Alert::MICROBLOG_WATCH;
+    const ID = Alert::MICROBLOG_SUBSCRIBER;
     const EMAIL = null;
 
     /**

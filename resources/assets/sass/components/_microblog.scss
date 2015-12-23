@@ -38,7 +38,7 @@
   }
 }
 
-.btn-thumbs, .btn-reply, .btn-watch {
+.btn-thumbs, .btn-reply, .btn-subscribe {
   padding: 2px 7px 2px 25px;
   color: $gray-light;
   position: relative;
@@ -60,7 +60,7 @@
   content: $fa-var-thumbs-o-up;
 }
 
-.btn-watch:before {
+.btn-subscribe:before {
   content: $fa-var-bell-o;
 }
 
@@ -73,7 +73,7 @@
   content: $fa-var-thumbs-up;
 }
 
-.watch-on:before {
+.subscribe-on:before {
   color: $brand-primary;
   content: $fa-var-bell;
 }

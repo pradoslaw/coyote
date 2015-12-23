@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMicroblogWatchTable extends Migration
+class CreatePostSubscribersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,15 @@ class CreateMicroblogWatchTable extends Migration
      */
     public function up()
     {
-        Schema::create('microblog_watch', function (Blueprint $table) {
-            $table->mediumInteger('microblog_id');
+        Schema::create('post_subscribers', function (Blueprint $table) {
+            $table->integer('post_id');
             $table->mediumInteger('user_id');
+            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
 
-            $table->unique(['microblog_id', 'user_id']);
+            $table->primary(['post_id', 'user_id']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('microblog_id')->references('id')->on('microblogs')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 
@@ -30,6 +31,6 @@ class CreateMicroblogWatchTable extends Migration
      */
     public function down()
     {
-        Schema::drop('microblog_watch');
+        Schema::drop('post_subscribers');
     }
 }

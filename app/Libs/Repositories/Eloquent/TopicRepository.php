@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
+use Coyote\Topic\Subscriber;
 use Coyote\Topic\Track;
 use Coyote\Topic;
 use Coyote\Tag;
@@ -129,6 +130,22 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         foreach ($tags as $name) {
             $tag = Tag::firstOrCreate(['name' => $name]);
             Topic\Tag::create(['topic_id' => $topicId, 'tag_id' => $tag->id]);
+        }
+    }
+
+    /**
+     * Enable/disable subscription for this topic
+     *
+     * @param int $topicId
+     * @param int $userId
+     * @param bool $flag
+     */
+    public function subscribe($topicId, $userId, $flag)
+    {
+        if (!$flag) {
+            Subscriber::where('topic_id', $topicId)->where('user_id', $userId)->delete();
+        } else {
+            Subscriber::firstOrCreate(['topic_id' => $topicId, 'user_id' => $userId]);
         }
     }
 

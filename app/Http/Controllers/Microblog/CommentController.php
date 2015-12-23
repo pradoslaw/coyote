@@ -10,7 +10,7 @@ use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Alert\Alert as Alerts;
-use Coyote\Alert\Providers\Microblog\Watch as Alert_Watch;
+use Coyote\Alert\Providers\Microblog\Subscriber as Alert_Subscriber;
 use Coyote\Alert\Providers\Microblog\Login as Alert_Login;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
@@ -90,7 +90,7 @@ class CommentController extends Controller
         $object = new Stream_Comment();
         $target = (new Stream_Microblog())->map($parent);
         $actor = new Stream_Actor($user);
-        $alert = new Alert_Watch($this->alert);
+        $alert = new Alert_Subscriber($this->alert);
         $stream = new Stream_Activity($this->stream);
 
         if (!$id) {
@@ -107,7 +107,7 @@ class CommentController extends Controller
             $microblog->text = $parser->parse($microblog->text);
 
             if (!$id) {
-                $watchers = $this->microblog->getWatchers($microblog->parent_id);
+                $subscribers = $this->microblog->getSubscribers($microblog->parent_id);
                 $alert = new Alerts();
 
                 // we need to send alerts AFTER saving comment to database because we need ID of comment
@@ -121,9 +121,9 @@ class CommentController extends Controller
                     'url'         => route('microblog.view', [$parent->id], false) . '#comment-' . $microblog->id
                 ];
 
-                if ($watchers) {
+                if ($subscribers) {
                     // new comment. should we send a notification?
-                    $alert->attach((new Alert_Watch($this->alert, $alertData))->setUsersId($watchers));
+                    $alert->attach((new Alert_Subscriber($this->alert, $alertData))->setUsersId($subscribers));
                 }
 
                 $ref = new Ref_Login();

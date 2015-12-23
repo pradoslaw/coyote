@@ -208,6 +208,10 @@ class TopicController extends Controller
 
             $this->topic->setTags($topic->id, $request->get('tag', []));
 
+            if (auth()->check()) {
+                $this->topic->subscribe($topic->id, auth()->id(), $request->get('subscribe'));
+            }
+
             // parsing text and store it in cache
             $text = app()->make('Parser\Post')->parse($request->text);
 

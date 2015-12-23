@@ -57,17 +57,22 @@ class PostController extends Controller
 
         if ($post === null) {
             $this->breadcrumb->push('Odpowiedz', request()->path());
-            $title = 'Napisz odpowiedź w wątku ' . $topic->subject;
         } else {
             // make sure user can edit this post
             $this->authorize('update', [$post, $forum]);
-
             $this->breadcrumb->push('Edycja', request()->path());
-            $title = 'Edycja posta';
+
+            if ($post->id === $topic->first_post_id) {
+                // get topic tags only if this post is the FIRST post in topic
+                $tags = $topic->tags->pluck('name')->toArray();
+            }
         }
 
-        $tags = $topic->tags->pluck('name')->toArray();
-        return parent::view('forum.submit')->with(compact('forum', 'topic', 'post', 'title', 'tags'));
+        if (auth()->check()) {
+            $isSubscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
+        }
+
+        return parent::view('forum.submit')->with(compact('forum', 'topic', 'post', 'title', 'tags', 'isSubscribe'));
     }
 
     public function save(PostRequest $request, $forum, $topic, $post = null)
@@ -119,6 +124,10 @@ class PostController extends Controller
                         'url'         => route('forum.topic', [$forum->path, $topic->id, $topic->path], false)
                     ])->notify();
                 }
+            }
+
+            if (auth()->check() && $post->user_id) {
+                $this->topic->subscribe($topic->id, $post->user_id, $request->get('subscribe'));
             }
 
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);

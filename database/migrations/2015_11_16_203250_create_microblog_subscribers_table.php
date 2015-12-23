@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTopicWatchTable extends Migration
+class CreateMicroblogSubscribersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,15 +12,14 @@ class CreateTopicWatchTable extends Migration
      */
     public function up()
     {
-        Schema::create('topic_watch', function (Blueprint $table) {
-            $table->integer('topic_id');
+        Schema::create('microblog_subscribers', function (Blueprint $table) {
+            $table->mediumInteger('microblog_id');
             $table->mediumInteger('user_id');
-            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
 
-            $table->unique(['topic_id', 'user_id']);
+            $table->unique(['microblog_id', 'user_id']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
+            $table->foreign('microblog_id')->references('id')->on('microblogs')->onDelete('cascade');
         });
     }
 
@@ -31,6 +30,6 @@ class CreateTopicWatchTable extends Migration
      */
     public function down()
     {
-        Schema::drop('topic_watch');
+        Schema::drop('microblog_subscribers');
     }
 }

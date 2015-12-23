@@ -1,5 +1,13 @@
 {% extends 'layout.twig' %}
-{% block title %}{{ title }}{{ parent() }}{% endblock %}
+{% block title %}
+    {% if post.id is null %}
+        Napisz odpowiedź w wątku {{ topic.subject }}
+    {% else %}
+        Edycja posta
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}
 
 {% import 'components/forms.twig' as forms %}
 
@@ -98,7 +106,7 @@
                 <div class="form-group">
                     <div class="col-md-10 col-md-offset-2">
                         <label>
-                            {{ form_checkbox('watch', 1, input_old('watch', user('allow_notify'))) }}
+                            {{ form_checkbox('subscribe', 1, input_old('subscribe', isSubscribe is defined ? isSubscribe : user('allow_subscribe'))) }}
                             Obserwuj wątek
                         </label>
                     </div>

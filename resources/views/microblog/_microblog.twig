@@ -39,7 +39,7 @@
                         </a>
 
                         {% if auth_check() %}
-                            <a href="{{ route('microblog.watch', [microblog.id]) }}" class="btn btn-watch {{ microblog.watch_on ? 'watch-on' }}">Obserwuj</a>
+                            <a href="{{ route('microblog.subscribe', [microblog.id]) }}" class="btn btn-subscribe {{ microblog.subscribe_on ? 'subscribe-on' }}">Obserwuj</a>
                             <a href="javascript:" class="btn btn-reply">Komentarz</a>
                         {% endif %}
                     </div>

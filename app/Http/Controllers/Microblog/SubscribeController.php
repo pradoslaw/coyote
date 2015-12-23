@@ -4,13 +4,13 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Microblog;
-use Coyote\Microblog\Watch;
+use Coyote\Microblog\Subscriber;
 
 /**
- * Class WatchController
+ * Class SubscribeController
  * @package Coyote\Http\Controllers\Microblog
  */
-class WatchController extends Controller
+class SubscribeController extends Controller
 {
     /**
      * Mozliwosc obserwowania danego wpisu na mikroblogu
@@ -24,12 +24,12 @@ class WatchController extends Controller
             return response()->json(['error' => 'Musisz być zalogowany, aby móc obserwować ten wpis.'], 500);
         }
 
-        $watch = Watch::where('microblog_id', $id)->where('user_id', auth()->user()->id)->first();
+        $subscriber = Subscriber::where('microblog_id', $id)->where('user_id', auth()->user()->id)->first();
 
-        if ($watch) {
-            $watch->delete();
+        if ($subscriber) {
+            $subscriber->delete();
         } else {
-            Watch::create(['microblog_id' => $id, 'user_id' => auth()->user()->id]);
+            Subscriber::create(['microblog_id' => $id, 'user_id' => auth()->user()->id]);
         }
     }
 }

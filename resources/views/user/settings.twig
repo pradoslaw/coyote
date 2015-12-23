@@ -38,7 +38,7 @@
 
                             {{ forms.checkbox('allow_count', 'Pokazuj licznik postów', 1, user_input('allow_count')) }}
                             {{ forms.checkbox('allow_smilies', 'Pokazuj emotikony w poście', 1, user_input('allow_smilies')) }}
-                            {{ forms.checkbox('allow_notify', 'Automatycznie obserwuj wątki, w których biorę udział', 1, user_input('allow_notify')) }}
+                            {{ forms.checkbox('allow_subscribe', 'Automatycznie obserwuj wątki, w których biorę udział', 1, user_input('allow_subscribe')) }}
                             {{ forms.checkbox('allow_sig', 'Wyświetlaj sygnaturki użytkowników', 1, user_input('allow_sig')) }}
                             {{ forms.textarea('sig', 'Sygnatura', user_input('sig'), errors.first('sig'), 3, {}, 'Podpis będzie widoczny przy każdym Twoim poście. Uwaga! Użytkownicy posiadający mniej niż 50 punktów reputacji nie mogą umieszczać linków w tym polu') }}
 

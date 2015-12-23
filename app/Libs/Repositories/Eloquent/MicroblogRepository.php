@@ -179,7 +179,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     {
         $columns = ['microblogs.*', 'users.name', 'is_active', 'is_blocked', 'photo'];
         $columnThumb = 'mv.id AS thumbs_on';
-        $columnWatch = 'mw.user_id AS watch_on';
+        $columnWatch = 'mw.user_id AS subscribe_on';
 
         $userId = auth()->check() ? \DB::raw(auth()->user()->id) : null;
         $with = [];
@@ -212,7 +212,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 $join->on('mv.microblog_id', '=', 'microblogs.id')
                     ->where('mv.user_id', '=', $userId);
             })
-            ->leftJoin('microblog_watch AS mw', function ($join) use ($userId) {
+            ->leftJoin('microblog_subscribers AS mw', function ($join) use ($userId) {
                 $join->on('mw.microblog_id', '=', 'microblogs.id')
                     ->where('mw.user_id', '=', $userId);
             });
@@ -295,9 +295,9 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      * @param int $id
      * @return mixed
      */
-    public function getWatchers($id)
+    public function getSubscribers($id)
     {
-        return (new Microblog\Watch())
+        return (new Microblog\Subscriber())
                 ->where('microblog_id', $id)
                 ->get()
                 ->lists('user_id')

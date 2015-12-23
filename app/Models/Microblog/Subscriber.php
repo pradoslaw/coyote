@@ -4,7 +4,7 @@ namespace Coyote\Microblog;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Watch extends Model
+class Subscriber extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -18,7 +18,7 @@ class Watch extends Model
      *
      * @var string
      */
-    protected $table = 'microblog_watch';
+    protected $table = 'microblog_subscribers';
 
     /**
      * @var array

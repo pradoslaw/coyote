@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostWatchTable extends Migration
+class CreateTopicSubscribersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,15 +12,15 @@ class CreatePostWatchTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_watch', function (Blueprint $table) {
-            $table->integer('post_id');
+        Schema::create('topic_subscribers', function (Blueprint $table) {
+            $table->integer('topic_id');
             $table->mediumInteger('user_id');
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
 
-            $table->unique(['post_id', 'user_id']);
+            $table->primary(['topic_id', 'user_id']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ class CreatePostWatchTable extends Migration
      */
     public function down()
     {
-        Schema::drop('post_watch');
+        Schema::drop('topic_subscribers');
     }
 }

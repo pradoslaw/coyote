@@ -77,8 +77,8 @@ class Microblog extends Model
         return $this->hasMany('Coyote\Microblog', 'parent_id', 'id');
     }
 
-    public function watchers()
+    public function subscribers()
     {
-        return $this->hasMany('Coyote\Microblog\Watch', 'microblog_id', 'id');
+        return $this->hasMany('Coyote\Microblog\Subscriber', 'microblog_id', 'id');
     }
 }

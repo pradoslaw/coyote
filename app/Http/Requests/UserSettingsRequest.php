@@ -38,7 +38,7 @@ class UserSettingsRequest extends Request
             'sig'                    => 'string|max:255',
             'allow_count'            => 'boolean',
             'allow_smilies'          => 'boolean',
-            'allow_notify'           => 'boolean',
+            'allow_subscribe'        => 'boolean',
             'allow_sig'              => 'boolean',
             'group_id'               => 'sometimes|integer|exists:user_groups,group_id,user_id,' . auth()->user()->id
         ];
