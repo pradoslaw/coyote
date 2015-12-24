@@ -41,6 +41,10 @@
                         <img class="img-responsive" src="{{ user_photo(post.photo) }}" {{ not post.photo ? 'style="max-width: 75px"' }}>
                     </div>
 
+                    {% if post.group_name %}
+                        <span class="label label-default">{{ post.group_name }}</span>
+                    {% endif %}
+
                     <p class="hidden-xs">
                         <strong>Rejestracja:</strong>
                         <small>{{ post.author_created_at|format_date }}</small>
@@ -49,6 +53,20 @@
                         <strong>Ostatnio:</strong>
                         <small>{{ post.session_updated_at|default(post.author_visited_at)|format_date }}</small>
                     </p>
+
+                    {% if post.location %}
+                        <p class="hidden-xs">
+                            <strong>Lokalizacja:</strong>
+                            <small>{{ post.location }}</small>
+                        </p>
+                    {% endif %}
+
+                    {% if post.allow_count and user('allow_count') %}
+                        <p class="hidden-xs">
+                            <strong>Postów:</strong>
+                            <small>{{ post.author_posts|number_format }}</small>
+                        </p>
+                    {% endif %}
                 {% endif %}
             </div>
             <div class="col-xs-10 col-body">

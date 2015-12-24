@@ -40,7 +40,7 @@ class UserSettingsRequest extends Request
             'allow_smilies'          => 'boolean',
             'allow_subscribe'        => 'boolean',
             'allow_sig'              => 'boolean',
-            'group_id'               => 'sometimes|integer|exists:user_groups,group_id,user_id,' . auth()->user()->id
+            'group_id'               => 'sometimes|integer|exists:group_users,group_id,user_id,' . auth()->user()->id
         ];
     }
 }
