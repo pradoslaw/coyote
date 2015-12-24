@@ -94,10 +94,17 @@
 
             <div class="box">
                 <ul class="side-menu" style="margin-top: 5px">
+                    {% set subscribers = topic.subscribers().lists('topic_id', 'user_id') %}
+
                     <li class="btn-watch on">
                         <a title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
-                            Obserwuj wątek
-                            <small>(1 obserwujący)</small>
+                            {% if auth_guest() or subscribers[user('id')] is not defined %}
+                                Obserwuj wątek
+                            {% else %}
+                                Zakończ obserwację
+                            {% endif %}
+
+                            <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
                         </a>
                     </li>
                     <li class="btn-atom">
