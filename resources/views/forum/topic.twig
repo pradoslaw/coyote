@@ -15,7 +15,7 @@
             {{ paginate|raw }}
         </nav>
 
-        {% include "forum/_top.twig" %}
+        {% include "forum/top.twig" %}
 
         <main id="mainbar">
 
@@ -96,7 +96,7 @@
                 <ul class="side-menu" style="margin-top: 5px">
                     {% set subscribers = topic.subscribers().lists('topic_id', 'user_id') %}
 
-                    <li class="btn-watch on">
+                    <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
                         <a title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
                             {% if auth_guest() or subscribers[user('id')] is not defined %}
                                 Obserwuj wątek
@@ -104,7 +104,9 @@
                                 Zakończ obserwację
                             {% endif %}
 
-                            <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
+                            {% if subscribers.count() > 0 %}
+                                <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
+                            {% endif %}
                         </a>
                     </li>
                     <li class="btn-atom">
