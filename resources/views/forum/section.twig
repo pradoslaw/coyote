@@ -63,7 +63,7 @@
                             {% else %}
                                 {% if forum.last_post_id %}
                                     <p>
-                                        <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view unread" href="{{ forum.route }}?view=unread"></a>
+                                        <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view {{ forum.topic_unread  ? 'unread' }}" href="{{ forum.route }}?view=unread"></a>
 
                                         <a title="{{ forum.subject }}" href="{{ forum.route }}?p={{ forum.last_post_id }}#id{{ forum.last_post_id }}">{{ forum.subject }}</a>
                                     </p>
