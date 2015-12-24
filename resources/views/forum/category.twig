@@ -15,6 +15,9 @@
         {% include "forum/_top.twig" %}
 
         <main id="mainbar">
+            {% for name, forums in sections %}
+                {% include 'forum/section.twig' %}
+            {% endfor %}
 
             <section class="panel panel-wrapper">
                 <div class="panel-body">

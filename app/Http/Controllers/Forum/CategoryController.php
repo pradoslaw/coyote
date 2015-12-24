@@ -48,6 +48,8 @@ class CategoryController extends Controller
 
         $this->pushForumCriteria();
         $forumList = $this->forum->forumList();
+        // execute query: get all categories that user can has access
+        $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId(), $forum->id);
 
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
         $topics = $this->topic->paginate(auth()->id(), $request->getSession()->getId());
@@ -57,6 +59,8 @@ class CategoryController extends Controller
             return $this->forum->getTagClouds();
         });
 
-        return parent::view('forum.category')->with(compact('viewers', 'forumList', 'forum', 'topics', 'tags'));
+        return parent::view('forum.category')->with(
+            compact('viewers', 'forumList', 'forum', 'topics', 'tags', 'sections')
+        );
     }
 }

@@ -81,7 +81,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         }
 
         // execute query and fetch all forum categories
-        $parents = $this->buildTree($result);
+        $parents = $this->buildTree($result, $parentId);
 
         // we must fill section field in every row just to group rows by section name.
         $section = '';
@@ -123,16 +123,17 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
     /**
      * @param \Collection $rowset
+     * @param int $parentId
      * @return mixed
      */
-    private function buildTree($rowset)
+    private function buildTree($rowset, $parentId = null)
     {
         // extract only main categories
-        $parents = $rowset->where('parent_id', null)->keyBy('id');
+        $parents = $rowset->where('parent_id', $parentId)->keyBy('id');
 
         // extract only children categories
-        $children = $rowset->filter(function ($item) {
-            return $item->parent_id != null;
+        $children = $rowset->filter(function ($item) use ($parentId) {
+            return $item->parent_id != $parentId;
         })->groupBy('parent_id');
 
         // we merge children with parent element
