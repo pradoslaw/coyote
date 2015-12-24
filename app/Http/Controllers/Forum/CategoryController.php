@@ -7,7 +7,6 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Illuminate\Http\Request;
-use Cache;
 
 class CategoryController extends Controller
 {
@@ -53,11 +52,7 @@ class CategoryController extends Controller
 
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
         $topics = $this->topic->paginate(auth()->id(), $request->getSession()->getId());
-
-        // let's cache tags. we don't need to run this query every time
-        $tags = Cache::remember('forum:tags', 60 * 24, function () {
-            return $this->forum->getTagClouds();
-        });
+        $tags = $this->getTagClouds();
 
         return parent::view('forum.category')->with(
             compact('viewers', 'forumList', 'forum', 'topics', 'tags', 'sections')

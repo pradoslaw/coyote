@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Gate;
+use Cache;
 
 trait Base
 {
@@ -36,5 +37,13 @@ trait Base
                 $this->forum->pushCriteria(new OnlyThoseWithAccess($groupsId->toArray()));
             }
         }
+    }
+
+    public function getTagClouds()
+    {
+        // let's cache tags. we don't need to run this query every time
+        return Cache::remember('forum:tags', 60 * 24, function () {
+            return $this->forum->getTagClouds();
+        });
     }
 }
