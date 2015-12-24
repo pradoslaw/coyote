@@ -40,7 +40,7 @@ class PostRequest extends Request
         if ((isset($post->id) && $post->id === $topic->first_post_id) || is_null($topic)) {
             $rules = array_merge($rules, ['subject' => 'required|min:3|max:200', 'tag' => 'array']);
 
-            $canSticky = $this->user()->can('sticky', $forum);
+            $canSticky = $this->user() ? $this->user()->can('sticky', $forum) : false;
             if ($canSticky) {
                 $rules['is_sticky'] = 'bool';
             }

@@ -12,6 +12,7 @@ use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
+use Coyote\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -224,11 +225,19 @@ class TopicController extends Controller
                 ])->notify();
             }
 
-            stream(
-                Stream_Create::class,
-                (new Stream_Topic)->map($topic, $forum, $text),
-                (new Stream_Forum)->map($forum)
+            $actor = new Stream_Actor(auth()->user());
+
+            if (auth()->guest()) {
+                $actor->displayName = $request->get('user_name');
+            }
+            (new \Coyote\Stream\Stream($this->stream))->add(
+                new Stream_Create(
+                    $actor,
+                    (new Stream_Topic)->map($topic, $forum, $text),
+                    (new Stream_Forum)->map($forum)
+                )
             );
+
             return route('forum.topic', [$forum->path, $topic->id, $path]);
         });
 

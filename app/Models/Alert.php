@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Alert extends Model
 {
     const PM = 1;
-    const POST_SUBMIT = 2;
+    const TOPIC_SUBSCRIBER = 2;
     const TOPIC_MOVE = 3;
     const TOPIC_DELETE = 4;
     const POST_DELETE = 5;

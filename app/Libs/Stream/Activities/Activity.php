@@ -65,6 +65,26 @@ abstract class Activity implements ObjectInterface
     }
 
     /**
+     * @param ObjectInterface $object
+     * @return $this
+     */
+    public function setObject(ObjectInterface $object)
+    {
+        $this->object = $object;
+        return $this;
+    }
+
+    /**
+     * @param ObjectInterface $target
+     * @return $this
+     */
+    public function setTarget(ObjectInterface $target)
+    {
+        $this->target = $target;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function build()

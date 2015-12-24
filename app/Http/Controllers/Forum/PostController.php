@@ -15,6 +15,7 @@ use Coyote\Stream\Activities\Restore as Stream_Restore;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
+use Coyote\Stream\Actor as Stream_Actor;
 use Gate;
 
 class PostController extends Controller
@@ -80,6 +81,7 @@ class PostController extends Controller
         $url = \DB::transaction(function () use ($request, $forum, $topic, $post) {
             // parsing text and store it in cache
             $text = app()->make('Parser\Post')->parse($request->text);
+            $actor = new Stream_Actor(auth()->user());
 
             // post has been modified...
             if ($post !== null) {
@@ -89,7 +91,7 @@ class PostController extends Controller
                     ];
 
                 $post->fill($data)->save();
-                $activity = Stream_Update::class;
+                $activity = new Stream_Update($actor);
 
                 // user want to change the subject. we must update topics table
                 if ($post->id === $topic->first_post_id) {
@@ -99,7 +101,10 @@ class PostController extends Controller
                     $this->topic->setTags($topic->id, $request->get('tag', []));
                 }
             } else {
-                $activity = Stream_Create::class;
+                if (auth()->guest()) {
+                    $actor->displayName = $request->get('user_name');
+                }
+                $activity = new Stream_Create($actor);
 
                 // create new post and assign it to topic. don't worry about the rest: trigger will do the work
                 $post = $this->post->create($request->all() + [
@@ -133,8 +138,11 @@ class PostController extends Controller
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
             $url .= '?p=' . $post->id . '#id' . $post->id;
 
-            $object = (new Stream_Post(['url' => $url]))->map($post);
-            stream($activity, $object, (new Stream_Topic())->map($topic, $forum));
+            $activity->setObject((new Stream_Post(['url' => $url]))->map($post));
+            $activity->setTarget((new Stream_Topic())->map($topic, $forum));
+
+            // put action into activity stream
+            stream($activity);
 
             return $url;
         });
