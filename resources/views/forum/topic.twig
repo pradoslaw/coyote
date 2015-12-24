@@ -9,7 +9,7 @@
 {% block container %}
 
     <div id="index" class="sidebar">
-        <h1>{{ topic.subject }}</h1>
+        <h1>{{ link_to_route('forum.topic', topic.subject, [forum.path, topic.id, topic.path]) }}</h1>
 
         <nav>
             {{ paginate|raw }}

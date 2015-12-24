@@ -1,12 +1,12 @@
 {% extends 'layout.twig' %}
-{% block title %}Forum dyskusyjne{{ parent() }}{% endblock %}
+{% block title %}{{ forum.title|default(forum.name) }} :: Forum {{ parent() }}{% endblock %}
 
 {% import 'components/forms.twig' as forms %}
 
 {% block container %}
 
     <div id="index" class="sidebar">
-        <h1>{{ forum.title|default(forum.name) }}</h1>
+        <h1>{{ link_to_route('forum.category', forum.title|default(forum.name), [forum.path]) }}</h1>
 
         <nav>
             {{ topics.render()|raw }}
