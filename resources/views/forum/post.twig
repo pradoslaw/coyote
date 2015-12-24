@@ -47,7 +47,7 @@
                     </p>
                     <p class="hidden-xs">
                         <strong>Ostatnio:</strong>
-                        <small>{{ post.session_updated_at(post.author_visited_at)|format_date }}</small>
+                        <small>{{ post.session_updated_at|default(post.author_visited_at)|format_date }}</small>
                     </p>
                 {% endif %}
             </div>
