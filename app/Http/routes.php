@@ -59,6 +59,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
 
     Route::get('/Tag/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
+    Route::get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);
 });
 
 Route::get('Praca', ['uses' => 'Job\HomeController@index', 'as' => 'job.home']);
