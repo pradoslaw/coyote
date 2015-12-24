@@ -118,13 +118,9 @@
     font-family: Arial, sans-serif;
     color: $gray;
 
-    a {
-      color: $link-color-darker;
-    }
-
     &:before {
       @include font-awesome($fa-var-user);
-      color: $text-color;
+      color: $brand-primary;
       left: 0;
       font-weight: normal;
     }

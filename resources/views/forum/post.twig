@@ -12,7 +12,7 @@
 
         <div class="row">
             <div class="col-xs-2 col-user">
-                <h5 class="offline" title="Użytkownik jest offline">
+                <h5 class="{{ post.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ post.session_updated_at ? 'online' : 'offline' }}">
                     {% if post.user_id %}
                         {{ link_to_profile(post.user_id, post.author_name, post.is_active, post.is_blocked) }}
                     {% else %}
