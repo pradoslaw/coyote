@@ -6,7 +6,7 @@
     <div id="vcard-content">
         <div class="row">
             <div class="col-xs-3">
-                <img src="/img/avatar.png" class="img-thumbnail">
+                <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
                 <span class="status {{ session_at ?: 'offline' }}">{{ session_at ? 'Online' : 'Offline' }}</span>
 
                 {% if user.group.name %}
