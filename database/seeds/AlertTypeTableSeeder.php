@@ -21,7 +21,7 @@ class AlertTypeTableSeeder extends Seeder
                       'profile'  => false,
                       'email'    => true
         ]);
-        Type::create(['id'       => Alert::POST_SUBMIT,
+        Type::create(['id'       => Alert::TOPIC_SUBSCRIBER,
                       'name'     => 'Powiadamiaj o nowych postach w obserwowanych wątkach',
                       'headline' => '{sender} dodał odpowiedź w wątku',
                       'profile'  => true,
