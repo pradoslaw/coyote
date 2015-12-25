@@ -57,7 +57,9 @@ class AlertServiceProvider extends ServiceProvider
             'Alert\Microblog\Subscriber',
             'Alert\Microblog\Vote',
             'Alert\Post\Login',
-            'Alert\Topic\Subscriber'
+            'Alert\Post\Delete',
+            'Alert\Topic\Subscriber',
+            'Alert\Topic\Delete'
         ];
     }
 }

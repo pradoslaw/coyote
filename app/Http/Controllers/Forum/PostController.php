@@ -196,34 +196,67 @@ class PostController extends Controller
         }
 
         $url = \DB::transaction(function () use ($post, $topic, $forum) {
+            // build url to post
+            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+
+            $notification = [
+                'sender_id'   => auth()->id(),
+                'sender_name' => auth()->user()->name,
+                'subject'     => excerpt($topic->subject, 48)
+            ];
+
             // if this is the first post in topic... we must delete whole thread
             if ($post->id === $topic->first_post_id) {
                 if (is_null($topic->deleted_at)) {
                     $activity = Stream_Delete::class;
-                    $topic->delete();
                     $redirect = redirect()->route('forum.category', [$forum->path]);
+
+                    $subscribersId = (array) $topic->subscribers()->pluck('user_id');
+                    if ($post->user_id !== null) {
+                        $subscribersId[] = $post->user_id;
+                    }
+
+                    $topic->delete();
+
+                    if ($subscribersId) {
+                        app()->make('Alert\Topic\Delete')
+                            ->with($notification)
+                            ->setUrl($url)
+                            ->setUsersId($subscribersId)
+                            ->notify();
+                    }
                 } else {
                     $activity = Stream_Restore::class;
                     $topic->restore();
-                    $redirect = redirecT()->route('forum.topic', [$forum->path, $topic->id, $topic->path]);
+                    $redirect = redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path]);
                 }
 
                 $object = (new Stream_Topic())->map($topic, $forum);
                 $target = (new Stream_Forum())->map($forum);
             } else {
+                $url .= '?p=' . $post->id . '#id' . $post->id;
+
                 if (is_null($post->deleted_at)) {
                     $activity = Stream_Delete::class;
+
+                    if ($post->user_id !== null) {
+                        /**
+                         * @todo Dodac wysylke powiadomien uzytkownikom ktorzy obserwuja dany post
+                         */
+                        app()->make('Alert\Post\Delete')
+                            ->with($notification)
+                            ->setUrl($url)
+                            ->setUserId($post->user_id)
+                            ->notify();
+                    }
+
                     $post->delete();
+                    $redirect = back();
                 } else {
                     $activity = Stream_Restore::class;
                     $post->restore();
+                    $redirect = redirect()->to($url);
                 }
-
-                $redirect = back();
-
-                // build url to post
-                $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
-                $url .= '?p=' . $post->id . '#id' . $post->id;
 
                 $object = (new Stream_Post(['url' => $url]))->map($post);
                 $target = (new Stream_Topic())->map($topic, $forum);
