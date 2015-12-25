@@ -35,13 +35,13 @@ class AlertTypeTableSeeder extends Seeder
         ]);
         Type::create(['id'       => Alert::TOPIC_DELETE,
                       'name'     => 'Powiadamiaj o usunięciu Twojego wątku',
-                      'headline' => 'Wątek został usunięty',
+                      'headline' => 'Wątek został usunięty przez {sender}',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::POST_DELETE,
                       'name'     => 'Powiadamiaj o usunięciu Twojego postu',
-                      'headline' => 'Twój post został usunięty',
+                      'headline' => 'Twój post został usunięty przez {sender}',
                       'profile'  => true,
                       'email'    => true
         ]);
