@@ -50,7 +50,7 @@ BEGIN
 
 			IF _post_id IS NOT NULL THEN
 				UPDATE topics SET
-					replies = (replies + 1),
+					replies = LEAST(replies_real, replies + 1),
 					last_post_id = _post_id,
 					last_post_created_at = _post_time
 				WHERE "id" = OLD.topic_id;
