@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Alert\Alert;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\PostRequest;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
@@ -83,8 +84,13 @@ class PostController extends Controller
             $text = app()->make('Parser\Post')->parse($request->text);
             $actor = new Stream_Actor(auth()->user());
 
+            // url to the post
+            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+
             // post has been modified...
             if ($post !== null) {
+                $url .= '?p=' . $post->id . '#id' . $post->id;
+
                 $this->authorize('update', [$post, $forum]);
                 $data = $request->only(['text', 'user_name']) + [
                         'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
@@ -116,27 +122,37 @@ class PostController extends Controller
                     'host'      => request()->server('SERVER_NAME')
                 ]);
 
-                // get id of users that were mentioned in the text
-                $usersId = (new Ref_Login())->grab($text);
+                $url .= '?p=' . $post->id . '#id' . $post->id;
 
-                if ($usersId) {
-                    app()->make('Alert\Post\Login')->with([
-                        'users_id'    => $usersId,
-                        'sender_id'   => auth()->id(),
-                        'sender_name' => $request->get('user_name', auth()->user()->name),
-                        'subject'     => excerpt($topic->subject, 48),
-                        'excerpt'     => excerpt($text),
-                        'url'         => route('forum.topic', [$forum->path, $topic->id, $topic->path], false)
-                    ])->notify();
+                $alert = new Alert();
+                $notification = [
+                    'sender_id'   => auth()->id(),
+                    'sender_name' => $request->get('user_name', auth()->id() ? auth()->user()->name : ''),
+                    'subject'     => excerpt($topic->subject, 48),
+                    'excerpt'     => excerpt($text),
+                    'url'         => $url
+                ];
+
+                $subscribersId = $topic->subscribers()->pluck('user_id');
+                if ($subscribersId) {
+                    $alert->attach(
+                        // $subscribersId can be int or array. we need to cast to array type
+                        app()->make('Alert\Topic\Subscriber')->with($notification)->setUsersId((array) $subscribersId)
+                    );
                 }
+
+                // get id of users that were mentioned in the text
+                $subscribersId = (new Ref_Login())->grab($text);
+                if ($subscribersId) {
+                    $alert->attach(app()->make('Alert\Post\Login')->with($notification)->setUsersId($subscribersId));
+                }
+
+                $alert->notify();
             }
 
             if (auth()->check() && $post->user_id) {
                 $this->topic->subscribe($topic->id, $post->user_id, $request->get('subscribe'));
             }
-
-            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
-            $url .= '?p=' . $post->id . '#id' . $post->id;
 
             $activity->setObject((new Stream_Post(['url' => $url]))->map($post));
             $activity->setTarget((new Stream_Topic())->map($topic, $forum));

@@ -52,6 +52,12 @@ class AlertServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['Alert\Post\Login'];
+        return [
+            'Alert\Microblog\Login',
+            'Alert\Microblog\Subscriber',
+            'Alert\Microblog\Vote',
+            'Alert\Post\Login',
+            'Alert\Topic\Subscriber'
+        ];
     }
 }
