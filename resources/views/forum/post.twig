@@ -77,12 +77,14 @@
                     <input type="hidden" value="1182672">
                     <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
-                    <a class="vote-up " href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
-                        <i class="fa fa-thumbs-o-up"></i>
-                    </a>
-                    <a class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tą odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
-                        <i class="fa fa-check-circle-o"></i>
-                    </a>
+                    {% if not post.deleted_at %}
+                        <a class="vote-up " href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </a>
+                        <a class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tą odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+                            <i class="fa fa-check-circle-o"></i>
+                        </a>
+                    {% endif %}
                 </div>
 
                 <div class="post-content" data-post-id="1182672">
@@ -142,35 +144,39 @@
             <div class="col-xs-2 col-bottom" style="height: 32px"></div>
             <div class="col-xs-10 col-bottom">
 
-                <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active">
-                    <i class="fa fa-search-plus"></i>
-                    <span class="hidden-xs">Obserwuj</span>
-                </a>
-                <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="{{ route('forum.share', [post.id]) }}" class="btn btn-xs btn-share">
-                    <i class="fa fa-share-alt"></i>
-                    <span class="hidden-xs">Udostępnij</span>
-                </a>
-                <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-xs btn-comment" href="#form-{{ post.id }}">
-                    <i class="fa fa-comment-o"></i>
-                    <span class="hidden-xs">Komentuj</span>
-                </a>
-
-                {% if auth_check() %}
-                    <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="javascript:" class="btn btn-xs btn-report" data-url="{{ url }}" data-post-id="{{ post.id }}">
-                        <i class="fa fa-flag"></i>
-                        <span class="hidden-xs">Raportuj</span>
+                {% if not post.deleted_at %}
+                    <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active">
+                        <i class="fa fa-search-plus"></i>
+                        <span class="hidden-xs">Obserwuj</span>
                     </a>
+                    <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="{{ route('forum.share', [post.id]) }}" class="btn btn-xs btn-share">
+                        <i class="fa fa-share-alt"></i>
+                        <span class="hidden-xs">Udostępnij</span>
+                    </a>
+                    <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-xs btn-comment" href="#form-{{ post.id }}">
+                        <i class="fa fa-comment-o"></i>
+                        <span class="hidden-xs">Komentuj</span>
+                    </a>
+
+                    {% if auth_check() %}
+                        <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="javascript:" class="btn btn-xs btn-report" data-url="{{ url }}" data-post-id="{{ post.id }}">
+                            <i class="fa fa-flag"></i>
+                            <span class="hidden-xs">Raportuj</span>
+                        </a>
+                    {% endif %}
                 {% endif %}
 
                 {% if is_writeable %}
-                    <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">
-                        <i class="fa fa-plus"></i>
-                    </a>
+                    {% if not post.deleted_at %}
+                        <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">
+                            <i class="fa fa-plus"></i>
+                        </a>
 
-                    <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="#" class="btn btn-xs btn-quote">
-                        <i class="fa fa-quote-right"></i>
-                        <span class="hidden-xs">Cytuj</span>
-                    </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="#" class="btn btn-xs btn-quote">
+                            <i class="fa fa-quote-right"></i>
+                            <span class="hidden-xs">Cytuj</span>
+                        </a>
+                    {% endif %}
 
                     {% if (post.id < topic.last_post_id and can('delete', post, forum)) or can('delete', forum) %}
                         {% if post.deleted_at %}
@@ -186,7 +192,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if can('update', post, forum) %}
+                    {% if can('update', post, forum) and not post.deleted_at %}
                         <a href="{{ route('forum.post.submit', [forum.path, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
                             <i class="fa fa-pencil"></i>
                             <span class="hidden-xs">Edytuj</span>
