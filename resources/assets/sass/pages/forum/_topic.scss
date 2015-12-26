@@ -120,9 +120,13 @@
 
     &:before {
       @include font-awesome($fa-var-user);
-      color: $brand-primary;
+      color: $link-color-darker;
       left: 0;
       font-weight: normal;
+    }
+
+    a {
+      color: $link-color-darker;
     }
   }
 
