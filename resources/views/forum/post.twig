@@ -31,7 +31,9 @@
 
                 <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
 
-                <small><a href="#" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
+                {% if can('update', forum) %}
+                    <small><a href="#" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
+                {% endif %}
             </div>
         </div>
         <div class="row">
