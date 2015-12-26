@@ -24,5 +24,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AlertTypeTableSeeder::class);
         $this->call(ForumTableSeeder::class);
         $this->call(FlagTypeSeeder::class);
+        $this->call(ForumReasonsTableSeeder::class);
     }
 }

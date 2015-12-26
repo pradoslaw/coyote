@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
@@ -151,6 +152,8 @@ class TopicController extends Controller
             foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
                 $activities[$row->first()['object.id']] = $row->first();
             }
+
+            $reasonList = Reason::lists('name', 'id');
         }
 
         $this->breadcrumb($forum);
@@ -164,7 +167,7 @@ class TopicController extends Controller
         $tags = $this->getTagClouds();
 
         return parent::view('forum.topic')->with(
-            compact('viewers', 'posts', 'forum', 'topic', 'paginate', 'forumList', 'tags', 'activities')
+            compact('viewers', 'posts', 'forum', 'topic', 'paginate', 'forumList', 'tags', 'activities', 'reasonList')
         );
     }
 

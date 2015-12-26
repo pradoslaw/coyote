@@ -3,7 +3,10 @@
         <div class="post-delete">
             <a href="#post-{{ post.id }}" data-toggle="collapse">
                 <i class="fa fa-warning"></i>
-                Post usunięty przez {{ activities[post.id].actor.displayName }} dnia {{ activities[post.id].created_at|format_date }}
+                Post usunięty przez {{ activities[post.id].actor.displayName }} dnia {{ activities[post.id].created_at|format_date }}.
+                {% if activities[post.id].object.reasonName %}
+                Powód: <strong>{{ activities[post.id].object.reasonName }}</strong>
+                {% endif %}
             </a>
         </div>
     {% endif %}

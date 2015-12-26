@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Alert\Alert;
+use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\PostRequest;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
@@ -18,6 +19,7 @@ use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
 use Gate;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -170,10 +172,13 @@ class PostController extends Controller
      * Delete post or whole thread
      *
      * @param int $id post id
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete($id)
+    public function delete($id, Request $request)
     {
+        $this->validate($request, ['reason' => 'sometimes|int|exists:forum_reasons,id']);
+
         // Step 1. Does post really exist?
         $post = $this->post->withTrashed()->findOrFail($id);
         $forum = $this->forum->find($post->forum_id);
@@ -195,7 +200,7 @@ class PostController extends Controller
             }
         }
 
-        $url = \DB::transaction(function () use ($post, $topic, $forum) {
+        $url = \DB::transaction(function () use ($post, $topic, $forum, $request) {
             // build url to post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
 
@@ -204,6 +209,18 @@ class PostController extends Controller
                 'sender_name' => auth()->user()->name,
                 'subject'     => excerpt($topic->subject, 48)
             ];
+
+            $reason = null;
+
+            if ($request->has('reason')) {
+                $reason = Reason::find($request->get('reason'));
+
+                $notification = array_merge($notification, [
+                    'excerpt'       => $reason->name,
+                    'reasonName'    => $reason->name,
+                    'reasonText'    => $reason->description
+                ]);
+            }
 
             // if this is the first post in topic... we must delete whole thread
             if ($post->id === $topic->first_post_id) {
@@ -260,6 +277,10 @@ class PostController extends Controller
 
                 $object = (new Stream_Post(['url' => $url]))->map($post);
                 $target = (new Stream_Topic())->map($topic, $forum);
+            }
+
+            if (!empty($reason)) {
+                $object->reasonName = $reason->name;
             }
 
             stream($activity, $object, $target);

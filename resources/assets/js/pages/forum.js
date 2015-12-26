@@ -16,7 +16,7 @@ $(function () {
     $(document).click(function (e) {
         var container = $('#sidebar, #btn-toggle-sidebar');
 
-        if ($('#sidebar').css('position') == 'absolute' && !container.is(e.target) && container.has(e.target).length == 0) {
+        if ($('#sidebar').css('position') === 'absolute' && !container.is(e.target) && container.has(e.target).length == 0) {
             $('#sidebar').hide();
         }
     });
@@ -79,6 +79,19 @@ $(function () {
         });
     });
 
+    function toPost(url) {
+        var form = $('<form>', {'method': 'POST', 'action': url});
+        form.append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">');
+
+        return form;
+    }
+
+    $('.btn-res').click(function() {
+        toPost($(this).attr('href')).submit();
+
+        return false;
+    });
+
     /**
      * Delete post/topic
      */
@@ -87,11 +100,31 @@ $(function () {
 
         $('#confirm-delete').modal('show').one('click', '.danger', function() {
             $(this).attr('disabled', 'disabled').text('Usuwanie...');
-            window.location = $this.attr('href');
+            var modal = $(this).parents('.modal-content');
+
+            var form = toPost($this.attr('href'));
+            form.append('<input type="hidden" name="reason" value="' + $('select', modal).val() + '">');
+            form.submit();
         });
 
         return false;
     });
+
+    /**
+     * Append list of reasons (of moderator actions) to modal box
+     */
+    if (typeof reasonsList !== 'undefined') {
+        var select = $('<select>', {'class': 'form-control input-sm'});
+        select.append('<option>-- wybierz powód --</option>');
+
+        $.each(reasonsList, function(key, value) {
+            select.append('<option value="' + key + '">' + value + '</option>');
+        });
+
+        $('#confirm-delete').each(function() {
+            select.appendTo($('.modal-body', this));
+        });
+    }
 
     if ('onhashchange' in window) {
         var onHashChange = function () {

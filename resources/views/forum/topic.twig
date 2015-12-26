@@ -152,6 +152,10 @@
     <script src="/js/forum.js" type="text/javascript"></script>
 
     <script type="text/javascript">
+        {% if can('delete', forum) %}
+            var reasonsList = {{ reasonList.toJson()|raw }};
+        {% endif %}
+
         $(function () {
             $('.col-bottom a').tooltip();
         });
