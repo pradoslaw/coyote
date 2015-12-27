@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -16,13 +17,32 @@ class HomeController extends Controller
     private $forum;
 
     /**
-     * @param Forum $forum
+     * @var Topic
      */
-    public function __construct(Forum $forum)
+    private $topic;
+
+    /**
+     * @param Forum $forum
+     * @param Topic $topic
+     */
+    public function __construct(Forum $forum, Topic $topic)
     {
         parent::__construct();
 
         $this->forum = $forum;
+        $this->topic = $topic;
+
+        $this->breadcrumb->push('Forum', route('forum.home'));
+    }
+
+    protected function view($view = null, $data = [])
+    {
+        $tags = $this->getTagClouds();
+
+        // create view with online users
+        $viewers = app()->make('Session\Viewers')->render(request()->getRequestUri());
+
+        return parent::view($view, $data)->with(compact('tags', 'viewers'));
     }
 
     /**
@@ -31,17 +51,11 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $this->breadcrumb->push('Forum', route('forum.home'));
-
         $this->pushForumCriteria();
         // execute query: get all categories that user can has access
         $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId());
-        $tags = $this->getTagClouds();
 
-        // create view with online users
-        $viewers = app()->make('Session\Viewers')->render($request->getRequestUri());
-
-        return parent::view('forum.home')->with(compact('sections', 'viewers', 'tags'));
+        return $this->view('forum.home')->with(compact('sections'));
     }
 
     /**
@@ -52,5 +66,15 @@ class HomeController extends Controller
     {
         $parser = app()->make('Parser\Post');
         return response($parser->parse($request->get('text')));
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     */
+    public function all(Request $request)
+    {
+        $topics = $this->topic->paginate(auth()->id(), $request->getSession()->getId());
+        return $this->view('forum.all')->with(compact('topics'));
     }
 }

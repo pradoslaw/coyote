@@ -32,6 +32,10 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
     Route::post('/Preview', ['uses' => 'HomeController@preview', 'as' => 'preview']);
 
+    Route::get('/Tag/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
+    Route::get('/All', ['uses' => 'HomeController@all', 'as' => 'all']);
+    Route::get('/Unanswered', ['uses' => 'HomeController@unanswered', 'as' => 'unanswered']);
+
     // formularz dodawania nowego watku na forum
     Route::get('{forum}/Submit', ['uses' => 'TopicController@submit', 'as' => 'topic.submit', 'middleware' => ['forum.access', 'forum.write']]);
     Route::post('{forum}/Submit', ['uses' => 'TopicController@save', 'middleware' => ['forum.access', 'forum.write']]);
@@ -58,7 +62,6 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // pokaz reszte komentarzy...
     Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
 
-    Route::get('/Tag/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     Route::get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);
 });
 

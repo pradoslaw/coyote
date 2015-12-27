@@ -3,7 +3,7 @@
 namespace TwigBridge\Extensions;
 
 use Carbon\Carbon;
-use Jenssegers\Eloquent\Model;
+use Gate;
 use Twig_Extension;
 use Twig_SimpleFunction;
 use Twig_SimpleFilter;
@@ -103,8 +103,16 @@ class User extends Twig_Extension
 
             new Twig_SimpleFunction(
                 'can',
-                function ($ability, $policy, $object = null) {
-                    return Auth::guest() ? false : policy($policy)->$ability(auth()->user(), $policy, $object);
+                function ($ability, $policy = null, $object = null) {
+                    if (Auth::guest()) {
+                        return false;
+                    }
+
+                    if ($policy === null) {
+                        return Gate::allows($ability);
+                    }
+
+                    return policy($policy)->$ability(auth()->user(), $policy, $object);
                 }
             )
         ];
