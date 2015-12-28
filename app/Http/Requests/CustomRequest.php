@@ -21,7 +21,7 @@ class CustomRequest extends Request
     {
         $ip = $this->getClientIp();
 
-        if ('prod' == env('APP_ENV')) {
+        if ('production' == env('APP_ENV')) {
             /*
              * Jezeli obecny jest ten naglowek, to oznacza, ze wlaczony jest CloudFlare. Nalezy wydobyc oryginalne IP
              * uzytkownika
