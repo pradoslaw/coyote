@@ -69,7 +69,7 @@ class Misc extends Twig_Extension
         $timer = microtime(true) - LARAVEL_START;
 
         if ($timer < 1) {
-            return substr((string) $timer, 2, 3) . ' ms';
+            return (int) substr((string) $timer, 2, 3) . ' ms';
         } else {
             return number_format($timer, 2) . ' s';
         }
