@@ -16,7 +16,7 @@ class OnlyThoseWithAccess extends Criteria
     /**
      * @param array $groupsId
      */
-    public function __construct(array $groupsId)
+    public function __construct(array $groupsId = [])
     {
         $this->groupsId = $groupsId;
     }
@@ -28,8 +28,21 @@ class OnlyThoseWithAccess extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        $query = $model->forGroups($this->groupsId);
+        return $model->whereNested(function ($sub) use ($model) {
+            $sub->whereNotExists(function ($sub) {
+                return $sub->select('forum_id')
+                    ->from('forum_access')
+                    ->where('forum_access.forum_id', '=', \DB::raw('forums.id'));
+            });
 
-        return $query;
+            if ($this->groupsId) {
+                $sub->orWhereExists(function ($sub) {
+                    return $sub->select('forum_id')
+                        ->from('forum_access')
+                        ->whereIn('group_id', $this->groupsId)
+                        ->where('forum_access.forum_id', '=', \DB::raw('forums.id'));
+                });
+            }
+        });
     }
 }

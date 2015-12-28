@@ -19,34 +19,6 @@ class Forum extends Model
     public $timestamps = false;
 
     /**
-     * @param $query
-     * @return mixed
-     */
-    public function scopeForAll($query)
-    {
-        return $query->orWhereNotExists(function ($sub) {
-            return $sub->select('forum_id')
-                    ->from('forum_access')
-                    ->where('forum_access.forum_id', '=', \DB::raw('forums.id'));
-        });
-    }
-
-    /**
-     * @param $query
-     * @param $groupsId
-     * @return mixed
-     */
-    public function scopeForGroups($query, $groupsId)
-    {
-        return $query->whereExists(function ($sub) use ($groupsId) {
-            return $sub->select('forum_id')
-                    ->from('forum_access')
-                    ->whereIn('group_id', $groupsId)
-                    ->where('forum_access.forum_id', '=', \DB::raw('forums.id'));
-        });
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function access()

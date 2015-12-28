@@ -2,63 +2,34 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
+use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
-    use Base;
-
     /**
-     * @var Forum
+     * @param null $view
+     * @param array $data
+     * @return mixed
      */
-    private $forum;
-
-    /**
-     * @var Topic
-     */
-    private $topic;
-
-    private $tabs = [];
-
-    /**
-     * @param Forum $forum
-     * @param Topic $topic
-     */
-    public function __construct(Forum $forum, Topic $topic)
+    protected function view($view = null, $data = [])
     {
-        parent::__construct();
-
-        $this->forum = $forum;
-        $this->topic = $topic;
-
-        $this->breadcrumb->push('Forum', route('forum.home'));
-        $this->tabs = [
+        $tabs = [
             'forum.home'            => 'Kategorie',
             'forum.all'             => 'Wszystkie',
             'forum.unanswered'      => 'Bez odpowiedzi'
         ];
 
         if (auth()->check()) {
-            $this->tabs['forum.subscribes'] = 'Obserwowane';
-            $this->tabs['forum.mine'] = 'Moje';
+            $tabs['forum.subscribes'] = 'Obserwowane';
+            $tabs['forum.mine'] = 'Moje';
         }
-    }
 
-    protected function view($view = null, $data = [])
-    {
-        $tags = $this->getTagClouds();
-
-        // create view with online users
-        $viewers = app()->make('Session\Viewers')->render(request()->getRequestUri());
         $routeName = request()->route()->getName();
-
-        return parent::view($view, $data)->with(compact('tags', 'viewers', 'routeName'))->with('tabs', $this->tabs);
+        return parent::view($view, $data)->with(compact('routeName', 'tabs'));
     }
 
     /**
@@ -91,6 +62,14 @@ class HomeController extends Controller
      */
     private function load($userId, $sessionId)
     {
+        $groupsId = [];
+
+        if (auth()->check()) {
+            $groupsId = auth()->user()->groups()->lists('id')->toArray();
+        }
+
+        $this->topic->pushCriteria(new OnlyThoseWithAccess($groupsId));
+
         $topics = $this->topic->paginate($userId, $sessionId);
         return $this->view('forum.home.topics')->with(compact('topics'));
     }

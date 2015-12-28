@@ -21,20 +21,8 @@ use Coyote\Stream\Actor as Stream_Actor;
 use Gate;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class PostController extends BaseController
 {
-    use Base;
-
-    /**
-     * @var Forum
-     */
-    private $forum;
-
-    /**
-     * @var Topic
-     */
-    private $topic;
-
     /**
      * @var Post
      */
@@ -47,10 +35,8 @@ class PostController extends Controller
      */
     public function __construct(Forum $forum, Topic $topic, Post $post)
     {
-        parent::__construct();
+        parent::__construct($forum, $topic);
 
-        $this->forum = $forum;
-        $this->topic = $topic;
         $this->post = $post;
     }
 

@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Forum\Reason;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
@@ -19,20 +18,8 @@ use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Gate;
 
-class TopicController extends Controller
+class TopicController extends BaseController
 {
-    use Base;
-
-    /**
-     * @var Forum
-     */
-    private $forum;
-
-    /**
-     * @var Topic
-     */
-    private $topic;
-
     /**
      * @var Post
      */
@@ -51,10 +38,8 @@ class TopicController extends Controller
      */
     public function __construct(Forum $forum, Topic $topic, Post $post, Stream $stream)
     {
-        parent::__construct();
+        parent::__construct($forum, $topic);
 
-        $this->forum = $forum;
-        $this->topic = $topic;
         $this->post = $post;
         $this->stream = $stream;
     }
@@ -163,11 +148,8 @@ class TopicController extends Controller
         $this->pushForumCriteria();
         $forumList = $this->forum->forumList();
 
-        $viewers = app('Session\Viewers')->render($request->getRequestUri());
-        $tags = $this->getTagClouds();
-
-        return parent::view('forum.topic')->with(
-            compact('viewers', 'posts', 'forum', 'topic', 'paginate', 'forumList', 'tags', 'activities', 'reasonList')
+        return $this->view('forum.topic')->with(
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList')
         );
     }
 

@@ -18,27 +18,12 @@ class Topic extends Model
 
     /**
      * @param $query
-     * @param $groupsId
-     * @return mixed
-     */
-    public function scopeForGroups($query, $groupsId)
-    {
-        return $query->whereExists(function ($sub) use ($groupsId) {
-            return $sub->select('forum_id')
-                ->from('forum_access')
-                ->whereIn('group_id', $groupsId)
-                ->where('forum_access.forum_id', '=', \DB::raw('forums.id'));
-        });
-    }
-
-    /**
-     * @param $query
      * @param $userId
      * @return mixed
      */
     public function scopeForUser($query, $userId)
     {
-        return $query->whereExists(function ($sub) use ($userId) {
+        return $query->whereIn('topics.id', function ($sub) use ($userId) {
             return $sub->select('topic_id')
                 ->from('topic_users')
                 ->where('user_id', $userId);
@@ -52,7 +37,7 @@ class Topic extends Model
      */
     public function scopeSubscribes($query, $userId)
     {
-        return $query->whereExists(function ($sub) use ($userId) {
+        return $query->whereIn('topics.id', function ($sub) use ($userId) {
             return $sub->select('topic_id')
                 ->from('topic_subscribers')
                 ->where('user_id', $userId);

@@ -37,6 +37,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     public function __construct(App $app)
     {
         $this->app = $app;
+        $this->resetScope();
         $this->makeModel();
     }
 
@@ -87,6 +88,15 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     public function getCriteria()
     {
         return $this->criteria;
+    }
+
+    /**
+     * @return $this
+     */
+    public function resetScope()
+    {
+        $this->skipCriteria(false);
+        return $this;
     }
 
     /**

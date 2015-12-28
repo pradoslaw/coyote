@@ -44,7 +44,6 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                         'is_active',
                         'is_confirm'
                     ])
-                    ->forAll()
                     ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
                         $join->on('forum_id', '=', 'forums.id');
 
@@ -154,7 +153,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         $this->applyCriteria();
 
         $list = [];
-        $result = $this->model->select(['id', 'name', 'path', 'parent_id'])->forAll()->orderBy('order')->get();
+        $result = $this->model->select(['id', 'name', 'path', 'parent_id'])->orderBy('order')->get();
         $tree = $this->buildTree($result);
 
         foreach ($tree as $parent) {
