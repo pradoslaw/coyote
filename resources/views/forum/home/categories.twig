@@ -1,4 +1,4 @@
-{% extends 'layout.twig' %}
+{% extends 'forum/base.twig' %}
 {% block title %}
     {% if routeName != 'forum.home' %}
         {{ tabs[routeName] }} ::
@@ -47,16 +47,4 @@
             {% include "forum/sidebar.twig" %}
         </aside>
     </div>
-{% endblock %}
-
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="/css/forum.css">
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
-
-    <script src="/js/forum.js" type="text/javascript"></script>
 {% endblock %}

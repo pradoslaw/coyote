@@ -1,0 +1,17 @@
+{% extends 'layout.twig' %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/forum.css">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        var forumUrl = '{{ route('forum.home') }}';
+    </script>
+
+    <script src="/js/forum.js" type="text/javascript"></script>
+{% endblock %}

@@ -124,11 +124,11 @@
                         </nav>
 
                         {% if forumList is defined %}
-                            <a class="btn pull-right" href="#">
+                            <a class="btn pull-right" href="javascript:" id="btn-goto">
                                 <i class="fa fa-arrow-circle-right"></i>
                             </a>
 
-                            {{ form_select('forum', forumList, forum.path, {'class': 'pull-right'}) }}
+                            {{ form_select('forum', forumList, forum.path, {'class': 'pull-right', 'id': 'sel-forum-list'}) }}
                         {% endif %}
                     </td>
                 </tr>

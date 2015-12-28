@@ -86,6 +86,9 @@ $(function () {
         return form;
     }
 
+    /**
+     * Restore deleted post
+     */
     $('.btn-res').click(function() {
         toPost($(this).attr('href')).submit();
 
@@ -108,6 +111,20 @@ $(function () {
         });
 
         return false;
+    });
+
+    /**
+     * Change forum category
+     */
+    $('#sel-forum-list').change(function() {
+        window.location.href = forumUrl + '/' + $(this).val();
+    });
+
+    /**
+     * Refresh forum category
+     */
+    $('#btn-goto').click(function() {
+        $('#sel-forum-list').trigger('change');
     });
 
     /**
