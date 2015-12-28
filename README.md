@@ -10,6 +10,8 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 ## Wymagania
 
 * PHP >= 5.5
+    * Moduł GD
+    * Moduł mongo
 * PostgreSQL >= 9.3
 * MongoDB >= 2.7
 * composer
