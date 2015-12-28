@@ -13,7 +13,7 @@
     <div id="index" class="sidebar">
         <ul class="nav nav-tabs">
             {% for route, label in tabs %}
-            <li role="presentation" {{ route == routeName ? 'class="active"' }}><a href="{{ route(route) }}">{{ label }}</a></li>
+            <li role="presentation" {{ route == routeName ? 'class="active"' }}><a href="{{ route(route, ['']) }}">{{ label }}</a></li>
             {% endfor %}
         </ul>
 

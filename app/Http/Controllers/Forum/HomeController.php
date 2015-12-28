@@ -6,6 +6,7 @@ use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
+use Coyote\Repositories\Criteria\Topic\WithTag;
 use Illuminate\Http\Request;
 
 class HomeController extends BaseController
@@ -29,6 +30,10 @@ class HomeController extends BaseController
         }
 
         $routeName = request()->route()->getName();
+
+        if ($routeName == 'forum.tag') {
+            $tabs['forum.tag'] = 'Wątki z: ' . request()->route('tag');
+        }
         return parent::view($view, $data)->with(compact('routeName', 'tabs'));
     }
 
@@ -110,6 +115,17 @@ class HomeController extends BaseController
     public function subscribes(Request $request)
     {
         $this->topic->pushCriteria(new Subscribes(auth()->id()));
+        return $this->load(auth()->id(), $request->getSession()->getId());
+    }
+
+    /**
+     * @param string $name
+     * @param Request $request
+     * @return HomeController
+     */
+    public function tag($name, Request $request)
+    {
+        $this->topic->pushCriteria(new WithTag($name));
         return $this->load(auth()->id(), $request->getSession()->getId());
     }
 }
