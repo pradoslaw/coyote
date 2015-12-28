@@ -20,7 +20,7 @@
                 <div class="form-group {{ errors.first('subject') ? 'has-error' }}">
                     <label class="col-md-2 control-label">Temat</label>
                     <div class="col-md-10">
-                        {{ form_text('subject', input_old('subject', topic.subject), {'class': 'form-control'}) }}
+                        {{ form_text('subject', input_old('subject', topic.subject), {'class': 'form-control', 'tabindex': 1, 'autofocus': 'autofocus'}) }}
 
                         {% if errors.first('subject') %}
                             <span class="help-block">{{ errors.first('subject') }}</span>
@@ -33,7 +33,7 @@
                 <div class="form-group {{ errors.first('user_name') ? 'has-error' }}">
                     <label class="col-md-2 control-label">Autor</label>
                     <div class="col-md-10">
-                        {{ form_text('user_name', input_old('user_name', post.user_name), {'class': 'form-control'}) }}
+                        {{ form_text('user_name', input_old('user_name', post.user_name), {'class': 'form-control', 'tabindex': 2}) }}
 
                         {% if errors.first('user_name') %}
                             <span class="help-block">{{ errors.first('user_name') }}</span>
@@ -56,7 +56,7 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
                             {% include 'components/toolbar' %}
-                            <textarea name="text" class="form-control" style="height: 160px;">{{ input_old('text', post.text) }}</textarea>
+                            <textarea name="text" class="form-control" style="height: 160px;" tabindex="3">{{ input_old('text', post.text) }}</textarea>
 
                             {% if errors.first('text') %}
                                 <span class="help-block">{{ errors.first('text') }}</span>
@@ -80,7 +80,7 @@
                 <div class="form-group {{ error_tag != '' ? 'has-error' }}">
                     <label class="col-md-2 control-label">Tagi</label>
                     <div class="col-md-10">
-                        {{ form_text('custom_tags', input_old('tag', tags)|join(', '), {'id': 'tag', 'placeholder': forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'}) }}
+                        {{ form_text('custom_tags', input_old('tag', tags)|join(', '), {'id': 'tag', 'tabindex': 4, 'placeholder': forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'}) }}
 
                         {% if error_tag != '' %}
                             <span class="help-block">{{ error_tag }}</span>
