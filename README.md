@@ -11,6 +11,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 
 * PHP >= 5.5
 * PostgreSQL >= 9.3
+* MongoDB >= 2.7
 * composer
 * npm
 * git
@@ -23,6 +24,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * `cp .env.production .env` (plik .env zawiera konfiguracje bazy danych)
 * `psql -c 'create database coyote;' -U postgres`
 * `php artisan migrate --seed`
+* `mkdir storage/app/purifier`
 * `chmod -R 777 storage/`
 
 ## Jak mozesz pomoc?
