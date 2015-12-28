@@ -97,5 +97,10 @@ class AppServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Contracts\\TagRepositoryInterface',
             'Coyote\\Repositories\\Eloquent\\TagRepository'
         );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\Post\\CommentRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\Post\\CommentRepository'
+        );
     }
 }

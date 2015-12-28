@@ -122,6 +122,10 @@ class TopicController extends BaseController
                 $post->sig = $parser['sig']->parse($post->sig);
             }
 
+            foreach ($post->comments as &$comment) {
+                $comment->text = $parser['comment']->parse($comment->text);
+            }
+
             $markTime = $post->created_at->toDateTimeString();
         }
 

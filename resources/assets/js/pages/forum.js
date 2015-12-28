@@ -86,6 +86,11 @@ $(function () {
         return form;
     }
 
+    function error(text) {
+        $('#alert').modal('show');
+        $('#alert').find('.modal-body').text(text);
+    }
+
     /**
      * Restore deleted post
      */
@@ -125,6 +130,41 @@ $(function () {
      */
     $('#btn-goto').click(function() {
         $('#sel-forum-list').trigger('change');
+    });
+
+    $('.comments').find('textarea').one('focus', function() {
+        $(this).prompt(promptUrl).fastSubmit().autogrow().focus();
+    });
+
+    $('.comments').on('submit', 'form', function() {
+        var $form = $(this);
+        $('button', $form).attr('disabled', 'disabled').text('Wysyłanie...');
+
+        $.post($form.attr('action'), $form.serialize(), function(html) {
+            $('textarea', $form).val('');
+            $form.collapse('hide');
+
+            $(html).hide().insertBefore($form).show('slow');
+        })
+        .always(function() {
+            $('button', $form).removeAttr('disabled').text('Zapisz komentarz');
+        })
+        .error(function(event, jqxhr) {
+            if (typeof event.responseJSON.text !== 'undefined') {
+                error(event.responseJSON.text);
+            }
+        });
+
+        return false;
+    });
+
+
+    $('.comments form').on('shown.bs.collapse', function() {
+        $(this).find('textarea').focus();
+        $('.btn-comment[href="#' + $(this).attr('id') + '"]').addClass('active');
+    })
+    .on('hidden.bs.collapse', function() {
+        $('.btn-comment[href="#' + $(this).attr('id') + '"]').removeClass('active');
     });
 
     /**

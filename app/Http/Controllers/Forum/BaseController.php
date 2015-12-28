@@ -36,17 +36,6 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @param Forum $forum
-     * @param Topic $topic
-     */
-//    public function __construct()
-//    {
-//        parent::__construct();
-//
-//        $this->breadcrumb->push('Forum', route('forum.home'));
-//    }
-
-    /**
      * Builds breadcrumb for this category
      *
      * @param \Coyote\Forum $forum

@@ -136,6 +136,7 @@
 
     {% if auth_check() %}
         {{ modals.confirm('Post zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'confirm-delete') }}
+        {{ modals.alert('Wystąpił błąd podczas działania programu.') }}
     {% endif %}
 
 {% endblock %}
@@ -143,7 +144,13 @@
 {% block body %}
     {{ parent() }}
 
+    {% if auth_check() %}
+        <script type="text/javascript" src="/js/posting.js"></script>
+    {% endif %}
+
     <script type="text/javascript">
+        var promptUrl = '{{ route('forum.home') }}';
+
         {% if can('delete', forum) %}
             var reasonsList = {{ reasonList.toJson()|raw }};
         {% endif %}
