@@ -17,7 +17,7 @@ class Login
         $usersId = [];
 
         foreach ($links as $link) {
-            if ('@' === $link->nodeValue[0]
+            if (strlen($link->nodeValue) > 0 && '@' === $link->nodeValue[0]
                 && preg_match('~.*/Profile/([0-9]+)~', $link->getAttribute('href'), $match)) {
                 $usersId[] = $match[1];
             }
