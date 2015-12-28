@@ -26,6 +26,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * `php artisan migrate --seed`
 * `mkdir storage/app/purifier`
 * `chmod -R 777 storage/`
+* `chmod -R 777 public/storage/`
 
 ## Jak mozesz pomoc?
 
