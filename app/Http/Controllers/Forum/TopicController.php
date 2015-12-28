@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Forum\Reason;
+use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
@@ -42,6 +43,16 @@ class TopicController extends BaseController
 
         $this->post = $post;
         $this->stream = $stream;
+    }
+
+    /**
+     * @param null $view
+     * @param array $data
+     * @return $this
+     */
+    protected function view($view = null, $data = [])
+    {
+        return Controller::view($view, $data);
     }
 
     /**
@@ -162,7 +173,7 @@ class TopicController extends BaseController
         $this->breadcrumb($forum);
         $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
 
-        return parent::view('forum.submit', ['title' => 'Nowy wątek na ' . $forum->name])->with('forum', $forum);
+        return $this->view('forum.submit', ['title' => 'Nowy wątek na ' . $forum->name])->with('forum', $forum);
     }
 
     /**

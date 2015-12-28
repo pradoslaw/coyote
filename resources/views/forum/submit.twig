@@ -1,4 +1,4 @@
-{% extends 'layout.twig' %}
+{% extends 'forum/base.twig' %}
 {% block title %}
     {% if post.id is null %}
         Napisz odpowiedź w wątku {{ topic.subject }}
@@ -170,17 +170,10 @@
     {{ modal.alert('Wystąpił błąd podczas dodawania tagu.') }}
 {% endblock %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="/css/forum.css">
-{% endblock %}
-
 {% block body %}
     {{ parent() }}
 
     <script type="text/javascript" src="/js/tab.js"></script>
-    <script type="text/javascript" src="/js/forum.js" ></script>
     <script type="text/javascript" src="/js/posting.js"></script>
     <script type="text/javascript" src="/js/wikieditor.js"></script>
     <script type="text/javascript" src="/js/tags.js"></script>
