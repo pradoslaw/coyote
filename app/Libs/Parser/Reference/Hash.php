@@ -17,7 +17,7 @@ class Hash
         $hash = [];
 
         foreach ($links as $link) {
-            if ('#' === $link->nodeValue[0]
+            if (strlen($link->nodeValue) > 0 && '#' === $link->nodeValue[0]
                 && preg_match('~#([\p{L}\p{Mn}0-9\._+-]+)~u', $link->nodeValue, $match)) {
                 $hash[] = mb_strtolower($match[1]);
             }
