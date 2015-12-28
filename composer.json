@@ -12,6 +12,9 @@
         }
     ],
     "require": {
+        "php": ">=5.5.9",
+        "ext-gd": "*",
+        "ext-mongo": "*",
         "laravel/framework": "5.1.*",
         "rcrowe/twigbridge": "0.8.1",
         "laravelcollective/html": "5.1.*",
