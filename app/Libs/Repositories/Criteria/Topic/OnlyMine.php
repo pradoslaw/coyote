@@ -5,19 +5,19 @@ namespace Coyote\Repositories\Criteria\Topic;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Criteria\Criteria;
 
-class BelongsToForum extends Criteria
+class OnlyMine extends Criteria
 {
     /**
      * @var int
      */
-    private $forumId;
+    private $userId;
 
     /**
-     * @param int $forumId
+     * @param $userId
      */
-    public function __construct($forumId)
+    public function __construct($userId)
     {
-        $this->forumId = $forumId;
+        $this->userId = $userId;
     }
 
     /**
@@ -27,6 +27,6 @@ class BelongsToForum extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->where('topics.forum_id', $this->forumId);
+        return $model->forUser($this->userId);
     }
 }

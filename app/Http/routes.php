@@ -35,6 +35,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('/Tag/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     Route::get('/All', ['uses' => 'HomeController@all', 'as' => 'all']);
     Route::get('/Unanswered', ['uses' => 'HomeController@unanswered', 'as' => 'unanswered']);
+    Route::get('/Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);
+    Route::get('/Subscribes', ['uses' => 'HomeController@subscribes', 'as' => 'subscribes']);
 
     // formularz dodawania nowego watku na forum
     Route::get('{forum}/Submit', ['uses' => 'TopicController@submit', 'as' => 'topic.submit', 'middleware' => ['forum.access', 'forum.write']]);

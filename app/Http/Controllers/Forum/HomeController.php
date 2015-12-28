@@ -5,6 +5,9 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
+use Coyote\Repositories\Criteria\Topic\OnlyMine;
+use Coyote\Repositories\Criteria\Topic\Subscribes;
+use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -21,6 +24,8 @@ class HomeController extends Controller
      */
     private $topic;
 
+    private $tabs = [];
+
     /**
      * @param Forum $forum
      * @param Topic $topic
@@ -33,6 +38,16 @@ class HomeController extends Controller
         $this->topic = $topic;
 
         $this->breadcrumb->push('Forum', route('forum.home'));
+        $this->tabs = [
+            'forum.home'            => 'Kategorie',
+            'forum.all'             => 'Wszystkie',
+            'forum.unanswered'      => 'Bez odpowiedzi'
+        ];
+
+        if (auth()->check()) {
+            $this->tabs['forum.subscribes'] = 'Obserwowane';
+            $this->tabs['forum.mine'] = 'Moje';
+        }
     }
 
     protected function view($view = null, $data = [])
@@ -41,8 +56,9 @@ class HomeController extends Controller
 
         // create view with online users
         $viewers = app()->make('Session\Viewers')->render(request()->getRequestUri());
+        $routeName = request()->route()->getName();
 
-        return parent::view($view, $data)->with(compact('tags', 'viewers'));
+        return parent::view($view, $data)->with(compact('tags', 'viewers', 'routeName'))->with('tabs', $this->tabs);
     }
 
     /**
@@ -55,7 +71,7 @@ class HomeController extends Controller
         // execute query: get all categories that user can has access
         $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId());
 
-        return $this->view('forum.home')->with(compact('sections'));
+        return $this->view('forum.home.categories')->with(compact('sections'));
     }
 
     /**
@@ -69,12 +85,52 @@ class HomeController extends Controller
     }
 
     /**
+     * @param int $userId
+     * @param string $sessionId
+     * @return $this
+     */
+    private function load($userId, $sessionId)
+    {
+        $topics = $this->topic->paginate($userId, $sessionId);
+        return $this->view('forum.home.topics')->with(compact('topics'));
+    }
+
+    /**
      * @param Request $request
      * @return $this
      */
     public function all(Request $request)
     {
-        $topics = $this->topic->paginate(auth()->id(), $request->getSession()->getId());
-        return $this->view('forum.all')->with(compact('topics'));
+        return $this->load(auth()->id(), $request->getSession()->getId());
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     */
+    public function unanswered(Request $request)
+    {
+        $this->topic->pushCriteria(new Unanswered());
+        return $this->load(auth()->id(), $request->getSession()->getId());
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     */
+    public function mine(Request $request)
+    {
+        $this->topic->pushCriteria(new OnlyMine(auth()->id()));
+        return $this->load(auth()->id(), $request->getSession()->getId());
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     */
+    public function subscribes(Request $request)
+    {
+        $this->topic->pushCriteria(new Subscribes(auth()->id()));
+        return $this->load(auth()->id(), $request->getSession()->getId());
     }
 }

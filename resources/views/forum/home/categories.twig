@@ -1,14 +1,20 @@
 {% extends 'layout.twig' %}
-{% block title %}Forum dyskusyjne{{ parent() }}{% endblock %}
+{% block title %}
+    {% if routeName != 'forum.home' %}
+        {{ tabs[routeName] }} ::
+    {% endif %}
+
+    Forum dyskusyjne{{ parent() }}
+{% endblock %}
 
 {% import 'components/forms.twig' as forms %}
 
 {% block container %}
     <div id="index" class="sidebar">
         <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="{{ route('forum.home') }}">Kategorie</a></li>
-            <li role="presentation"><a href="{{ route('forum.all') }}">Wszystkie</a></li>
-            <li role="presentation"><a href="{{ route('forum.unanswered') }}">Bez odpowiedzi</a></li>
+            {% for route, label in tabs %}
+            <li role="presentation" {{ route == routeName ? 'class="active"' }}><a href="{{ route(route) }}">{{ label }}</a></li>
+            {% endfor %}
         </ul>
 
         {% include "forum/top.twig" %}
