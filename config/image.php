@@ -103,7 +103,7 @@ return array(
     | as the original image so the next request will serve this static file
     |
     */
-    'write_image' => false,
+    'write_image' => getenv('APP_ENV') == 'production' ? true : false,
 
     /*
     |--------------------------------------------------------------------------
