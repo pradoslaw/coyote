@@ -9,7 +9,7 @@ use Coyote\Alert\Providers\Provider;
  * Class Subscriber
  * @package Coyote\Alert\Providers\Microblog
  */
-class Subscriber extends Provider implements Alert\Providers\ProviderInterface
+class Subscirber extends Provider implements Alert\Providers\ProviderInterface
 {
     const ID = Alert::MICROBLOG_SUBSCRIBER;
     const EMAIL = null;
