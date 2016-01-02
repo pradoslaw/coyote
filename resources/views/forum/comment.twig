@@ -1,13 +1,20 @@
-<div id="comment-{{ comment.id }}" data-comment-id="{{ comment.id }}">
+<div id="comment-{{ comment.id }}" data-comment-id="{{ comment.id }}" {{ comment.deleted_at ? 'class="deleted"' }}>
     {{ comment.text|raw }} -
 
     <a class="{{ post.user_id == comment.user_id ? 'user-name' }} {{ comment.is_blocked or not comment.is_active ? 'del' }}" data-user-id="{{ comment.user_id }}" href="{{ route('profile', [comment.user_id]) }}">{{ comment.name }}</a>
     <a href="#comment-{{ comment.id }}" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}" title="{{ comment.created_at|format_date(false) }}">{{ comment.created_at|format_date }}</a>
 
-    <a href="javascript:" title="Usuń ten komentarz" class="btn-edit">
-        <i class="fa fa-remove"></i>
-    </a>
-    <a href="javascript:" title="Edytuj ten komentarz" class="btn-del">
-        <i class="fa fa-pencil"></i>
-    </a>
+    {% if is_writeable %}
+        {% if can('delete', comment, forum) %}
+            <a href="{{ route('forum.comment.delete', [comment.id]) }}" title="Usuń ten komentarz" class="btn-comment-del">
+                <i class="fa fa-remove"></i>
+            </a>
+        {% endif %}
+
+        {% if can('update', comment, forum) %}
+            <a href="{{ route('forum.comment.save', [comment.id]) }}" title="Edytuj ten komentarz" class="btn-comment-edit">
+                <i class="fa fa-pencil"></i>
+            </a>
+        {% endif %}
+    {% endif %}
 </div>

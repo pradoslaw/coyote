@@ -106,7 +106,7 @@ $(function () {
     $('.btn-del').click(function() {
         var $this = $(this);
 
-        $('#confirm-delete').modal('show').one('click', '.danger', function() {
+        $('#post-confirm-delete').modal('show').one('click', '.danger', function() {
             $(this).attr('disabled', 'disabled').text('Usuwanie...');
             var modal = $(this).parents('.modal-content');
 
@@ -158,7 +158,29 @@ $(function () {
         });
 
         return false;
-    });
+    })
+        .on('click', '.btn-comment-del', function() {
+            var $this = $(this);
+
+            $('#comment-confirm-delete').modal('show').one('click', '.danger', function() {
+                $(this).attr('disabled', 'disabled').text('Usuwanie...');
+
+                $.post($this.attr('href'), function() {
+                    $('#comment-confirm-delete').modal('hide');
+
+                    $this.parent().fadeOut(function() {
+                        $(this).remove();
+                    });
+                })
+                .error(function(event) {
+                    if (typeof event.responseJSON.error !== 'undefined') {
+                        error(event.responseJSON.error);
+                    }
+                });
+            });
+
+            return false;
+        });
 
 
     $('.comments form').on('shown.bs.collapse', function() {
@@ -180,7 +202,7 @@ $(function () {
             select.append('<option value="' + key + '">' + value + '</option>');
         });
 
-        $('#confirm-delete').each(function() {
+        $('#post-confirm-delete').each(function() {
             select.appendTo($('.modal-body', this));
         });
     }

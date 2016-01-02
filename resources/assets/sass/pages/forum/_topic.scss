@@ -322,7 +322,7 @@ div.tooltip-inner {
     color: $link-color-darker;
   }
 
-  .btn-edit, .btn-del {
+  .btn-comment-edit, .btn-comment-del {
     padding: 0 5px;
     color: $gray;
     display: none;
@@ -361,7 +361,7 @@ div.tooltip-inner {
     }
 
     &:hover {
-      .btn-edit, .btn-del {
+      .btn-comment-edit, .btn-comment-del {
         display: inline-block;
       }
     }

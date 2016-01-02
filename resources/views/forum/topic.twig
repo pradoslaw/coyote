@@ -135,7 +135,8 @@
     </div>
 
     {% if auth_check() %}
-        {{ modals.confirm('Post zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'confirm-delete') }}
+        {{ modals.confirm('Post zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'post-confirm-delete') }}
+        {{ modals.confirm('Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'comment-confirm-delete') }}
         {{ modals.alert('Wystąpił błąd podczas działania programu.') }}
     {% endif %}
 

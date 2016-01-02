@@ -14,6 +14,7 @@ use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Http\Request;
+use Gate;
 
 class CommentController extends Controller
 {
@@ -72,9 +73,7 @@ class CommentController extends Controller
             'post_id'       => 'required|integer|exists:posts,id'
         ]);
 
-        $post = $this->post->findOrFail($request->get('post_id'), ['id', 'topic_id']);
-        $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'path', 'subject']);
-        $forum = $this->forum->findOrFail($topic->forum_id);
+        list($post, $topic, $forum) = $this->checkAbility($request->get('post_id'));
 
         $comment = $this->comment->findOrNew($id);
         $target = (new Stream_Topic())->map($topic, $forum);
@@ -120,7 +119,9 @@ class CommentController extends Controller
     public function edit($id)
     {
         $comment = $this->comment->findOrFail($id);
-        $this->authorize('update', $comment);
+        list(, , $forum) = $this->checkAbility($comment->post_id);
+
+        $this->authorize('update', [$comment, $forum]);
 
         return response($comment->text);
     }
@@ -131,12 +132,10 @@ class CommentController extends Controller
      */
     public function delete($id)
     {
-        $comment = $this->comment->findOrFail($id, ['id', 'user_id', 'post_id']);
-        $this->authorize('delete', $comment);
+        $comment = $this->comment->findOrFail($id);
+        list($post, $topic, $forum) = $this->checkAbility($comment->post_id);
 
-        $post = $this->post->findOrFail($comment->post_id, ['id', 'topic_id']);
-        $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'path', 'subject']);
-        $forum = $this->forum->findOrFail($topic->forum_id);
+        $this->authorize('delete', [$comment, $forum]);
 
         $target = (new Stream_Topic())->map($topic, $forum);
         $object = (new Stream_Comment())->map($post, $comment, $forum, $topic);
@@ -146,5 +145,27 @@ class CommentController extends Controller
 
             stream(Stream_Delete::class, $object, $target);
         });
+    }
+
+    private function checkAbility($postId)
+    {
+        $post = $this->post->findOrFail($postId, ['id', 'topic_id', 'forum_id']);
+        $forum = $this->forum->findOrFail($post->forum_id);
+
+        // Maybe user does not have an access to this category?
+        if (!$forum->userCanAccess(auth()->user())) {
+            abort(401, 'Unauthorized');
+        }
+
+        $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'path', 'subject']);
+
+        // Only moderators can delete this post if topic (or forum) was locked
+        if (Gate::denies('delete', $forum)) {
+            if ($topic->is_locked || $forum->is_locked || $post->deleted_at) {
+                abort(401, 'Unauthorized');
+            }
+        }
+
+        return [$post, $topic, $forum];
     }
 }
