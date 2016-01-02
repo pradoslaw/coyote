@@ -159,29 +159,32 @@ $(function () {
 
         return false;
     })
-        .on('click', '.btn-comment-del', function() {
-            var $this = $(this);
+    .on('click', '.btn-comment-del', function() {
+        var $this = $(this);
 
-            $('#comment-confirm-delete').modal('show').one('click', '.danger', function() {
-                $(this).attr('disabled', 'disabled').text('Usuwanie...');
+        $('#comment-confirm-delete').modal('show').one('click', '.danger', function() {
+            $(this).attr('disabled', 'disabled').text('Usuwanie...');
 
-                $.post($this.attr('href'), function() {
-                    $('#comment-confirm-delete').modal('hide');
+            $.post($this.attr('href'), function() {
+                $('#comment-confirm-delete').modal('hide');
 
-                    $this.parent().fadeOut(function() {
-                        $(this).remove();
-                    });
-                })
-                .error(function(event) {
-                    if (typeof event.responseJSON.error !== 'undefined') {
-                        error(event.responseJSON.error);
-                    }
+                $this.parent().fadeOut(function() {
+                    $(this).remove();
                 });
+            })
+            .error(function(event) {
+                if (typeof event.responseJSON.error !== 'undefined') {
+                    error(event.responseJSON.error);
+                }
             });
-
-            return false;
         });
 
+        return false;
+    })
+    .on('click', '.btn-show-all', function() {
+        $(this).nextAll('div:hidden').fadeIn(1000);
+        $(this).remove();
+    });
 
     $('.comments form').on('shown.bs.collapse', function() {
         $(this).find('textarea').focus();
@@ -210,15 +213,23 @@ $(function () {
     if ('onhashchange' in window) {
         var onHashChange = function () {
             var hash = window.location.hash;
+            var object = null;
 
             if (hash.substring(1, 3) === 'id') {
-                var object = $(hash).parents('.post');
+                object = $(hash).parents('.post');
+            } else {
+                object = $(hash);
 
-                object.css('background-color', '#FFDCA5');
-                $('#container-fluid').one('mousemove', function () {
-                    object.animate({backgroundColor: '#FFF'}, 1500);
-                });
+                if (object.is(':hidden')) {
+                    $('div:hidden', object.parent()).show();
+                    $('.btn-show-all', object.parent()).remove();
+                }
             }
+
+            object.css('background-color', '#FFDCA5');
+            $('#container-fluid').one('mousemove', function () {
+                object.animate({backgroundColor: '#FFF'}, 1500);
+            });
         };
 
         window.onhashchange = onHashChange;

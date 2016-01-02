@@ -367,6 +367,18 @@ div.tooltip-inner {
     }
   }
 
+  .btn-show-all {
+    color: $gray;
+    font-size: 12px;
+    padding: 2px 0 8px 1px;
+    display: inline-block;
+
+    &:hover {
+      text-decoration: none;
+      color: $alt-link-hover-color;
+    }
+  }
+
   form {
     margin-top: 10px;
   }

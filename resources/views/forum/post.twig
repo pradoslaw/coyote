@@ -116,6 +116,13 @@
 
                 <div class="comments">
 
+                    {% if post.comments|length > 6 %}
+                        <a href="javascript:" class="btn-show-all">
+                            <i class="fa fa-comments"></i>
+                            Pokaż {{ declination(post.comments|length - 5, ['pozostały', 'pozostałe', 'pozostałe'], true) }} {{ post.comments|length - 5 }} {{ declination(post.comments|length - 5, ['komentarz', 'komentarze', 'komentarzy'], true) }}
+                        </a>
+                    {% endif %}
+
                     {% for comment in post.comments %}
                         {% include 'forum/comment.twig' %}
                     {% endfor %}
