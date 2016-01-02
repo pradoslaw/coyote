@@ -152,6 +152,8 @@ $(function () {
         .error(function(event, jqxhr) {
             if (typeof event.responseJSON.text !== 'undefined') {
                 error(event.responseJSON.text);
+            } else if (typeof event.responseJSON.error !== 'undefined') {
+                error(event.responseJSON.error);
             }
         });
 
