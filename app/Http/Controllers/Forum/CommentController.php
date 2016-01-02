@@ -84,7 +84,7 @@ class CommentController extends Controller
 
             $activity = Stream_Create::class;
         } else {
-            $this->authorize('update', $comment);
+            $this->authorize('update', [$comment, $forum]);
 
             $user = $this->user->find($comment->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
             $data = $request->only(['text']);
@@ -109,7 +109,7 @@ class CommentController extends Controller
             $comment->$key = $user->$key;
         }
 
-        return view('forum.comment')->with('comment', $comment);
+        return view('forum.comment.element', ['is_writeable' => true])->with(compact('comment', 'forum'));
     }
 
     /**
@@ -123,7 +123,7 @@ class CommentController extends Controller
 
         $this->authorize('update', [$comment, $forum]);
 
-        return response($comment->text);
+        return view('forum.comment.form', ['post' => ['id' => $comment->post_id]])->with('comment', $comment);
     }
 
     /**

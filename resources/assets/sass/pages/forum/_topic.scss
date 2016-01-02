@@ -380,6 +380,11 @@ div.tooltip-inner {
   }
 
   form {
+    overflow: hidden;
+  }
+
+  // dodatkowy margines dla formularza dodawania nowego komentarza (nie tego ktory edytujemy)
+  > form {
     margin-top: 10px;
   }
 

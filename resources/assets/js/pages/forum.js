@@ -132,19 +132,21 @@ $(function () {
         $('#sel-forum-list').trigger('change');
     });
 
-    $('.comments').find('textarea').one('focus', function() {
-        $(this).prompt(promptUrl).fastSubmit().autogrow().focus();
-    });
+    var comments = {};
 
     $('.comments').on('submit', 'form', function() {
         var $form = $(this);
         $('button', $form).attr('disabled', 'disabled').text('Wysyłanie...');
 
         $.post($form.attr('action'), $form.serialize(), function(html) {
-            $('textarea', $form).val('');
-            $form.collapse('hide');
+            if ($form.hasClass('collapse')) {
+                $('textarea', $form).val('');
+                $form.collapse('hide');
 
-            $(html).hide().insertBefore($form).show('slow');
+                $(html).hide().insertBefore($form).show('slow');
+            } else {
+                $form.parent().hide().replaceWith(html).show('slow');
+            }
         })
         .always(function() {
             $('button', $form).removeAttr('disabled').text('Zapisz komentarz');
@@ -184,8 +186,36 @@ $(function () {
     .on('click', '.btn-show-all', function() {
         $(this).nextAll('div:hidden').fadeIn(1000);
         $(this).remove();
+    })
+    .on('keyup', 'textarea', function() {
+        if (parseInt($(this).val().length) > 580) {
+            $(this).val($(this).val().substr(0, 580));
+        }
+
+        $('strong', $(this).parents('form')).text(580 - parseInt($(this).val().length));
+    })
+    .on('click', '.btn-comment-edit', function() {
+        var $comment = $(this).parent();
+
+        $.get($(this).attr('href'), function(html) {
+            comments[$comment.data('comment-id')] = $comment.html();
+            $comment.html(html).find('textarea').prompt(promptUrl).fastSubmit().autogrow().focus();
+        });
+
+        return false;
+    })
+    .on('click', '.btn-reset', function() {
+        var $comment = $(this).parent().parent();
+
+        $comment.html(comments[$comment.data('comment-id')]);
+    })
+    .find('textarea').one('focus', function() {
+        $(this).prompt(promptUrl).fastSubmit().autogrow().focus();
     });
 
+    /**
+     * Show/hide new comment's form
+     */
     $('.comments form').on('shown.bs.collapse', function() {
         $(this).find('textarea').focus();
         $('.btn-comment[href="#' + $(this).attr('id') + '"]').addClass('active');

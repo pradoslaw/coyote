@@ -115,7 +115,6 @@
                 {% endif %}
 
                 <div class="comments">
-
                     {% if post.comments|length > 6 %}
                         <a href="javascript:" class="btn-show-all">
                             <i class="fa fa-comments"></i>
@@ -124,16 +123,10 @@
                     {% endif %}
 
                     {% for comment in post.comments %}
-                        {% include 'forum/comment.twig' %}
+                        {% include 'forum/comment/element.twig' %}
                     {% endfor %}
 
-                    <form method="post" action="{{ route('forum.comment.save') }}" class="collapse" id="form-{{ post.id }}">
-                        <input type="hidden" value="{{ post.id }}" name="post_id">
-                        <textarea cols="90" rows="2" class="form-control" name="text"></textarea>
-
-                        <p class="text-muted pull-left">Pozostało <strong>580</strong> znaków</p>
-                        <button type="submit" class="btn btn-xs btn-primary pull-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz komentarz</button>
-                    </form>
+                    {% include 'forum/comment/form.twig' %}
                 </div>
 
             </div>
