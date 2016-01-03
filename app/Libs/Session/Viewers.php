@@ -70,7 +70,7 @@ class Viewers
 
             foreach ($rowset as $user) {
                 if ($user->user_id) {
-                    $groups[$name][] = $this->makeProfileLink($user->id, $user->name);
+                    $groups[$name][] = $this->makeProfileLink($user->user_id, $user->name);
                 }
             }
         }
