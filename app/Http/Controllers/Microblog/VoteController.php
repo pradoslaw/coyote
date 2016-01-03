@@ -68,7 +68,7 @@ class VoteController extends Controller
         $vote = Vote::where('microblog_id', $id)->where('user_id', auth()->user()->id)->first();
 
         if (!config('app.debug') && auth()->user()->id === $microblog->user_id) {
-            return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa'], 500);
+            return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
         }
 
         \DB::beginTransaction();
