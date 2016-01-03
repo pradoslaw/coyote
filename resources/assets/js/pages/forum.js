@@ -101,6 +101,16 @@ $(function () {
     });
 
     /**
+     * Subscribe/unsubscribe post
+     */
+    $('.btn-sub').click(function() {
+        $(this).toggleClass('active');
+        $.post($(this).attr('href'));
+
+        return false;
+    });
+
+    /**
      * Delete post/topic
      */
     $('.btn-del').click(function() {
@@ -111,7 +121,10 @@ $(function () {
             var modal = $(this).parents('.modal-content');
 
             var form = toPost($this.attr('href'));
-            form.append('<input type="hidden" name="reason" value="' + $('select', modal).val() + '">');
+            if ($('select', modal).length) {
+                form.append('<input type="hidden" name="reason" value="' + $('select', modal).val() + '">');
+            }
+
             form.submit();
         });
 

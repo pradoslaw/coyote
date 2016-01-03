@@ -19,16 +19,4 @@ class Subscriber extends Model
      * @var string
      */
     protected $table = 'microblog_subscribers';
-
-    /**
-     * @var array
-     */
-    public $timestamps = false;
-
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'microblog_id';
 }

@@ -13,6 +13,7 @@ class CreateTopicSubscribersTable extends Migration
     public function up()
     {
         Schema::create('topic_subscribers', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('topic_id');
             $table->mediumInteger('user_id');
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));

@@ -4,8 +4,8 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Alert\Alert;
 use Coyote\Forum\Reason;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\PostRequest;
+use Coyote\Post\Subscriber;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
@@ -181,7 +181,7 @@ class PostController extends BaseController
 
         // Step 4. Only moderators can delete this post if topic (or forum) was locked
         if (Gate::denies('delete', $forum)) {
-            if ($topic->is_locked || $forum->is_locked || $topic->last_post_id > $post->id || !$post->deleted_at) {
+            if ($topic->is_locked || $forum->is_locked || $post->id < $topic->last_post_id || $post->deleted_at) {
                 abort(401, 'Unauthorized');
             }
         }
@@ -214,7 +214,7 @@ class PostController extends BaseController
                     $activity = Stream_Delete::class;
                     $redirect = redirect()->route('forum.category', [$forum->path]);
 
-                    $subscribersId = (array) $topic->subscribers()->pluck('user_id');
+                    $subscribersId = $topic->subscribers()->lists('user_id');
                     if ($post->user_id !== null) {
                         $subscribersId[] = $post->user_id;
                     }
@@ -225,7 +225,7 @@ class PostController extends BaseController
                         app()->make('Alert\Topic\Delete')
                             ->with($notification)
                             ->setUrl($url)
-                            ->setUsersId($subscribersId)
+                            ->setUsersId($subscribersId->toArray())
                             ->notify();
                     }
                 } else {
@@ -241,19 +241,22 @@ class PostController extends BaseController
 
                 if (is_null($post->deleted_at)) {
                     $activity = Stream_Delete::class;
+                    $subscribersId = $post->subscribers()->lists('user_id');
 
                     if ($post->user_id !== null) {
-                        /**
-                         * @todo Dodac wysylke powiadomien uzytkownikom ktorzy obserwuja dany post
-                         */
-                        app()->make('Alert\Post\Delete')
-                            ->with($notification)
-                            ->setUrl($url)
-                            ->setUserId($post->user_id)
-                            ->notify();
+                        $subscribersId[] = $post->user_id;
                     }
 
                     $post->delete();
+
+                    if ($subscribersId) {
+                        app()->make('Alert\Post\Delete')
+                            ->with($notification)
+                            ->setUrl($url)
+                            ->setUsersId($subscribersId->toArray())
+                            ->notify();
+                    }
+
                     $redirect = back();
                 } else {
                     $activity = Stream_Restore::class;
@@ -274,5 +277,24 @@ class PostController extends BaseController
         });
 
         return $url;
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function subscribe($id)
+    {
+        if (auth()->guest()) {
+            return response()->json(['error' => 'Musisz być zalogowany, aby móc obserwować ten post.'], 500);
+        }
+
+        $subscriber = Subscriber::where('post_id', $id)->where('user_id', auth()->id())->first();
+
+        if ($subscriber) {
+            $subscriber->delete();
+        } else {
+            Subscriber::create(['post_id' => $id, 'user_id' => auth()->id()]);
+        }
     }
 }

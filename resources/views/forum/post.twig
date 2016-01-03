@@ -137,7 +137,7 @@
 
                 {% if not post.deleted_at %}
                     {% if auth_check() %}
-                        <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" data-post-id="1182672" class="btn btn-xs btn-sub active">
+                        <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" href="{{ route('forum.post.subscribe', [post.id]) }}" class="btn btn-xs btn-sub {{ post.subscribe_on ? 'active' }}">
                             <i class="fa fa-search-plus"></i>
                             <span class="hidden-xs">Obserwuj</span>
                         </a>
@@ -173,7 +173,7 @@
                         </a>
                     {% endif %}
 
-                    {% if (post.id < topic.last_post_id and can('delete', post, forum)) or can('delete', forum) %}
+                    {% if (post.id == topic.last_post_id and can('delete', post, forum)) or can('delete', forum) %}
                         {% if post.deleted_at %}
                             <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.delete', [post.id]) }}" class="btn btn-xs btn-res">
                                 <i class="fa fa-undo"></i>

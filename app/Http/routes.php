@@ -53,6 +53,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     // usuwanie posta
     Route::post('Post/Delete/{id}', ['uses' => 'PostController@delete', 'as' => 'post.delete', 'middleware' => 'auth']);
+    // obserwowanie posta
+    Route::post('Post/Subscribe/{id}', ['uses' => 'PostController@subscribe', 'as' => 'post.subscribe', 'middleware' => 'auth']);
 
     // blokowanie watku
     Route::post('Lock/{id}', ['uses' => 'TopicController@lock', 'as' => 'lock', 'middleware' => 'auth']);
@@ -61,9 +63,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);
     Route::get('Comment/{id}', ['uses' => 'CommentController@edit', 'middleware' => 'auth']);
     Route::post('Comment/Delete/{id}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
-    // pokaz reszte komentarzy...
-    Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
 
+    // skrocony link do posta
     Route::get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);
 });
 

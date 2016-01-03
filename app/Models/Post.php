@@ -26,4 +26,9 @@ class Post extends Model
     {
         return $this->hasMany('Coyote\Post\Comment');
     }
+
+    public function subscribers()
+    {
+        return $this->hasMany('Coyote\Post\Subscriber');
+    }
 }

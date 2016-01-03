@@ -13,6 +13,7 @@ class CreateMicroblogSubscribersTable extends Migration
     public function up()
     {
         Schema::create('microblog_subscribers', function (Blueprint $table) {
+            $table->increments('id');
             $table->mediumInteger('microblog_id');
             $table->mediumInteger('user_id');
 

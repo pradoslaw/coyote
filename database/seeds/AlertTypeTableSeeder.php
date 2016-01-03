@@ -41,7 +41,7 @@ class AlertTypeTableSeeder extends Seeder
         ]);
         Type::create(['id'       => Alert::POST_DELETE,
                       'name'     => 'Powiadamiaj o usunięciu Twojego postu',
-                      'headline' => 'Twój post został usunięty przez {sender}',
+                      'headline' => 'Post został usunięty przez {sender}',
                       'profile'  => true,
                       'email'    => true
         ]);

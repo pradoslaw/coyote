@@ -313,6 +313,9 @@ abstract class Provider implements ProviderInterface
     {
         $recipients = [];
 
+        // remove duplicated values
+        $this->usersId = array_unique($this->usersId);
+
         // we don't want to send a notification to ourselves
         $index = array_search($this->getSenderId(), $this->usersId);
         if (false !== $index) {
