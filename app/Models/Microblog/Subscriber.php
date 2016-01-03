@@ -19,4 +19,9 @@ class Subscriber extends Model
      * @var string
      */
     protected $table = 'microblog_subscribers';
+
+    /**
+     * @var array
+     */
+    public $timestamps = false;
 }
