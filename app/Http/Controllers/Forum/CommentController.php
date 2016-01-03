@@ -109,6 +109,7 @@ class CommentController extends Controller
             $comment->$key = $user->$key;
         }
 
+        // we need to pass is_writeable variable to let know that we are able to edit/delete this comment
         return view('forum.comment.element', ['is_writeable' => true])->with(compact('comment', 'forum'));
     }
 
