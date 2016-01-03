@@ -141,12 +141,12 @@
                             {% for item in mode %}
                                 <div class="media">
                                     <div class="media-left">
-                                        <a href="{{ url('profile', [item.id]) }}">
+                                        <a href="{{ route('profile', [item.id]) }}">
                                             <img class="media-object" src="{{ user_photo(item.photo) }}" style="width: 40px; height: 40px;" alt="{{ item.name }}">
                                         </a>
                                     </div>
                                     <div class="media-body">
-                                        <h4 class="media-heading"><a data-user-id="{{ item.id }}" href="{{ url('profile', [item.id]) }}">{{ item.name }}</a></h4>
+                                        <h4 class="media-heading"><a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}">{{ item.name }}</a></h4>
 
                                         <div class="progress">
                                             <div class="progress-bar" role="progressbar" aria-valuenow="{{ item.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ item.percentage }}%;">
