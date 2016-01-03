@@ -46,16 +46,6 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param null $view
-     * @param array $data
-     * @return $this
-     */
-    protected function view($view = null, $data = [])
-    {
-        return Controller::view($view, $data);
-    }
-
-    /**
      * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
      * @param string $slug
@@ -177,7 +167,7 @@ class TopicController extends BaseController
         $this->breadcrumb($forum);
         $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
 
-        return $this->view('forum.submit', ['title' => 'Nowy wątek na ' . $forum->name])->with('forum', $forum);
+        return Controller::view('forum.submit', ['title' => 'Nowy wątek na ' . $forum->name])->with('forum', $forum);
     }
 
     /**
