@@ -10,6 +10,9 @@ class Login
      */
     public function grab($html)
     {
+        if (!$html) {
+            return [];
+        }
         $dom = new \DOMDocument;
         $dom->loadHTML($html);
 

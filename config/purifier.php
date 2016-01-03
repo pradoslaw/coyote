@@ -23,7 +23,8 @@ return [
     'HTML.Allowed'             => 'b,strong,i,em,a[href|title|data-user-id],p,br,ul,ol,li,span[style],img[width|height|alt|src|title],sub,sup,pre,code[class],kbd,h2,h3,h4,h5,h6',
     'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,text-align',
     'AutoFormat.AutoParagraph' => false,
-    'AutoFormat.RemoveEmpty'   => true,
+    // nie usuwaj pustych atrybutow typu <a></a>
+    'AutoFormat.RemoveEmpty'   => false,
     'HTML.TidyLevel'           => 'none',
     'Core.ConvertDocumentToFragment' => false,
     // nie usuwamy niepoprawnych znacznikow. jedynie zastepujemy znaki < oraz >
