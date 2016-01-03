@@ -168,7 +168,7 @@ class SubmitController extends Controller
             $microblog->$key = $user->$key;
         }
 
-        return view($id ? 'microblog._microblog_text' : 'microblog._microblog')->with('microblog', $microblog);
+        return view($id ? 'microblog.text' : 'microblog.microblog')->with('microblog', $microblog);
     }
 
     /**
@@ -190,7 +190,7 @@ class SubmitController extends Controller
             }
         }
 
-        return view('microblog._edit', ['thumbnails' => $thumbnails])->with($microblog->toArray());
+        return view('microblog.edit', ['thumbnails' => $thumbnails])->with($microblog->toArray());
     }
 
     /**

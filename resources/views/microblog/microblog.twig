@@ -30,7 +30,7 @@
                     <a href="{{ route('microblog.view', [microblog.id]) }}#entry-{{ microblog.id }}" title="{{ created_at|format_date(false) }}" class="timestamp" data-timestamp="{{ microblog.created_at|timestamp }}">{{ microblog.created_at|format_date }}</a>
 
                     <div class="microblog-text">
-                        {% include 'microblog/_microblog_text.twig' %}
+                        {% include 'microblog/text.twig' %}
                     </div>
 
                     <div class="microblog-footer">
@@ -53,7 +53,7 @@
                         {% endif %}
 
                         {% for comment in microblog.comments %}
-                            {% include 'microblog/_comment.twig' with {'comment': comment} %}
+                            {% include 'microblog/comment.twig' with {'comment': comment} %}
                         {% endfor %}
 
                         {% if auth_check() %}

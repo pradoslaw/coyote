@@ -152,7 +152,7 @@ class CommentController extends Controller
             $microblog->$key = $user->$key;
         }
 
-        return view('microblog._comment')->with('comment', $microblog)->with('microblog', ['id' => $microblog->parent_id]);
+        return view('microblog.comment')->with('comment', $microblog)->with('microblog', ['id' => $microblog->parent_id]);
     }
 
     /**
@@ -205,6 +205,6 @@ class CommentController extends Controller
         foreach ($comments as &$comment) {
             $comment->text = $parser->parse($comment->text);
         }
-        return view('microblog._comments', ['id' => $id, 'comments' => $comments]);
+        return view('microblog.comments', ['id' => $id, 'comments' => $comments]);
     }
 }
