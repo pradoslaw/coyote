@@ -78,7 +78,7 @@
 {% macro submit(value, state) %}
     <div class="form-group">
         <div class="col-md-6 col-md-offset-4">
-            <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="{{ state }}">
+            <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="{{ state|default(value) }}">
                 {{ value }}
             </button>
         </div>
