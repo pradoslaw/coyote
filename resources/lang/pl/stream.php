@@ -15,7 +15,7 @@ return [
 
     'headline' => [
         'microblog' => ':actor :verb :object na mikroblogu',
-        'comment'   => ':actor :verb :object do :target',
+        'comment'   => ':actor :verb :object w :target',
         'topic'     => ':actor :verb wątek :object',
         'post'      => ':actor :verb :object w :target'
     ]
