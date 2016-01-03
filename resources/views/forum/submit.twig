@@ -62,9 +62,26 @@
                                 <span class="help-block">{{ errors.first('text') }}</span>
                             {% endif %}
                         </div>
-                        <div role="tabpanel" class="tab-pane active" id="attachments"></div>
-                        <div role="tabpanel" class="tab-pane active" id="poll"></div>
-                        <div role="tabpanel" class="tab-pane active" id="preview"></div>
+                        <div role="tabpanel" class="tab-pane" id="attachments"></div>
+                        <div role="tabpanel" class="tab-pane" id="poll"></div>
+                        <div role="tabpanel" class="tab-pane" id="preview">
+
+                            <section class="panel panel-wrapper">
+                                <div class="panel-body">
+
+                                    <div id="box-post" class="box-forum">
+
+                                        <div class="post">
+                                            <div class="post-body">
+                                                <div class="post-content">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -197,10 +214,10 @@
             });
 
             $('a[href="#preview"]').click(function(e) {
-                $('#preview').html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
+                $('.post-content').html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
 
                 $.post('{{ route('forum.preview') }}', {'text': $('textarea[name="text"]').val()}, function(html) {
-                    $('#preview').html(html);
+                    $('.post-content').html(html);
                 });
             });
 
