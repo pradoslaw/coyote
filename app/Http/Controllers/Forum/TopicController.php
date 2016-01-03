@@ -15,6 +15,7 @@ use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
+use Coyote\Topic\Subscriber;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Gate;
@@ -232,5 +233,18 @@ class TopicController extends BaseController
         });
 
         return redirect()->to($url);
+    }
+
+    public function subscribe($id)
+    {
+        $subscriber = Subscriber::where('topic_id', $id)->where('user_id', auth()->id())->first();
+
+        if ($subscriber) {
+            $subscriber->delete();
+        } else {
+            Subscriber::create(['topic_id' => $id, 'user_id' => auth()->id()]);
+        }
+
+        return response(Subscriber::where('topic_id', $id)->count());
     }
 }

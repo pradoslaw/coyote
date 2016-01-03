@@ -94,7 +94,9 @@
                             <p title="Ilość wyświetleń"><strong>{{ topic.views }}</strong> <small>wyświetleń</small></p>
                         </td>
                         <td class="col-last-post hidden-xs">
-                            <a href="javascript:" class="btn-watch-sm"></a>
+                            {% if auth_check() %}
+                                <a title="Obserwuj wątek" href="{{ route('forum.topic.subscribe', [topic.id]) }}" class="btn-watch-sm {{ topic.subscribe_on ? 'on' }}"></a>
+                            {% endif %}
 
                             {% if topic.poster_id %}
                                 <a href="{{ route('profile', [topic.poster_id]) }}" class="hidden-sm hidden-xs">

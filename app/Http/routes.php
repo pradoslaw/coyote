@@ -46,6 +46,11 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@submit', 'as' => 'post.submit', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
     Route::post('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@save', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
 
+    // obserwowanie danego watku na forum
+    Route::post('Topic/Subscribe/{id}', ['uses' => 'TopicController@subscribe', 'as' => 'topic.subscribe', 'middleware' => 'auth']);
+    // blokowanie watku
+    Route::post('Topic/Lock/{id}', ['uses' => 'TopicController@lock', 'as' => 'lock', 'middleware' => 'auth']);
+
     // widok kategorii forum
     Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);
     // widok wyswietlania watku. {topic}
@@ -55,9 +60,6 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Post/Delete/{id}', ['uses' => 'PostController@delete', 'as' => 'post.delete', 'middleware' => 'auth']);
     // obserwowanie posta
     Route::post('Post/Subscribe/{id}', ['uses' => 'PostController@subscribe', 'as' => 'post.subscribe', 'middleware' => 'auth']);
-
-    // blokowanie watku
-    Route::post('Lock/{id}', ['uses' => 'TopicController@lock', 'as' => 'lock', 'middleware' => 'auth']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
     Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);

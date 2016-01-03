@@ -285,10 +285,6 @@ class PostController extends BaseController
      */
     public function subscribe($id)
     {
-        if (auth()->guest()) {
-            return response()->json(['error' => 'Musisz być zalogowany, aby móc obserwować ten post.'], 500);
-        }
-
         $subscriber = Subscriber::where('post_id', $id)->where('user_id', auth()->id())->first();
 
         if ($subscriber) {

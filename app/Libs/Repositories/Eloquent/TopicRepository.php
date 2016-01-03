@@ -7,6 +7,7 @@ use Coyote\Topic\Subscriber;
 use Coyote\Topic\Track;
 use Coyote\Topic;
 use Coyote\Tag;
+use DB;
 
 class TopicRepository extends Repository implements TopicRepositoryInterface
 {
@@ -79,6 +80,13 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     ->with('tags')
                     ->orderBy('is_sticky', 'DESC')
                     ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id']);
+
+        if ($userId) {
+            $sql = $sql->addSelect(['ts.created_at AS subscribe_on'])
+                        ->leftJoin('topic_subscribers AS ts', function ($join) use ($userId) {
+                            $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', DB::raw($userId));
+                        });
+        }
 
         $result = $sql->paginate($perPage);
 

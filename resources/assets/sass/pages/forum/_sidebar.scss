@@ -79,6 +79,10 @@
   color: lighten($alt-link-hover-color, 5%);
 }
 
+.btn-watch a:active, a:focus {
+  text-decoration: none;
+}
+
 .btn-watch small {
   color: $gray-light;
 }

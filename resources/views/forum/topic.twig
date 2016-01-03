@@ -98,12 +98,14 @@
                         {% set subscribers = topic.subscribers().lists('topic_id', 'user_id') %}
 
                         <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
-                            <a title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
-                                {% if auth_guest() or subscribers[user('id')] is not defined %}
-                                    Obserwuj wątek
-                                {% else %}
-                                    Zakończ obserwację
-                                {% endif %}
+                            <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
+                                <span>
+                                    {% if auth_guest() or subscribers[user('id')] is not defined %}
+                                        Obserwuj wątek
+                                    {% else %}
+                                        Zakończ obserwację
+                                    {% endif %}
+                                </span>
 
                                 {% if subscribers.count() > 0 %}
                                     <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>

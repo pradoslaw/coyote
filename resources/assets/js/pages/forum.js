@@ -101,6 +101,37 @@ $(function () {
     });
 
     /**
+     * Subscribe/unsubscribe topic (sidebar option)
+     */
+    $('.btn-watch a').click(function() {
+        var $this = $(this);
+
+        $.post($this.attr('href'), function(count) {
+            $this.parent().toggleClass('on');
+
+            $this.find('span').text($this.parent().hasClass('on') ? 'Zakończ obserwację' : 'Obserwuj');
+            $this.find('small').text('(' + count + ' ' + declination(count, ['obserwujący', 'obserwujących', 'obserwujących']) + ')');
+        })
+        .error(function(event) {
+            if (typeof event.responseJSON.error !== 'undefined') {
+                error(event.responseJSON.error);
+            }
+        });
+
+        return false;
+    });
+
+    /**
+     * Subscribe/unsubscribe topic (from topics list)
+     */
+    $('.btn-watch-sm').click(function() {
+        $(this).toggleClass('on');
+        $.post($(this).attr('href'));
+
+        return false;
+    });
+
+    /**
      * Subscribe/unsubscribe post
      */
     $('.btn-sub').click(function() {

@@ -4,6 +4,12 @@
   td.sticky {
     background-color: #e2e7e1;
   }
+
+  tr:hover {
+    .btn-watch-sm {
+      opacity: 1;
+    }
+  }
 }
 
 .col-topic-icon {
@@ -132,9 +138,14 @@
       font-family: FontAwesome;
       content: $fa-var-star-o;
     }
+  }
 
-    &:hover {
-      opacity: 1;
+  .btn-watch-sm.on {
+    opacity: 1;
+
+    &:after {
+      content: $fa-var-star;
+      color: lighten($alt-link-hover-color, 5%);
     }
   }
 }
