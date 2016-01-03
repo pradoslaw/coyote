@@ -94,39 +94,50 @@
 
             <div class="box">
                 <ul class="side-menu" style="margin-top: 5px">
-                    {% set subscribers = topic.subscribers().lists('topic_id', 'user_id') %}
+                    {% if auth_check() %}
+                        {% set subscribers = topic.subscribers().lists('topic_id', 'user_id') %}
 
-                    <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
-                        <a title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
-                            {% if auth_guest() or subscribers[user('id')] is not defined %}
-                                Obserwuj wątek
-                            {% else %}
-                                Zakończ obserwację
-                            {% endif %}
+                        <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
+                            <a title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
+                                {% if auth_guest() or subscribers[user('id')] is not defined %}
+                                    Obserwuj wątek
+                                {% else %}
+                                    Zakończ obserwację
+                                {% endif %}
 
-                            {% if subscribers.count() > 0 %}
-                                <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
-                            {% endif %}
-                        </a>
-                    </li>
+                                {% if subscribers.count() > 0 %}
+                                    <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+
                     <li class="btn-atom">
                         <a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
                     </li>
 
-                    <li id="btn-log"><a title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
-                    <li id="btn-edit-subject"><a title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
-                    <li id="btn-lock"><a title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">Zablokuj wątek</a></li>
-                    <li id="btn-move">
-                        <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
+                    {% if can('update', forum) %}
+                        <li id="btn-log"><a title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
+                        <li id="btn-edit-subject"><a title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
+                    {% endif %}
+                    {% if can('lock', forum) %}
+                        <li id="btn-lock"><a title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">Zablokuj wątek</a></li>
+                    {% endif %}
+                    {% if can('move', forum) %}
+                        <li id="btn-move">
+                            <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
 
-                        <ul id="collapse-sub" class="collapse">
-                            {% for path, name in forumList %}
-                                <li><a href="{{ path }}">{{ name|raw }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
+                            <ul id="collapse-sub" class="collapse">
+                                {% for path, name in forumList %}
+                                    <li><a href="{{ path }}">{{ name|raw }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
 
-                    <li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>
+                    {% if can('sticky', forum) %}
+                        <li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>
+                    {% endif %}
                 </ul>
             </div>
 
