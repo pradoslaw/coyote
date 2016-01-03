@@ -1,5 +1,5 @@
 {% extends 'forum/base.twig' %}
-{% block title %}Forum dyskusyjne{{ parent() }}{% endblock %}
+{% block title %}{{ topic.subject }}{{ parent() }}{% endblock %}
 
 {% import 'components/forms.twig' as forms %}
 {% import 'components/modals.twig' as modals %}
