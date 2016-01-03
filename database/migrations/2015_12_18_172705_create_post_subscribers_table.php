@@ -18,7 +18,7 @@ class CreatePostSubscribersTable extends Migration
             $table->mediumInteger('user_id');
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
 
-            $table->primary(['post_id', 'user_id']);
+            $table->unique(['post_id', 'user_id']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');

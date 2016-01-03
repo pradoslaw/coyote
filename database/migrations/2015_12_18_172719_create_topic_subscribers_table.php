@@ -18,7 +18,7 @@ class CreateTopicSubscribersTable extends Migration
             $table->mediumInteger('user_id');
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
 
-            $table->primary(['topic_id', 'user_id']);
+            $table->unique(['topic_id', 'user_id']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
