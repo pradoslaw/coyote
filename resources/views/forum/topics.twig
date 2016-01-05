@@ -89,7 +89,7 @@
                                 {% if topic.replies != topic.replies_real and can('delete', forum) %}
                                     <small class="col-replies-real">({{ topic.replies - topic.replies_real }})</small>
                                 {% endif %}
-                                <small>odpowiedzi</small>
+                                <small>{{ declination(topic.replies, ['odpowiedź', 'odpowiedzi', 'odpowiedzi'], true) }}</small>
                             </p>
                             <p title="Ilość wyświetleń"><strong>{{ topic.views }}</strong> <small>wyświetleń</small></p>
                         </td>
