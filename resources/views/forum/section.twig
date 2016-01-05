@@ -40,8 +40,8 @@
                         </td>
                         <td class="col-stats hidden-md hidden-sm hidden-xs">
                             {% if not forum.url %}
-                                <p title="Ilość wątków"><strong>{{ forum.topics|number_format(0, ',', ' ') }}</strong> <small>wątków</small></p>
-                                <p title="Ilość postów"><strong>{{ forum.posts|number_format(0, ',', ' ') }}</strong> <small>postów</small></p>
+                                <p title="Ilość wątków"><strong>{{ forum.topics|number_format(0, ',', ' ') }}</strong> <small>{{ declination(forum.topics, ['wątek', 'wątki', 'wątków']) }}</small></p>
+                                <p title="Ilość postów"><strong>{{ forum.posts|number_format(0, ',', ' ') }}</strong> <small>{{ declination(forum.topics, ['post', 'posty', 'postów']) }}</small></p>
                             {% endif %}
                         </td>
                         <td class="col-avatar hidden-md hidden-sm hidden-xs">

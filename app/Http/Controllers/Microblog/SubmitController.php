@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Microblog;
 
+use Coyote\Microblog\Subscriber;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
@@ -150,6 +151,10 @@ class SubmitController extends Controller
                         'url'         => route('microblog.view', [$microblog->id], false)
                     ])->notify();
                 }
+
+                // enable subscribe button
+                $microblog->subscribe_on = true;
+                Subscriber::insert(['microblog_id' => $microblog->id, 'user_id' => $user->id]);
             } else {
                 $stream->add(new Stream_Update($actor, $object));
             }
