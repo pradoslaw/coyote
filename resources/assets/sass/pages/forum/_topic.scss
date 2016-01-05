@@ -43,7 +43,7 @@
     margin: 0;
   }
 
-  > div > div.row:nth-child(odd) {
+  > div > div.row:nth-child(even) {
     background-color: #fafafa;
   }
 
