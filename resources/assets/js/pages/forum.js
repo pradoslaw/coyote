@@ -288,9 +288,11 @@ $(function () {
         var onHashChange = function () {
             var hash = window.location.hash;
             var object = null;
+            var color = null;
 
             if (hash.substring(1, 3) === 'id') {
                 object = $(hash).parents('.post-body');
+                color = '#fff';
             } else {
                 object = $(hash);
 
@@ -298,11 +300,15 @@ $(function () {
                     $('div:hidden', object.parent()).show();
                     $('.btn-show-all', object.parent()).remove();
                 }
+
+                color = '#fafafa';
             }
 
-            object.css('background-color', '#FFDCA5');
+            object.addClass('highlight').css('background-color', '#FFDCA5');
             $('#container-fluid').one('mousemove', function () {
-                object.animate({backgroundColor: '#FFF'}, 1500);
+                object.animate({backgroundColor: color}, 1500, function() {
+                    $(this).removeClass('highlight');
+                });
             });
         };
 

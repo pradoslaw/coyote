@@ -71,6 +71,12 @@
   }
 }
 
+.post-body.highlight {
+  > div.row:nth-child(even) {
+    background-color: inherit;
+  }
+}
+
 #first-post {
   margin-top: 10px;
   margin-bottom: 10px;
