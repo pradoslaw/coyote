@@ -45,7 +45,7 @@ class AlertTypeTableSeeder extends Seeder
                       'profile'  => true,
                       'email'    => true
         ]);
-        Type::create(['id'       => Alert::POST_COMMENT,
+        Type::create(['id'       => Alert::POST_SUBSCRIBER,
                       'name'     => 'Powiadamiaj o nowym komentarzu w Twoim poście',
                       'headline' => '{sender} dodał komentarz do postu',
                       'profile'  => true,
