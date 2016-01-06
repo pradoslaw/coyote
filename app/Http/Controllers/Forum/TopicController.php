@@ -122,6 +122,7 @@ class TopicController extends BaseController
         }
 
         if ($topicMarkTime < $markTime && $forumMarkTime < $markTime) {
+            // mark topic as read
             $this->topic->markAsRead($topic->id, $forum->id, $markTime, $userId, $sessionId);
             $isUnread = true;
 
@@ -155,7 +156,7 @@ class TopicController extends BaseController
         $this->pushForumCriteria();
         $forumList = $this->forum->forumList();
 
-        return $this->view('forum.topic')->with(
+        return $this->view('forum.topic', ['markTime' => $topicMarkTime ? $topicMarkTime : $forumMarkTime])->with(
             compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList')
         );
     }

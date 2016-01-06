@@ -28,9 +28,7 @@
             {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
 
             <div class="col-xs-10 col-time">
-                <a title="Link do tego postu" id="id{{ post.id }}" class="post-link" href="{{ url }}">
-                    <i class="fa fa-file-o"></i>
-                </a>
+                <a title="Link do tego postu" id="id{{ post.id }}" class="post-link {{ post.time > markTime ? 'unread' }}" href="{{ url }}"></a>
 
                 <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
 
