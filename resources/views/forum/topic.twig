@@ -69,8 +69,19 @@
             {% if auth_check() and is_writeable %}
                 <section id="box-quick-form" class="row">
                     <div class="col-xs-12">
-                        {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': '#', 'class': 'form-horizontal'}) }}
-                        <textarea rows="2" cols="60" name="content" class="form-control" placeholder="Kliknij, aby napisać szybką odpowiedź..."></textarea>
+                        {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': route('forum.post.submit', [forum.path, topic.id]), 'class': 'form-horizontal'}) }}
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    {% include 'components/toolbar' %}
+                                    <textarea rows="1" cols="60" name="text" class="form-control" placeholder="Kliknij, aby napisać szybką odpowiedź..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary btn-sm pull-right" style="display: none" data-submit-state="Wysyłanie...">Wyślij</button>
+                                </div>
+                            </div>
                         {{ form_close() }}
                     </div>
                 </section>
@@ -171,6 +182,15 @@
 
         $(function () {
             $('.col-bottom a').tooltip();
+
+            $('#submit-form textarea').one('focus', function() {
+                var $this = $(this);
+                $(':submit', $this.parents('form')).show();
+
+                $.getScript(baseUrl + '/js/wikieditor.js', function() {
+                    $this.wikiEditor().prompt(promptUrl).fastSubmit().autogrow();
+                });
+            });
         });
     </script>
 {% endblock %}
