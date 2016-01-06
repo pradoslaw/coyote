@@ -1,18 +1,14 @@
 <?php
 
-namespace Coyote\Alert\Providers\Post;
+namespace Coyote\Alert\Providers\Post\Comment;
 
 use Coyote\Alert;
 use Coyote\Alert\Providers\Provider;
 
-/**
- * Class Login
- * @package Coyote\Alert\Providers\Post
- */
 class Login extends Provider implements Alert\Providers\ProviderInterface
 {
-    const ID = Alert::POST_LOGIN;
-    const EMAIL = 'emails.alerts.post.login';
+    const ID = Alert::POST_COMMENT_LOGIN;
+    const EMAIL = 'emails.alerts.post.comment.login';
 
     /**
      * @var int

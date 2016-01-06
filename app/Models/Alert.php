@@ -11,7 +11,7 @@ class Alert extends Model
     const TOPIC_MOVE = 3;
     const TOPIC_DELETE = 4;
     const POST_DELETE = 5;
-    const POST_COMMENT = 6;
+    const POST_SUBSCRIBER = 6;
     const PAGE = 7;
     const COMMENT = 8;
     const POST_EDIT = 10;

@@ -52,12 +52,19 @@ class AlertServiceProvider extends ServiceProvider
      */
     public function provides()
     {
+        /*
+         * UWAGA! Po dodaniu nowego elementu do tablicy trzeba wykonac php artisan clear-compiled
+         */
         return [
             'Alert\Microblog\Login',
             'Alert\Microblog\Subscriber',
             'Alert\Microblog\Vote',
+
             'Alert\Post\Login',
             'Alert\Post\Delete',
+            'Alert\Post\Subscriber',
+            'Alert\Post\Comment\Login',
+
             'Alert\Topic\Subscriber',
             'Alert\Topic\Delete'
         ];

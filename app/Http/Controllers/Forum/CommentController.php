@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Alert\Alert;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\CommentRepositoryInterface as Comment;
@@ -14,6 +15,7 @@ use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Http\Request;
+use Coyote\Parser\Reference\Login as Ref_Login;
 use Gate;
 
 class CommentController extends Controller
@@ -103,6 +105,35 @@ class CommentController extends Controller
             // we need to parse text first (and store it in cache)
             $parser = app()->make('Parser\Comment');
             $comment->text = $parser->parse($comment->text);
+
+            if (!$id) {
+                $alert = new Alert();
+                $notification = [
+                    'sender_id'   => auth()->id(),
+                    'sender_name' => auth()->user()->name,
+                    'subject'     => excerpt($topic->subject, 48),
+                    'excerpt'     => excerpt($comment->text),
+                    'url'         => $object->url
+                ];
+
+                $subscribersId = $post->subscribers()->lists('user_id');
+                if ($subscribersId) {
+                    $alert->attach(
+                        // $subscribersId can be int or array. we need to cast to array type
+                        app()->make('Alert\Post\Subscriber')->with($notification)->setUsersId($subscribersId->toArray())
+                    );
+                }
+
+                // get id of users that were mentioned in the text
+                $subscribersId = (new Ref_Login())->grab($comment->text);
+                if ($subscribersId) {
+                    $alert->attach(
+                        app()->make('Alert\Post\Comment\Login')->with($notification)->setUsersId($subscribersId)
+                    );
+                }
+
+                $alert->notify();
+            }
         });
 
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
