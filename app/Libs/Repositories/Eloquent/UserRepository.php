@@ -13,11 +13,17 @@ class UserRepository extends Repository implements UserRepositoryInterface
 
     /**
      * @param $name
+     * @param array $orderByUsersId
      * @return mixed
      */
-    public function lookupName($name)
+    public function lookupName($name, $orderByUsersId = [])
     {
-        return $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%')->get();
+        $sql = $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%');
+        if ($orderByUsersId) {
+            $sql->orderBy(\DB::raw('id IN(' . implode(',', $orderByUsersId) . ')'), 'DESC');
+        }
+
+        return $sql->orderBy('visited_at', 'DESC')->limit(5)->get();
     }
 
     /**

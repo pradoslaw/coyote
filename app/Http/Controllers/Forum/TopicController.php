@@ -9,6 +9,7 @@ use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
@@ -16,7 +17,6 @@ use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
 use Coyote\Topic\Subscriber as Topic_Subscriber;
-use Coyote\Post\Subscriber as Post_Subscriber;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Gate;
@@ -238,6 +238,10 @@ class TopicController extends BaseController
         return redirect()->to($url);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function subscribe($id)
     {
         $subscriber = Topic_Subscriber::where('topic_id', $id)->where('user_id', auth()->id())->first();
@@ -249,5 +253,34 @@ class TopicController extends BaseController
         }
 
         return response(Topic_Subscriber::where('topic_id', $id)->count());
+    }
+
+    /**
+     * @param $id
+     * @param UserRepositoryInterface $user
+     * @param Request $request
+     * @return $this
+     */
+    public function prompt($id, UserRepositoryInterface $user, Request $request)
+    {
+        $this->validate($request, ['q' => 'username']);
+        $usersId = [];
+
+        $posts = $this->post->findAllBy('topic_id', $id, ['id', 'user_id']);
+        $posts->load('comments'); // load comments assigned to posts
+
+        foreach ($posts as $post) {
+            if ($post->user_id) {
+                $usersId[] = $post->user_id;
+            }
+
+            foreach ($post->comments as $comment) {
+                if ($comment->user_id) {
+                    $usersId[] = $comment->user_id;
+                }
+            }
+        }
+
+        return view('components.prompt')->with('users', $user->lookupName($request['q'], array_unique($usersId)));
     }
 }

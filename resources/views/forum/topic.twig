@@ -163,7 +163,7 @@
     {% endif %}
 
     <script type="text/javascript">
-        var promptUrl = '{{ route('forum.home') }}';
+        var promptUrl = '{{ route('forum.prompt', [topic.id]) }}';
 
         {% if can('delete', forum) %}
             var reasonsList = {{ reasonList.toJson()|raw }};
