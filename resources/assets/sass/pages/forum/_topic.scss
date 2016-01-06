@@ -320,8 +320,8 @@
   line-height: 120%;
 }
 
-.vote-up {
-
+.vote-up.on {
+  color: $brand-primary;
 }
 
 .vote-accept {

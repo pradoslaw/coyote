@@ -102,5 +102,10 @@ class AppServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Contracts\\Post\\CommentRepositoryInterface',
             'Coyote\\Repositories\\Eloquent\\Post\\CommentRepository'
         );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\Post\\VoteRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\Post\\VoteRepository'
+        );
     }
 }

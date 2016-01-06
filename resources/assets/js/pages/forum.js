@@ -162,6 +162,20 @@ $(function () {
         return false;
     });
 
+    $('.vote-up').click(function() {
+        var $this = $(this);
+
+        $.post($this.attr('href'), function(json) {
+            $this.toggleClass('on');
+            $this.prev().text(json.count);
+        })
+            .error(function() {
+
+            });
+
+        return false;
+    });
+
     /**
      * Change forum category
      */

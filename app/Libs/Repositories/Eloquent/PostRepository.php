@@ -52,8 +52,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
                     ->orderBy('sessions.updated_at', 'DESC');
 
         if ($userId) {
-            $sql = $sql->addSelect(['value AS vote_on', 'ps.created_at AS subscribe_on'])
-                        ->leftJoin('post_votes', 'post_votes.post_id', '=', 'posts.id')
+            $sql = $sql->addSelect(['pv.created_at AS vote_on', 'ps.created_at AS subscribe_on'])
+                        ->leftJoin('post_votes AS pv', 'pv.post_id', '=', 'posts.id')
                         ->leftJoin('post_subscribers AS ps', function ($join) use ($userId) {
                             $join->on('ps.post_id', '=', 'posts.id')->on('ps.user_id', '=', DB::raw($userId));
                         });

@@ -7,6 +7,7 @@ use Coyote\Forum\Reason;
 use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Subscriber;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Contracts\Post\VoteRepositoryInterface as Vote;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
@@ -14,6 +15,7 @@ use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Activities\Restore as Stream_Restore;
+use Coyote\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
@@ -297,5 +299,74 @@ class PostController extends BaseController
         } else {
             Subscriber::create(['post_id' => $id, 'user_id' => auth()->id()]);
         }
+    }
+
+    public function vote($id, Vote $vote)
+    {
+        if (auth()->guest()) {
+            return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
+        }
+
+        $post = $this->post->findOrFail($id);
+
+        if (!config('app.debug') && auth()->user()->id === $post->user_id) {
+            return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
+        }
+
+        $forum = $this->forum->find($post->forum_id);
+        if ($forum->is_locked) {
+            return response()->json(['error' => 'Forum jest zablokowane.']);
+        }
+
+        $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject']);
+        if ($topic->is_locked) {
+            return response()->json(['error' => 'Wątek jest zablokowany.']);
+        }
+
+        \DB::transaction(function () use ($post, $topic, $forum, $vote) {
+            $result = $vote->findWhere(['post_id' => $post->id, 'user_id' => auth()->id()])->first();
+
+            // build url to post
+            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false) . '?p=' . $post->id . '#id' . $post->id;
+            // excerpt of post text. used in reputation and alert
+            $excerpt = excerpt($post->text);
+
+            if ($result) {
+                $result->delete();
+                $post->score--;
+            } else {
+                $vote->create([
+                    'post_id' => $post->id, 'user_id' => auth()->id(), 'forum_id' => $forum->id, 'ip' => request()->ip()
+                ]);
+                $post->score++;
+
+                // send notification to the user
+                app()->make('Alert\Post\Vote')
+                    ->setPostId($post->id)
+                    ->addUserId($post->user_id)
+                    ->setSubject(excerpt($topic->subject, 48))
+                    ->setExcerpt($excerpt)
+                    ->setSenderId(auth()->id())
+                    ->setSenderName(auth()->user()->name)
+                    ->setUrl($url)
+                    ->notify();
+            }
+
+            if ($post->user_id) {
+                // add or subtract reputation points
+                app()->make('Reputation\Post\Vote')
+                    ->setUserId($post->user_id)
+                    ->setIsPositive(!count($result))
+                    ->setUrl($url)
+                    ->setPostId($post->id)
+                    ->setExcerpt(excerpt($post->text))
+                    ->save();
+            }
+
+            // add into activity stream
+            stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->map($post));
+        });
+
+        return response()->json(['count' => $post->score]);
     }
 }

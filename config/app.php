@@ -156,6 +156,8 @@ return [
         Coyote\Providers\ParserServiceProvider::class,
         // Klasy powiadomien
         Coyote\Providers\AlertServiceProvider::class,
+        // Klasy obslugi reputacji uzytkownika
+        Coyote\Providers\ReputationServiceProvider::class,
 
 
         // Obsluga szablonow Twig

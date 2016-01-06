@@ -79,7 +79,7 @@
                     <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
                     {% if not post.deleted_at %}
-                        <a class="vote-up " href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+                        <a class="vote-up {{ post.vote_on ? 'on' }}" href="{{ route('forum.post.vote', [post.id]) }}" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
                             <i class="fa fa-thumbs-o-up"></i>
                         </a>
                         <a class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">

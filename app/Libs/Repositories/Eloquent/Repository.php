@@ -256,11 +256,13 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     public function findWhere($where, $columns = ['*'])
     {
         $this->applyCriteria();
+        $model = $this->model;
+
         foreach ($where as $field => $value) {
-            $this->model->where($field, $value);
+            $model = $model->where($field, $value);
         }
 
-        return $this->model->get($columns);
+        return $model->get($columns);
     }
 
     public function __call($method, $args)

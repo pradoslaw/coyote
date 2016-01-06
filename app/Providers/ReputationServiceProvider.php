@@ -3,9 +3,8 @@
 namespace Coyote\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Coyote\Alert\Providers\Post\Login as Alert_Post_Login;
 
-class AlertServiceProvider extends ServiceProvider
+class ReputationServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -35,11 +34,11 @@ class AlertServiceProvider extends ServiceProvider
             $segments = explode('\\', $provider);
             array_shift($segments);
 
-            $class = '\\Coyote\\Alert\\Providers\\' . implode('\\', $segments);
+            $class = '\\Coyote\\Reputation\\' . implode('\\', $segments);
 
             $this->app->bind($provider, function ($app) use ($class) {
                 return new $class(
-                    $app['Coyote\Repositories\Contracts\AlertRepositoryInterface']
+                    $app['Coyote\Repositories\Contracts\ReputationRepositoryInterface']
                 );
             });
         }
@@ -56,18 +55,8 @@ class AlertServiceProvider extends ServiceProvider
          * UWAGA! Po dodaniu nowego elementu do tablicy trzeba wykonac php artisan clear-compiled
          */
         return [
-            'Alert\Microblog\Login',
-            'Alert\Microblog\Subscriber',
-            'Alert\Microblog\Vote',
-
-            'Alert\Post\Login',
-            'Alert\Post\Delete',
-            'Alert\Post\Subscriber',
-            'Alert\Post\Comment\Login',
-            'Alert\Post\Vote',
-
-            'Alert\Topic\Subscriber',
-            'Alert\Topic\Delete'
+            'Reputation\Post\Vote',
+            'Reputation\Post\Accept',
         ];
     }
 }
