@@ -15,7 +15,8 @@ use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
-use Coyote\Topic\Subscriber;
+use Coyote\Topic\Subscriber as Topic_Subscriber;
+use Coyote\Post\Subscriber as Post_Subscriber;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Gate;
@@ -184,7 +185,7 @@ class TopicController extends BaseController
             // create new topic
             $topic = $this->topic->create($request->all() + ['path' => $path, 'forum_id' => $forum->id]);
             // create new post and assign it to topic. don't worry about the rest: trigger will do the work
-            $this->post->create($request->all() + [
+            $post = $this->post->create($request->all() + [
                 'user_id'   => auth()->id(),
                 'topic_id'  => $topic->id,
                 'forum_id'  => $forum->id,
@@ -197,6 +198,8 @@ class TopicController extends BaseController
 
             if (auth()->check()) {
                 $this->topic->subscribe($topic->id, auth()->id(), $request->get('subscribe'));
+                // automatically subscribe post
+                $this->post->subscribe($post->id, auth()->id(), true);
             }
 
             // parsing text and store it in cache
@@ -237,14 +240,14 @@ class TopicController extends BaseController
 
     public function subscribe($id)
     {
-        $subscriber = Subscriber::where('topic_id', $id)->where('user_id', auth()->id())->first();
+        $subscriber = Topic_Subscriber::where('topic_id', $id)->where('user_id', auth()->id())->first();
 
         if ($subscriber) {
             $subscriber->delete();
         } else {
-            Subscriber::create(['topic_id' => $id, 'user_id' => auth()->id()]);
+            Topic_Subscriber::create(['topic_id' => $id, 'user_id' => auth()->id()]);
         }
 
-        return response(Subscriber::where('topic_id', $id)->count());
+        return response(Topic_Subscriber::where('topic_id', $id)->count());
     }
 }

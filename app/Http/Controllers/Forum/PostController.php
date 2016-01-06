@@ -110,6 +110,11 @@ class PostController extends BaseController
                     'host'      => request()->server('SERVER_NAME')
                 ]);
 
+                // automatically subscribe post
+                if (auth()->check()) {
+                    $this->post->subscribe($post->id, auth()->id(), true);
+                }
+
                 $url .= '?p=' . $post->id . '#id' . $post->id;
 
                 $alert = new Alert();
@@ -121,11 +126,11 @@ class PostController extends BaseController
                     'url'         => $url
                 ];
 
-                $subscribersId = $topic->subscribers()->pluck('user_id');
+                $subscribersId = $topic->subscribers()->lists('user_id');
                 if ($subscribersId) {
                     $alert->attach(
                         // $subscribersId can be int or array. we need to cast to array type
-                        app()->make('Alert\Topic\Subscriber')->with($notification)->setUsersId((array) $subscribersId)
+                        app()->make('Alert\Topic\Subscriber')->with($notification)->setUsersId($subscribersId->toArray())
                     );
                 }
 

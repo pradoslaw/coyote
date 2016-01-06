@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
+use Coyote\Post\Subscriber;
 use DB;
 
 class PostRepository extends Repository implements PostRepositoryInterface
@@ -131,5 +132,21 @@ class PostRepository extends Repository implements PostRepositoryInterface
                     ->where('topic_id', $topicId)
                         ->where('created_at', '>', $markTime)
                     ->pluck('id');
+    }
+
+    /**
+     * Enable/disable subscription for this post
+     *
+     * @param int $postId
+     * @param int $userId
+     * @param bool $flag
+     */
+    public function subscribe($postId, $userId, $flag)
+    {
+        if (!$flag) {
+            Subscriber::where('post_id', $postId)->where('user_id', $userId)->delete();
+        } else {
+            Subscriber::firstOrCreate(['post_id' => $postId, 'user_id' => $userId]);
+        }
     }
 }

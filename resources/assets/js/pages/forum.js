@@ -290,7 +290,7 @@ $(function () {
             var object = null;
 
             if (hash.substring(1, 3) === 'id') {
-                object = $(hash).parents('.post');
+                object = $(hash).parents('.post-body');
             } else {
                 object = $(hash);
 
