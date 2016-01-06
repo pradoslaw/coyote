@@ -29,6 +29,8 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * `mkdir storage/app/purifier`
 * `chmod -R 777 storage/`
 * `chmod -R 777 public/storage/`
+* `apt-get install php5-gd`
+* `apt-get install php5-mongo`
 
 ## Jak mozesz pomoc?
 
