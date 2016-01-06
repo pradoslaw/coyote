@@ -135,7 +135,8 @@ class Markdown extends \Parsedown implements ProviderInterface
                         'text' => '@' . $name,
                         'attributes' => [
                             'href' => route('profile', [$user->id]),
-                            'data-user-id' => $user->id
+                            'data-user-id' => $user->id,
+                            'class' => 'mention'
                         ]
                     ]
                 ];

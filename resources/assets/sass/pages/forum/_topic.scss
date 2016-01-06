@@ -71,6 +71,7 @@
   }
 }
 
+// klasa dodawana do tresci posta na okres podswietlania tresci
 .post-body.highlight {
   > div.row:nth-child(even) {
     background-color: inherit;
@@ -356,10 +357,6 @@ div.tooltip-inner {
       &:hover {
         color: $alt-link-hover-color;
       }
-    }
-
-    .user-name:hover {
-      text-decoration: none;
     }
 
     .author {
