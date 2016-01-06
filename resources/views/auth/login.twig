@@ -5,7 +5,7 @@
 
 {% block container %}
     <div class="row">
-        <div id="box-login" class="col-xs-7">
+        <div id="box-login" class="col-sm-7">
             <h1>Logowanie do systemu</h1>
 
             {{ form_open({'method': 'POST', 'role': 'form', 'url': route('login'), 'class': 'form-horizontal'}) }}
@@ -25,7 +25,7 @@
             {{ form_close() }}
         </div>
 
-        <div id="box-login-sidebar" class="col-xs-5">
+        <div id="box-login-sidebar" class="col-sm-5 hidden-xs">
             <div>
                 <h2>Nie masz konta?</h2>
 

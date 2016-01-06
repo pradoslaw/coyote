@@ -5,7 +5,7 @@
 
 {% block container %}
     <div class="row">
-        <div id="box-register" class="col-xs-7">
+        <div id="box-register" class="col-sm-7">
             <h1>Darmowa rejestracja - stwórz swój profil</h1>
 
             {{ form_open({'method': 'POST', 'role': 'form', 'url': route('register'), 'class': 'form-horizontal'}) }}
@@ -17,7 +17,7 @@
             {{ form_close() }}
         </div>
 
-        <div id="box-register-sidebar" class="col-xs-5">
+        <div id="box-register-sidebar" class="col-sm-5 hidden-xs">
             <div>
                 <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
 
