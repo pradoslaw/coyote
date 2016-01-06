@@ -4,7 +4,7 @@
     <div class="thumbnails row">
         {% for name, image in microblog.thumbnails %}
             <div class="col-xs-6 col-md-3">
-                <a href="{{ url('/storage/microblog/' ~ name) }}" class="thumbnail">
+                <a href="{{ url('/storage/microblog/' ~ name) }}" class="thumbnail" data-toggle="lightbox" data-gallery="gallery-{{ microblog.id }}">
                     <img src="{{ image }}">
                 </a>
             </div>

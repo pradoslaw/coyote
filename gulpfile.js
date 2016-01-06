@@ -33,7 +33,7 @@ elixir(function(mix) {
         // forum
        .scripts(['vendor/animate-colors.js', 'bootstrap/modal.js', 'pages/forum.js'], 'public/js/forum.js')
         // mikroblogi
-       .scripts(['vendor/animate-colors.js', 'pages/microblog.js'], 'public/js/microblog.js')
+       .scripts(['vendor/animate-colors.js', 'vendor/ekko-lightbox.js', 'pages/microblog.js'], 'public/js/microblog.js')
         // strona profilu uzytkownika
        //.scripts(['pages/profile.js'], 'public/js/profile.js')
         // komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
@@ -63,7 +63,6 @@ elixir(function(mix) {
        .sass('pages/wiki.scss')
        .sass('pages/user.scss')
        .sass('pages/profile.scss')
-       .sass('pages/job.scss')
-       .sass('vendor/wikieditor.scss');
+       .sass('pages/job.scss');
 });
 

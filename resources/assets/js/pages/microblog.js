@@ -246,6 +246,10 @@ $(function () {
             });
 
             return false;
+        })
+        .on('click', 'a[data-toggle="lightbox"]', function(e) {
+            e.preventDefault();
+            $(this).ekkoLightbox();
         });
 
     function initForm($form) {
@@ -355,5 +359,4 @@ $(function () {
         window.onhashchange = onHashChange;
         onHashChange();
     }
-
 });
