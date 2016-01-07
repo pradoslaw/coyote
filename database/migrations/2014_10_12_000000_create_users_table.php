@@ -53,7 +53,7 @@ class CreateUsersTable extends Migration
             $table->string('location')->nullable();
             $table->mediumInteger('birthyear')->nullable();
             $table->tinyInteger('allow_count')->default(1);
-            $table->tinyInteger('allow_smilies')->default(1);
+            $table->tinyInteger('allow_smilies')->default(0);
             $table->tinyInteger('allow_sig')->default(1);
             $table->tinyInteger('allow_subscribe')->default(1);
 
