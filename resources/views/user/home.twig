@@ -4,10 +4,10 @@
 {% import 'components/modals.twig' as modal %}
 
 {% block container %}
-    {{ include('user/_top', {active: 'home'}) }}
+    {{ include('user/top', {active: 'home'}) }}
 
     <div class="row">
-        {% include 'user/_home-menu' %}
+        {% include 'user/home-menu' %}
 
         <main class="col-md-10">
             <section class="panel panel-wrapper">

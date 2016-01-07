@@ -5,10 +5,10 @@
 {% import 'components/modals.twig' as modals %}
 
 {% block container %}
-    {{ include('user/_top', {active: 'settings'}) }}
+    {{ include('user/top', {active: 'settings'}) }}
 
     <div class="row">
-        {% include 'user/_settings-menu' %}
+        {% include 'user/settings-menu' %}
 
         <main class="col-md-10">
             <section class="panel panel-wrapper">
