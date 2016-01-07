@@ -152,9 +152,11 @@ class SubmitController extends Controller
                     ])->notify();
                 }
 
-                // enable subscribe button
-                $microblog->subscribe_on = true;
-                Subscriber::insert(['microblog_id' => $microblog->id, 'user_id' => $user->id]);
+                if (auth()->user()->allow_subscribe) {
+                    // enable subscribe button
+                    $microblog->subscribe_on = true;
+                    Subscriber::insert(['microblog_id' => $microblog->id, 'user_id' => $user->id]);
+                }
             } else {
                 $stream->add(new Stream_Update($actor, $object));
             }
