@@ -42,7 +42,7 @@
                             {{ forms.checkbox('allow_sig', 'Wyświetlaj sygnaturki użytkowników', 1, user_input('allow_sig')) }}
                             {{ forms.textarea('sig', 'Sygnatura', user_input('sig'), errors.first('sig'), 3, {}, 'Podpis będzie widoczny przy każdym Twoim poście. Uwaga! Użytkownicy posiadający mniej niż 50 punktów reputacji nie mogą umieszczać linków w tym polu') }}
 
-                            {{ forms.submit('Zapisz') }}
+                            {{ forms.submit('Zapisz', 'Zapisywanie...') }}
                             {{ form_close() }}
                         </div>
                     </div>

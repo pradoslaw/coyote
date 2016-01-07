@@ -64,7 +64,7 @@ class SettingsController extends Controller
                 $request['email'] = $user->email;
             }
         }
-        User::find($user->id)->fill($request->all())->save();
+        $user->fill($request->all())->save();
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
     }
