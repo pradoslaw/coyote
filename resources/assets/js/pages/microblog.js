@@ -56,6 +56,10 @@ $(function () {
                 .complete(function () {
                     $this.removeClass('loader');
                     $this.text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']));
+
+                    // jezeli wpis jest w sekcji "popularne wpisy" to tam tez nalezy oznaczyc, ze
+                    // wpis jest "lubiany"
+                    $('a[href="' + $this.attr('href') + '"]').not($this).toggleClass('thumbs-on', $this.hasClass('thumbs-on')).text($this.text());
                 });
 
             return false;
