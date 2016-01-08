@@ -6,19 +6,14 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
-use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Alert\Alert as Alerts;
-use Coyote\Alert\Providers\Microblog\Subscriber as Alert_Subscriber;
-use Coyote\Alert\Providers\Microblog\Login as Alert_Login;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Stream\Objects\Comment as Stream_Comment;
-use Coyote\Stream\Actor as Stream_Actor;
-use Coyote\Stream\Stream as Stream_Activity;
+use Coyote\Microblog\Subscriber;
 
 class CommentController extends Controller
 {
@@ -33,29 +28,15 @@ class CommentController extends Controller
     private $user;
 
     /**
-     * @var Alert
-     */
-    private $alert;
-
-    /**
-     * @var Stream
-     */
-    private $stream;
-
-    /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
      *
      * @param Microblog $microblog
      * @param User $user
-     * @param Alert $alert
-     * @param Stream $stream
      */
-    public function __construct(Microblog $microblog, User $user, Alert $alert, Stream $stream)
+    public function __construct(Microblog $microblog, User $user)
     {
         $this->microblog = $microblog;
         $this->user = $user;
-        $this->alert = $alert;
-        $this->stream = $stream;
     }
 
     /**
@@ -85,21 +66,12 @@ class CommentController extends Controller
 
         $microblog->fill($data);
 
+        // we need to get parent entry only for notification
         $parent = $this->microblog->find($microblog->parent_id);
 
-        $object = new Stream_Comment();
-        $target = (new Stream_Microblog())->map($parent);
-        $actor = new Stream_Actor($user);
-        $alert = new Alert_Subscriber($this->alert);
-        $stream = new Stream_Activity($this->stream);
+        $isSubscribed = false;
 
-        if (!$id) {
-            $activity = new Stream_Create($actor, $object, $target);
-        } else {
-            $activity = new Stream_Update($actor, $object, $target);
-        }
-
-        \DB::transaction(function () use ($id, &$microblog, $activity, $alert, $stream, $object, $user, $parent) {
+        \DB::transaction(function () use ($id, &$microblog, $user, $parent, &$isSubscribed) {
             $microblog->save();
 
             // we need to parse text first (and store it in cache)
@@ -123,7 +95,9 @@ class CommentController extends Controller
 
                 if ($subscribers) {
                     // new comment. should we send a notification?
-                    $alert->attach((new Alert_Subscriber($this->alert, $alertData))->setUsersId($subscribers));
+                    $alert->attach(
+                        app()->make('Alert\Microblog\Subscriber')->with($alertData)->setUsersId($subscribers)
+                    );
                 }
 
                 $ref = new Ref_Login();
@@ -131,28 +105,51 @@ class CommentController extends Controller
                 $usersId = $ref->grab($microblog->text);
 
                 if ($usersId) {
-                    $alert->attach((new Alert_Login($this->alert, $alertData))->setUsersId($usersId));
+                    $alert->attach(app()->make('Alert\Microblog\Login')->with($alertData))->setUsersId($usersId);
                 }
 
                 // send a notify
                 $alert->notify();
+
+                // now we can add user to subscribers list (if he's not in there yet)
+                // after that he will receive notification about other users comments
+                if (!in_array($user->id, $subscribers)) {
+                    $count = $this->microblog->where('parent_id', $parent->id)->where('user_id', $user->id)->count();
+
+                    if ($count == 1) {
+                        Subscriber::insert(['microblog_id' => $parent->id, 'user_id' => $user->id]);
+                        $isSubscribed = true;
+                    }
+                } else {
+                    $isSubscribed = true;
+                }
+
+                $activity = Stream_Create::class;
+            } else {
+                $activity = Stream_Update::class;
             }
 
             $ref = new Ref_Hash();
             $this->microblog->setTags($microblog->id, $ref->grab($microblog->text));
 
             // map microblog object into stream activity object
-            $object->map($microblog);
+            $object = (new Stream_Comment())->map($microblog);
+            $target = (new Stream_Microblog())->map($parent);
 
             // put item into stream activity
-            $stream->add($activity);
+            stream($activity, $object, $target);
         });
 
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
             $microblog->$key = $user->$key;
         }
 
-        return view('microblog.comment')->with('comment', $microblog)->with('microblog', ['id' => $microblog->parent_id]);
+        $view = view('microblog.comment', ['comment' => $microblog, 'microblog' => ['id' => $microblog->parent_id]]);
+
+        return response()->json([
+            'html' => $view->render(),
+            'subscribe' => (int) $isSubscribed
+        ]);
     }
 
     /**
@@ -186,8 +183,7 @@ class CommentController extends Controller
             $object = (new Stream_Comment())->map($microblog);
             $target = (new Stream_Microblog())->map($parent);
 
-            $delete = new Stream_Delete(new Stream_Actor(auth()->user()), $object, $target);
-            (new Stream_Activity($this->stream))->add($delete);
+            stream(Stream_Delete::class, $object, $target);
         });
     }
 

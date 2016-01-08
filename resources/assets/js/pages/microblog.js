@@ -167,12 +167,16 @@ $(function () {
 
             $input.attr('disabled', 'disabled');
 
-            $.post($form.attr('action'), data, function(html) {
-                $(html).hide().insertBefore($form).fadeIn(800);
+            $.post($form.attr('action'), data, function(json) {
+                $(json.html).hide().insertBefore($form).fadeIn(800);
                 $input.val('');
+
+                if (json.subscribe) {
+                    $('#entry-' + $('input[name="parent_id"]', $form).val()).find('.btn-subscribe').addClass('subscribe-on');
+                }
             })
-                .always(function() {
-                    $input.removeAttr('disabled');
+            .always(function() {
+                $input.removeAttr('disabled');
             });
 
             return false;
@@ -204,8 +208,8 @@ $(function () {
                         var data = $form.serialize();
                         $input.attr('disabled', 'disabled');
 
-                        $.post($this.attr('href'), data, function(html) {
-                            $('#comment-' + $this.data('id')).replaceWith(html);
+                        $.post($this.attr('href'), data, function(json) {
+                            $('#comment-' + $this.data('id')).replaceWith(json.html);
                             delete comments[$this.data('id')];
                         })
                             .always(function() {
