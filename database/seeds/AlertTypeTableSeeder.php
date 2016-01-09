@@ -75,7 +75,7 @@ class AlertTypeTableSeeder extends Seeder
                       'profile'  => true,
                       'email'    => false
         ]);
-        Type::create(['id'       => Alert::TOPIC_SOLVED,
+        Type::create(['id'       => Alert::POST_ACCEPT,
                       'name'     => 'Powiadamiaj jeżeli Twoja odpowiedź zostanie zaakceptowana przez autora wątku',
                       'headline' => 'Twoja odpowiedź została zaakceptowana',
                       'profile'  => true,
