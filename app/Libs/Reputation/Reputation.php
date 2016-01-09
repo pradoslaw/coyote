@@ -133,12 +133,10 @@ abstract class Reputation implements ReputationInterface
         }
 
         if ($this->getValue()) {
-            $this->setValue($this->isPositive() ? $this->getValue() : -$this->getValue());
-
             $this->reputation->create([
                 'type_id'           => $this->typeId,
                 'user_id'           => $this->getUserId(),
-                'value'             => $this->getValue(),
+                'value'             => $this->isPositive() ? $this->getValue() : -$this->getValue(),
                 'excerpt'           => $this->getExcerpt(),
                 'url'               => $this->getUrl(),
                 'metadata'          => $this->getMetadata()

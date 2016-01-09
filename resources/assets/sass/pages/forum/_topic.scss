@@ -328,6 +328,10 @@
   margin-top: 10px;
 }
 
+.vote-accept.on {
+  color: $brand-primary;
+}
+
 div.tooltip-inner {
   font-size: 11px;
 }

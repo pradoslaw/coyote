@@ -83,8 +83,9 @@
   strong {
     font-weight: normal;
     font-size: 11px;
-    padding: 3px 0 0 0;
+    padding: 1px 0 0 0;
     display: block;
+    clear: left;
   }
 
   > .tag-clouds {
@@ -100,6 +101,11 @@
         padding: 2px 6px;
       }
     }
+  }
+
+  .btn-accepted {
+    float: left;
+    margin-right: 3px;
   }
 }
 

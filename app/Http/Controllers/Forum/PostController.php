@@ -7,6 +7,7 @@ use Coyote\Forum\Reason;
 use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Subscriber;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Contracts\Post\AcceptRepositoryInterface as Accept;
 use Coyote\Repositories\Contracts\Post\VoteRepositoryInterface as Vote;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
@@ -16,6 +17,7 @@ use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Activities\Restore as Stream_Restore;
 use Coyote\Stream\Activities\Vote as Stream_Vote;
+use Coyote\Stream\Activities\Accept as Stream_Accept;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
@@ -301,6 +303,11 @@ class PostController extends BaseController
         }
     }
 
+    /**
+     * @param $id
+     * @param Vote $vote
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function vote($id, Vote $vote)
     {
         if (auth()->guest()) {
@@ -315,12 +322,12 @@ class PostController extends BaseController
 
         $forum = $this->forum->find($post->forum_id);
         if ($forum->is_locked) {
-            return response()->json(['error' => 'Forum jest zablokowane.']);
+            return response()->json(['error' => 'Forum jest zablokowane.'], 500);
         }
 
         $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject']);
         if ($topic->is_locked) {
-            return response()->json(['error' => 'Wątek jest zablokowany.']);
+            return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
         }
 
         \DB::transaction(function () use ($post, $topic, $forum, $vote) {
@@ -359,7 +366,7 @@ class PostController extends BaseController
                     ->setIsPositive(!count($result))
                     ->setUrl($url)
                     ->setPostId($post->id)
-                    ->setExcerpt(excerpt($post->text))
+                    ->setExcerpt($excerpt)
                     ->save();
             }
 
@@ -368,5 +375,106 @@ class PostController extends BaseController
         });
 
         return response()->json(['count' => $post->score]);
+    }
+
+    public function accept($id, Accept $accept)
+    {
+        if (auth()->guest()) {
+            return response()->json(['error' => 'Musisz być zalogowany, aby zaakceptować ten post.'], 500);
+        }
+
+        // user wants to accept this post...
+        $post = $this->post->findOrFail($id);
+        // post belongs to this topic:
+        $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject', 'first_post_id']);
+
+        if ($topic->is_locked) {
+            return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
+        }
+
+        $forum = $this->forum->find($post->forum_id);
+        if ($forum->is_locked) {
+            return response()->json(['error' => 'Forum jest zablokowane.'], 500);
+        }
+
+        if (Gate::denies('update', $forum)
+            && $this->post->find($topic->first_post_id, ['user_id'])->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Możesz zaakceptować post tylko we własnym wątku.'], 500);
+        }
+
+        \DB::transaction(function () use ($accept, $topic, $post, $forum) {
+            $result = $accept->findWhere(['topic_id' => $topic->id])->first();
+
+            // build url to post
+            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+            // excerpt of post text. used in reputation and alert
+            $excerpt = excerpt($post->text);
+
+            // add or subtract reputation points
+            $reputation = app()->make('Reputation\Post\Accept');
+
+            // user might change his mind and accept different post (or he can uncheck solved post)
+            if ($result) {
+                $reputation->setUrl($url . '?p=' . $result->post_id . '#id' . $result->post_id);
+                $reputation->setExcerpt($excerpt);
+
+                // reverse reputation points
+                if ($forum->enable_reputation) {
+                    $reputation->setIsPositive(false)->setPostId($result->post_id);
+
+                    if ($result->post_id !== $post->id) {
+                        $old = $this->post->find($result->post_id, ['user_id', 'text']);
+                        $reputation->setExcerpt(excerpt($old->text));
+
+                        if ($old->user_id !== $result->user_id) {
+                            $reputation->setUserId($old->user_id)->save();
+                        }
+                    } elseif ($result->user_id !== $post->user_id) {
+                        // reverse reputation points for post author
+                        $reputation->setUserId($post->user_id)->save(); // <-- don't change this. ($post->user_id)
+                    }
+                }
+
+                $accept->delete($result->id);
+            }
+
+            $reputation->setExcerpt($excerpt);
+            $url .= '?p=' . $post->id . '#id' . $post->id;
+
+            if (!$result || $post->id !== $result->post_id) {
+                $reputation->setUrl($url);
+
+                if ($post->user_id) {
+                    // before we add reputation points we need to be sure that user does not accept his own post
+                    if ($post->user_id !== auth()->id()) {
+                        if ($forum->enable_reputation) {
+                            // increase reputation points for author
+                            $reputation->setIsPositive(true)->setPostId($post->id)->setUserId($post->user_id)->save();
+                        }
+
+                        // send notification to the user
+                        app()->make('Alert\Post\Accept')
+                            ->setPostId($post->id)
+                            ->addUserId($post->user_id)
+                            ->setSubject(excerpt($topic->subject, 48))
+                            ->setExcerpt($excerpt)
+                            ->setSenderId(auth()->id())
+                            ->setSenderName(auth()->user()->name)
+                            ->setUrl($url)
+                            ->notify();
+                    }
+                }
+
+                $accept->create([
+                    'post_id'   => $post->id,
+                    'topic_id'  => $topic->id,
+                    'user_id'   => auth()->id(), // don't change this. we need to know who accepted this post
+                    'ip'        => request()->ip()
+                ]);
+            }
+
+            // add into activity stream
+            stream(Stream_Accept::class, (new Stream_Post(['url' => $url]))->map($post));
+        });
     }
 }

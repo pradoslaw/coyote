@@ -65,6 +65,7 @@ class AlertServiceProvider extends ServiceProvider
             'Alert\Post\Subscriber',
             'Alert\Post\Comment\Login',
             'Alert\Post\Vote',
+            'Alert\Post\Accept',
 
             'Alert\Topic\Subscriber',
             'Alert\Topic\Delete'

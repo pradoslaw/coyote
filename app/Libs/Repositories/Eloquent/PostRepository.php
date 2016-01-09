@@ -42,12 +42,14 @@ class PostRepository extends Repository implements PostRepositoryInterface
                         editor.name AS editor_is_active,
                         editor.name AS editor_is_blocked,
                         groups.name AS group_name,
-                        sessions.updated_at AS session_updated_at'
+                        sessions.updated_at AS session_updated_at,
+                        pa.user_id AS accept_on'
                     )
                     ->leftJoin('sessions', 'sessions.user_id', '=', 'posts.user_id')
                     ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
                     ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
                     ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
+                    ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')
                     ->orderBy('posts.id')
                     ->orderBy('sessions.updated_at', 'DESC');
 
@@ -77,7 +79,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
-     * Take X posts from topic. IMPORTANT: first post of topic will be always fetched
+     * Take X posts from topic. IMPORTANT: first post of topic will always be fetched
      *
      * @param int $topicId
      * @param int $postId   First post ID (in thread)
@@ -92,7 +94,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
         $this->applyCriteria();
         $sql = $this->prepare($userId)
-                    ->where('topic_id', $topicId)
+                    ->where('posts.topic_id', $topicId)
                     ->where('posts.id', '<>', $postId)
                     ->forPage($page, $perPage)
                     ->get()

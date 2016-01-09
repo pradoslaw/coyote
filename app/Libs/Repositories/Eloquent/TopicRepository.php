@@ -51,7 +51,8 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         'poster.photo AS poster_photo',
                         'forums.path AS forum_path',
                         'forums.name AS forum_name',
-                        'prev.name AS prev_forum_name'
+                        'prev.name AS prev_forum_name',
+                        'pa.post_id AS post_accept_id'
                     ])
                     ->join('forums', 'forums.id', '=', 'topics.forum_id')
                     ->leftJoin('forums AS prev', 'prev.id', '=', 'prev_forum_id')
@@ -77,6 +78,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                             $join->on('topic_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
                         }
                     })
+                    ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
                     ->with('tags')
                     ->orderBy('is_sticky', 'DESC')
                     ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id']);

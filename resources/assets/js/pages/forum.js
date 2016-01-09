@@ -169,8 +169,26 @@ $(function () {
             $this.toggleClass('on');
             $this.prev().text(json.count);
         })
-            .error(function() {
+            .error(function(event) {
+                if (typeof event.responseJSON.error !== 'undefined') {
+                    error(event.responseJSON.error);
+                }
+            });
 
+        return false;
+    });
+
+    $('.vote-accept[href]').click(function() {
+        var $this = $(this);
+
+        $.post($this.attr('href'), function() {
+            $this.toggleClass('on');
+            $('.vote-accept').not($this).removeClass('on');
+        })
+            .error(function(event) {
+                if (typeof event.responseJSON.error !== 'undefined') {
+                    error(event.responseJSON.error);
+                }
             });
 
         return false;

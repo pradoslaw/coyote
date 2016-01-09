@@ -60,6 +60,12 @@
 
                             <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view {{ topic.unread ? 'unread' }}" href="{{ url }}?view=unread"></a>
 
+                            {% if topic.post_accept_id %}
+                                <a rel="nofollow" title="Zobacz zaakceptowaną odpowiedź" class="btn-accepted" href="{{ url }}?p={{ topic.post_accept_id }}#id{{ topic.post_accept_id }}">
+                                    <i class="fa fa-check"></i>
+                                </a>
+                            {% endif %}
+
                             <h5>
                                 <a title="{{ topic.subject }}" href="{{ url }}">{{ topic.subject }}</a>
                             </h5>

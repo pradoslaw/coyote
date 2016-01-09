@@ -16,7 +16,7 @@ class Alert extends Model
     const COMMENT = 8;
     const POST_EDIT = 10;
     const TOPIC_SUBJECT = 11;
-    const TOPIC_SOLVED = 12;
+    const POST_ACCEPT = 12;
     const POST_COMMENT_LOGIN = 13;
     const POST_LOGIN = 14;
     const MICROBLOG = 15;
