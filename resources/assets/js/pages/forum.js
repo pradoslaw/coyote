@@ -121,6 +121,22 @@ $(function () {
         return false;
     });
 
+    $('#btn-lock a').click(function() {
+        var $this = $(this);
+
+        $.post($this.attr('href'), function() {
+            $this.parent().toggleClass('on');
+            $this.text($this.parent().hasClass('on') ? 'Odblokuj wątek' : 'Zablokuj wątek');
+        })
+        .error(function(event) {
+            if (typeof event.responseJSON.error !== 'undefined') {
+                error(event.responseJSON.error);
+            }
+        });
+
+        return false;
+    });
+
     /**
      * Subscribe/unsubscribe topic (from topics list)
      */

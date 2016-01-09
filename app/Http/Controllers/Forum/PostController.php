@@ -50,11 +50,11 @@ class PostController extends BaseController
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
         if ($post === null) {
-            $this->breadcrumb->push('Odpowiedz', request()->path());
+            $this->breadcrumb->push('Odpowiedz', url(request()->path()));
         } else {
             // make sure user can edit this post
             $this->authorize('update', [$post, $forum]);
-            $this->breadcrumb->push('Edycja', request()->path());
+            $this->breadcrumb->push('Edycja', url(request()->path()));
 
             if ($post->id === $topic->first_post_id) {
                 // get topic tags only if this post is the FIRST post in topic
@@ -325,7 +325,7 @@ class PostController extends BaseController
             return response()->json(['error' => 'Forum jest zablokowane.'], 500);
         }
 
-        $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject']);
+        $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject', 'is_locked']);
         if ($topic->is_locked) {
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
         }
@@ -386,7 +386,7 @@ class PostController extends BaseController
         // user wants to accept this post...
         $post = $this->post->findOrFail($id);
         // post belongs to this topic:
-        $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject', 'first_post_id']);
+        $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject', 'first_post_id', 'is_locked']);
 
         if ($topic->is_locked) {
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);

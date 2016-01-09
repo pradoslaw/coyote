@@ -62,6 +62,10 @@
   content: $fa-var-lock;
 }
 
+#btn-lock.on:before {
+  content: $fa-var-unlock;
+}
+
 #btn-move:before {
   content: $fa-var-arrow-circle-right;
 }

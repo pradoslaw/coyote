@@ -154,10 +154,12 @@
                     </a>
 
                     {% if auth_check() %}
-                        <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-xs btn-comment" href="#form-{{ post.id }}">
-                            <i class="fa fa-comment-o"></i>
-                            <span class="hidden-xs">Komentuj</span>
-                        </a>
+                        {% if is_writeable %}
+                            <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-xs btn-comment" href="#form-{{ post.id }}">
+                                <i class="fa fa-comment-o"></i>
+                                <span class="hidden-xs">Komentuj</span>
+                            </a>
+                        {% endif %}
 
                         <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" href="javascript:" class="btn btn-xs btn-report" data-url="{{ url }}" data-post-id="{{ post.id }}">
                             <i class="fa fa-flag"></i>

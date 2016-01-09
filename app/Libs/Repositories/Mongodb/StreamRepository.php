@@ -52,6 +52,9 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
         $result = $this->model->whereIn('object.objectType', $this->toArray($objects));
 
         if ($id) {
+            if (!is_array($id)) {
+                $id = [$id];
+            }
             $result->whereIn('object.id', $id);
         }
 

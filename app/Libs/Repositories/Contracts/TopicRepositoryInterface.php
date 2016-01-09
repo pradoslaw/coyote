@@ -60,4 +60,12 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function isUnread($forumId, $markTime, $userId, $sessionId);
+
+    /**
+     * Lock/unlock topic
+     *
+     * @param int $topicId
+     * @param bool $flag
+     */
+    public function lock($topicId, $flag);
 }

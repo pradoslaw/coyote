@@ -34,6 +34,17 @@ class ForumWrite
             }
         }
 
+        $topic = $request->route('topic');
+        if (!empty($topic)) {
+            if ($topic->is_locked && !Gate::allows('update', $forum)) {
+                if ($request->ajax()) {
+                    return response('Unauthorized.', 401);
+                } else {
+                    abort(401, 'Unauthorized');
+                }
+            }
+        }
+
         return $next($request);
     }
 }

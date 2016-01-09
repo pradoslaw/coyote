@@ -189,7 +189,7 @@ class CommentController extends Controller
             abort(401, 'Unauthorized');
         }
 
-        $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'path', 'subject']);
+        $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'path', 'subject', 'is_locked']);
 
         // Only moderators can delete this post if topic (or forum) was locked
         if (Gate::denies('delete', $forum)) {

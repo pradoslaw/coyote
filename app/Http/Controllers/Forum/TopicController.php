@@ -12,6 +12,8 @@ use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Stream\Activities\Create as Stream_Create;
+use Coyote\Stream\Activities\Lock as Stream_Lock;
+use Coyote\Stream\Activities\Unlock as Stream_Unlock;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
@@ -149,6 +151,11 @@ class TopicController extends BaseController
             $reasonList = Reason::lists('name', 'id');
         }
 
+        // if topic is locked we need to fetch information when and by whom
+        if ($topic->is_locked) {
+            $lock = $this->stream->findByObject('Topic', $topic->id, 'Lock')->last();
+        }
+
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
@@ -157,7 +164,7 @@ class TopicController extends BaseController
         $forumList = $this->forum->forumList();
 
         return $this->view('forum.topic', ['markTime' => $topicMarkTime ? $topicMarkTime : $forumMarkTime])->with(
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'lock')
         );
     }
 
@@ -283,5 +290,25 @@ class TopicController extends BaseController
         }
 
         return view('components.prompt')->with('users', $user->lookupName($request['q'], array_unique($usersId)));
+    }
+
+    /**
+     * @param int $id
+     */
+    public function lock($id)
+    {
+        $topic = $this->topic->findOrFail($id);
+        $forum = $this->forum->find($topic->forum_id);
+
+        $this->authorize('lock', $forum);
+
+        \DB::transaction(function () use ($id, $topic, $forum) {
+            $this->topic->lock($id, !$topic->is_locked);
+
+            stream(
+                $topic->is_locked ? Stream_Unlock::class : Stream_Lock::class,
+                (new Stream_Topic())->map($topic, $forum)
+            );
+        });
     }
 }

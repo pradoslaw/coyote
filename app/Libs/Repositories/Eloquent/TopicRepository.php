@@ -206,4 +206,15 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
 
         return $sql->count();
     }
+
+    /**
+     * Lock/unlock topic
+     *
+     * @param int $topicId
+     * @param bool $flag
+     */
+    public function lock($topicId, $flag)
+    {
+        $this->update(['is_locked' => $flag], $topicId);
+    }
 }
