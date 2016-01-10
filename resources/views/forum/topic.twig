@@ -156,7 +156,11 @@
 
                             <ul id="collapse-sub" class="collapse">
                                 {% for path, name in forumList %}
-                                    <li><a href="{{ path }}">{{ name|raw }}</a></li>
+                                    {% if path == forum.path %}
+                                        <li><a style="color: #ccc">{{ name|raw }}</a></li>
+                                    {% else %}
+                                        <li><a data-path="{{ path }}" href="{{ route('forum.move', [topic.id]) }}">{{ name|raw }}</a></li>
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
                         </li>
@@ -175,6 +179,7 @@
     {% if auth_check() %}
         {{ modals.confirm('Post zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'post-confirm-delete') }}
         {{ modals.confirm('Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'comment-confirm-delete') }}
+        {{ modals.confirm('Czy na pewno chcesz przenieść wątek do innej kategorii?', 'Czy chcesz przenieść?', 'confirm-move', 'Tak, przenieś') }}
         {{ modals.alert('Wystąpił błąd podczas działania programu.') }}
     {% endif %}
 

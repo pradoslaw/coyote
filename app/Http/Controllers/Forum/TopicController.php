@@ -14,6 +14,7 @@ use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Lock as Stream_Lock;
 use Coyote\Stream\Activities\Unlock as Stream_Unlock;
+use Coyote\Stream\Activities\Move as Stream_Move;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
@@ -142,7 +143,7 @@ class TopicController extends BaseController
 
             // here we go. if user has delete ability, for sure he/she would like to know
             // why posts were deleted and by whom
-            $collection = $this->stream->findByObject('Post', $posts->pluck('id'), 'Delete');
+            $collection = $this->stream->findByObject('Post', $posts->pluck('id')->toArray(), 'Delete');
 
             foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
                 $activities[$row->first()['object.id']] = $row->first();
@@ -315,5 +316,72 @@ class TopicController extends BaseController
                 (new Stream_Topic())->map($topic, $forum)
             );
         });
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function move($id, Request $request)
+    {
+        $this->validate($request, [
+            'path' => 'required|exists:forums',
+            'reason' => 'sometimes|int|exists:forum_reasons,id'
+        ]);
+
+        $topic = $this->topic->findOrFail($id);
+        $old = $this->forum->find($topic->forum_id);
+
+        $this->authorize('move', $old);
+        $forum = $this->forum->findBy('path', $request->get('path'));
+
+        if (!$forum->userCanAccess(auth()->id())) {
+            abort(401);
+        }
+
+        \DB::transaction(function () use ($topic, $forum, $old, $request) {
+            $reason = null;
+
+            $notification = [
+                'sender_id'   => auth()->id(),
+                'sender_name' => auth()->user()->name,
+                'subject'     => excerpt($topic->subject, 48),
+                'forum'       => $forum->name
+            ];
+
+            if ($request->has('reason')) {
+                $reason = Reason::find($request->get('reason'));
+
+                $notification = array_merge($notification, [
+                    'excerpt'       => $reason->name,
+                    'reasonName'    => $reason->name,
+                    'reasonText'    => $reason->description
+                ]);
+            }
+
+            $topic->forum_id = $forum->id;
+            $topic->save();
+
+            $object = (new Stream_Topic())->map($topic, $old);
+
+            if (!empty($reason)) {
+                $object->reasonName = $reason->name;
+            }
+
+            $post = $this->post->find($topic->first_post_id, ['user_id']);
+
+            if ($post->user_id) {
+                app()->make('Alert\Topic\Move')
+                    ->with($notification)
+                    ->setUrl($object->url)
+                    ->setUserId($post->user_id)
+                    ->notify();
+            }
+
+            stream(Stream_Move::class, $object, (new Stream_Forum())->map($forum));
+        });
+
+        return redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path]);
     }
 }

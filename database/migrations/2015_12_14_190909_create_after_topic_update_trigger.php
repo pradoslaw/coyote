@@ -14,8 +14,6 @@ class CreateAfterTopicUpdateTrigger extends Migration
     {
         DB::unprepared('
 CREATE FUNCTION after_topic_update() RETURNS trigger LANGUAGE plpgsql AS $$
-DECLARE
-	postCount INTEGER;
 BEGIN
 	IF OLD.deleted_at IS NULL AND NEW.deleted_at IS NOT NULL THEN -- kasowanie watku
 		UPDATE posts SET deleted_at = NOW() WHERE topic_id = OLD."id" AND deleted_at IS NULL;
@@ -28,33 +26,6 @@ BEGIN
 
 		UPDATE forums SET topics = (topics + 1), last_post_id = get_forum_last_post_id(OLD.forum_id) WHERE "id" = NEW.forum_id;
 	END IF;
-
-
- 	IF NEW.forum_id != OLD.forum_id THEN
- 		NEW.prev_forum_id = OLD.forum_id;
-
- 		UPDATE posts SET forum_id = NEW.forum_id WHERE topic_id = OLD."id";
- 		UPDATE topic_track SET forum_id = NEW.forum_id WHERE topic_id = OLD."id";
-
- 		postCount = (SELECT COUNT("id") FROM posts WHERE topic_id = NEW."id" AND deleted_at IS NOT NULL);
-
-		IF OLD.deleted_at IS NULL THEN
-	 		UPDATE forums
-	 		SET topics = topics -1, posts = posts - postCount, last_post_id = get_forum_last_post_id(OLD.forum_id)
-	 		WHERE "id" = OLD.forum_id;
-
-	 		UPDATE forums
-	 		SET topics = topics +1, posts = posts + postCount, last_post_id = get_forum_last_post_id(NEW.forum_id)
-	 		WHERE "id" = NEW.forum_id;
-	 	END IF;
-
-		UPDATE post_votes SET forum_id = NEW.forum_id
-		WHERE post_id IN(
-			SELECT "id"
-			FROM posts
-			WHERE topic_id = NEW."id"
-		);
- 	END IF;
 
 	RETURN NEW;
 END;$$;

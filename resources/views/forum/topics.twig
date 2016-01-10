@@ -66,6 +66,10 @@
                                 </a>
                             {% endif %}
 
+                            {% if topic.prev_forum_name %}
+                                <span class="label-move" title="Wątek przeniesiony z {{ topic.prev_forum_name }}">[» {{ topic.prev_forum_name }}]</span>
+                            {% endif %}
+
                             <h5>
                                 <a title="{{ topic.subject }}" href="{{ url }}">{{ topic.subject }}</a>
                             </h5>

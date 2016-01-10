@@ -137,6 +137,25 @@ $(function () {
         return false;
     });
 
+    $('#btn-move ul a').click(function() {
+        var $this = $(this);
+
+        $('#confirm-move').modal('show').one('click', '.danger', function() {
+            $(this).attr('disabled', 'disabled').text('Przenoszenie...');
+            var modal = $(this).parents('.modal-content');
+
+            var form = toPost($this.attr('href'));
+            if ($('select', modal).length) {
+                form.append('<input type="hidden" name="reason" value="' + $('select', modal).val() + '">');
+            }
+
+            form.append('<input type="hidden" name="path" value="' + $this.data('path') + '">');
+            form.submit();
+        });
+
+        return false;
+    });
+
     /**
      * Subscribe/unsubscribe topic (from topics list)
      */
@@ -327,7 +346,7 @@ $(function () {
             select.append('<option value="' + key + '">' + value + '</option>');
         });
 
-        $('#post-confirm-delete').each(function() {
+        $('#post-confirm-delete, #confirm-move').each(function() {
             select.appendTo($('.modal-body', this));
         });
     }

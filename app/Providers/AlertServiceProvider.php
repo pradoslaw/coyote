@@ -68,7 +68,8 @@ class AlertServiceProvider extends ServiceProvider
             'Alert\Post\Accept',
 
             'Alert\Topic\Subscriber',
-            'Alert\Topic\Delete'
+            'Alert\Topic\Delete',
+            'Alert\Topic\Move'
         ];
     }
 }

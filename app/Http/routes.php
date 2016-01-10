@@ -52,6 +52,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Topic/Lock/{id}', ['uses' => 'TopicController@lock', 'as' => 'lock', 'middleware' => 'auth']);
     // podpowiadanie nazwy uzytkownika (w kontekscie danego watku)
     Route::get('Topic/Prompt/{id}', ['uses' => 'TopicController@prompt', 'as' => 'prompt']);
+    // przeniesienie watku do innej kategorii
+    Route::post('Topic/Move/{id}', ['uses' => 'TopicController@move', 'as' => 'move']);
 
     // widok kategorii forum
     Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);
@@ -62,7 +64,9 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Post/Delete/{id}', ['uses' => 'PostController@delete', 'as' => 'post.delete', 'middleware' => 'auth']);
     // obserwowanie posta
     Route::post('Post/Subscribe/{id}', ['uses' => 'PostController@subscribe', 'as' => 'post.subscribe', 'middleware' => 'auth']);
+    // glosowanie na dany post
     Route::post('Post/Vote/{id}', ['uses' => 'PostController@vote', 'as' => 'post.vote']);
+    // akceptowanie danego posta jako poprawna odpowiedz w watku
     Route::post('Post/Accept/{id}', ['uses' => 'PostController@accept', 'as' => 'post.accept']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
