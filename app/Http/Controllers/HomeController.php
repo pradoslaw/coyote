@@ -18,7 +18,7 @@ class HomeController extends Controller
 
         Debugbar::startMeasure('stream', 'Stream activities');
         // tymczasowo naglowki tylko dla mikroblogow, a nie dla forum
-        $activities = $stream->take(10, 0, ['Topic', 'Post', 'Comment'], ['Create', 'Update']);
+        $activities = $stream->take(10, 0, ['Topic', 'Post', 'Comment'], ['Create', 'Update'], ['Forum', 'Post', 'Topic']);
         Debugbar::stopMeasure('stream');
 
         return view('home', [

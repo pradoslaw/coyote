@@ -25,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
         Validator::replacer('tag_creation', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);
         });
+
+        // show mongodb queries in laravel debugbar
+        \DB::connection('mongodb')->enableQueryLog();
     }
 
     /**

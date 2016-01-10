@@ -19,9 +19,10 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
      * @param int $offset
      * @param array $objects
      * @param array $verbs
+     * @param array $targets
      * @return mixed
      */
-    public function take($limit, $offset = 0, $objects = [], $verbs = [])
+    public function take($limit, $offset = 0, $objects = [], $verbs = [], $targets = [])
     {
         $result = $this->model
                 ->orderBy('_id', 'DESC')
@@ -34,6 +35,10 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
 
         if ($verbs) {
             $result->whereIn('verb', $this->toArray($verbs));
+        }
+
+        if ($targets) {
+            $result->whereIn('target.objectType', $this->toArray($targets));
         }
 
         return $result->get();

@@ -11,9 +11,10 @@ interface StreamRepositoryInterface extends RepositoryInterface
      * @param int $offset
      * @param array $objects
      * @param array $verbs
+     * @param array $targets
      * @return mixed
      */
-    public function take($limit, $offset = 0, $objects = [], $verbs = []);
+    public function take($limit, $offset = 0, $objects = [], $verbs = [], $targets = []);
 
     /**
      * Find activities by object, id and actions (verbs)

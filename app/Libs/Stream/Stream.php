@@ -58,11 +58,12 @@ class Stream
      * @param int $offset
      * @param array $objects
      * @param array $verbs
+     * @param array $targets
      * @return array
      */
-    public function take($limit, $offset = 0, $objects = [], $verbs = [])
+    public function take($limit, $offset = 0, $objects = [], $verbs = [], $targets = [])
     {
-        $collection = $this->model->take($limit, $offset, $objects, $verbs);
+        $collection = $this->model->take($limit, $offset, $objects, $verbs, $targets);
         return $this->decorate($collection);
     }
 }
