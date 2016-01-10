@@ -157,6 +157,28 @@ $(function () {
     });
 
     /**
+     * Mark category/categories as read
+     */
+    $('.btn-mark-read a').click(function() {
+        $('.btn-view').removeClass('unread');
+        $('.ico').each(function() {
+            if ($(this).hasClass('new')) {
+                $(this).removeClass('new').addClass('normal');
+            }
+        });
+
+        return false;
+    });
+
+    /**
+     * Mark category/topic as read by clicking on it
+     */
+    $('.new').click(function() {
+        $(this).addClass('normal').removeClass('new');
+        $(this).parent().next().find('.btn-view').removeClass('unread');
+    });
+
+    /**
      * Subscribe/unsubscribe topic (from topics list)
      */
     $('.btn-watch-sm').click(function() {
