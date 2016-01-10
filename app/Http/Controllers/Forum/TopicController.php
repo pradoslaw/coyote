@@ -325,10 +325,13 @@ class TopicController extends BaseController
      */
     public function move($id, Request $request)
     {
-        $this->validate($request, [
-            'path' => 'required|exists:forums',
-            'reason' => 'sometimes|int|exists:forum_reasons,id'
-        ]);
+        $rules = ['path' => 'required|exists:forums'];
+
+        // it must be like that. only if reason has been chosen, we need to validate it.
+        if ($request->get('reason')) {
+            $rules['reason'] = 'int|exists:forum_reasons,id';
+        }
+        $this->validate($request, $rules);
 
         $topic = $this->topic->findOrFail($id);
         $old = $this->forum->find($topic->forum_id);
@@ -350,7 +353,7 @@ class TopicController extends BaseController
                 'forum'       => $forum->name
             ];
 
-            if ($request->has('reason')) {
+            if ($request->get('reason')) {
                 $reason = Reason::find($request->get('reason'));
 
                 $notification = array_merge($notification, [
@@ -382,6 +385,6 @@ class TopicController extends BaseController
             stream(Stream_Move::class, $object, (new Stream_Forum())->map($forum));
         });
 
-        return redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path]);
+        return redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path])->with('success', 'Wątek został przeniesiony');
     }
 }

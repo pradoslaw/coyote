@@ -172,7 +172,10 @@ class PostController extends BaseController
      */
     public function delete($id, Request $request)
     {
-        $this->validate($request, ['reason' => 'sometimes|int|exists:forum_reasons,id']);
+        // it must be like that. only if reason has been chosen, we need to validate it.
+        if ($request->get('reason')) {
+            $this->validate($request, ['reason' => 'int|exists:forum_reasons,id']);
+        }
 
         // Step 1. Does post really exist?
         $post = $this->post->withTrashed()->findOrFail($id);
@@ -207,7 +210,7 @@ class PostController extends BaseController
 
             $reason = null;
 
-            if ($request->has('reason')) {
+            if ($request->get('reason')) {
                 $reason = Reason::find($request->get('reason'));
 
                 $notification = array_merge($notification, [

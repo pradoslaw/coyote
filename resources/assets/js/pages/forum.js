@@ -362,7 +362,7 @@ $(function () {
      */
     if (typeof reasonsList !== 'undefined') {
         var select = $('<select>', {'class': 'form-control input-sm'});
-        select.append('<option>-- wybierz powód --</option>');
+        select.append('<option value="0">-- wybierz powód --</option>');
 
         $.each(reasonsList, function(key, value) {
             select.append('<option value="' + key + '">' + value + '</option>');
