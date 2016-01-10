@@ -217,4 +217,15 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     {
         $this->update(['is_locked' => $flag], $topicId);
     }
+
+    /**
+     * @param int $topicId
+     * @param int $value
+     */
+    public function addViews($topicId, $value = 1)
+    {
+        $this->model->timestamps = false;
+        $this->model->where('id', $topicId)->update(['views' => \DB::raw('views + ' . $value)]);
+        $this->model->timestamps = true;
+    }
 }

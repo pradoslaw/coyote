@@ -68,4 +68,10 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @param bool $flag
      */
     public function lock($topicId, $flag);
+
+    /**
+     * @param int $topicId
+     * @param int $value
+     */
+    public function addViews($topicId, $value = 1);
 }

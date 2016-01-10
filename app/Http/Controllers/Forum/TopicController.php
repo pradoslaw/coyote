@@ -156,6 +156,11 @@ class TopicController extends BaseController
             $lock = $this->stream->findByObject('Topic', $topic->id, 'Lock')->last();
         }
 
+        // increase topic views counter
+        if (\App::environment('local', 'dev')) {
+            $this->topic->addViews($topic->id);
+        }
+
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 

@@ -97,7 +97,10 @@
                                 {% endif %}
                                 <small>{{ declination(topic.replies, ['odpowiedź', 'odpowiedzi', 'odpowiedzi'], true) }}</small>
                             </p>
-                            <p title="Ilość wyświetleń"><strong>{{ topic.views }}</strong> <small>wyświetleń</small></p>
+                            <p title="Ilość wyświetleń">
+                                <strong>{{ topic.views }}</strong>
+                                <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
+                            </p>
                         </td>
                         <td class="col-last-post hidden-xs">
                             {% if auth_check() %}
