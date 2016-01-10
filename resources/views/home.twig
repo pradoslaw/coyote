@@ -141,15 +141,15 @@
             <section id="box-reputation" class="box">
                 <h4><i class="fa fa-star fa-fw"></i> Reputacja użytkowników</h4>
 
-                <ul class="nav nav-panel">
-                    <li role="presentation" class="active"><a href="#month" role="tab" data-toggle="tab">W tym miesiącu</a></li>
-                    <li role="presentation"><a href="#year" role="tab" data-toggle="tab">W tym roku</a></li>
-                    <li role="presentation"><a href="#total" role="tab" data-toggle="tab">Ogólnie</a></li>
+                <ul id="reputation-tabs" class="nav nav-panel">
+                    <li role="presentation" {{ settings['homepage.reputation'] == 0 ? 'class="active"' }}><a href="#month" role="tab" data-toggle="tab">W tym miesiącu</a></li>
+                    <li role="presentation" {{ settings['homepage.reputation'] == 1 ? 'class="active"' }}><a href="#year" role="tab" data-toggle="tab">W tym roku</a></li>
+                    <li role="presentation" {{ settings['homepage.reputation'] == 2 ? 'class="active"' }}><a href="#total" role="tab" data-toggle="tab">Ogólnie</a></li>
                 </ul>
 
                 <div class="panel panel-default tab-content">
                     {% for key, mode in reputation %}
-                        <div id="{{ key }}" role="tabpanel" class="panel-body tab-pane {{ loop.first ? 'active' }}">
+                        <div id="{{ key }}" role="tabpanel" class="panel-body tab-pane {{ settings['homepage.reputation'] == loop.index0 ? 'active' }}">
                             {% for item in mode %}
                                 <div class="media">
                                     <div class="media-left">
@@ -282,6 +282,11 @@
             $('#forum-tabs a').click(function() {
                 var index = $('#forum-tabs a').index(this);
                 $.post('{{ route('user.settings.ajax') }}', {'homepage_mode': index});
+            });
+
+            $('#reputation-tabs a').click(function() {
+                var index = $('#reputation-tabs a').index(this);
+                $.post('{{ route('user.settings.ajax') }}', {'homepage_reputation': index});
             });
         });
     </script>
