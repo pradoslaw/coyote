@@ -1,0 +1,17 @@
+{# powiadomienie o przeniesieniu watku #}
+{% extends 'emails/layout.twig' %}
+
+{% block container %}
+    Witaj,<br><br>
+
+    {{ sender }} przeniósł wątek <b>{{ subject }}</b> do kategorii <b>{{ forum }}</b> z powodu: {{ reason_name }}.<br><br>
+    Szczegóły:<br><br>
+
+    <hr>
+    {{ reason_text }}
+    <hr><br>
+
+    Link do wpisu: <a href="{{ url(url) }}">{{ url(url) }}</a><br><br>
+
+    <b>Prosimy nie odpowiadać na tego e-maila. Jest on generowany automatycznie.</b>
+{% endblock %}

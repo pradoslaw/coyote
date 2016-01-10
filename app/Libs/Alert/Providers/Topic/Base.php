@@ -45,7 +45,7 @@ abstract class Base extends Provider implements Alert\Providers\ProviderInterfac
      */
     public function getReasonName()
     {
-        return $this->reasonName;
+        return $this->reasonName ?: '(moderator nie podał powodu)';
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class Base extends Provider implements Alert\Providers\ProviderInterfac
      */
     public function getReasonText()
     {
-        return $this->reasonText;
+        return $this->reasonText ?: '(moderator nie podał powodu)';
     }
 
     /**
@@ -73,7 +73,7 @@ abstract class Base extends Provider implements Alert\Providers\ProviderInterfac
     }
 
     /**
-     * Generowanie unikalnego ciagu znakow dla wpisu na mikro
+     * Generowanie unikalnego ciagu znakow dla watku
      *
      * @return string
      */
