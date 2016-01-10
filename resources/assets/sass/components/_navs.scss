@@ -125,7 +125,10 @@
     }
   }
 
-  > li.active > a, > li.active > a:hover {
+  > li.active > a,
+  > li.active > a:hover,
+  > li.active > a:focus,
+  > li.active > a:active {
     background: transparent;
     color: $brand-primary;
     border-bottom: 2px solid $brand-primary;

@@ -4,15 +4,16 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
+use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Stream\Stream;
 use Debugbar;
 use Cache;
 
 class HomeController extends Controller
 {
-    public function index(Microblog $microblog, Reputation $reputation, Stream $stream)
+    public function index(Microblog $microblog, Reputation $reputation, Stream $stream, Setting $setting)
     {
-        $microblog->setUserId(auth()->check() ? auth()->user()->id : null);
+        $microblog->setUserId(auth()->id());
         $viewers = app('Session\Viewers');
 
         Debugbar::startMeasure('stream', 'Stream activities');
@@ -30,7 +31,8 @@ class HomeController extends Controller
                     'year'       => $reputation->yearly(),
                     'total'      => $reputation->total()
                 ];
-            })
+            }),
+            'settings'                  => $setting->getAll(auth()->id(), request()->session()->getId())
         ]);
     }
 }

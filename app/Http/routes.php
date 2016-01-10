@@ -183,6 +183,9 @@ Route::get('User/Confirm/Email', ['uses' => 'User\ConfirmController@email', 'as'
 Route::get('User/Vcard/{id}', ['uses' => 'User\VcardController@index', 'as' => 'user.vcard']);
 // zadanie AJAX z lista loginow (podpowiedzi)
 Route::get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'user.prompt']);
+// zapis ustawien do tabeli settings. moga to byc np. niestandardowe ustawienia takie jak
+// np. domyslna zakladka na stronie glownej
+Route::post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
 
 // dostep do panelu administracyjnego
 Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' => 'Adm'], function () {

@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Repositories\Contracts\SettingRepositoryInterface;
 use Coyote\User;
 use Coyote\Actkey;
 use Coyote\Group;
@@ -67,5 +68,17 @@ class SettingsController extends Controller
         $user->fill($request->all())->save();
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
+    }
+
+    public function ajax(SettingRepositoryInterface $setting)
+    {
+        $name = array_keys($_POST)[0];
+        $name = trim(strip_tags(htmlspecialchars($name)));
+
+        if (!empty($name)) {
+            $value = trim(strip_tags(htmlspecialchars(request()->get($name))));
+
+            $setting->setItem(str_replace('_', '.', $name), $value, auth()->id(), request()->session()->getId());
+        }
     }
 }
