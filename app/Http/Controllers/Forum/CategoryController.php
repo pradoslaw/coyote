@@ -27,9 +27,22 @@ class CategoryController extends BaseController
         // execute query: get all subcategories that user can has access to
         $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId(), $forum->id);
 
+        if ($request->has('perPage')) {
+            $perPage = max(10, min($request->get('perPage'), 50));
+        } else {
+            $perPage = 20;
+        }
+
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
-        $topics = $this->topic->paginate(auth()->id(), $request->getSession()->getId());
+        // get topics according to given criteria
+        $topics = $this->topic->paginate(
+            auth()->id(),
+            $request->getSession()->getId(),
+            'topics.last_post_id',
+            'DESC',
+            $perPage
+        );
 
         return parent::view('forum.category')->with(
             compact('forumList', 'forum', 'topics', 'sections')

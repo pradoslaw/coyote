@@ -67,6 +67,13 @@ $(function () {
     });
 
     /**
+     * Change limit of posts/topics shown on one page
+     */
+    $('select[name="perPage"]').change(function() {
+        window.location.href = $(this).data('url') + '?perPage=' + $(this).val();
+    });
+
+    /**
      * Show "flag to report" page
      */
     $('.btn-report').click(function() {

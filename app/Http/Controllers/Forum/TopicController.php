@@ -87,6 +87,13 @@ class TopicController extends BaseController
         // number of answers
         $replies = $topic->replies;
 
+        if ($request->has('perPage')) {
+            $perPage = max(10, min($request->get('perPage'), 50));
+        } else {
+            $perPage = 10;
+        }
+
+        // user wants to show certain post. we need to calculate page number based on post id.
         if ($request->has('p')) {
             $page = $this->post->getPage($request->get('p'), $topic->id);
         }
@@ -98,8 +105,8 @@ class TopicController extends BaseController
         }
 
         // magic happens here. get posts for given topic
-        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $userId, $page);
-        $paginate = new LengthAwarePaginator($posts, $replies, 10, $page, ['path' => ' ']);
+        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $userId, $page, $perPage);
+        $paginate = new LengthAwarePaginator($posts, $replies, $perPage, $page, ['path' => ' ']);
 
         $parser = [
             'post' => app()->make('Parser\Post'),
