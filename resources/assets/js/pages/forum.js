@@ -285,6 +285,10 @@ $(function () {
         return false;
     });
 
+    $('#btn-fast-reply').click(function() {
+        $('#box-fast-form').find('textarea').focus();
+    });
+
     /**
      * Change forum category
      */

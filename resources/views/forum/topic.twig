@@ -66,14 +66,14 @@
 
                         {% if is_writeable %}
                             <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
-                            <a href="javascript:" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
+                            <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
                         {% endif %}
                     </div>
                 </div>
             </section>
 
             {% if auth_check() and is_writeable %}
-                <section id="box-quick-form" class="row">
+                <section id="box-fast-form" class="row">
                     <div class="col-xs-12">
                         {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': route('forum.post.submit', [forum.path, topic.id]), 'class': 'form-horizontal'}) }}
                             <div class="form-group">
