@@ -26,8 +26,10 @@ class AppServiceProvider extends ServiceProvider
             return str_replace(':point', $parameters[0], $message);
         });
 
-        // show mongodb queries in laravel debugbar
-        \DB::connection('mongodb')->enableQueryLog();
+        if (strpos(php_sapi_name(), 'cli') === false) {
+            // show mongodb queries in laravel debugbar
+            \DB::connection('mongodb')->enableQueryLog();
+        }
     }
 
     /**
