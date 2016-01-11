@@ -200,7 +200,7 @@
         {% endif %}
 
         $(function () {
-            $('.col-bottom a').tooltip();
+            $('.col-bottom a').tooltip({'trigger': 'hover'});
 
             $('#submit-form textarea').one('focus', function() {
                 var $this = $(this);

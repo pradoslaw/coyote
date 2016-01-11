@@ -219,6 +219,40 @@ $(function () {
         return false;
     });
 
+    /**
+     * Share post link
+     */
+    $('.btn-share').one('click', function() {
+        var url = $(this).attr('href');
+        var $input = $('<input type="text" class="form-control input-sm" style="width: 300px" value="' + url + '" />');
+
+        $input.click(function() {
+            this.select();
+        });
+
+        $(this).popover({
+            'html': true,
+            'content': $input,
+            'title': '',
+            'container': 'body'
+        }).tooltip('destroy');
+    })
+    .click(function() {
+        $(this).popover('show');
+
+        return false;
+    });
+
+    $('body').on('click', function (e) {
+        $('.btn-share').each(function () {
+            //the 'is' for buttons that trigger popups
+            //the 'has' for icons within a button that triggers a popup
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                $(this).popover('hide');
+            }
+        });
+    });
+
     $('.vote-up').click(function() {
         var $this = $(this);
 
