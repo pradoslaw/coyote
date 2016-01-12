@@ -315,17 +315,32 @@
 }
 
 .vote-count {
-  font-size: 26px;
+  font-size: 22px;
   margin: 5px 0 15px 0;
   line-height: 120%;
 }
 
+.vote-up {
+  .fa-thumbs-up {
+    display: none;
+  }
+}
+
 .vote-up.on {
   color: $brand-primary;
+
+  .fa-thumbs-up {
+    display: inline-block;
+  }
+
+  .fa-thumbs-o-up {
+    display: none;
+  }
 }
 
 .vote-accept {
   margin-top: 10px;
+  font-size: 25px;
 }
 
 .vote-accept.on {
