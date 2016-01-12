@@ -81,7 +81,7 @@ $(function () {
                                 $this.attr('title', html.replace(/\n/g, '<br />'))
                                     .data('count', count)
                                     .text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']))
-                                    .tooltip({html: true})
+                                    .tooltip({html: true, trigger: 'hover'})
                                     .tooltip('show');
                             }
                         });
