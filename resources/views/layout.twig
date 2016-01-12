@@ -7,20 +7,20 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         {% block head %}
-        <title>{% block title %} :: 4programmers.net{% endblock %}</title>
+            <title>{% block title %} :: 4programmers.net{% endblock %}</title>
 
-        <meta name="description" content="{% block description %}{% endblock %}">
-        <meta name="keywords" content="{% block keywords %}{% endblock %}">
+            <meta name="description" content="{% block description %}{% endblock %}">
+            <meta name="keywords" content="{% block keywords %}{% endblock %}">
 
-        <link rel="stylesheet" href="/css/main.css">
+            <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
 
-        <script type="text/javascript">
-            var baseUrl = '{{ route('home') }}';
-        </script>
+            <script type="text/javascript">
+                var baseUrl = '{{ route('home') }}';
+            </script>
         {% endblock %}
 
-        <link rel="apple-touch-icon" href="/img/apple-touch.png">
-        <link rel="shortcut icon" href="/img/favicon.png" type="image/png">
+        <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
+        <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
     </head>
     <body>
         {% block body %}
@@ -38,8 +38,8 @@
                         </button>
 
                         <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-                            <img id="logo" src="/img/logo.png">
-                            <img id="logo-mobile" src="/img/logo-mobile.png">
+                            <img id="logo" src="{{ cdn('img/logo.png') }}">
+                            <img id="logo-mobile" src="{{ cdn('img/logo-mobile.png') }}">
                         </a>
                     </div>
 
@@ -249,7 +249,7 @@
             </footer>
         </div>
 
-        <script src="/js/main.js"></script>
+        <script src="{{ cdn('js/main.js') }}"></script>
         {% endblock %}
     </body>
 </html>

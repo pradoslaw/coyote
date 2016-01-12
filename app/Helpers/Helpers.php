@@ -82,5 +82,10 @@ function cdn($path, $secure = null)
         return asset($path, $secure);
     }
 
-    return '//' . config('app.cdn') . '' . elixir(trim($path, '/'));
+    $path = trim($path, '/');
+    if (in_array(pathinfo($path, PATHINFO_EXTENSION), ['css', 'js'])) {
+        $path = elixir($path);
+    }
+
+    return '//' . config('app.cdn') . ($path[0] !== '/' ? ('/' . $path) : $path);
 }
