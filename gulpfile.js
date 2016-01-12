@@ -64,5 +64,32 @@ elixir(function(mix) {
        .sass('pages/user.scss')
        .sass('pages/profile.scss')
        .sass('pages/job.scss');
+
+    mix.version([
+        'js/main.js',
+        'js/microblog.js',
+        'js/forum.js',
+        'js/posting.js',
+        'js/wikieditor.js',
+        'js/auto-complete.js',
+        'js/tags.js',
+        'js/popover.js',
+        'js/tab.js',
+        'js/modal.js',
+        'js/perfect-scrollbar.js',
+        'js/animate-colors.js',
+        'js/ui-resizer.js',
+        'js/jquery-ui.js',
+
+        'css/main.css',
+        'css/auth.css',
+        'css/homepage.css',
+        'css/microblog.css',
+        'css/forum.css',
+        'css/wiki.css',
+        'css/user.css',
+        'css/profile.css',
+        'css/job.css'
+    ]);
 });
 
