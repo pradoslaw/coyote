@@ -22,6 +22,7 @@ use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
+use Coyote\User;
 use Gate;
 use Illuminate\Http\Request;
 
@@ -69,11 +70,40 @@ class PostController extends BaseController
         return parent::view('forum.submit')->with(compact('forum', 'topic', 'post', 'title', 'tags', 'isSubscribe'));
     }
 
+    /**
+     * Ajax request. Display edit form
+     *
+     * @param $forum
+     * @param $topic
+     * @param $post
+     * @return $this
+     */
+    public function edit($forum, $topic, $post)
+    {
+        if ($post->id === $topic->first_post_id) {
+            // get topic tags only if this post is the FIRST post in topic
+            $tags = $topic->tags->pluck('name')->toArray();
+        }
+        $isSubscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
+
+        return view('forum.edit')->with(compact('post', 'forum', 'topic', 'tags', 'isSubscribe'));
+    }
+
+    /**
+     * Save post (edit or create)
+     *
+     * @param PostRequest $request
+     * @param $forum
+     * @param $topic
+     * @param null $post
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save(PostRequest $request, $forum, $topic, $post = null)
     {
-        $url = \DB::transaction(function () use ($request, $forum, $topic, $post) {
-            // parsing text and store it in cache
-            $text = app()->make('Parser\Post')->parse($request->text);
+        // parsing text and store it in cache
+        $text = app()->make('Parser\Post')->parse($request->text);
+
+        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post) {
             $actor = new Stream_Actor(auth()->user());
 
             // url to the post
@@ -159,6 +189,19 @@ class PostController extends BaseController
 
             return $url;
         });
+
+        if ($request->ajax()) {
+            if (auth()->user()->allow_sig) {
+                $parser = app()->make('Parser\Sig');
+                $user = User::find($post->user_id, ['sig']);
+
+                if ($user->sig) {
+                    // @todo W kontrolerze nie powinny znajdowac sie znaczniki html
+                    $text .= '<hr><footer>' . $parser->parse($user->sig) . '</footer>';
+                }
+            }
+            return response($text);
+        }
 
         return redirect()->to($url);
     }

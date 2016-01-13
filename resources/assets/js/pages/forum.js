@@ -315,6 +315,7 @@ $(function () {
     $('.comments').on('submit', 'form', function() {
         var $form = $(this);
         $('button', $form).attr('disabled', 'disabled').text('Wysyłanie...');
+        $('textarea', $form).attr('readonly', 'readonly');
 
         $.post($form.attr('action'), $form.serialize(), function(html) {
             if ($form.hasClass('collapse')) {
@@ -328,6 +329,7 @@ $(function () {
         })
         .always(function() {
             $('button', $form).removeAttr('disabled').text('Zapisz komentarz');
+            $('textarea', $form).removeAttr('readonly');
         })
         .error(function(event, jqxhr) {
             if (typeof event.responseJSON.text !== 'undefined') {
@@ -391,6 +393,7 @@ $(function () {
         $(this).prompt(promptUrl).fastSubmit().autogrow().focus();
     });
 
+
     /**
      * Show/hide new comment's form
      */
@@ -401,6 +404,58 @@ $(function () {
     .on('hidden.bs.collapse', function() {
         $('.btn-comment[href="#' + $(this).attr('id') + '"]').removeClass('active');
     });
+
+    var posts = {};
+
+    $('.btn-fast-edit').click(function() {
+        var $this = $(this);
+        var $post = $('.post-content[data-post-id="' + $this.data('post-id') + '"]');
+
+        if (!$this.hasClass('active')) {
+            $.get($this.attr('href'), function(html) {
+                posts[$this.data('post-id')] = $post.html();
+                $post.html(html).find('textarea').prompt(promptUrl).fastSubmit().autogrow().focus();
+
+                $this.addClass('active');
+            });
+        } else {
+            $post.html(posts[$this.data('post-id')]);
+            $this.removeClass('active');
+        }
+
+        return false;
+    });
+
+    $('.post-content').on('submit', 'form', function() {
+        var $form = $(this);
+        var $post = $(this).parent();
+
+        $(':submit', $form).attr('disabled', 'disabled').text('Zapisywanie...');
+        $('textarea', $form).attr('readonly', 'readonly');
+
+        $.post($form.attr('action'), $form.serialize(), function(html) {
+            $post.html(html);
+            $('.btn-fast-edit[data-post-id="' + $post.data('post-id') + '"]').removeClass('active');
+        })
+        .error(function(event) {
+            $(':submit', $form).removeAttr('disabled').text('Zapisz');
+            $('textarea', $form).removeAttr('readonly');
+
+            if (typeof event.responseJSON.error !== 'undefined') {
+                error(event.responseJSON.error);
+            } else if (typeof event.responseJSON.text !== 'undefined') {
+                error(event.responseJSON.text);
+            }
+        });
+
+        return false;
+    })
+        .on('click', '.btn-reset', function() {
+            var $post = $(this).parent();
+
+            $post.html(posts[$post.data('post-id')]);
+            $('.btn-fast-edit[data-post-id="' + $post.data('post-id') + '"]').removeClass('active');
+        });
 
     /**
      * Append list of reasons (of moderator actions) to modal box

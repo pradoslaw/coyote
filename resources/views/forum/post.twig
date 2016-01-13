@@ -96,7 +96,7 @@
                     {% endif %}
                 </div>
 
-                <div class="post-content" data-post-id="1182672">
+                <div class="post-content" data-post-id="{{ post.id }}">
                     {{ post.text|raw }}
 
                     {% if post.sig %}
@@ -200,7 +200,7 @@
                             <i class="fa fa-pencil"></i>
                             <span class="hidden-xs">Edytuj</span>
                         </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="1182672" class="btn btn-xs btn-fast-edit">
+                        <a href="{{ route('forum.post.edit', [forum.path, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="{{ post.id }}" class="btn btn-xs btn-fast-edit">
                             <i class="fa fa-pencil"></i>
                             <span class="hidden-xs">Szybka edycja</span>
                         </a>

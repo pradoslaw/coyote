@@ -1,0 +1,23 @@
+{% spaceless %}
+{{ form_open({'url': route('forum.post.submit', [forum.path, topic.id, post.id])}) }}
+    {{ form_hidden('user_name', post.user_name) }}
+
+    {% if post.id == topic.first_post_id %}
+        {{ form_hidden('subject', topic.subject) }}
+        {{ form_hidden('custom_tags', tags|join(', ')) }}
+    {% endif %}
+
+    {% if can('sticky', forum) %}
+        {{ form_hidden('is_sticky', 1, post.is_sticky) }}
+    {% endif %}
+
+    {% if isSubscribe %}
+        {{ form_hidden('subscribe', true) }}
+    {% endif %}
+
+    <textarea name="text" rows="5" class="form-control">{{ post.text }}</textarea>
+
+    <button type="submit" class="btn btn-xs btn-primary pull-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</button>
+    <a class="btn btn-xs btn-default pull-right btn-reset" style="margin-right: 10px">Anuluj</a>
+{{ form_close() }}
+{% endspaceless %}
