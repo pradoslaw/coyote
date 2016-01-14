@@ -258,7 +258,7 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="/css/homepage.css">
+    <link rel="stylesheet" href="{{ cdn('css/homepage.css') }}">
 
     <script type="text/javascript">
         var uploadUrl = '{{ route('microblog.upload') }}';
@@ -269,11 +269,11 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="/js/tab.js"></script>
-    <script type="text/javascript" src="/js/modal.js"></script>
-    <script type="text/javascript" src="/js/perfect-scrollbar.js"></script>
-    <script type="text/javascript" src="/js/posting.js"></script>
-    <script type="text/javascript" src="/js/microblog.js"></script>
+    <script type="text/javascript" src="{{ cdn('js/tab.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/microblog.js') }}"></script>
     <script type="text/javascript">
         $(function () {
             $('.btn-thumbs').tooltip({html: true});
