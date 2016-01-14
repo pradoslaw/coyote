@@ -63,7 +63,8 @@ elixir(function(mix) {
        .sass('pages/wiki.scss')
        .sass('pages/user.scss')
        .sass('pages/profile.scss')
-       .sass('pages/job.scss');
+       .sass('pages/job.scss')
+       .sass('pages/errors.scss');
 
     mix.version([
         'js/main.js',
@@ -89,7 +90,8 @@ elixir(function(mix) {
         'css/wiki.css',
         'css/user.css',
         'css/profile.css',
-        'css/job.css'
+        'css/job.css',
+        'css/errors.css'
     ]);
 });
 

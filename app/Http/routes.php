@@ -206,6 +206,6 @@ Route::get('Flag', ['uses' => 'FlagController@index', 'as' => 'flag', 'middlewar
 Route::post('Flag', ['uses' => 'FlagController@save', 'middleware' => 'auth']);
 
 Route::get('/{slug}', function ($slug) {
-    echo "404 $slug";
+    return view('errors/404');
 
 })->where('slug', '.*');
