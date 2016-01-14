@@ -34,10 +34,10 @@ install_gulp:
 	npm install
 
 assets_production:
-	npm run gulp --production 
+	gulp --production
 
 assets_dev:
-	npm run gulp
+	gulp
     
 dump-autoload:
 	composer dump-autoload
