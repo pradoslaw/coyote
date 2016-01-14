@@ -5,13 +5,15 @@ namespace Coyote\Http\Controllers;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
+use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Stream\Stream;
 use Debugbar;
 use Cache;
 
 class HomeController extends Controller
 {
-    public function index(Microblog $microblog, Reputation $reputation, Stream $stream, Setting $setting)
+    public function index(Microblog $microblog, Reputation $reputation, Stream $stream, Setting $setting, Topic $topic)
     {
         $microblog->setUserId(auth()->id());
         $viewers = app('Session\Viewers');
@@ -21,18 +23,23 @@ class HomeController extends Controller
         $activities = $stream->take(10, 0, ['Topic', 'Post', 'Comment'], ['Create', 'Update'], ['Forum', 'Post', 'Topic']);
         Debugbar::stopMeasure('stream');
 
+        $topic->pushCriteria(new OnlyThoseWithAccess());
+
         return view('home', [
-            'viewers'                   => $viewers->render(),
-            'microblogs'                => $microblog->take(10),
-            'activities'                => $activities,
-            'reputation'                => Cache::remember('homepage:reputation', 30, function () use ($reputation) {
+            'viewers'              => $viewers->render(),
+            'microblogs'           => $microblog->take(10),
+            'activities'           => $activities,
+            'reputation'           => Cache::remember('homepage:reputation', 30, function () use ($reputation) {
                 return [
-                    'month'      => $reputation->monthly(),
-                    'year'       => $reputation->yearly(),
-                    'total'      => $reputation->total()
+                    'month'   => $reputation->monthly(),
+                    'year'    => $reputation->yearly(),
+                    'total'   => $reputation->total()
                 ];
             }),
-            'settings'                  => $setting->getAll(auth()->id(), request()->session()->getId())
+            'settings'             => $setting->getAll(auth()->id(), request()->session()->getId()),
+            'newest'               => Cache::remember('homepage:newest', 30, function () use ($topic) {
+                return $topic->newest();
+            })
         ]);
     }
 }

@@ -74,4 +74,10 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @param int $value
      */
     public function addViews($topicId, $value = 1);
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    public function newest($limit = 7);
 }

@@ -228,4 +228,27 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         $this->model->where('id', $topicId)->update(['views' => \DB::raw('views + ' . $value)]);
         $this->model->timestamps = true;
     }
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    public function newest($limit = 7)
+    {
+        $sub = $this->model
+                    ->select(['id', 'forum_id', 'subject', 'path', 'last_post_created_at', 'views', 'score', 'deleted_at'])
+                    ->orderBy('id', 'DESC')
+                    ->limit(3000)
+                    ->toSql();
+
+        $this->applyCriteria();
+
+        return $this->model
+                    ->select(['topics.*', 'forums.name', 'forums.path AS forum_path'])
+                    ->from(\DB::raw("($sub) AS topics"))
+                    ->join('forums', 'forums.id', '=', 'forum_id')
+                    ->where('forums.is_locked', 0)
+                    ->limit($limit)
+                    ->get();
+    }
 }

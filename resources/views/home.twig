@@ -52,7 +52,19 @@
                                         </div>
 
                                         <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 2 ? 'active' }}" id="newest">
-
+                                            {% for topic in newest %}
+                                                <div class="row">
+                                                    <span class="col-sm-2 hidden-xs">
+                                                        <strong>{{ topic.views }}</strong>
+                                                        <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
+                                                    </span>
+                                                    <div class="col-sm-10 col-xs-12">
+                                                        <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_path, topic.id, topic.path]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
+                                                        <a href="{{ route('forum.category', [topic.forum_path]) }}" class="category">{{ topic.name }}</a>
+                                                        <small class="pull-right">{{ topic.last_post_created_at|format_date }}</small>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div>
