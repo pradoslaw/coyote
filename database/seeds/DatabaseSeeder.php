@@ -25,5 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ForumTableSeeder::class);
         $this->call(FlagTypeSeeder::class);
         $this->call(ForumReasonsTableSeeder::class);
+        $this->call(PostHistoryTypesSeeder::class);
     }
 }

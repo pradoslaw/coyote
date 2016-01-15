@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Contracts\Post\HistoryRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
@@ -196,11 +197,12 @@ class TopicController extends BaseController
     /**
      * @param $forum
      * @param PostRequest $request
+     * @param HistoryRepositoryInterface $history
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($forum, PostRequest $request)
+    public function save($forum, PostRequest $request, HistoryRepositoryInterface $history)
     {
-        $url = \DB::transaction(function () use ($request, $forum) {
+        $url = \DB::transaction(function () use ($request, $forum, $history) {
             $path = str_slug($request->get('subject'), '_');
 
             // create new topic
@@ -252,6 +254,9 @@ class TopicController extends BaseController
                     (new Stream_Forum)->map($forum)
                 )
             );
+
+            // save it in history...
+            $history->initial(auth()->id(), $post, $topic);
 
             return route('forum.topic', [$forum->path, $topic->id, $path]);
         });

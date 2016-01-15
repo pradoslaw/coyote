@@ -8,6 +8,7 @@ use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Subscriber;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AcceptRepositoryInterface as Accept;
+use Coyote\Repositories\Contracts\Post\HistoryRepositoryInterface;
 use Coyote\Repositories\Contracts\Post\VoteRepositoryInterface as Vote;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
@@ -23,6 +24,7 @@ use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
 use Coyote\User;
+use Coyote\Post\History;
 use Gate;
 use Illuminate\Http\Request;
 
@@ -93,17 +95,18 @@ class PostController extends BaseController
      * Save post (edit or create)
      *
      * @param PostRequest $request
+     * @param HistoryRepositoryInterface $history
      * @param $forum
      * @param $topic
      * @param null $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(PostRequest $request, $forum, $topic, $post = null)
+    public function save(PostRequest $request, HistoryRepositoryInterface $history, $forum, $topic, $post = null)
     {
         // parsing text and store it in cache
         $text = app()->make('Parser\Post')->parse($request->text);
 
-        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post) {
+        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post, $history) {
             $actor = new Stream_Actor(auth()->user());
 
             // url to the post
@@ -114,18 +117,29 @@ class PostController extends BaseController
                 $url .= '?p=' . $post->id . '#id' . $post->id;
 
                 $this->authorize('update', [$post, $forum]);
-                $data = $request->only(['text', 'user_name']) + [
-                        'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
-                    ];
 
-                $post->fill($data)->save();
+                $data = $request->only(['text', 'user_name']);
+                $post->fill($data);
+
+                if ($post->isDirty('text')) {
+                    $post->fill([
+                        'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
+                    ]);
+                    $post->save();
+
+                    $history->add(History::EDIT_BODY, $post->id, auth()->id(), $post->text);
+                }
+
                 $activity = new Stream_Update($actor);
 
                 // user want to change the subject. we must update topics table
                 if ($post->id === $topic->first_post_id) {
                     $path = str_slug($request->get('subject'), '_');
+                    $topic->fill($request->all() + ['path' => $path]);
 
-                    $topic->fill($request->all() + ['path' => $path])->save();
+                    if ($topic->isDirty()) {
+                        $topic->save();
+                    }
                     $this->topic->setTags($topic->id, $request->get('tag', []));
                 }
             } else {
@@ -175,6 +189,8 @@ class PostController extends BaseController
                 }
 
                 $alert->notify();
+                // initial history of post
+                $history->initial(auth()->id(), $post);
             }
 
             if (auth()->check() && $post->user_id) {
@@ -190,6 +206,7 @@ class PostController extends BaseController
             return $url;
         });
 
+        // is this a fast edit (via ajax)?
         if ($request->ajax()) {
             if (auth()->user()->allow_sig) {
                 $parser = app()->make('Parser\Sig');
