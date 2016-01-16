@@ -115,32 +115,48 @@ class PostController extends BaseController
             // post has been modified...
             if ($post !== null) {
                 $url .= '?p=' . $post->id . '#id' . $post->id;
+                // determines if post has been changed somehow (body, title or tags)
+                $isDirty = false;
 
                 $this->authorize('update', [$post, $forum]);
 
                 $data = $request->only(['text', 'user_name']);
                 $post->fill($data);
 
-                if ($post->isDirty('text')) {
-                    $post->fill([
-                        'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
-                    ]);
-                    $post->save();
-
-                    $history->add(History::EDIT_BODY, $post->id, auth()->id(), $post->text);
-                }
-
                 $activity = new Stream_Update($actor);
+                $guid = $history->guid();
 
-                // user want to change the subject. we must update topics table
+                // user wants to change the subject. we must update "topics" table
                 if ($post->id === $topic->first_post_id) {
                     $path = str_slug($request->get('subject'), '_');
                     $topic->fill($request->all() + ['path' => $path]);
 
                     if ($topic->isDirty()) {
                         $topic->save();
+                        $isDirty = true;
+
+                        $history->add(History::EDIT_SUBJECT, $post->id, auth()->id(), $topic->subject, $guid);
                     }
-                    $this->topic->setTags($topic->id, $request->get('tag', []));
+
+                    $tags = $request->get('tag', []);
+
+                    if ($topic->tags()->lists('name')->diff($tags)->count()) {
+                        $this->topic->setTags($topic->id, $tags);
+                        $isDirty = true;
+
+                        $history->add(History::EDIT_TAGS, $post->id, auth()->id(), json_encode($tags), $guid);
+                    }
+                }
+
+                if ($isDirty) {
+                    $post->fill([
+                        'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
+                    ]);
+                    $post->save();
+                }
+
+                if ($post->isDirty('text')) {
+                    $history->add(History::EDIT_BODY, $post->id, auth()->id(), $post->text, $guid);
                 }
             } else {
                 if (auth()->guest()) {

@@ -62,7 +62,7 @@ class HistoryRepository extends Repository implements HistoryRepositoryInterface
     /**
      * @return string
      */
-    private function guid()
+    public function guid()
     {
         $data = openssl_random_pseudo_bytes(16);
 

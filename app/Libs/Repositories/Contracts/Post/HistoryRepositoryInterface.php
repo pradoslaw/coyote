@@ -25,4 +25,9 @@ interface HistoryRepositoryInterface extends RepositoryInterface
      * @param string $guid
      */
     public function add($typeId, $postId, $userId, $data, $guid = null);
+
+    /**
+     * @return string
+     */
+    public function guid();
 }
