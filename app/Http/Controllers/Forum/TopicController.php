@@ -399,4 +399,24 @@ class TopicController extends BaseController
 
         return redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path])->with('success', 'Wątek został przeniesiony');
     }
+
+    /**
+     * @param Topic $topic
+     */
+    public function mark($topic)
+    {
+        $sessionId = request()->session()->getId();
+        $userId = auth()->id();
+
+        // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
+        $forumMarkTime = $this->forum->markTime($topic->forum_id, $userId, $sessionId);
+
+        // mark topic as read
+        $this->topic->markAsRead($topic->id, $topic->forum_id, $topic->last_post_created_at, $userId, $sessionId);
+        $isUnread = $this->topic->isUnread($topic->forum_id, $forumMarkTime, $userId, $sessionId);
+
+        if (!$isUnread) {
+            $this->forum->markAsRead($topic->forum_id, $userId, $sessionId);
+        }
+    }
 }

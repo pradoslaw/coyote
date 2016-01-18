@@ -276,7 +276,8 @@
   .col-icon .ico.lock {
     background-position: 4px -123px; }
   .col-icon .ico.new {
-    background-position: 4px -172px; }
+    background-position: 4px -172px;
+    cursor: pointer; }
   .col-icon .ico.normal {
     background-position: 4px -221px; }
 

@@ -57,6 +57,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('Topic/Prompt/{id}', ['uses' => 'TopicController@prompt', 'as' => 'prompt']);
     // przeniesienie watku do innej kategorii
     Route::post('Topic/Move/{id}', ['uses' => 'TopicController@move', 'as' => 'move']);
+    // oznacz watek jako przeczytany
+    Route::post('Topic/Mark/{topic}', ['uses' => 'TopicController@mark', 'as' => 'topic.mark']);
 
     // widok kategorii forum
     Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);

@@ -3,7 +3,8 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
-use Coyote\Forum\Track;
+use Coyote\Forum\Track as Forum_Track;
+use Coyote\Topic\Track as Topic_Track;
 use Coyote\Topic;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
@@ -177,7 +178,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function markTime($forumId, $userId, $sessionId)
     {
-        $sql = Track::select('marked_at')->where('forum_id', $forumId);
+        $sql = Forum_Track::select('marked_at')->where('forum_id', $forumId);
 
         if ($userId) {
             $sql->where('user_id', $userId);
@@ -219,6 +220,13 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         // builds data to update
         $attributes = ['forum_id' => $forumId] + ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
         // execute a query...
-        Track::updateOrCreate($attributes, $attributes + ['marked_at' => \DB::raw('NOW()'), 'forum_id' => $forumId]);
+        Forum_Track::updateOrCreate($attributes, $attributes + ['marked_at' => \DB::raw('NOW()'), 'forum_id' => $forumId]);
+        $track = new Topic_Track();
+
+        foreach ($attributes as $key => $value) {
+            $track = $track->where($key, $value);
+        }
+
+        $track->delete();
     }
 }

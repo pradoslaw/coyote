@@ -634,6 +634,9 @@ $(function () {
             }
         });
 
+        $('.sub-unread').removeClass('sub-unread');
+        $.post($(this).attr('href'));
+
         return false;
     });
 
@@ -643,6 +646,10 @@ $(function () {
     $('.new').click(function() {
         $(this).addClass('normal').removeClass('new');
         $(this).parent().next().find('.btn-view').removeClass('unread');
+
+        $.post($(this).attr('href'));
+
+        return false;
     });
 
     /**

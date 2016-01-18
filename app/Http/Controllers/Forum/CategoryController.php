@@ -48,4 +48,17 @@ class CategoryController extends BaseController
             compact('forumList', 'forum', 'topics', 'sections')
         );
     }
+
+    /**
+     * @param $forum
+     */
+    public function mark($forum)
+    {
+        $this->forum->markAsRead($forum->id, auth()->id(), request()->session()->getId());
+        $forums = $this->forum->where('parent_id', $forum->id)->get();
+
+        foreach ($forums as $forum) {
+            $this->forum->markAsRead($forum->id, auth()->id(), request()->session()->getId());
+        }
+    }
 }

@@ -128,4 +128,15 @@ class HomeController extends BaseController
         $this->topic->pushCriteria(new WithTag($name));
         return $this->load(auth()->id(), $request->getSession()->getId());
     }
+
+    /**
+     * Mark ALL categories as READ
+     */
+    public function mark()
+    {
+        $forums = $this->forum->all(['id']);
+        foreach ($forums as $forum) {
+            $this->forum->markAsRead($forum->id, auth()->id(), request()->session()->getId());
+        }
+    }
 }
