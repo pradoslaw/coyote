@@ -44,18 +44,16 @@ $(function () {
             var flag = $('#index').hasClass('sidebar');
             toggleSidebar(!flag);
 
-            //$.ajax(
-            //    {
-            //        type: 'POST',
-            //        url: baseUrl + 'User/Setting/__save',
-            //        data: {'forum_sidebar': !flag},
-            //        dataType: 'html',
-            //        crossDomain: true,
-            //        xhrFields:
-            //        {
-            //            withCredentials: true
-            //        }
-            //    });
+            $.ajax({
+                type: 'POST',
+                url: baseUrl + '/User/Settings/Ajax',
+                data: {'forum_sidebar': !flag},
+                dataType: 'html',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
         }
     });
 
