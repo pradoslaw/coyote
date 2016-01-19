@@ -26,6 +26,7 @@ use Coyote\Stream\Actor as Stream_Actor;
 use Coyote\User;
 use Coyote\Post\History;
 use Gate;
+use Cookie;
 use Illuminate\Http\Request;
 
 class PostController extends BaseController
@@ -47,6 +48,14 @@ class PostController extends BaseController
         $this->post = $post;
     }
 
+    /**
+     * Show new post/edit form
+     *
+     * @param Forum $forum
+     * @param Topic $topic
+     * @param Post|null $post
+     * @return mixed
+     */
     public function submit($forum, $topic, $post = null)
     {
         $this->breadcrumb($forum);
@@ -73,14 +82,23 @@ class PostController extends BaseController
 
         // IDs of posts that user want to quote...
         $postsId = [];
+        $cookie = isset($_COOKIE['mqid' . $topic->id]) ? $_COOKIE['mqid' . $topic->id] : null;
+
+        if ($cookie) {
+            $postsId = array_map('intval', explode(',', $cookie));
+            // I used raw PHP function because I don't want to use laravel encryption in this case
+            setcookie('mqid' . $topic->id, null, time() - 3600, '/');
+        }
+
         if (request()->input('quote')) {
             $postsId[] = request()->input('quote');
         }
 
         if ($postsId) {
-            $posts = $this->post->findPosts($postsId, $topic->id);
+            $posts = $this->post->findPosts(array_unique($postsId), $topic->id);
             $body = '';
 
+            // builds text with quoted posts
             foreach ($posts as $post) {
                 $body .= '> [' .
                     ($post->name ?: $post->user_name) .

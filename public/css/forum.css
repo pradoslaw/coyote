@@ -798,6 +798,8 @@
   .col-bottom .btn-multi-quote {
     border-left: 1px solid #d0d0d0;
     margin-right: 5px; }
+  .col-bottom .btn-multi-quote.active {
+    border-left: 1px solid #555; }
 
 .col-end {
   background-color: #dedddd; }

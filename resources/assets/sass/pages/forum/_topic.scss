@@ -253,6 +253,10 @@
     border-left: 1px solid $border-color;
     margin-right: 5px;
   }
+
+  .btn-multi-quote.active {
+    border-left: 1px solid #555;
+  }
 }
 
 .col-end {

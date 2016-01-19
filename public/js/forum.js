@@ -715,6 +715,42 @@ $(function () {
         return false;
     });
 
+    /**
+     * Add to multi quote list
+     */
+    $('.btn-multi-quote').click(function() {
+        var cookies = document.cookie.split(';');
+        var cookie = [];
+        var postId = parseInt($(this).data('post-id'));
+        var topicId = parseInt($(this).data('topic-id'));
+
+        var map = function(element) {
+            return parseInt(element);
+        };
+
+        for (var item in cookies) {
+            var name = '', value = '';
+            var parts = cookies[item].split('=', 2);
+
+            name = parts[0];
+            value = parts[1];
+
+            if ($.trim(name) === 'mqid' + topicId) {
+                cookie = value.split(',').map(map);
+            }
+        }
+
+        var indexOf = $.inArray(postId, cookie);
+        if (indexOf === -1) {
+            cookie.push($(this).data('post-id'));
+        } else {
+            cookie.splice(indexOf, 1);
+        }
+
+        $(this).toggleClass('active');
+        document.cookie = 'mqid' + topicId + '=' + cookie.join(',') + ';path=/';
+    });
+
     $('body').on('click', function (e) {
         $('.btn-share').each(function () {
             //the 'is' for buttons that trigger popups

@@ -171,7 +171,7 @@
 
                 {% if is_writeable %}
                     {% if not post.deleted_at %}
-                        <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="1182672">
+                        <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="{{ post.id }}" data-topic-id="{{ topic.id }}">
                             <i class="fa fa-plus"></i>
                         </a>
 
