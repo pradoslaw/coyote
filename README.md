@@ -15,22 +15,22 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * PostgreSQL >= 9.3
 * MongoDB >= 2.7
 * composer
+* node.js
 * npm
 * git
 
 ## Instalacja
 
-* `git clone https://github.com/adam-boduch/coyote.git .`
-* `composer install`
-* `npm install`
-* `cp .env.production .env` (plik .env zawiera konfiguracje bazy danych)
-* `psql -c 'create database coyote;' -U postgres`
-* `php artisan migrate --seed`
-* `mkdir storage/app/purifier`
-* `chmod -R 777 storage/`
-* `chmod -R 777 public/storage/`
 * `apt-get install php5-gd`
 * `apt-get install php5-mongo`
+* `git clone https://github.com/adam-boduch/coyote.git .`
+* `cp .env.production .env` (plik .env zawiera konfiguracje bazy danych)
+* `psql -c 'create database coyote;' -U postgres`
+* `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
+
+## Aktualizacja projektu
+
+`make update` (na produkcji) lub `make update-dev` (na serwerze deweloperskim)
 
 ## Jak mozesz pomoc?
 
