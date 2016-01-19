@@ -39,7 +39,6 @@ class CreateTopicsTable extends Migration
             $table->index(['deleted_at', 'forum_id', 'is_sticky']);
 
             $table->foreign('forum_id')->references('id')->on('forums');
-            $table->foreign('poll_id')->references('id')->on('polls');
         });
     }
 

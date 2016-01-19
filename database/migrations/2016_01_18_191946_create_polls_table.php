@@ -21,6 +21,10 @@ class CreatePollsTable extends Migration
             $table->smallInteger('max_items')->default(1);
             $table->tinyInteger('is_enabled')->default(1);
         });
+
+        Schema::table('topics', function (Blueprint $table) {
+            $table->foreign('poll_id')->references('id')->on('polls');
+        });
     }
 
     /**
