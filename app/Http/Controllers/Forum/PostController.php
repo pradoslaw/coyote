@@ -63,13 +63,40 @@ class PostController extends BaseController
                 // get topic tags only if this post is the FIRST post in topic
                 $tags = $topic->tags->pluck('name')->toArray();
             }
+
+            $text = $post->text; // we're gonna pass this variable to the view
         }
 
         if (auth()->check()) {
             $isSubscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
         }
 
-        return parent::view('forum.submit')->with(compact('forum', 'topic', 'post', 'title', 'tags', 'isSubscribe'));
+        // IDs of posts that user want to quote...
+        $postsId = [];
+        if (request()->input('quote')) {
+            $postsId[] = request()->input('quote');
+        }
+
+        if ($postsId) {
+            $posts = $this->post->findPosts($postsId, $topic->id);
+            $body = '';
+
+            foreach ($posts as $post) {
+                $body .= '> [' .
+                    ($post->name ?: $post->user_name) .
+                    ' dnia ' . $post->created_at->toDateTimeString() . '](' . route('forum.share', [$post->id]) . '):';
+
+                $body .= "\n> " . str_replace("\n", "\n> ", $post->text);
+                $body .= "\n\n";
+            }
+
+            unset($post); // <-- delete this variable. we don't want to pass it to twig
+            $text = $body;
+        }
+
+        return $this->view('forum.submit')->with(
+            compact('forum', 'topic', 'post', 'text', 'title', 'tags', 'isSubscribe')
+        );
     }
 
     /**
@@ -224,7 +251,7 @@ class PostController extends BaseController
             return $url;
         });
 
-        // is this a fast edit (via ajax)?
+        // is this a quick edit (via ajax)?
         if ($request->ajax()) {
             if (auth()->user()->allow_sig) {
                 $parser = app()->make('Parser\Sig');

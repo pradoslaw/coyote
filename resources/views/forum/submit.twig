@@ -56,7 +56,7 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
                             {% include 'components/toolbar' %}
-                            <textarea name="text" class="form-control" style="height: 160px;" tabindex="3">{{ input_old('text', post.text) }}</textarea>
+                            <textarea name="text" class="form-control" style="height: 160px;" tabindex="3">{{ input_old('text', text) }}</textarea>
 
                             {% if errors.first('text') %}
                                 <span class="help-block">{{ errors.first('text') }}</span>

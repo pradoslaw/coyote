@@ -50,4 +50,13 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @param bool $flag
      */
     public function subscribe($postId, $userId, $flag);
+
+    /**
+     * Find posts by given ID. We use this method to retrieve quoted posts
+     *
+     * @param array $postsId
+     * @param int $topicId
+     * @return mixed
+     */
+    public function findPosts(array $postsId, $topicId);
 }

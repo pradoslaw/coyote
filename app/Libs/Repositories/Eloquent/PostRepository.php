@@ -151,4 +151,21 @@ class PostRepository extends Repository implements PostRepositoryInterface
             Subscriber::firstOrCreate(['post_id' => $postId, 'user_id' => $userId]);
         }
     }
+
+    /**
+     * Find posts by given ID. We use this method to retrieve quoted posts
+     *
+     * @param array $postsId
+     * @param int $topicId
+     * @return mixed
+     */
+    public function findPosts(array $postsId, $topicId)
+    {
+        return $this->model
+                ->select(['posts.*', 'users.name'])
+                ->leftJoin('users', 'users.id', '=', 'posts.user_id')
+                ->whereIn('posts.id', $postsId)
+                ->where('topic_id', $topicId) // <-- this condition for extra security
+                ->get();
+    }
 }
