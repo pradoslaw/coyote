@@ -115,13 +115,14 @@ class PostController extends BaseController
             // post has been modified...
             if ($post !== null) {
                 $url .= '?p=' . $post->id . '#id' . $post->id;
-                // determines if post has been changed somehow (body, title or tags)
-                $isDirty = false;
 
                 $this->authorize('update', [$post, $forum]);
 
                 $data = $request->only(['text', 'user_name']);
                 $post->fill($data);
+
+                // $isDirty determines if post has been changed somehow (body, title or tags)
+                $isDirty = $post->isDirty('text');
 
                 $activity = new Stream_Update($actor);
                 $guid = $history->guid();
@@ -152,8 +153,9 @@ class PostController extends BaseController
                     $post->fill([
                         'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
                     ]);
-                    $post->save();
                 }
+
+                $post->save();
 
                 if ($post->isDirty('text')) {
                     $history->add(History::EDIT_BODY, $post->id, auth()->id(), $post->text, $guid);
