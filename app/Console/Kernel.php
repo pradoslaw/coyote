@@ -11,8 +11,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'Coyote\Console\Commands\Inspire',
         'Coyote\Console\Commands\ClearCache',
+        'Coyote\Console\Commands\PurgeViews',
     ];
 
     /**
@@ -23,7 +23,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-            ->hourly();
+        $schedule->command('coyote:counter --force')->everyFiveMinutes();
     }
 }

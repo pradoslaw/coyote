@@ -166,8 +166,13 @@ class TopicController extends BaseController
         }
 
         // increase topic views counter
+        // only for developing purposes. it increases counter every time user hits the page
         if (\App::environment('local', 'dev')) {
             $this->topic->addViews($topic->id);
+        } else {
+            $user = auth()->check() ? auth()->id() : $request->session()->getId();
+            // on production environment: store hit in redis
+            app('redis')->sadd('counter:topic:' . $topic->id, $user . ';' . round(time() / 300) * 300);
         }
 
         $this->breadcrumb($forum);
