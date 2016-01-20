@@ -23,6 +23,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('coyote:counter --force')->everyFiveMinutes();
+        $schedule->command('coyote:counter')->everyFiveMinutes();
     }
 }
