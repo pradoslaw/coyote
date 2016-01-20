@@ -12,7 +12,7 @@ class ClearCache extends Command
      *
      * @var string
      */
-    protected $signature = 'coyote:clean';
+    protected $signature = 'coyote:clear';
 
     /**
      * The console command description.
@@ -23,8 +23,6 @@ class ClearCache extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
