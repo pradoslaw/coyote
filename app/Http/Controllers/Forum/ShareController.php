@@ -13,8 +13,6 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
  */
 class ShareController extends Controller
 {
-    use Base;
-
     /**
      * @var Forum
      */
