@@ -1,0 +1,6 @@
+{{ post.text|raw }}
+
+{% if post.sig %}
+    <hr>
+    <footer>{{ post.sig|raw }}</footer>
+{% endif %}

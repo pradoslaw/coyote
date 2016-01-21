@@ -272,16 +272,17 @@ class PostController extends BaseController
 
         // is this a quick edit (via ajax)?
         if ($request->ajax()) {
+            $data = ['post' => ['text' => $text]];
+
             if (auth()->user()->allow_sig) {
                 $parser = app()->make('Parser\Sig');
                 $user = User::find($post->user_id, ['sig']);
 
                 if ($user->sig) {
-                    // @todo W kontrolerze nie powinny znajdowac sie znaczniki html
-                    $text .= '<hr><footer>' . $parser->parse($user->sig) . '</footer>';
+                    $data['post']['sig'] = $parser->parse($user->sig);
                 }
             }
-            return response($text);
+            return view('forum.text', $data);
         }
 
         return redirect()->to($url);
