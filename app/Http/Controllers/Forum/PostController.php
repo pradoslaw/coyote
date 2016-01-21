@@ -274,7 +274,7 @@ class PostController extends BaseController
         if ($request->ajax()) {
             $data = ['post' => ['text' => $text]];
 
-            if (auth()->user()->allow_sig) {
+            if (auth()->user()->allow_sig && $post->user_id) {
                 $parser = app()->make('Parser\Sig');
                 $user = User::find($post->user_id, ['sig']);
 
