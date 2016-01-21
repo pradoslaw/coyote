@@ -30,7 +30,7 @@ class ForumTableSeeder extends Seeder
         ]);
 
         \DB::table('permissions')->insert([
-            'name'           => 'forum-edit',
+            'name'           => 'forum-update',
             'description'    => 'Edycja postów i komentarzy',
             'default'        => false
         ]);
