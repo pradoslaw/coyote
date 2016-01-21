@@ -430,6 +430,7 @@ $(function () {
         var $comment = $(this).parent().parent();
 
         $comment.html(comments[$comment.data('comment-id')]);
+        return false;
     })
     .find('textarea').one('focus', function() {
         $(this).prompt(promptUrl).fastSubmit().autogrow().focus();
@@ -492,12 +493,14 @@ $(function () {
 
         return false;
     })
-        .on('click', '.btn-reset', function() {
-            var $post = $(this).parent();
+    .on('click', '.btn-reset', function() {console.log(1);
+        var $post = $(this).parent().parent();
 
-            $post.html(posts[$post.data('post-id')]);
-            $('.btn-fast-edit[data-post-id="' + $post.data('post-id') + '"]').removeClass('active');
-        });
+        $post.html(posts[$post.data('post-id')]);
+        $('.btn-fast-edit[data-post-id="' + $post.data('post-id') + '"]').removeClass('active');
+
+        return false;
+    });
 
     /**
      * Append list of reasons (of moderator actions) to modal box
