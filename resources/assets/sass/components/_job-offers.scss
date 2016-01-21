@@ -5,6 +5,10 @@
 @import "../vendor/font-awesome/variables";
 
 #box-job-offers {
+  .panel-default {
+    border: 1px solid $brand-primary;
+  }
+
   .media {
     border-bottom: 1px solid $border-color;
     padding-bottom: 7px;

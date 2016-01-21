@@ -1,4 +1,7 @@
 @charset "UTF-8";
+#box-job-offers .panel-default {
+  border: 1px solid #80a41a; }
+
 #box-job-offers .media {
   border-bottom: 1px solid #d0d0d0;
   padding-bottom: 7px;
