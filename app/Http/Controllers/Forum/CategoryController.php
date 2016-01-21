@@ -2,20 +2,19 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Illuminate\Http\Request;
-use Coyote\Http\Controllers\Controller;
 
 class CategoryController extends BaseController
 {
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
+     * @param Setting $setting
      * @return $this
      */
-    public function index($forum, Request $request)
+    public function index($forum, Request $request, Setting $setting)
     {
         // builds breadcrumb for this category
         $this->breadcrumb($forum);
@@ -29,8 +28,9 @@ class CategoryController extends BaseController
 
         if ($request->has('perPage')) {
             $perPage = max(10, min($request->get('perPage'), 50));
+            $setting->setItem('forum.topics_per_page', $perPage, auth()->id(), $request->session()->getId());
         } else {
-            $perPage = 20;
+            $perPage = $setting->getItem('forum.topics_per_page', auth()->id(), $request->session()->getId(), 20);
         }
 
         // display topics for this category

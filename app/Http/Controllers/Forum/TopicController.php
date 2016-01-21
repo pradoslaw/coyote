@@ -7,6 +7,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\HistoryRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
@@ -56,9 +57,10 @@ class TopicController extends BaseController
      * @param \Coyote\Topic $topic
      * @param string $slug
      * @param Request $request
+     * @param Setting $setting
      * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function index($forum, $topic, $slug, Request $request)
+    public function index($forum, $topic, $slug, Request $request, Setting $setting)
     {
         $userId = auth()->id();
         $sessionId = $request->session()->getId();
@@ -90,8 +92,9 @@ class TopicController extends BaseController
 
         if ($request->has('perPage')) {
             $perPage = max(10, min($request->get('perPage'), 50));
+            $setting->setItem('forum.posts_per_page', $perPage, auth()->id(), $request->session()->getId());
         } else {
-            $perPage = 10;
+            $perPage = $setting->getItem('forum.posts_per_page', auth()->id(), $request->session()->getId(), 10);
         }
 
         // user wants to show certain post. we need to calculate page number based on post id.

@@ -51,16 +51,17 @@ class SettingRepository extends Repository implements SettingRepositoryInterface
      * @param $name
      * @param $userId
      * @param $sessionId
+     * @param null $default
      * @return null|static
      */
-    public function getItem($name, $userId, $sessionId)
+    public function getItem($name, $userId, $sessionId, $default = null)
     {
         $result = $this->findWhere($this->build(['name' => $name, 'user_id' => $userId, 'session_id' => $sessionId]));
 
         if (count($result)) {
-            return $result->pluck('value');
+            return (string) $result->pluck('value')[0];
         } else {
-            return null;
+            return $default;
         }
     }
 

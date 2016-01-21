@@ -16,9 +16,10 @@ interface SettingRepositoryInterface extends RepositoryInterface
      * @param $name
      * @param $userId
      * @param $sessionId
+     * @param null $default
      * @return null|static
      */
-    public function getItem($name, $userId, $sessionId);
+    public function getItem($name, $userId, $sessionId, $default = null);
 
     /**
      * @param $userId
