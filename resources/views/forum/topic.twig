@@ -141,7 +141,7 @@
 
                     {% if can('update', forum) %}
                         <li id="btn-log"><a title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
-                        <li id="btn-edit-subject"><a title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
+                        <li id="btn-edit-subject"><a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
                     {% endif %}
                     {% if can('lock', forum) %}
                         <li id="btn-lock" {{ topic.is_locked ? 'class="on"' }}>
@@ -187,13 +187,35 @@
         {{ modals.alert('Wystąpił błąd podczas działania programu.') }}
     {% endif %}
 
+    {% if can('update', forum) %}
+        {#<form method="post" action="{{ route('forum.topic.subject', [topic.id]) }}">#}
+            {{ form_open({'url': route('forum.topic.subject', [topic.id])}) }}
+            <div class="modal fade" id="subject-modal" tabindex="-1" role="dialog" aria-labelledby="subject-modal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Zmień tytuł wątku</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_text('subject', topic.subject, {'class': 'form-control'}) }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                            <button type="submit" class="btn btn-danger danger">Zmien tytuł</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{ form_close() }}
+    {% endif %}
+
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
 
     {% if auth_check() %}
-        <script type="text/javascript" src="/js/posting.js"></script>
+        <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
     {% endif %}
 
     <script type="text/javascript">

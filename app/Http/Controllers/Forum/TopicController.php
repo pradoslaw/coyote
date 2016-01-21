@@ -11,19 +11,22 @@ use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Stream\Activities\Create as Stream_Create;
+use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Lock as Stream_Lock;
 use Coyote\Stream\Activities\Unlock as Stream_Unlock;
 use Coyote\Stream\Activities\Move as Stream_Move;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
 use Coyote\Topic\Subscriber as Topic_Subscriber;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Coyote\Post\History;
 use Gate;
 
 class TopicController extends BaseController
@@ -291,11 +294,11 @@ class TopicController extends BaseController
 
     /**
      * @param $id
-     * @param UserRepositoryInterface $user
+     * @param User $user
      * @param Request $request
      * @return $this
      */
-    public function prompt($id, UserRepositoryInterface $user, Request $request)
+    public function prompt($id, User $user, Request $request)
     {
         $this->validate($request, ['q' => 'username']);
         $usersId = [];
@@ -425,6 +428,49 @@ class TopicController extends BaseController
 
         if (!$isUnread) {
             $this->forum->markAsRead($topic->forum_id, $userId, $sessionId);
+        }
+    }
+
+    /**
+     * @param $topic
+     * @param Request $request
+     * @param HistoryRepositoryInterface $history
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function subject($topic, Request $request, HistoryRepositoryInterface $history)
+    {
+        $forum = $this->forum->find($topic->forum_id);
+        $this->authorize('update', $forum);
+
+        $this->validate($request, ['subject' => 'required|min:3|max:200']);
+
+        $url = \DB::transaction(function () use ($request, $forum, $topic, $history) {
+            $path = str_slug($request->get('subject'), '_');
+            $topic->fill(['subject' => $request->get('subject'), 'path' => $path]);
+
+            if ($topic->isDirty()) {
+                $topic->save();
+
+                $history->add(History::EDIT_SUBJECT, $topic->first_post_id, auth()->id(), $topic->subject);
+            }
+
+            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+            $post = $this->post->find($topic->first_post_id);
+
+            // put action into activity stream
+            stream(
+                Stream_Update::class,
+                (new Stream_Post(['url' => $url]))->map($post),
+                (new Stream_Topic())->map($topic, $forum)
+            );
+
+            return $url;
+        });
+
+        if ($request->ajax()) {
+            return response(url($url));
+        } else {
+            return redirect()->to($url);
         }
     }
 }

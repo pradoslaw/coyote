@@ -603,6 +603,9 @@ $(function () {
         return false;
     });
 
+    /**
+     * Move to another category
+     */
     $('#btn-move ul a').click(function() {
         var $this = $(this);
 
@@ -618,6 +621,15 @@ $(function () {
             form.append('<input type="hidden" name="path" value="' + $this.data('path') + '">');
             form.submit();
         });
+
+        return false;
+    });
+
+    /**
+     * Edit topic subject
+     */
+    $('#btn-edit-subject a').click(function() {
+        $('#subject-modal').modal('show');
 
         return false;
     });
