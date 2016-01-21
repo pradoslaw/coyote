@@ -19,6 +19,11 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * npm
 * git
 
+### Zalecane
+
+* Redis
+* Beanstalkd
+
 ## Instalacja
 
 * `apt-get install php5-gd`
