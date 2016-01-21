@@ -61,6 +61,7 @@ $(function () {
      * Collapse forum category
      */
     $('.toggle[data-toggle="collapse"]').click(function() {
+        $.post($(this).data('ajax'), {flag: +$(this).hasClass('in')});
         $(this).toggleClass('in');
     });
 

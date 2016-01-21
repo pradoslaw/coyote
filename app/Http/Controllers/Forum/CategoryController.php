@@ -25,12 +25,14 @@ class CategoryController extends BaseController
         $this->forum->skipCriteria(true);
         // execute query: get all subcategories that user can has access to
         $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId(), $forum->id);
+        // get user settings based on user id or session id (for anonymous user)
+        $settings = $setting->getAll(auth()->id(), $request->session()->getId());
 
         if ($request->has('perPage')) {
             $perPage = max(10, min($request->get('perPage'), 50));
             $setting->setItem('forum.topics_per_page', $perPage, auth()->id(), $request->session()->getId());
         } else {
-            $perPage = $setting->getItem('forum.topics_per_page', auth()->id(), $request->session()->getId(), 20);
+            $perPage = isset($settings['forum.topics_per_page']) ?: 20;
         }
 
         // display topics for this category
@@ -44,8 +46,10 @@ class CategoryController extends BaseController
             $perPage
         );
 
+        $collapse = isset($settings['forum.collapse']) ? unserialize($settings['forum.collapse']) : [];
+
         return parent::view('forum.category')->with(
-            compact('forumList', 'forum', 'topics', 'sections')
+            compact('forumList', 'forum', 'topics', 'sections', 'collapse')
         );
     }
 
@@ -60,5 +64,23 @@ class CategoryController extends BaseController
         foreach ($forums as $forum) {
             $this->forum->markAsRead($forum->id, auth()->id(), request()->session()->getId());
         }
+    }
+
+    /**
+     * Set category visibility
+     *
+     * @param \Coyote\Forum $forum
+     * @param Request $request
+     * @param Setting $setting
+     */
+    public function section($forum, Request $request, Setting $setting)
+    {
+        $collapse = $setting->getItem('forum.collapse', auth()->id(), $request->session()->getId());
+        if ($collapse !== null) {
+            $collapse = unserialize($collapse);
+        }
+
+        $collapse[$forum->id] = (int) $request->input('flag');
+        $setting->setItem('forum.collapse', serialize($collapse), auth()->id(), $request->session()->getId());
     }
 }

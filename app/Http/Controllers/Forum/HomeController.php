@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
@@ -39,15 +40,21 @@ class HomeController extends BaseController
 
     /**
      * @param Request $request
+     * @param Setting $setting
      * @return $this
      */
-    public function index(Request $request)
+    public function index(Request $request, Setting $setting)
     {
         $this->pushForumCriteria();
         // execute query: get all categories that user can has access
         $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId());
+        // get categories collapse
+        $collapse = $setting->getItem('forum.collapse', auth()->id(), $request->session()->getId());
+        if ($collapse) {
+            $collapse = unserialize($collapse);
+        }
 
-        return $this->view('forum.home.categories')->with(compact('sections'));
+        return $this->view('forum.home.categories')->with(compact('sections', 'collapse'));
     }
 
     /**

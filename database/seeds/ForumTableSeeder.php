@@ -70,7 +70,8 @@ class ForumTableSeeder extends Seeder
             'name' => 'Dla początkujących',
             'path' => 'Python/Dla_poczatkujacych',
             'description' => 'Forum o Pythonie dla dla początkujących.',
-            'parent_id' => $parent->id
+            'parent_id' => $parent->id,
+            'section' => 'Podkategorie'
         ]);
 
         Coyote\Forum::create([
