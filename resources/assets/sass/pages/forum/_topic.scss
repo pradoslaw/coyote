@@ -450,3 +450,29 @@ div.tooltip-inner {
     height: 50px;
   }
 }
+
+// Cytowane posty na forum
+// ----------------------------------------------------------
+
+blockquote {
+  color: $gray-light;
+
+  > h5 {
+    a {
+      color: $gray !important;
+      position: relative;
+      padding-left: 16px;
+      font-family: Helvetica, sans-serif;
+
+      &:before {
+        @include font-awesome($fa-var-external-link);
+        left: 0;
+        top: 2px;
+      }
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}

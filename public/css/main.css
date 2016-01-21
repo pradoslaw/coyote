@@ -393,7 +393,7 @@ h2, .h2 {
   font-size: 20px; }
 
 h3, .h3 {
-  font-size: 23px; }
+  font-size: 20px; }
 
 h4, .h4 {
   font-size: 17px; }
@@ -7131,7 +7131,7 @@ ul.breadcrumb {
   box-shadow: inset 1px 1px #FFF;
   background-color: #e2e7e1;
   border: 1px solid #c7c7c7; }
-  .panel-wrapper > .panel-body h2 {
+  .panel-wrapper > .panel-body > h2 {
     font-size: 14px;
     color: #464646;
     text-shadow: white 0 1px 0; }

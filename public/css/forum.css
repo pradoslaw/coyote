@@ -919,6 +919,22 @@ div.tooltip-inner {
   #box-fast-form textarea {
     height: 50px; }
 
+blockquote {
+  color: #777777; }
+  blockquote > h5 a {
+    color: #555555 !important;
+    position: relative;
+    padding-left: 16px;
+    font-family: Helvetica, sans-serif; }
+    blockquote > h5 a:before {
+      position: absolute;
+      font-family: FontAwesome;
+      content: "";
+      left: 0;
+      top: 2px; }
+    blockquote > h5 a:hover {
+      text-decoration: none; }
+
 #form-wrapper {
   margin-top: 20px; }
 

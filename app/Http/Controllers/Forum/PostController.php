@@ -100,9 +100,10 @@ class PostController extends BaseController
 
             // builds text with quoted posts
             foreach ($posts as $post) {
-                $body .= '> [' .
+                $body .= '> ##### [' .
                     ($post->name ?: $post->user_name) .
-                    ' dnia ' . $post->created_at->toDateTimeString() . '](' . route('forum.share', [$post->id]) . '):';
+//                    ' dnia ' . $post->created_at->toDateTimeString() . '](' . route('forum.share', [$post->id]) . '):';
+                    ' napisał(a)](' . route('forum.share', [$post->id]) . '):';
 
                 $body .= "\n> " . str_replace("\n", "\n> ", $post->text);
                 $body .= "\n\n";
