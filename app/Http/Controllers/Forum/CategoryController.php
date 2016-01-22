@@ -32,7 +32,7 @@ class CategoryController extends BaseController
             $perPage = max(10, min($request->get('perPage'), 50));
             $setting->setItem('forum.topics_per_page', $perPage, auth()->id(), $request->session()->getId());
         } else {
-            $perPage = isset($settings['forum.topics_per_page']) ?: 20;
+            $perPage = isset($settings['forum.topics_per_page']) ? $settings['forum.topics_per_page'] : 20;
         }
 
         // display topics for this category

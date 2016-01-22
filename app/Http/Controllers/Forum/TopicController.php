@@ -162,8 +162,10 @@ class TopicController extends BaseController
             foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
                 $activities[$row->first()['object.id']] = $row->first();
             }
+        }
 
-            $reasonList = Reason::lists('name', 'id');
+        if (Gate::allows('delete', $forum) || Gate::allows('move', $forum)) {
+            $reasonList = Reason::lists('name', 'id')->toArray();
         }
 
         // if topic is locked we need to fetch information when and by whom

@@ -163,7 +163,7 @@
                                     {% if path == forum.path %}
                                         <li><a style="color: #ccc">{{ name|raw }}</a></li>
                                     {% else %}
-                                        <li><a data-path="{{ path }}" href="{{ route('forum.move', [topic.id]) }}">{{ name|raw }}</a></li>
+                                        <li><a data-path="{{ path }}" href="javascript:">{{ name|raw }}</a></li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
@@ -183,25 +183,71 @@
     {% if auth_check() %}
         {{ modals.confirm('Post zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'post-confirm-delete') }}
         {{ modals.confirm('Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'comment-confirm-delete') }}
-        {{ modals.confirm('Czy na pewno chcesz przenieść wątek do innej kategorii?', 'Czy chcesz przenieść?', 'confirm-move', 'Tak, przenieś') }}
+
+        {{ form_open({'url': '#'}) }}
+            <div class="modal fade" id="modal-post-delete" tabindex="-1" role="dialog" aria-labelledby="modal-post-delete" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Czy chcesz usunąć?</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Post zostanie usunięty. Czy na pewno chcesz to zrobić?</p>
+
+                            {% if reasonList %}
+                                {{ form_select('reason', {0: '-- Wybierz --'} + reasonList, 0, {'class': 'form-control input-sm'}) }}
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                            <button type="submit" class="btn btn-danger danger" data-submit-state="Usuwanie...">Tak, usuń</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{ form_close() }}
+
+        {% if can('move', forum) %}
+            {{ form_open({'url': route('forum.move', [topic.id])}) }}
+                <div class="modal fade" id="modal-move" tabindex="-1" role="dialog" aria-labelledby="modal-move" aria-hidden="true">
+                    {{ form_hidden('path') }}
+
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Czy chcesz przenieść?</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Czy na pewno chcesz przenieść wątek do innej kategorii?</p>
+                                {{ form_select('reason', {0: '-- Wybierz --'} + reasonList, 0, {'class': 'form-control input-sm'}) }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                                <button type="submit" class="btn btn-danger danger" data-submit-state="Przenoszenie...">Tak, przenieś</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{ form_close() }}
+        {% endif %}
+
         {{ modals.alert('Wystąpił błąd podczas działania programu.') }}
     {% endif %}
 
     {% if can('update', forum) %}
-        {#<form method="post" action="{{ route('forum.topic.subject', [topic.id]) }}">#}
-            {{ form_open({'url': route('forum.topic.subject', [topic.id])}) }}
-            <div class="modal fade" id="subject-modal" tabindex="-1" role="dialog" aria-labelledby="subject-modal" aria-hidden="true">
+        {{ form_open({'url': route('forum.topic.subject', [topic.id])}) }}
+            <div class="modal fade" id="modal-subject" tabindex="-1" role="dialog" aria-labelledby="modal-subject" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Zmień tytuł wątku</h4>
                         </div>
                         <div class="modal-body">
-                            {{ form_text('subject', topic.subject, {'class': 'form-control'}) }}
+                            {{ form_text('subject', topic.subject, {'class': 'form-control', 'required': 'required'}) }}
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                            <button type="submit" class="btn btn-danger danger">Zmien tytuł</button>
+                            <button type="submit" class="btn btn-danger danger" data-submit-state="Wysyłanie...">Zmien tytuł</button>
                         </div>
                     </div>
                 </div>
@@ -220,10 +266,6 @@
 
     <script type="text/javascript">
         var promptUrl = '{{ route('forum.prompt', [topic.id]) }}';
-
-        {% if can('delete', forum) %}
-            var reasonsList = {{ reasonList.toJson()|raw }};
-        {% endif %}
 
         $(function () {
             $('.col-bottom a').tooltip({'trigger': 'hover'});

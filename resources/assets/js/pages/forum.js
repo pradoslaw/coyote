@@ -147,20 +147,7 @@ $(function () {
      * Move to another category
      */
     $('#btn-move ul a').click(function() {
-        var $this = $(this);
-
-        $('#confirm-move').modal('show').one('click', '.danger', function() {
-            $(this).attr('disabled', 'disabled').text('Przenoszenie...');
-            var modal = $(this).parents('.modal-content');
-
-            var form = toPost($this.attr('href'));
-            if ($('select', modal).length) {
-                form.append('<input type="hidden" name="reason" value="' + $('select', modal).val() + '">');
-            }
-
-            form.append('<input type="hidden" name="path" value="' + $this.data('path') + '">');
-            form.submit();
-        });
+        $('#modal-move').modal('show').find(':hidden[name="path"]').val($(this).data('path'));
 
         return false;
     });
@@ -169,7 +156,7 @@ $(function () {
      * Edit topic subject
      */
     $('#btn-edit-subject a').click(function() {
-        $('#subject-modal').modal('show');
+        $('#modal-subject').modal('show');
 
         return false;
     });
@@ -229,17 +216,8 @@ $(function () {
     $('.btn-del').click(function() {
         var $this = $(this);
 
-        $('#post-confirm-delete').modal('show').one('click', '.danger', function() {
-            $(this).attr('disabled', 'disabled').text('Usuwanie...');
-            var modal = $(this).parents('.modal-content');
-
-            var form = toPost($this.attr('href'));
-            if ($('select', modal).length) {
-                form.append('<input type="hidden" name="reason" value="' + $('select', modal).val() + '">');
-            }
-
-            form.submit();
-        });
+        $('#modal-post-delete').parent().attr('action', $this.attr('href'));
+        $('#modal-post-delete').modal('show');
 
         return false;
     });
@@ -513,22 +491,6 @@ $(function () {
 
         return false;
     });
-
-    /**
-     * Append list of reasons (of moderator actions) to modal box
-     */
-    if (typeof reasonsList !== 'undefined') {
-        var select = $('<select>', {'class': 'form-control input-sm'});
-        select.append('<option value="0">-- wybierz powód --</option>');
-
-        $.each(reasonsList, function(key, value) {
-            select.append('<option value="' + key + '">' + value + '</option>');
-        });
-
-        $('#post-confirm-delete, #confirm-move').each(function() {
-            select.appendTo($('.modal-body', this));
-        });
-    }
 
     if ('onhashchange' in window) {
         var onHashChange = function () {
