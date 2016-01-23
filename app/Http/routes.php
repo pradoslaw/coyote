@@ -62,6 +62,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Topic/Mark/{topic}', ['uses' => 'TopicController@mark', 'as' => 'topic.mark']);
     // szybka zmiana tytulu watku
     Route::post('Topic/Subject/{topic}', ['uses' => 'TopicController@subject', 'as' => 'topic.subject', 'middleware' => 'auth']);
+    // dziennik zdarzen dla watku
+    Route::get('Topic/Log/{topic}', ['uses' => 'TopicController@log', 'as' => 'topic.log', 'middleware' => ['auth', 'topic.access']]);
 
     // widok kategorii forum
     Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);
@@ -76,6 +78,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Post/Vote/{id}', ['uses' => 'PostController@vote', 'as' => 'post.vote']);
     // akceptowanie danego posta jako poprawna odpowiedz w watku
     Route::post('Post/Accept/{id}', ['uses' => 'PostController@accept', 'as' => 'post.accept']);
+    Route::get('Post/History/{id}', ['uses' => 'PostController@history', 'as' => 'post.history']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
     Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);

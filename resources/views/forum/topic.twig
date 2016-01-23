@@ -136,11 +136,11 @@
                     {% endif %}
 
                     <li class="btn-atom">
-                        <a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
+                        <a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
                     </li>
 
                     {% if can('update', forum) %}
-                        <li id="btn-log"><a title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
+                        <li id="btn-log"><a href="{{ route('forum.topic.log', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
                         <li id="btn-edit-subject"><a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
                     {% endif %}
                     {% if can('lock', forum) %}
