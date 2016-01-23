@@ -836,11 +836,11 @@ $(function () {
     .on('click', '.btn-comment-del', function() {
         var $this = $(this);
 
-        $('#comment-confirm-delete').modal('show').one('click', '.danger', function() {
+        $('#modal-comment-delete').modal('show').one('click', '.danger', function() {
             $(this).attr('disabled', 'disabled').text('Usuwanie...');
 
             $.post($this.attr('href'), function() {
-                $('#comment-confirm-delete').modal('hide');
+                $('#modal-comment-delete').modal('hide');
 
                 $this.parent().fadeOut(function() {
                     $(this).remove();

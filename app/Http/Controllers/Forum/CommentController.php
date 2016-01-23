@@ -185,7 +185,7 @@ class CommentController extends Controller
         $forum = $this->forum->findOrFail($post->forum_id);
 
         // Maybe user does not have an access to this category?
-        if (!$forum->userCanAccess(auth()->user())) {
+        if (!$forum->userCanAccess(auth()->id())) {
             abort(401, 'Unauthorized');
         }
 

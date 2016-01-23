@@ -310,7 +310,7 @@ class PostController extends BaseController
         $this->authorize('delete', [$post, $forum]);
 
         // Step 3. Maybe user does not have an access to this category?
-        if (!$forum->userCanAccess(auth()->user())) {
+        if (!$forum->userCanAccess(auth()->id())) {
             abort(401, 'Unauthorized');
         }
 

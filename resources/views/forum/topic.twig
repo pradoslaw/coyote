@@ -170,9 +170,9 @@
                         </li>
                     {% endif %}
 
-                    {% if can('sticky', forum) %}
-                        <li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>
-                    {% endif %}
+                    {#{% if can('sticky', forum) %}#}
+                        {#<li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>#}
+                    {#{% endif %}#}
                 </ul>
             </div>
 
@@ -181,8 +181,7 @@
     </div>
 
     {% if auth_check() %}
-        {{ modals.confirm('Post zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'post-confirm-delete') }}
-        {{ modals.confirm('Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'comment-confirm-delete') }}
+        {{ modals.confirm('Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'modal-comment-delete') }}
 
         {{ form_open({'url': '#'}) }}
             <div class="modal fade" id="modal-post-delete" tabindex="-1" role="dialog" aria-labelledby="modal-post-delete" aria-hidden="true">
