@@ -52,6 +52,14 @@ interface PostRepositoryInterface extends RepositoryInterface
     public function subscribe($postId, $userId, $flag);
 
     /**
+     * Assign attachments to the post
+     *
+     * @param $postId
+     * @param array $attachments
+     */
+    public function setAttachments($postId, array $attachments);
+
+    /**
      * Find posts by given ID. We use this method to retrieve quoted posts
      *
      * @param array $postsId

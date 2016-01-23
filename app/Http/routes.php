@@ -39,6 +39,9 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('/Subscribes', ['uses' => 'HomeController@subscribes', 'as' => 'subscribes']);
     Route::post('/Mark', ['uses' => 'HomeController@mark', 'as' => 'mark']);
 
+    // dodawanie zalacznika do posta
+    Route::post('Upload', ['uses' => 'AttachmentController@upload', 'as' => 'upload']);
+
     // formularz dodawania nowego watku na forum
     Route::get('{forum}/Submit', ['uses' => 'TopicController@submit', 'as' => 'topic.submit', 'middleware' => ['forum.access', 'forum.write']]);
     Route::post('{forum}/Submit', ['uses' => 'TopicController@save', 'middleware' => ['forum.access', 'forum.write']]);

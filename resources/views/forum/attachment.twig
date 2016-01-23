@@ -1,0 +1,13 @@
+<tr>
+    <td><a href="javascript:" class="btn-append">{{ attachment.name }}</a></td>
+    <td>{{ attachment.mime }}</td>
+    <td>{{ attachment.created_at|format_date }}</td>
+    <td>{{ (attachment.size / 1024)|round(2) }} kB</td>
+    <td>
+        <button type="button" title="Usuń załącznik" class="btn btn-default btn-xs btn-del">
+            <i class="fa fa-remove"></i>
+        </button>
+
+        {{ form_hidden('attachments[]', attachment.file) }}
+    </td>
+</tr>

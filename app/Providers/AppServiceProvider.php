@@ -127,5 +127,10 @@ class AppServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Contracts\\Post\\HistoryRepositoryInterface',
             'Coyote\\Repositories\\Eloquent\\Post\\HistoryRepository'
         );
+
+        $this->app->bind(
+            'Coyote\\Repositories\\Contracts\\Post\\AttachmentRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\Post\\AttachmentRepository'
+        );
     }
 }

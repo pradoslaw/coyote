@@ -673,10 +673,8 @@ $(function () {
     /**
      * Delete post/topic
      */
-    $('.btn-del').click(function() {
-        var $this = $(this);
-
-        $('#modal-post-delete').parent().attr('action', $this.attr('href'));
+    $('.post').on('click', '.btn-del', function() {
+        $('#modal-post-delete').parent().attr('action', $(this).attr('href'));
         $('#modal-post-delete').modal('show');
 
         return false;
@@ -898,6 +896,9 @@ $(function () {
         $('.btn-comment[href="#' + $(this).attr('id') + '"]').removeClass('active');
     });
 
+    /**
+     * Quick edit of post
+     */
     var posts = {};
 
     $('.btn-fast-edit').click(function() {
@@ -951,6 +952,53 @@ $(function () {
 
         return false;
     });
+
+    /**
+     * Upload attachment
+     */
+    $('#btn-upload').click(function() {
+        $('.input-file').click();
+    });
+
+    $('.input-file').change(function() {
+        var $form = $('#submit-form');
+        var formData = new FormData($form[0]);
+
+        $.ajax({
+            url: uploadUrl,
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $('#btn-upload').attr('disabled', 'disabled').text('Wysyłanie...');
+            },
+            success: function (html) {
+                $('#attachments .text-center').remove();
+
+                $('#attachments tbody').append(html);
+            },
+            error: function (err) {
+                $('#alert').modal('show');
+
+                if (typeof err.responseJSON !== 'undefined') {
+                    $('.modal-body').text(err.responseJSON.attachment[0]);
+                }
+            },
+            complete: function() {
+                $('#btn-upload').removeAttr('disabled').text('Dodaj załącznik');
+            }
+        }, 'json');
+
+        return false;
+    });
+
+    $('#attachments').on('click', '.btn-del', function() {
+        $(this).parents('tr').remove();
+    });
+
+    /////////////////////////////////////////////////////////////////////////////////
 
     if ('onhashchange' in window) {
         var onHashChange = function () {

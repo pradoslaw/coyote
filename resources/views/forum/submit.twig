@@ -55,14 +55,45 @@
 
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
-                            {% include 'components/toolbar' %}
+                            {% include 'components/toolbar.twig' %}
                             <textarea name="text" class="form-control" style="height: 160px;" tabindex="3">{{ input_old('text', text) }}</textarea>
 
                             {% if errors.first('text') %}
                                 <span class="help-block">{{ errors.first('text') }}</span>
                             {% endif %}
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="attachments"></div>
+
+                        <div role="tabpanel" class="tab-pane" id="attachments">
+                            <div class="panel panel-default">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Nazwa pliku</th>
+                                            <th>Typ MIME</th>
+                                            <th>Data dodania</th>
+                                            <th>Rozmiar</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for attachment in attachments %}
+                                            {% include 'forum/attachment.twig' %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="5" class="text-center">Brak załączników.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <div class="panel-footer">
+                                    <p class="text-muted"><small>Możesz dodać maksymalnie <strong>15</strong> załączników, każdy z nich po <strong>20MB</strong>. Dostępne rozszerzenia: <strong>jpg, jpeg, gif, png, zip, rar, txt, pdf, doc, xls, pas, cpp, 7z, 7zip, patch</strong></small></p>
+
+                                    <input class="input-file" type="file" name="attachment" style="visibility: hidden; height: 1px">
+                                    <button type="button" id="btn-upload" class="btn btn-primary btn-sm">Dodaj załącznik</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div role="tabpanel" class="tab-pane" id="poll"></div>
                         <div role="tabpanel" class="tab-pane" id="preview">
 
@@ -237,6 +268,14 @@
     {% import 'components/modals.twig' as modal %}
 
     {{ modal.alert('Wystąpił błąd podczas dodawania tagu.') }}
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        var uploadUrl = '{{ route('forum.upload') }}';
+    </script>
 {% endblock %}
 
 {% block body %}

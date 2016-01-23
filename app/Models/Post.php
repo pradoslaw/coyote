@@ -31,4 +31,9 @@ class Post extends Model
     {
         return $this->hasMany('Coyote\Post\Subscriber');
     }
+
+    public function attachments()
+    {
+        return $this->hasMany('Coyote\Post\Attachment');
+    }
 }

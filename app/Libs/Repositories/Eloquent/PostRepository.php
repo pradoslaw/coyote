@@ -4,6 +4,7 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Post\Subscriber;
+use Coyote\Post\Attachment;
 use DB;
 
 class PostRepository extends Repository implements PostRepositoryInterface
@@ -150,6 +151,18 @@ class PostRepository extends Repository implements PostRepositoryInterface
         } else {
             Subscriber::firstOrCreate(['post_id' => $postId, 'user_id' => $userId]);
         }
+    }
+
+    /**
+     * Assign attachments to the post
+     *
+     * @param $postId
+     * @param array $attachments
+     */
+    public function setAttachments($postId, array $attachments)
+    {
+        Attachment::where('post_id', $postId)->update(['post_id' => null]);
+        Attachment::whereIn('file', $attachments)->update(['post_id' => $postId]);
     }
 
     /**

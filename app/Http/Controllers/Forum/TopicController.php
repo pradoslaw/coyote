@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\Post\HistoryRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
@@ -42,17 +43,24 @@ class TopicController extends BaseController
     private $stream;
 
     /**
+     * @var Attachment
+     */
+    private $attachment;
+
+    /**
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
      * @param Stream $stream
+     * @param Attachment $attachment
      */
-    public function __construct(Forum $forum, Topic $topic, Post $post, Stream $stream)
+    public function __construct(Forum $forum, Topic $topic, Post $post, Stream $stream, Attachment $attachment)
     {
         parent::__construct($forum, $topic);
 
         $this->post = $post;
         $this->stream = $stream;
+        $this->attachment = $attachment;
     }
 
     /**
@@ -230,6 +238,9 @@ class TopicController extends BaseController
                 'host'      => request()->server('SERVER_NAME')
             ]);
 
+            // assign attachments to the post
+            $this->post->setAttachments($post->id, $request->get('attachments', []));
+            // assign tags to topic
             $this->topic->setTags($topic->id, $request->get('tag', []));
 
             if (auth()->check()) {

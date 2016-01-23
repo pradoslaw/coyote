@@ -8,6 +8,7 @@ use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Subscriber;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AcceptRepositoryInterface as Accept;
+use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\Post\HistoryRepositoryInterface;
 use Coyote\Repositories\Contracts\Post\VoteRepositoryInterface as Vote;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
@@ -26,8 +27,8 @@ use Coyote\Stream\Actor as Stream_Actor;
 use Coyote\User;
 use Coyote\Post\History;
 use Gate;
-use Cookie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class PostController extends BaseController
 {
@@ -37,15 +38,22 @@ class PostController extends BaseController
     private $post;
 
     /**
+     * @var Attachment
+     */
+    private $attachment;
+
+    /**
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
+     * @param Attachment $attachment
      */
-    public function __construct(Forum $forum, Topic $topic, Post $post)
+    public function __construct(Forum $forum, Topic $topic, Post $post, Attachment $attachment)
     {
         parent::__construct($forum, $topic);
 
         $this->post = $post;
+        $this->attachment = $attachment;
     }
 
     /**
@@ -74,6 +82,7 @@ class PostController extends BaseController
             }
 
             $text = $post->text; // we're gonna pass this variable to the view
+            $attachments = $post->attachments()->get();
         }
 
         if (auth()->check()) {
@@ -113,8 +122,12 @@ class PostController extends BaseController
             $text = $body;
         }
 
+        if (request()->old('attachments')) {
+            $attachments = $this->attachment->findByFile(request()->old('attachments'))->toArray();
+        }
+
         return $this->view('forum.submit')->with(
-            compact('forum', 'topic', 'post', 'text', 'title', 'tags', 'isSubscribe')
+            compact('forum', 'topic', 'post', 'text', 'title', 'tags', 'isSubscribe', 'attachments')
         );
     }
 
@@ -260,6 +273,9 @@ class PostController extends BaseController
             if (auth()->check() && $post->user_id) {
                 $this->topic->subscribe($topic->id, $post->user_id, $request->get('subscribe'));
             }
+
+            // assign attachments to the post
+            $this->post->setAttachments($post->id, $request->get('attachments', []));
 
             $activity->setObject((new Stream_Post(['url' => $url]))->map($post));
             $activity->setTarget((new Stream_Topic())->map($topic, $forum));
