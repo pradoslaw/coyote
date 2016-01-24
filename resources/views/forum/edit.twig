@@ -2,6 +2,10 @@
 {{ form_open({'url': route('forum.post.submit', [forum.path, topic.id, post.id])}) }}
     {{ form_hidden('user_name', post.user_name) }}
 
+    {% for attachment in attachments %}
+        {{ form_hidden('attachments[]', attachment.file) }}
+    {% endfor %}
+
     {% if post.id == topic.first_post_id %}
         {{ form_hidden('subject', topic.subject) }}
         {{ form_hidden('custom_tags', tags|join(', ')) }}
@@ -15,7 +19,7 @@
         {{ form_hidden('subscribe', true) }}
     {% endif %}
 
-    <textarea name="text" rows="5" class="form-control">{{ post.text }}</textarea>
+    {{ form_textarea('text', post.text, {'class': 'form-control', 'rows': 5}) }}
 
     <button type="submit" class="btn btn-xs btn-primary pull-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</button>
     <a class="btn btn-xs btn-default pull-right btn-reset" style="margin-right: 10px">Anuluj</a>

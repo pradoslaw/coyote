@@ -147,8 +147,9 @@ class PostController extends BaseController
             $tags = $topic->tags->pluck('name')->toArray();
         }
         $isSubscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
+        $attachments = $post->attachments()->get();
 
-        return view('forum.edit')->with(compact('post', 'forum', 'topic', 'tags', 'isSubscribe'));
+        return view('forum.edit')->with(compact('post', 'forum', 'topic', 'tags', 'isSubscribe', 'attachments'));
     }
 
     /**
@@ -289,7 +290,7 @@ class PostController extends BaseController
 
         // is this a quick edit (via ajax)?
         if ($request->ajax()) {
-            $data = ['post' => ['text' => $text]];
+            $data = ['post' => ['text' => $text, 'attachments' => $post->attachments()->get()]];
 
             if (auth()->user()->allow_sig && $post->user_id) {
                 $parser = app()->make('Parser\Sig');
