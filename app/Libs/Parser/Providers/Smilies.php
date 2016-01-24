@@ -27,7 +27,7 @@ class Smilies implements ProviderInterface
 
         while (list($var, $value) = each($this->smilies)) {
             $patterns[] = '#(?<=^|[\n ]|\.)' . preg_quote($var, '#') . '#';
-            $replacements[] = '<img alt="' . $var . '" title="' . $var . '" src="' . asset('img/smilies/' . $value) . '" />';
+            $replacements[] = '<img class="img-smile" alt="' . $var . '" title="' . $var . '" src="' . asset('img/smilies/' . $value) . '" />';
         }
         reset($this->smilies);
 

@@ -825,6 +825,10 @@
     background: transparent; }
   .post-content textarea {
     margin-bottom: 5px; }
+  .post-content img:not(.img-smile) {
+    display: block;
+    max-width: 100%;
+    height: auto; }
 
 .edit-info {
   font-size: 11px;

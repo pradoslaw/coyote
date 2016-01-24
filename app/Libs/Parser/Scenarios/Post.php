@@ -26,11 +26,6 @@ class Post
     private $word;
 
     /**
-     * @var bool
-     */
-    private $enableSmilies = false;
-
-    /**
      * @param User $user
      * @param Word $word
      */
@@ -38,16 +33,6 @@ class Post
     {
         $this->user = $user;
         $this->word = $word;
-    }
-
-    /**
-     * @param bool $flag
-     * @return $this
-     */
-    public function setEnableSmilies($flag)
-    {
-        $this->enableSmilies = (bool) $flag;
-        return $this;
     }
 
     /**
@@ -70,7 +55,7 @@ class Post
             $parser->attach(new Geshi());
         });
 
-        if ((auth()->check() && auth()->user()->allow_smilies) && $this->enableSmilies) {
+        if (auth()->check() && auth()->user()->allow_smilies) {
             $parser->attach(new Smilies());
         }
 
