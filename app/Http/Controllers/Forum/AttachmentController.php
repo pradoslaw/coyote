@@ -57,7 +57,7 @@ class AttachmentController extends Controller
         ]);
 
         if ($request->file('attachment')->isValid()) {
-            $fileName = uniqid() . '.' . $request->file('attachment')->getClientOriginalExtension();
+            $fileName = uniqid() . '.' . strtolower($request->file('attachment')->getClientOriginalExtension());
             $request->file('attachment')->move(public_path() . '/storage/forum/', $fileName);
 
             $path = 'storage/forum/' . $fileName;

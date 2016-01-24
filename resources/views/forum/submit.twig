@@ -1,12 +1,16 @@
 {% extends 'forum/base.twig' %}
 {% block title %}
-    {% if post.id is null %}
-        Napisz odpowiedź w wątku {{ topic.subject }}
-    {% else %}
-        Edycja posta
-    {% endif %}
+    {% spaceless %}
+        {% if topic.id is null %}
+            Nowy wątek
+        {% elseif post.id is null %}
+            Napisz odpowiedź w wątku {{ topic.subject }}
+        {% else %}
+            Edycja posta
+        {% endif %}
 
     {{ parent() }}
+    {% endspaceless %}
 {% endblock %}
 
 {% import 'components/forms.twig' as forms %}

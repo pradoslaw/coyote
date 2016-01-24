@@ -1,5 +1,11 @@
 <tr>
-    <td><a href="javascript:" class="btn-append">{{ attachment.name }}</a></td>
+    <td>
+        {% if attachment.file|split('.')[1] in ['jpg', 'jpeg', 'gif', 'png'] %}
+            <a href="javascript:" class="btn-append" data-url="{{ cdn('storage/forum/' ~ attachment.file) }}">{{ attachment.name }}</a>
+        {% else %}
+            {{ attachment.name }}
+        {% endif %}
+    </td>
     <td>{{ attachment.mime }}</td>
     <td>{{ attachment.created_at|format_date }}</td>
     <td>{{ (attachment.size / 1024)|round(2) }} kB</td>
@@ -8,6 +14,6 @@
             <i class="fa fa-remove"></i>
         </button>
 
-        {{ form_hidden('attachments[]', attachment.file) }}
+        <input type="hidden" name="attachments[]" value="{{ attachment.file }}">
     </td>
 </tr>

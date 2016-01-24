@@ -212,7 +212,11 @@ class TopicController extends BaseController
         $this->breadcrumb($forum);
         $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
 
-        return Controller::view('forum.submit', ['title' => 'Nowy wątek na ' . $forum->name])->with('forum', $forum);
+        if (request()->old('attachments')) {
+            $attachments = $this->attachment->findByFile(request()->old('attachments'));
+        }
+
+        return Controller::view('forum.submit')->with(compact('forum', 'attachments'));
     }
 
     /**

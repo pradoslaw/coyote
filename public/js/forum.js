@@ -976,7 +976,6 @@ $(function () {
             },
             success: function (html) {
                 $('#attachments .text-center').remove();
-
                 $('#attachments tbody').append(html);
             },
             error: function (err) {
@@ -996,6 +995,21 @@ $(function () {
 
     $('#attachments').on('click', '.btn-del', function() {
         $(this).parents('tr').remove();
+    })
+    .on('click', '.btn-append', function() {
+        var $form = $(this).parents('form');
+
+        var parent = $(this).parents('tr');
+        var file = $(':hidden', parent).val();
+        var suffix = file.split('.').pop().toLowerCase();
+        var markdown = '';
+
+        if (suffix === 'png' || suffix === 'jpg' || suffix === 'jpeg' || suffix === 'gif') {
+            markdown = '![' + $(this).text() + '](' + $(this).data('url') + ')';
+        }
+
+        $('textarea', $form).insertAtCaret('', '', markdown);
+        $('.nav-tabs a:first').tab('show');
     });
 
     /////////////////////////////////////////////////////////////////////////////////

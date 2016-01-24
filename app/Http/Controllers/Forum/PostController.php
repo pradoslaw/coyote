@@ -28,7 +28,6 @@ use Coyote\User;
 use Coyote\Post\History;
 use Gate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 
 class PostController extends BaseController
 {
@@ -69,6 +68,9 @@ class PostController extends BaseController
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
+        // list of post's attachments
+        $attachments = collect();
+
         if ($post === null) {
             $this->breadcrumb->push('Odpowiedz', url(request()->path()));
         } else {
@@ -82,7 +84,7 @@ class PostController extends BaseController
             }
 
             $text = $post->text; // we're gonna pass this variable to the view
-            $attachments = $post->attachments()->get();
+            $attachments = $attachments->merge($post->attachments()->get());
         }
 
         if (auth()->check()) {
@@ -111,7 +113,6 @@ class PostController extends BaseController
             foreach ($posts as $post) {
                 $body .= '> ##### [' .
                     ($post->name ?: $post->user_name) .
-//                    ' dnia ' . $post->created_at->toDateTimeString() . '](' . route('forum.share', [$post->id]) . '):';
                     ' napisał(a)](' . route('forum.share', [$post->id]) . '):';
 
                 $body .= "\n> " . str_replace("\n", "\n> ", $post->text);
@@ -123,7 +124,7 @@ class PostController extends BaseController
         }
 
         if (request()->old('attachments')) {
-            $attachments = $this->attachment->findByFile(request()->old('attachments'))->toArray();
+            $attachments = $this->attachment->findByFile(request()->old('attachments'));
         }
 
         return $this->view('forum.submit')->with(
