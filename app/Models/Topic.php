@@ -44,13 +44,27 @@ class Topic extends Model
         });
     }
 
+    /**
+     * @return mixed
+     */
     public function tags()
     {
         return $this->hasMany('Coyote\Topic\Tag')->join('tags', 'tags.id', '=', 'tag_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function subscribers()
     {
         return $this->hasMany('Coyote\Topic\Subscriber');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function users()
+    {
+        return $this->hasMany('Coyote\Topic\User');
     }
 }

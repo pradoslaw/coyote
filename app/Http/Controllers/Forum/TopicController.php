@@ -216,7 +216,12 @@ class TopicController extends BaseController
             $attachments = $this->attachment->findByFile(request()->old('attachments'));
         }
 
-        return Controller::view('forum.submit')->with(compact('forum', 'attachments'));
+        if (auth()->check()) {
+            // default subscribe setting
+            $subscribe = auth()->user()->allow_subscribe;
+        }
+
+        return Controller::view('forum.submit')->with(compact('forum', 'attachments', 'subscribe'));
     }
 
     /**

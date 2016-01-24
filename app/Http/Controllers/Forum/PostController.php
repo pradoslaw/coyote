@@ -88,7 +88,15 @@ class PostController extends BaseController
         }
 
         if (auth()->check()) {
-            $isSubscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
+            $subscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
+
+            // we're creating new post...
+            if ($post === null && $subscribe == false) {
+                // if this is the first post in this topic, subscribe option depends on user's default setting
+                if (!$topic->users()->where('user_id', auth()->id())->count()) {
+                    $subscribe = auth()->user()->allow_subscribe;
+                }
+            }
         }
 
         // IDs of posts that user want to quote...
@@ -128,7 +136,7 @@ class PostController extends BaseController
         }
 
         return $this->view('forum.submit')->with(
-            compact('forum', 'topic', 'post', 'text', 'title', 'tags', 'isSubscribe', 'attachments')
+            compact('forum', 'topic', 'post', 'text', 'title', 'tags', 'subscribe', 'attachments')
         );
     }
 
@@ -146,10 +154,10 @@ class PostController extends BaseController
             // get topic tags only if this post is the FIRST post in topic
             $tags = $topic->tags->pluck('name')->toArray();
         }
-        $isSubscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
+        $subscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
         $attachments = $post->attachments()->get();
 
-        return view('forum.edit')->with(compact('post', 'forum', 'topic', 'tags', 'isSubscribe', 'attachments'));
+        return view('forum.edit')->with(compact('post', 'forum', 'topic', 'tags', 'subscribe', 'attachments'));
     }
 
     /**
