@@ -41,6 +41,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     // dodawanie zalacznika do posta
     Route::post('Upload', ['uses' => 'AttachmentController@upload', 'as' => 'upload']);
+    // sciaganie zalacznika
+    Route::get('Download/{id}', ['uses' => 'AttachmentController@download', 'as' => 'download']);
 
     // formularz dodawania nowego watku na forum
     Route::get('{forum}/Submit', ['uses' => 'TopicController@submit', 'as' => 'topic.submit', 'middleware' => ['forum.access', 'forum.write']]);

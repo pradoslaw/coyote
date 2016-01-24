@@ -106,6 +106,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 'post_comments.*', 'name', 'is_active', 'is_blocked'
             ])->join('users', 'users.id', '=', 'user_id');
         }]);
+        $sql->load('attachments');
+
         return $sql;
     }
 

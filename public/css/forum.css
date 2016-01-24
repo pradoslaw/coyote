@@ -830,6 +830,10 @@
     max-width: 100%;
     height: auto; }
 
+.list-attachments {
+  margin: 15px 0 5px 10px;
+  font-size: 11px; }
+
 .edit-info {
   font-size: 11px;
   padding: 5px 0;

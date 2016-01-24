@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Illuminate\Http\Request;
 use Guzzle\Http\Mimetypes;
 use Coyote\Http\Controllers\Controller;
+use Storage;
 
 /**
  * Class AttachmentController
@@ -53,7 +54,7 @@ class AttachmentController extends Controller
     public function upload(Request $request)
     {
         $this->validate($request, [
-            'attachment'             => 'required'
+            'attachment'  => 'required|max:' . (config('filesystems.upload_max_size') * 1024) . '|mimes:' . config('filesystems.upload_mimes')
         ]);
 
         if ($request->file('attachment')->isValid()) {
@@ -96,7 +97,7 @@ class AttachmentController extends Controller
         $attachment->count = $attachment->count + 1;
         $attachment->save();
 
-        $isImage = in_array(pathinfo($attachment->name, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
+        $isImage = in_array(pathinfo($attachment->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
 
         $headers = [
             'Content-Type' => $attachment->mime,
@@ -105,9 +106,15 @@ class AttachmentController extends Controller
             'Content-Length' => $attachment->size,
             'Cache-control' => 'private',
             'Pragma' => 'private',
-            'Expires', 'Mon, 26 Jul 1997 05:00:00 GMT'
+            'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT'
         ];
 
-        return response()->download(public_path() . '/store/forum/' . $attachment->file, $attachment->name, $headers);
+        $path = public_path('storage/forum/' . $attachment->file);
+
+        if ($isImage) {
+            return response()->make(Storage::get('forum/' . $attachment->file), 200, $headers);
+        } else {
+            return response()->download($path, $attachment->name, $headers);
+        }
     }
 }

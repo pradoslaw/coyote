@@ -90,7 +90,7 @@
                                     </tbody>
                                 </table>
                                 <div class="panel-footer">
-                                    <p class="text-muted"><small>Możesz dodać maksymalnie <strong>15</strong> załączników, każdy z nich po <strong>20MB</strong>. Dostępne rozszerzenia: <strong>jpg, jpeg, gif, png, zip, rar, txt, pdf, doc, xls, pas, cpp, 7z, 7zip, patch</strong></small></p>
+                                    <p class="text-muted"><small>Każdy załącznik może zawierać maksymalnie <strong>{{ config_get('filesystems.upload_max_size') }}MB</strong>. Dostępne rozszerzenia: <strong>{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}</strong></small></p>
 
                                     <input class="input-file" type="file" name="attachment" style="visibility: hidden; height: 1px">
                                     <button type="button" id="btn-upload" class="btn btn-primary btn-sm">Dodaj załącznik</button>
