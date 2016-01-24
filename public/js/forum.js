@@ -979,7 +979,8 @@ $(function () {
                 $('textarea', $form).val('');
                 $form.collapse('hide');
 
-                $(html).hide().insertBefore($form).show('slow');
+                $(html).hide().insertBefore($form).show('slow');console.log($(':hidden[name="post_id"]', $form).val());
+                $('.btn-sub[data-post-id="' + $(':hidden[name="post_id"]', $form).val() + '"]').addClass('active');
             } else {
                 $form.parent().hide().replaceWith(html).show('slow');
             }

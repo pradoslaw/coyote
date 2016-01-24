@@ -111,7 +111,7 @@ class CommentController extends Controller
                 $notification = [
                     'sender_id'   => auth()->id(),
                     'sender_name' => auth()->user()->name,
-                    'subject'     => excerpt($topic->subject, 48),
+                    'subject'     => excerpt($topic->subject),
                     'excerpt'     => excerpt($comment->text),
                     'url'         => $object->url
                 ];
@@ -133,6 +133,9 @@ class CommentController extends Controller
                 }
 
                 $alert->notify();
+
+                // subscribe post. notify about all future comments to this post
+                $this->post->subscribe($post->id, auth()->id(), true);
             }
         });
 

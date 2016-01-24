@@ -138,7 +138,7 @@
 
                 {% if not post.deleted_at %}
                     {% if auth_check() %}
-                        <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" href="{{ route('forum.post.subscribe', [post.id]) }}" class="btn btn-xs btn-sub {{ post.subscribe_on ? 'active' }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" href="{{ route('forum.post.subscribe', [post.id]) }}" data-post-id="{{ post.id }}" class="btn btn-xs btn-sub {{ post.subscribe_on ? 'active' }}">
                             <i class="fa fa-search-plus"></i>
                             <span class="hidden-xs">Obserwuj</span>
                         </a>
