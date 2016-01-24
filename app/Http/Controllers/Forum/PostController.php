@@ -183,10 +183,14 @@ class PostController extends BaseController
                 $post->fill($data);
 
                 // $isDirty determines if post has been changed somehow (body, title or tags)
-                $isDirty = $post->isDirty('text');
+                $isDirty = $post->isDirty('text'); // <-- we only wanna know if text has changed...
 
                 $activity = new Stream_Update($actor);
                 $guid = $history->guid();
+
+                if ($isDirty) {
+                    $history->add(History::EDIT_BODY, $post->id, auth()->id(), $post->text, $guid);
+                }
 
                 // user wants to change the subject. we must update "topics" table
                 if ($post->id === $topic->first_post_id) {
@@ -201,8 +205,9 @@ class PostController extends BaseController
                     }
 
                     $tags = $request->get('tag', []);
+                    $current = $topic->tags()->lists('name')->toArray();
 
-                    if ($topic->tags()->lists('name')->diff($tags)->count()) {
+                    if (array_merge(array_diff($tags, $current), array_diff($current, $tags))) {
                         $this->topic->setTags($topic->id, $tags);
                         $isDirty = true;
 
@@ -217,10 +222,6 @@ class PostController extends BaseController
                 }
 
                 $post->save();
-
-                if ($post->isDirty('text')) {
-                    $history->add(History::EDIT_BODY, $post->id, auth()->id(), $post->text, $guid);
-                }
             } else {
                 if (auth()->guest()) {
                     $actor->displayName = $request->get('user_name');
