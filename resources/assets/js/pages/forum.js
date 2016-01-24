@@ -58,6 +58,17 @@ $(function () {
     });
 
     /**
+     * Show post preview
+     */
+    $('a[href="#preview"]').click(function(e) {
+        $('#preview').find('.post-content').html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
+
+        $.post($(this).data('url'), {'text': $('#submit-form').find('textarea[name="text"]').val()}, function(html) {
+            $('#preview').find('.post-content').html(html);
+        });
+    });
+
+    /**
      * Collapse forum category
      */
     $('.toggle[data-toggle="collapse"]').click(function() {
@@ -548,7 +559,7 @@ $(function () {
             markdown = '![' + $(this).text() + '](' + $(this).data('url') + ')';
         }
 
-        $('textarea', $form).insertAtCaret('', '', markdown);
+        $('textarea', $form).insertAtCaret("\n", "\n", markdown);
         $('.nav-tabs a:first').tab('show');
     });
 

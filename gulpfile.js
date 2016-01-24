@@ -31,7 +31,7 @@ elixir(function(mix) {
         // strona glowna
        //.scripts(['bootstrap/tab.js', 'vendor/perfect-scrollbar.js'], 'public/js/homepage.js')
         // forum
-       .scripts(['vendor/animate-colors.js', 'bootstrap/modal.js', 'bootstrap/popover.js', 'pages/forum.js'], 'public/js/forum.js')
+       .scripts(['vendor/animate-colors.js', 'bootstrap/modal.js', 'bootstrap/tab.js', 'bootstrap/popover.js', 'pages/forum.js'], 'public/js/forum.js')
         // mikroblogi
        .scripts(['vendor/animate-colors.js', 'vendor/ekko-lightbox.js', 'pages/microblog.js'], 'public/js/microblog.js')
         // strona profilu uzytkownika

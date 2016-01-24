@@ -73,24 +73,41 @@
             </section>
 
             {% if auth_check() and is_writeable %}
-                <section id="box-fast-form" class="row">
-                    <div class="col-xs-12">
-                        {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': route('forum.post.submit', [forum.path, topic.id]), 'class': 'form-horizontal'}) }}
+                {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': route('forum.post.submit', [forum.path, topic.id]), 'class': 'form-horizontal'}) }}
+                    <section id="box-fast-form" class="row">
+                        <div class="col-xs-12">
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    {% include 'components/toolbar' %}
-                                    <textarea rows="1" cols="60" name="text" class="form-control" placeholder="Kliknij, aby napisać szybką odpowiedź..."></textarea>
+                                    <ul class="nav nav-tabs">
+                                        <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
+                                        <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Załączniki</a></li>
+                                        <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
+                                            {% include 'components/toolbar.twig' %}
+                                            <textarea name="text" class="form-control" cols="60" style="height: 100px" placeholder="Kliknij, aby napisać szybką odpowiedź...">{{ input_old('text', text) }}</textarea>
+
+                                            {% if errors.first('text') %}
+                                                <span class="help-block">{{ errors.first('text') }}</span>
+                                            {% endif %}
+                                        </div>
+
+                                        {% include 'forum/attachments.twig' %}
+                                        {% include 'forum/preview.twig' %}
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group" style="margin-bottom: 0">
+                            <div class="form-group">
                                 <div class="col-md-12">
-                                    <button type="submit" class="btn btn-primary btn-sm pull-right" style="display: none" data-submit-state="Wysyłanie...">Wyślij</button>
+                                    <button type="submit" class="btn btn-primary btn-sm pull-right" data-submit-state="Wysyłanie...">Wyślij</button>
                                 </div>
                             </div>
-                        {{ form_close() }}
-                    </div>
-                </section>
+                        </div>
+                    </section>
+                {{ form_close() }}
             {% endif %}
 
             <section class="row">
@@ -261,22 +278,19 @@
 
     {% if auth_check() %}
         <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
+        <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
     {% endif %}
 
     <script type="text/javascript">
         var promptUrl = '{{ route('forum.prompt', [topic.id]) }}';
+        var uploadUrl = '{{ route('forum.upload') }}';
 
         $(function () {
             $('.col-bottom a').tooltip({'trigger': 'hover'});
 
-            $('#submit-form textarea').one('focus', function() {
-                var $this = $(this);
-                $(':submit', $this.parents('form')).show();
-
-                $.getScript(baseUrl + '/js/wikieditor.js', function() {
-                    $this.wikiEditor().prompt(promptUrl).fastSubmit().autogrow();
-                });
-            });
+            {% if auth_check() %}
+                $('#submit-form textarea').wikiEditor().prompt(promptUrl).fastSubmit().autogrow();
+            {% endif %}
         });
     </script>
 {% endblock %}
