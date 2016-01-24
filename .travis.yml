@@ -9,13 +9,15 @@ services:
 addons:
   postgresql: "9.3"
 
+before_install:
+  - echo "extension=mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
 install:
   - composer install
 
 before_script:
   - psql -c 'create database coyote_test;' -U postgres
   - mongo coyote_test --eval 'db.addUser("travis", "test");'
-  - echo "extension=mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cp .env.testing .env
   - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
   - php artisan migrate --seed --env="testing"
