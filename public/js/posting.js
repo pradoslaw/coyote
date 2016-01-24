@@ -1,2 +1,266 @@
-!function(e){e.fn.prompt=function(t){return this.each(function(){var n=e(this),i=-1,a=0,r=e('<ul style="display: none;" class="auto-complete"></ul>'),o=function(){if(n[0].selectionStart||0==n[0].selectionStart)return n[0].selectionStart;if(document.selection){n.focus();var e=document.selection.createRange();return e.moveStart("character",-n.value.length),e.text.length}},s=function(e){for(var t=e,i=-1;t>e-50&&t>=0;){var a=n.val()[t];if(" "===a)break;if("@"===a&&(0===t||" "===n.val()[t-1]||"\n"===n.val()[t-1])){i=t+1;break}t--}return i},c=function(t){var n=e("li",r).length;n>0&&(t>=n?t=0:0>t&&(t=n-1),i=t,e("li",r).removeClass("hover"),e("li:eq("+i+")",r).addClass("hover"))};n.bind("keyup click",function(l){var u="",h=l.keyCode,f=o(),d=s(f);d>-1&&(u=n.val().substr(d,f-d));var v=function(){var t=e("li.hover span",r).text();if(t.length){(t.indexOf(" ")>-1||t.indexOf(".")>-1)&&(t="{"+t+"}"),n.val(n.val().substr(0,d)+t+n.val().substring(f)).trigger("change").focus();var i=d+t.length;if(n[0].setSelectionRange)n[0].setSelectionRange(i,i);else if(n[0].createTextRange){var a=n[0].createTextRange();a.collapse(!0),a.moveEnd("character",i),a.moveStart("character",i),a.select()}}r.html("").hide()};switch(h){case 27:r.html("").hide();break;case 40:c(i+1);break;case 38:c(i-1);break;case 13:v();break;default:u.length>=2?(clearTimeout(a),a=setTimeout(function(){e.get(t,{q:u},function(t){r.html(t).hide();var a=e("li",r).length;if(a>0){var o=n.offset();e("li",r).click(v).hover(function(){e("li",r).removeClass("hover"),e(this).addClass("hover")},function(){e(this).removeClass("hover")}),r.css({width:n.outerWidth(),top:n.outerHeight()+o.top+1,left:o.left}).show(),i=-1}})},200)):r.html("").hide()}}).keydown(function(e){var t=e.keyCode;return 40!==t&&38!==t&&13!==t&&27!==t||!r.is(":visible")?void 0:(e.preventDefault(),!1)}),r.appendTo(document.body),e(document).bind("click",function(t){var n=e(t.target);n.not(r)&&r.html("").hide()})})}}(jQuery),function(e){"use strict";e.fn.autogrow=function(){return this.each(function(){var t=e(this),n=t.height(),i=300,a=(t.css("lineHeight"),0),r=0,o=e("<div></div>").css({position:"absolute",top:-1e4,left:-1e4,width:e(this).width()-parseInt(t.css("paddingLeft"))-parseInt(t.css("paddingRight")),fontSize:t.css("fontSize"),fontFamily:t.css("fontFamily"),lineHeight:t.css("lineHeight"),resize:"none"}).appendTo(document.body),s=function(){var t=function(e,t){for(var n=0,i="";t>n;n++)i+=e;return i},a=this.value.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/&/g,"&amp;").replace(/\n$/,"<br/>&nbsp;").replace(/\n/g,"<br/>").replace(/ {2,}/g,function(e){return t("&nbsp;",e.length-1)+" "});o.html(a),e(this).css("height",Math.max(Math.min(o.height()+17,i),n))};t.change(s).keyup(s).keydown(s),s.apply(this),t.mousedown(function(){a=t.width(),r=t.height()}).mouseup(function(){(t.width()!=a||t.height()!=r)&&t.unbind("keyup",s).unbind("keydown",s).unbind("change",s),a=r=0})})}}(jQuery),function(e){"use strict";e.fn.fastSubmit=function(){return this.each(function(){e(this).keydown(function(t){if(13===t.keyCode){var n=e(this).closest("form");t.ctrlKey&&n.submit()}})})}}(jQuery);
+(function ($) {
+    $.fn.prompt = function (url) {
+        return this.each(function () {
+            var $textarea = $(this);
+            var index = -1;
+            var timeId = 0;
+            var $ul = $('<ul style="display: none;" class="auto-complete"></ul>');
+
+            var getCursorPosition = function () {
+                if ($textarea[0].selectionStart || $textarea[0].selectionStart == 0) {
+                    return $textarea[0].selectionStart;
+                }
+                else if (document.selection) {
+                    $textarea.focus();
+                    var sel = document.selection.createRange();
+
+                    sel.moveStart('character', -$textarea.value.length);
+                    return (sel.text.length);
+                }
+            };
+
+            var getUserNamePosition = function (caretPosition) {
+                var i = caretPosition;
+                var result = -1;
+
+                while (i > caretPosition - 50 && i >= 0) {
+                    var $val = $textarea.val()[i];
+
+                    if ($val === ' ') {
+                        break;
+                    }
+                    else if ($val === '@') {
+                        if (i === 0 || $textarea.val()[i - 1] === ' ' || $textarea.val()[i - 1] === "\n") {
+                            result = i + 1;
+                            break;
+                        }
+                    }
+                    i--;
+                }
+
+                return result;
+            };
+
+            var onSelect = function (position) {
+                var length = $('li', $ul).length;
+
+                if (length > 0) {
+                    if (position >= length) {
+                        position = 0;
+                    }
+                    else if (position < 0) {
+                        position = length - 1;
+                    }
+                    index = position;
+
+                    $('li', $ul).removeClass('hover');
+                    $('li:eq(' + index + ')', $ul).addClass('hover');
+                }
+            };
+
+            $textarea.bind('keyup click', function (e) {
+                var userName = '';
+                var keyCode = e.keyCode/* || window.event.keyCode*/;
+                var caretPosition = getCursorPosition();
+
+                var startIndex = getUserNamePosition(caretPosition);
+
+                if (startIndex > -1) {
+                    userName = $textarea.val().substr(startIndex, caretPosition - startIndex);
+                }
+
+                var onClick = function () {
+                    var $text = $('li.hover span', $ul).text();
+
+                    if ($text.length) {
+                        if ($text.indexOf(' ') > -1 || $text.indexOf('.') > -1) {
+                            $text = '{' + $text + '}';
+                        }
+                        $textarea.val($textarea.val().substr(0, startIndex) + $text + $textarea.val().substring(caretPosition)).trigger('change').focus();
+                        var caret = startIndex + $text.length;
+
+                        if ($textarea[0].setSelectionRange) {
+                            $textarea[0].setSelectionRange(caret, caret);
+                        }
+                        else if ($textarea[0].createTextRange) {
+                            var range = $textarea[0].createTextRange();
+
+                            range.collapse(true);
+                            range.moveEnd('character', caret);
+                            range.moveStart('character', caret);
+                            range.select();
+                        }
+                    }
+                    $ul.html('').hide();
+                };
+
+                switch (keyCode) {
+                    // esc
+                    case 27:
+
+                        $ul.html('').hide();
+                        break;
+
+                    // down
+                    case 40:
+
+                        onSelect(index + 1);
+                        break;
+
+                    case 38:
+
+                        onSelect(index - 1);
+                        break;
+
+                    case 13:
+
+                        onClick();
+
+                        break;
+
+                    default:
+
+                        if (userName.length >= 2) {
+                            clearTimeout(timeId);
+
+                            timeId = setTimeout(function () {
+                                $.get(url, {q: userName}, function (html) {
+                                    $ul.html(html).hide();
+                                    var length = $('li', $ul).length;
+
+                                    if (length > 0) {
+                                        var p = $textarea.offset();
+
+                                        $('li', $ul)
+                                            .click(onClick)
+                                            .hover(
+                                            function () {
+                                                $('li', $ul).removeClass('hover');
+                                                $(this).addClass('hover');
+                                            },
+                                            function () {
+                                                $(this).removeClass('hover');
+                                            }
+                                        );
+
+                                        $ul.css({
+                                            'width': $textarea.outerWidth(),
+                                            'top': $textarea.outerHeight() + p.top + 1,
+                                            'left': p.left
+                                        }).show();
+
+                                        index = -1;
+                                    }
+                                });
+
+                            }, 200);
+                        }
+                        else {
+                            $ul.html('').hide();
+                        }
+
+                        break;
+                }
+            }).keydown(function (e) {
+                var keyCode = e.keyCode;
+
+                if ((keyCode === 40 || keyCode === 38 || keyCode === 13 || keyCode === 27) && $ul.is(':visible')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $ul.appendTo(document.body);
+
+            $(document).bind('click', function (e) {
+                var $target = $(e.target);
+
+                if ($target.not($ul)) {
+                    $ul.html('').hide();
+                }
+            });
+        });
+    };
+})(jQuery);
+(function ($) {
+    "use strict";
+
+    $.fn.autogrow = function () {
+        /**
+         * @see http://code.google.com/p/gaequery/source/browse/trunk/src/static/scripts/jquery.autogrow-textarea.js?r=2
+         */
+        return this.each(function () {
+            var $this = $(this),
+                minHeight = $this.height(),
+                maxHeight = 300,
+                lineHeight = $this.css('lineHeight'),
+                currentWidth = 0,
+                currentHeight = 0;
+
+            var shadow = $('<div></div>').css(
+            {
+                position: 'absolute',
+                top: -10000,
+                left: -10000,
+                width: $(this).width() - parseInt($this.css('paddingLeft')) - parseInt($this.css('paddingRight')),
+                fontSize: $this.css('fontSize'),
+                fontFamily: $this.css('fontFamily'),
+                lineHeight: $this.css('lineHeight'),
+                resize: 'none'
+            }).appendTo(document.body);
+
+            var update = function () {
+                var times = function (string, number) {
+                    for (var i = 0, r = ''; i < number; i++) r += string;
+                    return r;
+                };
+
+                var val = this.value.replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/&/g, '&amp;')
+                    .replace(/\n$/, '<br/>&nbsp;')
+                    .replace(/\n/g, '<br/>')
+                    .replace(/ {2,}/g, function (space) {
+                        return times('&nbsp;', space.length - 1) + ' '
+                    });
+
+                shadow.html(val);
+
+                $(this).css('height', Math.max(Math.min(shadow.height() + 17, maxHeight), minHeight));
+            };
+
+            $this.change(update).keyup(update).keydown(update);
+            update.apply(this);
+
+            $this.mousedown(function () {
+                currentWidth = $this.width();
+                currentHeight = $this.height();
+            })
+            .mouseup(function () {
+                if ($this.width() != currentWidth || $this.height() != currentHeight) {
+                    $this.unbind('keyup', update).unbind('keydown', update).unbind('change', update);
+                }
+
+                currentWidth = currentHeight = 0;
+            });
+        });
+    };
+})(jQuery);
+(function ($) {
+    "use strict";
+
+    $.fn.fastSubmit = function () {
+        return this.each(function () {
+            $(this).keydown(function(e) {
+                if (e.keyCode === 13) {
+                    var form = $(this).closest('form');
+
+                    if (e.ctrlKey) {
+                        form.submit();
+                    }
+                }
+            });
+        });
+    };
+})(jQuery);
 //# sourceMappingURL=posting.js.map

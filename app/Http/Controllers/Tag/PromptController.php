@@ -19,8 +19,8 @@ class PromptController extends Controller
      */
     public function index(Request $request, Tag $tag)
     {
-        $this->validate($request, ['q' => 'required|string|max:50']);
-        return view('components.tags')->with('tags', $tag->lookupName($request['q']));
+        $this->validate($request, ['q' => 'required|string|max:25']);
+        return view('components.tags')->with('tags', $tag->lookupName(ltrim($request['q'], '#')));
     }
 
     /**

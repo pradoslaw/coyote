@@ -1,2 +1,146 @@
-!function(e){"use strict";e.fn.autocomplete=function(t){var i={className:"auto-complete",autoSubmit:!0,minLength:2,url:"",delay:200,onChange:function(e){}},o=e.extend(i,t),l=e(this),n=e('<ul style="display: none;" class="'+o.className+'"></ul>'),s=-1,r=0;n.css({width:l.outerWidth(),left:l.position().left,top:l.position().top+l.outerHeight()}),l.attr("autocomplete","off"),n.insertAfter(l);var a=function(t){var i=e("li:visible",n).length;i>0&&(t>=i?t=0:0>t&&(t=i-1),s=t,e("li:visible",n).removeClass("hover"),e("li:visible:eq("+s+")",n).addClass("hover"),n.scrollTop(t*e("li:first",n).outerHeight()))},u=function(t){t=e.trim(t).toString().replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/'/g,"&#39;").replace(/"/g,"&#34;").toLowerCase().replace(/ /g,"-"),e("li",n).removeClass("hover").show(),l.val(t),o.onChange(t),s=-1,o.autoSubmit&&l.parents("forms").submit()};n.on({mouseenter:function(){e(this).addClass("hover")},mouseleave:function(){e(this).removeClass("hover")}},"li").on("click","li",function(){u(e(this).text()),n.hide()}),l.keydown(function(e){var t=e.keyCode||window.event.keyCode;27===t?n.hide():13===t&&e.preventDefault()}).keyup(function(t){var i=t.keyCode||window.event.keyCode;if(40===i)a(s+1);else if(38===i)a(s-1);else if(13===i)n.is(":visible")&&""!==e("li.hover",n).text()&&(u(e("li.hover",n).text()),n.hide(),t.preventDefault());else{var c=e(this).val();clearTimeout(r),r=setTimeout(function(){e.trim(c).length>=o.minLength?e.get(o.url,{q:c},function(t){n.html(t).hide(),n.toggle(e("li",n).length>0),e("li:first",n).text().toLowerCase()===l.val().toLowerCase()&&n.hide()}):n.hide()},o.delay)}}),e(document).bind("click",function(t){var i=e(t.target);i.is(l)||n.hide()})}}(jQuery);
+/**
+ * @package Coyote CMF
+ * @author Adam Boduch <adam@boduch.net>
+ * @copyright Copyright (c) 4programmers.net
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ */
+
+(function ($) {
+    'use strict';
+
+    $.fn.autocomplete = function (options) {
+        var defaults =
+        {
+            className: 'auto-complete',
+            autoSubmit: true,
+            minLength: 2,
+            url: '',
+            delay: 200,
+            onChange: function (value) {
+
+            }
+        };
+
+        var setup = $.extend(defaults, options);
+
+        var $this = $(this);
+        var dropdown = $('<ul style="display: none;" class="' + setup.className + '"></ul>');
+        var index = -1;
+        var timeId = 0;
+
+        dropdown.css({
+            'width': $this.outerWidth(),
+            'left': $this.position().left,
+            'top': $this.position().top + $this.outerHeight()
+        });
+
+        $this.attr('autocomplete', 'off');
+        dropdown.insertAfter($this);
+
+        var select = function (position) {
+            var length = $('li:visible', dropdown).length;
+
+            if (length > 0) {
+                if (position >= length) {
+                    position = 0;
+                }
+                else if (position < 0) {
+                    position = length - 1;
+                }
+                index = position;
+
+                $('li:visible', dropdown).removeClass('hover');
+                $('li:visible:eq(' + index + ')', dropdown).addClass('hover');
+
+                dropdown.scrollTop(position * $('li:first', dropdown).outerHeight());
+            }
+        };
+
+        var change = function (value) {
+            value = $.trim(value).toString().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&#34;").toLowerCase().replace(/ /g, '-');
+
+            $('li', dropdown).removeClass('hover').show();
+            $this.val(value);
+            setup.onChange(value);
+
+            index = -1;
+
+            if (setup.autoSubmit) {
+                $this.parents('forms').submit();
+            }
+        };
+
+        dropdown.on({
+            mouseenter: function() {
+                $(this).addClass('hover');
+            },
+            mouseleave: function() {
+                $(this).removeClass('hover');
+            }
+        }, 'li')
+        .on('click', 'li', function () {
+            change($(this).text());
+            dropdown.hide();
+        });
+
+        $this.keydown(function (e) {
+            var keyCode = e.keyCode || window.event.keyCode;
+
+            if (keyCode === 27) {
+                dropdown.hide();
+            }
+            else if (keyCode === 13) {
+                e.preventDefault();
+            }
+        })
+        .keyup(function (e) {
+            var keyCode = e.keyCode || window.event.keyCode;
+
+            if (keyCode === 40) // down
+            {
+                select(index + 1);
+            }
+            else if (keyCode === 38) // up
+            {
+                select(index - 1);
+            }
+            else if (keyCode === 13) {
+                if (dropdown.is(':visible') && $('li.hover', dropdown).text() !== '') {
+                    change($('li.hover', dropdown).text());
+                    dropdown.hide();
+                    e.preventDefault();
+                }
+            }
+            else {
+                var searchText = $(this).val();
+
+                clearTimeout(timeId);
+                timeId = setTimeout(function () {
+                    if ($.trim(searchText).length >= setup.minLength) {
+                        $.get(setup.url, {q: searchText}, function (html) {
+                            dropdown.html(html).hide();
+                            dropdown.toggle($('li', dropdown).length > 0);
+
+                            if ($('li:first', dropdown).text().toLowerCase() === $this.val().toLowerCase()) {
+                                dropdown.hide();
+                            }
+                        });
+                    }
+                    else {
+                        dropdown.hide();
+                    }
+
+                }, setup.delay);
+            }
+        });
+
+        $(document).bind('click', function (e) {
+            var $target = $(e.target);
+
+            if (!$target.is($this)) {
+                dropdown.hide();
+            }
+        });
+    };
+})(jQuery);
 //# sourceMappingURL=auto-complete.js.map

@@ -21,7 +21,7 @@
                 'top': editor.position().top + editor.outerHeight()
             });
 
-            $this.attr('autocomplete', 'off');
+            $this.attr('autocomplete', 'off').removeClass('form-control');
             dropdown.insertAfter(editor);
 
             function setInputWidth() {

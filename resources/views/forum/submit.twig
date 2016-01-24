@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            {% if topic is not defined or topic.first_post_id == post.id %}
+            {% if topic.first_post_id == post.id %}
                 {% set error_tag = '' %}
                 {% for key in errors.keys() %}
                     {% if 'tag' in key %}
@@ -87,7 +87,7 @@
                 <div class="form-group {{ error_tag != '' ? 'has-error' }}">
                     <label class="col-md-2 control-label">Tagi</label>
                     <div class="col-md-10">
-                        {{ form_text('custom_tags', input_old('tag', tags)|join(', '), {'id': 'tag', 'tabindex': 4, 'placeholder': forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'}) }}
+                        {{ form_text('custom_tags', input_old('tag', tags)|join(', '), {'id': 'tag', 'class': 'form-control', 'tabindex': 4, 'placeholder': forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'}) }}
 
                         {% if error_tag != '' %}
                             <span class="help-block">{{ error_tag }}</span>

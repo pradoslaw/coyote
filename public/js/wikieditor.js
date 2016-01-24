@@ -1,2 +1,61 @@
-!function(t){"use strict";t.fn.wikiEditor=function(){return this.each(function(){var e=t(this),n=t("#wiki-toolbar");t(".btn-group button",n).click(function(){e.insertAtCaret(t(this).data("open"),t(this).data("close")," ")}),t(e).bind("keydown",function(t){return 9!==t.which&&9!==t.keyCode||!t.shiftKey?void 0:(e.insertAtCaret("	","",""),!1)})})},t.fn.extend({insertAtCaret:function(t,e,n){var i=this[0];if(document.selection){i.focus();var o=document.selection.createRange();o.text=t+(o.text.length>0?o.text:n)+e,i.focus()}else if(i.selectionStart||"0"==i.selectionStart){var s=i.selectionStart,c=i.selectionEnd,r=i.scrollTop;n=s!==c?t+i.value.substring(s,c)+e:t+n+e,i.value=i.value.substring(0,s)+n+i.value.substring(c,i.value.length),i.focus(),i.selectionStart=s+n.length,i.selectionEnd=s+n.length,i.scrollTop=r}else i.value+=t+n+e,i.focus()}})}(jQuery);
+(function ($) {
+    'use strict';
+
+    $.fn.wikiEditor = function () {
+        return this.each(function () {
+            var textarea = $(this);
+            var toolbar = $('#wiki-toolbar');
+
+            $('.btn-group button', toolbar).click(function() {
+                textarea.insertAtCaret($(this).data('open'), $(this).data('close'), ' ');
+            });
+
+            //$(textarea).bind($.browser.opera ? 'keypress' : 'keydown', function(e)
+            $(textarea).bind('keydown', function (e) {
+                if ((e.which === 9 || e.keyCode === 9) && e.shiftKey) {
+                    textarea.insertAtCaret("\t", '', "");
+
+                    return false;
+                }
+            });
+        });
+    };
+
+    $.fn.extend({
+        insertAtCaret: function (openWith, closeWith, value) {
+            var element = this[0];
+
+            if (document.selection) {
+                element.focus();
+                var sel = document.selection.createRange();
+                sel.text = openWith + (sel.text.length > 0 ? sel.text : value) + closeWith;
+
+                element.focus();
+            }
+            else if (element.selectionStart || element.selectionStart == '0') {
+                var startPos = element.selectionStart;
+                var endPos = element.selectionEnd;
+                var scrollTop = element.scrollTop;
+
+                if (startPos !== endPos) {
+                    value = openWith + element.value.substring(startPos, endPos) + closeWith;
+                }
+                else {
+                    value = openWith + value + closeWith;
+                }
+
+                element.value = element.value.substring(0, startPos) + value + element.value.substring(endPos, element.value.length);
+
+                element.focus();
+                element.selectionStart = startPos + value.length;
+                element.selectionEnd = startPos + value.length;
+                element.scrollTop = scrollTop;
+            }
+            else {
+                element.value += (openWith + value + closeWith);
+                element.focus();
+            }
+        }
+    });
+})(jQuery);
 //# sourceMappingURL=wikieditor.js.map
