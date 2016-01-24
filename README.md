@@ -33,6 +33,12 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * `psql -c 'create database coyote;' -U postgres`
 * `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
 
+### Problemy podczas instalacji
+#### Class 'MongoClient' not found
+
+Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php5-fpm restart`
+
+
 ## Aktualizacja projektu
 
 `make update` (na produkcji) lub `make update-dev` (na serwerze deweloperskim)
