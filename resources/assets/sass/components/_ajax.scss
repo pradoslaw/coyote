@@ -1,0 +1,15 @@
+#ajax-loader {
+  opacity: .5;
+  position: absolute;
+  background-color: #fff;
+
+  .fa {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    margin-left: -20px;
+    margin-top: -10px;
+    font-size: $font-size-large;
+    color: #000;
+  }
+}

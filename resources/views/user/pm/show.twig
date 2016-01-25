@@ -45,11 +45,11 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="/js/perfect-scrollbar.js"></script>
-    <script type="text/javascript" src="/js/animate-colors.js"></script>
-    <script type="text/javascript" src="/js/posting.js"></script>
-    <script type="text/javascript" src="/js/tab.js"></script>
-    <script type="text/javascript" src="/js/wikieditor.js"></script>
+    <script type="text/javascript" src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/animate-colors.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/tab.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
     <script type="text/javascript">
         $(function () {
             var wrap = $('#wrap');
@@ -58,7 +58,7 @@
             wrap.perfectScrollbar();
             wrap.scrollTop(overview.outerHeight());
 
-            $('textarea[name="text"]').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
+            $('textarea[name="text"]').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().pasteImage().focus();
 
             wrap.on('mouseenter', '.unread', function() {
                 $(this).off('mouseenter');

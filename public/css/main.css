@@ -7551,6 +7551,19 @@ ul.breadcrumb {
 .popover {
   max-width: 100%; }
 
+#ajax-loader {
+  opacity: .5;
+  position: absolute;
+  background-color: #fff; }
+  #ajax-loader .fa {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    margin-left: -20px;
+    margin-top: -10px;
+    font-size: 17px;
+    color: #000; }
+
 header #navbar-border-top {
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQIW2Ps3MD5n0+AlQEEPn34zcA4/QDffxADBEASmALIWkCqAPDNEnJoA/jxAAAAAElFTkSuQmCC");
   border-bottom: 1px solid #888;

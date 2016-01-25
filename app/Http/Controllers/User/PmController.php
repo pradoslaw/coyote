@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Alert\Providers\Pm as Alert_Pm;
 use Illuminate\Http\Request;
+use Guzzle\Http\Mimetypes;
 use Carbon;
 
 /**
@@ -179,5 +180,31 @@ class PmController extends Controller
 
         $pm->delete();
         return back()->with('success', 'Wiadomość poprawnie usunięta');
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function paste()
+    {
+        $input = file_get_contents("php://input");
+        if (strlen($input) > config('filesystems.upload_max_size') * 1024) {
+            abort(500, 'File is too big');
+        }
+
+        $fileName = uniqid() . '.png';
+        $path = public_path('storage/pm/' . $fileName);
+
+        file_put_contents($path, file_get_contents('data://' . substr($input, 7)));
+        $mime = new Mimetypes();
+
+        return response()->json([
+            'size' => filesize($path),
+            'suffix' => 'png',
+            'name' => $fileName,
+            'file' => $fileName,
+            'mime'  => $mime->fromFilename($fileName),
+            'url' => cdn('storage/pm/' . $fileName)
+        ]);
     }
 }

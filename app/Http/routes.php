@@ -158,9 +158,10 @@ Route::group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     Route::get('Pm/Show/{id}', ['uses' => 'PmController@show', 'as' => 'pm.show']);
     Route::get('Pm/Submit', ['uses' => 'PmController@submit', 'as' => 'pm.submit']);
     Route::post('Pm/Submit', 'PmController@save');
-    Route::post('Pm/Delete/{id}', 'PmController@delete')->name('pm.delete');
-    Route::post('Pm/Preview', 'PmController@preview')->name('pm.preview');
-    Route::get('Pm/Ajax', 'PmController@ajax')->name('pm.ajax');
+    Route::post('Pm/Delete/{id}', ['uses' => 'PmController@delete', 'as' => 'pm.delete']);
+    Route::post('Pm/Preview', ['uses' => 'PmController@preview', 'as' => 'pm.preview']);
+    Route::get('Pm/Ajax', ['uses' => 'PmController@ajax', 'as' => 'pm.ajax']);
+    Route::post('Pm/Paste', ['uses' => 'PmController@paste', 'as' => 'pm.paste']);
 
     Route::get('Favorites', ['uses' => 'FavoritesController@index', 'as' => 'favorites']);
     Route::post('Favorites', 'FavoritesController@save');

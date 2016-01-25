@@ -38,7 +38,7 @@ elixir(function(mix) {
        //.scripts(['pages/profile.js'], 'public/js/profile.js')
         // komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
         // rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
-       .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js'], 'public/js/posting.js')
+       .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js', 'components/upload.js'], 'public/js/posting.js')
        .scripts(['components/wikieditor.js'], 'public/js/wikieditor.js')
         // auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
        .scripts(['components/auto-complete.js'], 'public/js/auto-complete.js')
