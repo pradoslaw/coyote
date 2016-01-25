@@ -88,19 +88,6 @@
 
     {{ modal.alert('Nie można dodać załącznika. Być może plik ma nieprawidłowy format lub jest zbyt duży?') }}
     {{ modal.confirm('Czy na pewno usunąć ten wpis?') }}
-
-    <script type="text/html" id="tmpl-thumbnail">
-        <div class="col-sm-2">
-            <a href="javascript:" class="thumbnail">
-                <img src="[[src]]">
-
-                <div class="[[class]]">
-                    <i class="[[fa]]"></i>
-                </div>
-            </a>
-        </div>
-    </script>
-
 {% endblock %}
 
 {% block head %}
@@ -111,6 +98,7 @@
     <script type="text/javascript">
         var uploadUrl = '{{ route('microblog.upload') }}';
         var promptUrl = '{{ route('user.prompt') }}';
+        var pasteUrl = '{{ route('microblog.paste') }}';
     </script>
 
 {% endblock %}

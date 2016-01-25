@@ -21,18 +21,6 @@ a.run=function(a){d.each(c,function(d,c){b[c]=h(e[c],g,a)})}}};var l={aqua:[0,25
 $(function () {
     'use strict';
 
-    var IMG_PLACEHOLDER = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAADIAQMAAAAk14GrAAAABlBMVEXd3d3///+uIkqAAAAAI0lEQVRoge3BMQEAAADCoPVPbQ0PoAAAAAAAAAAAAAAAAHg2MgAAAYXziG4AAAAASUVORK5CYII=';
-
-    function tmpl(id, data) {
-        var str = $(id).clone().html();
-
-        for (var item in data) {
-            str = str.replace('[[' + item + ']]', data[item]);
-        }
-
-        return str;
-    }
-
     $(document).ajaxError(function(event, jqxhr) {
         $('#alert').modal('show');
         var error;
@@ -286,7 +274,31 @@ $(function () {
             $(this).parent().parent().remove();
         };
 
-        $('textarea', $form).prompt(promptUrl).fastSubmit().autogrow().focus();
+        function add(data) {
+            var thumbnail = $('.thumbnail:last', $form);
+
+            $('.spinner', thumbnail).remove();
+            $('img', thumbnail).attr('src', data.url);
+
+            $('<div>', {'class': 'btn-flush'}).html('<i class="fa fa-remove fa-2x"></i>').click(removeThumbnail).appendTo(thumbnail);
+            $('<input type="hidden" name="thumbnail[]" value="' + data.name + '">').appendTo(thumbnail);
+        }
+
+        $('textarea', $form).pasteImage({
+            url: pasteUrl,
+            onComplete: function(textarea, result) {
+                add(result);
+            },
+            onBeforeSend: function() {
+                $.get(uploadUrl, function(tmpl) {
+                    $('.thumbnails', $form).append(tmpl);
+                });
+            }
+        })
+            .prompt(promptUrl)
+            .fastSubmit()
+            .autogrow()
+            .focus();
 
         $form.on('click', '.btn-flush', removeThumbnail)
             .submit(function () {
@@ -324,39 +336,30 @@ $(function () {
                 else {
                     var formData = new FormData($form[0]);
 
-                    $.ajax({
-                        url: uploadUrl,
-                        type: 'POST',
-                        data: formData,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        beforeSend: function () {
-                            $('.thumbnails', $form).append(tmpl('#tmpl-thumbnail', {
-                                'src': IMG_PLACEHOLDER,
-                                'class': 'spinner',
-                                'fa': 'fa fa-spinner fa-spin fa-2x'
-                            }));
-                        },
-                        success: function (data) {
-                            var thumbnail = $('.thumbnail:last', $form);
+                    $.get(uploadUrl, function(tmpl) {
+                        $('.thumbnails', $form).append(tmpl);
 
-                            $('.spinner', thumbnail).remove();
-                            $('img', thumbnail).attr('src', data.url);
+                        $.ajax({
+                            url: uploadUrl,
+                            type: 'POST',
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (data) {
+                                add(data);
+                            },
+                            error: function (err) {
+                                $('#alert').modal('show');
 
-                            $('<div>', {'class': 'btn-flush'}).html('<i class="fa fa-remove fa-2x"></i>').click(removeThumbnail).appendTo(thumbnail);
-                            $('<input type="hidden" name="thumbnail[]" value="' + data.name + '">').appendTo(thumbnail);
-                        },
-                        error: function (err) {
-                            $('#alert').modal('show');
+                                if (typeof err.responseJSON !== 'undefined') {
+                                    $('.modal-body').text(err.responseJSON.photo[0]);
+                                }
 
-                            if (typeof err.responseJSON !== 'undefined') {
-                                $('.modal-body').text(err.responseJSON.photo[0]);
+                                $('.thumbnail:last', $form).remove();
                             }
-
-                            $('.thumbnail:last', $form).remove();
-                        }
-                    }, 'json');
+                        }, 'json');
+                    });
                 }
             });
 

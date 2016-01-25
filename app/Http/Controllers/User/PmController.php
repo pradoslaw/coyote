@@ -188,7 +188,7 @@ class PmController extends Controller
     public function paste()
     {
         $input = file_get_contents("php://input");
-        if (strlen($input) > config('filesystems.upload_max_size') * 1024) {
+        if (strlen($input) > (config('filesystems.upload_max_size') * 1024 * 1024)) {
             abort(500, 'File is too big');
         }
 

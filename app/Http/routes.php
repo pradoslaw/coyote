@@ -109,7 +109,9 @@ Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     Route::post('Edit/{id?}', ['uses' => 'SubmitController@save', 'as' => 'save', 'middleware' => 'auth']);
     Route::get('Edit/{id}', ['uses' => 'SubmitController@edit', 'middleware' => 'auth']);
 
+    Route::get('Upload', 'SubmitController@thumbnail');
     Route::post('Upload', ['uses' => 'SubmitController@upload', 'as' => 'upload', 'middleware' => 'auth']);
+    Route::post('Paste', ['uses' => 'SubmitController@paste', 'as' => 'paste', 'middleware' => 'auth']);
     Route::get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'view']);
     Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'vote', 'middleware' => 'auth']);
     Route::get('Vote/{id}', ['uses' => 'VoteController@voters', 'as' => 'voters']);
@@ -123,8 +125,8 @@ Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     // pokaz reszte komentarzy...
     Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
 
-    Route::get('/Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);
-    Route::get('/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
+    Route::get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);
+    Route::get('{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
 });
 
 // Obsluga modulu pastebin

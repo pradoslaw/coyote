@@ -201,6 +201,16 @@ class SubmitController extends Controller
     }
 
     /**
+     * Return small piece of code (thumbnail container)
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function thumbnail()
+    {
+        return view('microblog.thumbnail');
+    }
+
+    /**
      * Usuniecie wpisu z mikrobloga
      *
      * @param $id
@@ -230,7 +240,7 @@ class SubmitController extends Controller
     public function upload(Request $request)
     {
         $this->validate($request, [
-            'photo'             => 'required|image'
+            'photo'             => 'required|image|max:' . (config('filesystems.upload_max_size') * 1024)
         ]);
 
         if ($request->file('photo')->isValid()) {
@@ -242,5 +252,29 @@ class SubmitController extends Controller
                 'name' => $fileName
             ]);
         }
+    }
+
+    /**
+     * Paste image from clipboard
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function paste()
+    {
+        $input = file_get_contents("php://input");
+
+        if (strlen($input) > (config('filesystems.upload_max_size') * 1024 * 1024)) {
+            abort(500, 'File is too big');
+        }
+
+        $fileName = uniqid() . '.png';
+        $path = public_path('storage/tmp/' . $fileName);
+
+        file_put_contents($path, file_get_contents('data://' . substr($input, 7)));
+
+        return response()->json([
+            'name' => $fileName,
+            'url' => url('storage/tmp/' . $fileName)
+        ]);
     }
 }
