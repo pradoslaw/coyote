@@ -257,7 +257,7 @@ class PostController extends BaseController
                 $notification = [
                     'sender_id'   => auth()->id(),
                     'sender_name' => $request->get('user_name', auth()->id() ? auth()->user()->name : ''),
-                    'subject'     => excerpt($topic->subject, 48),
+                    'subject'     => excerpt($topic->subject),
                     'excerpt'     => excerpt($text),
                     'url'         => $url
                 ];

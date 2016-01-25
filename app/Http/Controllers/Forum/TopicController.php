@@ -281,7 +281,7 @@ class TopicController extends BaseController
                     'users_id'    => $usersId,
                     'sender_id'   => auth()->id(),
                     'sender_name' => $request->get('user_name', auth()->user()->name),
-                    'subject'     => excerpt($request->subject, 48),
+                    'subject'     => excerpt($request->subject),
                     'excerpt'     => excerpt($text),
                     'url'         => route('forum.topic', [$forum->path, $topic->id, $path], false)
                 ])->notify();
