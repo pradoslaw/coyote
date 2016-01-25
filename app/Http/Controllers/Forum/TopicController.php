@@ -191,6 +191,18 @@ class TopicController extends BaseController
             app('redis')->sadd('counter:topic:' . $topic->id, $user . ';' . round(time() / 300) * 300);
         }
 
+        if (auth()->check()) {
+            $subscribers = $topic->subscribers()->lists('topic_id', 'user_id');
+            $subscribe = isset($subscribers[auth()->id()]);
+
+            if (!$subscribe && auth()->user()->allow_subscribe) {
+                // if this is the first post in this topic, subscribe option depends on user's default setting
+                if (!$topic->users()->where('user_id', auth()->id())->count()) {
+                    $subscribe = true;
+                }
+            }
+        }
+
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
@@ -199,7 +211,7 @@ class TopicController extends BaseController
         $forumList = $this->forum->forumList();
 
         return $this->view('forum.topic', ['markTime' => $topicMarkTime ? $topicMarkTime : $forumMarkTime])->with(
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'lock')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'lock', 'subscribers', 'subscribe')
         );
     }
 

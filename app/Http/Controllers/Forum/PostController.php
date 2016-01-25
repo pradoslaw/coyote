@@ -91,10 +91,10 @@ class PostController extends BaseController
             $subscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
 
             // we're creating new post...
-            if ($post === null && $subscribe == false) {
+            if ($post === null && $subscribe == false && auth()->user()->allow_subscribe) {
                 // if this is the first post in this topic, subscribe option depends on user's default setting
                 if (!$topic->users()->where('user_id', auth()->id())->count()) {
-                    $subscribe = auth()->user()->allow_subscribe;
+                    $subscribe = true;
                 }
             }
         }

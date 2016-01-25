@@ -87,7 +87,7 @@
                                     <div class="tab-content">
                                         <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
                                             {% include 'components/toolbar.twig' %}
-                                            <textarea name="text" class="form-control" cols="60" style="height: 80px" placeholder="Kliknij, aby napisać szybką odpowiedź...">{{ input_old('text', text) }}</textarea>
+                                            <textarea name="text" class="form-control" cols="60" style="height: 80px" placeholder="Kliknij, aby napisać szybką odpowiedź..." required>{{ input_old('text', text) }}</textarea>
 
                                             {% if errors.first('text') %}
                                                 <span class="help-block">{{ errors.first('text') }}</span>
@@ -107,6 +107,10 @@
                             </div>
                         </div>
                     </section>
+
+                    {% if subscribe %}
+                        {{ form_hidden('subscribe', true) }}
+                    {% endif %}
                 {{ form_close() }}
             {% endif %}
 
@@ -133,12 +137,10 @@
             <div class="box">
                 <ul class="side-menu" style="margin-top: 5px">
                     {% if auth_check() %}
-                        {% set subscribers = topic.subscribers().lists('topic_id', 'user_id') %}
-
                         <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
                             <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
                                 <span>
-                                    {% if auth_guest() or subscribers[user('id')] is not defined %}
+                                    {% if subscribers[user('id')] is not defined %}
                                         Obserwuj wątek
                                     {% else %}
                                         Zakończ obserwację
