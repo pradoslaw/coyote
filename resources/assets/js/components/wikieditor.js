@@ -7,7 +7,7 @@
             var toolbar = $('#wiki-toolbar');
 
             $('.btn-group button', toolbar).click(function() {
-                textarea.insertAtCaret($(this).data('open'), $(this).data('close'), ' ');
+                textarea.insertAtCaret($(this).data('open').replace(/<br>/g, "\n"), $(this).data('close').replace(/<br>/g, "\n"), ' ');
             });
 
             //$(textarea).bind($.browser.opera ? 'keypress' : 'keydown', function(e)

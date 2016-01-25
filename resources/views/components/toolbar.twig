@@ -1,27 +1,24 @@
 <div id="wiki-toolbar" class="form-group">
     <div class="col-md-12">
         <div class="btn-group" role="group" aria-label="...">
-            <button type="button" class="btn btn-sm btn-default" data-open="**" data-close="**"><i class="fa fa-bold fa-fw"></i></button>
-            <button type="button" class="btn btn-sm btn-default" data-open="*" data-close="*"><i class="fa fa-italic fa-fw"></i></button>
-            <button type="button" class="btn btn-sm btn-default" data-open="<del>" data-close="</del>"><i class="fa fa-underline fa-fw"></i></button>
-            <button type="button" class="btn btn-sm btn-default" data-open="`" data-close="`"><i class="fa fa-text-width fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="**" data-close="**" title="Pogrubienie"><i class="fa fa-bold fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="*" data-close="*" title="Kursywa"><i class="fa fa-italic fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="<del>" data-close="</del>" title="Przekreślenie"><i class="fa fa-underline fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="`" data-close="`" title="Instrukcja kodu"><i class="fa fa-text-width fa-fw"></i></button>
         </div>
 
         <div class="btn-group" role="group">
 
-            <button type="button" class="btn btn-sm btn-default" data-open="
-            " data-close="## "><i class="fa fa-header fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="<br>" data-close="## " title="Nagłówek h2"><i class="fa fa-header fa-fw"></i></button>
         </div>
 
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-sm btn-default" data-open="
-            " data-close="*"><i class="fa fa-list-ul fa-fw"></i></button>
-            <button type="button" class="btn btn-sm btn-default" data-open="
-            " data-close="1. "><i class="fa fa-list-ol fa-fw"></i></button>
-            <button type="button" class="btn btn-sm btn-default" data-open="(" data-close=")"><i class="fa fa-image fa-fw"></i></button>
-            <button type="button" class="btn btn-sm btn-default" data-open="<" data-close=">"><i class="fa fa-link fa-fw"></i></button>
-            <button type="button" class="btn btn-sm btn-default" data-open="`" data-close="`"><i class="fa fa-table fa-fw"></i></button>
-            <button type="button" class="btn btn-sm btn-default" data-open="```" data-close="```"><i class="fa fa-code fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="<br>" data-close="*" title="Wypunktowanie"><i class="fa fa-list-ul fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="<br>" data-close="1. " title="Numerowanie"><i class="fa fa-list-ol fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="![title" data-close="](http://)"><i class="fa fa-image fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="<http://" data-close=">"><i class="fa fa-link fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="<br>Nagłówek 1 | Nagłówek 2<br>---------------- | -------------------<br>Kolumna1 | Kolumna 2<br>" data-close=""><i class="fa fa-table fa-fw"></i></button>
+            <button type="button" class="btn btn-sm btn-default" data-open="<br>```" data-close="<br>```" title="Kod źródłowy"><i class="fa fa-code fa-fw"></i></button>
         </div>
 
         <button type="button" class="btn btn-sm btn-default pull-right" data-toggle="collapse" data-target="#wiki-help" aria-expanded="false" aria-controls="wiki-help"><i class="fa fa-question fa-fw"></i></button>
@@ -36,42 +33,41 @@
                 <h2>Pogrubienie, kursywa...</h2>
 
                 <p>Możesz używać pogrubienia czy kursywy, aby usprawnić czytelność tekstu: <code>**to jest pogrubienie**, a to
-                        //kursywa//</code>. Możesz również używać <code>__podkreślenia__</code>.
+                        *kursywa*</code>.
                 </p>
 
                 <h2>Kod źródłowy</h2>
 
                 <p>Wszelkie jednolinijkowe instrukcje języka programowania (fragmenty kodu) powinny być zawarte pomiędzy obrócone
                     apostrofy
-                    lub podwójny cudzysłów, czyli: <code>`kod instrukcji języka programowania` lub ''instrukcje języka
-                        programowania''</code>.</p>
+                    lub podwójny cudzysłów, czyli: <code>`kod instrukcji języka programowania`</code>.</p>
 
-                <p>Znacznik <code>&lt;code&gt;</code> umożliwia kolorowanie większych fragmentów kodu. Możemy nadać nazwę języka
+                <p><code>```</code> umożliwia kolorowanie większych fragmentów kodu. Możemy nadać nazwę języka
                     programowania,
                     aby system użył konkretnych ustawień kolorowania składnii:
                     <br/><br/>
                     <code>
-                        &lt;code=javascript&gt;<br/>
+                        ```javascript<br/>
                         &nbsp;&nbsp;document.write('Hello World');<br/>
-                        &lt;/code&gt;<br/>
+                        ```<br/>
                     </code></p>
 
                 <h2>Nagłówki</h2>
 
                 <p>
-                    <code>== Nagłówek 2 ==</code><br/>
-                    <code>=== Nagłówek 3 ===</code><br/>
-                    <code>==== Nagłówek 4 ====</code>
+                    <code>## Nagłówek 2</code><br/>
+                    <code>### Nagłówek 3</code><br/>
+                    <code>#### Nagłówek 4</code>
                 </p>
 
                 <h2>Wypunktowanie i numerowanie</h2>
 
                 <p>Możliwe jest tworzenie listy numerowanych oraz wypunktowanych. Wystarczy, że pierwszym znakiem linii będzie
-                    <code>*</code> lub <code>#</code></p>
+                    <code>*</code> lub <code>1. </code></p>
 
                 <p>
-                    <code># Lista numerowana</code><br/>
-                    <code># Lista numerowana</code><br/>
+                    <code>1. Lista numerowana</code><br/>
+                    <code>2. Lista numerowana</code><br/>
                 </p>
                 <p></p>
                 <p>
