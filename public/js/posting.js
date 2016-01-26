@@ -266,30 +266,26 @@
 (function ($) {
     'use strict';
 
-    $.fn.pasteImage = function (options) {
+    $.fn.pasteImage = function (url, complete) {
         return this.each(function () {
             var defaults = {
-                url: '/User/Pm/Paste',
-                onBeforeSend: function () {
-                    //
-                },
-                onComplete: function (textarea, result) {
+                url: '',
+                complete: function (textarea, result) {
                     textarea.insertAtCaret('![' + result.name + '](' + result.url + ')', '', ' ');
                 }
             };
 
-            var setup = $.extend(defaults, options);console.log(setup,options);
+            var setup = $.extend(defaults, {url: url, complete: complete});
             var textarea = $(this);
 
             var upload = function(base64) {
                 textarea.attr('readonly', 'readonly');
-                setup.onBeforeSend();
 
                 var p = textarea.offset();
                 var loader = $('<div id="ajax-loader"><i class="fa fa-cog fa-spin"></i></div>').css({top: p.top, left: p.left, width: textarea.outerWidth(), height: textarea.outerHeight()}).appendTo('body');
 
                 $.post(setup.url, base64, function(result) {
-                    setup.onComplete(textarea, result);
+                    setup.complete(textarea, result);
                 })
                 .always(function() {
                     textarea.removeAttr('readonly');

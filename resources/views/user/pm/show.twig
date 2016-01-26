@@ -58,7 +58,7 @@
             wrap.perfectScrollbar();
             wrap.scrollTop(overview.outerHeight());
 
-            $('textarea[name="text"]').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().pasteImage().focus();
+            $('textarea[name="text"]').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().pasteImage('{{ route('user.pm.paste') }}').focus();
 
             wrap.on('mouseenter', '.unread', function() {
                 $(this).off('mouseenter');

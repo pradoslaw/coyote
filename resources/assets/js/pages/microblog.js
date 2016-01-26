@@ -264,16 +264,11 @@ $(function () {
             $('<input type="hidden" name="thumbnail[]" value="' + data.name + '">').appendTo(thumbnail);
         }
 
-        $('textarea', $form).pasteImage({
-            url: pasteUrl,
-            onComplete: function(textarea, result) {
+        $('textarea', $form).pasteImage(pasteUrl, function(textarea, result) {
+            $.get(uploadUrl, function(tmpl) {
+                $('.thumbnails', $form).append(tmpl);
                 add(result);
-            },
-            onBeforeSend: function() {
-                $.get(uploadUrl, function(tmpl) {
-                    $('.thumbnails', $form).append(tmpl);
-                });
-            }
+            });
         })
             .prompt(promptUrl)
             .fastSubmit()

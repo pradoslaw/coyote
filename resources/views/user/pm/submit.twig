@@ -54,7 +54,7 @@
     <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            $('textarea[name="text"]').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().pasteImage().focus();
+            $('textarea[name="text"]').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().pasteImage('{{ route('user.pm.paste') }}').focus();
             $('#author').autocomplete({
                 url: '{{ route('user.prompt') }}'
             });
