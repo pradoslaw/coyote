@@ -186,10 +186,10 @@
 
     <script type="text/javascript">
         var uploadUrl = '{{ route('forum.upload') }}';
+        var promptUrl = '{{ route('user.prompt') }}';
+        var pasteUrl = '{{ route('forum.paste') }}';
 
         $(function() {
-            $('#submit-form textarea').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().focus();
-
             var toolTipHints = $('#hint-subject, #hint-content, #hint-tag, #hint-user_name');
 
             $('#submit-form').delegate('input[name="subject"], textarea[name="text"], input[name="user_name"], .tag-editor input', 'focus', function () {

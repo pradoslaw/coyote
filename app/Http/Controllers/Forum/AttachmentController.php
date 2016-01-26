@@ -77,6 +77,36 @@ class AttachmentController extends Controller
     }
 
     /**
+     * Paste image from clipboard
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function paste()
+    {
+        $input = file_get_contents("php://input");
+
+        if (strlen($input) > (config('filesystems.upload_max_size') * 1024 * 1024)) {
+            abort(500, 'File is too big');
+        }
+
+        $fileName = uniqid() . '.png';
+        $path = public_path('storage/forum/' . $fileName);
+
+        file_put_contents($path, file_get_contents('data://' . substr($input, 7)));
+        $mime = new Mimetypes();
+
+        $data = [
+            'size' => filesize($path),
+            'mime' => $mime->fromFilename($fileName),
+            'file' => $fileName,
+            'name' => $fileName
+        ];
+
+        $this->attachment->create($data);
+        return view('forum.attachment', ['attachment' => $data]);
+    }
+
+    /**
      * Download the attachment (or show image)
      *
      * @param $id

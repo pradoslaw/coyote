@@ -286,13 +286,10 @@
     <script type="text/javascript">
         var promptUrl = '{{ route('forum.prompt', [topic.id]) }}';
         var uploadUrl = '{{ route('forum.upload') }}';
+        var pasteUrl = '{{ route('forum.paste') }}';
 
         $(function () {
             $('.col-bottom a').tooltip({'trigger': 'hover'});
-
-            {% if auth_check() %}
-                $('#submit-form textarea').wikiEditor().prompt(promptUrl).fastSubmit().autogrow();
-            {% endif %}
         });
     </script>
 {% endblock %}
