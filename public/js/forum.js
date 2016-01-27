@@ -979,10 +979,10 @@ $(function () {
                 $('textarea', $form).val('');
                 $form.collapse('hide');
 
-                $(html).hide().insertBefore($form).show('slow');console.log($(':hidden[name="post_id"]', $form).val());
+                $(html).insertBefore($form);
                 $('.btn-sub[data-post-id="' + $(':hidden[name="post_id"]', $form).val() + '"]').addClass('active');
             } else {
-                $form.parent().hide().replaceWith(html).show('slow');
+                $form.parent().replaceWith(html);
             }
         })
         .always(function() {
