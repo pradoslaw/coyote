@@ -7418,7 +7418,10 @@ ul.breadcrumb {
           clear: both;
           margin: 1px 0;
           font-weight: bold;
-          font-family: Arial, sans-serif; }
+          font-family: Arial, sans-serif;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap; }
         .dropdown-modal ul li a p {
           padding-right: 3px;
           margin: 0;

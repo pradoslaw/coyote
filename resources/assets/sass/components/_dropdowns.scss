@@ -143,6 +143,7 @@
           margin: 1px 0;
           font-weight: bold;
           font-family: Arial, sans-serif;
+          @include text-overflow();
         }
 
         p {
