@@ -30,4 +30,12 @@ class Topic extends Render
             ['title' => $this->stream['object.displayName']]
         );
     }
+
+    /**
+     * @return string
+     */
+    public function excerpt()
+    {
+        return $this->stream['object.excerpt'];
+    }
 }
