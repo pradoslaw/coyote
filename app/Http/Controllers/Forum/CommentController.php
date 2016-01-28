@@ -99,12 +99,14 @@ class CommentController extends Controller
         \DB::transaction(function () use ($comment, $id, $post, $topic, $forum, $activity, $target) {
             $comment->save();
 
-            $object = (new Stream_Comment())->map($post, $comment, $forum, $topic);
-            stream($activity, $object, $target);
-
             // we need to parse text first (and store it in cache)
             $parser = app()->make('Parser\Comment');
             $comment->text = $parser->parse($comment->text);
+
+            // it is IMPORTANT to parse text first, and then put information to activity stream.
+            // so that we will save plan text (without markdown)
+            $object = (new Stream_Comment())->map($post, $comment, $forum, $topic);
+            stream($activity, $object, $target);
 
             if (!$id) {
                 $alert = new Alert();

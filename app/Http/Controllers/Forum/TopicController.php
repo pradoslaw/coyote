@@ -271,10 +271,11 @@ class TopicController extends BaseController
             }
 
             // parsing text and store it in cache
-            $text = app()->make('Parser\Post')->parse($request->text);
+            // it's important. don't remove below line so that text in activity can be saved without markdown
+            $post->text = app()->make('Parser\Post')->parse($request->text);
 
             // get id of users that were mentioned in the text
-            $usersId = (new Ref_Login())->grab($text);
+            $usersId = (new Ref_Login())->grab($post->text);
 
             if ($usersId) {
                 app()->make('Alert\Post\Login')->with([
@@ -282,7 +283,7 @@ class TopicController extends BaseController
                     'sender_id'   => auth()->id(),
                     'sender_name' => $request->get('user_name', auth()->user()->name),
                     'subject'     => excerpt($request->subject),
-                    'excerpt'     => excerpt($text),
+                    'excerpt'     => excerpt($post->text),
                     'url'         => route('forum.topic', [$forum->path, $topic->id, $path], false)
                 ])->notify();
             }
@@ -295,7 +296,7 @@ class TopicController extends BaseController
             (new \Coyote\Stream\Stream($this->stream))->add(
                 new Stream_Create(
                     $actor,
-                    (new Stream_Topic)->map($topic, $forum, $text),
+                    (new Stream_Topic)->map($topic, $forum, $post->text),
                     (new Stream_Forum)->map($forum)
                 )
             );

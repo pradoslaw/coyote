@@ -288,6 +288,9 @@ class PostController extends BaseController
             // assign attachments to the post
             $this->post->setAttachments($post->id, $request->get('attachments', []));
 
+            // it's important. don't remove below line so that text in activity can be saved without markdown
+            $post->text = $text;
+
             $activity->setObject((new Stream_Post(['url' => $url]))->map($post));
             $activity->setTarget((new Stream_Topic())->map($topic, $forum));
 
