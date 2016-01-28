@@ -113,7 +113,12 @@ class PmController extends Controller
      */
     public function ajax()
     {
+        $parser = app()->make('Parser\Pm');
+
         $pm = $this->pm->takeForUser(auth()->user()->id);
+        foreach ($pm as &$row) {
+            $row->text = $parser->parse($row->text);
+        }
 
         return view('user.pm.ajax')->with(compact('pm'));
     }
