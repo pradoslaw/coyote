@@ -9,7 +9,7 @@ use Coyote\Post\Subscriber;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AcceptRepositoryInterface as Accept;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
-use Coyote\Repositories\Contracts\Post\HistoryRepositoryInterface;
+use Coyote\Repositories\Contracts\Post\LogRepositoryInterface;
 use Coyote\Repositories\Contracts\Post\VoteRepositoryInterface as Vote;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
@@ -25,7 +25,7 @@ use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
 use Coyote\User;
-use Coyote\Post\History;
+use Coyote\Post\Log;
 use Gate;
 use Illuminate\Http\Request;
 
@@ -164,18 +164,18 @@ class PostController extends BaseController
      * Save post (edit or create)
      *
      * @param PostRequest $request
-     * @param HistoryRepositoryInterface $history
+     * @param LogRepositoryInterface $log
      * @param $forum
      * @param $topic
      * @param null $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(PostRequest $request, HistoryRepositoryInterface $history, $forum, $topic, $post = null)
+    public function save(PostRequest $request, LogRepositoryInterface $log, $forum, $topic, $post = null)
     {
         // parsing text and store it in cache
         $text = app()->make('Parser\Post')->parse($request->text);
 
-        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post, $history) {
+        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post, $log) {
             $actor = new Stream_Actor(auth()->user());
 
             // url to the post
@@ -192,13 +192,9 @@ class PostController extends BaseController
 
                 // $isDirty determines if post has been changed somehow (body, title or tags)
                 $isDirty = $post->isDirty('text'); // <-- we only wanna know if text has changed...
-
                 $activity = new Stream_Update($actor);
-                $guid = $history->guid();
 
-                if ($isDirty) {
-                    $history->add(History::EDIT_BODY, $post->id, auth()->id(), $post->text, $guid);
-                }
+                $tags = $request->get('tag', []);
 
                 // user wants to change the subject. we must update "topics" table
                 if ($post->id === $topic->first_post_id) {
@@ -208,18 +204,13 @@ class PostController extends BaseController
                     if ($topic->isDirty()) {
                         $topic->save();
                         $isDirty = true;
-
-                        $history->add(History::EDIT_SUBJECT, $post->id, auth()->id(), $topic->subject, $guid);
                     }
 
-                    $tags = $request->get('tag', []);
                     $current = $topic->tags()->lists('name')->toArray();
 
                     if (array_merge(array_diff($tags, $current), array_diff($current, $tags))) {
                         $this->topic->setTags($topic->id, $tags);
                         $isDirty = true;
-
-                        $history->add(History::EDIT_TAGS, $post->id, auth()->id(), json_encode($tags), $guid);
                     }
                 }
 
@@ -227,6 +218,8 @@ class PostController extends BaseController
                     $post->fill([
                         'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
                     ]);
+
+                    $log->add($post->id, auth()->id(), $post->text, $topic->subject, $tags);
                 }
 
                 $post->save();
@@ -278,7 +271,7 @@ class PostController extends BaseController
 
                 $alert->notify();
                 // initial history of post
-                $history->initial(auth()->id(), $post);
+                $log->add($post->id, auth()->id(), $post->text, null, null);
             }
 
             if (auth()->check() && $post->user_id) {
@@ -634,5 +627,10 @@ class PostController extends BaseController
             // add into activity stream
             stream(Stream_Accept::class, (new Stream_Post(['url' => $url]))->map($post));
         });
+    }
+
+    public function log()
+    {
+
     }
 }

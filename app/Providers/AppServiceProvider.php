@@ -124,8 +124,8 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            'Coyote\\Repositories\\Contracts\\Post\\HistoryRepositoryInterface',
-            'Coyote\\Repositories\\Eloquent\\Post\\HistoryRepository'
+            'Coyote\\Repositories\\Contracts\\Post\\LogRepositoryInterface',
+            'Coyote\\Repositories\\Eloquent\\Post\\LogRepository'
         );
 
         $this->app->bind(

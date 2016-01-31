@@ -6,7 +6,7 @@ use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
-use Coyote\Repositories\Contracts\Post\HistoryRepositoryInterface;
+use Coyote\Repositories\Contracts\Post\LogRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
@@ -27,7 +27,7 @@ use Illuminate\Http\Request;
 use Coyote\Topic\Subscriber as Topic_Subscriber;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Coyote\Post\History;
+use Coyote\Post\Log;
 use Gate;
 
 class TopicController extends BaseController
@@ -239,12 +239,12 @@ class TopicController extends BaseController
     /**
      * @param $forum
      * @param PostRequest $request
-     * @param HistoryRepositoryInterface $history
+     * @param LogRepositoryInterface $log
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($forum, PostRequest $request, HistoryRepositoryInterface $history)
+    public function save($forum, PostRequest $request, LogRepositoryInterface $log)
     {
-        $url = \DB::transaction(function () use ($request, $forum, $history) {
+        $url = \DB::transaction(function () use ($request, $forum, $log) {
             $path = str_slug($request->get('subject'), '_');
 
             // create new topic
@@ -263,6 +263,9 @@ class TopicController extends BaseController
             $this->post->setAttachments($post->id, $request->get('attachments', []));
             // assign tags to topic
             $this->topic->setTags($topic->id, $request->get('tag', []));
+
+            // save it in log...
+            $log->add($post->id, auth()->id(), $post->text, $topic->subject, $request->get('tag', []));
 
             if (auth()->check()) {
                 $this->topic->subscribe($topic->id, auth()->id(), $request->get('subscribe'));
@@ -300,9 +303,6 @@ class TopicController extends BaseController
                     (new Stream_Forum)->map($forum)
                 )
             );
-
-            // save it in history...
-            $history->initial(auth()->id(), $post, $topic);
 
             return route('forum.topic', [$forum->path, $topic->id, $path]);
         });
@@ -469,24 +469,24 @@ class TopicController extends BaseController
     /**
      * @param $topic
      * @param Request $request
-     * @param HistoryRepositoryInterface $history
+     * @param LogRepositoryInterface $log
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function subject($topic, Request $request, HistoryRepositoryInterface $history)
+    public function subject($topic, Request $request, LogRepositoryInterface $log)
     {
         $forum = $this->forum->find($topic->forum_id);
         $this->authorize('update', $forum);
 
         $this->validate($request, ['subject' => 'required|min:3|max:200']);
 
-        $url = \DB::transaction(function () use ($request, $forum, $topic, $history) {
+        $url = \DB::transaction(function () use ($request, $forum, $topic, $log) {
             $path = str_slug($request->get('subject'), '_');
             $topic->fill(['subject' => $request->get('subject'), 'path' => $path]);
 
             if ($topic->isDirty()) {
                 $topic->save();
 
-                $history->add(History::EDIT_SUBJECT, $topic->first_post_id, auth()->id(), $topic->subject);
+                $log->add(log::EDIT_SUBJECT, $topic->first_post_id, auth()->id(), $topic->subject);
             }
 
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
