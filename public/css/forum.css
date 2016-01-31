@@ -741,7 +741,7 @@
     color: #555555;
     margin-right: 3px;
     display: inline-block;
-    background: url("/img/file28.png") no-repeat 0 0;
+    background: url("/img/post.png") no-repeat 0 0;
     background-size: 12px 12px;
     width: 12px;
     height: 12px;
@@ -749,7 +749,7 @@
     .col-time .post-link:focus {
       outline: none; }
   .col-time .post-link.unread {
-    background-image: url("/img/file29.png"); }
+    background-image: url("/img/post-unread.png"); }
 
 .col-body {
   vertical-align: top;
