@@ -271,7 +271,7 @@ class PostController extends BaseController
 
                 $alert->notify();
                 // initial history of post
-                $log->add($post->id, auth()->id(), $post->text, null, null);
+                $log->add($post->id, auth()->id(), $post->text, null, []);
             }
 
             if (auth()->check() && $post->user_id) {
