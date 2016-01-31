@@ -1,26 +1,81 @@
 @charset "UTF-8";
-#box-login, #box-register {
-  border-right: 1px solid #d0d0d0; }
-  #box-login > form, #box-register > form {
-    margin-top: 30px; }
+.btn-google, .btn-fb, .btn-github {
+  width: 100%;
+  border-radius: 4px;
+  text-align: center;
+  height: 35px;
+  line-height: 33px;
+  cursor: pointer; }
+  .btn-google .icon, .btn-fb .icon, .btn-github .icon {
+    width: 35px;
+    float: left;
+    height: 100%; }
 
-#box-login-sidebar > div, #box-register-sidebar > div {
-  padding: 40px; }
+.btn-google {
+  border: 1px solid #e0492f;
+  background-color: #e7705b;
+  color: #fff; }
+  .btn-google .icon {
+    border-right: 1px solid #d63b20; }
+  .btn-google:hover {
+    background-color: #bf341d; }
 
-#box-login-sidebar blockquote, #box-register-sidebar blockquote {
-  font-style: italic;
-  padding: 0 0 0 30px;
-  position: relative;
-  border-left: none;
-  font-size: 17px;
-  margin: 3% 0; }
-  #box-login-sidebar blockquote:after, #box-register-sidebar blockquote:after {
-    position: absolute;
-    font-family: FontAwesome;
-    content: "";
-    top: 0;
-    left: 0;
-    color: #d0d0d0; }
+.btn-fb {
+  border: 1px solid #395697;
+  background-color: #496cba;
+  color: #fff; }
+  .btn-fb .icon {
+    border-right: 1px solid #324b84; }
+  .btn-fb:hover {
+    background-color: #2b4172; }
+
+.btn-github {
+  border: 1px solid #ccc;
+  background-color: #e6e6e6;
+  color: #fff;
+  color: #555555;
+  border: 1px solid #ccc;
+  background-image: linear-gradient(to bottom, #fff 0%, #f6f6f6 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFF6F6F6', GradientType=0); }
+  .btn-github .icon {
+    border-right: 1px solid #bfbfbf; }
+  .btn-github:hover {
+    background-color: #b3b3b3; }
+
+#box-login .separator, #box-register .separator {
+  color: #555555;
+  margin: 15px 0; }
+  #box-login .separator span, #box-register .separator span {
+    font-style: italic;
+    background-color: #fafafa;
+    padding: 10px; }
+  #box-login .separator hr, #box-register .separator hr {
+    margin-bottom: -10px;
+    height: 0;
+    border-top: 1px solid #eeeeee; }
+
+#box-login h1, #box-register h1 {
+  display: none; }
+
+#box-login-sidebar, #box-register-sidebar {
+  border-left: 1px solid #d0d0d0; }
+  #box-login-sidebar > div, #box-register-sidebar > div {
+    padding: 40px; }
+  #box-login-sidebar blockquote, #box-register-sidebar blockquote {
+    font-style: italic;
+    padding: 0 0 0 30px;
+    position: relative;
+    border-left: none;
+    font-size: 17px;
+    margin: 3% 0; }
+    #box-login-sidebar blockquote:after, #box-register-sidebar blockquote:after {
+      position: absolute;
+      font-family: FontAwesome;
+      content: "";
+      top: 0;
+      left: 0;
+      color: #d0d0d0; }
 
 #box-register-sidebar > div {
   padding-top: 0; }

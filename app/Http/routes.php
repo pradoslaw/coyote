@@ -26,6 +26,15 @@ Route::post('Register', 'Auth\RegisterController@signup');
 // przypominanie hasla
 Route::controller('Password', 'Auth\PasswordController');
 
+Route::get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login', 'as' => 'oauth']);
+Route::get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');
+
+//Route::get('Google', ['uses' => 'Auth\GoogleController@redirectToProvider', 'as' => 'google']);
+//Route::get('Google/Callback', 'Auth\GoogleController@handleProviderCallback');
+//
+//Route::get('Facebook', ['uses' => 'Auth\GoogleController@redirectToProvider', 'as' => 'facebook']);
+//Route::get('Facebook/Callback', 'Auth\GoogleController@handleProviderCallback');
+
 
 Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], function () {
     // strona glowna forum

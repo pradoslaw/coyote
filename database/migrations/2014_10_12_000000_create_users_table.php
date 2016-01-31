@@ -15,13 +15,15 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50)->unique();
-            $table->string('email')->unique();
+            $table->string('email');
             /*
              * @deprecated
              * Musi zostac ze wzgledu na stare hashe w poprzedniej wersji Coyote
              */
             $table->string('salt', 34)->nullable();
             $table->string('password', 64);
+            $table->string('provider', 50)->nullable();
+            $table->bigInteger('provider_id')->nullable();
             $table->rememberToken();
             $table->timestampsTz();
             $table->tinyInteger('is_active')->default(1);
@@ -57,6 +59,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('allow_sig')->default(1);
             $table->tinyInteger('allow_subscribe')->default(1);
 
+            $table->unique(['provider', 'provider_id']);
         });
     }
 

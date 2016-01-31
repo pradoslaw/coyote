@@ -44,7 +44,7 @@ class LoginController extends Controller
             'password'              => 'required'
         ]);
 
-        if (Auth::attempt($request->only('name', 'password') + ['is_active' => 1], $request->has('remember'))) {
+        if (Auth::attempt($request->only('name', 'password') + ['is_active' => 1], true)) {
             // put information into the activity stream...
             stream(Stream_Login::class);
             return redirect()->intended(route('home'));

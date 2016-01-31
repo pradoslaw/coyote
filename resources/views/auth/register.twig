@@ -4,32 +4,42 @@
 {% import 'components/forms.twig' as forms %}
 
 {% block container %}
-    <div class="row">
-        <div id="box-register" class="col-sm-7">
-            <h1>Darmowa rejestracja - stwórz swój profil</h1>
+    <div class="row" style="margin-top: 25px">
 
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('register'), 'class': 'form-horizontal'}) }}
-                {{ forms.text('name', 'Nazwa użytkownika', input_old('name'), errors.first('name')) }}
-                {{ forms.password('password', 'Hasło', input_old('password'), errors.first('password')) }}
-                {{ forms.password('password_confirmation', 'Hasło (powtórnie)', input_old('password_confirmation'), errors.first('password_confirmation')) }}
-                {{ forms.text('email', 'E-mail', input_old('email'), errors.first('email')) }}
-                {{ forms.submit('Utwórz konto', 'Rejestracja...') }}
-            {{ form_close() }}
-        </div>
+        <div class="col-xs-10 col-xs-offset-1">
+            <div id="box-register" class="col-sm-5">
+                <h1>Darmowa rejestracja - stwórz swój profil</h1>
 
-        <div id="box-register-sidebar" class="col-sm-5 hidden-xs">
-            <div>
-                <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
+                {% include 'auth/oauth.twig' %}
 
-                <h2>Korzyści wynikające z rejestracji konta</h2>
+                {{ form_open({'method': 'POST', 'role': 'form', 'url': route('register')}) }}
+                {{ forms.inline(form_text('name', input_old('name'), {'class': 'form-control'}), 'Nazwa użytkownika', errors.first('name')) }}
+                {{ forms.inline(form_password('password', {'class': 'form-control'}), 'Hasło', errors.first('password')) }}
+                {{ forms.inline(form_password('password_confirmation', {'class': 'form-control'}), 'Hasło (powtórnie)', errors.first('password_confirmation')) }}
+                {{ forms.inline(form_text('email', input_old('email'), {'class': 'form-control'}), 'E-mail', errors.first('email'), 'Twój e-mail nie zostanie nikomu udostępniony.') }}
 
-                <ul class="list-unstyled">
-                    <li>Możliwość edycji oraz pisania artykułów</li>
-                    <li>Obserwowanie wątków na forum</li>
-                    <li>Śledzenie zmian w artykułach czy komentarzach</li>
-                    <li>System szeregu powiadomień o aktywności na stronie</li>
-                    <li>Pisanie własnego mikrobloga</li>
-                </ul>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="Rejestracja...">
+                        Utwórz konto
+                    </button>
+                </div>
+                {{ form_close() }}
+            </div>
+
+            <div id="box-register-sidebar" class="col-sm-5 col-sm-offset-2 hidden-xs">
+                <div>
+                    <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
+
+                    <h2>Korzyści wynikające z rejestracji konta</h2>
+
+                    <ul class="list-unstyled">
+                        <li>Możliwość edycji oraz pisania artykułów</li>
+                        <li>Obserwowanie wątków na forum</li>
+                        <li>Śledzenie zmian w artykułach czy komentarzach</li>
+                        <li>System szeregu powiadomień o aktywności na stronie</li>
+                        <li>Pisanie własnego mikrobloga</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -47,6 +57,10 @@
     <script type="text/javascript">
         $(function() {
             $('.form-horizontal').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
+
+            $('.btn-github, .btn-google, .btn-fb').click(function() {
+                window.location.href = $(this).data('url');
+            });
         });
     </script>
 {% endblock %}

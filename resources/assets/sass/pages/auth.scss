@@ -1,14 +1,78 @@
 @charset "UTF-8";
 @import "../helpers/variables";
 @import "../vendor/bootstrap/variables";
+@import "../vendor/bootstrap/mixins/gradients";
 @import "../vendor/font-awesome/variables";
 @import "../helpers/mixins";
 
-#box-login, #box-register {
-  border-right: 1px solid $border-color;
+.btn-google, .btn-fb, .btn-github {
+  width: 100%;
+  border-radius: 4px;
+  text-align: center;
+  height: 35px;
+  line-height: 33px;
+  cursor: pointer;
 
-  > form {
-    margin-top: 30px;
+  .icon {
+    width: 35px;
+    float: left;
+    height: 100%;
+  }
+}
+
+$google-color: #e0492f;
+$fb-color: #395697;
+$github-color: #60b044;
+
+@mixin socialize($color) {
+  border: 1px solid $color;
+  background-color: lighten($color, 10%);
+  color: #fff;
+
+  .icon {
+    border-right: 1px solid darken($color, 5%);
+  }
+
+  &:hover {
+    background-color: darken($color, 10%);
+  }
+}
+
+.btn-google {
+  @include socialize($google-color);
+}
+
+.btn-fb {
+  @include socialize($fb-color);
+}
+
+.btn-github {
+  @include socialize(#ccc);
+  color: $gray;
+  border: 1px solid #ccc;
+  @include gradient-vertical(#fff, #f6f6f6);
+}
+
+#box-login, #box-register {
+  .separator {
+    color: $gray;
+    margin: 15px 0;
+
+    span {
+      font-style: italic;
+      background-color: $body-bg;
+      padding: 10px;
+    }
+
+    hr {
+      margin-bottom: -10px;
+      height: 0;
+      border-top: 1px solid $gray-lighter;
+    }
+  }
+
+  h1 {
+    display: none;
   }
 }
 
@@ -16,6 +80,8 @@
   > div {
     padding: 40px;
   }
+
+  border-left: 1px solid $border-color;
 
   blockquote {
     font-style: italic;

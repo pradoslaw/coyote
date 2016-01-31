@@ -3,17 +3,18 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Session;
 use Illuminate\Http\Request;
-use Image;
+use Coyote\Thumbnail;
 
 class HomeController extends Controller
 {
     /**
+     * @param User $user
      * @return \Illuminate\View\View
      */
-    public function index(UserRepositoryInterface $user)
+    public function index(User $user)
     {
         $this->breadcrumb->push('Moje konto', route('user.home'));
 
@@ -53,10 +54,10 @@ class HomeController extends Controller
      * Upload zdjecia na serwer
      *
      * @param Request $request
-     * @param UserRepositoryInterface $user
+     * @param User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function upload(Request $request, UserRepositoryInterface $user)
+    public function upload(Request $request, User $user)
     {
         $this->validate($request, [
             'photo'             => 'required|image'
@@ -68,12 +69,9 @@ class HomeController extends Controller
 
             $request->file('photo')->move($path, $fileName);
 
-            $thumbnail = Image::open($path . $fileName)->thumbnail(
-                new \Imagine\Image\Box(120, 120),
-                \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND
-            );
+            $thumbnail = new Thumbnail\Thumbnail(new Thumbnail\Objects\Photo());
+            $thumbnail->make($path . $fileName);
 
-            $thumbnail->save($path . $fileName);
             $user->update(['photo' => $fileName], auth()->user()->id);
 
             return response()->json([
@@ -85,9 +83,9 @@ class HomeController extends Controller
     /**
      * Usuniecie zdjecia z serwera
      *
-     * @param UserRepositoryInterface $user
+     * @param User $user
      */
-    public function delete(UserRepositoryInterface $user)
+    public function delete(User $user)
     {
         $user->update(['photo' => null], auth()->user()->id);
     }
