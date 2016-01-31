@@ -51,6 +51,10 @@ $github-color: #60b044;
   color: $gray;
   border: 1px solid #ccc;
   @include gradient-vertical(#fff, #f6f6f6);
+
+  &:hover {
+    @include gradient-vertical(#f6f6f6, #fff);
+  }
 }
 
 #box-login, #box-register {

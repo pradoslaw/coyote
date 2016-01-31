@@ -40,7 +40,7 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="{{ cdn('css/auth.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -49,6 +49,7 @@
     <script type="text/javascript">
         $(function() {
             $('.btn-github, .btn-google, .btn-fb').click(function() {
+                $(this).text('Logowanie...');
                 window.location.href = $(this).data('url');
             });
         });

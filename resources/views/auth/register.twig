@@ -16,7 +16,7 @@
                 {{ forms.inline(form_text('name', input_old('name'), {'class': 'form-control'}), 'Nazwa użytkownika', errors.first('name')) }}
                 {{ forms.inline(form_password('password', {'class': 'form-control'}), 'Hasło', errors.first('password')) }}
                 {{ forms.inline(form_password('password_confirmation', {'class': 'form-control'}), 'Hasło (powtórnie)', errors.first('password_confirmation')) }}
-                {{ forms.inline(form_text('email', input_old('email'), {'class': 'form-control'}), 'E-mail', errors.first('email'), 'Twój e-mail nie zostanie nikomu udostępniony.') }}
+                {{ forms.inline(form_text('email', input_old('email'), {'class': 'form-control'}), 'E-mail', errors.first('email'), 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.') }}
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="Rejestracja...">
@@ -48,7 +48,7 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="{{ cdn('css/auth.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -59,6 +59,7 @@
             $('.form-horizontal').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
 
             $('.btn-github, .btn-google, .btn-fb').click(function() {
+                $(this).text('Logowanie...');
                 window.location.href = $(this).data('url');
             });
         });

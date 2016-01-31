@@ -42,6 +42,10 @@
     border-right: 1px solid #bfbfbf; }
   .btn-github:hover {
     background-color: #b3b3b3; }
+  .btn-github:hover {
+    background-image: linear-gradient(to bottom, #f6f6f6 0%, #fff 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF6F6F6', endColorstr='#FFFFFFFF', GradientType=0); }
 
 #box-login .separator, #box-register .separator {
   color: #555555;
