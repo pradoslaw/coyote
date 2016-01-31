@@ -101,7 +101,7 @@
             </section>
 
             <section id="microblog" class="box">
-                <h4><i class="fa fa-comments-o fa-fw"></i> <a href="#">Popularne wpisy na mikroblogu</a></h4>
+                <h4><i class="fa fa-comments-o fa-fw"></i> <a href="{{ route('microblog.home') }}">Popularne wpisy na mikroblogu</a></h4>
 
                 {% for microblog in microblogs %}
                     {% include "microblog/microblog.twig" %}
@@ -112,7 +112,7 @@
         <aside class="col-md-4">
 
             <section id="box-job-offers" class="box">
-                <h4><i class="fa fa-suitcase fa-fw"></i> <a href="#">Oferty pracy</a></h4>
+                <h4><i class="fa fa-suitcase fa-fw"></i> <a href="{{ route('job.home') }}">Oferty pracy</a></h4>
 
                 <div class="panel panel-default">
                     <div class="panel-body">

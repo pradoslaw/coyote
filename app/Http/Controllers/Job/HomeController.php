@@ -13,6 +13,6 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Praca', route('job.home'));
 
-        return parent::view('job.home');
+        return $this->view('job.home');
     }
 }

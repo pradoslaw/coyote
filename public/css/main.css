@@ -7567,6 +7567,9 @@ ul.breadcrumb {
     font-size: 17px;
     color: #000; }
 
+.label-new {
+  background-color: #FF4A00; }
+
 header #navbar-border-top {
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQIW2Ps3MD5n0+AlQEEPn34zcA4/QDffxADBEASmALIWkCqAPDNEnJoA/jxAAAAAElFTkSuQmCC");
   border-bottom: 1px solid #888;

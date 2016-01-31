@@ -177,6 +177,81 @@
       top: 4px;
       font-size: 17px; }
 
+.nav-tabs {
+  margin-bottom: 20px; }
+
+#box-jobs table {
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  border-radius: 3px;
+  margin: 10px 1px 1px 1px;
+  width: 100%;
+  table-layout: fixed; }
+
+#box-jobs tr:nth-child(even) {
+  background-color: #fafafa; }
+
+#box-jobs tr td {
+  padding: 5px;
+  border-bottom: 1px solid #d0d0d0; }
+
+#box-jobs tr:hover .btn-fav {
+  opacity: 1; }
+
+.col-logo {
+  width: 70px; }
+
+.col-body {
+  padding: 10px 1% 10px 0 !important; }
+  .col-body h2 {
+    font-size: 16px;
+    margin: 0 0 5px 0; }
+  .col-body p {
+    font-size: 12px;
+    clear: both;
+    padding: 2px 0;
+    line-height: 1.4;
+    margin: 0; }
+    .col-body p a {
+      color: #555555; }
+  .col-body small a {
+    font-size: 11px;
+    color: #777777; }
+  .col-body .tag-clouds {
+    padding: 0; }
+    .col-body .tag-clouds li a {
+      font-size: 12px;
+      padding: 2px 6px; }
+
+.col-salary {
+  width: 15%; }
+  .col-salary p {
+    font-weight: bold;
+    font-size: 12px;
+    color: #5B9A5C;
+    margin: 0; }
+
+.col-time {
+  width: 15%; }
+  .col-time .btn-fav {
+    opacity: .3;
+    float: right;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    margin: 0 5px 0 0;
+    position: relative;
+    display: inline-block; }
+    .col-time .btn-fav:before {
+      position: absolute;
+      font-family: FontAwesome;
+      content: ""; }
+  .col-time .btn-fav.on {
+    opacity: 1; }
+    .col-time .btn-fav.on:after {
+      content: "";
+      color: #e37329; }
+
 #job-offer {
   padding: 0 20px; }
   #job-offer blockquote {

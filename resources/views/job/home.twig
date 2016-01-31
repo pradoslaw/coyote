@@ -1,0 +1,62 @@
+{% extends 'job/base.twig' %}
+{% block title %}Praca {{ parent() }}{% endblock %}
+
+{% block container %}
+    <div class="row">
+        <main class="col-md-9">
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="{{ route('job.home') }}">Wszystkie</a></li>
+
+                {% if auth_check() %}
+                    <li role="presentation" title="Kliknij, aby zobaczyć oferty pasujące do mnie"><a href="{{ route('job.home') }}">Pasujące do mnie</a></li>
+                    <li role="presentation" title="Kliknij, aby zobaczyć oferty dodane przeze mnie"><a href="{{ route('job.home') }}">Moje</a></li>
+                {% endif %}
+            </ul>
+
+            <section class="panel panel-wrapper">
+                <div id="box-jobs" class="panel-body">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="col-logo">
+                                    <a href="http://4programmers.net/Praca/10709-Android_Developer"><img title="EclipseSource Group" src="http://4programmers.net/store/firm/553659c367f1c.png" width="55"></a>
+                                </td>
+                                <td class="col-body">
+                                    <h2><a href="http://4programmers.net/Praca/10709-Android_Developer">Android Developer</a></h2>
+
+                                    <p>
+                                        <a title="Zobacz oferty pracy z firmy EclipseSource Group" href="http://4programmers.net/Praca/Firma/EclipseSource Group">EclipseSource Group</a>						&nbsp;•&nbsp;
+                                        <small><a title="Znajdź oferty z miasta: Karlsruhe" href="http://4programmers.net/Praca/Miasto/Karlsruhe">Karlsruhe</a></small>
+
+                                        <small><a title="Praca zdalna jest możliwą opcją w przypadku tego ogłoszenia" href="http://4programmers.net/Praca/Zdalna">(praca zdalna)</a></small>
+                                    </p>
+
+                                    <ul class="tag-clouds hidden-sm hidden-xs">
+                                        <li><a data-category="job-tag" data-action="offer" data-value="java" title="Znajdź oferty z technologii: java" href="http://4programmers.net/Praca/Technologia/java">java</a></li>
+                                        <li><a data-category="job-tag" data-action="offer" data-value="mobile" title="Znajdź oferty z technologii: mobile" href="http://4programmers.net/Praca/Technologia/mobile">mobile</a></li>
+                                        <li><a data-category="job-tag" data-action="offer" data-value="android" title="Znajdź oferty z technologii: android" href="http://4programmers.net/Praca/Technologia/android">android</a></li>
+                                        <li><a data-category="job-tag" data-action="offer" data-value="framework" title="Znajdź oferty z technologii: framework" href="http://4programmers.net/Praca/Technologia/framework">framework</a></li>
+                                    </ul>
+                                </td>
+                                <td class="col-salary">
+                                    <p class="text-success">10 000 - 12 000 zł</p>
+
+                                </td>
+                                <td class="col-time">
+                                    <span class="label label-new">Nowe</span>
+
+                                    2 dni temu
+                                    <a class="btn-fav" href="http://4programmers.net/Praca/Watch/205649" title="Dodaj tę ofertę do ulubionych"></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <aside class="col-md-3">
+
+        </aside>
+    </div>
+{% endblock %}

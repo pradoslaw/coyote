@@ -104,7 +104,12 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);
 });
 
-Route::get('Praca', ['uses' => 'Job\HomeController@index', 'as' => 'job.home']);
+/*
+ * Modul "Praca"
+ */
+Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
+    Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
+});
 
 /*
  * Tymczasowe reguly

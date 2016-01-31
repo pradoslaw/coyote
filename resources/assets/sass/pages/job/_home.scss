@@ -1,0 +1,113 @@
+.nav-tabs {
+  margin-bottom: 20px;
+}
+
+#box-jobs {
+  table {
+    border: 1px solid $border-color;
+    background: #fff;
+    border-radius: 3px;
+    margin: 10px 1px 1px 1px;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  tr {
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    td {
+      padding: 5px;
+      border-bottom: 1px solid $border-color;
+    }
+
+    &:hover {
+      .btn-fav {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.col-logo {
+  width: 70px;
+}
+
+.col-body {
+  padding: 10px 1% 10px 0 !important;
+
+  h2 {
+    font-size: 16px;
+    margin: 0 0 5px 0;
+  }
+
+  p {
+    font-size: 12px;
+    clear: both;
+    padding: 2px 0;
+    line-height: 1.4;
+    margin: 0;
+
+    a {
+      color: $gray;
+    }
+  }
+
+  small {
+    a {
+      font-size: 11px;
+      color: $gray-light;
+    }
+  }
+
+  .tag-clouds {
+    padding: 0;
+
+    li {
+      a {
+        font-size: 12px;
+        padding: 2px 6px;
+      }
+    }
+  }
+}
+
+.col-salary {
+  width: 15%;
+
+  p {
+    font-weight: bold;
+    font-size: $font-size-small;
+    color: #5B9A5C;
+    margin: 0;
+  }
+}
+
+.col-time {
+  width: 15%;
+
+  .btn-fav {
+    opacity: .3;
+    float: right;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    margin: 0 5px 0 0;
+    position: relative;
+    display: inline-block;
+
+    &:before {
+      @include font-awesome($fa-var-star-o);
+    }
+  }
+
+  .btn-fav.on {
+    opacity: 1;
+
+    &:after {
+      content: $fa-var-star;
+      color: lighten($alt-link-hover-color, 5%);
+    }
+  }
+}
