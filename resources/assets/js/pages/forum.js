@@ -564,17 +564,19 @@ $(function () {
         $('.nav-tabs a:first').tab('show');
     });
 
-    $('#submit-form textarea').pasteImage(pasteUrl, function(textarea, html) {
-        $('#attachments .text-center').remove();
-        $('#attachments tbody').append(html);
+    if (typeof pasteUrl !== 'undefined') {
+        $('#submit-form textarea').pasteImage(pasteUrl, function (textarea, html) {
+                $('#attachments .text-center').remove();
+                $('#attachments tbody').append(html);
 
-        var link = $('a', html);
-        textarea.insertAtCaret("\n", "\n", '![' + link.text() + '](' + link.data('url') + ')');
-    })
-        .wikiEditor()
-        .prompt(promptUrl)
-        .fastSubmit()
-        .autogrow();
+                var link = $('a', html);
+                textarea.insertAtCaret("\n", "\n", '![' + link.text() + '](' + link.data('url') + ')');
+            })
+            .wikiEditor()
+            .prompt(promptUrl)
+            .fastSubmit()
+            .autogrow();
+    }
 
     /////////////////////////////////////////////////////////////////////////////////
 
