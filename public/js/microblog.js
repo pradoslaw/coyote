@@ -284,16 +284,18 @@ $(function () {
             $('<input type="hidden" name="thumbnail[]" value="' + data.name + '">').appendTo(thumbnail);
         }
 
-        $('textarea', $form).pasteImage(pasteUrl, function(textarea, result) {
-            $.get(uploadUrl, function(tmpl) {
-                $('.thumbnails', $form).append(tmpl);
-                add(result);
-            });
-        })
-            .prompt(promptUrl)
-            .fastSubmit()
-            .autogrow()
-            .focus();
+        if (jQuery.fn.pasteImage) {
+            $('textarea', $form).pasteImage(pasteUrl, function (textarea, result) {
+                    $.get(uploadUrl, function (tmpl) {
+                        $('.thumbnails', $form).append(tmpl);
+                        add(result);
+                    });
+                })
+                .prompt(promptUrl)
+                .fastSubmit()
+                .autogrow()
+                .focus();
+        }
 
         $form.on('click', '.btn-flush', removeThumbnail)
             .submit(function () {
