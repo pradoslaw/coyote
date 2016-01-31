@@ -56,7 +56,7 @@
 
     <script type="text/javascript">
         $(function() {
-            $('.form-horizontal').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
+            $('#box-register').find('form').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
 
             $('.btn-github, .btn-google, .btn-fb').click(function() {
                 $(this).text('Logowanie...');
