@@ -1180,7 +1180,7 @@ $(function () {
         $('.nav-tabs a:first').tab('show');
     });
 
-    if (typeof pasteUrl !== 'undefined') {
+    if (jQuery.fn.pasteImage) {
         $('#submit-form textarea').pasteImage(pasteUrl, function (textarea, html) {
                 $('#attachments .text-center').remove();
                 $('#attachments tbody').append(html);
