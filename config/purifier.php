@@ -32,7 +32,9 @@ return [
     'Core.HiddenElements'       => [],
     'Output.CommentScriptContents' => false,
     'Output.FixInnerHTML'       => false,
-//    'Core.LexerImpl'            => 'DirectLex', // <-- nie wlaczac. psuje parsowanie atrybutow
+    // dzieki temu ustawieniu znacznik <test> nie zostanie przeksztalcony do <text />
+    // trzeba monitorowac to ustawienie, poniewaz moze psuc parsowanie atrybutow
+    'Core.LexerImpl'            => 'DirectLex',
     'Core.AggressivelyFixLt'    => false,
     'Output.Newline'            => "\n"
 ];
