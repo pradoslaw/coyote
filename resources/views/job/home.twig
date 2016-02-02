@@ -4,6 +4,24 @@
 {% block container %}
     <div class="row">
         <main class="col-md-9">
+            {{ form_open({'id': 'box-search'}) }}
+                <div class="row">
+                    <div class="col-sm-5">
+                        <label>Słowo kluczowe</label>
+                        {{ form_text('q', '', {'class': 'form-control', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Lokalizacja</label>
+                        {{ form_text('l', '', {'class': 'form-control', 'placeholder': 'Nazwa miejscowości'}) }}
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-primary btn-search">
+                            <i class="fa fa-search"></i> Szukaj
+                        </button>
+                    </div>
+                </div>
+            {{ form_close() }}
+
             <ul class="nav nav-tabs">
                 <li role="presentation" class="active"><a href="{{ route('job.home') }}">Wszystkie</a></li>
 
@@ -39,13 +57,17 @@
                                     </ul>
                                 </td>
                                 <td class="col-salary">
-                                    <p class="text-success">10 000 - 12 000 zł</p>
-
+                                    <p class="text-success">
+                                        <i class="fa fa-money"></i> 10 000 - 12 000 zł
+                                    </p>
                                 </td>
                                 <td class="col-time">
-                                    <span class="label label-new">Nowe</span>
+                                    <p><span class="label label-new">Nowe</span></p>
 
                                     2 dni temu
+
+                                </td>
+                                <td class="col-fav">
                                     <a class="btn-fav" href="http://4programmers.net/Praca/Watch/205649" title="Dodaj tę ofertę do ulubionych"></a>
                                 </td>
                             </tr>

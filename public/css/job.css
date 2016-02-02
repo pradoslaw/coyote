@@ -180,6 +180,13 @@
 .nav-tabs {
   margin-bottom: 20px; }
 
+#box-search {
+  margin: 20px 0 30px 0; }
+  #box-search label {
+    color: #555555; }
+  #box-search .btn-search {
+    display: block; }
+
 #box-jobs table {
   border: 1px solid #d0d0d0;
   background: #fff;
@@ -214,9 +221,11 @@
     margin: 0; }
     .col-body p a {
       color: #555555; }
-  .col-body small a {
-    font-size: 11px;
+  .col-body small {
     color: #777777; }
+    .col-body small a {
+      font-size: 11px;
+      color: inherit; }
   .col-body .tag-clouds {
     padding: 0; }
     .col-body .tag-clouds li a {
@@ -233,7 +242,10 @@
 
 .col-time {
   width: 15%; }
-  .col-time .btn-fav {
+
+.col-fav {
+  width: 40px; }
+  .col-fav .btn-fav {
     opacity: .3;
     float: right;
     width: 16px;
@@ -242,13 +254,13 @@
     margin: 0 5px 0 0;
     position: relative;
     display: inline-block; }
-    .col-time .btn-fav:before {
+    .col-fav .btn-fav:before {
       position: absolute;
       font-family: FontAwesome;
       content: ""; }
-  .col-time .btn-fav.on {
+  .col-fav .btn-fav.on {
     opacity: 1; }
-    .col-time .btn-fav.on:after {
+    .col-fav .btn-fav.on:after {
       content: "";
       color: #e37329; }
 
