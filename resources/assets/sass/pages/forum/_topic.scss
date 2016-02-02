@@ -395,6 +395,7 @@ div.tooltip-inner {
     padding: 5px 0 5px 10px;
     margin-top: 1px;
     position: relative;
+    word-wrap: break-word;
 
     &:first-child {
       border-top: 1px dotted $border-color;
