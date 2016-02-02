@@ -3,7 +3,7 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="/css/forum.css">
+    <link rel="stylesheet" href="{{ cdn('css/forum.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -13,5 +13,5 @@
         var forumUrl = '{{ route('forum.home') }}';
     </script>
 
-    <script src="/js/forum.js" type="text/javascript"></script>
+    <script src="{{ cdn('js/forum.js') }}" type="text/javascript"></script>
 {% endblock %}
