@@ -717,7 +717,10 @@
   padding-left: 18px;
   position: relative;
   font-family: Arial, sans-serif;
-  color: #555555; }
+  color: #555555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
   .col-user h5:before {
     position: absolute;
     font-family: FontAwesome;

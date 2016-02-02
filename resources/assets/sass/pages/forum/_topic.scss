@@ -136,6 +136,8 @@
     a {
       color: $link-color-darker;
     }
+
+    @include text-overflow();
   }
 
   h5.offline {
