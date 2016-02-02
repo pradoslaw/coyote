@@ -144,10 +144,10 @@
                 <h4>Jak formatować treść postu</h4>
 
                 <p>► Kod źródłowy umieszczaj pomiędzy znacznikami <code>&lt;code&gt;</code> a <code>&lt;/code&gt;</code> np. <code>&lt;code=php&gt; &lt;/code&gt;</code></p>
-                <p>► Stosuj <code><strong>**pogrubienie**</strong> i <cite>//pochylenie//</cite></code></p>
-                <p>► <code><tt>''**brak formatowania**''</tt></code></p>
+                <p>► Stosuj <code><strong>**pogrubienie**</strong> i <cite>*pochylenie*</cite></code></p>
+                <p>► <code><tt>`**brak formatowania**`</tt></code></p>
                 <p>► <code>`polecenia języka programowania`</code></p>
-                <p>► Symbole <code>*</code> i <code>#</code> na początku linii powodują wypunktowanie i numerowanie</p>
+                <p>► Symbole <code>*</code> i <code>1.</code> na początku linii powodują wypunktowanie i numerowanie</p>
                 <p>► Zwracaj uwagę na gramatykę i ortografię!</p>
                 <p>► <cite>Ctrl+Enter</cite> publikuje post.</p>
                 <p>► <cite>Shift+Tab</cite> tworzy wcięcie.</p>
@@ -190,9 +190,9 @@
         var pasteUrl = '{{ route('forum.paste') }}';
 
         $(function() {
-            var toolTipHints = $('#hint-subject, #hint-content, #hint-tag, #hint-user_name');
+            var toolTipHints = $('#hint-subject, #hint-text, #hint-tag, #hint-user_name');
 
-            $('#submit-form').delegate('input[name="subject"], textarea[name="text"], input[name="user_name"], .tag-editor input', 'focus', function () {
+            $('#submit-form').delegate('input[name="subject"], textarea[name="text"], input[name="user_name"], #tag', 'focus', function () {
                 var name = typeof $(this).attr('name') == 'undefined' ? 'tag' : $(this).attr('name');
 
                 if ('hint-' + name != $('.sidebar-hint:visible').attr('id')) {
