@@ -26,6 +26,11 @@ class Post
     private $word;
 
     /**
+     * @var bool
+     */
+    private $enableCache = true;
+
+    /**
      * @param User $user
      * @param Word $word
      */
@@ -33,6 +38,16 @@ class Post
     {
         $this->user = $user;
         $this->word = $word;
+    }
+
+    /**
+     * @param bool $flag
+     * @return $this
+     */
+    public function setEnableCache($flag)
+    {
+        $this->enableCache = (bool) $flag;
+        return $this;
     }
 
     /**
@@ -46,6 +61,7 @@ class Post
         Debugbar::startMeasure('parsing', 'Time for parsing');
 
         $parser = new Parser();
+        $parser->setEnableCache($this->enableCache);
 
         $text = $parser->cache($text, function ($parser) {
             $parser->attach((new Markdown($this->user))->setBreaksEnabled(true));

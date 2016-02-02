@@ -36,6 +36,9 @@ final class Parser
         if ($closure) {
             $closure($this);
         }
+        // @todo klucz do redisa nie powinien uwzgledniac samej tresci ale rowniez liste parserow
+        // wszystko dlatego, ze dwie takie same tresci moga byc parsowane w rozny sposob w zaleznosci
+        // od parsow jakie zostaly wlaczone
         $crc32 = 'text:' . hash('crc32b', $text);
 
         if ($this->enableCache) {

@@ -37,6 +37,7 @@ class Pm
         Debugbar::startMeasure('parsing', 'Time for parsing');
 
         $parser = new Parser();
+        // we don't want to cache user's private messages
         $parser->setEnableCache(false);
 
         $text = $parser->cache($text, function ($parser) {
