@@ -343,6 +343,8 @@
     white-space: nowrap; }
   .col-post-preview a {
     color: #5e7813; }
+  .col-post-preview .btn-view {
+    margin-top: 4px; }
 
 .btn-view {
   padding: 8px 11px;
