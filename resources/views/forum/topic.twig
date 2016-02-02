@@ -33,7 +33,7 @@
                             <div id="box-topic-tags" class="hidden-xs">
                                 <ul class="tag-clouds">
                                     {% for tag in topic.tags %}
-                                        <li><a href="{{ route('forum.tag', [tag.name]) }}">{{ tag.name }}</a></li>
+                                        <li><a href="{{ route('forum.tag', [tag.name|url_encode]) }}">{{ tag.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </div>
