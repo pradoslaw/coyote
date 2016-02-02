@@ -7319,22 +7319,35 @@ ul.breadcrumb {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   font-size: 12px;
   top: 116%; }
-  .dropdown-menu:after, .dropdown-menu:before {
-    bottom: 100%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none; }
-  .dropdown-menu:after {
-    right: 10px;
-    border-bottom-color: #fff;
-    border-width: 8px; }
-  .dropdown-menu:before {
-    right: 9px;
-    border-bottom-color: #d0d0d0;
-    border-width: 9px; }
+
+.dropdown-menu.right:after, .dropdown-menu.left:after, .dropdown-menu.right:before, .dropdown-menu.left:before {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none; }
+
+.dropdown-menu.right:after, .dropdown-menu.left:after {
+  right: 10px;
+  border-bottom-color: #fff;
+  border-width: 8px; }
+
+.dropdown-menu.right:before, .dropdown-menu.left:before {
+  right: 9px;
+  border-bottom-color: #d0d0d0;
+  border-width: 9px; }
+
+.dropdown-menu.left:after {
+  left: 10px; }
+
+.dropdown-menu.left:before {
+  left: 9px; }
+
+#main-menu > li:hover .dropdown-menu {
+  display: block;
+  top: 100%; }
 
 #dropdown-user {
   right: 13px; }

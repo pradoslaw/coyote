@@ -44,9 +44,16 @@
                     </div>
 
                     <div class="collapse navbar-collapse" id="navbar-main">
-                        <ul class="nav navbar-nav">
+                        <ul id="main-menu" class="nav navbar-nav">
                             <li><a href="#">Kompendium wiedzy <span class="sr-only">(current)</span></a></li>
-                            <li><a href="{{ route('forum.home') }}">Forum</a></li>
+                            <li>
+                                <a href="{{ route('forum.home') }}">Forum</a>
+
+                                <ul class="dropdown-menu left">
+                                    <li><a href="#">Newbie</a></li>
+                                    <li><a href="#">Python</a></li>
+                                </ul>
+                            </li>
                             <li><a href="{{ route('pastebin.home') }}">Pastebin</a></li>
                             <li><a href="{{ route('microblog.home') }}">Mikroblogi</a></li>
                             <li><a href="{{ route('job.home') }}">Praca</a></li>
@@ -66,7 +73,7 @@
                                     <span class="caret"></span>
                                 </a>
 
-                                <ul id="dropdown-user" class="dropdown-menu">
+                                <ul id="dropdown-user" class="dropdown-menu right">
                                     <li class="dropdown-username"><a class="dropdown-userhome" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
                                     <li class="divider"></li>
                                     <li><a href="{{ route('user.pm') }}"><i class="fa fa-envelope fa-fw"></i> Wiadomości</a></li>
@@ -88,7 +95,7 @@
                                         <i class="fa fa-bell fa-fw"></i>
                                     </a>
 
-                                    <div id="dropdown-alerts" class="dropdown-menu">
+                                    <div id="dropdown-alerts" class="dropdown-menu right">
                                         <div class="dropdown-header">
                                             <a title="Przejdź do listy powiadomień" href="{{ route('user.alerts') }}">Powiadomienia</a>
 
@@ -115,7 +122,7 @@
                                         <i class="fa fa-envelope fa-fw"></i>
                                     </a>
 
-                                    <div id="dropdown-messages" class="dropdown-menu">
+                                    <div id="dropdown-messages" class="dropdown-menu right">
                                         <div class="dropdown-header">
                                             <a title="Przejdź do listy wiadomości" href="{{ route('user.pm') }}">Wiadomości</a>
 

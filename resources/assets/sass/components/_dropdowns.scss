@@ -3,7 +3,9 @@
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   font-size: $font-size-small;
   top: 116%;
+}
 
+.dropdown-menu.right {
   &:after, &:before {
     bottom: 100%;
     border: solid transparent;
@@ -24,6 +26,28 @@
     right: 9px;
     border-bottom-color: $border-color; // kolor obramowania
     border-width: 9px;
+  }
+}
+
+.dropdown-menu.left {
+  @extend .dropdown-menu.right;
+
+  &:after {
+    left: 10px;
+  }
+
+  &:before {
+    left: 9px;
+  }
+}
+
+// Glowne menu aplikacji. Po naprowadzeniu kursora myszy nad pozycja pokazujemy liste podmenu
+// ---------------------------------------------------------------------------------------
+
+#main-menu > li:hover {
+  .dropdown-menu {
+    display: block;
+    top: 100%;
   }
 }
 
