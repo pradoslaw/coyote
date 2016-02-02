@@ -60,6 +60,8 @@
 
   h5 {
     margin: 0;
+    @include text-overflow();
+    line-height: 116%;
 
     a {
       color: darken($brand-primary, 10%);
@@ -113,6 +115,14 @@
     font-size: 10px;
     float: left;
     margin: 1px 4px 0 0;
+  }
+
+  // jako, ze na malych ekranach ukrywane sa kolumny - np. z iloscia odpowiedzi oraz z data ostatniego posta
+  // w ich miejscu na chrome pozostawial puste (biale miejsce). dziwne, ale kolumna .col-subject mimo, ze mie
+  // miala ustalonej szerokosci, nie dopasowywala sie do szerokosci tabeli. ponizsza instrukcja powoduje
+  // poszerzenie do 100% szerokosci kolumny
+  @media screen and (max-width: $screen-sm) {
+    width: 100%;
   }
 }
 

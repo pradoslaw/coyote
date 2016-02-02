@@ -514,7 +514,11 @@
 .col-subject {
   padding-bottom: 1px !important; }
   .col-subject h5 {
-    margin: 0; }
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 116%; }
     .col-subject h5 a {
       color: #5e7813; }
   .col-subject .topic-pagination {
@@ -552,6 +556,9 @@
     font-size: 10px;
     float: left;
     margin: 1px 4px 0 0; }
+  @media screen and (max-width: 768px) {
+    .col-subject {
+      width: 100%; } }
 
 .col-views {
   width: 110px; }
