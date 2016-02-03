@@ -106,8 +106,15 @@
       font-family: FontAwesome;
       content: ""; }
 
+#box-job-offers > h4 a {
+  background: url("/img/search-headline.png") no-repeat;
+  text-indent: -9999px;
+  height: 25px;
+  display: block;
+  background-size: contain; }
+
 #box-job-offers .panel-default {
-  border: 1px solid #80a41a; }
+  border: 2px solid #91ba1d; }
 
 #box-job-offers .media {
   border-bottom: 1px solid #d0d0d0;

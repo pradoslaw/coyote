@@ -5,8 +5,19 @@
 @import "../vendor/font-awesome/variables";
 
 #box-job-offers {
+  > h4 {
+    a {
+      background: url("/img/search-headline.png") no-repeat;
+      text-indent: -9999px;
+      height: 25px;
+      display: block;
+      //background-size: 165px 25px;
+      background-size: contain;
+    }
+  }
+
   .panel-default {
-    border: 1px solid $brand-primary;
+    border: 2px solid lighten($brand-primary, 5%);
   }
 
   .media {
