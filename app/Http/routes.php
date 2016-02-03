@@ -93,7 +93,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Post/Vote/{id}', ['uses' => 'PostController@vote', 'as' => 'post.vote']);
     // akceptowanie danego posta jako poprawna odpowiedz w watku
     Route::post('Post/Accept/{id}', ['uses' => 'PostController@accept', 'as' => 'post.accept']);
-    Route::get('Post/Log/{id}', ['uses' => 'PostController@log', 'as' => 'post.log']);
+    Route::get('Post/Log/{post}', ['uses' => 'PostController@log', 'as' => 'post.log']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
     Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);

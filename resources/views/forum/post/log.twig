@@ -1,0 +1,53 @@
+{% extends 'forum/base.twig' %}
+{% block title %}Historia edycji posta w {{ topic.subject }}{{ parent() }}{% endblock %}
+
+{% block container %}
+    <h1>{{ link_to_route('forum.topic', topic.subject, [forum.path, topic.id, topic.path]) }}</h1>
+
+    {% for log in logs %}
+        <section class="panel panel-wrapper">
+            <div class="panel-body">
+
+                <div class="post">
+                    <div class="post-body">
+                        <div class="row">
+                            <div class="col-xs-2 col-user">
+                                <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
+                                    {% if log.user_id %}
+                                        {{ link_to_profile(log.user_id, log.author_name, log.is_active, log.is_blocked) }}
+                                    {% else %}
+                                        {{ log.user_name }}
+                                    {% endif %}
+                                </h5>
+                            </div>
+
+                            {% set url = route('forum.post.log', [log.post_id], false) ~ '#id' ~ log.id %}
+                            {% set ip = log.ip ~ ' ' ~ (log.host ? '(' ~ log.host ~ ')') ~ ' ' ~ log.browser %}
+
+                            <div class="col-xs-10 col-time">
+                                <a title="Link do tego postu" id="id{{ log.id }}" class="post-link" href="{{ url }}"></a>
+
+                                <span class="timestamp" title="{{ log.created_at|format_date(false) }}" data-timestamp="{{ log.created_at|timestamp }}">{{ log.created_at|format_date }}</span>
+                                <small><a href="#" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-2 col-user hidden-xss">
+
+                            </div>
+
+                            <div class="col-xs-10 col-body">
+                                <div class="post-content">
+                                    {{ log.text }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    {% endfor %}
+
+{% endblock %}

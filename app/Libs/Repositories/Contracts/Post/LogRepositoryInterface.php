@@ -15,4 +15,10 @@ interface LogRepositoryInterface extends RepositoryInterface
      * @param string|null $comment
      */
     public function add($postId, $userId, $text, $subject, array $tags, $comment = null);
+
+    /**
+     * @param $postId
+     * @return mixed
+     */
+    public function takeForPost($postId);
 }
