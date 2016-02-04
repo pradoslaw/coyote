@@ -341,7 +341,6 @@
   width: 25%; }
   .col-post-preview p {
     margin: 0;
-    padding: 2px 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap; }
