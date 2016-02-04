@@ -12,6 +12,13 @@ use Coyote\Parser\Scenarios\Post as Parser_Post;
 class ParserServiceProvider extends ServiceProvider
 {
     /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = true;
+
+    /**
      * Bootstrap the application services.
      *
      * @return void
@@ -61,5 +68,24 @@ class ParserServiceProvider extends ServiceProvider
                 $app['Coyote\Repositories\Eloquent\WordRepository']
             );
         });
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        /*
+         * UWAGA! Po dodaniu nowego elementu do tablicy trzeba wykonac php artisan clear-compiled
+         */
+        return [
+            'Parser\Microblog',
+            'Parser\Comment',
+            'Parser\Sig',
+            'Parser\Pm',
+            'Parser\Post'
+        ];
     }
 }
