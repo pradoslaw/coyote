@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Coyote\Session\Viewers;
+use Coyote\Session\Handler;
 
 class SessionServiceProvider extends ServiceProvider
 {
@@ -29,7 +30,7 @@ class SessionServiceProvider extends ServiceProvider
 
             $table = $databaseConnection->getTablePrefix() . $app['config']['session.table'];
 
-            return new \Coyote\Session\Handler($databaseConnection, $table);
+            return new Handler($databaseConnection, $table);
         });
 
         $this->app->bind('Session\Viewers', function ($app) {

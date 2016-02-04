@@ -132,5 +132,9 @@ class AppServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Contracts\\Post\\AttachmentRepositoryInterface',
             'Coyote\\Repositories\\Eloquent\\Post\\AttachmentRepository'
         );
+
+        $this->app->singleton('Setting', function ($app) {
+            return new $app['Coyote\\Repositories\\Contracts\\SettingRepositoryInterface']($app);
+        });
     }
 }

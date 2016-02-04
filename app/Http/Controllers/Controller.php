@@ -10,13 +10,30 @@ abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    /**
+     * @var Coyote\Breadcrumb
+     */
     protected $breadcrumb;
+
+    /**
+     * Stores user's custom settings (like active tab or tags) from settings table
+     *
+     * @var array|null
+     */
+    protected $settings;
 
     public function __construct()
     {
         $this->breadcrumb = new Coyote\Breadcrumb();
     }
 
+    /**
+     * Renders view with breadcrumb
+     *
+     * @param null $view
+     * @param array $data
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     protected function view($view = null, $data = [])
     {
         if (count($this->breadcrumb)) {
@@ -24,5 +41,42 @@ abstract class Controller extends BaseController
         }
 
         return view($view, $data);
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    protected function setSetting($name, $value)
+    {
+        app()->make('Setting')->setItem($name, $value, auth()->id(), request()->session()->getId());
+
+        if (is_array($this->settings)) {
+            $this->settings[$name] = $value;
+        }
+    }
+
+    /**
+     * Get user's settings as array (setting => value)
+     *
+     * @return array|null
+     */
+    protected function getSettings()
+    {
+        if (is_null($this->settings)) {
+            $this->settings = app()->make('Setting')->getAll(auth()->id(), request()->session()->getId());
+        }
+
+        return $this->settings;
+    }
+
+    /**
+     * @param $name
+     * @param null $default
+     * @return null
+     */
+    protected function getSetting($name, $default = null)
+    {
+        return isset($this->getSettings()[$name]) ? $this->settings[$name] : $default;
     }
 }

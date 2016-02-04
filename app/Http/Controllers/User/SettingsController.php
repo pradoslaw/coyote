@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\SettingRepositoryInterface;
 use Coyote\Stream\Activities\Update;
 use Coyote\Stream\Objects\Person;
 use Coyote\User;
@@ -75,7 +74,7 @@ class SettingsController extends Controller
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
     }
 
-    public function ajax(SettingRepositoryInterface $setting)
+    public function ajax()
     {
         $name = array_keys($_POST)[0];
         $name = trim(strip_tags(htmlspecialchars($name)));
@@ -83,7 +82,7 @@ class SettingsController extends Controller
         if (!empty($name)) {
             $value = trim(strip_tags(htmlspecialchars(request()->get($name))));
 
-            $setting->setItem(str_replace('_', '.', $name), $value, auth()->id(), request()->session()->getId());
+            $this->setSetting(str_replace('_', '.', $name), $value);
         }
     }
 }

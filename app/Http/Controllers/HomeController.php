@@ -4,24 +4,22 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
-use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Stream\Stream;
-use Debugbar;
 use Cache;
 
 class HomeController extends Controller
 {
-    public function index(Microblog $microblog, Reputation $reputation, Stream $stream, Setting $setting, Topic $topic)
+    public function index(Microblog $microblog, Reputation $reputation, Stream $stream, Topic $topic)
     {
         $microblog->setUserId(auth()->id());
         $viewers = app('Session\Viewers');
 
-        Debugbar::startMeasure('stream', 'Stream activities');
+        start_measure('stream', 'Stream activities');
         // tymczasowo naglowki tylko dla mikroblogow, a nie dla forum
         $activities = $stream->take(10, 0, ['Topic', 'Post', 'Comment'], ['Create', 'Update'], ['Forum', 'Post', 'Topic']);
-        Debugbar::stopMeasure('stream');
+        stop_measure('stream');
 
         $topic->pushCriteria(new OnlyThoseWithAccess());
 
@@ -36,7 +34,7 @@ class HomeController extends Controller
                     'total'   => $reputation->total()
                 ];
             }),
-            'settings'             => $setting->getAll(auth()->id(), request()->session()->getId()),
+            'settings'             => $this->getSettings(),
             'newest'               => Cache::remember('homepage:newest', 30, function () use ($topic) {
                 return $topic->newest();
             })

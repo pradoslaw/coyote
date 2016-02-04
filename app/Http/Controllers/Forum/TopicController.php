@@ -8,7 +8,6 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\Post\LogRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
-use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
@@ -51,13 +50,12 @@ class TopicController extends BaseController
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
-     * @param Setting $setting
      * @param Stream $stream
      * @param Attachment $attachment
      */
-    public function __construct(Forum $forum, Topic $topic, Post $post, Setting $setting, Stream $stream, Attachment $attachment)
+    public function __construct(Forum $forum, Topic $topic, Post $post, Stream $stream, Attachment $attachment)
     {
-        parent::__construct($forum, $topic, $setting);
+        parent::__construct($forum, $topic);
 
         $this->post = $post;
         $this->stream = $stream;

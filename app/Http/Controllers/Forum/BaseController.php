@@ -5,7 +5,6 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
-use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Gate;
 use Cache;
@@ -23,22 +22,15 @@ abstract class BaseController extends Controller
     protected $topic;
 
     /**
-     * @var Setting
-     */
-    protected $setting;
-
-    /**
      * @param Forum $forum
      * @param Topic $topic
-     * @param Setting $setting
      */
-    public function __construct(Forum $forum, Topic $topic, Setting $setting)
+    public function __construct(Forum $forum, Topic $topic)
     {
         parent::__construct();
 
         $this->forum = $forum;
         $this->topic = $topic;
-        $this->setting = $setting;
 
         $this->breadcrumb->push('Forum', route('forum.home'));
     }
@@ -123,31 +115,7 @@ abstract class BaseController extends Controller
 
             $tags = array_merge($weight, array_combine($diff, array_fill(0, count($diff), 0)));
         }
+
         return $tags;
-    }
-
-    /**
-     * @param $name
-     * @param $value
-     */
-    protected function setSetting($name, $value)
-    {
-        $this->setting->setItem($name, $value, auth()->id(), request()->session()->getId());
-    }
-
-    /**
-     * @param string $name
-     * @param null $default
-     * @return mixed|null
-     */
-    protected function getSetting($name, $default = null)
-    {
-        static $settings = null;
-
-        if (is_null($settings)) {
-            $settings = $this->setting->getAll(auth()->id(), request()->session()->getId());
-        }
-
-        return empty($settings[$name]) ? $default : $settings[$name];
     }
 }

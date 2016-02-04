@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Illuminate\Http\Request;
 
