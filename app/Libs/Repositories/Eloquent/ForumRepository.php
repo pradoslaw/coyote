@@ -209,6 +209,25 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
+     * @param array $tags
+     * @return mixed
+     */
+    public function getTagsWeight(array $tags)
+    {
+        return (new Topic\Tag())
+                ->select(['name', \DB::raw('COUNT(*) AS count')])
+                ->join('tags', 'tags.id', '=', 'tag_id')
+                ->join('topics', 'topics.id', '=', 'topic_id')
+                    ->whereIn('tags.name', $tags)
+                    ->whereNull('topics.deleted_at')
+                    ->whereNull('tags.deleted_at')
+                ->groupBy('name')
+                ->get()
+                ->lists('count', 'name')
+                ->toArray();
+    }
+
+    /**
      * Mark forum as read
      *
      * @param $forumId

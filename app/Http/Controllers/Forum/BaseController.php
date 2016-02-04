@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
+use Coyote\Repositories\Contracts\SettingRepositoryInterface as Setting;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Gate;
 use Cache;
@@ -22,15 +23,22 @@ abstract class BaseController extends Controller
     protected $topic;
 
     /**
+     * @var Setting
+     */
+    protected $setting;
+
+    /**
      * @param Forum $forum
      * @param Topic $topic
+     * @param Setting $setting
      */
-    public function __construct(Forum $forum, Topic $topic)
+    public function __construct(Forum $forum, Topic $topic, Setting $setting)
     {
         parent::__construct();
 
         $this->forum = $forum;
         $this->topic = $topic;
+        $this->setting = $setting;
 
         $this->breadcrumb->push('Forum', route('forum.home'));
     }
@@ -58,7 +66,10 @@ abstract class BaseController extends Controller
     protected function view($view = null, $data = [])
     {
         return parent::view($view, $data)->with([
-            'tags' => $this->getTagClouds(),
+            'tags' => [
+                'popular'   => $this->getTagClouds(),
+                'user'      => $this->getUserTags()
+            ],
             'viewers' => $this->getViewers()
         ]);
     }
@@ -95,5 +106,48 @@ abstract class BaseController extends Controller
         return Cache::remember('forum:tags', 60 * 24, function () {
             return $this->forum->getTagClouds();
         });
+    }
+
+    /**
+     * @return mixed|null
+     */
+    protected function getUserTags()
+    {
+        $tags = $this->getSetting('forum.tags');
+
+        if ($tags) {
+            $tags = json_decode($tags);
+
+            $weight = $this->forum->getTagsWeight($tags);
+            $diff = array_diff($tags, array_keys($weight));
+
+            $tags = array_merge($weight, array_combine($diff, array_fill(0, count($diff), 0)));
+        }
+        return $tags;
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    protected function setSetting($name, $value)
+    {
+        $this->setting->setItem($name, $value, auth()->id(), request()->session()->getId());
+    }
+
+    /**
+     * @param string $name
+     * @param null $default
+     * @return mixed|null
+     */
+    protected function getSetting($name, $default = null)
+    {
+        static $settings = null;
+
+        if (is_null($settings)) {
+            $settings = $this->setting->getAll(auth()->id(), request()->session()->getId());
+        }
+
+        return empty($settings[$name]) ? $default : $settings[$name];
     }
 }

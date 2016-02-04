@@ -29,29 +29,24 @@ Route::controller('Password', 'Auth\PasswordController');
 Route::get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login', 'as' => 'oauth']);
 Route::get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');
 
-//Route::get('Google', ['uses' => 'Auth\GoogleController@redirectToProvider', 'as' => 'google']);
-//Route::get('Google/Callback', 'Auth\GoogleController@handleProviderCallback');
-//
-//Route::get('Facebook', ['uses' => 'Auth\GoogleController@redirectToProvider', 'as' => 'facebook']);
-//Route::get('Facebook/Callback', 'Auth\GoogleController@handleProviderCallback');
-
-
 Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], function () {
     // strona glowna forum
     Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
-    Route::post('/Preview', ['uses' => 'HomeController@preview', 'as' => 'preview']);
+    Route::post('Preview', ['uses' => 'HomeController@preview', 'as' => 'preview']);
 
-    Route::get('/Tag/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
-    Route::get('/All', ['uses' => 'HomeController@all', 'as' => 'all']);
-    Route::get('/Unanswered', ['uses' => 'HomeController@unanswered', 'as' => 'unanswered']);
-    Route::get('/Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);
-    Route::get('/Subscribes', ['uses' => 'HomeController@subscribes', 'as' => 'subscribes']);
-    Route::post('/Mark', ['uses' => 'HomeController@mark', 'as' => 'mark']);
+    Route::get('Tag/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
+    Route::post('Tag/save', ['uses' => 'TagController@save', 'as' => 'tag.save']);
+    Route::get('All', ['uses' => 'HomeController@all', 'as' => 'all']);
+    Route::get('Unanswered', ['uses' => 'HomeController@unanswered', 'as' => 'unanswered']);
+    Route::get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);
+    Route::get('Subscribes', ['uses' => 'HomeController@subscribes', 'as' => 'subscribes']);
+    Route::post('Mark', ['uses' => 'HomeController@mark', 'as' => 'mark']);
 
     // dodawanie zalacznika do posta
     Route::post('Upload', ['uses' => 'AttachmentController@upload', 'as' => 'upload']);
     // sciaganie zalacznika
     Route::get('Download/{id}', ['uses' => 'AttachmentController@download', 'as' => 'download']);
+    // wklejanie zdjec przy pomocy Ctrl+V w textarea
     Route::post('Paste', ['uses' => 'AttachmentController@paste', 'as' => 'paste']);
 
     // formularz dodawania nowego watku na forum
@@ -93,6 +88,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Post/Vote/{id}', ['uses' => 'PostController@vote', 'as' => 'post.vote']);
     // akceptowanie danego posta jako poprawna odpowiedz w watku
     Route::post('Post/Accept/{id}', ['uses' => 'PostController@accept', 'as' => 'post.accept']);
+    // historia edycji danego posta
     Route::get('Post/Log/{post}', ['uses' => 'PostController@log', 'as' => 'post.log']);
 
     // edycja/publikacja komentarza oraz jego usuniecie

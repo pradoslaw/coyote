@@ -167,3 +167,29 @@
     font-size: 90%;
   }
 }
+
+// Style zwiazane z ustawianiem wlasnych tagow
+// -----------------------------------------------------------------
+
+#box-popular-tags, #box-my-tags {
+  margin-bottom: 20px;
+}
+
+#box-my-tags {
+  .btn-settings {
+    margin-top: -4px;
+  }
+}
+
+#tags-form {
+  .col-xs-2 {
+    padding: 0;
+  }
+}
+
+div.tag-clouds {
+  .btn-add {
+    color: $gray;
+    font-style: italic;
+  }
+}

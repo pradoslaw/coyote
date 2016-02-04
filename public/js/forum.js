@@ -1180,6 +1180,39 @@ $(function () {
         $('.nav-tabs a:first').tab('show');
     });
 
+    /**
+     * Custom tags
+     */
+    $('#box-my-tags').on('click', '.btn-settings', function() {
+        $('#box-my-tags').find('.tag-clouds').toggle();
+        $('#tags-form').toggle().find('input[name="tags"]').focus();
+    })
+        .on('click', '.btn-add', function() {
+            $('#box-my-tags').find('.btn-settings').click();
+        });
+
+    $('#tags-form').submit(function() {
+        var $form = $(this);
+        var tags = $('input[name="tags"]', this).val();
+
+        tags = tags.replace(new RegExp(',', 'g'), ' ').split(' ').filter(function(element) {
+            return element !== '';
+        });
+
+        $(':input', $form).attr('disabled', 'disabled');
+
+        $.post($form.attr('action'), {'tags': tags}, function(html) {
+            var object = $('#box-my-tags');
+
+            object.find('.tag-clouds').replaceWith(html).show();
+            $form.hide();
+        }).always(function() {
+            $(':input', $form).removeAttr('disabled');
+        });
+
+        return false;
+    });
+
     if (jQuery.fn.pasteImage) {
         $('#submit-form textarea').pasteImage(pasteUrl, function (textarea, html) {
                 $('#attachments .text-center').remove();

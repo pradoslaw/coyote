@@ -35,6 +35,12 @@ interface ForumRepositoryInterface extends RepositoryInterface
     public function getTagClouds();
 
     /**
+     * @param array $tags
+     * @return mixed
+     */
+    public function getTagsWeight(array $tags);
+
+    /**
      * Mark forum as read
      *
      * @param $forumId

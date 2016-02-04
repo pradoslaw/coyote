@@ -258,9 +258,6 @@
   margin-top: 20px;
   color: #777777; }
 
-#box-popular-tags, #box-my-tags {
-  margin-bottom: 20px; }
-
 .box-forum table {
   border: 1px solid #d0d0d0;
   background: #fff;
@@ -486,6 +483,19 @@
   #box-count span {
     letter-spacing: 2px;
     font-size: 90%; }
+
+#box-popular-tags, #box-my-tags {
+  margin-bottom: 20px; }
+
+#box-my-tags .btn-settings {
+  margin-top: -4px; }
+
+#tags-form .col-xs-2 {
+  padding: 0; }
+
+div.tag-clouds .btn-add {
+  color: #555555;
+  font-style: italic; }
 
 #box-topics {
   margin: 9px 0 9px 0; }

@@ -51,12 +51,13 @@ class TopicController extends BaseController
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
+     * @param Setting $setting
      * @param Stream $stream
      * @param Attachment $attachment
      */
-    public function __construct(Forum $forum, Topic $topic, Post $post, Stream $stream, Attachment $attachment)
+    public function __construct(Forum $forum, Topic $topic, Post $post, Setting $setting, Stream $stream, Attachment $attachment)
     {
-        parent::__construct($forum, $topic);
+        parent::__construct($forum, $topic, $setting);
 
         $this->post = $post;
         $this->stream = $stream;
@@ -68,10 +69,9 @@ class TopicController extends BaseController
      * @param \Coyote\Topic $topic
      * @param string $slug
      * @param Request $request
-     * @param Setting $setting
      * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function index($forum, $topic, $slug, Request $request, Setting $setting)
+    public function index($forum, $topic, $slug, Request $request)
     {
         $userId = auth()->id();
         $sessionId = $request->session()->getId();
@@ -103,9 +103,9 @@ class TopicController extends BaseController
 
         if ($request->has('perPage')) {
             $perPage = max(10, min($request->get('perPage'), 50));
-            $setting->setItem('forum.posts_per_page', $perPage, auth()->id(), $request->session()->getId());
+            $this->setSetting('forum.posts_per_page', $perPage);
         } else {
-            $perPage = $setting->getItem('forum.posts_per_page', auth()->id(), $request->session()->getId(), 10);
+            $perPage = $this->getSetting('forum.posts_per_page', 10);
         }
 
         // user wants to show certain post. we need to calculate page number based on post id.

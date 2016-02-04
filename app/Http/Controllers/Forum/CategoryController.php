@@ -11,10 +11,9 @@ class CategoryController extends BaseController
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
-     * @param Setting $setting
      * @return $this
      */
-    public function index($forum, Request $request, Setting $setting)
+    public function index($forum, Request $request)
     {
         // builds breadcrumb for this category
         $this->breadcrumb($forum);
@@ -25,14 +24,12 @@ class CategoryController extends BaseController
         $this->forum->skipCriteria(true);
         // execute query: get all subcategories that user can has access to
         $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId(), $forum->id);
-        // get user settings based on user id or session id (for anonymous user)
-        $settings = $setting->getAll(auth()->id(), $request->session()->getId());
 
         if ($request->has('perPage')) {
             $perPage = max(10, min($request->get('perPage'), 50));
-            $setting->setItem('forum.topics_per_page', $perPage, auth()->id(), $request->session()->getId());
+            $this->setSetting('forum.topics_per_page', $perPage);
         } else {
-            $perPage = isset($settings['forum.topics_per_page']) ? $settings['forum.topics_per_page'] : 20;
+            $perPage = $this->getSetting('forum.topics_per_page', 20);
         }
 
         // display topics for this category
@@ -46,7 +43,7 @@ class CategoryController extends BaseController
             $perPage
         );
 
-        $collapse = isset($settings['forum.collapse']) ? unserialize($settings['forum.collapse']) : [];
+        $collapse = $this->getSetting('forum.collapse') ? unserialize($this->getSetting('forum.collapse')) : [];
 
         return parent::view('forum.category')->with(
             compact('forumList', 'forum', 'topics', 'sections', 'collapse')
@@ -71,16 +68,15 @@ class CategoryController extends BaseController
      *
      * @param \Coyote\Forum $forum
      * @param Request $request
-     * @param Setting $setting
      */
-    public function section($forum, Request $request, Setting $setting)
+    public function section($forum, Request $request)
     {
-        $collapse = $setting->getItem('forum.collapse', auth()->id(), $request->session()->getId());
+        $collapse = $this->getSetting('forum.collapse');
         if ($collapse !== null) {
             $collapse = unserialize($collapse);
         }
 
         $collapse[$forum->id] = (int) $request->input('flag');
-        $setting->setItem('forum.collapse', serialize($collapse), auth()->id(), $request->session()->getId());
+        $this->setSetting('forum.collapse', serialize($collapse));
     }
 }

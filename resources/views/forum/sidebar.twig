@@ -1,19 +1,34 @@
 <div id="box-my-tags" class="box">
-    <h4 class="border"><i class="fa fa-tag fa-fw"></i> Moje tagi</h4>
+    <h4 class="border">
+        <i class="fa fa-tag fa-fw"></i> Moje tagi
 
-    <ul class="tag-clouds">
-        <li><a href="#">delphi</a><small>× 7970</small></li>
-    </ul>
+        <a href="javascript:" class="btn btn-default btn-xs pull-right btn-settings"><i class="fa fa-cog"></i></a>
+    </h4>
+
+    {% if tags.user %}
+        {% include 'forum/tags.twig' with {'tags': tags.user} %}
+    {% else %}
+        <div class="tag-clouds">
+            <a href="javascript:" class="btn-add">(Brak tagów. Kliknij, aby dodać)</a>
+        </div>
+    {% endif %}
+
+    {{ form_open({'method': 'post', 'url': route('forum.tag.save'), 'id': 'tags-form', 'style': 'display: none'}) }}
+        <div class="row">
+            <div class="col-xs-9">
+                {{ form_text('tags', tags.user|keys|join(', '), {'class': 'form-control input-sm'}) }}
+            </div>
+            <div class="col-xs-2">
+                {{ form_submit('Zapisz', {'class': 'btn btn-primary btn-sm', 'data-submit-state': 'Zapisywanie...'}) }}
+            </div>
+        </div>
+    {{ form_close() }}
 </div>
 
 <div id="box-popular-tags" class="box">
     <h4 class="border"><i class="fa fa-tag fa-fw"></i> Popularne tagi</h4>
 
-    <ul class="tag-clouds">
-        {% for name, count in tags %}
-            <li><a href="{{ route('forum.tag', [name]) }}">{{ name }}</a><small>× {{ count }}</small></li>
-        {% endfor %}
-    </ul>
+    {% include 'forum/tags.twig' with {'tags': tags.popular} %}
 </div>
 
 <section id="box-job-offers" class="box">
