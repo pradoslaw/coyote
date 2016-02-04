@@ -1,5 +1,5 @@
 <ul class="tag-clouds">
     {% for name, count in tags %}
-        <li><a href="{{ route('forum.tag', [name]) }}">{{ name }}</a><small>× {{ count }}</small></li>
+        <li><a href="{{ route('forum.tag', [name|url_encode]) }}">{{ name }}</a><small>× {{ count }}</small></li>
     {% endfor %}
 </ul>
