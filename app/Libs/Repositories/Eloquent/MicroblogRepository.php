@@ -14,32 +14,9 @@ use Image;
  */
 class MicroblogRepository extends Repository implements MicroblogRepositoryInterface
 {
-    /**
-     * @var int
-     */
-    private $userId;
-
     public function model()
     {
         return 'Coyote\Microblog';
-    }
-
-    /**
-     * @param int $userId
-     * @return $this
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -162,17 +139,25 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         return $microblogs;
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return $this->model->whereNull('parent_id')->count();
     }
 
-    public function countForUser()
+    /**
+     * @param int $userId
+     * @return null|int
+     */
+    public function countForUser($userId)
     {
-        return $this->userId ? $this->model->whereNull('parent_id')->where('user_id', $this->userId)->count() : 0;
+        return $userId ? $this->model->whereNull('parent_id')->where('user_id', $userId)->count() : null;
     }
 
     /**
+     * @param bool $withComments
      * @return mixed
      */
     private function prepare($withComments = true)
@@ -181,7 +166,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         $columnThumb = 'mv.id AS thumbs_on';
         $columnWatch = 'mw.user_id AS subscribe_on';
 
-        $userId = auth()->check() ? \DB::raw(auth()->user()->id) : null;
+        $userId = $this->app['auth']->id() ? \DB::raw($this->app['auth']->id()) : null;
         $with = [];
 
         if ($withComments) {

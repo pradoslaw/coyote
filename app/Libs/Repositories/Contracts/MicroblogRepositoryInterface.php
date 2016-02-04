@@ -5,17 +5,6 @@ namespace Coyote\Repositories\Contracts;
 interface MicroblogRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param int $userId
-     * @return $this
-     */
-    public function setUserId($userId);
-
-    /**
-     * @return int
-     */
-    public function getUserId();
-
-    /**
      * Pobierz X ostatnich wpisow z mikrobloga przy czym sortowane sa one wedlug oceny. Metoda
      * ta jest wykorzystywana na stronie glownej serwisu
      *

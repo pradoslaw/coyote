@@ -13,7 +13,6 @@ class HomeController extends Controller
 {
     public function index(Microblog $microblog, Reputation $reputation, Stream $stream, Topic $topic)
     {
-        $microblog->setUserId(auth()->id());
         $viewers = app('Session\Viewers');
 
         start_measure('stream', 'Stream activities');

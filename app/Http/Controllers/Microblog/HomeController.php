@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
 use Cache;
@@ -11,16 +11,15 @@ use Cache;
 class HomeController extends Controller
 {
     /**
-     * @var MicroblogRepositoryInterface
+     * @var Microblog
      */
     private $microblog;
 
-    public function __construct(MicroblogRepositoryInterface $repository)
+    public function __construct(Microblog $microblog)
     {
         parent::__construct();
 
-        $this->microblog = $repository;
-        $this->microblog->setUserId(auth()->check() ? auth()->user()->id : null);
+        $this->microblog = $microblog;
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));
     }
 
@@ -52,7 +51,7 @@ class HomeController extends Controller
 
         return parent::view('microblog.home', [
             'count'                     => $this->microblog->count(),
-            'count_user'                => $this->microblog->countForUser(),
+            'count_user'                => $this->microblog->countForUser(auth()->id()),
             'pagination'                => $microblogs->render(),
             'microblogs'                => $microblogs->items(),
             'route'                     => request()->route()->getName()
