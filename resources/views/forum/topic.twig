@@ -90,7 +90,7 @@
                                     <div class="tab-content">
                                         <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
                                             {% include 'components/toolbar.twig' %}
-                                            <textarea name="text" class="form-control" cols="60" style="height: 80px" placeholder="Kliknij, aby napisać szybką odpowiedź..." required>{{ input_old('text', text) }}</textarea>
+                                            <textarea name="text" class="form-control" cols="60" style="height: 80px" placeholder="Kliknij, aby napisać szybką odpowiedź..." data-paste-url="{{ route('forum.paste') }}" required>{{ input_old('text', text) }}</textarea>
 
                                             {% if errors.first('text') %}
                                                 <span class="help-block">{{ errors.first('text') }}</span>
@@ -289,7 +289,6 @@
     <script type="text/javascript">
         var promptUrl = '{{ route('forum.prompt', [topic.id]) }}';
         var uploadUrl = '{{ route('forum.upload') }}';
-        var pasteUrl = '{{ route('forum.paste') }}';
 
         $(function () {
             $('.col-bottom a').tooltip({'trigger': 'hover'});

@@ -265,7 +265,7 @@ $(function () {
         }
 
         if (jQuery.fn.pasteImage) {
-            $('textarea', $form).pasteImage(pasteUrl, function (textarea, result) {
+            $('textarea', $form).pasteImage(function (textarea, result) {
                     $.get(uploadUrl, function (tmpl) {
                         $('.thumbnails', $form).append(tmpl);
                         add(result);

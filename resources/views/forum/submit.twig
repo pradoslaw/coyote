@@ -60,7 +60,7 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
                             {% include 'components/toolbar.twig' %}
-                            <textarea name="text" class="form-control" style="height: 160px;" tabindex="3">{{ input_old('text', text) }}</textarea>
+                            <textarea name="text" class="form-control" style="height: 160px;" tabindex="3" data-paste-url="{{ route('forum.paste') }}">{{ input_old('text', text) }}</textarea>
 
                             {% if errors.first('text') %}
                                 <span class="help-block">{{ errors.first('text') }}</span>
@@ -187,7 +187,6 @@
     <script type="text/javascript">
         var uploadUrl = '{{ route('forum.upload') }}';
         var promptUrl = '{{ route('user.prompt') }}';
-        var pasteUrl = '{{ route('forum.paste') }}';
 
         $(function() {
             var toolTipHints = $('#hint-subject, #hint-text, #hint-tag, #hint-user_name');

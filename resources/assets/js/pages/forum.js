@@ -598,7 +598,7 @@ $(function () {
     });
 
     if (jQuery.fn.pasteImage) {
-        $('#submit-form textarea').pasteImage(pasteUrl, function (textarea, html) {
+        $('#submit-form textarea').pasteImage(function (textarea, html) {
                 $('#attachments .text-center').remove();
                 $('#attachments tbody').append(html);
 

@@ -1,17 +1,24 @@
 (function ($) {
     'use strict';
 
-    $.fn.pasteImage = function (url, complete) {
+    $.fn.pasteImage = function (complete) {
         return this.each(function () {
-            var defaults = {
-                url: '',
+            var setup = {
                 complete: function (textarea, result) {
                     textarea.insertAtCaret('![' + result.name + '](' + result.url + ')', '', ' ');
                 }
             };
 
-            var setup = $.extend(defaults, {url: url, complete: complete});
             var textarea = $(this);
+            setup.url = textarea.data('paste-url');
+
+            if (typeof setup.url === 'undefined') {
+                alert('Textarea does not have data-paste-url attribute');
+            }
+
+            if (typeof complete !== 'undefined') {
+                setup.complete = complete;
+            }
 
             var upload = function(base64) {
                 textarea.attr('readonly', 'readonly');

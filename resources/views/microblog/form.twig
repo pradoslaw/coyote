@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <textarea cols="110" rows="2" placeholder="Kliknij, aby dodać wpis" tabindex="1" name="text" style="height: 45px;">{{ text }}</textarea>
+        <textarea cols="110" rows="2" placeholder="Kliknij, aby dodać wpis" tabindex="1" name="text" style="height: 45px;" data-paste-url="{{ route('microblog.paste') }}">{{ text }}</textarea>
     </div>
 </div>
 
