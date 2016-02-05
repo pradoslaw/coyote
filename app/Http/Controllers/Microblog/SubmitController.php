@@ -8,7 +8,6 @@ use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
-use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 use Coyote\Reputation\Microblog\Create as Reputation_Create;
@@ -16,8 +15,6 @@ use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
-use Coyote\Stream\Actor as Stream_Actor;
-use Coyote\Stream\Stream as Stream_Activity;
 use Coyote\Alert\Providers\Microblog\Login as Alert_Login;
 use Illuminate\Http\Request;
 
@@ -43,11 +40,6 @@ class SubmitController extends Controller
     private $reputation;
 
     /**
-     * @var Stream
-     */
-    private $stream;
-
-    /**
      * @var Alert
      */
     private $alert;
@@ -58,15 +50,13 @@ class SubmitController extends Controller
      * @param Microblog $microblog
      * @param User $user
      * @param Reputation $reputation
-     * @param Stream $stream
      * @param Alert $alert
      */
-    public function __construct(Microblog $microblog, User $user, Reputation $reputation, Stream $stream, Alert $alert)
+    public function __construct(Microblog $microblog, User $user, Reputation $reputation, Alert $alert)
     {
         $this->microblog = $microblog;
         $this->user = $user;
         $this->reputation = $reputation;
-        $this->stream = $stream;
         $this->alert = $alert;
     }
 
@@ -128,15 +118,13 @@ class SubmitController extends Controller
             $microblog->text = app()->make('Parser\Microblog')->parse($microblog->text);
 
             $object = (new Stream_Microblog())->map($microblog);
-            $actor = new Stream_Actor($user);
-            $stream = new Stream_Activity($this->stream);
 
             if (!$id) {
                 // increase reputation points
                 (new Reputation_Create($this->reputation))->map($microblog)->save();
 
                 // put this to activity stream
-                $stream->add(new Stream_Create($actor, $object));
+                stream(Stream_Create::class, $object);
 
                 $ref = new Ref_Login();
                 // get id of users that were mentioned in the text
@@ -158,7 +146,7 @@ class SubmitController extends Controller
                     Subscriber::insert(['microblog_id' => $microblog->id, 'user_id' => $user->id]);
                 }
             } else {
-                $stream->add(new Stream_Update($actor, $object));
+                stream(Stream_Update::class, $object);
             }
 
             $ref = new Ref_Hash();
@@ -226,8 +214,7 @@ class SubmitController extends Controller
             (new Reputation_Create($this->reputation))->undo($microblog->id);
 
             // put this to activity stream
-            $delete = new Stream_Delete(new Stream_Actor(auth()->user()), (new Stream_Microblog())->map($microblog));
-            (new Stream_Activity($this->stream))->add($delete);
+            stream(Stream_Delete::class, (new Stream_Microblog())->map($microblog));
         });
     }
 
