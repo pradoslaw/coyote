@@ -57,6 +57,9 @@ class ReputationServiceProvider extends ServiceProvider
         return [
             'Reputation\Post\Vote',
             'Reputation\Post\Accept',
+
+            'Reputation\Microblog\Create',
+            'Reputation\Microblog\Vote'
         ];
     }
 }

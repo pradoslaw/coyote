@@ -8,7 +8,6 @@ use Coyote\Microblog\Vote;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Illuminate\Http\Request;
-use Coyote\Reputation\Microblog\Vote as Reputation_Vote;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 use Coyote\Alert\Providers\Microblog\Vote as Alert_Vote;
 use Coyote\Stream\Activities\Vote as Stream_Vote;
@@ -23,11 +22,6 @@ use Coyote\Stream\Objects\Microblog as Stream_Microblog;
 class VoteController extends Controller
 {
     /**
-     * @var Reputation
-     */
-    private $reputation;
-
-    /**
      * @var Alert
      */
     private $alert;
@@ -36,9 +30,8 @@ class VoteController extends Controller
      * @param Reputation $reputation
      * @param Alert $alert
      */
-    public function __construct(Reputation $reputation, Alert $alert)
+    public function __construct(Alert $alert)
     {
-        $this->reputation = $reputation;
         $this->alert = $alert;
     }
 
@@ -84,7 +77,7 @@ class VoteController extends Controller
             if (!$microblog->parent_id) {
                 $url = route('microblog.view', [$microblog->id], false) . '#entry-' . $microblog->id;
 
-                (new Reputation_Vote($this->reputation))->map($microblog)->setUrl($url)->setIsPositive(!$vote)->save();
+                app()->make('Reputation\Microblog\Vote')->map($microblog)->setUrl($url)->setIsPositive(!$vote)->save();
             } else {
                 $url = route('microblog.view', [$microblog->parent_id], false) . '#comment-' . $microblog->id;
             }

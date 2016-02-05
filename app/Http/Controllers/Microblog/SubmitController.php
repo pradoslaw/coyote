@@ -9,8 +9,6 @@ use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
-use Coyote\Reputation\Microblog\Create as Reputation_Create;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
@@ -35,11 +33,6 @@ class SubmitController extends Controller
     private $user;
 
     /**
-     * @var Reputation
-     */
-    private $reputation;
-
-    /**
      * @var Alert
      */
     private $alert;
@@ -49,14 +42,12 @@ class SubmitController extends Controller
      *
      * @param Microblog $microblog
      * @param User $user
-     * @param Reputation $reputation
      * @param Alert $alert
      */
-    public function __construct(Microblog $microblog, User $user, Reputation $reputation, Alert $alert)
+    public function __construct(Microblog $microblog, User $user, Alert $alert)
     {
         $this->microblog = $microblog;
         $this->user = $user;
-        $this->reputation = $reputation;
         $this->alert = $alert;
     }
 
@@ -121,7 +112,7 @@ class SubmitController extends Controller
 
             if (!$id) {
                 // increase reputation points
-                (new Reputation_Create($this->reputation))->map($microblog)->save();
+                app()->make('Reputation\Microblog\Create')->map($microblog)->save();
 
                 // put this to activity stream
                 stream(Stream_Create::class, $object);
@@ -211,7 +202,7 @@ class SubmitController extends Controller
         \DB::transaction(function () use ($microblog) {
             $microblog->delete();
             // cofniecie pkt reputacji
-            (new Reputation_Create($this->reputation))->undo($microblog->id);
+            app()->make('Reputation\Microblog\Create')->undo($microblog->id);
 
             // put this to activity stream
             stream(Stream_Delete::class, (new Stream_Microblog())->map($microblog));
