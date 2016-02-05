@@ -36,7 +36,7 @@ $(function () {
                 $this.data('count', count);
 
                 if (!$this.hasClass('thumbs-on')) {
-                    $this.next('.btn-subscribe').click(); // po doceneniu wpisu automatycznie go obserwujemy
+                    $this.next('.btn-subscribe:not(.subscribe-on)').click(); // po doceneniu wpisu automatycznie go obserwujemy
                 }
 
                 $this.toggleClass('thumbs-on');
