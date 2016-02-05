@@ -1037,7 +1037,7 @@ $(function () {
 
         $.get($(this).attr('href'), function(html) {
             comments[$comment.data('comment-id')] = $comment.html();
-            $comment.html(html).find('textarea').prompt(promptUrl).fastSubmit().autogrow().focus();
+            $comment.html(html).find('textarea').prompt().fastSubmit().autogrow().focus();
         });
 
         return false;
@@ -1049,7 +1049,7 @@ $(function () {
         return false;
     })
     .find('textarea').one('focus', function() {
-        $(this).prompt(promptUrl).fastSubmit().autogrow().focus();
+        $(this).prompt().fastSubmit().autogrow().focus();
     });
 
 
@@ -1076,7 +1076,7 @@ $(function () {
         if (!$this.hasClass('active')) {
             $.get($this.attr('href'), function(html) {
                 posts[$this.data('post-id')] = $post.html();
-                $post.html(html).find('textarea').prompt(promptUrl).fastSubmit().autogrow().focus();
+                $post.html(html).find('textarea').prompt().fastSubmit().autogrow().focus();
 
                 $this.addClass('active');
             });
@@ -1222,7 +1222,7 @@ $(function () {
                 textarea.insertAtCaret("\n", "\n", '![' + link.text() + '](' + link.data('url') + ')');
             })
             .wikiEditor()
-            .prompt(promptUrl)
+            .prompt()
             .fastSubmit()
             .autogrow();
     }

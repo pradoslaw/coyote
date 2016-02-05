@@ -1,10 +1,16 @@
 (function ($) {
-    $.fn.prompt = function (url) {
+    $.fn.prompt = function () {
         return this.each(function () {
             var $textarea = $(this);
             var index = -1;
             var timeId = 0;
             var $ul = $('<ul style="display: none;" class="auto-complete"></ul>');
+
+            var url = $textarea.data('prompt-url');
+
+            if (typeof url === 'undefined') {
+                alert('Textarea does not have data-prompt-url attribute');
+            }
 
             var getCursorPosition = function () {
                 if ($textarea[0].selectionStart || $textarea[0].selectionStart == 0) {
@@ -151,7 +157,11 @@
 
                                         index = -1;
                                     }
-                                });
+                                })
+                                    .error(function(e) {
+                                        // do nothing
+                                        return false;
+                                    });
 
                             }, 200);
                         }

@@ -31,11 +31,10 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="/css/microblog.css">
+    <link rel="stylesheet" href="{{ cdn('css/microblog.css') }}">
 
     <script type="text/javascript">
         var uploadUrl = '{{ route('microblog.upload') }}';
-        var promptUrl = '{{ route('user.prompt') }}';
     </script>
 
 {% endblock %}
@@ -43,7 +42,7 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="/js/microblog.js"></script>
-    <script type="text/javascript" src="/js/posting.js"></script>
-    <script type="text/javascript" src="/js/modal.js"></script>
+    <script type="text/javascript" src="{{ cdn('js/microblog.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
 {% endblock %}

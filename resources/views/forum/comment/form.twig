@@ -1,6 +1,6 @@
 <form method="post" action="{{ route('forum.comment.save', [comment.id]) }}" {{ comment.id is not defined ? ('class="collapse" id="form-' ~ post.id ~ '"')|raw }}>
     <input type="hidden" value="{{ post.id }}" name="post_id">
-    <textarea cols="90" rows="2" class="form-control" name="text" maxlength="580">{{ comment.text }}</textarea>
+    <textarea cols="90" rows="2" class="form-control" name="text" maxlength="580" data-prompt-url="{{ route('forum.prompt', [topic.id]) }}">{{ comment.text }}</textarea>
 
     <p class="text-muted pull-left">Pozostało <strong>{{ 580 - comment.text|length }}</strong> znaków</p>
 

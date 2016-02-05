@@ -22,7 +22,7 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="body">
                     {% include 'components/toolbar' %}
-                    <textarea name="text" class="form-control" rows="2" placeholder="Kliknij, aby odpowiedzieć" data-paste-url="{{ route('user.pm.paste') }}">{{ input_old('text') }}</textarea>
+                    <textarea name="text" class="form-control" rows="2" placeholder="Kliknij, aby odpowiedzieć" data-paste-url="{{ route('user.pm.paste') }}" data-prompt-url="{{ route('user.prompt') }}">{{ input_old('text') }}</textarea>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="preview"></div>
             </div>
@@ -58,7 +58,7 @@
             wrap.perfectScrollbar();
             wrap.scrollTop(overview.outerHeight());
 
-            $('textarea[name="text"]').wikiEditor().prompt('{{ route('user.prompt') }}').fastSubmit().autogrow().pasteImage().focus();
+            $('textarea[name="text"]').wikiEditor().prompt().fastSubmit().autogrow().pasteImage().focus();
 
             wrap.on('mouseenter', '.unread', function() {
                 $(this).off('mouseenter');

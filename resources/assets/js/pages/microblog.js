@@ -149,7 +149,7 @@ $(function () {
         })
         .on('focus', '.comment-submit input', function() {
             if (typeof $(this).data('prompt') === 'undefined') {
-                $(this).prompt(promptUrl).data('prompt', 'yes');
+                $(this).prompt().data('prompt', 'yes');
             }
         })
         .on('submit', '.comment-submit', function() {
@@ -212,7 +212,7 @@ $(function () {
                     });
 
                     $form.appendTo(commentText);
-                    $input.focus().prompt(promptUrl);
+                    $input.focus().prompt();
                 });
             } else {
                 cancel();
@@ -271,7 +271,7 @@ $(function () {
                         add(result);
                     });
                 })
-                .prompt(promptUrl)
+                .prompt()
                 .fastSubmit()
                 .autogrow()
                 .focus();

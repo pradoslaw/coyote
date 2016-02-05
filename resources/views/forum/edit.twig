@@ -19,7 +19,7 @@
         {{ form_hidden('subscribe', true) }}
     {% endif %}
 
-    {{ form_textarea('text', post.text, {'class': 'form-control', 'rows': 5}) }}
+    {{ form_textarea('text', post.text, {'class': 'form-control', 'rows': 5, 'data-prompt-url': route('forum.prompt', [topic.id])}) }}
 
     <button type="submit" class="btn btn-xs btn-primary pull-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</button>
     <button class="btn btn-xs btn-danger pull-right btn-reset" style="margin-right: 10px">Anuluj</button>
