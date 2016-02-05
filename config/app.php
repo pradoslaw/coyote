@@ -151,6 +151,7 @@ return [
         /*
          * Application Service Providers...
          */
+        Coyote\Providers\RepositoryServiceProvider::class,
         Coyote\Providers\AppServiceProvider::class,
         Coyote\Providers\BusServiceProvider::class,
         Coyote\Providers\ConfigServiceProvider::class,
