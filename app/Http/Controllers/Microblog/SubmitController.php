@@ -6,14 +6,12 @@ use Coyote\Microblog\Subscriber;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
-use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
-use Coyote\Alert\Providers\Microblog\Login as Alert_Login;
 use Illuminate\Http\Request;
 
 /**
@@ -33,22 +31,15 @@ class SubmitController extends Controller
     private $user;
 
     /**
-     * @var Alert
-     */
-    private $alert;
-
-    /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
      *
      * @param Microblog $microblog
      * @param User $user
-     * @param Alert $alert
      */
-    public function __construct(Microblog $microblog, User $user, Alert $alert)
+    public function __construct(Microblog $microblog, User $user)
     {
         $this->microblog = $microblog;
         $this->user = $user;
-        $this->alert = $alert;
     }
 
     /**
@@ -122,7 +113,7 @@ class SubmitController extends Controller
                 $usersId = $ref->grab($microblog->text);
 
                 if ($usersId) {
-                    (new Alert_Login($this->alert))->with([
+                    app()->make('Alert\Microblog\Login')->with([
                         'users_id'    => $usersId,
                         'sender_id'   => $user->id,
                         'sender_name' => $user->name,

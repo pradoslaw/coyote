@@ -5,11 +5,8 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Microblog;
 use Coyote\Microblog\Vote;
-use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Illuminate\Http\Request;
-use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
-use Coyote\Alert\Providers\Microblog\Vote as Alert_Vote;
 use Coyote\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
 
@@ -21,20 +18,6 @@ use Coyote\Stream\Objects\Microblog as Stream_Microblog;
  */
 class VoteController extends Controller
 {
-    /**
-     * @var Alert
-     */
-    private $alert;
-
-    /**
-     * @param Reputation $reputation
-     * @param Alert $alert
-     */
-    public function __construct(Alert $alert)
-    {
-        $this->alert = $alert;
-    }
-
     /**
      * @param $id
      * @param Request $request
@@ -88,7 +71,7 @@ class VoteController extends Controller
             stream(Stream_Vote::class, (new Stream_Microblog())->map($microblog));
 
             if (!$vote) {
-                (new Alert_Vote($this->alert))
+                app()->make('Alert\Microblog\Vote')
                     ->setMicroblogId($microblog->id)
                     ->addUserId($microblog->user_id)
                     ->setSubject(excerpt($microblog->text))
