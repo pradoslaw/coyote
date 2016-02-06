@@ -52,8 +52,7 @@ function excerpt($value, $limit = 64)
  */
 function stream($activity = null, $object = null, $target = null)
 {
-    $repository = app()->make('Coyote\\Repositories\\Contracts\\StreamRepositoryInterface');
-    $stream = new Coyote\Stream\Stream($repository);
+    $stream = app()->make('stream');
 
     if ($activity) {
         if (is_string($activity)) {

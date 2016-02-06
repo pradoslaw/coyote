@@ -46,5 +46,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('setting', function ($app) {
             return new $app['Coyote\\Repositories\\Contracts\\SettingRepositoryInterface']($app);
         });
+
+        $this->app->bind('stream', function ($app) {
+            return new $app['Coyote\\Stream\\Stream']($app['Coyote\\Repositories\\Contracts\\StreamRepositoryInterface']);
+        });
     }
 }
