@@ -208,7 +208,7 @@ $(function () {
                     commentText.html('');
 
                     var $form = $('<form>');
-                    var $input = $('<input>', {'value': text, 'class': 'form-control', 'name': 'text', 'autocomplete': 'off'})
+                    var $input = $('<input>', {'value': text, 'class': 'form-control', 'name': 'text', 'autocomplete': 'off', 'data-prompt-url': commentText.data('prompt-url')})
                         .keydown(function(e) {
                             if (e.keyCode === 27) {
                                 cancel();

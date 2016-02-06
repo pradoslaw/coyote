@@ -23,7 +23,7 @@
             </div>
         {% endif %}
 
-        <div class="inline-edit">
+        <div class="inline-edit" data-prompt-url="{{ route('user.prompt') }}">
             <h6>{{ link_to_profile(comment.user_id, comment.name, comment.is_active, comment.is_blocked) }}</h6>
             <div class="media-content">{{ comment.text|raw }}</div>
 

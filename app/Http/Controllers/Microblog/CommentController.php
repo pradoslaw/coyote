@@ -89,7 +89,7 @@ class CommentController extends Controller
                     'excerpt'     => excerpt($microblog->text),
                     'sender_id'   => $user->id,
                     'sender_name' => $user->name,
-                    'subject'     => excerpt($parent->text, 48), // original exerpt of parent entry
+                    'subject'     => excerpt($parent->text), // original exerpt of parent entry
                     'url'         => route('microblog.view', [$parent->id], false) . '#comment-' . $microblog->id
                 ];
 
@@ -105,7 +105,7 @@ class CommentController extends Controller
                 $usersId = $ref->grab($microblog->text);
 
                 if ($usersId) {
-                    $alert->attach(app()->make('Alert\Microblog\Login')->with($alertData))->setUsersId($usersId);
+                    $alert->attach(app()->make('Alert\Microblog\Login')->with($alertData)->setUsersId($usersId));
                 }
 
                 // send a notify

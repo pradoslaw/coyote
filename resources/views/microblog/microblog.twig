@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="media-body">
                                         <input type="hidden" name="parent_id" value="{{ microblog.id }}">
-                                        <input type="text" name="text" placeholder="Napisz komentarz..." class="form-control" autocomplete="off">
+                                        <input type="text" name="text" placeholder="Napisz komentarz..." class="form-control" autocomplete="off" data-prompt-url="{{ route('user.prompt') }}">
                                     </div>
                                 </div>
                             </form>
