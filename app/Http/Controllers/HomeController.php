@@ -13,7 +13,7 @@ class HomeController extends Controller
 {
     public function index(Microblog $microblog, Reputation $reputation, Stream $stream, Topic $topic)
     {
-        $viewers = app('Session\Viewers');
+        $viewers = app()->make('viewers');
 
         start_measure('stream', 'Stream activities');
         // tymczasowo naglowki tylko dla mikroblogow, a nie dla forum

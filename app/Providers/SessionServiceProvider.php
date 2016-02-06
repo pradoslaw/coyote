@@ -33,7 +33,7 @@ class SessionServiceProvider extends ServiceProvider
             return new Handler($databaseConnection, $table);
         });
 
-        $this->app->bind('Session\Viewers', function ($app) {
+        $this->app->bind('viewers', function ($app) {
             return new Viewers(
                 $app['Coyote\Repositories\Eloquent\SessionRepository'],
                 $app['Illuminate\Http\Request']

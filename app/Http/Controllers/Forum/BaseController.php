@@ -86,7 +86,7 @@ abstract class BaseController extends Controller
     protected function getViewers()
     {
         // create view with online users
-        return app()->make('Session\Viewers')->render(request()->getRequestUri());
+        return app()->make('viewers')->render(request()->getRequestUri());
     }
 
     /**

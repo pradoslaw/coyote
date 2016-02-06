@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('Setting', function ($app) {
+        $this->app->singleton('setting', function ($app) {
             return new $app['Coyote\\Repositories\\Contracts\\SettingRepositoryInterface']($app);
         });
     }
