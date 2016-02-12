@@ -567,6 +567,20 @@ $(function () {
     /**
      * Custom tags
      */
+    var applyTags = function(tags) {
+        $('.col-subject').find('.tag-clouds a').each(function() {
+            if ($.inArray($(this).data('tag'), tags) > -1) {
+                $(this).parents('tr').addClass('tagged');
+            }
+        });
+    };
+
+    var filterTags = function(string) {
+        return string.replace(new RegExp(',', 'g'), ' ').split(' ').filter(function(element) {
+            return element !== '';
+        });
+    };
+
     $('#box-my-tags').on('click', '.btn-settings', function() {
         $('#box-my-tags').find('.tag-clouds').toggle();
         $('#tags-form').toggle().find('input[name="tags"]').focus();
@@ -579,10 +593,7 @@ $(function () {
         var $form = $(this);
         var tags = $('input[name="tags"]', this).val();
 
-        tags = tags.replace(new RegExp(',', 'g'), ' ').split(' ').filter(function(element) {
-            return element !== '';
-        });
-
+        tags = filterTags(tags);
         $(':input', $form).attr('disabled', 'disabled');
 
         $.post($form.attr('action'), {'tags': tags}, function(html) {
@@ -590,12 +601,16 @@ $(function () {
 
             object.find('.tag-clouds').replaceWith(html).show();
             $form.hide();
+
+            applyTags(tags);
         }).always(function() {
             $(':input', $form).removeAttr('disabled');
         });
 
         return false;
     });
+
+    applyTags(filterTags($('#tags-form').find('input[name="tags"]').val()));
 
     if (jQuery.fn.pasteImage) {
         $('#submit-form textarea').pasteImage(function (textarea, html) {

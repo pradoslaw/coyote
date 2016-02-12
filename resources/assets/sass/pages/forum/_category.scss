@@ -10,6 +10,10 @@
       opacity: 1;
     }
   }
+
+  tr.tagged td {
+    background-color: $unread-bg;
+  }
 }
 
 .col-topic-icon {

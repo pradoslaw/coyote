@@ -502,6 +502,8 @@ div.tag-clouds .btn-add {
     background-color: #e2e7e1; }
   #box-topics tr:hover .btn-watch-sm {
     opacity: 1; }
+  #box-topics tr.tagged td {
+    background-color: #FFF3CD; }
 
 .col-topic-icon {
   width: 30px; }
