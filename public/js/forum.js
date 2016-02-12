@@ -1218,6 +1218,7 @@ $(function () {
             object.find('.tag-clouds').replaceWith(html).show();
             $form.hide();
 
+            $('.tagged').removeClass('tagged');
             applyTags(tags);
         }).always(function() {
             $(':input', $form).removeAttr('disabled');
