@@ -82,3 +82,41 @@
         </aside>
     </div>
 {% endblock %}
+
+{% block fixed %}
+    {{ parent() }}
+
+    <div id="box-clients">
+        <div class="row max-width">
+            <div class="col-xs-12">
+                <h4>Z naszych usług korzystali...</h4>
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <img src="{{ cdn('img/logo/wp.png') }}" class="img-responsive">
+                    </div>
+
+                    <div class="col-sm-2">
+                        <img src="{{ cdn('img/logo/gazeta.png') }}" class="img-responsive">
+                    </div>
+
+                    <div class="col-sm-2">
+                        <img src="{{ cdn('img/logo/allegro.png') }}" class="img-responsive">
+                    </div>
+
+                    <div class="col-sm-2">
+                        <img src="{{ cdn('img/logo/nsn.png') }}" class="img-responsive">
+                    </div>
+
+                    <div class="col-sm-2">
+                        <img src="{{ cdn('img/logo/pgs-software.png') }}" class="img-responsive">
+                    </div>
+
+                    <div class="col-sm-2">
+                        <img src="{{ cdn('img/logo/microsoft.png') }}" class="img-responsive">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

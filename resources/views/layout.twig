@@ -148,29 +148,31 @@
 
             {{ breadcrumb|raw }}
 
-            <div class="row max-width">
-                <div class="col-md-12">
-                    {% if session_has('success') %}
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="alert alert-success" style="margin-top: 18px">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    <i class="fa fa-check"></i>
+            {% block fixed %}
+                <div class="row max-width">
+                    <div class="col-md-12">
+                        {% if session_has('success') %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="alert alert-success" style="margin-top: 18px">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <i class="fa fa-check"></i>
 
-                                    {{ session_get('success') }}
+                                        {{ session_get('success') }}
+                                    </div>
                                 </div>
+
                             </div>
+                        {% endif %}
 
-                        </div>
-                    {% endif %}
+                        {% block container %}
 
-                    {% block container %}
-
-                    {% endblock %}
+                        {% endblock %}
+                    </div>
                 </div>
-            </div>
+            {% endblock %}
 
             <footer>
                 <div id="footer-top">
