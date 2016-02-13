@@ -230,6 +230,9 @@
 #box-jobs tr:hover .btn-fav {
   opacity: 1; }
 
+#box-jobs tr.premium td {
+  background-color: #FFF3CD; }
+
 .col-logo {
   width: 70px; }
 

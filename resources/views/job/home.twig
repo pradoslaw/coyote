@@ -10,12 +10,13 @@
                         <label>Słowo kluczowe</label>
                         {{ form_text('q', '', {'class': 'form-control', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-5">
                         <label>Lokalizacja</label>
                         {{ form_text('l', '', {'class': 'form-control', 'placeholder': 'Nazwa miejscowości'}) }}
                     </div>
                     <div class="col-sm-2">
-                        <button class="btn btn-primary btn-search">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary btn-search" style="width: 100%">
                             <i class="fa fa-search"></i> Szukaj
                         </button>
                     </div>
@@ -35,6 +36,43 @@
                 <div id="box-jobs" class="panel-body">
                     <table>
                         <tbody>
+                            <tr class="premium">
+                                <td class="col-logo">
+                                    <a href="http://4programmers.net/Praca/10709-Android_Developer"><img title="EclipseSource Group" src="http://4programmers.net/store/firm/553659c367f1c.png" width="55"></a>
+                                </td>
+                                <td class="col-body">
+                                    <h2><a href="http://4programmers.net/Praca/10709-Android_Developer">Android Developer</a></h2>
+
+                                    <p>
+                                        <a title="Zobacz oferty pracy z firmy EclipseSource Group" href="http://4programmers.net/Praca/Firma/EclipseSource Group">EclipseSource Group</a>						&nbsp;•&nbsp;
+                                        <small><a title="Znajdź oferty z miasta: Karlsruhe" href="http://4programmers.net/Praca/Miasto/Karlsruhe">Karlsruhe</a></small>
+
+                                        <small><a title="Praca zdalna jest możliwą opcją w przypadku tego ogłoszenia" href="http://4programmers.net/Praca/Zdalna">(praca zdalna)</a></small>
+                                    </p>
+
+                                    <ul class="tag-clouds hidden-sm hidden-xs">
+                                        <li><a data-category="job-tag" data-action="offer" data-value="java" title="Znajdź oferty z technologii: java" href="http://4programmers.net/Praca/Technologia/java">java</a></li>
+                                        <li><a data-category="job-tag" data-action="offer" data-value="mobile" title="Znajdź oferty z technologii: mobile" href="http://4programmers.net/Praca/Technologia/mobile">mobile</a></li>
+                                        <li><a data-category="job-tag" data-action="offer" data-value="android" title="Znajdź oferty z technologii: android" href="http://4programmers.net/Praca/Technologia/android">android</a></li>
+                                        <li><a data-category="job-tag" data-action="offer" data-value="framework" title="Znajdź oferty z technologii: framework" href="http://4programmers.net/Praca/Technologia/framework">framework</a></li>
+                                    </ul>
+                                </td>
+                                <td class="col-salary">
+                                    <p class="text-success">
+                                        <i class="fa fa-money"></i> 10 000 - 12 000 zł
+                                    </p>
+                                </td>
+                                <td class="col-time">
+                                    <p><span class="label label-new">Nowe</span></p>
+
+                                    2 dni temu
+
+                                </td>
+                                <td class="col-fav">
+                                    <a class="btn-fav" href="http://4programmers.net/Praca/Watch/205649" title="Dodaj tę ofertę do ulubionych"></a>
+                                </td>
+                            </tr>
+
                             <tr>
                                 <td class="col-logo">
                                     <a href="http://4programmers.net/Praca/10709-Android_Developer"><img title="EclipseSource Group" src="http://4programmers.net/store/firm/553659c367f1c.png" width="55"></a>
@@ -92,27 +130,27 @@
                 <h4>Z naszych usług korzystali...</h4>
 
                 <div class="row">
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-xs-4">
                         <img src="{{ cdn('img/logo/wp.png') }}" class="img-responsive">
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-xs-4">
                         <img src="{{ cdn('img/logo/gazeta.png') }}" class="img-responsive">
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-xs-4">
                         <img src="{{ cdn('img/logo/allegro.png') }}" class="img-responsive">
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-xs-4">
                         <img src="{{ cdn('img/logo/nsn.png') }}" class="img-responsive">
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-xs-4">
                         <img src="{{ cdn('img/logo/pgs-software.png') }}" class="img-responsive">
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-xs-4">
                         <img src="{{ cdn('img/logo/microsoft.png') }}" class="img-responsive">
                     </div>
                 </div>

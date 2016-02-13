@@ -11,7 +11,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $this->breadcrumb->push('Praca', route('job.home'));
+//        $this->breadcrumb->push('Praca', route('job.home'));
 
         return $this->view('job.home');
     }
