@@ -224,6 +224,7 @@ Route::post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as
 // dostep do panelu administracyjnego
 Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' => 'Adm'], function () {
     Route::get('/', 'HomeController@index');
+    Route::get('Dashboard', 'DashboardController@index');
 });
 
 Route::get('Profile/{user}', ['uses' => 'Profile\HomeController@index', 'as' => 'profile']);

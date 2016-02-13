@@ -64,7 +64,8 @@ elixir(function(mix) {
        .sass('pages/user.scss')
        .sass('pages/profile.scss')
        .sass('pages/job.scss')
-       .sass('pages/errors.scss');
+       .sass('pages/errors.scss')
+       .sass('pages/adm.scss');
 
     mix.version([
         'js/main.js',

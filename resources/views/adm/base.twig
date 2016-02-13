@@ -1,0 +1,102 @@
+{% extends 'layout.twig' %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ cdn('css/adm.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div id="container-fluid">
+        <div id="navbar-border-top"></div>
+
+        <aside id="adm-menu" class="navbar-default">
+            <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
+                <img id="logo" src="{{ cdn('img/logo.png') }}" class="img-responsive">
+            </a>
+
+            <div class="clearfix"></div>
+
+            <div id="box-user">
+                <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
+
+                <h3>{{ user('name') }}</h3>
+
+                <ol class="list-inline">
+                    <li><a href="{{ route('home') }}">Wyjście</a></li>
+                    <li><a href="{{ route('logout') }}">Wyloguj</a></li>
+                </ol>
+            </div>
+
+            <ul class="list-unstyled navbar-nav">
+                <li>
+                    <a href="#">
+                        <i class="fa fa-desktop fa-fw"></i>
+                        Strona główna
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-user fa-fw"></i>
+                        Użytkownicy
+                    </a>
+                </li>
+                <li class="active">
+                    <a data-toggle="collapse" href="#menu-forum" aria-expanded="false" aria-controls="menu-forum">
+                        <i class="fa fa-comments fa-fw"></i>
+                        Forum
+
+                        <i class="arrow fa fa-angle-left pull-right"></i>
+                    </a>
+
+                    <ul id="menu-forum" class="list-unstyled collapse">
+                        <li><a href="#">Kategorie</a></li>
+                        <li><a href="#">Dostęp</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <main id="wrapper">
+            <div id="adm-header" class="row">
+                <div class="col-xs-12">
+                    <a id="sidebar-toggle" href="javascript:" class="btn btn-default" title="">
+                        <i class="fa fa-bars" title=""></i>
+                    </a>
+                </div>
+
+            </div>
+
+            {{ breadcrumb|raw }}
+
+            {% block container %}
+
+            {% endblock %}
+        </main>
+    </div>
+
+    <script src="{{ cdn('js/main.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('.collapse').on('hidden.bs.collapse show.bs.collapse', function() {
+                $(this).parent().find('.arrow').toggleClass('fa-angle-down');
+            });
+
+            $('#sidebar-toggle').click(function() {
+                var obj = $('#adm-menu');
+                var direction = parseInt(obj.css('left')) < 0 ? 'right' : 'left';
+
+                // pokazujemy pasek boczny
+                if (direction == 'right') {
+                    obj.animate({'left': '+=220'});
+                    $('#wrapper').animate({'margin-left': '+=220'});
+                }
+                // chowamy pasek boczny
+                else {
+                    obj.animate({'left': '-=220'});
+                    $('#wrapper').animate({'margin-left': '-=220'});
+                }
+            });
+        });
+    </script>
+{% endblock %}
