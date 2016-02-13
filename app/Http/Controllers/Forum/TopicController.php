@@ -481,14 +481,17 @@ class TopicController extends BaseController
             $path = str_slug($request->get('subject'), '_');
             $topic->fill(['subject' => $request->get('subject'), 'path' => $path]);
 
+            $post = $this->post->find($topic->first_post_id);
+
             if ($topic->isDirty()) {
                 $topic->save();
+                $tags = $topic->tags->lists('name')->toArray();
 
-                $log->add(log::EDIT_SUBJECT, $topic->first_post_id, auth()->id(), $topic->subject);
+                // save it in log...
+                $log->add($post->id, auth()->id(), $post->text, $topic->subject, $tags);
             }
 
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
-            $post = $this->post->find($topic->first_post_id);
 
             // put action into activity stream
             stream(
