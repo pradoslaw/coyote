@@ -6,12 +6,32 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\User\Skill;
 
 class HomeController extends Controller
 {
+    /**
+     * @var User
+     */
     private $user;
+
+    /**
+     * @var Session
+     */
     private $session;
 
+    /**
+     * @var Reputation
+     */
+    private $reputation;
+
+    /**
+     * HomeController constructor.
+     *
+     * @param User $user
+     * @param Session $session
+     * @param Reputation $reputation
+     */
     public function __construct(User $user, Session $session, Reputation $reputation)
     {
         parent::__construct();
@@ -29,11 +49,12 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Profil: ' . $user->name, route('profile', ['user' => 1]));
 
-        return parent::view('profile.home')->with([
+        return $this->view('profile.home')->with([
             'user'          => $user,
             'rank'          => $this->user->rank($user->id),
             'total_users'   => $this->user->countUsersWithReputation(),
-            'reputation'    => $this->reputation->takeForUser($user->id)
+            'reputation'    => $this->reputation->takeForUser($user->id),
+            'skills'        => Skill::where('user_id', $user->id)->orderBy('order')->get()
         ]);
     }
 }

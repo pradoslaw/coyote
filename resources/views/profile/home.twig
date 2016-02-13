@@ -2,7 +2,9 @@
 {% block title %}Profil {{ parent() }}{% endblock %}
 
 {% block container %}
-    {{ include('user/top', {active: 'profile'}) }}
+    {% if user.id == user('id') %}
+        {{ include('user/top', {active: 'profile'}) }}
+    {% endif %}
 
     <div class="row">
         <div id="profile" class="col-md-9">
@@ -26,16 +28,13 @@
                             {% endif %}
                         </h3>
 
-                        <ul class="tag-clouds">
-                            <li><a href="#">java</a></li>
-                            <li><a href="#">jee</a></li>
-                            <li><a href="#">c++</a></li>
-                            <li><a href="#">c#</a></li>
-                            <li><a href="#">php</a></li>
-                            <li><a href="#">mysql</a></li>
-                            <li><a href="#">oracle</a></li>
-                            <li><a href="#">design-patterns</a></li>
-                        </ul>
+                        {% if skills %}
+                            <ul class="tag-clouds">
+                                {% for skill in skills %}
+                                    <li><a href="javascript:">{{ skill.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
                         <div id="statement">
                             {{ user.bio }}
