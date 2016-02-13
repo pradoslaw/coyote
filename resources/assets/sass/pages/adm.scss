@@ -42,10 +42,18 @@
         &:focus {
           text-decoration: none;
         }
+
+        .fa-fw {
+          margin-right: 3px;
+        }
       }
 
       &.active {
         border-left: 4px solid $brand-primary;
+
+        > a {
+          padding-left: 17px;
+        }
 
         ul {
           background-color: $navbar-default-link-active-bg;

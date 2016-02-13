@@ -1,4 +1,6 @@
-<?php namespace Coyote\Http\Controllers;
+<?php
+
+namespace Coyote\Http\Controllers;
 
 use Coyote;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -22,9 +24,22 @@ abstract class Controller extends BaseController
      */
     protected $settings;
 
+    /**
+     * Controller constructor.
+     */
     public function __construct()
     {
         $this->breadcrumb = new Coyote\Breadcrumb();
+    }
+
+    /**
+     * Application menu. Menu can be overwrite in admin panel.
+     *
+     * @return null
+     */
+    protected function menu()
+    {
+        return null;
     }
 
     /**
@@ -38,6 +53,10 @@ abstract class Controller extends BaseController
     {
         if (count($this->breadcrumb)) {
             $data['breadcrumb'] = $this->breadcrumb->render();
+        }
+
+        if (!request()->isXmlHttpRequest()) {
+            $data['menu'] = $this->menu();
         }
 
         return view($view, $data);

@@ -28,32 +28,28 @@
                 </ol>
             </div>
 
+            {% macro attr(attr) %}
+                {% for key, value in attr %}
+                    {{ key }}="{{ value }}"
+                {% endfor %}
+            {% endmacro %}
+
             <ul class="list-unstyled navbar-nav">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-desktop fa-fw"></i>
-                        Strona główna
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="fa fa-user fa-fw"></i>
-                        Użytkownicy
-                    </a>
-                </li>
-                <li class="active">
-                    <a data-toggle="collapse" href="#menu-forum" aria-expanded="false" aria-controls="menu-forum">
-                        <i class="fa fa-comments fa-fw"></i>
-                        Forum
+            {% for item in menu.roots() %}
+                <li {{ _self.attr(item.attr) }}>
+                    <a href="{{ item.url }}" {{ _self.attr(item.link.attr) }}>{{ item.title|raw }}</a>
 
-                        <i class="arrow fa fa-angle-left pull-right"></i>
-                    </a>
-
-                    <ul id="menu-forum" class="list-unstyled collapse">
-                        <li><a href="#">Kategorie</a></li>
-                        <li><a href="#">Dostęp</a></li>
-                    </ul>
+                    {% if item.hasChildren() %}
+                        <ul id="{{ item.url[1:] }}" class="list-unstyled collapse {{ item.attr['class'] == 'active' ? 'in' }}">
+                            {% for children in item.children() %}
+                                <li>
+                                    <a href="{{ children.url }}">{{ children.title|raw }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </li>
+            {% endfor %}
             </ul>
         </aside>
 

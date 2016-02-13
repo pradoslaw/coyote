@@ -222,9 +222,16 @@ Route::get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'use
 Route::post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
 
 // dostep do panelu administracyjnego
-Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' => 'Adm'], function () {
-    Route::get('/', 'HomeController@index');
-    Route::get('Dashboard', 'DashboardController@index');
+Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' => 'Adm', 'as' => 'adm.'], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::get('Dashboard', 'DashboardController@index')->name('dashboard');
+
+    Route::get('Forum/Category', 'Forum\CategoryController@index')->name('forum.category');
+    Route::get('Forum/Access', 'Forum\AccessController@index')->name('forum.access');
+
+    Route::get('User', 'UserController@index')->name('user');
+    Route::get('Stream', 'StreamController@index')->name('stream');
+    Route::get('Cache', 'CacheController@index')->name('cache');
 });
 
 Route::get('Profile/{user}', ['uses' => 'Profile\HomeController@index', 'as' => 'profile']);

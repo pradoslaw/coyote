@@ -178,7 +178,9 @@ return [
         // Mozliwosc logowania przez github, fb, google...
         Laravel\Socialite\SocialiteServiceProvider::class,
         // Obsluga MongoDB w Laravel
-        Jenssegers\Mongodb\MongodbServiceProvider::class
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
+        // Pakiet do budowania menu
+        Lavary\Menu\ServiceProvider::class
 
     ],
     /*
@@ -234,6 +236,7 @@ return [
         'Html'      => Collective\Html\HtmlFacade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Image'     => Folklore\Image\Facades\Image::class,
+        'Menu'      => Lavary\Menu\Facade::class,
     ],
 
 ];

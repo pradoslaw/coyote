@@ -2,13 +2,13 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
-class DashboardController extends BaseController
+class UserController extends BaseController
 {
     /**
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        return $this->view('adm.dashboard');
+        return $this->view('adm.user.home');
     }
 }

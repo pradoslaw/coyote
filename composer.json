@@ -28,7 +28,8 @@
         "erusev/parsedown-extra": "^0.7.0",
         "jenssegers/mongodb": "^2.2",
         "folklore/image": "^0.2.4",
-        "ezyang/htmlpurifier": "^4.7"
+        "ezyang/htmlpurifier": "^4.7",
+        "lavary/laravel-menu": "dev-master"
     },
     "require-dev": {
         "sebastian/phpcpd": "*",
