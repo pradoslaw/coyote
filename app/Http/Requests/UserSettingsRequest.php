@@ -36,6 +36,8 @@ class UserSettingsRequest extends Request
             'birthyear'              => 'sometimes|integer|between:1950,2015',
             'about'                  => 'string|max:255',
             'sig'                    => 'string|max:255',
+            'firm'                   => 'string|max:100',
+            'position'               => 'string|max:100',
             'allow_count'            => 'boolean',
             'allow_smilies'          => 'boolean',
             'allow_subscribe'        => 'boolean',

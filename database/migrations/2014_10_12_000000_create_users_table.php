@@ -30,7 +30,6 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('is_confirm')->default(0);
             $table->tinyInteger('is_blocked')->default(0);
             $table->mediumInteger('group_id')->nullable();
-            $table->json('settings')->nullable();
             $table->string('date_format', 32)->default('%Y-%m-%d %H:%M');
             $table->string('timezone')->default('Europe/Warsaw');
             $table->integer('flood')->default(0);
@@ -54,6 +53,8 @@ class CreateUsersTable extends Migration
             $table->string('website')->nullable();
             $table->string('location')->nullable();
             $table->mediumInteger('birthyear')->nullable();
+            $table->string('firm', 100)->nullable();
+            $table->string('position', 100)->nullable();
             $table->tinyInteger('allow_count')->default(1);
             $table->tinyInteger('allow_smilies')->default(0);
             $table->tinyInteger('allow_sig')->default(1);

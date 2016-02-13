@@ -11,14 +11,20 @@
                     <div id="profile-info">
                         <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
 
-                        <button class="btn btn-default btn-sm btn-pm">
+                        <a class="btn btn-default btn-sm btn-pm" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
                             <i class="fa fa-envelope"></i> Wiadomość
-                        </button>
+                        </a>
                     </div>
 
                     <div style="overflow: hidden;">
                         <h1>{{ user.name }}</h1>
-                        <h3>Junior C++ Developer <small>@ 4programmers.net</small></h3>
+                        <h3>
+                            {{ user.position }}
+
+                            {% if user.firm %}
+                                <small>@ {{ user.firm }}</small>
+                            {% endif %}
+                        </h3>
 
                         <ul class="tag-clouds">
                             <li><a href="#">java</a></li>
@@ -32,7 +38,7 @@
                         </ul>
 
                         <div id="statement">
-                            Massa est augue rhoncus massa aliquam elit phasellus sit platea, nascetur montes?
+                            {{ user.bio }}
                         </div>
                     </div>
 
@@ -107,7 +113,6 @@
                                             <div class="panel-body">
                                                 <div id="wrap">
                                                     <div id="overview">
-
                                                         <table class="table table-striped">
                                                             <tbody>
                                                                 {% for item in reputation %}

@@ -8,7 +8,7 @@
 
     <div class="form-group">
         <div class="col-md-12 {{ errors.has('author') > 0 ? 'has-error' }}">
-            {{ form_text('author', input_old('author'), {'class': 'form-control', 'placeholder': 'Nadawca...', 'id': 'author'}) }}
+            {{ form_text('author', input_old('author', request().get('to')), {'class': 'form-control', 'placeholder': 'Nadawca...', 'id': 'author'}) }}
 
             {% if errors.first('author') %}
                 <span class="help-block">{{ errors.first('author') }}</span>

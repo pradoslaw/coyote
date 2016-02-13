@@ -14,8 +14,8 @@
 
                 {{ form_open({'method': 'POST', 'role': 'form', 'url': route('register')}) }}
                 {{ forms.inline(form_text('name', input_old('name'), {'class': 'form-control'}), 'Nazwa użytkownika', errors.first('name')) }}
-                {{ forms.inline(form_password('password', {'class': 'form-control'}), 'Hasło', errors.first('password')) }}
-                {{ forms.inline(form_password('password_confirmation', {'class': 'form-control'}), 'Hasło (powtórnie)', errors.first('password_confirmation')) }}
+                {{ forms.inline(form_password('password', {'class': 'form-control'}), 'Hasło') }}
+                {{ forms.inline(form_password('password_confirmation', {'class': 'form-control'}), 'Hasło (powtórnie)') }}
                 {{ forms.inline(form_text('email', input_old('email'), {'class': 'form-control'}), 'E-mail', errors.first('email'), 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.') }}
 
                 <div class="form-group">

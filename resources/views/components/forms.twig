@@ -1,11 +1,13 @@
+{% macro attr(attr) %}
+    {% spaceless %}
+    {% for key, value in attr %}
+        {{ key }}="{{ value }}"
+    {% endfor %}
+    {% endspaceless %}
+{% endmacro %}
+
 {% macro element(html, label, error, attr, help) %}
-    <div class="form-group {{ error ? 'has-error' }}"
-        {% spaceless %}
-            {% for key, value in attr %}
-            {{ key }}="{{ value }}"
-            {% endfor %}
-        {% endspaceless %}
-            >
+    <div class="form-group {{ error ? 'has-error' }}" {{ _self.attr(attr) }}>
         <label class="col-md-4 control-label">{{ label }}</label>
         <div class="col-md-6">
             {{ html|raw }}
@@ -33,44 +35,28 @@
     </div>
 {% endmacro %}
 
-{% macro text(name, label, value, error, attr, help) %}
-    {% import _self as forms %}
-
-    {{ forms.element(form_text(name, value, {'class': 'form-control'}), label, error, attr, help) }}
+{% macro text(name, label, value, attr, help) %}
+    {{ _self.element(form_text(name, value, {'class': 'form-control'}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
 
-{% macro password(name, label, value, error, attr, help) %}
-    {% import _self as forms %}
-
-    {{ forms.element(form_password(name, {'class': 'form-control'}), label, error, attr, help) }}
+{% macro password(name, label, value, attr, help) %}
+    {{ _self.element(form_password(name, {'class': 'form-control'}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
 
-{% macro select(name, label, items, value, error, attr, help) %}
-    {% import _self as forms %}
-
-    {{ forms.element(form_select(name, items, value, {'class': 'form-control'}), label, error, attr, help) }}
+{% macro select(name, label, items, value, attr, help) %}
+    {{ _self.element(form_select(name, items, value, {'class': 'form-control'}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
 
-{% macro textarea(name, label, value, error, rows = 10, attr, help) %}
-    {% import _self as forms %}
-
-    {{ forms.element(form_textarea(name, value, {'class': 'form-control', 'rows': rows}), label, error, attr, help) }}
+{% macro textarea(name, label, value, rows = 10, attr, help) %}
+    {{ _self.element(form_textarea(name, value, {'class': 'form-control', 'rows': rows}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
 
-{% macro checkbox(name, label, value, checked, error, attr, help) %}
-    {% import _self as forms %}
-
+{% macro checkbox(name, label, value, checked, attr, help) %}
     {% if not ('[]' in name) %}
         {{ form_hidden(name, 0) }}
     {% endif %}
 
-    <div class="form-group {{ error ? 'has-error' }}"
-        {% spaceless %}
-            {% for key, value in attr %}
-            {{ key }}="{{ value }}"
-            {% endfor %}
-        {% endspaceless %}
-            >
+    <div class="form-group {{ error ? 'has-error' }}" {{ _self.attr(attr) }}>
 
         <div class="col-md-6 col-md-offset-4">
             <div class="checkbox">
@@ -80,8 +66,8 @@
                 </label>
             </div>
 
-            {% if error %}
-            <span class="help-block">{{ error }}</span>
+            {% if session_get('errors').has(name) %}
+            <span class="help-block">{{ session_get('errors').first(name) }}</span>
             {% elseif help %}
             <span class="help-box">{{ help }}</span>
             {% endif %}
