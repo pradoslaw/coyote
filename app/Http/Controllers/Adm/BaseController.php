@@ -12,15 +12,6 @@ use Menu;
  */
 class BaseController extends Controller
 {
-//    public function __construct(Request $request)
-//    {
-//        parent::__construct();
-//
-//        if (!$request->session()->has('admin')) {
-//
-//        }
-//    }
-
     /**
      * @return mixed
      */

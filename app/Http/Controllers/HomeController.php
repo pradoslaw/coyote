@@ -22,7 +22,7 @@ class HomeController extends Controller
 
         $topic->pushCriteria(new OnlyThoseWithAccess());
 
-        return view('home', [
+        return $this->view('home', [
             'viewers'              => $viewers->render(),
             'microblogs'           => $microblog->take(10),
             'activities'           => $activities,

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Menu;
 
 abstract class Controller extends BaseController
 {
@@ -39,7 +40,12 @@ abstract class Controller extends BaseController
      */
     protected function menu()
     {
-        return null;
+        return Menu::make('main', function ($menu) {
+            $menu->add('Forum', ['route' => 'forum.home'])->active('Forum/*');
+            $menu->add('Mikroblogi', ['route' => 'microblog.home'])->active('Mikroblogi/*');
+            $menu->add('Praca', ['route' => 'job.home'])->active('Praca/*');
+            $menu->add('Pastebin', ['route' => 'pastebin.home'])->active('Pastebin/*');
+        });
     }
 
     /**
@@ -55,7 +61,7 @@ abstract class Controller extends BaseController
             $data['breadcrumb'] = $this->breadcrumb->render();
         }
 
-        if (!request()->isXmlHttpRequest()) {
+        if (!request()->ajax()) {
             $data['menu'] = $this->menu();
         }
 
