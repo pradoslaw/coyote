@@ -16,6 +16,13 @@
 
                     <div id="box-alerts-settings" class="panel panel-default">
                         <div class="panel-body">
+                            {% if not user('is_confirm') %}
+                                <p class="alert alert-warning">
+                                    <strong>Uwaga!</strong> Nie potwierdziłeś swojego adresu e-mail dlatego też nie możemy wysyłać Ci powiadomień na maila.
+                                    Aby potwierdzić adres e-mail, <a href="{{ route('user.confirm') }}">kliknij tutaj</a>.
+                                </p>
+                            {% endif %}
+
                             {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.alerts.settings'), 'class': 'form-horizontal'}) }}
 
                             <div class="row">
@@ -47,7 +54,7 @@
 
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <button type="submit" class="btn btn-primary" style="margin-right: 15px;">
+                                    <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="Zapisywanie...">
                                         Zapisz zmiany
                                     </button>
                                 </div>
