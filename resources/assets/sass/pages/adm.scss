@@ -46,8 +46,11 @@
 
       &.active {
         border-left: 4px solid $brand-primary;
-      }
 
+        ul {
+          background-color: $navbar-default-link-active-bg;
+        }
+      }
 
       > ul > li > a {
         font-size: 90%;
