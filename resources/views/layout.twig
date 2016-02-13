@@ -79,7 +79,12 @@
                                     <li><a href="{{ route('user.pm') }}"><i class="fa fa-envelope fa-fw"></i> Wiadomości</a></li>
                                     <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
                                     <li><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
-                                    <li><a href="#"><i class="fa fa-info-circle fa-fw"></i> Pomoc</a></li>
+                                    <li><a href="{{ url('Pomoc') }}"><i class="fa fa-info-circle fa-fw"></i> Pomoc</a></li>
+
+                                    {% if can('adm-access') %}
+                                        <li><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
+                                    {% endif %}
+
                                     <li class="divider"></li>
                                     <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a></li>
                                 </ul>

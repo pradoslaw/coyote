@@ -221,9 +221,11 @@ Route::get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'use
 // np. domyslna zakladka na stronie glownej
 Route::post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
 
+// logowanie do panelu administracyjnego (ponowne wpisanie hasla)
+Route::match(['get', 'post'], 'Adm', ['uses' => 'Adm\HomeController@index', 'as' => 'adm.home', 'middleware' => ['auth', 'adm:0']]);
+
 // dostep do panelu administracyjnego
-Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm'], 'prefix' => 'Adm', 'as' => 'adm.'], function () {
-    Route::get('/', 'HomeController@index')->name('home');
+Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm:1'], 'prefix' => 'Adm', 'as' => 'adm.'], function () {
     Route::get('Dashboard', 'DashboardController@index')->name('dashboard');
 
     Route::get('Forum/Category', 'Forum\CategoryController@index')->name('forum.category');

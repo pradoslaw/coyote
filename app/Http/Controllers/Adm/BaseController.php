@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Menu;
 
 /**
@@ -11,6 +12,15 @@ use Menu;
  */
 class BaseController extends Controller
 {
+//    public function __construct(Request $request)
+//    {
+//        parent::__construct();
+//
+//        if (!$request->session()->has('admin')) {
+//
+//        }
+//    }
+
     /**
      * @return mixed
      */
