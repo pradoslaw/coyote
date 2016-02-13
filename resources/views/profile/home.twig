@@ -5,63 +5,87 @@
     {{ include('user/top', {active: 'profile'}) }}
 
     <div class="row">
-        <aside id="profile-info" class="col-md-1">
-            <div class="row">
-                <div class="col-sm-12">
-                    <img src="{{ user_photo(user.photo) }}">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <button class="btn btn-default btn-sm">
-                        <i class="fa fa-envelope"></i> Wiadomość
-                    </button>
-                </div>
-
-            </div>
-        </aside>
-
-        <div id="profile" class="col-md-11">
+        <div id="profile" class="col-md-9">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h1>{{ user.name }}</h1>
-                            <h3>Junior C++ Developer <small>@ 4programmers.net</small></h3>
+                    <div id="profile-info">
+                        <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
 
-                            <ul class="tag-clouds">
-                                <li><a href="#">java</a></li>
-                                <li><a href="#">jee</a></li>
-                                <li><a href="#">c++</a></li>
-                                <li><a href="#">c#</a></li>
-                                <li><a href="#">php</a></li>
-                                <li><a href="#">mysql</a></li>
-                                <li><a href="#">oracle</a></li>
-                                <li><a href="#">design-patterns</a></li>
-                            </ul>
+                        <button class="btn btn-default btn-sm btn-pm">
+                            <i class="fa fa-envelope"></i> Wiadomość
+                        </button>
+                    </div>
 
-                            <div id="statement">
-                                Massa est augue rhoncus massa aliquam elit phasellus sit platea, nascetur montes?
-                            </div>
+                    <div style="overflow: hidden;">
+                        <h1>{{ user.name }}</h1>
+                        <h3>Junior C++ Developer <small>@ 4programmers.net</small></h3>
 
+                        <ul class="tag-clouds">
+                            <li><a href="#">java</a></li>
+                            <li><a href="#">jee</a></li>
+                            <li><a href="#">c++</a></li>
+                            <li><a href="#">c#</a></li>
+                            <li><a href="#">php</a></li>
+                            <li><a href="#">mysql</a></li>
+                            <li><a href="#">oracle</a></li>
+                            <li><a href="#">design-patterns</a></li>
+                        </ul>
+
+                        <div id="statement">
+                            Massa est augue rhoncus massa aliquam elit phasellus sit platea, nascetur montes?
                         </div>
+                    </div>
 
-                        <div class="col-sm-6">
-                            <div id="box-stat" class="row">
-                                <div class="col-xs-4">
-                                    <strong>5 498</strong><span>postów</span>
-                                </div>
-                                <div class="col-xs-4">
-                                    <strong>856</strong><span>komentarzy</span>
-                                </div>
-                                <div class="col-xs-4">
-                                    <strong>12</strong><span>wpisów na mikroblogu</span>
-                                </div>
-                            </div>
 
-                            <div id="box-reputation">
-                                <h5><i class="fa fa-line-chart"></i> Reputacja</h5>
 
+                        {#<div class="col-sm-6">#}
+                            {#<div id="box-stat" class="row">#}
+                                {#<div class="col-xs-4">#}
+                                    {#<strong>5 498</strong><span>postów</span>#}
+                                {#</div>#}
+                                {#<div class="col-xs-4">#}
+                                    {#<strong>856</strong><span>komentarzy</span>#}
+                                {#</div>#}
+                                {#<div class="col-xs-4">#}
+                                    {#<strong>12</strong><span>wpisów na mikroblogu</span>#}
+                                {#</div>#}
+                            {#</div>#}
+
+
+                            {#<ul id="user-links" class="row">#}
+                                {#<li class="col-xs-6">#}
+                                    {#<i class="fa fa-map-marker fa-fw"></i>#}
+                                    {#Wrocław, Polska#}
+                                {#</li>#}
+                                {#<li class="col-xs-6">#}
+                                    {#<i class="fa fa-globe fa-fw"></i>#}
+                                    {#<a href="#">http://4programmers.net</a>#}
+                                {#</li>#}
+                                {#<li class="col-xs-6" title="Ostatnia wizyta">#}
+                                    {#<i class="fa fa-sign-in fa-fw"></i>#}
+                                    {#<small>Widziany</small> {{ user.visited_at.diffForHumans() }}#}
+                                {#</li>#}
+                                {#<li class="col-xs-6" title="Data rejestracji">#}
+                                    {#<i class="fa fa-user-plus fa-fw"></i>#}
+                                    {#Dołączył {{ user.created_at.diffForHumans() }}#}
+                                {#</li>#}
+                                {#<li class="col-xs-6" title="Ilość wizyt">#}
+                                    {#<i class="fa fa-eye fa-fw"></i>#}
+                                    {#{{ user.visits|number_format(0, ',', ' ') }} wizyt#}
+                                {#</li>#}
+                            {#</ul>#}
+                        {#</div>#}
+
+                </div>
+            </div>
+
+            <section id="box-reputation" class="box">
+                <h4><i class="fa fa-line-chart"></i> Reputacja użytkownika</h4>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-4">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;">
 
@@ -75,36 +99,39 @@
                                 </div>
                             </div>
 
-                            <ul id="user-links" class="row">
-                                <li class="col-xs-6">
-                                    <i class="fa fa-map-marker fa-fw"></i>
-                                    Wrocław, Polska
-                                </li>
-                                <li class="col-xs-6">
-                                    <i class="fa fa-globe fa-fw"></i>
-                                    <a href="#">http://4programmers.net</a>
-                                </li>
-                                <li class="col-xs-6" title="Ostatnia wizyta">
-                                    <i class="fa fa-sign-in fa-fw"></i>
-                                    <small>Widziany</small> {{ user.visited_at.diffForHumans() }}
-                                </li>
-                                <li class="col-xs-6" title="Data rejestracji">
-                                    <i class="fa fa-user-plus fa-fw"></i>
-                                    Dołączył {{ user.created_at.diffForHumans() }}
-                                </li>
-                                <li class="col-xs-6" title="Ilość wizyt">
-                                    <i class="fa fa-eye fa-fw"></i>
-                                    {{ user.visits|number_format(0, ',', ' ') }} wizyt
-                                </li>
-                            </ul>
+                            <div class="col-sm-8">
+                                <div class="panel panel-wrapper">
+                                    <div class="panel-body">
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <div id="wrap">
+                                                    <div id="overview">
+
+                                                        <table class="table table-striped">
+                                                            <tbody>
+                                                                {% for item in reputation %}
+                                                                    <tr>
+                                                                        <td class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}">{{ item.value }} pkt</td>
+                                                                        <td>{{ item.name }}</td>
+                                                                        <td>{{ item.created_at|format_date }}</td>
+                                                                        <td><p class="text-muted">{{ item.excerpt }}</p></td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
-
-
-
-
                 </div>
-            </div>
+            </section>
 
         </div>
     </div>
@@ -113,9 +140,19 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="{{ cdn('css/profile.css') }}">
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
+
+    <script type="text/javascript" src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            var wrap = $('#wrap');
+            var overview = $('#overview');
+
+            wrap.perfectScrollbar();
+        })
+    </script>
 {% endblock %}

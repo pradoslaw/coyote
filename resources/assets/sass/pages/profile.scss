@@ -10,14 +10,12 @@
 }
 
 #profile-info {
-  img {
-    width: 100%;
-    padding: 4px;
-    border: 1px solid $border-color;
-  }
+  float: left;
+  width: 160px;
 
-  .btn-sm {
-    margin-top: 10px;
+  > .btn-pm {
+    width: 130px;
+    margin-top: 20px;
   }
 }
 
@@ -77,9 +75,8 @@
 #box-reputation {
   margin-top: 22px;
 
-  h5 {
-    color: $gray;
-    font-family: Arial, sans-serif;
+  .table {
+    font-size: 11px;
   }
 }
 
@@ -95,4 +92,10 @@
     left: 0;
     color: $gray-light;
   }
+}
+
+#wrap {
+  position: relative;
+  max-height: 200px;
+  overflow: hidden;
 }

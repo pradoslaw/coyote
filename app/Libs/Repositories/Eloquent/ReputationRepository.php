@@ -26,6 +26,23 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
     }
 
     /**
+     * @param int $userId
+     * @param int $offset
+     * @param int $limit
+     * @return mixed
+     */
+    public function takeForUser($userId, $offset = 0, $limit = 100)
+    {
+        return $this->model->select()
+                    ->join('reputation_types', 'reputation_types.id', '=', \DB::raw('reputations.type_id'))
+                    ->where('user_id', $userId)
+                    ->orderBy('reputations.id', 'DESC')
+                    ->skip($offset)
+                    ->limit($limit)
+                    ->get();
+    }
+
+    /**
      * @param $dateTime
      * @param $limit
      * @return mixed

@@ -13,6 +13,14 @@ interface ReputationRepositoryInterface extends RepositoryInterface
     public function getDefaultValue($typeId);
 
     /**
+     * @param int $userId
+     * @param int $offset
+     * @param int $limit
+     * @return mixed
+     */
+    public function takeForUser($userId, $offset = 0, $limit = 100);
+
+    /**
      * Gets total reputation ranking
      *
      * @param int $limit

@@ -151,13 +151,12 @@
 #user-nav-tabs {
   margin: 20px 0; }
 
-#profile-info img {
-  width: 100%;
-  padding: 4px;
-  border: 1px solid #d0d0d0; }
-
-#profile-info .btn-sm {
-  margin-top: 10px; }
+#profile-info {
+  float: left;
+  width: 160px; }
+  #profile-info > .btn-pm {
+    width: 130px;
+    margin-top: 20px; }
 
 #profile h2, #profile h3 {
   color: #646466; }
@@ -195,9 +194,8 @@
 
 #box-reputation {
   margin-top: 22px; }
-  #box-reputation h5 {
-    color: #555555;
-    font-family: Arial, sans-serif; }
+  #box-reputation .table {
+    font-size: 11px; }
 
 #statement {
   padding: 0 0 0 30px;
@@ -211,5 +209,10 @@
     top: 0;
     left: 0;
     color: #777777; }
+
+#wrap {
+  position: relative;
+  max-height: 200px;
+  overflow: hidden; }
 
 /*# sourceMappingURL=profile.css.map */
