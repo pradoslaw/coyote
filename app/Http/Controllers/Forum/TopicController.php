@@ -294,7 +294,7 @@ class TopicController extends BaseController
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
             }
-            (new \Coyote\Stream\Stream($this->stream))->add(
+            app()->make('stream')->add(
                 new Stream_Create(
                     $actor,
                     (new Stream_Topic)->map($topic, $forum, $post->text),
