@@ -6,7 +6,7 @@ use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
-use Coyote\Repositories\Contracts\Post\LogRepositoryInterface;
+use Coyote\Repositories\Contracts\Post\LogRepositoryInterface as Log;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
@@ -231,10 +231,10 @@ class TopicController extends BaseController
     /**
      * @param $forum
      * @param PostRequest $request
-     * @param LogRepositoryInterface $log
+     * @param Log $log
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($forum, PostRequest $request, LogRepositoryInterface $log)
+    public function save($forum, PostRequest $request, Log $log)
     {
         $url = \DB::transaction(function () use ($request, $forum, $log) {
             $path = str_slug($request->get('subject'), '_');
@@ -288,7 +288,7 @@ class TopicController extends BaseController
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
             }
-            app()->make('stream')->add(
+            app()->make('Stream')->add(
                 new Stream_Create(
                     $actor,
                     (new Stream_Topic)->map($topic, $forum, $post->text),
@@ -461,10 +461,10 @@ class TopicController extends BaseController
     /**
      * @param $topic
      * @param Request $request
-     * @param LogRepositoryInterface $log
+     * @param Log $log
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function subject($topic, Request $request, LogRepositoryInterface $log)
+    public function subject($topic, Request $request, Log $log)
     {
         $forum = $this->forum->find($topic->forum_id);
         $this->authorize('update', $forum);
@@ -476,16 +476,33 @@ class TopicController extends BaseController
             $topic->fill(['subject' => $request->get('subject'), 'path' => $path]);
 
             $post = $this->post->find($topic->first_post_id);
+            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
 
             if ($topic->isDirty()) {
+                $original = $topic->getOriginal();
+
                 $topic->save();
                 $tags = $topic->tags->lists('name')->toArray();
 
                 // save it in log...
                 $log->add($post->id, auth()->id(), $post->text, $topic->subject, $tags);
-            }
 
-            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+                $post->fill([
+                    'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
+                ])
+                ->save();
+
+                if ($post->user_id) {
+                    app()->make('Alert\Topic\Subject')->with([
+                        'user_id'     => $post->user_id,
+                        'sender_id'   => auth()->id(),
+                        'sender_name' => auth()->user()->name,
+                        'subject'     => excerpt($original['subject']),
+                        'excerpt'     => excerpt($topic->subject),
+                        'url'         => $url
+                    ])->notify();
+                }
+            }
 
             // put action into activity stream
             stream(
