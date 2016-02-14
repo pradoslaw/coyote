@@ -297,7 +297,7 @@ class TopicController extends BaseController
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
             }
-            app()->make('stream')->add(
+            app()->make('Stream')->add(
                 new Stream_Create(
                     $actor,
                     (new Stream_Topic)->map($topic, $forum, $post->text),

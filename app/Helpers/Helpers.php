@@ -52,7 +52,7 @@ function excerpt($value, $limit = 64)
  */
 function stream($activity = null, $object = null, $target = null)
 {
-    $stream = app()->make('stream');
+    $stream = app()->make('Stream');
 
     if ($activity) {
         if (is_string($activity)) {
