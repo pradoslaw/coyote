@@ -47,7 +47,7 @@ class HomeController extends Controller
      */
     public function index($user)
     {
-        $this->breadcrumb->push('Profil: ' . $user->name, route('profile', ['user' => 1]));
+        $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
 
         return $this->view('profile.home')->with([
             'user'          => $user,
