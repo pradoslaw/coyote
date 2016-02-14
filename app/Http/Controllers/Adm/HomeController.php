@@ -16,8 +16,8 @@ class HomeController extends Controller
     {
         if ($request->session()->has('admin')) {
             return redirect()->route('adm.dashboard');
-
         }
+
         if ($request->isMethod('post')) {
             $this->validate($request, ['password' => 'required']);
 
