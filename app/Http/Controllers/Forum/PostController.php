@@ -6,10 +6,11 @@ use Coyote\Alert\Alert;
 use Coyote\Forum\Reason;
 use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Subscriber;
+use Coyote\Repositories\Contracts\FlagRepositoryInterface as Flag;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AcceptRepositoryInterface as Accept;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
-use Coyote\Repositories\Contracts\Post\LogRepositoryInterface;
+use Coyote\Repositories\Contracts\Post\LogRepositoryInterface as Log;
 use Coyote\Repositories\Contracts\Post\VoteRepositoryInterface as Vote;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
@@ -25,7 +26,6 @@ use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
 use Coyote\User;
-use Coyote\Post\Log;
 use Gate;
 use Illuminate\Http\Request;
 
@@ -164,13 +164,13 @@ class PostController extends BaseController
      * Save post (edit or create)
      *
      * @param PostRequest $request
-     * @param LogRepositoryInterface $log
+     * @param Log $log
      * @param $forum
      * @param $topic
      * @param null $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(PostRequest $request, LogRepositoryInterface $log, $forum, $topic, $post = null)
+    public function save(PostRequest $request, Log $log, $forum, $topic, $post = null)
     {
         // parsing text and store it in cache
         $text = app()->make('Parser\Post')->parse($request->text);
@@ -316,9 +316,10 @@ class PostController extends BaseController
      *
      * @param int $id post id
      * @param Request $request
+     * @param Flag $flag
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete($id, Request $request)
+    public function delete($id, Request $request, Flag $flag)
     {
         // it must be like that. only if reason has been chosen, we need to validate it.
         if ($request->get('reason')) {
@@ -346,7 +347,7 @@ class PostController extends BaseController
             }
         }
 
-        $url = \DB::transaction(function () use ($post, $topic, $forum, $request) {
+        $url = \DB::transaction(function () use ($post, $topic, $forum, $request, $flag) {
             // build url to post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
 
@@ -380,6 +381,8 @@ class PostController extends BaseController
                     }
 
                     $topic->delete();
+                    // delete topic's flag
+                    $flag->deleteBy('topic_id', $topic->id);
 
                     if ($subscribersId) {
                         app()->make('Alert\Topic\Delete')
@@ -408,6 +411,8 @@ class PostController extends BaseController
                     }
 
                     $post->delete();
+                    // delete post's flags
+                    $flag->deleteBy('post_id', $post->id);
 
                     if ($subscribersId) {
                         app()->make('Alert\Post\Delete')
@@ -630,11 +635,13 @@ class PostController extends BaseController
     }
 
     /**
+     * Show post history
+     *
      * @param Post $post
-     * @param LogRepositoryInterface $log
+     * @param Log $log
      * @return mixed
      */
-    public function log($post, LogRepositoryInterface $log)
+    public function log($post, Log $log)
     {
         $topic = $this->topic->find($post->topic_id);
         $forum = $this->forum->find($post->forum_id);

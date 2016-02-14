@@ -15,4 +15,10 @@ interface FlagRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function takeForPosts(array $postsId);
+
+    /**
+     * @param $key
+     * @param $value
+     */
+    public function deleteBy($key, $value);
 }

@@ -41,9 +41,20 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
      */
     public function takeForPosts(array $postsId)
     {
-        return $this->model->selectRaw("*, metadata->>'post_id' AS post_id")
+        return $this->model->selectRaw("flags.*, metadata->>'post_id' AS post_id, users.name AS user_name, flag_types.name")
+                    ->join('flag_types', 'flag_types.id', '=', 'type_id')
+                    ->join('users', 'users.id', '=', 'user_id')
                     ->whereRaw("metadata->>'post_id' IN(" . implode(',', array_map([&$this, 'strVal'], $postsId)) . ")")
                     ->get()
                     ->groupBy('post_id');
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     */
+    public function deleteBy($key, $value)
+    {
+        $this->model->whereRaw("metadata->>'$key' = ?", [$value])->delete();
     }
 }

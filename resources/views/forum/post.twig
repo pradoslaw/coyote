@@ -74,6 +74,18 @@
             </div>
             <div class="col-xs-10 col-body">
 
+                {% for flag in flags[post.id] %}
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Usuń"><span aria-hidden="true">&times;</span></button>
+
+                        {{ flag.user_name }} z powodu <strong>{{ flag.name }}</strong> dnia {{ flag.created_at|format_date }}
+
+                        {% if flag.text %}
+                            <br><br>{{ flag.text }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
                 <div class="col-vote">
                     <input type="hidden" value="1182672">
                     <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>

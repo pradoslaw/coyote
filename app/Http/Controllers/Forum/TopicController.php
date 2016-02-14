@@ -160,14 +160,17 @@ class TopicController extends BaseController
 
         if (Gate::allows('delete', $forum)) {
             $activities = [];
+            $postsId = $posts->pluck('id')->toArray();
 
             // here we go. if user has delete ability, for sure he/she would like to know
             // why posts were deleted and by whom
-            $collection = $this->stream->findByObject('Post', $posts->pluck('id')->toArray(), 'Delete');
+            $collection = $this->stream->findByObject('Post', $postsId, 'Delete');
 
             foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
                 $activities[$row->first()['object.id']] = $row->first();
             }
+
+            $flags = app()->make('FlagRepository')->takeForPosts($postsId);
         }
 
         if (Gate::allows('delete', $forum) || Gate::allows('move', $forum)) {
@@ -209,7 +212,7 @@ class TopicController extends BaseController
         $forumList = $this->forum->forumList();
 
         return $this->view('forum.topic', ['markTime' => $topicMarkTime ? $topicMarkTime : $forumMarkTime])->with(
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'lock', 'subscribers', 'subscribe')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'lock', 'subscribers', 'subscribe', 'flags')
         );
     }
 
