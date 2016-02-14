@@ -1,21 +1,42 @@
 <?php
 
-namespace Coyote\Alert\Emitters;
+namespace Coyote\Alert\Broadcasts;
 
 use Coyote\Alert\Providers\ProviderInterface;
+use Coyote\Events\AlertWasBroadcasted;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 
-class Db extends Emitter
+/**
+ * Class Db
+ * @package Coyote\Alert\Broadcasts
+ */
+class Db extends Broadcast
 {
+    /**
+     * @var AlertRepositoryInterface
+     */
     protected $repository;
+
+    /**
+     * @var
+     */
     protected $userId;
 
+    /**
+     * Db constructor.
+     *
+     * @param AlertRepositoryInterface $repository
+     * @param $userId
+     */
     public function __construct(AlertRepositoryInterface $repository, $userId)
     {
         $this->repository = $repository;
         $this->userId = $userId;
     }
 
+    /**
+     * @param ProviderInterface $alert
+     */
     public function send(ProviderInterface $alert)
     {
         $result = $this->repository->findByObjectId($this->userId, $alert->objectId(), ['id']);
@@ -29,6 +50,9 @@ class Db extends Emitter
                 'url'               => $alert->getUrl(),
                 'object_id'         => $alert->objectId()
             ]);
+
+            // broadcast this event to save notification to redis
+            event(new AlertWasBroadcasted($this->userId, $alert->toArray()));
 
             $alertId = $object->id;
         } else {

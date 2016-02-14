@@ -1,15 +1,15 @@
 <?php
 
-namespace Coyote\Alert\Emitters;
+namespace Coyote\Alert\Broadcasts;
 
 use Coyote\Alert\Providers\ProviderInterface;
 use Illuminate\Support\Facades\Mail;
 
 /**
  * Class Email
- * @package Coyote\Alert\Emitters
+ * @package Coyote\Alert\Broadcasts
  */
-class Email extends Emitter
+class Email extends Broadcast
 {
     /**
      * @var string
@@ -31,6 +31,11 @@ class Email extends Emitter
         $this->email = $email;
     }
 
+    /**
+     * @param array $data
+     * @param $content
+     * @return mixed
+     */
     private function parse(array $data, $content)
     {
         $template = [];
@@ -46,24 +51,7 @@ class Email extends Emitter
      */
     public function send(ProviderInterface $alert)
     {
-        $data = [];
-
-        foreach (get_class_methods($alert) as $methodName) {
-            if (substr($methodName, 0, 3) == 'get') {
-                $reflect = new \ReflectionMethod($alert, $methodName);
-
-                if (!$reflect->getNumberOfRequiredParameters()) {
-                    $value = $alert->$methodName();
-
-                    if (is_string($value) || is_numeric($value)) {
-                        $data[snake_case(substr($methodName, 3))] = $value;
-                    }
-                }
-
-                unset($reflect);
-            }
-        }
-
+        $data = $alert->toArray();
         $data['headline'] = $this->parse($data, $data['headline']);
 
         Mail::queue($this->view, $data, function ($message) use ($data) {

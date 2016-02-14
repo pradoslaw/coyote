@@ -140,6 +140,13 @@ interface ProviderInterface
     public function email();
 
     /**
+     * Konwertuje obiekt alertu to tablicy
+     *
+     * @return mixed
+     */
+    public function toArray();
+
+    /**
      * Generuje powiadomienie oraz zwraca ID userow do ktorych zostalo wyslane
      *
      * @return array

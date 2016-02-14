@@ -2,8 +2,8 @@
 
 namespace Coyote\Alert\Providers;
 
-use Coyote\Alert\Emitters\Db as Db_Emitter;
-use Coyote\Alert\Emitters\Email as Email_Emitter;
+use Coyote\Alert\Broadcasts\Db as Broadcast_Db;
+use Coyote\Alert\Broadcasts\Email as Broadcast_Email;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 
 /**
@@ -80,6 +80,10 @@ abstract class Provider implements ProviderInterface
         $this->with($args);
     }
 
+    /**
+     * @param array $args
+     * @return $this
+     */
     public function with(array $args = [])
     {
         if ($args) {
@@ -305,6 +309,34 @@ abstract class Provider implements ProviderInterface
     }
 
     /**
+     * Konwertuje obiekt alertu to tablicy
+     *
+     * @return mixed
+     */
+    public function toArray()
+    {
+        $array = [];
+
+        foreach (get_class_methods($this) as $methodName) {
+            if (substr($methodName, 0, 3) == 'get') {
+                $reflect = new \ReflectionMethod($this, $methodName);
+
+                if (!$reflect->getNumberOfRequiredParameters()) {
+                    $value = $this->$methodName();
+
+                    if (is_string($value) || is_numeric($value)) {
+                        $array[snake_case(substr($methodName, 3))] = $value;
+                    }
+                }
+
+                unset($reflect);
+            }
+        }
+
+        return $array;
+    }
+
+    /**
      * Generuje powiadomienie oraz zwraca ID userow do ktorych zostalo wyslane
      *
      * @return array
@@ -329,7 +361,7 @@ abstract class Provider implements ProviderInterface
             foreach ($users as $user) {
                 // wysylamy powiadomienie ktore bedzie widoczne w profilu uzytkownika
                 if ($user['profile']) {
-                    $notifier = new Db_Emitter($this->repository, $user['user_id']);
+                    $notifier = new Broadcast_Db($this->repository, $user['user_id']);
                     $notifier->send($this);
 
                     $recipients[] = $user['user_id'];
@@ -337,7 +369,7 @@ abstract class Provider implements ProviderInterface
 
                 if ($user['email'] && $this->email() && $user['user_email'] && $user['is_active']
                     && $user['is_confirm'] && !$user['is_blocked']) {
-                    $notifier = new Email_Emitter($this->email(), $user['user_email']);
+                    $notifier = new Broadcast_Email($this->email(), $user['user_email']);
                     $notifier->send($this);
 
                     $recipients[] = $user['user_id'];
