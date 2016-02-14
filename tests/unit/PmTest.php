@@ -27,6 +27,11 @@ class PmTest extends \Codeception\TestCase\Test
     {
     }
 
+    private function getUser($id)
+    {
+        return $this->tester->grabRecord('users', ['id' => $id]);
+    }
+
     private function create()
     {
         $rootId = rand(100, 9999);
@@ -41,37 +46,40 @@ class PmTest extends \Codeception\TestCase\Test
     // tests
     public function testPrivateMessageCreation()
     {
+        $before = $this->getUser($this->user->id);
         $pm = $this->create();
 
         $this->tester->seeRecord('pm', ['root_id' => $pm->root_id]);
-        $user = $this->tester->grabRecord('users', ['id' => $this->user->id]);
+        $after = $this->getUser($this->user->id);
 
-        $this->assertEquals(1, $user->pm);
-        $this->assertEquals(1, $user->pm_unread);
+        $this->assertEquals($before->pm + 1, $after->pm);
+        $this->assertEquals($before->pm_unread + 1, $after->pm_unread);
     }
 
     public function testMarkAsRead()
     {
+        $before = $this->getUser($this->user->id);
         $pm = $this->create();
 
         $pm->read_at = Carbon\Carbon::now();
         $pm->save();
 
-        $user = $this->tester->grabRecord('users', ['id' => $this->user->id]);
+        $after = $this->getUser($this->user->id);
 
-        $this->assertEquals(1, $user->pm);
-        $this->assertEquals(0, $user->pm_unread);
+        $this->assertEquals($before->pm + 1, $after->pm);
+        $this->assertEquals($before->pm_unread, $after->pm_unread);
     }
 
     public function testPrivateMessageDelete()
     {
+        $before = $this->getUser($this->user->id);
         $pm = $this->create();
         $pm->delete();
 
-        $user = $this->tester->grabRecord('users', ['id' => $this->user->id]);
+        $after = $this->getUser($this->user->id);
 
-        $this->assertEquals(0, $user->pm);
-        $this->assertEquals(0, $user->pm_unread);
+        $this->assertEquals($before->pm, $after->pm);
+        $this->assertEquals($before->pm_unread, $after->pm_unread);
 
         // jeden rekord powinien byc w bazie danych...
         $this->tester->seeRecord('pm', ['root_id' => $pm->root_id]);
