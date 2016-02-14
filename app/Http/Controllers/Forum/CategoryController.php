@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use Gate;
 
 class CategoryController extends BaseController
 {

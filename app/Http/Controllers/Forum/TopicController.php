@@ -26,7 +26,6 @@ use Illuminate\Http\Request;
 use Coyote\Topic\Subscriber as Topic_Subscriber;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Coyote\Post\Log;
 use Gate;
 
 class TopicController extends BaseController
@@ -297,7 +296,7 @@ class TopicController extends BaseController
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
             }
-            app()->make('Stream')->add(
+            app()->make('stream')->add(
                 new Stream_Create(
                     $actor,
                     (new Stream_Topic)->map($topic, $forum, $post->text),

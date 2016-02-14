@@ -8,7 +8,7 @@ use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use Gate;
 
 class HomeController extends BaseController
 {
