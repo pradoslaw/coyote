@@ -1227,7 +1227,11 @@ $(function () {
         return false;
     });
 
-    applyTags(filterTags($('#tags-form').find('input[name="tags"]').val()));
+    var tags = $.trim($('#tags-form').find('input[name="tags"]').val());
+
+    if (tags) {
+        applyTags(filterTags(tags));
+    }
 
     if (jQuery.fn.pasteImage) {
         $('#submit-form textarea').pasteImage(function (textarea, html) {
