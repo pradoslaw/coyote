@@ -80,4 +80,15 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function newest($limit = 7);
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    public function mostVoted($limit = 7);
+
+    /**
+     * @param int $limit
+     */
+    public function interesting($limit = 7);
 }

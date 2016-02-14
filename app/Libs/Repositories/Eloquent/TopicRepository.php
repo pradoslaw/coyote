@@ -251,4 +251,43 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     ->limit($limit)
                     ->get();
     }
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    public function mostVoted($limit = 7)
+    {
+        $this->applyCriteria();
+
+        return $this->model
+                    ->select([
+                        'topics.id',
+                        'forum_id',
+                        'subject',
+                        'topics.path',
+                        'forums.name AS forum_name',
+                        'forums.path AS forum_path',
+                        'last_post_created_at',
+                        'views',
+                        'score',
+                        'deleted_at'
+                    ])
+                    ->join('forums', 'forums.id', '=', 'forum_id')
+                    ->where('last_post_created_at', '>', date('Y-m-d', strtotime('-1 month')))
+                    ->where('forums.is_locked', 0)
+                    ->where('topics.is_locked', 0)
+                    ->orderBy('score', 'DESC')
+                    ->orderBy('views', 'DESC')
+                    ->limit($limit)
+                    ->get();
+    }
+
+    /**
+     * @param int $limit
+     */
+    public function interesting($limit = 7)
+    {
+        //
+    }
 }

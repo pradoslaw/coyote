@@ -36,6 +36,9 @@ class HomeController extends Controller
             'settings'             => $this->getSettings(),
             'newest'               => Cache::remember('homepage:newest', 30, function () use ($topic) {
                 return $topic->newest();
+            }),
+            'mostVoted'             => Cache::remember('homepage:voted', 30, function () use ($topic) {
+                return $topic->mostVoted();
             })
         ]);
     }
