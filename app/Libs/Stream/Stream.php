@@ -15,23 +15,25 @@ class Stream
     /**
      * @var StreamRepositoryInterface
      */
-    private $model;
+    private $repository;
 
     /**
-     * @param StreamRepositoryInterface $model
+     * @param StreamRepositoryInterface $repository
      */
-    public function __construct(StreamRepositoryInterface $model)
+    public function __construct(StreamRepositoryInterface $repository)
     {
-        $this->model = $model;
+        $this->repository = $repository;
     }
 
     /**
+     * Add activity into the stream
+     *
      * @param ObjectInterface $activity
      * @return $this
      */
     public function add(ObjectInterface $activity)
     {
-        $this->model->create($activity->build());
+        $this->repository->create($activity->build());
         return $this;
     }
 
@@ -63,7 +65,20 @@ class Stream
      */
     public function take($limit, $offset = 0, $objects = [], $verbs = [], $targets = [])
     {
-        $collection = $this->model->take($limit, $offset, $objects, $verbs, $targets);
+        $collection = $this->repository->take($limit, $offset, $objects, $verbs, $targets);
         return $this->decorate($collection);
+    }
+
+    /**
+     * Find activities by object, id and actions (verbs)
+     *
+     * @param $objects
+     * @param array $id
+     * @param array $verbs
+     * @return mixed
+     */
+    public function findByObject($objects, $id = [], $verbs = [])
+    {
+        return $this->repository->findByObject($objects, $id, $verbs);
     }
 }

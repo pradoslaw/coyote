@@ -8,7 +8,6 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\Post\LogRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
-use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -36,11 +35,6 @@ class TopicController extends BaseController
     private $post;
 
     /**
-     * @var Stream
-     */
-    private $stream;
-
-    /**
      * @var Attachment
      */
     private $attachment;
@@ -49,15 +43,13 @@ class TopicController extends BaseController
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
-     * @param Stream $stream
      * @param Attachment $attachment
      */
-    public function __construct(Forum $forum, Topic $topic, Post $post, Stream $stream, Attachment $attachment)
+    public function __construct(Forum $forum, Topic $topic, Post $post, Attachment $attachment)
     {
         parent::__construct($forum, $topic);
 
         $this->post = $post;
-        $this->stream = $stream;
         $this->attachment = $attachment;
     }
 
@@ -163,7 +155,7 @@ class TopicController extends BaseController
 
             // here we go. if user has delete ability, for sure he/she would like to know
             // why posts were deleted and by whom
-            $collection = $this->stream->findByObject('Post', $postsId, 'Delete');
+            $collection = app()->make('Stream')->findByObject('Post', $postsId, 'Delete');
 
             foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
                 $activities[$row->first()['object.id']] = $row->first();
@@ -178,7 +170,7 @@ class TopicController extends BaseController
 
         // if topic is locked we need to fetch information when and by whom
         if ($topic->is_locked) {
-            $lock = $this->stream->findByObject('Topic', $topic->id, 'Lock')->last();
+            $lock = app()->make('Stream')->findByObject('Topic', $topic->id, 'Lock')->last();
         }
 
         // increase topic views counter
