@@ -36,8 +36,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies($gate);
 
-        $gate->define('adm-access', function ($user) {
-            return $user->ability('adm-access');
-        });
+        foreach (['adm-access', 'forum-delete'] as $ability) {
+            $gate->define($ability, function ($user) use ($ability) {
+                return $user->ability($ability);
+            });
+        }
     }
 }

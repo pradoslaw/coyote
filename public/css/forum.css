@@ -504,6 +504,12 @@ div.tag-clouds .btn-add {
     opacity: 1; }
   #box-topics tr.tagged td {
     background-color: #FFF3CD; }
+  #box-topics tr.flagged td {
+    background-color: #f2dede;
+    color: #a94442;
+    border-bottom-color: #ebccd1; }
+    #box-topics tr.flagged td a {
+      color: #a94442; }
 
 .col-topic-icon {
   width: 30px; }

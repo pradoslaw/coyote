@@ -25,7 +25,7 @@
                             <td colspan="4" class="sticky"></td>
                         </tr>
                     {% endif %}
-                    <tr>
+                    <tr {{ flags[topic.id] is defined ? 'class="flagged"' }}>
                         <td class="col-topic-icon hidden-xxs">
                             {% set class = '' %}
                             {% set title = topic.unread ? 'Kliknij, aby oznaczyć jako przeczytane' %}

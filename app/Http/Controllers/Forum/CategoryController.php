@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends BaseController
 {
@@ -42,10 +43,16 @@ class CategoryController extends BaseController
             $perPage
         );
 
+        // we need to get an information about flagged topics. that's how moderators can notice
+        // that's something's wrong with posts.
+        if (Gate::allows('delete', $forum)) {
+            $flags = app()->make('FlagRepository')->takeForTopics($topics->groupBy('id')->keys()->toArray());
+        }
+
         $collapse = $this->getSetting('forum.collapse') ? unserialize($this->getSetting('forum.collapse')) : [];
 
-        return parent::view('forum.category')->with(
-            compact('forumList', 'forum', 'topics', 'sections', 'collapse')
+        return $this->view('forum.category')->with(
+            compact('forumList', 'forum', 'topics', 'sections', 'collapse', 'flags')
         );
     }
 

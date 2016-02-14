@@ -87,7 +87,7 @@ $(function () {
      * Show "flag to report" page
      */
     $('.btn-report').click(function() {
-        var metadata = {'post_id': $(this).data('post-id')};
+        var metadata = {'post_id': $(this).data('post-id'), 'topic_id': $(this).data('topic-id')};
 
         $.get(baseUrl + '/Flag', {url: $(this).data('url'), metadata: JSON.stringify(metadata)}, function(html) {
             $(html).appendTo('body');

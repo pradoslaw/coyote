@@ -14,6 +14,16 @@
   tr.tagged td {
     background-color: $unread-bg;
   }
+
+  tr.flagged td {
+    background-color: $alert-danger-bg;
+    color: $alert-danger-text;
+    border-bottom-color: $alert-danger-border;
+
+    a {
+      color: $alert-danger-text;
+    }
+  }
 }
 
 .col-topic-icon {

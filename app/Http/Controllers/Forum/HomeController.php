@@ -8,6 +8,7 @@ use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class HomeController extends BaseController
 {
@@ -79,9 +80,15 @@ class HomeController extends BaseController
         }
 
         $this->topic->pushCriteria(new OnlyThoseWithAccess($groupsId));
-
         $topics = $this->topic->paginate($userId, $sessionId);
-        return $this->view('forum.home.topics')->with(compact('topics'));
+
+        // we need to get an information about flagged topics. that's how moderators can notice
+        // that's something's wrong with posts.
+        if (Gate::allows('forum-delete')) {
+            $flags = app()->make('FlagRepository')->takeForTopics($topics->groupBy('id')->keys()->toArray());
+        }
+
+        return $this->view('forum.home.topics')->with(compact('topics', 'flags'));
     }
 
     /**
