@@ -72,6 +72,8 @@ $(function () {
     });
 
     $('#alerts').click(function (e) {
+        DesktopNotifications.requestPermission();
+
         var wrapper = $('#dropdown-alerts');
         var modal = wrapper.find('.dropdown-modal');
         var alerts = modal.find('ul');
