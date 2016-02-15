@@ -168,7 +168,7 @@
 
 .microblog-submit .submit-area {
   border-top: 1px solid #d0d0d0;
-  padding-top: 10px; }
+  padding-top: 11px; }
 
 .microblog-submit .img-thumbnail {
   border: none; }
@@ -208,6 +208,10 @@
     display: flex; }
   .microblog-submit .thumbnail img {
     height: 81px; }
+
+.microblog-submit .alert-popover {
+  top: -1px;
+  left: 60px; }
 
 #box-who-is-online {
   margin-top: 20px;

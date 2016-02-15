@@ -1165,7 +1165,7 @@ $(function () {
 var Session =
 {
     isSupported: function () {
-        return ('localStorage' in window && window['localStorage'] !== null);
+        return ('localStorage' in window && window.localStorage !== null);
     },
 
     setItem: function (key, value) {
@@ -1209,12 +1209,14 @@ var Session =
     }
 };
 $(function () {
+    'use strict';
+
     var toolTipTimer;
 
     $('body').delegate('a[data-user-id]', 'mouseenter mouseleave', function (e) {
         clearTimeout(toolTipTimer);
 
-        if (e.type == 'mouseenter') {
+        if (e.type === 'mouseenter') {
             var userId = $(this).data('user-id');
 
             toolTipTimer = setTimeout(function () {
@@ -1239,7 +1241,7 @@ $(function () {
 
             }, 800);
         }
-        else if (e.type == 'mouseleave') {
+        else if (e.type === 'mouseleave') {
             toolTipTimer = setTimeout(function () {
                 $('#vcard').remove();
 
@@ -1247,12 +1249,34 @@ $(function () {
         }
     })
     .delegate('#vcard', 'mouseenter mouseleave', function (e) {
-        if (e.type == 'mouseenter') {
+        if (e.type === 'mouseenter') {
             clearTimeout(toolTipTimer);
         }
-        else if (e.type == 'mouseleave') {
+        else if (e.type === 'mouseleave') {
             $('#vcard').remove();
         }
+    });
+});
+$(function() {
+    'use strict';
+
+    var popover = Session.getItem('popover');
+
+    if (popover === null) {
+        popover = [];
+    } else {
+        popover = JSON.parse(popover);
+    }
+
+    $('.alert-popover').each(function() {
+        if ($.inArray($(this).data('id'), popover) === -1) {
+            $(this).fadeIn(400);
+        }
+    }).on('click', '.close', function() {
+        popover.push($(this).parent().data('id'));
+        Session.setItem('popover', JSON.stringify(popover));
+
+        $(this).parent().hide();
     });
 });
 $(function() {

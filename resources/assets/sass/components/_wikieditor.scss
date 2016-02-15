@@ -2,4 +2,12 @@
   .btn-sm {
     @include gradient-vertical(#f6f6f6, #ddd);
   }
+
+  // Alert informujacy o tym, ze obslugujemy markdown
+  // ---------------------------------------------------
+
+  .alert-popover {
+    top: 0;
+    right: 65px;
+  }
 }

@@ -194,7 +194,7 @@
 
   .submit-area {
     border-top: 1px solid $border-color;
-    padding-top: 10px;
+    padding-top: 11px;
   }
 
   .img-thumbnail {
@@ -237,5 +237,13 @@
     img {
       height: 81px;
     }
+  }
+
+  // Komunikat informujacy o tym, ze obslugujemy markdown
+  // --------------------------------------------------------------------------
+
+  .alert-popover {
+    top: -1px;
+    left: 60px;
   }
 }

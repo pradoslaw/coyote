@@ -1,7 +1,7 @@
 var Session =
 {
     isSupported: function () {
-        return ('localStorage' in window && window['localStorage'] !== null);
+        return ('localStorage' in window && window.localStorage !== null);
     },
 
     setItem: function (key, value) {
