@@ -39,7 +39,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         if ($folder) {
             $folder = '\\' . $folder;
-         }
+        }
 
         foreach ($repositories as $key => $name) {
             if (is_array($name)) {
