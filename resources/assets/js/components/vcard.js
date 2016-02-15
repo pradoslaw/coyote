@@ -1,10 +1,12 @@
 $(function () {
+    'use strict';
+
     var toolTipTimer;
 
     $('body').delegate('a[data-user-id]', 'mouseenter mouseleave', function (e) {
         clearTimeout(toolTipTimer);
 
-        if (e.type == 'mouseenter') {
+        if (e.type === 'mouseenter') {
             var userId = $(this).data('user-id');
 
             toolTipTimer = setTimeout(function () {
@@ -29,7 +31,7 @@ $(function () {
 
             }, 800);
         }
-        else if (e.type == 'mouseleave') {
+        else if (e.type === 'mouseleave') {
             toolTipTimer = setTimeout(function () {
                 $('#vcard').remove();
 
@@ -37,10 +39,10 @@ $(function () {
         }
     })
     .delegate('#vcard', 'mouseenter mouseleave', function (e) {
-        if (e.type == 'mouseenter') {
+        if (e.type === 'mouseenter') {
             clearTimeout(toolTipTimer);
         }
-        else if (e.type == 'mouseleave') {
+        else if (e.type === 'mouseleave') {
             $('#vcard').remove();
         }
     });
