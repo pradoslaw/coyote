@@ -126,16 +126,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     private function getPermissions()
     {
-        $key = 'permission:' . $this->id;
-
-        return Cache::tags(['permissions', $key])->rememberForever($key, function () {
-            return $this->permissions()
-                    ->join('permissions AS p', 'p.id', '=', 'group_permissions.permission_id')
-                    ->orderBy('value')
-                    ->select(['name', 'value'])
-                    ->get()
-                    ->lists('value', 'name');
-        });
+        return $this->permissions()
+                ->join('permissions AS p', 'p.id', '=', 'group_permissions.permission_id')
+                ->orderBy('value')
+                ->select(['name', 'value'])
+                ->get()
+                ->lists('value', 'name');
     }
 
     /**
@@ -147,7 +143,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function ability($ability)
     {
-        $permissions = $this->getPermissions();
+        // @todo nie powinnismy uzywac cache w modelu
+        if (Cache::getFacadeRoot() instanceof \Illuminate\Cache\TaggableStore) {
+            $key = 'permission:' . $this->id;
+
+            $permissions = Cache::tags(['permissions', $key])->rememberForever($key, function () {
+                return $this->getPermissions();
+            });
+        } else {
+            $permissions = $this->getPermissions();
+        }
         return isset($permissions[$ability]) ? $permissions[$ability] : false;
     }
 
