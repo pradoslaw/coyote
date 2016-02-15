@@ -256,8 +256,11 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
      * @param int $limit
      * @return mixed
      */
-    public function mostVoted($limit = 7)
+    public function voted($limit = 7)
     {
+        // ze wzgledu na blad w aplikowaniu kryteriow, zapytanie z metody newset() laczone jest
+        // z tym z metody voted(). nalezy wiec utworzyc nowy obiekt modelu! do poprawy
+        $this->makeModel();
         $this->applyCriteria();
 
         return $this->model

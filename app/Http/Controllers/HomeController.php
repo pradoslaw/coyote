@@ -16,7 +16,7 @@ class HomeController extends Controller
         $viewers = app()->make('viewers');
 
         start_measure('stream', 'Stream activities');
-        // tymczasowo naglowki tylko dla mikroblogow, a nie dla forum
+        // take last stream activity for forum
         $activities = $stream->take(10, 0, ['Topic', 'Post', 'Comment'], ['Create', 'Update'], ['Forum', 'Post', 'Topic']);
         stop_measure('stream');
 
@@ -37,8 +37,8 @@ class HomeController extends Controller
             'newest'               => Cache::remember('homepage:newest', 30, function () use ($topic) {
                 return $topic->newest();
             }),
-            'mostVoted'             => Cache::remember('homepage:voted', 30, function () use ($topic) {
-                return $topic->mostVoted();
+            'voted'                 => Cache::remember('homepage:voted', 30, function () use ($topic) {
+                return $topic->voted();
             })
         ]);
     }
