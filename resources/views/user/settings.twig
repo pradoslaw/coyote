@@ -11,9 +11,9 @@
 
         <main class="col-md-10">
             {% if errors.any %}
-            <div class="alert alert-danger">
-                Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.
-            </div>
+                <div class="alert alert-danger">
+                    Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.
+                </div>
             {% endif %}
 
             {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.settings'), 'class': 'form-horizontal'}) }}
@@ -24,14 +24,14 @@
 
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            {{ forms.text('email', 'E-mail', user_input('email'), {}, 'Jeżeli chcesz zmienić adres e-mail, na nową skrzynkę zostanie wygenerowany klucz aktywacyjny') }}
+                            {{ forms.text('email', 'E-mail', user_input('email'), {'id': 'email'}, 'Jeżeli chcesz zmienić adres e-mail, na nową skrzynkę zostanie wygenerowany klucz aktywacyjny') }}
 
                             {% if groupList|length > 1 %}
                             {{ forms.select('group_id', 'Domyślna grupa', groupList, user_input('group_id'), {}, 'Nazwa grupy będzie wyświetlana pod avatarem, np. na forum') }}
                             {% endif %}
 
                             {{ forms.select('date_format', 'Format daty', formatList, user_input('date_format')) }}
-                            {{ forms.text('website', 'Strona domowa', user_input('website'), {}, 'Strona domowa, portfolio itp (Potrzebujesz min. 50 punktów reputacji aby skorzystać z tej opcji)') }}
+                            {{ forms.text('website', 'Strona domowa', user_input('website'), {}, 'Strona domowa, portfolio itp.') }}
                             {{ forms.checkbox('allow_smilies', 'Pokazuj emotikony', 1, user_input('allow_smilies')) }}
                             {{ forms.checkbox('allow_subscribe', 'Automatycznie obserwuj wątki oraz wpisy na mikroblogu, w których biorę udział', 1, user_input('allow_subscribe')) }}
                             {{ forms.submit('Zapisz', 'Zapisywanie...') }}
@@ -73,19 +73,16 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="/css/user.css">
+    <link rel="stylesheet" href="{{ cdn('css/user.css') }}">
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
 
-    {% if actEmail %}
-        <script type="text/javascript" src="/js/popover.js"></script>
-
-        <script type="text/javascript">
-            $(function () {
-                $('input[name="email"]').popover({content: "Na adres {{ actEmail }} wysłaliśmy link umożliwiający zmianę adresu e-mail", placement: "top"}).popover('show');
-            });
-        </script>
+    {% if email %}
+        <div class="alert alert-warning alert-popover bottom" data-id="change-email" data-containment="input[name=email]">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
+            Na adres {{ email }} wysłaliśmy link umożliwiający zmianę adresu e-mail.
+        </div>
     {% endif %}
 {% endblock %}
