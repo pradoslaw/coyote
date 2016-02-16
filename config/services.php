@@ -30,6 +30,10 @@ return [
         'model'  => 'User',
         'secret' => '',
     ],
+    'ws'        => [
+        'host'   => env('WS_HOST'),
+        'port'   => env('WS_PORT')
+    ],
 
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),

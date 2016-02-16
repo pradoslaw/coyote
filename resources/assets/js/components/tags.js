@@ -1,7 +1,7 @@
 (function ($) {
     'use strict';
 
-    $.fn.tag = function () {
+    $.fn.tag = function (config) {
         return this.each(function () {
             var $this = $(this);
 
@@ -25,8 +25,6 @@
             dropdown.insertAfter(editor);
 
             function setInputWidth() {
-                var items = [];
-
                 $(':hidden[name="tag[]"]').remove();
 
                 $('ul.tag-clouds li', editor).each(function () {
@@ -104,7 +102,7 @@
                     else {
                         $.ajax({
                             type: 'GET',
-                            url: baseUrl + '/Tag/Validate',
+                            url: config.validateUrl,
                             data: {t: value},
                             dataType: 'json',
                             crossDomain: true,
@@ -197,7 +195,7 @@
                         timeId = setTimeout(function () {
                             $.ajax({
                                 type: 'GET',
-                                url: baseUrl + '/Tag/Prompt',
+                                url: config.promptUrl,
                                 data: {q: searchText},
                                 crossDomain: true,
                                 xhrFields: {

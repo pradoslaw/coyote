@@ -202,7 +202,10 @@
                 }
             });
 
-            $('#tag').tag();
+            $('#tag').tag({
+                validateUrl: '{{ route('tag.validate') }}',
+                promptUrl: '{{ route('tag.prompt') }}'
+            });
         });
     </script>
 {% endblock %}
