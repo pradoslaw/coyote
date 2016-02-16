@@ -1067,7 +1067,7 @@ $(function () {
         var alerts = modal.find('ul');
 
         if ($('li', alerts).length <= 1) {
-            $.get(baseUrl + '/User/Alerts/Ajax', function (json) {
+            $.get($(this).children().attr('href'), function (json) {
                 alerts.html(json.html);
 
                 setAlertsNumber(json.unread);
@@ -1113,7 +1113,7 @@ $(function () {
             // klikniecie lewym lub srodkowym przyciskiem myszy
             if (e.which !== 3) {
                 $(this).parent().removeClass('unread');
-                $.post(baseUrl + '/User/Alerts/Mark/' + $(this).data('id'));
+                $.post($(this).data('mark-url'));
 
                 if (e.which === 1) {
                     var pos = $(this).attr('href').indexOf('#');
@@ -1142,11 +1142,11 @@ $(function () {
             setAlertsNumber(0);
         }
 
-        $.post(baseUrl + '/User/Alerts/Mark');
+        $.post($(this).attr('href'));
         return false;
     })
     .delegate('.btn-delete-alert', 'click', function() {
-        $.post(baseUrl + '/User/Alerts/Delete/' + parseInt($(this).prev().data('id')));
+        $.post($(this).attr('href'));
         $(this).parent().fadeOut();
 
         return false;
@@ -1156,7 +1156,7 @@ $(function () {
         var messages = $('#dropdown-messages').find('ul');
 
         if ($('li', messages).length <= 1) {
-            $.get(baseUrl + '/User/Pm/Ajax', function (html) {
+            $.get($(this).children('a').attr('href'), function (html) {
                 messages.html(html);
             });
         }

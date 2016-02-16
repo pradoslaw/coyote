@@ -1,6 +1,6 @@
 {% for alert in alerts %}
     <li class="{{ (alert.read_at and alert.read_at|timestamp < session.created_at|timestamp) or alert.is_marked ? '' : 'unread' }}">
-        <a data-id="{{ alert.id }}" href="{{ url(alert.url) }}" title="{{ alert.headline }}">
+        <a href="{{ url(alert.url) }}" title="{{ alert.headline }}" data-mark-url="{{ route('user.alerts.mark', [alert.id]) }}">
             <img src="{{ user_photo(alert.user.photo) }}">
 
             <div>
@@ -14,7 +14,7 @@
             </div>
         </a>
 
-        <a class="btn-delete-alert" href="javascript:" title="Usuń">
+        <a class="btn-delete-alert" href="{{ route('user.alerts.delete', [alert.id]) }}" title="Usuń">
             <i class="fa fa-remove"></i>
         </a>
     </li>

@@ -163,9 +163,9 @@ Route::group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     Route::get('Alerts', ['uses' => 'AlertsController@index', 'as' => 'alerts']);
     Route::get('Alerts/Settings', ['uses' => 'AlertsController@settings', 'as' => 'alerts.settings']);
     Route::post('Alerts/Settings', 'AlertsController@save');
-    Route::get('Alerts/Ajax', 'AlertsController@ajax');
-    Route::post('Alerts/Mark/{id?}', 'AlertsController@markAsRead');
-    Route::post('Alerts/Delete/{id}', 'AlertsController@delete');
+    Route::get('Alerts/Ajax', ['uses' => 'AlertsController@ajax', 'as' => 'alerts.ajax']);
+    Route::post('Alerts/Mark/{id?}', ['uses' => 'AlertsController@markAsRead', 'as' => 'alerts.mark']);
+    Route::post('Alerts/Delete/{id}', ['uses' => 'AlertsController@delete', 'as' => 'alerts.delete']);
 
     Route::get('Pm', ['uses' => 'PmController@index', 'as' => 'pm']);
     Route::get('Pm/Show/{id}', ['uses' => 'PmController@show', 'as' => 'pm.show']);

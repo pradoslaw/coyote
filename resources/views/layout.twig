@@ -96,7 +96,7 @@
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li id="alerts" class="alerts">
-                                    <a href="javascript:" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <a href="{{ route('user.alerts.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('alerts_unread') %}
                                             <span class="badge">{{ user('alerts_unread') }}</span>
                                         {% endif %}
@@ -108,7 +108,7 @@
                                         <div class="dropdown-header">
                                             <a title="Przejdź do listy powiadomień" href="{{ route('user.alerts') }}">Powiadomienia</a>
 
-                                            <a id="btn-mark-read" title="Oznacz jako przeczytane" href="javascript:">
+                                            <a id="btn-mark-read" title="Oznacz jako przeczytane" href="{{ route('user.alerts.mark') }}">
                                                 <i class="fa fa-calendar-check-o"></i>
                                             </a>
                                         </div>
@@ -123,7 +123,7 @@
                                 </li>
 
                                 <li id="messages" class="messages">
-                                    <a href="javascript:" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <a href="{{ route('user.pm.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('pm_unread') %}
                                             <span class="badge">{{ user('pm_unread') }}</span>
                                         {% endif %}
