@@ -16,7 +16,9 @@
                         <div class="panel-body">
                             {% set head_date = '' %}
 
-                            {{ alerts.render() }}
+                            <nav class="text-center">
+                                {{ alerts.render()|raw }}
+                            </nav>
 
                             {% for alert in alerts %}
                                 {% if head_date != alert.created_at|date('d F Y') %}
@@ -43,7 +45,9 @@
                                 <p class="alert alert-info">Brak powiadomień.</p>
                             {% endfor %}
 
-                            {{ alerts.render() }}
+                            <nav class="text-center">
+                                {{ alerts.render()|raw }}
+                            </nav>
                         </div>
                     </div>
                 </div>
