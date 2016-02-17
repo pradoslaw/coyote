@@ -8,7 +8,10 @@
 
     {% if post.id == topic.first_post_id %}
         {{ form_hidden('subject', topic.subject) }}
-        {{ form_hidden('custom_tags', tags|join(', ')) }}
+
+        {% for tag in tags %}
+            {{ form_hidden('tag[]', tag) }}
+        {% endfor %}
     {% endif %}
 
     {% if can('sticky', forum) %}
