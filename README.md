@@ -29,7 +29,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * `apt-get install php5-gd`
 * `apt-get install php5-mongo`
 * `git clone https://github.com/adam-boduch/coyote.git .`
-* `cp .env.production .env` (plik .env zawiera konfiguracje bazy danych)
+* `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
 * `psql -c 'create database coyote;' -U postgres`
 * `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
 
