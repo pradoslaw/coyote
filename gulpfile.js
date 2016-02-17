@@ -32,8 +32,8 @@ elixir(function(mix) {
     mix.scripts(base, 'public/js/main.js')
         // strona glowna
        //.scripts(['bootstrap/tab.js', 'vendor/perfect-scrollbar.js'], 'public/js/homepage.js')
-        // forum
-       .scripts(['vendor/animate-colors.js', 'bootstrap/modal.js', 'bootstrap/tab.js', 'pages/forum.js'], 'public/js/forum.js')
+        // forum (popover jest na forum potrzebne do pokazywania okna dzielenia linku)
+       .scripts(['vendor/animate-colors.js', 'bootstrap/modal.js', 'bootstrap/tab.js', 'bootstrap/popover.js', 'pages/forum.js'], 'public/js/forum.js')
         // mikroblogi
        .scripts(['vendor/animate-colors.js', 'vendor/ekko-lightbox.js', 'pages/microblog.js', 'components/wikieditor.js'], 'public/js/microblog.js')
         // strona profilu uzytkownika
