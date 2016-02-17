@@ -29,7 +29,8 @@
         "jenssegers/mongodb": "^2.2",
         "folklore/image": "^0.2.4",
         "ezyang/htmlpurifier": "^4.7",
-        "lavary/laravel-menu": "dev-master"
+        "lavary/laravel-menu": "dev-master",
+        "elasticsearch/elasticsearch": "~2.0"
     },
     "require-dev": {
         "sebastian/phpcpd": "*",
