@@ -553,7 +553,7 @@ $(function () {
 
             $.ajax({
                 type: 'POST',
-                url: baseUrl + '/User/Settings/Ajax',
+                url: _config.public + '/User/Settings/Ajax',
                 data: {'forum_sidebar': !flag},
                 dataType: 'html',
                 crossDomain: true,
@@ -596,7 +596,7 @@ $(function () {
     $('.btn-report').click(function() {
         var metadata = {'post_id': $(this).data('post-id'), 'topic_id': $(this).data('topic-id')};
 
-        $.get(baseUrl + '/Flag', {url: $(this).data('url'), metadata: JSON.stringify(metadata)}, function(html) {
+        $.get(_config.public + '/Flag', {url: $(this).data('url'), metadata: JSON.stringify(metadata)}, function(html) {
             $(html).appendTo('body');
 
             $('#flag').find('.modal').modal('show');

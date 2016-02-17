@@ -12,7 +12,7 @@ $(function () {
             toolTipTimer = setTimeout(function () {
                 $.ajax({
                     type: 'GET',
-                    url: baseUrl + '/User/Vcard/' + userId,
+                    url: _config.public + '/User/Vcard/' + userId,
                     dataType: 'html',
                     crossDomain: true,
                     xhrFields: {

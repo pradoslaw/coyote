@@ -1053,7 +1053,7 @@ var DesktopNotifications =
 
     doNotify: function (title, body, url) {
         if (this.isAllowed()) {
-            var notification = new Notification(title, {body: body, tag: url, icon: baseUrl + '/img/favicon.png'});
+            var notification = new Notification(title, {body: body, tag: url, icon: _config.cdn + '/img/favicon.png'});
 
             notification.onshow = function () {
                 setTimeout(function () {
@@ -1310,7 +1310,7 @@ $(function () {
             toolTipTimer = setTimeout(function () {
                 $.ajax({
                     type: 'GET',
-                    url: baseUrl + '/User/Vcard/' + userId,
+                    url: _config.public + '/User/Vcard/' + userId,
                     dataType: 'html',
                     crossDomain: true,
                     xhrFields: {

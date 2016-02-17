@@ -20,7 +20,7 @@ var DesktopNotifications =
 
     doNotify: function (title, body, url) {
         if (this.isAllowed()) {
-            var notification = new Notification(title, {body: body, tag: url, icon: baseUrl + '/img/favicon.png'});
+            var notification = new Notification(title, {body: body, tag: url, icon: _config.cdn + '/img/favicon.png'});
 
             notification.onshow = function () {
                 setTimeout(function () {
