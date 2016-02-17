@@ -30,8 +30,10 @@ class MicroblogsCest
         $fake = Factory::create();
         $text = $fake->realText();
 
-        $I->disableMiddleware();
         $I->amOnRoute('microblog.home');
+        $I->see($this->user->name, '.dropdown-username');
+
+        $I->disableMiddleware();
         $I->submitForm('.microblog-submit', ['text' => $text]);
 
         $I->seeRecord('microblogs', ['text' => $text]);
