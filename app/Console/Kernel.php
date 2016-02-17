@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'Coyote\Console\Commands\ClearCache',
         'Coyote\Console\Commands\PurgeViews',
+        'Coyote\Console\Commands\Migrate',
     ];
 
     /**

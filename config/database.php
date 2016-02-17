@@ -61,7 +61,16 @@ return [
             'username' => env('MONGO_USERNAME', ''),
             'password' => env('MONGO_PASSWORD', '')
         ],
-
+        'mysql' => [
+            'driver'   => 'mysql',
+            'host'     => 'localhost',
+            'database' => 'coyote',
+            'username' => 'root',
+            'password' => '123',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+        ]
     ],
     /*
     |--------------------------------------------------------------------------
