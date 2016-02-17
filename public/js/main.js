@@ -896,6 +896,51 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
 }(jQuery);
 
+function Realtime() {
+    'use strict';
+
+    var self = this;
+    var handler = null;
+    this._callbaks = {};
+
+    this.on = function(event, fn) {
+        (self._callbaks[event] = self._callbaks[event] || []).push(fn);
+        return self;
+    };
+
+    this.emit = function(event, data) {
+        if (self._callbaks[event]) {
+            var callbacks = self._callbaks[event].slice(0);
+            for (var i = 0, len = callbacks.length; i < len; ++i) {
+                callbacks[i].apply(this, [data]);
+            }
+        }
+
+        return self;
+    };
+
+    if (typeof _config.ws !== 'undefined') {
+        handler = new WebSocket('ws://' + _config.ws + '/realtime?token=' + _config.token);
+
+        handler.onopen = function (e) {
+        };
+
+        handler.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+
+            if (data.event) {
+                self.emit(data.event, data.data);
+            }
+        };
+
+        handler.onclose = function (e) {
+        };
+    }
+}
+
+// global object
+var ws = new Realtime();
+
 $(function() {
     'use strict';
 
@@ -1006,9 +1051,9 @@ var DesktopNotifications =
         return this.isSupported() && Notification.permission === "granted";
     },
 
-    doNotify: function (title, body) {
+    doNotify: function (title, body, url) {
         if (this.isAllowed()) {
-            var notification = new Notification(title, {body: body, icon: baseUrl + '/img/favicon.png'});
+            var notification = new Notification(title, {body: body, tag: url, icon: baseUrl + '/img/favicon.png'});
 
             notification.onshow = function () {
                 setTimeout(function () {
@@ -1025,41 +1070,67 @@ var DesktopNotifications =
 $(function () {
     'use strict';
 
+    // original page title
     var pageTitle = $('head title').text();
 
     /**
-     * Set alerts number in page title
+     * Manager alerts counter (set, get or clear)
      *
-     * @param value
+     * @type {{self: (jQuery|HTMLElement), set: Alerts.set, get: Alerts.get, clear: Alerts.clear}}
      */
-    var setAlertsNumber = function (value) {
-        var alerts = $('#alerts');
-        Session.setItem('alerts', value);
+    var Alerts =
+    {
+        self: $('#alerts'),
 
-        if (value > 0) {
-            if (!$('.badge', alerts).length) {
-                $('> a:first', alerts).prepend('<span class="badge">' + value + '</span>');
+        /**
+         * Set alerts counter
+         *
+         * @param value
+         */
+        set: function(value) {
+            Session.setItem('alerts', value);
+
+            if (value > 0) {
+                if (!$('.badge', this.self).length) {
+                    $('> a:first', this.self).prepend('<span class="badge">' + value + '</span>');
+                } else {
+                    $('.badge', this.self).text(value);
+                }
+
+                $('head title').text('(' + (value) + ') ' + pageTitle);
+                $('head link[rel=icon]').attr('href', _config.cdn + '/img/xicon/favicon' + Math.min(value, 6) + '.png');
             } else {
-                $('.amount', alerts).text(value);
+                $('.badge', this.self).remove();
+                $('head title').text(pageTitle);
+                $('head link[rel=icon]').attr('href', _config.cdn + '/img/favicon.png');
             }
+        },
 
-            $('head title').text('(' + (value) + ') ' + pageTitle);
-            $('head link[rel=icon]').attr('href', baseUrl + '/img/xicon/favicon' + Math.min(value, 6) + '.png');
-        } else {
-            $('.badge', alerts).remove();
-            $('head title').text(pageTitle);
-            $('head link[rel=icon]').attr('href', baseUrl + '/img/favicon.png');
+        /**
+         * Get alerts counter
+         *
+         * @returns {Number|number}
+         */
+        get: function() {
+            return parseInt(this.self.find('.badge').text()) || 0;
+        },
+
+        /**
+         * Remove alerts list
+         */
+        clear: function() {
+            $('#dropdown-alerts li').remove();
         }
     };
 
     Session.addListener(function (e) {
-        if (e.key === 'alerts' && e.newValue !== e.oldValue) {
-            setAlertsNumber(e.newValue);
-            $('#dropdown-alerts li').remove();
+        if (e.key === 'alerts' && e.newValue !== e.oldValue) {console.log('session listener');
+            Alerts.set(e.newValue);
+            Alerts.clear();
         }
     });
 
-    $('#alerts').click(function (e) {
+    Alerts.self.click(function (e) {
         DesktopNotifications.requestPermission();
 
         var wrapper = $('#dropdown-alerts');
@@ -1070,7 +1141,7 @@ $(function () {
             $.get($(this).children().attr('href'), function (json) {
                 alerts.html(json.html);
 
-                setAlertsNumber(json.unread);
+                Alerts.set(json.unread);
 
                 // default max height of alerts area
                 var maxHeight = 390;
@@ -1085,7 +1156,7 @@ $(function () {
                     wrapper.width(parseInt(Session.getItem('box-notify-w')));
                 }
 
-                $.getScript(baseUrl + '/js/ui-resizer.js', function() {
+                $.getScript(_config.cdn + '/js/ui-resizer.js', function() {
                     wrapper.resizable({
                         maxHeight: alerts.height(), // max rozmiar obszaru powiadomien odpowiada ilosci znajdujacych sie tam powiadomien
                         minHeight: 190,
@@ -1102,7 +1173,11 @@ $(function () {
                     });
                 });
 
-                $.getScript(baseUrl + '/js/perfect-scrollbar.js', function() {
+                if (typeof modal.perfectScrollbar !== 'undefined') {
+                    modal.perfectScrollbar('update');
+                }
+
+                $.getScript(_config.cdn + '/js/perfect-scrollbar.js', function() {
                     modal.perfectScrollbar({suppressScrollX: true});
                 });
             });
@@ -1135,11 +1210,10 @@ $(function () {
         return false;
     })
     .delegate('#btn-mark-read', 'click', function() {
-        var alerts = $('#alerts');
-        $('li', alerts).removeClass('unread');
+        $('li', Alerts.self).removeClass('unread');
 
-        if ($('.badge', alerts).length) {
-            setAlertsNumber(0);
+        if ($('.badge', Alerts.self).length) {
+            Alerts.set(0);
         }
 
         $.post($(this).attr('href'));
@@ -1160,6 +1234,20 @@ $(function () {
                 messages.html(html);
             });
         }
+    });
+
+    ws.on('alert', function(data) {
+        console.log(data);
+
+        Alerts.set(Alerts.get() + 1);
+        Alerts.clear();
+
+        if (DesktopNotifications.isAllowed()) {
+            DesktopNotifications.doNotify(data.headline, data.subject, data.url);
+        }
+    })
+    .on('pm', function(data) {
+        // @todo Increase priv msg counter
     });
 });
 var Session =

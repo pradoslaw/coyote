@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Menu;
+use Crypt;
 
 abstract class Controller extends BaseController
 {
@@ -19,6 +20,16 @@ abstract class Controller extends BaseController
     protected $breadcrumb;
 
     /**
+     * @var int
+     */
+    protected $userId;
+
+    /**
+     * @var string
+     */
+    protected $sessionId;
+
+    /**
      * Stores user's custom settings (like active tab or tags) from settings table
      *
      * @var array|null
@@ -26,11 +37,31 @@ abstract class Controller extends BaseController
     protected $settings;
 
     /**
+     * Public data that will be passed to JS as a JSON object
+     *
+     * @var array
+     */
+    protected $public = [];
+
+    /**
      * Controller constructor.
      */
     public function __construct()
     {
         $this->breadcrumb = new Coyote\Breadcrumb();
+        $this->userId = auth()->id();
+        $this->sessionId = request()->session()->getId();
+
+        // URL to main page and CDN
+        $this->public = ['public' => url(), 'cdn' => config('cdn', url())];
+
+        if ($this->userId) {
+            if (config('services.ws.host')) {
+                $this->public['ws'] = config('services.ws.host') . ':' . config('services.ws.port');
+                // token contains channel name
+                $this->public['token'] = Crypt::encrypt('user:' . $this->userId . '|' . time());
+            }
+        }
     }
 
     /**
@@ -57,6 +88,9 @@ abstract class Controller extends BaseController
      */
     protected function view($view = null, $data = [])
     {
+        // public JS variables
+        $data['public'] = json_encode($this->public);
+
         if (count($this->breadcrumb)) {
             $data['breadcrumb'] = $this->breadcrumb->render();
         }
@@ -74,7 +108,7 @@ abstract class Controller extends BaseController
      */
     protected function setSetting($name, $value)
     {
-        app()->make('Setting')->setItem($name, $value, auth()->id(), request()->session()->getId());
+        app()->make('Setting')->setItem($name, $value, $this->userId, $this->sessionId);
 
         if (is_array($this->settings)) {
             $this->settings[$name] = $value;
@@ -89,7 +123,7 @@ abstract class Controller extends BaseController
     protected function getSettings()
     {
         if (is_null($this->settings)) {
-            $this->settings = app()->make('Setting')->getAll(auth()->id(), request()->session()->getId());
+            $this->settings = app()->make('Setting')->getAll($this->userId, $this->sessionId);
         }
 
         return $this->settings;

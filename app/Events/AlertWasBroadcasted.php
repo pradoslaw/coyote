@@ -15,7 +15,7 @@ class AlertWasBroadcasted extends Event implements ShouldBroadcast
      *
      * @var int
      */
-    public $userId;
+    private $userId;
 
     /**
      * @var ProviderInterface
@@ -41,7 +41,7 @@ class AlertWasBroadcasted extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['user.' . $this->userId];
+        return ['user:' . $this->userId];
     }
 
     /**
@@ -51,6 +51,16 @@ class AlertWasBroadcasted extends Event implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return 'alert.broadcast';
+        return 'alert';
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
+    public function broadcastWith()
+    {
+        return $this->alert;
     }
 }

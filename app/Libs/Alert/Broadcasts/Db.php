@@ -51,8 +51,11 @@ class Db extends Broadcast
                 'object_id'         => $alert->objectId()
             ]);
 
+            $data = $alert->toArray();
+
+            $data['headline'] = $this->parse($data, $data['headline']);
             // broadcast this event to save notification to redis
-            event(new AlertWasBroadcasted($this->userId, $alert->toArray()));
+            event(new AlertWasBroadcasted($this->userId, $data));
 
             $alertId = $object->id;
         } else {
