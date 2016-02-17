@@ -34,6 +34,10 @@ class CreatePollsTable extends Migration
      */
     public function down()
     {
+        Schema::table('topics', function (Blueprint $table) {
+            $table->dropForeign(['poll_id']);
+        });
+
         Schema::drop('polls');
     }
 }
