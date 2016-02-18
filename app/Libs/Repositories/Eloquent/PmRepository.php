@@ -59,7 +59,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
     public function paginate($userId, $perPage = 10)
     {
         $count = $this->model
-                ->select(\DB::raw('COUNT(*)'))
+                ->selectRaw('COUNT(*)')
                 ->where('user_id', $userId)
                 ->groupBy('root_id')
                 ->get()
@@ -67,7 +67,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
 
         $result = $this->prepare($userId)
                 ->limit($perPage)
-                ->skip(request('page') * $perPage)
+                ->skip((request('page') - 1) * $perPage)
                 ->get();
 
         return new LengthAwarePaginator(

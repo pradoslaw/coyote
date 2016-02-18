@@ -2,6 +2,7 @@
 
 namespace Coyote\Console\Commands;
 
+use Coyote\Pm;
 use Illuminate\Console\Command;
 use DB;
 
@@ -332,7 +333,7 @@ class Migrate extends Command
     /**
      * Wymaga uzupelnienia tabeli alert_types
      *
-     * @todo Co z URL? Trzeba usunac z nich http:// na poczatku
+     * @todo Co z subdomena forum? Jezeli nie zapisujemy hostow trzeba prowadic do prawidlowego aresu url
      */
     private function migrateAlerts()
     {
@@ -433,6 +434,95 @@ class Migrate extends Command
     }
 
     /**
+     * 90% (oprocz samej tresci wiadomosci - zmiana parsera)
+     * W poprzedniej wersji nie bylo grupowania po polu "root"? :/
+     */
+    private function migratePm()
+    {
+        $this->info('Pms...');
+        $count = $this->count(['pm', 'pm_text']);
+
+        $bar = $this->output->createProgressBar($count);
+
+        DB::beginTransaction();
+
+        try {
+            $sql = DB::connection('mysql')
+                ->table('pm_text')
+                ->select(['pm_text.*', 'pm.pm_time AS pm_time'])
+                ->join('pm', 'pm.pm_text', '=', 'pm_text.pm_text')
+                ->groupBy('pm_text')
+                ->get();
+
+            foreach ($sql as $row) {
+                $row = $this->skipPrefix('pm_', (array) $row);
+
+                $this->rename($row, 'text', 'id');
+                $this->rename($row, 'message', 'text');
+                $this->rename($row, 'time', 'created_at');
+
+                $this->timestampToDatetime($row['created_at']);
+
+                DB::table('pm_text')->insert($row);
+                $bar->advance();
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////
+
+            $sql = DB::connection('mysql')->table('pm')->get();
+
+            foreach ($sql as $row) {
+                $row = $this->skipPrefix('pm_', (array) $row);
+
+                $from = $row['from'];
+                $to = $row['to'];
+
+                $this->rename($row, 'read', 'read_at');
+                $this->rename($row, 'trunk', 'root_id');
+                $this->rename($row, 'text', 'text_id');
+
+                if ($row['read_at'] == 1) {
+                    $row['read_at'] = $row['time'];
+                }
+
+                if ($row['read_at']) {
+                    $this->timestampToDatetime($row['read_at']);
+                } else {
+                    $row['read_at'] = null;
+                }
+
+                if ($row['folder'] == Pm::INBOX) {
+                    $row['user_id'] = $to;
+                    $row['author_id'] = $from;
+                } else {
+                    $row['user_id'] = $from;
+                    $row['author_id'] = $to;
+                }
+
+                $row['root_id'] = $row['user_id'] + $row['author_id'];
+
+                unset($row['type'], $row['subject'], $row['time'], $row['from'], $row['to']);
+
+                DB::table('pm')->insert($row);
+
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -441,12 +531,13 @@ class Migrate extends Command
     {
         DB::statement('SET session_replication_role = replica');
         $this->migrateUsers();
-        // musi byc przed dodawaniem grup
+        /* musi byc przed dodawaniem grup */
         $this->migratePermissions();
         $this->migrateGroups();
         $this->migrateSkills();
         $this->migrateWords();
         $this->migrateAlerts();
+        $this->migratePm();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }
