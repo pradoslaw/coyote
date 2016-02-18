@@ -51,20 +51,38 @@ class Migrate extends Command
         return $data;
     }
 
-    private function timestampToDatetime(&$data, $key)
+    private function timestampToDatetime(&$value)
     {
-        $data[$key] = date('Y-m-d H:i:s', $data[$key]);
+        $value = date('Y-m-d H:i:s', $value);
 
-        return $data;
+        return $value;
     }
 
-    private function setNullIfEmpty(&$data, $key)
+    private function setNullIfEmpty(&$value)
     {
-        if (empty($data[$key])) {
-            $data[$key] = null;
+        if (empty($value)) {
+            $value = null;
         }
 
-        return $data;
+        return $value;
+    }
+
+    private function skipHost($url)
+    {
+        $parsed = parse_url($url);
+
+        $url = trim($parsed['path'], '/');
+        if (!empty($parsed['query'])) {
+            $url .= '?' . $parsed['query'];
+        }
+        if (!empty($parsed['fragment'])) {
+            $url .= '#' . $parsed['fragment'];
+        }
+        if (!empty($parsed['host']) && $parsed['host'] == 'forum.4programmers.net') {
+            $url = 'Forum/' . $url;
+        }
+
+        return $url;
     }
 
     private function count($tables)
@@ -114,15 +132,15 @@ class Migrate extends Command
                 $this->rename($row, 'group', 'group_id');
                 $this->rename($row, 'post', 'posts');
 
-                $this->timestampToDatetime($row, 'created_at');
+                $this->timestampToDatetime($row['created_at']);
 
                 if ($row['visited_at']) {
-                    $this->timestampToDatetime($row, 'visited_at');
+                    $this->timestampToDatetime($row['visited_at']);
                 } else {
                     $row['visited_at'] = null;
                 }
 
-                $this->setNullIfEmpty($row, 'photo');
+                $this->setNullIfEmpty($row['photo']);
                 $row['updated_at'] = $row['visited_at'] ?: $row['created_at'];
 
                 DB::table('users')->insert($row);
@@ -137,6 +155,9 @@ class Migrate extends Command
 
             $this->error($e->getMessage());
         }
+
+        $this->line('');
+        $this->info('Done');
     }
 
     /**
@@ -144,6 +165,7 @@ class Migrate extends Command
      */
     public function migrateGroups()
     {
+        $this->info('Groups...');
         $groups = DB::connection('mysql')->table('group')->where('group_id', '>', 2)->orderBy('group_id')->get();
 
         DB::beginTransaction();
@@ -158,7 +180,7 @@ class Migrate extends Command
                 $this->rename($group, 'exposed', 'partner');
 
                 $group['created_at'] = $group['updated_at'] = date('Y-m-d H:i:s');
-                $this->setNullIfEmpty($group, 'leader_id');
+                $this->setNullIfEmpty($group['leader_id']);
 
                 DB::table('groups')->insert($group);
 
@@ -188,7 +210,8 @@ class Migrate extends Command
             $this->error($e->getMessage());
         }
 
-        $this->info('Groups...');
+        $this->line('');
+        $this->info('Done');
     }
 
     /**
@@ -196,6 +219,7 @@ class Migrate extends Command
      */
     private function migratePermissions()
     {
+        $this->info('Permissions...');
         $permissions = DB::connection('mysql')->table('auth_option')->get();
 
         DB::beginTransaction();
@@ -233,7 +257,8 @@ class Migrate extends Command
             $this->error($e->getMessage());
         }
 
-        $this->info('Permissions...');
+        $this->line('');
+        $this->info('Done');
     }
 
     /**
@@ -265,6 +290,9 @@ class Migrate extends Command
 
             $this->error($e->getMessage());
         }
+
+        $this->line('');
+        $this->info('Done');
     }
 
     /**
@@ -296,6 +324,9 @@ class Migrate extends Command
 
             $this->error($e->getMessage());
         }
+
+        $this->line('');
+        $this->info('Done');
     }
 
     /**
@@ -326,24 +357,27 @@ class Migrate extends Command
                 $row = $this->skipPrefix('header_', $row);
 
                 $this->rename($row, 'notify', 'type_id');
-                $this->rename($row, 'sender', 'user_id');
+                $this->rename($row, 'recipient', 'user_id');
                 $this->rename($row, 'sender_time', 'created_at');
                 $this->rename($row, 'read', 'read_at');
                 $this->rename($row, 'mark', 'is_marked');
 
-                unset($row['time'], $row['recipient'], $row['headline']);
+                unset($row['time'], $row['sender'], $row['headline']);
 
-                $this->timestampToDatetime($row, 'created_at');
+                $this->timestampToDatetime($row['created_at']);
                 $row['object_id'] = substr(md5($row['type_id'] . $row['subject']), 16);
 
-                if (!$row['read_at']) {
-                    $row['read_at'] = null;
-                } else {
-                    $this->timestampToDatetime($row, 'read_at');
-                }
+                $this->setNullIfEmpty($row['url']);
+                $this->setNullIfEmpty($row['excerpt']);
+
+                $row['read_at'] = !$row['read_at'] ? null : $this->timestampToDatetime($row['read_at']);
 
                 if (empty($row['subject'])) {
                     $row['subject'] = '';
+                }
+
+                if ($row['url']) {
+                    $row['url'] = $this->skipHost($row['url']);
                 }
 
                 DB::table('alerts')->insert($row);
@@ -360,7 +394,7 @@ class Migrate extends Command
                     $this->rename($row, 'time', 'created_at');
                     $this->rename($row, 'header', 'alert_id');
 
-                    $this->timestampToDatetime($row, 'created_at');
+                    $this->timestampToDatetime($row['created_at']);
                     DB::table('alert_senders')->insert($row);
 
                     $bar->advance();
@@ -390,8 +424,12 @@ class Migrate extends Command
         } catch (\Exception $e) {
             DB::rollBack();
 
-            $this->error($e->getLine() . ': ' . $e->getMessage());
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
         }
+
+        $this->line('');
+        $this->info('Done');
     }
 
     /**
