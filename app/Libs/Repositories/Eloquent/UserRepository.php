@@ -45,7 +45,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
     {
         $sql = "SELECT u1.reputation AS reputation,
                 (
-                    u1.reputation / GREATEST(1, (
+                    u1.reputation::FLOAT / GREATEST(1, (
 
                         SELECT reputation
                         FROM users u2
