@@ -70,7 +70,11 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 ->skip(request('page') * $perPage)
                 ->get();
 
-        return new LengthAwarePaginator($result, $count, $perPage, request('page'));
+        return new LengthAwarePaginator(
+            $result, $count, $perPage, LengthAwarePaginator::resolveCurrentPage(), [
+                'path' => LengthAwarePaginator::resolveCurrentPath()
+            ]
+        );
     }
 
     /**
