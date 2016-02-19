@@ -681,6 +681,9 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    /**
+     * 100%
+     */
     public function migrateTopic()
     {
         $this->info('Topic...');
@@ -730,6 +733,8 @@ class Migrate extends Command
 
                         unset($row['solved'], $row['page'], $row['delete']);
 
+                        $row['subject'] = htmlspecialchars_decode($row['subject']);
+
                         DB::table('topics')->insert($row);
                         $bar->advance();
                     }
@@ -770,12 +775,13 @@ class Migrate extends Command
 
     /**
      * @todo Usuniecie posta trzeba przepisac do mongo
+     * Poza tym jest ok
      */
     public function migratePost()
     {
         $this->info('Post...');
 
-        $count = $this->count(['post']);
+        $count = $this->count(['post_text']);
         $bar = $this->output->createProgressBar($count);
 
         DB::beginTransaction();
@@ -801,7 +807,12 @@ class Migrate extends Command
                         $this->rename($row, 'content', 'text');
 
                         $this->timestampToDatetime($row['created_at']);
-                        $this->timestampToDatetime($row['updated_at']);
+
+                        if ($row['updated_at']) {
+                            $this->timestampToDatetime($row['updated_at']);
+                        } else {
+                            $row['updated_at'] = null;
+                        }
 
                         if ($row['delete']) {
                             $row['deleted_at'] = $this->timestampToDatetime($row['delete_time']);
@@ -816,24 +827,98 @@ class Migrate extends Command
                     }
                 });
 
-//            DB::connection('mysql')->table('topic_marking')->chunk(100000, function ($sql) use ($bar) {
-//                foreach ($sql as $row) {
-//                    $row = (array) $row;
-//
-//                    $this->rename($row, 'mark_time', 'marked_at');
-//                    $this->timestampToDatetime($row['marked_at']);
-//
-//                    DB::table('topic_track')->insert($row);
-//                    $bar->advance();
-//                }
-//            });
-//
-//            DB::connection('mysql')->table('topic_user')->chunk(100000, function ($sql) use ($bar) {
-//                foreach ($sql as $row) {
-//                    DB::table('topic_user')->insert((array) $row);
-//                    $bar->advance();
-//                }
-//            });
+            DB::connection('mysql')->table('post_comment')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    $row = $this->skipPrefix('comment_', (array) $row);
+
+                    $this->rename($row, 'user', 'user_id');
+                    $this->rename($row, 'time', 'created_at');
+                    $this->rename($row, 'post', 'post_id');
+
+                    $row['updated_at'] = $row['created_at'];
+                    $this->timestampToDatetime($row['created_at']);
+                    $this->timestampToDatetime($row['updated_at']);
+
+                    DB::table('post_comments')->insert($row);
+                    $bar->advance();
+                }
+            });
+
+            DB::connection('mysql')->table('post_subscribe')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    DB::table('post_subscribers')->insert((array) $row);
+                    $bar->advance();
+                }
+            });
+
+            DB::connection('mysql')->table('post_vote')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    $row = $this->skipPrefix('vote_', $row);
+
+                    $this->rename($row, 'post', 'post_id');
+                    $this->rename($row, 'user', 'user_id');
+                    $this->rename($row, 'time', 'created_at');
+                    $this->rename($row, 'forum', 'forum_id');
+
+                    if ($row['created_at']) {
+                        $this->timestampToDatetime($row['created_at']);
+                    }
+
+                    unset($row['value']);
+
+                    DB::table('post_votes')->insert($row);
+                    $bar->advance();
+                }
+            });
+
+            DB::connection('mysql')->table('post_accept')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    $row = $this->skipPrefix('accept_', (array) $row);
+
+                    $this->rename($row, 'post', 'post_id');
+                    $this->rename($row, 'topic', 'topic_id');
+                    $this->rename($row, 'user', 'user_id');
+                    $this->rename($row, 'time', 'created_at');
+
+                    $this->timestampToDatetime($row['created_at']);
+
+                    DB::table('post_accepts')->insert($row);
+                    $bar->advance();
+                }
+            });
+
+            DB::connection('mysql')->table('post_attachment')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    $row = $this->skipPrefix('attachment_', (array) $row);
+
+                    $this->rename($row, 'post', 'post_id');
+                    $this->rename($row, 'time', 'created_at');
+
+                    $this->timestampToDatetime($row['created_at']);
+                    $row['updated_at'] = $row['created_at'];
+
+                    unset($row['width'], $row['height']);
+
+                    DB::table('post_attachments')->insert($row);
+                    $bar->advance();
+                }
+            });
+
+            DB::connection('mysql')->table('post_text')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    $row = $this->skipPrefix('text_', (array) $row);
+
+                    $this->rename($row, 'post', 'post_id');
+                    $this->rename($row, 'time', 'created_at');
+                    $this->rename($row, 'content', 'text');
+                    $this->rename($row, 'user', 'user_id');
+
+                    $this->timestampToDatetime($row['created_at']);
+
+                    DB::table('post_log')->insert($row);
+                    $bar->advance();
+                }
+            });
 
             $bar->finish();
             DB::commit();
