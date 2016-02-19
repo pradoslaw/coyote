@@ -51,6 +51,7 @@
 
   p {
     margin: 0;
+    @include text-overflow();
   }
 }
 
