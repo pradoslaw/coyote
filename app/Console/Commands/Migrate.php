@@ -942,17 +942,17 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-//        $this->migrateUsers();
+        $this->migrateUsers();
         /* musi byc przed dodawaniem grup */
-//        $this->migratePermissions();
-//        $this->migrateGroups();
-//        $this->migrateSkills();
-//        $this->migrateWords();
-//        $this->migrateAlerts();
-//        $this->migratePm();
-//        $this->migrateReputation();
-//        $this->migrateForum();
-//        $this->migrateTopic();
+        $this->migratePermissions();
+        $this->migrateGroups();
+        $this->migrateSkills();
+        $this->migrateWords();
+        $this->migrateAlerts();
+        $this->migratePm();
+        $this->migrateReputation();
+        $this->migrateForum();
+        $this->migrateTopic();
         $this->migratePost();
 
         DB::statement('SET session_replication_role = DEFAULT');
