@@ -62,13 +62,10 @@ class TopicController extends BaseController
      */
     public function index($forum, $topic, $slug, Request $request)
     {
-        $userId = auth()->id();
-        $sessionId = $request->session()->getId();
-
         // pobranie daty i godziny ostatniego razu gdy uzytkownik przeczytal ten watek
-        $topicMarkTime = $this->topic->markTime($topic->id, $userId, $sessionId);
+        $topicMarkTime = $this->topic->markTime($topic->id, $this->userId, $this->sessionId);
         // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
-        $forumMarkTime = $this->forum->markTime($forum->id, $userId, $sessionId);
+        $forumMarkTime = $this->forum->markTime($forum->id, $this->userId, $this->sessionId);
 
         if ($request->get('view') === 'unread') {
             if ($topicMarkTime < $topic->last_post_created_at && $forumMarkTime < $topic->last_post_created_at) {
@@ -109,7 +106,7 @@ class TopicController extends BaseController
         }
 
         // magic happens here. get posts for given topic
-        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $userId, $page, $perPage);
+        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $this->userId, $page, $perPage);
         $paginate = new LengthAwarePaginator($posts, $replies, $perPage, $page, ['path' => ' ']);
 
         $parser = [
@@ -137,15 +134,15 @@ class TopicController extends BaseController
 
         if ($topicMarkTime < $markTime && $forumMarkTime < $markTime) {
             // mark topic as read
-            $this->topic->markAsRead($topic->id, $forum->id, $markTime, $userId, $sessionId);
+            $this->topic->markAsRead($topic->id, $forum->id, $markTime, $this->userId, $this->sessionId);
             $isUnread = true;
 
             if ($forumMarkTime < $markTime) {
-                $isUnread = $this->topic->isUnread($forum->id, $forumMarkTime, $userId, $sessionId);
+                $isUnread = $this->topic->isUnread($forum->id, $forumMarkTime, $this->userId, $this->sessionId);
             }
 
             if (!$isUnread) {
-                $this->forum->markAsRead($forum->id, $userId, $sessionId);
+                $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
             }
         }
 
@@ -443,18 +440,15 @@ class TopicController extends BaseController
      */
     public function mark($topic)
     {
-        $sessionId = request()->session()->getId();
-        $userId = auth()->id();
-
         // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
-        $forumMarkTime = $this->forum->markTime($topic->forum_id, $userId, $sessionId);
+        $forumMarkTime = $this->forum->markTime($topic->forum_id, $this->userId, $this->sessionId);
 
         // mark topic as read
-        $this->topic->markAsRead($topic->id, $topic->forum_id, $topic->last_post_created_at, $userId, $sessionId);
-        $isUnread = $this->topic->isUnread($topic->forum_id, $forumMarkTime, $userId, $sessionId);
+        $this->topic->markAsRead($topic->id, $topic->forum_id, $topic->last_post_created_at, $this->userId, $this->sessionId);
+        $isUnread = $this->topic->isUnread($topic->forum_id, $forumMarkTime, $this->userId, $this->sessionId);
 
         if (!$isUnread) {
-            $this->forum->markAsRead($topic->forum_id, $userId, $sessionId);
+            $this->forum->markAsRead($topic->forum_id, $this->userId, $this->sessionId);
         }
     }
 
