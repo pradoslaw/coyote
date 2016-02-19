@@ -94,7 +94,7 @@
                         </td>
                         <td class="col-views hidden-xs">
                             <p title="Ilość odpowiedzi">
-                                <strong>{{ topic.replies }}</strong>
+                                <strong>{{ topic.replies|number_format(0, '', ' ') }}</strong>
 
                                 {% if topic.replies != topic.replies_real and can('delete', forum) %}
                                     <small class="col-replies-real">({{ topic.replies - topic.replies_real }})</small>
@@ -102,7 +102,7 @@
                                 <small>{{ declination(topic.replies, ['odpowiedź', 'odpowiedzi', 'odpowiedzi'], true) }}</small>
                             </p>
                             <p title="Ilość wyświetleń">
-                                <strong>{{ topic.views }}</strong>
+                                <strong>{{ topic.views|number_format(0, '', ' ') }}</strong>
                                 <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
                             </p>
                         </td>
