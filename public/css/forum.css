@@ -293,7 +293,10 @@
   width: 9%;
   font-size: 12px; }
   .col-stats p, .col-views p {
-    margin: 0; }
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; }
 
 .col-forum-description p {
   margin: 0; }

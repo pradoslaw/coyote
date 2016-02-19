@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
+use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Illuminate\Http\Request;
 use Gate;
 
@@ -34,6 +35,7 @@ class CategoryController extends BaseController
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
+        $this->topic->pushCriteria(new StickyGoesFirst());
         // get topics according to given criteria
         $topics = $this->topic->paginate(
             auth()->id(),

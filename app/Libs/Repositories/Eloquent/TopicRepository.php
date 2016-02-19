@@ -33,7 +33,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         $this->applyCriteria();
 
         $pagination = $this->model->select(['topics.id'])
-                    ->orderBy('is_sticky', 'DESC')
                     ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
                     ->paginate($perPage);
 
