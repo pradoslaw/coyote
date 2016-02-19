@@ -135,71 +135,70 @@
             {{ viewers|raw }}
         </main>
 
-        <aside id="sidebar">
+        {% embed 'forum/sidebar.twig' %}
+            {% block side_menu %}
+                <div class="box">
+                    <ul class="side-menu" style="margin-top: 5px">
+                        {% if auth_check() %}
+                            <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
+                                <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
+                                    <span>
+                                        {% if subscribers[user('id')] is not defined %}
+                                            Obserwuj wątek
+                                        {% else %}
+                                            Zakończ obserwację
+                                        {% endif %}
+                                    </span>
 
-            <div class="box">
-                <ul class="side-menu" style="margin-top: 5px">
-                    {% if auth_check() %}
-                        <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
-                            <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
-                                <span>
-                                    {% if subscribers[user('id')] is not defined %}
-                                        Obserwuj wątek
-                                    {% else %}
-                                        Zakończ obserwację
+                                    {% if subscribers.count() > 0 %}
+                                        <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
                                     {% endif %}
-                                </span>
+                                </a>
+                            </li>
+                        {% endif %}
 
-                                {% if subscribers.count() > 0 %}
-                                    <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
-                                {% endif %}
-                            </a>
+                        <li class="btn-atom">
+                            <a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
                         </li>
-                    {% endif %}
 
-                    <li class="btn-atom">
-                        <a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
-                    </li>
-
-                    {% if can('update', forum) %}
-                        <li id="btn-log"><a href="{{ route('forum.topic.log', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
-                        <li id="btn-edit-subject"><a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
-                    {% endif %}
-                    {% if can('lock', forum) %}
-                        <li id="btn-lock" {{ topic.is_locked ? 'class="on"' }}>
-                            <a href="{{ route('forum.lock', [topic.id]) }}" title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">
-                                {% if topic.is_locked %}
-                                    Odblokuj wątek
-                                {% else %}
-                                    Zablokuj wątek
-                                {% endif %}
-                            </a>
-                        </li>
-                    {% endif %}
-                    {% if can('move', forum) %}
-                        <li id="btn-move">
-                            <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
-
-                            <ul id="collapse-sub" class="collapse">
-                                {% for path, name in forumList %}
-                                    {% if path == forum.path %}
-                                        <li><a style="color: #ccc">{{ name|raw }}</a></li>
+                        {% if can('update', forum) %}
+                            <li id="btn-log"><a href="{{ route('forum.topic.log', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
+                            <li id="btn-edit-subject"><a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
+                        {% endif %}
+                        {% if can('lock', forum) %}
+                            <li id="btn-lock" {{ topic.is_locked ? 'class="on"' }}>
+                                <a href="{{ route('forum.lock', [topic.id]) }}" title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">
+                                    {% if topic.is_locked %}
+                                        Odblokuj wątek
                                     {% else %}
-                                        <li><a data-path="{{ path }}" href="javascript:">{{ name|raw }}</a></li>
+                                        Zablokuj wątek
                                     {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if can('move', forum) %}
+                            <li id="btn-move">
+                                <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
 
-                    {#{% if can('sticky', forum) %}#}
-                        {#<li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>#}
-                    {#{% endif %}#}
-                </ul>
-            </div>
+                                <ul id="collapse-sub" class="collapse">
+                                    {% for path, name in forumList %}
+                                        {% if path == forum.path %}
+                                            <li><a style="color: #ccc">{{ name|raw }}</a></li>
+                                        {% else %}
+                                            <li><a data-path="{{ path }}" href="javascript:">{{ name|raw }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
 
-            {% include "forum/sidebar.twig" %}
-        </aside>
+                        {#{% if can('sticky', forum) %}#}
+                            {#<li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>#}
+                        {#{% endif %}#}
+                    </ul>
+                </div>
+            {% endblock %}
+        {% endembed %}
     </div>
 
     {% if auth_check() %}

@@ -39,24 +39,19 @@
             {{ viewers|raw }}
         </main>
 
-        <aside id="sidebar">
-            <div id="box-count" class="box">
-                <strong>{{ topics.total() }}</strong>
-                <span>{{ declination(topics.total(), ['wątek', 'wątki', 'wątków'], true) }}</span>
-            </div>
-
-            <div class="box">
-                <ul class="side-menu">
-                    <li class="btn-mark-read">
-                        <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.category.mark', [forum.path]) }}" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
-                    </li>
-                    <li class="btn-atom">
-                        <a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
-                    </li>
-                </ul>
-            </div>
-
-            {% include "forum/sidebar.twig" %}
-        </aside>
+        {% embed "forum/sidebar.twig" %}
+            {% block side_menu %}
+                <div class="box">
+                    <ul class="side-menu">
+                        <li class="btn-mark-read">
+                            <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.category.mark', [forum.path]) }}" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
+                        </li>
+                        <li class="btn-atom">
+                            <a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
+                        </li>
+                    </ul>
+                </div>
+            {% endblock %}
+        {% endembed %}
     </div>
 {% endblock %}

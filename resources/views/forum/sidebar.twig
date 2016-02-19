@@ -1,140 +1,153 @@
-<div id="box-my-tags" class="box">
-    <h4 class="border">
-        <i class="fa fa-tag fa-fw"></i> Moje tagi
-
-        <a href="javascript:" class="btn btn-default btn-xs pull-right btn-settings"><i class="fa fa-cog"></i></a>
-    </h4>
-
-    {% if tags.user %}
-        {% include 'forum/tags.twig' with {'tags': tags.user} %}
-    {% else %}
-        <div class="tag-clouds">
-            <a href="javascript:" class="btn-add">(Brak tagów. Kliknij, aby dodać)</a>
+<aside id="sidebar">
+    {% if topics is defined %}
+        <div id="box-count" class="box">
+            <strong>{{ topics.total()|number_format(0, '', ' ') }}</strong>
+            <span>{{ declination(topics.total(), ['wątek', 'wątki', 'wątków'], true) }}</span>
         </div>
     {% endif %}
 
-    {{ form_open({'method': 'post', 'url': route('forum.tag.save'), 'id': 'tags-form', 'style': 'display: none'}) }}
-        <div class="row">
-            <div class="col-xs-9">
-                {{ form_text('tags', tags.user|keys|join(', '), {'class': 'form-control input-sm'}) }}
+    {% block side_menu %}
+
+    {% endblock %}
+
+    <div id="box-my-tags" class="box">
+        <h4 class="border">
+            <i class="fa fa-tag fa-fw"></i> Moje tagi
+
+            <a href="javascript:" class="btn btn-default btn-xs pull-right btn-settings"><i class="fa fa-cog"></i></a>
+        </h4>
+
+        {% if tags.user %}
+            {% include 'forum/tags.twig' with {'tags': tags.user} %}
+        {% else %}
+            <div class="tag-clouds">
+                <a href="javascript:" class="btn-add">(Brak tagów. Kliknij, aby dodać)</a>
             </div>
-            <div class="col-xs-2">
-                {{ form_submit('Zapisz', {'class': 'btn btn-primary btn-sm', 'data-submit-state': 'Zapisywanie...'}) }}
+        {% endif %}
+
+        {{ form_open({'method': 'post', 'url': route('forum.tag.save'), 'id': 'tags-form', 'style': 'display: none'}) }}
+            <div class="row">
+                <div class="col-xs-9">
+                    {{ form_text('tags', tags.user|keys|join(', '), {'class': 'form-control input-sm'}) }}
+                </div>
+                <div class="col-xs-2">
+                    {{ form_submit('Zapisz', {'class': 'btn btn-primary btn-sm', 'data-submit-state': 'Zapisywanie...'}) }}
+                </div>
+            </div>
+        {{ form_close() }}
+    </div>
+
+    <div id="box-popular-tags" class="box">
+        <h4 class="border"><i class="fa fa-tag fa-fw"></i> Popularne tagi</h4>
+
+        {% include 'forum/tags.twig' with {'tags': tags.popular} %}
+    </div>
+
+    <section id="box-job-offers" class="box">
+        <h4><a href="{{ route('job.home') }}">Oferty pracy</a></h4>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object" src="/img/apple-touch.png" style="width: 35px; height: 35px;" alt="Power Media S.A.">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
+
+                        <p><a href="#">Power Media S.A.</a></p>
+                        <small><a href="#">Wrocław</a> • do 5000 zł</small>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object" src="/img/apple-touch.png" style="width: 35px; height: 35px;" alt="Power Media S.A.">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
+
+                        <p><a href="#">Power Media S.A.</a></p>
+                        <small><a href="#">Wrocław</a> • do 5000 zł</small>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <a href="#" class="text-align">Więcej ofert w pobliżu Wrocław</a>
+                </div>
             </div>
         </div>
-    {{ form_close() }}
-</div>
+    </section>
 
-<div id="box-popular-tags" class="box">
-    <h4 class="border"><i class="fa fa-tag fa-fw"></i> Popularne tagi</h4>
+    <section id="box-related" class="box related">
+        <h4 class="border"><i class="fa fa-eye fa-fw"></i> Strony pokrewne</h4>
 
-    {% include 'forum/tags.twig' with {'tags': tags.popular} %}
-</div>
-
-<section id="box-job-offers" class="box">
-    <h4><a href="{{ route('job.home') }}">Oferty pracy</a></h4>
-
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="media">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object" src="/img/apple-touch.png" style="width: 35px; height: 35px;" alt="Power Media S.A.">
+        <div>
+            <ul>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/105064-Canvas_w_TOpenDialog" title="Canvas w TOpenDialog">
+                        <strong>Canvas w TOpenDialog</strong>
+                        <small>06 marzec 2007, 13:54</small>
                     </a>
-                </div>
-                <div class="media-body">
-                    <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
-
-                    <p><a href="#">Power Media S.A.</a></p>
-                    <small><a href="#">Wrocław</a> • do 5000 zł</small>
-                </div>
-            </div>
-            <div class="media">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object" src="/img/apple-touch.png" style="width: 35px; height: 35px;" alt="Power Media S.A.">
+                </li>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/C_i_C++/67995-C++_Builder_-_dodawanie_elementow_do_OpenDialog" title="C++ Builder - dodawanie elementow do OpenDialog">
+                        <strong>C++ Builder - dodawanie elementow do OpenDialog</strong>
+                        <small>14 marzec 2005, 23:06</small>
                     </a>
-                </div>
-                <div class="media-body">
-                    <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
-
-                    <p><a href="#">Power Media S.A.</a></p>
-                    <small><a href="#">Wrocław</a> • do 5000 zł</small>
-                </div>
-            </div>
-
-            <div class="media">
-                <a href="#" class="text-align">Więcej ofert w pobliżu Wrocław</a>
-            </div>
+                </li>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/171489-wstawianie_zawartosci_kilku_plikow_tekstowych_do_memo" title="Wstawianie zawartości kilku plików tekstowych do memo.">
+                        <strong>Wstawianie zawartości kilku plików tekstowych do memo.</strong>
+                        <small>23 grudzień 2010, 21:42</small>
+                    </a>
+                </li>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/Archiwum/20460-Co_jest_w_tym_zle" title="Co jest w tym źle!">
+                        <strong>Co jest w tym źle!</strong>
+                        <small>09 wrzesień 2002, 16:17</small>
+                    </a>
+                </li>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/104633-Dziwny_problem_z_TOpenDialog" title="Dziwny problem z TOpenDialog">
+                        <strong>Dziwny problem z TOpenDialog</strong>
+                        <small>01 marzec 2007, 21:13</small>
+                    </a>
+                </li>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/36619-TOpenDialog" title="TOpenDialog">
+                        <strong>TOpenDialog</strong>
+                        <small>21 marzec 2003, 16:24</small>
+                    </a>
+                </li>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/38922-Przegladarka" title="Przeglądarka">
+                        <strong>Przeglądarka</strong>
+                        <small>06 maj 2003, 20:55</small>
+                    </a>
+                </li>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/62379-Pozycja_okna_OpenDialog" title="Pozycja okna OpenDialog....">
+                        <strong>Pozycja okna OpenDialog....</strong>
+                        <small>11 grudzień 2004, 00:54</small>
+                    </a>
+                </li>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/Newbie/206847-jak_wstawic_opensavedialog_do_zewnetrznego_modulu" title="jak wstawic open(save)dialog do zewnetrznego modułu ?">
+                        <strong>jak wstawic open(save)dialog do zewnetrznego modułu ?</strong>
+                        <small>11 listopad 2012, 15:38</small>
+                    </a>
+                </li>
+                <li>
+                    <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/99200-Rekordy_+_TImage_+_TOpenDialog_Invalid_FileName" title="Rekordy + TImage + TOpenDialog = Invalid FileName">
+                        <strong>Rekordy + TImage + TOpenDialog = Invalid FileName</strong>
+                        <small>06 listopad 2006, 18:01</small>
+                    </a>
+                </li>
+            </ul>
         </div>
-    </div>
-</section>
-
-<section id="box-related" class="box related">
-    <h4 class="border"><i class="fa fa-eye fa-fw"></i> Strony pokrewne</h4>
-
-    <div>
-        <ul>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/105064-Canvas_w_TOpenDialog" title="Canvas w TOpenDialog">
-                    <strong>Canvas w TOpenDialog</strong>
-                    <small>06 marzec 2007, 13:54</small>
-                </a>
-            </li>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/C_i_C++/67995-C++_Builder_-_dodawanie_elementow_do_OpenDialog" title="C++ Builder - dodawanie elementow do OpenDialog">
-                    <strong>C++ Builder - dodawanie elementow do OpenDialog</strong>
-                    <small>14 marzec 2005, 23:06</small>
-                </a>
-            </li>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/171489-wstawianie_zawartosci_kilku_plikow_tekstowych_do_memo" title="Wstawianie zawartości kilku plików tekstowych do memo.">
-                    <strong>Wstawianie zawartości kilku plików tekstowych do memo.</strong>
-                    <small>23 grudzień 2010, 21:42</small>
-                </a>
-            </li>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/Archiwum/20460-Co_jest_w_tym_zle" title="Co jest w tym źle!">
-                    <strong>Co jest w tym źle!</strong>
-                    <small>09 wrzesień 2002, 16:17</small>
-                </a>
-            </li>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/104633-Dziwny_problem_z_TOpenDialog" title="Dziwny problem z TOpenDialog">
-                    <strong>Dziwny problem z TOpenDialog</strong>
-                    <small>01 marzec 2007, 21:13</small>
-                </a>
-            </li>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/36619-TOpenDialog" title="TOpenDialog">
-                    <strong>TOpenDialog</strong>
-                    <small>21 marzec 2003, 16:24</small>
-                </a>
-            </li>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/38922-Przegladarka" title="Przeglądarka">
-                    <strong>Przeglądarka</strong>
-                    <small>06 maj 2003, 20:55</small>
-                </a>
-            </li>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/62379-Pozycja_okna_OpenDialog" title="Pozycja okna OpenDialog....">
-                    <strong>Pozycja okna OpenDialog....</strong>
-                    <small>11 grudzień 2004, 00:54</small>
-                </a>
-            </li>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/Newbie/206847-jak_wstawic_opensavedialog_do_zewnetrznego_modulu" title="jak wstawic open(save)dialog do zewnetrznego modułu ?">
-                    <strong>jak wstawic open(save)dialog do zewnetrznego modułu ?</strong>
-                    <small>11 listopad 2012, 15:38</small>
-                </a>
-            </li>
-            <li>
-                <a data-category="forum-related" href="http://forum.4programmers.net/Delphi_Pascal/99200-Rekordy_+_TImage_+_TOpenDialog_Invalid_FileName" title="Rekordy + TImage + TOpenDialog = Invalid FileName">
-                    <strong>Rekordy + TImage + TOpenDialog = Invalid FileName</strong>
-                    <small>06 listopad 2006, 18:01</small>
-                </a>
-            </li>
-        </ul>
-    </div>
-</section>
+    </section>
+</aside>

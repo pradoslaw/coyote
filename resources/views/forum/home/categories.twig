@@ -13,7 +13,7 @@
     <div id="index" class="sidebar">
         <ul class="nav nav-tabs">
             {% for route, label in tabs %}
-            <li role="presentation" {{ route == routeName ? 'class="active"' }}><a href="{{ route == 'forum.tag' ? route(route, tag) : route(route) }}">{{ label }}</a></li>
+                <li role="presentation" {{ route == routeName ? 'class="active"' }}><a href="{{ route == 'forum.tag' ? route(route, tag) : route(route) }}">{{ label }}</a></li>
             {% endfor %}
         </ul>
 
@@ -29,22 +29,22 @@
             {{ viewers|raw }}
         </main>
 
-        <aside id="sidebar">
-            <div class="box">
-                <ul class="side-menu">
-                    <li class="btn-mark-read">
-                        <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.mark') }}" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
-                    </li>
-                    <li class="btn-atom">
-                        <a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
-                    </li>
-                    <li id="btn-setting">
-                        <a title="Zmień kolejność wyświetlanych kategorii" href="http://4programmers.net/User/Order" data-category="forum-sidebar-buttons" data-value="setting">Personalizacja forum</a>
-                    </li>
-                </ul>
-            </div>
-
-            {% include "forum/sidebar.twig" %}
-        </aside>
+        {% embed 'forum/sidebar.twig' %}
+            {% block side_menu %}
+                <div class="box">
+                    <ul class="side-menu">
+                        <li class="btn-mark-read">
+                            <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.mark') }}" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
+                        </li>
+                        <li class="btn-atom">
+                            <a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
+                        </li>
+                        <li id="btn-setting">
+                            <a title="Zmień kolejność wyświetlanych kategorii" href="http://4programmers.net/User/Order" data-category="forum-sidebar-buttons" data-value="setting">Personalizacja forum</a>
+                        </li>
+                    </ul>
+                </div>
+            {% endblock %}
+        {% endembed %}
     </div>
 {% endblock %}
