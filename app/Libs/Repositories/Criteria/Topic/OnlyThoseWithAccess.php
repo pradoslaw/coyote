@@ -32,7 +32,7 @@ class OnlyThoseWithAccess extends Criteria
             $sub->whereNotExists(function ($sub) {
                 return $sub->select('forum_id')
                     ->from('forum_access')
-                    ->where('forum_access.forum_id', '=', \DB::raw('forums.id'));
+                    ->where('forum_access.forum_id', '=', \DB::raw('topics.forum_id'));
             });
 
             if ($this->groupsId) {
@@ -40,7 +40,7 @@ class OnlyThoseWithAccess extends Criteria
                     return $sub->select('forum_id')
                         ->from('forum_access')
                         ->whereIn('group_id', $this->groupsId)
-                        ->where('forum_access.forum_id', '=', \DB::raw('forums.id'));
+                        ->where('forum_access.forum_id', '=', \DB::raw('topics.forum_id'));
                 });
             }
         });
