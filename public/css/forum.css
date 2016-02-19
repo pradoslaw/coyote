@@ -770,7 +770,10 @@ div.tag-clouds .btn-add {
 .col-time {
   font-size: 11px;
   padding-top: 4px;
-  padding-bottom: 0; }
+  padding-bottom: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
   .col-time small a {
     color: #777777; }
   .col-time .post-link {

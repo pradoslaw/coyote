@@ -151,6 +151,7 @@
   font-size: 11px;
   padding-top: 4px;
   padding-bottom: 0;
+  @include text-overflow();
 
   small a {
     color: $gray-light;
