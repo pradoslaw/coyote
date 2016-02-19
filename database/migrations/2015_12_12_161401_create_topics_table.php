@@ -36,7 +36,6 @@ class CreateTopicsTable extends Migration
             $table->index('last_post_id');
             $table->index('last_post_created_at');
             $table->index('views');
-            $table->index(['deleted_at', 'forum_id', 'is_sticky']);
 
             $table->foreign('forum_id')->references('id')->on('forums');
         });

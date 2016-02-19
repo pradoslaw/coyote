@@ -23,6 +23,7 @@ class CreateTopicTrackTable extends Migration
             $table->index('forum_id');
             $table->index(['topic_id', 'user_id']);
             $table->index(['topic_id', 'session_id']);
+            // @todo Czy potrzebujemy indeks na session_id?
             $table->index('session_id');
 
             $table->foreign('forum_id')->references('id')->on('forums')->onDelete('cascade');

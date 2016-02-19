@@ -523,6 +523,333 @@ class Migrate extends Command
     }
 
     /**
+     *  WYMAGA DODANIA DANYCH DO TABELI REPUTATION_TYPES
+     * 100%
+     */
+    public function migrateReputation()
+    {
+        $this->info('Reputations...');
+
+        DB::beginTransaction();
+
+        try {
+            $sql = DB::connection('mysql')
+                    ->table('reputation_activity')
+                    ->select(['reputation_activity.*', 'module_name AS activity_module_name'])
+                    ->leftJoin('page', 'page_id', '=', 'activity_page')
+                    ->leftJoin('module', 'module_id', '=', 'page_module')
+                    ->get();
+
+            $bar = $this->output->createProgressBar(count($sql));
+
+            foreach ($sql as $row) {
+                $row = $this->skipPrefix('activity_', (array) $row);
+
+                $this->rename($row, 'reputation', 'type_id');
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'time', 'created_at');
+                $this->rename($row, 'subject', 'excerpt');
+
+                $this->timestampToDatetime($row['created_at']);
+                $metadata = [];
+
+                if ($row['url']) {
+                    $row['url'] = $this->skipHost($row['url']);
+                }
+
+                if (empty($row['module_name'])) {
+                    $metadata['microblog_id'] = $row['item'];
+                } elseif ($row['module_name'] == 'forum') {
+                    $metadata['post_id'] = $row['item'];
+                }
+
+                $row['metadata'] = json_encode($metadata);
+                unset($row['enable'], $row['page'], $row['item'], $row['module_name']);
+
+                $row['excerpt'] = str_limit($row['excerpt'], 250);
+                $row['url'] = str_limit($row['url'], 250);
+
+                DB::table('reputations')->insert($row);
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
+    }
+
+    private function migrateForum()
+    {
+        $this->info('Forum...');
+
+        DB::beginTransaction();
+
+        try {
+            $sql = DB::connection('mysql')
+                ->table('forum')
+                ->select([
+                    'forum.*',
+                    'page_subject AS forum_name',
+                    'page_title AS forum_title',
+                    'page_path AS forum_path',
+                    'page_order AS forum_order',
+                    'page_depth AS forum_depth'
+                ])
+                ->leftJoin('page', 'page_id', '=', 'forum_page')
+                ->orderBy('page_matrix')
+                ->get();
+
+            $parentId = null;
+            $groups = [];
+
+            foreach ($sql as $row) {
+                $row = $this->skipPrefix('forum_', (array) $row);
+
+                $this->rename($row, 'lock', 'is_locked');
+                $this->rename($row, 'prune', 'prune_days');
+
+                if ($row['depth'] == 1) {
+                    $parentId = $row['id'];
+                } else {
+                    $row['parent_id'] = $parentId;
+                }
+
+                $row['enable_prune'] = $row['prune_days'] > 0;
+                $groups[$row['page']] = $row['id'];
+
+                $permissions = unserialize($row['permission']);
+
+                unset($row['depth'], $row['permission'], $row['page']);
+
+                DB::table('forums')->insert($row);
+
+                foreach ($permissions as $groupId => $rowset) {
+                    if ($groupId > 2) {
+                        foreach ($rowset as $permissionId => $value) {
+                            DB::table('forum_permissions')->insert([
+                                'forum_id' => $row['id'],
+                                'group_id' => $groupId,
+                                'permission_id' => $permissionId,
+                                'value' => $value
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            $sql = DB::connection('mysql')->table('page_group')->whereIn('page_id', array_keys($groups))->get();
+
+            foreach ($sql as $row) {
+                if ($row->group_id > 2) {
+                    DB::table('forum_access')->insert(['forum_id' => $groups[$row->page_id], 'group_id' => $row->group_id]);
+                }
+            }
+
+            $sql = DB::connection('mysql')->table('forum_marking')->get();
+            $bar = $this->output->createProgressBar(count($sql));
+
+            foreach ($sql as $row) {
+                $row = (array) $row;
+
+                $this->rename($row, 'mark_time', 'marked_at');
+                $this->timestampToDatetime($row['marked_at']);
+
+                DB::table('forum_track')->insert($row);
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
+    }
+
+    public function migrateTopic()
+    {
+        $this->info('Topic...');
+
+        $count = $this->count(['topic', 'topic_marking', 'topic_user']);
+        $bar = $this->output->createProgressBar($count);
+
+        DB::beginTransaction();
+
+        try {
+            DB::connection('mysql')
+                ->table('topic')
+                ->select([
+                    'topic.*',
+                    'page_subject AS topic_subject',
+                    'page_path AS topic_path',
+                    'p1.post_time AS topic_created_at',
+                    'p2.post_time AS topic_updated_at',
+                ])
+                ->leftJoin('page', 'page_id', '=', 'topic_page')
+                ->join('post AS p1', 'p1.post_id', '=', 'topic_first_post_id')
+                ->join('post AS p2', 'p2.post_id', '=', 'topic_first_post_id')
+                ->orderBy('topic_id')
+                ->chunk(100000, function ($sql) use ($bar) {
+
+                    foreach ($sql as $row) {
+                        $row = $this->skipPrefix('topic_', (array)$row);
+
+                        $this->rename($row, 'forum', 'forum_id');
+                        $this->rename($row, 'vote', 'score');
+                        $this->rename($row, 'sticky', 'is_sticky');
+                        $this->rename($row, 'announcement', 'is_announcement');
+                        $this->rename($row, 'lock', 'is_locked');
+                        $this->rename($row, 'poll', 'poll_id');
+                        $this->rename($row, 'moved_id', 'prev_forum_id');
+                        $this->rename($row, 'last_post_time', 'last_post_created_at');
+
+                        $this->timestampToDatetime($row['last_post_created_at']);
+                        $this->timestampToDatetime($row['created_at']);
+                        $this->timestampToDatetime($row['updated_at']);
+
+                        if ($row['delete']) {
+                            $row['deleted_at'] = $row['updated_at'];
+                        } else {
+                            $row['deleted_at'] = null;
+                        }
+
+                        unset($row['solved'], $row['page'], $row['delete']);
+
+                        DB::table('topics')->insert($row);
+                        $bar->advance();
+                    }
+                });
+
+            DB::connection('mysql')->table('topic_marking')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    $row = (array) $row;
+
+                    $this->rename($row, 'mark_time', 'marked_at');
+                    $this->timestampToDatetime($row['marked_at']);
+
+                    DB::table('topic_track')->insert($row);
+                    $bar->advance();
+                }
+            });
+
+            DB::connection('mysql')->table('topic_user')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    DB::table('topic_users')->insert((array) $row);
+                    $bar->advance();
+                }
+            });
+
+            $bar->finish();
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
+    }
+
+    /**
+     * @todo Usuniecie posta trzeba przepisac do mongo
+     */
+    public function migratePost()
+    {
+        $this->info('Post...');
+
+        $count = $this->count(['post']);
+        $bar = $this->output->createProgressBar($count);
+
+        DB::beginTransaction();
+
+        try {
+            DB::connection('mysql')
+                ->table('post')
+                ->select(['post.*', 'text_content AS post_content'])
+                ->join('post_text', 'text_id', '=', 'post_text')
+                ->chunk(50000, function ($sql) use ($bar) {
+
+                    foreach ($sql as $row) {
+                        $row = $this->skipPrefix('post_', (array)$row);
+
+                        $this->rename($row, 'forum', 'forum_id');
+                        $this->rename($row, 'topic', 'topic_id');
+                        $this->rename($row, 'user', 'user_id');
+                        $this->rename($row, 'username', 'user_name');
+                        $this->rename($row, 'time', 'created_at');
+                        $this->rename($row, 'edit_time', 'updated_at');
+                        $this->rename($row, 'edit_user', 'editor_id');
+                        $this->rename($row, 'vote', 'score');
+                        $this->rename($row, 'content', 'text');
+
+                        $this->timestampToDatetime($row['created_at']);
+                        $this->timestampToDatetime($row['updated_at']);
+
+                        if ($row['delete']) {
+                            $row['deleted_at'] = $this->timestampToDatetime($row['delete_time']);
+                        } else {
+                            $row['deleted_at'] = null;
+                        }
+
+                        unset($row['enable_smilies'], $row['enable_html'], $row['delete'], $row['delete_user'], $row['delete_time']);
+
+                        DB::table('posts')->insert($row);
+                        $bar->advance();
+                    }
+                });
+
+//            DB::connection('mysql')->table('topic_marking')->chunk(100000, function ($sql) use ($bar) {
+//                foreach ($sql as $row) {
+//                    $row = (array) $row;
+//
+//                    $this->rename($row, 'mark_time', 'marked_at');
+//                    $this->timestampToDatetime($row['marked_at']);
+//
+//                    DB::table('topic_track')->insert($row);
+//                    $bar->advance();
+//                }
+//            });
+//
+//            DB::connection('mysql')->table('topic_user')->chunk(100000, function ($sql) use ($bar) {
+//                foreach ($sql as $row) {
+//                    DB::table('topic_user')->insert((array) $row);
+//                    $bar->advance();
+//                }
+//            });
+
+            $bar->finish();
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -530,14 +857,18 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-        $this->migrateUsers();
+//        $this->migrateUsers();
         /* musi byc przed dodawaniem grup */
-        $this->migratePermissions();
-        $this->migrateGroups();
-        $this->migrateSkills();
-        $this->migrateWords();
-        $this->migrateAlerts();
-        $this->migratePm();
+//        $this->migratePermissions();
+//        $this->migrateGroups();
+//        $this->migrateSkills();
+//        $this->migrateWords();
+//        $this->migrateAlerts();
+//        $this->migratePm();
+//        $this->migrateReputation();
+//        $this->migrateForum();
+//        $this->migrateTopic();
+        $this->migratePost();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }

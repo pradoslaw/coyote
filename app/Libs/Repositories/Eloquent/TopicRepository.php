@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Topic\Subscriber;
 use Coyote\Topic\Track;
@@ -31,7 +32,24 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     {
         $this->applyCriteria();
 
-        $sql = $this->model
+        $pagination = $this->model->select(['topics.id'])
+                    ->orderBy('is_sticky', 'DESC')
+                    ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
+                    ->paginate($perPage);
+
+        $values = [];
+        $pagination->lists('id')->each(function ($item, $key) use (&$values) {
+            $values[] = "($item,$key)";
+        });
+
+        $from = \DB::table('topics AS t')
+                    ->select(['t.*', 'x.ordering'])
+                    ->join(\DB::raw('(VALUES ' . implode(',', $values) . ') AS x (id, ordering)'), 't.id', '=', 'x.id')
+                    ->orderBy('x.ordering')
+                    ->toSql();
+
+        $sql = $this->makeModel()
+                    ->withTrashed()
                     ->select([
                         'topics.*',
                         'forum_track.marked_at AS forum_marked_at',
@@ -54,14 +72,15 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         'prev.name AS prev_forum_name',
                         'pa.post_id AS post_accept_id'
                     ])
+                    ->from(\DB::raw("($from) AS topics"))
                     ->join('forums', 'forums.id', '=', 'topics.forum_id')
                     ->leftJoin('forums AS prev', 'prev.id', '=', 'prev_forum_id')
-                    ->leftJoin('posts AS first', 'first.id', '=', 'topics.first_post_id')
-                    ->leftJoin('posts AS last', 'last.id', '=', 'topics.last_post_id')
+                    ->join('posts AS first', 'first.id', '=', 'topics.first_post_id')
+                    ->join('posts AS last', 'last.id', '=', 'topics.last_post_id')
                     ->leftJoin('users AS author', 'author.id', '=', 'first.user_id')
                     ->leftJoin('users AS poster', 'poster.id', '=', 'last.user_id')
                     ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
-                        $join->on('forum_track.forum_id', '=', 'forums.id');
+                        $join->on('forum_track.forum_id', '=', 'topics.forum_id');
 
                         if ($userId) {
                             $join->on('forum_track.user_id', '=', \DB::raw($userId));
@@ -80,8 +99,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     })
                     ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
                     ->with('tags')
-                    ->orderBy('is_sticky', 'DESC')
-                    ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id']);
+                    ->orderBy('topics.ordering');
 
         if ($userId) {
             $sql = $sql->addSelect(['ts.created_at AS subscribe_on'])
@@ -90,7 +108,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         });
         }
 
-        $result = $sql->paginate($perPage);
+        $result = $sql->get();
 
         foreach ($result as $topic) {
             $lastMarked = $topic->forum_marked_at ?: (new \DateTime('last month'))->format('Y-m-d H:i:s');
@@ -105,7 +123,11 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
             $topic->unread = $topic->last_created_at > $lastMarked && $topic->last_created_at > $topic->topic_marked_at;
         }
 
-        return $result;
+        return new LengthAwarePaginator(
+            $result, $pagination->total(), $perPage, LengthAwarePaginator::resolveCurrentPage(), [
+                'path' => LengthAwarePaginator::resolveCurrentPath()
+            ]
+        );
     }
 
     /**
