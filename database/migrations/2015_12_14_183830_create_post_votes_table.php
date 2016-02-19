@@ -17,8 +17,8 @@ class CreatePostVotesTable extends Migration
             $table->integer('post_id');
             $table->smallInteger('forum_id');
             $table->integer('user_id');
-            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
-            $table->string('ip', 45);
+            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'))->nullable();
+            $table->string('ip', 45)->nullable();
 
             $table->index('forum_id');
             $table->index('post_id');

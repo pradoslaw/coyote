@@ -15,10 +15,10 @@ class CreatePostAcceptsTable extends Migration
         Schema::create('post_accepts', function (Blueprint $table) {
             $table->mediumInteger('id', true);
             $table->mediumInteger('user_id');
-            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
+            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'))->nullable();
             $table->integer('post_id');
             $table->integer('topic_id');
-            $table->string('ip', 45);
+            $table->string('ip', 45)->nullable();
 
             $table->index('post_id');
             $table->index('topic_id');
