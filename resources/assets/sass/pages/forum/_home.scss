@@ -87,12 +87,8 @@
       float: left;
       padding-left: 9px;
       margin-right: 9px;
-
-      &:before {
-        //@include font-awesome($fa-var-angle-right);
-        @include font-awesome($fa-var-file-o);
-        left: 0;
-      }
+      background: url('/img/post.png') no-repeat 0 1px;
+      background-size: 11px 11px;
 
       a {
         color: $gray-light;
@@ -106,9 +102,7 @@
     }
 
     li.sub-unread {
-      &:before {
-        color: $alt-link-hover-color;
-      }
+      background-image: url('/img/post-unread.png');
     }
   }
 }

@@ -322,20 +322,17 @@
     position: relative;
     float: left;
     padding-left: 9px;
-    margin-right: 9px; }
-    .col-forum-description ul li:before {
-      position: absolute;
-      font-family: FontAwesome;
-      content: "";
-      left: 0; }
+    margin-right: 9px;
+    background: url("/img/post.png") no-repeat 0 1px;
+    background-size: 11px 11px; }
     .col-forum-description ul li a {
       color: #777777;
       padding-left: 5px; }
       .col-forum-description ul li a:hover {
         color: #d7661c;
         text-decoration: none; }
-  .col-forum-description ul li.sub-unread:before {
-    color: #d7661c; }
+  .col-forum-description ul li.sub-unread {
+    background-image: url("/img/post-unread.png"); }
 
 .col-avatar {
   width: 4%; }
