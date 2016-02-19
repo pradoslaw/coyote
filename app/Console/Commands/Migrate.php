@@ -734,6 +734,7 @@ class Migrate extends Command
                         unset($row['solved'], $row['page'], $row['delete']);
 
                         $row['subject'] = htmlspecialchars_decode($row['subject']);
+                        $row['path'] = explode('-', $row['path'])[1];
 
                         DB::table('topics')->insert($row);
                         $bar->advance();
@@ -758,6 +759,27 @@ class Migrate extends Command
                     $bar->advance();
                 }
             });
+
+            $sql = DB::connection('mysql')
+                ->table('watch')
+                ->select(['topic_id', 'user_id', 'watch_time'])
+                ->join('topic', 'topic_page', '=', 'page_id')
+                ->groupBy(['user_id', 'page_id', 'watch_module', 'watch_plugin'])
+                ->get();
+
+            foreach ($sql as $row) {
+                $row = (array) $row;
+
+                $this->rename($row, 'watch_time', 'created_at');
+
+                if ($row['created_at']) {
+                    $this->timestampToDatetime($row['created_at']);
+                } else {
+                    $row['created_at'] = null;
+                }
+
+                DB::table('topic_subscribers')->insert($row);
+            }
 
             $bar->finish();
             DB::commit();
