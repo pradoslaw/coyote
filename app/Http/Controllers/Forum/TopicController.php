@@ -116,6 +116,7 @@ class TopicController extends BaseController
         ];
 
         $markTime = null;
+        start_measure('Parsing...');
 
         foreach ($posts as &$post) {
             // parse post or get it from cache
@@ -131,6 +132,8 @@ class TopicController extends BaseController
 
             $markTime = $post->created_at->toDateTimeString();
         }
+
+        stop_measure('Parsing...');
 
         if ($topicMarkTime < $markTime && $forumMarkTime < $markTime) {
             // mark topic as read

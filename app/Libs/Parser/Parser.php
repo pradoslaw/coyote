@@ -3,59 +3,38 @@
 namespace Coyote\Parser;
 
 use Coyote\Parser\Providers\ProviderInterface;
-use Cache;
 
+/**
+ * Class Parser
+ * @package Coyote\Parser
+ */
 final class Parser
 {
+    /**
+     * @var array
+     */
     private $parsers = [];
-    private $enableCache = true;
 
-    public function setEnableCache($flag)
-    {
-        $this->enableCache = (bool) $flag;
-        return $this;
-    }
-
-    public function isCacheEnabled()
-    {
-        return $this->enableCache;
-    }
-
+    /**
+     * @param ProviderInterface $parser
+     */
     public function attach(ProviderInterface $parser)
     {
         $this->parsers[] = $parser;
     }
 
-    public function detach($parser)
+    /**
+     *
+     */
+    public function detach()
     {
-        //
-    }
-
-    public function cache($text, \Closure $closure = null)
-    {
-        if ($closure) {
-            $closure($this);
-        }
-        // @todo klucz do redisa nie powinien uwzgledniac samej tresci ale rowniez liste parserow
-        // wszystko dlatego, ze dwie takie same tresci moga byc parsowane w rozny sposob w zaleznosci
-        // od parsow jakie zostaly wlaczone
-        $crc32 = 'text:' . hash('crc32b', $text);
-
-        if ($this->enableCache) {
-            if (!Cache::has($crc32)) {
-                $text = $this->parse($text);
-                Cache::put($crc32, $text, 60 * 24 * 30); // 30d
-            } else {
-                $text = Cache::get($crc32);
-            }
-        } else {
-            $text = $this->parse($text);
-        }
-
         $this->parsers = [];
-        return $text;
     }
 
+    /**
+     * @param $text
+     * @return mixed
+     */
     public function parse($text)
     {
         foreach ($this->parsers as $parser) {

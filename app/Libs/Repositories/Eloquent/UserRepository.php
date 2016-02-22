@@ -20,6 +20,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
     {
         $sql = $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%');
         if ($orderByUsersId) {
+            // @todo To moze nie zadzialac na postgresie
             $sql->orderBy(\DB::raw('id IN(' . implode(',', $orderByUsersId) . ')'), 'DESC');
         }
 
@@ -32,7 +33,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
      */
     public function findByName($name)
     {
-        return $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name)->first();
+        return $this->model->select(['id', 'name', 'photo'])->whereRaw('LOWER(name) = ?', [mb_strtolower($name)])->first();
     }
 
     /**

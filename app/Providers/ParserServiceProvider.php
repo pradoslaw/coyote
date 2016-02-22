@@ -37,6 +37,7 @@ class ParserServiceProvider extends ServiceProvider
     {
         $this->app->bind('Parser\Microblog', function ($app) {
             return new Parser_Microblog(
+                $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository'],
                 $app['Coyote\Repositories\Eloquent\WordRepository']
             );
@@ -44,6 +45,7 @@ class ParserServiceProvider extends ServiceProvider
 
         $this->app->bind('Parser\Comment', function ($app) {
             return new Parser_Comment(
+                $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository'],
                 $app['Coyote\Repositories\Eloquent\WordRepository']
             );
@@ -51,6 +53,7 @@ class ParserServiceProvider extends ServiceProvider
 
         $this->app->bind('Parser\Sig', function ($app) {
             return new Parser_Sig(
+                $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository'],
                 $app['Coyote\Repositories\Eloquent\WordRepository']
             );
@@ -58,12 +61,14 @@ class ParserServiceProvider extends ServiceProvider
 
         $this->app->bind('Parser\Pm', function ($app) {
             return new Parser_Pm(
+                $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository']
             );
         });
 
         $this->app->bind('Parser\Post', function ($app) {
             return new Parser_Post(
+                $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository'],
                 $app['Coyote\Repositories\Eloquent\WordRepository']
             );
