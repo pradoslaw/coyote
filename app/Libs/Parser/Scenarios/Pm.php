@@ -8,10 +8,10 @@ use Coyote\Parser\Providers\Link;
 use Coyote\Parser\Providers\Markdown;
 use Coyote\Parser\Providers\Purifier;
 use Coyote\Parser\Providers\Smilies;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Debugbar;
 
-class Pm
+class Pm extends Scenario
 {
     /**
      * @var User
@@ -19,10 +19,13 @@ class Pm
     private $user;
 
     /**
+     * @param Cache $cache
      * @param User $user
      */
-    public function __construct(User $user)
+    public function __construct(Cache $cache, User $user)
     {
+        parent::__construct($cache);
+
         $this->user = $user;
     }
 
@@ -34,25 +37,22 @@ class Pm
      */
     public function parse($text)
     {
-        Debugbar::startMeasure('parsing', 'Time for parsing');
+        start_measure('parsing', 'Parsing private message...');
 
         $parser = new Parser();
-        // we don't want to cache user's private messages
-        $parser->setEnableCache(false);
 
-        $text = $parser->cache($text, function ($parser) {
-            $parser->attach((new Markdown($this->user))->setBreaksEnabled(true));
-            $parser->attach(new Purifier());
-            $parser->attach(new Link());
-            $parser->attach(new Geshi());
-        });
+        // we don't want to cache user's private messages
+        $parser->attach((new Markdown($this->user))->setBreaksEnabled(true));
+        $parser->attach(new Purifier());
+        $parser->attach(new Link());
+        $parser->attach(new Geshi());
 
         if (auth()->check() && auth()->user()->allow_smilies) {
             $parser->attach(new Smilies());
         }
 
         $text = $parser->parse($text);
-        Debugbar::stopMeasure('parsing');
+        stop_measure('parsing');
 
         return $text;
     }

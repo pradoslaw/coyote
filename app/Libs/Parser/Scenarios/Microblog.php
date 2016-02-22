@@ -9,11 +9,11 @@ use Coyote\Parser\Providers\Link;
 use Coyote\Parser\Providers\Markdown;
 use Coyote\Parser\Providers\Purifier;
 use Coyote\Parser\Providers\Smilies;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
-use Debugbar;
 
-class Microblog
+class Microblog extends Scenario
 {
     /**
      * @var User
@@ -26,11 +26,14 @@ class Microblog
     private $word;
 
     /**
+     * @param Cache $cache
      * @param User $user
      * @param Word $word
      */
-    public function __construct(User $user, Word $word)
+    public function __construct(Cache $cache, User $user, Word $word)
     {
+        parent::__construct($cache);
+
         $this->user = $user;
         $this->word = $word;
     }
@@ -43,24 +46,33 @@ class Microblog
      */
     public function parse($text)
     {
-        Debugbar::startMeasure('parsing', 'Time for parsing');
+        start_measure('parsing', 'Parsing microblog...');
 
-        $parser = new Parser();
+        $allowSmilies = auth()->check() && auth()->user()->allow_smilies;
+        $isInCache = $this->inCache($text);
 
-        $text = $parser->cache($text, function ($parser) {
-            $parser->attach((new Markdown($this->user))->setBreaksEnabled(true)->setEnableHashParser(true));
-            $parser->attach(new Purifier());
-            $parser->attach(new Link());
-            $parser->attach(new Censore($this->word));
-            $parser->attach(new Geshi());
-        });
+        if (!$isInCache || $allowSmilies) {
+            $parser = new Parser();
 
-        if (auth()->check() && auth()->user()->allow_smilies) {
-            $parser->attach(new Smilies());
+            if (!$isInCache) {
+                $this->cache($text, function () use ($parser) {
+                    $parser->attach((new Markdown($this->user))->setBreaksEnabled(true)->setEnableHashParser(true));
+                    $parser->attach(new Purifier());
+                    $parser->attach(new Link());
+                    $parser->attach(new Censore($this->word));
+                    $parser->attach(new Geshi());
+
+                    return $parser;
+                });
+            }
+
+            if (auth()->check() && auth()->user()->allow_smilies) {
+                $parser->attach(new Smilies());
+            }
+
+            $text = $parser->parse($text);
         }
-
-        $text = $parser->parse($text);
-        Debugbar::stopMeasure('parsing');
+        stop_measure('parsing');
 
         return $text;
     }
