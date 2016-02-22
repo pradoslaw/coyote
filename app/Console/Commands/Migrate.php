@@ -573,7 +573,6 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -951,6 +950,148 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    public function migrateTags()
+    {
+        $this->info('Tag...');
+
+        $sql = DB::connection('mysql')->table('tag')->get();
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($sql as $row) {
+                $row = (array) $row;
+
+                DB::table('tags')->insert(['name' => $row['tag_text'], 'created_at' => $this->timestampToDatetime($row['tag_time'])]);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
+    }
+
+    /**
+     * @todo edit_user przeniesc do mongo
+     */
+    public function migrateMicroblogs()
+    {
+        $this->info('Microblog...');
+
+        $count = $this->count(['microblog', 'microblog_image', 'microblog_vote', 'microblog_tag', 'microblog_discuss']);
+        $bar = $this->output->createProgressBar($count);
+
+        DB::beginTransaction();
+
+        try {
+            DB::connection('mysql')
+                ->table('microblog')
+                ->chunk(50000, function ($sql) use ($bar) {
+
+                    foreach ($sql as $row) {
+                        $row = $this->skipPrefix('microblog_', (array)$row);
+
+                        $this->rename($row, 'parent', 'parent_id');
+                        $this->rename($row, 'user', 'user_id');
+                        $this->rename($row, 'time', 'created_at');
+                        $this->rename($row, 'vote', 'votes');
+                        $this->rename($row, 'sponsored', 'is_sponsored');
+
+                        $this->timestampToDatetime($row['created_at']);
+                        $row['updated_at'] = $row['created_at'];
+
+                        $row['score'] = $row['score'] ?: 0;
+
+                        unset($row['recall'], $row['cache'], $row['edit_time'], $row['edit_user'], $row['ip']);
+
+                        DB::table('microblogs')->insert($row);
+                        $bar->advance();
+                    }
+                });
+
+            DB::connection('mysql')->table('microblog_discuss')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    $row = (array) $row;
+
+                    $this->rename($row, 'discuss_id', 'microblog_id');
+
+                    DB::table('microblog_subscribers')->insert($row);
+                    $bar->advance();
+                }
+            });
+
+            DB::connection('mysql')->table('microblog_vote')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    $row = $this->skipPrefix('vote_', (array) $row);
+
+                    $this->rename($row, 'microblog', 'microblog_id');
+                    $this->rename($row, 'user', 'user_id');
+                    $this->rename($row, 'time', 'created_at');
+
+                    $this->timestampToDatetime($row['created_at']);
+
+                    DB::table('microblog_votes')->insert((array) $row);
+                    $bar->advance();
+                }
+            });
+
+            DB::connection('mysql')->table('microblog_image')->chunk(100000, function ($sql) use ($bar) {
+                foreach ($sql as $row) {
+                    $media = json_encode(['image' => [$row->image_file]]);
+
+                    DB::table('microblogs')->where('id', $row->image_microblog)->update(['media' => $media]);
+                    $bar->advance();
+                }
+            });
+
+            $sql = DB::connection('mysql')
+                ->table('microblog_tag')
+                ->select(['tag_microblog', 'tag_name', 'tag_text', 'tag.tag_id'])
+                ->join('microblog', 'microblog_id', '=', 'tag_microblog')
+                ->leftJoin('tag', 'tag_text', '=', 'tag_name')
+                ->get();
+
+            $custom = [];
+
+            foreach ($sql as $row) {
+                $row = (array) $row;
+
+                $tagId = $row['tag_id'] ?: 0;
+
+                if (!$tagId) {
+                    if (!isset($custom[$row['tag_name']])) {
+                        DB::table('tags')->insert(['name' => $row['tag_name']]);
+                        $tagId = DB::table('tags')->where(['name' => $row['tag_name']])->pluck('id');
+
+                        $custom[$row['tag_name']] = $tagId;
+                    } else {
+                        $tagId = $custom[$row['tag_name']];
+                    }
+                }
+
+                DB::table('microblog_tags')->insert(['tag_id' => $tagId, 'microblog_id' => $row['tag_microblog']]);
+            }
+
+
+            $bar->finish();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
+    }
+
     /**
      * Execute the console command.
      *
@@ -960,6 +1101,7 @@ class Migrate extends Command
     {
         DB::statement('SET session_replication_role = replica');
         $this->migrateUsers();
+        $this->migrateTags();
         /* musi byc przed dodawaniem grup */
         $this->migratePermissions();
         $this->migrateGroups();
@@ -971,6 +1113,7 @@ class Migrate extends Command
         $this->migrateForum();
         $this->migrateTopic();
         $this->migratePost();
+        $this->migrateMicroblogs();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }
