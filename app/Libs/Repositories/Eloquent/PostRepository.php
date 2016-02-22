@@ -51,8 +51,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                     ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
                     ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
                     ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')
-                    ->orderBy('posts.id')
-                    ->orderBy('sessions.updated_at', 'DESC');
+                    ->orderBy('posts.id');
 
         if ($userId) {
             // pobieramy wartosc "id" a nie "created_at" poniewaz kiedys created_at nie bylo zapisywane
