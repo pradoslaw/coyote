@@ -421,7 +421,6 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -510,7 +509,6 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -669,7 +667,6 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -783,7 +780,6 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -944,7 +940,6 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
 
