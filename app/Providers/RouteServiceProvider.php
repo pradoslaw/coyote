@@ -27,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->model('topic', 'Coyote\Topic');
 
         $router->pattern('id', '[0-9]+');
-        $router->pattern('forum', '[A-Za-z\_\/]+');
+        $router->pattern('forum', '[A-Za-z\-\_\/]+');
         $router->pattern('tag', '([\p{L}\p{Mn}0-9\#\._+-]+)');
         $router->bind('forum', function ($path) {
             $result = \Coyote\Forum::where('path', $path)->first();
