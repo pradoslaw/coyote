@@ -55,7 +55,7 @@ class Sig extends Scenario
             $parser = new Parser();
 
             if (!$isInCache) {
-                $this->cache($text, function () use ($parser) {
+                $text = $this->cache($text, function () use ($parser) {
                     $parser->attach((new SimpleMarkdown($this->user))->setBreaksEnabled(true));
                     $parser->attach((new Purifier())->set('HTML.Allowed', 'br,b,strong,i,em,a[href|title|data-user-id],code'));
                     $parser->attach(new Link());

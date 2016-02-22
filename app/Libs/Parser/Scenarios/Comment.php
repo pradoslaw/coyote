@@ -55,7 +55,7 @@ class Comment extends Scenario
             $parser = new Parser();
 
             if (!$this->inCache($text)) {
-                $this->cache($text, function () use ($parser) {
+                $text = $this->cache($text, function () use ($parser) {
                     $parser->attach((new SimpleMarkdown($this->user))->setEnableHashParser(true));
                     $parser->attach((new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id|class],code'));
                     $parser->attach(new Link());

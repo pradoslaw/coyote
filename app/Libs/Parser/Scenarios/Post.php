@@ -55,7 +55,7 @@ class Post extends Scenario
             $parser = new Parser();
 
             if (!$isInCache) {
-                $this->cache($text, function () use ($parser) {
+                $text = $this->cache($text, function () use ($parser) {
                     $parser->attach((new Markdown($this->user))->setBreaksEnabled(true));
                     $parser->attach(new Purifier());
                     $parser->attach(new Link());

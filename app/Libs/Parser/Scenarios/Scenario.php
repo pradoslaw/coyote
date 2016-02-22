@@ -59,7 +59,7 @@ abstract class Scenario
      */
     protected function inCache($text)
     {
-        return $this->cache->has($this->getCacheKey($text));
+        return $this->enableCache && $this->cache->has($this->getCacheKey($text));
     }
 
     /**
@@ -82,10 +82,10 @@ abstract class Scenario
     {
         $parser = $closure();
 
-        if ($this->enableCache) {
-            $key = $this->getCacheKey($text);
+        $key = $this->getCacheKey($text);
+        $text = $parser->parse($text);
 
-            $text = $parser->parse($text);
+        if ($this->enableCache) {
             $this->cache->put($key, $text, self::CACHE_EXPIRATION);
         }
 
