@@ -95,6 +95,27 @@ class Markdown extends \Parsedown implements ProviderInterface
     }
 
     /**
+     * Find the position of the first occurrence of a character in a string
+     *
+     * @param $haystack
+     * @param $needle
+     * @param int $offset
+     * @return bool|mixed
+     */
+    private function strpos($haystack, $needle, $offset = 0)
+    {
+        $result = [];
+
+        foreach (str_split($needle) as $char) {
+            if (($pos = strpos($haystack, $char, $offset)) !== false) {
+                $result[] = $pos;
+            }
+        }
+
+        return $result ? min($result) : false;
+    }
+
+    /**
      * Parse users login
      *
      * @param array $excerpt
@@ -106,8 +127,8 @@ class Markdown extends \Parsedown implements ProviderInterface
         $start = strpos($text, '@');
 
         if (isset($text[$start + 1])) {
-            $exitChar = $text[$start + 1] === '{' ? '}' : ' ';
-            $end = strpos($text, $exitChar, $start);
+            $exitChar = $text[$start + 1] === '{' ? '}' : ': '; // <-- space at the end
+            $end = $this->strpos($text, $exitChar, $start);
 
             if ($end === false) {
                 $end = mb_strlen($text) - $start;
