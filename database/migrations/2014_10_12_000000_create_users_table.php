@@ -62,6 +62,8 @@ class CreateUsersTable extends Migration
 
             $table->unique(['provider', 'provider_id']);
         });
+
+        DB::unprepared('CREATE INDEX "users_name_index" ON "users" USING btree (LOWER(name))');
     }
 
     /**
