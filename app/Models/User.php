@@ -144,7 +144,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function ability($ability)
     {
         // @todo nie powinnismy uzywac cache w modelu
-        if (Cache::getFacadeRoot() instanceof \Illuminate\Cache\TaggableStore) {
+        if (config('cache.driver') !== 'file') {
             $key = 'permission:' . $this->id;
 
             $permissions = Cache::tags(['permissions', $key])->rememberForever($key, function () {
