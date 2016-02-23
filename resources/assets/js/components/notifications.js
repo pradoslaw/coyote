@@ -91,7 +91,7 @@ $(function () {
     };
 
     Session.addListener(function (e) {
-        if (e.key === 'alerts' && e.newValue !== e.oldValue) {console.log('session listener');
+        if (e.key === 'alerts' && e.newValue !== e.oldValue) {
             Alerts.set(e.newValue);
             Alerts.clear();
         }
@@ -103,9 +103,10 @@ $(function () {
         var wrapper = $('#dropdown-alerts');
         var modal = wrapper.find('.dropdown-modal');
         var alerts = modal.find('ul');
+        var url = $(this).children().attr('href');
 
         if ($('li', alerts).length <= 1) {
-            $.get($(this).children().attr('href'), function (json) {
+            $.get(url, function (json) {
                 alerts.html(json.html);
 
                 Alerts.set(json.unread);
@@ -145,7 +146,11 @@ $(function () {
                 }
 
                 $.getScript(_config.cdn + '/js/perfect-scrollbar.js', function() {
-                    modal.perfectScrollbar({suppressScrollX: true});
+                    modal.perfectScrollbar({suppressScrollX: true}).on('ps-y-reach-end', function() {
+                        $.get(url + '?offset=' + $('li', alerts).length, function(json) {
+                            alerts.append(json.html);
+                        });
+                    });
                 });
             });
         }

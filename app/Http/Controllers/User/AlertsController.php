@@ -108,16 +108,19 @@ class AlertsController extends Controller
 
     /**
      * @param Session $session
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ajax(Session $session)
+    public function ajax(Session $session, Request $request)
     {
-        $alerts = $this->alert->takeForUser(auth()->user()->id);
-        $unread = auth()->user()->alerts_unread - $this->mark($alerts);
+        $unread = auth()->user()->alerts_unread;
+
+        $alerts = $this->alert->takeForUser($this->userId, max(10, $unread), $request->query('offset', 0));
+        $unread -= $this->mark($alerts);
 
         $view = view('user.alerts.ajax', [
             'alerts'    => $alerts,
-            'session'   => $session->findBy('user_id', auth()->user()->id, ['created_at']),
+            'session'   => $session->findBy('user_id', $this->userId, ['created_at']),
         ])->render();
 
         return response()->json([

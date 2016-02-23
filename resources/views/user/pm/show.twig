@@ -63,21 +63,18 @@
             wrap.on('mouseenter', '.unread', function() {
                 $(this).off('mouseenter');
                 $(this).animate({backgroundColor: '#fff'});
-            });
+            })
+            .on('ps-y-reach-start', function() {
+                var self = $(this);
 
-            var isProcessing = false;
+                $.get('{{ route('user.pm.show', [pm.id]) }}', {'offset': $('.media', overview).length}, function(html) {
+                    overview.prepend(html);
 
-            wrap.bind('scroll', function() {
-                if (0 === $(this).scrollTop() && !isProcessing) {
-                    isProcessing = true;
-
-                    $.get('{{ route('user.pm.show', [pm.id]) }}', {'offset': $('.media', overview).length}, function(html) {
-                        overview.prepend(html);
-
-                        // jezeli nie ma wiecej wiadomosci, to ajax nie bedzie kolejny raz wyslany
-                        isProcessing = $.trim(html) === '';
-                    });
-                }
+                    // jezeli nie ma wiecej wiadomosci, to ajax nie bedzie kolejny raz wyslany
+                    if ($.trim(html) === '') {
+                        self.off('ps-y-reach-start');
+                    }
+                });
             });
         });
     </script>
