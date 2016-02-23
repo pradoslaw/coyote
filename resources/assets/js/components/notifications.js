@@ -117,8 +117,9 @@ $(function () {
 
                 if (parseInt(Session.getItem('box-notify-h'))) {
                     maxHeight = Math.min(alerts.height(), Math.max(190, parseInt(Session.getItem('box-notify-h'))));
-                    modal.css('max-height', maxHeight); // max wysokosc obszaru powiadomien
                 }
+
+                modal.css('max-height', maxHeight); // max wysokosc obszaru powiadomien
 
                 if (parseInt(Session.getItem('box-notify-w'))) {
                     wrapper.width(parseInt(Session.getItem('box-notify-w')));

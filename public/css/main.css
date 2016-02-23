@@ -7443,7 +7443,6 @@ ul.breadcrumb {
     float: left; }
 
 .dropdown-modal {
-  max-height: 390px;
   position: relative;
   background-color: #fff; }
   .dropdown-modal ul {
