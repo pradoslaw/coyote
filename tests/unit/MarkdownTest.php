@@ -38,6 +38,9 @@ class MarkdownTest extends \Codeception\TestCase\Test
         $input = $this->markdown->parse('@admin:lorem ipsum');
         $this->tester->assertRegExp('/<a href=".*">@admin<\/a>:lorem ipsum/', $input);
 
+        $input = $this->markdown->parse('@admin, lorem ipsum');
+        $this->tester->assertRegExp('/<a href=".*">@admin<\/a>, lorem ipsum/', $input);
+
         $now = new \DateTime('now');
         $this->tester->haveRecord('users', ['name' => 'admin admiński', 'email' => 'foo@bar.com', 'created_at' => $now, 'updated_at' => $now]);
 

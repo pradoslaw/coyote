@@ -127,7 +127,7 @@ class Markdown extends \Parsedown implements ProviderInterface
         $start = strpos($text, '@');
 
         if (isset($text[$start + 1])) {
-            $exitChar = $text[$start + 1] === '{' ? '}' : ': '; // <-- space at the end
+            $exitChar = $text[$start + 1] === '{' ? '}' : ':, '; // <-- space at the end
             $end = $this->strpos($text, $exitChar, $start);
 
             if ($end === false) {
