@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
              * Musi zostac ze wzgledu na stare hashe w poprzedniej wersji Coyote
              */
             $table->string('salt', 34)->nullable();
-            $table->string('password', 64);
+            $table->string('password', 64)->nullable();
             $table->string('provider', 50)->nullable();
             $table->bigInteger('provider_id')->nullable();
             $table->rememberToken();
