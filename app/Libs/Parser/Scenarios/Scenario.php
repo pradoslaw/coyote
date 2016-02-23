@@ -3,6 +3,8 @@
 namespace Coyote\Parser\Scenarios;
 
 use Illuminate\Contracts\Cache\Repository as Cache;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 
 abstract class Scenario
 {
@@ -14,16 +16,32 @@ abstract class Scenario
     protected $cache;
 
     /**
+     * @var User
+     */
+    protected $user;
+
+    /**
+     * @var Word
+     */
+    protected $word;
+
+    /**
      * @var bool
      */
     protected $enableCache = true;
 
+    private $crc32 = [];
+
     /**
      * @param Cache $cache
+     * @param User $user
+     * @param Word $word
      */
-    public function __construct(Cache $cache)
+    public function __construct(Cache $cache, User $user, Word $word)
     {
         $this->cache = $cache;
+        $this->user = $user;
+        $this->word = $word;
     }
 
     /**
@@ -44,6 +62,11 @@ abstract class Scenario
         return $this->enableCache;
     }
 
+    public function isSmiliesAllowed()
+    {
+        return auth()->check() && auth()->user()->allow_smilies;
+    }
+
     /**
      * @param $text
      * @return string
@@ -57,7 +80,7 @@ abstract class Scenario
      * @param $text
      * @return bool
      */
-    protected function inCache($text)
+    protected function isInCache($text)
     {
         return $this->enableCache && $this->cache->has($this->getCacheKey($text));
     }
@@ -66,8 +89,12 @@ abstract class Scenario
      * @param $text
      * @return mixed
      */
-    protected function fromCache($text)
+    protected function getFromCache($text)
     {
+        if (!$this->isInCache($text)) {
+            return false;
+        }
+
         return $this->cache->get($this->getCacheKey($text));
     }
 

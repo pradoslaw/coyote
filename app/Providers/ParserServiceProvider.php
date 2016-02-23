@@ -61,7 +61,6 @@ class ParserServiceProvider extends ServiceProvider
 
         $this->app->bind('Parser\Pm', function ($app) {
             return new Parser_Pm(
-                $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository']
             );
         });

@@ -8,38 +8,11 @@ use Coyote\Parser\Providers\Link;
 use Coyote\Parser\Providers\Purifier;
 use Coyote\Parser\Providers\SimpleMarkdown;
 use Coyote\Parser\Providers\Smilies;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
-use Debugbar;
 
 class Comment extends Scenario
 {
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var Word
-     */
-    private $word;
-
-    /**
-     * @param Cache $cache
-     * @param User $user
-     * @param Word $word
-     */
-    public function __construct(Cache $cache, User $user, Word $word)
-    {
-        parent::__construct($cache);
-
-        $this->user = $user;
-        $this->word = $word;
-    }
-
-    /**
-     * Parse microblog
+     * Parse comment
      *
      * @param string $text
      * @return string
@@ -48,13 +21,15 @@ class Comment extends Scenario
     {
         start_measure('parsing', 'Parsing comment...');
 
-        $allowSmilies = auth()->check() && auth()->user()->allow_smilies;
-        $isInCache = $this->inCache($text);
+        $isInCache = $this->isInCache($text);
+        if ($isInCache) {
+            $text = $this->getFromCache($text);
+        }
 
-        if (!$isInCache || $allowSmilies) {
+        if (!$isInCache || $this->isSmiliesAllowed()) {
             $parser = new Parser();
 
-            if (!$this->inCache($text)) {
+            if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {
                     $parser->attach((new SimpleMarkdown($this->user))->setEnableHashParser(true));
                     $parser->attach((new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id|class],code'));
@@ -63,16 +38,14 @@ class Comment extends Scenario
 
                     return $parser;
                 });
-            } else {
-                $text = $this->fromCache($text);
             }
 
-            if (auth()->check() && auth()->user()->allow_smilies) {
+            if ($this->isSmiliesAllowed()) {
                 $parser->attach(new Smilies());
+                $text = $parser->parse($text);
             }
-
-            $text = $parser->parse($text);
         }
+
         stop_measure('parsing');
 
         return $text;

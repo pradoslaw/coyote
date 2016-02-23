@@ -16,29 +16,6 @@ use Debugbar;
 class Sig extends Scenario
 {
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var Word
-     */
-    private $word;
-
-    /**
-     * @param Cache $cache
-     * @param User $user
-     * @param Word $word
-     */
-    public function __construct(Cache $cache, User $user, Word $word)
-    {
-        parent::__construct($cache);
-
-        $this->user = $user;
-        $this->word = $word;
-    }
-
-    /**
      * Parse microblog
      *
      * @param string $text
@@ -48,10 +25,12 @@ class Sig extends Scenario
     {
         start_measure('parsing', 'Parsing signature...');
 
-        $allowSmilies = auth()->check() && auth()->user()->allow_smilies;
-        $isInCache = $this->inCache($text);
+        $isInCache = $this->isInCache($text);
+        if ($isInCache) {
+            $text = $this->getFromCache($text);
+        }
 
-        if (!$isInCache || $allowSmilies) {
+        if (!$isInCache || $this->isSmiliesAllowed()) {
             $parser = new Parser();
 
             if (!$isInCache) {
@@ -63,15 +42,12 @@ class Sig extends Scenario
 
                     return $parser;
                 });
-            } else {
-                $this->fromCache($text);
             }
 
-            if ($allowSmilies) {
+            if ($this->isSmiliesAllowed()) {
                 $parser->attach(new Smilies());
+                $text = $parser->parse($text);
             }
-
-            $text = $parser->parse($text);
         }
         stop_measure('parsing');
 

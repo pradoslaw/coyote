@@ -8,7 +8,6 @@ use Coyote\Parser\Providers\Link;
 use Coyote\Parser\Providers\Markdown;
 use Coyote\Parser\Providers\Purifier;
 use Coyote\Parser\Providers\Smilies;
-use Illuminate\Contracts\Cache\Repository as Cache;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 
 class Pm extends Scenario
@@ -16,16 +15,13 @@ class Pm extends Scenario
     /**
      * @var User
      */
-    private $user;
+    protected $user;
 
     /**
-     * @param Cache $cache
      * @param User $user
      */
-    public function __construct(Cache $cache, User $user)
+    public function __construct(User $user)
     {
-        parent::__construct($cache);
-
         $this->user = $user;
     }
 
@@ -47,7 +43,7 @@ class Pm extends Scenario
         $parser->attach(new Link());
         $parser->attach(new Geshi());
 
-        if (auth()->check() && auth()->user()->allow_smilies) {
+        if ($this->isSmiliesAllowed()) {
             $parser->attach(new Smilies());
         }
 

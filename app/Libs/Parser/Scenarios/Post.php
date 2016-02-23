@@ -9,35 +9,9 @@ use Coyote\Parser\Providers\Link;
 use Coyote\Parser\Providers\Markdown;
 use Coyote\Parser\Providers\Purifier;
 use Coyote\Parser\Providers\Smilies;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 
 class Post extends Scenario
 {
-    /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var Word
-     */
-    private $word;
-
-    /**
-     * @param Cache $cache
-     * @param User $user
-     * @param Word $word
-     */
-    public function __construct(Cache $cache, User $user, Word $word)
-    {
-        parent::__construct($cache);
-
-        $this->user = $user;
-        $this->word = $word;
-    }
-
     /**
      * Parse post
      *
@@ -48,10 +22,12 @@ class Post extends Scenario
     {
         start_measure('parsing', 'Parsing post...');
 
-        $allowSmilies = auth()->check() && auth()->user()->allow_smilies;
-        $isInCache = $this->inCache($text);
+        $isInCache = $this->isInCache($text);
+        if ($isInCache) {
+            $text = $this->getFromCache($text);
+        }
 
-        if (!$isInCache || $allowSmilies) {
+        if (!$isInCache || $this->isSmiliesAllowed()) {
             $parser = new Parser();
 
             if (!$isInCache) {
@@ -64,15 +40,12 @@ class Post extends Scenario
 
                     return $parser;
                 });
-            } else {
-                $text = $this->fromCache($text);
             }
 
-            if ($allowSmilies) {
+            if ($this->isSmiliesAllowed()) {
                 $parser->attach(new Smilies());
+                $text = $parser->parse($text);
             }
-
-            $text = $parser->parse($text);
         }
         stop_measure('parsing');
 
