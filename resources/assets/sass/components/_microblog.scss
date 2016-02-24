@@ -36,6 +36,12 @@
   > .thumbnails {
     margin-top: 20px;
   }
+
+  img:not(.img-smile) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 .btn-thumbs, .btn-reply, .btn-subscribe {

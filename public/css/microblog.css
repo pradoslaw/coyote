@@ -126,6 +126,10 @@
   padding: 10px 0; }
   .microblog-text > .thumbnails {
     margin-top: 20px; }
+  .microblog-text img:not(.img-smile) {
+    display: block;
+    max-width: 100%;
+    height: auto; }
 
 .btn-thumbs, .btn-reply, .btn-subscribe {
   padding: 2px 7px 2px 25px;
