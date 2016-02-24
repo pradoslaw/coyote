@@ -124,7 +124,7 @@ Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     Route::post('Upload', ['uses' => 'SubmitController@upload', 'as' => 'upload', 'middleware' => 'auth']);
     Route::post('Paste', ['uses' => 'SubmitController@paste', 'as' => 'paste', 'middleware' => 'auth']);
     Route::get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'view']);
-    Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'vote', 'middleware' => 'auth']);
+    Route::post('Vote/{id}', ['uses' => 'VoteController@post', 'as' => 'vote']);
     Route::get('Vote/{id}', ['uses' => 'VoteController@voters', 'as' => 'voters']);
     Route::post('Subscribe/{id}', ['uses' => 'SubscribeController@post', 'as' => 'subscribe', 'middleware' => 'auth']);
     Route::post('Delete/{id}', ['uses' => 'SubmitController@delete', 'as' => 'delete', 'middleware' => 'auth']);
