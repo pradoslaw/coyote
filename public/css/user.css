@@ -236,7 +236,7 @@
   #box-skills .rate-large:before {
     font-size: 17px; }
 
-#box-skills .rate.mark:before {
+#box-skills .rate.marked:before {
   content: ""; }
 
 #box-skills .form-group:last-child {
@@ -246,5 +246,9 @@
   color: #777777;
   margin-right: 5px;
   cursor: move; }
+
+#box-skills .alert-popover {
+  right: 15px;
+  top: 43px; }
 
 /*# sourceMappingURL=user.css.map */
