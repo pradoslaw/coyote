@@ -30,8 +30,6 @@ abstract class Scenario
      */
     protected $enableCache = true;
 
-    private $crc32 = [];
-
     /**
      * @param Cache $cache
      * @param User $user
@@ -62,6 +60,9 @@ abstract class Scenario
         return $this->enableCache;
     }
 
+    /**
+     * @return bool
+     */
     public function isSmiliesAllowed()
     {
         return auth()->check() && auth()->user()->allow_smilies;
@@ -73,7 +74,7 @@ abstract class Scenario
      */
     protected function getCacheKey($text)
     {
-        return 'text:' . class_basename($this) . hash('crc32b', $text);
+        return 'text:' . class_basename($this) . md5($text);
     }
 
     /**
@@ -91,10 +92,6 @@ abstract class Scenario
      */
     protected function getFromCache($text)
     {
-        if (!$this->isInCache($text)) {
-            return false;
-        }
-
         return $this->cache->get($this->getCacheKey($text));
     }
 

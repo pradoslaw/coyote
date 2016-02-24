@@ -15,10 +15,6 @@ class ViewController extends Controller
     public function index($id, Microblog $repository)
     {
         $microblog = $repository->findOrFail($id);
-        $excerpt = excerpt($microblog->text);
-
-        $this->breadcrumb->push('Mikroblog', route('microblog.home'));
-        $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
 
         $microblog->text = app()->make('Parser\Microblog')->parse($microblog->text);
         $parser = app()->make('Parser\Comment');
@@ -27,6 +23,11 @@ class ViewController extends Controller
             $comment->text = $parser->parse($comment->text);
         }
 
-        return parent::view('microblog.view')->with(['microblog' => $microblog, 'excerpt' => $excerpt]);
+        $excerpt = excerpt($microblog->text);
+
+        $this->breadcrumb->push('Mikroblog', route('microblog.home'));
+        $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
+
+        return $this->view('microblog.view')->with(['microblog' => $microblog, 'excerpt' => $excerpt]);
     }
 }
