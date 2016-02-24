@@ -108,7 +108,8 @@ return [
         ],
         // m.in. w mikroblogach
         'text' => [
-            'required'      => 'Proszę wpisać treść'
+            'required'      => 'Proszę wpisać treść',
+            'max'           => 'Maksymalna długość tekstu to :max znaków'
         ],
         // m.in. w wiadomosciach prywatnych
         'author' => [
