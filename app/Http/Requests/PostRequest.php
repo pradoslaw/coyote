@@ -45,7 +45,7 @@ class PostRequest extends Request
                 $rules['is_sticky'] = 'bool';
             }
 
-            if ($forum->required_tag) {
+            if ($forum->require_tag) {
                 $rules['tag'] .= '|required';
             }
 
