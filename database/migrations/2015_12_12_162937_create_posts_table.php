@@ -24,7 +24,7 @@ class CreatePostsTable extends Migration
             $table->integer('editor_id')->nullable();
             $table->smallInteger('score')->default(0);
             $table->text('text');
-            $table->string('ip', 45);
+            $table->string('ip');
             $table->string('browser');
             $table->string('host');
 

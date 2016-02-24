@@ -21,6 +21,9 @@ class CreatePostLogTable extends Migration
             $table->text('text')->nullable();
             $table->json('tags')->nullable();
             $table->string('comment')->nullable();
+            $table->string('ip');
+            $table->string('browser');
+            $table->string('host');
 
             $table->index('post_id');
 
