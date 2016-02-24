@@ -515,7 +515,8 @@ class PostController extends BaseController
                     ->notify();
             }
 
-            if ($post->user_id) {
+            // increase/decrease reputation points according to the forum settings
+            if ($post->user_id && $forum->enable_reputation) {
                 // add or subtract reputation points
                 app()->make('Reputation\Post\Vote')
                     ->setUserId($post->user_id)
