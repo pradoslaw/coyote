@@ -14,7 +14,7 @@ class CreateForumReasonsTable extends Migration
     {
         Schema::create('forum_reasons', function (Blueprint $table) {
             $table->smallInteger('id', true);
-            $table->string('name', 50);
+            $table->string('name');
             $table->text('description');
         });
     }

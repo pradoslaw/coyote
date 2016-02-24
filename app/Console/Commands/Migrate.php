@@ -101,6 +101,17 @@ class Migrate extends Command
         return $result;
     }
 
+    private function fixSequence($tables)
+    {
+        if (!is_array($tables)) {
+            $tables = [$tables];
+        }
+
+        foreach ($tables as $table) {
+            DB::unprepared("SELECT setval('${table}_id_seq', (SELECT MAX(id) FROM $table))");
+        }
+    }
+
     /**
      * @todo ip_invalid zapisac do mongo
      * @todo Co z kolumna flood?
@@ -665,6 +676,19 @@ class Migrate extends Command
             }
 
             $bar->finish();
+
+            $sql = DB::connection('mysql')->table('forum_reason')->get();
+
+            foreach ($sql as $row) {
+                $row = $this->skipPrefix('reason_', (array) $row);
+
+                $this->rename($row, 'content', 'description');
+
+                DB::table('forum_reasons')->insert($row);
+            }
+
+            $this->fixSequence(['forums', 'forum_permissions', 'forum_track', 'forum_reasons']);
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -1100,20 +1124,20 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-        $this->migrateUsers();
-        $this->migrateTags();
+//        $this->migrateUsers();
+//        $this->migrateTags();
         /* musi byc przed dodawaniem grup */
-        $this->migratePermissions();
-        $this->migrateGroups();
-        $this->migrateSkills();
-        $this->migrateWords();
-        $this->migrateAlerts();
-        $this->migratePm();
-        $this->migrateReputation();
+//        $this->migratePermissions();
+//        $this->migrateGroups();
+//        $this->migrateSkills();
+//        $this->migrateWords();
+//        $this->migrateAlerts();
+//        $this->migratePm();
+//        $this->migrateReputation();
         $this->migrateForum();
-        $this->migrateTopic();
-        $this->migratePost();
-        $this->migrateMicroblogs();
+//        $this->migrateTopic();
+//        $this->migratePost();
+//        $this->migrateMicroblogs();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }
