@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Events\PmWasSent;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
@@ -160,14 +161,21 @@ class PmController extends Controller
             $user = auth()->user();
             $pm = $this->pm->submit($user, $request);
 
+            $excerpt = excerpt($request->get('text'));
+
+            // we need to send notification to recipient
             (new Alert_Pm($this->alert))->with([
                 'user_id'     => $pm->author_id,
                 'sender_id'   => $user->id,
                 'sender_name' => $user->name,
-                'subject'     => excerpt($request->get('text'), 48),
+                'subject'     => $excerpt,
                 'url'         => route('user.pm.show', [$pm->id - 1], false)
             ])->notify();
 
+            // broadcast event: we can use it to show message in real time
+            event(new PmWasSent($pm->author_id, $user->id, $user->name, $excerpt));
+
+            // redirect to sent message...
             return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
         });
     }
