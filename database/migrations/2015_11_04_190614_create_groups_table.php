@@ -25,7 +25,7 @@ class CreateGroupsTable extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->foreign('group_id')->references('groups')->on('id');
+            $table->foreign('group_id')->references('id')->on('groups');
         });
     }
 
