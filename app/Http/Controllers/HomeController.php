@@ -40,7 +40,7 @@ class HomeController extends Controller
             'voted'                 => Cache::remember('homepage:voted', 30, function () use ($topic) {
                 return $topic->voted();
             }),
-            'interesting'           => $topic->interesting($this->userId)
+            'interesting'           => $topic->interesting($this->userId),
         ]);
     }
 }

@@ -49,7 +49,7 @@ abstract class Controller extends BaseController
     public function __construct()
     {
         $this->breadcrumb = new Coyote\Breadcrumb();
-        $this->userId = auth()->id();
+        $this->userId = auth()->check() ? auth()->user()->id : null;
         $this->sessionId = request()->session()->getId();
 
         // URL to main page and CDN
