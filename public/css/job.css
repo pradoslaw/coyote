@@ -212,6 +212,42 @@
   #box-search .btn-search {
     display: block; }
 
+#box-filter h5 {
+  color: #646466;
+  font-size: Arial, Verdana, Helvetica, sans-serif; }
+
+#box-filter .list-group-item {
+  padding: 5px 5px;
+  margin-top: 4px; }
+  #box-filter .list-group-item a {
+    color: #555555;
+    display: block;
+    font-size: 12px; }
+    #box-filter .list-group-item a i {
+      font-size: 17px;
+      vertical-align: middle; }
+    #box-filter .list-group-item a span {
+      padding-left: 3px;
+      color: #777777; }
+    #box-filter .list-group-item a small {
+      color: #777777;
+      font-size: 9px; }
+    #box-filter .list-group-item a:hover {
+      text-decoration: none; }
+
+#box-employers {
+  margin-top: 43px; }
+  #box-employers h4 {
+    text-indent: -9999px;
+    background: url("/img/job-headline.png") no-repeat;
+    background-size: contain;
+    height: 100px;
+    margin-bottom: 0; }
+  #box-employers ul li {
+    padding: 8px 0 8px 0; }
+    #box-employers ul li i {
+      color: #5cb85c; }
+
 #box-jobs table {
   border: 1px solid #d0d0d0;
   background: #fff;
@@ -237,14 +273,14 @@
   width: 70px; }
 
 .col-body {
-  padding: 10px 1% 10px 0 !important; }
+  padding: 7px 1% 7px 0 !important; }
   .col-body h2 {
-    font-size: 16px;
+    font-size: 15px;
     margin: 0 0 5px 0; }
   .col-body p {
     font-size: 12px;
     clear: both;
-    padding: 2px 0;
+    padding: 0;
     line-height: 1.4;
     margin: 0; }
     .col-body p a {
@@ -258,7 +294,7 @@
     padding: 0; }
     .col-body .tag-clouds li a {
       font-size: 12px;
-      padding: 2px 6px; }
+      padding: 1px 6px; }
 
 .col-salary {
   width: 15%; }

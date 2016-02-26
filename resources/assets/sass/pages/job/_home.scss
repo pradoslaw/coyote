@@ -25,6 +25,9 @@
   margin-bottom: 20px;
 }
 
+// Formularz wyszukiwania oferty
+// -------------------------------------------
+
 #box-search {
   margin: 20px 0 30px 0;
 
@@ -34,6 +37,64 @@
 
   .btn-search {
     display: block;
+  }
+}
+
+#box-filter {
+  h5 {
+    color: $box-header-color;
+    font-size: $font-family-base;
+  }
+
+  .list-group-item {
+    padding: 5px 5px;
+    margin-top: 4px;
+
+    a {
+      color: $gray;
+      display: block;
+      font-size: 12px;
+
+      i {
+        font-size: $font-size-large;
+        vertical-align: middle;
+      }
+
+      span {
+        padding-left: 3px;
+        color: $gray-light;
+      }
+
+      small {
+        color: $gray-light;
+        font-size: 9px;
+      }
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+#box-employers {
+  margin-top: 43px;
+
+  h4 {
+    text-indent: -9999px;
+    background: url('/img/job-headline.png') no-repeat;
+    background-size: contain;
+    height: 100px;
+    margin-bottom: 0;
+  }
+
+  ul {
+    li {
+      padding: 8px 0 8px 0;
+
+      i {
+        color: $brand-success;
+      }
+    }
   }
 }
 
@@ -74,17 +135,17 @@
 }
 
 .col-body {
-  padding: 10px 1% 10px 0 !important;
+  padding: 7px 1% 7px 0 !important;
 
   h2 {
-    font-size: 16px;
+    font-size: 15px;
     margin: 0 0 5px 0;
   }
 
   p {
     font-size: 12px;
     clear: both;
-    padding: 2px 0;
+    padding: 0;
     line-height: 1.4;
     margin: 0;
 
@@ -108,7 +169,7 @@
     li {
       a {
         font-size: 12px;
-        padding: 2px 6px;
+        padding: 1px 6px;
       }
     }
   }
