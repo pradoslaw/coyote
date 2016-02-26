@@ -155,6 +155,10 @@ class Migrate extends Command
                 $this->setNullIfEmpty($row['photo']);
                 $row['updated_at'] = $row['visited_at'] ?: $row['created_at'];
 
+                if ($row['group_id'] <= 2) {
+                    $row['group_id'] = null;
+                }
+
                 DB::table('users')->insert($row);
 
                 $bar->advance();
