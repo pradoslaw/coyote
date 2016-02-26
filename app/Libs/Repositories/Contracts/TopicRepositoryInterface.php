@@ -88,7 +88,8 @@ interface TopicRepositoryInterface extends RepositoryInterface
     public function voted($limit = 7);
 
     /**
+     * @param int $userId
      * @param int $limit
      */
-    public function interesting($limit = 7);
+    public function interesting($userId, $limit = 7);
 }

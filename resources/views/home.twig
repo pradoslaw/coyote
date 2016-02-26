@@ -23,32 +23,23 @@
                                 <div id="box-forum-headline">
                                     <div class="tab-content">
                                         <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 0 ? 'active' }}" id="interesting">
-                                            <div class="row">
-                                                <span class="col-sm-2 hidden-xs">
-                                                    <strong>843</strong>
-                                                    <small>wyświetleń</small>
-                                                </span>
-                                                <div class="col-sm-10 col-xs-12">
-                                                    <a title="[18 wrzesień 2015, 14:34] Responsywny layout. Prace trwają..." href="http://forum.4programmers.net/Coyote/257945-responsywny_layout_prace_trwaja?view=unread" class="title" data-category="homepage-forum-headline" data-action="most-intresting">Responsywny layout. Prace trwają...</a>
-                                                    <a href="http://forum.4programmers.net/Coyote" class="category">Coyote</a>
-                                                    <small class="pull-right">18 wrzesień 2015, 14:34</small>
+                                            {% for topic in interesting %}
+                                                <div class="row">
+                                                    <span class="col-sm-2 hidden-xs">
+                                                        <strong>{{ topic.views }}</strong>
+                                                        <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
+                                                    </span>
+                                                    <div class="col-sm-10 col-xs-12">
+                                                        <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_path, topic.id, topic.path]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
+                                                        <a href="{{ route('forum.category', [topic.forum_path]) }}" class="category">{{ topic.name }}</a>
+                                                        <small class="pull-right">{{ topic.last_post_created_at|format_date }}</small>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <span class="col-sm-2 hidden-xs">
-                                                    <strong>390</strong>
-                                                    <small>wyświetleń</small>
-                                                </span>
-                                                <div class="col-sm-10 col-xs-12">
-                                                    <a title="[dzisiaj, 11:04] Tworzenie stron internetowych a dochody" href="http://forum.4programmers.net/Kariera/258281-tworzenie_stron_internetowych_a_dochody?view=unread" class="title" data-category="homepage-forum-headline" data-action="most-intresting">Tworzenie stron internetowych a dochody</a>
-                                                    <a href="http://forum.4programmers.net/Kariera" class="category">Kariera</a>
-                                                    <small class="pull-right">dzisiaj, 11:04</small>
-                                                </div>
-                                            </div>
+                                            {% endfor %}
                                         </div>
 
                                         <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 1 ? 'active' }}" id="rated">
-                                            {% for topic in mostVoted %}
+                                            {% for topic in voted %}
                                                 <div class="row">
                                                     <span class="col-sm-2 hidden-xs">
                                                         <strong>{{ topic.score }}</strong>

@@ -251,17 +251,36 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     }
 
     /**
+     * @param string $sort
+     * @return mixed
+     */
+    private function getPackage($sort)
+    {
+        return $this->model
+                ->select([
+                    'id',
+                    'forum_id',
+                    'subject',
+                    'path',
+                    'is_locked',
+                    'last_post_created_at',
+                    'views',
+                    'score',
+                    'replies',
+                    'deleted_at',
+                    'first_post_id'])
+                ->orderBy($sort, 'DESC')
+                ->limit(3000)
+                ->toSql();
+    }
+
+    /**
      * @param int $limit
      * @return mixed
      */
     public function newest($limit = 7)
     {
-        $sub = $this->model
-                    ->select(['id', 'forum_id', 'subject', 'path', 'last_post_created_at', 'views', 'score', 'deleted_at'])
-                    ->orderBy('id', 'DESC')
-                    ->limit(3000)
-                    ->toSql();
-
+        $sub = $this->getPackage('id');
         $this->applyCriteria();
 
         return $this->model
@@ -290,7 +309,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         'forum_id',
                         'subject',
                         'topics.path',
-                        'forums.name AS forum_name',
+                        'forums.name',
                         'forums.path AS forum_path',
                         'last_post_created_at',
                         'views',
@@ -308,10 +327,56 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     }
 
     /**
+     * @param int $userId
      * @param int $limit
      */
-    public function interesting($limit = 7)
+    public function interesting($userId, $limit = 7)
     {
-        //
+        $this->makeModel();
+
+        $sub = $this->getPackage('last_post_created_at');
+        $this->applyCriteria();
+
+        return $this->model
+                    ->select([
+                        'topics.id',
+                        'topics.forum_id',
+                        'topics.subject',
+                        'topics.path',
+                        'forums.name',
+                        'forums.path AS forum_path',
+                        'last_post_created_at',
+                        'views',
+                        'topics.score',
+                        'topics.deleted_at'
+                    ])
+                    ->from(\DB::raw("($sub) AS topics"))
+                    ->withTrashed()
+                    ->join('forums', 'forums.id', '=', 'forum_id')
+                    ->join('posts', 'posts.id', '=', 'first_post_id')
+                    ->leftJoin('topic_visits AS tv', function ($join) use ($userId) {
+                        $join->on('tv.topic_id', '=', 'topics.id');
+
+                        if ($userId) {
+                            $join->on('tv.user_id', '=', \DB::raw($userId));
+                        }
+                    })
+                    ->where('forums.is_locked', 0)
+                    ->where('topics.is_locked', 0)
+                    ->orderBy(\DB::raw('
+                        LEAST(1000, 200 * topics.score) +
+                        LEAST(1000, 100 * topics.replies) +
+                        LEAST(1000, 15 * topics.views) -
+                        (extract(epoch from now()) - extract(epoch from topics.last_post_created_at)) / 4500 -
+                        (extract(epoch from now()) - extract(epoch from posts.created_at)) / 1000 -
+							CASE
+							    WHEN tv.updated_at IS NOT NULL AND tv.updated_at > last_post_created_at
+							    THEN (extract(epoch from tv.updated_at) - extract(epoch from last_post_created_at)) / 450
+							    ELSE 0
+							END
+                    '), 'DESC')
+                    ->limit($limit)
+                    ->get();
+
     }
 }
