@@ -377,6 +377,5 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     '), 'DESC')
                     ->limit($limit)
                     ->get();
-
     }
 }
