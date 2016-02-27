@@ -1120,6 +1120,53 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    public function migrateTopicVisits()
+    {
+        $this->info('Topic visits...');
+
+        $count = DB::connection('mysql')->table('page_track')->join('topic', 'topic_page', '=', 'track_page')->count();
+        $bar = $this->output->createProgressBar($count);
+
+        DB::beginTransaction();
+
+        try {
+            DB::connection('mysql')
+                ->table('page_track')
+                ->select(['page_track.*', 'topic_id AS track_topic_id'])
+                ->join('topic', 'topic_page', '=', 'track_page')
+                ->chunk(50000, function ($sql) use ($bar) {
+                    foreach ($sql as $row) {
+                        $row = $this->skipPrefix('track_', (array) $row);
+
+                        $this->rename($row, 'user', 'user_id');
+                        $this->rename($row, 'time', 'created_at');
+                        $this->rename($row, 'last_visit', 'updated_at');
+                        $this->rename($row, 'count', 'visits');
+
+                        $this->timestampToDatetime($row['created_at']);
+                        $this->timestampToDatetime($row['updated_at']);
+
+                        unset($row['page']);
+
+                        DB::table('topic_visits')->insert($row);
+                        $bar->advance();
+                    }
+                });
+
+
+            DB::commit();
+            $bar->finish();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
+    }
+
     /**
      * Execute the console command.
      *
@@ -1128,20 +1175,21 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-//        $this->migrateUsers();
-//        $this->migrateTags();
+        $this->migrateUsers();
+        $this->migrateTags();
         /* musi byc przed dodawaniem grup */
-//        $this->migratePermissions();
-//        $this->migrateGroups();
-//        $this->migrateSkills();
-//        $this->migrateWords();
-//        $this->migrateAlerts();
-//        $this->migratePm();
-//        $this->migrateReputation();
+        $this->migratePermissions();
+        $this->migrateGroups();
+        $this->migrateSkills();
+        $this->migrateWords();
+        $this->migrateAlerts();
+        $this->migratePm();
+        $this->migrateReputation();
         $this->migrateForum();
-//        $this->migrateTopic();
-//        $this->migratePost();
-//        $this->migrateMicroblogs();
+        $this->migrateTopic();
+        $this->migratePost();
+        $this->migrateMicroblogs();
+        $this->migrateTopicVisits();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }
