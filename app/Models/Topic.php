@@ -17,6 +17,11 @@ class Topic extends Model
     protected $fillable = ['subject', 'path', 'forum_id', 'is_sticky', 'is_announcement'];
 
     /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
      * @param $query
      * @param $userId
      * @return mixed
@@ -66,5 +71,21 @@ class Topic extends Model
     public function users()
     {
         return $this->hasMany('Coyote\Topic\User');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function forum()
+    {
+        return $this->belongsTo('Coyote\Forum');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function page()
+    {
+        return $this->morphOne('Coyote\Page', 'content');
     }
 }

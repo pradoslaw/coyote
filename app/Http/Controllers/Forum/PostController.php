@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Alert\Alert;
+use Coyote\Events\TopicWasDeleted;
 use Coyote\Forum\Reason;
 use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Subscriber;
@@ -391,6 +392,9 @@ class PostController extends BaseController
                             ->setUsersId($subscribersId->toArray())
                             ->notify();
                     }
+
+                    // fire the event. it can be used to delete row from "pages" table or from search index
+                    event(new TopicWasDeleted($topic));
                 } else {
                     $activity = Stream_Restore::class;
                     $topic->restore();

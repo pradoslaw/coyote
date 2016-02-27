@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Events\PageWasCreated;
+use Coyote\Events\TopicWasCreated;
 use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
@@ -178,18 +180,18 @@ class TopicController extends BaseController
         if (\App::environment('local', 'dev')) {
             $this->topic->addViews($topic->id);
         } else {
-            $user = auth()->check() ? auth()->id() : $request->session()->getId();
+            $user = auth()->check() ? $this->userId : $request->session()->getId();
             // on production environment: store hit in redis
             app('redis')->sadd('counter:topic:' . $topic->id, $user . ';' . round(time() / 300) * 300);
         }
 
         if (auth()->check()) {
             $subscribers = $topic->subscribers()->lists('topic_id', 'user_id');
-            $subscribe = isset($subscribers[auth()->id()]);
+            $subscribe = isset($subscribers[$this->userId]);
 
             if (!$subscribe && auth()->user()->allow_subscribe) {
                 // if this is the first post in this topic, subscribe option depends on user's default setting
-                if (!$topic->users()->where('user_id', auth()->id())->count()) {
+                if (!$topic->users()->where('user_id', $this->userId)->count()) {
                     $subscribe = true;
                 }
             }
@@ -243,7 +245,7 @@ class TopicController extends BaseController
             $topic = $this->topic->create($request->all() + ['path' => $path, 'forum_id' => $forum->id]);
             // create new post and assign it to topic. don't worry about the rest: trigger will do the work
             $post = $this->post->create($request->all() + [
-                'user_id'   => auth()->id(),
+                'user_id'   => $this->userId,
                 'topic_id'  => $topic->id,
                 'forum_id'  => $forum->id,
                 'ip'        => request()->ip(),
@@ -257,12 +259,12 @@ class TopicController extends BaseController
             $this->topic->setTags($topic->id, $request->get('tag', []));
 
             // save it in log...
-            $log->add($post->id, auth()->id(), $post->text, $topic->subject, $request->get('tag', []));
+            $log->add($post->id, $this->userId, $post->text, $topic->subject, $request->get('tag', []));
 
             if (auth()->check()) {
-                $this->topic->subscribe($topic->id, auth()->id(), $request->get('subscribe'));
+                $this->topic->subscribe($topic->id, $this->userId, $request->get('subscribe'));
                 // automatically subscribe post
-                $this->post->subscribe($post->id, auth()->id(), true);
+                $this->post->subscribe($post->id, $this->userId, true);
             }
 
             // parsing text and store it in cache
@@ -275,7 +277,7 @@ class TopicController extends BaseController
             if ($usersId) {
                 app()->make('Alert\Post\Login')->with([
                     'users_id'    => $usersId,
-                    'sender_id'   => auth()->id(),
+                    'sender_id'   => $this->userId,
                     'sender_name' => $request->get('user_name', auth()->user()->name),
                     'subject'     => excerpt($request->subject),
                     'excerpt'     => excerpt($post->text),
@@ -283,6 +285,8 @@ class TopicController extends BaseController
                 ])->notify();
             }
 
+            // fire the event. it can be used to index a content and/or add page path to "pages" table
+            event(new TopicWasCreated($topic));
             $actor = new Stream_Actor(auth()->user());
 
             if (auth()->guest()) {
@@ -308,12 +312,12 @@ class TopicController extends BaseController
      */
     public function subscribe($id)
     {
-        $subscriber = Topic_Subscriber::where('topic_id', $id)->where('user_id', auth()->id())->first();
+        $subscriber = Topic_Subscriber::where('topic_id', $id)->where('user_id', $this->userId)->first();
 
         if ($subscriber) {
             $subscriber->delete();
         } else {
-            Topic_Subscriber::create(['topic_id' => $id, 'user_id' => auth()->id()]);
+            Topic_Subscriber::create(['topic_id' => $id, 'user_id' => $this->userId]);
         }
 
         return response(Topic_Subscriber::where('topic_id', $id)->count());
@@ -389,7 +393,7 @@ class TopicController extends BaseController
         $this->authorize('move', $old);
         $forum = $this->forum->findBy('path', $request->get('path'));
 
-        if (!$forum->userCanAccess(auth()->id())) {
+        if (!$forum->userCanAccess($this->userId)) {
             abort(401);
         }
 
@@ -397,7 +401,7 @@ class TopicController extends BaseController
             $reason = null;
 
             $notification = [
-                'sender_id'   => auth()->id(),
+                'sender_id'   => $this->userId,
                 'sender_name' => auth()->user()->name,
                 'subject'     => excerpt($topic->subject, 48),
                 'forum'       => $forum->name
@@ -482,17 +486,17 @@ class TopicController extends BaseController
                 $tags = $topic->tags->lists('name')->toArray();
 
                 // save it in log...
-                $log->add($post->id, auth()->id(), $post->text, $topic->subject, $tags);
+                $log->add($post->id, $this->userId, $post->text, $topic->subject, $tags);
 
                 $post->fill([
-                    'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
+                    'edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId
                 ])
                 ->save();
 
                 if ($post->user_id) {
                     app()->make('Alert\Topic\Subject')->with([
                         'user_id'     => $post->user_id,
-                        'sender_id'   => auth()->id(),
+                        'sender_id'   => $this->userId,
                         'sender_name' => auth()->user()->name,
                         'subject'     => excerpt($original['subject']),
                         'excerpt'     => excerpt($topic->subject),

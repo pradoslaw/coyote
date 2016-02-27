@@ -81,6 +81,7 @@ class RepositoryServiceProvider extends ServiceProvider
             'Microblog',
             'User',
             'Post',
+            'Page',
 
             'Post' => [
                 'Attachment',
