@@ -111,7 +111,7 @@ class CommentController extends Controller
             if (!$id) {
                 $alert = new Alert();
                 $notification = [
-                    'sender_id'   => auth()->id(),
+                    'sender_id'   => $this->userId,
                     'sender_name' => auth()->user()->name,
                     'subject'     => excerpt($topic->subject),
                     'excerpt'     => excerpt($comment->text),
@@ -137,7 +137,7 @@ class CommentController extends Controller
                 $alert->notify();
 
                 // subscribe post. notify about all future comments to this post
-                $this->post->subscribe($post->id, auth()->id(), true);
+                $this->post->subscribe($post->id, $this->userId, true);
             }
         });
 
@@ -190,7 +190,7 @@ class CommentController extends Controller
         $forum = $this->forum->findOrFail($post->forum_id);
 
         // Maybe user does not have an access to this category?
-        if (!$forum->userCanAccess(auth()->id())) {
+        if (!$forum->userCanAccess($this->userId)) {
             abort(401, 'Unauthorized');
         }
 

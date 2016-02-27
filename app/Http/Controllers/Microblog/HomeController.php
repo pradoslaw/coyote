@@ -51,7 +51,7 @@ class HomeController extends Controller
 
         return parent::view('microblog.home', [
             'count'                     => $this->microblog->count(),
-            'count_user'                => $this->microblog->countForUser(auth()->id()),
+            'count_user'                => $this->microblog->countForUser($this->userId),
             'pagination'                => $microblogs->render(),
             'microblogs'                => $microblogs->items(),
             'route'                     => request()->route()->getName()

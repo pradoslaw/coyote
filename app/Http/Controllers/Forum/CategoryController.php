@@ -24,7 +24,7 @@ class CategoryController extends BaseController
 
         $this->forum->skipCriteria(true);
         // execute query: get all subcategories that user can has access to
-        $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId(), $forum->id);
+        $sections = $this->forum->groupBySections($this->userId, $request->session()->getId(), $forum->id);
 
         if ($request->has('perPage')) {
             $perPage = max(10, min($request->get('perPage'), 50));
@@ -38,7 +38,7 @@ class CategoryController extends BaseController
         $this->topic->pushCriteria(new StickyGoesFirst());
         // get topics according to given criteria
         $topics = $this->topic->paginate(
-            auth()->id(),
+            $this->userId,
             $request->getSession()->getId(),
             'topics.last_post_id',
             'DESC',
@@ -63,11 +63,11 @@ class CategoryController extends BaseController
      */
     public function mark($forum)
     {
-        $this->forum->markAsRead($forum->id, auth()->id(), request()->session()->getId());
+        $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
         $forums = $this->forum->where('parent_id', $forum->id)->get();
 
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, auth()->id(), request()->session()->getId());
+            $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
         }
     }
 

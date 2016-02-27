@@ -118,7 +118,7 @@ class AttachmentController extends Controller
         $post = $this->post->findOrNew($attachment->post_id, ['id', 'forum_id']);
         $forum = $this->forum->find($post->forum_id);
 
-        if (!$forum->userCanAccess(auth()->id())) {
+        if (!$forum->userCanAccess($this->userId)) {
             abort(401, 'Unauthorized');
         }
 

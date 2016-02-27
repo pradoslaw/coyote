@@ -46,7 +46,7 @@ class HomeController extends BaseController
     {
         $this->pushForumCriteria();
         // execute query: get all categories that user can has access
-        $sections = $this->forum->groupBySections(auth()->id(), $request->session()->getId());
+        $sections = $this->forum->groupBySections($this->userId, $this->sessionId);
         // get categories collapse
         $collapse = $this->getSetting('forum.collapse');
         if ($collapse) {
@@ -92,53 +92,48 @@ class HomeController extends BaseController
     }
 
     /**
-     * @param Request $request
      * @return $this
      */
-    public function all(Request $request)
+    public function all()
     {
-        return $this->load(auth()->id(), $request->getSession()->getId());
+        return $this->load($this->userId, $this->sessionId);
     }
 
     /**
-     * @param Request $request
      * @return $this
      */
-    public function unanswered(Request $request)
+    public function unanswered()
     {
         $this->topic->pushCriteria(new Unanswered());
-        return $this->load(auth()->id(), $request->getSession()->getId());
+        return $this->load($this->userId, $this->sessionId);
     }
 
     /**
-     * @param Request $request
      * @return $this
      */
-    public function mine(Request $request)
+    public function mine()
     {
-        $this->topic->pushCriteria(new OnlyMine(auth()->id()));
-        return $this->load(auth()->id(), $request->getSession()->getId());
+        $this->topic->pushCriteria(new OnlyMine($this->userId));
+        return $this->load($this->userId, $this->sessionId);
     }
 
     /**
-     * @param Request $request
      * @return $this
      */
-    public function subscribes(Request $request)
+    public function subscribes()
     {
-        $this->topic->pushCriteria(new Subscribes(auth()->id()));
-        return $this->load(auth()->id(), $request->getSession()->getId());
+        $this->topic->pushCriteria(new Subscribes($this->userId));
+        return $this->load($this->userId, $this->sessionId);
     }
 
     /**
      * @param string $name
-     * @param Request $request
      * @return HomeController
      */
-    public function tag($name, Request $request)
+    public function tag($name)
     {
         $this->topic->pushCriteria(new WithTag($name));
-        return $this->load(auth()->id(), $request->getSession()->getId());
+        return $this->load($this->userId, $this->sessionId);
     }
 
     /**
@@ -148,7 +143,7 @@ class HomeController extends BaseController
     {
         $forums = $this->forum->all(['id']);
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, auth()->id(), request()->session()->getId());
+            $this->forum->markAsRead($forum->id, $this->userId, request()->session()->getId());
         }
     }
 }

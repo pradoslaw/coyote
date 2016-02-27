@@ -89,12 +89,12 @@ class PostController extends BaseController
         }
 
         if (auth()->check()) {
-            $subscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
+            $subscribe = $topic->subscribers()->where('user_id', $this->userId)->count();
 
             // we're creating new post...
             if ($post === null && $subscribe == false && auth()->user()->allow_subscribe) {
                 // if this is the first post in this topic, subscribe option depends on user's default setting
-                if (!$topic->users()->where('user_id', auth()->id())->count()) {
+                if (!$topic->users()->where('user_id', $this->userId)->count()) {
                     $subscribe = true;
                 }
             }
@@ -155,7 +155,7 @@ class PostController extends BaseController
             // get topic tags only if this post is the FIRST post in topic
             $tags = $topic->tags->pluck('name')->toArray();
         }
-        $subscribe = $topic->subscribers()->where('user_id', auth()->id())->count();
+        $subscribe = $topic->subscribers()->where('user_id', $this->userId)->count();
         $attachments = $post->attachments()->get();
 
         return view('forum.edit')->with(compact('post', 'forum', 'topic', 'tags', 'subscribe', 'attachments'));
@@ -217,10 +217,10 @@ class PostController extends BaseController
 
                 if ($isDirty) {
                     $post->fill([
-                        'edit_count' => $post->edit_count + 1, 'editor_id' => auth()->id()
+                        'edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId
                     ]);
 
-                    $log->add($post->id, auth()->id(), $post->text, $topic->subject, $tags);
+                    $log->add($post->id, $this->userId, $post->text, $topic->subject, $tags);
                 }
 
                 $post->save();
@@ -232,7 +232,7 @@ class PostController extends BaseController
 
                 // create new post and assign it to topic. don't worry about the rest: trigger will do the work
                 $post = $this->post->create($request->all() + [
-                    'user_id'   => auth()->id(),
+                    'user_id'   => $this->userId,
                     'topic_id'  => $topic->id,
                     'forum_id'  => $forum->id,
                     'ip'        => request()->ip(),
@@ -242,15 +242,15 @@ class PostController extends BaseController
 
                 // automatically subscribe post
                 if (auth()->check()) {
-                    $this->post->subscribe($post->id, auth()->id(), true);
+                    $this->post->subscribe($post->id, $this->userId, true);
                 }
 
                 $url .= '?p=' . $post->id . '#id' . $post->id;
 
                 $alert = new Alert();
                 $notification = [
-                    'sender_id'   => auth()->id(),
-                    'sender_name' => $request->get('user_name', auth()->id() ? auth()->user()->name : ''),
+                    'sender_id'   => $this->userId,
+                    'sender_name' => $request->get('user_name', $this->userId ? auth()->user()->name : ''),
                     'subject'     => excerpt($topic->subject),
                     'excerpt'     => excerpt($text),
                     'url'         => $url
@@ -272,7 +272,7 @@ class PostController extends BaseController
 
                 $alert->notify();
                 // initial history of post
-                $log->add($post->id, auth()->id(), $post->text, null, []);
+                $log->add($post->id, $this->userId, $post->text, null, []);
             }
 
             if (auth()->check() && $post->user_id) {
@@ -335,7 +335,7 @@ class PostController extends BaseController
         $this->authorize('delete', [$post, $forum]);
 
         // Step 3. Maybe user does not have an access to this category?
-        if (!$forum->userCanAccess(auth()->id())) {
+        if (!$forum->userCanAccess($this->userId)) {
             abort(401, 'Unauthorized');
         }
 
@@ -353,7 +353,7 @@ class PostController extends BaseController
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
 
             $notification = [
-                'sender_id'   => auth()->id(),
+                'sender_id'   => $this->userId,
                 'sender_name' => auth()->user()->name,
                 'subject'     => excerpt($topic->subject, 48)
             ];
@@ -454,12 +454,12 @@ class PostController extends BaseController
      */
     public function subscribe($id)
     {
-        $subscriber = Subscriber::where('post_id', $id)->where('user_id', auth()->id())->first();
+        $subscriber = Subscriber::where('post_id', $id)->where('user_id', $this->userId)->first();
 
         if ($subscriber) {
             $subscriber->delete();
         } else {
-            Subscriber::create(['post_id' => $id, 'user_id' => auth()->id()]);
+            Subscriber::create(['post_id' => $id, 'user_id' => $this->userId]);
         }
     }
 
@@ -491,7 +491,7 @@ class PostController extends BaseController
         }
 
         \DB::transaction(function () use ($post, $topic, $forum, $vote) {
-            $result = $vote->findWhere(['post_id' => $post->id, 'user_id' => auth()->id()])->first();
+            $result = $vote->findWhere(['post_id' => $post->id, 'user_id' => $this->userId])->first();
 
             // build url to post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false) . '?p=' . $post->id . '#id' . $post->id;
@@ -503,7 +503,7 @@ class PostController extends BaseController
                 $post->score--;
             } else {
                 $vote->create([
-                    'post_id' => $post->id, 'user_id' => auth()->id(), 'forum_id' => $forum->id, 'ip' => request()->ip()
+                    'post_id' => $post->id, 'user_id' => $this->userId, 'forum_id' => $forum->id, 'ip' => request()->ip()
                 ]);
                 $post->score++;
 
@@ -513,7 +513,7 @@ class PostController extends BaseController
                     ->addUserId($post->user_id)
                     ->setSubject(excerpt($topic->subject, 48))
                     ->setExcerpt($excerpt)
-                    ->setSenderId(auth()->id())
+                    ->setSenderId($this->userId)
                     ->setSenderName(auth()->user()->name)
                     ->setUrl($url)
                     ->notify();
@@ -559,7 +559,7 @@ class PostController extends BaseController
         }
 
         if (Gate::denies('update', $forum)
-            && $this->post->find($topic->first_post_id, ['user_id'])->user_id !== auth()->id()) {
+            && $this->post->find($topic->first_post_id, ['user_id'])->user_id !== $this->userId) {
             return response()->json(['error' => 'Możesz zaakceptować post tylko we własnym wątku.'], 500);
         }
 
@@ -607,7 +607,7 @@ class PostController extends BaseController
 
                 if ($post->user_id) {
                     // before we add reputation points we need to be sure that user does not accept his own post
-                    if ($post->user_id !== auth()->id()) {
+                    if ($post->user_id !== $this->userId) {
                         if ($forum->enable_reputation) {
                             // increase reputation points for author
                             $reputation->setIsPositive(true)->setPostId($post->id)->setUserId($post->user_id)->save();
@@ -619,7 +619,7 @@ class PostController extends BaseController
                             ->addUserId($post->user_id)
                             ->setSubject(excerpt($topic->subject, 48))
                             ->setExcerpt($excerpt)
-                            ->setSenderId(auth()->id())
+                            ->setSenderId($this->userId)
                             ->setSenderName(auth()->user()->name)
                             ->setUrl($url)
                             ->notify();
@@ -629,7 +629,7 @@ class PostController extends BaseController
                 $accept->create([
                     'post_id'   => $post->id,
                     'topic_id'  => $topic->id,
-                    'user_id'   => auth()->id(), // don't change this. we need to know who accepted this post
+                    'user_id'   => $this->userId, // don't change this. we need to know who accepted this post
                     'ip'        => request()->ip()
                 ]);
             }

@@ -29,7 +29,7 @@ class FlagController extends Controller
         ]);
 
         \DB::transaction(function () use ($request) {
-            $flag = Flag::create($request->all() + ['user_id' => auth()->id()]);
+            $flag = Flag::create($request->all() + ['user_id' => $this->userId]);
             $object = new Stream_Flag(['id' => $flag->id, 'displayName' => excerpt($request->text)]);
 
             stream(Stream_Create::class, $object);
