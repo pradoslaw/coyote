@@ -20,7 +20,7 @@ class CreateTopicVisitsTable extends Migration
             $table->timestampTz('updated_at');
             $table->smallInteger('visits')->default(0);
 
-            $table->index('topic_id');
+            $table->index(['topic_id', 'user_id']);
         });
     }
 

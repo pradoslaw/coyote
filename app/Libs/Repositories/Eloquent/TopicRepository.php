@@ -337,7 +337,13 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         $sub = $this->getPackage('last_post_created_at');
         $this->applyCriteria();
 
-        return $this->model
+        $algo = 'LEAST(1000, 200 * topics.score) +
+                    LEAST(1000, 100 * topics.replies) +
+                    LEAST(1000, 15 * topics.views) -
+                    (extract(epoch from now()) - extract(epoch from topics.last_post_created_at)) / 4500 -
+                (extract(epoch from now()) - extract(epoch from posts.created_at)) / 1000';
+
+        $sql = $this->model
                     ->select([
                         'topics.id',
                         'topics.forum_id',
@@ -354,28 +360,22 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     ->withTrashed()
                     ->join('forums', 'forums.id', '=', 'forum_id')
                     ->join('posts', 'posts.id', '=', 'first_post_id')
-                    ->leftJoin('topic_visits AS tv', function ($join) use ($userId) {
-                        $join->on('tv.topic_id', '=', 'topics.id');
-
-                        if ($userId) {
-                            $join->on('tv.user_id', '=', \DB::raw($userId));
-                        }
-                    })
                     ->where('forums.is_locked', 0)
                     ->where('topics.is_locked', 0)
-                    ->orderBy(\DB::raw('
-                        LEAST(1000, 200 * topics.score) +
-                        LEAST(1000, 100 * topics.replies) +
-                        LEAST(1000, 15 * topics.views) -
-                        (extract(epoch from now()) - extract(epoch from topics.last_post_created_at)) / 4500 -
-                        (extract(epoch from now()) - extract(epoch from posts.created_at)) / 1000 -
-							CASE
-							    WHEN tv.updated_at IS NOT NULL AND tv.updated_at > last_post_created_at
-							    THEN (extract(epoch from tv.updated_at) - extract(epoch from last_post_created_at)) / 450
-							    ELSE 0
-							END
-                    '), 'DESC')
-                    ->limit($limit)
-                    ->get();
+                    ->limit($limit);
+
+        if ($userId) {
+            $sql->leftJoin('topic_visits AS tv', function ($join) use ($userId) {
+                $join->on('tv.topic_id', '=', 'topics.id')->on('tv.user_id', '=', \DB::raw($userId));
+            });
+
+            $algo .= ' - CASE
+                            WHEN tv.updated_at IS NOT NULL AND tv.updated_at > last_post_created_at
+                            THEN (extract(epoch from tv.updated_at) - extract(epoch from last_post_created_at)) / 450
+                            ELSE 0
+                        END';
+        }
+
+        return $sql->orderBy(\DB::raw($algo), 'DESC')->get();
     }
 }
