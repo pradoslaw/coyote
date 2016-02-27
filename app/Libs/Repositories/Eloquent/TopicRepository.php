@@ -219,7 +219,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         }
                     })
                     ->where('topics.forum_id', $forumId)
-                    ->whereNull('topic_track.topic_id');
+                    ->whereNull('topic_track.id');
 
         if ($markTime) {
             $sql->where('last_post_created_at', '>', $markTime);
