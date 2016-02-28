@@ -4,8 +4,8 @@ namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Actkey;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
-use Coyote\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -14,10 +14,21 @@ use Coyote\Stream\Objects\Person as Stream_Person;
 
 class RegisterController extends Controller
 {
-    public function __construct()
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * RegisterController constructor.
+     * @param User $user
+     */
+    public function __construct(User $user)
     {
         parent::__construct();
         $this->middleware('guest');
+
+        $this->user = $user;
     }
 
     /**
@@ -25,9 +36,9 @@ class RegisterController extends Controller
      */
     public function index()
     {
-        $this->breadcrumb->push('Rejestracja', '/register');
+        $this->breadcrumb->push('Rejestracja', route('register'));
 
-        return parent::view('auth.register');
+        return $this->view('auth.register');
     }
 
     /**
@@ -40,17 +51,15 @@ class RegisterController extends Controller
     {
         $this->validate($request, [
             'name'                  => 'required|min:2|max:28|username|user_unique',
-            'email'                 => 'required|email|max:255|unique:users',
+            'email'                 => 'required|email|max:255|unique:users,email,NULL,id,is_confirm,1',
             'password'              => 'required|confirmed|min:3',
             'human'                 => 'required'
         ]);
 
-        DB::beginTransaction();
-
-        try {
+        DB::transaction(function () use ($request) {
             $email = $request->input('email');
 
-            $user = User::create([
+            $user = $this->user->create([
                 'name'     => $request->input('name'),
                 'email'    => $email,
                 'password' => bcrypt($request->input('password'))
@@ -72,12 +81,7 @@ class RegisterController extends Controller
 
             Auth::login($user, true);
             stream(Stream_Create::class, new Stream_Person());
-
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        });
 
         return redirect()->intended(route('home'));
     }
