@@ -30,7 +30,7 @@ class UserSettingsRequest extends Request
     public function rules()
     {
         return [
-            'email'                  => 'required|email|unique:users,email,' . auth()->user()->id,
+            'email'                  => 'required|email|unique:users,email,' . auth()->user()->id . ',id,is_confirm,1',
             'website'                => 'url|reputation:50',
             'location'               => 'string|max:50',
             'birthyear'              => 'sometimes|integer|between:1950,2015',

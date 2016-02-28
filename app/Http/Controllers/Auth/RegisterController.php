@@ -65,14 +65,7 @@ class RegisterController extends Controller
                 'password' => bcrypt($request->input('password'))
             ]);
 
-            $actkey = Actkey::create([
-                'actkey'   => str_random(),
-                'user_id'  => $user->id
-            ]);
-
-            // taki format linku zachowany jest ze wzgledu na wsteczna kompatybilnosc.
-            // z czasem mozemy zmienic ten format aby wskazywal na /User/Confirm/Email/<id>/<actkey>
-            $url = route('user.email') . '?id=' . $user->id . '&actkey=' . $actkey->actkey;
+            $url = Actkey::createLink($user->id);
 
             Mail::queue('emails.signup', ['url' => $url], function ($message) use ($email) {
                 $message->to($email);

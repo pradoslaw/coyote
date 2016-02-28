@@ -25,7 +25,7 @@ class SettingsController extends Controller
 
         $email = Actkey::where('user_id', auth()->user()->id)->pluck('email');
 
-        return parent::view('user.settings', [
+        return $this->view('user.settings', [
             'formatList'        => User::dateFormatList(),
             'yearList'          => User::birthYearList(),
             'groupList'         => $groupList,
@@ -48,15 +48,7 @@ class SettingsController extends Controller
                 // kasujemy poprzednie rekordu zwiazane z tym userem
                 Actkey::where('user_id', $user->id)->delete();
                 // przed zmiana e-maila trzeba wyslac link potwierdzajacy
-                $actkey = Actkey::create([
-                    'actkey'   => str_random(),
-                    'user_id'  => $user->id,
-                    'email'    => $email
-                ]);
-
-                // taki format linku zachowany jest ze wzgledu na wsteczna kompatybilnosc.
-                // z czasem mozemy zmienic ten format aby wskazywal na /User/Confirm/Email/<id>/<actkey>
-                $url = route('user.email') . '?id=' . $user->id . '&actkey=' . $actkey->actkey;
+                $url = Actkey::createLink($user->id, $email);
 
                 Mail::queue('emails.email', ['url' => $url], function ($message) use ($email) {
                     $message->to($email);

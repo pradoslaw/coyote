@@ -25,6 +25,7 @@ Route::post('Register', 'Auth\RegisterController@signup');
 
 // przypominanie hasla
 Route::controller('Password', 'Auth\PasswordController');
+Route::controller('Confirm', 'Auth\ConfirmController');
 
 Route::get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login', 'as' => 'oauth']);
 Route::get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');
@@ -204,15 +205,8 @@ Route::group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
 
     Route::get('Forum', ['uses' => 'ForumController@index', 'as' => 'forum']);
     Route::post('Forum', 'ForumController@save');
-
-    // Generowanie linka potwierdzajacego autentycznosc adresu e-mail
-    Route::get('Confirm', ['uses' => 'ConfirmController@index', 'as' => 'confirm']);
-    Route::post('Confirm', ['uses' => 'ConfirmController@send']);
 });
 
-// ta regula nie moze sprawdzac czy user jest zalogowany, czy nie. user moze potwierdzic adres e-mail
-// niekoniecznie bedac zalogowanym
-Route::get('User/Confirm/Email', ['uses' => 'User\ConfirmController@email', 'as' => 'user.email']);
 // wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera
 Route::get('User/Vcard/{id}', ['uses' => 'User\VcardController@index', 'as' => 'user.vcard']);
 // zadanie AJAX z lista loginow (podpowiedzi)
