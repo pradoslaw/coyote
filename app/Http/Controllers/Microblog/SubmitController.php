@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Controllers\Microblog;
 
+use Coyote\Events\MicroblogWasDeleted;
+use Coyote\Events\MicroblogWasSaved;
 use Coyote\Microblog\Subscriber;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
@@ -133,6 +135,8 @@ class SubmitController extends Controller
 
             $ref = new Ref_Hash();
             $this->microblog->setTags($microblog->id, $ref->grab($microblog->text));
+
+            event(new MicroblogWasSaved($microblog));
         });
 
         // jezeli wpis zawiera jakies zdjecia, generujemy linki do miniatur
@@ -195,6 +199,7 @@ class SubmitController extends Controller
             // cofniecie pkt reputacji
             app()->make('Reputation\Microblog\Create')->undo($microblog->id);
 
+            event(new MicroblogWasDeleted($microblog));
             // put this to activity stream
             stream(Stream_Delete::class, (new Stream_Microblog())->map($microblog));
         });

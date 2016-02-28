@@ -9,4 +9,11 @@ interface PageRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function findByPath($path);
+
+    /**
+     * @param $id
+     * @param $content
+     * @return mixed
+     */
+    public function findByContent($id, $content);
 }

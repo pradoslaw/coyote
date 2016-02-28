@@ -2,8 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Events\PageWasCreated;
-use Coyote\Events\TopicWasCreated;
+use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
@@ -286,7 +285,7 @@ class TopicController extends BaseController
             }
 
             // fire the event. it can be used to index a content and/or add page path to "pages" table
-            event(new TopicWasCreated($topic));
+            event(new TopicWasSaved($topic));
             $actor = new Stream_Actor(auth()->user());
 
             if (auth()->guest()) {

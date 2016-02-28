@@ -22,4 +22,14 @@ class PageRepository extends Repository implements PageRepositoryInterface
     {
         return $this->model->select()->whereRaw('LOWER(path) = ?', [mb_strtolower($path)])->first();
     }
+
+    /**
+     * @param $id
+     * @param $content
+     * @return mixed
+     */
+    public function findByContent($id, $content)
+    {
+        return $this->model->select()->where('content_id', $id)->where('content_type', $content)->first();
+    }
 }

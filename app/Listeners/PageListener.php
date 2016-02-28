@@ -2,8 +2,11 @@
 
 namespace Coyote\Listeners;
 
-use Coyote\Events\TopicWasCreated;
+use Coyote\Events\MicroblogWasDeleted;
+use Coyote\Events\MicroblogWasSaved;
+use Coyote\Events\TopicWasSaved;
 use Coyote\Events\TopicWasDeleted;
+use Coyote\Microblog;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Coyote\Topic;
@@ -25,11 +28,14 @@ class PageListener implements ShouldQueue
     }
 
     /**
-     * @param TopicWasCreated $event
+     * @param TopicWasSaved $event
      */
-    public function onTopicCreated(TopicWasCreated $event)
+    public function onTopicSave(TopicWasSaved $event)
     {
-        $event->topic->page()->create([
+        $event->topic->page()->updateOrCreate([
+            'content_id' => $event->topic->id,
+            'content_type' => Topic::class
+        ], [
             'title' => $event->topic->subject,
             'path' => route('forum.topic', [$event->topic->forum->path, $event->topic->id, $event->topic->path], false)
         ]);
@@ -38,9 +44,31 @@ class PageListener implements ShouldQueue
     /**
      * @param TopicWasDeleted $event
      */
-    public function onTopicDeleted(TopicWasDeleted $event)
+    public function onTopicDelete(TopicWasDeleted $event)
     {
-        $this->page->where('content_id', $event->topic['id'])->where('content_type', Topic::class)->delete();
+        $this->page->findByContent($event->topic['id'], Topic::class)->delete();
+    }
+
+    /**
+     * @param MicroblogWasSaved $event
+     */
+    public function onMicroblogSave(MicroblogWasSaved $event)
+    {
+        $event->microblog->page()->updateOrCreate([
+            'content_id'    => $event->microblog->id,
+            'content_type'  => Microblog::class,
+        ], [
+            'title' => excerpt($event->microblog->text, 28),
+            'path' => route('microblog.view', [$event->microblog->id], false)
+        ]);
+    }
+
+    /**
+     * @param MicroblogWasDeleted $event
+     */
+    public function onMicroblogDelete(MicroblogWasDeleted $event)
+    {
+        $this->page->findByContent($event->microblog['id'], Microblog::class)->delete();
     }
 
     /**
@@ -51,13 +79,23 @@ class PageListener implements ShouldQueue
     public function subscribe($events)
     {
         $events->listen(
-            'Coyote\Events\TopicWasCreated',
-            'Coyote\Listeners\PageListener@onTopicCreated'
+            'Coyote\Events\TopicWasSaved',
+            'Coyote\Listeners\PageListener@onTopicSave'
         );
 
         $events->listen(
             'Coyote\Events\TopicWasDeleted',
-            'Coyote\Listeners\PageListener@onTopicDeleted'
+            'Coyote\Listeners\PageListener@onTopicDelete'
+        );
+
+        $events->listen(
+            'Coyote\Events\MicroblogWasSaved',
+            'Coyote\Listeners\PageListener@onMicroblogSave'
+        );
+
+        $events->listen(
+            'Coyote\Events\MicroblogWasDeleted',
+            'Coyote\Listeners\PageListener@onMicroblogDelete'
         );
     }
 }

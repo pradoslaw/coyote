@@ -34,6 +34,7 @@ class Link implements ProviderInterface
     /**
      * @param string $text
      * @return mixed|string
+     * @todo Parsowanie linkow "starego" coyote typu [[Foo]]
      */
     public function parse($text)
     {

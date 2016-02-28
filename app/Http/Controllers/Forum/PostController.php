@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Alert\Alert;
 use Coyote\Events\TopicWasDeleted;
+use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Subscriber;
@@ -213,6 +214,9 @@ class PostController extends BaseController
                         $this->topic->setTags($topic->id, $tags);
                         $isDirty = true;
                     }
+
+                    // fire the event. it can be used to index a content and/or add page path to "pages" table
+                    event(new TopicWasSaved($topic));
                 }
 
                 if ($isDirty) {

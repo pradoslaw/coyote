@@ -62,23 +62,44 @@ class Microblog extends Model
         return (int) ($log + ($timestamp / 45000));
     }
 
+    /**
+     * @param $media
+     * @return mixed
+     */
     public function getMediaAttribute($media)
     {
         return json_decode($media, true);
     }
 
+    /**
+     * @param $media
+     */
     public function setMediaAttribute($media)
     {
         $this->attributes['media'] = json_encode($media);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function comments()
     {
         return $this->hasMany('Coyote\Microblog', 'parent_id', 'id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function subscribers()
     {
         return $this->hasMany('Coyote\Microblog\Subscriber', 'microblog_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function page()
+    {
+        return $this->morphOne('Coyote\Page', 'content');
     }
 }
