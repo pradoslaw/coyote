@@ -34,6 +34,10 @@ return [
         'host'   => env('WS_HOST'),
         'port'   => env('WS_PORT')
     ],
+    'elasticsearch' => [
+        'host'   => env('ELASTICSEARCH_HOST', 'localhost'),
+        'port'   => env('ELASTICSEARCH_PORT', 9200)
+    ],
 
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
