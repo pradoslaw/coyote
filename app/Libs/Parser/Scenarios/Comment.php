@@ -31,10 +31,10 @@ class Comment extends Scenario
 
             if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach((new SimpleMarkdown($this->user))->setEnableHashParser(true));
+                    $parser->attach((new SimpleMarkdown($this->app['Coyote\Repositories\Eloquent\UserRepository']))->setEnableHashParser(true));
                     $parser->attach((new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id|class],code'));
-                    $parser->attach(new Link($this->page, $this->request));
-                    $parser->attach(new Censore($this->word));
+                    $parser->attach(new Link($this->app['Coyote\Repositories\Eloquent\PageRepository'], $this->app['Illuminate\Http\Request']));
+                    $parser->attach(new Censore($this->app['Coyote\Repositories\Eloquent\WordRepository']));
 
                     return $parser;
                 });

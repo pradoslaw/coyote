@@ -8,23 +8,9 @@ use Coyote\Parser\Providers\Link;
 use Coyote\Parser\Providers\Markdown;
 use Coyote\Parser\Providers\Purifier;
 use Coyote\Parser\Providers\Smilies;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 
 class Pm extends Scenario
 {
-    /**
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * @param User $user
-     */
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
-
     /**
      * Parse microblog
      *
@@ -38,9 +24,9 @@ class Pm extends Scenario
         $parser = new Parser();
 
         // we don't want to cache user's private messages
-        $parser->attach((new Markdown($this->user))->setBreaksEnabled(true));
+        $parser->attach((new Markdown($this->app['Coyote\Repositories\Eloquent\UserRepository']))->setBreaksEnabled(true));
         $parser->attach(new Purifier());
-//        $parser->attach(new Link());
+        $parser->attach(new Link($this->app['Coyote\Repositories\Eloquent\PageRepository'], $this->app['Illuminate\Http\Request']));
         $parser->attach(new Geshi());
 
         if ($this->isSmiliesAllowed()) {
