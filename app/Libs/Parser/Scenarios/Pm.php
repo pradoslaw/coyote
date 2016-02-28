@@ -40,7 +40,7 @@ class Pm extends Scenario
         // we don't want to cache user's private messages
         $parser->attach((new Markdown($this->user))->setBreaksEnabled(true));
         $parser->attach(new Purifier());
-        $parser->attach(new Link());
+//        $parser->attach(new Link());
         $parser->attach(new Geshi());
 
         if ($this->isSmiliesAllowed()) {

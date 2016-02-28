@@ -37,25 +37,31 @@ class ParserServiceProvider extends ServiceProvider
     {
         $this->app->bind('Parser\Microblog', function ($app) {
             return new Parser_Microblog(
+                $app['Illuminate\Http\Request'],
                 $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository'],
-                $app['Coyote\Repositories\Eloquent\WordRepository']
+                $app['Coyote\Repositories\Eloquent\WordRepository'],
+                $app['Coyote\Repositories\Eloquent\PageRepository']
             );
         });
 
         $this->app->bind('Parser\Comment', function ($app) {
             return new Parser_Comment(
+                $app['Illuminate\Http\Request'],
                 $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository'],
-                $app['Coyote\Repositories\Eloquent\WordRepository']
+                $app['Coyote\Repositories\Eloquent\WordRepository'],
+                $app['Coyote\Repositories\Eloquent\PageRepository']
             );
         });
 
         $this->app->bind('Parser\Sig', function ($app) {
             return new Parser_Sig(
+                $app['Illuminate\Http\Request'],
                 $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository'],
-                $app['Coyote\Repositories\Eloquent\WordRepository']
+                $app['Coyote\Repositories\Eloquent\WordRepository'],
+                $app['Coyote\Repositories\Eloquent\PageRepository']
             );
         });
 
@@ -67,9 +73,11 @@ class ParserServiceProvider extends ServiceProvider
 
         $this->app->bind('Parser\Post', function ($app) {
             return new Parser_Post(
+                $app['Illuminate\Http\Request'],
                 $app['Illuminate\Contracts\Cache\Repository'],
                 $app['Coyote\Repositories\Eloquent\UserRepository'],
-                $app['Coyote\Repositories\Eloquent\WordRepository']
+                $app['Coyote\Repositories\Eloquent\WordRepository'],
+                $app['Coyote\Repositories\Eloquent\PageRepository']
             );
         });
     }

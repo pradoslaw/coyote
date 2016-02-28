@@ -34,7 +34,7 @@ class Microblog extends Scenario
                 $text = $this->cache($text, function () use ($parser) {
                     $parser->attach((new Markdown($this->user))->setBreaksEnabled(true)->setEnableHashParser(true));
                     $parser->attach(new Purifier());
-                    $parser->attach(new Link());
+                    $parser->attach(new Link($this->page, $this->request));
                     $parser->attach(new Censore($this->word));
                     $parser->attach(new Geshi());
 

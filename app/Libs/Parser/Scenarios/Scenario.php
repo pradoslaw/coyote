@@ -2,13 +2,20 @@
 
 namespace Coyote\Parser\Scenarios;
 
+use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
+use Illuminate\Http\Request;
 
 abstract class Scenario
 {
     const CACHE_EXPIRATION = 60 * 24 * 30; // 30d
+
+    /**
+     * @var Request
+     */
+    protected $request;
 
     /**
      * @var Cache
@@ -26,6 +33,11 @@ abstract class Scenario
     protected $word;
 
     /**
+     * @var Page
+     */
+    protected $page;
+
+    /**
      * @var bool
      */
     protected $enableCache = true;
@@ -34,12 +46,15 @@ abstract class Scenario
      * @param Cache $cache
      * @param User $user
      * @param Word $word
+     * @param Page $page
      */
-    public function __construct(Cache $cache, User $user, Word $word)
+    public function __construct(Request $request, Cache $cache, User $user, Word $word, Page $page)
     {
+        $this->request = $request;
         $this->cache = $cache;
         $this->user = $user;
         $this->word = $word;
+        $this->page = $page;
     }
 
     /**

@@ -13,4 +13,13 @@ class PageRepository extends Repository implements PageRepositoryInterface
     {
         return 'Coyote\Page';
     }
+
+    /**
+     * @param string $path
+     * @return mixed
+     */
+    public function findByPath($path)
+    {
+        return $this->model->select()->whereRaw('LOWER(path) = ?', [mb_strtolower($path)])->first();
+    }
 }
