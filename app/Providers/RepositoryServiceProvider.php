@@ -82,6 +82,7 @@ class RepositoryServiceProvider extends ServiceProvider
             'User',
             'Post',
             'Page',
+            'Firewall',
 
             'Post' => [
                 'Attachment',
