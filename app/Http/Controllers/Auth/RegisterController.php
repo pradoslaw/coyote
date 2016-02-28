@@ -39,7 +39,7 @@ class RegisterController extends Controller
     public function signup(Request $request)
     {
         $this->validate($request, [
-            'name'                  => 'required|min:2|max:28|username|unique:users',
+            'name'                  => 'required|min:2|max:28|username|user_unique',
             'email'                 => 'required|email|max:255|unique:users',
             'password'              => 'required|confirmed|min:3',
             'human'                 => 'required'

@@ -77,9 +77,12 @@ return [
     'url'                  => 'The :attribute format is invalid.',
 
     'username'             => 'Nazwa użytkownika może zawierać litery, cyfry oraz znaki ._ -',
-    'password'             => 'Podano nieprawidłowe hasło',
-    'reputation'           => 'Potrzebujesz :point punktów reputacji aby zmienić zawartość tego pola',
-    'tag'                  => 'Podany tag zawiera nieprawidłowe znaki',
+    'user_exist'           => 'Użytkownik o podanej nazwie nie istnieje.',
+    'user_unique'          => 'Konto o podanej nazwie użytkownika już istnieje.',
+    'user_active'          => 'Konto o tym loginie zostało zablokowane.',
+    'password'             => 'Podano nieprawidłowe hasło.',
+    'reputation'           => 'Potrzebujesz :point punktów reputacji aby zmienić zawartość tego pola.',
+    'tag'                  => 'Podany tag zawiera nieprawidłowe znaki.',
     'tag_creation'         => 'Potrzebujesz :point punktów reputacji, aby utworzyć nowy tag. Wybierz już istniejący.',
 
     /*

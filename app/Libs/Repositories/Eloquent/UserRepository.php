@@ -33,7 +33,10 @@ class UserRepository extends Repository implements UserRepositoryInterface
      */
     public function findByName($name)
     {
-        return $this->model->select(['id', 'name', 'photo'])->whereRaw('LOWER(name) = ?', [mb_strtolower($name)])->first();
+        return $this->model
+                    ->select(['id', 'name', 'photo', 'is_active', 'is_blocked'])
+                    ->whereRaw('LOWER(name) = ?', [mb_strtolower($name)])
+                    ->first();
     }
 
     /**
