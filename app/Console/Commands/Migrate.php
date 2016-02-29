@@ -1012,7 +1012,8 @@ class Migrate extends Command
     {
         $this->info('Microblog...');
 
-        $count = $this->count(['microblog', 'microblog_image', 'microblog_vote', 'microblog_tag', 'microblog_discuss']);
+        $tables = ['microblog', 'microblog_image', 'microblog_vote', 'microblog_tag', 'microblog_discuss'];
+        $count = $this->count($tables);
         $bar = $this->output->createProgressBar($count);
 
         DB::beginTransaction();
@@ -1080,34 +1081,25 @@ class Migrate extends Command
 
             $sql = DB::connection('mysql')
                 ->table('microblog_tag')
-                ->select(['tag_microblog', 'tag_name', 'tag_text', 'tag.tag_id'])
+                ->select(['microblog_id', 'tag_name', 'tag_text', 'tag.tag_id', 'microblog_parent'])
                 ->join('microblog', 'microblog_id', '=', 'tag_microblog')
                 ->leftJoin('tag', 'tag_text', '=', 'tag_name')
                 ->get();
 
-            $custom = [];
-
             foreach ($sql as $row) {
                 $row = (array) $row;
 
-                $tagId = $row['tag_id'] ?: 0;
-
+                $tagId = DB::table('tags')->select(['id'])->where('name', $row['tag_name'])->pluck('id');
                 if (!$tagId) {
-                    if (!isset($custom[$row['tag_name']])) {
-                        DB::table('tags')->insert(['name' => $row['tag_name']]);
-                        $tagId = DB::table('tags')->where(['name' => $row['tag_name']])->pluck('id');
-
-                        $custom[$row['tag_name']] = $tagId;
-                    } else {
-                        $tagId = $custom[$row['tag_name']];
-                    }
+                    $tagId = DB::table('tags')->where(['name' => $row['tag_name']])->pluck('id');
                 }
 
-                DB::table('microblog_tags')->insert(['tag_id' => $tagId, 'microblog_id' => $row['tag_microblog']]);
+                DB::table('microblog_tags')->insert(['tag_id' => $tagId, 'microblog_id' => $row['microblog_parent'] ? $row['microblog_parent'] : $row['microblog_id']]);
             }
 
-
             $bar->finish();
+
+            $this->fixSequence($tables);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
