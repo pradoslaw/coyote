@@ -3,6 +3,8 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Alert\Alert;
+use Coyote\Events\PostWasDeleted;
+use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
@@ -295,6 +297,9 @@ class PostController extends BaseController
             // put action into activity stream
             stream($activity);
 
+            // add post to elasticsearch
+            event(new PostWasSaved($post));
+
             return $url;
         });
 
@@ -402,6 +407,8 @@ class PostController extends BaseController
                 } else {
                     $activity = Stream_Restore::class;
                     $topic->restore();
+
+                    event(new TopicWasSaved($topic));
                     $redirect = redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path]);
                 }
 
@@ -431,10 +438,15 @@ class PostController extends BaseController
                     }
 
                     $redirect = back();
+                    // fire the event. delete from search index
+                    event(new PostWasDeleted($post));
                 } else {
                     $activity = Stream_Restore::class;
                     $post->restore();
                     $redirect = redirect()->to($url);
+
+                    // fire the event. add post to search engine
+                    event(new PostWasSaved($post));
                 }
 
                 $object = (new Stream_Post(['url' => $url]))->map($post);

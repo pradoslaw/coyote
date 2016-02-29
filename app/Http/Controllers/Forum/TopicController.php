@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\TopicWasSaved;
+use Coyote\Events\PostWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
@@ -284,8 +285,6 @@ class TopicController extends BaseController
                 ])->notify();
             }
 
-            // fire the event. it can be used to index a content and/or add page path to "pages" table
-            event(new TopicWasSaved($topic));
             $actor = new Stream_Actor(auth()->user());
 
             if (auth()->guest()) {
@@ -298,6 +297,11 @@ class TopicController extends BaseController
                     (new Stream_Forum)->map($forum)
                 )
             );
+
+            // fire the event. it can be used to index a content and/or add page path to "pages" table
+            event(new TopicWasSaved($topic));
+            // add post to elasticsearch
+            event(new PostWasSaved($post));
 
             return route('forum.topic', [$forum->path, $topic->id, $path]);
         });
