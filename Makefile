@@ -40,8 +40,9 @@ assets_dev:
 	gulp
     
 dump-autoload:
-	composer dump-autoload
+	php artisan clear-compiled
     
 cache-config:
 	php artisan config:clear
 	php artisan config:cache
+	php artisan optimize
