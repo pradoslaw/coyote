@@ -130,7 +130,7 @@ class CommentController extends Controller
             }
 
             $ref = new Ref_Hash();
-            $this->microblog->setTags($microblog->id, $ref->grab($microblog->text));
+            $this->microblog->setTags($microblog->parent_id, $ref->grab($microblog->text));
 
             // map microblog object into stream activity object
             $object = (new Stream_Comment())->map($microblog);
