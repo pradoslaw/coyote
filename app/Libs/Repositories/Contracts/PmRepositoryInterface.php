@@ -37,10 +37,10 @@ interface PmRepositoryInterface extends RepositoryInterface
      * Submit a new message
      *
      * @param \Coyote\User $user
-     * @param Request $request
+     * @param array $payload
      * @throws \Exception
      */
-    public function submit(\Coyote\User $user, Request $request);
+    public function submit(\Coyote\User $user, array $payload);
 
     /**
      * Mark notifications as read

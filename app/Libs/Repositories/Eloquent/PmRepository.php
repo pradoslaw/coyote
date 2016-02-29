@@ -17,21 +17,6 @@ use Carbon\Carbon;
 class PmRepository extends Repository implements PmRepositoryInterface
 {
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @param App $app
-     * @param User $user
-     */
-    public function __construct(App $app, User $user)
-    {
-        parent::__construct($app);
-
-        $this->user = $user;
-    }
-    /**
      * @return \Coyote\Pm
      */
     public function model()
@@ -88,6 +73,17 @@ class PmRepository extends Repository implements PmRepositoryInterface
      */
     public function talk($userId, $rootId, $limit = 10, $offset = 0)
     {
+        $sub = $this->model->select([
+                    'pm.*',
+                    \DB::raw('(CASE WHEN folder = 2 THEN user_id ELSE author_id END) AS host_id')
+                ])
+                ->whereRaw("user_id = $userId")
+                ->whereRaw("root_id = '$rootId'")
+                ->take($limit)
+                ->skip($offset)
+                ->orderBy('pm.id', 'DESC')
+                ->toSql();
+
         $result = $this->model->select([
                     'pm.*',
                     'pm_text.text',
@@ -97,12 +93,9 @@ class PmRepository extends Repository implements PmRepositoryInterface
                     'is_blocked',
                     'photo'
                 ])
+                ->from(\DB::raw("($sub) AS pm"))
                 ->join('pm_text', 'pm_text.id', '=', 'text_id')
-                ->join('users', 'users.id', '=', 'author_id')
-                ->where('user_id', $userId)
-                ->where('root_id', $rootId)
-                ->take($limit)
-                ->skip($offset)
+                ->leftJoin('users', 'users.id', '=', 'host_id')
                 ->orderBy('pm.id', 'DESC')
                 ->get();
 
@@ -112,28 +105,31 @@ class PmRepository extends Repository implements PmRepositoryInterface
     /**
      * Submit a new message
      *
-     * @param \Coyote\User $user
-     * @param Request $request
+     * @param \Coyote\User $user    Message author
+     * @param array $payload
      * @throws \Exception
      */
-    public function submit(\Coyote\User $user, Request $request)
+    public function submit(\Coyote\User $user, array $payload)
     {
-        $rootId = $request->get('root_id', dechex(mt_rand(0, 0x7fffffff)));
-        $author = $this->user->findByName($request->get('author'));
+        $rootId = empty($payload['root_id']) ? dechex(mt_rand(0, 0x7fffffff)) : $payload['root_id'];
 
-        if (!$author) {
+        if (!$payload['author_id']) {
             throw new \Exception('Can not get recipient ID.');
         }
 
-        $text = Pm\Text::create(['text' => $request->get('text')]);
+        if ($user->id === $payload['author_id']) {
+            throw new \Exception('Recipient ID and sender ID have the same value.');
+        }
+
+        $text = Pm\Text::create(['text' => $payload['text']]);
         $fill = [
             'root_id' => $rootId,
             'text_id' => $text->id
         ];
 
         // we need to create two records. one for recipient and one for message author
-        $this->model->create($fill + ['user_id' => $author->id, 'author_id' => $user->id, 'folder' => Pm::INBOX]);
-        $pm = $this->model->create($fill + ['user_id' => $user->id, 'author_id' => $author->id, 'folder' => Pm::SENTBOX]);
+        $this->model->create($fill + ['user_id' => $payload['author_id'], 'author_id' => $user->id, 'folder' => Pm::INBOX]);
+        $pm = $this->model->create($fill + ['user_id' => $user->id, 'author_id' => $payload['author_id'], 'folder' => Pm::SENTBOX]);
 
         return $pm;
     }

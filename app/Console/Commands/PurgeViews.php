@@ -23,6 +23,9 @@ class PurgeViews extends Command implements SelfHandling
      */
     protected $description = 'Increment topic views';
 
+    /**
+     * @var Topic
+     */
     private $topic;
 
     /**

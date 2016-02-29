@@ -61,7 +61,7 @@ class PmController extends Controller
             $row->text = $parser->parse($row->text);
         }
 
-        return parent::view('user.pm.home')->with(compact('pm'));
+        return $this->view('user.pm.home')->with(compact('pm'));
     }
 
     /**
@@ -75,7 +75,7 @@ class PmController extends Controller
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
-        $pm = $this->pm->find($id, ['user_id', 'root_id', 'id']);
+        $pm = $this->pm->find($id, ['user_id', 'author_id', 'root_id', 'id']);
 
         if (!$pm) {
             return redirect()->route('user.pm');
@@ -104,7 +104,8 @@ class PmController extends Controller
             return view('user.pm.infinite')->with('talk', $talk);
         }
 
-        return parent::view('user.pm.show')->with(compact('pm', 'talk'));
+        $recipient = $this->user->find($pm->author_id, ['name']);
+        return $this->view('user.pm.show')->with(compact('pm', 'talk', 'recipient'));
     }
 
     /**
@@ -132,7 +133,7 @@ class PmController extends Controller
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
         $this->breadcrumb->push('Napisz wiadomość', route('user.pm.submit'));
 
-        return parent::view('user.pm.submit');
+        return $this->view('user.pm.submit');
     }
 
     /**
@@ -152,14 +153,16 @@ class PmController extends Controller
     public function save(Request $request)
     {
         $this->validate($request, [
-            'author'             => 'required|username|exists:users,name',
+            'recipient'          => 'required|username|user_exist',
             'text'               => 'required',
             'root_id'            => 'sometimes|exists:pm'
         ]);
 
         return \DB::transaction(function () use ($request) {
+            $recipient = $this->user->findByName($request->get('recipient'));
+
             $user = auth()->user();
-            $pm = $this->pm->submit($user, $request);
+            $pm = $this->pm->submit($user, $request->all() + ['author_id' => $recipient->id]);
 
             $excerpt = excerpt($request->get('text'));
 

@@ -1,4 +1,4 @@
-{% extends 'user/pm/base.twig' %}
+{% extends 'user.pm.base' %}
 {% set parent = 'user.pm.submit' %}
 
 {% import 'components/forms.twig' as forms %}
@@ -8,7 +8,7 @@
 
     <div class="form-group">
         <div class="col-md-12 {{ errors.has('author') > 0 ? 'has-error' }}">
-            {{ form_text('author', input_old('author', request().get('to')), {'class': 'form-control', 'placeholder': 'Nadawca...', 'id': 'author'}) }}
+            {{ form_text('recipient', input_old('recipient', request().get('to')), {'class': 'form-control', 'placeholder': 'Nadawca...', 'id': 'recipient'}) }}
 
             {% if errors.first('author') %}
                 <span class="help-block">{{ errors.first('author') }}</span>
@@ -24,7 +24,7 @@
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="body">
-                    {% include 'components/toolbar' %}
+                    {% include 'components.toolbar' %}
                     <textarea name="text" class="form-control" rows="5" data-paste-url="{{ route('user.pm.paste') }}" data-prompt-url="{{ route('user.prompt') }}">{{ input_old('text') }}</textarea>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="preview"></div>
@@ -55,7 +55,7 @@
     <script type="text/javascript">
         $(function () {
             $('textarea[name="text"]').wikiEditor().prompt().fastSubmit().autogrow().pasteImage().focus();
-            $('#author').autocomplete({
+            $('#recipient').autocomplete({
                 url: '{{ route('user.prompt') }}'
             });
         });

@@ -1,17 +1,17 @@
-{% extends 'user/pm/base.twig' %}
+{% extends 'user.pm.base' %}
 
 {% block pm %}
     <div id="wrap">
         <div id="overview">
             {% for item in talk %}
-                {% include 'user/pm/message.twig' with {'content': '<div class="pm-text">' ~ item.text ~ '</div>'} %}
+                {% include 'user.pm.message' with {'content': '<div class="pm-text">' ~ item.text ~ '</div>'} %}
             {% endfor %}
         </div>
     </div>
 
     {{ form_open({'url': route('user.pm.submit'), 'method': 'POST', 'class': 'form-horizontal'}) }}
     {{ form_hidden('root_id', pm.root_id) }}
-    {{ form_hidden('author', talk[0].name) }}
+    {{ form_hidden('recipient', recipient.name) }}
     <div class="form-group">
         <div class="col-md-12 {{ errors.has('text') > 0 ? 'has-error' }}">
             <ul class="nav nav-tabs">
@@ -21,7 +21,7 @@
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="body">
-                    {% include 'components/toolbar' %}
+                    {% include 'components.toolbar' %}
                     <textarea name="text" class="form-control" rows="2" placeholder="Kliknij, aby odpowiedzieć" data-paste-url="{{ route('user.pm.paste') }}" data-prompt-url="{{ route('user.prompt') }}">{{ input_old('text') }}</textarea>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="preview"></div>

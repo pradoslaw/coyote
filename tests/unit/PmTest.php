@@ -37,6 +37,7 @@ class PmTest extends \Codeception\TestCase\Test
         $rootId = rand(100, 9999);
 
         $text = Pm\Text::create(['text' => 'Lorem ipsum lores']);
+        // new message from $this->author to $this->user
         $pm = Pm::create(['root_id' => $rootId, 'user_id' => $this->user->id, 'author_id' => $this->author->id, 'folder' => Pm::INBOX, 'text_id' => $text->id]);
         Pm::create(['root_id' => $rootId, 'user_id' => $this->author->id, 'author_id' => $this->user->id, 'folder' => Pm::SENTBOX, 'text_id' => $text->id]);
 
