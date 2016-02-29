@@ -1183,6 +1183,10 @@ $(function () {
                     modal.perfectScrollbar({suppressScrollX: true}).on('ps-y-reach-end', function() {
                         $.get(url + '?offset=' + $('li', alerts).length, function(json) {
                             alerts.append(json.html);
+
+                            if ($('li', json.html).length < 10) {
+                                modal.off('ps-y-reach-end');
+                            }
                         });
                     });
                 });
