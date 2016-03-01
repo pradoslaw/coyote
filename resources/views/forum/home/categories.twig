@@ -1,4 +1,4 @@
-{% extends 'forum/base.twig' %}
+{% extends 'forum.base' %}
 {% block title %}
     {% if routeName != 'forum.home' %}
         {{ tabs[routeName] }} ::
@@ -7,7 +7,7 @@
     Forum dyskusyjne{{ parent() }}
 {% endblock %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
 {% block container %}
     <div id="index" class="sidebar">
@@ -17,20 +17,27 @@
             {% endfor %}
         </ul>
 
-        {% include "forum/top.twig" %}
+        {% include "forum.top" %}
 
         <main id="mainbar">
             {% block mainbar %}
                 {% for name, forums in sections %}
-                    {% include 'forum/section.twig' %}
+                    {% include 'forum.section' %}
                 {% endfor %}
             {% endblock %}
 
             {{ viewers|raw }}
         </main>
 
-        {% embed 'forum/sidebar.twig' %}
+        {% embed 'forum.sidebar' %}
             {% block side_menu %}
+                {% if topics.total() %}
+                    <div id="box-count" class="box">
+                        <strong>{{ topics.total()|number_format(0, '', ' ') }}</strong>
+                        <span>{{ declination(topics.total(), ['wątek', 'wątki', 'wątków'], true) }}</span>
+                    </div>
+                {% endif %}
+
                 <div class="box">
                     <ul class="side-menu">
                         <li class="btn-mark-read">

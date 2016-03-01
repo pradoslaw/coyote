@@ -34,6 +34,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // strona glowna forum
     Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
     Route::post('Preview', ['uses' => 'HomeController@preview', 'as' => 'preview']);
+    Route::get('Search', ['uses' => 'SearchController@index', 'as' => 'search']);
 
     Route::get('Tag/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     Route::post('Tag/save', ['uses' => 'TagController@save', 'as' => 'tag.save']);

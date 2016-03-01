@@ -1,11 +1,4 @@
 <aside id="sidebar">
-    {% if topics is defined %}
-        <div id="box-count" class="box">
-            <strong>{{ topics.total()|number_format(0, '', ' ') }}</strong>
-            <span>{{ declination(topics.total(), ['wątek', 'wątki', 'wątków'], true) }}</span>
-        </div>
-    {% endif %}
-
     {% block side_menu %}
 
     {% endblock %}

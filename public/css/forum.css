@@ -1008,4 +1008,11 @@ blockquote {
     font-size: 14px;
     line-height: 160%; }
 
+#box-search {
+  margin-bottom: 20px; }
+
+#box-search-results #sort {
+  margin-bottom: 10px;
+  margin-top: 7px; }
+
 /*# sourceMappingURL=forum.css.map */

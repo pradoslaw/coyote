@@ -39,10 +39,9 @@ class HomeController extends BaseController
     }
 
     /**
-     * @param Request $request
      * @return $this
      */
-    public function index(Request $request)
+    public function index()
     {
         $this->pushForumCriteria();
         // execute query: get all categories that user can has access

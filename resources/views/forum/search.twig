@@ -1,0 +1,77 @@
+{% extends 'forum.base' %}
+
+{% block container %}
+    <div id="index" class="sidebar">
+        {% include "forum.top" %}
+
+        <h4>Szukaj</h4>
+
+        <main id="mainbar">
+            {{ form_open({'method': 'GET', 'role': 'form', 'url': route('forum.search'), 'class': 'form-inline', 'id': 'box-search'}) }}
+                <div class="form-group">
+                    {{ form_text('q', input_get('q'), {'class': 'form-control'}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_select('f', {'': 'Wszystkie kategorie'} + forumList, input_get('f'), {'class': 'form-control'}) }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Szukaj</button>
+            {{ form_close() }}
+
+            <section id="box-search-results" class="panel panel-wrapper">
+                <div class="panel-body">
+                    <ul id="sort" class="hidden-xs">
+                        <li>{{ sortable('last', 'Trafność', ['last', 'desc']) }}</li>
+                        <li>{{ sortable('id', 'Data utworzenia', ['last', 'desc']) }}</li>
+                    </ul>
+
+                    <div class="clearfix"></div>
+
+                    <div class="post">
+                        <div class="post-body">
+                            <div class="row">
+                                <div class="col-xs-2 col-user">
+                                    <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
+                                        {% if log.user_id %}
+                                            {{ link_to_profile(log.user_id, log.author_name, log.is_active, log.is_blocked) }}
+                                        {% else %}
+                                            {{ log.user_name }}
+                                        {% endif %}
+                                    </h5>
+                                </div>
+
+                                <div class="col-xs-10 col-time">
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-2 col-user hidden-xss">
+
+                                </div>
+
+                                <div class="col-xs-10 col-body">
+                                    <div class="post-content">
+                                        {{ log.text }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            {{ viewers|raw }}
+        </main>
+
+        {% embed 'forum.sidebar' %}
+            {% block side_menu %}
+                <div id="box-count" class="box">
+                    <strong>{{ 0|number_format(0, '', ' ') }}</strong>
+                    <span>{{ declination(0, ['post', 'posty', 'postów'], true) }}</span>
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </div>
+{% endblock %}
