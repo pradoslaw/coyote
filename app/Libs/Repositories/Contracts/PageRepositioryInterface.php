@@ -2,7 +2,7 @@
 
 namespace Coyote\Repositories\Contracts;
 
-interface PageRepositioryInterface extends RepositoryInterface
+interface PageRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param string $path
