@@ -75,7 +75,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // szybka zmiana tytulu watku
     Route::post('Topic/Subject/{topic}', ['uses' => 'TopicController@subject', 'as' => 'topic.subject', 'middleware' => 'auth']);
     // dziennik zdarzen dla watku
-    Route::get('Topic/Log/{topic}', ['uses' => 'TopicController@log', 'as' => 'topic.log', 'middleware' => ['auth', 'topic.access']]);
+    Route::get('Stream/{topic}', ['uses' => 'StreamController@index', 'as' => 'stream', 'middleware' => ['auth']]);
 
     // widok kategorii forum
     Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);

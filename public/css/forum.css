@@ -215,6 +215,19 @@
           height: 13px;
           color: #80a41a; }
 
+.stream .media {
+  border-bottom: 1px solid #d0d0d0; }
+  .stream .media:last-child {
+    border-bottom: 0; }
+  .stream .media p {
+    margin-bottom: 2px;
+    font-size: 12px; }
+  .stream .media small.text-muted {
+    font-size: 85%; }
+  .stream .media .well {
+    font-size: 12px;
+    margin-top: 10px; }
+
 #index {
   position: relative;
   margin-top: 20px; }
@@ -398,6 +411,9 @@
 
 .btn-atom:before {
   content: ""; }
+
+.btn-back:before {
+  content: ""; }
 
 #btn-setting:before {
   content: ""; }

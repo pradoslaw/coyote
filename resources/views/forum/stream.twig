@@ -1,0 +1,74 @@
+{% extends 'forum.base' %}
+{% block title %}Dziennik zdarzeń{{ parent() }}{% endblock %}
+
+{% block container %}
+    <div id="index" class="sidebar">
+        {% include "forum.top" %}
+
+        {% set back_url = route('forum.topic', [forum.path, topic.id, topic.path]) %}
+        <h1>{{ link_to(back_url, topic.subject) }}</h1>
+
+        <main id="mainbar">
+
+
+            <ul class="nav nav-panel" style="margin-bottom: 0">
+                <li role="presentation" class="active"><a href="#stream" role="tab" data-toggle="tab">Aktywność użytkowników</a></li>
+                <li role="presentation"><a href="#visits" role="tab" data-toggle="tab">Wizyty</a></li>
+            </ul>
+
+            <div class="panel panel-default">
+                <div id="stream" role="tabpanel" class="panel-body tab-pane active">
+                    {{ activities.render() }}
+
+                    <div class="stream">
+                        {% for activity in decorate %}
+                            <div class="media">
+                                <div class="media-left hidden-xs">
+                                    <a href="{{ activity.actor.url }}">
+                                        <img class="media-object img-thumbnail" src="{{ user_photo(activity.actor.image) }}" style="width: 38px; height: 38px;" alt="">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <i class="fa fa-laptop pull-right bubble" title="{{ activity.ip }}"></i>
+                                    <i class="fa fa-globe pull-right bubble" title="{{ activity.browser }}"></i>
+
+                                    <p title="{{ activity.headline|striptags }}">{{ activity.headline|raw }}</p>
+                                    <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
+
+                                    <div class="well well-sm">{{ activity.excerpt|raw }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div id="visits" role="tabpanel" class="panel-body tab-pane">
+                </div>
+            </div>
+
+            {{ viewers|raw }}
+        </main>
+
+        {% embed 'forum.sidebar' %}
+            {% block side_menu %}
+                <div class="box">
+                    <ul class="side-menu">
+                        <li class="btn-back">
+                            <a title="Powrót do wątku" href="{{ back_url }}">Powrót do: {{ topic.subject }}</a>
+                        </li>
+                    </ul>
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function () {
+            $('.bubble').tooltip({'trigger': 'hover'});
+        });
+    </script>
+{% endblock %}

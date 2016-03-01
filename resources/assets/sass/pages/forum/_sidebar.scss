@@ -46,6 +46,10 @@
   content: $fa-var-rss-square;
 }
 
+.btn-back:before {
+  content: $fa-var-undo;
+}
+
 #btn-setting:before {
   content: $fa-var-cog;
 }

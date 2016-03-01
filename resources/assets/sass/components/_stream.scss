@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+.stream {
+  .media {
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    p {
+      margin-bottom: 2px;
+      font-size: $font-size-small;
+    }
+
+    small.text-muted {
+      font-size: 85%;
+    }
+
+    .well {
+      font-size: $font-size-small;
+      margin-top: 10px;
+    }
+  }
+}
