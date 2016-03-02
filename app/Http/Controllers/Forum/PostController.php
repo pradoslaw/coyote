@@ -25,6 +25,7 @@ use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Activities\Restore as Stream_Restore;
 use Coyote\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Stream\Activities\Accept as Stream_Accept;
+use Coyote\Stream\Activities\Reject as Stream_Reject;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
@@ -548,7 +549,7 @@ class PostController extends BaseController
             }
 
             // add into activity stream
-            stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->map($post));
+            stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->map($post), (new Stream_Topic())->map($topic, $forum));
         });
 
         return response()->json(['count' => $post->score]);
@@ -589,18 +590,23 @@ class PostController extends BaseController
 
             // add or subtract reputation points
             $reputation = app()->make('Reputation\Post\Accept');
+            $target = (new Stream_Topic())->map($topic, $forum);
 
             // user might change his mind and accept different post (or he can uncheck solved post)
             if ($result) {
+                $old = $this->post->find($result->post_id, ['user_id', 'text']);
+
                 $reputation->setUrl($url . '?p=' . $result->post_id . '#id' . $result->post_id);
                 $reputation->setExcerpt($excerpt);
+
+                // add into activity stream
+                stream(Stream_Reject::class, (new Stream_Post(['url' => $reputation->getUrl()]))->map($old), $target);
 
                 // reverse reputation points
                 if ($forum->enable_reputation) {
                     $reputation->setIsPositive(false)->setPostId($result->post_id);
 
                     if ($result->post_id !== $post->id) {
-                        $old = $this->post->find($result->post_id, ['user_id', 'text']);
                         $reputation->setExcerpt(excerpt($old->text));
 
                         if ($old->user_id !== $result->user_id) {
@@ -648,10 +654,10 @@ class PostController extends BaseController
                     'user_id'   => $this->userId, // don't change this. we need to know who accepted this post
                     'ip'        => request()->ip()
                 ]);
-            }
 
-            // add into activity stream
-            stream(Stream_Accept::class, (new Stream_Post(['url' => $url]))->map($post));
+                // add into activity stream
+                stream(Stream_Accept::class, (new Stream_Post(['url' => $url]))->map($post), $target);
+            }
         });
     }
 

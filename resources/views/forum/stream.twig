@@ -18,7 +18,7 @@
 
             <div class="panel panel-default">
                 <div id="stream" role="tabpanel" class="panel-body tab-pane active">
-                    {{ activities.render() }}
+                    <nav class="text-center">{{ activities.render()|raw }}</nav>
 
                     <div class="stream">
                         {% for activity in decorate %}
@@ -40,6 +40,8 @@
                             </div>
                         {% endfor %}
                     </div>
+
+                    <nav class="text-center">{{ activities.render()|raw }}</nav>
                 </div>
 
                 <div id="visits" role="tabpanel" class="panel-body tab-pane">

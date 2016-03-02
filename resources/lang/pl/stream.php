@@ -7,6 +7,8 @@ return [
     'restore' => 'przywrócił',
     'update' => 'zmienił',
     'vote' => 'zagłosował',
+    'accept' => 'zaakceptował',
+    'reject' => 'zrezygnował z akceptacji',
 
     'microblog' => 'wpis',
     'comment' => 'komentarz',
@@ -17,6 +19,7 @@ return [
         'microblog' => ':actor :verb :object na mikroblogu',
         'comment'   => ':actor :verb :object w :target',
         'topic'     => ':actor :verb wątek :object',
-        'post'      => ':actor :verb :object w :target'
+        'post'      => ':actor :verb :object w :target',
+        'accept'    => ':actor :verb :object w :target'
     ]
 ];
