@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+$font-size-control-label: 15px;
+
+#job-posting {
+  .panel-heading {
+    font-size: $font-size-large;
+  }
+
+  .control-label, .checkbox label {
+    //font-size: $font-size-control-label;
+    //font-weight: normal;
+    color: $gray;
+  }
+
+  .help-block {
+    font-size: $font-size-small;
+  }
+
+  .form-group {
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.input-inline {
+  display: inline-block;
+}
+
+input[name=salary_from], input[name=salary_to] {
+  width: 50px;
+}
+
+select[name=currency_id], select[name=rate_id], select[name=employment_id] {
+  width: auto;
+}
+
+.has-feedback label ~ .form-control-feedback {
+  top: 30px;
+  font-size: $font-size-large;
+  color: $gray;
+}

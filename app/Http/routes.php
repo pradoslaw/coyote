@@ -107,6 +107,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
  */
 Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
     Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
+
+    Route::get('Submit', ['uses' => 'SubmitController@index', 'as' => 'submit']);
 });
 
 /*

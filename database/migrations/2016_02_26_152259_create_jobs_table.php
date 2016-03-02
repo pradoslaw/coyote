@@ -26,8 +26,9 @@ class CreateJobsTable extends Migration
             $table->smallInteger('country_id')->nullable();
             $table->smallInteger('salary_from')->nullable();
             $table->smallInteger('salary_to')->nullable();
-            $table->smallInteger('salary_currency')->nullable();
-            $table->enum('payment', ['monthly', 'daily', 'yearly', 'weekly']);
+            $table->smallInteger('currency_id')->nullable();
+            $table->smallInteger('rate_id')->nullable();
+            $table->smallInteger('employment_id')->nullable();
             $table->timestampTz('deadline_at');
             $table->string('email')->nullable();
             $table->tinyInteger('incognito')->default(0);
@@ -37,6 +38,9 @@ class CreateJobsTable extends Migration
 
             $table->foreign('firm_id')->references('id')->on('firms')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('currency_id')->references('id')->on('currencies');
+            $table->foreign('employment_id')->references('id')->on('job_employment');
+            $table->foreign('rate_id')->references('id')->on('job_rates');
         });
     }
 

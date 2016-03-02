@@ -1,0 +1,81 @@
+{% extends 'job.base' %}
+{% block title %}Wystaw ofertę pracy{{ parent() }}{% endblock %}
+
+{% import 'components.forms' as forms %}
+
+{% block container %}
+<div class="row">
+    <main class="col-sm-8">
+        {{ form_open({'url': '#', 'class': '', 'id': 'job-posting'}) }}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Podstawowe informacje
+                </div>
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <label class="control-label">Tytuł oferty <em class="text-danger">*</em></label>
+
+                        {{ form_text('name', input_old('name'), {'class': 'form-control', 'placeholder': 'Np. Senior Java Developer'}) }}
+                        <span class="help-block">Pozostało: <strong>60</strong> znaków</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Lokalizacja</label>
+
+                        <div class="row">
+                            <div class="col-sm-2">
+                                {{ form_select('country_id', countryList, input_old('country_id'), {'class': 'form-control'}) }}
+                            </div>
+                            <div class="col-sm-7" style="padding-left: 0">
+                                {{ form_text('city', input_old('city'), {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="checkbox">
+                                    {{ form_checkbox('remote', 1, true, {'id': 'remote'}) }}
+
+                                    <label for="remote">
+                                        Możliwa praca zdalna
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>
+
+                        <div>
+                            od
+                            {{ form_text('salary_from', input_old('salary_from'), {'class': 'form-control input-inline'}) }}
+
+                            do
+                            {{ form_text('salary_to', input_old('salary_to'), {'class': 'form-control input-inline'}) }}
+                            {{ form_select('currency_id', currencyList, input_old('currency_id'), {'class': 'form-control input-inline'}) }}
+                            {{ form_select('rate_id', rateList, input_old('rate_id'), {'class': 'form-control input-inline'}) }}
+                            {{ form_select('employment_id', employmentList, input_old('employment_id'), {'class': 'form-control input-inline'}) }}
+
+                            <span class="help-block">Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Wymagania, czyli co trzeba potrafić?</label>
+
+                        {{ form_text('', '', {'class': 'form-control', 'placeholder': 'Np. Java, MS-SQL'}) }}
+                        <span class="help-block">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter.</span>
+                        <span class="fa fa-tag form-control-feedback" aria-hidden="true"></span>
+                    </div>
+
+                </div>
+            </div>
+        {{ form_close() }}
+    </main>
+
+    <aside class="col-sm-4">
+
+    </aside>
+</div>
+{% endblock %}

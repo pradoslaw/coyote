@@ -327,6 +327,34 @@
       content: "";
       color: #e37329; }
 
+#job-posting .panel-heading {
+  font-size: 17px; }
+
+#job-posting .control-label, #job-posting .checkbox label {
+  color: #555555; }
+
+#job-posting .help-block {
+  font-size: 12px; }
+
+#job-posting .form-group {
+  border-bottom: 1px solid #d0d0d0; }
+  #job-posting .form-group:last-child {
+    border-bottom: none; }
+
+.input-inline {
+  display: inline-block; }
+
+input[name=salary_from], input[name=salary_to] {
+  width: 50px; }
+
+select[name=currency_id], select[name=rate_id], select[name=employment_id] {
+  width: auto; }
+
+.has-feedback label ~ .form-control-feedback {
+  top: 30px;
+  font-size: 17px;
+  color: #555555; }
+
 #job-offer {
   padding: 0 20px; }
   #job-offer blockquote {

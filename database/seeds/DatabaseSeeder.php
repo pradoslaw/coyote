@@ -25,5 +25,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ForumTableSeeder::class);
         $this->call(FlagTypeSeeder::class);
         $this->call(ForumReasonsTableSeeder::class);
+        $this->call(CurrencyTableSeeder::class);
+        $this->call(CountryTableSeeder::class);
+        $this->call(JobEmploymentTableSeeder::class);
+        $this->call(JobRatesTableSeeder::class);
     }
 }

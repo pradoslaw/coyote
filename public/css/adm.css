@@ -1,0 +1,88 @@
+@charset "UTF-8";
+#wrapper {
+  padding: 0 15px 0 15px;
+  margin-left: 222px; }
+
+#box-login {
+  margin: 60px auto 0 auto;
+  max-width: 350px;
+  background-color: #fff;
+  border: 1px solid #d0d0d0; }
+  #box-login form {
+    padding: 40px 20px; }
+
+#adm-menu {
+  background: url("/img/background.png") repeat;
+  border-right: 1px solid #d5d5d5;
+  position: fixed;
+  left: 0;
+  top: 5px;
+  height: 100%;
+  width: 222px; }
+  #adm-menu ul {
+    margin-left: 0;
+    width: 100%; }
+    #adm-menu ul > li {
+      transition: all 0.5s;
+      display: block;
+      font-size: 12px;
+      float: none; }
+      #adm-menu ul > li > a {
+        display: block;
+        padding: 10px 20px;
+        transition: all 0.15s linear;
+        color: #3C3C3C;
+        font-family: "Open Sans", Arial, sans-serif;
+        font-size: 12px; }
+        #adm-menu ul > li > a:hover {
+          color: #80a41a;
+          text-decoration: none; }
+        #adm-menu ul > li > a:focus {
+          text-decoration: none; }
+        #adm-menu ul > li > a .fa-fw {
+          margin-right: 3px; }
+      #adm-menu ul > li.active {
+        border-left: 4px solid #80a41a; }
+        #adm-menu ul > li.active > a {
+          padding-left: 17px; }
+        #adm-menu ul > li.active ul {
+          background-color: #e7e7e7; }
+      #adm-menu ul > li > ul > li > a {
+        font-size: 90%;
+        padding: 5px 20px 5px 40px; }
+
+#box-user {
+  margin: 20px 17px;
+  clear: both;
+  border-bottom: 1px solid #d0d0d0;
+  overflow: hidden;
+  padding-bottom: 10px; }
+  #box-user .img-thumbnail {
+    width: 45px;
+    float: left;
+    margin-right: 10px; }
+  #box-user h3 {
+    font-size: 15px;
+    margin-top: 1px; }
+  #box-user .list-inline {
+    font-size: 11px;
+    color: #777777; }
+    #box-user .list-inline li {
+      padding-left: 0; }
+    #box-user .list-inline li:after {
+      content: '●';
+      margin-left: 9px; }
+    #box-user .list-inline li:first-child {
+      padding-left: 1px; }
+    #box-user .list-inline li:last-child:after {
+      content: ''; }
+    #box-user .list-inline a {
+      color: inherit; }
+
+#adm-header {
+  background-color: #fff;
+  border-bottom: 1px solid #d0d0d0; }
+  #adm-header > .col-xs-12 {
+    padding: 10px 15px; }
+
+/*# sourceMappingURL=adm.css.map */
