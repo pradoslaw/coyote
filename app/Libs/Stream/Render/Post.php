@@ -18,4 +18,9 @@ class Post extends Render
 
         return parent::actor();
     }
+
+    protected function excerpt()
+    {
+        return $this->stream['object.reasonName'] ?: $this->stream['object.displayName'];
+    }
 }
