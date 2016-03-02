@@ -9,6 +9,7 @@ return [
     'vote' => 'zagłosował',
     'accept' => 'zaakceptował',
     'reject' => 'zrezygnował z akceptacji',
+    'move' => 'przeniósł',
 
     'microblog' => 'wpis',
     'comment' => 'komentarz',
@@ -20,6 +21,7 @@ return [
         'comment'   => ':actor :verb :object w :target',
         'topic'     => ':actor :verb wątek :object',
         'post'      => ':actor :verb :object w :target',
-        'accept'    => ':actor :verb :object w :target'
+        'accept'    => ':actor :verb :object w :target',
+        'topic:move' => ':actor :verb :object z :source do :target'
     ]
 ];

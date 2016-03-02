@@ -32,10 +32,18 @@ class Topic extends Render
     }
 
     /**
+     * @return mixed
+     */
+    protected function source()
+    {
+        return $this->stream['object.forum.name'];
+    }
+
+    /**
      * @return string
      */
-    public function excerpt()
+    protected function excerpt()
     {
-        return $this->stream['object.excerpt'];
+        return $this->stream['object.reasonName'] ?: $this->stream['object.excerpt'];
     }
 }

@@ -20,6 +20,46 @@ abstract class Render
         $this->stream = $stream;
     }
 
+    public function render()
+    {
+        $translator = app('translator');
+        $id = 'stream.headline.' . $this->stream['object.objectType'];
+
+        if ($translator->has($id . ':' . $this->stream['verb'])) {
+            $id .= ':' . $this->stream['verb'];
+        }
+
+        $message = $translator->get($id);
+        $parameters = $this->makeParameters($message);
+
+        $this->stream['headline'] = $translator->trans($id, $parameters);
+        $this->stream['excerpt'] = $this->excerpt();
+
+        return $this->stream;
+    }
+
+    protected function makeParameters($message)
+    {
+        $parameters = [];
+        $offset = 0;
+
+        while (($start = strpos($message, ':', $offset)) > -1) {
+            $offset = $start + 1;
+            $end = strpos($message, ' ', $offset);
+
+            if ($end === false) {
+                $end = strlen($message);
+            }
+
+            $parameter = substr($message, $start + 1, $end - 1 - $start);
+            if (method_exists($this, $parameter)) {
+                $parameters[$parameter] = $this->$parameter();
+            }
+        }
+
+        return $parameters;
+    }
+
     protected function actor()
     {
         return link_to(
@@ -47,24 +87,11 @@ abstract class Render
         );
     }
 
-    public function target()
+    protected function target()
     {
         return link_to(
             $this->stream['target.url'],
             str_limit($this->stream['target.displayName'], 48)
         );
-    }
-
-    public function render()
-    {
-        $this->stream['headline'] = trans('stream.headline.' . $this->stream['object.objectType'], [
-            'actor'     => $this->actor(),
-            'verb'      => $this->verb(),
-            'object'    => $this->object(),
-            'target'    => $this->target()
-        ]);
-        $this->stream['excerpt'] = $this->excerpt();
-
-        return $this->stream;
     }
 }
