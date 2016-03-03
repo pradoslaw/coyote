@@ -327,6 +327,82 @@
       content: "";
       color: #e37329; }
 
+.jumbotron {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  color: inherit;
+  background-color: #eeeeee; }
+  .jumbotron h1,
+  .jumbotron .h1 {
+    color: inherit; }
+  .jumbotron p {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 200; }
+  .jumbotron > hr {
+    border-top-color: #d5d5d5; }
+  .container .jumbotron,
+  .container-fluid .jumbotron {
+    border-radius: 6px; }
+  .jumbotron .container {
+    max-width: 100%; }
+  @media screen and (min-width: 768px) {
+    .jumbotron {
+      padding-top: 48px;
+      padding-bottom: 48px; }
+      .container .jumbotron,
+      .container-fluid .jumbotron {
+        padding-left: 60px;
+        padding-right: 60px; }
+      .jumbotron h1,
+      .jumbotron .h1 {
+        font-size: 59px; } }
+
+.jumbotron {
+  padding: 15px; }
+  .jumbotron h1 {
+    font-size: 35px; }
+  .jumbotron p {
+    font-size: 16px; }
+
+#indicator {
+  margin: 20px 0;
+  overflow: hidden;
+  padding-top: 10px; }
+  #indicator .bar {
+    height: 10px;
+    background-color: #eeeeee;
+    width: 76%;
+    margin: auto; }
+  #indicator ul li {
+    display: inline-block;
+    width: 25%;
+    float: left;
+    text-align: center; }
+    #indicator ul li .bubble {
+      border-radius: 50%;
+      border: 5px solid #eeeeee;
+      width: 30px;
+      height: 30px;
+      background-color: #fff;
+      display: block;
+      margin: -19px auto 0 auto; }
+    #indicator ul li strong {
+      font-weight: bold;
+      color: #c4c4c4;
+      display: inline-block;
+      padding-top: 10px; }
+  #indicator ul li.complete .bubble {
+    background-color: #555;
+    background-image: radial-gradient(circle, #aed91d, #abd600);
+    background-repeat: no-repeat;
+    box-shadow: inset 1px -1px #777777; }
+  #indicator ul li.complete strong {
+    color: #777777; }
+  #indicator ul li.end .bubble {
+    background-color: #eeeeee; }
+
 #job-posting .panel-heading {
   font-size: 17px; }
 
@@ -344,7 +420,7 @@
 .input-inline {
   display: inline-block; }
 
-input[name=salary_from], input[name=salary_to] {
+input[name=salary_from], input[name=salary_to], input[name=deadline] {
   width: 50px; }
 
 select[name=currency_id], select[name=rate_id], select[name=employment_id] {

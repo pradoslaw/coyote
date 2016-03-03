@@ -6,6 +6,48 @@
 {% block container %}
 <div class="row">
     <main class="col-sm-8">
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Zaczynamy...</h1>
+                <p>Pamiętaj, że informacje zawarte w tym formularzu, możesz zmienić w każdej chwili i jest ono publikowane za darmo.
+                    Prosimy o zamieszczanie rzeczowych informacji. Frazesy w tylu <em>młoda dynamiczna firma</em> nie są dobrze widziane przez programistów.</p>
+
+                <p><a class="btn btn-default" href="#" role="button">Ok, zrozumiałem</a></p>
+            </div>
+        </div>
+
+        <div id="indicator">
+            <div class="bar"></div>
+
+            <ul class="list-unstyled">
+                <li class="complete">
+                    <span class="bubble"></span>
+
+                    <strong>Podstawowe informacje</strong>
+                </li>
+
+                <li>
+                    <span class="bubble"></span>
+
+                    <strong>Informacje o firmie</strong>
+                </li>
+
+                <li>
+                    <span class="bubble"></span>
+
+                    <strong>Podgląd</strong>
+                </li>
+
+                <li class="end">
+                    <span class="bubble"></span>
+
+                    <strong>Koniec</strong>
+                </li>
+            </ul>
+        </div>
+
+        <div class="clearfix"></div>
+
         {{ form_open({'url': '#', 'class': '', 'id': 'job-posting'}) }}
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -69,6 +111,44 @@
                         <span class="fa fa-tag form-control-feedback" aria-hidden="true"></span>
                     </div>
 
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Szczegółowe informacje
+                </div>
+
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="control-label">Data ważności oferty</label>
+
+                        {{ form_text('deadline', input_old('deadline', 90), {'class': 'form-control input-inline'}) }} dni
+                        <span class="help-block">Oferta będzie widoczna na stronie do dnia 2016-06-01</span>
+                    </div>
+
+                    <div class="form-group" style="border-bottom: none">
+                        <div class="radio">
+                            {{ form_radio('apply_enable', 1, true, {'id': 'apply-enable'}) }}
+
+                            <label for="apply-enable">
+                                Zezwól na wysyłanie CV poprzez serwis 4programmers.net
+                            </label>
+                        </div>
+
+                        {{ form_text('email', input_old('email'), {'class': 'form-control'}) }}
+                        <span class="help-block">Podaj adres e-mail na jaki wyślemy Ci informacje o kandydatach. Adres e-mail nie będzie widoczny dla osób postronnych.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="radio">
+                            {{ form_radio('apply_enable', 0, false, {'id': 'apply-disable'}) }}
+
+                            <label for="apply-disable">
+                                ...lub podaj informacje w jaki sposób kandydaci mogą aplikować na to stanowisko
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         {{ form_close() }}
