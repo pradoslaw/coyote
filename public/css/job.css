@@ -387,7 +387,10 @@
       height: 30px;
       background-color: #fff;
       display: block;
-      margin: -19px auto 0 auto; }
+      margin: -19px auto 0 auto;
+      padding-top: 2px; }
+      #indicator ul li .bubble i {
+        color: #80a41a; }
     #indicator ul li strong {
       font-weight: bold;
       color: #c4c4c4;

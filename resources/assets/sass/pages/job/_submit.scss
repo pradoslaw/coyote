@@ -43,6 +43,11 @@ $font-size-control-label: 15px;
         background-color: #fff;
         display: block;
         margin: -19px auto 0 auto;
+        padding-top: 2px;
+
+        i {
+          color: $brand-primary;
+        }
       }
 
       strong {
