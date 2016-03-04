@@ -1,11 +1,12 @@
 @charset "UTF-8";
 @import "../../vendor/bootstrap/jumbotron";
 @import "../../vendor/bootstrap/mixins/gradients";
+@import "../../components/affix";
 
 $font-size-control-label: 15px;
 
 .jumbotron {
-  padding: 15px;
+  padding: 15px 30px;
 
   h1 {
     font-size: 35px;
@@ -13,6 +14,14 @@ $font-size-control-label: 15px;
 
   p {
     font-size: 16px;
+  }
+
+  &.alert-popover {
+    position: static;
+
+    .close {
+      font-size: 25px;
+    }
   }
 }
 
@@ -84,8 +93,6 @@ $font-size-control-label: 15px;
   }
 
   .control-label, .checkbox label {
-    //font-size: $font-size-control-label;
-    //font-weight: normal;
     color: $gray;
   }
 
@@ -93,13 +100,25 @@ $font-size-control-label: 15px;
     font-size: $font-size-small;
   }
 
-  .form-group {
+  .form-group-border {
     border-bottom: 1px solid $border-color;
 
     &:last-child {
       border-bottom: none;
     }
   }
+}
+
+#hint-container {
+  position: absolute;
+}
+
+.sidebar-hint {
+  margin-top: 0;
+}
+
+.mce-tinymce {
+  width: 95% !important;
 }
 
 .input-inline {

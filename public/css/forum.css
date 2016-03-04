@@ -228,6 +228,18 @@
     font-size: 12px;
     margin-top: 10px; }
 
+.sidebar-hint {
+  padding: 10px;
+  border-radius: 5px;
+  margin: 15px;
+  background-color: #ffcc5e; }
+  .sidebar-hint h4 {
+    color: #960202; }
+  .sidebar-hint p {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 160%; }
+
 #index {
   position: relative;
   margin-top: 20px; }
@@ -1011,18 +1023,6 @@ blockquote {
   margin-bottom: 10px; }
   #text-area .tab-content {
     margin-top: 20px; }
-
-.sidebar-hint {
-  padding: 10px;
-  border-radius: 5px;
-  margin: 15px;
-  background-color: #ffcc5e; }
-  .sidebar-hint h4 {
-    color: #960202; }
-  .sidebar-hint p {
-    margin: 8px 0;
-    font-size: 14px;
-    line-height: 160%; }
 
 #box-search {
   margin-bottom: 20px; }

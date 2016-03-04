@@ -359,12 +359,28 @@
       .jumbotron .h1 {
         font-size: 59px; } }
 
+.sidebar-hint {
+  padding: 10px;
+  border-radius: 5px;
+  margin: 15px;
+  background-color: #ffcc5e; }
+  .sidebar-hint h4 {
+    color: #960202; }
+  .sidebar-hint p {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 160%; }
+
 .jumbotron {
-  padding: 15px; }
+  padding: 15px 30px; }
   .jumbotron h1 {
     font-size: 35px; }
   .jumbotron p {
     font-size: 16px; }
+  .jumbotron.alert-popover {
+    position: static; }
+    .jumbotron.alert-popover .close {
+      font-size: 25px; }
 
 #indicator {
   margin: 20px 0;
@@ -415,10 +431,19 @@
 #job-posting .help-block {
   font-size: 12px; }
 
-#job-posting .form-group {
+#job-posting .form-group-border {
   border-bottom: 1px solid #d0d0d0; }
-  #job-posting .form-group:last-child {
+  #job-posting .form-group-border:last-child {
     border-bottom: none; }
+
+#hint-container {
+  position: absolute; }
+
+.sidebar-hint {
+  margin-top: 0; }
+
+.mce-tinymce {
+  width: 95% !important; }
 
 .input-inline {
   display: inline-block; }
