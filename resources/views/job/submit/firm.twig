@@ -1,0 +1,203 @@
+{% extends 'job.base' %}
+{% block title %}Informacje o firmie{{ parent() }}{% endblock %}
+
+{% import 'components.forms' as forms %}
+
+{% block container %}
+    <div class="row">
+        <main class="col-sm-8">
+            {% include 'job.submit.indicator' with {'current': 2} %}
+
+            {{ form_open({'url': '#', 'class': '', 'id': 'job-posting'}) }}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Informacje o firmie
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="radio">
+                            {{ form_radio('private', 0, false, {'id': 'private'}) }}
+
+                            <label for="private">
+                                Jestem osobą prywatną
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-border">
+                        <div class="radio">
+                            {{ form_radio('private', 1, true, {'id': 'public'}) }}
+
+                            <label for="public">
+                                Reprezentuje firmę
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <table id="box-choose-firm" class="table">
+                    <tbody>
+                        <tr>
+                            <td style="width: 10%">
+                                <img class="img-thumbnail" src="/img/apple-touch.png">
+                            </td>
+                            <td>
+                                <h4>4programmers.net</h4>
+                                <p>Lorem ipsum lores</p>
+                            </td>
+                            <td class="text-center" style="vertical-align: middle">
+                                <button class="btn btn-default btn-sm text-center">Wybierz</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="box-edit-firm" class="panel panel-default">
+                <div class="panel-heading">
+                    Dane firmy
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="form-group form-group-border">
+                        <label class="control-label">Nazwa firmy <em class="text-danger">*</em></label>
+
+                        {{ form_text('name', input_old('name'), {'class': 'form-control'}) }}
+                        <span class="help-block">Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="radio">
+                            {{ form_radio('is_agency', 0, true, {'id': 'direct'}) }}
+
+                            <label for="direct">
+                                Bezpośredni pracodawca
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-border">
+                        <div class="radio">
+                            {{ form_radio('is_agency', 1, false, {'id': 'agency'}) }}
+
+                            <label for="agency">
+                                Agencja pośrednictwa / IT outsourcing
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Logo</label>
+
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <a href="javascript:" id="logo" class="img-thumbnail">
+                                    <img src="/img/apple-touch.png">
+
+                                    <div class="btn-flush">
+                                        <i class="fa fa-remove fa-2x"></i>
+                                    </div>
+                                </a>
+
+                                <a id="upload" href="javascript:" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-border">
+                        <label class="control-label">Strona WWW</label>
+
+                        {{ form_text('website', input_old('website'), {'class': 'form-control'}) }}
+                        <span class="help-block">Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.</span>
+                    </div>
+
+                    <div class="form-group form-group-border agency">
+                        <label class="control-label">Liczba pracowników w firmie</label>
+
+                        {{ form_select('employees', employeesList, input_old('employees'), {'class': 'form-control'}) }}
+                        <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
+                    </div>
+
+                    <div class="form-group form-group-border agency">
+                        <label class="control-label">Rok powstania</label>
+
+                        {{ form_select('founded', foundedList, input_old('founded'), {'class': 'form-control'}) }}
+                        <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
+                    </div>
+
+                    <div class="form-group agency">
+                        <label class="control-label">Motto lub nagłówek</label>
+
+                        {{ form_text('headline', input_old('headline'), {'class': 'form-control', 'maxlength': 100}) }}
+                        <span class="help-block">Pozostało <strong>100</strong> znaków.</span>
+                    </div>
+
+                    <div class="form-group agency">
+                        <label class="control-label">Opis firmy</label>
+
+                        {{ form_textarea('description', input_old('description'), {'class': 'form-control'}) }}
+                        <span class="help-block">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
+                    </div>
+
+                    <div class="form-group form-group-border agency">
+                        <label class="control-label">Adres</label>
+
+                        {{ form_hidden('latitude', input_old('latitude'), {'id': 'latitude'}) }}
+                        {{ form_hidden('longitude', input_old('latitude'), {'id': 'longitude'}) }}
+                        {{ form_hidden('street', input_old('street')) }}
+                        {{ form_hidden('city', input_old('city')) }}
+                        {{ form_hidden('country', input_old('country')) }}
+                        {{ form_hidden('postcode', input_old('postcode')) }}
+                        {{ form_hidden('house', input_old('house')) }}
+
+                        {{ form_text('address', input_old('address'), {'class': 'form-control', 'id': 'address'}) }}
+                        <span class="help-block">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
+
+                        <div id="map"></div>
+                    </div>
+
+                    <div class="form-group form-group-border agency">
+                        <label class="control-label">Benefity</label>
+                        <span class="help-block">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w polu poniżej.</span>
+
+                        <ol id="benefits" class="list-group">
+                            {% for benefit in benefitsList %}
+                                <li class="list-group-item col-sm-6">
+                                    <i class="fa fa-check"></i> {{ benefit }}
+
+                                    <input type="hidden" name="benefits[]" value="{{ benefit }}">
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+
+                    <div class="form-group">
+                        <a href="" class="btn btn-default btn-lg pull-left">Informacje o firmie</a>
+                        <button type="submit" class="btn btn-primary btn-lg pull-right">Podgląd</button>
+                    </div>
+                </div>
+            </div>
+            {{ form_close() }}
+        </main>
+
+        <aside class="col-sm-4">
+            <div id="hint-container">
+                <div id="hint-headline" class="sidebar-hint" style="display: none;">
+                    <h4>Motto lub nagłówek</h4>
+
+                    <p>
+                        Opcjonalna informacja, która opisuje Twoją firmę. To zdanie będzie wyświetlane przy opisie firmy pod ofertą.
+                    </p>
+                </div>
+            </div>
+
+        </aside>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjPih0Ay15fPj2j6KOqqNn2Af902apRz8&sensor=false"></script>
+    <script src="{{ cdn('js/job-submit.js') }}"></script>
+{% endblock %}

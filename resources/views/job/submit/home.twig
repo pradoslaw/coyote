@@ -16,37 +16,7 @@
             <p><button class="btn btn-default btn-close" role="button" data-dismiss="alert" aria-label="Close">Ok, zrozumiałem</button></p>
         </div>
 
-        <div id="indicator">
-            <div class="bar"></div>
-
-            <ul class="list-unstyled">
-                <li class="complete">
-                    <span class="bubble"><i class="fa fa-check"></i></span>
-
-                    <strong>Podstawowe informacje</strong>
-                </li>
-
-                <li class="complete">
-                    <span class="bubble"></span>
-
-                    <strong>Informacje o firmie</strong>
-                </li>
-
-                <li>
-                    <span class="bubble"></span>
-
-                    <strong>Podgląd</strong>
-                </li>
-
-                <li class="end">
-                    <span class="bubble"></span>
-
-                    <strong>Koniec</strong>
-                </li>
-            </ul>
-        </div>
-
-        <div class="clearfix"></div>
+        {% include 'job.submit.indicator' with {'current': 1} %}
 
         {{ form_open({'url': '#', 'class': '', 'id': 'job-posting'}) }}
             <div class="panel panel-default">
@@ -58,7 +28,7 @@
                     <div class="form-group form-group-border">
                         <label class="control-label">Tytuł oferty <em class="text-danger">*</em></label>
 
-                        {{ form_text('name', input_old('name'), {'class': 'form-control', 'placeholder': 'Np. Senior Java Developer'}) }}
+                        {{ form_text('name', input_old('name'), {'class': 'form-control', 'placeholder': 'Np. Senior Java Developer', 'maxlength': 60}) }}
                         <span class="help-block">Pozostało: <strong>60</strong> znaków</span>
                     </div>
 
@@ -124,7 +94,7 @@
                         <label class="control-label">Data ważności oferty</label>
 
                         {{ form_text('deadline', input_old('deadline', 90), {'class': 'form-control input-inline'}) }} dni
-                        <span class="help-block">Oferta będzie widoczna na stronie do dnia 2016-06-01</span>
+                        <span class="help-block">Oferta będzie widoczna na stronie do dnia <strong>2016-06-01</strong></span>
                     </div>
 
                     <div class="form-group">
@@ -161,7 +131,8 @@
 
                     <div class="form-group">
 
-                        <button type="submit" class="btn btn-primary btn-lg pull-right">Dalej</button>
+
+                        <button type="submit" class="btn btn-primary btn-lg pull-right">Informacje o firmie</button>
                     </div>
                 </div>
             </div>
@@ -218,44 +189,5 @@
     {{ parent() }}
 
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script>
-        tinymce.init({
-            selector: "textarea",
-            height: 150,
-            plugins: [
-                "advlist lists spellchecker",
-                "code",
-                "paste"
-            ],
-
-            toolbar1: "bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | cut copy paste | bullist numlist | undo redo | outdent indent",
-
-            menubar: false,
-            toolbar_items_size: 'small',
-            elementpath: false,
-            statusbar: false,
-
-            content_style: "* {font-size: 13px; font-family: Arial, sans-serif;}"
-        });
-
-        $(function() {
-            $(':input').focus(function() {
-                $('.sidebar-hint').hide();
-                $('#hint-' + $(this).attr('name')).fadeIn();
-
-                var offset = $(this).position().top;
-                if (!offset) {
-                    offset = $(this).parent().position().top;
-                }
-
-                $('#hint-container').css('top', offset);
-            });
-
-            $('input[name="name"]').focus();
-
-            $('.jumbotron .btn-close').click(function() {
-                $('.jumbotron .close').click();
-            });
-        });
-    </script>
+    <script src="{{ cdn('js/job-submit.js') }}"></script>
 {% endblock %}

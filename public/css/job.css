@@ -436,6 +436,47 @@
   #job-posting .form-group-border:last-child {
     border-bottom: none; }
 
+#logo {
+  position: relative;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  text-align: center;
+  width: 100%; }
+  #logo:hover .btn-flush {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex; }
+
+.btn-upload {
+  width: 100%;
+  background-color: #d7661c;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  color: #fff; }
+  .btn-upload:hover {
+    color: #fff; }
+
+.btn-flush {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  vertical-align: middle;
+  text-align: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: none;
+  background-color: #000;
+  opacity: .5;
+  color: #fff; }
+  .btn-flush:hover {
+    text-decoration: none; }
+
 #hint-container {
   position: absolute; }
 
@@ -451,13 +492,27 @@
 input[name=salary_from], input[name=salary_to], input[name=deadline] {
   width: 50px; }
 
-select[name=currency_id], select[name=rate_id], select[name=employment_id] {
+select[name=currency_id], select[name=rate_id], select[name=employment_id], select[name=employees], select[name=founded] {
   width: auto; }
 
 .has-feedback label ~ .form-control-feedback {
   top: 30px;
   font-size: 17px;
   color: #555555; }
+
+#benefits li {
+  border: none;
+  color: #777777;
+  cursor: pointer; }
+
+#benefits li.active {
+  color: #555555; }
+  #benefits li.active i {
+    color: #80a41a; }
+
+#map {
+  height: 200px;
+  margin-bottom: 10px; }
 
 #job-offer {
   padding: 0 20px; }

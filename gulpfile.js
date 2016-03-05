@@ -28,6 +28,8 @@ elixir(function(mix) {
         'components/popover.js',
         'main.js'
     ];
+    
+    mix.babel(['pages/job/submit.js'], 'public/js/job-submit.js');
 
     mix.scripts(base, 'public/js/main.js')
         // strona glowna

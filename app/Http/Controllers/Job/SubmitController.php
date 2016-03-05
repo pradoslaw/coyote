@@ -4,6 +4,8 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Country;
 use Coyote\Currency;
+use Coyote\Firm\Benefit;
+use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Job\Employment;
 use Coyote\Job\Rate;
@@ -24,5 +26,14 @@ class SubmitController extends Controller
         $rateList = Rate::lists('name', 'id');
 
         return $this->view('job.submit.home')->with(compact('countryList', 'currencyList', 'employmentList', 'rateList'));
+    }
+
+    public function firm()
+    {
+        $employeesList = Job::getEmployeesList();
+        $foundedList = Job::getFoundedList();
+        $benefitsList = Benefit::getBenefitsList();
+
+        return $this->view('job.submit.firm')->with(compact('employeesList', 'foundedList', 'benefitsList'));
     }
 }

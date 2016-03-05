@@ -109,6 +109,7 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
     Route::get('Submit', ['uses' => 'SubmitController@index', 'as' => 'submit']);
+    Route::get('Submit/Firm', ['uses' => 'SubmitController@firm', 'as' => 'submit.firm']);
 });
 
 /*
