@@ -36,7 +36,7 @@ $(() => {
 
     $('input[name="is_agency"]').change(e => {
         $('.agency').toggle($(e.currentTarget).val() != 1);
-    });
+    }).trigger('change');
 
     $(':input').focus(e => {
         let $this = $(e.currentTarget);

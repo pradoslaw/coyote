@@ -4,11 +4,13 @@ namespace Coyote\Providers;
 
 use Coyote\Forum;
 use Coyote\Job;
+use Coyote\Firm;
 use Coyote\Microblog;
 use Coyote\Policies\MicroblogPolicy;
 use Coyote\Policies\ForumPolicy;
 use Coyote\Policies\PostPolicy;
 use Coyote\Policies\JobPolicy;
+use Coyote\Policies\FirmPolicy;
 use Coyote\Policies\PostCommentPolicy;
 use Coyote\Post;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
@@ -26,7 +28,8 @@ class AuthServiceProvider extends ServiceProvider
         Forum::class => ForumPolicy::class,
         Post::class => PostPolicy::class,
         Post\Comment::class => PostCommentPolicy::class,
-        Job::class => JobPolicy::class
+        Job::class => JobPolicy::class,
+        Firm::class => FirmPolicy::class
     ];
 
     /**

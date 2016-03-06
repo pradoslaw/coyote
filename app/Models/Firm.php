@@ -22,11 +22,6 @@ class Firm extends Model
     protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
-     * @var bool
-     */
-    public $timestamps = false;
-
-    /**
      * @return array
      */
     public static function getEmployeesList()

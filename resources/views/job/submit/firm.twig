@@ -10,6 +10,7 @@
             {% set is_private = input_old('private', not job.firm_id) %}
 
             {{ form_open({'url': route('job.submit.firm'), 'class': '', 'id': 'job-posting'}) }}
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Informacje o firmie
@@ -36,8 +37,8 @@
                     </div>
 
                     <div id="box-buttons" class="form-group" style="display: none">
-                        <a href="{{ route('job.submit') }}" class="btn btn-default btn-lg pull-left">Podstawowe informacje</a>
-                        <button type="submit" class="btn btn-primary btn-lg pull-right" data-submit-state="Proszę czekać...">Podgląd</button>
+                        <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
+                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Podgląd <i class="fa fa-angle-right"></i></button>
                     </div>
                 </div>
 
@@ -63,6 +64,8 @@
                 <div class="panel-heading">
                     Dane firmy
                 </div>
+
+                {{ form_hidden('id', input_old('id', firm.id)) }}
 
                 <div class="panel-body">
 
@@ -99,11 +102,14 @@
 
                         <div class="row">
                             <div class="col-sm-2">
+                                {% set logo = input_old('logo', firm.logo) %}
+                                {{ form_hidden('logo', logo) }}
+
                                 <a href="javascript:" id="logo" class="img-thumbnail">
-                                    {% if not input_old('logo', firm.logo) %}
+                                    {% if not logo %}
                                         <img src="{{ cdn('img/logo-gray.png') }}">
                                     {% else %}
-                                        <img src="{{ cdn('store/logo/' ~ input_old('logo', firm.logo)) }}">
+                                        <img src="{{ cdn('store/logo/' ~ logo) }}">
                                     {% endif %}
 
                                     {% if input_old('logo', firm.logo) %}

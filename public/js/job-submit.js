@@ -37,7 +37,7 @@ $(function () {
 
     $('input[name="is_agency"]').change(function (e) {
         $('.agency').toggle($(e.currentTarget).val() != 1);
-    });
+    }).trigger('change');
 
     $(':input').focus(function (e) {
         var $this = $(e.currentTarget);

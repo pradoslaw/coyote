@@ -20,9 +20,9 @@
 
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="form-group">
-                        <a href="{{ route('job.submit.firm') }}" class="btn btn-default btn-lg pull-left">Informacje o firmie</a>
-                        <button type="submit" class="btn btn-primary btn-lg pull-right">Opublikuj</button>
+                    <div id="form-navigation" class="form-group">
+                        <a href="{{ route('job.submit.firm') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Informacje o firmie</a>
+                        <button type="submit" class="btn btn-primary pull-right">Opublikuj <i class="fa fa-angle-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -40,4 +40,6 @@
 
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
+
+    {% include 'job.submit.navigation' %}
 {% endblock %}

@@ -110,8 +110,13 @@ class SubmitController extends Controller
         $benefitsList = Benefit::getBenefitsList();
 
         $job = $request->session()->get('job');
+        $firm = $this->firm->find((int) $job['firm_id']);
 
-        return $this->view('job.submit.firm')->with(compact('job', 'employeesList', 'foundedList', 'benefitsList'));
+        if ($firm->id) {
+            $this->authorize('update', $firm);
+        }
+
+        return $this->view('job.submit.firm')->with(compact('job', 'firm', 'employeesList', 'foundedList', 'benefitsList'));
     }
 
     /**
@@ -127,7 +132,7 @@ class SubmitController extends Controller
                 'name' => 'required|max:60',
                 'is_agency' => 'boolean',
                 'logo' => 'string',
-                'website' => 'website',
+                'website' => 'url',
                 'employees' => 'integer',
                 'founded' => 'integer',
                 'headline' => 'string|max:100',
@@ -141,9 +146,9 @@ class SubmitController extends Controller
             ], [
                 'name.required' => 'Nazwa firmy jest wymagana'
             ]);
-        }
 
-        $request->session()->put('firm', $request->all());
+            $request->session()->put('firm', $request->all());
+        }
 
         return redirect()->route('job.submit.preview');
     }
@@ -182,7 +187,15 @@ class SubmitController extends Controller
         $job->deadline_at = Carbon::now()->addDay($data['deadline']);
         $job->path = str_slug($data['title'], '_');
 
-        \DB::transaction(function () use ($data, &$job, $request, $locations) {
+        \DB::transaction(function () use (&$job, $request, $locations) {
+            if ($request->session()->has('firm')) {
+                $data = $request->session()->get('firm');
+                $firm = $this->firm->firstOrNew(['user_id' => $this->userId, 'name' => $data['name']]);
+
+                $firm->fill($data)->save();
+                $job->firm_id = $firm->id;
+            }
+
             $job->save();
             $job->locations()->delete();
 
@@ -195,7 +208,7 @@ class SubmitController extends Controller
             $request->session()->forget(['job', 'firm']);
         });
 
-        return redirect()->route('job.offer', [$job->id, $job->path]);
+        return redirect()->route('job.offer', [$job->id, $job->path])->with('success', 'Oferta została prawidłowo dodana.');
     }
 
     /**
