@@ -436,6 +436,16 @@
   #job-posting .form-group-border:last-child {
     border-bottom: none; }
 
+#job-posting #benefits li {
+  border: none;
+  color: #777777;
+  cursor: pointer; }
+
+#job-posting #benefits li.active {
+  color: #555555; }
+  #job-posting #benefits li.active i {
+    color: #80a41a; }
+
 #logo {
   position: relative;
   border-bottom-left-radius: 0;
@@ -500,22 +510,26 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   font-size: 17px;
   color: #555555; }
 
-#benefits li {
-  border: none;
-  color: #777777;
-  cursor: pointer; }
-
-#benefits li.active {
-  color: #555555; }
-  #benefits li.active i {
-    color: #80a41a; }
-
 #map {
   height: 200px;
   margin-bottom: 10px; }
 
+#benefits .list-group-item {
+  border: none; }
+
 #job-offer {
   padding: 0 20px; }
+  #job-offer h1 {
+    font-size: 22px;
+    margin-bottom: 10px; }
+  #job-offer .employer {
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: normal; }
+  #job-offer .salary {
+    font-size: 14px; }
+    #job-offer .salary small {
+      font-weight: normal; }
   #job-offer blockquote {
     font-style: italic;
     padding: 0 0 0 30px;
@@ -530,31 +544,38 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
       top: 0;
       left: 0;
       color: #777777; }
+  #job-offer #benefits i {
+    color: #80a41a; }
 
-#metadata {
-  color: #777777;
-  margin: 20px 0 12px -5px; }
-  #metadata i {
+.metadata {
+  color: #777777; }
+  .metadata i {
     color: #555555;
     font-size: 14px; }
-  #metadata a {
+  .metadata a {
     color: inherit; }
+
+.metadata.location {
+  display: inline; }
+  .metadata.location li {
+    font-size: 12px; }
+
+.metadata.primary {
+  margin: 10px 0 12px 2px;
+  padding-top: 10px;
+  border-top: 1px solid #d0d0d0; }
   @media screen and (max-width: 480px) {
-    #metadata li {
+    .metadata.primary li {
       display: block !important;
       font-size: 90%;
       margin-bottom: 5px; } }
+  .metadata.primary li:first-child {
+    padding-left: 0; }
 
 .tag-clouds {
   padding: 5px 0; }
   .tag-clouds li a {
     font-size: 12px; }
-
-#benefits i {
-  color: #80a41a; }
-
-#benefits .list-group-item {
-  border: none; }
 
 #apply {
   margin-top: 30px; }
@@ -583,33 +604,6 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   position: absolute;
   font-family: FontAwesome;
   content: ""; }
-
-#box-salary {
-  text-align: right;
-  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.09);
-  position: relative; }
-
-#box-salary:after, #box-salary:before {
-  right: 100%;
-  top: 25px;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none; }
-
-#box-salary:after {
-  border-color: rgba(251, 220, 154, 0);
-  border-right-color: #fefae4;
-  border-width: 12px;
-  margin-top: -12px; }
-
-#box-salary:before {
-  border-color: rgba(138, 109, 59, 0);
-  border-right-color: #fbdc9a;
-  border-width: 15px;
-  margin-top: -15px; }
 
 #box-job-firm ul {
   margin-bottom: 0; }

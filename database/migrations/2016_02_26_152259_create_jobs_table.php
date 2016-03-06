@@ -25,8 +25,8 @@ class CreateJobsTable extends Migration
             $table->text('recruitment');
             $table->tinyInteger('is_remote')->default(0);
             $table->smallInteger('country_id')->nullable();
-            $table->smallInteger('salary_from')->nullable();
-            $table->smallInteger('salary_to')->nullable();
+            $table->integer('salary_from')->nullable();
+            $table->integer('salary_to')->nullable();
             $table->smallInteger('currency_id')->nullable();
             $table->smallInteger('rate_id')->nullable();
             $table->smallInteger('employment_id')->nullable();

@@ -1,0 +1,14 @@
+{% set salary_from = job.salary_from|number_format(0, ' ', ' ') %}
+{% set salary_to = job.salary_to|number_format(0, ' ', ' ') %}
+
+{% if salary_from and salary_to %}
+{{ salary_from }} - {{ salary_to }}
+{% elseif salary_from %}
+od {{ salary_from }}
+{% elseif salary_to %}
+do {{ salary_to }}
+{% endif %}
+
+{% if salary_from or salary_to %}
+{{ job.currency_name }}
+{% endif %}

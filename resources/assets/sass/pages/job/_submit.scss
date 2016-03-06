@@ -107,6 +107,22 @@ $font-size-control-label: 15px;
       border-bottom: none;
     }
   }
+
+  #benefits {
+    li {
+      border: none;
+      color: $gray-light;
+      cursor: pointer;
+    }
+
+    li.active {
+      color: $gray;
+
+      i {
+        color: $brand-primary;
+      }
+    }
+  }
 }
 
 #logo {
@@ -183,22 +199,6 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   top: 30px;
   font-size: $font-size-large;
   color: $gray;
-}
-
-#benefits {
-  li {
-    border: none;
-    color: $gray-light;
-    cursor: pointer;
-  }
-
-  li.active {
-    color: $gray;
-
-    i {
-      color: $brand-primary;
-    }
-  }
 }
 
 #map {

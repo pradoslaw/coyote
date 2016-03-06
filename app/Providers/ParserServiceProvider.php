@@ -8,6 +8,7 @@ use Coyote\Parser\Scenarios\Comment as Parser_Comment;
 use Coyote\Parser\Scenarios\Sig as Parser_Sig;
 use Coyote\Parser\Scenarios\Pm as Parser_Pm;
 use Coyote\Parser\Scenarios\Post as Parser_Post;
+use Coyote\Parser\Scenarios\Job as Parser_Job;
 
 class ParserServiceProvider extends ServiceProvider
 {
@@ -54,6 +55,10 @@ class ParserServiceProvider extends ServiceProvider
         $this->app->bind('Parser\Post', function ($app) {
             return new Parser_Post($app);
         });
+
+        $this->app->bind('Parser\Job', function ($app) {
+            return new Parser_Job($app);
+        });
     }
 
     /**
@@ -71,7 +76,8 @@ class ParserServiceProvider extends ServiceProvider
             'Parser\Comment',
             'Parser\Sig',
             'Parser\Pm',
-            'Parser\Post'
+            'Parser\Post',
+            'Parser\Job'
         ];
     }
 }

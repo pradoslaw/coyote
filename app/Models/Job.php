@@ -45,7 +45,7 @@ class Job extends Model
     /**
      * @var string
      */
-//    protected $dateFormat = 'Y-m-d H:i:se';
+    protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
      * We need to set firm id to null offer is private
