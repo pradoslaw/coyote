@@ -446,6 +446,9 @@
   #job-posting #benefits li.active i {
     color: #80a41a; }
 
+#job-posting #benefits input[type=checkbox] {
+  display: none; }
+
 #logo {
   position: relative;
   border-bottom-left-radius: 0;

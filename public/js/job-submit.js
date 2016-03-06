@@ -37,7 +37,11 @@ $(function () {
 
     $('input[name="is_agency"]').change(function (e) {
         $('.agency').toggle($(e.currentTarget).val() != 1);
-    }).trigger('change');
+    });
+
+    if ($('input[name="is_agency"]').val()) {
+        $('input[name="is_agency"]:checked').trigger('change');
+    }
 
     $(':input').focus(function (e) {
         var $this = $(e.currentTarget);
@@ -91,6 +95,13 @@ $(function () {
             $('input[name="email"]').attr('disabled', 'disabled');
         }
     });
+
+    $('#benefits li').click(function (e) {
+        var checkbox = $(e.currentTarget).children(':checkbox');
+
+        checkbox.prop('checked', !checkbox.is(':checked'));
+        $(e.currentTarget).toggleClass('active');
+    });
 });
 
 function initialize() {
@@ -110,7 +121,7 @@ function initialize() {
         if (status === google.maps.GeocoderStatus.OK) {
             map.setCenter(results[0].geometry.location);
 
-            if (marker !== null) {
+            if (marker) {
                 marker.setMap(null);
             }
 

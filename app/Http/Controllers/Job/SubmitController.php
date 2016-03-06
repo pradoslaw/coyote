@@ -9,8 +9,6 @@ use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Job\Employment;
-use Coyote\Job\Rate;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Illuminate\Http\Request;
@@ -112,8 +110,12 @@ class SubmitController extends Controller
         $job = $request->session()->get('job');
         $firm = $this->firm->find((int) $job['firm_id']);
 
-        if ($firm->id) {
+        if ($firm) {
             $this->authorize('update', $firm);
+        }
+
+        if ($request->session()->has('firm')) {
+            $firm->forceFill($request->session()->get('firm'));
         }
 
         return $this->view('job.submit.firm')->with(compact('job', 'firm', 'employeesList', 'foundedList', 'benefitsList'));
@@ -137,8 +139,8 @@ class SubmitController extends Controller
                 'founded' => 'integer',
                 'headline' => 'string|max:100',
                 'description' => 'string',
-                'latitude' => 'float',
-                'longitude' => 'float',
+                'latitude' => 'numeric',
+                'longitude' => 'numeric',
                 'street' => 'string|max:255',
                 'city' => 'string|max:255',
                 'house' => 'string|max:50',
@@ -194,6 +196,13 @@ class SubmitController extends Controller
 
                 $firm->fill($data)->save();
                 $job->firm_id = $firm->id;
+
+                $firm->benefits()->delete();
+                foreach ($data['benefits'] as $benefit) {
+                    $firm->benefits()->create([
+                        'name' => $benefit
+                    ]);
+                }
             }
 
             $job->save();

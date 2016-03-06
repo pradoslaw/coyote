@@ -14,12 +14,42 @@ class Firm extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'logo', 'website', 'headline', 'description', 'employees', 'founded', 'is_agency'];
+    protected $fillable = [
+        'user_id',
+        'name',
+        'logo',
+        'website',
+        'headline',
+        'description',
+        'employees',
+        'founded',
+        'is_agency',
+        'country_id',
+        'city',
+        'street',
+        'house',
+        'postcode',
+        'latitude',
+        'longitude'
+    ];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            foreach (['latitude', 'longitude'] as $column) {
+                if (empty($model->$column)) {
+                    $model->$column = null;
+                }
+            }
+        });
+    }
 
     /**
      * @return array
@@ -53,5 +83,13 @@ class Firm extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function benefits()
+    {
+        return $this->hasMany('Coyote\Firm\Benefit');
     }
 }

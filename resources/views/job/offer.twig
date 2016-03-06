@@ -1,5 +1,5 @@
 {% extends 'layout.twig' %}
-{% block title %}Praca :: Lorem ipsum{{ parent() }}{% endblock %}
+{% block title %}{{ job.title }}{{ parent() }}{% endblock %}
 
 {% block container %}
     <div class="row" style="margin-top: 20px">
@@ -7,16 +7,18 @@
             <div class="panel panel-default">
 
                 <div class="panel-body">
-
                     <div class="media">
-                        <div class="media-left">
-                            <a href="#">
-                                <img class="media-object" src="/img/apple-touch.png" style="width: 70px; height: 70px;" alt="Power Media S.A.">
-                            </a>
-                        </div>
+                        {% if firm.logo %}
+                            <div class="media-left">
+                                <img class="media-object" src="{{ cdn('logo/' ~ firm.logo) }}" style="width: 70px; height: 70px;" alt="{{ firm.name }}">
+                            </div>
+                        {% endif %}
+
                         <div id="job-offer" class="media-body">
                             <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.path]) }}</h1>
-                            <strong class="employer">4programmers.net</strong>
+                            {% if firm.name %}
+                                <strong class="employer">{{ firm.name }}</strong>
+                            {% endif %}
 
                             {% if job.salary_from or job.salary_to %}
                                 <strong class="salary pull-right text-primary">
@@ -69,26 +71,27 @@
                                 </div>
                             {% endif %}
 
-                            <h2>Oferujemy</h2>
+                            {% if firm.benefits %}
+                                <h2>Oferujemy</h2>
 
-                            <ul id="benefits" class="list-group row">
-                                <li class="list-group-item col-xs-6"><i class="fa fa-check fa-fw"></i> Karta multisport (lub podobna)</li>
-                                <li class="list-group-item col-xs-6"><i class="fa fa-check fa-fw"></i> Kuchnia</li>
-                                <li class="list-group-item col-xs-6"><i class="fa fa-check fa-fw"></i> Darmowe przekąski</li>
-                                <li class="list-group-item col-xs-6"><i class="fa fa-check fa-fw"></i> Darmowe posiłki</li>
-                                <li class="list-group-item col-xs-6"><i class="fa fa-check fa-fw"></i> Darmowa kawa i inne napoje</li>
-                                <li class="list-group-item col-xs-6"><i class="fa fa-check fa-fw"></i> Pokój gier</li>
-                                <li class="list-group-item col-xs-6"><i class="fa fa-check fa-fw"></i> Elastyczne godziny pracy</li>
-                                <li class="list-group-item col-xs-6"><i class="fa fa-check fa-fw"></i> Imprezy i wyjazdy integracyjne</li>
-                            </ul>
+                                <ul id="benefits" class="list-group row">
+                                    {% for benefit in firm.benefits %}
+                                    <li class="list-group-item col-xs-6"><i class="fa fa-check fa-fw"></i> {{ benefit.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
 
-                            <h2>O 4programmers.net</h2>
+                            {% if firm.name %}
+                                <h2>{{ firm.name }}</h2>
 
-                            <div>
-                                <blockquote>Lorem ipsum lores</blockquote>
+                                <div>
+                                    {% if firm.headline %}
+                                        <blockquote>{{ firm.headline }}</blockquote>
+                                    {% endif %}
 
-                                Urna ut ac. Montes in phasellus risus! Nec parturient odio dolor platea amet egestas, elementum amet ultrices porttitor odio, placerat egestas, mauris dolor? Vel nisi porttitor penatibus amet a? Mattis. Augue? Cras, egestas. Phasellus phasellus! Adipiscing urna, odio, diam pulvinar porttitor eu tincidunt, sit? Lacus vut magna, augue sed! Tristique ut amet cras urna auctor? Tempor? Natoque aliquam sed amet penatibus? Lundium nunc sit purus sagittis lundium adipiscing ac natoque proin? Aliquam cum in, eros? Nascetur nisi et in. Turpis natoque ultricies aliquet auctor sagittis nisi? Tortor vel, dis placerat lacus risus mattis montes sit! Mid pulvinar habitasse ultricies? A augue eu magna, mattis magna augue, ultricies, vel augue, diam nec elit lorem hac velit lorem cras! Enim ac.
-                            </div>
+                                    {{ firm.description|raw }}
+                                </div>
+                            {% endif %}
 
                             <div id="apply">
                                 <a class="btn btn-primary" href="#">Aplikuj na to stanowisko</a>
@@ -97,8 +100,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
 
         <aside class="col-sm-3">
@@ -122,32 +123,40 @@
                 </li>
             </ul>
 
-            <section id="box-job-firm" class="box">
-                <h4><i class="fa fa-info-circle fa-fw"></i> O firmie</h4>
+            {% if job.firm_id %}
+                <section id="box-job-firm" class="box">
+                    <h4><i class="fa fa-info-circle fa-fw"></i> O firmie</h4>
 
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <ul class="list-unstyled">
-                            <li>
-                                <i class="fa fa-home fa-fw"></i>
-                                ul. Powstańców Śląskich 1/2
-                            </li>
-                            <li>
-                                <i class="fa fa-link fa-fw"></i>
-                                <a href="#">http://4programmers.net</a>
-                            </li>
-                            <li>
-                                <i class="fa fa-users fa-fw"></i>
-                                51 - 100 pracowników
-                            </li>
-                            <li>
-                                <i class="fa fa-calendar-o fa-fw"></i>
-                                Rok założenia: 2000
-                            </li>
-                        </ul>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <ul class="list-unstyled">
+                                {% if firm.street %}
+                                    <li>
+                                        <i class="fa fa-home fa-fw"></i>
+                                        {{ firm.street }} {{ firm.house }} {{ firm.postcode }} {{ firm.city }}
+                                    </li>
+                                {% endif %}
+                                {% if firm.website %}
+                                    <li>
+                                        <i class="fa fa-link fa-fw"></i>
+                                        <a href="{{ firm.website }}">{{ firm.website }}</a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <i class="fa fa-users fa-fw"></i>
+                                    {{ employeesList[firm.employees] }} pracowników
+                                </li>
+                                {% if firm.founded %}
+                                    <li>
+                                        <i class="fa fa-calendar-o fa-fw"></i>
+                                        Rok założenia: {{ firm.founded }}
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            {% endif %}
 
             <section id="box-job-offers" class="box">
                 <h4><a href="#">Zobacz też</a></h4>

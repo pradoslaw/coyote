@@ -25,8 +25,16 @@ class CreateFirmsTable extends Migration
             $table->smallInteger('employees')->nullable();
             $table->smallInteger('founded')->nullable();
             $table->tinyInteger('is_agency')->default(0);
+            $table->smallInteger('country_id')->nullable();
+            $table->string('city')->nullable();
+            $table->string('street')->nullable();
+            $table->string('house', 50)->nullable();
+            $table->string('postcode', 50)->nullable();
+            $table->float('latitude')->nullable();
+            $table->float('longitude')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('no action');
         });
     }
 

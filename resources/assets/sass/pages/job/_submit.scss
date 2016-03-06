@@ -122,6 +122,10 @@ $font-size-control-label: 15px;
         color: $brand-primary;
       }
     }
+
+    input[type=checkbox] {
+      display: none;
+    }
   }
 }
 

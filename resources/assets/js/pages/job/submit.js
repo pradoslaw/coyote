@@ -36,7 +36,11 @@ $(() => {
 
     $('input[name="is_agency"]').change(e => {
         $('.agency').toggle($(e.currentTarget).val() != 1);
-    }).trigger('change');
+    });
+
+    if ($('input[name="is_agency"]').val()) {
+        $('input[name="is_agency"]:checked').trigger('change');
+    }
 
     $(':input').focus(e => {
         let $this = $(e.currentTarget);
@@ -92,6 +96,13 @@ $(() => {
             $('input[name="email"]').attr('disabled', 'disabled');
         }
     });
+
+    $('#benefits li').click(e => {
+        let checkbox = $(e.currentTarget).children(':checkbox');
+
+        checkbox.prop('checked', !checkbox.is(':checked'));
+        $(e.currentTarget).toggleClass('active');
+    });
 });
 
 function initialize() {
@@ -112,7 +123,7 @@ function initialize() {
         if (status === google.maps.GeocoderStatus.OK) {
             map.setCenter(results[0].geometry.location);
 
-            if (marker !== null) {
+            if (marker) {
                 marker.setMap(null);
             }
 

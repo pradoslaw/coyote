@@ -17,8 +17,17 @@ class OfferController extends Controller
      * @var JobRepositoryInterface
      */
     private $job;
+
+    /**
+     * @var FirmRepositoryInterface
+     */
     private $firm;
 
+    /**
+     * OfferController constructor.
+     * @param JobRepositoryInterface $job
+     * @param FirmRepositoryInterface $firm
+     */
     public function __construct(JobRepositoryInterface $job, FirmRepositoryInterface $firm)
     {
         parent::__construct();
@@ -28,9 +37,10 @@ class OfferController extends Controller
     }
 
     /**
+     * @param int $id
      * @return \Illuminate\View\View
      */
-    public function index($id, $slug)
+    public function index($id)
     {
         $job = $this->job->findById($id);
 
@@ -49,14 +59,20 @@ class OfferController extends Controller
             return link_to('#', $item);
         });
 
+        $firm = [];
+        if ($job->firm_id) {
+            $firm = $this->firm->find($job->firm_id);
+            $firm->description = $parser->parse($firm->description);
+        }
+
         return $this->view('job.offer', [
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
             'employeesList'     => Firm::getEmployeesList(),
             'locations'         => $locations,
-            'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->d
+            'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days
         ])->with(
-            compact('job')
+            compact('job', 'firm')
         );
     }
 }
