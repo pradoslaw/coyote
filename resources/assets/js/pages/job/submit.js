@@ -5,6 +5,26 @@ $(() => {
         google.maps.event.addDomListener(window, 'load', initialize);
     }
 
+    let navigation = $('#form-navigation');
+    let fixed = $('#form-navigation-fixed');
+
+    $('#form-navigation-container').html(navigation.html()).on('click', ':submit', () => {
+        $('#job-posting').submit();
+    }).on('click', 'button[data-submit-state]', (e) => {
+        $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state'));
+    });
+
+    $(window).scroll(e => {
+        let bottom = $(window).scrollTop() + $(window).height();
+
+        if (bottom > navigation.offset().top) {
+            fixed.fadeOut();
+        }
+        else {
+            fixed.show();
+        }
+    });
+
     $('input[name="private"]').change(e => {
         $('#box-edit-firm, #box-choose-firm').toggle($(e.currentTarget).val() == 0);
         $('#box-buttons').toggle($(e.currentTarget).val() != 0);

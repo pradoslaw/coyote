@@ -205,3 +205,14 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   height: 200px;
   margin-bottom: 10px;
 }
+
+#form-navigation-fixed {
+  background-color: $body-bg;
+  border-top: 2px solid $border-color;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0;
+  z-index: 1000;
+  display: none;
+}

@@ -185,9 +185,9 @@
                         </ol>
                     </div>
 
-                    <div class="form-group">
-                        <a href="{{ route('job.submit') }}" class="btn btn-default btn-lg pull-left">Podstawowe informacje</a>
-                        <button type="submit" class="btn btn-primary btn-lg pull-right" data-submit-state="Proszę czekać...">Podgląd</button>
+                    <div id="form-navigation" class="form-group">
+                        <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
+                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Podgląd <i class="fa fa-angle-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -215,4 +215,6 @@
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjPih0Ay15fPj2j6KOqqNn2Af902apRz8&sensor=false"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
+
+    {% include 'job.submit.navigation' %}
 {% endblock %}

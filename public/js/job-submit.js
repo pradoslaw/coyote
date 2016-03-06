@@ -7,6 +7,25 @@ $(function () {
         google.maps.event.addDomListener(window, 'load', initialize);
     }
 
+    var navigation = $('#form-navigation');
+    var fixed = $('#form-navigation-fixed');
+
+    $('#form-navigation-container').html(navigation.html()).on('click', ':submit', function () {
+        $('#job-posting').submit();
+    }).on('click', 'button[data-submit-state]', function (e) {
+        $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state'));
+    });
+
+    $(window).scroll(function (e) {
+        var bottom = $(window).scrollTop() + $(window).height();
+
+        if (bottom > navigation.offset().top) {
+            fixed.fadeOut();
+        } else {
+            fixed.show();
+        }
+    });
+
     $('input[name="private"]').change(function (e) {
         $('#box-edit-firm, #box-choose-firm').toggle($(e.currentTarget).val() == 0);
         $('#box-buttons').toggle($(e.currentTarget).val() != 0);
