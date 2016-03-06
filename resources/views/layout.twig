@@ -14,7 +14,7 @@
 
             <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
 
-            <script type="text/javascript">var _config = {{ public|raw }};</script>
+            <script type="text/javascript">var _config = {{ public|default('{}')|raw }};</script>
         {% endblock %}
 
         <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">

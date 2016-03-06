@@ -16,13 +16,14 @@ class CreateJobsTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->smallInteger('firm_id')->nullable();
-            $table->string('name');
+            $table->string('title');
+            $table->string('path');
             $table->timestampsTz();
             $table->softDeletes();
             $table->text('description');
-            $table->text('requirements');
+            $table->text('requirements')->nullable();
             $table->text('recruitment');
-            $table->tinyInteger('is_remote');
+            $table->tinyInteger('is_remote')->default(0);
             $table->smallInteger('country_id')->nullable();
             $table->smallInteger('salary_from')->nullable();
             $table->smallInteger('salary_to')->nullable();
@@ -31,16 +32,13 @@ class CreateJobsTable extends Migration
             $table->smallInteger('employment_id')->nullable();
             $table->timestampTz('deadline_at');
             $table->string('email')->nullable();
-            $table->tinyInteger('incognito')->default(0);
-            $table->tinyInteger('apply_enable')->default(1);
+            $table->tinyInteger('enable_apply')->default(1);
             $table->float('score')->default(0);
             $table->mediumInteger('order')->default(0);
 
             $table->foreign('firm_id')->references('id')->on('firms')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('currency_id')->references('id')->on('currencies');
-            $table->foreign('employment_id')->references('id')->on('job_employment');
-            $table->foreign('rate_id')->references('id')->on('job_rates');
         });
     }
 

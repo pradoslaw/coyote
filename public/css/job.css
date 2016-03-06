@@ -490,7 +490,7 @@
   display: inline-block; }
 
 input[name=salary_from], input[name=salary_to], input[name=deadline] {
-  width: 50px; }
+  width: 65px; }
 
 select[name=currency_id], select[name=rate_id], select[name=employment_id], select[name=employees], select[name=founded] {
   width: auto; }

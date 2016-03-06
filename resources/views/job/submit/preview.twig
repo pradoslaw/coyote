@@ -1,0 +1,43 @@
+{% extends 'job.base' %}
+{% block title %}Podgląd{{ parent() }}{% endblock %}
+
+{% import 'job.submit.theme' as theme %}
+
+{% block container %}
+    <div class="row">
+        <main class="col-sm-8">
+            {% include 'job.submit.indicator' with {'current': 3} %}
+
+            {{ form_open({'url': route('job.submit.save'), 'class': '', 'id': 'job-posting'}) }}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Podgląd
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <a href="{{ route('job.submit.firm') }}" class="btn btn-default btn-lg pull-left">Informacje o firmie</a>
+                        <button type="submit" class="btn btn-primary btn-lg pull-right">Opublikuj</button>
+                    </div>
+                </div>
+            </div>
+            {{ form_close() }}
+        </main>
+
+        <aside class="col-sm-4">
+
+        </aside>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="{{ cdn('js/job-submit.js') }}"></script>
+{% endblock %}

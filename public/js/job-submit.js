@@ -8,11 +8,16 @@ $(function () {
     }
 
     $('input[name="private"]').change(function (e) {
-        $('#box-edit-firm, #box-choose-firm').toggle($(e.currentTarget).val() == 1);
+        $('#box-edit-firm, #box-choose-firm').toggle($(e.currentTarget).val() == 0);
+        $('#box-buttons').toggle($(e.currentTarget).val() != 0);
     });
 
+    if ($('input[name="private"]').val()) {
+        $('input[name="private"]:checked').trigger('change');
+    }
+
     $('input[name="is_agency"]').change(function (e) {
-        $('.agency').toggle($(e.currentTarget).val() == 1);
+        $('.agency').toggle($(e.currentTarget).val() != 1);
     });
 
     $(':input').focus(function (e) {
@@ -50,9 +55,21 @@ $(function () {
             var date = new Date();
             date.setDate(date.getDate() + value);
 
-            $this.next('span').show().children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+            $this.next('span').children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
         } else {
-            $this.next('span').hide();
+            $this.next('span').children('strong').text('--');
+        }
+    });
+
+    $('input[name="enable_apply"]').change(function (e) {
+        if (Boolean(parseInt($(e.currentTarget).val()))) {
+            tinymce.get('recruitment').hide();
+            $('#recruitment').hide();
+
+            $('input[name="email"]').removeAttr('disabled');
+        } else {
+            tinymce.get('recruitment').show();
+            $('input[name="email"]').attr('disabled', 'disabled');
         }
     });
 });
@@ -168,7 +185,7 @@ function initialize() {
 
 tinymce.init({
     selector: "textarea",
-    height: 150,
+    //height: 150,
     plugins: ["advlist lists spellchecker", "code", "paste"],
 
     toolbar1: "bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | cut copy paste | bullist numlist | undo redo | outdent indent",
@@ -178,6 +195,14 @@ tinymce.init({
     elementpath: false,
     statusbar: false,
 
-    content_style: "* {font-size: 13px; font-family: Arial, sans-serif;}"
+    content_style: "* {font-size: 13px; font-family: Arial, sans-serif;}",
+
+    setup: function setup(ed) {
+        ed.on('init', function (args) {
+            if ('recruitment' === args.target.id) {
+                $('input[name="enable_apply"]:checked').trigger('change');
+            }
+        });
+    }
 });
 //# sourceMappingURL=job-submit.js.map

@@ -1,0 +1,12 @@
+
+{% macro error(name, default) %}
+    <span class="help-block">{{ (session_get('errors').first(name))|default(default)|raw }}</span>
+{% endmacro %}
+
+{% macro group_open(name, class) %}
+    <div class="form-group {{ class }} {{ session_get('errors').first(name) ? 'has-error' }}">
+{% endmacro %}
+
+{% macro group_close() %}
+    </div>
+{% endmacro %}

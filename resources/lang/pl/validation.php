@@ -131,6 +131,10 @@ return [
         'user_name' => [
             'required'      => 'Proszę wpisać nazwę użytkownika',
             'unique'        => 'Ta nazwa jest zajęta przez innego użytkownika',
+        ],
+        // formularz pracy
+        'title' => [
+            'required'      => 'Tytuł jest wymagany'
         ]
     ],
 

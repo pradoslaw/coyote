@@ -33,7 +33,7 @@ class FirewallBlacklist
         $user = $request->user();
 
         if ($response = $this->firewall->filter($user ? $user->id : null, $request->ip())) {
-            echo view('errors.403', $response);
+            echo view('errors.401', $response);
             exit;
         }
 

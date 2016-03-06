@@ -108,8 +108,16 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
     Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
-    Route::get('Submit', ['uses' => 'SubmitController@index', 'as' => 'submit']);
-    Route::get('Submit/Firm', ['uses' => 'SubmitController@firm', 'as' => 'submit.firm']);
+    Route::get('Submit/{id?}', ['uses' => 'SubmitController@getIndex', 'as' => 'submit', 'middleware' => 'auth']);
+    Route::post('Submit', ['uses' => 'SubmitController@postIndex', 'middleware' => 'auth']);
+
+    Route::get('Submit/Firm', ['uses' => 'SubmitController@getFirm', 'as' => 'submit.firm', 'middleware' => 'auth']);
+    Route::post('Submit/Firm', ['uses' => 'SubmitController@postFirm', 'middleware' => 'auth']);
+
+    Route::get('Submit/Preview', ['uses' => 'SubmitController@getPreview', 'as' => 'submit.preview', 'middleware' => 'auth']);
+    Route::post('Submit/Save', ['uses' => 'SubmitController@save', 'as' => 'submit.save', 'middleware' => 'auth']);
+
+    Route::get('{id}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
 });
 
 /*
@@ -117,7 +125,7 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
  */
 Route::get('/Delphi', ['as' => 'page', 'uses' => 'Wiki\WikiController@category']);
 Route::get('/Delphi/Lorem_ipsum', ['as' => 'article', 'uses' => 'Wiki\WikiController@article']);
-Route::get('Praca/Lorem_ipsum', ['uses' => 'Job\OfferController@index', 'as' => 'job.offer']);
+
 
 // Obsluga mikroblogow
 Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'microblog.'], function () {

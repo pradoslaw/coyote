@@ -1,11 +1,17 @@
 {% extends 'job.base' %}
 {% block title %}Wystaw ofertę pracy{{ parent() }}{% endblock %}
 
-{% import 'components.forms' as forms %}
+{% import 'job.submit.theme' as theme %}
 
 {% block container %}
 <div class="row">
     <main class="col-sm-8">
+        {% if session_has('error') %}
+            <p class="alert alert-error">
+                {{ session_get('error') }}
+            </p>
+        {% endif %}
+
         <div class="jumbotron alert-popover" data-id="job-jumbotron">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
 
@@ -18,60 +24,66 @@
 
         {% include 'job.submit.indicator' with {'current': 1} %}
 
-        {{ form_open({'url': '#', 'class': '', 'id': 'job-posting'}) }}
+        {{ form_open({'url': route('job.submit'), 'class': '', 'id': 'job-posting'}) }}
+            {{ form_hidden('id', job.id) }}
+            {{ form_hidden('firm_id', job.firm_id) }}
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Podstawowe informacje
                 </div>
                 <div class="panel-body">
 
-                    <div class="form-group form-group-border">
+                    {{ theme.group_open('title', 'form-group-border') }}
                         <label class="control-label">Tytuł oferty <em class="text-danger">*</em></label>
 
-                        {{ form_text('name', input_old('name'), {'class': 'form-control', 'placeholder': 'Np. Senior Java Developer', 'maxlength': 60}) }}
-                        <span class="help-block">Pozostało: <strong>60</strong> znaków</span>
-                    </div>
+                        {{ form_text('title', input_old('title', job.title), {'class': 'form-control', 'placeholder': 'Np. Senior Java Developer', 'maxlength': 60}) }}
+                        {{ theme.error('title', 'Pozostało: <strong>' ~ (60 - input_old('title', job.title)|length) ~ '</strong> znaków</span>') }}
+                    {{ theme.group_close() }}
 
                     <div class="form-group form-group-border">
                         <label class="control-label">Lokalizacja</label>
 
                         <div class="row">
                             <div class="col-sm-2">
-                                {{ form_select('country_id', countryList, input_old('country_id'), {'class': 'form-control'}) }}
+                                {{ form_select('country_id', countryList, input_old('country_id', job.country_id), {'class': 'form-control'}) }}
                             </div>
                             <div class="col-sm-7" style="padding-left: 0">
-                                {{ form_text('city', input_old('city'), {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}) }}
+                                {{ form_text('city', input_old('city', job.city), {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="checkbox">
-                                    {{ form_checkbox('remote', 1, true, {'id': 'remote'}) }}
+                                    {{ form_checkbox('is_remote', 1, input_old('remote', job.is_remote), {'id': 'remote'}) }}
 
                                     <label for="remote">
                                         Możliwa praca zdalna
                                     </label>
                                 </div>
+
+                                {{ theme.error('city') }}
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-group form-group-border">
+                    {{ theme.group_open('salary_from', 'form-group-border') }}
                         <label class="control-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>
 
                         <div>
                             od
-                            {{ form_text('salary_from', input_old('salary_from'), {'class': 'form-control input-inline'}) }}
+                            {{ form_text('salary_from', input_old('salary_from', job.salary_from), {'class': 'form-control input-inline'}) }}
 
                             do
-                            {{ form_text('salary_to', input_old('salary_to'), {'class': 'form-control input-inline'}) }}
-                            {{ form_select('currency_id', currencyList, input_old('currency_id'), {'class': 'form-control input-inline'}) }}
-                            {{ form_select('rate_id', rateList, input_old('rate_id'), {'class': 'form-control input-inline'}) }}
-                            {{ form_select('employment_id', employmentList, input_old('employment_id'), {'class': 'form-control input-inline'}) }}
+                            {{ form_text('salary_to', input_old('salary_to', job.salary_to), {'class': 'form-control input-inline'}) }}
+                            {{ form_select('currency_id', currencyList, input_old('currency_id', job.currency_id), {'class': 'form-control input-inline'}) }}
+                            {{ form_select('rate_id', rateList, input_old('rate_id', job.rate_id), {'class': 'form-control input-inline'}) }}
+                            {{ form_select('employment_id', employmentList, input_old('employment_id', job.employment_id), {'class': 'form-control input-inline'}) }}
 
-                            <span class="help-block">Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!</span>
+                            {{ theme.error('salary_from', 'Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!') }}
+                            {{ theme.error('salary_to') }}
                         </div>
-                    </div>
+                    {{ theme.group_close() }}
 
                     <div class="form-group has-feedback">
                         <label class="control-label">Wymagania, czyli co trzeba potrafić?</label>
@@ -90,49 +102,48 @@
                 </div>
 
                 <div class="panel-body">
-                    <div class="form-group form-group-border">
+                    {{ theme.group_open('deadline', 'form-group-border') }}
                         <label class="control-label">Data ważności oferty</label>
 
-                        {{ form_text('deadline', input_old('deadline', 90), {'class': 'form-control input-inline'}) }} dni
-                        <span class="help-block">Oferta będzie widoczna na stronie do dnia <strong>2016-06-01</strong></span>
-                    </div>
+                        {% set deadline = input_old('deadline', job.deadline ?: 90) %}
+                        {{ form_text('deadline', deadline, {'class': 'form-control input-inline'}) }} dni
+                        {{ theme.error('deadline', 'Oferta będzie widoczna na stronie do dnia <strong>' ~ ('+' ~ deadline ~ ' days')|date('Y-m-d') ~ '</strong>') }}
+                    {{ theme.group_close() }}
 
                     <div class="form-group">
                         <label class="control-label">Opis oferty</label>
 
-                        {{ form_textarea('description', input_old('description'), {'class': 'form-control'}) }}
+                        {{ form_textarea('description', input_old('description', job.description), {'class': 'form-control', 'style': 'height: 140px'}) }}
                         <span class="help-block">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
                     </div>
 
-                    <div class="form-group">
+                    {{ theme.group_open('email') }}
                         <div class="radio">
-                            {{ form_radio('apply_enable', 1, true, {'id': 'apply-enable'}) }}
+                            {{ form_radio('enable_apply', 1, job.enable_apply == true, {'id': 'apply-enable'}) }}
 
                             <label for="apply-enable">
                                 Zezwól na wysyłanie CV poprzez serwis 4programmers.net
                             </label>
                         </div>
 
-                        {{ form_text('email', input_old('email'), {'class': 'form-control'}) }}
-                        <span class="help-block">Podaj adres e-mail na jaki wyślemy Ci informacje o kandydatach. Adres e-mail nie będzie widoczny dla osób postronnych.</span>
-                    </div>
+                        {{ form_text('email', input_old('email', job.email ?: user('email')), {'class': 'form-control'}) }}
+                        {{ theme.error('email', 'Podaj adres e-mail na jaki wyślemy Ci informacje o kandydatach. Adres e-mail nie będzie widoczny dla osób postronnych.') }}
+                    {{ theme.group_close() }}
 
                     <div class="form-group">
                         <div class="radio">
-                            {{ form_radio('apply_enable', 0, false, {'id': 'apply-disable'}) }}
-
-                            {{ form_textarea('recruiment', input_old('recruiment'), {'class': 'form-control', 'style': 'display: none'}) }}
+                            {{ form_radio('enable_apply', 0, job.enable_apply == false, {'id': 'apply-disable'}) }}
 
                             <label for="apply-disable">
                                 ...lub podaj informacje w jaki sposób kandydaci mogą aplikować na to stanowisko
                             </label>
                         </div>
+
+                        {{ form_textarea('recruitment', input_old('recruitment', job.recruitment), {'class': 'form-control', 'style': 'height: 40px'}) }}
                     </div>
 
                     <div class="form-group">
-
-
-                        <button type="submit" class="btn btn-primary btn-lg pull-right">Informacje o firmie</button>
+                        <button type="submit" class="btn btn-primary btn-lg pull-right" data-submit-state="Proszę czekać...">Informacje o firmie</button>
                     </div>
                 </div>
             </div>
@@ -190,4 +201,9 @@
 
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
+    <script>
+        $(function() {
+            $('input[name="name"]').focus();
+        })
+    </script>
 {% endblock %}
