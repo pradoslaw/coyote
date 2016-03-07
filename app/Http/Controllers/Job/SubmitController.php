@@ -57,19 +57,19 @@ class SubmitController extends Controller
             $job->deadline = (new Carbon($job->deadline_at))->diff(Carbon::now())->days;
         }
 
-        if ($request->session()->has('job')) {
+        if ($request->session()->has('job') && !$request->has('revalidate')) {
             $job->forceFill($request->session()->get('job'));
         }
 
-        $countryList = Country::lists('name', 'id');
-        $currencyList = Currency::lists('name', 'id');
-        $employmentList = Job::getEmploymentList();
-        $rateList = Job::getRatesList();
-
         $this->breadcrumb($job);
 
-        return $this->view('job.submit.home')->with(
-            compact('job', 'countryList', 'currencyList', 'employmentList', 'rateList')
+        return $this->view('job.submit.home', [
+            'countryList'       => Country::lists('name', 'id'),
+            'currencyList'      => Currency::lists('name', 'id'),
+            'employmentList'    => Job::getEmploymentList(),
+            'rateList'          => Job::getRatesList()
+        ])->with(
+            compact('job')
         );
     }
 
@@ -88,10 +88,11 @@ class SubmitController extends Controller
             'city'          => 'string',
             'salary_from'   => 'integer',
             'salary_to'     => 'integer',
-            'deadline'      => 'integer',
+            'deadline'      => 'integer|min:1|max:365',
             'requirements'  => 'string',
-            'recruitment'   => 'string',
-            'enable_apply'  => 'boolean'
+            'recruitment'   => 'sometimes|required|string',
+            'enable_apply'  => 'boolean',
+            'email'         => 'sometimes|required|email'
         ]);
 
         $request->session()->put('job', $request->all());
@@ -105,15 +106,14 @@ class SubmitController extends Controller
      */
     public function getFirm(Request $request)
     {
-        $employeesList = Firm::getEmployeesList();
-        $foundedList = Firm::getFoundedList();
-        $benefitsList = Benefit::getBenefitsList();
-
         $job = $request->session()->get('job');
-        $firm = $this->firm->find((int) $job['firm_id']);
+        // it must be firm_id from "job" array (in case we are editing an offer)
+        $firm = $this->firm->findOrNew((int) $job['firm_id']);
 
-        if ($firm) {
+        // get firm benefits only if firm really exists. that's why we need to check if ID is really set
+        if (!empty($firm->id)) {
             $this->authorize('update', $firm);
+            $firm->benefits = $firm->benefits()->lists('name')->toArray();
         }
 
         if ($request->session()->has('firm')) {
@@ -123,11 +123,12 @@ class SubmitController extends Controller
         $this->breadcrumb($job);
 
         return $this->view('job.submit.firm', [
-            'employeesList' => $employeesList,
-            'foundedList' => $foundedList,
-            'benefitsList' => $benefitsList,
-            'benefits' => $firm->benefits()->lists('name')->toArray()
-        ])->with(compact('job', 'firm'));
+            'employeesList'     => Firm::getEmployeesList(),
+            'foundedList'       => Firm::getFoundedList(),
+            'benefitsList'      => Benefit::getBenefitsList(), // default benefits,
+        ])->with(
+            compact('job', 'firm')
+        );
     }
 
     /**
@@ -189,10 +190,10 @@ class SubmitController extends Controller
 
         $this->authorize('update', $job);
 
-        $locations = array_unique(array_map('trim', preg_split('/[\/,]/', $data['city'])));
+        $locations = array_filter(array_unique(array_map('trim', preg_split('/[\/,]/', $data['city']))));
         $job->fill($data);
 
-        $job->deadline_at = Carbon::now()->addDay($data['deadline']);//dd($data['deadline'],$job->deadline_at);
+        $job->deadline_at = Carbon::now()->addDay($data['deadline']);
         $job->path = str_slug($data['title'], '_');
 
         \DB::transaction(function () use (&$job, $request, $locations) {
@@ -231,6 +232,9 @@ class SubmitController extends Controller
         return redirect()->route('job.offer', [$job->id, $job->path])->with('success', 'Oferta została prawidłowo dodana.');
     }
 
+    /**
+     * @param $job
+     */
     private function breadcrumb($job)
     {
         if (is_null($job['id'])) {

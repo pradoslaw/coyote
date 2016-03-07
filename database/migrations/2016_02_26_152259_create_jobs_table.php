@@ -22,7 +22,7 @@ class CreateJobsTable extends Migration
             $table->softDeletes();
             $table->text('description');
             $table->text('requirements')->nullable();
-            $table->text('recruitment');
+            $table->text('recruitment')->nullable();
             $table->tinyInteger('is_remote')->default(0);
             $table->smallInteger('country_id')->nullable();
             $table->integer('salary_from')->nullable();

@@ -41,9 +41,11 @@
                             <ul class="metadata list-inline location">
                                 <li title="Lokalizacja">
                                     <i class="fa fa-map-marker"></i>
-                                    {{ job.country_name }},
+                                    {{ job.country_name }}
 
-                                    {{ locations.implode(', ')|raw }}
+                                    {% if locations|length > 0 %}
+                                        • {{ locations.implode(', ')|raw }}
+                                    {% endif %}
 
                                     {% if job.is_remote %}
                                         <a href="{{ route('job.remote') }}">(praca zdalna)</a>
@@ -83,7 +85,7 @@
                                 </div>
                             {% endif %}
 
-                            {% if firm.benefits %}
+                            {% if firm.benefits|length %}
                                 <h2>Oferujemy</h2>
 
                                 <ul class="benefits list-group row">
@@ -93,7 +95,7 @@
                                 </ul>
                             {% endif %}
 
-                            {% if firm.name %}
+                            {% if firm.name and (firm.headline or firm.description) %}
                                 <h2>{{ firm.name }}</h2>
 
                                 <div>
@@ -105,7 +107,7 @@
                                 </div>
                             {% endif %}
 
-                            {% if job.recruitment %}
+                            {% if not job.enable_apply %}
                                 <h2>Informacje o rekrutacji</h2>
 
                                 <div>
@@ -133,7 +135,7 @@
                     </li>
                 {% endif %}
                 <li class="btn-add">
-                    <a href="{{ route('job.submit') }}">Dodaj ofertę pracy</a>
+                    <a href="{{ route('job.submit') }}?revalidate=1">Dodaj ofertę pracy</a>
                 </li>
                 <li class="btn-delete">
                     <a href="javascript:">Usuń tę ofertę pracy</a>

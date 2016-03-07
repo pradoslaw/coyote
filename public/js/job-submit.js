@@ -90,12 +90,13 @@ $(function () {
     $('input[name="enable_apply"]').change(function (e) {
         if (Boolean(parseInt($(e.currentTarget).val()))) {
             tinymce.get('recruitment').hide();
-            $('#recruitment').hide();
+            $('#recruitment').attr('disabled', 'disabled').hide();
 
             $('input[name="email"]').removeAttr('disabled');
         } else {
             tinymce.get('recruitment').show();
             $('input[name="email"]').attr('disabled', 'disabled');
+            $('#recruitment').removeAttr('disabled');
         }
     });
 

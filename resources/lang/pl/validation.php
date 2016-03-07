@@ -135,6 +135,9 @@ return [
         // formularz pracy
         'title' => [
             'required'      => 'Tytuł jest wymagany'
+        ],
+        'recruitment' => [
+            'required'      => 'Proszę podać informacje w jaki sposób można składać aplikacje na to stanowisko.'
         ]
     ],
 

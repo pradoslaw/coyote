@@ -6,12 +6,6 @@
 {% block container %}
 <div class="row">
     <main class="col-sm-8">
-        {% if session_has('error') %}
-            <p class="alert alert-error">
-                {{ session_get('error') }}
-            </p>
-        {% endif %}
-
         <div class="jumbotron alert-popover" data-id="job-jumbotron">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
 
@@ -23,6 +17,18 @@
         </div>
 
         {% include 'job.submit.indicator' with {'current': 1} %}
+
+        {% if session_has('error') %}
+            <p class="alert alert-danger">
+                {{ session_get('error') }}
+            </p>
+        {% endif %}
+
+        {% if errors.any %}
+            <p class="alert alert-danger">
+                Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.
+            </p>
+        {% endif %}
 
         {{ form_open({'url': route('job.submit'), 'class': '', 'id': 'job-posting'}) }}
             {{ form_hidden('id', job.id) }}
