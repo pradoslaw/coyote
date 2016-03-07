@@ -233,7 +233,7 @@ class SubmitController extends Controller
 
     private function breadcrumb($job)
     {
-        if (is_null($job->id)) {
+        if (is_null($job['id'])) {
             $this->breadcrumb->push('Wystaw ofertę pracy', route('job.submit'));
         } else {
             $this->breadcrumb->push($job['title'], route('job.offer', [$job['id'], $job['path']]));
