@@ -5,7 +5,7 @@
         {% for step in ['Podstawowe informacje', 'Informacje o firmie', 'Podgląd'] %}
             <li class="{{ loop.index <= current ? 'complete' }}">
                 <span class="bubble">
-                    {% if current == loop.index %}
+                    {% if loop.index < current %}
                         <i class="fa fa-check"></i>
                     {% endif %}
                 </span>

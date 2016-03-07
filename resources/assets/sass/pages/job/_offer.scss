@@ -118,6 +118,10 @@
   .btn-flag:before {
     @include font-awesome($fa-var-flag);
   }
+
+  .btn-add:before {
+    @include font-awesome($fa-var-pencil);
+  }
 }
 
 #box-job-firm {

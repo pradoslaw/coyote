@@ -623,6 +623,11 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   font-family: FontAwesome;
   content: ""; }
 
+.side-menu .btn-add:before {
+  position: absolute;
+  font-family: FontAwesome;
+  content: ""; }
+
 #box-job-firm ul {
   margin-bottom: 0; }
   #box-job-firm ul li {

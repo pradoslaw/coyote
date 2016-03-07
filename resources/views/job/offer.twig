@@ -1,5 +1,13 @@
 {% extends 'layout.twig' %}
-{% block title %}{{ job.title }}{{ parent() }}{% endblock %}
+{% block title %}
+    {{ job.title }}
+
+    {% if job.firm_id and not firm.is_agency %}
+        @ {{ firm.name }}
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}
 
 {% block container %}
     <div class="row" style="margin-top: 20px">
@@ -124,6 +132,9 @@
                         <a href="{{ route('job.submit', [job.id]) }}">Edycja oferty</a>
                     </li>
                 {% endif %}
+                <li class="btn-add">
+                    <a href="{{ route('job.submit') }}">Dodaj ofertę pracy</a>
+                </li>
                 <li class="btn-delete">
                     <a href="javascript:">Usuń tę ofertę pracy</a>
                 </li>
