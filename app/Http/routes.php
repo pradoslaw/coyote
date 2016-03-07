@@ -117,6 +117,10 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     Route::get('Submit/Preview', ['uses' => 'SubmitController@getPreview', 'as' => 'submit.preview', 'middleware' => 'auth']);
     Route::post('Submit/Save', ['uses' => 'SubmitController@save', 'as' => 'submit.save', 'middleware' => 'auth']);
 
+    Route::get('Technologia/{name}', ['uses' => 'HomeController@index', 'as' => 'tag']);
+    Route::get('Zdalna', ['uses' => 'HomeController@index', 'as' => 'remote']);
+    Route::get('Miasto/{name}', ['uses' => 'HomeController@index', 'as' => 'city']);
+
     Route::get('{id}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
 });
 

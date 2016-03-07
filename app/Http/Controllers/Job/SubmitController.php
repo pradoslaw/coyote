@@ -33,9 +33,9 @@ class SubmitController extends Controller
     public function __construct(JobRepositoryInterface $job, FirmRepositoryInterface $firm)
     {
         parent::__construct();
+        $this->middleware('job.session', ['except' => ['getIndex', 'postIndex']]);
 
         $this->breadcrumb->push('Praca', route('job.home'));
-        $this->breadcrumb->push('Wystaw ofertę pracy', route('job.submit'));
 
         $this->job = $job;
         $this->firm = $firm;
@@ -51,6 +51,8 @@ class SubmitController extends Controller
         $job = $this->job->findOrNew($id);
 
         if ($job->id) {
+            $this->authorize('update', $job);
+
             $job->city = $job->locations()->get()->implode('name', ', ');
             $job->deadline = (new Carbon($job->deadline_at))->diff(Carbon::now())->days;
         }
@@ -63,6 +65,8 @@ class SubmitController extends Controller
         $currencyList = Currency::lists('name', 'id');
         $employmentList = Job::getEmploymentList();
         $rateList = Job::getRatesList();
+
+        $this->breadcrumb($job);
 
         return $this->view('job.submit.home')->with(
             compact('job', 'countryList', 'currencyList', 'employmentList', 'rateList')
@@ -101,8 +105,6 @@ class SubmitController extends Controller
      */
     public function getFirm(Request $request)
     {
-        $this->redirectIfSessionIsEmpty($request->session());
-
         $employeesList = Firm::getEmployeesList();
         $foundedList = Firm::getFoundedList();
         $benefitsList = Benefit::getBenefitsList();
@@ -118,7 +120,14 @@ class SubmitController extends Controller
             $firm->forceFill($request->session()->get('firm'));
         }
 
-        return $this->view('job.submit.firm')->with(compact('job', 'firm', 'employeesList', 'foundedList', 'benefitsList'));
+        $this->breadcrumb($job);
+
+        return $this->view('job.submit.firm', [
+            'employeesList' => $employeesList,
+            'foundedList' => $foundedList,
+            'benefitsList' => $benefitsList,
+            'benefits' => $firm->benefits()->lists('name')->toArray()
+        ])->with(compact('job', 'firm'));
     }
 
     /**
@@ -127,8 +136,6 @@ class SubmitController extends Controller
      */
     public function postFirm(Request $request)
     {
-        $this->redirectIfSessionIsEmpty($request->session());
-
         if (!$request->get('private')) {
             $this->validate($request, [
                 'name' => 'required|max:60',
@@ -161,7 +168,8 @@ class SubmitController extends Controller
      */
     public function getPreview(Request $request)
     {
-        $this->redirectIfSessionIsEmpty($request->session());
+        $job = $request->session()->get('job');
+        $this->breadcrumb($job);
 
         return $this->view('job.submit.preview');
     }
@@ -172,8 +180,6 @@ class SubmitController extends Controller
      */
     public function save(Request $request)
     {
-        $this->redirectIfSessionIsEmpty($request->session());
-
         $data = $request->session()->get('job');
 
         $job = $this->job->findOrNew((int) $data['id']);
@@ -186,19 +192,24 @@ class SubmitController extends Controller
         $locations = array_unique(array_map('trim', preg_split('/[\/,]/', $data['city'])));
         $job->fill($data);
 
-        $job->deadline_at = Carbon::now()->addDay($data['deadline']);
+        $job->deadline_at = Carbon::now()->addDay($data['deadline']);//dd($data['deadline'],$job->deadline_at);
         $job->path = str_slug($data['title'], '_');
 
         \DB::transaction(function () use (&$job, $request, $locations) {
             if ($request->session()->has('firm')) {
                 $data = $request->session()->get('firm');
-                $firm = $this->firm->firstOrNew(['user_id' => $this->userId, 'name' => $data['name']]);
+                $firm = $this->firm->firstOrNew([
+                    'user_id' => $job->user_id ?: $this->userId,
+                    'name' => $data['name']
+                ]);
 
                 $firm->fill($data)->save();
                 $job->firm_id = $firm->id;
 
                 $firm->benefits()->delete();
-                foreach ($data['benefits'] as $benefit) {
+                $benefits = array_filter(array_unique(array_map('trim', $data['benefits'])));
+
+                foreach ($benefits as $benefit) {
                     $firm->benefits()->create([
                         'name' => $benefit
                     ]);
@@ -220,14 +231,13 @@ class SubmitController extends Controller
         return redirect()->route('job.offer', [$job->id, $job->path])->with('success', 'Oferta została prawidłowo dodana.');
     }
 
-    /**
-     * @param $session
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function redirectIfSessionIsEmpty($session)
+    private function breadcrumb($job)
     {
-        if (!$session->has('job')) {
-            return redirect()->route('job.submit')->with('error', 'Przepraszamy, ale Twoja sesja wygasła po conajmniej 15 minutach nieaktywności.');
+        if (is_null($job->id)) {
+            $this->breadcrumb->push('Wystaw ofertę pracy', route('job.submit'));
+        } else {
+            $this->breadcrumb->push($job['title'], route('job.offer', [$job['id'], $job['path']]));
+            $this->breadcrumb->push('Edycja oferty', route('job.submit'));
         }
     }
 }

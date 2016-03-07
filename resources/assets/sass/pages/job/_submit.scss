@@ -108,15 +108,15 @@ $font-size-control-label: 15px;
     }
   }
 
-  #benefits {
+  .benefits {
     li {
       border: none;
       color: $gray-light;
       cursor: pointer;
     }
 
-    li.active {
-      color: $gray;
+    li.checked {
+      color: $gray-darker;
 
       i {
         color: $brand-primary;
@@ -125,6 +125,12 @@ $font-size-control-label: 15px;
 
     input[type=checkbox] {
       display: none;
+    }
+
+    input[type=text] {
+      display: inline-block;
+      width: 90%;
+      margin-left: 10px;
     }
   }
 }

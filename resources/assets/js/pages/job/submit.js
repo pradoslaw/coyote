@@ -45,9 +45,12 @@ $(() => {
     $(':input').focus(e => {
         let $this = $(e.currentTarget);
         let offset = $this.position().top;
+        let name = $this.attr('name');
+
+        name = name.replace('[', '').replace(']', '');
 
         $('.sidebar-hint').hide();
-        $('#hint-' + $this.attr('name')).fadeIn();
+        $('#hint-' + name).fadeIn();
 
         if (!offset) {
             offset = $this.parent().position().top;
@@ -97,11 +100,28 @@ $(() => {
         }
     });
 
-    $('#benefits li').click(e => {
+    $('.benefits').on('keyup focus blur', 'input[type="text"]', (e) => {
+        let $this = $(e.currentTarget);
+        let nextItem = $this.parent().next('li');
+
+        if ($this.val().length > 0) {
+            if (!nextItem.length) {
+                let clone = $this.parent().clone();
+                $('input', clone).val('');
+
+                clone.insertAfter($this.parent());
+            }
+        }
+        else if (nextItem.length) {
+            if ($('input', nextItem).val().length === 0) {
+                nextItem.remove();
+            }
+        }
+    }).on('click', 'li.clickable', (e) => {
         let checkbox = $(e.currentTarget).children(':checkbox');
 
         checkbox.prop('checked', !checkbox.is(':checked'));
-        $(e.currentTarget).toggleClass('active');
+        $(e.currentTarget).toggleClass('checked');
     });
 });
 

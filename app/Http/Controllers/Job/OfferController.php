@@ -56,7 +56,7 @@ class OfferController extends Controller
         }
 
         $locations = $job->locations()->lists('name')->map(function ($item) {
-            return link_to('#', $item);
+            return link_to_route('job.city', $item, [$item]);
         });
 
         $firm = [];

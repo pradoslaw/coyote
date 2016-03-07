@@ -31,6 +31,7 @@ class Kernel extends HttpKernel
         'adm'           => Middleware\AdmAccess::class,
         'forum.access'  => Middleware\ForumAccess::class,
         'forum.write'   => Middleware\ForumWrite::class,
-        'topic.access'  => Middleware\RedirectIfMoved::class
+        'topic.access'  => Middleware\RedirectIfMoved::class,
+        'job.session'   => Middleware\VerifyJobSession::class
     ];
 }

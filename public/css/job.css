@@ -436,18 +436,23 @@
   #job-posting .form-group-border:last-child {
     border-bottom: none; }
 
-#job-posting #benefits li {
+#job-posting .benefits li {
   border: none;
   color: #777777;
   cursor: pointer; }
 
-#job-posting #benefits li.active {
-  color: #555555; }
-  #job-posting #benefits li.active i {
+#job-posting .benefits li.checked {
+  color: #222222; }
+  #job-posting .benefits li.checked i {
     color: #80a41a; }
 
-#job-posting #benefits input[type=checkbox] {
+#job-posting .benefits input[type=checkbox] {
   display: none; }
+
+#job-posting .benefits input[type=text] {
+  display: inline-block;
+  width: 90%;
+  margin-left: 10px; }
 
 #logo {
   position: relative;
@@ -527,7 +532,7 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   z-index: 1000;
   display: none; }
 
-#benefits .list-group-item {
+.benefits .list-group-item {
   border: none; }
 
 #job-offer {
@@ -557,7 +562,7 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
       top: 0;
       left: 0;
       color: #777777; }
-  #job-offer #benefits i {
+  #job-offer .benefits i {
     color: #80a41a; }
 
 .metadata {

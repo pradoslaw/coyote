@@ -46,9 +46,12 @@ $(function () {
     $(':input').focus(function (e) {
         var $this = $(e.currentTarget);
         var offset = $this.position().top;
+        var name = $this.attr('name');
+
+        name = name.replace('[', '').replace(']', '');
 
         $('.sidebar-hint').hide();
-        $('#hint-' + $this.attr('name')).fadeIn();
+        $('#hint-' + name).fadeIn();
 
         if (!offset) {
             offset = $this.parent().position().top;
@@ -96,11 +99,27 @@ $(function () {
         }
     });
 
-    $('#benefits li').click(function (e) {
+    $('.benefits').on('keyup focus blur', 'input[type="text"]', function (e) {
+        var $this = $(e.currentTarget);
+        var nextItem = $this.parent().next('li');
+
+        if ($this.val().length > 0) {
+            if (!nextItem.length) {
+                var clone = $this.parent().clone();
+                $('input', clone).val('');
+
+                clone.insertAfter($this.parent());
+            }
+        } else if (nextItem.length) {
+            if ($('input', nextItem).val().length === 0) {
+                nextItem.remove();
+            }
+        }
+    }).on('click', 'li.clickable', function (e) {
         var checkbox = $(e.currentTarget).children(':checkbox');
 
         checkbox.prop('checked', !checkbox.is(':checked'));
-        $(e.currentTarget).toggleClass('active');
+        $(e.currentTarget).toggleClass('checked');
     });
 });
 
