@@ -25,4 +25,4 @@ $I->fillField('email', 'joe@doe.com');
 $I->fillField('password', '1234');
 $I->fillField('password_confirmation', '1234');
 $I->click('button[type=submit]');
-$I->see('Hasło zostało prawidłowo ustawione');
+$I->see('Hasło zostało ustawione. Zostałeś prawidłowo zalogowany.');

@@ -17,7 +17,7 @@ class Person extends Object
         $this->displayName = $data['name'];
         $this->url = route('profile', [$this->id], false);
 
-        if ($data['photo']) {
+        if (!empty($data['photo'])) {
             $this->image = $data['photo'];
         }
         parent::__construct($data);

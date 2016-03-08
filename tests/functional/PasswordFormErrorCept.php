@@ -15,4 +15,4 @@ $I->haveRecord('users', [
 $I->amOnPage('/Password');
 $I->fillField('email', 'joe@doe.com');
 $I->click('button[type=submit]');
-$I->seeFormErrorMessage('email', 'Konto o tym adresie e-mail nie istnieje lub e-mail nie został potwierdzony');
+$I->see('Ten adres e-mail nie został zweryfikowany.');
