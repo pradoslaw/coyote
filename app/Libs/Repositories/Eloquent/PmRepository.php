@@ -75,7 +75,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
     {
         $sub = $this->model->select([
                     'pm.*',
-                    \DB::raw('(CASE WHEN folder = 2 THEN user_id ELSE author_id END) AS host_id')
+                    \DB::raw(sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS host_id', Pm::SENTBOX))
                 ])
                 ->whereRaw("user_id = $userId")
                 ->whereRaw("root_id = '$rootId'")
@@ -88,6 +88,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                     'pm.*',
                     'pm_text.text',
                     'pm_text.created_at',
+                    'users.id AS user_id',
                     'name',
                     'is_active',
                     'is_blocked',
