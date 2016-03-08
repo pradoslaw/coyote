@@ -12,7 +12,7 @@
     <div class="row">
         <main class="col-sm-8">
             {% include 'job.submit.indicator' with {'current': 2} %}
-            {% set is_private = input_old('private', firm.private|default(not job.firm_id)) %}
+            {% set private = input_old('private', firm.private|default(not job.firm_id)) %}
 
             {% if errors.any %}
                 <p class="alert alert-danger">
@@ -29,7 +29,7 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <div class="radio">
-                            {{ form_radio('private', 1, is_private == true, {'id': 'private'}) }}
+                            {{ form_radio('private', 1, private == true, {'id': 'private'}) }}
 
                             <label for="private">
                                 Jestem osobą prywatną
@@ -39,7 +39,7 @@
 
                     <div class="form-group">
                         <div class="radio">
-                            {{ form_radio('private', 0, is_private == false, {'id': 'public'}) }}
+                            {{ form_radio('private', 0, private == false, {'id': 'public'}) }}
 
                             <label for="public">
                                 Reprezentuje firmę
@@ -53,22 +53,26 @@
                     </div>
                 </div>
 
-                <table id="box-choose-firm" class="table">
-                    <tbody>
-                        <tr>
-                            <td style="width: 10%">
-                                <img class="img-thumbnail" src="/img/apple-touch.png">
-                            </td>
-                            <td>
-                                <h4>4programmers.net</h4>
-                                <p>Lorem ipsum lores</p>
-                            </td>
-                            <td class="text-center" style="vertical-align: middle">
-                                <button class="btn btn-default btn-sm text-center">Wybierz</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                {% if firms|length > 1 %}
+                    <table id="choose-firm" class="table">
+                        <tbody>
+                            {% for item in firms %}
+                                <tr>
+                                    <td style="width: 10%">
+                                        <img class="img-thumbnail" src="{{ cdn(item.logo ? ('storage/logo/' ~ item.logo) : 'img/logo-gray.png') }}">
+                                    </td>
+                                    <td>
+                                        <h4>{{ item.name }}</h4>
+                                        <p>{{ item.headline }}</p>
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle">
+                                        <button class="btn btn-sm text-center {{ item.id == firm.id ? 'btn-primary' : 'btn-default' }}">Wybierz</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
             </div>
 
             <div id="box-edit-firm" class="panel panel-default">
@@ -79,7 +83,6 @@
                 {{ form_hidden('id', input_old('id', firm.id)) }}
 
                 <div class="panel-body">
-
                     {{ theme.group_open('name', 'form-group-border') }}
                         <label class="control-label">Nazwa firmy <em class="text-danger">*</em></label>
 

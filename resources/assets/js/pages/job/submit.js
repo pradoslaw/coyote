@@ -26,7 +26,7 @@ $(() => {
     });
 
     $('input[name="private"]').change(e => {
-        $('#box-edit-firm, #box-choose-firm').toggle($(e.currentTarget).val() == 0);
+        $('#box-edit-firm, #choose-firm').toggle($(e.currentTarget).val() == 0);
         $('#box-buttons').toggle($(e.currentTarget).val() != 0);
     });
 

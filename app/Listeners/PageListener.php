@@ -6,10 +6,13 @@ use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Events\TopicWasDeleted;
+use Coyote\Events\JobWasSaved;
+use Coyote\Events\JobWasDeleted;
 use Coyote\Microblog;
+use Coyote\Job;
+use Coyote\Topic;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Coyote\Topic;
 
 class PageListener implements ShouldQueue
 {
@@ -72,6 +75,28 @@ class PageListener implements ShouldQueue
     }
 
     /**
+     * @param JobWasSaved $event
+     */
+    public function onJobSave(JobWasSaved $event)
+    {
+        $event->job->page()->updateOrCreate([
+            'content_id'    => $event->job->id,
+            'content_type'  => Job::class,
+        ], [
+            'title' => $event->job->title,
+            'path' => route('job.offer', [$event->job->id, $event->job->path], false)
+        ]);
+    }
+
+    /**
+     * @param JobWasDeleted $event
+     */
+    public function onJobDelete(JobWasDeleted $event)
+    {
+        $this->page->findByContent($event->job['id'], Job::class)->delete();
+    }
+
+    /**
      * Register the listeners for the subscriber.
      *
      * @param  \Illuminate\Events\Dispatcher  $events
@@ -96,6 +121,16 @@ class PageListener implements ShouldQueue
         $events->listen(
             'Coyote\Events\MicroblogWasDeleted',
             'Coyote\Listeners\PageListener@onMicroblogDelete'
+        );
+
+        $events->listen(
+            'Coyote\Events\JobWasSaved',
+            'Coyote\Listeners\PageListener@onJobSave'
+        );
+
+        $events->listen(
+            'Coyote\Events\JobWasDeleted',
+            'Coyote\Listeners\PageListener@onJobDelete'
         );
     }
 }

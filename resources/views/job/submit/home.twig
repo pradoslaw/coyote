@@ -53,7 +53,7 @@
 
                         <div class="row">
                             <div class="col-sm-2">
-                                {{ form_select('country_id', countryList, input_old('country_id', job.country_id), {'class': 'form-control'}) }}
+                                {{ form_select('country_id', countryList, input_old('country_id', job.country_id ?: defaultCountryId), {'class': 'form-control'}) }}
                             </div>
                             <div class="col-sm-7" style="padding-left: 0">
                                 {{ form_text('city', input_old('city', job.city), {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}) }}

@@ -86,4 +86,12 @@ class Job extends Model
     {
         return $this->hasMany('Coyote\Job\Location');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function page()
+    {
+        return $this->morphOne('Coyote\Page', 'content');
+    }
 }

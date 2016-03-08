@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Job;
 use Carbon\Carbon;
 use Coyote\Country;
 use Coyote\Currency;
+use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Job;
@@ -62,9 +63,14 @@ class SubmitController extends Controller
         }
 
         $this->breadcrumb($job);
+        $countryList = Country::lists('name', 'id');
+
+        // @todo Uzyc mechanizmu geolokalizacji
+        $defaultCountryId = array_search('Polska', $countryList->toArray());
 
         return $this->view('job.submit.home', [
-            'countryList'       => Country::lists('name', 'id'),
+            'countryList'       => $countryList,
+            'defaultCountryId'  => $defaultCountryId,
             'currencyList'      => Currency::lists('name', 'id'),
             'employmentList'    => Job::getEmploymentList(),
             'rateList'          => Job::getRatesList()
@@ -106,6 +112,9 @@ class SubmitController extends Controller
      */
     public function getFirm(Request $request)
     {
+        // get all user firms...
+        $firms = $this->firm->findAllBy('user_id', $this->userId);
+
         $job = $request->session()->get('job');
         // it must be firm_id from "job" array (in case we are editing an offer)
         $firm = $this->firm->findOrNew((int) $job['firm_id']);
@@ -113,8 +122,12 @@ class SubmitController extends Controller
         // get firm benefits only if firm really exists. that's why we need to check if ID is really set
         if (!empty($firm->id)) {
             $this->authorize('update', $firm);
-            $firm->benefits = $firm->benefits()->lists('name')->toArray();
+        } elseif ($firms->count()) {
+            $firm = $firms->first();
+            $job['firm_id'] = $firm->id; // it's really important to assign default firm id to job offer
         }
+
+        $firm->benefits = $firm->benefits()->lists('name')->toArray();
 
         if ($request->session()->has('firm')) {
             $firm->forceFill($request->session()->get('firm'));
@@ -127,7 +140,7 @@ class SubmitController extends Controller
             'foundedList'       => Firm::getFoundedList(),
             'benefitsList'      => Benefit::getBenefitsList(), // default benefits,
         ])->with(
-            compact('job', 'firm')
+            compact('job', 'firm', 'firms')
         );
     }
 
@@ -199,10 +212,13 @@ class SubmitController extends Controller
         \DB::transaction(function () use (&$job, $request, $locations) {
             if ($request->session()->has('firm')) {
                 $data = $request->session()->get('firm');
-                $firm = $this->firm->firstOrNew([
-                    'user_id' => $job->user_id ?: $this->userId,
-                    'name' => $data['name']
-                ]);
+                $firm = $this->firm->findOrNew((int) $data['id']);
+
+                if (empty($firm->id)) {
+                    $firm->user_id = $this->userId;
+                }
+
+                $this->authorize('update', $firm);
 
                 $firm->fill($data)->save();
                 $job->firm_id = $firm->id;
@@ -226,6 +242,7 @@ class SubmitController extends Controller
                 ]);
             }
 
+            event(new JobWasSaved($job));
             $request->session()->forget(['job', 'firm']);
         });
 
@@ -237,7 +254,7 @@ class SubmitController extends Controller
      */
     private function breadcrumb($job)
     {
-        if (is_null($job['id'])) {
+        if (empty($job['id'])) {
             $this->breadcrumb->push('Wystaw ofertę pracy', route('job.submit'));
         } else {
             $this->breadcrumb->push($job['title'], route('job.offer', [$job['id'], $job['path']]));
