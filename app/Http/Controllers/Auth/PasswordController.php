@@ -20,12 +20,12 @@ class PasswordController extends Controller
     public function getReset($token = null)
     {
         if (is_null($token)) {
-            throw new NotFoundHttpException;
+            abort(404);
         }
 
         $this->breadcrumb->push('Odzyskiwanie hasła', '/Password/reset');
 
-        return parent::view('auth.reset')->with('token', $token);
+        return $this->view('auth.reset')->with('token', $token);
     }
 
     /**
@@ -83,7 +83,7 @@ class PasswordController extends Controller
     {
         $this->breadcrumb->push('Odzyskiwanie hasła', '/Password');
 
-        return parent::view('auth.password');
+        return $this->view('auth.password');
     }
 
     /**

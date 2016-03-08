@@ -44,6 +44,7 @@ class ConfirmController extends Controller
             'email' => 'required|email|max:255|unique:users,email,NULL,id,is_confirm,1',
         ]);
 
+        // perhaps user decided to change his email, so we need to save new one in database
         if ($request->email !== $request->user()->email) {
             $request->user()->fill(['email' => $request->email])->save();
         }

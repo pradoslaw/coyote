@@ -76,6 +76,8 @@ class RegisterController extends Controller
             stream(Stream_Create::class, new Stream_Person());
         });
 
-        return redirect()->intended(route('home'));
+        return redirect()
+            ->intended(route('home'))
+            ->with('success', 'Konto zostało utworzone. Na podany adres e-mail, przesłany został link aktywacyjny.');
     }
 }
