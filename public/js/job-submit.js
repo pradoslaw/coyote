@@ -122,6 +122,63 @@ $(function () {
         checkbox.prop('checked', !checkbox.is(':checked'));
         $(e.currentTarget).toggleClass('checked');
     });
+
+    $('#upload').click(function () {
+        $('#input-file').click();
+    });
+
+    $('#input-file').change(function (e) {
+        var file = e.currentTarget.files[0];
+
+        if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
+            $('#alert').modal('show');
+            $('.modal-body').text('Format pliku jest nieprawidłowy. Załącznik musi być zdjęciem JPG, PNG lub GIF');
+        } else {
+            (function () {
+                var $form = $('#upload-form');
+                var formData = new FormData($form[0]);
+                var uploadBtn = $('#upload i');
+
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function beforeSend() {
+                        uploadBtn.removeClass('fa-upload').addClass('fa-spinner fa-spin');
+                    },
+                    success: function success(data) {
+                        $('#logo img').attr('src', data.url);
+                        $('#job-posting').find('input[name="logo"]').val(data.name);
+
+                        if (!$('.btn-flush').length) {
+                            $('<div class="btn-flush"><i class="fa fa-remove fa-2x"></i></div>').appendTo('#logo');
+                        }
+                    },
+                    complete: function complete() {
+                        uploadBtn.removeClass('fa-spinner fa-spin').addClass('fa-upload');
+                    },
+                    error: function error(err) {
+                        $('#alert').modal('show');
+
+                        if (typeof err.responseJSON !== 'undefined') {
+                            $('.modal-body').text(err.responseJSON.logo[0]);
+                        }
+                    }
+                }, 'json');
+            })();
+        }
+    });
+
+    $('.btn-flush').on('click', function () {
+        $('#job-posting').find('input[name="logo"]').val('');
+        $('.btn-flush').remove();
+        $('#logo img').attr('src', '/img/logo-gray.png');
+
+        return false;
+    });
 });
 
 function initialize() {

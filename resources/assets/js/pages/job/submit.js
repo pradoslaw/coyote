@@ -124,6 +124,62 @@ $(() => {
         checkbox.prop('checked', !checkbox.is(':checked'));
         $(e.currentTarget).toggleClass('checked');
     });
+
+    $('#upload').click(() => {
+        $('#input-file').click();
+    });
+
+    $('#input-file').change((e) => {
+        let file = e.currentTarget.files[0];
+
+        if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
+            $('#alert').modal('show');
+            $('.modal-body').text('Format pliku jest nieprawidłowy. Załącznik musi być zdjęciem JPG, PNG lub GIF');
+        }
+        else {
+            let $form = $('#upload-form');
+            let formData = new FormData($form[0]);
+            let uploadBtn = $('#upload i');
+
+            $.ajax({
+                url: $form.attr('action'),
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                beforeSend: () => {
+                    uploadBtn.removeClass('fa-upload').addClass('fa-spinner fa-spin');
+                },
+                success: (data) => {
+                    $('#logo img').attr('src', data.url);
+                    $('#job-posting').find('input[name="logo"]').val(data.name);
+
+                    if (!$('.btn-flush').length) {
+                        $('<div class="btn-flush"><i class="fa fa-remove fa-2x"></i></div>').appendTo('#logo');
+                    }
+                },
+                complete: () => {
+                    uploadBtn.removeClass('fa-spinner fa-spin').addClass('fa-upload');
+                },
+                error: (err) => {
+                    $('#alert').modal('show');
+
+                    if (typeof err.responseJSON !== 'undefined') {
+                        $('.modal-body').text(err.responseJSON.logo[0]);
+                    }
+                }
+            }, 'json');
+        }
+    });
+
+    $('.btn-flush').on('click', () => {
+        $('#job-posting').find('input[name="logo"]').val('');
+        $('.btn-flush').remove();
+        $('#logo img').attr('src', '/img/logo-gray.png');
+
+        return false;
+    });
 });
 
 function initialize() {

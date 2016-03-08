@@ -73,6 +73,7 @@ elixir(function(mix) {
         'js/main.js',
         'js/microblog.js',
         'js/forum.js',
+        'js/job-submit.js',
         'js/posting.js',
         'js/wikieditor.js',
         'js/auto-complete.js',

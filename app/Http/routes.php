@@ -124,6 +124,10 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     Route::get('{id}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
 });
 
+Route::group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {
+    Route::post('Logo', ['uses' => 'SubmitController@logo', 'as' => 'logo']);
+});
+
 /*
  * Tymczasowe reguly
  */
