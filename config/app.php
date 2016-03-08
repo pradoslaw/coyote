@@ -158,6 +158,8 @@ return [
         Coyote\Providers\EventServiceProvider::class,
         Coyote\Providers\RouteServiceProvider::class,
         Coyote\Providers\AuthServiceProvider::class,
+        // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
+        Coyote\Providers\SessionServiceProvider::class,
         // mozliwosc wczytania gotowych "scenariuszy" parsowania elementow strony, takich jak
         // mikroblogi, czy forum. w takim scenariuszu zaladowane sa odpowiednie klasy
         // do parsowania tekstu w zaleznosci od tego, czy mamy do czynienia z postem, komentarzem itd
@@ -167,16 +169,14 @@ return [
         // Klasy obslugi reputacji uzytkownika
         Coyote\Providers\ReputationServiceProvider::class,
 
-
         // Obsluga szablonow Twig
         TwigBridge\ServiceProvider::class,
         // Klasa wspierajaca budowanie znacznikow HTML
         Collective\Html\HtmlServiceProvider::class,
 
-        // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
-        Coyote\Providers\SessionServiceProvider::class,
         // Mozliwosc logowania przez github, fb, google...
         Laravel\Socialite\SocialiteServiceProvider::class,
+
         // Obsluga MongoDB w Laravel
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         // Pakiet do budowania menu

@@ -77,7 +77,7 @@ class RegisterController extends Controller
         });
 
         return redirect()
-            ->intended(route('home'))
+            ->intended(route('user'))
             ->with('success', 'Konto zostało utworzone. Na podany adres e-mail, przesłany został link aktywacyjny.');
     }
 }

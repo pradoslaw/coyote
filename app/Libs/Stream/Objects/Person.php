@@ -9,14 +9,16 @@ class Person extends Object
      */
     public function __construct(array $data = [])
     {
-        $user = auth()->user();
+        if (!$data) {
+            $data = auth()->user()->toArray();
+        }
 
-        $this->id = $user->id;
-        $this->displayName = $user->name;
+        $this->id = $data['id'];
+        $this->displayName = $data['name'];
         $this->url = route('profile', [$this->id], false);
 
-        if ($user->photo) {
-            $this->image = $user->photo;
+        if ($data['photo']) {
+            $this->image = $data['photo'];
         }
         parent::__construct($data);
     }

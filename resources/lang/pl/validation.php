@@ -101,7 +101,8 @@ return [
             'unique'        => 'Konto o tym loginie już istnieje'
         ],
         'email' => [
-            'unique'        => 'Ten e-mail jest już przypisany do innego konta'
+            'unique'        => 'Ten e-mail jest już przypisany do innego konta',
+            'exists'        => 'Podany adres e-mail nie istnieje.'
         ],
         'password' => [
             'confirmed'     => 'Hasło w obu polach musi być identyczne'

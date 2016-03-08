@@ -403,15 +403,12 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <div class="header-content"><a
-                                                style="color: #FFFFFF; text-decoration: none; font-weight: bold;"
-                                                href="#">Wersja
-                                            www</a>
-
+                                    <div class="header-content">
                                         {% if auth_check() %}
                                             <span class="hide" style="color: #ffffff">&nbsp;&nbsp;|&nbsp; <a
                                                         style="color: #FFFFFF; text-decoration: none; font-weight: bold;"
-                                                        href="#">Ustawienia powiadomień</a></span>
+                                                        href="{{ route('user.alerts.settings') }}">Ustawienia
+                                                    powiadomień</a></span>
                                         {% endif %}
                                     </div>
                                     <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
@@ -472,7 +469,7 @@
                             <a href="http://4programmers.net">
                                 <img id="customHeaderImage" label="4programmers.net" editable="true" width="240"
                                      height="32"
-                                     src="http://static.4programmers.net/template/img/logo-email.png" class="w640"
+                                     src="{{ cdn('img/logo-email.png') }}" class="w640"
                                      border="0" align="top"
                                      style="display: inline; margin-top: 20px; margin-left: 26px">
                             </a>
@@ -535,7 +532,7 @@
                                     {% if auth_check() %}
                                         <p align="left" class="footer-content-left"><a
                                                     style="color: #969696; text-decoration: none; font-weight: bold"
-                                                    href="#">Ustawienia
+                                                    href="{{ route('user.alerts.settings') }}">Ustawienia
                                                 powiadomień</a></p>
                                     {% endif %}
                                 </td>

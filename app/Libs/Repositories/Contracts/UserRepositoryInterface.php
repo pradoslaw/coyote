@@ -11,10 +11,20 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function lookupName($name);
 
     /**
+     * Find by user name (case insensitive)
+     *
      * @param $name
      * @return mixed
      */
     public function findByName($name);
+
+    /**
+     * Find by user email (case insensitive)
+     *
+     * @param $email
+     * @return mixed
+     */
+    public function findByEmail($email);
 
     /**
      * Pobiera reputacje usera w procentach (jak i rowniez pozycje usera w rankingu)

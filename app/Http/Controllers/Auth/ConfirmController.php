@@ -3,17 +3,27 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Actkey;
-use Coyote\User;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Mail;
 
 class ConfirmController extends Controller
 {
-    public function __construct()
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * ConfirmController constructor.
+     * @param User $user
+     */
+    public function __construct(User $user)
     {
         parent::__construct();
-        $this->middleware('auth', ['except' => 'getEmail']);
+
+        $this->user = $user;
     }
 
     /**
@@ -22,7 +32,7 @@ class ConfirmController extends Controller
      */
     public function getIndex(Request $request)
     {
-        if ($request->user()->is_confirm) {
+        if ($this->userId && $request->user()->is_confirm) {
             return redirect()->route('user.home')->with('success', 'Adres e-mail jest już potwierdzony.');
         }
         $this->breadcrumb->push('Potwierdź adres e-mail', url('Confirm'));
@@ -36,20 +46,40 @@ class ConfirmController extends Controller
      */
     public function postIndex(Request $request)
     {
-        if ($request->user()->is_confirm) {
-            return redirect()->route('user.home')->with('success', 'Adres e-mail jest już potwierdzony.');
-        }
-
         $this->validate($request, [
             'email' => 'required|email|max:255|unique:users,email,NULL,id,is_confirm,1',
+            'name'  => 'sometimes|username|exists:users'
+        ], [
+            'email.unique' => 'Ten adres e-mail jest już zweryfikowany.'
         ]);
 
-        // perhaps user decided to change his email, so we need to save new one in database
-        if ($request->email !== $request->user()->email) {
-            $request->user()->fill(['email' => $request->email])->save();
+        if ($this->userId) {
+            if ($request->user()->is_confirm) {
+                return redirect()->route('user.home')->with('success', 'Adres e-mail jest już potwierdzony.');
+            }
+
+            // perhaps user decided to change his email, so we need to save new one in database
+            if ($request->email !== $request->user()->email) {
+                $request->user()->fill(['email' => $request->email])->save();
+            }
+
+            $userId = $this->userId;
+        } else {
+            $result = $this->user->findWhere($request->only(['name', 'email']) + ['is_confirm' => 0]);
+
+            // taka sytuacja nie bedzie miala miejsce w 99% przypadkow
+            // warunek zostanie spelniony tylko wowczas gdy np. 2 lub wiecej uzytkownikow zostalo
+            // zarejestrowanych na ten sam adres e-mail
+            if ($result->count() > 1) {
+                return back()->withInput()
+                            ->withErrors('email', 'Ten e-mail przypisany jest do dwóch kont. Wybierz, które z nich ma zostać potwierdzone')
+                            ->with('users', $result->lists('name', 'name')->toArray());
+            }
+
+            $userId = $result->first()->id;
         }
 
-        $url = Actkey::createLink($request->user()->id);
+        $url = Actkey::createLink($userId);
         $email = $request->email;
 
         Mail::queue('emails.email', ['url' => $url], function ($message) use ($email) {
@@ -70,7 +100,7 @@ class ConfirmController extends Controller
     {
         $actkey = Actkey::where('user_id', $request->id)->where('actkey', $request->actkey)->firstOrFail();
 
-        $user = User::find(request('id'));
+        $user = $this->user->findOrFail($request->get('id'));
         $user->is_confirm = 1;
 
         if ($actkey->email) {

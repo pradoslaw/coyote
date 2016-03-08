@@ -50,12 +50,29 @@ class OAuthController extends Controller
         $oauth = Socialite::driver($provider)->user();
         $user = $this->user->findWhere(['provider' => $provider, 'provider_id' => $oauth->getId()])->first();
 
+        // if record does not exist, we must create new user in database
         if (!$user) {
             $name = $oauth->getName() ?: $oauth->getNickName();
 
+            // it's important to check login name using case insensitive...
             if ($this->user->findByName($name)) {
-                request()->session()->flash('error', 'Uuups. Niestety loginie ' . $name . ' jest już zajęty.');
-                return redirect()->route('login');
+                // komunikatu bledu nie mozemy przekazac w sesji poniewaz z jakiegos powodu
+                // jest ona gubiona
+                return redirect()->route('register', [
+                    'error' => sprintf('Uuups. Niestety login %s jest już zajęty.', $name)
+                ]);
+            }
+
+            $user = $this->user->findByEmail($oauth->getEmail());
+
+            if ($user && $user->is_confirm) {
+                // komunikatu bledu nie mozemy przekazac w sesji poniewaz z jakiegos powodu
+                // jest ona gubiona
+                return redirect()->route('register', [
+                    'error' => sprintf(
+                        'Adres e-mail %s jest już przypisany do użytkownika %s', $oauth->getEmail(), $user->name
+                    )
+                ]);
             }
 
             $photoUrl = isset($oauth->avatar_original) ? $oauth->avatar_original : $oauth->getAvatar();

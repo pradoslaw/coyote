@@ -11,6 +11,16 @@
   }
 }
 
+// Kolor linkow w komunikacie bledow
+// ------------------------------------------------------------------------------------
+
+.alert-danger {
+  a {
+    color: darken($state-danger-text, 10%);
+    font-weight: bold;
+  }
+}
+
 // Komunikat informujacy o funkcjonalnosciach strony (do zamkniecia przez uzytkownika)
 // -----------------------------------------------------------------------------------
 

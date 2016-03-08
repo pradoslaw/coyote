@@ -7373,6 +7373,10 @@ ul.breadcrumb {
     font-weight: bold;
     color: #66512c; }
 
+.alert-danger a {
+  color: #843534;
+  font-weight: bold; }
+
 .alert-popover {
   position: absolute;
   margin: 0;

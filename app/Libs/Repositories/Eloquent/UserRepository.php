@@ -28,15 +28,25 @@ class UserRepository extends Repository implements UserRepositoryInterface
     }
 
     /**
+     * Find by user name (case insensitive)
+     *
      * @param $name
      * @return mixed
      */
     public function findByName($name)
     {
-        return $this->model
-                    ->select(['id', 'name', 'photo', 'is_active', 'is_blocked'])
-                    ->whereRaw('LOWER(name) = ?', [mb_strtolower($name)])
-                    ->first();
+        return $this->findByCaseInsensitive('name', $name);
+    }
+
+    /**
+     * Find by user email (case insensitive)
+     *
+     * @param $email
+     * @return mixed
+     */
+    public function findByEmail($email)
+    {
+        return $this->findByCaseInsensitive('email', $email);
     }
 
     /**
@@ -86,5 +96,18 @@ class UserRepository extends Repository implements UserRepositoryInterface
     public function countUsersWithReputation()
     {
         return $this->model->where('reputation', '>', 0)->count();
+    }
+
+    /**
+     * @param $field
+     * @param $value
+     * @return mixed
+     */
+    protected function findByCaseInsensitive($field, $value)
+    {
+        return $this->model
+            ->select(['id', 'name', 'photo', 'is_active', 'is_blocked', 'is_confirm'])
+            ->whereRaw("LOWER($field) = ?", [mb_strtolower($value)])
+            ->first();
     }
 }

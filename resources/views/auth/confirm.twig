@@ -1,7 +1,7 @@
-{% extends 'layout.twig' %}
+{% extends 'layout' %}
 {% block title %}Potwierdzenie adresu e-mail{{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
 {% block container %}
     <div class="panel panel-default">
@@ -9,9 +9,14 @@
             Potwierdź adres e-mail, aby otrzymywać powiadomienia
         </div>
         <div class="panel-body">
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': '/Confirm', 'class': 'form-horizontal'}) }}
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': url('Confirm'), 'class': 'form-horizontal'}) }}
             {{ form_hidden('token', token) }}
             {{ forms.text('email', 'E-mail', user_input('email')) }}
+
+            {% if session_has('users') %}
+                {{ forms.select('name', 'Nazwa użytkownika', session_get('users')) }}
+            {% endif %}
+
             {{ forms.submit('Wyślij e-mail z linkiem aktywacyjnym', 'Wysyłanie...') }}
             {{ form_close() }}
         </div>

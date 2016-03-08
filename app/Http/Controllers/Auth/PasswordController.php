@@ -7,10 +7,53 @@ use Illuminate\Mail\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PasswordController extends Controller
 {
+    /**
+     * Formularz generuje link umozliwiajacy reset hasla
+     *
+     * @return \Illuminate\View\View
+     */
+    public function getIndex()
+    {
+        $this->breadcrumb->push('Odzyskiwanie hasła', url('Password'));
+
+        return $this->view('auth.password');
+    }
+
+    /**
+     * Formularz powoduje wyslanie linku umozliwiajacego zmiane hasla
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function postIndex(Request $request)
+    {
+        $this->validate($request, [
+            'email'                     => 'required|email|exists:users'
+        ]);
+
+        // aby wygenerowac link konto musi byc aktywne oraz e-mail musi byc wczesniej potwierdzony
+        $credentials = $request->only('email') + ['is_active' => 1, 'is_confirm' => 1];
+
+        $response = Password::sendResetLink($credentials, function (Message $message) {
+            $message->subject('Ustaw nowe hasło w serwisie 4programmers.net');
+        });
+
+        switch ($response) {
+            case Password::RESET_LINK_SENT:
+                return redirect()->back()->with('success', 'Na podany adres e-mail wysłane zostały dalsze instrukcje');
+
+            case Password::INVALID_USER:
+                return redirect()->back()->withErrors([
+                    'email' => sprintf(
+                        'Ten adres e-mail nie został zweryfikowany. %s aby go potwierdzić', link_to('Confirm', 'Kliknij')
+                    )
+                ]);
+        }
+    }
+
     /**
      * Widok generowania nowego hasla
      *
@@ -23,7 +66,7 @@ class PasswordController extends Controller
             abort(404);
         }
 
-        $this->breadcrumb->push('Odzyskiwanie hasła', '/Password/reset');
+        $this->breadcrumb->push('Odzyskiwanie hasła', url('Password/reset'));
 
         return $this->view('auth.reset')->with('token', $token);
     }
@@ -44,7 +87,7 @@ class PasswordController extends Controller
 
         $credentials = $request->only(
             'email', 'password', 'password_confirmation', 'token'
-        );
+        ) + ['is_confirm' => 1]; // <-- its important! only record with confirmed email address!!
 
         // walidacja poprawnosci hasla. jedyne wymaganie to posiadanie hasla max 3 znakowego
         Password::validator(function (array $credentials) {
@@ -60,7 +103,7 @@ class PasswordController extends Controller
 
         switch ($response) {
             case Password::PASSWORD_RESET:
-                return redirect(route('home'))->with('success', 'Hasło zostało prawidłowo ustawione');
+                return redirect(route('home'))->with('success', 'Hasło zostało ustawione. Zostałeś prawidłowo zalogowany.');
 
             default:
                 $errors = [
@@ -71,46 +114,6 @@ class PasswordController extends Controller
                 return redirect()->back()
                     ->withInput($request->only('email'))
                     ->withErrors(['email' => $errors[$response]]);
-        }
-    }
-
-    /**
-     * Formularz generuje link umozliwiajacy reset hasla
-     *
-     * @return \Illuminate\View\View
-     */
-    public function getIndex()
-    {
-        $this->breadcrumb->push('Odzyskiwanie hasła', '/Password');
-
-        return $this->view('auth.password');
-    }
-
-    /**
-     * Formularz powoduje wyslanie linku umozliwiajacego zmiane hasla
-     *
-     * @param Request $request
-     * @return $this|\Illuminate\Http\RedirectResponse
-     */
-    public function postIndex(Request $request)
-    {
-        $this->validate($request, [
-            'email'                     => 'required|email'
-        ]);
-
-        // aby wygenerowac link konto musi byc aktywne oraz e-mail musi byc wczesniej potwierdzony
-        $credentials = $request->only('email') + ['is_active' => 1, 'is_confirm' => 1];
-
-        $response = Password::sendResetLink($credentials, function (Message $message) {
-            $message->subject('Ustaw nowe hasło w serwisie 4programmers.net');
-        });
-
-        switch ($response) {
-            case Password::RESET_LINK_SENT:
-                return redirect()->back()->with('success', 'Na podany adres e-mail wysłane zostały dalsze instrukcje');
-
-            case Password::INVALID_USER:
-                return redirect()->back()->withErrors(['email' => 'Konto o tym adresie e-mail nie istnieje lub e-mail nie został potwierdzony']);
         }
     }
 }

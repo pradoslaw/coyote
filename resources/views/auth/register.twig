@@ -1,7 +1,7 @@
-{% extends 'layout.twig' %}
+{% extends 'layout' %}
 {% block title %}Rejestracja{{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
 {% block container %}
     <div class="row" style="margin-top: 25px">
@@ -10,10 +10,18 @@
             <div id="box-register" class="col-sm-5">
                 <h1>Darmowa rejestracja - stwórz swój profil</h1>
 
-                {% include 'auth/oauth.twig' %}
+                {% include 'auth.oauth' %}
+
+                {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
+                {# niestety z jakiegos powodu nie mozna tego komunikatu przekazac w sesji #}
+                {% if request().has('error') %}
+                    <div class="alert alert-danger">
+                        {{ request().get('error') }}
+                    </div>
+                {% endif %}
 
                 {{ form_open({'method': 'POST', 'role': 'form', 'url': route('register')}) }}
-                {{ forms.inline(form_text('name', input_old('name'), {'class': 'form-control'}), 'Nazwa użytkownika', errors.first('name')) }}
+                {{ forms.inline(form_text('name', input_old('name'), {'class': 'form-control', 'autofocus': 'autofocus'}), 'Nazwa użytkownika', errors.first('name')) }}
                 {{ forms.inline(form_password('password', {'class': 'form-control'}), 'Hasło', errors.first('password')) }}
                 {{ forms.inline(form_password('password_confirmation', {'class': 'form-control'}, errors.first('password_confirmation')), 'Hasło (powtórnie)') }}
                 {{ forms.inline(form_text('email', input_old('email'), {'class': 'form-control'}), 'E-mail', errors.first('email'), 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.') }}
