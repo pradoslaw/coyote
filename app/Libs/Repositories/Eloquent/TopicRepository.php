@@ -41,6 +41,10 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
             $values[] = "($item,$key)";
         });
 
+        if (!$values) {
+            return false;
+        }
+
         $from = \DB::table('topics AS t')
                     ->select(['t.*', 'x.ordering'])
                     ->join(\DB::raw('(VALUES ' . implode(',', $values) . ') AS x (id, ordering)'), 't.id', '=', 'x.id')
