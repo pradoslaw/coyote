@@ -9,10 +9,10 @@ class Job extends Model
 {
     use SoftDeletes;
 
-    const MONTH			= 1;
-    const YEAR			= 2;
-    const WEEK			= 3;
-    const HOUR			= 4;
+    const MONTH            = 1;
+    const YEAR            = 2;
+    const WEEK            = 3;
+    const HOUR            = 4;
 
     /**
      * The attributes that are mass assignable.
