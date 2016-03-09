@@ -12,6 +12,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * PHP >= 5.5
     * Moduł GD
     * Moduł mongo
+    * Moduł mcrypt
 * PostgreSQL >= 9.3
 * MongoDB >= 2.7
 * composer
@@ -28,6 +29,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 
 * `apt-get install php5-gd`
 * `apt-get install php5-mongo`
+* `apt-get install php5-mcrypt`
 * `git clone https://github.com/adam-boduch/coyote.git .`
 * `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
 * `psql -c 'create database coyote;' -U postgres`
@@ -38,6 +40,9 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 
 Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php5-fpm restart`
 
+#### Use of undefined constant MCRYPT_RIJNDAEL_128 - assumed 'MCRYPT_RIJNDAEL_128'
+
+Czy biblioteka mcrypt jest zainstalowana? Jeżeli tak to `service php5-fpm restart`
 
 ## Aktualizacja projektu
 
