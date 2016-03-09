@@ -34,6 +34,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
 * `psql -c 'create database coyote;' -U postgres`
 * `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
+* `php artisan key:generate` (generowanie unikalnego klucza, który posłuży do szyfrowania danych)
 
 ### Problemy podczas instalacji
 #### Class 'MongoClient' not found
@@ -43,6 +44,10 @@ Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php5-fpm restar
 #### Use of undefined constant MCRYPT_RIJNDAEL_128 - assumed 'MCRYPT_RIJNDAEL_128'
 
 Czy biblioteka mcrypt jest zainstalowana? Jeżeli tak to `service php5-fpm restart`
+
+## Uruchomienie
+
+Działanie projektu wymaga zainstalowania serwera HTTP takiego jak Apache czy Nginx. Laravel udostępnia jednak prosty serwer HTTP, który można wykorzystać, aby sprawdzić działanie aplikacji. Aby go uruchomić należy wykonać polecenie: `php artisan serve`
 
 ## Aktualizacja projektu
 
