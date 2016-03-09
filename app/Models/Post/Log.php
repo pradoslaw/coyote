@@ -29,4 +29,21 @@ class Log extends Model
      * @var array
      */
     public $timestamps = false;
+
+    /**
+     * @param $tags
+     */
+    public function setTagsAttribute($tags)
+    {
+        $this->attributes['tags'] = json_encode($tags);
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function getTagsAttribute($value)
+    {
+        return json_decode($value);
+    }
 }

@@ -850,14 +850,14 @@ div.tag-clouds .btn-add {
 
 .col-bottom {
   background-color: #ececec; }
-  .col-bottom .btn-sub, .col-bottom .btn-share, .col-bottom .btn-comment, .col-bottom .btn-report, .col-bottom .btn-quote, .col-bottom .btn-multi-quote, .col-bottom .btn-edit, .col-bottom .btn-fast-edit, .col-bottom .btn-del, .col-bottom .btn-res {
+  .col-bottom .btn-sub, .col-bottom .btn-share, .col-bottom .btn-comment, .col-bottom .btn-report, .col-bottom .btn-quote, .col-bottom .btn-multi-quote, .col-bottom .btn-edit, .col-bottom .btn-fast-edit, .col-bottom .btn-del, .col-bottom .btn-res, .col-bottom .btn-rollback {
     color: #333333;
     opacity: .9;
     border: 1px solid transparent; }
-    .col-bottom .btn-sub:hover, .col-bottom .btn-share:hover, .col-bottom .btn-comment:hover, .col-bottom .btn-report:hover, .col-bottom .btn-quote:hover, .col-bottom .btn-multi-quote:hover, .col-bottom .btn-edit:hover, .col-bottom .btn-fast-edit:hover, .col-bottom .btn-del:hover, .col-bottom .btn-res:hover {
+    .col-bottom .btn-sub:hover, .col-bottom .btn-share:hover, .col-bottom .btn-comment:hover, .col-bottom .btn-report:hover, .col-bottom .btn-quote:hover, .col-bottom .btn-multi-quote:hover, .col-bottom .btn-edit:hover, .col-bottom .btn-fast-edit:hover, .col-bottom .btn-del:hover, .col-bottom .btn-res:hover, .col-bottom .btn-rollback:hover {
       opacity: 1;
       border-color: #d0d0d0; }
-    .col-bottom .btn-sub i, .col-bottom .btn-share i, .col-bottom .btn-comment i, .col-bottom .btn-report i, .col-bottom .btn-quote i, .col-bottom .btn-multi-quote i, .col-bottom .btn-edit i, .col-bottom .btn-fast-edit i, .col-bottom .btn-del i, .col-bottom .btn-res i {
+    .col-bottom .btn-sub i, .col-bottom .btn-share i, .col-bottom .btn-comment i, .col-bottom .btn-report i, .col-bottom .btn-quote i, .col-bottom .btn-multi-quote i, .col-bottom .btn-edit i, .col-bottom .btn-fast-edit i, .col-bottom .btn-del i, .col-bottom .btn-res i, .col-bottom .btn-rollback i {
       font-size: 13px; }
   .col-bottom .btn-report, .col-bottom .btn-quote, .col-bottom .btn-multi-quote, .col-bottom .btn-edit, .col-bottom .btn-fast-edit, .col-bottom .btn-del, .col-bottom .btn-res {
     float: right; }

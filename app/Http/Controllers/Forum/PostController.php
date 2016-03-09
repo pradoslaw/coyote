@@ -660,25 +660,4 @@ class PostController extends BaseController
             }
         });
     }
-
-    /**
-     * Show post history
-     *
-     * @param Post $post
-     * @param Log $log
-     * @return mixed
-     */
-    public function log($post, Log $log)
-    {
-        $topic = $this->topic->find($post->topic_id);
-        $forum = $this->forum->find($post->forum_id);
-
-        $this->breadcrumb($forum);
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
-        $this->breadcrumb->push('Historia postu', route('forum.post.log', [$post->id]));
-
-        $logs = $log->takeForPost($post->id);
-
-        return $this->view('forum.post.log')->with(compact('logs', 'post', 'forum', 'topic'));
-    }
 }

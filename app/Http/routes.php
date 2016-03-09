@@ -91,7 +91,9 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // akceptowanie danego posta jako poprawna odpowiedz w watku
     Route::post('Post/Accept/{id}', ['uses' => 'PostController@accept', 'as' => 'post.accept']);
     // historia edycji danego posta
-    Route::get('Post/Log/{post}', ['uses' => 'PostController@log', 'as' => 'post.log']);
+    Route::get('Post/Log/{post}', ['uses' => 'LogController@log', 'as' => 'post.log']);
+    // przywrocenie poprzedniej wersji posta
+    Route::post('Post/Rollback/{post}/{id}', ['uses' => 'LogController@rollback', 'as' => 'post.rollback']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
     Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);

@@ -733,6 +733,18 @@ $(function () {
         return false;
     });
 
+    $('.btn-rollback').click(function() {
+        $('#form-rollback').attr('action', $(this).attr('href'));
+
+        $('#confirm').modal('show').one('click', '.danger', function() {
+            $(this).attr('disabled', 'disabled').text('Przywracanie...');
+
+            $('#form-rollback').submit();
+        });
+
+        return false;
+    });
+
     /**
      * Subscribe/unsubscribe topic (sidebar option)
      */

@@ -30,7 +30,7 @@ class LogRepository extends Repository implements LogRepositoryInterface
             'user_id' => $userId,
             'text' => $text,
             'subject' => $subject,
-            'tags' => json_encode($tags),
+            'tags' => $tags,
             'comment' => $comment
         ]);
     }

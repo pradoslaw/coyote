@@ -1,6 +1,8 @@
 {% extends 'forum/base.twig' %}
 {% block title %}Historia edycji posta w {{ topic.subject }}{{ parent() }}{% endblock %}
 
+{% import 'components.modals' as modal %}
+
 {% block container %}
     <h1>{{ link_to_route('forum.topic', topic.subject, [forum.path, topic.id, topic.path]) }}</h1>
 
@@ -43,11 +45,27 @@
                                 </div>
                             </div>
                         </div>
+
+                        {% if not loop.first %}
+                            <div class="row">
+                                <div class="col-xs-2 col-bottom" style="height: 32px"></div>
+                                <div class="col-xs-10 col-bottom">
+                                    <a data-toggle="tooltip" data-placement="top" title="Cofnij do tej wersji" data-category="postLinks" data-action="rollback" href="{{ route('forum.post.rollback', [post.id, log.id]) }}" class="btn btn-xs btn-rollback">
+                                        <i class="fa fa-undo"></i>
+                                        <span class="hidden-xs">Cofnij do tej wersji</span>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
             </div>
         </section>
     {% endfor %}
+
+    {{ form_open({'url': '', 'id': 'form-rollback'}) }}
+    {{ modal.confirm('Treść postu zostanie zastąpiona. Czy chcesz kontynuować?') }}
+    {{ form_close() }}
 
 {% endblock %}
