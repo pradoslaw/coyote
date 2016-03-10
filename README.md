@@ -31,8 +31,8 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 * `apt-get install php5-mongo`
 * `apt-get install php5-mcrypt`
 * `git clone https://github.com/adam-boduch/coyote.git .`
-* `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
 * `psql -c 'create database coyote;' -U postgres`
+* `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
 * `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
 * `php artisan key:generate` (generowanie unikalnego klucza, który posłuży do szyfrowania danych)
 
@@ -52,6 +52,12 @@ Działanie projektu wymaga zainstalowania serwera HTTP takiego jak Apache czy Ng
 ## Aktualizacja projektu
 
 `make update` (na produkcji) lub `make update-dev` (na serwerze deweloperskim)
+
+## Konfiguracja
+
+Konfiguracja projektu znajduje się w pliku `.env`. Zaleca się zmianę sterownika cache na **redis**:
+
+`CACHE_DRIVER=redis`
 
 ## Jak mozesz pomoc?
 
