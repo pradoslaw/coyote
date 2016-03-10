@@ -43,15 +43,6 @@ interface PostRepositoryInterface extends RepositoryInterface
     public function getFirstUnreadPostId($topicId, $markTime);
 
     /**
-     * Enable/disable subscription for this post
-     *
-     * @param int $postId
-     * @param int $userId
-     * @param bool $flag
-     */
-    public function subscribe($postId, $userId, $flag);
-
-    /**
      * Assign attachments to the post
      *
      * @param $postId

@@ -252,7 +252,7 @@ class PostController extends BaseController
 
                 // automatically subscribe post
                 if (auth()->check()) {
-                    $this->post->subscribe($post->id, $this->userId, true);
+                    $post->subscribe($this->userId, true);
                 }
 
                 $url .= '?p=' . $post->id . '#id' . $post->id;
@@ -283,11 +283,11 @@ class PostController extends BaseController
                 $alert->notify();
 
                 // initial history of post
-                (new Log)->post($post)->save();
+                (new Log)->setPost($post)->save();
             }
 
             if (auth()->check() && $post->user_id) {
-                $this->topic->subscribe($topic->id, $post->user_id, $request->get('subscribe'));
+                $topic->subscribe($post->user_id, $request->get('subscribe'));
             }
 
             // assign attachments to the post
@@ -470,17 +470,17 @@ class PostController extends BaseController
     }
 
     /**
-     * @param $id
+     * @param Post $post
      * @return \Illuminate\Http\JsonResponse
      */
-    public function subscribe($id)
+    public function subscribe($post)
     {
-        $subscriber = Subscriber::where('post_id', $id)->where('user_id', $this->userId)->first();
+        $subscriber = $post->subscribers()->where('user_id', $this->userId)->first();
 
         if ($subscriber) {
             $subscriber->delete();
         } else {
-            Subscriber::create(['post_id' => $id, 'user_id' => $this->userId]);
+            $post->subscribers()->create(['post_id' => $post->id, 'user_id' => $this->userId]);
         }
     }
 

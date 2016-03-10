@@ -264,9 +264,9 @@ class TopicController extends BaseController
                 ->save();
 
             if (auth()->check()) {
-                $this->topic->subscribe($topic->id, $this->userId, $request->get('subscribe'));
+                $topic->subscribe($this->userId, $request->get('subscribe'));
                 // automatically subscribe post
-                $this->post->subscribe($post->id, $this->userId, true);
+                $post->subscribe($this->userId, true);
             }
 
             // parsing text and store it in cache
@@ -312,20 +312,20 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param $id
+     * @param Topic $topic
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function subscribe($id)
+    public function subscribe($topic)
     {
-        $subscriber = Topic_Subscriber::where('topic_id', $id)->where('user_id', $this->userId)->first();
+        $subscriber = $topic->subscribers()->where('user_id', $this->userId)->first();
 
         if ($subscriber) {
             $subscriber->delete();
         } else {
-            Topic_Subscriber::create(['topic_id' => $id, 'user_id' => $this->userId]);
+            $topic->subscribers()->create(['topic_id' => $topic->id, 'user_id' => $this->userId]);
         }
 
-        return response(Topic_Subscriber::where('topic_id', $id)->count());
+        return response($topic->subscribers()->count());
     }
 
     /**

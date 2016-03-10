@@ -97,4 +97,19 @@ class Topic extends Model
     {
         return $this->morphOne('Coyote\Page', 'content');
     }
+
+    /**
+     * Subscribe/unsubscribe to topic
+     *
+     * @param int $userId
+     * @param bool $flag
+     */
+    public function subscribe($userId, $flag)
+    {
+        if (!$flag) {
+            $this->subscribers()->where('user_id', $userId)->delete();
+        } else {
+            $this->subscribers()->firstOrCreate(['topic_id' => $this->id, 'user_id' => $userId]);
+        }
+    }
 }

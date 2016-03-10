@@ -169,22 +169,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     }
 
     /**
-     * Enable/disable subscription for this topic
-     *
-     * @param int $topicId
-     * @param int $userId
-     * @param bool $flag
-     */
-    public function subscribe($topicId, $userId, $flag)
-    {
-        if (!$flag) {
-            Subscriber::where('topic_id', $topicId)->where('user_id', $userId)->delete();
-        } else {
-            Subscriber::firstOrCreate(['topic_id' => $topicId, 'user_id' => $userId]);
-        }
-    }
-
-    /**
      * Mark topic as read
      *
      * @param $topicId

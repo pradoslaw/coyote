@@ -137,7 +137,7 @@ class CommentController extends Controller
                 $alert->notify();
 
                 // subscribe post. notify about all future comments to this post
-                $this->post->subscribe($post->id, $this->userId, true);
+                $post->subscribe($this->userId, true);
             }
         });
 

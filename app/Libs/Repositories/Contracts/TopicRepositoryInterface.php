@@ -31,15 +31,6 @@ interface TopicRepositoryInterface extends RepositoryInterface
     public function setTags($topicId, array $tags);
 
     /**
-     * Enable/disable subscription for this topic
-     *
-     * @param int $topicId
-     * @param int $userId
-     * @param bool $flag
-     */
-    public function subscribe($topicId, $userId, $flag);
-
-    /**
      * Mark topic as read
      *
      * @param $topicId

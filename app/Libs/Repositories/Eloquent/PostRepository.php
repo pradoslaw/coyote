@@ -142,22 +142,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
-     * Enable/disable subscription for this post
-     *
-     * @param int $postId
-     * @param int $userId
-     * @param bool $flag
-     */
-    public function subscribe($postId, $userId, $flag)
-    {
-        if (!$flag) {
-            Subscriber::where('post_id', $postId)->where('user_id', $userId)->delete();
-        } else {
-            Subscriber::firstOrCreate(['post_id' => $postId, 'user_id' => $userId]);
-        }
-    }
-
-    /**
      * Assign attachments to the post
      *
      * @param $postId
