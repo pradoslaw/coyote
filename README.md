@@ -47,7 +47,16 @@ Czy biblioteka mcrypt jest zainstalowana? Jeżeli tak to `service php5-fpm resta
 
 ## Uruchomienie
 
-Działanie projektu wymaga zainstalowania serwera HTTP takiego jak Apache czy Nginx. Laravel udostępnia jednak prosty serwer HTTP, który można wykorzystać, aby sprawdzić działanie aplikacji. Aby go uruchomić należy wykonać polecenie: `php artisan serve`
+Działanie projektu wymaga zainstalowania serwera HTTP takiego jak Apache czy Nginx. PHP udostępnia jednak prosty serwer HTTP, który można wykorzystać, aby sprawdzić działanie aplikacji. Aby go uruchomić należy wykonać polecenie: `php -S localhost:8000 -t public`
+
+## Testowanie
+
+W pisaniu testów, pomaga nam framework [Codeception](http://codeception.com/). Testy znajdują się w katalogu `tests`, który zawiera testy jednostkowe, funkcjonalne oraz akceptacyjne. Aby uruchomić testy trzeba wejść do katalogu z projektem i wykonać polecenia:
+
+1. `vendor/bin/codecept build` (tylko jednorazowo)
+2. `vendor/bin/codecept run`
+
+Jeżeli chcesz uruchomić testy akceptacyjne, to będziesz potrzebował narzędzia takiego jak Selenium czy PhantomJS. W katalogu `tests` znajduje się plik `acceptance.suite.yml.travis` który zawiera konfigurację testów akceptacyjnych i jest wykorzystywany przez Travis CI. Należy zmienić nazwę tego pliku na `acceptance.suite.yml` i zmienić wartość `url` na prawidłowy adres pod którym uruchomiony jest Coyote (np. `http://localhost/`). Zakładamy, że PhantomJS jest uruchomiony (`phantomjs --webdriver=4444`). 
 
 ## Aktualizacja projektu
 
