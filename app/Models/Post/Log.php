@@ -59,4 +59,10 @@ class Log extends Model
 
         return $this;
     }
+
+    public function setLog(Log $log)
+    {
+        $this->fill($log->toArray());
+        return $this;
+    }
 }

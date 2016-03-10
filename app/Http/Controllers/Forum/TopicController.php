@@ -255,7 +255,7 @@ class TopicController extends BaseController
             // assign attachments to the post
             $post->setAttachments($request->get('attachments', []));
             // assign tags to topic
-            $this->topic->setTags($topic->id, $request->get('tag', []));
+            $topic->setTags($tags);
 
             // save it in log...
             (new Log())

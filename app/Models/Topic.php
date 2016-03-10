@@ -112,4 +112,19 @@ class Topic extends Model
             $this->subscribers()->firstOrCreate(['topic_id' => $this->id, 'user_id' => $userId]);
         }
     }
+
+    /**
+     * Save topic's tags
+     *
+     * @param array $tags
+     */
+    public function setTags(array $tags)
+    {
+        $this->tags()->delete();
+
+        foreach ($tags as $name) {
+            $tag = Tag::firstOrCreate(['name' => $name]);
+            $this->tags()->create(['tag_id' => $tag->id]);
+        }
+    }
 }

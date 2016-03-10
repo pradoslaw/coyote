@@ -153,22 +153,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     }
 
     /**
-     * Save topic's tags
-     *
-     * @param int $topicId
-     * @param array $tags
-     */
-    public function setTags($topicId, array $tags)
-    {
-        Topic\Tag::where('topic_id', $topicId)->delete();
-
-        foreach ($tags as $name) {
-            $tag = Tag::firstOrCreate(['name' => $name]);
-            Topic\Tag::create(['topic_id' => $topicId, 'tag_id' => $tag->id]);
-        }
-    }
-
-    /**
      * Mark topic as read
      *
      * @param $topicId

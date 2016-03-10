@@ -23,14 +23,6 @@ interface TopicRepositoryInterface extends RepositoryInterface
     public function markTime($topicId, $userId, $sessionId);
 
     /**
-     * Save topic's tags
-     *
-     * @param int $topicId
-     * @param array $tags
-     */
-    public function setTags($topicId, array $tags);
-
-    /**
      * Mark topic as read
      *
      * @param $topicId

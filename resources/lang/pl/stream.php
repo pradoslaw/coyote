@@ -10,6 +10,7 @@ return [
     'accept' => 'zaakceptował',
     'reject' => 'zrezygnował z akceptacji',
     'move' => 'przeniósł',
+    'rollback' => 'przywrócił',
 
     'microblog' => 'wpis',
     'comment' => 'komentarz',

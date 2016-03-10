@@ -70,9 +70,12 @@ class Post extends Model
     public function setAttachments(array $attachments)
     {
         $this->attachments()->update(['post_id' => null]);
+        $rows = [];
 
         foreach ($attachments as $attachment) {
-            Attachment::where('file', $attachment)->update(['post_id' => $this->id]);
+            $rows[] = Attachment::where('file', $attachment)->first();
         }
+
+        $this->attachments()->saveMany($rows);
     }
 }

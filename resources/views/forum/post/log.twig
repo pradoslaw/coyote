@@ -65,7 +65,7 @@
     {% endfor %}
 
     {{ form_open({'url': '', 'id': 'form-rollback'}) }}
-    {{ modal.confirm('Treść postu zostanie zastąpiona. Czy chcesz kontynuować?') }}
+    {{ modal.confirm('Treść postu zostanie zastąpiona. Czy chcesz kontynuować?', 'Potwierdź operację', 'confirm', 'Tak, cofnij') }}
     {{ form_close() }}
 
 {% endblock %}

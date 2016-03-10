@@ -24,9 +24,4 @@ class Tag extends Model
      * @var array
      */
     public $timestamps = false;
-
-    public function tag()
-    {
-        return $this->hasOne('Coyote\Tag');
-    }
 }

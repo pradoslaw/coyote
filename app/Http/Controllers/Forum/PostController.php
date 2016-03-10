@@ -10,7 +10,6 @@ use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Log;
-use Coyote\Post\Subscriber;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface as Flag;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AcceptRepositoryInterface as Accept;
@@ -215,7 +214,7 @@ class PostController extends BaseController
                     $log->tags = $tags;
 
                     if (array_merge(array_diff($tags, $current), array_diff($current, $tags))) {
-                        $this->topic->setTags($topic->id, $tags);
+                        $topic->setTags($tags);
                         $isDirty = true;
                     }
 
