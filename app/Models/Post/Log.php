@@ -3,6 +3,7 @@
 namespace Coyote\Post;
 
 use Illuminate\Database\Eloquent\Model;
+use Coyote\Post;
 
 class Log extends Model
 {
@@ -11,7 +12,7 @@ class Log extends Model
      *
      * @var array
      */
-    protected $fillable = ['post_id', 'user_id', 'text', 'subject', 'tags', 'comment'];
+    protected $fillable = ['post_id', 'user_id', 'text', 'subject', 'tags', 'comment', 'ip', 'browser', 'host'];
 
     /**
      * @var string
@@ -45,5 +46,17 @@ class Log extends Model
     public function getTagsAttribute($value)
     {
         return json_decode($value);
+    }
+
+    /**
+     * @param Post $post
+     * @return $this
+     */
+    public function setPost(Post $post)
+    {
+        $this->fill($post->toArray());
+        $this->post_id = $post->id;
+
+        return $this;
     }
 }

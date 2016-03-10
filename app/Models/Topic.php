@@ -50,6 +50,15 @@ class Topic extends Model
     }
 
     /**
+     * @param $subject
+     */
+    public function setSubjectAttribute($subject)
+    {
+        $this->attributes['subject'] = $subject;
+        $this->attributes['path'] = str_slug($subject, '_');
+    }
+
+    /**
      * @return mixed
      */
     public function tags()

@@ -5,10 +5,10 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Events\PostWasSaved;
 use Coyote\Forum\Reason;
+use Coyote\Post\Log;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
-use Coyote\Repositories\Contracts\Post\LogRepositoryInterface as Log;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
@@ -233,16 +233,13 @@ class TopicController extends BaseController
     /**
      * @param $forum
      * @param PostRequest $request
-     * @param Log $log
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($forum, PostRequest $request, Log $log)
+    public function save($forum, PostRequest $request)
     {
-        $url = \DB::transaction(function () use ($request, $forum, $log) {
-            $path = str_slug($request->get('subject'), '_');
-
+        $url = \DB::transaction(function () use ($request, $forum) {
             // create new topic
-            $topic = $this->topic->create($request->all() + ['path' => $path, 'forum_id' => $forum->id]);
+            $topic = $this->topic->create($request->all() + ['forum_id' => $forum->id]);
             // create new post and assign it to topic. don't worry about the rest: trigger will do the work
             $post = $this->post->create($request->all() + [
                 'user_id'   => $this->userId,
@@ -253,13 +250,18 @@ class TopicController extends BaseController
                 'host'      => request()->server('SERVER_NAME')
             ]);
 
+            $tags = $request->get('tag', []);
+
             // assign attachments to the post
             $this->post->setAttachments($post->id, $request->get('attachments', []));
             // assign tags to topic
             $this->topic->setTags($topic->id, $request->get('tag', []));
 
             // save it in log...
-            $log->add($post->id, $this->userId, $post->text, $topic->subject, $request->get('tag', []));
+            (new Log())
+                ->setPost($post)
+                ->fill(['subject' => $topic->subject, 'tags' => $tags])
+                ->save();
 
             if (auth()->check()) {
                 $this->topic->subscribe($topic->id, $this->userId, $request->get('subscribe'));
@@ -281,7 +283,7 @@ class TopicController extends BaseController
                     'sender_name' => $request->get('user_name', auth()->user()->name),
                     'subject'     => excerpt($request->subject),
                     'excerpt'     => excerpt($post->text),
-                    'url'         => route('forum.topic', [$forum->path, $topic->id, $path], false)
+                    'url'         => route('forum.topic', [$forum->path, $topic->id, $topic->path], false)
                 ])->notify();
             }
 
@@ -303,7 +305,7 @@ class TopicController extends BaseController
             // add post to elasticsearch
             event(new PostWasSaved($post));
 
-            return route('forum.topic', [$forum->path, $topic->id, $path]);
+            return route('forum.topic', [$forum->path, $topic->id, $topic->path]);
         });
 
         return redirect()->to($url);
@@ -465,19 +467,17 @@ class TopicController extends BaseController
     /**
      * @param $topic
      * @param Request $request
-     * @param Log $log
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function subject($topic, Request $request, Log $log)
+    public function subject($topic, Request $request)
     {
         $forum = $this->forum->find($topic->forum_id);
         $this->authorize('update', $forum);
 
         $this->validate($request, ['subject' => 'required|min:3|max:200']);
 
-        $url = \DB::transaction(function () use ($request, $forum, $topic, $log) {
-            $path = str_slug($request->get('subject'), '_');
-            $topic->fill(['subject' => $request->get('subject'), 'path' => $path]);
+        $url = \DB::transaction(function () use ($request, $forum, $topic) {
+            $topic->fill(['subject' => $request->get('subject')]);
 
             $post = $this->post->find($topic->first_post_id);
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
@@ -489,7 +489,10 @@ class TopicController extends BaseController
                 $tags = $topic->tags->lists('name')->toArray();
 
                 // save it in log...
-                $log->add($post->id, $this->userId, $post->text, $topic->subject, $tags);
+                (new Log)
+                    ->setPost($post)
+                    ->fill(['user_id' => $this->userId, 'subject' => $topic->subject, 'tags' => $tags])
+                    ->save();
 
                 $post->fill([
                     'edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId

@@ -9,12 +9,12 @@ use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Requests\PostRequest;
+use Coyote\Post\Log;
 use Coyote\Post\Subscriber;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface as Flag;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AcceptRepositoryInterface as Accept;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
-use Coyote\Repositories\Contracts\Post\LogRepositoryInterface as Log;
 use Coyote\Repositories\Contracts\Post\VoteRepositoryInterface as Vote;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
@@ -169,18 +169,17 @@ class PostController extends BaseController
      * Save post (edit or create)
      *
      * @param PostRequest $request
-     * @param Log $log
      * @param $forum
      * @param $topic
      * @param null $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(PostRequest $request, Log $log, $forum, $topic, $post = null)
+    public function save(PostRequest $request, $forum, $topic, $post = null)
     {
         // parsing text and store it in cache
         $text = app()->make('Parser\Post')->parse($request->text);
 
-        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post, $log) {
+        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post) {
             $actor = new Stream_Actor(auth()->user());
 
             // url to the post
@@ -200,11 +199,11 @@ class PostController extends BaseController
                 $activity = new Stream_Update($actor);
 
                 $tags = $request->get('tag', []);
+                $log = new Log();
 
                 // user wants to change the subject. we must update "topics" table
                 if ($post->id === $topic->first_post_id) {
-                    $path = str_slug($request->get('subject'), '_');
-                    $topic->fill($request->all() + ['path' => $path]);
+                    $topic->fill($request->all());
 
                     if ($topic->isDirty()) {
                         $topic->save();
@@ -212,6 +211,8 @@ class PostController extends BaseController
                     }
 
                     $current = $topic->tags()->lists('name')->toArray();
+                    $log->subject = $topic->subject;
+                    $log->tags = $tags;
 
                     if (array_merge(array_diff($tags, $current), array_diff($current, $tags))) {
                         $this->topic->setTags($topic->id, $tags);
@@ -227,7 +228,9 @@ class PostController extends BaseController
                         'edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId
                     ]);
 
-                    $log->add($post->id, $this->userId, $post->text, $topic->subject, $tags);
+                    $log->setPost($post);
+                    $log->user_id = $this->userId; // it can be moderator action (moderator is editing post)
+                    $log->save();
                 }
 
                 $post->save();
@@ -278,8 +281,9 @@ class PostController extends BaseController
                 }
 
                 $alert->notify();
+
                 // initial history of post
-                $log->add($post->id, $this->userId, $post->text, null, []);
+                (new Log)->post($post)->save();
             }
 
             if (auth()->check() && $post->user_id) {
