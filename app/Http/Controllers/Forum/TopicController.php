@@ -509,6 +509,11 @@ class TopicController extends BaseController
                         'url'         => $url
                     ])->notify();
                 }
+
+                // fire the event. it can be used to index a content and/or add page path to "pages" table
+                event(new TopicWasSaved($topic));
+                // add post to elasticsearch
+                event(new PostWasSaved($post));
             }
 
             // put action into activity stream
