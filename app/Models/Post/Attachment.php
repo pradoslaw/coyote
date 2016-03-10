@@ -26,4 +26,12 @@ class Attachment extends Model
      * @var string
      */
     protected $table = 'post_attachments';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo('Coyote\Post');
+    }
 }

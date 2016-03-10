@@ -142,18 +142,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
-     * Assign attachments to the post
-     *
-     * @param $postId
-     * @param array $attachments
-     */
-    public function setAttachments($postId, array $attachments)
-    {
-        Attachment::where('post_id', $postId)->update(['post_id' => null]);
-        Attachment::whereIn('file', $attachments)->update(['post_id' => $postId]);
-    }
-
-    /**
      * Find posts by given ID. We use this method to retrieve quoted posts
      *
      * @param array $postsId

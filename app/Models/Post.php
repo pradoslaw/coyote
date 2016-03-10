@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Post\Attachment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
@@ -58,6 +59,20 @@ class Post extends Model
             $this->subscribers()->where('user_id', $userId)->delete();
         } else {
             $this->subscribers()->firstOrCreate(['post_id' => $this->id, 'user_id' => $userId]);
+        }
+    }
+
+    /**
+     * Assign attachments to the post
+     *
+     * @param array $attachments
+     */
+    public function setAttachments(array $attachments)
+    {
+        $this->attachments()->update(['post_id' => null]);
+
+        foreach ($attachments as $attachment) {
+            Attachment::where('file', $attachment)->update(['post_id' => $this->id]);
         }
     }
 }
