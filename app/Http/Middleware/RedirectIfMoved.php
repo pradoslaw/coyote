@@ -32,7 +32,8 @@ class RedirectIfMoved
         $forum = $request->route('forum');
         $topic = $request->route('topic');
 
-        if ($forum->id !== $topic->forum_id) {
+        if ($forum->id !== $topic->forum_id
+            || $request->route('slug') !== $topic->path) {
             $forum = $this->forum->find($topic->forum_id, ['path']);
 
             return redirect(route('forum.topic', [$forum->path, $topic->id, $topic->path]));
