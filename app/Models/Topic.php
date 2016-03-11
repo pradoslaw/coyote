@@ -107,6 +107,14 @@ class Topic extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tracks()
+    {
+        return $this->hasMany('Coyote\Topic\Track');
+    }
+
+    /**
      * Subscribe/unsubscribe to topic
      *
      * @param int $userId
@@ -134,5 +142,39 @@ class Topic extends Model
             $tag = Tag::firstOrCreate(['name' => $name]);
             $this->tags()->create(['tag_id' => $tag->id]);
         }
+    }
+
+    /**
+     * @param $userId
+     * @param $sessionId
+     * @return mixed
+     */
+    public function markTime($userId, $sessionId)
+    {
+        $sql = $this->tracks()->select('marked_at');
+
+        if ($userId) {
+            $sql->where('user_id', $userId);
+        } else {
+            $sql->where('session_id', $sessionId);
+        }
+
+        return $sql->pluck('marked_at');
+    }
+
+    /**
+     * Mark topic as read\
+     *
+     * @param $forumId
+     * @param $markTime
+     * @param $userId
+     * @param $sessionId
+     */
+    public function markAsRead($forumId, $markTime, $userId, $sessionId)
+    {
+        // builds data to update
+        $attributes = ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
+        // execute a query...
+        $this->tracks()->updateOrCreate($attributes, $attributes + ['marked_at' => $markTime, 'forum_id' => $forumId]);
     }
 }

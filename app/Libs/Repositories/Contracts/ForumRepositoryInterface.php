@@ -22,14 +22,6 @@ interface ForumRepositoryInterface extends RepositoryInterface
     public function forumList();
 
     /**
-     * @param $forumId
-     * @param $userId
-     * @param $sessionId
-     * @return mixed
-     */
-    public function markTime($forumId, $userId, $sessionId);
-
-    /**
      * @return array
      */
     public function getTagClouds();

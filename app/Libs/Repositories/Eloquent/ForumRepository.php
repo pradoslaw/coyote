@@ -171,25 +171,6 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * @param $forumId
-     * @param $userId
-     * @param $sessionId
-     * @return mixed
-     */
-    public function markTime($forumId, $userId, $sessionId)
-    {
-        $sql = Forum_Track::select('marked_at')->where('forum_id', $forumId);
-
-        if ($userId) {
-            $sql->where('user_id', $userId);
-        } else {
-            $sql->where('session_id', $sessionId);
-        }
-
-        return $sql->pluck('marked_at');
-    }
-
-    /**
      * @return array
      */
     public function getTagClouds()

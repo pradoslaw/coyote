@@ -65,9 +65,9 @@ class TopicController extends BaseController
     public function index($forum, $topic, $slug, Request $request)
     {
         // pobranie daty i godziny ostatniego razu gdy uzytkownik przeczytal ten watek
-        $topicMarkTime = $this->topic->markTime($topic->id, $this->userId, $this->sessionId);
+        $topicMarkTime = $topic->markTime($this->userId, $this->sessionId);
         // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
-        $forumMarkTime = $this->forum->markTime($forum->id, $this->userId, $this->sessionId);
+        $forumMarkTime = $forum->markTime($this->userId, $this->sessionId);
 
         if ($request->get('view') === 'unread') {
             if ($topicMarkTime < $topic->last_post_created_at && $forumMarkTime < $topic->last_post_created_at) {
@@ -139,7 +139,7 @@ class TopicController extends BaseController
 
         if ($topicMarkTime < $markTime && $forumMarkTime < $markTime) {
             // mark topic as read
-            $this->topic->markAsRead($topic->id, $forum->id, $markTime, $this->userId, $this->sessionId);
+            $topic->markAsRead($forum->id, $markTime, $this->userId, $this->sessionId);
             $isUnread = true;
 
             if ($forumMarkTime < $markTime) {
@@ -180,7 +180,7 @@ class TopicController extends BaseController
         if (\App::environment('local', 'dev')) {
             $this->topic->addViews($topic->id);
         } else {
-            $user = auth()->check() ? $this->userId : $request->session()->getId();
+            $user = auth()->check() ? $this->userId : $this->sessionId;
             // on production environment: store hit in redis
             app('redis')->sadd('counter:topic:' . $topic->id, $user . ';' . round(time() / 300) * 300);
         }

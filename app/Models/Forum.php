@@ -35,6 +35,14 @@ class Forum extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tracks()
+    {
+        return $this->hasMany('Coyote\Forum\Track');
+    }
+
+    /**
      * Checks ability for specified forum and user id
      *
      * @param string $name
@@ -79,5 +87,23 @@ class Forum extends Model
         } else {
             return in_array($userId, $usersId);
         }
+    }
+
+    /**
+     * @param $userId
+     * @param $sessionId
+     * @return mixed
+     */
+    public function markTime($userId, $sessionId)
+    {
+        $sql = $this->tracks()->select('marked_at');
+
+        if ($userId) {
+            $sql->where('user_id', $userId);
+        } else {
+            $sql->where('session_id', $sessionId);
+        }
+
+        return $sql->pluck('marked_at');
     }
 }

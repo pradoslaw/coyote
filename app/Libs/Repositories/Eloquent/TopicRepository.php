@@ -134,42 +134,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     }
 
     /**
-     * @param $topicId
-     * @param $userId
-     * @param $sessionId
-     * @return mixed
-     */
-    public function markTime($topicId, $userId, $sessionId)
-    {
-        $sql = Track::select('marked_at')->where('topic_id', $topicId);
-
-        if ($userId) {
-            $sql->where('user_id', $userId);
-        } else {
-            $sql->where('session_id', $sessionId);
-        }
-
-        return $sql->pluck('marked_at');
-    }
-
-    /**
-     * Mark topic as read
-     *
-     * @param $topicId
-     * @param $forumId
-     * @param $markTime
-     * @param $userId
-     * @param $sessionId
-     */
-    public function markAsRead($topicId, $forumId, $markTime, $userId, $sessionId)
-    {
-        // builds data to update
-        $attributes = ['topic_id' => $topicId] + ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
-        // execute a query...
-        Track::updateOrCreate($attributes, $attributes + ['marked_at' => $markTime, 'forum_id' => $forumId]);
-    }
-
-    /**
      * Is there any unread topic in this category?
      *
      * @param $forumId

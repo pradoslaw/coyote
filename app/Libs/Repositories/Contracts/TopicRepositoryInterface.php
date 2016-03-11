@@ -15,25 +15,6 @@ interface TopicRepositoryInterface extends RepositoryInterface
     public function paginate($userId, $sessionId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20);
 
     /**
-     * @param $topicId
-     * @param $userId
-     * @param $sessionId
-     * @return mixed
-     */
-    public function markTime($topicId, $userId, $sessionId);
-
-    /**
-     * Mark topic as read
-     *
-     * @param $topicId
-     * @param $forumId
-     * @param $markTime
-     * @param $userId
-     * @param $sessionId
-     */
-    public function markAsRead($topicId, $forumId, $markTime, $userId, $sessionId);
-
-    /**
      * Is there any unread topic in this category?
      *
      * @param $forumId
