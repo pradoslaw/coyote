@@ -163,18 +163,17 @@ class Topic extends Model
     }
 
     /**
-     * Mark topic as read\
+     * Mark topic as read
      *
-     * @param $forumId
      * @param $markTime
      * @param $userId
      * @param $sessionId
      */
-    public function markAsRead($forumId, $markTime, $userId, $sessionId)
+    public function markAsRead($markTime, $userId, $sessionId)
     {
         // builds data to update
         $attributes = ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
         // execute a query...
-        $this->tracks()->updateOrCreate($attributes, $attributes + ['marked_at' => $markTime, 'forum_id' => $forumId]);
+        $this->tracks()->updateOrCreate($attributes, $attributes + ['marked_at' => $markTime, 'forum_id' => $this->forum_id]);
     }
 }

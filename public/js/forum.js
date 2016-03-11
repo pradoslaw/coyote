@@ -1246,7 +1246,7 @@ $(function () {
     }
 
     if (jQuery.fn.pasteImage) {
-        $('#submit-form textarea').pasteImage(function (textarea, html) {
+        $('#submit-form textarea[name="text"]').pasteImage(function (textarea, html) {
                 $('#attachments .text-center').remove();
                 $('#attachments tbody').append(html);
 

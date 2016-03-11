@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Events\PostWasSaved;
 use Coyote\Forum\Reason;
+use Coyote\Http\Requests\SubjectRequest;
 use Coyote\Post\Log;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
@@ -139,7 +140,7 @@ class TopicController extends BaseController
 
         if ($topicMarkTime < $markTime && $forumMarkTime < $markTime) {
             // mark topic as read
-            $topic->markAsRead($forum->id, $markTime, $this->userId, $this->sessionId);
+            $topic->markAsRead($markTime, $this->userId, $this->sessionId);
             $isUnread = true;
 
             if ($forumMarkTime < $markTime) {
@@ -453,10 +454,10 @@ class TopicController extends BaseController
     public function mark($topic)
     {
         // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
-        $forumMarkTime = $this->forum->markTime($topic->forum_id, $this->userId, $this->sessionId);
+        $forumMarkTime = $topic->forum->markTime($this->userId, $this->sessionId);
 
         // mark topic as read
-        $this->topic->markAsRead($topic->id, $topic->forum_id, $topic->last_post_created_at, $this->userId, $this->sessionId);
+        $topic->markAsRead($topic->last_post_created_at, $this->userId, $this->sessionId);
         $isUnread = $this->topic->isUnread($topic->forum_id, $forumMarkTime, $this->userId, $this->sessionId);
 
         if (!$isUnread) {
@@ -466,15 +467,13 @@ class TopicController extends BaseController
 
     /**
      * @param $topic
-     * @param Request $request
+     * @param SubjectRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function subject($topic, Request $request)
+    public function subject($topic, SubjectRequest $request)
     {
         $forum = $this->forum->find($topic->forum_id);
         $this->authorize('update', $forum);
-
-        $this->validate($request, ['subject' => 'required|min:3|max:200']);
 
         $url = \DB::transaction(function () use ($request, $forum, $topic) {
             $topic->fill(['subject' => $request->get('subject')]);

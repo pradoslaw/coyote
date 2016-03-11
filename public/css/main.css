@@ -7466,6 +7466,10 @@ ul.breadcrumb {
     color: #464646;
     text-shadow: white 0 1px 0; }
 
+.panel-forum {
+  background-color: #f3f5f0;
+  border: 1px solid #d0d0d0; }
+
 .progress {
   background: #444444;
   padding: 5px;

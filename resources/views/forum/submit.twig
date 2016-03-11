@@ -1,4 +1,4 @@
-{% extends 'forum/base.twig' %}
+{% extends 'forum.base' %}
 {% block title %}
     {% spaceless %}
         {% if topic.id is null %}
@@ -13,7 +13,7 @@
     {% endspaceless %}
 {% endblock %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
 {% block container %}
     <div id="form-wrapper" class="row">
@@ -59,7 +59,7 @@
 
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
-                            {% include 'components/toolbar.twig' %}
+                            {% include 'components.toolbar' %}
                             <textarea name="text" class="form-control" style="height: 160px;" tabindex="3" data-paste-url="{{ route('forum.paste') }}" data-prompt-url="{{ topic.id ? route('forum.prompt', [topic.id]) : route('user.prompt') }}">{{ input_old('text', text) }}</textarea>
 
                             {% if errors.first('text') %}
@@ -67,11 +67,20 @@
                             {% endif %}
                         </div>
 
-                        {% include 'forum/attachments.twig' %}
+                        {% include 'forum.attachments' %}
 
-                        <div role="tabpanel" class="tab-pane" id="poll"></div>
+                        <div role="tabpanel" class="tab-pane" id="poll">
+                            <div class="panel panel-forum">
+                                <div class="panel-body">
+                                    {{ forms.text('title', 'Tytuł ankiety', poll.title) }}
+                                    {{ forms.textarea('items', 'Odpowiedzi w ankiecie', poll.items, 10, {}, 'Maksymalnie 20 odpowiedzi. Każda w nowej linii. Jeżeli chcesz usunąć pozostaw pustą linię.') }}
+                                    {{ forms.text('max_items', 'Ilość możliwych odpowiedzi', poll.max_items, {}, 'odaj liczbę określającą ilość możliwych odpowiedzi.') }}
+                                    {{ forms.text('length', 'Długość działania', poll.length, {}, 'Okreś długość działania ankiety (w dniach). 0 oznacza brak terminu ważności') }}
+                                </div>
+                            </div>
+                        </div>
 
-                        {% include 'forum/preview.twig' %}
+                        {% include 'forum.preview' %}
                     </div>
                 </div>
             </div>
@@ -172,7 +181,7 @@
         </aside>
     </div>
 
-    {% import 'components/modals.twig' as modal %}
+    {% import 'components.modals' as modal %}
 
     {{ modal.alert('Wystąpił błąd podczas dodawania tagu.') }}
 {% endblock %}
