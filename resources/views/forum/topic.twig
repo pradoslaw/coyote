@@ -135,7 +135,7 @@
             {{ viewers|raw }}
         </main>
 
-        {% embed 'forum/sidebar.twig' %}
+        {% embed 'forum.sidebar' %}
             {% block side_menu %}
                 <div class="box">
                     <ul class="side-menu" style="margin-top: 5px">
@@ -157,9 +157,9 @@
                             </li>
                         {% endif %}
 
-                        <li class="btn-atom">
-                            <a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>
-                        </li>
+                        {#<li class="btn-atom">#}
+                            {#<a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>#}
+                        {#</li>#}
 
                         {% if can('update', forum) %}
                             <li id="btn-log"><a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
@@ -277,6 +277,9 @@
         {{ form_close() }}
     {% endif %}
 
+    {% if can('delete', forum) %}
+        {{ modals.confirm('Czy chcesz zamknąć ten raport?', 'Zamknięcie raportu', 'modal-report', 'Tak, zamknij') }}
+    {% endif %}
 {% endblock %}
 
 {% block body %}

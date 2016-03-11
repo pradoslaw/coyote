@@ -328,10 +328,9 @@ class PostController extends BaseController
      *
      * @param int $id post id
      * @param Request $request
-     * @param Flag $flag
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete($id, Request $request, Flag $flag)
+    public function delete($id, Request $request)
     {
         // it must be like that. only if reason has been chosen, we need to validate it.
         if ($request->get('reason')) {
@@ -359,7 +358,7 @@ class PostController extends BaseController
             }
         }
 
-        $url = \DB::transaction(function () use ($post, $topic, $forum, $request, $flag) {
+        $url = \DB::transaction(function () use ($post, $topic, $forum, $request) {
             // build url to post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
 
@@ -394,7 +393,7 @@ class PostController extends BaseController
 
                     $topic->delete();
                     // delete topic's flag
-                    $flag->deleteBy('topic_id', $topic->id);
+                    app('FlagRepository')->deleteBy('topic_id', $topic->id);
 
                     if ($subscribersId) {
                         app()->make('Alert\Topic\Delete')
@@ -429,7 +428,7 @@ class PostController extends BaseController
 
                     $post->delete();
                     // delete post's flags
-                    $flag->deleteBy('post_id', $post->id);
+                    app('FlagRepository')->deleteBy('post_id', $post->id);
 
                     if ($subscribersId) {
                         app()->make('Alert\Post\Delete')

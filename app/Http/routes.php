@@ -257,6 +257,7 @@ Route::get('Tag/Prompt', ['uses' => 'Tag\PromptController@index', 'as' => 'tag.p
 Route::get('Tag/Validate', ['uses' => 'Tag\PromptController@valid', 'as' => 'tag.validate']);
 Route::get('Flag', ['uses' => 'FlagController@index', 'as' => 'flag', 'middleware' => 'auth']);
 Route::post('Flag', ['uses' => 'FlagController@save', 'middleware' => 'auth']);
+Route::post('Flag/Delete/{id}', ['uses' => 'FlagController@delete', 'middleware' => 'auth', 'as' => 'flag.delete']);
 
 Route::get('/{slug}', function ($slug) {
     return view('errors/404');

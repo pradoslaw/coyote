@@ -705,11 +705,30 @@ $(function () {
     $('.btn-report').click(function() {
         var metadata = {'post_id': $(this).data('post-id'), 'topic_id': $(this).data('topic-id')};
 
-        $.get(_config.public + '/Flag', {url: $(this).data('url'), metadata: JSON.stringify(metadata)}, function(html) {
+        $.get($(this).attr('href'), {url: $(this).data('url'), metadata: JSON.stringify(metadata)}, function(html) {
             $(html).appendTo('body');
 
             $('#flag').find('.modal').modal('show');
         });
+
+        return false;
+    });
+
+    /**
+     * Close flagged post report
+     */
+    $('.alert-report').submit(function() {
+        var url = $(this).attr('action');
+        var $this = $(this);
+
+        $('#modal-report').modal('show').one('click', '.danger', function() {
+            $.post(url);
+            $this.fadeOut();
+
+            $('#modal-report').modal('hide');
+        });
+
+        return false;
     });
 
     function toPost(url) {
