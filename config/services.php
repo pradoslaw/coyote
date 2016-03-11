@@ -57,4 +57,7 @@ return [
         'redirect' => env('FACEBOOK_REDIRECT'),
     ],
 
+    'google-maps' => [
+        'key' => 'AIzaSyCjPih0Ay15fPj2j6KOqqNn2Af902apRz8'
+    ]
 ];
