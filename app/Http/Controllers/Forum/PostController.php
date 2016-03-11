@@ -12,9 +12,7 @@ use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Log;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface as Flag;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Contracts\Post\AcceptRepositoryInterface as Accept;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
-use Coyote\Repositories\Contracts\Post\VoteRepositoryInterface as Vote;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
@@ -484,17 +482,14 @@ class PostController extends BaseController
     }
 
     /**
-     * @param $id
-     * @param Vote $vote
+     * @param Post $post
      * @return \Illuminate\Http\JsonResponse
      */
-    public function vote($id, Vote $vote)
+    public function vote($post)
     {
         if (auth()->guest()) {
             return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
         }
-
-        $post = $this->post->findOrFail($id);
 
         if (!config('app.debug') && auth()->user()->id === $post->user_id) {
             return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
@@ -510,8 +505,8 @@ class PostController extends BaseController
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
         }
 
-        \DB::transaction(function () use ($post, $topic, $forum, $vote) {
-            $result = $vote->findWhere(['post_id' => $post->id, 'user_id' => $this->userId])->first();
+        \DB::transaction(function () use ($post, $topic, $forum) {
+            $result = $post->votes()->where('user_id', $this->userId)->first();
 
             // build url to post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false) . '?p=' . $post->id . '#id' . $post->id;
@@ -522,8 +517,8 @@ class PostController extends BaseController
                 $result->delete();
                 $post->score--;
             } else {
-                $vote->create([
-                    'post_id' => $post->id, 'user_id' => $this->userId, 'forum_id' => $forum->id, 'ip' => request()->ip()
+                $post->votes()->create([
+                    'user_id' => $this->userId, 'forum_id' => $forum->id, 'ip' => request()->ip()
                 ]);
                 $post->score++;
 
@@ -558,14 +553,16 @@ class PostController extends BaseController
         return response()->json(['count' => $post->score]);
     }
 
-    public function accept($id, Accept $accept)
+    /**
+     * @param Post $post
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function accept($post)
     {
         if (auth()->guest()) {
             return response()->json(['error' => 'Musisz być zalogowany, aby zaakceptować ten post.'], 500);
         }
 
-        // user wants to accept this post...
-        $post = $this->post->findOrFail($id);
         // post belongs to this topic:
         $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject', 'first_post_id', 'is_locked']);
 
@@ -583,8 +580,8 @@ class PostController extends BaseController
             return response()->json(['error' => 'Możesz zaakceptować post tylko we własnym wątku.'], 500);
         }
 
-        \DB::transaction(function () use ($accept, $topic, $post, $forum) {
-            $result = $accept->findWhere(['topic_id' => $topic->id])->first();
+        \DB::transaction(function () use ($topic, $post, $forum) {
+            $result = $topic->accept()->where('topic_id', $topic->id)->first();
 
             // build url to post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
@@ -621,7 +618,7 @@ class PostController extends BaseController
                     }
                 }
 
-                $accept->delete($result->id);
+                $result->delete();
             }
 
             $reputation->setExcerpt($excerpt);
@@ -651,9 +648,8 @@ class PostController extends BaseController
                     }
                 }
 
-                $accept->create([
+                $topic->accept()->create([
                     'post_id'   => $post->id,
-                    'topic_id'  => $topic->id,
                     'user_id'   => $this->userId, // don't change this. we need to know who accepted this post
                     'ip'        => request()->ip()
                 ]);

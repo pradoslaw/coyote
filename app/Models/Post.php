@@ -48,6 +48,22 @@ class Post extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes()
+    {
+        return $this->hasMany('Coyote\Post\Vote');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function accept()
+    {
+        return $this->hasOne('Coyote\Post\Accept');
+    }
+
+    /**
      * Enable/disable subscription for this post
      *
      * @param int $userId

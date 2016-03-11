@@ -99,6 +99,14 @@ class Topic extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function accept()
+    {
+        return $this->hasOne('Coyote\Post\Accept');
+    }
+
+    /**
      * Subscribe/unsubscribe to topic
      *
      * @param int $userId

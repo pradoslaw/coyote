@@ -87,9 +87,9 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // obserwowanie posta
     Route::post('Post/Subscribe/{post}', ['uses' => 'PostController@subscribe', 'as' => 'post.subscribe', 'middleware' => 'auth']);
     // glosowanie na dany post
-    Route::post('Post/Vote/{id}', ['uses' => 'PostController@vote', 'as' => 'post.vote']);
+    Route::post('Post/Vote/{post}', ['uses' => 'PostController@vote', 'as' => 'post.vote']);
     // akceptowanie danego posta jako poprawna odpowiedz w watku
-    Route::post('Post/Accept/{id}', ['uses' => 'PostController@accept', 'as' => 'post.accept']);
+    Route::post('Post/Accept/{post}', ['uses' => 'PostController@accept', 'as' => 'post.accept']);
     // historia edycji danego posta
     Route::get('Post/Log/{post}', ['uses' => 'LogController@log', 'as' => 'post.log']);
     // przywrocenie poprzedniej wersji posta
