@@ -59,13 +59,14 @@ class AttachmentController extends Controller
 
         if ($request->file('attachment')->isValid()) {
             $fileName = uniqid() . '.' . strtolower($request->file('attachment')->getClientOriginalExtension());
-            $request->file('attachment')->move(public_path() . '/storage/forum/', $fileName);
 
-            $path = 'storage/forum/' . $fileName;
+            $path = 'forum/' . $fileName;
+            Storage::disk('public')->put($path, file_get_contents($request->file('attachment')->getRealPath()));
+
             $mime = new Mimetypes();
 
             $data = [
-                'size' => filesize($path),
+                'size' => Storage::disk('public')->size($path),
                 'mime' => $mime->fromFilename($fileName),
                 'file' => $fileName,
                 'name' => $request->file('attachment')->getClientOriginalName()
@@ -90,13 +91,13 @@ class AttachmentController extends Controller
         }
 
         $fileName = uniqid() . '.png';
-        $path = public_path('storage/forum/' . $fileName);
+        $path = 'forum/' . $fileName;
 
-        file_put_contents($path, file_get_contents('data://' . substr($input, 7)));
+        Storage::disk('public')->put($path, file_get_contents('data://' . substr($input, 7)));
         $mime = new Mimetypes();
 
         $data = [
-            'size' => filesize($path),
+            'size' => Storage::disk('public')->size($path),
             'mime' => $mime->fromFilename($fileName),
             'file' => $fileName,
             'name' => $fileName
@@ -139,12 +140,10 @@ class AttachmentController extends Controller
             'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT'
         ];
 
-        $path = public_path('storage/forum/' . $attachment->file);
-
         if ($isImage) {
-            return response()->make(Storage::get('forum/' . $attachment->file), 200, $headers);
+            return response()->make(Storage::disk('public')->get('forum/' . $attachment->file), 200, $headers);
         } else {
-            return response()->download($path, $attachment->name, $headers);
+            return response()->download(public_path('storage/forum/' . $attachment->file), $attachment->name, $headers);
         }
     }
 }

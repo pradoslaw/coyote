@@ -34,6 +34,8 @@ class PostRequest extends Request
     public function rules()
     {
         $forum = $this->route('forum');
+        $post = $this->route('post');
+        $topic = $this->route('topic');
 
         $rules = [
             'text' => self::RULE_TEXT,
@@ -47,14 +49,17 @@ class PostRequest extends Request
             'length' => self::RULE_POLL_LENGTH
         ];
 
-        if ($forum->require_tag) {
-            $rules['tag'] .= '|required';
-        }
+        // if I create new topic or edit first post ...
+        if ((isset($post->id) && $post->id === $topic->first_post_id) || is_null($topic)) {
+            if ($forum->require_tag) {
+                $rules['tag'] .= '|required';
+            }
 
-        // @todo fix in laravel 5.2
-        if (is_array($this->request->get('tag'))) {
-            foreach ($this->request->get('tag') as $key => $val) {
-                $rules['tag.' . $key] = 'required|max:25|tag|tag_creation:2';
+            // @todo fix in laravel 5.2
+            if (is_array($this->request->get('tag'))) {
+                foreach ($this->request->get('tag') as $key => $val) {
+                    $rules['tag.' . $key] = 'required|max:25|tag|tag_creation:2';
+                }
             }
         }
 
