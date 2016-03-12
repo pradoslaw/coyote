@@ -35,7 +35,7 @@ install-gulp:
 	npm install
 
 install-assets:
-    bower install
+	bower install
 
 assets-production:
 	gulp --production
