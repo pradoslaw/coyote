@@ -1,9 +1,9 @@
-.PHONY: all update-repo dependency-install file-permission migration seed assets_dev assets_production
+.PHONY: all update-repo dependency-install file-permission migration seed assets-dev assets-production
 
-install: dependency-install dump-autoload file-permission migration seed install_gulp assets_production cache-config
-install-dev: dependency-install dump-autoload file-permission migration seed install_gulp assets_dev
-update: update-repo dump-autoload migration assets_production cache-config
-update-dev: update-repo dump-autoload migration assets_dev
+install: dependency-install dump-autoload file-permission migration seed install-gulp install-assets assets-production cache-config
+install-dev: dependency-install dump-autoload file-permission migration seed install-gulp install-assets assets-dev
+update: update-repo dump-autoload migration install-assets assets-production cache-config
+update-dev: update-repo dump-autoload migration install-assets assets-dev
 
 help:
 	@echo 'make install -- download dependencies and install'
@@ -29,11 +29,15 @@ migration:
 seed:
 	php artisan db:seed
 
-install_gulp:
+install-gulp:
 	npm install --g gulp
+	npm install --g bower
 	npm install
 
-assets_production:
+install-assets:
+    bower install
+
+assets-production:
 	gulp --production
 
 assets_dev:
