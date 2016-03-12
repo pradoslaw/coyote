@@ -69,7 +69,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // podpowiadanie nazwy uzytkownika (w kontekscie danego watku)
     Route::get('Topic/Prompt/{id}', ['uses' => 'TopicController@prompt', 'as' => 'prompt']);
     // przeniesienie watku do innej kategorii
-    Route::post('Topic/Move/{id}', ['uses' => 'TopicController@move', 'as' => 'move']);
+    Route::post('Topic/Move/{topic}', ['uses' => 'TopicController@move', 'as' => 'move']);
     // oznacz watek jako przeczytany
     Route::post('Topic/Mark/{topic}', ['uses' => 'TopicController@mark', 'as' => 'topic.mark']);
     // szybka zmiana tytulu watku

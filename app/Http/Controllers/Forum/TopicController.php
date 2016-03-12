@@ -377,11 +377,11 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param $id
+     * @param \Coyote\Topic $topic
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function move($id, Request $request)
+    public function move($topic, Request $request)
     {
         $rules = ['path' => 'required|exists:forums'];
 
@@ -391,8 +391,7 @@ class TopicController extends BaseController
         }
         $this->validate($request, $rules);
 
-        $topic = $this->topic->findOrFail($id);
-        $old = $this->forum->find($topic->forum_id);
+        $old = $topic->forum()->first(); // old category
 
         $this->authorize('move', $old);
         $forum = $this->forum->findBy('path', $request->get('path'));
@@ -422,6 +421,7 @@ class TopicController extends BaseController
             }
 
             $topic->forum_id = $forum->id;
+            // magic happens here. database trigger will do the work
             $topic->save();
 
             $object = (new Stream_Topic())->map($topic, $old);
@@ -447,7 +447,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param Topic $topic
+     * @param \Coyote\Topic $topic
      */
     public function mark($topic)
     {
@@ -464,13 +464,13 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param $topic
+     * @param \Coyote\Topic $topic
      * @param SubjectRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function subject($topic, SubjectRequest $request)
     {
-        $forum = $this->forum->find($topic->forum_id);
+        $forum = $topic->forum()->first();
         $this->authorize('update', $forum);
 
         $url = \DB::transaction(function () use ($request, $forum, $topic) {
