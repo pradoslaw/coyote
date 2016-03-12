@@ -11,13 +11,13 @@ var elixir = require('laravel-elixir');
  |
  */
 
-elixir(function(mix) {
+elixir(function (mix) {
 
     var base = [
-        'jquery-last.min.js',
-        'bootstrap/tooltip.js',
-        'bootstrap/dropdown.js',// menu jest na kazdej stronie (dla uzytkownikow zalogowanych)
-        'bootstrap/collapse.js', // to musi sie znajdowac na kazdej podstronie (zwijanie menu dla urzadzen mobilnych)
+        '../bower/jquery/dist/jquery.min.js',
+        '../bower/bootstrap/js/tooltip.js',
+        '../bower/bootstrap/js/dropdown.js',// menu jest na kazdej stronie (dla uzytkownikow zalogowanych)
+        '../bower/bootstrap/js/collapse.js', // to musi sie znajdowac na kazdej podstronie (zwijanie menu dla urzadzen mobilnych)
         'components/realtime.js',
         'components/state.js',
         'components/declination.js',
@@ -28,46 +28,99 @@ elixir(function(mix) {
         'components/popover.js',
         'main.js'
     ];
-    
+
     mix.babel(['pages/job/submit.js'], 'public/js/job-submit.js');
 
     mix.scripts(base, 'public/js/main.js')
-        // strona glowna
-       //.scripts(['bootstrap/tab.js', 'vendor/perfect-scrollbar.js'], 'public/js/homepage.js')
-        // forum (popover jest na forum potrzebne do pokazywania okna dzielenia linku)
-       .scripts(['vendor/animate-colors.js', 'bootstrap/modal.js', 'bootstrap/tab.js', 'bootstrap/popover.js', 'pages/forum.js'], 'public/js/forum.js')
-        // mikroblogi
-       .scripts(['vendor/animate-colors.js', 'vendor/ekko-lightbox.js', 'pages/microblog.js', 'components/wikieditor.js'], 'public/js/microblog.js')
-        // strona profilu uzytkownika
-       //.scripts(['pages/profile.js'], 'public/js/profile.js')
-        // komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
-        // rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
-       .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js', 'components/upload.js'], 'public/js/posting.js')
-       .scripts(['components/wikieditor.js'], 'public/js/wikieditor.js')
-        // auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
-       .scripts(['components/auto-complete.js'], 'public/js/auto-complete.js')
-        // komponent z mozliwoscia wyboru tagow
-       .scripts(['components/tags.js'], 'public/js/tags.js')
-        // uzywane na niewielu stronach. tam gdzie trzeba przelaczac sie miedzy zakladkami
-       .scripts(['bootstrap/tab.js'], 'public/js/tab.js')
-        // okna modalne, tj. wyswietlanie komunikatow - np. zapytanie czy na pewno usunac post
-       .scripts(['bootstrap/modal.js'], 'public/js/modal.js')
-       .scripts(['vendor/perfect-scrollbar.js'], 'public/js/perfect-scrollbar.js')
-       .scripts(['vendor/animate-colors.js'], 'public/js/animate-colors.js')
-       .scripts(['vendor/ui-resizer.js'], 'public/js/ui-resizer.js')
-       .scripts(['vendor/jquery-ui.js'], 'public/js/jquery-ui.js');
+        /*
+         | Forum (popover jest na forum potrzebne do pokazywania okna z ktorego mozna skopiowac skrocony link do postu)
+         */
+        .scripts([
+            '../bower/jquery-color-animation/jquery.animate-colors-min.js',
+            '../bower/bootstrap/js/modal.js',
+            '../bower/bootstrap/js/tab.js',
+            '../bower/bootstrap/js/popover.js',
+            'pages/forum.js'
+        ], 'public/js/forum.js')
+
+        /*
+         | Mikroblogu
+         */
+        .scripts([
+            '../bower/jquery-color-animation/jquery.animate-colors-min.js',
+            '../bower/ekko-lightbox/dist/ekko-lightbox.min.js',
+            'pages/microblog.js',
+            'components/wikieditor.js'
+        ], 'public/js/microblog.js')
+
+        /*
+         | Komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
+         | rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
+         */
+        .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js', 'components/upload.js'], 'public/js/posting.js')
+
+        /*
+         | JS do prostego edytora markdown
+         */
+        .scripts(['components/wikieditor.js'], 'public/js/wikieditor.js')
+
+        /*
+         | auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
+         */
+        .scripts(['components/auto-complete.js'], 'public/js/auto-complete.js')
+
+        /*
+         | Komponent z mozliwoscia wyboru tagow
+         */
+        .scripts(['components/tags.js'], 'public/js/tags.js')
+
+        /*
+         | Uzywane na niewielu stronach. tam gdzie trzeba przelaczac sie miedzy zakladkami
+         */
+        .scripts(['../bower/bootstrap/js/tab.js'], 'public/js/tab.js')
+
+        /*
+         | Okna modalne, tj. wyswietlanie komunikatow - np. zapytanie czy na pewno usunac post
+         */
+        .scripts(['../bower/bootstrap/js/modal.js'], 'public/js/modal.js')
+
+        /*
+         | Scrollbar uzywany m.in w oknie powiadomien, wiadomosci prywatnych czy tez na stronie glownej
+         | gdzie wyswietlane sa ostatnie aktywnosci z forum
+         */
+        .scripts(['../bower/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js'], 'public/js/perfect-scrollbar.js')
+
+        /*
+         | Plugin animujacy tlo danego elementu strony (mikroblog, post) dla usprawnienia ubsability
+         */
+        .scripts(['../bower/jquery-color-animation/jquery.animate-colors-min.js'], 'public/js/animate-colors.js')
+
+        /*
+         | jQuery Ui w okrojonej wersji.
+         | ---------------------------------------
+         | Wykorzystywany m.in. po zaladowaniu okna powiadomien (mamy mozliwosc zmiany rozmiaru tego okna)
+         | oraz w panelu uzytkownika na stronie umiejetnosci gdzie mamy mozliwosc dodawania/usuwania umiejetnosci
+         | a takze ich przesuwania wzgledem siebie (za pomoca drag'n'drop)
+         */
+        .scripts([
+            '../bower/jquery-ui/ui/minified/core.min.js',
+            '../bower/jquery-ui/ui/minified/widget.min.js',
+            '../bower/jquery-ui/ui/minified/mouse.min.js',
+            '../bower/jquery-ui/ui/minified/resizable.min.js',
+            '../bower/jquery-ui/ui/minified/sortable.min.js'
+        ], 'public/js/jquery-ui.js');
 
     mix.sass('main.scss')
-       .sass('pages/auth.scss')
-       .sass('pages/homepage.scss')
-       .sass('pages/microblog.scss')
-       .sass('pages/forum.scss')
-       .sass('pages/wiki.scss')
-       .sass('pages/user.scss')
-       .sass('pages/profile.scss')
-       .sass('pages/job.scss')
-       .sass('pages/errors.scss')
-       .sass('pages/adm.scss');
+        .sass('pages/auth.scss')
+        .sass('pages/homepage.scss')
+        .sass('pages/microblog.scss')
+        .sass('pages/forum.scss')
+        .sass('pages/wiki.scss')
+        .sass('pages/user.scss')
+        .sass('pages/profile.scss')
+        .sass('pages/job.scss')
+        .sass('pages/errors.scss')
+        .sass('pages/adm.scss');
 
     mix.version([
         'js/main.js',
@@ -82,7 +135,6 @@ elixir(function(mix) {
         'js/modal.js',
         'js/perfect-scrollbar.js',
         'js/animate-colors.js',
-        'js/ui-resizer.js',
         'js/jquery-ui.js',
 
         'css/main.css',

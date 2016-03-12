@@ -125,7 +125,7 @@ $(function () {
                     wrapper.width(parseInt(Session.getItem('box-notify-w')));
                 }
 
-                $.getScript(_config.cdn + '/js/ui-resizer.js', function() {
+                $.getScript(_config.cdn + '/js/jquery-ui.js', function() {
                     wrapper.resizable({
                         maxHeight: alerts.height(), // max rozmiar obszaru powiadomien odpowiada ilosci znajdujacych sie tam powiadomien
                         minHeight: 190,

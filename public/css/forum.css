@@ -166,8 +166,8 @@
       font-size: 12px;
       opacity: .8;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap; }
+      white-space: nowrap;
+      text-overflow: ellipsis; }
       .side-menu > li > a:hover {
         color: #80a41a;
         text-decoration: none; }
@@ -207,8 +207,8 @@
           display: block; }
         .related ul li a strong {
           overflow: hidden;
-          text-overflow: ellipsis;
           white-space: nowrap;
+          text-overflow: ellipsis;
           width: 90%;
           display: inline-block;
           line-height: 1;
@@ -323,8 +323,8 @@
   .col-stats p, .col-views p {
     margin: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; }
+    white-space: nowrap;
+    text-overflow: ellipsis; }
 
 .col-forum-description p {
   margin: 0; }
@@ -370,8 +370,8 @@
   .col-post-preview p {
     margin: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; }
+    white-space: nowrap;
+    text-overflow: ellipsis; }
   .col-post-preview a {
     color: #5e7813; }
   .col-post-preview .btn-view {
@@ -571,8 +571,8 @@ div.tag-clouds .btn-add {
   .col-subject h5 {
     margin: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    text-overflow: ellipsis;
     line-height: 116%; }
     .col-subject h5 a {
       color: #5e7813; }
@@ -783,8 +783,8 @@ div.tag-clouds .btn-add {
   font-family: Arial, sans-serif;
   color: #555555;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; }
+  white-space: nowrap;
+  text-overflow: ellipsis; }
   .col-user h5:before {
     position: absolute;
     font-family: FontAwesome;
@@ -803,8 +803,8 @@ div.tag-clouds .btn-add {
   padding-top: 4px;
   padding-bottom: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; }
+  white-space: nowrap;
+  text-overflow: ellipsis; }
   .col-time small a {
     color: #777777; }
   .col-time .post-link {

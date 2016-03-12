@@ -6,6 +6,7 @@
 
 /vendor
 /node_modules
+/resources/assets/bower
 .env
 
 ### JetBrains template

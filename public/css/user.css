@@ -17,8 +17,8 @@
       font-size: 12px;
       opacity: .8;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap; }
+      white-space: nowrap;
+      text-overflow: ellipsis; }
       .side-menu > li > a:hover {
         color: #80a41a;
         text-decoration: none; }
