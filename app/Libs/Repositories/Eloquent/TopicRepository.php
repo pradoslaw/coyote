@@ -165,17 +165,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     }
 
     /**
-     * Lock/unlock topic
-     *
-     * @param int $topicId
-     * @param bool $flag
-     */
-    public function lock($topicId, $flag)
-    {
-        $this->update(['is_locked' => $flag], $topicId);
-    }
-
-    /**
      * @param int $topicId
      * @param int $value
      */

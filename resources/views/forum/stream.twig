@@ -35,7 +35,9 @@
                                     <p title="{{ activity.headline|striptags }}">{{ activity.headline|raw }}</p>
                                     <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
 
-                                    <div class="well well-sm">{{ activity.excerpt|raw }}</div>
+                                    {% if activity.excerpt %}
+                                        <div class="well well-sm">{{ activity.excerpt|raw }}</div>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}

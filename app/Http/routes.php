@@ -65,7 +65,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // obserwowanie danego watku na forum
     Route::post('Topic/Subscribe/{topic}', ['uses' => 'TopicController@subscribe', 'as' => 'topic.subscribe', 'middleware' => 'auth']);
     // blokowanie watku
-    Route::post('Topic/Lock/{id}', ['uses' => 'TopicController@lock', 'as' => 'lock', 'middleware' => 'auth']);
+    Route::post('Topic/Lock/{topic}', ['uses' => 'TopicController@lock', 'as' => 'lock', 'middleware' => 'auth']);
     // podpowiadanie nazwy uzytkownika (w kontekscie danego watku)
     Route::get('Topic/Prompt/{id}', ['uses' => 'TopicController@prompt', 'as' => 'prompt']);
     // przeniesienie watku do innej kategorii

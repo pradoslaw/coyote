@@ -752,6 +752,9 @@ $(function () {
         return false;
     });
 
+    /**
+     * Rollback post to previous version
+     */
     $('.btn-rollback').click(function() {
         $('#form-rollback').attr('action', $(this).attr('href'));
 

@@ -224,9 +224,12 @@
     font-size: 12px; }
   .stream .media small.text-muted {
     font-size: 85%; }
+  .stream .media .media-body {
+    padding-bottom: 10px; }
   .stream .media .well {
     font-size: 12px;
-    margin-top: 10px; }
+    margin-top: 10px;
+    margin-bottom: 5px; }
 
 .sidebar-hint {
   padding: 10px;

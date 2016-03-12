@@ -176,4 +176,13 @@ class Topic extends Model
         // execute a query...
         $this->tracks()->updateOrCreate($attributes, $attributes + ['marked_at' => $markTime, 'forum_id' => $this->forum_id]);
     }
+
+    /**
+     * Lock/unlock topic
+     */
+    public function lock()
+    {
+        $this->is_locked = !$this->is_locked;
+        $this->save();
+    }
 }

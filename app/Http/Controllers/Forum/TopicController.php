@@ -359,20 +359,18 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param int $id
+     * @param \Coyote\Topic $topic
      */
-    public function lock($id)
+    public function lock($topic)
     {
-        $topic = $this->topic->findOrFail($id);
-        $forum = $this->forum->find($topic->forum_id);
-
+        $forum = $topic->forum()->first();
         $this->authorize('lock', $forum);
 
-        \DB::transaction(function () use ($id, $topic, $forum) {
-            $this->topic->lock($id, !$topic->is_locked);
+        \DB::transaction(function () use ($topic, $forum) {
+            $topic->lock();
 
             stream(
-                $topic->is_locked ? Stream_Unlock::class : Stream_Lock::class,
+                $topic->is_locked ? Stream_Lock::class : Stream_Unlock::class,
                 (new Stream_Topic())->map($topic, $forum)
             );
         });

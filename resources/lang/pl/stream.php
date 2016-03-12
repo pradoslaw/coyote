@@ -11,6 +11,8 @@ return [
     'reject' => 'zrezygnował z akceptacji',
     'move' => 'przeniósł',
     'rollback' => 'przywrócił',
+    'lock' => 'zablokował',
+    'unlock' => 'odblokował',
 
     'microblog' => 'wpis',
     'comment' => 'komentarz',

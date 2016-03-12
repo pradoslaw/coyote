@@ -17,9 +17,14 @@
       font-size: 85%;
     }
 
+    .media-body {
+      padding-bottom: 10px;
+    }
+
     .well {
       font-size: $font-size-small;
       margin-top: 10px;
+      margin-bottom: 5px;
     }
   }
 }
