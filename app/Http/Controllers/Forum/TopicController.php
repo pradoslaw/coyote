@@ -25,7 +25,6 @@ use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
-use Coyote\Topic\Subscriber as Topic_Subscriber;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Gate;
