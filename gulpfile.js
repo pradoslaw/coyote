@@ -57,7 +57,7 @@ elixir(function (mix) {
          | Komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
          | rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
          */
-        .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js', 'components/upload.js'], 'public/js/posting.js')
+        .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js', 'components/upload.js', 'components/input-focus.js'], 'public/js/posting.js')
 
         /*
          | JS do prostego edytora markdown

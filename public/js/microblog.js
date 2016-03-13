@@ -232,7 +232,7 @@ $(function () {
                     });
 
                     $form.appendTo(commentText);
-                    $input.focus().prompt();
+                    $input.inputFocus().prompt();
                 });
             } else {
                 cancel();
@@ -294,7 +294,7 @@ $(function () {
                 .prompt()
                 .fastSubmit()
                 .autogrow()
-                .focus();
+                .inputFocus();
         }
 
         $form.on('click', '.btn-flush', removeThumbnail)
