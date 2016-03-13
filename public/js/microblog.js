@@ -22,7 +22,6 @@ $(function () {
     'use strict';
 
     $(document).ajaxError(function(event, jqxhr) {
-        $('#alert').modal('show');
         var error;
 
         if (typeof jqxhr.responseJSON.error !== 'undefined') {
@@ -31,7 +30,7 @@ $(function () {
             error = jqxhr.responseJSON.text;
         }
 
-        $('.modal-body').text(error);
+        $('#alert').modal('show').find('.modal-body').text(error);
     });
 
     // zawartosc tresci wpisow
