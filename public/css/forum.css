@@ -430,6 +430,9 @@
 .btn-back:before {
   content: ""; }
 
+.btn-diff:before {
+  content: ""; }
+
 #btn-setting:before {
   content: ""; }
 
@@ -705,23 +708,23 @@ div.tag-clouds .btn-add {
 #box-post {
   margin-top: 5px; }
 
-#box-topic-tags {
+.box-topic-tags {
   border: 1px solid #d0d0d0;
   background-color: #fafafa;
   float: left;
   border-radius: 3px;
   padding: 3px 10px 3px 30px;
   position: relative; }
-  #box-topic-tags:after {
+  .box-topic-tags:after {
     position: absolute;
     font-family: FontAwesome;
     content: "";
     left: 8px;
     top: 6px; }
-  #box-topic-tags ul.tag-clouds {
+  .box-topic-tags ul.tag-clouds {
     margin: 0;
     padding: 0; }
-    #box-topic-tags ul.tag-clouds a {
+    .box-topic-tags ul.tag-clouds a {
       margin: 0 5px 0 0; }
 
 .post {

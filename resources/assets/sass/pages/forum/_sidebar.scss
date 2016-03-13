@@ -50,6 +50,10 @@
   content: $fa-var-undo;
 }
 
+.btn-diff:before {
+  content: $fa-var-random;
+}
+
 #btn-setting:before {
   content: $fa-var-cog;
 }

@@ -30,7 +30,7 @@
 
                     <div id="box-post" class="box-forum">
                         {% if topic.tags.count() %}
-                            <div id="box-topic-tags" class="hidden-xs">
+                            <div class="box-topic-tags hidden-xs">
                                 <ul class="tag-clouds">
                                     {% for tag in topic.tags %}
                                         <li><a href="{{ route('forum.tag', [tag.name|url_encode]) }}">{{ tag.name }}</a></li>

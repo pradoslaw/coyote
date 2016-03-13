@@ -48,6 +48,15 @@ class LogController extends BaseController
         $this->breadcrumb->push('Historia postu', route('forum.post.log', [$post->id]));
 
         $logs = $this->log->takeForPost($post->id);
+        $parser = app()->make('Parser\Post');
+
+        if (!request()->get('diff')) {
+            foreach ($logs as &$log) {
+                $log->text = $parser->parse($log->text);
+            }
+        } else {
+            // @todo wyswietlanie diff
+        }
 
         return $this->view('forum.post.log')->with(compact('logs', 'post', 'forum', 'topic'));
     }
