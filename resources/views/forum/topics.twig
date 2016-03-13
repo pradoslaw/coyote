@@ -7,7 +7,7 @@
                 <li>{{ sortable('replies', 'Odpowiedzi', ['last', 'desc']) }}</li>
                 <li>{{ sortable('views', 'Wyświetleń', ['last', 'desc']) }}</li>
                 <li>{{ sortable('score', 'Głosów', ['last', 'desc']) }}</li>
-                <li class="filter"><a href="javascript:">Filtruj</a></li>
+                {#<li class="filter"><a href="javascript:">Filtruj</a></li>#}
             </ul>
 
             {% if forum is defined and not forum.is_locked %}
@@ -92,6 +92,13 @@
                                 {% endif %}
                             </strong>
                         </td>
+
+                        {% if forum is not defined %}
+                            <td class="col-category">
+                                {{ link_to_route('forum.category', topic.forum_name, [topic.forum_path]) }}
+                            </td>
+                        {% endif %}
+
                         <td class="col-views hidden-xs">
                             <p title="Ilość odpowiedzi">
                                 <strong>{{ topic.replies|number_format(0, '', ' ') }}</strong>
