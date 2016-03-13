@@ -146,7 +146,7 @@ class CommentController extends Controller
         }
 
         // we need to pass is_writeable variable to let know that we are able to edit/delete this comment
-        return view('forum.comment.element', ['is_writeable' => true])->with(compact('comment', 'forum'));
+        return view('forum.partials.comment', ['is_writeable' => true])->with(compact('comment', 'forum'));
     }
 
     /**
@@ -160,7 +160,7 @@ class CommentController extends Controller
 
         $this->authorize('update', [$comment, $forum]);
 
-        return view('forum.comment.form', ['post' => ['id' => $comment->post_id]])->with('comment', $comment);
+        return view('forum.partials.form', ['post' => ['id' => $comment->post_id]])->with('comment', $comment);
     }
 
     /**

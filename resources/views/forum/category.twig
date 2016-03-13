@@ -1,7 +1,7 @@
-{% extends 'forum/base.twig' %}
+{% extends 'forum.base' %}
 {% block title %}{{ forum.title|default(forum.name) }} :: Forum {{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
 {% block container %}
 
@@ -12,14 +12,14 @@
             {{ topics.render()|raw }}
         </nav>
 
-        {% include "forum/top.twig" %}
+        {% include "forum.partials.top" %}
 
         <main id="mainbar">
             {% for name, forums in sections %}
-                {% include 'forum/section.twig' %}
+                {% include 'forum.partials.section' %}
             {% endfor %}
 
-            {% include 'forum/topics.twig' %}
+            {% include 'forum.partials.topics.twig' %}
 
             <section class="row">
                 <div class="col-xs-12">
@@ -39,7 +39,7 @@
             {{ viewers|raw }}
         </main>
 
-        {% embed "forum/sidebar.twig" %}
+        {% embed "forum.partials.sidebar.twig" %}
             {% block side_menu %}
                 <div class="box">
                     <ul class="side-menu">

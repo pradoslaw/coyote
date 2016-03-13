@@ -1,8 +1,8 @@
-{% extends 'forum/base.twig' %}
+{% extends 'forum.base' %}
 {% block title %}{{ topic.subject }}{{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
-{% import 'components/modals.twig' as modals %}
+{% import 'components.forms' as forms %}
+{% import 'components.modals' as modals %}
 
 {% set is_writeable = can('update', forum) ? true : (not (forum.is_locked or topic.is_locked)) %}
 
@@ -21,7 +21,7 @@
             {{ paginate|raw }}
         </nav>
 
-        {% include "forum/top.twig" %}
+        {% include "forum.partials.top" %}
 
         <main id="mainbar">
 
@@ -47,7 +47,7 @@
                         <div class="clearfix"></div>
 
                         {% for post in posts %}
-                            {{ include('forum/post.twig', {index: loop.index0}) }}
+                            {{ include('forum.partials.post', {index: loop.index0}) }}
                         {% endfor %}
 
                         <div class="post" id="last-post">
@@ -89,7 +89,7 @@
 
                                     <div class="tab-content">
                                         <div role="tabpanel" class="tab-pane active {{ errors.first('text') ? 'has-error' }}" id="body">
-                                            {% include 'components/toolbar.twig' %}
+                                            {% include 'components.toolbar' %}
                                             <textarea name="text" class="form-control" cols="60" style="height: 80px" placeholder="Kliknij, aby napisać szybką odpowiedź..." data-paste-url="{{ route('forum.paste') }}" data-prompt-url="{{ route('forum.prompt', [topic.id]) }}" required>{{ input_old('text', text) }}</textarea>
 
                                             {% if errors.first('text') %}
@@ -97,8 +97,8 @@
                                             {% endif %}
                                         </div>
 
-                                        {% include 'forum/attachments.twig' %}
-                                        {% include 'forum/preview.twig' %}
+                                        {% include 'forum.partials.attachments' %}
+                                        {% include 'forum.partials.preview' %}
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +135,7 @@
             {{ viewers|raw }}
         </main>
 
-        {% embed 'forum.sidebar' %}
+        {% embed 'forum.partials.sidebar' %}
             {% block side_menu %}
                 <div class="box">
                     <ul class="side-menu" style="margin-top: 5px">

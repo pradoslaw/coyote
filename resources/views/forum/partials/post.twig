@@ -108,7 +108,7 @@
                 </div>
 
                 <div class="post-content" data-post-id="{{ post.id }}">
-                    {% include 'forum.text' %}
+                    {% include 'forum.partials.text' %}
                 </div>
 
                 <div class="clearfix"></div>
@@ -135,10 +135,10 @@
                     {% endif %}
 
                     {% for comment in post.comments %}
-                        {% include 'forum/comment/element.twig' %}
+                        {% include 'forum.partials.comment' %}
                     {% endfor %}
 
-                    {% include 'forum/comment/form.twig' %}
+                    {% include 'forum.partials.form' %}
                 </div>
 
             </div>

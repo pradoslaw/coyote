@@ -159,7 +159,7 @@ class PostController extends BaseController
         $subscribe = $topic->subscribers()->where('user_id', $this->userId)->count();
         $attachments = $post->attachments()->get();
 
-        return view('forum.edit')->with(compact('post', 'forum', 'topic', 'tags', 'subscribe', 'attachments'));
+        return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'tags', 'subscribe', 'attachments'));
     }
 
     /**
@@ -317,7 +317,7 @@ class PostController extends BaseController
                     $data['post']['sig'] = $parser->parse($user->sig);
                 }
             }
-            return view('forum.text', $data);
+            return view('forum.partials.text', $data);
         }
 
         return redirect()->to($url);

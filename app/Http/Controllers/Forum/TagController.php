@@ -26,6 +26,6 @@ class TagController extends BaseController
         $tags = json_encode($request->get('tags', []));
         $this->setSetting('forum.tags', $tags);
 
-        return view('forum.tags')->with('tags', $this->getUserTags());
+        return view('forum.partials.tags')->with('tags', $this->getUserTags());
     }
 }

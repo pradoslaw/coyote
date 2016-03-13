@@ -11,7 +11,7 @@
         </h4>
 
         {% if tags.user %}
-            {% include 'forum/tags.twig' with {'tags': tags.user} %}
+            {% include 'forum.partials.tags' with {'tags': tags.user} %}
         {% else %}
             <div class="tag-clouds">
                 <a href="javascript:" class="btn-add">(Brak tagów. Kliknij, aby dodać)</a>
@@ -33,7 +33,7 @@
     <div id="box-popular-tags" class="box">
         <h4 class="border"><i class="fa fa-tag fa-fw"></i> Popularne tagi</h4>
 
-        {% include 'forum/tags.twig' with {'tags': tags.popular} %}
+        {% include 'forum.partials.tags' with {'tags': tags.popular} %}
     </div>
 
     <section id="box-job-offers" class="box">

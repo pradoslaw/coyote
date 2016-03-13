@@ -73,7 +73,7 @@ class AttachmentController extends Controller
             ];
 
             $this->attachment->create($data);
-            return view('forum.attachment', ['attachment' => $data]);
+            return view('forum.partials.attachment', ['attachment' => $data]);
         }
     }
 
@@ -104,7 +104,7 @@ class AttachmentController extends Controller
         ];
 
         $this->attachment->create($data);
-        return view('forum.attachment', ['attachment' => $data]);
+        return view('forum.partials.attachment', ['attachment' => $data]);
     }
 
     /**

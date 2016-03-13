@@ -2,7 +2,7 @@
 
 {% block container %}
     <div id="index" class="sidebar">
-        {% include "forum.top" %}
+        {% include "forum.partials.top" %}
 
         <h4>Szukaj</h4>
 
@@ -65,7 +65,7 @@
             {{ viewers|raw }}
         </main>
 
-        {% embed 'forum.sidebar' %}
+        {% embed 'forum.partials.sidebar' %}
             {% block side_menu %}
                 <div id="box-count" class="box">
                     <strong>{{ 0|number_format(0, '', ' ') }}</strong>

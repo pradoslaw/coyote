@@ -3,14 +3,12 @@
 
 {% block container %}
     <div id="index" class="sidebar">
-        {% include "forum.top" %}
+        {% include "forum.partials.top" %}
 
         {% set back_url = route('forum.topic', [forum.path, topic.id, topic.path]) %}
         <h1>{{ link_to(back_url, topic.subject) }}</h1>
 
         <main id="mainbar">
-
-
             <ul class="nav nav-panel" style="margin-bottom: 0">
                 <li role="presentation" class="active"><a href="#stream" role="tab" data-toggle="tab">Aktywność użytkowników</a></li>
                 <li role="presentation"><a href="#visits" role="tab" data-toggle="tab">Wizyty</a></li>
@@ -53,7 +51,7 @@
             {{ viewers|raw }}
         </main>
 
-        {% embed 'forum.sidebar' %}
+        {% embed 'forum.partials.sidebar' %}
             {% block side_menu %}
                 <div class="box">
                     <ul class="side-menu">

@@ -17,19 +17,19 @@
             {% endfor %}
         </ul>
 
-        {% include "forum.top" %}
+        {% include "forum.partials.top" %}
 
         <main id="mainbar">
             {% block mainbar %}
                 {% for name, forums in sections %}
-                    {% include 'forum.section' %}
+                    {% include 'forum.partials.section' %}
                 {% endfor %}
             {% endblock %}
 
             {{ viewers|raw }}
         </main>
 
-        {% embed 'forum.sidebar' %}
+        {% embed 'forum.partials.sidebar' %}
             {% block side_menu %}
                 {% if topics.total() %}
                     <div id="box-count" class="box">

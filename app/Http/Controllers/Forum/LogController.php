@@ -58,7 +58,7 @@ class LogController extends BaseController
             // @todo wyswietlanie diff
         }
 
-        return $this->view('forum.post.log')->with(compact('logs', 'post', 'forum', 'topic'));
+        return $this->view('forum.log')->with(compact('logs', 'post', 'forum', 'topic'));
     }
 
     /**
