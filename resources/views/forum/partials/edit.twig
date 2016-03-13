@@ -1,7 +1,5 @@
 {% spaceless %}
 {{ form_open({'url': route('forum.post.submit', [forum.path, topic.id, post.id])}) }}
-    {{ form_hidden('user_name', post.user_name) }}
-
     {% for attachment in attachments %}
         {{ form_hidden('attachments[]', attachment.file) }}
     {% endfor %}
@@ -12,10 +10,6 @@
         {% for tag in tags %}
             {{ form_hidden('tag[]', tag) }}
         {% endfor %}
-    {% endif %}
-
-    {% if can('sticky', forum) %}
-        {{ form_hidden('is_sticky', 1, post.is_sticky) }}
     {% endif %}
 
     {% if subscribe %}

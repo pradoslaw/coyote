@@ -5,7 +5,7 @@
 
 {% block container %}
     <div id="index" class="sidebar">
-        {% include "forum.top" %}
+        {% include "forum.partials.top" %}
 
         <h1>{{ link_to_route('forum.topic', topic.subject, [forum.path, topic.id, topic.path]) }}</h1>
 
@@ -85,7 +85,7 @@
             {% endfor %}
         </main>
 
-        {% embed 'forum.sidebar' %}
+        {% embed 'forum.partials.sidebar' %}
             {% block side_menu %}
                 <div class="box">
                     <ul class="side-menu">

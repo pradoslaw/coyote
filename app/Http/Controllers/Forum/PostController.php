@@ -188,7 +188,7 @@ class PostController extends BaseController
 
                 $this->authorize('update', [$post, $forum]);
 
-                $data = $request->only(['text', 'user_name']);
+                $data = $request->all();
                 $post->fill($data);
 
                 // $isDirty determines if post has been changed somehow (body, title or tags)
@@ -202,10 +202,15 @@ class PostController extends BaseController
                 if ($post->id === $topic->first_post_id) {
                     $topic->fill($request->all());
 
-                    if ($topic->isDirty()) {
-                        $topic->save();
+                    // we only want to know if subject has changed. in that case we need to add record
+                    // to log database
+                    if ($topic->isDirty('subject')) {
                         $isDirty = true;
                     }
+
+                    // every time we need to save this record. user might change other options
+                    // like user name or sticky checkbox
+                    $topic->save();
 
                     $current = $topic->tags()->lists('name')->toArray();
                     $log->subject = $topic->subject;

@@ -52,7 +52,7 @@ class HomeController extends BaseController
             $collapse = unserialize($collapse);
         }
 
-        return $this->view('forum.home.categories')->with(compact('sections', 'collapse'));
+        return $this->view('forum.home')->with(compact('sections', 'collapse'));
     }
 
     /**
@@ -87,7 +87,7 @@ class HomeController extends BaseController
             $flags = app()->make('FlagRepository')->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
-        return $this->view('forum.home.topics')->with(compact('topics', 'flags'));
+        return $this->view('forum.topics')->with(compact('topics', 'flags'));
     }
 
     /**

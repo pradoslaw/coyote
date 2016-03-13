@@ -12,7 +12,7 @@
             </thead>
             <tbody>
             {% for attachment in attachments %}
-                {% include 'forum/attachment.twig' %}
+                {% include 'forum.partials.attachment' %}
             {% else %}
                 <tr>
                     <td colspan="5" class="text-center">Brak załączników.</td>
