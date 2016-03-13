@@ -53,7 +53,7 @@
 .microblog > .media-left {
   padding-right: 15px; }
 
-.microblog .media-body a.timestamp {
+.media-body a.timestamp {
   font-size: 11px;
   color: #777777; }
 

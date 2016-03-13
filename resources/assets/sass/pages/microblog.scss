@@ -38,19 +38,19 @@
     }
   }
 
-  small {
-    color: $gray-light;
-    font-size: 11px;
-    margin-left: 6px;
-    vertical-align: top;
-  }
-
   .media-heading {
     margin-left: 5px;
+    margin-right: 5px;
 
     a {
       color: $gray-darker;
     }
+  }
+
+  a.timestamp {
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 1px;
   }
 
   .btn-thumbs {

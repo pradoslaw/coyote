@@ -118,7 +118,7 @@
 .microblog > .media-left {
   padding-right: 15px; }
 
-.microblog .media-body a.timestamp {
+.media-body a.timestamp {
   font-size: 11px;
   color: #777777; }
 
@@ -304,16 +304,16 @@
   #box-popular-entries p a {
     color: #777777; }
 
-#box-popular-entries small {
-  color: #777777;
-  font-size: 11px;
-  margin-left: 6px;
-  vertical-align: top; }
-
 #box-popular-entries .media-heading {
-  margin-left: 5px; }
+  margin-left: 5px;
+  margin-right: 5px; }
   #box-popular-entries .media-heading a {
     color: #222222; }
+
+#box-popular-entries a.timestamp {
+  vertical-align: top;
+  display: inline-block;
+  margin-top: 1px; }
 
 #box-popular-entries .btn-thumbs {
   font-size: 11px; }

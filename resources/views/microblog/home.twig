@@ -70,7 +70,7 @@
                             <h5 class="media-heading pull-left">
                                 {{ link_to_profile(microblog.user_id, microblog.name, microblog.is_active, microblog.is_blocked) }}
                             </h5>
-                            <small> • {{ microblog.created_at|format_date }}</small>
+                            • <a href="{{ route('microblog.view', [microblog.id]) }}#entry-{{ microblog.id }}" title="{{ created_at|format_date(false) }}" class="timestamp" data-timestamp="{{ microblog.created_at|timestamp }}">{{ microblog.created_at|format_date }}</a>
 
                             <p>
                                 <a href="{{ route('microblog.view', [microblog.id]) }}">{{ excerpt(microblog.text, 200) }}</a>

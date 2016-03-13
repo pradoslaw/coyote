@@ -19,12 +19,13 @@
   > .media-left {
     padding-right: 15px;
   }
+}
 
-  .media-body {
-    a.timestamp {
-      font-size: 11px;
-      color: $gray-light;
-    }
+// zmienia kolor daty rowniez w rubryce "najpopularniejsze"
+.media-body {
+  a.timestamp {
+    font-size: 11px;
+    color: $gray-light;
   }
 }
 
