@@ -77,7 +77,7 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Moje wpisy', route('microblog.mine'));
 
-        $this->microblog->pushCriteria(new OnlyMine());
+        $this->microblog->pushCriteria(new OnlyMine($this->userId));
         return $this->index();
     }
 }

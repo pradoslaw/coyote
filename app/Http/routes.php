@@ -159,7 +159,7 @@ Route::group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     // pokaz reszte komentarzy...
     Route::get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
 
-    Route::get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);
+    Route::get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine', 'middleware' => 'auth']);
     Route::get('{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
 });
 
