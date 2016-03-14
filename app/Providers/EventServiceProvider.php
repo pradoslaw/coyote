@@ -23,6 +23,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         'Coyote\Listeners\PageListener',
+        'Coyote\Listeners\PostListener',
     ];
 
     /**

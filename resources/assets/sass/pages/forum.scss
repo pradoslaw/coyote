@@ -85,6 +85,14 @@ $sidebar-media-max-width: 1024px;
   color: $gray-light;
 }
 
+// Podkreslenie slow kluczowych w wyszukiwarce
+// ----------------------------------------------------------------------------------
+
+.highlight {
+  background-color: $unread-bg-hover;
+  font-style: normal;
+}
+
 // Strona glowna forum
 // ----------------------------------------------------------------------------------
 

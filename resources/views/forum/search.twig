@@ -1,4 +1,5 @@
 {% extends 'forum.base' %}
+{% block title %}{{ declination(total, ['post', 'posty', 'postów']) }} dla frazy {{ input_get('q') }}{% endblock %}
 
 {% block container %}
     <div id="index" class="sidebar">
@@ -21,43 +22,73 @@
             <section id="box-search-results" class="panel panel-wrapper">
                 <div class="panel-body">
                     <ul id="sort" class="hidden-xs">
-                        <li>{{ sortable('last', 'Trafność', ['last', 'desc']) }}</li>
-                        <li>{{ sortable('id', 'Data utworzenia', ['last', 'desc']) }}</li>
+                        <li>{{ sortable('relevance', 'Trafność', ['relevance', 'desc']) }}</li>
+                        <li>{{ sortable('id', 'Data utworzenia', ['relevance', 'desc']) }}</li>
                     </ul>
 
                     <div class="clearfix"></div>
 
-                    <div class="post">
-                        <div class="post-body">
-                            <div class="row">
-                                <div class="col-xs-2 col-user">
-                                    <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
-                                        {% if log.user_id %}
-                                            {{ link_to_profile(log.user_id, log.author_name, log.is_active, log.is_blocked) }}
-                                        {% else %}
-                                            {{ log.user_name }}
-                                        {% endif %}
-                                    </h5>
-                                </div>
+                    {% for post in result %}
+                        {% set source = post['_source'] %}
 
-                                <div class="col-xs-10 col-time">
-
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-2 col-user hidden-xss">
-
-                                </div>
-
-                                <div class="col-xs-10 col-body">
-                                    <div class="post-content">
-                                        {{ log.text }}
+                        <div class="post">
+                            <div class="post-body">
+                                <div class="row">
+                                    <div class="col-xs-2 col-user">
+                                        <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
+                                            {% if log.user_id %}
+                                                {{ link_to_profile(log.user_id, log.author_name, log.is_active, log.is_blocked) }}
+                                            {% else %}
+                                                {{ log.user_name }}
+                                            {% endif %}
+                                        </h5>
                                     </div>
+
+                                    <div class="col-xs-10 col-subject">
+                                        <a href="{{ route('forum.topic', [source.forum.path, source.topic_id, source.topic.path]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(post, 'topic.subject') }}</a>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-2 col-user hidden-xss">
+                                        <p class="hidden-xs">
+                                            <strong>Data:</strong>
+                                            <small>{{ source.created_at|format_date }}</small>
+                                        </p>
+
+                                        <p class="hidden-xs">
+                                            <strong>Kategoria:</strong>
+                                            <small>{{ link_to_route('forum.category', source.forum.name, [forum.path]) }}</small>
+                                        </p>
+
+                                        <p class="hidden-xs">
+                                            <strong>Odpowiedzi:</strong>
+                                            <small>{{ source.topic.replies }}</small>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-10 col-body">
+                                        <div class="post-content">
+                                            {{ elastic_highlight(post, 'text') }}
+                                        </div>
+
+                                        {% if source.tags %}
+                                            <ul class="tag-clouds">
+                                                {% for tag in source.tags %}
+                                                    <li><a href="#">{{ tag }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-2 col-bottom"></div>
+                                    <div class="col-xs-10 col-bottom">
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
 
                 </div>
             </section>
@@ -68,8 +99,8 @@
         {% embed 'forum.partials.sidebar' %}
             {% block side_menu %}
                 <div id="box-count" class="box">
-                    <strong>{{ 0|number_format(0, '', ' ') }}</strong>
-                    <span>{{ declination(0, ['post', 'posty', 'postów'], true) }}</span>
+                    <strong>{{ total|number_format(0, '', ' ') }}</strong>
+                    <span>{{ declination(total, ['post', 'posty', 'postów'], true) }}</span>
                 </div>
             {% endblock %}
         {% endembed %}

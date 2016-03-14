@@ -286,6 +286,10 @@
   margin-top: 20px;
   color: #777777; }
 
+.highlight {
+  background-color: #FFDCA5;
+  font-style: normal; }
+
 .box-forum table {
   border: 1px solid #d0d0d0;
   background: #fff;

@@ -2,14 +2,14 @@
 
 namespace Coyote;
 
+use Coyote\Elasticsearch\Elasticsearch;
 use Coyote\Post\Attachment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use DB;
 
 class Post extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Elasticsearch;
 
     /**
      * The attributes that are mass assignable.
@@ -64,6 +64,19 @@ class Post extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function topic()
+    {
+        return $this->belongsTo('Coyote\Topic');
+    }
+
+    public function forum()
+    {
+        return $this->belongsTo('Coyote\Forum');
+    }
+
+    /**
      * Enable/disable subscription for this post
      *
      * @param int $userId
@@ -93,5 +106,27 @@ class Post extends Model
         }
 
         $this->attachments()->saveMany($rows);
+    }
+
+    /**
+     * Return data to index in elasticsearch
+     *
+     * @return array
+     */
+    protected function getBody()
+    {
+        // additionally index few fields from topics table...
+        $topic = $this->topic()->first(['subject', 'path', 'replies', 'forum_id', 'id', 'first_post_id']);
+        // we need to index every field from posts except:
+        $body = array_except($this->toArray(), ['deleted_at', 'edit_count', 'editor_id']);
+
+        if ($topic->first_post_id == $body['id']) {
+            $body['tags'] = $this->tags()->lists('name');
+        }
+
+        return array_merge($body, [
+            'topic' => $topic,
+            'forum' => $this->forum()->first(['name', 'path'])
+        ]);
     }
 }

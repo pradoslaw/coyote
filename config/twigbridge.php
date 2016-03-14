@@ -103,6 +103,7 @@ return [
 
             'TwigBridge\Extensions\User',
             'TwigBridge\Extensions\Misc',
+            'TwigBridge\Extensions\Elasticsearch',
 //             'TwigBridge\Extension\Laravel\Legacy\Facades',
         ],
         /*

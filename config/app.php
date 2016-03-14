@@ -168,6 +168,8 @@ return [
         Coyote\Providers\AlertServiceProvider::class,
         // Klasy obslugi reputacji uzytkownika
         Coyote\Providers\ReputationServiceProvider::class,
+        // Obsluga Elasticsearch
+        Coyote\Providers\ElasticsearchServiceProvider::class,
 
         // Obsluga szablonow Twig
         TwigBridge\ServiceProvider::class,

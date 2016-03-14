@@ -1,4 +1,6 @@
 {% extends 'layout.twig' %}
+{% set search_url = route('forum.search') %}
+{% set search_placeholder = 'Szukaj na forum...' %}
 
 {% block head %}
     {{ parent() }}
