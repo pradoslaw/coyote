@@ -45,7 +45,7 @@
                                     </div>
 
                                     <div class="col-xs-10 col-subject">
-                                        <a href="{{ route('forum.topic', [source.forum.path, source.topic_id, source.topic.path]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(post, 'topic.subject') }}</a>
+                                        <h5><a href="{{ route('forum.topic', [source.forum.path, source.topic_id, source.topic.path]) }}?p={{ source.id }}#id{{ source.id }}">{{ elastic_highlight(post, 'topic.subject') }}</a></h5>
                                     </div>
                                 </div>
 
@@ -58,7 +58,7 @@
 
                                         <p class="hidden-xs">
                                             <strong>Kategoria:</strong>
-                                            <small>{{ link_to_route('forum.category', source.forum.name, [forum.path]) }}</small>
+                                            <small>{{ link_to_route('forum.category', source.forum.name, [source.forum.path]) }}</small>
                                         </p>
 
                                         <p class="hidden-xs">
@@ -75,7 +75,7 @@
                                         {% if source.tags %}
                                             <ul class="tag-clouds">
                                                 {% for tag in source.tags %}
-                                                    <li><a href="#">{{ tag }}</a></li>
+                                                    <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
                                                 {% endfor %}
                                             </ul>
                                         {% endif %}

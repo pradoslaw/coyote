@@ -10,6 +10,8 @@ class SearchController extends BaseController
 {
     public function index(Request $request, Post $post, User $user)
     {
+        $this->breadcrumb->push('Szukaj', route('forum.search'));
+
         // create forum list for current user (according to user's privileges)
         $this->pushForumCriteria();
         $forumList = $this->forum->forumList();
@@ -47,6 +49,8 @@ class SearchController extends BaseController
                 $usersId = $result->keyBy('_source.user_id')->keys();
                 $users = $user->whereIn('id', array_map('intval', $usersId->toArray()))->get()->keyBy('id');
             }
+
+            $this->breadcrumb->push('Wyniki wyszukiwania', $request->fullUrl());
         }
 
         return $this->view('forum.search')->with(compact('forumList', 'users', 'result', 'total'));
