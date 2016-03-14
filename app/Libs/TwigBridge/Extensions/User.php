@@ -69,14 +69,18 @@ class User extends Twig_Extension
             // jest zablokowany lub zbanowany
             new Twig_SimpleFunction(
                 'link_to_profile',
-                function () {
-                    $args = func_get_args();
+                function (... $args) {
+                    $user = $args[0];
 
-                    if (is_array($args[0])) {
-                        $userId     = isset($args['user_id']) ? $args['user_id'] : $args['id'];
-                        $name       = isset($args['user_name']) ? $args['user_name'] : $args['name'];
-                        $isActive   = $args['is_active'];
-                        $isBlocked  = $args['is_blocked'];
+                    if ($user instanceof \Coyote\User) {
+                        $user = $user->toArray();
+                    }
+
+                    if (is_array($user)) {
+                        $userId     = isset($user['user_id']) ? $user['user_id'] : $user['id'];
+                        $name       = isset($user['user_name']) ? $user['user_name'] : $user['name'];
+                        $isActive   = $user['is_active'];
+                        $isBlocked  = $user['is_blocked'];
                     } else {
                         $userId     = array_shift($args);
                         $name       = array_shift($args);
@@ -97,7 +101,7 @@ class User extends Twig_Extension
             new Twig_SimpleFunction(
                 'user_photo',
                 function ($photo) {
-                    return $photo ? asset('storage/photo/' . $photo) : asset('img/avatar.png');
+                    return $photo ? cdn('storage/photo/' . $photo) : cdn('img/avatar.png');
                 }
             ),
 

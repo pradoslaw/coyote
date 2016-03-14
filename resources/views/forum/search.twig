@@ -36,10 +36,10 @@
                                 <div class="row">
                                     <div class="col-xs-2 col-user">
                                         <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
-                                            {% if log.user_id %}
-                                                {{ link_to_profile(log.user_id, log.author_name, log.is_active, log.is_blocked) }}
+                                            {% if source.user_id %}
+                                                {{ link_to_profile(users[source.user_id]) }}
                                             {% else %}
-                                                {{ log.user_name }}
+                                                {{ source.user_name }}
                                             {% endif %}
                                         </h5>
                                     </div>

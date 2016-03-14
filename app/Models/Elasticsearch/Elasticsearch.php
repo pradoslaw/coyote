@@ -12,8 +12,6 @@ trait Elasticsearch
     public function putToIndex()
     {
         $params = $this->getParams();
-        $params['id'] = $this->getKey();
-
         $params['body'] = $this->modelToArray($this->getBody());
 
         return $this->getClient()->index($params);
@@ -30,17 +28,34 @@ trait Elasticsearch
     }
 
     /**
+     * @param $body
+     * @return mixed
+     */
+    public function search($body)
+    {
+        $params = $this->getParams();
+        $params['body'] = $body;
+
+        return $this->getClient()->search($params);
+    }
+
+    /**
      * Basic elasticsearch params
      *
      * @return array
      */
     protected function getParams()
     {
-        return [
+        $params = [
             'index' => $this->getIndexName(),
-            'type' => $this->getTable(),
-            'id' => $this->getKey()
+            'type' => $this->getTable()
         ];
+
+        if ($this->getKey()) {
+            $params['id'] = $this->getKey();
+        }
+
+        return $params;
     }
 
     /**
