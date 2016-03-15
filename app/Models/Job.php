@@ -104,6 +104,17 @@ class Job extends Model
         return $this->belongsTo('Coyote\Firm');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function currency()
+    {
+        return $this->belongsTo('Coyote\Currency');
+    }
+
+    /**
+     * @return array
+     */
     protected function getBody()
     {
         // maximum offered salary
@@ -121,9 +132,11 @@ class Job extends Model
         }
 
         $body = array_merge($body, [
-            'locations' => $this->locations()->lists('name'),
-            'salary' => $salary,
-            'firm' => $this->firm()->first(['name', 'logo'])
+            'locations'         => $this->locations()->lists('name'),
+            'salary'            => $salary,
+            // yes, we index currency name so we don't have to look it up in database during search process
+            'currency_name'     => $this->currency()->pluck('name'),
+            'firm'              => $this->firm()->first(['name', 'logo'])
         ]);
 
         return $body;

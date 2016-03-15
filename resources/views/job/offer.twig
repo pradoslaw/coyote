@@ -30,7 +30,7 @@
 
                             {% if job.salary_from or job.salary_to %}
                                 <strong class="salary pull-right text-primary">
-                                    {% include 'job.salary' %} <small>netto</small>
+                                    {% include 'job.partial.salary' %} <small>netto</small>
 
                                     {% if job.rate_id > 1 %}
                                         <small>/ {{ ratesList[job.rate_id] }}</small>

@@ -29,23 +29,21 @@
                     <div class="clearfix"></div>
 
                     {% for post in response %}
-                        {% set source = post['_source'] %}
-
                         <div class="post">
                             <div class="post-body">
                                 <div class="row">
                                     <div class="col-xs-2 col-user">
                                         <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
-                                            {% if source.user_id %}
-                                                {{ link_to_profile(users[source.user_id]) }}
+                                            {% if post.user_id %}
+                                                {{ link_to_profile(users[post.user_id]) }}
                                             {% else %}
-                                                {{ source.user_name }}
+                                                {{ post.user_name }}
                                             {% endif %}
                                         </h5>
                                     </div>
 
                                     <div class="col-xs-10 col-subject">
-                                        <h5><a href="{{ route('forum.topic', [source.forum.path, source.topic_id, source.topic.path]) }}?p={{ source.id }}#id{{ source.id }}">{{ elastic_highlight(post, 'topic.subject') }}</a></h5>
+                                         <h5><a href="{{ route('forum.topic', [post.forum.path, post.topic_id, post.topic.path]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(highlights[post.id]['topic.subject'], post.topic.subject) }}</a></h5>
                                     </div>
                                 </div>
 
@@ -53,28 +51,28 @@
                                     <div class="col-xs-2 col-user hidden-xss">
                                         <p class="hidden-xs">
                                             <strong>Data:</strong>
-                                            <small>{{ source.created_at|format_date }}</small>
+                                            <small>{{ post.created_at|format_date }}</small>
                                         </p>
 
                                         <p class="hidden-xs">
                                             <strong>Kategoria:</strong>
-                                            <small>{{ link_to_route('forum.category', source.forum.name, [source.forum.path]) }}</small>
+                                            <small>{{ link_to_route('forum.category', post.forum.name, [post.forum.path]) }}</small>
                                         </p>
 
                                         <p class="hidden-xs">
                                             <strong>Odpowiedzi:</strong>
-                                            <small>{{ source.topic.replies }}</small>
+                                            <small>{{ post.topic.replies }}</small>
                                         </p>
                                     </div>
 
                                     <div class="col-xs-10 col-body">
                                         <div class="post-content">
-                                            {{ elastic_highlight(post, 'text') }}
+                                            {{ elastic_highlight(highlights[post.id]['text'], post.text) }}
                                         </div>
 
-                                        {% if source.tags %}
+                                        {% if post.tags %}
                                             <ul class="tag-clouds">
-                                                {% for tag in source.tags %}
+                                                {% for tag in post.tags %}
                                                     <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
                                                 {% endfor %}
                                             </ul>

@@ -122,6 +122,7 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     Route::get('Technologia/{name}', ['uses' => 'HomeController@index', 'as' => 'tag']);
     Route::get('Zdalna', ['uses' => 'HomeController@index', 'as' => 'remote']);
     Route::get('Miasto/{name}', ['uses' => 'HomeController@index', 'as' => 'city']);
+    Route::get('Firma/{name}', ['uses' => 'HomeController@index', 'as' => 'firm']);
 
     Route::get('{id}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
 });

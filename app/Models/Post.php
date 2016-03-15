@@ -121,7 +121,7 @@ class Post extends Model
         $body = array_except($this->toArray(), ['deleted_at', 'edit_count', 'editor_id']);
 
         if ($topic->first_post_id == $body['id']) {
-            $body['tags'] = $this->tags()->lists('name');
+            $body['tags'] = $topic->tags()->lists('name');
         }
 
         return array_merge($body, [

@@ -17,7 +17,7 @@ class SearchController extends BaseController
         $forumList = $this->forum->forumList();
 
         $users = [];
-        $response = null;
+        $response = $highlights = null;
 
         if ($request->has('q')) {
             $body = [
@@ -46,6 +46,7 @@ class SearchController extends BaseController
             ];
 
             $response = $post->search($body);
+            $highlights = $response->getHighlights();
 
             if ($response->totalHits() > 0) {
                 $usersId = $response->keyBy('_source.user_id')->keys();
@@ -55,6 +56,6 @@ class SearchController extends BaseController
             $this->breadcrumb->push('Wyniki wyszukiwania', $request->fullUrl());
         }
 
-        return $this->view('forum.search')->with(compact('forumList', 'users', 'response'));
+        return $this->view('forum.search')->with(compact('forumList', 'users', 'response', 'highlights'));
     }
 }

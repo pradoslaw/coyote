@@ -70,12 +70,20 @@ class Response implements \Countable, \IteratorAggregate
     }
 
     /**
+     * @return static
+     */
+    public function getHighlights()
+    {
+        return $this->hits->pluck('highlight', '_source.id');
+    }
+
+    /**
      * Get an iterator for the items.
      *
      * @return \ArrayIterator
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->hits->toArray());
+        return new ArrayIterator($this->hits->pluck('_source')->toArray());
     }
 }

@@ -11,7 +11,7 @@
 
                         <div class="input-group">
                             <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                            {{ form_text('q', '', {'class': 'form-control form-query', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
+                            {{ form_text('q', input_old('q'), {'class': 'form-control form-query', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
                         </div>
                     </div>
                     <div class="col-sm-5">
@@ -19,7 +19,7 @@
 
                         <div class="input-group">
                             <div class="input-group-addon"><i class="fa fa-map-marker"></i></div>
-                            {{ form_text('l', '', {'class': 'form-control form-location', 'placeholder': 'Nazwa miejscowości'}) }}
+                            {{ form_text('location', input_old('location'), {'class': 'form-control form-location', 'placeholder': 'Nazwa miejscowości'}) }}
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -58,6 +58,10 @@
                 </div>
 
                 <div class="col-sm-9">
+                    <nav>
+                        <ul class="pagination"><li class="disabled"><span>«</span></li> <li class="active"><span>1</span></li><li><a href="http://coyote.dev/Mikroblogi?page=2">2</a></li><li><a href="http://coyote.dev/Mikroblogi?page=3">3</a></li><li><a href="http://coyote.dev/Mikroblogi?page=4">4</a></li> <li><a href="http://coyote.dev/Mikroblogi?page=2" rel="next">»</a></li></ul>
+                    </nav>
+
                     <section class="panel panel-wrapper">
                         <div id="box-jobs" class="panel-body">
                             <ul id="sort" class="hidden-xs">
@@ -68,79 +72,61 @@
 
                             <table>
                                 <tbody>
-                                    <tr>
-                                        <td class="col-logo">
-                                            <a href="http://4programmers.net/Praca/10709-Android_Developer"><img title="EclipseSource Group" src="http://4programmers.net/store/firm/5510012686dfa.png" width="55"></a>
-                                        </td>
-                                        <td class="col-body">
-                                            <h2><a href="http://4programmers.net/Praca/10709-Android_Developer">Android Developer</a></h2>
+                                    {% for job in jobs %}
+                                        {% set url = route('job.offer', [job.id, job.path]) %}
 
-                                            <p>
-                                                <a title="Zobacz oferty pracy z firmy EclipseSource Group" href="http://4programmers.net/Praca/Firma/EclipseSource Group">EclipseSource Group</a>						&nbsp;•&nbsp;
-                                                <small><a title="Znajdź oferty z miasta: Karlsruhe" href="http://4programmers.net/Praca/Miasto/Karlsruhe">Karlsruhe</a></small>
+                                        <tr>
+                                            <td class="col-logo">
+                                                {% if job.firm %}
+                                                    <a href="{{ url }}"><img title="{{ job.firm.name }}" src="{{ cdn('storage/logo/' ~ job.firm.logo) }}" width="55"></a>
+                                                {% else %}
+                                                    <img src="{{ cdn('img/logo-gray.png') }}" width="55">
+                                                {% endif %}
+                                            </td>
+                                            <td class="col-body">
+                                                <h2><a href="{{ url }}">{{ job.title }}</a></h2>
 
-                                                <small><a title="Praca zdalna jest możliwą opcją w przypadku tego ogłoszenia" href="http://4programmers.net/Praca/Zdalna">(praca zdalna)</a></small>
-                                            </p>
+                                                <p>
+                                                    {% if job.firm %}
+                                                        <a title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a> &nbsp;•&nbsp;
+                                                    {% endif %}
 
-                                            <ul class="tag-clouds hidden-sm hidden-xs">
-                                                <li><a data-category="job-tag" data-action="offer" data-value="java" title="Znajdź oferty z technologii: java" href="http://4programmers.net/Praca/Technologia/java">java</a></li>
-                                                <li><a data-category="job-tag" data-action="offer" data-value="mobile" title="Znajdź oferty z technologii: mobile" href="http://4programmers.net/Praca/Technologia/mobile">mobile</a></li>
-                                                <li><a data-category="job-tag" data-action="offer" data-value="android" title="Znajdź oferty z technologii: android" href="http://4programmers.net/Praca/Technologia/android">android</a></li>
-                                                <li><a data-category="job-tag" data-action="offer" data-value="framework" title="Znajdź oferty z technologii: framework" href="http://4programmers.net/Praca/Technologia/framework">framework</a></li>
-                                            </ul>
-                                        </td>
-                                        <td class="col-salary">
-                                            <p class="text-success">
-                                                <i class="fa fa-money"></i> 10 000 - 12 000 zł
-                                            </p>
-                                        </td>
-                                        <td class="col-time">
-                                            <p><span class="label label-new">Nowe</span></p>
+                                                    <small><a title="Znajdź oferty z miasta: Karlsruhe" href="http://4programmers.net/Praca/Miasto/Karlsruhe">Karlsruhe</a></small>
 
-                                            2 dni temu
+                                                    {% if job.is_remote %}
+                                                        <small><a title="Praca zdalna jest możliwą opcją w przypadku tego ogłoszenia" href="{{ route('job.remote') }}">(praca zdalna)</a></small>
+                                                    {% endif %}
+                                                </p>
 
-                                        </td>
-                                        <td class="col-fav">
-                                            <a class="btn-fav" href="http://4programmers.net/Praca/Watch/205649" title="Dodaj tę ofertę do ulubionych"></a>
-                                        </td>
-                                    </tr>
+                                                <ul class="tag-clouds hidden-sm hidden-xs">
+                                                    <li><a data-category="job-tag" data-action="offer" data-value="java" title="Znajdź oferty z technologii: java" href="http://4programmers.net/Praca/Technologia/java">java</a></li>
+                                                    <li><a data-category="job-tag" data-action="offer" data-value="mobile" title="Znajdź oferty z technologii: mobile" href="http://4programmers.net/Praca/Technologia/mobile">mobile</a></li>
+                                                    <li><a data-category="job-tag" data-action="offer" data-value="android" title="Znajdź oferty z technologii: android" href="http://4programmers.net/Praca/Technologia/android">android</a></li>
+                                                    <li><a data-category="job-tag" data-action="offer" data-value="framework" title="Znajdź oferty z technologii: framework" href="http://4programmers.net/Praca/Technologia/framework">framework</a></li>
+                                                </ul>
+                                            </td>
+                                            <td class="col-salary">
+                                                {% if job.salary_from or job.salary_to %}
+                                                    <p class="text-success">
+                                                        {% include 'job.partial.salary' %}
 
-                                    <tr>
-                                        <td class="col-logo">
-                                            <a href="http://4programmers.net/Praca/10709-Android_Developer"><img title="EclipseSource Group" src="http://4programmers.net/store/firm/553659c367f1c.png" width="55"></a>
-                                        </td>
-                                        <td class="col-body">
-                                            <h2><a href="http://4programmers.net/Praca/10709-Android_Developer">Android Developer</a></h2>
+                                                        {% if job.rate_id > 1 %}
+                                                            <small>/ {{ ratesList[job.rate_id] }}</small>
+                                                        {% endif %}
+                                                    </p>
+                                                {% endif %}
+                                            </td>
+                                            <td class="col-time">
+                                                <p><span class="label label-new">Nowe</span></p>
 
-                                            <p>
-                                                <a title="Zobacz oferty pracy z firmy EclipseSource Group" href="http://4programmers.net/Praca/Firma/EclipseSource Group">EclipseSource Group</a>						&nbsp;•&nbsp;
-                                                <small><a title="Znajdź oferty z miasta: Karlsruhe" href="http://4programmers.net/Praca/Miasto/Karlsruhe">Karlsruhe</a></small>
+                                                <small>{{ job.created_at|format_date }}</small>
+                                            </td>
+                                            <td class="col-fav">
+                                                <a class="btn-fav" href="http://4programmers.net/Praca/Watch/205649" title="Dodaj tę ofertę do ulubionych"></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
 
-                                                <small><a title="Praca zdalna jest możliwą opcją w przypadku tego ogłoszenia" href="http://4programmers.net/Praca/Zdalna">(praca zdalna)</a></small>
-                                            </p>
-
-                                            <ul class="tag-clouds hidden-sm hidden-xs">
-                                                <li><a data-category="job-tag" data-action="offer" data-value="java" title="Znajdź oferty z technologii: java" href="http://4programmers.net/Praca/Technologia/java">java</a></li>
-                                                <li><a data-category="job-tag" data-action="offer" data-value="mobile" title="Znajdź oferty z technologii: mobile" href="http://4programmers.net/Praca/Technologia/mobile">mobile</a></li>
-                                                <li><a data-category="job-tag" data-action="offer" data-value="android" title="Znajdź oferty z technologii: android" href="http://4programmers.net/Praca/Technologia/android">android</a></li>
-                                                <li><a data-category="job-tag" data-action="offer" data-value="framework" title="Znajdź oferty z technologii: framework" href="http://4programmers.net/Praca/Technologia/framework">framework</a></li>
-                                            </ul>
-                                        </td>
-                                        <td class="col-salary">
-                                            <p class="text-success">
-                                                <i class="fa fa-money"></i> 10 000 - 12 000 zł
-                                            </p>
-                                        </td>
-                                        <td class="col-time">
-                                            <p><span class="label label-new">Nowe</span></p>
-
-                                            2 dni temu
-
-                                        </td>
-                                        <td class="col-fav">
-                                            <a class="btn-fav" href="http://4programmers.net/Praca/Watch/205649" title="Dodaj tę ofertę do ulubionych"></a>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
