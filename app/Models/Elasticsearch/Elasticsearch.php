@@ -2,6 +2,8 @@
 
 namespace Coyote\Elasticsearch;
 
+use Illuminate\Contracts\Support\Arrayable;
+
 trait Elasticsearch
 {
     /**
@@ -12,7 +14,7 @@ trait Elasticsearch
     public function putToIndex()
     {
         $params = $this->getParams();
-        $params['body'] = $this->modelToArray($this->getBody());
+        $params['body'] = $this->buildArray($this->getBody());
 
         return $this->getClient()->index($params);
     }
@@ -29,14 +31,23 @@ trait Elasticsearch
 
     /**
      * @param $body
-     * @return mixed
+     * @return Response
      */
     public function search($body)
     {
         $params = $this->getParams();
         $params['body'] = $body;
 
-        return $this->getClient()->search($params);
+        return $this->getResponse($this->getClient()->search($params));
+    }
+
+    /**
+     * @param $response
+     * @return Response
+     */
+    protected function getResponse($response)
+    {
+        return new Response($response);
     }
 
     /**
@@ -64,15 +75,15 @@ trait Elasticsearch
      * @param $collection
      * @return mixed
      */
-    protected function modelToArray($collection)
+    protected function buildArray($collection)
     {
-        if (is_object($collection) && method_exists($collection, 'toArray')) {
+        if (is_object($collection) && $collection instanceof Arrayable) {
             $collection = $collection->toArray();
         }
 
         foreach ($collection as &$value) {
-            if (is_object($value) && method_exists($value, 'toArray')) {
-                $value = $this->modelToArray($value);
+            if (is_object($value) && $collection instanceof Arrayable) {
+                $value = $this->buildArray($value);
             }
         }
 

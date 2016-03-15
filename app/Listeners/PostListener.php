@@ -9,6 +9,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PostListener implements ShouldQueue
 {
+    use Elasticsearch;
+
     /**
      * @param PostWasSaved $event
      */
@@ -45,20 +47,5 @@ class PostListener implements ShouldQueue
             'Coyote\Events\PostWasDeleted',
             'Coyote\Listeners\PostListener@onPostDelete'
         );
-    }
-
-    /**
-     * @param \Closure $closure
-     * @throws \Exception
-     */
-    private function fireJobs(\Closure $closure)
-    {
-        try {
-            $closure();
-        } catch (\Exception $e) {
-            if (config('queue.default') !== 'sync') {
-                throw $e;
-            }
-        }
     }
 }

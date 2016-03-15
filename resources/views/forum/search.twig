@@ -1,5 +1,5 @@
 {% extends 'forum.base' %}
-{% block title %}{{ declination(total, ['post', 'posty', 'postów']) }} dla frazy {{ input_get('q') }}{% endblock %}
+{% block title %}{{ declination(response.totalHits(), ['post', 'posty', 'postów']) }} dla frazy {{ input_get('q') }}{% endblock %}
 
 {% block container %}
     <div id="index" class="sidebar">
@@ -22,13 +22,13 @@
             <section id="box-search-results" class="panel panel-wrapper">
                 <div class="panel-body">
                     <ul id="sort" class="hidden-xs">
-                        <li>{{ sortable('relevance', 'Trafność', ['relevance', 'desc']) }}</li>
-                        <li>{{ sortable('id', 'Data utworzenia', ['relevance', 'desc']) }}</li>
+                        <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
+                        <li>{{ sortable('id', 'Data utworzenia', ['_score', 'desc']) }}</li>
                     </ul>
 
                     <div class="clearfix"></div>
 
-                    {% for post in result %}
+                    {% for post in response %}
                         {% set source = post['_source'] %}
 
                         <div class="post">
@@ -99,8 +99,8 @@
         {% embed 'forum.partials.sidebar' %}
             {% block side_menu %}
                 <div id="box-count" class="box">
-                    <strong>{{ total|number_format(0, '', ' ') }}</strong>
-                    <span>{{ declination(total, ['post', 'posty', 'postów'], true) }}</span>
+                    <strong>{{ response.totalHits()|number_format(0, '', ' ') }}</strong>
+                    <span>{{ declination(response.totalHits(), ['post', 'posty', 'postów'], true) }}</span>
                 </div>
             {% endblock %}
         {% endembed %}

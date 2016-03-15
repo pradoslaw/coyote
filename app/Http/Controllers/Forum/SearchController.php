@@ -16,9 +16,8 @@ class SearchController extends BaseController
         $this->pushForumCriteria();
         $forumList = $this->forum->forumList();
 
-        $result = [];
-        $total = 0;
         $users = [];
+        $response = null;
 
         if ($request->has('q')) {
             $body = [
@@ -37,22 +36,23 @@ class SearchController extends BaseController
                         'text' => (object) [],
                         'tags' => (object) []
                     ]
+                ],
+
+                'sort' => [
+                    [$request->get('sort', '_score') => $request->get('order', 'desc')]
                 ]
             ];
 
             $response = $post->search($body);
 
-            if (isset($response['hits']['hits'])) {
-                $total = $response['hits']['total'];
-                $result = collect($response['hits']['hits']);
-
-                $usersId = $result->keyBy('_source.user_id')->keys();
+            if ($response->totalHits() > 0) {
+                $usersId = $response->keyBy('_source.user_id')->keys();
                 $users = $user->whereIn('id', array_map('intval', $usersId->toArray()))->get()->keyBy('id');
             }
 
             $this->breadcrumb->push('Wyniki wyszukiwania', $request->fullUrl());
         }
 
-        return $this->view('forum.search')->with(compact('forumList', 'users', 'result', 'total'));
+        return $this->view('forum.search')->with(compact('forumList', 'users', 'response'));
     }
 }

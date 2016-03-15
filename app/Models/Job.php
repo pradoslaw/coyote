@@ -2,12 +2,13 @@
 
 namespace Coyote;
 
+use Coyote\Elasticsearch\Elasticsearch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Job extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Elasticsearch;
 
     const MONTH            = 1;
     const YEAR            = 2;
@@ -93,5 +94,38 @@ class Job extends Model
     public function page()
     {
         return $this->morphOne('Coyote\Page', 'content');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function firm()
+    {
+        return $this->belongsTo('Coyote\Firm');
+    }
+
+    protected function getBody()
+    {
+        // maximum offered salary
+        $salary = $this->salary_to;
+        $body = array_except($this->toArray(), ['deleted_at', 'enable_apply']);
+
+        if ($salary && $this->rate_id != self::MONTH) {
+            if ($this->rate_id == self::YEAR) {
+                $salary = round($salary / 12);
+            } elseif ($this->rate_id == self::WEEK) {
+                $salary = round($salary * 4);
+            } else {
+                $salary = round($salary * 8 * 5 * 4);
+            }
+        }
+
+        $body = array_merge($body, [
+            'locations' => $this->locations()->lists('name'),
+            'salary' => $salary,
+            'firm' => $this->firm()->first(['name', 'logo'])
+        ]);
+
+        return $body;
     }
 }
