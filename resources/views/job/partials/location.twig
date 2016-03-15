@@ -1,0 +1,7 @@
+{% set data = {} %}
+
+{% for city in locations %}
+    {% set data = data|merge([link_to_route('job.city', city, [city], {'title': 'Znajdź oferty z miasta ' ~ city})]) %}
+{% endfor %}
+
+{{ data|join(', ')|raw }}

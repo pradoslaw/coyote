@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Elasticsearch;
+namespace Coyote\Elasticsearch\Response;
 
 use ArrayIterator;
 
-class Response implements \Countable, \IteratorAggregate
+class Standard implements \Countable, \IteratorAggregate, ResponseInterface
 {
     /**
      * @var array|\Illuminate\Support\Collection
@@ -18,7 +18,7 @@ class Response implements \Countable, \IteratorAggregate
 
     /**
      * Response constructor.
-     * @param $response
+     * @param array $response
      */
     public function __construct($response)
     {

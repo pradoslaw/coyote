@@ -30,7 +30,7 @@
 
                             {% if job.salary_from or job.salary_to %}
                                 <strong class="salary pull-right text-primary">
-                                    {% include 'job.partial.salary' %} <small>netto</small>
+                                    {% include 'job.partials.salary' %} <small>netto</small>
 
                                     {% if job.rate_id > 1 %}
                                         <small>/ {{ ratesList[job.rate_id] }}</small>
@@ -43,8 +43,8 @@
                                     <i class="fa fa-map-marker"></i>
                                     {{ job.country_name }}
 
-                                    {% if locations|length > 0 %}
-                                        • {{ locations.implode(', ')|raw }}
+                                    {% if job.locations|length > 0 %}
+                                        • {% include 'job.partials.location' with {'locations': job.locations.lists('name')} %}
                                     {% endif %}
 
                                     {% if job.is_remote %}

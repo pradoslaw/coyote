@@ -55,10 +55,6 @@ class OfferController extends Controller
             }
         }
 
-        $locations = $job->locations()->lists('name')->map(function ($item) {
-            return link_to_route('job.city', $item, [$item]);
-        });
-
         $firm = [];
         if ($job->firm_id) {
             $firm = $this->firm->find($job->firm_id);
@@ -69,7 +65,6 @@ class OfferController extends Controller
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
             'employeesList'     => Firm::getEmployeesList(),
-            'locations'         => $locations,
             'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days
         ])->with(
             compact('job', 'firm')

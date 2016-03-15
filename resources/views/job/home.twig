@@ -91,7 +91,7 @@
                                                         <a title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a> &nbsp;•&nbsp;
                                                     {% endif %}
 
-                                                    <small><a title="Znajdź oferty z miasta: Karlsruhe" href="http://4programmers.net/Praca/Miasto/Karlsruhe">Karlsruhe</a></small>
+                                                    <small>{% include 'job.partials.location' with {'locations': job.locations} %}</small>
 
                                                     {% if job.is_remote %}
                                                         <small><a title="Praca zdalna jest możliwą opcją w przypadku tego ogłoszenia" href="{{ route('job.remote') }}">(praca zdalna)</a></small>
@@ -108,7 +108,7 @@
                                             <td class="col-salary">
                                                 {% if job.salary_from or job.salary_to %}
                                                     <p class="text-success">
-                                                        {% include 'job.partial.salary' %}
+                                                        {% include 'job.partials.salary' %}
 
                                                         {% if job.rate_id > 1 %}
                                                             <small>/ {{ ratesList[job.rate_id] }}</small>

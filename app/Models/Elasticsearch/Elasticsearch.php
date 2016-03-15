@@ -2,6 +2,7 @@
 
 namespace Coyote\Elasticsearch;
 
+use Coyote\Elasticsearch\Response\ResponseInterface;
 use Illuminate\Contracts\Support\Arrayable;
 
 trait Elasticsearch
@@ -31,7 +32,7 @@ trait Elasticsearch
 
     /**
      * @param $body
-     * @return Response
+     * @return ResponseInterface
      */
     public function search($body)
     {
@@ -43,11 +44,11 @@ trait Elasticsearch
 
     /**
      * @param $response
-     * @return Response
+     * @return ResponseInterface
      */
     protected function getResponse($response)
     {
-        return new Response($response);
+        return app($this->getResponseClass(), [$response]);
     }
 
     /**
@@ -58,8 +59,8 @@ trait Elasticsearch
     protected function getParams()
     {
         $params = [
-            'index' => $this->getIndexName(),
-            'type' => $this->getTable()
+            'index'     => $this->getIndexName(),
+            'type'      => $this->getTable()
         ];
 
         if ($this->getKey()) {
@@ -108,6 +109,14 @@ trait Elasticsearch
     protected function getIndexName()
     {
         return config('elasticsearch.default_index');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getResponseClass()
+    {
+        return 'Coyote\Elasticsearch\Response\Standard';
     }
 
     /**
