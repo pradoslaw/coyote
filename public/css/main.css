@@ -7429,14 +7429,58 @@ ul.breadcrumb {
   box-shadow: inset 1px 1px #FFF;
   background-color: #e2e7e1;
   border: 1px solid #c7c7c7; }
-  .panel-wrapper > .panel-body > h2 {
-    font-size: 14px;
-    color: #464646;
-    text-shadow: white 0 1px 0; }
+  .panel-wrapper > .panel-body {
+    padding: 4px 10px 8px 10px; }
+    .panel-wrapper > .panel-body > h2 {
+      font-size: 14px;
+      color: #464646;
+      text-shadow: white 0 1px 0;
+      margin: 5px 0 10px 2px; }
 
 .panel-forum {
   background-color: #f3f5f0;
   border: 1px solid #d0d0d0; }
+
+#sort {
+  list-style-type: none;
+  float: left;
+  height: 30px;
+  padding: 0;
+  margin-bottom: 10px;
+  margin-top: 7px; }
+  #sort li {
+    display: inline-block;
+    margin-right: 6px; }
+    #sort li a {
+      display: block;
+      color: #333333;
+      padding: 6px 10px;
+      font-size: 12px;
+      text-shadow: #fff 0 1px 0;
+      opacity: .8;
+      text-decoration: none; }
+  #sort .desc, #sort .asc {
+    margin-right: 10px;
+    padding-right: 24px;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    background-color: #444;
+    border-radius: 10px;
+    color: #fff;
+    text-shadow: none;
+    opacity: 1.0;
+    position: relative; }
+    #sort .desc:after, #sort .asc:after {
+      position: absolute;
+      font-family: FontAwesome;
+      right: 9px;
+      font-size: 14px; }
+  #sort .asc:after {
+    content: "";
+    top: 6px; }
+  #sort .desc:after {
+    content: "";
+    top: 0; }
 
 .progress {
   background: #444444;

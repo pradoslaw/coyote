@@ -39,7 +39,9 @@ class SearchController extends BaseController
                 ],
 
                 'sort' => [
-                    [$request->get('sort', '_score') => $request->get('order', 'desc')]
+                    [
+                        $request->get('sort', '_score') => $request->get('order', 'desc')
+                    ]
                 ]
             ];
 

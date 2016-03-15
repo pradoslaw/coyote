@@ -48,12 +48,6 @@ $sidebar-media-max-width: 1024px;
 
 .panel-wrapper {
   .panel-body {
-    padding: 4px 8px 8px 8px;
-
-    > h2 {
-      margin: 5px 0 0 2px;
-    }
-
     .toggle {
       color: $gray-dark;
       margin: 2px 2px 0 0;
@@ -107,11 +101,6 @@ $sidebar-media-max-width: 1024px;
 // ----------------------------------------
 
 @import "forum/category";
-
-// Element filtrowania i sortowania watkow w tabeli
-// -----------------------------------------------------------------------------------
-
-@import "forum/sort";
 
 // Wyswietlanie zawartosci watku
 // -----------------------------------------

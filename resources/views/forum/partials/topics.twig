@@ -1,6 +1,6 @@
 <section class="panel panel-wrapper">
     <div class="panel-body">
-        <div id="box-topics" class="box-forum">
+        <div id="box-topics" class="table-forum">
             <ul id="sort" class="hidden-xs">
                 <li>{{ sortable('last', 'Ostatni post', ['last', 'desc']) }}</li>
                 <li>{{ sortable('id', 'Data utworzenia', ['last', 'desc']) }}</li>
@@ -11,7 +11,7 @@
             </ul>
 
             {% if forum is defined and not forum.is_locked %}
-                <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right" style="margin-top: 6px">Nowy wątek</a>
             {% endif %}
             <div class="clearfix"></div>
 
