@@ -15,7 +15,7 @@ trait Elasticsearch
     public function putToIndex()
     {
         $params = $this->getParams();
-        $params['body'] = $this->buildArray($this->getBody());
+        $params['body'] = $this->buildArray($this->getIndexBody());
 
         return $this->getClient()->index($params);
     }
@@ -124,7 +124,7 @@ trait Elasticsearch
      *
      * @return mixed
      */
-    protected function getBody()
+    protected function getIndexBody()
     {
         return $this->toArray();
     }

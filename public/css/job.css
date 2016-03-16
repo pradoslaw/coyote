@@ -544,7 +544,8 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   #job-offer .employer {
     margin-right: 10px;
     font-size: 14px;
-    font-weight: normal; }
+    font-weight: normal;
+    color: #555555; }
   #job-offer .salary {
     font-size: 14px; }
     #job-offer .salary small {

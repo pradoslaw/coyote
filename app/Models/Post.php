@@ -113,7 +113,7 @@ class Post extends Model
      *
      * @return array
      */
-    protected function getBody()
+    protected function getIndexBody()
     {
         // additionally index few fields from topics table...
         $topic = $this->topic()->first(['subject', 'path', 'replies', 'forum_id', 'id', 'first_post_id']);

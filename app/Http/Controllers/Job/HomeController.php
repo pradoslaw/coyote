@@ -31,16 +31,53 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $body = [
-            'sort' => [
-                [
-                    $request->get('sort', '_score') => $request->get('order', 'desc')
+        return $this->load($request);
+    }
+
+    /**
+     * @param Request $request
+     * @param $name
+     * @return $this
+     */
+    public function city(Request $request, $name)
+    {
+        return $this->load($request, [
+            'terms' => [
+                'locations' => [
+                    strtolower($name)
                 ]
             ]
-        ];
+        ]);
+    }
+
+    /**
+     * @param $name
+     */
+    public function tag($name)
+    {
+        //
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     */
+    public function remote(Request $request)
+    {
+        return $this->load($request, ['term' => ['is_remote' => 1]]);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $filter
+     * @return $this
+     */
+    private function load(Request $request, $filter = [])
+    {
+        $query = [];
 
         if ($request->has('q')) {
-            $body['query'] = [
+            $query = [
                 'query_string' => [
                     'query' => $request->get('q'),
                     'fields' => ['title', 'description', 'requirements', 'recruitment', 'tags']
@@ -48,7 +85,27 @@ class HomeController extends Controller
             ];
         }
 
+        $body = [
+            'query' => [
+                'filtered' => [
+                    'query' => $query,
+                    'filter' =>
+                        $filter
+
+                ]
+            ],
+
+            'sort' => [
+                [
+                    $request->get('sort', '_score') => $request->get('order', 'desc')
+                ]
+            ]
+        ];
+
+        start_measure('search', 'Elasticsearch');
+
         $jobs = $this->job->search($body);
+        stop_measure('search');
 
         return $this->view('job.home', [
             'ratesList'         => Job::getRatesList(),

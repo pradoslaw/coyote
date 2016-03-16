@@ -115,7 +115,7 @@ class Job extends Model
     /**
      * @return array
      */
-    protected function getBody()
+    protected function getIndexBody()
     {
         // maximum offered salary
         $salary = $this->salary_to;
