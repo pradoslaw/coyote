@@ -59,11 +59,11 @@ class Topic extends Model
     }
 
     /**
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function tags()
     {
-        return $this->hasMany('Coyote\Topic\Tag')->join('tags', 'tags.id', '=', 'tag_id');
+        return $this->belongsToMany('Coyote\Tag', 'topic_tags');
     }
 
     /**
@@ -126,21 +126,6 @@ class Topic extends Model
             $this->subscribers()->where('user_id', $userId)->delete();
         } else {
             $this->subscribers()->firstOrCreate(['topic_id' => $this->id, 'user_id' => $userId]);
-        }
-    }
-
-    /**
-     * Save topic's tags
-     *
-     * @param array $tags
-     */
-    public function setTags(array $tags)
-    {
-        $this->tags()->delete();
-
-        foreach ($tags as $name) {
-            $tag = Tag::firstOrCreate(['name' => $name]);
-            $this->tags()->create(['tag_id' => $tag->id]);
         }
     }
 

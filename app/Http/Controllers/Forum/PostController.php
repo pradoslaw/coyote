@@ -14,6 +14,7 @@ use Coyote\Repositories\Contracts\FlagRepositoryInterface as Flag;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Stream\Activities\Create as Stream_Create;
@@ -171,12 +172,12 @@ class PostController extends BaseController
      * @param null $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(PostRequest $request, $forum, $topic, $post = null)
+    public function save(PostRequest $request, $forum, $topic, $post = null, TagRepositoryInterface $tag)
     {
         // parsing text and store it in cache
         $text = app()->make('Parser\Post')->parse($request->text);
 
-        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post) {
+        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post, $tag) {
             $actor = new Stream_Actor(auth()->user());
 
             // url to the post
@@ -217,7 +218,8 @@ class PostController extends BaseController
                     $log->tags = $tags;
 
                     if (array_merge(array_diff($tags, $current), array_diff($current, $tags))) {
-                        $topic->setTags($tags);
+                        // assign tags to topic
+                        $topic->tags()->sync($tag->multiInsert($tags));
                         $isDirty = true;
                     }
 

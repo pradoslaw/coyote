@@ -11,6 +11,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -180,9 +181,10 @@ class TopicController extends BaseController
         if (\App::environment('local', 'dev')) {
             $this->topic->addViews($topic->id);
         } else {
-            $user = auth()->check() ? $this->userId : $this->sessionId;
             // on production environment: store hit in redis
-            app('redis')->sadd('counter:topic:' . $topic->id, $user . ';' . round(time() / 300) * 300);
+            app('redis')->sadd(
+                'counter:topic:' . $topic->id, $this->userId ?: $this->sessionId . ';' . round(time() / 300) * 300
+            );
         }
 
         if (auth()->check()) {
@@ -233,11 +235,12 @@ class TopicController extends BaseController
     /**
      * @param $forum
      * @param PostRequest $request
+     * @param TagRepositoryInterface $tag
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($forum, PostRequest $request)
+    public function save($forum, PostRequest $request, TagRepositoryInterface $tag)
     {
-        $url = \DB::transaction(function () use ($request, $forum) {
+        $url = \DB::transaction(function () use ($request, $forum, $tag) {
             // create new topic
             $topic = $this->topic->create($request->all() + ['forum_id' => $forum->id]);
             // create new post and assign it to topic. don't worry about the rest: trigger will do the work
@@ -252,10 +255,11 @@ class TopicController extends BaseController
 
             $tags = $request->get('tag', []);
 
+            // assign tags to topic
+            $topic->tags()->sync($tag->multiInsert($tags));
+
             // assign attachments to the post
             $post->setAttachments($request->get('attachments', []));
-            // assign tags to topic
-            $topic->setTags($tags);
 
             // save it in log...
             (new Log())

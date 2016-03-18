@@ -83,7 +83,8 @@ class LogController extends BaseController
 
             if ($post->id === $topic->first_post_id) {
                 $topic->fill(['subject' => $log->subject]);
-                $topic->setTags($log->tags);
+                // assign tags to topic
+                $topic->tags()->sync(app('TagRepository')->multiInsert($log->tags));
 
                 $topic->save();
             }
