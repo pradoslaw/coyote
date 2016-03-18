@@ -13,6 +13,9 @@ class Hash
         if (!$html) {
             return [];
         }
+
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
+
         $dom = new \DOMDocument;
         $dom->loadHTML($html);
 
