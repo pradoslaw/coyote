@@ -223,23 +223,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
-     * Pobiera loginy osob ktore oddaly glos na dany wpis
-     *
-     * @param int $id
-     * @return mixed
-     */
-    public function getVoters($id)
-    {
-        return (new Microblog\Vote())
-                ->where('microblog_id', $id)
-                ->join('users', 'users.id', '=', 'user_id')
-                ->select(['users.name'])
-                ->get()
-                ->lists('name')
-                ->toArray();
-    }
-
-    /**
      * Pobiera najpopularniejsze tagi w mikroblogach
      *
      * @return mixed

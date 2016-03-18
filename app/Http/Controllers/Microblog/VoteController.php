@@ -3,9 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Microblog;
-use Coyote\Microblog\Vote;
-use Coyote\Repositories\Eloquent\MicroblogRepository;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Illuminate\Http\Request;
 use Coyote\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
@@ -19,6 +17,21 @@ use Coyote\Stream\Objects\Microblog as Stream_Microblog;
 class VoteController extends Controller
 {
     /**
+     * @var Microblog
+     */
+    private $microblog;
+
+    /**
+     * VoteController constructor.
+     * @param Microblog $microblog
+     */
+    public function __construct(Microblog $microblog)
+    {
+        parent::__construct();
+        $this->microblog = $microblog;
+    }
+
+    /**
      * @param $id
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -30,10 +43,10 @@ class VoteController extends Controller
             return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
         }
 
-        $microblog = Microblog::findOrFail($id);
-        $vote = Vote::where('microblog_id', $id)->where('user_id', auth()->user()->id)->first();
+        $microblog = $this->microblog->findOrFail($id);
+        $vote = $microblog->voters()->where('user_id', $this->userId)->first();
 
-        if (!config('app.debug') && auth()->user()->id === $microblog->user_id) {
+        if (!config('app.debug') && $this->userId === $microblog->user_id) {
             return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
         }
 
@@ -45,12 +58,12 @@ class VoteController extends Controller
 
                 $microblog->votes--;
             } else {
-                Vote::create(['microblog_id' => $id, 'user_id' => auth()->user()->id, 'ip' => $request->getClientIp()]);
+                $microblog->voters()->create(['user_id' => auth()->user()->id, 'ip' => $request->getClientIp()]);
 
                 $microblog->votes++;
             }
 
-            $microblog->score = Microblog::getScore(
+            $microblog->score = \Coyote\Microblog::getScore(
                 $microblog->votes,
                 $microblog->bonus,
                 $microblog->created_at->getTimestamp()
@@ -75,7 +88,7 @@ class VoteController extends Controller
                     ->setMicroblogId($microblog->id)
                     ->addUserId($microblog->user_id)
                     ->setSubject(excerpt($microblog->text))
-                    ->setSenderId(auth()->user()->id)
+                    ->setSenderId($this->userId)
                     ->setSenderName(auth()->user()->name)
                     ->setUrl($url)
                     ->notify();
@@ -88,16 +101,23 @@ class VoteController extends Controller
             throw $e;
         }
 
-        return response()->json(['count' => Vote::where('microblog_id', $id)->count()]);
+        return response()->json(['count' => $microblog->voters()->count()]);
     }
 
     /**
      * @param $id
-     * @param MicroblogRepository $microblog
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function voters($id, MicroblogRepository $microblog)
+    public function voters($id)
     {
-        return response(implode("\n", $microblog->getVoters($id)));
+        $microblog = $this->microblog->find($id);
+
+        return response(
+            $microblog->voters()
+                ->join('users', 'users.id', '=', 'user_id')
+                ->get(['users.name'])
+                ->lists('name')
+                ->implode('name', "\n")
+        );
     }
 }

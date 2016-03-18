@@ -103,6 +103,11 @@ class Microblog extends Model
         return $this->belongsToMany('Coyote\Tag', 'microblog_tags');
     }
 
+    public function voters()
+    {
+        return $this->hasMany('Coyote\Microblog\Vote');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */

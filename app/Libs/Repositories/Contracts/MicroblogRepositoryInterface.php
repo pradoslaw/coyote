@@ -38,10 +38,9 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     public function getComments($parentId);
 
     /**
-     * Pobiera loginy osob ktore oddaly glos na dany wpis
+     * Pobiera najpopularniejsze tagi w mikroblogach
      *
-     * @param int $id
      * @return mixed
      */
-    public function getVoters($id);
+    public function getTags();
 }
