@@ -14,6 +14,8 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\ClearCache',
         'Coyote\Console\Commands\PurgeViews',
         'Coyote\Console\Commands\Migrate',
+        'Coyote\Console\Commands\Elasticsearch\Mapping',
+        'Coyote\Console\Commands\Elasticsearch\Index',
     ];
 
     /**

@@ -49,6 +49,45 @@ class Job extends Model
     protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
+     * Elasticsearch type mapping
+     *
+     * @var array
+     */
+    protected $mapping = [
+        "locations" => [
+            "type" => "nested",
+            "properties" => [
+                "city" => [
+                    "type" => "multi_field",
+                    "fields" => [
+                        "city" => ["type" => "string", "index" => "analyzed", "store" => "yes"],
+                        "city_original" => ["type" => "string", "index" => "not_analyzed"]
+                    ]
+                ],
+                "coordinates" => [
+                    "type" => "geo_point"
+                ]
+            ]
+        ],
+        "firm.name" => [
+            "type" => "string",
+            "index" => "not_analyzed"
+        ],
+        "created_at" => [
+            "type" => "date",
+            "format" => "yyyy/MM/dd HH:mm:ss"
+        ],
+        "updated_at" => [
+            "type" => "date",
+            "format" => "yyyy/MM/dd HH:mm:ss"
+        ],
+        "deadline_at" => [
+            "type" => "date",
+            "format" => "yyyy/MM/dd HH:mm:ss"
+        ]
+    ];
+
+    /**
      * We need to set firm id to null offer is private
      */
     public static function boot()
@@ -131,13 +170,31 @@ class Job extends Model
             }
         }
 
+        $locations = [];
+
+        foreach ($this->locations()->get() as $location) {
+            $locations[] = [
+                'city' => $location->city,
+                'coordinates' => [
+                    'lat' => $location->latitude,
+                    'lon' => $location->longitude
+                ]
+            ];
+        }
+
         $body = array_merge($body, [
-            'locations'         => $this->locations()->lists('name'),
+            'locations'         => $locations,
             'salary'            => $salary,
             // yes, we index currency name so we don't have to look it up in database during search process
             'currency_name'     => $this->currency()->pluck('name'),
             'firm'              => $this->firm()->first(['name', 'logo'])
         ]);
+
+        foreach (['created_at', 'updated_at', 'deadline_at'] as $column) {
+            if (!empty($body[$column])) {
+                $body[$column] = date('Y/m/d H:i:s', strtotime($body[$column]));
+            }
+        }
 
         return $body;
     }

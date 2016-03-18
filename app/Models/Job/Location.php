@@ -18,7 +18,7 @@ class Location extends Model
      *
      * @var array
      */
-    protected $fillable = ['job_id', 'name'];
+    protected $fillable = ['job_id', 'city'];
 
     /**
      * @var bool

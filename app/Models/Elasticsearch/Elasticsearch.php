@@ -42,6 +42,20 @@ trait Elasticsearch
         return $this->getResponse($this->getClient()->search($params));
     }
 
+    public function putMapping()
+    {
+        if ($this->mapping) {
+            $params = $this->getParams();
+            $params['body'] = [
+                $this->getTable() => [
+                    'properties' => $this->mapping
+                ]
+            ];
+
+            $this->getClient()->indices()->putMapping($params);
+        }
+    }
+
     /**
      * @param $response
      * @return ResponseInterface

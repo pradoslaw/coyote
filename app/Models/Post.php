@@ -24,6 +24,34 @@ class Post extends Model
     protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
+     * Elasticsearch type mapping
+     *
+     * @var array
+     */
+    protected $mapping = [
+        "tags" => [
+            "type" => "multi_field",
+            "fields" => [
+                "tag" => [
+                    "type" => "string"
+                ],
+                "tag_original" => [
+                    "type" => "string",
+                    "index" => "not_analyzed"
+                ]
+            ]
+        ],
+        "user_name" => [
+            "type" => "string",
+            "index" => "not_analyzed"
+        ],
+        "ip" => [
+            "type" => "string",
+            "index" => "not_analyzed"
+        ]
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function comments()
@@ -116,7 +144,7 @@ class Post extends Model
     protected function getIndexBody()
     {
         // additionally index few fields from topics table...
-        $topic = $this->topic()->first(['subject', 'path', 'replies', 'forum_id', 'id', 'first_post_id']);
+        $topic = $this->topic()->first(['subject', 'path', 'forum_id', 'id', 'first_post_id']);
         // we need to index every field from posts except:
         $body = array_except($this->toArray(), ['deleted_at', 'edit_count', 'editor_id']);
 

@@ -2,6 +2,8 @@
 
 namespace Coyote\Listeners;
 
+use Log;
+
 trait Elasticsearch
 {
     /**
@@ -13,9 +15,10 @@ trait Elasticsearch
         try {
             $closure();
         } catch (\Exception $e) {
-            if (config('queue.default') !== 'sync') {
+            Log::error($e->getMessage(), ['debug' => $e->getTrace()]);
+//            if (config('queue.default') !== 'sync') {
                 throw $e;
-            }
+//            }
         }
     }
 }
