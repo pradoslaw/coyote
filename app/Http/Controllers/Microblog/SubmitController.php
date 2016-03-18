@@ -9,6 +9,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
@@ -31,6 +32,7 @@ class SubmitController extends Controller
      * @var User
      */
     private $user;
+    private $tag;
 
     /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
@@ -38,10 +40,11 @@ class SubmitController extends Controller
      * @param Microblog $microblog
      * @param User $user
      */
-    public function __construct(Microblog $microblog, User $user)
+    public function __construct(Microblog $microblog, User $user, TagRepositoryInterface $tag)
     {
         $this->microblog = $microblog;
         $this->user = $user;
+        $this->tag = $tag;
     }
 
     /**
@@ -127,14 +130,16 @@ class SubmitController extends Controller
                 if (auth()->user()->allow_subscribe) {
                     // enable subscribe button
                     $microblog->subscribe_on = true;
-                    Subscriber::insert(['microblog_id' => $microblog->id, 'user_id' => $user->id]);
+                    $microblog->subscribers()->create(['user_id' => $user->id]);
                 }
             } else {
                 stream(Stream_Update::class, $object);
             }
 
             $ref = new Ref_Hash();
-            $this->microblog->setTags($microblog->id, $ref->grab($microblog->text));
+
+            $tagsId = $this->tag->multiInsert($ref->grab($microblog->text));
+            $microblog->tags()->sync($tagsId);
 
             event(new MicroblogWasSaved($microblog));
         });

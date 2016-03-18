@@ -25,8 +25,11 @@ class Tag extends Model
      */
     public $timestamps = false;
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function tag()
     {
-        return $this->hasOne('Coyote\Tag');
+        return $this->belongsTo('Coyote\Tag');
     }
 }

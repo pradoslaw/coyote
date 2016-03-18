@@ -26,4 +26,22 @@ class TagRepository extends Repository implements TagRepositoryInterface
                             ->groupBy('tags.id')
                             ->get();
     }
+
+    /**
+     * Insert tags and return theirs ids
+     *
+     * @param array $tags
+     * @return array Ids of tags
+     */
+    public function multiInsert(array $tags)
+    {
+        $tagsId = [];
+
+        foreach ($tags as $name) {
+            $tag = $this->model->firstOrCreate(['name' => $name]);
+            $tagsId[] = $tag->id;
+        }
+
+        return $tagsId;
+    }
 }

@@ -6,6 +6,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Alert\Alert as Alerts;
 use Coyote\Stream\Activities\Create as Stream_Create;
@@ -26,6 +27,7 @@ class CommentController extends Controller
      * @var User
      */
     private $user;
+    private $tag;
 
     /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
@@ -33,10 +35,11 @@ class CommentController extends Controller
      * @param Microblog $microblog
      * @param User $user
      */
-    public function __construct(Microblog $microblog, User $user)
+    public function __construct(Microblog $microblog, User $user, TagRepositoryInterface $tag)
     {
         $this->microblog = $microblog;
         $this->user = $user;
+        $this->tag = $tag;
     }
 
     /**
@@ -75,11 +78,12 @@ class CommentController extends Controller
             $microblog->save();
 
             // we need to parse text first (and store it in cache)
-            $parser = app()->make('Parser\Comment');
-            $microblog->text = $parser->parse($microblog->text);
+            $microblog->text = app()->make('Parser\Comment')->parse($microblog->text);
+            // get parsed content from cache
+            $parent->text = app()->make('Parser\Microblog')->parse($parent->text);
 
             if (!$id) {
-                $subscribers = $this->microblog->getSubscribers($microblog->parent_id);
+                $subscribers = $parent->subscribers()->lists('user_id')->toArray();
                 $alert = new Alerts();
 
                 // we need to send alerts AFTER saving comment to database because we need ID of comment
@@ -117,7 +121,7 @@ class CommentController extends Controller
                     $count = $this->microblog->where('parent_id', $parent->id)->where('user_id', $user->id)->count();
 
                     if ($count == 1) {
-                        Subscriber::insert(['microblog_id' => $parent->id, 'user_id' => $user->id]);
+                        $parent->subscribers()->create(['user_id' => $user->id]);
                         $isSubscribed = true;
                     }
                 } else {
@@ -130,7 +134,9 @@ class CommentController extends Controller
             }
 
             $ref = new Ref_Hash();
-            $this->microblog->setTags($microblog->parent_id, $ref->grab($microblog->text));
+
+            $tagsId = $this->tag->multiInsert($ref->grab($microblog->text));
+            $microblog->tags()->sync($tagsId);
 
             // map microblog object into stream activity object
             $object = (new Stream_Comment())->map($microblog);

@@ -9,8 +9,15 @@ use Coyote\Repositories\Criteria\Criteria;
 
 class WithTag extends Criteria
 {
+    /**
+     * @var string
+     */
     private $tag;
 
+    /**
+     * WithTag constructor.
+     * @param string $tag
+     */
     public function __construct($tag)
     {
         $this->tag = $tag;
@@ -23,11 +30,14 @@ class WithTag extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        $subSql = Tag::select(['microblog_id'])
-            ->join('microblog_tags', 'microblog_tags.tag_id', '=', 'tags.id')
-            ->whereRaw('name = \'' . $this->tag . '\'');
+        $query = $model->whereIn('microblogs.id', function ($sub) {
+            $sub->selectRaw('(CASE WHEN parent_id IS NOT NULL THEN parent_id ELSE microblogs.id END)')
+                ->from((new Tag())->getTable())
+                ->join('microblog_tags', 'microblog_tags.tag_id', '=', 'tags.id')
+                ->join('microblogs', 'microblogs.id', '=', 'microblog_tags.microblog_id')
+                ->where('name', $this->tag);
+        });
 
-        $query = $model->whereRaw('microblogs.id IN(' . $subSql->toSql() . ')');
         return $query;
     }
 }

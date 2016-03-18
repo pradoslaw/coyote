@@ -240,22 +240,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
-     * Save microblog's tags
-     *
-     * @param int $microblogId
-     * @param array $tags
-     */
-    public function setTags($microblogId, array $tags)
-    {
-        Microblog\Tag::where('microblog_id', $microblogId)->delete();
-
-        foreach ($tags as $name) {
-            $tag = Tag::firstOrCreate(['name' => $name]);
-            Microblog\Tag::create(['microblog_id' => $microblogId, 'tag_id' => $tag->id]);
-        }
-    }
-
-    /**
      * Pobiera najpopularniejsze tagi w mikroblogach
      *
      * @return mixed
@@ -273,19 +257,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->limit(30)
                 ->get()
                 ->lists('count', 'name')
-                ->toArray();
-    }
-
-    /**
-     * @param int $id
-     * @return mixed
-     */
-    public function getSubscribers($id)
-    {
-        return (new Microblog\Subscriber())
-                ->where('microblog_id', $id)
-                ->get()
-                ->lists('user_id')
                 ->toArray();
     }
 }

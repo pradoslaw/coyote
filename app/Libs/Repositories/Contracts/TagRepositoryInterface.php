@@ -9,4 +9,10 @@ interface TagRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function lookupName($name);
+
+    /**
+     * @param array $tags
+     * @return array Ids of tags
+     */
+    public function multiInsert(array $tags);
 }
