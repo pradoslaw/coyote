@@ -2,7 +2,7 @@
 
 namespace Coyote\Elasticsearch;
 
-abstract class Filter implements Dsl
+abstract class Filter implements DslInterface
 {
     /**
      * @var string

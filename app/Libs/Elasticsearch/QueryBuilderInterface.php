@@ -10,34 +10,34 @@ interface QueryBuilderInterface
     public function getBody();
 
     /**
-     * @param Dsl $query
+     * @param DslInterface $query
      * @return $this|QueryBuilder
      */
-    public function addQuery(Dsl $query);
+    public function addQuery(DslInterface $query);
 
     /**
-     * @param Dsl $filter
+     * @param DslInterface $filter
      * @return $this|QueryBuilder
      */
-    public function addFilter(Dsl $filter);
+    public function addFilter(DslInterface $filter);
 
     /**
-     * @param Dsl $sort
+     * @param DslInterface $sort
      * @return $this|QueryBuilder
      */
-    public function addSort(Dsl $sort);
+    public function addSort(DslInterface $sort);
 
     /**
-     * @param Dsl $aggs
+     * @param DslInterface $aggs
      * @return QueryBuilder
      */
-    public function addAggs(Dsl $aggs);
+    public function addAggs(DslInterface $aggs);
 
     /**
-     * @param Dsl $highlight
+     * @param DslInterface $highlight
      * @return QueryBuilder
      */
-    public function addHighlight(Dsl $highlight);
+    public function addHighlight(DslInterface $highlight);
 
     /**
      * @return array

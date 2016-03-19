@@ -3,9 +3,9 @@
 namespace Coyote\Elasticsearch\Aggs\Job;
 
 use Coyote\Elasticsearch\Aggs;
-use Coyote\Elasticsearch\Dsl;
+use Coyote\Elasticsearch\DslInterface;
 
-class Location extends Aggs\Nested implements Dsl
+class Location extends Aggs\Nested implements DslInterface
 {
     public function __construct()
     {

@@ -2,7 +2,7 @@
 
 namespace Coyote\Elasticsearch;
 
-class Query implements Dsl
+class Query implements DslInterface
 {
     /**
      * @var string

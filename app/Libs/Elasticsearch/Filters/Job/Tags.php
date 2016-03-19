@@ -2,10 +2,10 @@
 
 namespace Coyote\Elasticsearch\Filters\Job;
 
-use Coyote\Elasticsearch\Dsl;
+use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\Filters\Terms;
 
-class Tags extends Terms implements Dsl
+class Tags extends Terms implements DslInterface
 {
     /**
      * Tags constructor.

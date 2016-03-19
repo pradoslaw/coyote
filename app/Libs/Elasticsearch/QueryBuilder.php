@@ -46,46 +46,46 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * @param Dsl $query
+     * @param DslInterface $query
      * @return $this|QueryBuilder
      */
-    public function addQuery(Dsl $query)
+    public function addQuery(DslInterface $query)
     {
         return $this->addToStock($query);
     }
 
     /**
-     * @param Dsl $filter
+     * @param DslInterface $filter
      * @return $this|QueryBuilder
      */
-    public function addFilter(Dsl $filter)
+    public function addFilter(DslInterface $filter)
     {
         return $this->addToStock($filter);
     }
 
     /**
-     * @param Dsl $sort
+     * @param DslInterface $sort
      * @return $this|QueryBuilder
      */
-    public function addSort(Dsl $sort)
+    public function addSort(DslInterface $sort)
     {
         return $this->addToStock($sort);
     }
 
     /**
-     * @param Dsl $aggs
+     * @param DslInterface $aggs
      * @return QueryBuilder
      */
-    public function addAggs(Dsl $aggs)
+    public function addAggs(DslInterface $aggs)
     {
         return $this->addToStock($aggs);
     }
 
     /**
-     * @param Dsl $highlight
+     * @param DslInterface $highlight
      * @return QueryBuilder
      */
-    public function addHighlight(Dsl $highlight)
+    public function addHighlight(DslInterface $highlight)
     {
         return $this->addToStock($highlight);
     }
@@ -103,10 +103,10 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * @param Dsl $stock
+     * @param DslInterface $stock
      * @return $this
      */
-    protected function addToStock(Dsl $stock)
+    protected function addToStock(DslInterface $stock)
     {
         $this->stock[] = $stock;
         return $this;

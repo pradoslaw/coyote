@@ -2,7 +2,7 @@
 
 namespace Coyote\Elasticsearch;
 
-interface Dsl
+interface DslInterface
 {
     /**
      * @param QueryBuilderInterface $queryBuilder

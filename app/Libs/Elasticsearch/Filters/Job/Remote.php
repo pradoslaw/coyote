@@ -2,10 +2,10 @@
 
 namespace Coyote\Elasticsearch\Job;
 
-use Coyote\Elasticsearch\Dsl;
+use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\Filters\Term;
 
-class Remote extends Term implements Dsl
+class Remote extends Term implements DslInterface
 {
     /**
      * Remote constructor.

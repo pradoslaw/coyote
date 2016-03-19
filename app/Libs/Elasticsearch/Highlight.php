@@ -2,7 +2,7 @@
 
 namespace Coyote\Elasticsearch;
 
-class Highlight implements Dsl
+class Highlight implements DslInterface
 {
     /**
      * @var array

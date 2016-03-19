@@ -3,10 +3,10 @@
 namespace Coyote\Elasticsearch\Aggs;
 
 use Coyote\Elasticsearch\Aggs;
-use Coyote\Elasticsearch\Dsl;
+use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\QueryBuilderInterface;
 
-class Terms extends Aggs implements Dsl
+class Terms extends Aggs implements DslInterface
 {
     /**
      * @param QueryBuilderInterface $queryBuilder

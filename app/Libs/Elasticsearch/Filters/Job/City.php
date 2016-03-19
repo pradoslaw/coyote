@@ -2,11 +2,11 @@
 
 namespace Coyote\Elasticsearch\Filters\Job;
 
-use Coyote\Elasticsearch\Dsl;
+use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\Filter;
 use Coyote\Elasticsearch\QueryBuilderInterface;
 
-class City extends Filter implements Dsl
+class City extends Filter implements DslInterface
 {
     /**
      * @var array

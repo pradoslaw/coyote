@@ -2,10 +2,10 @@
 
 namespace Coyote\Elasticsearch\Filters\Post;
 
-use Coyote\Elasticsearch\Dsl;
+use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\Filters\Terms;
 
-class Forum extends Terms implements Dsl
+class Forum extends Terms implements DslInterface
 {
     /**
      * @var array

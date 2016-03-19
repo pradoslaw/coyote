@@ -2,7 +2,7 @@
 
 namespace Coyote\Elasticsearch;
 
-class Sort implements Dsl
+class Sort implements DslInterface
 {
     /**
      * @var string

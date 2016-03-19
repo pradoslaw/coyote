@@ -2,10 +2,10 @@
 
 namespace Coyote\Elasticsearch\Filters\Job;
 
-use Coyote\Elasticsearch\Dsl;
+use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\Filters\Term;
 
-class Firm extends Term implements Dsl
+class Firm extends Term implements DslInterface
 {
     /**
      * Firm constructor.
