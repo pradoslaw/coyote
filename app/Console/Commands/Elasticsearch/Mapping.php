@@ -58,11 +58,11 @@ class Mapping extends Command
             if (!$model) {
                 $this->putMapping();
             } else {
-                if (!method_exists($this, "model{$model}")) {
+                if (!method_exists($this, "mapping{$model}")) {
                     $this->error("$model does not exist");
                 }
 
-                $this->{'model' . $model}();
+                $this->{'mapping' . $model}();
             }
 
             $this->info('Done.');

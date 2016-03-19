@@ -61,7 +61,7 @@ class Job extends Model
                     "type" => "multi_field",
                     "fields" => [
                         "city" => ["type" => "string", "index" => "analyzed", "store" => "yes"],
-                        "city_original" => ["type" => "string", "index" => "not_analyzed"]
+                        "city_original" => ["type" => "string", "analyzer" => "analyzer_keyword"]
                     ]
                 ],
                 "coordinates" => [
@@ -69,9 +69,25 @@ class Job extends Model
                 ]
             ]
         ],
-        "firm.name" => [
-            "type" => "string",
-            "index" => "not_analyzed"
+        "tags" => [
+            "type" => "multi_field",
+            "fields" => [
+                "tag" => [
+                    "type" => "string"
+                ],
+                "tag_original" => [
+                    "type" => "string",
+                    "index" => "not_analyzed"
+                ]
+            ]
+        ],
+        "firm" => [
+            "properties" => [
+                "name" => [
+                    "type" => "string",
+                    "analyzer" => "analyzer_keyword"
+                ]
+            ]
         ],
         "created_at" => [
             "type" => "date",
@@ -160,6 +176,7 @@ class Job extends Model
         $salary = $this->salary_to;
         $body = array_except($this->toArray(), ['deleted_at', 'enable_apply']);
 
+        // we need to calculate monthly salary in order to sorting data by salary
         if ($salary && $this->rate_id != self::MONTH) {
             if ($this->rate_id == self::YEAR) {
                 $salary = round($salary / 12);
@@ -172,14 +189,19 @@ class Job extends Model
 
         $locations = [];
 
-        foreach ($this->locations()->get() as $location) {
-            $locations[] = [
-                'city' => $location->city,
-                'coordinates' => [
+        // We need to transform locations to format acceptable by elasticsearch.
+        // I'm talking here about the coordinates
+        foreach ($this->locations()->get(['city', 'longitude', 'latitude']) as $location) {
+            $nested = ['city' => $location->city];
+
+            if ($location->latitude && $location->longitude) {
+                $nested['coordinates'] = [
                     'lat' => $location->latitude,
                     'lon' => $location->longitude
-                ]
-            ];
+                ];
+            }
+
+            $locations[] = $nested;
         }
 
         $body = array_merge($body, [
@@ -189,6 +211,9 @@ class Job extends Model
             'currency_name'     => $this->currency()->pluck('name'),
             'firm'              => $this->firm()->first(['name', 'logo'])
         ]);
+
+        $tags = ['boduch-adam', '4programmers.net', 'delphi', 'pascal'];
+        $body['tags'] = array_rand($tags, 2);
 
         foreach (['created_at', 'updated_at', 'deadline_at'] as $column) {
             if (!empty($body[$column])) {

@@ -104,7 +104,9 @@ class HomeController extends Controller
 
         start_measure('search', 'Elasticsearch');
 
-        $jobs = $this->job->search($body);
+        // keep in mind that we return data by calling getSource(). This is important because
+        // we want to pass collection to the twig (not raw php array)
+        $jobs = $this->job->search($body)->getSource();
         stop_measure('search');
 
         return $this->view('job.home', [

@@ -238,7 +238,7 @@ class SubmitController extends Controller
 
             foreach ($locations as $location) {
                 $job->locations()->create([
-                    'name' => $location
+                    'city' => $location
                 ]);
             }
 

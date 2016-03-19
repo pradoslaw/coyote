@@ -91,7 +91,7 @@
                                                         <a title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a> &nbsp;•&nbsp;
                                                     {% endif %}
 
-                                                    <small>{% include 'job.partials.location' with {'locations': job.locations} %}</small>
+                                                    <small>{% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}</small>
 
                                                     {% if job.is_remote %}
                                                         <small><a title="Praca zdalna jest możliwą opcją w przypadku tego ogłoszenia" href="{{ route('job.remote') }}">(praca zdalna)</a></small>

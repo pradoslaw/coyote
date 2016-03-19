@@ -42,18 +42,33 @@ trait Elasticsearch
         return $this->getResponse($this->getClient()->search($params));
     }
 
+    /**
+     * Put mapping to elasticsearch's type
+     */
     public function putMapping()
     {
-        if ($this->mapping) {
+        $mapping = $this->getMapping();
+
+        if ($mapping) {
             $params = $this->getParams();
-            $params['body'] = [
-                $this->getTable() => [
-                    'properties' => $this->mapping
-                ]
-            ];
+            $params['body'] = $mapping;
 
             $this->getClient()->indices()->putMapping($params);
         }
+    }
+
+    /**
+     * Get model's mapping
+     *
+     * @return array
+     */
+    protected function getMapping()
+    {
+        return [
+            $this->getTable() => [
+                'properties' => $this->mapping
+            ]
+        ];
     }
 
     /**

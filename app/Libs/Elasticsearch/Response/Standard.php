@@ -23,9 +23,28 @@ class Standard implements \Countable, \IteratorAggregate, ResponseInterface
     public function __construct($response)
     {
         if (isset($response['hits'])) {
-            $this->hits = collect($response['hits']['hits']);
+            $this->hits = $this->collect($response['hits']['hits']);
             $this->totalHits = $response['hits']['total'];
         }
+    }
+
+    /**
+     * Transform results array to laravel's collection
+     *
+     * @param array $array
+     * @return array|\Illuminate\Support\Collection
+     */
+    protected function collect(array $array)
+    {
+        $array = collect($array);
+
+        foreach ($array as $key => $item) {
+            if (is_array($item)) {
+                $array[$key] = $this->collect($item);
+            }
+        }
+
+        return $array;
     }
 
     /**
@@ -41,7 +60,7 @@ class Standard implements \Countable, \IteratorAggregate, ResponseInterface
     /**
      * Get Hits
      *
-     * Get the raw hits array from
+     * Get the raw hits from
      * Elasticsearch results.
      *
      * @return array
@@ -49,6 +68,20 @@ class Standard implements \Countable, \IteratorAggregate, ResponseInterface
     public function getHits()
     {
         return $this->hits;
+    }
+
+    /**
+     * Get _source element from raw hits
+     *
+     * @return array|\Illuminate\Support\Collection
+     */
+    public function getSource()
+    {
+        if (!$this->totalHits) {
+            return [];
+        }
+
+        return $this->hits->pluck('_source');
     }
 
     /**

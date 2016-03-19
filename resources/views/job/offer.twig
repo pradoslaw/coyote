@@ -44,7 +44,7 @@
                                     {{ job.country_name }}
 
                                     {% if job.locations|length > 0 %}
-                                        • {% include 'job.partials.location' with {'locations': job.locations.lists('name')} %}
+                                        • {% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}
                                     {% endif %}
 
                                     {% if job.is_remote %}

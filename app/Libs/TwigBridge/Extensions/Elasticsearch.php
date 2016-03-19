@@ -24,7 +24,7 @@ class Elasticsearch extends Twig_Extension
             new Twig_SimpleFunction(
                 'elastic_highlight',
                 function ($highlight, $default) {
-                    return $highlight ? implode('...', $highlight) : $default;
+                    return $highlight ? $highlight->implode(' ... ') : $default;
                 },
                 [
                     'is_safe' => ['html'],
