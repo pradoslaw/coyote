@@ -12,6 +12,11 @@ class Standard implements \Countable, \IteratorAggregate, ResponseInterface
     protected $hits = [];
 
     /**
+     * @var array
+     */
+    protected $aggregations = [];
+
+    /**
      * @var int
      */
     protected $totalHits = 0;
@@ -25,6 +30,10 @@ class Standard implements \Countable, \IteratorAggregate, ResponseInterface
         if (isset($response['hits'])) {
             $this->hits = $this->collect($response['hits']['hits']);
             $this->totalHits = $response['hits']['total'];
+
+            if (isset($response['aggregations'])) {
+                $this->aggregations = ($response['aggregations']);
+            }
         }
     }
 
@@ -91,7 +100,7 @@ class Standard implements \Countable, \IteratorAggregate, ResponseInterface
      */
     public function __call($name, $arguments)
     {
-        return $this->getHits()->$name(...$arguments);
+        return $this->hits->$name(...$arguments);
     }
 
     /**
@@ -108,6 +117,20 @@ class Standard implements \Countable, \IteratorAggregate, ResponseInterface
     public function getHighlights()
     {
         return $this->hits->pluck('highlight', '_source.id');
+    }
+
+    /**
+     * @param null $name
+     * @return array|static
+     */
+    public function getAggregations($name = null)
+    {
+        if (!$name) {
+            return $this->aggregations;
+        }
+
+        $data = array_get($this->aggregations, "$name.buckets");
+        return collect($data)->lists('doc_count', 'key');
     }
 
     /**

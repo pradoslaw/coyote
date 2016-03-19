@@ -28,6 +28,12 @@ interface QueryBuilderInterface
     public function addSort(Dsl $sort);
 
     /**
+     * @param Dsl $aggs
+     * @return QueryBuilder
+     */
+    public function addAggs(Dsl $aggs);
+
+    /**
      * @return array
      */
     public function build();

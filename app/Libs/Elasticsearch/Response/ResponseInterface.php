@@ -25,4 +25,9 @@ interface ResponseInterface
      * @return static
      */
     public function getHighlights();
+
+    /**
+     * @return array
+     */
+    public function getAggregations();
 }

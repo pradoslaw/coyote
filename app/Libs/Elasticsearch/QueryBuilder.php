@@ -23,6 +23,7 @@ class QueryBuilder implements QueryBuilderInterface
             ]
         ],
 
+        'aggs' => [],
         'sort' => []
     ];
 
@@ -64,6 +65,15 @@ class QueryBuilder implements QueryBuilderInterface
     public function addSort(Dsl $sort)
     {
         return $this->addToStock($sort);
+    }
+
+    /**
+     * @param Dsl $aggs
+     * @return QueryBuilder
+     */
+    public function addAggs(Dsl $aggs)
+    {
+        return $this->addToStock($aggs);
     }
 
     /**

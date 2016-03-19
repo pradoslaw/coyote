@@ -42,7 +42,7 @@
 
             <div class="row">
                 <div id="box-filter" class="col-sm-3">
-                    <h5><i class="fa fa-cog"></i> Technologie</h5>
+                    <h5><i class="fa fa-cog fa-fw"></i> Technologie</h5>
 
                     <ul class="list-group">
                         <li class="list-group-item">
@@ -55,6 +55,18 @@
                             <a href="#"><i class="fa fa-square-o"></i> <span>c#</span> <small>(211 ofert)</small></a>
                         </li>
                     </ul>
+
+                    {% if aggregations.city %}
+                        <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
+
+                        <ul class="list-group">
+                            {% for city, count in aggregations.city %}
+                                <li class="list-group-item">
+                                    <a href="#"><i class="fa fa-check-square-o"></i> <span>{{ city }}</span> <small>({{ declination(count, ['oferta', 'oferty', 'ofert']) }})</small></a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
 
                 <div class="col-sm-9">

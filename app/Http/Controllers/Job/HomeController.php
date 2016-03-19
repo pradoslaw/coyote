@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Elasticsearch\Aggs\Job\Location;
 use Coyote\Elasticsearch\Filters\Job\City;
 use Coyote\Elasticsearch\Filters\Job\Firm;
 use Coyote\Elasticsearch\Filters\Job\Tags;
@@ -111,18 +112,26 @@ class HomeController extends Controller
             new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
         );
 
+        // facet search
+        $this->elasticsearch->addAggs(new Location());
+
         start_measure('search', 'Elasticsearch');
-//dd($this->elasticsearch->build());
+
+        $response = $this->job->search($this->elasticsearch->build());
+        stop_measure('search');
+
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)
-        $jobs = $this->job->search($this->elasticsearch->build())->getSource();
-        stop_measure('search');
+        $jobs = $response->getSource();
+        $aggregations = [
+            'city' => $response->getAggregations('locations.city')
+        ];
 
         return $this->view('job.home', [
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList()
         ])->with(
-            compact('jobs')
+            compact('jobs', 'aggregations')
         );
     }
 }
