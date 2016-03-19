@@ -2,6 +2,13 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Elasticsearch\Filters\Job\City;
+use Coyote\Elasticsearch\Filters\Job\Firm;
+use Coyote\Elasticsearch\Filters\Job\Tags;
+use Coyote\Elasticsearch\Job\Remote;
+use Coyote\Elasticsearch\Query;
+use Coyote\Elasticsearch\QueryBuilderInterface;
+use Coyote\Elasticsearch\Sort;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Illuminate\Http\Request;
@@ -15,14 +22,21 @@ class HomeController extends Controller
     private $job;
 
     /**
+     * @var QueryBuilderInterface
+     */
+    private $elasticsearch;
+
+    /**
      * HomeController constructor.
      * @param JobRepositoryInterface $job
+     * @param QueryBuilderInterface $queryBuilder
      */
-    public function __construct(JobRepositoryInterface $job)
+    public function __construct(JobRepositoryInterface $job, QueryBuilderInterface $queryBuilder)
     {
         parent::__construct();
 
         $this->job = $job;
+        $this->elasticsearch = $queryBuilder;
     }
 
     /**
@@ -41,21 +55,33 @@ class HomeController extends Controller
      */
     public function city(Request $request, $name)
     {
-        return $this->load($request, [
-            'terms' => [
-                'locations' => [
-                    strtolower($name)
-                ]
-            ]
-        ]);
+        $this->elasticsearch->addFilter(new City($name));
+
+        return $this->load($request);
     }
 
     /**
+     * @param Request $request
      * @param $name
+     * @return HomeController
      */
-    public function tag($name)
+    public function tag(Request $request, $name)
     {
-        //
+        $this->elasticsearch->addFilter(new Tags($name));
+
+        return $this->load($request);
+    }
+
+    /**
+     * @param Request $request
+     * @param $name
+     * @return HomeController
+     */
+    public function firm(Request $request, $name)
+    {
+        $this->elasticsearch->addFilter(new Firm($name));
+
+        return $this->load($request);
     }
 
     /**
@@ -64,49 +90,32 @@ class HomeController extends Controller
      */
     public function remote(Request $request)
     {
-        return $this->load($request, ['term' => ['is_remote' => 1]]);
+        $this->elasticsearch->addFilter(new Remote());
+
+        return $this->load($request);
     }
 
     /**
      * @param Request $request
-     * @param array $filter
      * @return $this
      */
-    private function load(Request $request, $filter = [])
+    private function load(Request $request)
     {
-        $query = [];
-
         if ($request->has('q')) {
-            $query = [
-                'query_string' => [
-                    'query' => $request->get('q'),
-                    'fields' => ['title', 'description', 'requirements', 'recruitment', 'tags']
-                ]
-            ];
+            $this->elasticsearch->addQuery(
+                new Query($request->get('q'), ['title', 'description', 'requirements', 'recruitment', 'tags'])
+            );
         }
 
-        $body = [
-            'query' => [
-                'filtered' => [
-                    'query' => $query,
-                    'filter' =>
-                        $filter
-
-                ]
-            ],
-
-            'sort' => [
-                [
-                    $request->get('sort', '_score') => $request->get('order', 'desc')
-                ]
-            ]
-        ];
+        $this->elasticsearch->addSort(
+            new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
+        );
 
         start_measure('search', 'Elasticsearch');
-
+//dd($this->elasticsearch->build());
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)
-        $jobs = $this->job->search($body)->getSource();
+        $jobs = $this->job->search($this->elasticsearch->build())->getSource();
         stop_measure('search');
 
         return $this->view('job.home', [

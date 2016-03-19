@@ -77,7 +77,7 @@
 
                                         <tr>
                                             <td class="col-logo">
-                                                {% if job.firm %}
+                                                {% if job.firm.logo %}
                                                     <a href="{{ url }}"><img title="{{ job.firm.name }}" src="{{ cdn('storage/logo/' ~ job.firm.logo) }}" width="55"></a>
                                                 {% else %}
                                                     <img src="{{ cdn('img/logo-gray.png') }}" width="55">

@@ -21,16 +21,18 @@ class ElasticsearchServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('Elasticsearch', function () {
+        $this->app->singleton('Elasticsearch', function ($app) {
             $logger = ClientBuilder::defaultLogger(
-                $this->app['config']->get('elasticsearch.logPath'), $this->app['config']->get('elasticsearch.logLevel')
+                $app['config']->get('elasticsearch.logPath'), $app['config']->get('elasticsearch.logLevel')
             );
 
             return ClientBuilder::create()
-                ->setHosts($this->app['config']->get('elasticsearch.hosts'))
+                ->setHosts($app['config']->get('elasticsearch.hosts'))
                 ->setLogger($logger)
                 ->build();
         });
+
+        $this->app->bind('Coyote\Elasticsearch\QueryBuilderInterface', 'Coyote\Elasticsearch\QueryBuilder');
     }
 
     /**
@@ -40,6 +42,6 @@ class ElasticsearchServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['Elasticsearch'];
+        return ['Elasticsearch', 'Coyote\Elasticsearch\QueryBuilderInterface'];
     }
 }
