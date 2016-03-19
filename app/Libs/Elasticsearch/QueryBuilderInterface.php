@@ -34,6 +34,12 @@ interface QueryBuilderInterface
     public function addAggs(Dsl $aggs);
 
     /**
+     * @param Dsl $highlight
+     * @return QueryBuilder
+     */
+    public function addHighlight(Dsl $highlight);
+
+    /**
      * @return array
      */
     public function build();

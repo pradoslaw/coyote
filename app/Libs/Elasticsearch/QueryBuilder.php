@@ -23,8 +23,13 @@ class QueryBuilder implements QueryBuilderInterface
             ]
         ],
 
-        'aggs' => [],
-        'sort' => []
+        'sort' => [],
+        'highlight' => [
+            'pre_tags' => ['<em class="highlight">'],
+            'post_tags' => ["</em>"],
+            'fields' => [ ]
+        ],
+
     ];
 
     /**
@@ -74,6 +79,15 @@ class QueryBuilder implements QueryBuilderInterface
     public function addAggs(Dsl $aggs)
     {
         return $this->addToStock($aggs);
+    }
+
+    /**
+     * @param Dsl $highlight
+     * @return QueryBuilder
+     */
+    public function addHighlight(Dsl $highlight)
+    {
+        return $this->addToStock($highlight);
     }
 
     /**

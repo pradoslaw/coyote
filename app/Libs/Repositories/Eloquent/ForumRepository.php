@@ -149,7 +149,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      *
      * @return array
      */
-    public function forumList()
+    public function forumList($key = 'path')
     {
         $this->applyCriteria();
 
@@ -158,11 +158,11 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         $tree = $this->buildTree($result);
 
         foreach ($tree as $parent) {
-            $list[$parent->path] = $parent->name;
+            $list[$parent->$key] = $parent->name;
 
             if (isset($parent->subs)) {
                 foreach ($parent->subs as $child) {
-                    $list[$child->path] = str_repeat('&nbsp;', 4) . $child->name;
+                    $list[$child->$key] = str_repeat('&nbsp;', 4) . $child->name;
                 }
             }
         }
