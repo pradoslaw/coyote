@@ -33,7 +33,7 @@ class QueryBuilder implements QueryBuilderInterface
     ];
 
     /**
-     * @var Dsl[]
+     * @var DslInterface[]
      */
     protected $stock = [];
 
@@ -88,6 +88,16 @@ class QueryBuilder implements QueryBuilderInterface
     public function addHighlight(DslInterface $highlight)
     {
         return $this->addToStock($highlight);
+    }
+
+    /**
+     * @param int $from
+     * @param int $size
+     */
+    public function setSize($from, $size)
+    {
+        $this->body['from'] = $from;
+        $this->body['size'] = $size;
     }
 
     /**

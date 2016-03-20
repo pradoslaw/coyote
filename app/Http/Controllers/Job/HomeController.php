@@ -14,9 +14,12 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Illuminate\Http\Request;
 use Coyote\Job;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class HomeController extends Controller
 {
+    const PER_PAGE = 15;
+
     /**
      * @var JobRepositoryInterface
      */
@@ -114,6 +117,7 @@ class HomeController extends Controller
 
         // facet search
         $this->elasticsearch->addAggs(new Location());
+        $this->elasticsearch->setSize($request->get('page'), self::PER_PAGE);
 
         start_measure('search', 'Elasticsearch');
 
@@ -127,11 +131,19 @@ class HomeController extends Controller
             'city' => $response->getAggregations('locations.city')
         ];
 
+        $pagination = new LengthAwarePaginator(
+            $jobs, $response->totalHits(), self::PER_PAGE, LengthAwarePaginator::resolveCurrentPage(), [
+                'path' => LengthAwarePaginator::resolveCurrentPath()
+            ]
+        );
+
+        $pagination->appends($request->except('page'));
+
         return $this->view('job.home', [
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList()
         ])->with(
-            compact('jobs', 'aggregations')
+            compact('jobs', 'aggregations', 'pagination')
         );
     }
 }

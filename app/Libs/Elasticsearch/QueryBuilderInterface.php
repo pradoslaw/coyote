@@ -40,6 +40,12 @@ interface QueryBuilderInterface
     public function addHighlight(DslInterface $highlight);
 
     /**
+     * @param int $from
+     * @param int $size
+     */
+    public function setSize($from, $size);
+
+    /**
      * @return array
      */
     public function build();
