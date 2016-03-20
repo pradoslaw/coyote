@@ -33,8 +33,8 @@ class MicroblogsCest
         $I->amOnRoute('microblog.home');
         $I->see($this->user->name, '.dropdown-username');
 
-        $I->disableMiddleware();
-        $I->submitForm('.microblog-submit', ['text' => $text]);
+        $csrf = $I->grabTextFrom('//*[@name="csrf-token"]/@content');
+        $I->submitForm('.microblog-submit', ['text' => $text, '_token' => $csrf]);
 
         $I->seeRecord('microblogs', ['text' => $text]);
 
@@ -79,11 +79,11 @@ class MicroblogsCest
 
     public function tryingToCreateWithEmptyContent(FunctionalTester $I)
     {
-        $I->disableMiddleware();
         $I->amOnRoute('microblog.home');
-        $I->sendAjaxPostRequest(route('microblog.save'), array('text' => '')); // POST
+        $csrf = $I->grabTextFrom('//*[@name="csrf-token"]/@content');
+        $I->sendAjaxPostRequest(route('microblog.save'), array('text' => '', '_token' => $csrf)); // POST
 
-        $I->seeResponseCodeIs(422);
+        $I->seeResponseCodeIs(500);
     }
 
     public function canEditMicroblog(FunctionalTester $I)
