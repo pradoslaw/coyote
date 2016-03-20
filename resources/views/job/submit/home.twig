@@ -98,8 +98,38 @@
                         {{ form_text('tag', '', {'class': 'form-control', 'placeholder': 'Np. Java, MS-SQL'}) }}
                         <span class="help-block">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter.</span>
                         <span class="fa fa-tag form-control-feedback" aria-hidden="true"></span>
-                    </div>
 
+                        <div id="tags-container">
+                            {% for tag in job.tags %}
+                                <div class="row">
+                                    <div class="col-xs-8">
+                                        <ol class="tag-clouds">
+                                            <li><a href="javascript:">{{ tag.name }}</a></li>
+                                        </ol>
+                                    </div>
+
+                                    {{ form_hidden('tags[]', tag.name) }}
+
+                                    <div class="col-xs-3">
+                                        <div class="radio radio-primary radio-inline">
+                                            {{ form_radio('priority[' ~ tag.name ~ ']', 1, tag.pivot.priority == 1, {'id': tag.name ~ '-must-have'}) }}
+                                            <label for="{{ tag.name }}-must-have"> Wymagane </label>
+                                        </div>
+                                        <div class="radio radio-inline">
+                                            {{ form_radio('priority[' ~ tag.name ~ ']', 0, tag.pivot.priority == 0, {'id': tag.name ~ '-nice-to-have'}) }}
+                                            <label for="{{ tag.name }}-nice-to-have"> Mile widziane </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-1">
+                                        <a class="btn-xs pull-right">
+                                            <i class="fa fa-remove text-danger"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -160,7 +190,7 @@
 
     <aside class="col-sm-4">
         <div id="hint-container">
-            <div id="hint-name" class="sidebar-hint" style="display: none;">
+            <div id="hint-title" class="sidebar-hint" style="display: none;">
                 <h4>Jak tytułować oferty pracy?</h4>
 
                 <p>
@@ -202,6 +232,11 @@
 
     </aside>
 </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
 {% endblock %}
 
 {% block body %}

@@ -176,6 +176,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany('Coyote\Tag', 'job_tags')->withPivot('priority');
+    }
+
+    /**
      * @return array
      */
     protected function getIndexBody()

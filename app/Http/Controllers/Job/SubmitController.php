@@ -54,8 +54,10 @@ class SubmitController extends Controller
         if ($job->id) {
             $this->authorize('update', $job);
 
-            $job->city = $job->locations()->get()->implode('name', ', ');
+            $job->city = $job->locations()->get()->implode('city', ', ');
             $job->deadline = (new Carbon($job->deadline_at))->diff(Carbon::now())->days;
+
+            $job->tags = $job->tags()->get();
         }
 
         if ($request->session()->has('job') && !$request->has('revalidate')) {

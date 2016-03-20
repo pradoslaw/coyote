@@ -2,6 +2,7 @@
 @import "../../../bower/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
 @import "../../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
 @import "../../components/affix";
+@import "../../components/tags";
 
 $font-size-control-label: 15px;
 
@@ -225,4 +226,31 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   padding: 10px 0;
   z-index: 1000;
   display: none;
+}
+
+#tags-container {
+  margin-top: 30px;
+
+  > .row {
+    margin-bottom: 10px;
+  }
+
+  .tag-clouds {
+    padding: 0;
+    float: left;
+    margin-right: 20px;
+
+    a {
+      margin-top: 0;
+    }
+  }
+
+  .radio {
+    font-size: 12px;
+    color: $gray;
+  }
+
+  input[type=radio]:focus {
+    outline: 0;
+  }
 }
