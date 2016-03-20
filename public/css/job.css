@@ -219,6 +219,8 @@
 #box-filter .list-group-item {
   padding: 5px 5px;
   margin-top: 4px; }
+  #box-filter .list-group-item input[type=checkbox] {
+    display: none; }
   #box-filter .list-group-item a {
     color: #555555;
     display: block;

@@ -231,4 +231,12 @@ class Job extends Model
 
         return $body;
     }
+
+    /**
+     * @return string
+     */
+    protected function getResponseClass()
+    {
+        return 'Coyote\Elasticsearch\Response\Job';
+    }
 }

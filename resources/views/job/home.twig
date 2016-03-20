@@ -62,7 +62,18 @@
                         <ul class="list-group">
                             {% for city, count in aggregations.city %}
                                 <li class="list-group-item">
-                                    <a href="#"><i class="fa fa-check-square-o"></i> <span>{{ city }}</span> <small>({{ declination(count, ['oferta', 'oferty', 'ofert']) }})</small></a>
+                                    {{ form_checkbox('city[]', city, city in cities) }}
+
+                                    <a href="{{ route('job.city', [city|capitalize]) }}">
+                                        {% if city in cities %}
+                                            <i class="fa fa-check-square-o"></i>
+                                        {% else %}
+                                            <i class="fa fa-square-o"></i>
+                                        {% endif %}
+
+                                        <span>{{ city|capitalize }}</span>
+                                        <small>({{ declination(count, ['oferta', 'oferty', 'ofert']) }})</small>
+                                    </a>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -129,7 +140,9 @@
                                                 {% endif %}
                                             </td>
                                             <td class="col-time">
-                                                <p><span class="label label-new">Nowe</span></p>
+                                                {% if job.diff_in_days <= 1 %}
+                                                    <p><span class="label label-new">Nowe</span></p>
+                                                {% endif %}
 
                                                 <small>{{ job.created_at|format_date }}</small>
                                             </td>

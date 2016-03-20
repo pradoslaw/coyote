@@ -17,7 +17,7 @@ class City extends Filter implements DslInterface
      * City constructor.
      * @param $cities
      */
-    public function __construct($cities)
+    public function __construct($cities = [])
     {
         $this->setCities($cities);
     }
@@ -43,11 +43,23 @@ class City extends Filter implements DslInterface
     }
 
     /**
+     * @return array
+     */
+    public function getCities()
+    {
+        return $this->cities;
+    }
+
+    /**
      * @param QueryBuilderInterface $queryBuilder
      * @return mixed
      */
     public function apply(QueryBuilderInterface $queryBuilder)
     {
+        if (!$this->cities) {
+            return $queryBuilder->getBody();
+        }
+
         return $this->addFilter($queryBuilder, [
             'nested' => [
                 'path' => 'locations',

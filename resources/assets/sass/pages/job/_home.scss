@@ -50,6 +50,10 @@
     padding: 5px 5px;
     margin-top: 4px;
 
+    input[type=checkbox] {
+      display: none;
+    }
+
     a {
       color: $gray;
       display: block;
@@ -187,7 +191,6 @@
 
 .col-fav {
   width: 40px;
-
 
   .btn-fav {
     opacity: .3;

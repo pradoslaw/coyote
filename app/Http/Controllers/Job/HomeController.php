@@ -31,6 +31,11 @@ class HomeController extends Controller
     private $elasticsearch;
 
     /**
+     * @var City
+     */
+    private $city;
+
+    /**
      * HomeController constructor.
      * @param JobRepositoryInterface $job
      * @param QueryBuilderInterface $queryBuilder
@@ -41,6 +46,7 @@ class HomeController extends Controller
 
         $this->job = $job;
         $this->elasticsearch = $queryBuilder;
+        $this->city = new City();
     }
 
     /**
@@ -59,7 +65,7 @@ class HomeController extends Controller
      */
     public function city(Request $request, $name)
     {
-        $this->elasticsearch->addFilter(new City($name));
+        $this->city->addCity($name);
 
         return $this->load($request);
     }
@@ -115,6 +121,8 @@ class HomeController extends Controller
             new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
         );
 
+        $this->elasticsearch->addFilter($this->city);
+
         // facet search
         $this->elasticsearch->addAggs(new Location());
         $this->elasticsearch->setSize($request->get('page'), self::PER_PAGE);
@@ -128,7 +136,7 @@ class HomeController extends Controller
         // we want to pass collection to the twig (not raw php array)
         $jobs = $response->getSource();
         $aggregations = [
-            'city' => $response->getAggregations('locations.city')
+            'city' => $response->getAggregations('global.locations.city')
         ];
 
         $pagination = new LengthAwarePaginator(
@@ -141,7 +149,8 @@ class HomeController extends Controller
 
         return $this->view('job.home', [
             'ratesList'         => Job::getRatesList(),
-            'employmentList'    => Job::getEmploymentList()
+            'employmentList'    => Job::getEmploymentList(),
+            'cities'            => array_map('mb_strtolower', $this->city->getCities())
         ])->with(
             compact('jobs', 'aggregations', 'pagination')
         );
