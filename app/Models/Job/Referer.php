@@ -29,6 +29,6 @@ class Referer extends Model
      * @var array
      */
     protected $attributes = [
-        'count' => 0
+        'count' => 1
     ];
 }

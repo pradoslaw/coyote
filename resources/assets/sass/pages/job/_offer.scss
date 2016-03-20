@@ -44,6 +44,18 @@
       color: $brand-primary;
     }
   }
+
+  .tags {
+    margin-top: 10px;
+    background: url("/img/hand-writing-nice-to-have.png") no-repeat 58%;
+
+    .must-have {
+      text-indent: -9999px;
+      background: url('/img/hand-writing-must-have.png') no-repeat;
+      height: 30px;
+    }
+
+  }
 }
 
 // @todo Ponizszy blok jest uzywany rowniez w artykulach (plik wiki.scss). Moze nalezaloby zastosowac DRY?

@@ -9,6 +9,14 @@
     {{ parent() }}
 {% endblock %}
 
+{% macro display_tags(tags) %}
+    <ul class="tag-clouds">
+        {% for tag in tags %}
+            <li><a href="{{ route('job.tag', [tag.name]) }}" title="Znajdź oferty technologii {{ tag.name }}">{{ tag.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
 {% block container %}
     <div class="row" style="margin-top: 20px">
         <div class="col-sm-9">
@@ -62,7 +70,7 @@
                                 {% if can('update', job) %}
                                     <li class="counter">
                                         <i class="fa fa-eye"></i>
-                                        {{ declination(job.visits, ['odsłon', 'odsłon', 'odsłon']) }}
+                                        {{ declination(job.visits, ['odsłony', 'odsłon', 'odsłony']) }}
                                     </li>
                                 {% endif %}
 
@@ -76,10 +84,25 @@
                                 </li>
                             </ul>
 
-                            <ul class="tag-clouds">
-                                <li><a href="#">java</a></li>
-                                <li><a href="#">jee</a></li>
-                            </ul>
+                            {% if tagsSet|length > 0 %}
+                                <div class="tags">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <h5 class="must-have">Wymagane</h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            {{ _self.display_tags(tagsSet[1]) }}
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            {{ _self.display_tags(tagsSet[0]) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
 
                             {% if job.description %}
                                 <h2>Opis oferty</h2>

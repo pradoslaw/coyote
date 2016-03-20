@@ -121,12 +121,13 @@
                                                     {% endif %}
                                                 </p>
 
-                                                <ul class="tag-clouds hidden-sm hidden-xs">
-                                                    <li><a data-category="job-tag" data-action="offer" data-value="java" title="Znajdź oferty z technologii: java" href="http://4programmers.net/Praca/Technologia/java">java</a></li>
-                                                    <li><a data-category="job-tag" data-action="offer" data-value="mobile" title="Znajdź oferty z technologii: mobile" href="http://4programmers.net/Praca/Technologia/mobile">mobile</a></li>
-                                                    <li><a data-category="job-tag" data-action="offer" data-value="android" title="Znajdź oferty z technologii: android" href="http://4programmers.net/Praca/Technologia/android">android</a></li>
-                                                    <li><a data-category="job-tag" data-action="offer" data-value="framework" title="Znajdź oferty z technologii: framework" href="http://4programmers.net/Praca/Technologia/framework">framework</a></li>
-                                                </ul>
+                                                {% if job.tags %}
+                                                    <ul class="tag-clouds hidden-sm hidden-xs">
+                                                        {% for tag in job.tags %}
+                                                            <li><a data-category="job-tag" data-action="offer" data-value="{{ tag }}" title="Znajdź oferty z technologii: {{ tag }}" href="{{ route('job.tag', [tag]) }}">{{ tag }}</a></li>
+                                                        {% endfor %}
+                                                     </ul>
+                                                {% endif %}
                                             </td>
                                             <td class="col-salary">
                                                 {% if job.salary_from or job.salary_to %}

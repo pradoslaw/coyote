@@ -55,6 +55,8 @@ class OfferController extends Controller
             }
         }
 
+        $tagsSet = $job->tags()->get()->groupBy('pivot.priority');
+
         $firm = [];
         if ($job->firm_id) {
             $firm = $this->firm->find($job->firm_id);
@@ -63,11 +65,14 @@ class OfferController extends Controller
 
         $job->increment('visits');
 
-        // @todo w laravel 5.2 mozna uzyc:
-        // url()->previous();
-        if ($request->header('referer')) {
-            $referer = $job->referers()->firstOrNew(['url' => $request->header('referer')]);
-            $referer->increment('count');
+        if (url()->previous()) {
+            $referer = $job->referers()->firstOrNew(['url' => url()->previous()]);
+
+            if (!$referer->id) {
+                $referer->save();
+            } else {
+                $referer->increment('count');
+            }
         }
 
         return $this->view('job.offer', [
@@ -76,7 +81,7 @@ class OfferController extends Controller
             'employeesList'     => Firm::getEmployeesList(),
             'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days
         ])->with(
-            compact('job', 'firm')
+            compact('job', 'firm', 'tagsSet')
         );
     }
 }

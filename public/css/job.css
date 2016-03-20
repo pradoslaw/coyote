@@ -692,6 +692,13 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
       color: #777777; }
   #job-offer .benefits i {
     color: #80a41a; }
+  #job-offer .tags {
+    margin-top: 10px;
+    background: url("/img/hand-writing-nice-to-have.png") no-repeat 58%; }
+    #job-offer .tags .must-have {
+      text-indent: -9999px;
+      background: url("/img/hand-writing-must-have.png") no-repeat;
+      height: 30px; }
 
 .metadata {
   color: #777777; }

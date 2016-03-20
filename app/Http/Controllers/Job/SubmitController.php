@@ -12,6 +12,7 @@ use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Http\Request;
 
 class SubmitController extends Controller
@@ -27,11 +28,16 @@ class SubmitController extends Controller
     private $firm;
 
     /**
+     * @var TagRepositoryInterface
+     */
+    private $tag;
+
+    /**
      * SubmitController constructor.
      * @param JobRepositoryInterface $job
      * @param FirmRepositoryInterface $firm
      */
-    public function __construct(JobRepositoryInterface $job, FirmRepositoryInterface $firm)
+    public function __construct(JobRepositoryInterface $job, FirmRepositoryInterface $firm, TagRepositoryInterface $tag)
     {
         parent::__construct();
         $this->middleware('job.session', ['except' => ['getIndex', 'postIndex']]);
@@ -40,6 +46,7 @@ class SubmitController extends Controller
 
         $this->job = $job;
         $this->firm = $firm;
+        $this->tag = $tag;
     }
 
     /**
@@ -57,7 +64,9 @@ class SubmitController extends Controller
             $job->city = $job->locations()->get()->implode('city', ', ');
             $job->deadline = (new Carbon($job->deadline_at))->diff(Carbon::now())->days;
 
-            $job->tags = $job->tags()->get();
+            $job->tags = $job->tags()->get()->each(function (&$item, $key) {
+                $item->priority = $item->pivot->priority;
+            });
         }
 
         if ($request->session()->has('job') && !$request->has('revalidate')) {
@@ -88,19 +97,21 @@ class SubmitController extends Controller
     public function postIndex(Request $request)
     {
         $this->validate($request, [
-            'title'         => 'required|max:60',
-            'country_id'    => 'required|integer',
-            'currency_id'   => 'required|integer',
-            'rate_id'       => 'required|integer',
-            'employment_id' => 'required|integer',
-            'city'          => 'string',
-            'salary_from'   => 'integer',
-            'salary_to'     => 'integer',
-            'deadline'      => 'integer|min:1|max:365',
-            'requirements'  => 'string',
-            'recruitment'   => 'sometimes|required|string',
-            'enable_apply'  => 'boolean',
-            'email'         => 'sometimes|required|email'
+            'title'             => 'required|max:60',
+            'country_id'        => 'required|integer',
+            'currency_id'       => 'required|integer',
+            'rate_id'           => 'required|integer',
+            'employment_id'     => 'required|integer',
+            'city'              => 'string',
+            'salary_from'       => 'integer',
+            'salary_to'         => 'integer',
+            'deadline'          => 'integer|min:1|max:365',
+            'requirements'      => 'string',
+            'recruitment'       => 'sometimes|required|string',
+            'enable_apply'      => 'boolean',
+            'email'             => 'sometimes|required|email',
+            'tags.*.name'       => 'tag',
+            'tags.*.priority'   => 'int|min:0|max:1'
         ]);
 
         $request->session()->put('job', $request->all());
@@ -205,13 +216,23 @@ class SubmitController extends Controller
 
         $this->authorize('update', $job);
 
+        $tags = [];
+        if (!empty($data['tags'])) {
+            foreach ($data['tags'] as $tag) {
+                $model = $this->tag->firstOrCreate(['name' => $tag['name']]);
+
+                $tags[$model->id] = [
+                    'priority' => $tag['priority']
+                ];
+            }
+        }
+
         $locations = array_filter(array_unique(array_map('trim', preg_split('/[\/,]/', $data['city']))));
         $job->fill($data);
 
         $job->deadline_at = Carbon::now()->addDay($data['deadline']);
-        $job->path = str_slug($data['title'], '_');
 
-        \DB::transaction(function () use (&$job, $request, $locations) {
+        \DB::transaction(function () use (&$job, $request, $locations, $tags) {
             if ($request->session()->has('firm')) {
                 $data = $request->session()->get('firm');
                 $firm = $this->firm->findOrNew((int) $data['id']);
@@ -243,6 +264,8 @@ class SubmitController extends Controller
                     'city' => $location
                 ]);
             }
+
+            $job->tags()->sync($tags);
 
             event(new JobWasSaved($job));
             $request->session()->forget(['job', 'firm']);

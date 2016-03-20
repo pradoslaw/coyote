@@ -184,6 +184,15 @@ class Job extends Model
     }
 
     /**
+     * @param string $title
+     */
+    public function setTitleAttribute($title)
+    {
+        $this->attributes['title'] = $title;
+        $this->attributes['path'] = str_slug($title, '_');
+    }
+
+    /**
      * @return array
      */
     protected function getIndexBody()
@@ -225,11 +234,9 @@ class Job extends Model
             'salary'            => $salary,
             // yes, we index currency name so we don't have to look it up in database during search process
             'currency_name'     => $this->currency()->pluck('name'),
-            'firm'              => $this->firm()->first(['name', 'logo'])
+            'firm'              => $this->firm()->first(['name', 'logo']),
+            'tags'              => $this->tags()->orderBy('priority', 'DESC')->pluck('name')
         ]);
-
-        $tags = ['boduch-adam', '4programmers.net', 'delphi', 'pascal'];
-        $body['tags'] = array_rand($tags, 2);
 
         foreach (['created_at', 'updated_at', 'deadline_at'] as $column) {
             if (!empty($body[$column])) {
