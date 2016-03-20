@@ -167,12 +167,13 @@ class PostController extends BaseController
      * Save post (edit or create)
      *
      * @param PostRequest $request
+     * @param TagRepositoryInterface $tag
      * @param $forum
      * @param $topic
      * @param null $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(PostRequest $request, $forum, $topic, $post = null, TagRepositoryInterface $tag)
+    public function save(PostRequest $request, TagRepositoryInterface $tag, $forum, $topic, $post = null)
     {
         // parsing text and store it in cache
         $text = app()->make('Parser\Post')->parse($request->text);

@@ -37,7 +37,7 @@ class Post extends Model
                 ],
                 "tag_original" => [
                     "type" => "string",
-                    "index" => "not_analyzed"
+                    "index" => "analyzer_keyword"
                 ]
             ]
         ],
@@ -48,6 +48,14 @@ class Post extends Model
         "ip" => [
             "type" => "string",
             "index" => "not_analyzed"
+        ],
+        "browser" => [
+            "type" => "string",
+            "index" => "analyzer_keyword"
+        ],
+        "host" => [
+            "type" => "string",
+            "index" => "analyzer_keyword"
         ]
     ];
 
@@ -99,6 +107,9 @@ class Post extends Model
         return $this->belongsTo('Coyote\Topic');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function forum()
     {
         return $this->belongsTo('Coyote\Forum');

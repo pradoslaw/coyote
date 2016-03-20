@@ -2,7 +2,6 @@
 
 namespace Coyote\Elasticsearch;
 
-use Coyote\Elasticsearch\Response\ResponseInterface;
 use Illuminate\Contracts\Support\Arrayable;
 
 trait Elasticsearch
@@ -145,7 +144,7 @@ trait Elasticsearch
      */
     protected function getResponseClass()
     {
-        return 'Coyote\Elasticsearch\Response\Standard';
+        return 'Coyote\Elasticsearch\Response';
     }
 
     /**

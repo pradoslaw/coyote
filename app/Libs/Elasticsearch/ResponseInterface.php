@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Elasticsearch\Response;
+namespace Coyote\Elasticsearch;
 
 interface ResponseInterface
 {

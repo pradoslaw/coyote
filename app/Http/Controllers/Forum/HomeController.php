@@ -83,7 +83,7 @@ class HomeController extends BaseController
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
-        if (Gate::allows('forum-delete')) {
+        if ($topics && Gate::allows('forum-delete')) {
             $flags = app()->make('FlagRepository')->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 

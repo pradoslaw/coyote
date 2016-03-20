@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Elasticsearch\Response;
+namespace Coyote\Elasticsearch;
 
 use ArrayIterator;
 
-class Standard implements \Countable, \IteratorAggregate, ResponseInterface
+class Response implements \Countable, \IteratorAggregate, ResponseInterface
 {
     /**
      * @var array|\Illuminate\Support\Collection

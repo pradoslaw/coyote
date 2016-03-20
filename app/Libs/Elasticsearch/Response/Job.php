@@ -1,8 +1,8 @@
 <?php
 
-namespace Coyote\Elasticsearch\Response;
+namespace Coyote\Elasticsearch;
 
-class Job extends Standard implements ResponseInterface
+class Job extends Response implements ResponseInterface
 {
     //
 }
