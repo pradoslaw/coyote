@@ -4,12 +4,11 @@ namespace Coyote\Http\Controllers\Job;
 
 use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface ;
 use Coyote\Firm;
 use Coyote\Job;
-use Coyote\Currency;
-use Coyote\Country;
 
 class OfferController extends Controller
 {
@@ -37,10 +36,11 @@ class OfferController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param int $id
      * @return \Illuminate\View\View
      */
-    public function index($id)
+    public function index(Request $request, $id)
     {
         $job = $this->job->findById($id);
 
@@ -59,6 +59,15 @@ class OfferController extends Controller
         if ($job->firm_id) {
             $firm = $this->firm->find($job->firm_id);
             $firm->description = $parser->parse($firm->description);
+        }
+
+        $job->increment('visits');
+
+        // @todo w laravel 5.2 mozna uzyc:
+        // url()->previous();
+        if ($request->header('referer')) {
+            $referer = $job->referers()->firstOrNew(['url' => $request->header('referer')]);
+            $referer->increment('count');
         }
 
         return $this->view('job.offer', [

@@ -282,8 +282,6 @@
     padding: 0;
     line-height: 1.4;
     margin: 0; }
-    .col-body p a {
-      color: #555555; }
   .col-body small {
     color: #777777; }
     .col-body small a {
@@ -325,6 +323,9 @@
     .col-fav .btn-fav.on:after {
       content: "";
       color: #e37329; }
+
+.employer {
+  color: #555555; }
 
 .jumbotron {
   padding-top: 30px;
@@ -542,7 +543,7 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
     font-size: 22px;
     margin-bottom: 10px; }
   #job-offer .employer {
-    margin-right: 10px;
+    margin-right: 3px;
     font-size: 14px;
     font-weight: normal;
     color: #555555; }

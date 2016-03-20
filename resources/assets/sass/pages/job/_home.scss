@@ -76,6 +76,7 @@
     }
   }
 }
+
 #box-employers {
   margin-top: 43px;
 
@@ -147,10 +148,6 @@
     padding: 0;
     line-height: 1.4;
     margin: 0;
-
-    a {
-      color: $gray;
-    }
   }
 
   small {
@@ -215,4 +212,8 @@
       color: lighten($alt-link-hover-color, 5%);
     }
   }
+}
+
+.employer {
+  color: $gray;
 }

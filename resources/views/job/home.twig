@@ -100,7 +100,7 @@
 
                                                 <p>
                                                     {% if job.firm %}
-                                                        <a title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a> &nbsp;•&nbsp;
+                                                        <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a> &nbsp;•&nbsp;
                                                     {% endif %}
 
                                                     <small>{% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}</small>

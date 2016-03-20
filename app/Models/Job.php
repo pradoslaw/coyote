@@ -168,6 +168,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function referers()
+    {
+        return $this->hasMany('Coyote\Job\Referer');
+    }
+
+    /**
      * @return array
      */
     protected function getIndexBody()

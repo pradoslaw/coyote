@@ -33,6 +33,7 @@ class CreateJobsTable extends Migration
             $table->timestampTz('deadline_at');
             $table->string('email')->nullable();
             $table->tinyInteger('enable_apply')->default(1);
+            $table->integer('visits')->default(0);
             $table->float('score')->default(0);
             $table->mediumInteger('order')->default(0);
 
