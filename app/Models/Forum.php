@@ -104,6 +104,6 @@ class Forum extends Model
             $sql->where('session_id', $sessionId);
         }
 
-        return $sql->pluck('marked_at');
+        return $sql->value('marked_at');
     }
 }
