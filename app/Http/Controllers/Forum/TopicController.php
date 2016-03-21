@@ -193,7 +193,7 @@ class TopicController extends BaseController
 
             if (!$subscribe && auth()->user()->allow_subscribe) {
                 // if this is the first post in this topic, subscribe option depends on user's default setting
-                if (!$topic->users()->where('user_id', $this->userId)->count()) {
+                if (!$topic->users()->forUser($this->userId)->exists()) {
                     $subscribe = true;
                 }
             }
@@ -321,12 +321,12 @@ class TopicController extends BaseController
      */
     public function subscribe($topic)
     {
-        $subscriber = $topic->subscribers()->where('user_id', $this->userId)->first();
+        $subscriber = $topic->subscribers()->forUser($this->userId)->first();
 
         if ($subscriber) {
             $subscriber->delete();
         } else {
-            $topic->subscribers()->create(['topic_id' => $topic->id, 'user_id' => $this->userId]);
+            $topic->subscribers()->create(['user_id' => $this->userId]);
         }
 
         return response($topic->subscribers()->count());

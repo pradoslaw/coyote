@@ -2,12 +2,15 @@
 
 namespace Coyote\Post;
 
+use Coyote\Models\Scopes\ForUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 
 class Accept extends Model
 {
+    use ForUser;
+
     /**
      * The attributes that are mass assignable.
      *

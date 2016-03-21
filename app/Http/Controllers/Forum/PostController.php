@@ -157,7 +157,7 @@ class PostController extends BaseController
             // get topic tags only if this post is the FIRST post in topic
             $tags = $topic->tags->pluck('name')->toArray();
         }
-        $subscribe = $topic->subscribers()->where('user_id', $this->userId)->count();
+        $subscribe = $topic->subscribers()->forUser($this->userId)->count();
         $attachments = $post->attachments()->get();
 
         return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'tags', 'subscribe', 'attachments'));
@@ -479,12 +479,12 @@ class PostController extends BaseController
      */
     public function subscribe($post)
     {
-        $subscriber = $post->subscribers()->where('user_id', $this->userId)->first();
+        $subscriber = $post->subscribers()->forUser($this->userId)->first();
 
         if ($subscriber) {
             $subscriber->delete();
         } else {
-            $post->subscribers()->create(['post_id' => $post->id, 'user_id' => $this->userId]);
+            $post->subscribers()->create(['user_id' => $this->userId]);
         }
     }
 
@@ -513,7 +513,7 @@ class PostController extends BaseController
         }
 
         \DB::transaction(function () use ($post, $topic, $forum) {
-            $result = $post->votes()->where('user_id', $this->userId)->first();
+            $result = $post->votes()->forUser($this->userId)->first();
 
             // build url to post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false) . '?p=' . $post->id . '#id' . $post->id;
