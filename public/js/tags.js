@@ -3,7 +3,8 @@
 
     $.fn.tag = function (config) {
         return this.each(function () {
-            var $this = $(this);
+            var $this = $(this);console.log($this);
+            var name = $this.attr('name') + '[]';
 
             var dropdown = $('<ol class="tag-suggestions"></ol>');
             var index = -1;
@@ -25,10 +26,10 @@
             dropdown.insertAfter(editor);
 
             function setInputWidth() {
-                $(':hidden[name="tag[]"]').remove();
+                $(':hidden[name="' + name + '"]').remove();
 
                 $('ul.tag-clouds li', editor).each(function () {
-                    $('<input>', {'type': 'hidden', 'name': 'tag[]'}).val($(this).text()).insertAfter($this);
+                    $('<input>', {'type': 'hidden', 'name': name}).val($(this).text()).insertAfter($this);
                 });
 
                 var width = editorWidth - $('.tag-clouds').outerWidth();
@@ -49,6 +50,7 @@
             }
 
             function filterData(value) {
+                // @todo odczytywac z pola z klasy TagValidator
                 return $.trim(value.toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, ''));
             }
 

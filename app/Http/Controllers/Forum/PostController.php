@@ -197,7 +197,7 @@ class PostController extends BaseController
                 $isDirty = $post->isDirty('text'); // <-- we only wanna know if text has changed...
                 $activity = new Stream_Update($actor);
 
-                $tags = $request->get('tag', []);
+                $tags = $request->get('tags', []);
                 $log = new Log();
 
                 // user wants to change the subject. we must update "topics" table

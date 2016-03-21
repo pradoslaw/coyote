@@ -86,20 +86,13 @@
             </div>
 
             {% if topic.first_post_id == post.id %}
-                {% set error_tag = '' %}
-                {% for key in errors.keys() %}
-                    {% if 'tag' in key %}
-                        {% set error_tag = errors.first(key) %}
-                    {% endif %}
-                {% endfor %}
-
-                <div class="form-group {{ error_tag != '' ? 'has-error' }}">
+                <div class="form-group {{ errors.any('tags') ? 'has-error' }}">
                     <label class="col-md-2 control-label">Tagi</label>
                     <div class="col-md-10">
-                        {{ form_text('custom_tags', input_old('tag', tags)|join(', '), {'id': 'tag', 'class': 'form-control', 'tabindex': 4, 'placeholder': forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'}) }}
+                        <input id="tags" name="tags" value="{{ input_old('tags[]', tags)|join(', ') }}" class="form-control" tabindex="4" placeholder="{{ forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net' }}">
 
-                        {% if error_tag != '' %}
-                            <span class="help-block">{{ error_tag }}</span>
+                        {% if errors.any('tags') %}
+                            <span class="help-block">{{ errors.first('tags') }}</span>
                         {% else %}
                             <span class="help-block">Możesz opisać swój wątek słowami kluczowymi - np. c#, .net (max. 5 tagów)</span>
                         {% endif %}
@@ -212,7 +205,7 @@
                 }
             });
 
-            $('#tag').tag({
+            $('#tags').tag({
                 validateUrl: '{{ route('tag.validate') }}',
                 promptUrl: '{{ route('tag.prompt') }}'
             });

@@ -125,8 +125,11 @@ return [
             'required'      => 'Temat musi posiadać minimum 3 znaki długości',
             'min'           => 'Temat musi posiadać minimum 3 znaki długości',
         ],
-        'tag' => [
+        'tags' => [
             'required'      => 'Wymagane jest przypisanie minimum jednego tagu do tego wątku'
+        ],
+        'tags.*' => [
+            'max'           => 'Tag nie może być dłuższy niż :max znaków.'
         ],
         // w formularzu forum
         'user_name' => [

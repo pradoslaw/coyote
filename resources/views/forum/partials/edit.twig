@@ -8,7 +8,7 @@
         {{ form_hidden('subject', topic.subject) }}
 
         {% for tag in tags %}
-            {{ form_hidden('tag[]', tag) }}
+            {{ form_hidden('tags[]', tag) }}
         {% endfor %}
     {% endif %}
 

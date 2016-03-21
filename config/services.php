@@ -40,24 +40,29 @@ return [
     ],
 
     'github' => [
-        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_id'     => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_SECRET_ID'),
-        'redirect' => env('GITHUB_REDIRECT'),
+        'redirect'      => env('GITHUB_REDIRECT'),
     ],
 
     'google' => [
-        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_id'     => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_SECRET_ID'),
-        'redirect' => env('GOOGLE_REDIRECT')
+        'redirect'      => env('GOOGLE_REDIRECT')
     ],
 
     'facebook' => [
-        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_id'     => env('FACEBOOK_CLIENT_ID'),
         'client_secret' => env('FACEBOOK_SECRET_ID'),
-        'redirect' => env('FACEBOOK_REDIRECT'),
+        'redirect'      => env('FACEBOOK_REDIRECT'),
     ],
 
     'google-maps' => [
-        'key' => 'AIzaSyCjPih0Ay15fPj2j6KOqqNn2Af902apRz8'
+        'key'           => 'AIzaSyCjPih0Ay15fPj2j6KOqqNn2Af902apRz8'
+    ],
+
+    'geo-ip' => [
+        'host'          => '',
+        'port'          => ''
     ]
 ];

@@ -253,7 +253,7 @@ class TopicController extends BaseController
                 'host'      => request()->server('SERVER_NAME')
             ]);
 
-            $tags = $request->get('tag', []);
+            $tags = $request->get('tags', []);
 
             // assign tags to topic
             $topic->tags()->sync($tag->multiInsert($tags));
