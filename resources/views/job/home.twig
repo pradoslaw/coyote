@@ -44,28 +44,37 @@
                 <div id="box-filter" class="col-sm-3">
                     <h5><i class="fa fa-cog fa-fw"></i> Technologie</h5>
 
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <a href="#"><i class="fa fa-check-square-o"></i> <span>javascript</span> <small>(317 ofert)</small></a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="#"><i class="fa fa-square-o"></i> <span>java</span> <small>(211 ofert)</small></a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="#"><i class="fa fa-square-o"></i> <span>c#</span> <small>(211 ofert)</small></a>
-                        </li>
-                    </ul>
+                    {% if aggregations.tags %}
+                        <ul class="list-group">
+                            {% for tag, count in aggregations.tags %}
+                                <li class="list-group-item">
+                                    {{ form_checkbox('tag[]', tag, tag in selected.tags) }}
 
-                    {% if aggregations.city %}
+                                    <a href="{{ route('job.tag', [tag]) }}">
+                                        {% if tag in selected.tags %}
+                                            <i class="fa fa-check-square-o"></i>
+                                        {% else %}
+                                            <i class="fa fa-square-o"></i>
+                                        {% endif %}
+
+                                        <span>{{ tag }}</span>
+                                        <small>({{ declination(count, ['oferta', 'oferty', 'ofert']) }})</small>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    {% if aggregations.cities %}
                         <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
 
                         <ul class="list-group">
-                            {% for city, count in aggregations.city %}
+                            {% for city, count in aggregations.cities %}
                                 <li class="list-group-item">
-                                    {{ form_checkbox('city[]', city, city in cities) }}
+                                    {{ form_checkbox('city[]', city, city in selected.cities) }}
 
                                     <a href="{{ route('job.city', [city|capitalize]) }}">
-                                        {% if city in cities %}
+                                        {% if city in selected.cities %}
                                             <i class="fa fa-check-square-o"></i>
                                         {% else %}
                                             <i class="fa fa-square-o"></i>

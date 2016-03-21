@@ -16,12 +16,11 @@ class Terms extends Aggs implements DslInterface
     {
         $body = $queryBuilder->getBody();
 
-        $body['aggs'] = [
-            $this->name => [
+        $body['aggs'][$this->name] = [
                 'terms' => [
                     'field' => $this->field
                 ]
-            ]
+
         ];
 
         return $body;

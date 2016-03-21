@@ -2,11 +2,8 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Elasticsearch\Aggs\Job\Location;
-use Coyote\Elasticsearch\Filters\Job\City;
-use Coyote\Elasticsearch\Filters\Job\Firm;
-use Coyote\Elasticsearch\Filters\Job\Tags;
-use Coyote\Elasticsearch\Job\Remote;
+use Coyote\Elasticsearch\Aggs;
+use Coyote\Elasticsearch\Filters;
 use Coyote\Elasticsearch\Query;
 use Coyote\Elasticsearch\QueryBuilderInterface;
 use Coyote\Elasticsearch\Sort;
@@ -31,9 +28,14 @@ class HomeController extends Controller
     private $elasticsearch;
 
     /**
-     * @var City
+     * @var Filters\Job\City
      */
     private $city;
+
+    /**
+     * @var Filters\Job\Tag
+     */
+    private $tag;
 
     /**
      * HomeController constructor.
@@ -46,7 +48,8 @@ class HomeController extends Controller
 
         $this->job = $job;
         $this->elasticsearch = $queryBuilder;
-        $this->city = new City();
+        $this->city = new Filters\Job\City();
+        $this->tag = new Filters\Job\Tag();
     }
 
     /**
@@ -77,7 +80,7 @@ class HomeController extends Controller
      */
     public function tag(Request $request, $name)
     {
-        $this->elasticsearch->addFilter(new Tags($name));
+        $this->tag->addTag($name);
 
         return $this->load($request);
     }
@@ -89,7 +92,7 @@ class HomeController extends Controller
      */
     public function firm(Request $request, $name)
     {
-        $this->elasticsearch->addFilter(new Firm($name));
+        $this->elasticsearch->addFilter(new Filters\Job\Firm($name));
 
         return $this->load($request);
     }
@@ -100,7 +103,7 @@ class HomeController extends Controller
      */
     public function remote(Request $request)
     {
-        $this->elasticsearch->addFilter(new Remote());
+        $this->elasticsearch->addFilter(new Filters\Job\Remote());
 
         return $this->load($request);
     }
@@ -122,13 +125,15 @@ class HomeController extends Controller
         );
 
         $this->elasticsearch->addFilter($this->city);
+        $this->elasticsearch->addFilter($this->tag);
 
         // facet search
-        $this->elasticsearch->addAggs(new Location());
+        $this->elasticsearch->addAggs(new Aggs\Job\Location());
+        $this->elasticsearch->addAggs(new Aggs\Job\Tag());
         $this->elasticsearch->setSize($request->get('page'), self::PER_PAGE);
 
         start_measure('search', 'Elasticsearch');
-
+//dd($this->elasticsearch->build());
         $response = $this->job->search($this->elasticsearch->build());
         stop_measure('search');
 
@@ -136,7 +141,8 @@ class HomeController extends Controller
         // we want to pass collection to the twig (not raw php array)
         $jobs = $response->getSource();
         $aggregations = [
-            'city' => $response->getAggregations('global.locations.city')
+            'cities' => $response->getAggregations('global.locations.city'),
+            'tags' => $response->getAggregations('global.tags')
         ];
 
         $pagination = new LengthAwarePaginator(
@@ -150,7 +156,10 @@ class HomeController extends Controller
         return $this->view('job.home', [
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
-            'cities'            => array_map('mb_strtolower', $this->city->getCities())
+            'selected' => [
+                'tags'          => $this->tag->getTags(),
+                'cities'        => array_map('mb_strtolower', $this->city->getCities())
+            ]
         ])->with(
             compact('jobs', 'aggregations', 'pagination')
         );

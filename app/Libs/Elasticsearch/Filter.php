@@ -47,6 +47,10 @@ abstract class Filter implements DslInterface
      */
     public function apply(QueryBuilderInterface $queryBuilder)
     {
+        if (empty($this->value)) {
+            return $queryBuilder->getBody();
+        }
+
         return $this->addFilter($queryBuilder, [static::FILTER_NAME => [$this->field => $this->value]]);
     }
 }

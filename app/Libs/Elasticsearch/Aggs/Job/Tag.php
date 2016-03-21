@@ -6,13 +6,13 @@ use Coyote\Elasticsearch\Aggs;
 use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\QueryBuilderInterface;
 
-class Location extends Aggs\Nested implements DslInterface
+class Tag extends Aggs\Terms implements DslInterface
 {
     use Job;
 
     public function __construct()
     {
-        parent::__construct('locations', 'city');
+        parent::__construct('tags', 'tag_original');
     }
 
     /**

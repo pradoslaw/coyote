@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Elasticsearch\Job;
+namespace Coyote\Elasticsearch\Filters\Job;
 
 use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\Filters\Term;
