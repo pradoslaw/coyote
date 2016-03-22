@@ -36,6 +36,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        // error handler to JSON request
         if ($request->isXmlHttpRequest()) { // moze lepiej bedzie uzyc wantsJson()?
             $response = [
                 'error' => 'Przepraszamy, ale coś poszło nie tak. Prosimy o kontakt z administratorem.'
@@ -47,15 +48,21 @@ class Handler extends ExceptionHandler
                 $response['trace'] = $e->getTrace();
             }
 
-            $status = 500;
+            $statusCode = 500;
 
             if ($this->isHttpException($e)) {
-                $status = $e->getStatusCode();
+                $statusCode = $e->getStatusCode();
             }
 
-            return response()->json($response, $status);
+            return response()->json($response, $statusCode);
         }
 
-        return parent::render($request, $e);
+        // in debug mode, call parent error handler
+        if (config('app.debug') || parent::isHttpException($e)) {
+            return parent::render($request, $e);
+        }
+
+        // on production site, we MUST render "nice" error page
+        return response()->view('errors.500', [], 500);
     }
 }
