@@ -6,7 +6,6 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
-use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Alert\Alert as Alerts;
 use Coyote\Stream\Activities\Create as Stream_Create;
@@ -14,7 +13,7 @@ use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Stream\Objects\Comment as Stream_Comment;
-use Coyote\Microblog\Subscriber;
+use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
@@ -27,7 +26,6 @@ class CommentController extends Controller
      * @var User
      */
     private $user;
-    private $tag;
 
     /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
@@ -35,22 +33,22 @@ class CommentController extends Controller
      * @param Microblog $microblog
      * @param User $user
      */
-    public function __construct(Microblog $microblog, User $user, TagRepositoryInterface $tag)
+    public function __construct(Microblog $microblog, User $user)
     {
         $this->microblog = $microblog;
         $this->user = $user;
-        $this->tag = $tag;
     }
 
     /**
      * Publikowanie komentarza na mikroblogu
      *
+     * @param Request $request
      * @param null|int $id
      * @return $this
      */
-    public function save($id = null)
+    public function save(Request $request, $id = null)
     {
-        $this->validate(request(), [
+        $this->validate($request, [
             'text'          => 'required|string|max:5000',
             'parent_id'     => 'sometimes|integer|exists:microblogs,id'
         ]);
@@ -59,12 +57,12 @@ class CommentController extends Controller
 
         if ($id === null) {
             $user = auth()->user();
-            $data = request()->only(['text', 'parent_id']) + ['user_id' => $user->id];
+            $data = $request->only(['text', 'parent_id']) + ['user_id' => $user->id];
         } else {
             $this->authorize('update', $microblog);
 
             $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
-            $data = request()->only(['text']);
+            $data = $request->only(['text']);
         }
 
         $microblog->fill($data);
@@ -134,9 +132,7 @@ class CommentController extends Controller
             }
 
             $ref = new Ref_Hash();
-
-            $tagsId = $this->tag->multiInsert($ref->grab($microblog->text));
-            $microblog->tags()->sync($tagsId);
+            $microblog->setTags($ref->grab($microblog->text));
 
             // map microblog object into stream activity object
             $object = (new Stream_Comment())->map($microblog);

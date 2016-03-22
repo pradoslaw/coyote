@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Microblog extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Taggable;
 
     /**
      * The attributes that are mass assignable.
@@ -103,6 +103,9 @@ class Microblog extends Model
         return $this->belongsToMany('Coyote\Tag', 'microblog_tags');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function voters()
     {
         return $this->hasMany('Coyote\Microblog\Vote');

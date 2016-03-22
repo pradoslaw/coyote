@@ -32,7 +32,6 @@ class SubmitController extends Controller
      * @var User
      */
     private $user;
-    private $tag;
 
     /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
@@ -40,27 +39,27 @@ class SubmitController extends Controller
      * @param Microblog $microblog
      * @param User $user
      */
-    public function __construct(Microblog $microblog, User $user, TagRepositoryInterface $tag)
+    public function __construct(Microblog $microblog, User $user)
     {
         $this->microblog = $microblog;
         $this->user = $user;
-        $this->tag = $tag;
     }
 
     /**
      * Publikowanie wpisu na mikroblogu
      *
+     * @param Request $request
      * @param null|int $id
      * @return $this
      */
-    public function save($id = null)
+    public function save(Request $request, $id = null)
     {
-        $this->validate(request(), [
+        $this->validate($request, [
             'text'          => 'required|string|max:10000'
         ]);
 
         $microblog = $this->microblog->findOrNew($id);
-        $data = request()->only(['text']);
+        $data = $request->only(['text']);
 
         if ($id === null) {
             $user = auth()->user();
@@ -78,7 +77,7 @@ class SubmitController extends Controller
             }
         }
 
-        if (request()->has('thumbnail') || count($media['image']) > 0) {
+        if ($request->has('thumbnail') || count($media['image']) > 0) {
             $delete = array_diff($media['image'], (array) request()->get('thumbnail'));
 
             foreach ($delete as $name) {
@@ -137,9 +136,7 @@ class SubmitController extends Controller
             }
 
             $ref = new Ref_Hash();
-
-            $tagsId = $this->tag->multiInsert($ref->grab($microblog->text));
-            $microblog->tags()->sync($tagsId);
+            $microblog->setTags($ref->grab($microblog->text));
 
             event(new MicroblogWasSaved($microblog));
         });
