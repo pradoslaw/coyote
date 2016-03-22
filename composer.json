@@ -27,7 +27,7 @@
         "fzaninotto/faker": "^1.5",
         "erusev/parsedown-extra": "^0.7.0",
         "jenssegers/mongodb": "^2.2",
-        "folklore/image": "^0.2.4",
+        "folklore/image": "0.3.*",
         "ezyang/htmlpurifier": "^4.7",
         "lavary/laravel-menu": "dev-master",
         "elasticsearch/elasticsearch": "~2.0"

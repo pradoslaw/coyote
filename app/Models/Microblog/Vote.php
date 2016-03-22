@@ -2,10 +2,13 @@
 
 namespace Coyote\Microblog;
 
+use Coyote\Models\Scopes\ForUser;
 use Illuminate\Database\Eloquent\Model;
 
 class Vote extends Model
 {
+    use ForUser;
+
     /**
      * The attributes that are mass assignable.
      *

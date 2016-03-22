@@ -44,7 +44,7 @@ class VoteController extends Controller
         }
 
         $microblog = $this->microblog->findOrFail($id);
-        $vote = $microblog->voters()->where('user_id', $this->userId)->first();
+        $vote = $microblog->voters()->forUser($this->userId)->first();
 
         if (!config('app.debug') && $this->userId === $microblog->user_id) {
             return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);

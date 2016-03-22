@@ -4,18 +4,17 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
-use Coyote\Microblog\Subscriber;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
-use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
 use Illuminate\Http\Request;
+use Storage;
 
 /**
  * Class SubmitController
@@ -78,17 +77,17 @@ class SubmitController extends Controller
         }
 
         if ($request->has('thumbnail') || count($media['image']) > 0) {
-            $delete = array_diff($media['image'], (array) request()->get('thumbnail'));
+            $delete = array_diff($media['image'], (array) $request->get('thumbnail'));
 
             foreach ($delete as $name) {
-                unlink(public_path('storage/microblog/' . $name));
+                Storage::disk('public')->delete('microblog/' . $name);
                 unset($media['image'][array_search($name, $media['image'])]);
             }
 
-            $insert = array_diff((array) request()->get('thumbnail'), $media['image']);
+            $insert = array_diff((array) $request->get('thumbnail'), $media['image']);
 
             foreach ($insert as $name) {
-                rename(public_path('storage/tmp/' . $name), public_path('storage/microblog/' . $name));
+                Storage::disk('public')->move('tmp/' . $name, 'microblog/' . $name);
                 $media['image'][] = $name;
             }
 
@@ -221,10 +220,12 @@ class SubmitController extends Controller
 
         if ($request->file('photo')->isValid()) {
             $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
-            $request->file('photo')->move(public_path() . '/storage/tmp/', $fileName);
+            $path = 'tmp/' . $fileName;
+
+            Storage::disk('public')->put($path, file_get_contents($request->file('photo')->getRealPath()));
 
             return response()->json([
-                'url' => url('storage/tmp/' . $fileName),
+                'url' => asset('storage/' . $path),
                 'name' => $fileName
             ]);
         }
@@ -244,13 +245,13 @@ class SubmitController extends Controller
         }
 
         $fileName = uniqid() . '.png';
-        $path = public_path('storage/tmp/' . $fileName);
+        $path = 'tmp/' . $fileName;
 
-        file_put_contents($path, file_get_contents('data://' . substr($input, 7)));
+        Storage::disk('public')->put($path, file_get_contents('data://' . substr($input, 7)));
 
         return response()->json([
             'name' => $fileName,
-            'url' => url('storage/tmp/' . $fileName)
+            'url' => asset('storage/' . $path)
         ]);
     }
 }
