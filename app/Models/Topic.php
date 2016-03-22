@@ -4,10 +4,11 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Coyote\Models\Scopes\Sortable;
 
 class Topic extends Model
 {
-    use SoftDeletes, Sortable;
+    use SoftDeletes, Sortable, Taggable;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +23,8 @@ class Topic extends Model
     protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
+     * Scope used in topic filtering.
+     *
      * @param $query
      * @param $userId
      * @return mixed
@@ -36,6 +39,8 @@ class Topic extends Model
     }
 
     /**
+     * Scope used in topic filtering.
+     *
      * @param $query
      * @param $userId
      * @return mixed

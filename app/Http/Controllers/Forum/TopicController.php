@@ -11,7 +11,6 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
-use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -235,12 +234,11 @@ class TopicController extends BaseController
     /**
      * @param $forum
      * @param PostRequest $request
-     * @param TagRepositoryInterface $tag
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($forum, PostRequest $request, TagRepositoryInterface $tag)
+    public function save($forum, PostRequest $request)
     {
-        $url = \DB::transaction(function () use ($request, $forum, $tag) {
+        $url = \DB::transaction(function () use ($request, $forum) {
             // create new topic
             $topic = $this->topic->create($request->all() + ['forum_id' => $forum->id]);
             // create new post and assign it to topic. don't worry about the rest: trigger will do the work
@@ -256,7 +254,7 @@ class TopicController extends BaseController
             $tags = $request->get('tags', []);
 
             // assign tags to topic
-            $topic->tags()->sync($tag->multiInsert($tags));
+            $topic->setTags($tags);
 
             // assign attachments to the post
             $post->setAttachments($request->get('attachments', []));

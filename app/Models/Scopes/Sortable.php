@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote;
+namespace Coyote\Models\Scopes;
 
 trait Sortable
 {

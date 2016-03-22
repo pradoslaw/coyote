@@ -155,7 +155,7 @@ class PostController extends BaseController
     {
         if ($post->id === $topic->first_post_id) {
             // get topic tags only if this post is the FIRST post in topic
-            $tags = $topic->tags->pluck('name')->toArray();
+            $tags = $topic->getTagNames();
         }
         $subscribe = $topic->subscribers()->forUser($this->userId)->count();
         $attachments = $post->attachments()->get();
@@ -167,18 +167,17 @@ class PostController extends BaseController
      * Save post (edit or create)
      *
      * @param PostRequest $request
-     * @param TagRepositoryInterface $tag
-     * @param $forum
-     * @param $topic
-     * @param null $post
+     * @param \Coyote\Forum $forum
+     * @param \Coyote\Topic $topic
+     * @param \Coyote\Post|null $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(PostRequest $request, TagRepositoryInterface $tag, $forum, $topic, $post = null)
+    public function save(PostRequest $request, $forum, $topic, $post = null)
     {
         // parsing text and store it in cache
         $text = app()->make('Parser\Post')->parse($request->text);
 
-        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post, $tag) {
+        $url = \DB::transaction(function () use ($text, $request, $forum, $topic, $post) {
             $actor = new Stream_Actor(auth()->user());
 
             // url to the post
@@ -214,13 +213,13 @@ class PostController extends BaseController
                     // like user name or sticky checkbox
                     $topic->save();
 
-                    $current = $topic->tags()->lists('name')->toArray();
+                    $current = $topic->getTagNames();
                     $log->subject = $topic->subject;
                     $log->tags = $tags;
 
                     if (array_merge(array_diff($tags, $current), array_diff($current, $tags))) {
                         // assign tags to topic
-                        $topic->tags()->sync($tag->multiInsert($tags));
+                        $topic->setTags($tags);
                         $isDirty = true;
                     }
 
