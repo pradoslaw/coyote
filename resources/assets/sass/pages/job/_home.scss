@@ -1,43 +1,116 @@
-#box-clients {
-  background-color: $gray-lighter;
-  padding: 20px 0 25px 0;
+// Background color for job homepage (only in header of home page)
+$header-footer-color: darken($body-bg, 0.8%);
+$header-footer-border: #c7c7c7;
 
-  .img-responsive {
-    filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale"); /* Firefox 10+, Firefox on Android */
-    filter: gray; /* IE6-9 */
-    -webkit-filter: grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+// Job homepage header. Contains search box and post offer button
+// ---------------------------------------------------------------
 
-    &:hover {
-      filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
-      -webkit-filter: grayscale(0%);
+#job-header-container {
+  background-color: $header-footer-color;
+  border-bottom: 1px solid $header-footer-border;
+
+  .nav-tabs {
+    margin-bottom: -1px;
+    border-bottom: none;
+  }
+
+  .outline {
+    border-radius: $border-radius-large;
+    background-color: darken($gray-lighter, 4%);
+    padding: 5px;
+    display: inline-block;
+
+    .btn-primary {
+      box-shadow: inset 0 1px 1px #fff;
+      background: $brand-primary;
+      border-color: $brand-primary;
     }
-
-    height: 35px;
   }
-
-  h4 {
-    margin-top: 0;
-    margin-bottom: 25px;
-  }
-}
-
-.nav-tabs {
-  margin-bottom: 20px;
 }
 
 // Formularz wyszukiwania oferty
 // -------------------------------------------
 
 #box-search {
-  margin: 20px 0 30px 0;
+  float: none;
+  margin: 25px auto 24px auto;
 
-  label {
+  > form {
+    width: 100%;
+    white-space: nowrap;
+  }
+
+  .form-group {
+    position: relative;
+    float: left;
+    padding: 0;
+    margin-bottom: 0;
+
+    &:before {
+      position: absolute;
+      font-family: FontAwesome;
+      top: 7px;
+      left: 7px;
+      color: lighten($gray-light, 10%);
+      z-index: 9999;
+    }
+
+    input[type=text] {
+      padding-left: 25px;
+      width: 100%;
+      border-radius: $border-radius-small;
+    }
+
+    .col-content {
+      padding-right: 5px;
+    }
+  }
+
+  .input-keywords:before {
+    content: $fa-var-search;
+  }
+
+  .input-location:before {
+    content: $fa-var-map-marker;
+  }
+
+  button[type=submit] {
+    font-size: 12px;
+    width: 100%;
+    @include text-overflow();
+  }
+}
+
+// Post offer button (for employers)
+// -----------------------------------------------------------
+
+#post-offer {
+  margin-top: 20px;
+
+  h4 {
+    text-indent: -9999px;
+    background: url('/img/hand-writing-for-employers.png') no-repeat;
+    background-size: contain;
+    height: 27px;
+  }
+
+  p {
+    font-size: 11px;
     color: $gray;
+    font-style: italic;
+    margin-top: 8px;
   }
 
-  .btn-search {
-    display: block;
+  .btn-primary {
+    font-size: 14px;
   }
+}
+
+// Main content begins here...
+// -----------------------------------------------------
+
+#job-main-content {
+  padding-top: 40px;
 }
 
 #box-filter {
@@ -81,27 +154,6 @@
   }
 }
 
-#box-employers {
-  margin-top: 43px;
-
-  h4 {
-    text-indent: -9999px;
-    background: url('/img/hand-writing-for-employers.png') no-repeat;
-    background-size: contain;
-    height: 27px;
-  }
-
-  ul {
-    li {
-      padding: 8px 0 8px 0;
-
-      i {
-        color: $brand-success;
-      }
-    }
-  }
-}
-
 #box-jobs {
   table {
     border: 1px solid $border-color;
@@ -122,6 +174,63 @@
       border-bottom: 1px solid $border-color;
     }
 
+    .col-logo {
+      width: 70px;
+
+      img {
+        max-width: 100%;
+      }
+
+      @media screen and (max-width: $screen-sm) {
+        width: 35px;
+      }
+
+      @media screen and (max-width: $screen-xs) {
+        display: none;
+      }
+    }
+
+    .col-body {
+      padding: 7px 1% 7px 0;
+
+      h2 {
+        font-size: 15px;
+        margin: 0 0 5px 0;
+      }
+
+      p {
+        font-size: 12px;
+        clear: both;
+        padding: 0;
+        line-height: 1.4;
+        margin: 0;
+      }
+
+      small {
+        color: $gray-light;
+
+        a {
+          font-size: 11px;
+          color: inherit;
+        }
+      }
+
+      .tag-clouds {
+        padding: 0;
+
+        li {
+          a {
+            font-size: 12px;
+            padding: 1px 6px;
+          }
+        }
+      }
+
+      @media screen and (max-width: $screen-xs) {
+        padding-left: 5px;
+      }
+    }
+
     &:hover {
       .btn-fav {
         opacity: 1;
@@ -130,47 +239,6 @@
 
     &.premium td {
       background-color: $unread-bg;
-    }
-  }
-}
-
-.col-logo {
-  width: 70px;
-}
-
-.col-body {
-  padding: 7px 1% 7px 0 !important;
-
-  h2 {
-    font-size: 15px;
-    margin: 0 0 5px 0;
-  }
-
-  p {
-    font-size: 12px;
-    clear: both;
-    padding: 0;
-    line-height: 1.4;
-    margin: 0;
-  }
-
-  small {
-    color: $gray-light;
-
-    a {
-      font-size: 11px;
-      color: inherit;
-    }
-  }
-
-  .tag-clouds {
-    padding: 0;
-
-    li {
-      a {
-        font-size: 12px;
-        padding: 1px 6px;
-      }
     }
   }
 }
@@ -217,6 +285,26 @@
   }
 }
 
-.employer {
-  color: $gray;
+#clients {
+  //background-color: $header-footer-color;
+  //border-top: 1px solid $header-footer-border;
+  padding: 20px 0 25px 0;
+
+  .img-responsive {
+    filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale"); /* Firefox 10+, Firefox on Android */
+    filter: gray; /* IE6-9 */
+    -webkit-filter: grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+
+    &:hover {
+      filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
+      -webkit-filter: grayscale(0%);
+    }
+
+    height: 35px;
+  }
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 25px;
+  }
 }

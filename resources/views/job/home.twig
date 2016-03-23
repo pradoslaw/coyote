@@ -2,46 +2,11 @@
 {% block title %}Praca {{ parent() }}{% endblock %}
 
 {% block container %}
-    <div class="row">
-        <main class="col-md-9">
-            {{ form_open({'id': 'box-search'}) }}
-                <div class="row">
-                    <div class="col-sm-5">
-                        <label>Słowo kluczowe</label>
-
-                        <div class="input-group">
-                            <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                            {{ form_text('q', input_old('q'), {'class': 'form-control form-query', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
-                        </div>
-                    </div>
-                    <div class="col-sm-5">
-                        <label>Lokalizacja</label>
-
-                        <div class="input-group">
-                            <div class="input-group-addon"><i class="fa fa-map-marker"></i></div>
-                            {{ form_text('location', input_old('location'), {'class': 'form-control form-location', 'placeholder': 'Nazwa miejscowości'}) }}
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <label>&nbsp;</label>
-                        <button class="btn btn-primary btn-search" style="width: 100%">
-                            <i class="fa fa-search"></i> Szukaj
-                        </button>
-                    </div>
-                </div>
-            {{ form_close() }}
-
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="{{ route('job.home') }}">Wszystkie</a></li>
-
-                {% if auth_check() %}
-                    <li role="presentation" title="Kliknij, aby zobaczyć oferty pasujące do mnie"><a href="{{ route('job.home') }}">Pasujące do mnie</a></li>
-                    <li role="presentation" title="Kliknij, aby zobaczyć oferty dodane przeze mnie"><a href="{{ route('job.home') }}">Moje</a></li>
-                {% endif %}
-            </ul>
+    <div id="job-main-content" class="row">
+        <main class="col-lg-9 col-md-12">
 
             <div class="row">
-                <div id="box-filter" class="col-sm-3">
+                <div id="box-filter" class="col-sm-3 hidden-xs">
                     <h5><i class="fa fa-cog fa-fw"></i> Technologie</h5>
 
                     {% if aggregations.tags %}
@@ -89,7 +54,7 @@
                     {% endif %}
                 </div>
 
-                <div class="col-sm-9">
+                <div class="col-sm-9 col-xs-12">
                     <nav>
                         {{ pagination|raw }}
                     </nav>
@@ -110,9 +75,9 @@
                                         <tr>
                                             <td class="col-logo">
                                                 {% if job.firm.logo %}
-                                                    <a href="{{ url }}"><img title="{{ job.firm.name }}" src="{{ cdn('storage/logo/' ~ job.firm.logo) }}" width="55"></a>
+                                                    <a href="{{ url }}"><img title="{{ job.firm.name }}" src="{{ cdn('storage/logo/' ~ job.firm.logo) }}" width=""></a>
                                                 {% else %}
-                                                    <img src="{{ cdn('img/logo-gray.png') }}" width="55">
+                                                    <img src="{{ cdn('img/logo-gray.png') }}" width="">
                                                 {% endif %}
                                             </td>
                                             <td class="col-body">
@@ -138,7 +103,7 @@
                                                      </ul>
                                                 {% endif %}
                                             </td>
-                                            <td class="col-salary">
+                                            <td class="col-salary hidden-xs hidden-xxs">
                                                 {% if job.salary_from or job.salary_to %}
                                                     <p class="text-primary">
                                                         {% include 'job.partials.salary' %}
@@ -149,7 +114,7 @@
                                                     </p>
                                                 {% endif %}
                                             </td>
-                                            <td class="col-time">
+                                            <td class="col-time hidden-sm hidden-xs hidden-xxs">
                                                 {% if job.diff_in_days <= 1 %}
                                                     <p><span class="label label-new">Nowe</span></p>
                                                 {% endif %}
@@ -157,11 +122,10 @@
                                                 <small>{{ job.created_at|format_date }}</small>
                                             </td>
                                             <td class="col-fav">
-                                                <a class="btn-fav" href="http://4programmers.net/Praca/Watch/205649" title="Dodaj tę ofertę do ulubionych"></a>
+                                                <a class="btn-fav" href="" title="Dodaj tę ofertę do ulubionych"></a>
                                             </td>
                                         </tr>
                                     {% endfor %}
-
                                 </tbody>
                             </table>
                         </div>
@@ -170,31 +134,72 @@
             </div>
         </main>
 
-        <aside class="col-md-3">
+        <aside class="col-lg-3">
 
-            <section id="box-employers" class="box">
-                <h4>Dla pracodawców</h4>
-
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <ul class="list-unstyled">
-                            <li><i class="fa fa-check"></i> Umieszczenie ogłoszenia <strong>w 100% darmowe</strong>!</li>
-                            <li><i class="fa fa-check"></i> Reklama na naszym forum</li>
-                            <li><i class="fa fa-check"></i> Dostęp do specjalistów IT</li>
-                        </ul>
-
-                        <a class="btn btn-primary" href="#">Dodaj nowe ogłoszenie</a>
-                    </div>
-                </div>
-            </section>
         </aside>
     </div>
 {% endblock %}
 
 {% block fixed %}
+    <div id="job-header-container">
+        <div class="row max-width">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div id="box-search" class="col-md-8 col-sm-12 col-xs-12">
+                                {{ form_open({'url': route('job.home'), 'class': 'form-inline outline'}) }}
+                                    <div class="form-group input-keywords col-sm-5 col-xs-5">
+                                        <div class="col-content">
+                                            {{ form_text('q', input_old('q'), {'class': 'form-control', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group input-location col-sm-5 col-xs-5">
+                                        <div class="col-content">
+                                            {{ form_text('city', input_old('city'), {'class': 'form-control', 'placeholder': 'Nazwa miejscowości'}) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-sm-2 col-xs-2">
+                                        <button class="btn btn-primary btn-search" type="submit">
+                                            <i class="fa fa-search"></i> <span class="hidden-xxs">1 800 ofert</span>
+                                        </button>
+                                    </div>
+
+                                {{ form_close() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active"><a href="{{ route('job.home') }}">Wszystkie</a></li>
+                    <li role="presentation" title="Kliknij, aby zobaczyć oferty pasujące do mnie"><a href="{{ route('job.home') }}">Wybrane dla mnie</a></li>
+
+                    {% if auth_check() %}
+                        <li role="presentation" title="Kliknij, aby zobaczyć oferty dodane przeze mnie"><a href="{{ route('job.home') }}">Moje</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="col-md-3 hidden-sm hidden-xs">
+                <section id="post-offer">
+                    <h4>Dla pracodawców</h4>
+
+                    <span class="outline">
+                        <a href="{{ route('job.submit') }}" class="btn btn-primary" title="Dodaj ofertę pracy zupełnie za darmo!">Dodaj ofertę pracy</a>
+                    </span>
+
+                    <p>* żadnych ukrytych kosztów!</p>
+                </section>
+            </div>
+        </div>
+    </div>
+
     {{ parent() }}
 
-    <div id="box-clients">
+    <div id="clients" class="hidden-sm hidden-xs">
         <div class="row max-width">
             <div class="col-xs-12">
                 <h4>Z naszych usług korzystali...</h4>

@@ -184,33 +184,74 @@
       top: 4px;
       font-size: 17px; }
 
-#box-clients {
-  background-color: #eeeeee;
-  padding: 20px 0 25px 0; }
-  #box-clients .img-responsive {
-    filter: url("data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg'&gt;&lt;filter id='grayscale'&gt;&lt;feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
-    /* Firefox 10+, Firefox on Android */
-    filter: gray;
-    /* IE6-9 */
-    -webkit-filter: grayscale(100%);
-    /* Chrome 19+, Safari 6+, Safari 6+ iOS */
-    height: 35px; }
-    #box-clients .img-responsive:hover {
-      filter: url("data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg'&gt;&lt;filter id='grayscale'&gt;&lt;feColorMatrix type='matrix' values='1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
-      -webkit-filter: grayscale(0%); }
-  #box-clients h4 {
-    margin-top: 0;
-    margin-bottom: 25px; }
-
-.nav-tabs {
-  margin-bottom: 20px; }
+#job-header-container {
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #c7c7c7; }
+  #job-header-container .nav-tabs {
+    margin-bottom: -1px;
+    border-bottom: none; }
+  #job-header-container .outline {
+    border-radius: 6px;
+    background-color: #e4e4e4;
+    padding: 5px;
+    display: inline-block; }
+    #job-header-container .outline .btn-primary {
+      box-shadow: inset 0 1px 1px #fff;
+      background: #80a41a;
+      border-color: #80a41a; }
 
 #box-search {
-  margin: 20px 0 30px 0; }
-  #box-search label {
-    color: #555555; }
-  #box-search .btn-search {
-    display: block; }
+  float: none;
+  margin: 25px auto 24px auto; }
+  #box-search > form {
+    width: 100%;
+    white-space: nowrap; }
+  #box-search .form-group {
+    position: relative;
+    float: left;
+    padding: 0;
+    margin-bottom: 0; }
+    #box-search .form-group:before {
+      position: absolute;
+      font-family: FontAwesome;
+      top: 7px;
+      left: 7px;
+      color: #919191;
+      z-index: 9999; }
+    #box-search .form-group input[type=text] {
+      padding-left: 25px;
+      width: 100%;
+      border-radius: 3px; }
+    #box-search .form-group .col-content {
+      padding-right: 5px; }
+  #box-search .input-keywords:before {
+    content: ""; }
+  #box-search .input-location:before {
+    content: ""; }
+  #box-search button[type=submit] {
+    font-size: 12px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
+
+#post-offer {
+  margin-top: 20px; }
+  #post-offer h4 {
+    text-indent: -9999px;
+    background: url("/img/hand-writing-for-employers.png") no-repeat;
+    background-size: contain;
+    height: 27px; }
+  #post-offer p {
+    font-size: 11px;
+    color: #555555;
+    font-style: italic;
+    margin-top: 8px; }
+  #post-offer .btn-primary {
+    font-size: 14px; }
+
+#job-main-content {
+  padding-top: 40px; }
 
 #box-filter h5 {
   color: #646466;
@@ -237,18 +278,6 @@
     #box-filter .list-group-item a:hover {
       text-decoration: none; }
 
-#box-employers {
-  margin-top: 43px; }
-  #box-employers h4 {
-    text-indent: -9999px;
-    background: url("/img/hand-writing-for-employers.png") no-repeat;
-    background-size: contain;
-    height: 27px; }
-  #box-employers ul li {
-    padding: 8px 0 8px 0; }
-    #box-employers ul li i {
-      color: #5cb85c; }
-
 #box-jobs table {
   border: 1px solid #d0d0d0;
   background: #fff;
@@ -264,36 +293,47 @@
   padding: 5px;
   border-bottom: 1px solid #d0d0d0; }
 
-#box-jobs tr:hover .btn-fav {
-  opacity: 1; }
-
-#box-jobs tr.premium td {
-  background-color: #FFF3CD; }
-
-.col-logo {
+#box-jobs tr .col-logo {
   width: 70px; }
+  #box-jobs tr .col-logo img {
+    max-width: 100%; }
+  @media screen and (max-width: 768px) {
+    #box-jobs tr .col-logo {
+      width: 35px; } }
+  @media screen and (max-width: 480px) {
+    #box-jobs tr .col-logo {
+      display: none; } }
 
-.col-body {
-  padding: 7px 1% 7px 0 !important; }
-  .col-body h2 {
+#box-jobs tr .col-body {
+  padding: 7px 1% 7px 0; }
+  #box-jobs tr .col-body h2 {
     font-size: 15px;
     margin: 0 0 5px 0; }
-  .col-body p {
+  #box-jobs tr .col-body p {
     font-size: 12px;
     clear: both;
     padding: 0;
     line-height: 1.4;
     margin: 0; }
-  .col-body small {
+  #box-jobs tr .col-body small {
     color: #777777; }
-    .col-body small a {
+    #box-jobs tr .col-body small a {
       font-size: 11px;
       color: inherit; }
-  .col-body .tag-clouds {
+  #box-jobs tr .col-body .tag-clouds {
     padding: 0; }
-    .col-body .tag-clouds li a {
+    #box-jobs tr .col-body .tag-clouds li a {
       font-size: 12px;
       padding: 1px 6px; }
+  @media screen and (max-width: 480px) {
+    #box-jobs tr .col-body {
+      padding-left: 5px; } }
+
+#box-jobs tr:hover .btn-fav {
+  opacity: 1; }
+
+#box-jobs tr.premium td {
+  background-color: #FFF3CD; }
 
 .col-salary {
   width: 15%; }
@@ -326,8 +366,22 @@
       content: "";
       color: #e37329; }
 
-.employer {
-  color: #555555; }
+#clients {
+  padding: 20px 0 25px 0; }
+  #clients .img-responsive {
+    filter: url("data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg'&gt;&lt;filter id='grayscale'&gt;&lt;feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
+    /* Firefox 10+, Firefox on Android */
+    filter: gray;
+    /* IE6-9 */
+    -webkit-filter: grayscale(100%);
+    /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+    height: 35px; }
+    #clients .img-responsive:hover {
+      filter: url("data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg'&gt;&lt;filter id='grayscale'&gt;&lt;feColorMatrix type='matrix' values='1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
+      -webkit-filter: grayscale(0%); }
+  #clients h4 {
+    margin-top: 0;
+    margin-bottom: 25px; }
 
 .jumbotron {
   padding-top: 30px;
@@ -661,6 +715,9 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 
 .benefits .list-group-item {
   border: none; }
+
+.employer {
+  color: #555555; }
 
 #job-offer {
   padding: 0 20px; }

@@ -7604,6 +7604,11 @@ ul.breadcrumb {
   border-bottom: 1px solid #c7c7c7; }
   .nav-tabs > li > a {
     color: #777777; }
+  .nav-tabs > li.active > a,
+  .nav-tabs > li.active > a:hover,
+  .nav-tabs > li.active > a:focus,
+  .nav-tabs > li.active > a:active {
+    border-top: 2px solid #d7661c; }
 
 .nav-pills {
   border-bottom: 1px solid #c7c7c7;

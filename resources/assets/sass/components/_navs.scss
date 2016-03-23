@@ -109,6 +109,14 @@
   > li > a {
     color: $gray-light;
   }
+
+  > li.active > a,
+  > li.active > a:hover,
+  > li.active > a:focus,
+  > li.active > a:active {
+    //border-top: 2px solid $brand-primary;
+    border-top: 2px solid $alt-link-hover-color;
+  }
 }
 
 .nav-pills {
