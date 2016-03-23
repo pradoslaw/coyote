@@ -126,6 +126,10 @@ class HomeController extends Controller
             $this->city->addCity($request->get('city'));
         }
 
+        if ($request->has('tag')) {
+            $this->tag->addTag($request->get('tag'));
+        }
+
         $this->elasticsearch->addSort(
             new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
         );
@@ -151,9 +155,11 @@ class HomeController extends Controller
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)
         $jobs = $response->getSource();
+
+        $context = !$request->has('q') ? 'global.' : '';
         $aggregations = [
-            'cities' => $response->getAggregations('global.locations.city'),
-            'tags' => $response->getAggregations('global.tags')
+            'cities' => $response->getAggregations("${context}locations.city"),
+            'tags' => $response->getAggregations("${context}tags")
         ];
 
         $pagination = new LengthAwarePaginator(
@@ -164,6 +170,7 @@ class HomeController extends Controller
 
         $pagination->appends($request->except('page'));
 
+        // we need to display actual number of active offers
         $this->job->pushCriteria(new PriorDeadline());
         $count = $this->job->count();
 

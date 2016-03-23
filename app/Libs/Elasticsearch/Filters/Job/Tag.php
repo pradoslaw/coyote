@@ -28,7 +28,14 @@ class Tag extends Terms implements DslInterface
      */
     public function addTag($tag)
     {
-        $this->tags[] = $tag;
+        if (is_array($tag)) {
+            foreach ($tag as $value) {
+                $this->addTag($value);
+            }
+        } else {
+            $this->tags[] = $tag;
+        }
+
         return $this;
     }
 
