@@ -227,7 +227,7 @@ class SubmitController extends Controller
             }
         }
 
-        $locations = array_filter(array_unique(array_map('trim', preg_split('/[\/,]/', $data['city']))));
+        $locations = Job\Location::transformToArray($data['city']);
         $job->fill($data);
 
         $job->deadline_at = Carbon::now()->addDay($data['deadline']);

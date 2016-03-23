@@ -265,7 +265,8 @@
   #box-filter .list-group-item a {
     color: #555555;
     display: block;
-    font-size: 12px; }
+    font-size: 12px;
+    padding-left: 19px; }
     #box-filter .list-group-item a i {
       font-size: 17px;
       vertical-align: middle; }
@@ -275,8 +276,31 @@
     #box-filter .list-group-item a small {
       color: #777777;
       font-size: 9px; }
-    #box-filter .list-group-item a:hover {
+    #box-filter .list-group-item a:before {
+      position: absolute;
+      font-family: FontAwesome;
+      content: "";
+      left: 5px;
+      top: 1px;
+      font-size: 19px; }
+    #box-filter .list-group-item a:hover,
+    #box-filter .list-group-item a:focus,
+    #box-filter .list-group-item a:active {
       text-decoration: none; }
+
+#box-filter .btn-reset {
+  color: #777777;
+  font-size: 12px;
+  margin-top: 10px; }
+  #box-filter .btn-reset:hover {
+    color: #555555;
+    text-decoration: none; }
+
+#box-filter .form-search {
+  margin-top: 30px; }
+
+#box-filter input[type="checkbox"]:checked + a:before {
+  content: ""; }
 
 #box-jobs table {
   border: 1px solid #d0d0d0;

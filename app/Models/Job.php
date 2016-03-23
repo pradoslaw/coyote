@@ -136,6 +136,17 @@ class Job extends Model
     }
 
     /**
+     * Scope for currently active job offers
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePriorDeadline($query)
+    {
+        return $query->where('deadline_at', '>', date('Y-m-d H:i:s'));
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function locations()

@@ -130,7 +130,8 @@ $header-footer-border: #c7c7c7;
     a {
       color: $gray;
       display: block;
-      font-size: 12px;
+      font-size: $font-size-small;
+      padding-left: 19px;
 
       i {
         font-size: $font-size-large;
@@ -147,9 +148,39 @@ $header-footer-border: #c7c7c7;
         font-size: 9px;
       }
 
-      &:hover {
+      &:before {
+        @include font-awesome($fa-var-square-o);
+        left: 5px;
+        top: 1px;
+        font-size: 19px;
+      }
+
+      &:hover,
+      &:focus,
+      &:active {
         text-decoration: none;
       }
+    }
+  }
+
+  .btn-reset {
+    color: $gray-light;
+    font-size: $font-size-small;
+    margin-top: 10px;
+
+    &:hover {
+      color: $gray;
+      text-decoration: none;
+    }
+  }
+
+  .form-search {
+    margin-top: 30px;
+  }
+
+  input[type="checkbox"]:checked + a {
+    &:before {
+      content: $fa-var-check-square-o;
     }
   }
 }

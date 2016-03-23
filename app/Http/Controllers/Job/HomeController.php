@@ -9,8 +9,10 @@ use Coyote\Elasticsearch\QueryBuilderInterface;
 use Coyote\Elasticsearch\Sort;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
+use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Illuminate\Http\Request;
 use Coyote\Job;
+use Coyote\Currency;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class HomeController extends Controller
@@ -120,10 +122,16 @@ class HomeController extends Controller
             );
         }
 
+        if ($request->has('city')) {
+            $this->city->addCity($request->get('city'));
+        }
+
         $this->elasticsearch->addSort(
             new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
         );
 
+        // it's really important. we MUST show only active offers
+        $this->elasticsearch->addFilter(new Filters\Range('deadline_at', ['gte' => 'now']));
         $this->elasticsearch->addFilter($this->city);
         $this->elasticsearch->addFilter($this->tag);
 
@@ -133,7 +141,10 @@ class HomeController extends Controller
         $this->elasticsearch->setSize($request->get('page'), self::PER_PAGE);
 
         start_measure('search', 'Elasticsearch');
-//dd($this->elasticsearch->build());
+
+        // show build query in laravel's debugbar
+        debugbar()->debug($this->elasticsearch->build());
+
         $response = $this->job->search($this->elasticsearch->build());
         stop_measure('search');
 
@@ -153,15 +164,19 @@ class HomeController extends Controller
 
         $pagination->appends($request->except('page'));
 
+        $this->job->pushCriteria(new PriorDeadline());
+        $count = $this->job->count();
+
         return $this->view('job.home', [
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
+            'currencyList'      => Currency::lists('name', 'id'),
             'selected' => [
                 'tags'          => $this->tag->getTags(),
                 'cities'        => array_map('mb_strtolower', $this->city->getCities())
             ]
         ])->with(
-            compact('jobs', 'aggregations', 'pagination')
+            compact('jobs', 'aggregations', 'pagination', 'count')
         );
     }
 }

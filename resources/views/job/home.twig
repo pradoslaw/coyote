@@ -1,57 +1,80 @@
 {% extends 'job/base.twig' %}
 {% block title %}Praca {{ parent() }}{% endblock %}
 
+{% set declinationOffers = ['oferta', 'oferty', 'ofert'] %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="{{ cdn('js/job.js') }}"></script>
+{% endblock %}
+
 {% block container %}
     <div id="job-main-content" class="row">
         <main class="col-lg-9 col-md-12">
 
             <div class="row">
                 <div id="box-filter" class="col-sm-3 hidden-xs">
-                    <h5><i class="fa fa-cog fa-fw"></i> Technologie</h5>
+                    {{ form_open({'url': request().fullUrl(), 'method': 'get', 'class': 'form-horizontal'}) }}
+                        {{ form_hidden('q', request('q')) }}
 
-                    {% if aggregations.tags %}
-                        <ul class="list-group">
-                            {% for tag, count in aggregations.tags %}
-                                <li class="list-group-item">
-                                    {{ form_checkbox('tag[]', tag, tag in selected.tags) }}
+                        <h5><i class="fa fa-cog fa-fw"></i> Technologie</h5>
 
-                                    <a href="{{ route('job.tag', [tag]) }}">
-                                        {% if tag in selected.tags %}
-                                            <i class="fa fa-check-square-o"></i>
-                                        {% else %}
-                                            <i class="fa fa-square-o"></i>
-                                        {% endif %}
+                        {% if aggregations.tags %}
+                            <ul class="list-group">
+                                {% for tag, count in aggregations.tags %}
+                                    <li class="list-group-item">
+                                        {{ form_checkbox('tag[]', tag, tag in selected.tags) }}
 
-                                        <span>{{ tag }}</span>
-                                        <small>({{ declination(count, ['oferta', 'oferty', 'ofert']) }})</small>
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                                        <a href="{{ route('job.tag', [tag]) }}">
+                                            <span>{{ tag }}</span>
+                                            <small>({{ declination(count, declinationOffers) }})</small>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
-                    {% if aggregations.cities %}
-                        <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
+                        {% if aggregations.cities %}
+                            <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
 
-                        <ul class="list-group">
-                            {% for city, count in aggregations.cities %}
-                                <li class="list-group-item">
-                                    {{ form_checkbox('city[]', city, city in selected.cities) }}
+                            <ul class="list-group">
+                                {% for city, count in aggregations.cities %}
+                                    <li class="list-group-item">
+                                        {{ form_checkbox('city[]', city, city in selected.cities) }}
 
-                                    <a href="{{ route('job.city', [city|capitalize]) }}">
-                                        {% if city in selected.cities %}
-                                            <i class="fa fa-check-square-o"></i>
-                                        {% else %}
-                                            <i class="fa fa-square-o"></i>
-                                        {% endif %}
+                                        <a href="{{ route('job.city', [city|capitalize]) }}">
+                                            <span>{{ city|capitalize }}</span>
+                                            <small>({{ declination(count, declinationOffers) }})</small>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
-                                        <span>{{ city|capitalize }}</span>
-                                        <small>({{ declination(count, ['oferta', 'oferty', 'ofert']) }})</small>
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                        <h5><i class="fa fa-leaf"></i> Wynagrodzenie</h5>
+
+                        <div class="form-group row">
+                            <label for="salary-input" class="col-xs-1 control-label">od</label>
+
+                            <div class="col-xs-4">
+                                {{ form_text('salary', request('salary'), {'id': 'salary-input', 'class': 'input-sm form-control', 'placeholder': '3000'}) }}
+                            </div>
+                            <div class="col-xs-4" style="padding-left: 0">
+                                {{ form_select('currency', currencyList, request('currency'), {'class': 'input-sm form-control'}) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group row form-search">
+                            <div class="col-xs-6">
+                                <button type="submit" class="btn btn-sm btn-primary">Szukaj</button>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="{{ route('job.home') }}" class="pull-right btn-reset"><i class="fa fa-remove"></i> Wyczyść filtr</a>
+                            </div>
+                        </div>
+
+                    {{ form_close() }}
                 </div>
 
                 <div class="col-sm-9 col-xs-12">
@@ -75,9 +98,9 @@
                                         <tr>
                                             <td class="col-logo">
                                                 {% if job.firm.logo %}
-                                                    <a href="{{ url }}"><img title="{{ job.firm.name }}" src="{{ cdn('storage/logo/' ~ job.firm.logo) }}" width=""></a>
+                                                    <a href="{{ url }}"><img title="{{ job.firm.name }}" src="{{ cdn('storage/logo/' ~ job.firm.logo) }}"></a>
                                                 {% else %}
-                                                    <img src="{{ cdn('img/logo-gray.png') }}" width="">
+                                                    <img src="{{ cdn('img/logo-gray.png') }}">
                                                 {% endif %}
                                             </td>
                                             <td class="col-body">
@@ -148,22 +171,22 @@
                     <div class="col-xs-12">
                         <div class="row">
                             <div id="box-search" class="col-md-8 col-sm-12 col-xs-12">
-                                {{ form_open({'url': route('job.home'), 'class': 'form-inline outline'}) }}
+                                {{ form_open({'url': route('job.home'), 'class': 'form-inline outline', 'method': 'get'}) }}
                                     <div class="form-group input-keywords col-sm-5 col-xs-5">
                                         <div class="col-content">
-                                            {{ form_text('q', input_old('q'), {'class': 'form-control', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
+                                            {{ form_text('q', request('q'), {'class': 'form-control', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
                                         </div>
                                     </div>
 
                                     <div class="form-group input-location col-sm-5 col-xs-5">
                                         <div class="col-content">
-                                            {{ form_text('city', input_old('city'), {'class': 'form-control', 'placeholder': 'Nazwa miejscowości'}) }}
+                                            {{ form_text('city', request('city')|join(', '), {'class': 'form-control', 'placeholder': 'Nazwa miejscowości'}) }}
                                         </div>
                                     </div>
 
                                     <div class="form-group col-sm-2 col-xs-2">
                                         <button class="btn btn-primary btn-search" type="submit">
-                                            <i class="fa fa-search"></i> <span class="hidden-xxs">1 800 ofert</span>
+                                            <i class="fa fa-search"></i> <span class="hidden-xxs">{{ declination(count, declinationOffers) }}</span>
                                         </button>
                                     </div>
 

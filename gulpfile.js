@@ -29,7 +29,8 @@ elixir(function (mix) {
         'main.js'
     ];
 
-    mix.babel(['pages/job/submit.js'], 'public/js/job-submit.js');
+    mix.babel(['pages/job/submit.js'], 'public/js/job-submit.js')
+        .babel(['pages/job.js'], 'public/js/job.js');
 
     mix.scripts(base, 'public/js/main.js')
         /*
@@ -126,6 +127,7 @@ elixir(function (mix) {
         'js/main.js',
         'js/microblog.js',
         'js/forum.js',
+        'js/job.js',
         'js/job-submit.js',
         'js/posting.js',
         'js/wikieditor.js',
