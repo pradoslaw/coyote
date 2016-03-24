@@ -23,7 +23,7 @@ class SettingsController extends Controller
 
         $groupList = [null => '-- wybierz --'] + Group\User::groupList(auth()->user()->id)->toArray();
 
-        $email = Actkey::where('user_id', auth()->user()->id)->pluck('email');
+        $email = Actkey::where('user_id', auth()->user()->id)->value('email');
 
         return $this->view('user.settings', [
             'formatList'        => User::dateFormatList(),
