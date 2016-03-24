@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateJobFavoritesTable extends Migration
+class CreateJobSubscribersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateJobFavoritesTable extends Migration
      */
     public function up()
     {
-        Schema::create('job_favorites', function (Blueprint $table) {
+        Schema::create('job_subscribers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('job_id');
             $table->integer('user_id');
@@ -32,6 +32,6 @@ class CreateJobFavoritesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('job_favorites');
+        Schema::drop('job_subscribers');
     }
 }
