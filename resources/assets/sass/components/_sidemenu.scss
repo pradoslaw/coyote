@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+// @todo Do refaktoryzacji. Ikony CSS ustawiamy tutaj w pliku CSS ale lepiej to zrobic wprost w kodzie HTML
 .side-menu {
   margin: 0 0 30px 0;
   padding: 0;
@@ -21,9 +22,19 @@
       opacity: .8;
       @include text-overflow();
 
+      i {
+        font-size: 15px;
+        margin-right: 5px;
+      }
+
       &:hover {
         color: $brand-primary;
         text-decoration: none;
+
+        i {
+          color: $gray-dark;
+          opacity: 1;
+        }
       }
     }
 

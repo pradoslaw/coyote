@@ -109,28 +109,16 @@
   margin-top: 30px;
 }
 
-.btn-subscribe:before {
-  @include font-awesome($fa-var-star-o);
-}
+.side-menu {
+  li a {
+    padding-left: 2px;
+  }
 
-.btn-edit:before {
-  @include font-awesome($fa-var-edit);
-}
-
-.btn-delete:before {
-  @include font-awesome($fa-var-remove);
-}
-
-.btn-move:before {
-  @include font-awesome($fa-var-arrow-circle-o-right);
-}
-
-.btn-flag:before {
-  @include font-awesome($fa-var-flag);
-}
-
-.btn-add:before {
-  @include font-awesome($fa-var-pencil);
+  .on:hover {
+    i {
+      color: lighten($alt-link-hover-color, 5%);
+    }
+  }
 }
 
 #box-job-firm {

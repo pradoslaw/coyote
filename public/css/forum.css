@@ -191,9 +191,15 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis; }
+      .side-menu > li > a i {
+        font-size: 15px;
+        margin-right: 5px; }
       .side-menu > li > a:hover {
         color: #80a41a;
         text-decoration: none; }
+        .side-menu > li > a:hover i {
+          color: #333333;
+          opacity: 1; }
     .side-menu > li:before {
       opacity: .8; }
     .side-menu > li:last-child {

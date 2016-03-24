@@ -191,9 +191,15 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis; }
+      .side-menu > li > a i {
+        font-size: 15px;
+        margin-right: 5px; }
       .side-menu > li > a:hover {
         color: #80a41a;
         text-decoration: none; }
+        .side-menu > li > a:hover i {
+          color: #333333;
+          opacity: 1; }
     .side-menu > li:before {
       opacity: .8; }
     .side-menu > li:last-child {
@@ -240,7 +246,7 @@
       top: 7px;
       left: 7px;
       color: #919191;
-      z-index: 9999; }
+      z-index: 1; }
     #box-search .form-group input[type=text] {
       padding-left: 25px;
       width: 100%;
@@ -275,6 +281,8 @@
 
 #job-main-content {
   padding-top: 40px; }
+  #job-main-content aside .box:first-child > h4 {
+    margin-top: 0; }
 
 #box-filter h5 {
   color: #646466;
@@ -389,13 +397,7 @@
 #box-jobs tr .col-fav {
   width: 40px; }
 
-#box-jobs tr:hover .btn-subscribe {
-  opacity: 1; }
-
-#box-jobs tr.premium td {
-  background-color: #FFF3CD; }
-
-a.btn-subscribe {
+#box-jobs tr .btn-subscribe {
   opacity: .3;
   float: right;
   width: 16px;
@@ -404,6 +406,15 @@ a.btn-subscribe {
   margin: 0 5px 0 0;
   position: relative;
   display: inline-block; }
+
+#box-jobs tr .btn-subscribe.on {
+  opacity: 1; }
+
+#box-jobs tr:hover .btn-subscribe {
+  opacity: 1; }
+
+#box-jobs tr.premium td {
+  background-color: #FFF3CD; }
 
 #clients {
   padding: 20px 0 25px 0; }
@@ -755,16 +766,20 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 .benefits .list-group-item {
   border: none; }
 
-.btn-subscribe:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: ""; }
+.btn-subscribe .fa-star-o {
+  display: inline-block; }
 
-.btn-subscribe.on {
-  opacity: 1; }
-  .btn-subscribe.on:before {
-    content: "";
-    color: #e37329; }
+.btn-subscribe .fa-star {
+  display: none; }
+
+.btn-subscribe.on .fa-star-o {
+  display: none; }
+
+.btn-subscribe.on .fa-star {
+  display: inline-block; }
+
+.btn-subscribe.on i {
+  color: #e37329; }
 
 img[src*="logo-gray"] {
   opacity: 0.7; }
@@ -839,35 +854,11 @@ img[src*="logo-gray"] {
 #apply {
   margin-top: 30px; }
 
-.btn-subscribe:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: ""; }
+.side-menu li a {
+  padding-left: 2px; }
 
-.btn-edit:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: ""; }
-
-.btn-delete:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: ""; }
-
-.btn-move:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: ""; }
-
-.btn-flag:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: ""; }
-
-.btn-add:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: ""; }
+.side-menu .on:hover i {
+  color: #e37329; }
 
 #box-job-firm ul {
   margin-bottom: 0; }

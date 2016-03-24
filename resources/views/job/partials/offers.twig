@@ -1,0 +1,70 @@
+<nav>
+    {{ pagination|raw }}
+</nav>
+
+<section class="panel panel-wrapper">
+    <div id="box-jobs" class="panel-body">
+        <ul id="sort" class="hidden-xs">
+            <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
+            <li>{{ sortable('id', 'Data dodania', ['_score', 'desc']) }}</li>
+            <li>{{ sortable('salary', 'Wynagrodzenie', ['_score', 'desc']) }}</li>
+        </ul>
+
+        <table>
+            <tbody>
+            {% for job in jobs %}
+                {% set url = route('job.offer', [job.id, job.path]) %}
+
+                <tr>
+                    <td class="col-logo">
+                        {% if job.firm.logo %}
+                            <a href="{{ url }}"><img title="{{ job.firm.name }}" src="{{ cdn('storage/logo/' ~ job.firm.logo) }}"></a>
+                        {% else %}
+                            <img src="{{ cdn('img/logo-gray.png') }}">
+                        {% endif %}
+                    </td>
+                    <td class="col-body">
+                        <h2><a href="{{ url }}">{{ job.title }}</a></h2>
+
+                        <p>
+                            {% if job.firm %}
+                                <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a> &nbsp;•&nbsp;
+                            {% endif %}
+
+                            <small>{% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}</small>
+                        </p>
+
+                        {% if job.tags %}
+                            <ul class="tag-clouds hidden-sm hidden-xs">
+                                {% for tag in job.tags %}
+                                    <li><a data-category="job-tag" data-action="offer" data-value="{{ tag }}" title="Znajdź oferty z technologii: {{ tag }}" href="{{ route('job.tag', [tag]) }}">{{ tag }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                    <td class="col-salary hidden-xs hidden-xxs">
+                        {% if job.salary_from or job.salary_to %}
+                            <p class="text-primary">
+                                {% include 'job.partials.salary' with {'rate_label': true} %}
+                            </p>
+                        {% endif %}
+                    </td>
+                    <td class="col-time hidden-sm hidden-xs hidden-xxs">
+                        {% if job.diff_in_days <= 1 %}
+                            <p><span class="label label-new">Nowe</span></p>
+                        {% endif %}
+
+                        <small>{{ job.created_at|format_date }}</small>
+                    </td>
+                    <td class="col-fav">
+                        <a class="btn-subscribe {{ subscribes.contains('id', job.id) ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}" title="Dodaj lub usuń tę ofertę do ulubionych">
+                            <i class="fa fa-fw fa-star-o"></i>
+                            <i class="fa fa-fw fa-star"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>

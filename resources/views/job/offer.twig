@@ -1,4 +1,4 @@
-{% extends 'layout.twig' %}
+{% extends 'job.base' %}
 {% block title %}
     {{ job.title }}
 
@@ -144,27 +144,33 @@
 
         <aside class="col-sm-3">
             <ul class="side-menu">
-                <li class="btn-subscribe {{ subscribed ? 'on' }}">
-                    <a href="{{ route('job.subscribe', [job.id]) }}">
+                <li>
+                    <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}">
+                        <i class="fa fa-fw fa-star-o"></i>
+                        <i class="fa fa-fw fa-star"></i>
+
                         {{ not subscribed ? 'Dodaj do ulubionych' : 'Usuń z ulubionych' }}
                     </a>
                 </li>
                 {% if can('update', job) %}
-                    <li class="btn-edit">
-                        <a href="{{ route('job.submit', [job.id]) }}">Edycja oferty</a>
+                    <li>
+                        <a class="btn-edit" href="{{ route('job.submit', [job.id]) }}">
+                            <i class="fa fa-fw fa-edit"></i>
+                            Edycja oferty
+                        </a>
                     </li>
                 {% endif %}
-                <li class="btn-add">
-                    <a href="{{ route('job.submit') }}?revalidate=1">Dodaj ofertę pracy</a>
+                <li>
+                    <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fa fa-fw fa-pencil"></i> Dodaj ofertę pracy</a>
                 </li>
-                <li class="btn-delete">
-                    <a href="javascript:">Usuń tę ofertę pracy</a>
+                <li>
+                    <a class="btn-delete" href="javascript:"><i class="fa fa-fw fa-remove"></i> Usuń tę ofertę pracy</a>
                 </li>
-                <li class="btn-move">
-                    <a href="javascript:">Przenieś na forum</a>
+                <li>
+                    <a class="btn-move" href="javascript:"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
                 </li>
-                <li class="btn-flag">
-                    <a href="javascript:">Zgłoś naruszenie</a>
+                <li>
+                    <a class="btn-flag" href="javascript:"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
                 </li>
             </ul>
 

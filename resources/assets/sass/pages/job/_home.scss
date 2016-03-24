@@ -52,7 +52,7 @@ $header-footer-border: #c7c7c7;
       top: 7px;
       left: 7px;
       color: lighten($gray-light, 10%);
-      z-index: 9999;
+      z-index: 1;
     }
 
     input[type=text] {
@@ -111,6 +111,14 @@ $header-footer-border: #c7c7c7;
 
 #job-main-content {
   padding-top: 40px;
+
+  aside {
+    .box:first-child {
+      > h4 {
+        margin-top: 0;
+      }
+    }
+  }
 }
 
 #box-filter {
@@ -280,6 +288,21 @@ $header-footer-border: #c7c7c7;
       width: 40px;
     }
 
+    .btn-subscribe {
+      opacity: .3;
+      float: right;
+      width: 16px;
+      height: 16px;
+      font-size: 16px;
+      margin: 0 5px 0 0;
+      position: relative;
+      display: inline-block;
+    }
+
+    .btn-subscribe.on {
+      opacity: 1;
+    }
+
     &:hover {
       .btn-subscribe {
         opacity: 1;
@@ -290,18 +313,6 @@ $header-footer-border: #c7c7c7;
       background-color: $unread-bg;
     }
   }
-}
-
-// a.btn-subscribe MUST NOT be inside #box-jobs
-a.btn-subscribe {
-  opacity: .3;
-  float: right;
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-  margin: 0 5px 0 0;
-  position: relative;
-  display: inline-block;
 }
 
 #clients {

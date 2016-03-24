@@ -19,16 +19,25 @@
 // ------------------------------------------------
 
 .btn-subscribe {
-  &:before {
-    @include font-awesome($fa-var-star-o);
+  .fa-star-o {
+    display: inline-block;
+  }
+
+  .fa-star {
+    display: none;
   }
 }
 
 .btn-subscribe.on {
-  opacity: 1;
+  .fa-star-o {
+    display: none;
+  }
 
-  &:before {
-    content: $fa-var-star;
+  .fa-star {
+    display: inline-block;
+  }
+
+  i {
     color: lighten($alt-link-hover-color, 5%);
   }
 }
