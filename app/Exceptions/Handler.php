@@ -57,12 +57,23 @@ class Handler extends ExceptionHandler
             return response()->json($response, $statusCode);
         }
 
-        // in debug mode, call parent error handler
-        if (config('app.debug') || parent::isHttpException($e)) {
-            return parent::render($request, $e);
+        return parent::render($request, $e);
+    }
+
+    /**
+     * Get the html response content.
+     *
+     * @param  string  $content
+     * @param  string  $css
+     * @return string
+     */
+    protected function decorate($content, $css)
+    {
+        if (config('app.debug')) {
+            return parent::decorate($content, $css);
         }
 
         // on production site, we MUST render "nice" error page
-        return response()->view('errors.500', [], 500);
+        return view('errors.500')->render();
     }
 }

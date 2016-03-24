@@ -116,7 +116,7 @@ return [
             'max'           => 'Maksymalna długość tekstu to :max znaków'
         ],
         // m.in. w wiadomosciach prywatnych
-        'author' => [
+        'recipient' => [
             'required'      => 'Proszę wpisać nadawcę wiadomości',
             'exists'        => 'Użytkownik o tej nazwie nie istnieje'
         ],

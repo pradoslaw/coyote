@@ -153,6 +153,11 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        // Obsluga szablonow Twig. Ten serwis umieszczony jest tutaj poniewaz chcemy
+        // aby twig umozliwial generowanie stron bledow na niskim poziomie (np. przy braku polaczenia
+        // z baza danych)
+        TwigBridge\ServiceProvider::class,
+
         // Profiler aplikacji (to musi byc w tym miejscu)
         Barryvdh\Debugbar\ServiceProvider::class,
         // Mozliwosc tworzenia miniaturek zdjec. ten provider umieszczony jest tak wysoko poniewaz
@@ -181,8 +186,6 @@ return [
         // Obsluga Elasticsearch
         Coyote\Providers\ElasticsearchServiceProvider::class,
 
-        // Obsluga szablonow Twig
-        TwigBridge\ServiceProvider::class,
         // Klasa wspierajaca budowanie znacznikow HTML
         Collective\Html\HtmlServiceProvider::class,
 

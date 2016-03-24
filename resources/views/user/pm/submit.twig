@@ -7,11 +7,11 @@
     {{ form_open({'url': route('user.pm.submit'), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
     <div class="form-group">
-        <div class="col-md-12 {{ errors.has('author') > 0 ? 'has-error' }}">
+        <div class="col-md-12 {{ errors.has('recipient') > 0 ? 'has-error' }}">
             {{ form_text('recipient', input_old('recipient', request().get('to')), {'class': 'form-control', 'placeholder': 'Nadawca...', 'id': 'recipient'}) }}
 
-            {% if errors.first('author') %}
-                <span class="help-block">{{ errors.first('author') }}</span>
+            {% if errors.first('recipient') %}
+                <span class="help-block">{{ errors.first('recipient') }}</span>
             {% endif %}
         </div>
     </div>
