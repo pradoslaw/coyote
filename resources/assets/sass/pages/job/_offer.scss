@@ -111,30 +111,28 @@
   margin-top: 30px;
 }
 
-.side-menu {
-  .btn-watch:before {
-    @include font-awesome($fa-var-star-o);
-  }
+.btn-subscribe:before {
+  @include font-awesome($fa-var-star-o);
+}
 
-  .btn-edit:before {
-    @include font-awesome($fa-var-edit);
-  }
+.btn-edit:before {
+  @include font-awesome($fa-var-edit);
+}
 
-  .btn-delete:before {
-    @include font-awesome($fa-var-remove);
-  }
+.btn-delete:before {
+  @include font-awesome($fa-var-remove);
+}
 
-  .btn-move:before {
-    @include font-awesome($fa-var-arrow-circle-o-right);
-  }
+.btn-move:before {
+  @include font-awesome($fa-var-arrow-circle-o-right);
+}
 
-  .btn-flag:before {
-    @include font-awesome($fa-var-flag);
-  }
+.btn-flag:before {
+  @include font-awesome($fa-var-flag);
+}
 
-  .btn-add:before {
-    @include font-awesome($fa-var-pencil);
-  }
+.btn-add:before {
+  @include font-awesome($fa-var-pencil);
 }
 
 #box-job-firm {

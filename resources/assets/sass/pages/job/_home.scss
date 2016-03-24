@@ -262,8 +262,26 @@ $header-footer-border: #c7c7c7;
       }
     }
 
+    .col-salary {
+      width: 15%;
+
+      p {
+        font-weight: bold;
+        font-size: $font-size-small;
+        margin: 0;
+      }
+    }
+
+    .col-time {
+      width: 15%;
+    }
+
+    .col-fav {
+      width: 40px;
+    }
+
     &:hover {
-      .btn-fav {
+      .btn-subscribe {
         opacity: 1;
       }
     }
@@ -274,46 +292,16 @@ $header-footer-border: #c7c7c7;
   }
 }
 
-.col-salary {
-  width: 15%;
-
-  p {
-    font-weight: bold;
-    font-size: $font-size-small;
-    margin: 0;
-  }
-}
-
-.col-time {
-  width: 15%;
-}
-
-.col-fav {
-  width: 40px;
-
-  .btn-fav {
-    opacity: .3;
-    float: right;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-    margin: 0 5px 0 0;
-    position: relative;
-    display: inline-block;
-
-    &:before {
-      @include font-awesome($fa-var-star-o);
-    }
-  }
-
-  .btn-fav.on {
-    opacity: 1;
-
-    &:after {
-      content: $fa-var-star;
-      color: lighten($alt-link-hover-color, 5%);
-    }
-  }
+// a.btn-subscribe MUST NOT be inside #box-jobs
+a.btn-subscribe {
+  opacity: .3;
+  float: right;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  margin: 0 5px 0 0;
+  position: relative;
+  display: inline-block;
 }
 
 #clients {

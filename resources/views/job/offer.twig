@@ -32,17 +32,14 @@
 
                         <div id="job-offer" class="media-body">
                             <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.path]) }}</h1>
+
                             {% if firm.name %}
                                 <a class="employer" title="Zobacz oferty pracy z firmy {{ firm.name }}" href="{{ route('job.firm', [firm.name]) }}">{{ firm.name }}</a>
                             {% endif %}
 
                             {% if job.salary_from or job.salary_to %}
                                 <strong class="salary pull-right text-primary">
-                                    {% include 'job.partials.salary' %} <small>netto</small>
-
-                                    {% if job.rate_id > 1 %}
-                                        <small>/ {{ ratesList[job.rate_id] }}</small>
-                                    {% endif %}
+                                    {% include 'job.partials.salary' with {'net_label': true, 'rate_label': true} %}
                                 </strong>
                             {% endif %}
 
@@ -51,13 +48,7 @@
                                     <i class="fa fa-map-marker"></i>
                                     {{ job.country_name }}
 
-                                    {% if job.locations|length > 0 %}
-                                        • {% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}
-                                    {% endif %}
-
-                                    {% if job.is_remote %}
-                                        <a href="{{ route('job.remote') }}">(praca zdalna)</a>
-                                    {% endif %}
+                                    • {% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}
                                 </li>
                             </ul>
 
@@ -153,8 +144,10 @@
 
         <aside class="col-sm-3">
             <ul class="side-menu">
-                <li class="btn-watch">
-                    <a href="javascript:">Dodaj do ulubionych</a>
+                <li class="btn-subscribe {{ subscribed ? 'on' }}">
+                    <a href="{{ route('job.subscribe', [job.id]) }}">
+                        {{ not subscribed ? 'Dodaj do ulubionych' : 'Usuń z ulubionych' }}
+                    </a>
                 </li>
                 {% if can('update', job) %}
                     <li class="btn-edit">
@@ -212,7 +205,7 @@
                 </section>
             {% endif %}
 
-            <section id="box-job-offers" class="box">
+            <section id="box-job-offers" class="box sidebar-job-offers">
                 <h4><a href="#">Zobacz też</a></h4>
 
                 <div class="panel panel-default">

@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
 #box-job-offers {
+  .panel-default {
+    border: 2px solid lighten($brand-primary, 5%);
+  }
+
   > h4 {
     a {
       background: url("/img/search-headline.png") no-repeat;
@@ -12,17 +16,9 @@
     }
   }
 
-  .panel-default {
-    border: 2px solid lighten($brand-primary, 5%);
-  }
-
   .media {
-    border-bottom: 1px solid $border-color;
-    padding-bottom: 7px;
-    margin-top: 7px;
-
     &:last-child {
-      border-bottom: none;
+
       padding: 10px 0 0 0;
       margin: 0;
       text-align: center;
@@ -34,27 +30,48 @@
       }
     }
   }
+}
 
-  h5 {
-    @include text-overflow;
-    font-size: 14px;
+.sidebar-job-offers {
+  .media {
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 7px;
+    margin-top: 7px;
+
+    .media-heading {
+      margin-bottom: 2px;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 
-  small {
-    color: $gray-light;
-    font-size: 10px;
+  h5 {
+    padding-bottom: 1px;
 
     a {
-      color: $gray-light;
+      @include text-overflow;
+      font-size: 14px;
     }
   }
 
   p {
     font-size: 11px;
     margin: 0;
+  }
+
+  p.bottom {
+    color: $gray-light;
+    font-size: 10px;
+    display: inline;
 
     a {
-      color: $gray;
+      color: $gray-light;
     }
+  }
+
+  img[src*="logo-gray"] {
+    opacity: 0.7;
   }
 }

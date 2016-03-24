@@ -133,6 +133,7 @@ class HomeController extends Controller
         $this->elasticsearch->addSort(
             new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
         );
+        $this->elasticsearch->addSort(new Sort('id', 'desc'));
 
         // it's really important. we MUST show only active offers
         $this->elasticsearch->addFilter(new Filters\Range('deadline_at', ['gte' => 'now']));
@@ -170,9 +171,15 @@ class HomeController extends Controller
 
         $pagination->appends($request->except('page'));
 
-        // we need to display actual number of active offers
+        // we need to display actual number of active offers so don't remove line below!
         $this->job->pushCriteria(new PriorDeadline());
         $count = $this->job->count();
+
+        $subscribes = [];
+
+        if ($this->userId) {
+            $subscribes = $this->job->subscribes($this->userId);
+        }
 
         return $this->view('job.home', [
             'ratesList'         => Job::getRatesList(),
@@ -183,7 +190,7 @@ class HomeController extends Controller
                 'cities'        => array_map('mb_strtolower', $this->city->getCities())
             ]
         ])->with(
-            compact('jobs', 'aggregations', 'pagination', 'count')
+            compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count')
         );
     }
 }

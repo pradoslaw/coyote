@@ -195,6 +195,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscribers()
+    {
+        return $this->hasMany('Coyote\Job\Subscriber');
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)

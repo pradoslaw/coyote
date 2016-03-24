@@ -12,3 +12,11 @@
 {% if salary_from or salary_to %}
     {{ job.currency_name }}
 {% endif %}
+
+{% if net_label %}
+    <small>netto</small>
+{% endif %}
+
+{% if job.rate_id > 1 and rate_label %}
+    <small>/ {{ ratesList[job.rate_id] }}</small>
+{% endif %}

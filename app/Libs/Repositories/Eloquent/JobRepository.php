@@ -28,4 +28,32 @@ class JobRepository extends Repository implements JobRepositoryInterface
                     ->leftJoin('currencies', 'currencies.id', '=', 'currency_id')
                     ->findOrFail($id);
     }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        $this->applyCriteria();
+        return $this->model->count();
+    }
+
+    /**
+     * Get subscribed job offers for given user id
+     *
+     * @param int $userId
+     * @return mixed
+     */
+    public function subscribes($userId)
+    {
+        return $this->model
+                    ->select(['jobs.*', 'firms.name AS firm_name', 'firms.logo', 'currencies.name AS currency_name'])
+                    ->join('job_subscribers', function ($join) use ($userId) {
+                        $join->on('job_id', '=', 'jobs.id')->on('job_subscribers.user_id', '=', \DB::raw($userId));
+                    })
+                    ->leftJoin('firms', 'firms.id', '=', 'firm_id')
+                    ->join('currencies', 'currencies.id', '=', 'currency_id')
+                    ->with('locations')
+                    ->get();
+    }
 }

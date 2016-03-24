@@ -21,6 +21,8 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     Route::get('Firma/{name}', ['uses' => 'HomeController@firm', 'as' => 'firm']);
 
     Route::get('{id}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
+
+    Route::post('Subscribe/{job}', ['uses' => 'SubscribeController@index', 'as' => 'subscribe', 'middleware' => 'auth']);
 });
 
 Route::group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {

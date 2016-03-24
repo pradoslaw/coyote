@@ -3,12 +3,6 @@
 
 {% set declinationOffers = ['oferta', 'oferty', 'ofert'] %}
 
-{% block body %}
-    {{ parent() }}
-
-    <script src="{{ cdn('js/job.js') }}"></script>
-{% endblock %}
-
 {% block container %}
     <div id="job-main-content" class="row">
         <main class="col-lg-9 col-md-12">
@@ -112,10 +106,6 @@
                                                     {% endif %}
 
                                                     <small>{% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}</small>
-
-                                                    {% if job.is_remote %}
-                                                        <small><a title="Praca zdalna jest możliwą opcją w przypadku tego ogłoszenia" href="{{ route('job.remote') }}">(praca zdalna)</a></small>
-                                                    {% endif %}
                                                 </p>
 
                                                 {% if job.tags %}
@@ -129,11 +119,7 @@
                                             <td class="col-salary hidden-xs hidden-xxs">
                                                 {% if job.salary_from or job.salary_to %}
                                                     <p class="text-primary">
-                                                        {% include 'job.partials.salary' %}
-
-                                                        {% if job.rate_id > 1 %}
-                                                            <small>/ {{ ratesList[job.rate_id] }}</small>
-                                                        {% endif %}
+                                                        {% include 'job.partials.salary' with {'rate_label': true} %}
                                                     </p>
                                                 {% endif %}
                                             </td>
@@ -145,7 +131,7 @@
                                                 <small>{{ job.created_at|format_date }}</small>
                                             </td>
                                             <td class="col-fav">
-                                                <a class="btn-fav" href="" title="Dodaj tę ofertę do ulubionych"></a>
+                                                <a class="btn-subscribe {{ subscribes.contains('id', job.id) ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}" title="Dodaj lub usuń tę ofertę do ulubionych"></a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -158,7 +144,37 @@
         </main>
 
         <aside class="col-lg-3">
+            <section class="box sidebar-job-offers">
+                <h4 style="margin-top: 0"><i class="fa fa-star fa-fw"></i> Obserwowane oferty pracy</h4>
 
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {% for job in subscribes %}
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="{{ route('job.offer', [job.id, job.path]) }}" title="{{ job.title }}">
+                                        <img class="media-object" src="{{ cdn(job.logo ? 'storage/logo/' ~ job.logo : 'img/logo-gray.png') }}" style="width: 50px; height: 50px;" alt="{{ job.firm_name }}">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h5 class="media-heading"><a href="{{ route('job.offer', [job.id, job.path]) }}" title="{{ job.title }}">{{ job.title }}</a></h5>
+                                    <p><a class="employer" href="{{ route('job.firm', [job.firm_name]) }}">{{ job.firm_name }}</a></p>
+
+                                    <p class="bottom">
+                                        {% include 'job.partials.location' with {
+                                            'locations': job.locations.lists('city')
+                                        } %}
+
+                                        {% if job.salary_from or job.salary_to %}
+                                            • {% include 'job.partials.salary' %}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
         </aside>
     </div>
 {% endblock %}

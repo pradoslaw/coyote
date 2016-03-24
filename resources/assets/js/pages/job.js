@@ -26,8 +26,13 @@ $(() => {
 
     new Filter($('#box-filter'));
 
-    //$('#box-filter').on('submit', 'form', () => {
-    //
-    //})
+    $('.btn-subscribe').click((e) => {
+        $(e.currentTarget).toggleClass('on');
 
+        $.post($(e.currentTarget).attr('href')).fail((e) => {
+            $('#modal-unauthorized').modal('show');
+        });
+
+        return false;
+    });
 });

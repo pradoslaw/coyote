@@ -5,3 +5,7 @@
 {% endfor %}
 
 {{ data|join(', ')|raw }}
+
+{% if job.is_remote %}
+    <a href="{{ route('job.remote') }}">(praca zdalna)</a>
+{% endif %}

@@ -106,6 +106,9 @@
       font-family: FontAwesome;
       content: ""; }
 
+#box-job-offers .panel-default {
+  border: 2px solid #91ba1d; }
+
 #box-job-offers > h4 a {
   background: url("/img/search-headline.png") no-repeat;
   text-indent: -9999px;
@@ -113,40 +116,45 @@
   display: block;
   background-size: contain; }
 
-#box-job-offers .panel-default {
-  border: 2px solid #91ba1d; }
+#box-job-offers .media:last-child {
+  padding: 10px 0 0 0;
+  margin: 0;
+  text-align: center; }
+  #box-job-offers .media:last-child a {
+    color: #5e7813;
+    font-weight: bold;
+    font-size: 12px; }
 
-#box-job-offers .media {
+.sidebar-job-offers .media {
   border-bottom: 1px solid #d0d0d0;
   padding-bottom: 7px;
   margin-top: 7px; }
-  #box-job-offers .media:last-child {
-    border-bottom: none;
-    padding: 10px 0 0 0;
-    margin: 0;
-    text-align: center; }
-    #box-job-offers .media:last-child a {
-      color: #5e7813;
-      font-weight: bold;
-      font-size: 12px; }
+  .sidebar-job-offers .media .media-heading {
+    margin-bottom: 2px; }
+  .sidebar-job-offers .media:last-child {
+    border-bottom: none; }
 
-#box-job-offers h5 {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: 14px; }
+.sidebar-job-offers h5 {
+  padding-bottom: 1px; }
+  .sidebar-job-offers h5 a {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px; }
 
-#box-job-offers small {
-  color: #777777;
-  font-size: 10px; }
-  #box-job-offers small a {
-    color: #777777; }
-
-#box-job-offers p {
+.sidebar-job-offers p {
   font-size: 11px;
   margin: 0; }
-  #box-job-offers p a {
-    color: #555555; }
+
+.sidebar-job-offers p.bottom {
+  color: #777777;
+  font-size: 10px;
+  display: inline; }
+  .sidebar-job-offers p.bottom a {
+    color: #777777; }
+
+.sidebar-job-offers img[src*="logo-gray"] {
+  opacity: 0.7; }
 
 .side-menu {
   margin: 0 0 30px 0;
@@ -353,42 +361,34 @@
     #box-jobs tr .col-body {
       padding-left: 5px; } }
 
-#box-jobs tr:hover .btn-fav {
+#box-jobs tr .col-salary {
+  width: 15%; }
+  #box-jobs tr .col-salary p {
+    font-weight: bold;
+    font-size: 12px;
+    margin: 0; }
+
+#box-jobs tr .col-time {
+  width: 15%; }
+
+#box-jobs tr .col-fav {
+  width: 40px; }
+
+#box-jobs tr:hover .btn-subscribe {
   opacity: 1; }
 
 #box-jobs tr.premium td {
   background-color: #FFF3CD; }
 
-.col-salary {
-  width: 15%; }
-  .col-salary p {
-    font-weight: bold;
-    font-size: 12px;
-    margin: 0; }
-
-.col-time {
-  width: 15%; }
-
-.col-fav {
-  width: 40px; }
-  .col-fav .btn-fav {
-    opacity: .3;
-    float: right;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-    margin: 0 5px 0 0;
-    position: relative;
-    display: inline-block; }
-    .col-fav .btn-fav:before {
-      position: absolute;
-      font-family: FontAwesome;
-      content: ""; }
-  .col-fav .btn-fav.on {
-    opacity: 1; }
-    .col-fav .btn-fav.on:after {
-      content: "";
-      color: #e37329; }
+a.btn-subscribe {
+  opacity: .3;
+  float: right;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  margin: 0 5px 0 0;
+  position: relative;
+  display: inline-block; }
 
 #clients {
   padding: 20px 0 25px 0; }
@@ -743,6 +743,20 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 .employer {
   color: #555555; }
 
+.btn-subscribe:before {
+  position: absolute;
+  font-family: FontAwesome;
+  content: ""; }
+
+.btn-subscribe.on {
+  opacity: 1; }
+  .btn-subscribe.on:before {
+    content: "";
+    color: #e37329; }
+
+img[src*="logo-gray"] {
+  opacity: 0.7; }
+
 #job-offer {
   padding: 0 20px; }
   #job-offer h1 {
@@ -814,32 +828,32 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 #apply {
   margin-top: 30px; }
 
-.side-menu .btn-watch:before {
+.btn-subscribe:before {
   position: absolute;
   font-family: FontAwesome;
   content: ""; }
 
-.side-menu .btn-edit:before {
+.btn-edit:before {
   position: absolute;
   font-family: FontAwesome;
   content: ""; }
 
-.side-menu .btn-delete:before {
+.btn-delete:before {
   position: absolute;
   font-family: FontAwesome;
   content: ""; }
 
-.side-menu .btn-move:before {
+.btn-move:before {
   position: absolute;
   font-family: FontAwesome;
   content: ""; }
 
-.side-menu .btn-flag:before {
+.btn-flag:before {
   position: absolute;
   font-family: FontAwesome;
   content: ""; }
 
-.side-menu .btn-add:before {
+.btn-add:before {
   position: absolute;
   font-family: FontAwesome;
   content: ""; }

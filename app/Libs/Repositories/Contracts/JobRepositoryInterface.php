@@ -9,4 +9,17 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function findById($id);
+
+    /**
+     * @return int
+     */
+    public function count();
+
+    /**
+     * Get subscribed job offers for given user id
+     *
+     * @param int $userId
+     * @return mixed
+     */
+    public function subscribes($userId);
 }

@@ -79,7 +79,8 @@ class OfferController extends Controller
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
             'employeesList'     => Firm::getEmployeesList(),
-            'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days
+            'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days,
+            'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
         ])->with(
             compact('job', 'firm', 'tagsSet')
         );

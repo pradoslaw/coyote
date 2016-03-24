@@ -1,7 +1,17 @@
-{% extends 'layout.twig' %}
+{% extends 'layout' %}
 
 {% block head %}
     {{ parent() }}
 
     <link rel="stylesheet" href="{{ cdn('css/job.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% import 'components.modals' as modals %}
+
+    {{ parent() }}
+
+    <script src="{{ cdn('js/job.js') }}"></script>
+
+    {{ modals.alert('Należy się zalogować, aby dodać ogłoszenie do ulubionych', 'Logowanie', 'modal-unauthorized') }}
 {% endblock %}
