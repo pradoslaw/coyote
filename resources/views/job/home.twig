@@ -149,29 +149,7 @@
 
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        {% for job in subscribes %}
-                            <div class="media">
-                                <div class="media-left">
-                                    <a href="{{ route('job.offer', [job.id, job.path]) }}" title="{{ job.title }}">
-                                        <img class="media-object" src="{{ cdn(job.logo ? 'storage/logo/' ~ job.logo : 'img/logo-gray.png') }}" style="width: 50px; height: 50px;" alt="{{ job.firm_name }}">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h5 class="media-heading"><a href="{{ route('job.offer', [job.id, job.path]) }}" title="{{ job.title }}">{{ job.title }}</a></h5>
-                                    <p><a class="employer" href="{{ route('job.firm', [job.firm_name]) }}">{{ job.firm_name }}</a></p>
-
-                                    <p class="bottom">
-                                        {% include 'job.partials.location' with {
-                                            'locations': job.locations.lists('city')
-                                        } %}
-
-                                        {% if job.salary_from or job.salary_to %}
-                                            • {% include 'job.partials.salary' %}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            </div>
-                        {% endfor %}
+                        {% include 'components.jobs' with {'jobs': subscribes} %}
                     </div>
                 </div>
             </section>

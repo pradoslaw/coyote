@@ -1,5 +1,12 @@
 @charset "UTF-8";
 
+// Nazwa firmy
+// --------------------------------
+
+.employer {
+  color: $gray;
+}
+
 #box-job-offers {
   .panel-default {
     border: 2px solid lighten($brand-primary, 5%);
@@ -11,14 +18,12 @@
       text-indent: -9999px;
       height: 25px;
       display: block;
-      //background-size: 165px 25px;
       background-size: contain;
     }
   }
 
   .media {
     &:last-child {
-
       padding: 10px 0 0 0;
       margin: 0;
       text-align: center;
@@ -68,6 +73,21 @@
 
     a {
       color: $gray-light;
+    }
+  }
+
+  img {
+    width: 50px;
+    height: 50px;
+
+    @media screen and (max-width: $screen-lg) {
+      width: 35px;
+      height: 35px;
+    }
+
+    @media screen and (max-width: $screen-sm) {
+      width: 25px;
+      height: 25px;
     }
   }
 

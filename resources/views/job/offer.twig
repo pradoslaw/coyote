@@ -199,7 +199,9 @@
                                 {% endif %}
                             </ul>
 
-                            <div id="map" style="height: 300px"></div>
+                            {% if firm.longitude and firm.latitude %}
+                                <div id="map" style="height: 300px"></div>
+                            {% endif %}
                         </div>
                     </div>
                 </section>
@@ -213,27 +215,27 @@
                         <div class="media">
                             <div class="media-left">
                                 <a href="#">
-                                    <img class="media-object" src="/img/apple-touch.png" style="width: 50px; height: 50px;" alt="Power Media S.A.">
+                                    <img class="media-object" src="/img/apple-touch.png" alt="Power Media S.A.">
                                 </a>
                             </div>
                             <div class="media-body">
                                 <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
 
-                                <p><a href="#">Power Media S.A.</a></p>
-                                <small><a href="#">Wrocław</a> • do 5000 zł</small>
+                                <p><a href="#" class="employer">Power Media S.A.</a></p>
+                                <p class="bottom"><a href="#">Wrocław</a> • do 5000 zł</p>
                             </div>
                         </div>
                         <div class="media">
                             <div class="media-left">
                                 <a href="#">
-                                    <img class="media-object" src="/img/apple-touch.png" style="width: 50px; height: 50px;" alt="Power Media S.A.">
+                                    <img class="media-object" src="/img/apple-touch.png" alt="Power Media S.A.">
                                 </a>
                             </div>
                             <div class="media-body">
                                 <h5 class="media-heading"><a href="#">Junior Web Developer</a></h5>
 
-                                <p><a href="#">Power Media S.A.</a></p>
-                                <small><a href="#">Wrocław</a> • do 5000 zł</small>
+                                <p><a href="#" class="employer">Power Media S.A.</a></p>
+                                <p class="bottom"><a href="#">Wrocław</a> • do 5000 zł</p>
                             </div>
                         </div>
 
@@ -260,24 +262,24 @@
     <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
 
     {% if firm.latitude and firm.longitude %}
-    <script type="text/javascript">
-        function initialize() {
-            var coordinates = new google.maps.LatLng({{ firm.latitude }}, {{ firm.longitude }});
-            var mapOptions = {
-                zoom: 16,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                center: coordinates
-            };
+        <script type="text/javascript">
+            function initialize() {
+                var coordinates = new google.maps.LatLng({{ firm.latitude }}, {{ firm.longitude }});
+                var mapOptions = {
+                    zoom: 16,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    center: coordinates
+                };
 
-            var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-            new google.maps.Marker({
-                map: map,
-                position: coordinates
-            });
-        }
+                new google.maps.Marker({
+                    map: map,
+                    position: coordinates
+                });
+            }
 
-        google.maps.event.addDomListener(window, 'load', initialize);
+            google.maps.event.addDomListener(window, 'load', initialize);
     </script>
     {% endif %}
 {% endblock %}

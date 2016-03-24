@@ -1,4 +1,7 @@
 @charset "UTF-8";
+.employer {
+  color: #555555; }
+
 #box-job-offers .panel-default {
   border: 2px solid #91ba1d; }
 
@@ -45,6 +48,18 @@
   display: inline; }
   .sidebar-job-offers p.bottom a {
     color: #777777; }
+
+.sidebar-job-offers img {
+  width: 50px;
+  height: 50px; }
+  @media screen and (max-width: 1200px) {
+    .sidebar-job-offers img {
+      width: 35px;
+      height: 35px; } }
+  @media screen and (max-width: 768px) {
+    .sidebar-job-offers img {
+      width: 25px;
+      height: 25px; } }
 
 .sidebar-job-offers img[src*="logo-gray"] {
   opacity: 0.7; }
