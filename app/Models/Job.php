@@ -252,7 +252,7 @@ class Job extends Model
             'locations'         => $locations,
             'salary'            => $salary,
             // yes, we index currency name so we don't have to look it up in database during search process
-            'currency_name'     => $this->currency()->pluck('name'),
+            'currency_name'     => $this->currency()->value('name'),
             'firm'              => $this->firm()->first(['name', 'logo']),
             'tags'              => $this->tags()->orderBy('priority', 'DESC')->pluck('name')
         ]);

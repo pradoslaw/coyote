@@ -130,6 +130,11 @@ class HomeController extends Controller
             $this->tag->addTag($request->get('tag'));
         }
 
+        if ($request->has('salary')) {
+            $this->elasticsearch->addFilter(new Filters\Range('salary', ['gte' => $request->get('salary')]));
+            $this->elasticsearch->addFilter(new Filters\Job\Currency($request->get('currency')));
+        }
+
         $this->elasticsearch->addSort(
             new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
         );
