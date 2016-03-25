@@ -117,8 +117,9 @@ return [
         ],
         // m.in. w wiadomosciach prywatnych
         'recipient' => [
-            'required'      => 'Proszę wpisać nadawcę wiadomości',
-            'exists'        => 'Użytkownik o tej nazwie nie istnieje'
+            'required'      => 'Proszę wpisać nadawcę wiadomości.',
+            'exists'        => 'Użytkownik o tej nazwie nie istnieje.',
+            'different'     => 'Nie można wysłać wiadomości do samego siebie.'
         ],
         // uzywany na forum
         'subject' => [

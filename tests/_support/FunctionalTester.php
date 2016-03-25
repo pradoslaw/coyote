@@ -1,5 +1,7 @@
 <?php
 
+use Faker\Factory;
+use Coyote\User;
 
 /**
  * Inherited Methods
@@ -23,4 +25,25 @@ class FunctionalTester extends \Codeception\Actor
     /**
      * Define custom actions here
      */
+
+    public function createUser()
+    {
+        $fake = Factory::create();
+
+        return $this->haveRecord('users', [
+            'name'       => $fake->name,
+            'email'      => $fake->email,
+            'password'   => bcrypt($fake->password),
+            'created_at' => new \DateTime(),
+            'updated_at' => new \DateTime(),
+        ]);
+    }
+
+    public function logInAsRandomUser()
+    {
+        $user = User::first();
+        $this->amLoggedAs($user);
+
+        return $user;
+    }
 }

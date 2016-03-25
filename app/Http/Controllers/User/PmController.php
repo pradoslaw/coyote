@@ -153,7 +153,7 @@ class PmController extends Controller
     public function save(Request $request)
     {
         $this->validate($request, [
-            'recipient'          => 'required|username|user_exist',
+            'recipient'          => 'required|username|user_exist|different:' . auth()->user()->name,
             'text'               => 'required',
             'root_id'            => 'sometimes|exists:pm'
         ]);
