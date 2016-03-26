@@ -818,12 +818,26 @@ img[src*="logo-gray"] {
   #job-offer .benefits i {
     color: #80a41a; }
   #job-offer .tags {
-    margin-top: 10px;
-    background: url("/img/hand-writing-nice-to-have.png") no-repeat 58%; }
+    margin-top: 10px; }
     #job-offer .tags .must-have {
       text-indent: -9999px;
       background: url("/img/hand-writing-must-have.png") no-repeat;
       height: 30px; }
+      @media screen and (max-width: 768px) {
+        #job-offer .tags .must-have {
+          display: none; } }
+    #job-offer .tags .nice-to-have {
+      text-indent: -9999px;
+      background: url("/img/hand-writing-nice-to-have.png") no-repeat;
+      height: 45px;
+      position: absolute;
+      z-index: 1000;
+      width: 200px;
+      left: -27px;
+      top: 11px; }
+      @media screen and (max-width: 768px) {
+        #job-offer .tags .nice-to-have {
+          display: none; } }
 
 .metadata {
   color: #777777; }
@@ -846,7 +860,9 @@ img[src*="logo-gray"] {
     .metadata.primary li {
       display: block !important;
       font-size: 90%;
-      margin-bottom: 5px; } }
+      margin-bottom: 10px;
+      padding-left: 0;
+      padding-right: 0; } }
   .metadata.primary li:first-child {
     padding-left: 0; }
 

@@ -19,7 +19,7 @@
 
 {% block container %}
     <div class="row" style="margin-top: 20px">
-        <div class="col-sm-9">
+        <div class="col-md-9">
             <div class="panel panel-default">
 
                 <div class="panel-body">
@@ -80,6 +80,10 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <h5 class="must-have">Wymagane</h5>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <h5 class="nice-to-have">Mile widziane</h5>
                                         </div>
                                     </div>
 
@@ -142,7 +146,7 @@
             </div>
         </div>
 
-        <aside class="col-sm-3">
+        <aside class="col-md-3">
             <ul class="side-menu">
                 <li>
                     <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}">

@@ -46,12 +46,30 @@
 
   .tags {
     margin-top: 10px;
-    background: url("/img/hand-writing-nice-to-have.png") no-repeat 58%;
 
     .must-have {
       text-indent: -9999px;
       background: url('/img/hand-writing-must-have.png') no-repeat;
       height: 30px;
+
+      @media screen and (max-width: $screen-sm) {
+        display: none;
+      }
+    }
+
+    .nice-to-have {
+      text-indent: -9999px;
+      background: url('/img/hand-writing-nice-to-have.png') no-repeat;
+      height: 45px;
+      position: absolute;
+      z-index: 1000;
+      width: 200px;
+      left: -27px;
+      top: 11px;
+
+      @media screen and (max-width: $screen-sm) {
+        display: none;
+      }
     }
   }
 }
@@ -83,12 +101,13 @@
   padding-top: 10px;
   border-top: 1px solid $border-color;
 
-
   li {
     @media screen and (max-width: $screen-xs) {
       display: block !important;
       font-size: 90%;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+      padding-left: 0;
+      padding-right: 0;
     }
 
     &:first-child {
