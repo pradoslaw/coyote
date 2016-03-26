@@ -44,4 +44,12 @@ class Location extends Model
     {
         return $this->belongsTo('Coyote\Job');
     }
+
+    /**
+     * @param $city
+     */
+    public function setCityAttribute($city)
+    {
+        $this->attributes['city'] = capitalize($city);
+    }
 }

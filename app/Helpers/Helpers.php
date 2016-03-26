@@ -88,3 +88,14 @@ function cdn($path, $secure = null)
 
     return '//' . config('app.cdn') . ($path[0] !== '/' ? ('/' . $path) : $path);
 }
+
+/**
+ * Uppercase first character of each word
+ *
+ * @param $string
+ * @return mixed|string
+ */
+function capitalize($string)
+{
+    return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
+}
