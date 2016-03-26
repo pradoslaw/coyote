@@ -82,14 +82,20 @@
                                             <h5 class="must-have">Wymagane</h5>
                                         </div>
 
-                                        <div class="col-sm-6">
-                                            <h5 class="nice-to-have">Mile widziane</h5>
-                                        </div>
+                                        {% if tagsSet[0] %}
+                                            <div class="col-sm-6">
+                                                <h5 class="nice-to-have">Mile widziane</h5>
+                                            </div>
+                                        {% endif %}
                                     </div>
 
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            {{ _self.display_tags(tagsSet[1]) }}
+                                            {% if tagsSet[1] %}
+                                                {{ _self.display_tags(tagsSet[1]) }}
+                                            {% else %}
+                                                --
+                                            {% endif %}
                                         </div>
 
                                         <div class="col-sm-6">
