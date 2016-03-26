@@ -61,8 +61,8 @@ class SubmitController extends Controller
     {
         if ($request->session()->has('job')) {
             // get form content from session and fill model
-            $job = $this->job->forceFill($request->session()->get('job'));
-            $firm = $request->session()->get('firm');
+            $job = $this->job->forceFill((array) $request->session()->get('job'));
+            $firm = $this->firm->forceFill((array) $request->session()->get('firm'));
         } else {
             $job = $this->job->findOrNew($id);
             $job->setDefaultUserId($this->userId);
@@ -74,10 +74,13 @@ class SubmitController extends Controller
                 $job->tags = $job->tags()->get()->each(function (&$item, $key) {
                     $item->priority = $item->pivot->priority;
                 });
+
+                $firm = $this->firm->findOrNew((int) $job->firm_id);
+            } else {
+                // either load firm assigned to existing job offer or load user's default firm
+                $firm = $this->loadDefaultFirm();
             }
 
-            // either load firm assigned to existing job offer or load user's default firm
-            $firm = $this->loadFirm($job->firm_id);
             $job->firm_id = $firm->id; // it's really important to assign default firm id to job offer
 
             if (!empty($firm->id)) {
@@ -87,7 +90,7 @@ class SubmitController extends Controller
 
         $this->authorize('update', $job);
 
-        if (!empty($firm['id'])) {
+        if (!empty($firm->id)) {
             $this->authorize('update', $firm);
         }
 
@@ -135,13 +138,10 @@ class SubmitController extends Controller
             'tags.*.priority'   => 'int|min:0|max:1'
         ]);
 
-        $request->session()->put('job', $request->all());
+        $userId = $request->session()->pull('job.user_id');
+        $request->session()->put('job', $request->all() + ['user_id' => $userId]);
 
-        if ($request->get('done')) {
-            return $this->save($request);
-        }
-
-        return redirect()->route('job.submit.firm');
+        return $this->next($request, redirect()->route('job.submit.firm'));
     }
 
     /**
@@ -201,7 +201,7 @@ class SubmitController extends Controller
             $request->session()->put('firm', $request->all());
         }
 
-        return redirect()->route('job.submit.preview');
+        return $this->next($request, redirect()->route('job.submit.preview'));
     }
 
     /**
@@ -314,6 +314,23 @@ class SubmitController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @param $next
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function next(Request $request, $next)
+    {
+        if ($request->get('done')) {
+            return $this->save($request);
+        }
+
+        return $next;
+    }
+
+    /**
+     * @return mixed
+     */
     private function getFirms()
     {
         // get all firms assigned to user...
@@ -321,20 +338,16 @@ class SubmitController extends Controller
     }
 
     /**
-     * Load given firm from database or get defeault
+     * Load user's default firm
      *
-     * @param $firmId
-     * @return mixed
+     * @return \Coyote\Firm
      */
-    private function loadFirm($firmId)
+    private function loadDefaultFirm()
     {
-        // it must be firm_id from "job" array (in case we are editing an offer)
-        $firm = $this->firm->findOrNew((int) $firmId);
-        $firm->setDefaultUserId($this->userId);
-
+        $firm = $this->firm->newInstance();
         $firms = $this->getFirms();
 
-        if (empty($firm->id) && $firms->count()) {
+        if ($firms->count()) {
             $firm = $firms->first();
         }
 
