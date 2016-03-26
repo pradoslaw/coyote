@@ -3,7 +3,7 @@
 
     $.fn.tag = function (config) {
         return this.each(function () {
-            var $this = $(this);console.log($this);
+            var $this = $(this);
             var name = $this.attr('name') + '[]';
 
             var dropdown = $('<ol class="tag-suggestions"></ol>');

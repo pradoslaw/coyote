@@ -56,4 +56,24 @@ class JobRepository extends Repository implements JobRepositoryInterface
                     ->with('locations')
                     ->get();
     }
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    public function getPopularTags($limit = 1000)
+    {
+        return $this
+                ->app->make('Coyote\Job\Tag')
+                ->select(['name', \DB::raw('COUNT(*) AS count')])
+                ->join('tags', 'tags.id', '=', 'tag_id')
+                ->join('jobs', 'jobs.id', '=', 'job_id')
+                    ->whereNull('jobs.deleted_at')
+                    ->whereNull('tags.deleted_at')
+                ->groupBy('name')
+                ->orderBy(\DB::raw('COUNT(*)'), 'DESC')
+                ->limit($limit)
+                ->get()
+                ->toArray();
+    }
 }

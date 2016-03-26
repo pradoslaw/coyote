@@ -36,11 +36,12 @@ class SubmitController extends Controller
      * SubmitController constructor.
      * @param JobRepositoryInterface $job
      * @param FirmRepositoryInterface $firm
+     * @param TagRepositoryInterface $tag
      */
     public function __construct(JobRepositoryInterface $job, FirmRepositoryInterface $firm, TagRepositoryInterface $tag)
     {
         parent::__construct();
-        $this->middleware('job.session', ['except' => ['getIndex', 'postIndex']]);
+        $this->middleware('job.session', ['except' => ['getIndex', 'postIndex', 'postTag']]);
 
         $this->breadcrumb->push('Praca', route('job.home'));
 
@@ -84,7 +85,8 @@ class SubmitController extends Controller
             'defaultCountryId'  => $defaultCountryId,
             'currencyList'      => Currency::lists('name', 'id'),
             'employmentList'    => Job::getEmploymentList(),
-            'rateList'          => Job::getRatesList()
+            'rateList'          => Job::getRatesList(),
+            'tagsList'          => $this->job->getPopularTags()
         ])->with(
             compact('job')
         );
@@ -272,6 +274,22 @@ class SubmitController extends Controller
         });
 
         return redirect()->route('job.offer', [$job->id, $job->path])->with('success', 'Oferta została prawidłowo dodana.');
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function postTag(Request $request)
+    {
+        $this->validate($request, ['name' => 'required|string|max:25|tag']);
+
+        return view('job.submit.tag', ['tag' =>
+            [
+                'name' => $request->name,
+                'priority' => 1
+            ]
+        ]);
     }
 
     /**

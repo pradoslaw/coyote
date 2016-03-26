@@ -15,6 +15,8 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     Route::get('Submit/Preview', ['uses' => 'SubmitController@getPreview', 'as' => 'submit.preview', 'middleware' => 'auth']);
     Route::post('Submit/Save', ['uses' => 'SubmitController@save', 'as' => 'submit.save', 'middleware' => 'auth']);
 
+    Route::post('Submit/Tag', ['uses' => 'SubmitController@postTag', 'as' => 'submit.tag']);
+
     Route::get('Technologia/{name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     Route::get('Zdalna', ['uses' => 'HomeController@remote', 'as' => 'remote']);
     Route::get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city']);

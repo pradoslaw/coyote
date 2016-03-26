@@ -1,5 +1,197 @@
+class Tags {
+    constructor(options) {
+        let defaults = {
+            input: '#tag',
+            dropdown: '.tag-suggestions',
+            container: '#tags-container',
+            remove: '.btn-remove'
+        };
+
+        this.setup = $.extend(defaults, options);
+
+        this.input = $(this.setup.input);
+        this.dropdown = $(this.setup.dropdown);
+        this.container = $(this.setup.container);
+        this.removeButton = $(this.setup.remove);
+        this.selectedIndex = -1;
+
+        this.dropdown.css({
+            'width':			this.input.outerWidth() - 4,
+            'left':				this.input.position().left,
+            'top':				this.input.position().top + this.input.outerHeight()
+        });
+
+        this.onFocus();
+        this.onKeyUp();
+        this.onKeyDown();
+        this.onHover();
+        this.onItemClick();
+        this.onRemove();
+
+        let self = this;
+
+        $(document).bind('click', (e) => {
+            let $target = $(e.target);
+
+            if (!$target.is(self.input)) {
+                self.hideDropdown();
+            }
+        });
+    }
+
+    onKeyUp() {
+        let self = this;
+
+        this.input.on('keyup', (e) => {
+            let keyCode = e.keyCode || window.event.keyCode;
+
+            if (keyCode === 13) {
+                if ($('li.hover', self.dropdown).find('span').text() !== '') {
+                    self.addTag($('li.hover', self.dropdown).find('span').text());
+                }
+                else if (self.input.val() !== '') {
+                    self.addTag(self.input.val());
+                }
+
+                self.hideDropdown();
+                self.input.val('');
+
+                e.preventDefault();
+            }
+            else if (keyCode === 40) { // down
+                self.select(self.selectedIndex + 1);
+            }
+            else if (keyCode === 38) { // up
+                self.select(self.selectedIndex - 1);
+            }
+            else {
+                let searchText = self.input.val().toLowerCase();
+                let hits = 0;
+
+                $('li', self.dropdown).each((index) => {
+                    let item = $('li:eq(' + index + ')', self.dropdown);
+                    let text = item.find('span').text();
+
+                    if (text.toLowerCase().indexOf(searchText) === -1) {
+                        item.hide();
+                    }
+                    else  {
+                        item.show();
+                        hits++;
+                    }
+                });
+
+                self.dropdown.toggle(hits > 0);
+            }
+        });
+    }
+
+    onKeyDown() {
+        let self = this;
+
+        this.input.on('keydown', (e) => {
+            let keyCode = e.keyCode || window.event.keyCode;
+
+            if (keyCode === 27) {
+                self.input.val('');
+                self.dropdown.hide();
+            }
+            else if (keyCode === 13) {
+                e.preventDefault();
+            }
+        });
+    }
+
+    onHover() {
+        $('li', this.dropdown).hover((e) => {
+                $(e.currentTarget).addClass('hover');
+            },
+            (e) => {
+                $(e.currentTarget).removeClass('hover');
+            });
+    }
+
+    onItemClick() {
+        let self = this;
+
+        this.dropdown.on('click', 'li', (e) => {
+            self.addTag($(e.currentTarget).find('span').text());
+            self.hideDropdown();
+
+            self.input.val('').focus();
+        });
+    }
+
+    onRemove() {
+        this.container.on('click', this.removeButton, (e) => {
+            $(e.currentTarget).parents('.tag-item').remove();
+        });
+    }
+
+    onFocus() {
+        let self = this;
+
+        this.input.on('focus click', () => {
+            self.dropdown.show();
+        });
+    }
+
+    select(position) {
+        let length = $('li:visible', this.dropdown).length;
+
+        if (length > 0) {
+            if (position >= length) {
+                position = 0;
+            }
+            else if (position < 0) {
+                position = length -1;
+            }
+            this.selectedIndex = position;
+
+            $('li:visible', this.dropdown).removeClass('hover');
+            $('li:visible:eq(' + this.selectedIndex + ')', this.dropdown).addClass('hover');
+
+            this.dropdown.scrollTop(position * $('li:first', this.dropdown).outerHeight());
+        }
+    }
+
+    hideDropdown() {
+        this.dropdown.hide();
+    }
+
+    showDropdown() {
+        this.dropdown.show();
+    }
+
+    addTag(value) {
+        value = $.trim(value)
+            .toString()
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/'/g, "&#39;")
+            .replace(/"/g, "&#34;")
+            .toLowerCase()
+            .replace(/ /g, '-');
+
+        let self = this;
+
+        $.post(this.input.data('post-url'), {name: value}, (html) => {
+            self.container.append(html);
+        }).fail(() => {
+            $('#alert').modal('show');
+        });
+
+        this.selectedIndex = - 1;
+        $('li', this.dropdown).removeClass('hover').show();
+    }
+}
+
 $(() => {
     'use strict';
+
+    if ($('#tag').length) {
+        new Tags();
+    }
 
     if (typeof google !== 'undefined') {
         google.maps.event.addDomListener(window, 'load', initialize);

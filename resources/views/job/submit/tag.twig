@@ -1,0 +1,26 @@
+<div class="row tag-item">
+    <div class="col-xs-8">
+        <ol class="tag-clouds">
+            <li><a href="javascript:">{{ tag.name }}</a></li>
+        </ol>
+    </div>
+
+    {{ form_hidden('tags[' ~ tag.name ~ '][name]', tag.name) }}
+
+    <div class="col-xs-3">
+        <div class="radio radio-primary radio-inline">
+            {{ form_radio('tags[' ~ tag.name ~ '][priority]', 1, tag.priority == 1, {'id': tag.name ~ '-must-have'}) }}
+            <label for="{{ tag.name }}-must-have"> Wymagane </label>
+        </div>
+        <div class="radio radio-inline">
+            {{ form_radio('tags[' ~ tag.name ~ '][priority]', 0, tag.priority == 0, {'id': tag.name ~ '-nice-to-have'}) }}
+            <label for="{{ tag.name }}-nice-to-have"> Mile widziane </label>
+        </div>
+    </div>
+
+    <div class="col-xs-1">
+        <a class="btn-xs btn-remove pull-right" href="javascript:" title="Kliknij, aby usunąć tag">
+            <i class="fa fa-remove text-danger"></i>
+        </a>
+    </div>
+</div>

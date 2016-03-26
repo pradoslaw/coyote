@@ -1,17 +1,19 @@
 
 class Filter {
     constructor(form) {
-        this.form = form;
+        this.form = $(form);
 
         this.onFilterClick();
     }
 
     onFilterClick() {
+        let self = this;
+
         this.form.on('click', '.list-group-item a', (e) => {
             let checkbox = $(e.currentTarget).prev(':checkbox');
 
             checkbox.attr('checked', !checkbox.is(':checked'));
-            this.onSubmit();
+            self.onSubmit();
             return false;
         });
     }
@@ -24,7 +26,7 @@ class Filter {
 $(() => {
     'use strict';
 
-    new Filter($('#box-filter'));
+    new Filter('#box-filter');
 
     $('.btn-subscribe').click((e) => {
         $(e.currentTarget).toggleClass('on');

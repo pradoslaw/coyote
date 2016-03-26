@@ -22,4 +22,10 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function subscribes($userId);
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    public function getPopularTags($limit = 1000);
 }
