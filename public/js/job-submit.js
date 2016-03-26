@@ -20,7 +20,6 @@ var Tags = (function () {
         this.input = $(this.setup.input);
         this.dropdown = $(this.setup.dropdown);
         this.container = $(this.setup.container);
-        this.removeButton = $(this.setup.remove);
         this.selectedIndex = -1;
 
         this.dropdown.css({
@@ -134,7 +133,7 @@ var Tags = (function () {
     }, {
         key: 'onRemove',
         value: function onRemove() {
-            this.container.on('click', this.removeButton, function (e) {
+            this.container.on('click', this.setup.remove, function (e) {
                 $(e.currentTarget).parents('.tag-item').remove();
             });
         }

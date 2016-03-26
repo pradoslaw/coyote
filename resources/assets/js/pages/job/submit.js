@@ -12,7 +12,6 @@ class Tags {
         this.input = $(this.setup.input);
         this.dropdown = $(this.setup.dropdown);
         this.container = $(this.setup.container);
-        this.removeButton = $(this.setup.remove);
         this.selectedIndex = -1;
 
         this.dropdown.css({
@@ -123,7 +122,7 @@ class Tags {
     }
 
     onRemove() {
-        this.container.on('click', this.removeButton, (e) => {
+        this.container.on('click', this.setup.remove, (e) => {
             $(e.currentTarget).parents('.tag-item').remove();
         });
     }
