@@ -208,7 +208,7 @@ $(function () {
     }
 
     var navigation = $('#form-navigation');
-    var fixed = $('#form-navigation-fixed');
+    var fixed = $('#form-navbar-fixed');
 
     $('#form-navigation-container').html(navigation.html()).on('click', ':submit', function () {
         $('#job-posting').submit();
@@ -245,7 +245,7 @@ $(function () {
 
     $(':input').focus(function (e) {
         var $this = $(e.currentTarget);
-        var offset = $this.position().top;
+        var offset = $this.offset().top;
         var name = $this.attr('name');
 
         name = name.replace('[', '').replace(']', '');
@@ -253,9 +253,7 @@ $(function () {
         $('.sidebar-hint').hide();
         $('#hint-' + name).fadeIn();
 
-        if (!offset) {
-            offset = $this.parent().position().top;
-        }
+        offset -= $('aside').offset().top;
 
         $('#hint-container').css('top', offset);
     });
@@ -378,6 +376,10 @@ $(function () {
         $('#logo img').attr('src', '/img/logo-gray.png');
 
         return false;
+    });
+
+    $('#btn-save').click(function () {
+        $('input[name="done"]').val(1);
     });
 });
 

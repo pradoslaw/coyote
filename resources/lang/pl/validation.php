@@ -139,10 +139,17 @@ return [
         ],
         // formularz pracy
         'title' => [
-            'required'      => 'Tytuł jest wymagany'
+            'required'      => 'Tytuł jest wymagany.',
+            'min'           => 'Tytuł jest zbyt krótki. Musi mieć minimum 3 znaku długości.'
         ],
         'recruitment' => [
             'required'      => 'Proszę podać informacje w jaki sposób można składać aplikacje na to stanowisko.'
+        ],
+        'salary_from' => [
+            'integer'       => 'Wynagrodzenie "od" musi być liczbą całkowitą.'
+        ],
+        'salary_to' => [
+            'integer'       => 'Wynagrodzenie "do" musi być liczbą całkowitą.'
         ]
     ],
 

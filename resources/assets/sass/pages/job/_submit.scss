@@ -6,6 +6,9 @@
 
 $font-size-control-label: 15px;
 
+// Banner that is shown at the top of the form
+// -------------------------------------------------
+
 .jumbotron {
   padding: 15px 30px;
 
@@ -25,6 +28,9 @@ $font-size-control-label: 15px;
     }
   }
 }
+
+// Wizard form. Element that indicates current step
+// -----------------------------------------------------
 
 #indicator {
   margin: 20px 0;
@@ -87,6 +93,72 @@ $font-size-control-label: 15px;
     }
   }
 }
+
+// Sidebar hints
+// --------------------------------------------
+
+#hint-container {
+  position: absolute;
+}
+
+.sidebar-hint {
+  margin-top: 0;
+}
+
+// Fixed navigation bar with "next", "previous" buttons
+// ---------------------------------------------------------
+
+#form-navbar-fixed {
+  background-color: $body-bg;
+  border-top: 2px solid $border-color;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0;
+  z-index: 1000;
+  display: none;
+}
+
+// Container for offer's tags
+// -----------------------------------------------
+
+#tags-container {
+  margin-top: 30px;
+
+  > .row {
+    margin-bottom: 10px;
+  }
+
+  .tag-clouds {
+    padding: 0;
+    float: left;
+    margin-right: 20px;
+
+    a {
+      margin-top: 0;
+      cursor: not-allowed;
+    }
+  }
+
+  .radio {
+    font-size: 12px;
+    color: $gray;
+  }
+
+  input[type=radio]:focus {
+    outline: 0;
+  }
+}
+
+// "Save and close" button
+// --------------------------------------------
+
+#btn-save {
+  margin-right: 10px;
+}
+
+// Submit form
+// --------------------------------------------
 
 #job-posting {
   .panel-heading {
@@ -182,14 +254,6 @@ $font-size-control-label: 15px;
   }
 }
 
-#hint-container {
-  position: absolute;
-}
-
-.sidebar-hint {
-  margin-top: 0;
-}
-
 .mce-tinymce {
   width: 95% !important;
 }
@@ -206,6 +270,9 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   width: auto;
 }
 
+// Tag icon in tag input field
+// ----------------------------------------------
+
 .has-feedback label ~ .form-control-feedback {
   top: 30px;
   font-size: $font-size-large;
@@ -215,43 +282,4 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 #map {
   height: 200px;
   margin-bottom: 10px;
-}
-
-#form-navigation-fixed {
-  background-color: $body-bg;
-  border-top: 2px solid $border-color;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 10px 0;
-  z-index: 1000;
-  display: none;
-}
-
-#tags-container {
-  margin-top: 30px;
-
-  > .row {
-    margin-bottom: 10px;
-  }
-
-  .tag-clouds {
-    padding: 0;
-    float: left;
-    margin-right: 20px;
-
-    a {
-      margin-top: 0;
-      cursor: not-allowed;
-    }
-  }
-
-  .radio {
-    font-size: 12px;
-    color: $gray;
-  }
-
-  input[type=radio]:focus {
-    outline: 0;
-  }
 }

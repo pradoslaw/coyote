@@ -92,4 +92,14 @@ class Firm extends Model
     {
         return $this->hasMany('Coyote\Firm\Benefit');
     }
+
+    /**
+     * @param int $userId
+     */
+    public function setDefaultUserId($userId)
+    {
+        if (empty($this->user_id)) {
+            $this->user_id = $userId;
+        }
+    }
 }

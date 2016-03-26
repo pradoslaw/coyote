@@ -637,6 +637,42 @@
   #indicator ul li.end .bubble {
     background-color: #eeeeee; }
 
+#hint-container {
+  position: absolute; }
+
+.sidebar-hint {
+  margin-top: 0; }
+
+#form-navbar-fixed {
+  background-color: #fafafa;
+  border-top: 2px solid #d0d0d0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0;
+  z-index: 1000;
+  display: none; }
+
+#tags-container {
+  margin-top: 30px; }
+  #tags-container > .row {
+    margin-bottom: 10px; }
+  #tags-container .tag-clouds {
+    padding: 0;
+    float: left;
+    margin-right: 20px; }
+    #tags-container .tag-clouds a {
+      margin-top: 0;
+      cursor: not-allowed; }
+  #tags-container .radio {
+    font-size: 12px;
+    color: #555555; }
+  #tags-container input[type=radio]:focus {
+    outline: 0; }
+
+#btn-save {
+  margin-right: 10px; }
+
 #job-posting .panel-heading {
   font-size: 17px; }
 
@@ -710,12 +746,6 @@
   .btn-flush:hover {
     text-decoration: none; }
 
-#hint-container {
-  position: absolute; }
-
-.sidebar-hint {
-  margin-top: 0; }
-
 .mce-tinymce {
   width: 95% !important; }
 
@@ -736,33 +766,6 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 #map {
   height: 200px;
   margin-bottom: 10px; }
-
-#form-navigation-fixed {
-  background-color: #fafafa;
-  border-top: 2px solid #d0d0d0;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 10px 0;
-  z-index: 1000;
-  display: none; }
-
-#tags-container {
-  margin-top: 30px; }
-  #tags-container > .row {
-    margin-bottom: 10px; }
-  #tags-container .tag-clouds {
-    padding: 0;
-    float: left;
-    margin-right: 20px; }
-    #tags-container .tag-clouds a {
-      margin-top: 0;
-      cursor: not-allowed; }
-  #tags-container .radio {
-    font-size: 12px;
-    color: #555555; }
-  #tags-container input[type=radio]:focus {
-    outline: 0; }
 
 .benefits .list-group-item {
   border: none; }

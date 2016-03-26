@@ -212,6 +212,16 @@ class Job extends Model
     }
 
     /**
+     * @param int $userId
+     */
+    public function setDefaultUserId($userId)
+    {
+        if (empty($this->user_id)) {
+            $this->user_id = $userId;
+        }
+    }
+
+    /**
      * @return array
      */
     protected function getIndexBody()

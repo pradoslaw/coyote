@@ -197,7 +197,7 @@ $(() => {
     }
 
     let navigation = $('#form-navigation');
-    let fixed = $('#form-navigation-fixed');
+    let fixed = $('#form-navbar-fixed');
 
     $('#form-navigation-container').html(navigation.html()).on('click', ':submit', () => {
         $('#job-posting').submit();
@@ -235,7 +235,7 @@ $(() => {
 
     $(':input').focus(e => {
         let $this = $(e.currentTarget);
-        let offset = $this.position().top;
+        let offset = $this.offset().top;
         let name = $this.attr('name');
 
         name = name.replace('[', '').replace(']', '');
@@ -243,9 +243,7 @@ $(() => {
         $('.sidebar-hint').hide();
         $('#hint-' + name).fadeIn();
 
-        if (!offset) {
-            offset = $this.parent().position().top;
-        }
+        offset -= $('aside').offset().top;
 
         $('#hint-container').css('top', offset);
     });
@@ -370,6 +368,10 @@ $(() => {
         $('#logo img').attr('src', '/img/logo-gray.png');
 
         return false;
+    });
+
+    $('#btn-save').click(() => {
+        $('input[name="done"]').val(1);
     });
 });
 

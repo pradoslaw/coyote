@@ -35,6 +35,7 @@
             {{ form_hidden('id', job.id) }}
             {{ form_hidden('firm_id', job.firm_id) }}
             {{ form_hidden('path', job.path) }}
+            {{ form_hidden('done', 0) }}
 
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -105,7 +106,7 @@
                         </ol>
 
                         <div id="tags-container">
-                            {% for tag in job.tags %}
+                            {% for tag in input_old('tags', job.tags) %}
                                 {% include 'job.submit.tag' %}
                             {% endfor %}
                         </div>
@@ -162,6 +163,10 @@
 
                     <div id="form-navigation" class="form-group">
                         <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Informacje o firmie <i class="fa fa-angle-right"></i></button>
+
+                        {% if job.firm_id %}
+                            <button type="submit" class="btn btn-danger pull-right" data-submit-state="Proszę czekać..." id="btn-save"><i class="fa fa-save"></i> Zapisz i zakończ</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
