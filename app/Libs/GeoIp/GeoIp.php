@@ -105,6 +105,6 @@ class GeoIp
      */
     protected function getBaseUrl()
     {
-        return 'http://' . $this->host . ':' . $this->port . '/' . self::VERSION . '/';
+        return 'http://' . $this->host . ($this->port !== '' && $this->port != 80 ? (':' . $this->port) : '') . '/' . self::VERSION . '/';
     }
 }

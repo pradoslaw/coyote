@@ -30,14 +30,25 @@ return [
         'model'  => 'User',
         'secret' => '',
     ],
+
+    // WebSocket server for Coyote.
+    // ------------------------------------------------------
+
     'ws'        => [
         'host'   => env('WS_HOST'),
         'port'   => env('WS_PORT')
     ],
+
+    // Elasticsearch host and port. In most cases default values will be suitable.
+    // ---------------------------------------------------------------------------
+
     'elasticsearch' => [
         'host'   => env('ELASTICSEARCH_HOST', 'localhost'),
         'port'   => env('ELASTICSEARCH_PORT', 9200)
     ],
+
+    // OAuth clients.
+    // ------------------------------------------------------
 
     'github' => [
         'client_id'     => env('GITHUB_CLIENT_ID'),
@@ -57,9 +68,15 @@ return [
         'redirect'      => env('FACEBOOK_REDIRECT'),
     ],
 
+    // Google maps key to show jobs locations.
+    // -----------------------------------------------------------
+
     'google-maps' => [
         'key'           => 'AIzaSyCjPih0Ay15fPj2j6KOqqNn2Af902apRz8'
     ],
+
+    // Host and port to geo-ip.pl microservice to geocode IP and city name.
+    // ------------------------------------------------------------------------
 
     'geo-ip' => [
         'host'          => '192.168.56.101',
