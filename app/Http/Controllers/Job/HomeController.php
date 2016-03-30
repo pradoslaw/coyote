@@ -164,7 +164,7 @@ class HomeController extends Controller
 
         $context = !$request->has('q') ? 'global.' : '';
         $aggregations = [
-            'cities' => $response->getAggregations("${context}locations.city"),
+            'cities' => $response->getAggregations("${context}locations.city_original"),
             'tags' => $response->getAggregations("${context}tags")
         ];
 

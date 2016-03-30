@@ -12,7 +12,7 @@ class Location extends Aggs\Nested implements DslInterface
 
     public function __construct()
     {
-        parent::__construct('locations', 'city');
+        parent::__construct('locations', 'city_original');
     }
 
     /**
