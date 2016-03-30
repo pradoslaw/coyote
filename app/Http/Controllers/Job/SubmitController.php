@@ -8,12 +8,14 @@ use Coyote\Currency;
 use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
+use Coyote\GeoIp;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class SubmitController extends Controller
 {
@@ -31,6 +33,8 @@ class SubmitController extends Controller
      * @var TagRepositoryInterface
      */
     private $tag;
+
+    private $geoIp;
 
     /**
      * SubmitController constructor.
@@ -50,6 +54,8 @@ class SubmitController extends Controller
         $this->job = $job;
         $this->firm = $firm;
         $this->tag = $tag;
+
+        $this->geoIp = app('GeoIp');
     }
 
     /**
@@ -75,7 +81,7 @@ class SubmitController extends Controller
                     $item->priority = $item->pivot->priority;
                 });
 
-                $firm = $this->firm->findOrNew((int) $job->firm_id);
+                $firm = $this->loadFirm((int) $job->firm_id);
             } else {
                 // either load firm assigned to existing job offer or load user's default firm
                 $firm = $this->loadDefaultFirm();
@@ -271,9 +277,9 @@ class SubmitController extends Controller
             $job->locations()->delete();
 
             foreach ($locations as $location) {
-                $job->locations()->create([
-                    'city' => $location
-                ]);
+                $job->locations()->create(
+                    $this->geocode($location)
+                );
             }
 
             $job->tags()->sync($tags);
@@ -299,6 +305,36 @@ class SubmitController extends Controller
                 'priority' => 1
             ]
         ]);
+    }
+
+    /**
+     * @param $city
+     * @return array
+     */
+    private function geocode($city)
+    {
+        $location = [
+            'city'          => $city
+        ];
+
+        try {
+            // @todo Ten mechanizm trzeba bedzie zmienic w przypadku angielskiej wersji serwisu
+            $normalizer = new GeoIp\Normalizers\Locale(config('app.locale'));
+
+            // we just want a first hit of a results with local name of the city
+            // so Warsaw will become Warszawa
+            $result = $normalizer->normalize($this->geoIp->city($city));
+
+            $location = array_merge($location, [
+                'latitude' => $result['latitude'],
+                'longitude' => $result['longitude'],
+                'city' => $result['name']
+            ]);
+        } catch (\Exception $e) {
+            app('log')->error($e->getMessage());
+        }
+
+        return $location;
     }
 
     /**
@@ -335,6 +371,18 @@ class SubmitController extends Controller
     {
         // get all firms assigned to user...
         return $this->firm->findAllBy('user_id', $this->userId);
+    }
+
+    /**
+     * @param int $firmId
+     * @return mixed
+     */
+    private function loadFirm($firmId)
+    {
+        $firm = $this->firm->findOrNew((int) $firmId);
+        $firm->benefits = $firm->benefits()->lists('name')->toArray();
+
+        return $firm;
     }
 
     /**

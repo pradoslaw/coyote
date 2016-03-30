@@ -185,6 +185,8 @@ return [
         Coyote\Providers\ReputationServiceProvider::class,
         // Obsluga Elasticsearch
         Coyote\Providers\ElasticsearchServiceProvider::class,
+        // Geokodowanie przy pomocy uslugi geo-ip.pl
+        Coyote\Providers\GeoIpServiceProvider::class,
 
         // Klasa wspierajaca budowanie znacznikow HTML
         Collective\Html\HtmlServiceProvider::class,
