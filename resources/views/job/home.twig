@@ -9,8 +9,8 @@
 
             <div class="row">
                 <div id="box-filter" class="col-sm-3 hidden-xs">
-                    {{ form_open({'url': request().fullUrl(), 'method': 'get', 'class': 'form-horizontal'}) }}
-                        {{ form_hidden('q', request('q')) }}
+                    {{ form_open({'url': route('job.home'), 'method': 'get', 'class': 'form-horizontal'}) }}
+                        {{ form_hidden('q', input_get('q')) }}
 
                         <h5><i class="fa fa-cog fa-fw"></i> Technologie</h5>
 
