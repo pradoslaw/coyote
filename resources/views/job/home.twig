@@ -14,7 +14,7 @@
 
                         <h5><i class="fa fa-cog fa-fw"></i> Technologie</h5>
 
-                        {% if aggregations.tags %}
+                        {% if aggregations.tags|length > 0 %}
                             <ul class="list-group">
                                 {% for tag, count in aggregations.tags %}
                                     <li class="list-group-item">
@@ -27,11 +27,13 @@
                                     </li>
                                 {% endfor %}
                             </ul>
+                        {% else %}
+                            <p>--</p>
                         {% endif %}
 
-                        {% if aggregations.cities %}
-                            <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
+                        <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
 
+                        {% if aggregations.cities|length > 0 %}
                             <ul class="list-group">
                                 {% for city, count in aggregations.cities %}
                                     <li class="list-group-item">
@@ -44,6 +46,8 @@
                                     </li>
                                 {% endfor %}
                             </ul>
+                        {% else %}
+                            <p>--</p>
                         {% endif %}
 
                         <h5><i class="fa fa-leaf fa-fw"></i> Wynagrodzenie</h5>
