@@ -8,6 +8,7 @@
 /node_modules
 /resources/assets/bower
 .env
+supervisor.conf
 
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm

@@ -5,7 +5,7 @@
 
 Coyote to nazwa systemu obslugujacego serwis 4programmers.net. Obecnie w obludze jest wersja 1.x ktora mamy nadzieje zastapic wersja 2.0 ktora jest w trakcie pisania i bedzie dostepna na githubie jako open source. 
 
-Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja koncowa.
+Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja koncowa i stabilna.
 
 ## Wymagania
 
@@ -23,7 +23,8 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 ### Zalecane
 
 * Redis
-* Beanstalkd
+* Elasticsearch
+* Supervisor
 
 ## Instalacja
 
@@ -64,9 +65,19 @@ Jeżeli chcesz uruchomić testy akceptacyjne, to będziesz potrzebował narzędz
 
 ## Konfiguracja
 
-Konfiguracja projektu znajduje się w pliku `.env`. Zaleca się zmianę sterownika cache na **redis**:
+Konfiguracja projektu znajduje się w pliku `.env`. **Szczególnie** zaleca się zmianę sterownika cache na **redis**:
 
 `CACHE_DRIVER=redis`
+
+### Konfiguracja supervisor
+
+Supervisor jest narzędziem monitorującym procesy, działającym w środowisku Linux. W Laravel dostępny jest
+mechanizm kolejkowania zadań (np. indeksowanie treści w Elasticsearch), który można uruchomić przy pomocy
+
+`artisan queue:listen --sleep=10`
+
+Supervisor ma na celu automatyczne uruchamianie tego procesu po starcie systemu i pilnownie, aby zawsze był uruchomiony.
+Konfigurację supervisor możesz znaleźć w pliku `supervisor.conf`. Więcej informacji: https://laravel.com/docs/5.2/queues
 
 ## Jak mozesz pomoc?
 
