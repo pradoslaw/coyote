@@ -7,8 +7,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Menu;
-use Crypt;
 
 abstract class Controller extends BaseController
 {
@@ -53,13 +51,13 @@ abstract class Controller extends BaseController
         $this->sessionId = request()->session()->getId();
 
         // URL to main page and CDN
-        $this->public = ['public' => url(), 'cdn' => config('cdn', url())];
+        $this->public = ['public' => url()->route('home'), 'cdn' => config('cdn', url()->route('home'))];
 
         if ($this->userId) {
             if (config('services.ws.host')) {
                 $this->public['ws'] = config('services.ws.host') . ':' . config('services.ws.port');
                 // token contains channel name
-                $this->public['token'] = Crypt::encrypt('user:' . $this->userId . '|' . time());
+                $this->public['token'] = app('encrypter')->encrypt('user:' . $this->userId . '|' . time());
             }
         }
     }
@@ -71,7 +69,7 @@ abstract class Controller extends BaseController
      */
     protected function menu()
     {
-        return Menu::make('main', function ($menu) {
+        return app('menu')->make('main', function ($menu) {
             $menu->add('Forum', ['route' => 'forum.home'])->active('Forum/*');
             $menu->add('Mikroblogi', ['route' => 'microblog.home'])->active('Mikroblogi/*');
             $menu->add('Praca', ['route' => 'job.home'])->active('Praca/*');
