@@ -7,3 +7,4 @@ finder:
   exclude:
     - "tests"
     - "Geshi"
+    - "app/Libs/Parser/Geshi"
