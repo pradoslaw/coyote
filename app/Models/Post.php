@@ -37,10 +37,11 @@ class Post extends Model
                 ],
                 "tag_original" => [
                     "type" => "string",
-                    "index" => "analyzer_keyword"
+                    "index" => "not_analyzed"
                 ]
             ]
         ],
+
         "user_name" => [
             "type" => "string",
             "index" => "not_analyzed"
@@ -51,12 +52,20 @@ class Post extends Model
         ],
         "browser" => [
             "type" => "string",
-            "index" => "analyzer_keyword"
+            "index" => "not_analyzed"
         ],
         "host" => [
             "type" => "string",
-            "index" => "analyzer_keyword"
-        ]
+            "index" => "not_analyzed"
+        ],
+        "created_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
+        "updated_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
     ];
 
     /**
@@ -161,6 +170,12 @@ class Post extends Model
 
         if ($topic->first_post_id == $body['id']) {
             $body['tags'] = $topic->tags()->lists('name');
+        }
+
+        foreach (['created_at', 'updated_at'] as $column) {
+            if (!empty($body[$column])) {
+                $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
+            }
         }
 
         return array_merge($body, [

@@ -91,15 +91,15 @@ class Job extends Model
         ],
         "created_at" => [
             "type" => "date",
-            "format" => "yyyy/MM/dd HH:mm:ss"
+            "format" => "yyyy-MM-dd HH:mm:ss"
         ],
         "updated_at" => [
             "type" => "date",
-            "format" => "yyyy/MM/dd HH:mm:ss"
+            "format" => "yyyy-MM-dd HH:mm:ss"
         ],
         "deadline_at" => [
             "type" => "date",
-            "format" => "yyyy/MM/dd HH:mm:ss"
+            "format" => "yyyy-MM-dd HH:mm:ss"
         ]
     ];
 
@@ -269,7 +269,7 @@ class Job extends Model
 
         foreach (['created_at', 'updated_at', 'deadline_at'] as $column) {
             if (!empty($body[$column])) {
-                $body[$column] = date('Y/m/d H:i:s', strtotime($body[$column]));
+                $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
             }
         }
 
