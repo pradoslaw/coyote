@@ -272,6 +272,45 @@
     font-size: 14px;
     line-height: 160%; }
 
+#box-search > form {
+  width: 100%;
+  white-space: nowrap; }
+
+#box-search .form-group {
+  position: relative;
+  float: left;
+  padding: 0;
+  margin-bottom: 0; }
+  #box-search .form-group:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 7px;
+    left: 7px;
+    color: #919191;
+    z-index: 1; }
+  #box-search .form-group input[type=text], #box-search .form-group select {
+    padding-left: 25px;
+    width: 100%;
+    border-radius: 3px; }
+  #box-search .form-group .col-content {
+    padding-right: 5px; }
+
+#box-search .input-keywords:before {
+  content: ""; }
+
+#box-search .input-location:before {
+  content: ""; }
+
+#box-search .input-category:before {
+  content: ""; }
+
+#box-search button[type=submit] {
+  font-size: 12px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; }
+
 #index {
   position: relative;
   margin-top: 20px; }
@@ -1027,6 +1066,8 @@ blockquote {
     margin-top: 20px; }
 
 #box-search {
-  margin-bottom: 20px; }
+  float: none;
+  margin: 0 auto 24px auto;
+  overflow: hidden; }
 
 /*# sourceMappingURL=forum.css.map */

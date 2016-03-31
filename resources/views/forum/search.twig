@@ -1,25 +1,45 @@
 {% extends 'forum.base' %}
-{% block title %}{{ declination(response.totalHits(), ['post', 'posty', 'postów']) }} dla frazy {{ input_get('q') }}{% endblock %}
+{% set declination = ['post', 'posty', 'postów'] %}
+
+{% block title %}
+    {% if response %}
+        {{ declination(response.totalHits(), declination) }} dla frazy {{ input_get('q') }}
+    {% else %}
+        Szukaj na forum {{ parent() }}
+    {% endif %}
+{% endblock %}
 
 {% block container %}
     <div id="index" class="sidebar">
         {% include "forum.partials.top" %}
 
-        <h4>Szukaj</h4>
-
         <main id="mainbar">
-            {{ form_open({'method': 'GET', 'role': 'form', 'url': route('forum.search'), 'class': 'form-inline', 'id': 'box-search'}) }}
-                <div class="form-group">
-                    {{ form_text('q', input_get('q'), {'class': 'form-control'}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_select('f', {'': 'Wszystkie kategorie'} + forumList, input_get('f'), {'class': 'form-control'}) }}
-                </div>
+            <div class="row">
+                <div id="box-search" class="col-md-7 col-sm-12 col-xs-12">
+                    {{ form_open({'method': 'GET', 'role': 'form', 'url': route('forum.search'), 'class': 'form-inline outline', 'id': 'box-search'}) }}
+                        <div class="form-group input-keywords col-sm-5 col-xs-5">
+                            <div class="col-content">
+                                {{ form_text('q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
+                            </div>
+                        </div>
 
-                <button type="submit" class="btn btn-primary">Szukaj</button>
-            {{ form_close() }}
+                        <div class="form-group input-category col-sm-5 col-xs-5">
+                            <div class="col-content">
+                                {{ form_select('f', {'': 'Wszystkie kategorie'} + forumList, input_get('f'), {'class': 'form-control'}) }}
+                            </div>
+                        </div>
 
-            <section id="box-search-results" class="panel panel-wrapper">
+                        <div class="form-group col-sm-2 col-xs-2">
+                            <button class="btn btn-primary btn-search" type="submit">
+                                <i class="fa fa-search"></i> <span class="hidden-xxs">Szukaj</span>
+                            </button>
+                        </div>
+                    {{ form_close() }}
+                </div>
+            </div>
+
+            {% if response %}
+                <section id="box-search-results" class="panel panel-wrapper">
                 <div class="panel-body">
                     <ul id="sort" class="hidden-xs">
                         <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
@@ -85,16 +105,19 @@
 
                 </div>
             </section>
+            {% endif %}
 
             {{ viewers|raw }}
         </main>
 
         {% embed 'forum.partials.sidebar' %}
             {% block side_menu %}
-                <div id="box-count" class="box">
-                    <strong>{{ response.totalHits()|number_format(0, '', ' ') }}</strong>
-                    <span>{{ declination(response.totalHits(), ['post', 'posty', 'postów'], true) }}</span>
-                </div>
+                {% if response %}
+                    <div id="box-count" class="box">
+                        <strong>{{ response.totalHits()|number_format(0, '', ' ') }}</strong>
+                        <span>{{ declination(response.totalHits(), declination, true) }}</span>
+                    </div>
+                {% endif %}
             {% endblock %}
         {% endembed %}
     </div>

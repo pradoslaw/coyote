@@ -7314,15 +7314,15 @@ ul.breadcrumb {
     color: #91ba1d; }
 
 .btn-primary {
-  background-image: linear-gradient(to bottom, #83a81b 0%, #6f8e17 100%);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF83A81B', endColorstr='#FF6F8E17', GradientType=0);
-  text-shadow: rgba(0, 0, 0, 0.14902) 0 -1px 0; }
-  .btn-primary:focus, .btn-primary:active, .btn-primary:active:focus {
-    background-color: #6f8e17;
-    border-color: #688515; }
+  text-shadow: rgba(0, 0, 0, 0.14902) 0 -1px 0;
+  box-shadow: inset 0 1px 1px #fff;
+  background: #80a41a;
+  border-color: #80a41a; }
+  .btn-primary:focus, .btn-primary:active, .btn-primary:active:focus, .btn-primary:hover {
+    background-color: #80a41a;
+    border-color: #80a41a; }
   .btn-primary:hover {
-    box-shadow: inset 0 1px 1px #eaf6c7; }
+    box-shadow: inset 0 0 2px #fff; }
 
 .btn-default {
   background-image: linear-gradient(to bottom, #fff 0%, #f6f6f6 100%);

@@ -213,6 +213,45 @@
       top: 4px;
       font-size: 17px; }
 
+#box-search > form {
+  width: 100%;
+  white-space: nowrap; }
+
+#box-search .form-group {
+  position: relative;
+  float: left;
+  padding: 0;
+  margin-bottom: 0; }
+  #box-search .form-group:before {
+    position: absolute;
+    font-family: FontAwesome;
+    top: 7px;
+    left: 7px;
+    color: #919191;
+    z-index: 1; }
+  #box-search .form-group input[type=text], #box-search .form-group select {
+    padding-left: 25px;
+    width: 100%;
+    border-radius: 3px; }
+  #box-search .form-group .col-content {
+    padding-right: 5px; }
+
+#box-search .input-keywords:before {
+  content: ""; }
+
+#box-search .input-location:before {
+  content: ""; }
+
+#box-search .input-category:before {
+  content: ""; }
+
+#box-search button[type=submit] {
+  font-size: 12px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; }
+
 #job-header-container {
   background-color: #f8f8f8;
   border-bottom: 1px solid #c7c7c7; }
@@ -224,45 +263,10 @@
     background-color: #e4e4e4;
     padding: 5px;
     display: inline-block; }
-    #job-header-container .outline .btn-primary {
-      box-shadow: inset 0 1px 1px #fff;
-      background: #80a41a;
-      border-color: #80a41a; }
 
 #box-search {
   float: none;
   margin: 25px auto 24px auto; }
-  #box-search > form {
-    width: 100%;
-    white-space: nowrap; }
-  #box-search .form-group {
-    position: relative;
-    float: left;
-    padding: 0;
-    margin-bottom: 0; }
-    #box-search .form-group:before {
-      position: absolute;
-      font-family: FontAwesome;
-      top: 7px;
-      left: 7px;
-      color: #919191;
-      z-index: 1; }
-    #box-search .form-group input[type=text] {
-      padding-left: 25px;
-      width: 100%;
-      border-radius: 3px; }
-    #box-search .form-group .col-content {
-      padding-right: 5px; }
-  #box-search .input-keywords:before {
-    content: ""; }
-  #box-search .input-location:before {
-    content: ""; }
-  #box-search button[type=submit] {
-    font-size: 12px;
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis; }
 
 #post-offer {
   margin-top: 20px; }

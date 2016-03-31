@@ -19,12 +19,6 @@ $header-footer-border: #c7c7c7;
     background-color: darken($gray-lighter, 4%);
     padding: 5px;
     display: inline-block;
-
-    .btn-primary {
-      box-shadow: inset 0 1px 1px #fff;
-      background: $brand-primary;
-      border-color: $brand-primary;
-    }
   }
 }
 
@@ -34,51 +28,6 @@ $header-footer-border: #c7c7c7;
 #box-search {
   float: none;
   margin: 25px auto 24px auto;
-
-  > form {
-    width: 100%;
-    white-space: nowrap;
-  }
-
-  .form-group {
-    position: relative;
-    float: left;
-    padding: 0;
-    margin-bottom: 0;
-
-    &:before {
-      position: absolute;
-      font-family: FontAwesome;
-      top: 7px;
-      left: 7px;
-      color: lighten($gray-light, 10%);
-      z-index: 1;
-    }
-
-    input[type=text] {
-      padding-left: 25px;
-      width: 100%;
-      border-radius: $border-radius-small;
-    }
-
-    .col-content {
-      padding-right: 5px;
-    }
-  }
-
-  .input-keywords:before {
-    content: $fa-var-search;
-  }
-
-  .input-location:before {
-    content: $fa-var-map-marker;
-  }
-
-  button[type=submit] {
-    font-size: 12px;
-    width: 100%;
-    @include text-overflow();
-  }
 }
 
 // Post offer button (for employers)
