@@ -17,6 +17,7 @@ class PostRequest extends Request
     // @todo dodac walidator sprawdzajacy ilosc (oraz dlugosc) linii
     const RULE_POLL_MAX_ITEMS = 'required_with:title|integer|min:1|max:20';
     const RULE_POLL_LENGTH = 'required_with:title|integer';
+    const RULE_HUMAN = 'required';
 
     /**
      * Determine if the user is authorized to make this request.
@@ -50,7 +51,8 @@ class PostRequest extends Request
             'title'         => self::RULE_POLL_TITLE,
             'items'         => self::RULE_POLL_ITEMS,
             'max_items'     => self::RULE_POLL_MAX_ITEMS,
-            'length'        => self::RULE_POLL_LENGTH
+            'length'        => self::RULE_POLL_LENGTH,
+            'human'         => self::RULE_HUMAN
         ];
 
         // if I create new topic or edit first post ...

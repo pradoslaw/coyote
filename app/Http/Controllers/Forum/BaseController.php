@@ -29,6 +29,8 @@ abstract class BaseController extends Controller
     {
         parent::__construct();
 
+        $this->public['uploadUrl'] = route('forum.upload');
+
         $this->forum = $forum;
         $this->topic = $topic;
 

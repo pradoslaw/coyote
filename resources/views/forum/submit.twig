@@ -195,8 +195,6 @@
     <script type="text/javascript" src="{{ cdn('js/tags.js') }}"></script>
 
     <script type="text/javascript">
-        var uploadUrl = '{{ route('forum.upload') }}';
-
         $(function() {
             var toolTipHints = $('#hint-subject, #hint-text, #hint-tag, #hint-user_name');
 
@@ -210,7 +208,7 @@
 
                     $('#hint-' + name).fadeIn(1000);
                 }
-            });
+            }).append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
 
             $('#tags').tag({
                 validateUrl: '{{ route('tag.validate') }}',

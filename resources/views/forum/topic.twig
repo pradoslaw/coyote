@@ -282,10 +282,9 @@
     {% endif %}
 
     <script type="text/javascript">
-        var uploadUrl = '{{ route('forum.upload') }}';
-
         $(function () {
             $('.col-bottom a').tooltip({'trigger': 'hover'});
+            $('#submit-form').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
         });
     </script>
 {% endblock %}
