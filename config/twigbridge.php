@@ -102,6 +102,7 @@ return [
             'TwigBridge\Extension\Laravel\Html',
 
             'TwigBridge\Extensions\User',
+            'TwigBridge\Extensions\DateTime',
             'TwigBridge\Extensions\Misc',
             'TwigBridge\Extensions\Elasticsearch',
 //             'TwigBridge\Extension\Laravel\Legacy\Facades',

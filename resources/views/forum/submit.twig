@@ -20,6 +20,13 @@
         <div class="col-sm-9">
             {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': url(request().path), 'class': 'form-horizontal'}) }}
 
+            {% if diff_in_months(topic.last_post_created_at) >= 6 %}
+                <p class="alert alert-danger">
+                    Ostatni post w tym wątku datowany jest na <strong>{{ topic.last_post_created_at|format_date }}</strong>.<br>
+                    Problem lub informacje w nim zawarte mogą być nieaktualne. Zastanów się, czy na pewno chcesz dodać nowy post w tym wątku?
+                </p>
+            {% endif %}
+
             {% if topic is not defined or topic.first_post_id == post.id %}
                 <div class="form-group {{ errors.first('subject') ? 'has-error' }}">
                     <label class="col-md-2 control-label">Temat</label>

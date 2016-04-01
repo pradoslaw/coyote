@@ -5,6 +5,7 @@
 {% import 'components.modals' as modals %}
 
 {% set is_writeable = can('update', forum) ? true : (not (forum.is_locked or topic.is_locked)) %}
+{% set too_old = diff_in_months(topic.last_post_created_at) >= 6 %}
 
 {% block container %}
 
@@ -67,7 +68,7 @@
                         {% if is_writeable %}
                             <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
 
-                            {% if auth_check() %}
+                            {% if auth_check() and not too_old %}
                                 <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
                             {% endif %}
                         {% endif %}
@@ -75,7 +76,7 @@
                 </div>
             </section>
 
-            {% if auth_check() and is_writeable %}
+            {% if auth_check() and is_writeable and not too_old %}
                 {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': route('forum.post.submit', [forum.path, topic.id]), 'class': 'form-horizontal'}) }}
                     <section id="box-fast-form" class="row">
                         <div class="col-xs-12">

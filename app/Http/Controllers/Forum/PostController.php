@@ -10,11 +10,9 @@ use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Log;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface as Flag;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
-use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Stream\Activities\Create as Stream_Create;
@@ -61,12 +59,13 @@ class PostController extends BaseController
     /**
      * Show new post/edit form
      *
-     * @param Forum $forum
-     * @param Topic $topic
-     * @param Post|null $post
+     * @param Request $request
+     * @param \Coyote\Forum $forum
+     * @param \Coyote\Topic $topic
+     * @param \Coyote\Post|null $post
      * @return mixed
      */
-    public function submit($forum, $topic, $post = null)
+    public function submit(Request $request, $forum, $topic, $post = null)
     {
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
@@ -75,11 +74,11 @@ class PostController extends BaseController
         $attachments = collect();
 
         if ($post === null) {
-            $this->breadcrumb->push('Odpowiedz', url(request()->path()));
+            $this->breadcrumb->push('Odpowiedz', url($request->path()));
         } else {
             // make sure user can edit this post
             $this->authorize('update', [$post, $forum]);
-            $this->breadcrumb->push('Edycja', url(request()->path()));
+            $this->breadcrumb->push('Edycja', url($request->path()));
 
             if ($post->id === $topic->first_post_id) {
                 // get topic tags only if this post is the FIRST post in topic
@@ -91,12 +90,12 @@ class PostController extends BaseController
         }
 
         if (auth()->check()) {
-            $subscribe = $topic->subscribers()->where('user_id', $this->userId)->count();
+            $subscribe = $topic->subscribers()->forUser($this->userId)->exists();
 
             // we're creating new post...
             if ($post === null && $subscribe == false && auth()->user()->allow_subscribe) {
                 // if this is the first post in this topic, subscribe option depends on user's default setting
-                if (!$topic->users()->where('user_id', $this->userId)->count()) {
+                if ($topic->users()->forUser($this->userId)->exists()) {
                     $subscribe = true;
                 }
             }
@@ -112,8 +111,8 @@ class PostController extends BaseController
             setcookie('mqid' . $topic->id, null, time() - 3600, '/');
         }
 
-        if (request()->input('quote')) {
-            $postsId[] = request()->input('quote');
+        if ($request->input('quote')) {
+            $postsId[] = $request->input('quote');
         }
 
         if ($postsId) {
@@ -134,8 +133,8 @@ class PostController extends BaseController
             $text = $body;
         }
 
-        if (request()->old('attachments')) {
-            $attachments = $this->attachment->findByFile(request()->old('attachments'));
+        if ($request->old('attachments')) {
+            $attachments = $this->attachment->findByFile($request->old('attachments'));
         }
 
         return $this->view('forum.submit')->with(

@@ -211,7 +211,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param Forum $forum
+     * @param \Coyote\Forum $forum
      * @return \Illuminate\View\View
      */
     public function submit($forum)
