@@ -3,6 +3,8 @@
 
 {% import 'components.modals' as modal %}
 
+{% set url = route('forum.post.log', [log.post_id]) %}
+
 {% block container %}
     <div id="index" class="sidebar">
         {% include "forum.partials.top" %}
@@ -10,23 +12,9 @@
         <h1>{{ link_to_route('forum.topic', topic.subject, [forum.path, topic.id, topic.path]) }}</h1>
 
         <main id="mainbar">
-
-            {% for log in logs %}
-                <section class="panel panel-wrapper">
-                    <div class="panel-body">
-
-                        {% if log.tags %}
-                            <div class="box-topic-tags hidden-xs" style="margin-bottom: 10px">
-                                <ul class="tag-clouds">
-                                    {% for tag in log.tags %}
-                                        <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-
-                            <div class="clearfix"></div>
-                        {% endif %}
-
+            <section class="panel panel-wrapper">
+                <div class="panel-body">
+                    {% for log in logs %}
                         <div class="post">
                             <div class="post-body">
                                 <div class="row">
@@ -40,30 +28,48 @@
                                         </h5>
                                     </div>
 
-                                    {% set url = route('forum.post.log', [log.post_id]) %}
-                                    {% set ip = log.ip ~ ' ' ~ (log.host ? '(' ~ log.host ~ ')') ~ ' ' ~ log.browser %}
-
                                     <div class="col-xs-10 col-time">
                                         <a title="Link do tego postu" id="id{{ log.id }}" class="post-link" href="{{ url ~ '#id' ~ log.id }}"></a>
 
-                                        <span class="timestamp" title="{{ log.created_at|format_date(false) }}" data-timestamp="{{ log.created_at|timestamp }}">{{ log.created_at|format_date }}</span>
-                                        <small><a href="#" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
+                                        <h5 style="display: inline"><a href="{{ url }}">{{ log.subject }}</a></h5>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-xs-2 col-user hidden-xss">
+                                        <p class="hidden-xs">
+                                            <strong>Data:</strong>
+                                            <small>{{ post.created_at|format_date }}</small>
+                                        </p>
 
+                                        <p class="hidden-xs">
+                                            <strong>IP:</strong>
+                                            <small>{{ log.ip }}</small>
+                                        </p>
+
+                                        <p class="hidden-xs">
+                                            <strong>Host:</strong>
+                                            <small title="{{ log.host }}">{{ log.host }}</small>
+                                        </p>
+
+                                        <p class="hidden-xs">
+                                            <strong>Przeglądarka:</strong>
+                                            <small title="{{ log.browser }}">{{ log.browser }}</small>
+                                        </p>
                                     </div>
 
                                     <div class="col-xs-10 col-body">
-                                        {% if log.subject %}
-                                            <h5>{{ log.subject }}</h5>
-                                        {% endif %}
-
                                         <div class="post-content">
                                             {{ log.text|raw }}
                                         </div>
+
+                                        {% if log.tags %}
+                                            <ul class="tag-clouds">
+                                                {% for tag in log.tags %}
+                                                    <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
                                     </div>
                                 </div>
 
@@ -80,9 +86,9 @@
                                 {% endif %}
                             </div>
                         </div>
-                    </div>
-                </section>
-            {% endfor %}
+                    {% endfor %}
+                </div>
+            </section>
         </main>
 
         {% embed 'forum.partials.sidebar' %}

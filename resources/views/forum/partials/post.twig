@@ -1,3 +1,6 @@
+{% set url = route('forum.topic', [forum.path, topic.id, topic.path], false) ~ '?p=' ~ post.id ~ '#id' ~ post.id %}
+{% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
+
 <div class="post" {{ index == 0 ? 'id="first-post"' }}>
     {% if post.deleted_at %}
         <div class="post-delete">
@@ -23,9 +26,6 @@
                     {% endif %}
                 </h5>
             </div>
-
-            {% set url = route('forum.topic', [forum.path, topic.id, topic.path], false) ~ '?p=' ~ post.id ~ '#id' ~ post.id %}
-            {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
 
             <div class="col-xs-10 col-time">
                 <a title="Link do tego postu" id="id{{ post.id }}" class="post-link {{ post.created_at > markTime ? 'unread' }}" href="{{ url }}"></a>
@@ -110,6 +110,14 @@
                 <div class="post-content" data-post-id="{{ post.id }}">
                     {% include 'forum.partials.text' %}
                 </div>
+
+                {% if index == 0 and topic.tags.count() %}
+                    <ul class="tag-clouds">
+                        {% for tag in topic.tags %}
+                            <li><a href="{{ route('forum.tag', [tag.name|url_encode]) }}">{{ tag.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
 
                 <div class="clearfix"></div>
 

@@ -738,25 +738,6 @@ div.tag-clouds .btn-add {
 #box-post {
   margin-top: 5px; }
 
-.box-topic-tags {
-  border: 1px solid #d0d0d0;
-  background-color: #fafafa;
-  float: left;
-  border-radius: 3px;
-  padding: 3px 10px 3px 30px;
-  position: relative; }
-  .box-topic-tags:after {
-    position: absolute;
-    font-family: FontAwesome;
-    content: "";
-    left: 8px;
-    top: 6px; }
-  .box-topic-tags ul.tag-clouds {
-    margin: 0;
-    padding: 0; }
-    .box-topic-tags ul.tag-clouds a {
-      margin: 0 5px 0 0; }
-
 .post {
   background-color: #fff;
   border: 1px solid #d0d0d0; }
@@ -801,7 +782,10 @@ div.tag-clouds .btn-add {
   font-size: 11px;
   color: #555555;
   margin: 0;
-  padding: 2px 0; }
+  padding: 2px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; }
   .col-user p strong {
     width: 36%;
     display: inline-block;
