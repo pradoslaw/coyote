@@ -114,7 +114,6 @@ class Migrate extends Command
 
     /**
      * @todo ip_invalid zapisac do mongo
-     * @todo Co z kolumna flood?
      */
     private function migrateUsers()
     {
@@ -990,7 +989,7 @@ class Migrate extends Command
             foreach ($sql as $row) {
                 $row = (array) $row;
 
-                DB::table('tags')->insert(['name' => $row['tag_text'], 'created_at' => $this->timestampToDatetime($row['tag_time'])]);
+                DB::table('tags')->insert(['id' => $row['tag_id'], 'name' => $row['tag_text'], 'created_at' => $this->timestampToDatetime($row['tag_time'])]);
             }
 
             DB::commit();
@@ -1159,6 +1158,311 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    public function migrateFirms()
+    {
+        $this->info('Firms...');
+
+        $firms = DB::connection('mysql')->table('firm')
+                    ->select([
+                        'firm.*',
+                        'page_subject AS firm_name',
+                        'page_time AS firm_created_at',
+                        'page_edit_time AS firm_updated_at',
+                        'page_delete AS firm_deleted_at'
+                    ])
+                    ->join('page', 'page_id', '=', 'firm_page')
+                    ->get();
+        $bar = $this->output->createProgressBar(count($firms));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($firms as $row) {
+                $row = $this->skipPrefix('firm_', (array)$row);
+
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'agency', 'is_agency');
+                $this->rename($row, 'country', 'country_id');
+
+                $this->timestampToDatetime($row['created_at']);
+                $this->timestampToDatetime($row['updated_at']);
+
+                $this->setNullIfEmpty($row['deleted_at']);
+                if (!empty($row['deleted_at'])) {
+                    $row['deleted_at'] = $row['updated_at'];
+                }
+
+                unset($row['phone'], $row['page'], $row['technology']);
+
+                DB::table('firms')->insert($row);
+                $bar->advance();
+            }
+
+            DB::commit();
+            $bar->finish();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->info('Firm benefits...');
+
+        $benefits = DB::connection('mysql')->table('firm_benefit')->get();
+        $bar = $this->output->createProgressBar(count($benefits));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($benefits as $row) {
+                $row = $this->skipPrefix('benefit_', (array) $row);
+
+                $this->rename($row, 'firm', 'firm_id');
+
+                DB::table('firm_benefits')->insert($row);
+                $bar->advance();
+            }
+
+            DB::commit();
+            $bar->finish();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
+    }
+
+    public function migrateJobs()
+    {
+        $this->info('Jobs...');
+
+        $jobs = DB::connection('mysql')
+            ->table('job')
+            ->select([
+                'job.*',
+                'page_subject AS job_title',
+                'page_time AS job_created_at',
+                'page_edit_time AS job_updated_at',
+                'page_delete AS job_deleted_at',
+                'page_views AS job_visits'
+            ])
+            ->join('page', 'page_id', '=', 'job_page')
+            ->get();
+        $bar = $this->output->createProgressBar(count($jobs));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($jobs as $row) {
+                $row = $this->skipPrefix('job_', (array)$row);
+
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'firm', 'firm_id');
+                $this->rename($row, 'remote', 'is_remote');
+                $this->rename($row, 'country', 'country_id');
+                $this->rename($row, 'salary_currency', 'currency_id');
+                $this->rename($row, 'salary_duration', 'rate_id');
+                $this->rename($row, 'type', 'employment_id');
+                $this->rename($row, 'apply', 'enable_apply');
+                $this->rename($row, 'deadline', 'deadline_at');
+
+                $row['path'] = str_slug($row['title']);
+
+                $this->timestampToDatetime($row['created_at']);
+                $this->timestampToDatetime($row['updated_at']);
+                $this->timestampToDatetime($row['deadline_at']);
+
+                $this->setNullIfEmpty($row['deleted_at']);
+                if (!empty($row['deleted_at'])) {
+                    $row['deleted_at'] = $row['updated_at'];
+                }
+
+                unset($row['incognito'], $row['page'], $row['searchable']);
+
+                DB::table('jobs')->insert($row);
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Job locations...');
+
+        $locations = DB::connection('mysql')
+            ->table('job_location')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($locations));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($locations as $row) {
+                $row = $this->skipPrefix('location_', (array)$row);
+                $this->rename($row, 'job', 'job_id');
+
+                DB::table('job_locations')->insert($row);
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Tags...');
+
+        $tags = DB::connection('mysql')
+            ->table('page_tag')
+            ->select(['job_id', 'tag_id'])
+            ->join('page', 'page.page_id', '=', 'page_tag.page_id')
+            ->join('job', 'job_page', '=', 'page.page_id')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($tags));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($tags as $row) {
+                DB::table('job_tags')->insert((array) $row);
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Candidates...');
+
+        $candidates = DB::connection('mysql')
+            ->table('job_apply')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($candidates));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($candidates as $row) {
+                $row = $this->skipPrefix('apply_', (array)$row);
+
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'time', 'created_at');
+                $this->rename($row, 'session', 'session_id');
+                $this->rename($row, 'job', 'job_id');
+
+                $this->timestampToDatetime($row['created_at']);
+                unset($row['ip']);
+
+                DB::table('job_candidates')->insert((array) $row);
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Subscribers...');
+
+        $subscribers = DB::connection('mysql')
+            ->table('watch')
+            ->select(['watch.*', 'job_id'])
+            ->join('job', 'job_page', '=', 'page_id')
+            ->whereNull('watch_plugin')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($subscribers));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($subscribers as $row) {
+                $row = (array) $row;
+                $this->rename($row, 'watch_time', 'created_at');
+
+                $this->timestampToDatetime($row['created_at']);
+                unset($row['page_id'], $row['watch_page'], $row['watch_module'], $row['watch_plugin']);
+
+                $this->setNullIfEmpty($row['created_at']);
+
+                DB::table('job_subscribers')->insert((array) $row);
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Referers...');
+
+        $referers = DB::connection('mysql')
+            ->table('job_referer')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($referers));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($referers as $row) {
+                $row = $this->skipPrefix('referer_', (array) $row);
+                $this->rename($row, 'job', 'job_id');
+
+                if (strlen($row['url']) <= 250) {
+                    DB::table('job_referers')->insert((array)$row);
+                }
+
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->info('Done');
+    }
+
     /**
      * Execute the console command.
      *
@@ -1167,21 +1471,23 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-        $this->migrateUsers();
-        $this->migrateTags();
+//        $this->migrateUsers();
+//        $this->migrateTags();
         /* musi byc przed dodawaniem grup */
-        $this->migratePermissions();
-        $this->migrateGroups();
-        $this->migrateSkills();
-        $this->migrateWords();
-        $this->migrateAlerts();
-        $this->migratePm();
-        $this->migrateReputation();
-        $this->migrateForum();
-        $this->migrateTopic();
-        $this->migratePost();
-        $this->migrateMicroblogs();
-        $this->migrateTopicVisits();
+//        $this->migratePermissions();
+//        $this->migrateGroups();
+//        $this->migrateSkills();
+//        $this->migrateWords();
+//        $this->migrateAlerts();
+//        $this->migratePm();
+//        $this->migrateReputation();
+//        $this->migrateForum();
+//        $this->migrateTopic();
+//        $this->migratePost();
+//        $this->migrateMicroblogs();
+//        $this->migrateTopicVisits();
+//        $this->migrateFirms();
+        $this->migrateJobs();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }

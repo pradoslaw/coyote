@@ -13,7 +13,7 @@ class CreateFirmBenefitsTable extends Migration
     public function up()
     {
         Schema::create('firm_benefits', function (Blueprint $table) {
-            $table->smallInteger('id', true);
+            $table->increments('id');
             $table->smallInteger('firm_id');
             $table->string('name');
 
