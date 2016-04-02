@@ -84,6 +84,7 @@ return [
     'reputation'           => 'Potrzebujesz :point punktów reputacji aby zmienić zawartość tego pola.',
     'tag'                  => 'Podany tag zawiera nieprawidłowe znaki.',
     'tag_creation'         => 'Potrzebujesz :point punktów reputacji, aby utworzyć nowy tag. Wybierz już istniejący.',
+    'throttle'             => 'Musisz odczekać chwilę przed dodaniem kolejnego wpisu.',
 
     /*
     |--------------------------------------------------------------------------

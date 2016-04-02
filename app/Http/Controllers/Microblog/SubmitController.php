@@ -54,7 +54,7 @@ class SubmitController extends Controller
     public function save(Request $request, $id = null)
     {
         $this->validate($request, [
-            'text'          => 'required|string|max:10000'
+            'text'          => 'required|string|max:10000|throttle'
         ]);
 
         $microblog = $this->microblog->findOrNew($id);

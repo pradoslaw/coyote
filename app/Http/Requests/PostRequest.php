@@ -6,18 +6,19 @@ use Illuminate\Contracts\Validation\Validator;
 
 class PostRequest extends Request
 {
-    const RULE_USER_NAME = 'sometimes|required|string|max:20|unique:users,name';
-    const RULE_SUBJECT = 'sometimes|required|min:3|max:200';
-    const RULE_TEXT = 'required';
-    const RULE_STICKY = 'sometimes|bool';
-    const RULE_TAGS = 'array';
-    const RULE_TAG = 'max:25|tag|tag_creation:2';
-    const RULE_POLL_TITLE = 'string';
-    const RULE_POLL_ITEMS = 'required_with:title';
+    const RULE_USER_NAME            = 'sometimes|required|string|max:20|unique:users,name';
+    const RULE_SUBJECT              = 'sometimes|required|min:3|max:200';
+    const RULE_TEXT                 = 'required';
+    const RULE_STICKY               = 'sometimes|bool';
+    const RULE_TAGS                 = 'array';
+    const RULE_TAG                  = 'max:25|tag|tag_creation:2';
+    const RULE_POLL_TITLE           = 'string';
+    const RULE_POLL_ITEMS           = 'required_with:title';
     // @todo dodac walidator sprawdzajacy ilosc (oraz dlugosc) linii
-    const RULE_POLL_MAX_ITEMS = 'required_with:title|integer|min:1|max:20';
-    const RULE_POLL_LENGTH = 'required_with:title|integer';
-    const RULE_HUMAN = 'required';
+    const RULE_POLL_MAX_ITEMS       = 'required_with:title|integer|min:1|max:20';
+    const RULE_POLL_LENGTH          = 'required_with:title|integer';
+    const RULE_HUMAN                = 'required';
+    const RULE_THROTTLE             = 'throttle'; // must be at the end
 
     /**
      * Determine if the user is authorized to make this request.
@@ -52,7 +53,8 @@ class PostRequest extends Request
             'items'         => self::RULE_POLL_ITEMS,
             'max_items'     => self::RULE_POLL_MAX_ITEMS,
             'length'        => self::RULE_POLL_LENGTH,
-            'human'         => self::RULE_HUMAN
+            'human'         => self::RULE_HUMAN,
+            '_token'        => self::RULE_THROTTLE
         ];
 
         // if I create new topic or edit first post ...

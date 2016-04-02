@@ -58,7 +58,7 @@ class VoteController extends Controller
 
                 $microblog->votes--;
             } else {
-                $microblog->voters()->create(['user_id' => auth()->user()->id, 'ip' => $request->getClientIp()]);
+                $microblog->voters()->create(['user_id' => $this->userId, 'ip' => $request->getClientIp()]);
 
                 $microblog->votes++;
             }

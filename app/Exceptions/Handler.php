@@ -2,6 +2,7 @@
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -36,8 +37,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        // error handler to JSON request
+        // error handler to AJAX request
         if ($request->isXmlHttpRequest()) { // moze lepiej bedzie uzyc wantsJson()?
+            $statusCode = 500;
+
+            if ($e instanceof ValidationException && $e->getResponse()) {
+                return response()->json($e->validator->errors(), $statusCode);
+            }
+
             $response = [
                 'error' => 'Przepraszamy, ale coś poszło nie tak. Prosimy o kontakt z administratorem.'
             ];
@@ -47,8 +54,6 @@ class Handler extends ExceptionHandler
                 $response['message'] = $e->getMessage();
                 $response['trace'] = $e->getTrace();
             }
-
-            $statusCode = 500;
 
             if ($this->isHttpException($e)) {
                 $statusCode = $e->getStatusCode();

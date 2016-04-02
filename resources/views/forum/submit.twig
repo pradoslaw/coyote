@@ -27,6 +27,12 @@
                 </p>
             {% endif %}
 
+            {% if errors.first('_token') %}
+                <p class="alert alert-danger">
+                    {{ errors.first('_token') }}
+                </p>
+            {% endif %}
+
             {% if topic is not defined or topic.first_post_id == post.id %}
                 <div class="form-group {{ errors.first('subject') ? 'has-error' }}">
                     <label class="col-md-2 control-label">Temat</label>

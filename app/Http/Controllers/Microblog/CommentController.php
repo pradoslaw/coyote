@@ -49,8 +49,8 @@ class CommentController extends Controller
     public function save(Request $request, $id = null)
     {
         $this->validate($request, [
-            'text'          => 'required|string|max:5000',
-            'parent_id'     => 'sometimes|integer|exists:microblogs,id'
+            'parent_id'     => 'sometimes|integer|exists:microblogs,id',
+            'text'          => 'required|string|max:5000|throttle'
         ]);
 
         $microblog = $this->microblog->findOrNew($id);

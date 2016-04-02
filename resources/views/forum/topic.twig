@@ -16,6 +16,12 @@
             </p>
         {% endif %}
 
+        {% if errors.first('_token') %}
+            <p class="alert alert-danger">
+                {{ errors.first('_token') }}
+            </p>
+        {% endif %}
+
         <h1>{{ link_to_route('forum.topic', topic.subject, [forum.path, topic.id, topic.path]) }}</h1>
 
         <nav>
