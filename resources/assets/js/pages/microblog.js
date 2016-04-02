@@ -245,6 +245,11 @@ $(function () {
         .on('click', 'a[data-toggle="lightbox"]', function(e) {
             e.preventDefault();
             $(this).ekkoLightbox();
+        })
+        .on('click', '.read-more', function()
+        {
+            $(this).prev().css('max-height', '9999px').children('.microblog-gradient').remove();
+            $(this).remove();
         });
 
     function initForm($form) {
@@ -343,6 +348,15 @@ $(function () {
     }
 
     initForm($('.microblog-submit'));
+
+    $(window).load(function() {
+        $('.microblog-text').each(function() {
+            if ($(this).height() > 305) {
+                $(this).css('max-height', '305px').append('<div class="microblog-gradient"></div>');
+                $('<a class="read-more" href="javascript:">Zobacz całość</a>').insertAfter(this);
+            }
+        });
+    });
 
     if ('onhashchange' in window) {
         var onHashChange = function () {

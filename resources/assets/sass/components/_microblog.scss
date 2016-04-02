@@ -31,6 +31,8 @@
 
 .microblog-text {
   padding: 10px 0;
+  overflow: hidden;
+  position: relative;
 
   > .thumbnails {
     margin-top: 20px;
@@ -40,6 +42,32 @@
     display: block;
     max-width: 100%;
     height: auto;
+  }
+}
+
+.microblog-gradient {
+  position: absolute;
+  bottom:   0;
+  left:     0;
+  width:    100%;
+  height:   30px;
+  background: linear-gradient(to bottom,rgba(255,255,255,0.15) 0,white 100%);
+}
+
+.read-more {
+  color: $gray;
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 20px;
+  display: inline-block;
+
+  &:hover {
+    color: inherit;
+  }
+
+  &:before {
+    @include font-awesome($fa-var-arrow-circle-o-right);
+    left: 0;
   }
 }
 
