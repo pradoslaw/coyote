@@ -3,7 +3,6 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
-use Cache;
 
 class FirewallRepository extends Repository implements FirewallRepositoryInterface
 {
@@ -19,11 +18,11 @@ class FirewallRepository extends Repository implements FirewallRepositoryInterfa
 
     private function load()
     {
-        if (Cache::has(self::CACHE_KEY)) {
-            $result = json_decode(Cache::get(self::CACHE_KEY), true);
+        if ($this->app['cache']->has(self::CACHE_KEY)) {
+            $result = json_decode($this->app['cache']->get(self::CACHE_KEY), true);
         } else {
             $result = $this->all()->toArray();
-            Cache::forever(self::CACHE_KEY, json_encode($result));
+            $this->app['cache']->forever(self::CACHE_KEY, json_encode($result));
         }
 
         return $result;
@@ -39,7 +38,7 @@ class FirewallRepository extends Repository implements FirewallRepositoryInterfa
         $result = [];
 
         foreach ($this->load() as $row) {
-            if ($row['ip']) {//dd(('/^' . str_replace('\*', '\d+', preg_quote($row['ip'])) . '$/'));
+            if ($row['ip']) {
                 if (preg_match('/^' . str_replace('\*', '\d+', preg_quote($row['ip'])) . '$/', $ip)) {
                     $result = $row;
                     break;

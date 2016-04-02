@@ -30,9 +30,10 @@ class FirewallBlacklist
      */
     public function handle($request, Closure $next)
     {
-        $user = $request->user();
+        $response = $this->firewall->filter(auth()->check() ? auth()->user()->id : null, $request->ip());
 
-        if ($response = $this->firewall->filter($user ? $user->id : null, $request->ip())) {
+        if ($response) {
+            // show ban message and exit the program. I don't know how to stop application. return false didn't work :(
             echo view('errors.401', $response);
             exit;
         }
