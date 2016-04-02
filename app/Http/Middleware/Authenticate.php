@@ -16,7 +16,6 @@ class Authenticate
      * Create a new filter instance.
      *
      * @param  Guard $auth
-     * @return void
      */
     public function __construct(Guard $auth)
     {
@@ -33,7 +32,7 @@ class Authenticate
     public function handle($request, Closure $next)
     {
         if ($this->auth->guest()) {
-            if ($request->ajax()) {
+            if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
                 return redirect()->guest(route('login'));

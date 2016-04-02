@@ -10,13 +10,33 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        'Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode',
-        'Illuminate\Cookie\Middleware\EncryptCookies',
-        'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
-        'Illuminate\Session\Middleware\StartSession',
-        'Illuminate\View\Middleware\ShareErrorsFromSession',
-        'Coyote\Http\Middleware\VerifyCsrfToken',
-        'Coyote\Http\Middleware\FirewallBlacklist',
+        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \Coyote\Http\Middleware\EncryptCookies::class,
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        \Coyote\Http\Middleware\VerifyCsrfToken::class,
+        \Coyote\Http\Middleware\FirewallBlacklist::class
+    ];
+
+    /**
+     * The application's route middleware groups.
+     *
+     * @var array
+     */
+    protected $middlewareGroups = [
+        'web' => [
+            // @todo nie wiem czemu po upgrade laravela, nie dzialaja reguly z grupy web
+//            \Coyote\Http\Middleware\EncryptCookies::class,
+//            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+//            \Illuminate\Session\Middleware\StartSession::class,
+//            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+//            \Coyote\Http\Middleware\VerifyCsrfToken::class,
+//            \Coyote\Http\Middleware\FirewallBlacklist::class
+        ],
+        'api' => [
+            'throttle:60,1',
+        ],
     ];
 
     /**
@@ -27,6 +47,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth'          => Middleware\Authenticate::class,
         'auth.basic'    => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'can'           => \Illuminate\Foundation\Http\Middleware\Authorize::class,
         'guest'         => Middleware\RedirectIfAuthenticated::class,
         'adm'           => Middleware\AdmAccess::class,
         'forum.access'  => Middleware\ForumAccess::class,

@@ -25,10 +25,10 @@ class SessionServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->session->extend('coyote', function ($app) {
-            $connectionName     = $this->app->config->get('session.connection');
-            $databaseConnection = $app->app->db->connection($connectionName);
+            $connectionName     = $app['config']->get('session.connection');
+            $databaseConnection = $app['db']->connection($connectionName);
 
-            $table = $databaseConnection->getTablePrefix() . $app['config']['session.table'];
+            $table = $databaseConnection->getTablePrefix() . $app['config']->get('session.table');
 
             return new Handler($databaseConnection, $table);
         });
