@@ -11,7 +11,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'Coyote\Console\Commands\ClearCache',
         'Coyote\Console\Commands\PurgeViews',
         'Coyote\Console\Commands\Migrate',
         'Coyote\Console\Commands\Elasticsearch\Mapping',

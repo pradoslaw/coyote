@@ -5,6 +5,12 @@ namespace Coyote\Console\Commands;
 use Illuminate\Console\Command;
 use Cache;
 
+/**
+ * Class ClearCache
+ * @package Coyote\Console\Commands
+ *
+ * @deprecated
+ */
 class ClearCache extends Command
 {
     /**
