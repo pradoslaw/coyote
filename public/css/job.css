@@ -258,6 +258,8 @@
   #job-header-container .nav-tabs {
     margin-bottom: -1px;
     border-bottom: none; }
+    #job-header-container .nav-tabs .fa-cog {
+      padding-left: 5px; }
   #job-header-container .outline {
     border-radius: 6px;
     background-color: #e4e4e4;
@@ -284,7 +286,7 @@
     font-size: 14px; }
 
 #job-main-content {
-  padding-top: 40px; }
+  padding-top: 15px; }
   #job-main-content aside .box:first-child > h4 {
     margin-top: 0; }
 

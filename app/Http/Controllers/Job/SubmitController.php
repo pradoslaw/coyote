@@ -34,6 +34,9 @@ class SubmitController extends Controller
      */
     private $tag;
 
+    /**
+     * @var \Coyote\GeoIp
+     */
     private $geoIp;
 
     /**
@@ -289,22 +292,6 @@ class SubmitController extends Controller
         });
 
         return redirect()->route('job.offer', [$job->id, $job->path])->with('success', 'Oferta została prawidłowo dodana.');
-    }
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function postTag(Request $request)
-    {
-        $this->validate($request, ['name' => 'required|string|max:25|tag']);
-
-        return view('job.submit.tag', [
-            'tag' => [
-                'name' => $request->name,
-                'priority' => 1
-            ]
-        ]);
     }
 
     /**

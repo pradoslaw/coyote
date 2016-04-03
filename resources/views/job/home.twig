@@ -3,6 +3,8 @@
 
 {% set declinationOffers = ['oferta', 'oferty', 'ofert'] %}
 
+{% import 'components.forms' as forms %}
+
 {% block container %}
     <div id="job-main-content" class="row">
         <main class="col-lg-9 col-md-12">
@@ -95,6 +97,40 @@
             {% endif %}
         </aside>
     </div>
+
+    {{ form_open({'url': route('job.preferences'), 'id': 'form-preferences'}) }}
+        <div class="modal fade" id="editor" tabindex="-1" role="dialog" aria-labelledby="editor-modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Ustawienia preferencji</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{ forms.inline(form_text('city', preferences.city, {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}), 'Miejscowość') }}
+                        {{ forms.inline(form_text('tags', preferences.tags|join(', '), {'class': 'form-control', 'placeholder': 'Np. .net, c#', 'id': 'tags'}), 'Technologie') }}
+
+                        <div class="form-group">
+                            <label>Minimalne wynagrodzenie</label>
+
+                            <div class="row">
+                                <div class="col-xs-2" style="padding-right: 0">
+                                    {{ form_text('salary', preferences.salary, {'class': 'form-control'}) }}
+                                </div>
+
+                                <div class="col-xs-2">
+                                    {{ form_select('currency_id', currencyList, preferences.currency_id, {'class': 'form-control'}) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                        <button type="submit" class="btn btn-primary danger">Zapisz</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_close() }}
 {% endblock %}
 
 {% block fixed %}
@@ -132,7 +168,9 @@
 
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active"><a href="{{ route('job.home') }}">Wszystkie</a></li>
-                    <li role="presentation" title="Kliknij, aby zobaczyć oferty pasujące do mnie"><a href="{{ route('job.home') }}">Wybrane dla mnie</a></li>
+                    <li role="presentation" title="Kliknij, aby zobaczyć oferty pasujące do mnie">
+                        <a href="{{ route('job.home') }}">Wybrane dla mnie <i id="btn-editor" class="fa fa-cog"></i></a>
+                    </li>
 
                     {% if auth_check() %}
                         <li role="presentation" title="Kliknij, aby zobaczyć oferty dodane przeze mnie"><a href="{{ route('job.home') }}">Moje</a></li>
@@ -189,4 +227,19 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ cdn('js/tags.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            {#$('#tags').tag({#}
+                {#validateUrl: '{{ route('tag.validate') }}',#}
+                {#promptUrl: '{{ route('tag.prompt') }}'#}
+            {#});#}
+        });
+    </script>
+
 {% endblock %}

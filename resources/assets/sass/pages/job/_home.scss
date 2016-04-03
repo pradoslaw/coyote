@@ -12,6 +12,10 @@ $header-footer-border: #c7c7c7;
   .nav-tabs {
     margin-bottom: -1px;
     border-bottom: none;
+
+    .fa-cog {
+      padding-left: 5px;
+    }
   }
 
   .outline {
@@ -59,7 +63,7 @@ $header-footer-border: #c7c7c7;
 // -----------------------------------------------------
 
 #job-main-content {
-  padding-top: 40px;
+  padding-top: 15px;
 
   aside {
     .box:first-child {

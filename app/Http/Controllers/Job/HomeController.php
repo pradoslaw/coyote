@@ -52,6 +52,9 @@ class HomeController extends Controller
         $this->elasticsearch = $queryBuilder;
         $this->city = new Filters\Job\City();
         $this->tag = new Filters\Job\Tag();
+
+        $this->public['validateUrl'] = route('job.tag.validate');
+        $this->public['promptUrl'] = route('job.tag.prompt');
     }
 
     /**
@@ -148,7 +151,7 @@ class HomeController extends Controller
         // facet search
         $this->elasticsearch->addAggs(new Aggs\Job\Location());
         $this->elasticsearch->addAggs(new Aggs\Job\Tag());
-        $this->elasticsearch->setSize(self::PER_PAGE * ($request->get('page', 0) - 1), self::PER_PAGE);
+        $this->elasticsearch->setSize(self::PER_PAGE * ($request->get('page', 1) - 1), self::PER_PAGE);
 
         start_measure('search', 'Elasticsearch');
 
@@ -190,6 +193,7 @@ class HomeController extends Controller
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
             'currencyList'      => Currency::lists('name', 'id'),
+            'preferences'       => json_decode($this->getSetting('job.preferences', '{}')),
             'selected' => [
                 'tags'          => $this->tag->getTags(),
                 'cities'        => array_map('mb_strtolower', $this->city->getCities())
