@@ -148,7 +148,7 @@ class HomeController extends Controller
         // facet search
         $this->elasticsearch->addAggs(new Aggs\Job\Location());
         $this->elasticsearch->addAggs(new Aggs\Job\Tag());
-        $this->elasticsearch->setSize($request->get('page'), self::PER_PAGE);
+        $this->elasticsearch->setSize(self::PER_PAGE * ($request->get('page', 0) - 1), self::PER_PAGE);
 
         start_measure('search', 'Elasticsearch');
 

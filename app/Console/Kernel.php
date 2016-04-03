@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\Elasticsearch\Mapping',
         'Coyote\Console\Commands\Elasticsearch\Create',
         'Coyote\Console\Commands\Elasticsearch\Index',
+        'Coyote\Console\Commands\Elasticsearch\Purge',
     ];
 
     /**
@@ -27,5 +28,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('coyote:counter')->everyFiveMinutes();
+        $schedule->command('es:purge')->hourly();
     }
 }

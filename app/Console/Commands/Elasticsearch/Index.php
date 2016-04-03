@@ -88,7 +88,7 @@ class Index extends Command
     private function indexJob()
     {
         $this->line('Indexing jobs in Elasticsearch...');
-        $this->index($this->job);
+        $this->index($this->job->select()->whereNull('deleted_at')->where('deadline_at', '>=', \DB::raw('NOW()')));
         $this->info('Success');
     }
 

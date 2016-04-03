@@ -1193,6 +1193,7 @@ class Migrate extends Command
                 }
 
                 unset($row['phone'], $row['page'], $row['technology']);
+                $row['name'] = htmlspecialchars_decode($row['name']);
 
                 DB::table('firms')->insert($row);
                 $bar->advance();
@@ -1219,6 +1220,7 @@ class Migrate extends Command
                 $row = $this->skipPrefix('benefit_', (array) $row);
 
                 $this->rename($row, 'firm', 'firm_id');
+                $row['name'] = htmlspecialchars_decode($row['name']);
 
                 DB::table('firm_benefits')->insert($row);
                 $bar->advance();
@@ -1283,6 +1285,7 @@ class Migrate extends Command
                 }
 
                 unset($row['incognito'], $row['page'], $row['searchable']);
+                $row['title'] = htmlspecialchars_decode($row['title']);
 
                 DB::table('jobs')->insert($row);
                 $bar->advance();
@@ -1307,11 +1310,14 @@ class Migrate extends Command
         $bar = $this->output->createProgressBar(count($locations));
 
         DB::beginTransaction();
+        $replace = ['Warsaw' => 'Warszawa', 'Krakow' => 'Kraków', 'Wroclaw' => 'Wrocław', 'Lodz' => 'Łódź'];
 
         try {
             foreach ($locations as $row) {
                 $row = $this->skipPrefix('location_', (array)$row);
                 $this->rename($row, 'job', 'job_id');
+
+                $row['city'] = str_ireplace(array_keys($replace), array_values($replace), $row['city']);
 
                 DB::table('job_locations')->insert($row);
                 $bar->advance();
@@ -1376,6 +1382,7 @@ class Migrate extends Command
                 $this->rename($row, 'job', 'job_id');
 
                 $this->timestampToDatetime($row['created_at']);
+                $this->setNullIfEmpty($row['user_id']);
                 unset($row['ip']);
 
                 DB::table('job_candidates')->insert((array) $row);

@@ -368,6 +368,8 @@
   #box-jobs tr .col-body h2 {
     font-size: 15px;
     margin: 0 0 5px 0; }
+    #box-jobs tr .col-body h2 a {
+      color: #5e7813; }
   #box-jobs tr .col-body p {
     font-size: 12px;
     clear: both;
