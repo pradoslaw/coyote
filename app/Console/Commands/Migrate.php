@@ -1348,7 +1348,10 @@ class Migrate extends Command
 
         try {
             foreach ($tags as $row) {
-                DB::table('job_tags')->insert((array) $row);
+                $row = (array) $row;
+                $row['priority'] = 1;
+
+                DB::table('job_tags')->insert($row);
                 $bar->advance();
             }
 
