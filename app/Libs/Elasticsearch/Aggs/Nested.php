@@ -24,7 +24,8 @@ class Nested extends Aggs implements DslInterface
                 'aggs' => [
                     $this->field => [
                         'terms' => [
-                            'field' => $this->field
+                            'field' => $this->field,
+                            'size' => 15
                         ]
                     ]
                 ]

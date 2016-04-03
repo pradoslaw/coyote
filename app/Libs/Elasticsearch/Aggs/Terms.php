@@ -18,7 +18,8 @@ class Terms extends Aggs implements DslInterface
 
         $body['aggs'][$this->name] = [
                 'terms' => [
-                    'field' => $this->field
+                    'field' => $this->field,
+                    'size' => 15
                 ]
 
         ];
