@@ -184,7 +184,7 @@
                 </li>
             </ul>
 
-            {% if job.firm_id %}
+            {% if job.firm_id and (firm.street or firm.website or firm.employees or firm.founded or firm.latitude) %}
                 <section id="box-job-firm" class="box">
                     <h4><i class="fa fa-info-circle fa-fw"></i> O firmie</h4>
 
@@ -203,10 +203,12 @@
                                         <a href="{{ firm.website }}">{{ firm.website }}</a>
                                     </li>
                                 {% endif %}
-                                <li>
-                                    <i class="fa fa-users fa-fw"></i>
-                                    {{ employeesList[firm.employees] }} pracowników
-                                </li>
+                                {% if firm.employees %}
+                                    <li>
+                                        <i class="fa fa-users fa-fw"></i>
+                                        {{ employeesList[firm.employees] }} pracowników
+                                    </li>
+                                {% endif %}
                                 {% if firm.founded %}
                                     <li>
                                         <i class="fa fa-calendar-o fa-fw"></i>
