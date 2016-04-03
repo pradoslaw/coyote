@@ -84,7 +84,7 @@
         </main>
 
         <aside class="col-lg-3">
-            {% if subscribes %}
+            {% if subscribes|length %}
                 <section class="box sidebar-job-offers">
                     <h4><i class="fa fa-star fa-fw"></i> Obserwowane oferty pracy</h4>
 
@@ -233,13 +233,4 @@
     {{ parent() }}
 
     <script type="text/javascript" src="{{ cdn('js/tags.js') }}"></script>
-    <script type="text/javascript">
-        $(function() {
-            {#$('#tags').tag({#}
-                {#validateUrl: '{{ route('tag.validate') }}',#}
-                {#promptUrl: '{{ route('tag.prompt') }}'#}
-            {#});#}
-        });
-    </script>
-
 {% endblock %}
