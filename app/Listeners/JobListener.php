@@ -9,16 +9,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class JobListener implements ShouldQueue
 {
-    use Elasticsearch;
-
     /**
      * @param JobWasSaved $event
      */
     public function onJobSave(JobWasSaved $event)
     {
-        $this->fireJobs(function () use ($event) {
-            $event->job->putToIndex();
-        });
+        $event->job->putToIndex();
     }
 
     /**
@@ -26,9 +22,7 @@ class JobListener implements ShouldQueue
      */
     public function onJobDelete(JobWasDeleted $event)
     {
-        $this->fireJobs(function () use ($event) {
-            Job::withTrashed()->find($event->job['id'])->deleteFromIndex();
-        });
+        Job::withTrashed()->find($event->job['id'])->deleteFromIndex();
     }
 
     /**
@@ -45,7 +39,7 @@ class JobListener implements ShouldQueue
 
         $events->listen(
             'Coyote\Events\JobWasDeleted',
-            'Coyote\Listeners\jobListener@onJobDelete'
+            'Coyote\Listeners\JobListener@onJobDelete'
         );
     }
 }

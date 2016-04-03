@@ -17,6 +17,8 @@
     </ul>
 {% endmacro %}
 
+{% import 'components.modals' as modals %}
+
 {% block container %}
     <div class="row" style="margin-top: 20px">
         <div class="col-md-9">
@@ -173,9 +175,11 @@
                 <li>
                     <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fa fa-fw fa-pencil"></i> Dodaj ofertę pracy</a>
                 </li>
-                <li>
-                    <a class="btn-delete" href="javascript:"><i class="fa fa-fw fa-remove"></i> Usuń tę ofertę pracy</a>
-                </li>
+                {% if can('delete', job) %}
+                    <li>
+                        <a class="btn-delete" href="#modal-delete" data-toggle="modal"><i class="fa fa-fw fa-remove"></i> Usuń tę ofertę pracy</a>
+                    </li>
+                {% endif %}
                 <li>
                     <a class="btn-move" href="javascript:"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
                 </li>
@@ -266,20 +270,17 @@
 
         </aside>
     </div>
-{% endblock %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/job.css') }}">
+    {{ form_open({'url': route('job.delete', [job.id]) }) }}
+    {{ modals.confirm('Czy chcesz usunąć tę ofertę pracy?', 'Usuwanie', 'modal-delete') }}
+    {{ form_close() }}
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
 
-    <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
-
     {% if firm.latitude and firm.longitude %}
+        <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
         <script type="text/javascript">
             function initialize() {
                 var coordinates = new google.maps.LatLng({{ firm.latitude }}, {{ firm.longitude }});
@@ -298,6 +299,6 @@
             }
 
             google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
+        </script>
     {% endif %}
 {% endblock %}

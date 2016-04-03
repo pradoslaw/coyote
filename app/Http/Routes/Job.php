@@ -19,6 +19,8 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     Route::get('Tag/Prompt', ['uses' => 'TagController@prompt', 'as' => 'tag.prompt']);
     Route::get('Tag/Validate', ['uses' => 'TagController@valid', 'as' => 'tag.validate']);
 
+    Route::post('Delete/{job}', ['uses' => 'DeleteController@index', 'as' => 'delete']);
+
     Route::get('Technologia/{name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     Route::get('Zdalna', ['uses' => 'HomeController@remote', 'as' => 'remote']);
     Route::get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city']);

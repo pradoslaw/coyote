@@ -257,6 +257,8 @@ class Migrate extends Command
                     'f_merge' => 'forum-merge',
                     'm_edit' => 'microblog-update',
                     'm_delete' => 'microblog-delete',
+                    'j_edit' => 'job-update',
+                    'j_delete' => 'job-delete'
                 ];
 
                 if (in_array($permission['name'], array_keys($mapping))) {
