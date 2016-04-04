@@ -259,7 +259,12 @@
     margin-bottom: -1px;
     border-bottom: none; }
     #job-header-container .nav-tabs .fa-cog {
-      padding-left: 5px; }
+      margin-left: 5px;
+      padding: 2px 4px;
+      border: 1px solid transparent; }
+      #job-header-container .nav-tabs .fa-cog:hover {
+        color: #555555;
+        border-color: #d0d0d0; }
   #job-header-container .outline {
     border-radius: 6px;
     background-color: #e4e4e4;

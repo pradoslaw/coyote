@@ -138,6 +138,10 @@ class HomeController extends Controller
             $this->elasticsearch->addFilter(new Filters\Job\Currency($request->get('currency')));
         }
 
+        if ($request->has('remote')) {
+            $this->elasticsearch->addFilter(new Filters\Job\Remote());
+        }
+
         $this->elasticsearch->addSort(
             new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
         );
@@ -150,15 +154,17 @@ class HomeController extends Controller
 
         // facet search
         $this->elasticsearch->addAggs(new Aggs\Job\Location());
+        $this->elasticsearch->addAggs(new Aggs\Job\Remote());
         $this->elasticsearch->addAggs(new Aggs\Job\Tag());
         $this->elasticsearch->setSize(self::PER_PAGE * ($request->get('page', 1) - 1), self::PER_PAGE);
 
         start_measure('search', 'Elasticsearch');
 
+        $build = $this->elasticsearch->build();
         // show build query in laravel's debugbar
-        debugbar()->debug($this->elasticsearch->build());
+        debugbar()->debug($build);
 
-        $response = $this->job->search($this->elasticsearch->build());
+        $response = $this->job->search($build);
         stop_measure('search');
 
         // keep in mind that we return data by calling getSource(). This is important because
@@ -168,7 +174,8 @@ class HomeController extends Controller
         $context = !$request->has('q') ? 'global.' : '';
         $aggregations = [
             'cities' => $response->getAggregations("${context}locations.city_original"),
-            'tags' => $response->getAggregations("${context}tags")
+            'tags' => $response->getAggregations("${context}tags"),
+            'remote' => $response->getAggregations("${context}remote")
         ];
 
         $pagination = new LengthAwarePaginator(
@@ -196,7 +203,8 @@ class HomeController extends Controller
             'preferences'       => json_decode($this->getSetting('job.preferences', '{}')),
             'selected' => [
                 'tags'          => $this->tag->getTags(),
-                'cities'        => array_map('mb_strtolower', $this->city->getCities())
+                'cities'        => array_map('mb_strtolower', $this->city->getCities()),
+                'remote'        => $request->has('remote')
             ]
         ])->with(
             compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count')

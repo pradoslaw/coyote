@@ -35,6 +35,17 @@
 
                         <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
 
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                {{ form_checkbox('remote', 1, selected.remote) }}
+
+                                <a href="{{ route('job.remote') }}">
+                                    <span>Praca zdalna</span>
+                                    <small>({{ declination(aggregations.remote[1], declinationOffers) }})</small>
+                                </a>
+                            </li>
+                        </ul>
+
                         {% if aggregations.cities|length > 0 %}
                             <ul class="list-group">
                                 {% for city, count in aggregations.cities %}
@@ -106,7 +117,19 @@
                         <h4 class="modal-title">Ustawienia preferencji</h4>
                     </div>
                     <div class="modal-body">
-                        {{ forms.inline(form_text('city', preferences.city, {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}), 'Miejscowość') }}
+                        <div class="form-group">
+                            <label>Miejscowość</label>
+                            {{ form_text('city', preferences.city, {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}) }}
+
+                            <div class="checkbox">
+                                {{ form_checkbox('is_remote', 1, preferences.is_remote, {'id': 'is-remote'}) }}
+
+                                <label for="is-remote">
+                                    Praca zdalna
+                                </label>
+                            </div>
+                        </div>
+
                         {{ forms.inline(form_text('tags', preferences.tags|join(', '), {'class': 'form-control', 'placeholder': 'Np. .net, c#', 'id': 'tags'}), 'Technologie') }}
 
                         <div class="form-group">

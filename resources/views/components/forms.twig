@@ -58,18 +58,23 @@
 
     <div class="form-group {{ error ? 'has-error' }}" {{ _self.attr(attr) }}>
 
+        {% if not attr.id %}
+            {% set attr = {'id': 'id' ~ random()} %}
+        {% endif %}
+
         <div class="col-md-6 col-md-offset-4">
             <div class="checkbox">
-                <label>
-                    {{ form_checkbox(name, value, checked, attr, help) }}
+                {{ form_checkbox(name, value, checked, attr, help) }}
+
+                <label for="{{ attr.id }}">
                     {{ label }}
                 </label>
             </div>
 
             {% if session_get('errors').has(name) %}
-            <span class="help-block">{{ session_get('errors').first(name) }}</span>
+                <span class="help-block">{{ session_get('errors').first(name) }}</span>
             {% elseif help %}
-            <span class="help-box">{{ help }}</span>
+                <span class="help-box">{{ help }}</span>
             {% endif %}
         </div>
     </div>

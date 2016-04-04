@@ -17,6 +17,7 @@ class PreferencesController extends Controller
             'city' => 'string',
             'salary' => 'int',
             'currency_id' => 'required|integer',
+            'is_remote' => 'bool'
         ]);
 
         $this->setSetting('job.preferences', json_encode($request->except('_token')));
