@@ -9,16 +9,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PostListener implements ShouldQueue
 {
-    use Elasticsearch;
-
     /**
      * @param PostWasSaved $event
      */
     public function onPostSave(PostWasSaved $event)
     {
-        $this->fireJobs(function () use ($event) {
-            $event->post->putToIndex();
-        });
+        $event->post->putToIndex();
     }
 
     /**
@@ -26,9 +22,7 @@ class PostListener implements ShouldQueue
      */
     public function onPostDelete(PostWasDeleted $event)
     {
-        $this->fireJobs(function () use ($event) {
-            Post::withTrashed()->find($event->post['id'])->deleteFromIndex();
-        });
+        Post::withTrashed()->find($event->post['id'])->deleteFromIndex();
     }
 
     /**
