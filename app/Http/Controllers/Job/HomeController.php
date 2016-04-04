@@ -18,6 +18,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class HomeController extends Controller
 {
     const PER_PAGE = 15;
+    const TAB_ALL = 'all';
+    const TAB_FILTERED = 'filtered';
 
     /**
      * @var JobRepositoryInterface
@@ -40,6 +42,11 @@ class HomeController extends Controller
     private $tag;
 
     /**
+     * @var mixed
+     */
+    private $nav;
+
+    /**
      * HomeController constructor.
      * @param JobRepositoryInterface $job
      * @param QueryBuilderInterface $queryBuilder
@@ -55,6 +62,15 @@ class HomeController extends Controller
 
         $this->public['validateUrl'] = route('job.tag.validate');
         $this->public['promptUrl'] = route('job.tag.prompt');
+
+        $this->nav = app('menu')->make('job.home', function ($menu) {
+            $html = app('html')->tag('i', '', ['id' => 'btn-editor', 'class' => 'fa fa-cog']);
+
+            $menu->add('Wszystkie', ['route' => ['job.home', 'tab' => 'all'], 'nickname' => 'all']);
+            $menu->add('Wybrane dla mnie', [
+                'route' => ['job.home', 'tab' => 'filtered'], 'nickname' => 'filtered'
+            ])->append($html);
+        });
     }
 
     /**
@@ -119,6 +135,24 @@ class HomeController extends Controller
      */
     private function load(Request $request)
     {
+        $tab = $request->get('tab', $this->getSetting('job.tab', self::TAB_FILTERED));
+        $validator = $this->getValidationFactory()->make($request->all(), ['tab' => 'sometimes|in:all,filtered']);
+
+        if ($validator->fails()) {
+            $tab = self::TAB_FILTERED;
+        }
+
+        if ($request->has('tab')) {
+            $this->setSetting('job.tab', $tab);
+        }
+
+        if ($request->getQueryString() || $this->getRouter()->currentRouteName() !== 'job.home') {
+            $tab = self::TAB_ALL;
+        }
+        $this->nav->get($tab)->active();
+
+        $preferences = json_decode($this->getSetting('job.preferences', '{}'));
+
         if ($request->has('q')) {
             $this->elasticsearch->addQuery(
                 new Query($request->get('q'), ['title', 'description', 'requirements', 'recruitment', 'tags'])
@@ -200,7 +234,8 @@ class HomeController extends Controller
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
             'currencyList'      => Currency::lists('name', 'id'),
-            'preferences'       => json_decode($this->getSetting('job.preferences', '{}')),
+            'preferences'       => $preferences,
+            'nav'               => $this->nav,
             'selected' => [
                 'tags'          => $this->tag->getTags(),
                 'cities'        => array_map('mb_strtolower', $this->city->getCities()),
