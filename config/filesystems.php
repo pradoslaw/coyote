@@ -74,7 +74,7 @@ return [
     |
     | List of allowed extensions
     */
-    'upload_mimes' => ' jpg,jpeg,gif,png,zip,rar,txt,pdf,doc,xls,pas,cpp,7z,7zip,patch',
+    'upload_mimes' => 'jpg,jpeg,gif,png,zip,rar,txt,pdf,doc,docx,xls,xlsx,pas,cpp,7z,7zip,patch,webm',
 
     /*
     | --------------------------------------------------------------------------
