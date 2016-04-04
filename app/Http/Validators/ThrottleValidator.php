@@ -12,7 +12,12 @@ class ThrottleValidator
     public function validateThrottle($attribute, $value, $parameters, $validator)
     {
         $request = request();
-        $key = $request->ip() . $request->browser();
+        $key = $request->ip();
+
+        // kod uruchamiany poprzez codeception "nie widzi" metody browser()
+        if (method_exists($request, 'browser')) {
+            $key .= $request->browser();
+        }
 
         $delay = 60;
 
