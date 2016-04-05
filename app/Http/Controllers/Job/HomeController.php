@@ -8,6 +8,7 @@ use Coyote\Elasticsearch\Query;
 use Coyote\Elasticsearch\QueryBuilderInterface;
 use Coyote\Elasticsearch\Sort;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Parser\Reference\City;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Illuminate\Http\Request;
@@ -47,6 +48,16 @@ class HomeController extends Controller
     private $nav;
 
     /**
+     * @var string
+     */
+    private $tab = self::TAB_ALL;
+
+    /**
+     * @var array|mixed
+     */
+    private $preferences = [];
+
+    /**
      * HomeController constructor.
      * @param JobRepositoryInterface $job
      * @param QueryBuilderInterface $queryBuilder
@@ -63,14 +74,8 @@ class HomeController extends Controller
         $this->public['validateUrl'] = route('job.tag.validate');
         $this->public['promptUrl'] = route('job.tag.prompt');
 
-        $this->nav = app('menu')->make('job.home', function ($menu) {
-            $html = app('html')->tag('i', '', ['id' => 'btn-editor', 'class' => 'fa fa-cog']);
-
-            $menu->add('Wszystkie', ['route' => ['job.home', 'tab' => 'all'], 'nickname' => 'all']);
-            $menu->add('Wybrane dla mnie', [
-                'route' => ['job.home', 'tab' => 'filtered'], 'nickname' => 'filtered'
-            ])->append($html);
-        });
+        $this->preferences = json_decode($this->getSetting('job.preferences', '{}'));
+        $this->nav = $this->getMenu();
     }
 
     /**
@@ -79,6 +84,24 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        $this->tab = $request->get('tab', $this->getSetting('job.tab', self::TAB_FILTERED));
+        $validator = $this->getValidationFactory()->make($request->all(), ['tab' => 'sometimes|in:all,filtered']);
+
+        if ($validator->fails()) {
+            $this->tab = self::TAB_FILTERED;
+        }
+
+        if ($request->has('tab')) {
+            $this->setSetting('job.tab', $this->tab);
+        }
+
+        // if user want to filter job offers, we MUST select "all" tab
+        if ($this->inputNotEmpty($request, ['q', 'city', 'remote', 'tag'])) {
+            $this->tab = self::TAB_ALL;
+        } else {
+            $this->applyPreferences();
+        }
+
         return $this->load($request);
     }
 
@@ -124,7 +147,7 @@ class HomeController extends Controller
      */
     public function remote(Request $request)
     {
-        $this->elasticsearch->addFilter(new Filters\Job\Remote());
+        $this->applyRemoteFilter();
 
         return $this->load($request);
     }
@@ -135,23 +158,7 @@ class HomeController extends Controller
      */
     private function load(Request $request)
     {
-        $tab = $request->get('tab', $this->getSetting('job.tab', self::TAB_FILTERED));
-        $validator = $this->getValidationFactory()->make($request->all(), ['tab' => 'sometimes|in:all,filtered']);
-
-        if ($validator->fails()) {
-            $tab = self::TAB_FILTERED;
-        }
-
-        if ($request->has('tab')) {
-            $this->setSetting('job.tab', $tab);
-        }
-
-        if ($request->getQueryString() || $this->getRouter()->currentRouteName() !== 'job.home') {
-            $tab = self::TAB_ALL;
-        }
-        $this->nav->get($tab)->active();
-
-        $preferences = json_decode($this->getSetting('job.preferences', '{}'));
+        $this->nav->get($this->tab)->active();
 
         if ($request->has('q')) {
             $this->elasticsearch->addQuery(
@@ -168,12 +175,11 @@ class HomeController extends Controller
         }
 
         if ($request->has('salary')) {
-            $this->elasticsearch->addFilter(new Filters\Range('salary', ['gte' => $request->get('salary')]));
-            $this->elasticsearch->addFilter(new Filters\Job\Currency($request->get('currency')));
+            $this->applySalaryFilter($request->get('salary'), $request->get('currency'));
         }
 
         if ($request->has('remote')) {
-            $this->elasticsearch->addFilter(new Filters\Job\Remote());
+            $this->applyRemoteFilter();
         }
 
         $this->elasticsearch->addSort(
@@ -234,7 +240,7 @@ class HomeController extends Controller
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
             'currencyList'      => Currency::lists('name', 'id'),
-            'preferences'       => $preferences,
+            'preferences'       => $this->preferences,
             'nav'               => $this->nav,
             'selected' => [
                 'tags'          => $this->tag->getTags(),
@@ -244,5 +250,76 @@ class HomeController extends Controller
         ])->with(
             compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count')
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getMenu()
+    {
+        return app('menu')->make('job.home', function ($menu) {
+            $html = app('html')->tag('i', '', ['id' => 'btn-editor', 'class' => 'fa fa-cog']);
+
+            $menu->add('Wszystkie', ['route' => ['job.home', 'tab' => 'all'], 'nickname' => 'all']);
+            $menu->add('Wybrane dla mnie', [
+                'route' => ['job.home', 'tab' => 'filtered'], 'nickname' => 'filtered'
+            ])->append($html);
+        });
+    }
+
+    /**
+     * @todo Nie mam pomyslu w tej chwili, aby to lepiej rozpisac... te if'y nie wygladaja zbyt dobrze
+     */
+    protected function applyPreferences()
+    {
+        if (!empty($this->preferences->city)) {
+            $this->city->setCities((new City())->grab($this->preferences->city));
+        }
+
+        if (!empty($this->preferences->tags)) {
+            $this->tag->setTags($this->preferences->tags);
+        }
+
+        if (!empty($this->preferences->is_remote)) {
+            $this->applyRemoteFilter();
+        }
+
+        if (!empty($this->preferences->salary)) {
+            $this->applySalaryFilter($this->preferences->salary, $this->preferences->currency_id);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param array $keys
+     * @return bool
+     */
+    protected function inputNotEmpty(Request $request, array $keys)
+    {
+        foreach ($keys as $key) {
+            if ($request->has($key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Apply remote job filter
+     */
+    protected function applyRemoteFilter()
+    {
+        $this->elasticsearch->addFilter(new Filters\Job\Remote());
+    }
+
+    /**
+     * @param $salary
+     * @param $currencyId
+     */
+    protected function applySalaryFilter($salary, $currencyId)
+    {
+        $this->elasticsearch->addFilter(new Filters\Range('salary', ['gte' => $salary]));
+        $this->elasticsearch->addFilter(new Filters\Job\Currency($currencyId));
     }
 }

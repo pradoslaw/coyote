@@ -26,18 +26,6 @@ class Location extends Model
     public $timestamps = false;
 
     /**
-     * Transform string (with cities separated by comma) to array
-     *
-     * @param string $cities Wroclaw, Warszawa
-     * @return array
-     * @todo Moze jest lepsze miejsce na umiesczenie tego kodu?
-     */
-    public static function transformToArray($cities)
-    {
-        return array_filter(array_unique(array_map('trim', preg_split('/[\/,]/', $cities))));
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function job()

@@ -5,7 +5,7 @@ namespace Coyote\Elasticsearch\Filters\Job;
 use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\Filter;
 use Coyote\Elasticsearch\QueryBuilderInterface;
-use Coyote\Job\Location;
+use Coyote\Parser\Reference;
 
 class City extends Filter implements DslInterface
 {
@@ -33,7 +33,8 @@ class City extends Filter implements DslInterface
                 $this->addCity($value);
             }
         } else {
-            $this->cities = array_merge($this->cities, Location::transformToArray($city));
+            $city = (new Reference\City())->grab($city);
+            $this->cities = array_merge($this->cities, $city);
         }
     }
 

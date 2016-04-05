@@ -8,14 +8,13 @@ use Coyote\Currency;
 use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
-use Coyote\GeoIp;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
+use Coyote\Parser\Reference\City;
 
 class SubmitController extends Controller
 {
@@ -249,7 +248,7 @@ class SubmitController extends Controller
             }
         }
 
-        $locations = Job\Location::transformToArray($data['city']);
+        $locations = (new City())->grab($data['city']);
         $job->fill($data);
 
         $job->deadline_at = Carbon::now()->addDay($data['deadline']);
