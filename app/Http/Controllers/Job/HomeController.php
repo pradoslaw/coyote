@@ -74,7 +74,6 @@ class HomeController extends Controller
         $this->public['validateUrl'] = route('job.tag.validate');
         $this->public['promptUrl'] = route('job.tag.prompt');
 
-        $this->preferences = json_decode($this->getSetting('job.preferences', '{}'));
         $this->nav = $this->getMenu();
     }
 
@@ -84,6 +83,8 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        $this->preferences = json_decode($this->getSetting('job.preferences', '{}'));
+
         $this->tab = $request->get('tab', $this->getSetting('job.tab', self::TAB_FILTERED));
         $validator = $this->getValidationFactory()->make($request->all(), ['tab' => 'sometimes|in:all,filtered']);
 
@@ -98,7 +99,9 @@ class HomeController extends Controller
         // if user want to filter job offers, we MUST select "all" tab
         if ($this->inputNotEmpty($request, ['q', 'city', 'remote', 'tag'])) {
             $this->tab = self::TAB_ALL;
-        } else {
+        }
+
+        if ($this->tab == self::TAB_FILTERED) {
             $this->applyPreferences();
         }
 
@@ -236,19 +239,23 @@ class HomeController extends Controller
             $subscribes = $this->job->subscribes($this->userId);
         }
 
+        $selected = [];
+        if ($this->tab != self::TAB_FILTERED) {
+            $selected = [
+                'tags'          => $this->tag->getTags(),
+                'cities'        => array_map('mb_strtolower', $this->city->getCities()),
+                'remote'        => $request->has('remote')
+            ];
+        }
+
         return $this->view('job.home', [
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
             'currencyList'      => Currency::lists('name', 'id'),
             'preferences'       => $this->preferences,
-            'nav'               => $this->nav,
-            'selected' => [
-                'tags'          => $this->tag->getTags(),
-                'cities'        => array_map('mb_strtolower', $this->city->getCities()),
-                'remote'        => $request->has('remote')
-            ]
+            'nav'               => $this->nav
         ])->with(
-            compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count')
+            compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count', 'selected')
         );
     }
 

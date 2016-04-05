@@ -33,7 +33,7 @@ abstract class Controller extends BaseController
      *
      * @var array|null
      */
-    protected $settings;
+    protected $settings = null;
 
     /**
      * Public data that will be passed to JS as a JSON object
@@ -109,9 +109,11 @@ abstract class Controller extends BaseController
     {
         app()->make('Setting')->setItem($name, $value, $this->userId, $this->sessionId);
 
-        if (is_array($this->settings)) {
-            $this->settings[$name] = $value;
+        if (!is_array($this->settings)) {
+            $this->settings;
         }
+
+        $this->settings[$name] = $value;
     }
 
     /**

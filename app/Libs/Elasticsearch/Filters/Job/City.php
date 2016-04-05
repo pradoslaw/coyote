@@ -68,7 +68,7 @@ class City extends Filter implements DslInterface
             return $queryBuilder->getBody();
         }
 
-        return $this->addFilter($queryBuilder, [
+        return $this->addOrFilter($queryBuilder, [
             'nested' => [
                 'path' => 'locations',
                 'query' => [

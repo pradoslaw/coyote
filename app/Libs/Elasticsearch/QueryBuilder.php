@@ -17,7 +17,13 @@ class QueryBuilder implements QueryBuilderInterface
                 ],
                 'filter' => [
                     'and' => [
-                        'filters' => []
+                        'filters' => [
+                            [
+                                'or' => [
+                                    'filters' => []
+                                ]
+                            ]
+                        ]
                     ]
                 ]
             ]

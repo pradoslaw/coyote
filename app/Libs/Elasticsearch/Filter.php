@@ -43,6 +43,24 @@ abstract class Filter implements DslInterface
 
     /**
      * @param QueryBuilderInterface $queryBuilder
+     * @param $filter
+     * @return array
+     *
+     * @todo potrzebny refaktoring poniewaz kod tej metody dubluje sie z poprzednim (DRY!)
+     */
+    public function addOrFilter(QueryBuilderInterface $queryBuilder, $filter)
+    {
+        $filters = array_get($queryBuilder->getBody(), 'query.filtered.filter.and.filters.0.or.filters');
+        $filters[] = $filter;
+
+        $body = $queryBuilder->getBody();
+        $body['query']['filtered']['filter']['and']['filters'][0]['or']['filters'] = $filters;
+
+        return $body;
+    }
+
+    /**
+     * @param QueryBuilderInterface $queryBuilder
      * @return mixed
      */
     public function apply(QueryBuilderInterface $queryBuilder)
