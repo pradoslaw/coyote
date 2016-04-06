@@ -260,6 +260,11 @@
       background-color: $body-bg;
     }
   }
+
+  .checkbox {
+    min-height: unset;
+    padding-top: 0;
+  }
 }
 
 .tab-content {
