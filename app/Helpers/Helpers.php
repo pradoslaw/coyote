@@ -34,7 +34,7 @@ function plain($value, $stripTags = true)
  * @param int $limit
  * @return string
  */
-function excerpt($value, $limit = 64)
+function excerpt($value, $limit = 84)
 {
     $value = str_replace(["\n", "\t", "\r"], ' ', plain($value));
     $value = trim(preg_replace('/ {2,}/', ' ', $value));
