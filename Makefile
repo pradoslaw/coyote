@@ -2,8 +2,8 @@
 
 install: dependency-install dump-autoload file-permission migration seed install-gulp install-assets assets-production cache-config
 install-dev: dependency-install dump-autoload file-permission migration seed install-gulp install-assets assets-dev
-update: update-repo dump-autoload migration install-assets assets-production cache-config
-update-dev: update-repo dump-autoload migration install-assets assets-dev
+update: update-repo dependency-install dump-autoload migration install-assets assets-production cache-config
+update-dev: update-repo dependency-install dump-autoload migration install-assets assets-dev
 
 help:
 	@echo 'make install -- download dependencies and install'
