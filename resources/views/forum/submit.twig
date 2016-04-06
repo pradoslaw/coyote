@@ -102,7 +102,7 @@
                 <div class="form-group {{ errors.any('tags') ? 'has-error' }}">
                     <label class="col-md-2 control-label">Tagi</label>
                     <div class="col-md-10">
-                        <input id="tags" name="tags" value="{{ input_old('tags[]', tags)|join(', ') }}" class="form-control" tabindex="4" placeholder="{{ forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net' }}">
+                        <input id="tags" name="tags" value="{{ input_old('tags', tags)|join(', ') }}" class="form-control" tabindex="4" placeholder="{{ forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net' }}">
 
                         {% if errors.any('tags') %}
                             <span class="help-block">{{ errors.first('tags') }}</span>

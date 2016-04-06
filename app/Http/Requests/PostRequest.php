@@ -10,7 +10,7 @@ class PostRequest extends Request
     const RULE_SUBJECT              = 'sometimes|required|min:3|max:200';
     const RULE_TEXT                 = 'required';
     const RULE_STICKY               = 'sometimes|bool';
-    const RULE_TAGS                 = 'array';
+    const RULE_TAGS                 = 'array|max:5';
     const RULE_TAG                  = 'max:25|tag|tag_creation:2';
     const RULE_POLL_TITLE           = 'string';
     const RULE_POLL_ITEMS           = 'required_with:title';
