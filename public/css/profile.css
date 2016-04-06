@@ -151,64 +151,90 @@
 #user-nav-tabs {
   margin: 20px 0; }
 
-#profile-info {
-  float: left;
-  width: 160px; }
-  #profile-info > .btn-pm {
-    width: 130px;
-    margin-top: 20px; }
-
-#profile h2, #profile h3 {
-  color: #646466; }
-  #profile h2 a, #profile h3 a {
-    color: inherit; }
+#profile .user-photo {
+  float: left; }
+  #profile .user-photo > .btn-pm {
+    margin-top: 20px;
+    display: block; }
 
 #profile h1 {
   margin-top: 0; }
 
-#profile h3 {
-  margin-top: 0;
-  font-size: 15px; }
-  #profile h3 small {
-    font-size: 80%; }
-
-#box-stat {
-  color: #919191; }
-  #box-stat strong {
-    font-size: 150%;
-    display: block; }
-  #box-stat span {
-    letter-spacing: 1px;
-    font-size: 90%; }
-
-#user-links {
-  list-style-type: none;
-  padding: 0;
-  margin: 20px 0 0 0; }
-  #user-links li {
-    padding: 4px 0;
-    text-shadow: 1px 1px 1px #FFF;
+#profile .position {
+  font-size: 15px;
+  color: #555555;
+  padding-right: 0; }
+  #profile .position small {
+    font-size: 80%;
+    vertical-align: top;
+    padding-top: 2px;
+    display: inline-block;
     color: #777777; }
-    #user-links li a {
-      color: inherit; }
 
-#box-reputation {
-  margin-top: 22px; }
-  #box-reputation .table {
-    font-size: 11px; }
+#profile .location {
+  color: #777777;
+  font-size: 13px; }
 
-#statement {
+#profile .metadata {
+  margin: 10px 0 12px 2px;
+  padding-top: 10px;
+  border-top: 1px solid #d0d0d0;
+  color: #777777; }
+  @media screen and (max-width: 480px) {
+    #profile .metadata li {
+      display: block !important;
+      font-size: 90%;
+      margin-bottom: 10px;
+      padding-left: 0;
+      padding-right: 0; } }
+
+#profile .metadata, #profile .base-info {
+  margin-left: 0; }
+  #profile .metadata a, #profile .base-info a {
+    color: inherit; }
+  #profile .metadata i, #profile .base-info i {
+    color: #555555;
+    font-size: 14px; }
+  #profile .metadata li:first-child, #profile .base-info li:first-child {
+    padding-left: 0; }
+
+#profile .statement {
   padding: 0 0 0 30px;
   position: relative;
   font-size: 14px;
   margin: 20px 0 17px 2px; }
-  #statement:after {
+  #profile .statement:after {
     position: absolute;
     font-family: FontAwesome;
     content: "";
     top: 0;
     left: 0;
     color: #777777; }
+
+#box-reputation {
+  margin-top: 22px; }
+  #box-reputation .reputation-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #d0d0d0; }
+    #box-reputation .reputation-item .point {
+      padding-top: 4px;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center; }
+      #box-reputation .reputation-item .point p {
+        margin: auto;
+        font-size: 18px; }
+    #box-reputation .reputation-item .content {
+      font-size: 12px; }
+      #box-reputation .reputation-item .content strong {
+        font-weight: normal; }
+      #box-reputation .reputation-item .content small {
+        display: block; }
+      #box-reputation .reputation-item .content p {
+        font-weight: normal;
+        padding: 0;
+        margin: 7px 0 0 1px;
+        font-family: "Open Sans",sans-serif; }
 
 #wrap {
   position: relative;

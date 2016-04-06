@@ -1,4 +1,4 @@
-{% extends 'layout.twig' %}
+{% extends 'layout' %}
 {% block title %}Profil {{ parent() }}{% endblock %}
 
 {% block container %}
@@ -7,85 +7,87 @@
     {% endif %}
 
     <div class="row">
-        <div id="profile" class="col-md-9">
-            <div class="panel panel-default">
+        <div class="col-md-9">
+            <div id="profile" class="panel panel-default">
                 <div class="panel-body">
-                    <div id="profile-info">
-                        <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
 
-                        <a class="btn btn-default btn-sm btn-pm" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
-                            <i class="fa fa-envelope"></i> Wiadomość
-                        </a>
-                    </div>
+                    <div class="media">
+                        <div class="media-left user-photo">
+                            <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
 
-                    <div style="overflow: hidden;">
-                        <h1>{{ user.name }}</h1>
-                        <h3>
-                            {{ user.position }}
+                            <a class="btn btn-default btn-sm btn-pm" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
+                                <i class="fa fa-envelope"></i> Wiadomość
+                            </a>
+                        </div>
 
-                            {% if user.firm %}
-                                <small>@ {{ user.firm }}</small>
+                        <div class="media-body">
+                            <h1 class="media-heading">{{ user.name }}</h1>
+
+                            <ol class="base-info list-inline">
+                                {% if user.position %}
+                                    <li class="position">
+                                        {{ user.position }}
+
+                                        {% if user.firm %}
+                                            <small>@ {{ user.firm }}</small>
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+
+                                {% if user.location %}
+                                    <li class="location">
+                                        <i class="fa fa-map-marker"></i>
+                                        {{ user.location }}
+                                    </li>
+                                {% endif %}
+                            </ol>
+
+                            <ol class="metadata list-inline">
+                                {% if user.website %}
+                                    <li title="Strona WWW">
+                                        <i class="fa fa-globe fa-fw"></i>
+                                        <a href="{{ user.website }}">{{ user.website }}</a>
+                                    </li>
+                                {% endif %}
+                                <li title="Ostatnia wizyta">
+                                    <i class="fa fa-sign-in fa-fw"></i>
+                                    {{ user.visited_at.diffForHumans() }}
+                                </li>
+                                <li title="Data rejestracji">
+                                    <i class="fa fa-user-plus fa-fw"></i>
+                                    {{ user.created_at.diffForHumans() }}
+                                </li>
+                                <li title="Ilość wizyt">
+                                    <i class="fa fa-eye fa-fw"></i>
+                                    {{ user.visits|number_format(0, ',', ' ') }} wizyt
+                                </li>
+                            </ol>
+
+                            {% if skills %}
+                                <ul class="tag-clouds">
+                                    {% for skill in skills %}
+                                        <li><a href="javascript:">{{ skill.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
                             {% endif %}
-                        </h3>
 
-                        {% if skills %}
-                            <ul class="tag-clouds">
-                                {% for skill in skills %}
-                                    <li><a href="javascript:">{{ skill.name }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-
-                        <div id="statement">
-                            {{ user.bio }}
+                            {% if user.bio %}
+                                <div class="statement">
+                                    {{ user.bio }}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-
-
-
-                        {#<div class="col-sm-6">#}
-                            {#<div id="box-stat" class="row">#}
-                                {#<div class="col-xs-4">#}
-                                    {#<strong>5 498</strong><span>postów</span>#}
-                                {#</div>#}
-                                {#<div class="col-xs-4">#}
-                                    {#<strong>856</strong><span>komentarzy</span>#}
-                                {#</div>#}
-                                {#<div class="col-xs-4">#}
-                                    {#<strong>12</strong><span>wpisów na mikroblogu</span>#}
-                                {#</div>#}
-                            {#</div>#}
-
-
-                            {#<ul id="user-links" class="row">#}
-                                {#<li class="col-xs-6">#}
-                                    {#<i class="fa fa-map-marker fa-fw"></i>#}
-                                    {#Wrocław, Polska#}
-                                {#</li>#}
-                                {#<li class="col-xs-6">#}
-                                    {#<i class="fa fa-globe fa-fw"></i>#}
-                                    {#<a href="#">http://4programmers.net</a>#}
-                                {#</li>#}
-                                {#<li class="col-xs-6" title="Ostatnia wizyta">#}
-                                    {#<i class="fa fa-sign-in fa-fw"></i>#}
-                                    {#<small>Widziany</small> {{ user.visited_at.diffForHumans() }}#}
-                                {#</li>#}
-                                {#<li class="col-xs-6" title="Data rejestracji">#}
-                                    {#<i class="fa fa-user-plus fa-fw"></i>#}
-                                    {#Dołączył {{ user.created_at.diffForHumans() }}#}
-                                {#</li>#}
-                                {#<li class="col-xs-6" title="Ilość wizyt">#}
-                                    {#<i class="fa fa-eye fa-fw"></i>#}
-                                    {#{{ user.visits|number_format(0, ',', ' ') }} wizyt#}
-                                {#</li>#}
-                            {#</ul>#}
-                        {#</div>#}
-
                 </div>
             </div>
 
+            <ul class="nav nav-pills">
+                <li role="presentation" class="active"><a title="Zobacz najciekawsze wątki na forum" href="#interesting" role="tab" data-toggle="tab">Reputacja</a></li>
+                <li role="presentation"><a title="Zobacz najwyżej oceniane wątki w ostatnim miesiącu" href="#rated" role="tab" data-toggle="tab">Posty na forum</a></li>
+            </ul>
+
             <section id="box-reputation" class="box">
-                <h4><i class="fa fa-line-chart"></i> Reputacja użytkownika</h4>
+                {#<h4><i class="fa fa-line-chart"></i> Reputacja użytkownika</h4>#}
 
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -105,29 +107,22 @@
                             </div>
 
                             <div class="col-sm-8">
-                                <div class="panel panel-wrapper">
-                                    <div class="panel-body">
+                                <div id="wrap">
+                                    <div id="overview">
+                                        {% for item in reputation %}
+                                            <div class="row reputation-item">
+                                                <div class="col-xs-1 point">
+                                                    <p class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}">{{ item.value }} pkt</p>
+                                                </div>
 
-                                        <div class="panel panel-default">
-                                            <div class="panel-body">
-                                                <div id="wrap">
-                                                    <div id="overview">
-                                                        <table class="table table-striped">
-                                                            <tbody>
-                                                                {% for item in reputation %}
-                                                                    <tr>
-                                                                        <td class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}">{{ item.value }} pkt</td>
-                                                                        <td>{{ item.name }}</td>
-                                                                        <td>{{ item.created_at|format_date }}</td>
-                                                                        <td><p class="text-muted">{{ item.excerpt }}</p></td>
-                                                                    </tr>
-                                                                {% endfor %}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                                <div class="col-xs-7 content">
+                                                    <strong><a href="{{ url(item.url) }}">{{ item.name }}</a></strong>
+                                                    <small>{{ item.created_at|format_date }}</small>
+
+                                                    <p class="text-muted">{{ item.excerpt }}</p>
                                                 </div>
                                             </div>
-                                        </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
@@ -157,6 +152,8 @@
             var overview = $('#overview');
 
             wrap.perfectScrollbar();
+
+            $('.metadata li').tooltip({'trigger': 'hover'});
         })
     </script>
 {% endblock %}

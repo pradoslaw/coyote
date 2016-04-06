@@ -9,22 +9,13 @@
   margin: 20px 0;
 }
 
-#profile-info {
-  float: left;
-  width: 160px;
-
-  > .btn-pm {
-    width: 130px;
-    margin-top: 20px;
-  }
-}
-
 #profile {
-  h2, h3 {
-    color: $box-header-color;
+  .user-photo {
+    float: left;
 
-    a {
-      color: inherit;
+    > .btn-pm {
+      margin-top: 20px;
+      display: block;
     }
   }
 
@@ -32,42 +23,73 @@
     margin-top: 0;
   }
 
-  h3 {
-    margin-top: 0;
+  .position {
     font-size: 15px;
+    color: $gray;
+    padding-right: 0;
 
     small {
       font-size: 80%;
+      vertical-align: top;
+      padding-top: 2px;
+      display: inline-block;
+      color: $gray-light;
     }
   }
-}
 
-#box-stat {
-  color: lighten($gray-light, 10%);
-
-  strong {
-    font-size: 150%;
-    display: block;
-  }
-
-  span {
-    letter-spacing: 1px;
-    font-size: 90%;
-  }
-}
-
-#user-links {
-  list-style-type: none;
-  padding: 0;
-  margin: 20px 0 0 0;
-
-  li {
-    padding: 4px 0;
-    text-shadow: 1px 1px 1px #FFF;
+  .location {
     color: $gray-light;
+    font-size: 13px;
+  }
+
+  // @todo Ponizszy blok jest uzywany rowniez w artykulach oraz w profilu usera (plik wiki.scss). Moze nalezaloby zastosowac DRY?
+  .metadata {
+    margin: 10px 0 12px 2px;
+    padding-top: 10px;
+    border-top: 1px solid $border-color;
+    color: $gray-light;
+
+    li {
+      @media screen and (max-width: $screen-xs) {
+        display: block !important;
+        font-size: 90%;
+        margin-bottom: 10px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+
+  .metadata, .base-info {
+    margin-left: 0;
 
     a {
       color: inherit;
+    }
+
+    i {
+      color: $gray;
+      font-size: $font-size-base + 1;
+    }
+
+    li {
+      &:first-child {
+        padding-left: 0;
+      }
+    }
+  }
+
+  .statement {
+    padding: 0 0 0 30px;
+    position: relative;
+    font-size: 14px;
+    margin: 20px 0 17px 2px;
+
+    &:after {
+      @include font-awesome($fa-var-quote-left);
+      top: 0;
+      left: 0;
+      color: $gray-light;
     }
   }
 }
@@ -75,22 +97,40 @@
 #box-reputation {
   margin-top: 22px;
 
-  .table {
-    font-size: 11px;
-  }
-}
+  .reputation-item {
+    padding: 10px 0;
+    border-bottom: 1px solid $border-color;
 
-#statement {
-  padding: 0 0 0 30px;
-  position: relative;
-  font-size: 14px;
-  margin: 20px 0 17px 2px;
+    .point {
+      padding-top: 4px;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
 
-  &:after {
-    @include font-awesome($fa-var-quote-left);
-    top: 0;
-    left: 0;
-    color: $gray-light;
+      p {
+        margin: auto;
+        font-size: 18px;
+      }
+    }
+
+    .content {
+      font-size: 12px;
+
+      strong {
+        font-weight: normal;
+      }
+
+      small {
+        display: block;
+      }
+
+      p {
+        font-weight: normal;
+        padding: 0;
+        margin: 7px 0 0 1px;
+        font-family: "Open Sans",sans-serif;
+      }
+    }
   }
 }
 

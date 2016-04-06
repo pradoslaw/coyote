@@ -34,7 +34,7 @@ class UserSettingsRequest extends Request
             'website'                => 'url|reputation:50',
             'location'               => 'string|max:50',
             'birthyear'              => 'sometimes|integer|between:1950,2015',
-            'about'                  => 'string|max:255',
+            'bio'                    => 'string|max:500',
             'sig'                    => 'string|max:255',
             'firm'                   => 'string|max:100',
             'position'               => 'string|max:100',
