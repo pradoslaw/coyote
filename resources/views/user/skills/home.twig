@@ -1,74 +1,56 @@
-{% extends 'layout.twig' %}
+{% extends 'user.base' %}
 {% block title %}Umiejętności {{ parent() }}{% endblock %}
 
 {% import 'components/forms.twig' as forms %}
 {% import 'components/modals.twig' as modals %}
 
-{% block container %}
-    {{ include('user/top', {active: 'settings'}) }}
+{% block content %}
+    <h2>Umiejętności</h2>
 
-    <div class="row">
-        {% include 'user/settings-menu' %}
+    <div id="box-skills" class="panel panel-default">
+        <div class="panel-body">
+            <div class="list-group">
+                {% for item in skills %}
+                    {% include 'user.skills.list' %}
+                {% endfor %}
+            </div>
 
-        <main class="col-md-10">
-            <section class="panel panel-wrapper">
-                <div class="panel-body">
-                    <h2>Umiejętności</h2>
+            {{ form_open({'id': 'rate-form', 'method': 'POST', 'role': 'form', 'url': route('user.skills'), 'class': 'form-horizontal'}) }}
+            {{ form_hidden('rate', 0) }}
 
-                    <div id="box-skills" class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="list-group">
-                                {% for item in skills %}
-                                    {% include 'user.skills.list' %}
-                                {% endfor %}
-                            </div>
+            <div class="form-group">
+                <div class="col-sm-9 col-md-10 col-lg-11 col-xs-8">
+                    {{ form_text('name', '', {'class': 'form-control', 'placeholder': 'Np. java, c#'}) }}
 
-                            {{ form_open({'id': 'rate-form', 'method': 'POST', 'role': 'form', 'url': route('user.skills'), 'class': 'form-horizontal'}) }}
-                            {{ form_hidden('rate', 0) }}
-
-                            <div class="form-group">
-                                <div class="col-sm-9 col-md-10 col-lg-11 col-xs-8">
-                                    {{ form_text('name', '', {'class': 'form-control', 'placeholder': 'Np. java, c#'}) }}
-
-                                    <div class="alert alert-warning alert-popover top hidden-xs hidden-sm" data-id="skills">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
-                                        Umiejętności będą widoczne na Twoim profilu.
-                                    </div>
-                                </div>
-                                <div class="col-sm-3 col-md-2 col-lg-1 col-xs-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Dodaj
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="rate-container col-xs-12">
-                                    <a class="rate rate-large" title="Słabo"></a>
-                                    <a class="rate rate-large" title="Podstawy"></a>
-                                    <a class="rate rate-large" title="Przeciętnie"></a>
-                                    <a class="rate rate-large" title="Dobrze"></a>
-                                    <a class="rate rate-large" title="Bardzo dobrze"></a>
-                                    <a class="rate rate-large" title="Ekspert"></a>
-                                </div>
-                            </div>
-
-                            {{ form_close() }}
-                        </div>
+                    <div class="alert alert-warning alert-popover top hidden-xs hidden-sm" data-id="skills">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
+                        Umiejętności będą widoczne na Twoim profilu.
                     </div>
                 </div>
-            </section>
-        </main>
+                <div class="col-sm-3 col-md-2 col-lg-1 col-xs-4">
+                    <button type="submit" class="btn btn-primary">
+                        Dodaj
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="rate-container col-xs-12">
+                    <a class="rate rate-large" title="Słabo"></a>
+                    <a class="rate rate-large" title="Podstawy"></a>
+                    <a class="rate rate-large" title="Przeciętnie"></a>
+                    <a class="rate rate-large" title="Dobrze"></a>
+                    <a class="rate rate-large" title="Bardzo dobrze"></a>
+                    <a class="rate rate-large" title="Ekspert"></a>
+                </div>
+            </div>
+
+            {{ form_close() }}
+        </div>
     </div>
 
     {{ modals.alert('') }}
     {{ modals.confirm('Czy chcesz usunąć te umiejętność ze swojej listy?') }}
-{% endblock %}
-
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/user.css') }}">
 {% endblock %}
 
 {% block body %}

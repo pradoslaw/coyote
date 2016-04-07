@@ -1,0 +1,36 @@
+{% extends 'layout' %}
+
+{% block container %}
+    {{ include('user/top', {active: 'settings'}) }}
+
+    <div class="row">
+        {% include 'user/settings-menu' %}
+
+        <main class="col-md-10">
+            {% if errors.any %}
+                <div class="alert alert-danger">
+                    Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.
+                </div>
+            {% endif %}
+
+            {% block wrapper %}
+                <section class="panel panel-wrapper">
+                    <div class="panel-body">
+                        {% block content %}{% endblock content %}
+                    </div>
+                </section>
+            {% endblock %}
+        </main>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ cdn('css/user.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+{% endblock %}

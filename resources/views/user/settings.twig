@@ -1,79 +1,58 @@
-{% extends 'layout.twig' %}
+{% extends 'user.base' %}
 {% block title %}Ustawienia{{ parent() }}{% endblock %}
 
 {% import 'components/forms.twig' as forms %}
 
-{% block container %}
-    {{ include('user/top', {active: 'settings'}) }}
+{% block wrapper %}
+    {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.settings'), 'class': 'form-horizontal'}) }}
 
-    <div class="row">
-        {% include 'user/settings-menu' %}
+        <section class="panel panel-wrapper">
+            <div class="panel-body">
+                <h2>Podstawowa konfiguracja</h2>
 
-        <main class="col-md-10">
-            {% if errors.any %}
-                <div class="alert alert-danger">
-                    Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.
-                </div>
-            {% endif %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {{ forms.text('email', 'E-mail', user_input('email'), {'id': 'email'}, 'Jeżeli chcesz zmienić adres e-mail, na nową skrzynkę zostanie wygenerowany klucz aktywacyjny') }}
 
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.settings'), 'class': 'form-horizontal'}) }}
-
-            <section class="panel panel-wrapper">
-                <div class="panel-body">
-                    <h2>Podstawowa konfiguracja</h2>
-
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            {{ forms.text('email', 'E-mail', user_input('email'), {'id': 'email'}, 'Jeżeli chcesz zmienić adres e-mail, na nową skrzynkę zostanie wygenerowany klucz aktywacyjny') }}
-
-                            {% if groupList|length > 1 %}
+                        {% if groupList|length > 1 %}
                             {{ forms.select('group_id', 'Domyślna grupa', groupList, user_input('group_id'), {}, 'Nazwa grupy będzie wyświetlana pod avatarem, np. na forum') }}
-                            {% endif %}
+                        {% endif %}
 
-                            {{ forms.select('date_format', 'Format daty', formatList, user_input('date_format')) }}
-                            {{ forms.text('website', 'Strona domowa', user_input('website'), {}, 'Strona domowa, portfolio itp.') }}
-                            {{ forms.checkbox('allow_smilies', 'Pokazuj emotikony', 1, user_input('allow_smilies')) }}
-                            {{ forms.checkbox('allow_subscribe', 'Automatycznie obserwuj wątki oraz wpisy na mikroblogu, w których biorę udział', 1, user_input('allow_subscribe')) }}
-                            {{ forms.submit('Zapisz', 'Zapisywanie...') }}
-                        </div>
-                    </div>
-
-                    <h2>Kariera</h2>
-
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            {{ forms.text('firm', 'Nazwa firmy', user_input('firm')) }}
-                            {{ forms.element(form_text('position', user_input('position'), {'class': 'form-control', 'placeholder': 'Np. Junior Java Developer'}), 'Stanowisko', errors.first('position')) }}
-
-                            {{ forms.textarea('bio', 'O sobie', user_input('bio'), 3, {}, 'W tym polu możesz zamieścić krótką informację o sobie, czym się zajmujesz, co cię interesuje. Ta informacja zostanie wyświetlona na Twoim profilu') }}
-                            {{ forms.select('birthyear', 'Rok urodzenia', yearList, user_input('birthyear'), {}, 'Na podstawie roku urodzenia, w Twoim profilu będzie widoczny Twój wiek') }}
-                            {{ forms.text('location', 'Miejsce zamieszkania', user_input('location')) }}
-                            {{ forms.submit('Zapisz', 'Zapisywanie...') }}
-                        </div>
-                    </div>
-
-                    <h2>Forum</h2>
-
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            {{ forms.checkbox('allow_count', 'Pokazuj licznik postów', 1, user_input('allow_count')) }}
-                            {{ forms.checkbox('allow_sig', 'Wyświetlaj sygnaturki użytkowników', 1, user_input('allow_sig')) }}
-                            {{ forms.textarea('sig', 'Sygnatura', user_input('sig'), 3, {}, 'Podpis będzie widoczny przy każdym Twoim poście. Uwaga! Użytkownicy posiadający mniej niż 50 punktów reputacji nie mogą umieszczać linków w tym polu') }}
-                            {{ forms.submit('Zapisz', 'Zapisywanie...') }}
-                        </div>
+                        {{ forms.select('date_format', 'Format daty', formatList, user_input('date_format')) }}
+                        {{ forms.text('website', 'Strona domowa', user_input('website'), {}, 'Strona domowa, portfolio itp.') }}
+                        {{ forms.checkbox('allow_smilies', 'Pokazuj emotikony', 1, user_input('allow_smilies')) }}
+                        {{ forms.checkbox('allow_subscribe', 'Automatycznie obserwuj wątki oraz wpisy na mikroblogu, w których biorę udział', 1, user_input('allow_subscribe')) }}
+                        {{ forms.submit('Zapisz', 'Zapisywanie...') }}
                     </div>
                 </div>
-            </section>
 
-            {{ form_close() }}
-        </main>
-    </div>
-{% endblock %}
+                <h2>Kariera</h2>
 
-{% block head %}
-    {{ parent() }}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {{ forms.text('firm', 'Nazwa firmy', user_input('firm')) }}
+                        {{ forms.element(form_text('position', user_input('position'), {'class': 'form-control', 'placeholder': 'Np. Junior Java Developer'}), 'Stanowisko', errors.first('position')) }}
 
-    <link rel="stylesheet" href="{{ cdn('css/user.css') }}">
+                        {{ forms.textarea('bio', 'O sobie', user_input('bio'), 3, {}, 'W tym polu możesz zamieścić krótką informację o sobie, czym się zajmujesz, co cię interesuje. Ta informacja zostanie wyświetlona na Twoim profilu') }}
+                        {{ forms.select('birthyear', 'Rok urodzenia', yearList, user_input('birthyear'), {}, 'Na podstawie roku urodzenia, w Twoim profilu będzie widoczny Twój wiek') }}
+                        {{ forms.text('location', 'Miejsce zamieszkania', user_input('location')) }}
+                        {{ forms.submit('Zapisz', 'Zapisywanie...') }}
+                    </div>
+                </div>
+
+                <h2>Forum</h2>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {{ forms.checkbox('allow_count', 'Pokazuj licznik postów', 1, user_input('allow_count')) }}
+                        {{ forms.checkbox('allow_sig', 'Wyświetlaj sygnaturki użytkowników', 1, user_input('allow_sig')) }}
+                        {{ forms.textarea('sig', 'Sygnatura', user_input('sig'), 3, {}, 'Podpis będzie widoczny przy każdym Twoim poście. Uwaga! Użytkownicy posiadający mniej niż 50 punktów reputacji nie mogą umieszczać linków w tym polu') }}
+                        {{ forms.submit('Zapisz', 'Zapisywanie...') }}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {{ form_close() }}
 {% endblock %}
 
 {% block body %}
