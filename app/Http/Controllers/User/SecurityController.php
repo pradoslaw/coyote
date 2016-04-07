@@ -14,7 +14,7 @@ class SecurityController extends BaseController
      */
     public function index()
     {
-        $this->breadcrumb->push('Bezpieczeństwo', route('user.security'));       
+        $this->breadcrumb->push('Bezpieczeństwo', route('user.security'));
 
         return $this->view('user.security', ['ips' => explode('.', auth()->user()->access_ip)]);
     }

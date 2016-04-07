@@ -23,13 +23,13 @@ trait SettingsTrait
                 'id' => 'btn-notifies',
                 'route' => 'user.security',
                 'icon' => 'fa-lock',
-                'label' => 'Bezpieczeństwo'                
+                'label' => 'Bezpieczeństwo'
             ],
             [
                 'id' => 'btn-pm',
                 'route' => 'user.password',
                 'icon' => 'fa-key',
-                'label' => 'Zmiana hasła'                
+                'label' => 'Zmiana hasła'
             ],
             [
                 'id' => 'btn-favorites',
