@@ -2,18 +2,18 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\User;
 use Illuminate\Http\Request;
 
-class ForumController extends Controller
+class ForumController extends BaseController
 {
+    use SettingsTrait;
+    
     /**
      * @return $this
      */
     public function index()
     {
-        $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Personalizacja forum', route('user.forum'));
 
         return $this->view('user.forum');

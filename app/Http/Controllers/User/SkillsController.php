@@ -6,14 +6,15 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\User;
 use Illuminate\Http\Request;
 
-class SkillsController extends Controller
+class SkillsController extends BaseController
 {
+    use SettingsTrait;
+
     /**
      * @return $this
      */
     public function index()
     {
-        $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Umiejętności', route('user.skills'));
 
         $skills = User\Skill::where('user_id', auth()->user()->id)->orderBy('order')->get();

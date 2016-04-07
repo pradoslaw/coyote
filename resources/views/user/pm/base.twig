@@ -1,48 +1,30 @@
-{% extends 'layout.twig' %}
+{% extends 'user.base' %}
 {% block title %}Wiadomości prywatne {{ parent() }}{% endblock %}
 
 {% import 'components/modals.twig' as modal %}
 
-{% block container %}
-    {{ include('user/top', {active: 'home'}) }}
+{% block content %}
+    <h2>Wiadomości prywatne</h2>
 
-    <div class="row">
-        {% include 'user/home-menu' %}
+    <ul class="nav nav-panel">
+        <li role="presentation" {{ parent != 'user.pm.submit' ? 'class="active"' }}><a href="{{ route('user.pm') }}">Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</a></li>
+        <li role="presentation" {{ parent == 'user.pm.submit' ? 'class="active"' }}><a href="{{ route('user.pm.submit') }}">Napisz wiadomość</a></li>
+    </ul>
 
-        <main class="col-md-10">
-            <section class="panel panel-wrapper">
-                <div class="panel-body">
-                    <h2>Wiadomości prywatne</h2>
-
-                    <ul class="nav nav-panel">
-                        <li role="presentation" {{ parent != 'user.pm.submit' ? 'class="active"' }}><a href="{{ route('user.pm') }}">Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</a></li>
-                        <li role="presentation" {{ parent == 'user.pm.submit' ? 'class="active"' }}><a href="{{ route('user.pm.submit') }}">Napisz wiadomość</a></li>
-                    </ul>
-
-                    <div id="box-pm" class="panel panel-default">
-                        <div class="panel-body">
-                            {% block pm %}
-                            {% endblock %}
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+    <div id="box-pm" class="panel panel-default">
+        <div class="panel-body">
+            {% block pm %}
+            {% endblock %}
+        </div>
     </div>
 
     {{ modal.confirm('Czy na pewno usunąć tę wiadomość? Tej operacji nie będzie można cofnąć.') }}
 {% endblock %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="/css/user.css">
-{% endblock %}
-
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="/js/modal.js"></script>
+    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
     <script type="text/javascript">
         $(function() {
             $('.btn-delete-pm').click(function() {

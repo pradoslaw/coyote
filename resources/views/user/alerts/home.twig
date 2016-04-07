@@ -1,63 +1,45 @@
-{% extends 'layout.twig' %}
+{% extends 'user.base' %}
 {% block title %}Powiadomienia {{ parent() }}{% endblock %}
 
-{% block container %}
-    {{ include('user/top', {active: 'home'}) }}
+{% block content %}
+    <h2>Powiadomienia</h2>
 
-    <div class="row">
-        {% include 'user/home-menu' %}
+    <div id="box-alerts" class="panel panel-default">
+        <div class="panel-body">
+            {% set head_date = '' %}
 
-        <main class="col-md-10">
-            <section class="panel panel-wrapper">
-                <div class="panel-body">
-                    <h2>Powiadomienia</h2>
+            <nav class="text-center">
+                {{ alerts.render()|raw }}
+            </nav>
 
-                    <div id="box-alerts" class="panel panel-default">
-                        <div class="panel-body">
-                            {% set head_date = '' %}
+            {% for alert in alerts %}
+                {% if head_date != alert.created_at|date('d F Y') %}
+                    <h2>{{ alert.created_at|date('d F Y') }}</h2>
+                    {% set head_date = alert.created_at|date('d F Y') %}
+                {% endif %}
 
-                            <nav class="text-center">
-                                {{ alerts.render()|raw }}
-                            </nav>
-
-                            {% for alert in alerts %}
-                                {% if head_date != alert.created_at|date('d F Y') %}
-                                    <h2>{{ alert.created_at|date('d F Y') }}</h2>
-                                    {% set head_date = alert.created_at|date('d F Y') %}
-                                {% endif %}
-
-                                <div class="media {{ (alert.read_at and alert.read_at|timestamp < session.created_at|timestamp) or alert.is_marked ? '' : 'unread' }}">
-                                    <div class="media-left">
-                                        <a href="{{ route('profile', [alert.user.user_id]) }}">
-                                            <img class="media-object" src="{{ user_photo(alert.user.photo) }}" style="width: 49px; height: 49px;" alt="{{ alert.user.name }}" title="{{ alert.user.name }}">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <header>
-                                            <h4 class="pull-left"><a href="{{ url(alert.url) }}">{{ alert.headline }}</a></h4>
-                                            <small class="pull-right">{{ alert.created_at|format_date }}</small>
-                                        </header>
-                                        <h3><a href="{{ url(alert.url) }}">{{ alert.subject|raw }}</a></h3>
-                                        <p><a href="{{ url(alert.url) }}">{{ alert.excerpt|raw }}</a></p>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <p class="alert alert-info">Brak powiadomień.</p>
-                            {% endfor %}
-
-                            <nav class="text-center">
-                                {{ alerts.render()|raw }}
-                            </nav>
-                        </div>
+                <div class="media {{ (alert.read_at and alert.read_at|timestamp < session.created_at|timestamp) or alert.is_marked ? '' : 'unread' }}">
+                    <div class="media-left">
+                        <a href="{{ route('profile', [alert.user.user_id]) }}">
+                            <img class="media-object" src="{{ user_photo(alert.user.photo) }}" style="width: 49px; height: 49px;" alt="{{ alert.user.name }}" title="{{ alert.user.name }}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <header>
+                            <h4 class="pull-left"><a href="{{ url(alert.url) }}">{{ alert.headline }}</a></h4>
+                            <small class="pull-right">{{ alert.created_at|format_date }}</small>
+                        </header>
+                        <h3><a href="{{ url(alert.url) }}">{{ alert.subject|raw }}</a></h3>
+                        <p><a href="{{ url(alert.url) }}">{{ alert.excerpt|raw }}</a></p>
                     </div>
                 </div>
-            </section>
-        </main>
+            {% else %}
+                <p class="alert alert-info">Brak powiadomień.</p>
+            {% endfor %}
+
+            <nav class="text-center">
+                {{ alerts.render()|raw }}
+            </nav>
+        </div>
     </div>
-{% endblock %}
-
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="/css/user.css">
 {% endblock %}

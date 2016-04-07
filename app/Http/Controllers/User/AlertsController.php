@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -10,8 +9,13 @@ use Illuminate\Http\Request;
 use Coyote\Alert\Setting;
 use Carbon;
 
-class AlertsController extends Controller
+class AlertsController extends BaseController
 {
+    use SettingsTrait, HomeTrait {
+        SettingsTrait::getSideMenu as settingsSideMenu;
+        HomeTrait::getSideMenu as homeSideMenu;
+    }
+
     /**
      * @var User
      */
@@ -35,12 +39,23 @@ class AlertsController extends Controller
     }
 
     /**
+     * @return mixed
+     */
+    public function getSideMenu()
+    {
+        if ($this->getRouter()->currentRouteName() == 'user.alerts') {
+            return $this->homeSideMenu();
+        } else {
+            return $this->settingsSideMenu();
+        }
+    }
+
+    /**
      * @param Session $session
      * @return $this
      */
     public function index(Session $session)
     {
-        $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Powiadomienia', route('user.alerts'));
 
         $alerts = $this->alert->paginate(auth()->user()->id);
@@ -79,7 +94,6 @@ class AlertsController extends Controller
      */
     public function settings()
     {
-        $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Ustawienia powiadomień', route('user.alerts.settings'));
 
         $settings = Setting::select(['alert_settings.*', 'alert_types.name'])

@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\Stream\Activities\Update;
 use Coyote\Stream\Objects\Person;
 use Coyote\User;
@@ -11,14 +10,15 @@ use Coyote\Group;
 use Coyote\Http\Requests\UserSettingsRequest;
 use Illuminate\Support\Facades\Mail;
 
-class SettingsController extends Controller
+class SettingsController extends BaseController
 {
+    use SettingsTrait;
+
     /**
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Ustawienia', route('user.settings'));
 
         $groupList = [null => '-- wybierz --'] + Group\User::groupList(auth()->user()->id)->toArray();

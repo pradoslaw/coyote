@@ -1,10 +1,20 @@
 {% extends 'layout' %}
 
+{% import 'components.forms' as forms %}
+
 {% block container %}
     {{ include('user/top', {active: 'settings'}) }}
 
     <div class="row">
-        {% include 'user/settings-menu' %}
+        <menu class="col-md-2">
+            <ul class="side-menu">
+                {% for item in side_menu.roots() %}
+                    <li {{ forms.attr(item.attr) }}>
+                        <a href="{{ item.url }}">{{ item.title|raw }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </menu>
 
         <main class="col-md-10">
             {% if errors.any %}

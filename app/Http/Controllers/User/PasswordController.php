@@ -7,14 +7,15 @@ use Coyote\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PasswordController extends Controller
+class PasswordController extends BaseController
 {
+    use SettingsTrait;
+    
     /**
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Zmiana hasła', route('user.password'));
 
         return parent::view('user.password');

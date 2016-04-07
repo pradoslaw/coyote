@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmWasSent;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -16,8 +15,10 @@ use Carbon;
  * Class PmController
  * @package Coyote\Http\Controllers\User
  */
-class PmController extends Controller
+class PmController extends BaseController
 {
+    use HomeTrait;
+    
     /**
      * @var User
      */

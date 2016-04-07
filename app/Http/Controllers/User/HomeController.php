@@ -2,22 +2,21 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Session;
 use Illuminate\Http\Request;
 use Coyote\Thumbnail;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
+    use HomeTrait;
+
     /**
      * @param User $user
      * @return \Illuminate\View\View
      */
     public function index(User $user)
     {
-        $this->breadcrumb->push('Moje konto', route('user.home'));
-
         $sessions = Session::where('user_id', auth()->user()->id)->get();
 
         $browsers = [

@@ -2,18 +2,18 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\User;
 use Illuminate\Http\Request;
 
-class SecurityController extends Controller
+class SecurityController extends BaseController
 {
+    use SettingsTrait;
+    
     /**
      * @return $this
      */
     public function index()
     {
-        $this->breadcrumb->push('Moje konto', route('user.home'));
         $this->breadcrumb->push('Bezpieczeństwo', route('user.security'));       
 
         return $this->view('user.security', ['ips' => explode('.', auth()->user()->access_ip)]);
