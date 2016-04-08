@@ -92,6 +92,10 @@ class RepositoryServiceProvider extends ServiceProvider
                 'Accept',
                 'Vote',
                 'Comment'
+            ],
+
+            'Forum' => [
+                'Order'
             ]
         ];
     }

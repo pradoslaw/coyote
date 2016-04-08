@@ -18,7 +18,7 @@ class Order extends Model
      *
      * @var string
      */
-    protected $table = 'forum_order';
+    protected $table = 'forum_orders';
 
     /**
      * @var array
