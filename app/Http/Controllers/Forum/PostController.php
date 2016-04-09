@@ -82,7 +82,7 @@ class PostController extends BaseController
 
             if ($post->id === $topic->first_post_id) {
                 // get topic tags only if this post is the FIRST post in topic
-                $tags = $topic->tags->pluck('name')->toArray();
+                $tags = $topic->getTagNames();
             }
 
             $text = $post->text; // we're gonna pass this variable to the view

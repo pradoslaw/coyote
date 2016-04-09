@@ -488,7 +488,7 @@ class TopicController extends BaseController
                 $original = $topic->getOriginal();
 
                 $topic->save();
-                $tags = $topic->tags->lists('name')->toArray();
+                $tags = $topic->getTagNames();
 
                 // save it in log...
                 (new Log)
@@ -503,7 +503,7 @@ class TopicController extends BaseController
 
                 if ($post->user_id) {
                     app()->make('Alert\Topic\Subject')->with([
-                        'user_id'     => $post->user_id,
+                        'users_id'    => $forum->onlyUsersWithAccess([$post->user_id]),
                         'sender_id'   => $this->userId,
                         'sender_name' => auth()->user()->name,
                         'subject'     => excerpt($original['subject']),
