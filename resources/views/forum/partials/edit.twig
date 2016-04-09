@@ -1,5 +1,7 @@
 {% spaceless %}
 {{ form_open({'url': route('forum.post.submit', [forum.path, topic.id, post.id])}) }}
+    {{ form_hidden('human', 1) }}
+
     {% for attachment in attachments %}
         {{ form_hidden('attachments[]', attachment.file) }}
     {% endfor %}

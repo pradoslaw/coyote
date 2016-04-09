@@ -2,7 +2,11 @@
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -12,7 +16,10 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        'Symfony\Component\HttpKernel\Exception\HttpException'
+        AuthorizationException::class,
+        HttpException::class,
+        ModelNotFoundException::class,
+        ValidationException::class,
     ];
 
     /**
@@ -41,6 +48,14 @@ class Handler extends ExceptionHandler
         if ($request->isXmlHttpRequest()) { // moze lepiej bedzie uzyc wantsJson()?
             $statusCode = 500;
 
+            if ($this->isHttpException($e)) {
+                $statusCode = $e->getStatusCode();
+            }
+
+            if ($e instanceof HttpResponseException) {
+                return parent::render($request, $e);
+            }
+
             if ($e instanceof ValidationException && $e->getResponse()) {
                 return response()->json($e->validator->errors(), $statusCode);
             }
@@ -53,10 +68,6 @@ class Handler extends ExceptionHandler
                 $response['exception'] = get_class($e);
                 $response['message'] = $e->getMessage();
                 $response['trace'] = $e->getTrace();
-            }
-
-            if ($this->isHttpException($e)) {
-                $statusCode = $e->getStatusCode();
             }
 
             return response()->json($response, $statusCode);
