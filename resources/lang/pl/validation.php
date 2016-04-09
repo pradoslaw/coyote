@@ -113,8 +113,8 @@ return [
         ],
         // m.in. w mikroblogach
         'text' => [
-            'required'      => 'Proszę wpisać treść',
-            'max'           => 'Maksymalna długość tekstu to :max znaków'
+            'required'      => 'Proszę wpisać treść.',
+            'max'           => 'Maksymalna długość tekstu to :max znaków.'
         ],
         // m.in. w wiadomosciach prywatnych
         'recipient' => [
@@ -124,12 +124,12 @@ return [
         ],
         // uzywany na forum
         'subject' => [
-            'required'      => 'Temat musi posiadać minimum 3 znaki długości',
-            'min'           => 'Temat musi posiadać minimum 3 znaki długości',
+            'required'      => 'Temat musi posiadać minimum 3 znaki długości.',
+            'min'           => 'Temat musi posiadać minimum 3 znaki długości.',
         ],
         // tagi, np. na forum
         'tags' => [
-            'required'      => 'Wymagane jest przypisanie minimum jednego tagu do tego wątku',
+            'required'      => 'Wymagane jest przypisanie minimum jednego tagu do tego wątku.',
             'max'           => 'Możesz przypisać maksymalnie :max tagów.'
         ],
         'tags.*' => [
@@ -137,8 +137,8 @@ return [
         ],
         // w formularzu forum
         'user_name' => [
-            'required'      => 'Proszę wpisać nazwę użytkownika',
-            'unique'        => 'Ta nazwa jest zajęta przez innego użytkownika',
+            'required'      => 'Proszę wpisać nazwę użytkownika.',
+            'unique'        => 'Ta nazwa jest zajęta przez innego użytkownika.',
         ],
         // formularz pracy
         'title' => [
