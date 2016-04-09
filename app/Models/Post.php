@@ -35,22 +35,20 @@ class Post extends Model
                 "tag" => [
                     "type" => "string"
                 ],
+
+                // original value (case sensitive)
                 "tag_original" => [
                     "type" => "string",
                     "index" => "not_analyzed"
                 ]
             ]
         ],
-
         "user_name" => [
             "type" => "string",
-            "index" => "not_analyzed"
+            // ability to search case insensitive
+            "analyzer" => "analyzer_keyword"
         ],
         "ip" => [
-            "type" => "string",
-            "index" => "not_analyzed"
-        ],
-        "browser" => [
             "type" => "string",
             "index" => "not_analyzed"
         ],
