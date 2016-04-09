@@ -510,7 +510,7 @@ $(function () {
         var $form = $(this);
         var $post = $(this).parent();
 
-        $(':submit', $form).attr('disabled', 'disabled').text('Zapisywanie...');
+        $('button[type=submit]', $form).attr('disabled', 'disabled').text('Zapisywanie...');
         $('textarea', $form).attr('readonly', 'readonly');
 
         $.post($form.attr('action'), $form.serialize(), function(html) {
@@ -518,7 +518,7 @@ $(function () {
             $('.btn-fast-edit[data-post-id="' + $post.data('post-id') + '"]').removeClass('active');
         })
         .error(function(event) {
-            $(':submit', $form).removeAttr('disabled').text('Zapisz');
+            $('button[type=submit]', $form).removeAttr('disabled').text('Zapisz');
             $('textarea', $form).removeAttr('readonly');
 
             if (typeof event.responseJSON.error !== 'undefined') {
