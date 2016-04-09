@@ -1,25 +1,27 @@
-{% for alert in alerts %}
-    <li class="{{ (alert.read_at and alert.read_at|timestamp < session.created_at|timestamp) or alert.is_marked ? '' : 'unread' }}">
-        <a href="{{ url(alert.url) }}" title="{{ alert.headline }}" data-mark-url="{{ route('user.alerts.mark', [alert.id]) }}">
-            <img src="{{ user_photo(alert.user.photo) }}">
+{% if alerts|length > 0 %}
+    {% for alert in alerts %}
+        <li class="{{ (alert.read_at and alert.read_at|timestamp < session.created_at|timestamp) or alert.is_marked ? '' : 'unread' }}">
+            <a href="{{ url(alert.url) }}" title="{{ alert.headline }}" data-mark-url="{{ route('user.alerts.mark', [alert.id]) }}">
+                <img src="{{ user_photo(alert.user.photo) }}">
 
-            <div>
-                <header>
-                    <h4>{{ alert.headline }}</h4>
-                    <small>{{ alert.created_at|format_date }}</small>
-                </header>
+                <div>
+                    <header>
+                        <h4>{{ alert.headline }}</h4>
+                        <small>{{ alert.created_at|format_date }}</small>
+                    </header>
 
-                <h3>{{ alert.subject|raw }}</h3>
-                <p>{{ alert.excerpt|raw }}</p>
-            </div>
-        </a>
+                    <h3>{{ alert.subject|raw }}</h3>
+                    <p>{{ alert.excerpt|raw }}</p>
+                </div>
+            </a>
 
-        <a class="btn-delete-alert" href="{{ route('user.alerts.delete', [alert.id]) }}" title="Usuń">
-            <i class="fa fa-remove"></i>
-        </a>
-    </li>
+            <a class="btn-delete-alert" href="{{ route('user.alerts.delete', [alert.id]) }}" title="Usuń">
+                <i class="fa fa-remove"></i>
+            </a>
+        </li>
+    {% endfor %}
 {% else %}
     <li style="text-align: center; font-size: 11px">
         Brak powiadomień.
     </li>
-{% endfor %}
+{% endif %}
