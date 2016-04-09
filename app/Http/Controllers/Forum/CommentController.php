@@ -118,16 +118,18 @@ class CommentController extends Controller
                     'url'         => $object->url
                 ];
 
-                $subscribersId = $post->subscribers()->lists('user_id');
+                $subscribersId = $forum->onlyUsersWithAccess($post->subscribers()->lists('user_id')->toArray());
+
                 if ($subscribersId) {
                     $alert->attach(
                         // $subscribersId can be int or array. we need to cast to array type
-                        app()->make('Alert\Post\Subscriber')->with($notification)->setUsersId($subscribersId->toArray())
+                        app()->make('Alert\Post\Subscriber')->with($notification)->setUsersId($subscribersId)
                     );
                 }
 
                 // get id of users that were mentioned in the text
-                $subscribersId = (new Ref_Login())->grab($comment->text);
+                $subscribersId = $forum->onlyUsersWithAccess((new Ref_Login())->grab($comment->text));
+
                 if ($subscribersId) {
                     $alert->attach(
                         app()->make('Alert\Post\Comment\Login')->with($notification)->setUsersId($subscribersId)

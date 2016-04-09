@@ -18,7 +18,7 @@ class AdmAccess
     public function handle($request, Closure $next, $isLogged)
     {
         if (Gate::denies('adm-access')) {
-            abort(403);
+            abort(401);
         }
 
         // admin panel sometimes requires to re-enter the password

@@ -233,7 +233,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param $forum
+     * @param \Coyote\Forum $forum
      * @param PostRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -277,7 +277,7 @@ class TopicController extends BaseController
             $post->text = app()->make('Parser\Post')->parse($request->text);
 
             // get id of users that were mentioned in the text
-            $usersId = (new Ref_Login())->grab($post->text);
+            $usersId = $forum->onlyUsersWithAccess((new Ref_Login())->grab($post->text));
 
             if ($usersId) {
                 app()->make('Alert\Post\Login')->with([
@@ -433,12 +433,13 @@ class TopicController extends BaseController
             }
 
             $post = $this->post->find($topic->first_post_id, ['user_id']);
+            $recipientsId = $forum->onlyUsersWithAccess([$post->user_id]);
 
-            if ($post->user_id) {
+            if ($recipientsId) {
                 app()->make('Alert\Topic\Move')
                     ->with($notification)
-                    ->setUrl($object->url)
-                    ->setUserId($post->user_id)
+                    ->setUrl(route('forum.topic', [$forum->path, $topic->id, $topic->path], false))
+                    ->setUsersId($recipientsId)
                     ->notify();
             }
 

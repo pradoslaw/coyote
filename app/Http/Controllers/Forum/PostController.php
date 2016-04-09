@@ -269,16 +269,16 @@ class PostController extends BaseController
                     'url'         => $url
                 ];
 
-                $subscribersId = $topic->subscribers()->lists('user_id');
+                $subscribersId = $forum->onlyUsersWithAccess($topic->subscribers()->lists('user_id')->toArray());
                 if ($subscribersId) {
                     $alert->attach(
                         // $subscribersId can be int or array. we need to cast to array type
-                        app()->make('Alert\Topic\Subscriber')->with($notification)->setUsersId($subscribersId->toArray())
+                        app()->make('Alert\Topic\Subscriber')->with($notification)->setUsersId($subscribersId)
                     );
                 }
 
                 // get id of users that were mentioned in the text
-                $subscribersId = (new Ref_Login())->grab($text);
+                $subscribersId = $forum->onlyUsersWithAccess((new Ref_Login())->grab($text));
                 if ($subscribersId) {
                     $alert->attach(app()->make('Alert\Post\Login')->with($notification)->setUsersId($subscribersId));
                 }
@@ -530,8 +530,8 @@ class PostController extends BaseController
                 // send notification to the user
                 app()->make('Alert\Post\Vote')
                     ->setPostId($post->id)
-                    ->addUserId($post->user_id)
-                    ->setSubject(excerpt($topic->subject, 48))
+                    ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
+                    ->setSubject(excerpt($topic->subject))
                     ->setExcerpt($excerpt)
                     ->setSenderId($this->userId)
                     ->setSenderName(auth()->user()->name)
@@ -643,8 +643,8 @@ class PostController extends BaseController
                         // send notification to the user
                         app()->make('Alert\Post\Accept')
                             ->setPostId($post->id)
-                            ->addUserId($post->user_id)
-                            ->setSubject(excerpt($topic->subject, 48))
+                            ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
+                            ->setSubject(excerpt($topic->subject))
                             ->setExcerpt($excerpt)
                             ->setSenderId($this->userId)
                             ->setSenderName(auth()->user()->name)

@@ -74,11 +74,7 @@ class Forum extends Model
      */
     public function userCanAccess($userId)
     {
-        $usersId = $this->access()
-                ->select('user_id')
-                ->join('group_users', 'group_users.group_id', '=', 'forum_access.group_id')
-                ->lists('user_id')
-                ->toArray();
+        $usersId = $this->getUsersWithAccess();
 
         if (empty($usersId)) {
             return true;
@@ -87,6 +83,26 @@ class Forum extends Model
         } else {
             return in_array($userId, $usersId);
         }
+    }
+
+    /**
+     * Filter users. Return only ids of users who have access to this forum.
+     *
+     * @param array $usersId
+     * @return array|bool
+     */
+    public function onlyUsersWithAccess(array $usersId)
+    {
+        if (empty($usersId)) {
+            return false;
+        }
+
+        $allowed = $this->getUsersWithAccess();
+        if (empty($allowed)) {
+            return $usersId;
+        }
+
+        return array_intersect($usersId, $allowed);
     }
 
     /**
@@ -105,5 +121,23 @@ class Forum extends Model
         }
 
         return $sql->value('marked_at');
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getUsersWithAccess()
+    {
+        static $usersId = null;
+
+        if (is_null($usersId)) {
+            $usersId = $this->access()
+                            ->select('user_id')
+                            ->join('group_users', 'group_users.group_id', '=', 'forum_access.group_id')
+                            ->lists('user_id')
+                            ->toArray();
+        }
+
+        return $usersId;
     }
 }
