@@ -19,23 +19,41 @@ class HomeController extends BaseController
      */
     protected function view($view = null, $data = [])
     {
-        $tabs = [
-            'forum.home'            => 'Kategorie',
-            'forum.all'             => 'Wszystkie',
-            'forum.unanswered'      => 'Bez odpowiedzi'
-        ];
+        $route = request()->route()->getName();
 
-        if (auth()->check()) {
-            $tabs['forum.subscribes'] = 'Obserwowane';
-            $tabs['forum.mine'] = 'Moje';
+        $tabs = app('menu')->make('tabs', function ($menu) {
+            $tabs = [
+                'forum.home'            => 'Kategorie',
+                'forum.all'             => 'Wszystkie',
+                'forum.unanswered'      => 'Bez odpowiedzi'
+            ];
+
+            if (auth()->check()) {
+                $tabs['forum.subscribes'] = 'Obserwowane';
+                $tabs['forum.mine'] = 'Moje';
+            }
+
+            foreach ($tabs as $route => $label) {
+                $menu->add($label, ['route' => $route]);
+            }
+        });
+
+        if ($route == 'forum.tag') {
+            $tabs->add('Wątki z: ' . request()->route('tag'), [
+                'route' => [
+                    'forum.tag', urlencode(request()->route('tag'))
+                ]
+            ]);
         }
 
-        $routeName = request()->route()->getName();
-
-        if ($routeName == 'forum.tag') {
-            $tabs['forum.tag'] = 'Wątki z: ' . request()->route('tag');
+        $title = '';
+        foreach ($tabs->all() as $tab) {
+            if ($tab->attr('class') == 'active') {
+                $title = $tab->title;
+            }
         }
-        return parent::view($view, $data)->with(compact('routeName', 'tabs'));
+
+        return parent::view($view, $data)->with(compact('route', 'tabs', 'title'));
     }
 
     /**
