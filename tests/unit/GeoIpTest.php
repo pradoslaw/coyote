@@ -54,6 +54,9 @@ class GeoIpTest extends \Codeception\TestCase\Test
 
         $result = $normalize->normalize($this->geoIp->city('Gdansk'));
         $this->assertEquals('Gdańsk', $result['name']);
+
+        $result = $normalize->normalize($this->geoIp->city('Krakow'));
+        $this->assertEquals('Kraków', $result['name']);
     }
 
     public function testGeocodeNonExistingCityAndThrowException()

@@ -305,7 +305,7 @@ class SubmitController extends Controller
 
         try {
             // @todo Ten mechanizm trzeba bedzie zmienic w przypadku angielskiej wersji serwisu
-            $normalizer = new GeoIp\Normalizers\Locale(config('app.locale'));
+            $normalizer = new \Coyote\GeoIp\Normalizers\Locale(config('app.locale'));
 
             // we just want a first hit of a results with local name of the city
             // so Warsaw will become Warszawa

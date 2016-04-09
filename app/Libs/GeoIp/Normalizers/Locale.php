@@ -27,6 +27,10 @@ class Locale implements NormalizerInterface
      */
     public function normalize(array $data)
     {
+        $data = array_reverse(array_sort($data, function ($value) {
+            return $value['population'];
+        }));
+
         // we just want a first hit
         $result = array_first($data);
 
