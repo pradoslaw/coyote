@@ -9,10 +9,21 @@ class MicroblogCest
 
     public function _after(AcceptanceTester $I)
     {
+
+    }
+
+    public function postWithEmptyContent(AcceptanceTester $I)
+    {
+        $I->wantTo('Create message with empty content');
+
+        $I->amOnPage('/Mikroblogi');
+        $I->submitForm('.microblog-submit', ['text' => '']);
+        $I->wait(1);
+        $I->canSee('Proszę wpisać treść');
     }
 
     // tests
-    public function write(AcceptanceTester $I)
+    public function post(AcceptanceTester $I)
     {
         $I->wantTo('write a message');
 
