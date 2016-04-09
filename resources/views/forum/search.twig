@@ -140,6 +140,20 @@
                         <span>{{ declination(response.totalHits(), declination, true) }}</span>
                     </div>
                 {% endif %}
+
+                <div id="box-search-tips" class="box">
+                    <h4 class="border"><i class="fa fa-question-circle"></i> Wskazówki wyszukiwania</h4>
+
+                    <ul>
+                        <li><kbd>user:"Lorem ipsum"</kbd> lub <kbd>user:foo</kbd></li>
+
+                        {% if can('forum-update') %}
+                            <li><kbd>ip:127.0.0.1</kbd></li>
+                            <li><kbd>host:coyote.dev</kbd></li>
+                            <li><kbd>browser:"Mozilla Firefox"</kbd></li>
+                        {% endif %}
+                    </ul>
+                </div>
             {% endblock %}
         {% endembed %}
     </div>

@@ -587,6 +587,11 @@
     letter-spacing: 2px;
     font-size: 90%; }
 
+#box-search-tips ul {
+  margin: 20px 0; }
+  #box-search-tips ul li {
+    margin: 4px 0; }
+
 #box-popular-tags, #box-my-tags {
   margin-bottom: 20px; }
 
