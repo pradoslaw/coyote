@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Events\TopicWasMoved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Events\PostWasSaved;
 use Coyote\Forum\Reason;
@@ -407,7 +408,7 @@ class TopicController extends BaseController
             $notification = [
                 'sender_id'   => $this->userId,
                 'sender_name' => auth()->user()->name,
-                'subject'     => excerpt($topic->subject, 48),
+                'subject'     => excerpt($topic->subject),
                 'forum'       => $forum->name
             ];
 
@@ -441,6 +442,8 @@ class TopicController extends BaseController
                     ->notify();
             }
 
+            // we need to reindex this topic
+            event(new TopicWasMoved($topic));
             stream(Stream_Move::class, $object, (new Stream_Forum())->map($forum));
         });
 

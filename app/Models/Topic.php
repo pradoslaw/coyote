@@ -120,6 +120,14 @@ class Topic extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany('Coyote\Post');
+    }
+
+    /**
      * Subscribe/unsubscribe to topic
      *
      * @param int $userId
