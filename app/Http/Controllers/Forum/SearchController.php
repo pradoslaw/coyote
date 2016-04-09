@@ -12,13 +12,14 @@ use Coyote\Elasticsearch\Sort;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
+use Gate;
 
 class SearchController extends BaseController
 {
-    const FIELD_IP = 'ip';
-    const FIELD_USER = 'user';
-    const FIELD_BROWSER = 'browser';
-    const FIELD_HOST = 'host';
+    const FIELD_IP          = 'ip';
+    const FIELD_USER        = 'user';
+    const FIELD_BROWSER     = 'browser';
+    const FIELD_HOST        = 'host';
 
     /**
      * @param Request $request
@@ -64,7 +65,7 @@ class SearchController extends BaseController
 
             // we cannot allowed regular uesrs to search by IP or host
             foreach ([self::FIELD_IP, self::FIELD_HOST, self::FIELD_BROWSER] as $filter) {
-                if (!$request->user()->can('forum-update')) {
+                if (!Gate::allows('forum-update')) {
                     $parser->removeFilter($filter); // user is not ALLOWED to use this filter
                 }
             }
