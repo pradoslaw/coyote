@@ -165,6 +165,8 @@ class Migrate extends Command
 
             DB::commit();
             $bar->finish();
+
+            $this->fixSequence('users');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -219,6 +221,8 @@ class Migrate extends Command
             }
 
             DB::commit();
+
+            $this->fixSequence(['groups', 'group_permissions']);
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -268,6 +272,8 @@ class Migrate extends Command
             }
 
             DB::commit();
+
+            $this->fixSequence('permissions');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -302,6 +308,8 @@ class Migrate extends Command
 
             DB::commit();
             $bar->finish();
+
+            $this->fixSequence('user_skills');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -336,6 +344,8 @@ class Migrate extends Command
 
             DB::commit();
             $bar->finish();
+
+            $this->fixSequence('words');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -401,6 +411,8 @@ class Migrate extends Command
                 $bar->advance();
             }
 
+            $this->fixSequence('alerts');
+
             ///////////////////////////////////////////////////////////////////////////////
 
             DB::connection('mysql')->table('notify_sender')->chunk(100000, function ($sql) use ($bar) {
@@ -418,6 +430,8 @@ class Migrate extends Command
                 }
             });
 
+            $this->fixSequence('alert_senders');
+
             //////////////////////////////////////////////////////////////////////////////////
 
             DB::connection('mysql')->table('notify_user')->chunk(100000, function ($sql) use ($bar) {
@@ -434,6 +448,8 @@ class Migrate extends Command
                     $bar->advance();
                 }
             });
+
+            $this->fixSequence('alert_settings');
 
             $bar->finish();
             DB::commit();
@@ -482,6 +498,8 @@ class Migrate extends Command
                 $bar->advance();
             }
 
+            $this->fixSequence('pm_text');
+
             ///////////////////////////////////////////////////////////////////////////////
 
             $sql = DB::connection('mysql')->table('pm')->get();
@@ -522,6 +540,8 @@ class Migrate extends Command
 
                 $bar->advance();
             }
+
+            $this->fixSequence('pm');
 
             $bar->finish();
             DB::commit();
@@ -589,6 +609,8 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
+
+            $this->fixSequence('reputations');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -766,6 +788,8 @@ class Migrate extends Command
                     }
                 });
 
+            $this->fixSequence('topics');
+
             DB::connection('mysql')->table('topic_marking')->chunk(100000, function ($sql) use ($bar) {
                 foreach ($sql as $row) {
                     $row = (array) $row;
@@ -777,6 +801,8 @@ class Migrate extends Command
                     $bar->advance();
                 }
             });
+
+            $this->fixSequence('topic_track');
 
             DB::connection('mysql')->table('topic_user')->chunk(100000, function ($sql) use ($bar) {
                 foreach ($sql as $row) {
@@ -805,6 +831,23 @@ class Migrate extends Command
 
                 DB::table('topic_subscribers')->insert($row);
             }
+
+            $this->fixSequence('topic_subscribers');
+
+            DB::connection('mysql')
+                ->table('page_tag')
+                ->select(['topic_id', 'tag_id'])
+                ->join('page', 'page.page_id', '=', 'page_tag.page_id')
+                ->join('topic', 'topic_page', '=', 'page.page_id')
+                ->chunk(10000, function ($sql) {
+                    foreach ($sql as $row) {
+                        $row = (array) $row;
+
+                        DB::table('topics_tags')->insert($row);
+                    }
+                });
+
+            $this->fixSequence('topic_tags');
 
             $bar->finish();
             DB::commit();
@@ -870,6 +913,8 @@ class Migrate extends Command
 
                         DB::table('posts')->insert($row);
                         $bar->advance();
+
+                        $this->fixSequence('posts');
                     }
                 });
 
@@ -887,6 +932,8 @@ class Migrate extends Command
 
                     DB::table('post_comments')->insert($row);
                     $bar->advance();
+
+                    $this->fixSequence('post_comments');
                 }
             });
 
@@ -894,6 +941,8 @@ class Migrate extends Command
                 foreach ($sql as $row) {
                     DB::table('post_subscribers')->insert((array) $row);
                     $bar->advance();
+
+                    $this->fixSequence('post_subscribers');
                 }
             });
 
@@ -914,6 +963,8 @@ class Migrate extends Command
 
                     DB::table('post_votes')->insert($row);
                     $bar->advance();
+
+                    $this->fixSequence('post_votes');
                 }
             });
 
@@ -930,6 +981,8 @@ class Migrate extends Command
 
                     DB::table('post_accepts')->insert($row);
                     $bar->advance();
+
+                    $this->fixSequence('post_accepts');
                 }
             });
 
@@ -947,6 +1000,8 @@ class Migrate extends Command
 
                     DB::table('post_attachments')->insert($row);
                     $bar->advance();
+
+                    $this->fixSequence('post_attachments');
                 }
             });
 
@@ -963,6 +1018,8 @@ class Migrate extends Command
 
                     DB::table('post_log')->insert($row);
                     $bar->advance();
+
+                    $this->fixSequence('post_log');
                 }
             });
 
@@ -995,6 +1052,7 @@ class Migrate extends Command
             }
 
             DB::commit();
+            $this->fixSequence('tags');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1090,17 +1148,17 @@ class Migrate extends Command
             foreach ($sql as $row) {
                 $row = (array) $row;
 
-                $tagId = DB::table('tags')->select(['id'])->where('name', $row['tag_name'])->pluck('id');
+                $tagId = DB::table('tags')->select(['id'])->where('name', $row['tag_name'])->value('id');
                 if (!$tagId) {
-                    $tagId = DB::table('tags')->where(['name' => $row['tag_name']])->pluck('id');
+                    $tagId = DB::table('tags')->insertGetId(['name' => $row['tag_name']]);
                 }
-
-                DB::table('microblog_tags')->insert(['tag_id' => $tagId, 'microblog_id' => $row['microblog_parent'] ? $row['microblog_parent'] : $row['microblog_id']]);
+                
+                DB::table('microblog_tags')->insert(['tag_id' => $tagId, 'microblog_id' => $row['microblog_id']]);
             }
 
             $bar->finish();
 
-            $this->fixSequence($tables);
+            $this->fixSequence(['microblogs', 'microblog_subscribers', 'microblog_votes', 'microblog_tags']);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -1149,6 +1207,8 @@ class Migrate extends Command
 
             DB::commit();
             $bar->finish();
+
+            $this->fixSequence('topic_visits');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1203,6 +1263,8 @@ class Migrate extends Command
 
             DB::commit();
             $bar->finish();
+
+            $this->fixSequence('firms');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1230,6 +1292,8 @@ class Migrate extends Command
 
             DB::commit();
             $bar->finish();
+
+            $this->fixSequence('firm_benefits');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1295,6 +1359,8 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
+
+            $this->fixSequence('jobs');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1327,6 +1393,8 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
+
+            $this->fixSequence('job_locations');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1359,6 +1427,8 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
+
+            $this->fixSequence('job_tags');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1396,6 +1466,8 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
+
+            $this->fixSequence('job_candidates');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1433,6 +1505,8 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
+
+            $this->fixSequence('job_subscribers');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1465,6 +1539,8 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
+
+            $this->fixSequence('job_referers');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1483,22 +1559,22 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-//        $this->migrateUsers();
-//        $this->migrateTags();
+        $this->migrateUsers();
+        $this->migrateTags();
         /* musi byc przed dodawaniem grup */
-//        $this->migratePermissions();
-//        $this->migrateGroups();
-//        $this->migrateSkills();
-//        $this->migrateWords();
-//        $this->migrateAlerts();
-//        $this->migratePm();
-//        $this->migrateReputation();
-//        $this->migrateForum();
-//        $this->migrateTopic();
-//        $this->migratePost();
-//        $this->migrateMicroblogs();
-//        $this->migrateTopicVisits();
-//        $this->migrateFirms();
+        $this->migratePermissions();
+        $this->migrateGroups();
+        $this->migrateSkills();
+        $this->migrateWords();
+        $this->migrateAlerts();
+        $this->migratePm();
+        $this->migrateReputation();
+        $this->migrateForum();
+        $this->migrateTopic();
+        $this->migratePost();
+        $this->migrateMicroblogs();
+        $this->migrateTopicVisits();
+        $this->migrateFirms();
         $this->migrateJobs();
 
         DB::statement('SET session_replication_role = DEFAULT');
