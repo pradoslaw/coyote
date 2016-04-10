@@ -21,7 +21,6 @@ class CityValidator
 
         foreach ($grabber->grab($value) as $city) {
             if (!preg_match('/' . self::REGEXP . '/u', trim($city))) {
-
                 if ($validator instanceof \Illuminate\Validation\Validator) {
                     $validator->addReplacer('city', function ($message, $attribute, $rule, $parameters) use ($city) {
                         return str_replace(':value', $city, $message);
