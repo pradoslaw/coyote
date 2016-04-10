@@ -33,11 +33,16 @@ class LoginController extends Controller
     /**
      * Widok formularza logowania
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->breadcrumb->push('Logowanie', route('login'));
+
+        if (!$request->session()->has('url.intended')) {
+            $request->session()->put('url.intended', url()->previous());
+        }
 
         return $this->view('auth.login');
     }

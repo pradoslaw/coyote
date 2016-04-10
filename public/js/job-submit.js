@@ -248,14 +248,16 @@ $(function () {
         var offset = $this.offset().top;
         var name = $this.attr('name');
 
-        name = name.replace('[', '').replace(']', '');
-
         $('.sidebar-hint').hide();
-        $('#hint-' + name).fadeIn();
 
-        offset -= $('aside').offset().top;
+        if (typeof name !== 'undefined') {
+            name = name.replace('[', '').replace(']', '');
 
-        $('#hint-container').css('top', offset);
+            $('#hint-' + name).fadeIn();
+            offset -= $('aside').offset().top;
+
+            $('#hint-container').css('top', offset);
+        }
     });
 
     $('.jumbotron .btn-close').click(function () {

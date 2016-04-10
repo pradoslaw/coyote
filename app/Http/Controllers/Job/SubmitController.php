@@ -98,7 +98,7 @@ class SubmitController extends Controller
 
         $this->authorize('update', $job);
 
-        if (!empty($firm->id)) {
+        if (!empty($firm->user_id)) {
             $this->authorize('update', $firm);
         }
 

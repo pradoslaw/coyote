@@ -21,6 +21,7 @@
             {% endif %}
 
             {{ form_open({'url': route('job.submit.firm'), 'class': '', 'id': 'job-posting'}) }}
+            {{ form_hidden('done', 0) }}
 
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -148,14 +149,14 @@
                     <div class="form-group form-group-border agency">
                         <label class="control-label">Liczba pracowników w firmie</label>
 
-                        {{ form_select('employees', employeesList, input_old('employees', firm.employees), {'class': 'form-control'}) }}
+                        {{ form_select('employees', {'': ''} + employeesList, input_old('employees', firm.employees), {'class': 'form-control'}) }}
                         <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
                     </div>
 
                     <div class="form-group form-group-border agency">
                         <label class="control-label">Rok powstania</label>
 
-                        {{ form_select('founded', foundedList, input_old('founded', firm.founded ?: 'now'|date('Y')), {'class': 'form-control'}) }}
+                        {{ form_select('founded', {'': ''} + foundedList, input_old('founded', firm.founded ?: 'now'|date('Y')), {'class': 'form-control'}) }}
                         <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
                     </div>
 
@@ -179,12 +180,12 @@
                         {{ form_hidden('latitude', input_old('latitude', firm.latitude), {'id': 'latitude'}) }}
                         {{ form_hidden('longitude', input_old('latitude', firm.longitude), {'id': 'longitude'}) }}
                         {{ form_hidden('street', input_old('street', firm.street)) }}
-                        {{ form_hidden('city', input_old('city', firm.street)) }}
+                        {{ form_hidden('city', input_old('city', firm.city)) }}
                         {{ form_hidden('country', input_old('country', firm.country)) }}
                         {{ form_hidden('postcode', input_old('postcode', firm.postcode)) }}
                         {{ form_hidden('house', input_old('house', firm.house)) }}
 
-                        {{ form_text('address', input_old('address'), {'class': 'form-control', 'id': 'address'}) }}
+                        {{ form_text('address', input_old('address', firm.street ~ ' ' ~ firm.house ~ ' ' ~ firm.city), {'class': 'form-control', 'id': 'address'}) }}
                         <span class="help-block">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
 
                         <div id="map"></div>
