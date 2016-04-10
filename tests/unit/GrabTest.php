@@ -27,4 +27,25 @@ class GrabTest extends \Codeception\TestCase\Test
         $tags = $hash->grab('<a href="">słoma</a>');
         $this->assertEquals(0, count($tags));
     }
+    
+    public function testGrabCityName()
+    {
+        $city = new \Coyote\Parser\Reference\City();
+        
+        $cities = $city->grab('Wrocław, Warszawa');        
+        $this->assertEquals(2, count($cities));
+        $this->assertEquals('Wrocław', $cities[0]);
+        $this->assertEquals('Warszawa', $cities[1]);
+
+        $cities = $city->grab('Wrocław');
+        $this->assertEquals('Wrocław', $cities[0]);
+
+        $cities = $city->grab('Wrocław,Wrocław');
+        $this->assertEquals(1, count($cities));
+
+        $cities = $city->grab('Wrocław/ Warszawa');
+        $this->assertEquals(2, count($cities));
+        $this->assertEquals('Wrocław', $cities[0]);
+        $this->assertEquals('Warszawa', $cities[1]);
+    }
 }

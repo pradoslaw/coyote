@@ -2,7 +2,7 @@
 
 use Faker\Factory;
 
-class ForumCest
+class TopicCest
 {
     public function _before(AcceptanceTester $I)
     {
