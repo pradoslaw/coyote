@@ -1,12 +1,12 @@
 {% extends 'job.base' %}
 {% block title %}Podgląd{{ parent() }}{% endblock %}
 
-{% import 'job.submit.theme' as theme %}
+{% import 'job.submit.partials.theme' as theme %}
 
 {% block container %}
     <div class="row">
         <main class="col-sm-8">
-            {% include 'job.submit.indicator' with {'current': 3} %}
+            {% include 'job.submit.partials.indicator' with {'current': 3} %}
 
             {{ form_open({'url': route('job.submit.save'), 'class': '', 'id': 'job-posting'}) }}
             <div class="panel panel-default">
@@ -41,5 +41,5 @@
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 
-    {% include 'job.submit.navigation' %}
+    {% include 'job.submit.partials.navigation' %}
 {% endblock %}

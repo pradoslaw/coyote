@@ -372,8 +372,46 @@ $(() => {
         return false;
     });
 
-    $('#btn-save').click(() => {
+    /**
+     * Save and exit button
+     */
+    $('#job-posting').on('click', '#btn-save', () => {
         $('input[name="done"]').val(1);
+    });
+
+    /**
+     * Ability to create new firm and assign it to the offer
+     */
+    $('#box-edit-firm').find('input[name="name"]').one('keyup', () => {
+        if ($('#firm-id').val() === '') {
+            return true;
+        }
+
+        $('#modal-firm').modal('show').find('.btn-primary').one('click', () => {
+            $.get(_config.firm_partial, {}, (html) => {
+                $('#box-edit-firm').replaceWith(html);
+
+                $('#modal-firm').modal('hide');
+                initialize();
+            });
+        });
+    });
+
+    /**
+     * Ability to assign different firm to this job offer
+     */
+    $('.btn-firm').click((e) => {
+        let self = $(e.currentTarget);
+
+        $.get(self.attr('href'), (html) => {
+            $('#box-edit-firm').replaceWith(html);
+            initialize();
+
+            $('.btn-firm').not(self).removeClass('btn-primary').addClass('btn-default');
+            self.addClass('btn-primary').removeClass('btn-default');
+        });
+
+        return false;
     });
 });
 

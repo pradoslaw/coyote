@@ -207,6 +207,8 @@ class Job extends Model
      */
     public function setTitleAttribute($title)
     {
+        $title = trim($title);
+        
         $this->attributes['title'] = $title;
         $this->attributes['path'] = str_slug($title, '_');
     }

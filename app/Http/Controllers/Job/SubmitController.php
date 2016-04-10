@@ -48,8 +48,8 @@ class SubmitController extends Controller
     {
         parent::__construct();
 
-        $this->middleware('job.revalidate', ['except' => 'postTag']);
-        $this->middleware('job.session', ['except' => ['getIndex', 'postIndex', 'postTag']]);
+        $this->middleware('job.revalidate', ['except' => ['postTag', 'getFirmPartial']]);
+        $this->middleware('job.session', ['except' => ['getIndex', 'postIndex', 'postTag', 'getFirmPartial']]);
 
         $this->breadcrumb->push('Praca', route('job.home'));
 
@@ -58,6 +58,8 @@ class SubmitController extends Controller
         $this->tag = $tag;
 
         $this->geoIp = app('GeoIp');
+
+        $this->public['firm_partial'] = route('job.submit.firm.partial');
     }
 
     /**
@@ -166,11 +168,7 @@ class SubmitController extends Controller
 
         $this->breadcrumb($job);
 
-        return $this->view('job.submit.firm', [
-            'employeesList'     => Firm::getEmployeesList(),
-            'foundedList'       => Firm::getFoundedList(),
-            'benefitsList'      => Benefit::getBenefitsList(), // default benefits,
-        ])->with(
+        return $this->view('job.submit.firm', $this->getFirmOptions())->with(
             compact('job', 'firm', 'firms')
         );
     }
@@ -210,6 +208,25 @@ class SubmitController extends Controller
         }
 
         return $this->next($request, redirect()->route('job.submit.preview'));
+    }
+
+    /**
+     * @param Request $request
+     * @param null $id
+     * @return mixed
+     */
+    public function getFirmPartial(Request $request, $id = null)
+    {
+        $firm = null;
+
+        if ($id) {
+            $firm = $this->loadFirm($id);
+            $this->authorize('update', $firm);
+
+            $request->session()->put('firm', $firm->toArray());
+        }
+
+        return view('job.submit.partials.firm', $this->getFirmOptions())->with(compact('firm'));
     }
 
     /**
@@ -321,6 +338,18 @@ class SubmitController extends Controller
         }
 
         return $location;
+    }
+
+    /**
+     * @return array
+     */
+    private function getFirmOptions()
+    {
+        return [
+            'employeesList'     => Firm::getEmployeesList(),
+            'foundedList'       => Firm::getFoundedList(),
+            'benefitsList'      => Benefit::getBenefitsList(), // default benefits,
+        ];
     }
 
     /**

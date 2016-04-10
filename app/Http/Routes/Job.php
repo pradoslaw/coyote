@@ -11,6 +11,7 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     Route::get('Submit/Firm', ['uses' => 'SubmitController@getFirm', 'as' => 'submit.firm', 'middleware' => 'auth']);
     Route::post('Submit/Firm', ['uses' => 'SubmitController@postFirm', 'middleware' => 'auth']);
+    Route::get('Submit/Firm/Partial/{id?}', ['uses' => 'SubmitController@getFirmPartial', 'as' => 'submit.firm.partial', 'middleware' => 'auth']);
 
     Route::get('Submit/Preview', ['uses' => 'SubmitController@getPreview', 'as' => 'submit.preview', 'middleware' => 'auth']);
     Route::post('Submit/Save', ['uses' => 'SubmitController@save', 'as' => 'submit.save', 'middleware' => 'auth']);

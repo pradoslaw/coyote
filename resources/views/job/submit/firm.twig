@@ -1,7 +1,7 @@
 {% extends 'job.base' %}
 {% block title %}Informacje o firmie{{ parent() }}{% endblock %}
 
-{% import 'job.submit.theme' as theme %}
+{% import 'job.submit.partials.theme' as theme %}
 {% import 'components.modals' as modal %}
 
 {% block container %}
@@ -11,7 +11,7 @@
 
     <div class="row">
         <main class="col-sm-8">
-            {% include 'job.submit.indicator' with {'current': 2} %}
+            {% include 'job.submit.partials.indicator' with {'current': 2} %}
             {% set private = input_old('private', firm.private|default(not job.firm_id)) %}
 
             {% if errors.any %}
@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-                {% if firms|length > 0 %}
+                {% if firms|length > 1 %}
                     <table id="choose-firm" class="table">
                         <tbody>
                             {% for item in firms %}
@@ -67,7 +67,7 @@
                                         <p>{{ item.headline }}</p>
                                     </td>
                                     <td class="text-center" style="vertical-align: middle">
-                                        <button class="btn btn-sm text-center {{ item.id == firm.id ? 'btn-primary' : 'btn-default' }}">Wybierz</button>
+                                        <a href="{{ route('job.submit.firm.partial', [item.id]) }}" class="btn btn-sm text-center btn-firm {{ item.id == firm.id ? 'btn-primary' : 'btn-default' }}">Wybierz</a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -76,162 +76,8 @@
                 {% endif %}
             </div>
 
-            <div id="box-edit-firm" class="panel panel-default">
-                <div class="panel-heading">
-                    Dane firmy
-                </div>
+            {% include 'job.submit.partials.firm' %}
 
-                {{ form_hidden('id', input_old('id', firm.id)) }}
-
-                <div class="panel-body">
-                    {{ theme.group_open('name', 'form-group-border') }}
-                        <label class="control-label">Nazwa firmy <em class="text-danger">*</em></label>
-
-                        {{ form_text('name', input_old('name', firm.name), {'class': 'form-control'}) }}
-                        {{ theme.error('name', 'Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.') }}
-                    {{ theme.group_close() }}
-
-                    {% set is_agency = input_old('is_agency', firm.is_agency) %}
-
-                    <div class="form-group">
-                        <div class="radio">
-                            {{ form_radio('is_agency', 0, is_agency == 0, {'id': 'direct'}) }}
-
-                            <label for="direct">
-                                Bezpośredni pracodawca
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group form-group-border">
-                        <div class="radio">
-                            {{ form_radio('is_agency', 1, is_agency == 1, {'id': 'agency'}) }}
-
-                            <label for="agency">
-                                Agencja pośrednictwa / IT outsourcing
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label">Logo</label>
-
-                        <div class="row">
-                            <div class="col-sm-2">
-                                {% set logo = input_old('logo', firm.logo) %}
-                                {{ form_hidden('logo', logo) }}
-
-                                <a href="javascript:" id="logo" class="img-thumbnail">
-                                    {% if not logo %}
-                                        <img src="{{ cdn('img/logo-gray.png') }}">
-                                    {% else %}
-                                        <img src="{{ cdn('storage/logo/' ~ logo) }}">
-                                    {% endif %}
-
-                                    {% if input_old('logo', firm.logo) %}
-                                        <div class="btn-flush">
-                                            <i class="fa fa-remove fa-2x"></i>
-                                        </div>
-                                    {% endif %}
-                                </a>
-
-                                <a id="upload" href="javascript:" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{ theme.group_open('website', 'form-group-border') }}
-                        <label class="control-label">Strona WWW</label>
-
-                        {{ form_text('website', input_old('website', firm.website), {'class': 'form-control'}) }}
-                        {{ theme.error('website', 'Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.') }}
-                    {{ theme.group_close() }}
-
-                    <div class="form-group form-group-border agency">
-                        <label class="control-label">Liczba pracowników w firmie</label>
-
-                        {{ form_select('employees', {'': ''} + employeesList, input_old('employees', firm.employees), {'class': 'form-control'}) }}
-                        <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
-                    </div>
-
-                    <div class="form-group form-group-border agency">
-                        <label class="control-label">Rok powstania</label>
-
-                        {{ form_select('founded', {'': ''} + foundedList, input_old('founded', firm.founded ?: 'now'|date('Y')), {'class': 'form-control'}) }}
-                        <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
-                    </div>
-
-                    <div class="form-group agency">
-                        <label class="control-label">Motto lub nagłówek</label>
-
-                        {{ form_text('headline', input_old('headline', firm.headline), {'class': 'form-control', 'maxlength': 100}) }}
-                        <span class="help-block">Pozostało <strong>{{ (100 - input_old('headline', firm.headline)|length) }}</strong> znaków.</span>
-                    </div>
-
-                    <div class="form-group agency">
-                        <label class="control-label">Opis firmy</label>
-
-                        {{ form_textarea('description', input_old('description', firm.description), {'class': 'form-control', 'style': 'height: 60px'}) }}
-                        <span class="help-block">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
-                    </div>
-
-                    <div class="form-group form-group-border agency">
-                        <label class="control-label">Adres</label>
-
-                        {{ form_hidden('latitude', input_old('latitude', firm.latitude), {'id': 'latitude'}) }}
-                        {{ form_hidden('longitude', input_old('latitude', firm.longitude), {'id': 'longitude'}) }}
-                        {{ form_hidden('street', input_old('street', firm.street)) }}
-                        {{ form_hidden('city', input_old('city', firm.city)) }}
-                        {{ form_hidden('country', input_old('country', firm.country)) }}
-                        {{ form_hidden('postcode', input_old('postcode', firm.postcode)) }}
-                        {{ form_hidden('house', input_old('house', firm.house)) }}
-
-                        {{ form_text('address', input_old('address', firm.street ~ ' ' ~ firm.house ~ ' ' ~ firm.city), {'class': 'form-control', 'id': 'address'}) }}
-                        <span class="help-block">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
-
-                        <div id="map"></div>
-                    </div>
-
-                    <div class="form-group form-group-border agency">
-                        <label class="control-label">Benefity</label>
-                        <span class="help-block">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w polu poniżej.</span>
-
-                        {% set benefits = input_old('benefits', firm.benefits) %}
-
-                        <ol class="benefits list-group">
-                            {% for benefit in benefitsList %}
-                                <li class="list-group-item col-sm-6 clickable {{ benefit in benefits ? 'checked' }}">
-                                    <i class="fa fa-check"></i> {{ benefit }}
-
-                                    <input type="checkbox" name="benefits[]" value="{{ benefit }}" {{ benefit in benefits ? 'checked' }}>
-                                </li>
-                            {% endfor %}
-
-                            {% for benefit in benefits %}
-                                {% if benefit not in benefitsList and benefit != '' %}
-                                    <li class="list-group-item col-xs-6 checked">
-                                        <i class="fa fa-check"></i>
-                                        <input type="text" name="benefits[]" value="{{ benefit }}" class="form-control input-sm">
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-
-                            <li class="list-group-item col-xs-6 checked">
-                                <i class="fa fa-check"></i>
-                                <input type="text" name="benefits[]" class="form-control input-sm">
-                            </li>
-                        </ol>
-
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <div id="form-navigation" class="form-group">
-                        <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
-                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Podgląd <i class="fa fa-angle-right"></i></button>
-
-                        <button type="submit" class="btn btn-danger pull-right" data-submit-state="Proszę czekać..." id="btn-save"><i class="fa fa-save"></i> Zapisz i zakończ</button>
-                    </div>
-                </div>
-            </div>
             {{ form_close() }}
         </main>
 
@@ -250,6 +96,23 @@
     </div>
 
     {{ modal.alert('Nie można dodać loga firmy. Proszę skontaktuj się z administratorem serwera.') }}
+
+    <div class="modal fade" id="modal-firm" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Zmiana nazwy firmy?</h4>
+                </div>
+                <div class="modal-body">
+                    Zamierzasz edytować nazwę tej firmy. Weź pod uwagę, że zmieniona nazwa będzie wyświetlana przy wszystkich Twoich ofertach. Czy może chcesz dodać nową firmę?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Jest OK, chce tylko zmienić nazwę</button>
+                    <a href="javascript:" class="btn btn-primary">Tak, chcę dodać nową firmę</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block body %}
@@ -260,5 +123,5 @@
     <script src="{{ cdn('js/modal.js') }}"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 
-    {% include 'job.submit.navigation' %}
+    {% include 'job.submit.partials.navigation' %}
 {% endblock %}

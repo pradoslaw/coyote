@@ -94,6 +94,16 @@ class Firm extends Model
     }
 
     /**
+     * @param string $name
+     */
+    public function setNameAttribute($name)
+    {
+        $name = trim($name);
+
+        $this->attributes['name'] = $name;
+    }
+
+    /**
      * @param int $userId
      */
     public function setDefaultUserId($userId)
