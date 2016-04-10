@@ -15,7 +15,7 @@ class CreateJobLocationsTable extends Migration
         Schema::create('job_locations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('job_id');
-            $table->string('name');
+            $table->string('city');
             $table->float('latitude')->nullable();
             $table->float('longitude')->nullable();
 
