@@ -134,7 +134,7 @@ class SubmitController extends Controller
             'currency_id'       => 'required|integer',
             'rate_id'           => 'required|integer',
             'employment_id'     => 'required|integer',
-            'city'              => 'string',
+            'city'              => 'string|city',
             'salary_from'       => 'integer',
             'salary_to'         => 'integer',
             'deadline'          => 'integer|min:1|max:365',

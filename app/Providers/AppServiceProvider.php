@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('tag', 'Coyote\TagValidator@validateTag');
         Validator::extend('tag_creation', 'Coyote\TagCreationValidator@validateTag');
         Validator::extend('throttle', 'Coyote\ThrottleValidator@validateThrottle');
+        Validator::extend('city', 'Coyote\CityValidator@validateCity');
 
         Validator::replacer('reputation', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);

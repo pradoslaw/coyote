@@ -11,7 +11,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
 
             <h1>Zaczynamy...</h1>
-            <p>Pamiętaj, że informacje zawarte w tym formularzu, możesz zmienić w każdej chwili i jest ono publikowane za darmo.
+            <p>Pamiętaj, że informacje zawarte w tym formularzu, możesz zmienić w każdej chwili, a ogłoszenie jest publikowane bezpłatnie.
                 Prosimy o zamieszczanie rzeczowych informacji. Frazesy w tylu <em>młoda dynamiczna firma</em> nie są dobrze widziane przez programistów.</p>
 
             <p><button class="btn btn-default btn-close" role="button" data-dismiss="alert" aria-label="Close">Ok, zrozumiałem</button></p>
@@ -50,7 +50,7 @@
                         {{ theme.error('title', 'Pozostało: <strong>' ~ (60 - input_old('title', job.title)|length) ~ '</strong> znaków</span>') }}
                     {{ theme.group_close() }}
 
-                    <div class="form-group form-group-border">
+                    {{ theme.group_open('city', 'form-group-border') }}
                         <label class="control-label">Lokalizacja</label>
 
                         <div class="row">
@@ -74,7 +74,7 @@
                                 {{ theme.error('city') }}
                             </div>
                         </div>
-                    </div>
+                    {{ theme.group_close() }}
 
                     {{ theme.group_open('salary_from', 'form-group-border') }}
                         <label class="control-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>

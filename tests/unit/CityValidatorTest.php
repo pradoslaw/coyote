@@ -21,17 +21,17 @@ class CityValidatorTest extends \Codeception\TestCase\Test
     {
         $validator = new \Coyote\CityValidator();
 
-        $this->assertTrue($validator->validateTag([], 'Wrocław', [], null));
-        $this->assertTrue($validator->validateTag([], 'Wrocław, Warszawa', [], null));
-        $this->assertTrue($validator->validateTag([], 'Wrocław/Warszawa', [], null));
-        $this->assertTrue($validator->validateTag([], 'Zielona góra/Warszawa', [], null));
-        $this->assertFalse($validator->validateTag([], 'Warszawa (ścisłe centrum)', [], null));
-        $this->assertTrue($validator->validateTag([], 'Warszawa', [], null));
-        $this->assertTrue($validator->validateTag([], 'Kraków', [], null));
-        $this->assertTrue($validator->validateTag([], 'Gdańsk', [], null));
-        $this->assertTrue($validator->validateTag([], 'Łódź', [], null));
-        $this->assertTrue($validator->validateTag([], 'Garðabær', [], null));
-        $this->assertTrue($validator->validateTag([], 'Sauðárkrókur', [], null));
-        $this->assertTrue($validator->validateTag([], 'Provence-Alpes-Côte d\'Azur', [], null));
+        $this->assertTrue($validator->validateCity([], 'Wrocław', [], null));
+        $this->assertTrue($validator->validateCity([], 'Wrocław, Warszawa', [], null));
+        $this->assertTrue($validator->validateCity([], 'Wrocław/Warszawa', [], null));
+        $this->assertTrue($validator->validateCity([], 'Zielona góra/Warszawa', [], null));
+        $this->assertFalse($validator->validateCity([], 'Warszawa (ścisłe centrum)', [], null));
+        $this->assertTrue($validator->validateCity([], 'Warszawa', [], null));
+        $this->assertTrue($validator->validateCity([], 'Kraków', [], null));
+        $this->assertTrue($validator->validateCity([], 'Gdańsk', [], null));
+        $this->assertTrue($validator->validateCity([], 'Łódź', [], null));
+        $this->assertTrue($validator->validateCity([], 'Garðabær', [], null));
+        $this->assertTrue($validator->validateCity([], 'Sauðárkrókur', [], null));
+        $this->assertTrue($validator->validateCity([], 'Provence-Alpes-Côte d\'Azur', [], null));
     }
 }
