@@ -26,14 +26,19 @@
                             </a>
                         </td>
                         <td class="col-body">
-                            <h2><a href="{{ url }}">{{ job.title }}</a></h2>
+                            <h2><a href="{{ url }}" title="{{ job.title }}">{{ job.title }}</a></h2>
 
                             <p>
                                 {% if job.firm %}
-                                    <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a> &nbsp;•&nbsp;
+                                    <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a>
                                 {% endif %}
 
-                                <small>{% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}</small>
+                                <small>
+                                    {% include 'job.partials.location' with {
+                                        'locations': job.locations.lists('city'),
+                                        'separator': job.firm is not null
+                                    } %}
+                                </small>
                             </p>
 
                             {% if job.tags %}

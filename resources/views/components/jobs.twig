@@ -10,7 +10,10 @@
             <p><a class="employer" href="{{ route('job.firm', [job.firm_name]) }}">{{ job.firm_name }}</a></p>
 
             <p class="bottom">
-                {% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}
+                {% include 'job.partials.location' with {
+                    'locations': job.locations.lists('city'),
+                    'separator': false
+                } %}
 
                 {% if job.salary_from or job.salary_to %}
                     • {% include 'job.partials.salary' %}

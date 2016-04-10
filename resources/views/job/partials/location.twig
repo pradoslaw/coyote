@@ -1,8 +1,13 @@
 {% set data = {} %}
+{% set separator = separator is defined ? separator : true %}
 
 {% for city in locations %}
     {% set data = data|merge([link_to_route('job.city', city, [city], {'title': 'Znajdź oferty z miasta ' ~ city})]) %}
 {% endfor %}
+
+{% if separator and (data|length > 0 or job.is_remote) %}
+    &nbsp;•&nbsp;
+{% endif %}
 
 {{ data|join(', ')|raw }}
 
