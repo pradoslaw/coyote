@@ -1,0 +1,137 @@
+{% set preview = preview|default(false) %}
+
+{% macro display_tags(tags) %}
+    <ul class="tag-clouds">
+        {% for tag in tags %}
+            <li><a href="{{ route('job.tag', [tag.name]) }}" title="Znajdź oferty zawierające {{ tag.name }}">{{ tag.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+<div class="panel-body">
+    <div class="media">
+        {% if firm.logo %}
+            <div class="media-left">
+                <img class="media-object" src="{{ cdn('storage/logo/' ~ firm.logo) }}" style="width: 70px; height: 70px;" alt="{{ firm.name }}">
+            </div>
+        {% endif %}
+
+        <div id="job-offer" class="media-body">
+            <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.path]) }}</h1>
+
+            {% if firm.name %}
+                <a class="employer" title="Zobacz oferty pracy z firmy {{ firm.name }}" href="{{ route('job.firm', [firm.name]) }}">{{ firm.name }}</a>
+            {% endif %}
+
+            {% if job.salary_from or job.salary_to %}
+                <strong class="salary pull-right text-primary">
+                    {% include 'job.partials.salary' with {'net_label': true, 'rate_label': true} %}
+                </strong>
+            {% endif %}
+
+            <ul class="metadata list-inline location">
+                <li title="Lokalizacja">
+                    <i class="fa fa-map-marker"></i>
+                    {{ job.country_name }}
+
+                    {% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}
+                </li>
+            </ul>
+
+            <ul class="metadata list-inline primary">
+                <li title="Data opublikowania">
+                    <i class="fa fa-calendar"></i>
+                    {{ job.created_at|format_date }}
+                </li>
+
+                {% if not preview and can('update', job) %}
+                    <li class="counter">
+                        <i class="fa fa-eye"></i>
+                        {{ declination(job.visits, ['odsłony', 'odsłon', 'odsłony']) }}
+                    </li>
+                {% endif %}
+
+                <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
+                    <i class="fa fa-clock-o"></i>
+                    {{ deadline }} dni do końca
+                </li>
+                <li>
+                    <i class="fa fa-pencil"></i>
+                    {{ employmentList[job.employment_id] }}
+                </li>
+            </ul>
+
+            {% if tags|length > 0 %}
+                <div class="tags">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h5 class="must-have">Wymagane</h5>
+                        </div>
+
+                        {% if tags[0] %}
+                            <div class="col-sm-6">
+                                <h5 class="nice-to-have">Mile widziane</h5>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {% if tags[1] %}
+                                {{ _self.display_tags(tags[1]) }}
+                            {% else %}
+                                --
+                            {% endif %}
+                        </div>
+
+                        <div class="col-sm-6">
+                            {{ _self.display_tags(tags[0]) }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if job.description %}
+                <h2>Opis oferty</h2>
+
+                <div>
+                    {{ job.description|raw }}
+                </div>
+            {% endif %}
+
+            {% if firm.benefits|length %}
+                <h2>Oferujemy</h2>
+
+                <ul class="benefits list-group row">
+                    {% for benefit in firm.benefits %}
+                        <li class="list-group-item col-xs-6 checked"><i class="fa fa-check fa-fw"></i> {{ benefit.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if firm.name and (firm.headline or firm.description) %}
+                <h2>{{ firm.name }}</h2>
+
+                <div>
+                    {% if firm.headline %}
+                        <blockquote>{{ firm.headline }}</blockquote>
+                    {% endif %}
+
+                    {{ firm.description|raw }}
+                </div>
+            {% endif %}
+
+            {% if not job.enable_apply %}
+                <h2>Informacje o rekrutacji</h2>
+
+                <div>
+                    {{ job.recruitment|raw }}
+                </div>
+            {% else %}
+                <div id="apply">
+                    <a class="btn btn-primary" href="{{ not preview ? route('job.candidate', [job.id]) : 'javascript:' }}">Aplikuj na to stanowisko</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

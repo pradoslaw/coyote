@@ -16,7 +16,7 @@ class TagController extends Controller
     {
         $this->validate($request, ['name' => 'required|string|max:25|tag']);
 
-        return view('job.submit.tag', [
+        return view('job.submit.partials.tag', [
             'tag' => [
                 'name' => $request->name,
                 'priority' => 1

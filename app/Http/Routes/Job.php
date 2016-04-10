@@ -31,6 +31,8 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     Route::post('Subscribe/{job}', ['uses' => 'SubscribeController@index', 'as' => 'subscribe', 'middleware' => 'auth']);
     Route::post('Preferences', ['uses' => 'PreferencesController@index', 'as' => 'preferences']);
+
+    Route::get('Candidate/{job}', ['uses' => 'CandidateController@index', 'as' => 'candidate']);
 });
 
 Route::group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {

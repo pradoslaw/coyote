@@ -204,7 +204,10 @@ class SubmitController extends Controller
             // very IMPORTANT: set firm id to null in case we don't want to associate firm with this offer
             $request->session()->put('job.firm_id', null);
         } else {
-            $request->session()->put('firm', $request->all());
+            $data = $request->all();
+            $data['benefits'] = array_filter(array_unique(array_map('trim', $data['benefits'])));
+
+            $request->session()->put('firm', $data);
         }
 
         return $this->next($request, redirect()->route('job.submit.preview'));
@@ -236,9 +239,68 @@ class SubmitController extends Controller
     public function getPreview(Request $request)
     {
         $job = $request->session()->get('job');
+        $firm = $request->session()->get('firm');
+
         $this->breadcrumb($job);
 
-        return $this->view('job.submit.preview');
+        /*
+         * We need to do a little transformation so data from session can look like data from database
+         */
+        $benefits = [];
+        if (!empty($firm['benefits'])) {
+            foreach ($firm['benefits'] as $benefit) {
+                if (!empty($benefit)) {
+                    $benefits[] = ['name' => $benefit];
+                }
+            }
+
+            $firm['benefits'] = $benefits;
+        }
+
+        $tags = [];
+        if (!empty($job['tags'])) {
+            $tags = [Job\Tag::NICE_TO_HAVE => [], Job\Tag::MUST_HAVE => []];
+
+            foreach ($job['tags'] as $tag) {
+                $tags[$tag['priority']][] = [
+                    'name' => $tag['name']
+                ];
+            }
+        }
+
+        $job['country_name'] = Country::find($job['country_id'])->name;
+
+        if (!empty($job['city'])) {
+            $job['locations'] = collect();
+            $grabber = new City();
+
+            foreach ($grabber->grab($job['city']) as $city) {
+                $job['locations']->push(['city' => $city]);
+            }
+        }
+
+        $parser = app('Parser\Job');
+
+        foreach (['description', 'requirements', 'recruitment'] as $name) {
+            if (!empty($job[$name])) {
+                $job[$name] = $parser->parse($job[$name]);
+            }
+        }
+
+        if ($firm['description']) {
+            $firm['description'] = $parser->parse($firm['description']);
+        }
+
+        $deadline = new Carbon();
+        $deadline->addDays($job['deadline']);
+
+        return $this->view('job.submit.preview', [
+            'ratesList'         => Job::getRatesList(),
+            'employmentList'    => Job::getEmploymentList(),
+            'deadline'          => $deadline->diff(Carbon::now())->days
+        ])->with(
+            compact('job', 'firm', 'tags')
+        );
     }
 
     /**
@@ -283,9 +345,9 @@ class SubmitController extends Controller
                 $job->firm_id = $firm->id; // it's important to assign firm id to the offer
 
                 $firm->benefits()->delete();
-                $benefits = array_filter(array_unique(array_map('trim', $data['benefits'])));
+//                $benefits = array_filter(array_unique(array_map('trim', $data['benefits'])));
 
-                foreach ($benefits as $benefit) {
+                foreach ($data['benefits'] as $benefit) {
                     $firm->benefits()->create([
                         'name' => $benefit
                     ]);

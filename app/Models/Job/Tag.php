@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
+    const MUST_HAVE = 1;
+    const NICE_TO_HAVE = 0;
+    
     /**
      * The attributes that are mass assignable.
      *

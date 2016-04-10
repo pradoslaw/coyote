@@ -42,6 +42,7 @@ class OfferController extends Controller
      */
     public function index(Request $request, $id)
     {
+        // call method from repository to fetch job data and country name and currency
         $job = $this->job->findById($id);
 
         $this->breadcrumb->push('Praca', route('job.home'));
@@ -55,7 +56,7 @@ class OfferController extends Controller
             }
         }
 
-        $tagsSet = $job->tags()->get()->groupBy('pivot.priority');
+        $tags = $job->tags()->get()->groupBy('pivot.priority');
 
         $firm = [];
         if ($job->firm_id) {
@@ -82,7 +83,7 @@ class OfferController extends Controller
             'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days,
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
         ])->with(
-            compact('job', 'firm', 'tagsSet')
+            compact('job', 'firm', 'tags')
         );
     }
 }
