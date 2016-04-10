@@ -15,7 +15,7 @@ class CreatePagesTable extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->increments('id');
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
-            $table->timestampTz('updated_at');
+            $table->timestampTz('updated_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->string('title');
             $table->string('path', 2000);
             $table->integer('content_id')->nullable();

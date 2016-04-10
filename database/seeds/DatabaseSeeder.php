@@ -14,18 +14,19 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call(UserTableSeeder::class);
-        $this->call(GroupTableSeeder::class);
-        $this->call(PermissionTableSeeder::class);
-        $this->call(WordTableSeeder::class);
-        $this->call(TagTableSeeder::class);
+        $this->call(PagesTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
+        $this->call(GroupsTableSeeder::class);
+        $this->call(PermissionsTableSeeder::class);
+        $this->call(WordsTableSeeder::class);
+        $this->call(TagsTableSeeder::class);
         $this->call(ReputationTypesTableSeeder::class);
-        $this->call(MicroblogTableSeeder::class);
-        $this->call(AlertTypeTableSeeder::class);
-        $this->call(ForumTableSeeder::class);
-        $this->call(FlagTypeSeeder::class);
+        $this->call(MicroblogsTableSeeder::class);
+        $this->call(AlertTypesTableSeeder::class);
+        $this->call(ForumsTableSeeder::class);
+        $this->call(FlagTypesSeeder::class);
         $this->call(ForumReasonsTableSeeder::class);
-        $this->call(CurrencyTableSeeder::class);
-        $this->call(CountryTableSeeder::class);
+        $this->call(CurrenciesTableSeeder::class);
+        $this->call(CountriesTableSeeder::class);
     }
 }

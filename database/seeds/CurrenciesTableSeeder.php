@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Coyote\Currency;
 
-class CurrencyTableSeeder extends Seeder
+class CurrenciesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

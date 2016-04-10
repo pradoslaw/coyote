@@ -3,24 +3,24 @@
 namespace Coyote\Events;
 
 use Illuminate\Queue\SerializesModels;
-use Coyote\Topic;
+use Coyote\Forum;
 
-class TopicWasDeleted extends Event
+class ForumWasDeleted extends Event
 {
     use SerializesModels;
 
     /**
      * @var array
      */
-    public $topic;
+    public $forum;
 
     /**
      * Create a new event instance.
      *
-     * @param Topic $topic
+     * @param Forum $forum
      */
-    public function __construct(Topic $topic)
+    public function __construct(Forum $forum)
     {
-        $this->topic = $topic->toArray();
+        $this->forum = $forum->toArray();
     }
 }

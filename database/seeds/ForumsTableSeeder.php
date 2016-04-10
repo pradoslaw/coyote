@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ForumTableSeeder extends Seeder
+class ForumsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -53,12 +53,14 @@ class ForumTableSeeder extends Seeder
             'default'        => false
         ]);
 
-        Coyote\Forum::create([
+        $row = Coyote\Forum::create([
             'name' => 'Newbie',
             'path' => 'Newbie',
             'section' => 'Podstawy programowania',
             'description' => 'Jeżeli jesteś kompletnym laikiem jeżeli chodzi o programowanie, to jest odpowiednia kategoria dla Ciebie. Tutaj możesz zadawać pytania o podstawy programowania, nie narażając się, że Twój temat zostanie skasowany z powodu niskiego poziomu merytorycznego.'
         ]);
+
+        event(new \Coyote\Events\ForumWasSaved($row));
 
         $parent = Coyote\Forum::create([
             'name' => 'Python',
@@ -66,7 +68,9 @@ class ForumTableSeeder extends Seeder
             'description' => 'Forum o Pythonie.'
         ]);
 
-        Coyote\Forum::create([
+        event(new \Coyote\Events\ForumWasSaved($parent));
+
+        $row = Coyote\Forum::create([
             'name' => 'Dla początkujących',
             'path' => 'Python/Dla_poczatkujacych',
             'description' => 'Forum o Pythonie dla dla początkujących.',
@@ -74,19 +78,25 @@ class ForumTableSeeder extends Seeder
             'section' => 'Podkategorie'
         ]);
 
-        Coyote\Forum::create([
+        event(new \Coyote\Events\ForumWasSaved($row));
+
+        $row = Coyote\Forum::create([
             'name' => 'Dla zaawansowanych',
             'path' => 'Python/Dla_zaawansowanych',
             'description' => 'Forum o Pythonie dla zaawansowanych',
             'parent_id' => $parent->id
         ]);
 
-        Coyote\Forum::create([
+        event(new \Coyote\Events\ForumWasSaved($row));
+
+        $row = Coyote\Forum::create([
             'name' => '4programmers.net',
             'path' => '4programmers',
             'description' => 'Przejdź do 4programmers.net',
             'url' => 'http://4programmers.net',
             'section' => 'Inne'
         ]);
+
+        event(new \Coyote\Events\ForumWasSaved($row));
     }
 }

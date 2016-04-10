@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class MicroblogTableSeeder extends Seeder
+class MicroblogsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

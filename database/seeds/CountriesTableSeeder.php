@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Coyote\Country;
 
-class CountryTableSeeder extends Seeder
+class CountriesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

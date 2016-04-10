@@ -6,11 +6,14 @@ use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Events\TopicWasDeleted;
+use Coyote\Events\ForumWasSaved;
+use Coyote\Events\ForumWasDeleted;
 use Coyote\Events\JobWasSaved;
 use Coyote\Events\JobWasDeleted;
 use Coyote\Microblog;
 use Coyote\Job;
 use Coyote\Topic;
+use Coyote\Forum;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -50,6 +53,28 @@ class PageListener implements ShouldQueue
     public function onTopicDelete(TopicWasDeleted $event)
     {
         $this->page->findByContent($event->topic['id'], Topic::class)->delete();
+    }
+
+    /**
+     * @param ForumWasSaved $event
+     */
+    public function onForumSave(ForumWasSaved $event)
+    {
+        $event->forum->page()->updateOrCreate([
+            'content_id' => $event->forum->id,
+            'content_type' => Forum::class
+        ], [
+            'title' => $event->forum->name,
+            'path' => route('forum.category', [$event->forum->path], false)
+        ]);
+    }
+
+    /**
+     * @param ForumWasDeleted $event
+     */
+    public function onForumDelete(ForumWasDeleted $event)
+    {
+        $this->page->findByContent($event->forum['id'], Forum::class)->delete();
     }
 
     /**
@@ -111,6 +136,16 @@ class PageListener implements ShouldQueue
         $events->listen(
             'Coyote\Events\TopicWasDeleted',
             'Coyote\Listeners\PageListener@onTopicDelete'
+        );
+
+        $events->listen(
+            'Coyote\Events\ForumWasSaved',
+            'Coyote\Listeners\PageListener@onForumSave'
+        );
+
+        $events->listen(
+            'Coyote\Events\ForumWasDeleted',
+            'Coyote\Listeners\PageListener@onForumDelete'
         );
 
         $events->listen(

@@ -43,6 +43,14 @@ class Forum extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function page()
+    {
+        return $this->morphOne('Coyote\Page', 'content');
+    }
+
+    /**
      * Checks ability for specified forum and user id
      *
      * @param string $name

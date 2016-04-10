@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Coyote\Alert\Type;
 use Coyote\Alert;
 
-class AlertTypeTableSeeder extends Seeder
+class AlertTypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
