@@ -15,6 +15,9 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Http\Request;
 use Coyote\Parser\Reference\City;
+use Coyote\Stream\Objects\Job as Stream_Job;
+use Coyote\Stream\Activities\Create as Stream_Create;
+use Coyote\Stream\Activities\Update as Stream_Update;
 
 class SubmitController extends Controller
 {
@@ -333,6 +336,8 @@ class SubmitController extends Controller
         $job->deadline_at = Carbon::now()->addDay($data['deadline']);
 
         \DB::transaction(function () use (&$job, $request, $locations, $tags) {
+            $activity = $job->id ? Stream_Update::class : Stream_Create::class;
+
             if ($request->session()->has('firm.name')) {
                 $data = $request->session()->get('firm');
 
@@ -367,6 +372,11 @@ class SubmitController extends Controller
 
             event(new JobWasSaved($job));
             $request->session()->forget(['job', 'firm']);
+
+            $parser = app('Parser\Job');
+            $job->description = $parser->parse($job->description);
+
+            stream($activity, (new Stream_Job)->map($job));
         });
 
         return redirect()->route('job.offer', [$job->id, $job->path])->with('success', 'Oferta została prawidłowo dodana.');

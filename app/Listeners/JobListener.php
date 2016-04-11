@@ -5,9 +5,8 @@ namespace Coyote\Listeners;
 use Coyote\Events\JobWasDeleted;
 use Coyote\Events\JobWasSaved;
 use Coyote\Job;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class JobListener implements ShouldQueue
+class JobListener
 {
     /**
      * @param JobWasSaved $event

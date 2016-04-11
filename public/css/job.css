@@ -330,7 +330,7 @@
     #box-filter .list-group-item a:active {
       text-decoration: none; }
   #box-filter .list-group-item:hover {
-    border-color: #eeeeee; }
+    border-color: #d0d0d0; }
 
 #box-filter .btn-reset {
   color: #777777;
