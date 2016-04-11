@@ -57,9 +57,29 @@ class TopicCest
         $I->see('Musisz odczekać chwilę przed dodaniem kolejnego wpisu.');
     }
 
-    private function submit(AcceptanceTester $I, $subject, $text, $username)
+    public function createTopicAsAuthenticatedUser(AcceptanceTester $I)
     {
-        $I->fillField('user_name', $username);
+        $I->wantTo('Create new topic as authenticated user');
+        $I->login('admin', '123');
+        $I->amOnPage('/Forum/Newbie/Submit');
+
+        $fake = Factory::create();
+        $text = $fake->text;
+        $subject = $fake->title;
+
+        $this->submit($I, $subject, $text);
+
+        $I->wait(1);
+        $I->canSee($text);
+        $I->seeInTitle($subject);
+    }
+
+    private function submit(AcceptanceTester $I, $subject, $text, $username = null)
+    {
+        if ($username) {
+            $I->fillField('user_name', $username);
+        }
+
         $I->fillField('subject', $subject);
         $I->fillField('text', $text);
         $I->click('Wyślij');
