@@ -86,7 +86,10 @@ class HomeController extends Controller
         $this->preferences = json_decode($this->getSetting('job.preferences', '{}'));
 
         $this->tab = $request->get('tab', $this->getSetting('job.tab', self::TAB_FILTERED));
-        $validator = $this->getValidationFactory()->make($request->all(), ['tab' => 'sometimes|in:all,filtered']);
+        $validator = $this->getValidationFactory()->make(
+            $request->all(),
+            ['tab' => 'sometimes|in:' . self::TAB_ALL . ',' . self::TAB_FILTERED]
+        );
 
         if ($validator->fails()) {
             $this->tab = self::TAB_FILTERED;
@@ -240,11 +243,11 @@ class HomeController extends Controller
         }
 
         $selected = [];
-        if ($this->tab != self::TAB_FILTERED) {
+        if ($this->tab !== self::TAB_FILTERED) {
             $selected = [
                 'tags'          => $this->tag->getTags(),
                 'cities'        => array_map('mb_strtolower', $this->city->getCities()),
-                'remote'        => $request->has('remote')
+                'remote'        => $request->has('remote') || $this->getRouter()->currentRouteName() === 'job.remote'
             ];
         }
 
