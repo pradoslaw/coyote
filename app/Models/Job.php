@@ -54,6 +54,9 @@ class Job extends Model
      * @var array
      */
     protected $mapping = [
+        "id" => [
+            "type" => "integer"
+        ],
         "locations" => [
             "type" => "nested",
             "properties" => [
