@@ -30,13 +30,18 @@ class FunctionalTester extends \Codeception\Actor
     {
         $fake = Factory::create();
 
-        return $this->haveRecord('users', [
+        $data = [
             'name'       => $fake->name,
             'email'      => $fake->email,
-            'password'   => bcrypt($fake->password),
+            'password'   => $fake->password,
             'created_at' => new \DateTime(),
             'updated_at' => new \DateTime(),
-        ]);
+        ];
+        
+        $id = $this->haveRecord('users', array_merge($data, ['password' => bcrypt($data['password'])]));
+        $data['id'] = $id;
+        
+        return $data;
     }
 
     public function logInAsRandomUser()

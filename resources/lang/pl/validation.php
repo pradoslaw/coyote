@@ -147,7 +147,7 @@ return [
             'min'           => 'Tytuł jest zbyt krótki. Musi mieć minimum 3 znaku długości.'
         ],
         'recruitment' => [
-            'required'      => 'Proszę podać informacje w jaki sposób można składać aplikacje na to stanowisko.'
+            'required_if'   => 'Proszę podać informacje w jaki sposób można składać aplikacje na to stanowisko.'
         ],
         'salary_from' => [
             'integer'       => 'Wynagrodzenie "od" musi być liczbą całkowitą.'

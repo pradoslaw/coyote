@@ -144,7 +144,7 @@ class SubmitController extends Controller
             'salary_to'         => 'integer',
             'deadline'          => 'integer|min:1|max:365',
             'requirements'      => 'string',
-            'recruitment'       => 'sometimes|required|string',
+            'recruitment'       => 'required_if:enable_apply,0|string',
             'enable_apply'      => 'boolean',
             'email'             => 'sometimes|required|email',
             'tags.*.name'       => 'tag',

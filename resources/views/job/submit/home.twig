@@ -28,6 +28,8 @@
             {% if errors.any %}
                 <p class="alert alert-danger">
                     Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.
+
+                    {{ dump(errors) }}
                 </p>
             {% endif %}
 
