@@ -11,7 +11,7 @@ class JobsTableSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = [           
+        $permissions = [
             [
                 'name' => 'job-update',
                 'description' => 'Edycja ofert pracy',
