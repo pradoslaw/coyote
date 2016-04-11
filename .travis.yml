@@ -5,6 +5,7 @@ php:
 services:
   - postgresql
   - mongodb
+  - elasticsearch
 
 addons:
   postgresql: "9.3"
@@ -22,7 +23,7 @@ before_script:
   - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
   - php artisan migrate --seed --env="testing"
   - php vendor/bin/codecept build
-  - chmod -R 777 storage/
+  - make file-permission
   - phantomjs --webdriver=4444 2>&1 >/dev/null &
   - sleep 5
   - php -S 127.0.0.1:8000 -t public/ 2>&1 >/dev/null &
