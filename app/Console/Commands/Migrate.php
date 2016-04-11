@@ -235,7 +235,7 @@ class Migrate extends Command
 
     /**
      * 100%
-     * 
+     *
      * @todo dodac uprawnienia firm-update oraz firm-delete
      */
     private function migratePermissions()
@@ -1154,7 +1154,7 @@ class Migrate extends Command
                 if (!$tagId) {
                     $tagId = DB::table('tags')->insertGetId(['name' => $row['tag_name']]);
                 }
-                
+
                 DB::table('microblog_tags')->insert(['tag_id' => $tagId, 'microblog_id' => $row['microblog_id']]);
             }
 

@@ -18,7 +18,7 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
         \DB::table('group_permissions')->where('permission_id', '=', $id)->update(['value' => true]);
-        
+
         $permissions = [
             [
                 'name' => 'microblog-update',
@@ -86,9 +86,9 @@ class PermissionsTableSeeder extends Seeder
                 'default' => false
             ],
         ];
-        
+
         foreach ($permissions as $permission) {
-            \DB::table('permissions')->create($permission);
+            \DB::table('permissions')->insert($permission);
         }
     }
 }
