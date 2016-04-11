@@ -235,6 +235,8 @@ class Migrate extends Command
 
     /**
      * 100%
+     * 
+     * @todo dodac uprawnienia firm-update oraz firm-delete
      */
     private function migratePermissions()
     {

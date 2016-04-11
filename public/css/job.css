@@ -329,6 +329,8 @@
     #box-filter .list-group-item a:focus,
     #box-filter .list-group-item a:active {
       text-decoration: none; }
+  #box-filter .list-group-item:hover {
+    border-color: #eeeeee; }
 
 #box-filter .btn-reset {
   color: #777777;

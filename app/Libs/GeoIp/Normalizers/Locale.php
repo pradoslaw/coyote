@@ -35,6 +35,10 @@ class Locale implements NormalizerInterface
         $result = array_first($data);
 
         if (!empty($result['alternatives'])) {
+            $result['alternatives'] = array_reverse(array_sort($result['alternatives'], function ($value) {
+                return $value['is_preferred'];
+            }));
+
             foreach ($result['alternatives'] as $alternative) {
                 if ($alternative['language'] === $this->locale) {
                     $result['name'] = $alternative['name'];

@@ -160,11 +160,11 @@ class SubmitController extends Controller
      */
     public function getFirm(Request $request)
     {
-        // get all firms assigned to user...
-        $firms = $this->getFirms();
-
         $job = $request->session()->get('job');
         $firm = $request->session()->get('firm');
+
+        // get all firms assigned to user...
+        $firms = $this->getFirms($job['user_id']);
 
         $this->breadcrumb($job);
 
@@ -442,12 +442,13 @@ class SubmitController extends Controller
     }
 
     /**
+     * @param int $userId
      * @return mixed
      */
-    private function getFirms()
+    private function getFirms($userId)
     {
         // get all firms assigned to user...
-        return $this->firm->findAllBy('user_id', $this->userId);
+        return $this->firm->findAllBy('user_id', $userId);
     }
 
     /**
@@ -470,7 +471,7 @@ class SubmitController extends Controller
     private function loadDefaultFirm()
     {
         $firm = $this->firm->newInstance();
-        $firms = $this->getFirms();
+        $firms = $this->getFirms($this->userId);
 
         if ($firms->count()) {
             $firm = $firms->first();

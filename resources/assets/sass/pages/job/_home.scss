@@ -129,6 +129,10 @@ $header-footer-border: #c7c7c7;
         text-decoration: none;
       }
     }
+
+    &:hover {
+      border-color: $gray-lighter;
+    }
   }
 
   .btn-reset {
