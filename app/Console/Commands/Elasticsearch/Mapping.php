@@ -51,7 +51,7 @@ class Mapping extends Command
      * @return mixed
      */
     public function handle()
-    {        
+    {
         if ($this->option('force') || $this->confirm('Do you want to create Elasticsearch mapping?', true)) {
             $model = ucfirst($this->option('model'));
 
