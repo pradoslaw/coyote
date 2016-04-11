@@ -13,7 +13,7 @@ class Mapping extends Command
      *
      * @var string
      */
-    protected $signature = 'es:mapping {--model=}';
+    protected $signature = 'es:mapping {--model=} {--force}';
 
     /**
      * The console command description.
@@ -51,8 +51,8 @@ class Mapping extends Command
      * @return mixed
      */
     public function handle()
-    {
-        if ($this->confirm('Do you want to create Elasticsearch mapping?', true)) {
+    {        
+        if ($this->option('force') || $this->confirm('Do you want to create Elasticsearch mapping?', true)) {
             $model = ucfirst($this->option('model'));
 
             if (!$model) {

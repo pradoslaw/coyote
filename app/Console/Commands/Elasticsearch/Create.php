@@ -11,7 +11,7 @@ class Create extends Command
      *
      * @var string
      */
-    protected $signature = 'es:create';
+    protected $signature = 'es:create {--force}';
 
     /**
      * The console command description.
@@ -38,7 +38,7 @@ class Create extends Command
     {
         $index = config('elasticsearch.default_index');
 
-        if ($this->confirm("Do you want to create index $index in Elasticsearch?", true)) {
+        if ($this->option('force') || $this->confirm("Do you want to create index $index in Elasticsearch?", true)) {
             $client = app('Elasticsearch');
 
             $params = [
