@@ -38,7 +38,7 @@ class TopicCest
 
         $fake = Factory::create();
         $text = $fake->text;
-        $subject = $fake->title;
+        $subject = $fake->text(50);
 
         $this->submit($I, $subject, $text, $fake->userName);
 
@@ -65,7 +65,7 @@ class TopicCest
 
         $fake = Factory::create();
         $text = $fake->text;
-        $subject = $fake->title;
+        $subject = $fake->text(50);
 
         $this->submit($I, $subject, $text);
 

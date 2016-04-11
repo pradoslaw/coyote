@@ -59,9 +59,13 @@ class Create extends Command
                 ]
             ];
 
-            $client->indices()->close(['index' => $index]);
-            $client->indices()->putSettings($params);
-            $client->indices()->open(['index' => $index]);
+            if ($client->indices()->exists(['index' => $index])) {
+                $client->indices()->close(['index' => $index]);
+                $client->indices()->putSettings($params);
+                $client->indices()->open(['index' => $index]);
+            } else {
+                $client->indices()->create($params);
+            }
 
             $this->info('Done.');
         }
