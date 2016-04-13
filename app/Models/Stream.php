@@ -2,7 +2,7 @@
 
 namespace Coyote;
 
-use Jenssegers\Mongodb\Model as Eloquent;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 class Stream extends Eloquent
 {
