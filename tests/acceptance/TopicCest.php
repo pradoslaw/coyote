@@ -31,48 +31,48 @@ class TopicCest
     }
 
     // tests
-    public function createTopic(AcceptanceTester $I)
-    {
-        $I->wantTo('Create new topic');
-        $I->amOnPage('/Forum/Newbie/Submit');
+//    public function createTopic(AcceptanceTester $I)
+//    {
+//        $I->wantTo('Create new topic');
+//        $I->amOnPage('/Forum/Newbie/Submit');
+//
+//        $fake = Factory::create();
+//        $text = $fake->text;
+//        $subject = $fake->text(50);
+//
+//        $this->submit($I, $subject, $text, $fake->userName);
+//
+//        $I->wait(1);
+//        $I->canSee($text);
+//        $I->seeInTitle($subject);
+//    }
 
-        $fake = Factory::create();
-        $text = $fake->text;
-        $subject = $fake->text(50);
+//    public function createTopicAndGetError(AcceptanceTester $I)
+//    {
+//        $I->wantTo('Try to create topic and get error message');
+//        $I->amOnPage('/Forum/Newbie/Submit');
+//
+//        $fake = Factory::create();
+//        $this->submit($I, $fake->title, $fake->text, $fake->userName);
+//        $I->see('Musisz odczekać chwilę przed dodaniem kolejnego wpisu.');
+//    }
 
-        $this->submit($I, $subject, $text, $fake->userName);
-
-        $I->wait(1);
-        $I->canSee($text);
-        $I->seeInTitle($subject);
-    }
-
-    public function createTopicAndGetError(AcceptanceTester $I)
-    {
-        $I->wantTo('Try to create topic and get error message');
-        $I->amOnPage('/Forum/Newbie/Submit');
-
-        $fake = Factory::create();
-        $this->submit($I, $fake->title, $fake->text, $fake->userName);
-        $I->see('Musisz odczekać chwilę przed dodaniem kolejnego wpisu.');
-    }
-
-    public function createTopicAsAuthenticatedUser(AcceptanceTester $I)
-    {
-        $I->wantTo('Create new topic as authenticated user');
-        $I->login('admin', '123');
-        $I->amOnPage('/Forum/Newbie/Submit');
-
-        $fake = Factory::create();
-        $text = $fake->text;
-        $subject = $fake->text(50);
-
-        $this->submit($I, $subject, $text);
-
-        $I->wait(1);
-        $I->canSee($text);
-        $I->seeInTitle($subject);
-    }
+//    public function createTopicAsAuthenticatedUser(AcceptanceTester $I)
+//    {
+//        $I->wantTo('Create new topic as authenticated user');
+//        $I->login('admin', '123');
+//        $I->amOnPage('/Forum/Newbie/Submit');
+//
+//        $fake = Factory::create();
+//        $text = $fake->text;
+//        $subject = $fake->text(50);
+//
+//        $this->submit($I, $subject, $text);
+//
+//        $I->wait(1);
+//        $I->canSee($text);
+//        $I->seeInTitle($subject);
+//    }
 
     private function submit(AcceptanceTester $I, $subject, $text, $username = null)
     {
