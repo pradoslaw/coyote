@@ -28,9 +28,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 
 ## Instalacja
 
-* `apt-get install php5-gd`
-* `apt-get install php5-mongo`
-* `apt-get install php5-mcrypt`
+* `sudo pecl install mongodb`
 * `git clone https://github.com/adam-boduch/coyote.git .`
 * `psql -c 'create database coyote;' -U postgres`
 * `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
@@ -40,11 +38,11 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 ### Problemy podczas instalacji
 #### Class 'MongoClient' not found
 
-Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php5-fpm restart`
+Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php5-fpm restart` (zakładając, że używasz PHP5 a nie PHP7)
 
 #### Use of undefined constant MCRYPT_RIJNDAEL_128 - assumed 'MCRYPT_RIJNDAEL_128'
 
-Czy biblioteka mcrypt jest zainstalowana? Jeżeli tak to `service php5-fpm restart`
+Czy biblioteka mcrypt jest zainstalowana? Jeżeli nie to `apt-get install php5-mcrypt`. Jeżeli tak to `service php5-fpm restart` (zakładając, że używasz PHP5 a nie PHP7)
 
 ## Uruchomienie
 
