@@ -9,7 +9,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 
 ## Wymagania
 
-* PHP >= 5.5
+* PHP >= 5.6
     * Moduł GD
     * Moduł mongo
     * Moduł mcrypt
@@ -23,7 +23,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 ### Zalecane
 
 * Redis
-* Elasticsearch
+* Elasticsearch >= 2.0
 * Supervisor
 
 ## Instalacja
