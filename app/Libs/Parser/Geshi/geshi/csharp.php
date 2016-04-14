@@ -12,6 +12,8 @@
  *
  * CHANGES
  * -------
+ * 2016/04/14
+ *  - Added missing keywords from C# 5/6 and global contextual keyword
  * 2012/06/18 (1.0.8.11)
  *  -  Added missing keywords (Christian Stelzmann)
  * 2009/04/03 (1.0.8.6)
@@ -62,9 +64,9 @@ $language_data = array(
     'ESCAPE_CHAR' => '\\',
     'KEYWORDS' => array(
         1 => array(
-            'abstract', 'add', 'as', 'base', 'break', 'by', 'case', 'catch', 'const', 'continue',
+            'abstract', 'add', 'as', 'async', 'await', 'base', 'break', 'by', 'case', 'catch', 'const', 'continue',
             'default', 'do', 'else', 'event', 'explicit', 'extern', 'false',
-            'finally', 'fixed', 'for', 'foreach', 'from', 'get', 'goto', 'group', 'if',
+            'finally', 'fixed', 'for', 'foreach', 'from', 'get', 'global', 'goto', 'group', 'if',
             'implicit', 'in', 'into', 'internal', 'join', 'lock', 'namespace', 'null',
             'operator', 'out', 'override', 'params', 'partial', 'private',
             'protected', 'public', 'readonly', 'remove', 'ref', 'return', 'sealed',
@@ -77,7 +79,7 @@ $language_data = array(
             '#line', '#region', '#undef', '#warning'
             ),
         3 => array(
-            'checked', 'is', 'new', 'sizeof', 'typeof', 'unchecked'
+            'checked', 'is', 'nameof', 'new', 'sizeof', 'typeof', 'unchecked'
             ),
         4 => array(
             'bool', 'byte', 'char', 'class', 'decimal', 'delegate', 'double',
