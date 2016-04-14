@@ -35,7 +35,7 @@
 
                         <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
 
-                        {% if aggregations.remote|length > 0 %}
+                        {% if aggregations.remote[1] is not null %}
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     {{ form_checkbox('remote', 1, selected.remote) }}
