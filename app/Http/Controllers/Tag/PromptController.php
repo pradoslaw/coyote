@@ -16,6 +16,8 @@ class PromptController extends Controller
      * @param Request $request
      * @param Tag $tag
      * @return $this
+     * 
+     * @todo Do usuniecia. Podobny kod jest w kontrolerach w katalogu ForumController oraz JobController
      */
     public function index(Request $request, Tag $tag)
     {
@@ -25,6 +27,8 @@ class PromptController extends Controller
 
     /**
      * @param Request $request
+     * 
+     * @todo Do usuniecia poniewaz walidacja tagu powinna odbywac sie w zaleznosci od kontekstu (forum, ofety pracy)
      */
     public function valid(Request $request)
     {

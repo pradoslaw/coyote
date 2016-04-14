@@ -13,6 +13,7 @@
 
 Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 
+// @todo do usuniecia te reguly globalne. zostaly przeniesione do modulu forum
 Route::get('Tag/Prompt', ['uses' => 'Tag\PromptController@index', 'as' => 'tag.prompt']);
 Route::get('Tag/Validate', ['uses' => 'Tag\PromptController@valid', 'as' => 'tag.validate']);
 Route::get('Flag', ['uses' => 'FlagController@index', 'as' => 'flag', 'middleware' => 'auth']);

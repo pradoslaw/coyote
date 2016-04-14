@@ -20,8 +20,7 @@ class TagRepository extends Repository implements TagRepositoryInterface
      */
     public function lookupName($name)
     {
-        return $this->model->select(['tags.id', 'name', \DB::raw('COUNT(topic_tags.id) AS count')])
-                            ->leftJoin('topic_tags', 'topic_tags.tag_id', '=', 'tags.id')
+        return $this->model->select(['tags.id', 'name'])
                             ->where('name', 'ILIKE', $name . '%')
                             ->groupBy('tags.id')
                             ->get();

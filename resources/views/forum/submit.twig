@@ -217,8 +217,8 @@
             }).append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
 
             $('#tags').tag({
-                validateUrl: '{{ route('tag.validate') }}',
-                promptUrl: '{{ route('tag.prompt') }}'
+                validateUrl: '{{ route('forum.tag.validate') }}',
+                promptUrl: '{{ route('forum.tag.prompt') }}'
             });
         });
     </script>

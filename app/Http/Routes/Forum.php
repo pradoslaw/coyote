@@ -8,6 +8,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     Route::get('Tag/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     Route::post('Tag/save', ['uses' => 'TagController@save', 'as' => 'tag.save']);
+    Route::get('Tag/Prompt', ['uses' => 'TagController@prompt', 'as' => 'tag.prompt']);
+    Route::get('Tag/Validate', ['uses' => 'TagController@valid', 'as' => 'tag.validate']);
     Route::get('All', ['uses' => 'HomeController@all', 'as' => 'all']);
     Route::get('Unanswered', ['uses' => 'HomeController@unanswered', 'as' => 'unanswered']);
     Route::get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);

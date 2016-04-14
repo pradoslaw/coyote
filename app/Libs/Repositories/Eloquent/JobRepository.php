@@ -76,4 +76,26 @@ class JobRepository extends Repository implements JobRepositoryInterface
                 ->get()
                 ->toArray();
     }
+
+    /**
+     * Return tags with job offers counter
+     *
+     * @param array $tagsId
+     * @return mixed
+     */
+    public function getTagsWeight(array $tagsId)
+    {
+        $this->applyCriteria();
+
+        return $this
+                ->app->make('Coyote\Job\Tag')
+                ->select(['name', \DB::raw('COUNT(*) AS count')])
+                ->join('tags', 'tags.id', '=', 'tag_id')
+                ->join('jobs', 'jobs.id', '=', 'job_id')
+                ->whereIn('job_tags.tag_id', $tagsId)
+                    ->whereNull('jobs.deleted_at')
+                    ->whereNull('tags.deleted_at')
+                ->groupBy('name')
+                ->get();
+    }
 }

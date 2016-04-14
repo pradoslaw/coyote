@@ -28,4 +28,12 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getPopularTags($limit = 1000);
+
+    /**
+     * Return tags with job offers counter
+     *
+     * @param array $tagsId
+     * @return mixed
+     */
+    public function getTagsWeight(array $tagsId);
 }

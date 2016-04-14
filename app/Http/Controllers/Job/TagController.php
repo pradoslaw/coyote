@@ -3,6 +3,8 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Repositories\Contracts\JobRepositoryInterface as Job;
+use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as Tag;
 
@@ -27,12 +29,18 @@ class TagController extends Controller
     /**
      * @param Request $request
      * @param Tag $tag
+     * @param Job $job
      * @return $this
      */
-    public function prompt(Request $request, Tag $tag)
+    public function prompt(Request $request, Tag $tag, Job $job)
     {
         $this->validate($request, ['q' => 'required|string|max:25']);
-        return view('components.tags')->with('tags', $tag->lookupName(ltrim($request['q'], '#')));
+        $tags = $tag->lookupName(ltrim($request['q'], '#'));
+
+        $job->pushCriteria(new PriorDeadline());
+        $tags = $job->getTagsWeight($tags->pluck('id')->toArray());
+
+        return view('components.tags')->with('tags', $tags);
     }
 
     /**
