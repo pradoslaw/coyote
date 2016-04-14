@@ -4,8 +4,11 @@
 {% set declinationOffers = ['oferta', 'oferty', 'ofert'] %}
 
 {% import 'components.forms' as forms %}
+{% import 'components.modals' as modals %}
 
 {% block container %}
+    {{ modals.alert('Błąd podczas dodawania tagów. Sprawdź proszę czy nazwa tagu jest prawidłowa.') }}
+
     <div id="job-main-content" class="row">
         <main class="col-lg-9 col-md-12">
 

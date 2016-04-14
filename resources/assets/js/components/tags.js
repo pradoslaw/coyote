@@ -32,7 +32,7 @@
                     $('<input>', {'type': 'hidden', 'name': name}).val($(this).text()).insertAfter($this);
                 });
 
-                var width = editorWidth - $('.tag-clouds').outerWidth();
+                var width = editorWidth - $('.tag-clouds', editor).outerWidth();
                 $this.width(Math.max(100, width));
 
                 if (width < 100) {
@@ -97,6 +97,7 @@
                     editor.children('ul').append('<li><a class="remove">' + value + '</a></li>');
                     setInputWidth();
 
+                    // @todo trzeba ustawiac te liczbe w konfiguracji zamiast na sztywno
                     if (editor.find('li').length > 5) {
                         $('#alert').modal('show');
                         $('.modal-body').text('Maksymalna ilość tagów to 5');
@@ -110,15 +111,15 @@
                             crossDomain: true,
                             xhrFields: {
                                 withCredentials: true
-                            },
-                            error: function (e) {
-                                if (typeof e.responseJSON.t !== 'undefined') {
-                                    $('#alert').modal('show');
-                                    $('.modal-body').text(e.responseJSON.t[0]);
+                            }
+                        })
+                        .fail(function (e) {
+                            if (typeof e.responseJSON.t !== 'undefined') {
+                                $('#alert').modal('show');
+                                $('.modal-body').text(e.responseJSON.t[0]);
 
-                                    $('ul.tag-clouds li:last', editor).remove();
-                                    setInputWidth();
-                                }
+                                $('ul.tag-clouds li:last', editor).remove();
+                                setInputWidth();
                             }
                         });
                     }
