@@ -12,7 +12,7 @@ class Tag extends Aggs\Terms implements DslInterface
 
     public function __construct()
     {
-        parent::__construct('tags', 'tag_original');
+        parent::__construct('tags', 'tags.original');
     }
 
     /**

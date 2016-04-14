@@ -78,7 +78,7 @@ class Job extends Model
                 "tag" => [
                     "type" => "string"
                 ],
-                "tag_original" => [
+                "original" => [
                     "type" => "string",
                     "index" => "not_analyzed"
                 ]
@@ -211,7 +211,7 @@ class Job extends Model
     public function setTitleAttribute($title)
     {
         $title = trim($title);
-        
+
         $this->attributes['title'] = $title;
         $this->attributes['path'] = str_slug($title, '_');
     }
