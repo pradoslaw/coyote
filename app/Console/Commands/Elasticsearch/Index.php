@@ -72,7 +72,7 @@ class Index extends Command
     private function indexAll()
     {
         foreach (get_class_methods($this) as $method) {
-            if ($method !== 'indexAll' && 'index' === substr($method, 0, 5)) {
+            if ($method !== 'indexAll' && $method !== 'index' && 'index' === substr($method, 0, 5)) {
                 $this->$method();
             }
         }
