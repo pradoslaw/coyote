@@ -3,7 +3,7 @@
 [![StyleCI](https://styleci.io/repos/30256872/shield)](https://styleci.io/repos/30256872)
 [![Build Status](https://travis-ci.org/adam-boduch/coyote.svg?branch=master)](https://travis-ci.org/adam-boduch/coyote)
 
-Coyote to nazwa systemu obslugujacego serwis 4programmers.net. Obecnie w obludze jest wersja 1.x ktora mamy nadzieje zastapic wersja 2.0 ktora jest w trakcie pisania i bedzie dostepna na githubie jako open source. 
+Coyote to nazwa systemu obslugujacego serwis 4programmers.net. Obecnie w obludze jest wersja 1.x ktora mamy nadzieje zastapic wersja 2.0 ktora jest w trakcie pisania i bedzie dostepna na githubie jako open source.
 
 Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja koncowa i stabilna.
 
@@ -11,7 +11,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 
 * PHP >= 5.6
     * Moduł GD
-    * Moduł mongo
+    * Moduł mongodb
     * Moduł mcrypt
 * PostgreSQL >= 9.3
 * MongoDB >= 2.7
@@ -23,10 +23,14 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 ### Zalecane
 
 * Redis
-* Elasticsearch >= 2.0
+* Elasticsearch 1.7
 * Supervisor
 
 ## Instalacja
+
+Moduły takie jak mcrypt czy gd na większości serwerów są domyślnie zainstalowane. Jeżeli jednak
+moduły te nie są zainstalowane na serwerze, możesz je zainstalować poprzez:  `apt-get install php5-mcrypt`
+oraz `apt-get install php5-gd`.
 
 * `sudo pecl install mongodb`
 * `git clone https://github.com/adam-boduch/coyote.git .`
@@ -55,7 +59,7 @@ W pisaniu testów, pomaga nam framework [Codeception](http://codeception.com/). 
 1. `vendor/bin/codecept build` (tylko jednorazowo)
 2. `vendor/bin/codecept run`
 
-Jeżeli chcesz uruchomić testy akceptacyjne, to będziesz potrzebował narzędzia takiego jak Selenium czy PhantomJS. W katalogu `tests` znajduje się plik `acceptance.suite.yml.travis` który zawiera konfigurację testów akceptacyjnych i jest wykorzystywany przez Travis CI. Należy zmienić nazwę tego pliku na `acceptance.suite.yml` i zmienić wartość `url` na prawidłowy adres pod którym uruchomiony jest Coyote (np. `http://localhost/`). Zakładamy, że PhantomJS jest uruchomiony (`phantomjs --webdriver=4444`). 
+Jeżeli chcesz uruchomić testy akceptacyjne, to będziesz potrzebował narzędzia takiego jak Selenium czy PhantomJS. W katalogu `tests` znajduje się plik `acceptance.suite.yml.travis` który zawiera konfigurację testów akceptacyjnych i jest wykorzystywany przez Travis CI. Należy zmienić nazwę tego pliku na `acceptance.suite.yml` i zmienić wartość `url` na prawidłowy adres pod którym uruchomiony jest Coyote (np. `http://localhost/`). Zakładamy, że PhantomJS jest uruchomiony (`phantomjs --webdriver=4444`).
 
 ## Aktualizacja projektu
 
@@ -79,7 +83,7 @@ Konfigurację supervisor możesz znaleźć w pliku `supervisor.conf`. Więcej in
 
 ## Jak mozesz pomoc?
 
-Zachecamy do aktywnego udzialu w rozwoju projektu. Zajrzyj na zakladke *Issues* i zobacz jakie zadanie mozesz zrealizowac. Realizujemy tylko te zadanie ktore jest zaakceptowane i przypisane do wersji 2.0.. 
+Zachecamy do aktywnego udzialu w rozwoju projektu. Zajrzyj na zakladke *Issues* i zobacz jakie zadanie mozesz zrealizowac. Realizujemy tylko te zadanie ktore jest zaakceptowane i przypisane do wersji 2.0..
 
 1. Utworz fork repozytorium
 2. Wprowadz zmiany
