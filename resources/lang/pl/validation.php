@@ -154,6 +154,10 @@ return [
         ],
         'salary_to' => [
             'integer'       => 'Wynagrodzenie "do" musi być liczbą całkowitą.'
+        ],
+        // walidacja poprawnosci tagu
+        't' => [
+            'max'           => 'Maksymalna długośc tagu to :max znaków.'
         ]
     ],
 

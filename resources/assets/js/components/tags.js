@@ -99,25 +99,12 @@
 
                     // @todo trzeba ustawiac te liczbe w konfiguracji zamiast na sztywno
                     if (editor.find('li').length > 5) {
-                        $('#alert').modal('show');
-                        $('.modal-body').text('Maksymalna ilość tagów to 5');
+                        $('#alert').modal('show').find('.modal-body').text('Maksymalna ilość tagów to 5');
                     }
                     else {
-                        $.ajax({
-                            type: 'GET',
-                            url: config.validateUrl,
-                            data: {t: value},
-                            dataType: 'json',
-                            crossDomain: true,
-                            xhrFields: {
-                                withCredentials: true
-                            }
-                        })
-                        .fail(function (e) {
+                        $.get(config.validateUrl, {t: value}).fail(function (e) {
                             if (typeof e.responseJSON.t !== 'undefined') {
-                                $('#alert').modal('show');
-                                $('.modal-body').text(e.responseJSON.t[0]);
-
+                                $('#alert').modal('show').find('.modal-body').text(e.responseJSON.t[0]);
                                 $('ul.tag-clouds li:last', editor).remove();
                                 setInputWidth();
                             }
@@ -196,21 +183,12 @@
 
                     if (searchText.length) {
                         timeId = setTimeout(function () {
-                            $.ajax({
-                                type: 'GET',
-                                url: config.promptUrl,
-                                data: {q: searchText},
-                                crossDomain: true,
-                                xhrFields: {
-                                    withCredentials: true
-                                },
-                                success: function (html) {
-                                    if ($.trim(html) !== '') {
-                                        dropdown.html(html).css('top', editor.position().top + editor.outerHeight()).show();
-                                    }
-                                    else {
-                                        dropdown.hide();
-                                    }
+                            $.get(config.promptUrl, {q: searchText}, function (html) {
+                                if ($.trim(html) !== '') {
+                                    dropdown.html(html).css('top', editor.position().top + editor.outerHeight()).show();
+                                }
+                                else {
+                                    dropdown.hide();
                                 }
                             });
 
