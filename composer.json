@@ -1,5 +1,11 @@
 {
     "name": "adam-boduch/coyote",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/adam-boduch/geshi"
+        }
+    ],
     "description": "4programmers.net",
     "version": "2.0-dev",
     "homepage": "http://4programmers.net",
@@ -29,10 +35,10 @@
         "ezyang/htmlpurifier": "^4.7",
         "lavary/laravel-menu": "dev-master",
         "elasticsearch/elasticsearch": "~2.0",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "adam-boduch/geshi": "dev-master"
     },
     "require-dev": {
-        "sebastian/phpcpd": "*",
         "squizlabs/php_codesniffer": "2.*",
         "phpmd/phpmd" : "@stable",
         "symfony/css-selector": "2.8.*|3.0.*",
@@ -69,7 +75,7 @@
             "php artisan optimize"
         ],
         "post-create-project-cmd": [
-            "php -r \"copy('.env.example', '.env');\"",
+            "php -r \"copy('.env.default', '.env');\"",
             "php artisan key:generate"
         ]
     },
