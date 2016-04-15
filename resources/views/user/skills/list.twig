@@ -6,9 +6,9 @@
         <i class="fa fa-remove" title="Usuń"></i>
     </a>
 
-    <span class="pull-right" style="margin: -2px 10px 0 0">
+    <span class="pull-right" style="margin-right: 10px">
         {% for i in 1..6 %}
-            <span class="rate {{ i <= item.rate ? 'mark' }}"></span>
+            <span class="rate {{ i <= item.rate ? 'marked' }}"></span>
         {% endfor %}
     </span>
 </div>

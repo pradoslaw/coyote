@@ -29,7 +29,7 @@
       }
     }
   }
-  
+
   h5 {
     color: $gray;
     font-family: Arial, sans-serif;
@@ -267,7 +267,8 @@
   margin-top: 10px;
 }
 
-// nie chcemy aby zakladki na bialym tle mialy szare tlo
+// nie chcemy aby zakladki na bialym tle mialy szare tlo. chodzi tutaj o zakladki formularza pisania
+// nowej wiadomosci (umozliwiajace przelaczenie sie w tryb edycji oraz podgladu)
 #box-pm {
   .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
     background-color: transparent;
@@ -277,16 +278,12 @@
 
 #box-skills {
   .rate {
-    //width: 16px;
-    //height: 16px;
     display: inline-block;
     width: 1.28571429em;
 
     &:before {
       font-family: FontAwesome;
       content: $fa-var-star-o;
-      //width: 16px;
-      //height: 16px;
     }
 
     &:hover {
