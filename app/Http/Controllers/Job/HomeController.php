@@ -191,7 +191,7 @@ class HomeController extends Controller
         $this->elasticsearch->addSort(
             new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
         );
-        $this->elasticsearch->addSort(new Sort('id', 'desc'));
+        $this->elasticsearch->addSort(new Sort('_id', 'desc'));
 
         // it's really important. we MUST show only active offers
         $this->elasticsearch->addFilter(new Filters\Range('deadline_at', ['gte' => 'now']));
