@@ -72,7 +72,12 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="5" style="text-align: center">Brak ofert pracy spełniających podane kryteria.</td>
+                        <td colspan="5" class="empty-result">
+                            <p>
+                                Nie znaleźliśmy ofert, które spełniają Twoje kryteria.<br>
+                                <a href="{{ route('job.home', {'tab': 'all'}) }}">Zobacz wszystkie oferty</a>, a być może znajdziesz coś dla siebie!
+                            </p>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

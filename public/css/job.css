@@ -431,6 +431,16 @@
 #box-jobs tr.premium td {
   background-color: #FFF3CD; }
 
+#box-jobs .empty-result {
+  background: url("/img/sad-face.png") no-repeat top left;
+  padding-left: 70px; }
+  #box-jobs .empty-result p {
+    margin-top: 9px;
+    font-size: 14px;
+    text-align: center; }
+    #box-jobs .empty-result p a {
+      text-decoration: underline; }
+
 #clients {
   padding: 20px 0 25px 0; }
   #clients .img-responsive {
