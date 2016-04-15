@@ -7,7 +7,6 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Gate;
-use Cache;
 
 abstract class BaseController extends Controller
 {
@@ -97,7 +96,7 @@ abstract class BaseController extends Controller
     protected function getTagClouds()
     {
         // let's cache tags. we don't need to run this query every time
-        return Cache::remember('forum:tags', 60 * 24, function () {
+        return app('cache')->remember('forum:tags', 60 * 24, function () {
             return $this->forum->getTagClouds();
         });
     }
