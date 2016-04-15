@@ -121,7 +121,7 @@ class SubmitController extends Controller
             'currencyList'      => Currency::lists('name', 'id'),
             'employmentList'    => Job::getEmploymentList(),
             'rateList'          => Job::getRatesList(),
-            'tagsList'          => $this->job->getPopularTags()
+            'popularTags'       => $this->job->getPopularTags()
         ])->with(
             compact('job')
         );
@@ -217,6 +217,8 @@ class SubmitController extends Controller
     }
 
     /**
+     * AJAX request: get firm form edit
+     *
      * @param Request $request
      * @param null $id
      * @return mixed

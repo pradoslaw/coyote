@@ -74,7 +74,7 @@ class JobRepository extends Repository implements JobRepositoryInterface
                 ->orderBy(\DB::raw('COUNT(*)'), 'DESC')
                 ->limit($limit)
                 ->get()
-                ->toArray();
+                ->lists('count', 'name');
     }
 
     /**
@@ -96,6 +96,7 @@ class JobRepository extends Repository implements JobRepositoryInterface
                     ->whereNull('jobs.deleted_at')
                     ->whereNull('tags.deleted_at')
                 ->groupBy('name')
-                ->get();
+                ->get()
+                ->lists('count', 'name');
     }
 }

@@ -9,6 +9,8 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 class TagController extends BaseController
 {
     /**
+     * Save user's custom tags
+     *
      * @param Request $request
      * @return $this
      */
@@ -33,17 +35,7 @@ class TagController extends BaseController
         $this->validate($request, ['q' => 'required|string|max:25']);
         $tags = $tag->lookupName(ltrim($request['q'], '#'));
 
-        $result = $forum->getTagsWeight($tags->pluck('name')->toArray());
-        $tags = [];
-
-        // @todo do poprawy. szablon components.twig przyjmuje jako wartosc tablice tablic
-        // natomiast getTagsWeight() zwraca tablice <nazwa tagu> => klucz
-        foreach ($result as $name => $count) {
-            $tags[] = [
-                'name' => $name,
-                'count' => $count
-            ];
-        }
+        $tags = $forum->getTagsWeight($tags->pluck('name')->toArray());
 
         return view('components.tags')->with('tags', $tags);
     }
