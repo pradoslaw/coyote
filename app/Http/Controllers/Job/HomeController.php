@@ -74,7 +74,6 @@ class HomeController extends Controller
         $this->city = new Filters\Job\City();
         $this->tag = new Filters\Job\Tag();
 
-        $this->public['validateUrl'] = route('job.tag.validate');
         $this->public['promptUrl'] = route('job.tag.prompt');
 
         $this->nav = $this->getMenu();

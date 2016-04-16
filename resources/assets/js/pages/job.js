@@ -40,7 +40,6 @@ $(() => {
 
     $('#editor').on('shown.bs.modal', (e) => {
         $('#tags').tag({
-            // validateUrl: _config.validateUrl,
             promptUrl: _config.promptUrl
         });
 
