@@ -49,10 +49,12 @@
                                         <a href="{{ user.website }}">{{ user.website }}</a>
                                     </li>
                                 {% endif %}
-                                <li title="Ostatnia wizyta">
-                                    <i class="fa fa-sign-in fa-fw"></i>
-                                    {{ user.visited_at.diffForHumans() }}
-                                </li>
+                                {% if user.visited_at %}
+                                    <li title="Ostatnia wizyta">
+                                        <i class="fa fa-sign-in fa-fw"></i>
+                                        {{ user.visited_at.diffForHumans() }}
+                                    </li>
+                                {% endif %}
                                 <li title="Data rejestracji">
                                     <i class="fa fa-user-plus fa-fw"></i>
                                     {{ user.created_at.diffForHumans() }}
