@@ -1,4 +1,4 @@
-{% extends 'job/base.twig' %}
+{% extends 'job.base' %}
 {% block title %}
     Praca
 
@@ -90,7 +90,7 @@
                             <label for="salary-input" class="col-xs-1 control-label">od</label>
 
                             <div class="col-xs-4">
-                                {{ form_text('salary', request('salary'), {'id': 'salary-input', 'class': 'input-sm form-control', 'placeholder': '3000'}) }}
+                                {{ form_text('salary', request('salary'), {'id': 'salary-input', 'class': 'input-sm form-control'}) }}
                             </div>
                             <div class="col-xs-4" style="padding-left: 0">
                                 {{ form_select('currency', currencyList, request('currency'), {'class': 'input-sm form-control'}) }}
@@ -138,9 +138,10 @@
                         <h4 class="modal-title">Ustawienia preferencji</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group" data-column="city">
                             <label>Miejscowość</label>
                             {{ form_text('city', preferences.city, {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}) }}
+                            <span class="help-block"></span>
 
                             <div class="checkbox">
                                 {{ form_checkbox('is_remote', 1, preferences.is_remote, {'id': 'is-remote'}) }}
@@ -151,9 +152,14 @@
                             </div>
                         </div>
 
-                        {{ forms.inline(form_text('tags', preferences.tags|join(', '), {'class': 'form-control', 'placeholder': 'Np. .net, c#', 'id': 'tags'}), 'Technologie') }}
+                        <div class="form-group" data-column="tags">
+                            <label>Technologie</label>
 
-                        <div class="form-group">
+                            {{ form_text('tags', preferences.tags|join(', '), {'class': 'form-control', 'placeholder': 'Np. .net, c#', 'id': 'tags'}) }}
+                            <span class="help-block"></span>
+                        </div>
+
+                        <div class="form-group" data-column="salary">
                             <label>Minimalne wynagrodzenie</label>
 
                             <div class="row">
@@ -165,6 +171,8 @@
                                     {{ form_select('currency_id', currencyList, preferences.currency_id, {'class': 'form-control'}) }}
                                 </div>
                             </div>
+
+                            <span class="help-block"></span>
                         </div>
                     </div>
                     <div class="modal-footer">

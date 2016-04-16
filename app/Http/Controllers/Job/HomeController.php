@@ -22,6 +22,9 @@ class HomeController extends Controller
     const TAB_ALL = 'all';
     const TAB_FILTERED = 'filtered';
 
+    const DEFAULT_TAB = self::TAB_FILTERED;
+    const DEFAULT_SORT = '_score';
+
     /**
      * @var JobRepositoryInterface
      */
@@ -188,10 +191,31 @@ class HomeController extends Controller
             $this->addRemoteFilter();
         }
 
-        $this->elasticsearch->addSort(
-            new Sort($request->get('sort', '_score'), $request->get('order', 'desc'))
+        $validator = $this->getValidationFactory()->make(
+            $request->all(),
+            [
+                'sort' => 'sometimes|in:id,_score,salary',
+                'order' => 'sometimes|in:asc,desc'
+            ]
         );
-        $this->elasticsearch->addSort(new Sort('_id', 'desc'));
+
+        $sort = $request->get('sort', '_score');
+        $order = $request->get('order', 'desc');
+
+        if ($validator->fails()) {
+            $sort = self::DEFAULT_SORT;
+            $order = 'desc';
+        }
+
+        $this->elasticsearch->addSort(new Sort($sort, $order));
+
+        // @todo jezeli sortujemy po "trafnosci" w sytuacji gdy uzytkownik chce wyswietlic wszystkie wyniki
+        // mozemy dodac sortowanie po "jakosci" ogloszenia. w ten sposob te lepsze ogloszenia beda na liscie
+        // nieco wyzej niz te gorsze. w ten sposob ogloszenia nie beda posortowane po dacie. nalezy sie zastanowic
+        // czy takie dzialanie jest pozadane?
+        if ($sort === '_score') {
+            $this->elasticsearch->addSort(new Sort('order', 'desc'));
+        }
 
         // it's really important. we MUST show only active offers
         $this->elasticsearch->addFilter(new Filters\Range('deadline_at', ['gte' => 'now']));
@@ -274,7 +298,11 @@ class HomeController extends Controller
 
             $menu->add('Wszystkie', ['route' => ['job.home', 'tab' => 'all'], 'nickname' => 'all']);
             $menu->add('Wybrane dla mnie', [
-                'route' => ['job.home', 'tab' => 'filtered'], 'nickname' => 'filtered'
+                'route' => [
+                    'job.home',
+                    'tab' => 'filtered'
+                ],
+                'nickname' => 'filtered'
             ])->append($html);
         });
     }

@@ -10,7 +10,7 @@ class Job extends Model
 {
     use SoftDeletes, Elasticsearch;
 
-    const MONTH            = 1;
+    const MONTH           = 1;
     const YEAR            = 2;
     const WEEK            = 3;
     const HOUR            = 4;
@@ -55,7 +55,7 @@ class Job extends Model
      */
     protected $mapping = [
         "id" => [
-            "type" => "integer"
+            "type" => "long"
         ],
         "locations" => [
             "type" => "nested",
@@ -103,6 +103,15 @@ class Job extends Model
         "deadline_at" => [
             "type" => "date",
             "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
+        "salary" => [
+            "type" => "float"
+        ],
+        "score" => [
+            "type" => "integer"
+        ],
+        "order" => [
+            "type" => "float"
         ]
     ];
 
@@ -119,6 +128,33 @@ class Job extends Model
                     $model->$column = null;
                 }
             }
+
+            $model->score = 0;
+
+            foreach (['description' => 10, 'requirements' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15] as $column => $point) {
+                if (!empty($model->$column)) {
+                    $model->score += $point;
+                }
+            }
+
+            $model->score += (count($model->tags()->get()) * 10);
+
+            if ($model->firm_id) {
+                $firm = $model->firm()->first();
+
+                foreach (['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5] as $column => $point) {
+                    if (!empty($firm->$column)) {
+                        $model->score += $point;
+                    }
+                }
+
+                $model->score -= ($firm->is_agency * 10);
+            }
+
+            $timestamp = $model->created_at ? strtotime($model->created_at) : time();
+
+            $seconds = ($timestamp - 1380585600) / 45000;
+            $model->order = number_format($model->score + $seconds, 6, '.', '');
         });
     }
 

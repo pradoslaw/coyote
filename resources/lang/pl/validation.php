@@ -158,6 +158,9 @@ return [
         // walidacja poprawnosci tagu
         't' => [
             'max'           => 'Maksymalna długośc tagu to :max znaków.'
+        ],
+        'salary' => [
+            'integer'       => 'Wynagrodzenie musi być liczbą całkowitą.'
         ]
     ],
 

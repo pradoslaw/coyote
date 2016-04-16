@@ -35,7 +35,7 @@ class CreateJobsTable extends Migration
             $table->tinyInteger('enable_apply')->default(1);
             $table->integer('visits')->default(0);
             $table->float('score')->default(0);
-            $table->mediumInteger('order')->default(0);
+            $table->float('order')->default(0);
 
             $table->foreign('firm_id')->references('id')->on('firms')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

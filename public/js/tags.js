@@ -97,11 +97,7 @@
                     editor.children('ul').append('<li><a class="remove">' + value + '</a></li>');
                     setInputWidth();
 
-                    // @todo trzeba ustawiac te liczbe w konfiguracji zamiast na sztywno
-                    if (editor.find('li').length > 5) {
-                        $('#alert').modal('show').find('.modal-body').text('Maksymalna ilość tagów to 5');
-                    }
-                    else {
+                    if (config.validateUrl) {
                         $.get(config.validateUrl, {t: value}).fail(function (e) {
                             if (typeof e.responseJSON.t !== 'undefined') {
                                 $('#alert').modal('show').find('.modal-body').text(e.responseJSON.t[0]);
