@@ -1340,6 +1340,7 @@ class Migrate extends Command
                 $this->rename($row, 'type', 'employment_id');
                 $this->rename($row, 'apply', 'enable_apply');
                 $this->rename($row, 'deadline', 'deadline_at');
+                $this->rename($row, 'order', 'rank');
 
                 $row['path'] = str_slug($row['title']);
 

@@ -110,7 +110,7 @@ class Job extends Model
         "score" => [
             "type" => "integer"
         ],
-        "order" => [
+        "rank" => [
             "type" => "float"
         ]
     ];
@@ -154,7 +154,7 @@ class Job extends Model
             $timestamp = $model->created_at ? strtotime($model->created_at) : time();
 
             $seconds = ($timestamp - 1380585600) / 45000;
-            $model->order = number_format($model->score + $seconds, 6, '.', '');
+            $model->rank = number_format($model->score + $seconds, 6, '.', '');
         });
     }
 

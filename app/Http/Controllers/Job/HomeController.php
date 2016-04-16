@@ -213,7 +213,7 @@ class HomeController extends Controller
         // nieco wyzej niz te gorsze. w ten sposob ogloszenia nie beda posortowane po dacie. nalezy sie zastanowic
         // czy takie dzialanie jest pozadane?
         if ($sort === '_score') {
-            $this->elasticsearch->addSort(new Sort('order', 'desc'));
+            $this->elasticsearch->addSort(new Sort('rank', 'desc'));
         }
 
         // it's really important. we MUST show only active offers
