@@ -224,26 +224,55 @@ $(function () {
         } else {
             fixed.show();
         }
+    }).trigger('scroll');
+
+    /**
+     * Save and exit button
+     */
+    $('.btn-save').on('click', function () {
+        $('input[name="done"]').val(1);
     });
 
-    $('input[name="private"]').change(function (e) {
+    $('.jumbotron .btn-close').click(function () {
+        $('.jumbotron .close').click();
+    });
+
+    $('#job-posting').on('change', 'input[name="enable_apply"]', function (e) {
+        if (Boolean(parseInt($(e.currentTarget).val()))) {
+            tinymce.get('recruitment').hide();
+            $('#recruitment').attr('disabled', 'disabled').hide();
+
+            $('input[name="email"]').removeAttr('disabled');
+        } else {
+            tinymce.get('recruitment').show();
+            $('input[name="email"]').attr('disabled', 'disabled');
+            $('#recruitment').removeAttr('disabled');
+        }
+    }).on('keyup', 'input[name="deadline"]', function (e) {
+        var $this = $(e.currentTarget);
+        var value = parseInt($this.val());
+
+        if (value > 0) {
+            var date = new Date();
+            date.setDate(date.getDate() + value);
+
+            $this.next('span').children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+        } else {
+            $this.next('span').children('strong').text('--');
+        }
+    }).on('change keyup', 'input[maxlength]', function (e) {
+        var $this = $(e.currentTarget);
+        var maxLength = $this.attr('maxlength');
+        var container = $this.next('span');
+        var length = maxLength - $this.val().length;
+
+        container.children('strong').text(length);
+    }).on('change', 'input[name="private"]', function (e) {
         $('#box-edit-firm, #choose-firm').toggle($(e.currentTarget).val() == 0);
         $('#box-buttons').toggle($(e.currentTarget).val() != 0);
-    });
-
-    if ($('input[name="private"]').val()) {
-        $('input[name="private"]:checked').trigger('change');
-    }
-
-    $('input[name="is_agency"]').change(function (e) {
+    }).on('change', 'input[name="is_agency"]', function (e) {
         $('.agency').toggle($(e.currentTarget).val() != 1);
-    });
-
-    if ($('input[name="is_agency"]').val()) {
-        $('input[name="is_agency"]:checked').trigger('change');
-    }
-
-    $(':input').focus(function (e) {
+    }).on('focus', ':input', function (e) {
         var $this = $(e.currentTarget);
         var offset = $this.offset().top;
         var name = $this.attr('name');
@@ -260,45 +289,13 @@ $(function () {
         }
     });
 
-    $('.jumbotron .btn-close').click(function () {
-        $('.jumbotron .close').click();
-    });
+    if ($('input[name="private"]').val()) {
+        $('input[name="private"]:checked').trigger('change');
+    }
 
-    $('body').on('change keyup', 'input[maxlength]', function (e) {
-        var $this = $(e.currentTarget);
-        var maxLength = $this.attr('maxlength');
-        var container = $this.next('span');
-        var length = maxLength - $this.val().length;
-
-        container.children('strong').text(length);
-    });
-
-    $('input[name="deadline"]').on('keyup', function (e) {
-        var $this = $(e.currentTarget);
-        var value = parseInt($this.val());
-
-        if (value > 0) {
-            var date = new Date();
-            date.setDate(date.getDate() + value);
-
-            $this.next('span').children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
-        } else {
-            $this.next('span').children('strong').text('--');
-        }
-    });
-
-    $('input[name="enable_apply"]').change(function (e) {
-        if (Boolean(parseInt($(e.currentTarget).val()))) {
-            tinymce.get('recruitment').hide();
-            $('#recruitment').attr('disabled', 'disabled').hide();
-
-            $('input[name="email"]').removeAttr('disabled');
-        } else {
-            tinymce.get('recruitment').show();
-            $('input[name="email"]').attr('disabled', 'disabled');
-            $('#recruitment').removeAttr('disabled');
-        }
-    });
+    if ($('input[name="is_agency"]').val()) {
+        $('input[name="is_agency"]:checked').trigger('change');
+    }
 
     $('.benefits').on('keyup focus blur', 'input[type="text"]', function (e) {
         var $this = $(e.currentTarget);
@@ -378,13 +375,6 @@ $(function () {
         $('#logo img').attr('src', '/img/logo-gray.png');
 
         return false;
-    });
-
-    /**
-     * Save and exit button
-     */
-    $('#job-posting').on('click', '#btn-save', function () {
-        $('input[name="done"]').val(1);
     });
 
     /**

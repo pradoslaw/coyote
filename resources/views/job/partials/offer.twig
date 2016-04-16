@@ -3,7 +3,7 @@
 {% macro display_tags(tags) %}
     <ul class="tag-clouds">
         {% for tag in tags %}
-            <li><a href="{{ route('job.tag', [tag.name]) }}" title="Znajdź oferty zawierające {{ tag.name }}">{{ tag.name }}</a></li>
+            <li><a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.name }}">{{ tag.name }}</a></li>
         {% endfor %}
     </ul>
 {% endmacro %}

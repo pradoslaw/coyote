@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "10ab23462ac41a88ee58573c89efd0d0",
-    "content-hash": "23b9ae607405485b5b9e128d216ae662",
+    "hash": "a77b6a450e29ecfa484b06085540b829",
+    "content-hash": "3556eb7d5fe7e8f74e176096e0cd0af8",
     "packages": [
         {
             "name": "adam-boduch/geshi",
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-boduch/geshi.git",
-                "reference": "649bca11ec5898c6cf410c7b22a15f830a8100c2"
+                "reference": "57e6a6c1957b4e21a744b3aec580c77803a85dcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/geshi/zipball/649bca11ec5898c6cf410c7b22a15f830a8100c2",
-                "reference": "649bca11ec5898c6cf410c7b22a15f830a8100c2",
+                "url": "https://api.github.com/repos/adam-boduch/geshi/zipball/57e6a6c1957b4e21a744b3aec580c77803a85dcb",
+                "reference": "57e6a6c1957b4e21a744b3aec580c77803a85dcb",
                 "shasum": ""
             },
             "require": {
@@ -38,7 +38,7 @@
                 "source": "https://github.com/adam-boduch/geshi/tree/master",
                 "issues": "https://github.com/adam-boduch/geshi/issues"
             },
-            "time": "2016-04-15 14:59:58"
+            "time": "2016-04-15 15:47:02"
         },
         {
             "name": "barryvdh/laravel-debugbar",
@@ -5130,7 +5130,9 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.9"
+        "php": ">=5.5.9",
+        "ext-gd": "*",
+        "ext-mongodb": "*"
     },
     "platform-dev": []
 }

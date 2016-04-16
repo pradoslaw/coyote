@@ -695,7 +695,7 @@
   #tags-container input[type=radio]:focus {
     outline: 0; }
 
-#btn-save {
+.btn-save {
   margin-right: 10px; }
 
 #job-posting .panel-heading {

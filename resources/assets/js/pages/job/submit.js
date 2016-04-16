@@ -214,26 +214,62 @@ $(() => {
         else {
             fixed.show();
         }
+    }).trigger('scroll');
+
+    /**
+     * Save and exit button
+     */
+    $('.btn-save').on('click', () => {
+        $('input[name="done"]').val(1);
     });
 
-    $('input[name="private"]').change(e => {
+    $('.jumbotron .btn-close').click(() => {
+        $('.jumbotron .close').click();
+    });
+
+    $('#job-posting').on('change', 'input[name="enable_apply"]', e => {
+        if (Boolean(parseInt($(e.currentTarget).val()))) {
+            tinymce.get('recruitment').hide();
+            $('#recruitment').attr('disabled', 'disabled').hide();
+
+            $('input[name="email"]').removeAttr('disabled');
+        }
+        else {
+            tinymce.get('recruitment').show();
+            $('input[name="email"]').attr('disabled', 'disabled');
+            $('#recruitment').removeAttr('disabled');
+        }
+    })
+    .on('keyup', 'input[name="deadline"]', e => {
+        let $this = $(e.currentTarget);
+        let value = parseInt($this.val());
+
+        if (value > 0) {
+            let date = new Date();
+            date.setDate(date.getDate() + value);
+
+            $this.next('span').children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+        }
+        else {
+            $this.next('span').children('strong').text('--');
+        }
+    })
+    .on('change keyup', 'input[maxlength]', e => {
+        let $this = $(e.currentTarget);
+        let maxLength = $this.attr('maxlength');
+        let container = $this.next('span');
+        let length = maxLength - $this.val().length;
+
+        container.children('strong').text(length);
+    })
+    .on('change', 'input[name="private"]', e => {
         $('#box-edit-firm, #choose-firm').toggle($(e.currentTarget).val() == 0);
         $('#box-buttons').toggle($(e.currentTarget).val() != 0);
-    });
-
-    if ($('input[name="private"]').val()) {
-        $('input[name="private"]:checked').trigger('change');
-    }
-
-    $('input[name="is_agency"]').change(e => {
+    })
+    .on('change', 'input[name="is_agency"]', e => {
         $('.agency').toggle($(e.currentTarget).val() != 1);
-    });
-
-    if ($('input[name="is_agency"]').val()) {
-        $('input[name="is_agency"]:checked').trigger('change');
-    }
-
-    $(':input').focus(e => {
+    })
+    .on('focus', ':input', e => {
         let $this = $(e.currentTarget);
         let offset = $this.offset().top;
         let name = $this.attr('name');
@@ -250,47 +286,13 @@ $(() => {
         }
     });
 
-    $('.jumbotron .btn-close').click(() => {
-        $('.jumbotron .close').click();
-    });
+    if ($('input[name="private"]').val()) {
+        $('input[name="private"]:checked').trigger('change');
+    }
 
-    $('body').on('change keyup', 'input[maxlength]', e => {
-        let $this = $(e.currentTarget);
-        let maxLength = $this.attr('maxlength');
-        let container = $this.next('span');
-        let length = maxLength - $this.val().length;
-
-        container.children('strong').text(length);
-    });
-
-    $('input[name="deadline"]').on('keyup', e => {
-        let $this = $(e.currentTarget);
-        let value = parseInt($this.val());
-
-        if (value > 0) {
-            let date = new Date();
-            date.setDate(date.getDate() + value);
-
-            $this.next('span').children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
-        }
-        else {
-            $this.next('span').children('strong').text('--');
-        }
-    });
-
-    $('input[name="enable_apply"]').change(e => {
-        if (Boolean(parseInt($(e.currentTarget).val()))) {
-            tinymce.get('recruitment').hide();
-            $('#recruitment').attr('disabled', 'disabled').hide();
-
-            $('input[name="email"]').removeAttr('disabled');
-        }
-        else {
-            tinymce.get('recruitment').show();
-            $('input[name="email"]').attr('disabled', 'disabled');
-            $('#recruitment').removeAttr('disabled');
-        }
-    });
+    if ($('input[name="is_agency"]').val()) {
+        $('input[name="is_agency"]:checked').trigger('change');
+    }
 
     $('.benefits').on('keyup focus blur', 'input[type="text"]', (e) => {
         let $this = $(e.currentTarget);
@@ -370,13 +372,6 @@ $(() => {
         $('#logo img').attr('src', '/img/logo-gray.png');
 
         return false;
-    });
-
-    /**
-     * Save and exit button
-     */
-    $('#job-posting').on('click', '#btn-save', () => {
-        $('input[name="done"]').val(1);
     });
 
     /**
