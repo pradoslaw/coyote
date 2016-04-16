@@ -10,9 +10,19 @@
 {% block container %}
 
     <div id="index" class="sidebar">
-        {% if lock %}
+        {% if warnings.lock %}
             <p class="alert alert-warning">
-                Wątek zablokowany {{ lock.created_at|format_date }} przez <a href="{{ url(lock.actor.url) }}">{{ lock.actor.displayName }}</a>.
+                Wątek zablokowany {{ warnings.lock.created_at|format_date }} przez <a href="{{ url(warnings.lock.actor.url) }}">{{ warnings.lock.actor.displayName }}</a>.
+            </p>
+        {% endif %}
+
+        {% if warnings.move %}
+            <p class="alert alert-warning">
+                Wątek przeniesiony {{ warnings.move.created_at|format_date }} z {{ warnings.move.object.forum.name }} przez <a href="{{ url(warnings.move.actor.url) }}">{{ warnings.move.actor.displayName }}</a>.
+
+                {% if warnings.move.object.reasonName %}
+                    Powód: <strong>{{ warnings.move.object.reasonName }}</strong>
+                {% endif %}
             </p>
         {% endif %}
 

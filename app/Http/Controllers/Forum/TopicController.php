@@ -129,7 +129,7 @@ class TopicController extends BaseController
 
             // here we go. if user has delete ability, for sure he/she would like to know
             // why posts were deleted and by whom
-            $collection = app()->make('Stream')->findByObject('Post', $postsId, 'Delete');
+            $collection = $this->getFromStream('Post', $postsId, 'Delete');
 
             foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
                 $activities[$row->first()['object.id']] = $row->first();
@@ -142,9 +142,15 @@ class TopicController extends BaseController
             $reasonList = Reason::lists('name', 'id')->toArray();
         }
 
+        $warnings = [];
+
         // if topic is locked we need to fetch information when and by whom
         if ($topic->is_locked) {
-            $lock = app()->make('Stream')->findByObject('Topic', $topic->id, 'Lock')->last();
+            $warnings['lock'] = $this->getFromStream('Topic', $topic->id, 'Lock')->last();
+        }
+
+        if ($topic->prev_forum_id) {
+            $warnings['move'] = $this->getFromStream('Topic', $topic->id, 'Move')->last();
         }
 
         // increase topic views counter
@@ -179,7 +185,7 @@ class TopicController extends BaseController
         $forumList = $this->forum->forumList();
 
         return $this->view('forum.topic', ['markTime' => $topicMarkTime ? $topicMarkTime : $forumMarkTime])->with(
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'lock', 'subscribers', 'subscribe', 'flags')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'warnings', 'subscribers', 'subscribe', 'flags')
         );
     }
 
@@ -415,5 +421,16 @@ class TopicController extends BaseController
         } else {
             return redirect()->to($url);
         }
+    }
+
+    /**
+     * @param $object
+     * @param $id
+     * @param $verb
+     * @return mixed
+     */
+    private function getFromStream($object, $id, $verb)
+    {
+        return app('Stream')->findByObject($object, $id, $verb);
     }
 }
