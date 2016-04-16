@@ -1,5 +1,21 @@
 {% extends 'job/base.twig' %}
-{% block title %}Praca {{ parent() }}{% endblock %}
+{% block title %}
+    Praca
+
+    {% if request('q') %}
+        {{ request('q') }}
+    {% endif %}
+
+    {% if selected.tags %}
+        {{ selected.tags|join(', ') }}
+    {% endif %}
+
+    {% if selected.cities %}
+        {{ selected.cities|join(', ') }}
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}
 
 {% set declinationOffers = ['oferta', 'oferty', 'ofert'] %}
 

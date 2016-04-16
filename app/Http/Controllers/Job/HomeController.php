@@ -153,7 +153,7 @@ class HomeController extends Controller
      */
     public function remote(Request $request)
     {
-        $this->applyRemoteFilter();
+        $this->addRemoteFilter();
 
         return $this->load($request);
     }
@@ -181,11 +181,11 @@ class HomeController extends Controller
         }
 
         if ($request->has('salary')) {
-            $this->applySalaryFilter($request->get('salary'), $request->get('currency'));
+            $this->addSalaryFilter($request->get('salary'), $request->get('currency'));
         }
 
         if ($request->has('remote')) {
-            $this->applyRemoteFilter();
+            $this->addRemoteFilter();
         }
 
         $this->elasticsearch->addSort(
@@ -225,9 +225,11 @@ class HomeController extends Controller
         ];
 
         $pagination = new LengthAwarePaginator(
-            $jobs, $response->totalHits(), self::PER_PAGE, LengthAwarePaginator::resolveCurrentPage(), [
-                'path' => LengthAwarePaginator::resolveCurrentPath()
-            ]
+            $jobs,
+            $response->totalHits(),
+            self::PER_PAGE,
+            LengthAwarePaginator::resolveCurrentPage(),
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
 
         $pagination->appends($request->except('page'));
@@ -291,11 +293,11 @@ class HomeController extends Controller
         }
 
         if (!empty($this->preferences->is_remote)) {
-            $this->applyRemoteFilter();
+            $this->addRemoteFilter();
         }
 
         if (!empty($this->preferences->salary)) {
-            $this->applySalaryFilter($this->preferences->salary, $this->preferences->currency_id);
+            $this->addSalaryFilter($this->preferences->salary, $this->preferences->currency_id);
         }
     }
 
@@ -318,7 +320,7 @@ class HomeController extends Controller
     /**
      * Apply remote job filter
      */
-    protected function applyRemoteFilter()
+    protected function addRemoteFilter()
     {
         $this->elasticsearch->addFilter(new Filters\Job\Remote());
     }
@@ -327,7 +329,7 @@ class HomeController extends Controller
      * @param $salary
      * @param $currencyId
      */
-    protected function applySalaryFilter($salary, $currencyId)
+    protected function addSalaryFilter($salary, $currencyId)
     {
         $this->elasticsearch->addFilter(new Filters\Range('salary', ['gte' => $salary]));
         $this->elasticsearch->addFilter(new Filters\Job\Currency($currencyId));
