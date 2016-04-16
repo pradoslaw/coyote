@@ -128,6 +128,14 @@ class Topic extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function firstPost()
+    {
+        return $this->hasOne('Coyote\Post', 'id', 'first_post_id');
+    }
+
+    /**
      * Subscribe/unsubscribe to topic
      *
      * @param int $userId

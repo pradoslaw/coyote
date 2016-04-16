@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
+use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Gate;
 
@@ -21,10 +22,16 @@ abstract class BaseController extends Controller
     protected $topic;
 
     /**
+     * @var Post
+     */
+    protected $post;
+
+    /**
      * @param Forum $forum
      * @param Topic $topic
+     * @param Post $post
      */
-    public function __construct(Forum $forum, Topic $topic)
+    public function __construct(Forum $forum, Topic $topic, Post $post)
     {
         parent::__construct();
 
@@ -32,6 +39,7 @@ abstract class BaseController extends Controller
 
         $this->forum = $forum;
         $this->topic = $topic;
+        $this->post = $post;
 
         $this->breadcrumb->push('Forum', route('forum.home'));
     }

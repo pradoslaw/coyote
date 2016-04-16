@@ -37,11 +37,11 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // obserwowanie danego watku na forum
     Route::post('Topic/Subscribe/{topic}', ['uses' => 'TopicController@subscribe', 'as' => 'topic.subscribe', 'middleware' => 'auth']);
     // blokowanie watku
-    Route::post('Topic/Lock/{topic}', ['uses' => 'TopicController@lock', 'as' => 'lock', 'middleware' => 'auth']);
+    Route::post('Topic/Lock/{topic}', ['uses' => 'LockController@index', 'as' => 'lock', 'middleware' => 'auth']);
     // podpowiadanie nazwy uzytkownika (w kontekscie danego watku)
     Route::get('Topic/Prompt/{id}', ['uses' => 'TopicController@prompt', 'as' => 'prompt']);
     // przeniesienie watku do innej kategorii
-    Route::post('Topic/Move/{topic}', ['uses' => 'TopicController@move', 'as' => 'move']);
+    Route::post('Topic/Move/{topic}', ['uses' => 'MoveController@index', 'as' => 'move']);
     // oznacz watek jako przeczytany
     Route::post('Topic/Mark/{topic}', ['uses' => 'TopicController@mark', 'as' => 'topic.mark']);
     // szybka zmiana tytulu watku
@@ -55,13 +55,13 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('{forum}/{topic}-{slug}', ['uses' => 'TopicController@index', 'as' => 'topic', 'middleware' => ['forum.access', 'topic.access']]);
 
     // usuwanie posta
-    Route::post('Post/Delete/{id}', ['uses' => 'PostController@delete', 'as' => 'post.delete', 'middleware' => 'auth']);
+    Route::post('Post/Delete/{id}', ['uses' => 'DeleteController@index', 'as' => 'post.delete', 'middleware' => 'auth']);
     // obserwowanie posta
     Route::post('Post/Subscribe/{post}', ['uses' => 'PostController@subscribe', 'as' => 'post.subscribe', 'middleware' => 'auth']);
     // glosowanie na dany post
-    Route::post('Post/Vote/{post}', ['uses' => 'PostController@vote', 'as' => 'post.vote']);
+    Route::post('Post/Vote/{post}', ['uses' => 'VoteController@index', 'as' => 'post.vote']);
     // akceptowanie danego posta jako poprawna odpowiedz w watku
-    Route::post('Post/Accept/{post}', ['uses' => 'PostController@accept', 'as' => 'post.accept']);
+    Route::post('Post/Accept/{post}', ['uses' => 'AcceptController@index', 'as' => 'post.accept']);
     // historia edycji danego posta
     Route::get('Post/Log/{post}', ['uses' => 'LogController@log', 'as' => 'post.log']);
     // przywrocenie poprzedniej wersji posta

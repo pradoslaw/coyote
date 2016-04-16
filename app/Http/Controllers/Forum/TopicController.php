@@ -2,25 +2,20 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Events\TopicWasMoved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Events\PostWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Requests\SubjectRequest;
 use Coyote\Post\Log;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Repositories\Contracts\FlagRepositoryInterface;
+use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Activities\Update as Stream_Update;
-use Coyote\Stream\Activities\Lock as Stream_Lock;
-use Coyote\Stream\Activities\Unlock as Stream_Unlock;
-use Coyote\Stream\Activities\Move as Stream_Move;
 use Coyote\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream\Objects\Post as Stream_Post;
 use Coyote\Stream\Objects\Forum as Stream_Forum;
@@ -32,30 +27,6 @@ use Gate;
 
 class TopicController extends BaseController
 {
-    /**
-     * @var Post
-     */
-    private $post;
-
-    /**
-     * @var Attachment
-     */
-    private $attachment;
-
-    /**
-     * @param Forum $forum
-     * @param Topic $topic
-     * @param Post $post
-     * @param Attachment $attachment
-     */
-    public function __construct(Forum $forum, Topic $topic, Post $post, Attachment $attachment)
-    {
-        parent::__construct($forum, $topic);
-
-        $this->post = $post;
-        $this->attachment = $attachment;
-    }
-
     /**
      * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
@@ -164,7 +135,7 @@ class TopicController extends BaseController
                 $activities[$row->first()['object.id']] = $row->first();
             }
 
-            $flags = app()->make('FlagRepository')->takeForPosts($postsId);
+            $flags = app(FlagRepositoryInterface::class)->takeForPosts($postsId);
         }
 
         if (Gate::allows('delete', $forum) || Gate::allows('move', $forum)) {
@@ -183,7 +154,8 @@ class TopicController extends BaseController
         } else {
             // on production environment: store hit in redis
             app('redis')->sadd(
-                'counter:topic:' . $topic->id, $this->userId ?: $this->sessionId . ';' . round(time() / 300) * 300
+                'counter:topic:' . $topic->id,
+                $this->userId ?: $this->sessionId . ';' . round(time() / 300) * 300
             );
         }
 
@@ -212,16 +184,17 @@ class TopicController extends BaseController
     }
 
     /**
+     * @param Request $request
      * @param \Coyote\Forum $forum
      * @return \Illuminate\View\View
      */
-    public function submit($forum)
+    public function submit(Request $request, $forum)
     {
         $this->breadcrumb($forum);
         $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
 
-        if (request()->old('attachments')) {
-            $attachments = $this->attachment->findByFile(request()->old('attachments'));
+        if ($request->old('attachments')) {
+            $attachments = app(AttachmentRepositoryInterface::class)->findByFile(request()->old('attachments'));
         }
 
         if (auth()->check()) {
@@ -358,97 +331,6 @@ class TopicController extends BaseController
         }
 
         return view('components.prompt')->with('users', $user->lookupName($request['q'], array_unique($usersId)));
-    }
-
-    /**
-     * @param \Coyote\Topic $topic
-     */
-    public function lock($topic)
-    {
-        $forum = $topic->forum()->first();
-        $this->authorize('lock', $forum);
-
-        \DB::transaction(function () use ($topic, $forum) {
-            $topic->lock();
-
-            stream(
-                $topic->is_locked ? Stream_Lock::class : Stream_Unlock::class,
-                (new Stream_Topic())->map($topic, $forum)
-            );
-        });
-    }
-
-    /**
-     * @param \Coyote\Topic $topic
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function move($topic, Request $request)
-    {
-        $rules = ['path' => 'required|exists:forums'];
-
-        // it must be like that. only if reason has been chosen, we need to validate it.
-        if ($request->get('reason')) {
-            $rules['reason'] = 'int|exists:forum_reasons,id';
-        }
-        $this->validate($request, $rules);
-
-        $old = $topic->forum()->first(); // old category
-
-        $this->authorize('move', $old);
-        $forum = $this->forum->findBy('path', $request->get('path'));
-
-        if (!$forum->userCanAccess($this->userId)) {
-            abort(401);
-        }
-
-        \DB::transaction(function () use ($topic, $forum, $old, $request) {
-            $reason = null;
-
-            $notification = [
-                'sender_id'   => $this->userId,
-                'sender_name' => auth()->user()->name,
-                'subject'     => excerpt($topic->subject),
-                'forum'       => $forum->name
-            ];
-
-            if ($request->get('reason')) {
-                $reason = Reason::find($request->get('reason'));
-
-                $notification = array_merge($notification, [
-                    'excerpt'       => $reason->name,
-                    'reasonName'    => $reason->name,
-                    'reasonText'    => $reason->description
-                ]);
-            }
-
-            $topic->forum_id = $forum->id;
-            // magic happens here. database trigger will do the work
-            $topic->save();
-
-            $object = (new Stream_Topic())->map($topic, $old);
-
-            if (!empty($reason)) {
-                $object->reasonName = $reason->name;
-            }
-
-            $post = $this->post->find($topic->first_post_id, ['user_id']);
-            $recipientsId = $forum->onlyUsersWithAccess([$post->user_id]);
-
-            if ($recipientsId) {
-                app()->make('Alert\Topic\Move')
-                    ->with($notification)
-                    ->setUrl(route('forum.topic', [$forum->path, $topic->id, $topic->path], false))
-                    ->setUsersId($recipientsId)
-                    ->notify();
-            }
-
-            // we need to reindex this topic
-            event(new TopicWasMoved($topic));
-            stream(Stream_Move::class, $object, (new Stream_Forum())->map($forum));
-        });
-
-        return redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path])->with('success', 'Wątek został przeniesiony');
     }
 
     /**

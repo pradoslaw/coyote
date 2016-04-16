@@ -11,37 +11,8 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
  * Class ShareController
  * @package Coyote\Http\Controllers\Forum
  */
-class ShareController extends Controller
+class ShareController extends BaseController
 {
-    /**
-     * @var Forum
-     */
-    private $forum;
-
-    /**
-     * @var Post
-     */
-    private $post;
-
-    /**
-     * @var Topic
-     */
-    private $topic;
-
-    /**
-     * @param Forum $forum
-     * @param Post $post
-     * @param Topic $topic
-     */
-    public function __construct(Forum $forum, Post $post, Topic $topic)
-    {
-        parent::__construct();
-
-        $this->forum = $forum;
-        $this->post = $post;
-        $this->topic = $topic;
-    }
-
     /**
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
