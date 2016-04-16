@@ -67,7 +67,7 @@
                     {% if post.allow_count and user('allow_count') %}
                         <p class="hidden-xs">
                             <strong>Postów:</strong>
-                            <small>{{ post.author_posts|number_format }}</small>
+                            <small><a title="Znajdź posty tego użytkownika" href="{{ route('forum.user', [post.user_id]) }}" style="text-decoration: underline">{{ post.author_posts|number_format }}</a></small>
                         </p>
                     {% endif %}
                 {% endif %}

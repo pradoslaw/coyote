@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
@@ -42,6 +43,15 @@ class HomeController extends BaseController
             $tabs->add('Wątki z: ' . request()->route('tag'), [
                 'route' => [
                     'forum.tag', urlencode(request()->route('tag'))
+                ]
+            ]);
+        }
+
+        if ($route == 'forum.user') {
+            $user = app(UserRepositoryInterface::class)->find(request()->route('id'));
+            $tabs->add('Posty: ' . $user->name, [
+                'route' => [
+                    'forum.user', request()->route('id')
                 ]
             ]);
         }
@@ -131,6 +141,16 @@ class HomeController extends BaseController
     public function mine()
     {
         $this->topic->pushCriteria(new OnlyMine($this->userId));
+        return $this->load($this->userId, $this->sessionId);
+    }
+
+    /**
+     * @param int $userId
+     * @return HomeController
+     */
+    public function user($userId)
+    {
+        $this->topic->pushCriteria(new OnlyMine($userId));
         return $this->load($this->userId, $this->sessionId);
     }
 

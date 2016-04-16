@@ -14,6 +14,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('Unanswered', ['uses' => 'HomeController@unanswered', 'as' => 'unanswered']);
     Route::get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);
     Route::get('Subscribes', ['uses' => 'HomeController@subscribes', 'as' => 'subscribes']);
+    Route::get('User/{id}', ['uses' => 'HomeController@user', 'as' => 'user']);
     Route::post('Mark', ['uses' => 'HomeController@mark', 'as' => 'mark']);
 
     // dodawanie zalacznika do posta
