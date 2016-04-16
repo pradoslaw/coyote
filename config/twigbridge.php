@@ -105,6 +105,7 @@ return [
             'TwigBridge\Extensions\DateTime',
             'TwigBridge\Extensions\Misc',
             'TwigBridge\Extensions\Elasticsearch',
+            'TwigBridge\Extensions\Block',
 //             'TwigBridge\Extension\Laravel\Legacy\Facades',
         ],
         /*

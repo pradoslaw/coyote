@@ -85,6 +85,7 @@ class RepositoryServiceProvider extends ServiceProvider
             'Firewall',
             'Job',
             'Firm',
+            'Block',
 
             'Post' => [
                 'Attachment',
