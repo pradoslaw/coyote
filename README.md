@@ -28,10 +28,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 
 ## Instalacja
 
-Moduły takie jak mcrypt czy gd na większości serwerów są domyślnie zainstalowane. Jeżeli jednak
-moduły te nie są zainstalowane na serwerze, możesz je zainstalować poprzez:  `apt-get install php5-mcrypt`
-oraz `apt-get install php5-gd`.
-
+* `apt-get install php5-gd` (dla PHP5) lub `sudo apt-get install php7.0-gd` (PHP 7)
 * `sudo pecl install mongodb`
 * `git clone https://github.com/adam-boduch/coyote.git .`
 * `psql -c 'create database coyote;' -U postgres`
