@@ -66,9 +66,10 @@ class OfferController extends Controller
         }
 
         $job->increment('visits');
+        $previous = url()->previous();
 
-        if (url()->previous()) {
-            $referer = $job->referers()->firstOrNew(['url' => url()->previous()]);
+        if ($previous && mb_strlen($previous) < 200) {
+            $referer = $job->referers()->firstOrNew(['url' => $previous]);
 
             if (!$referer->id) {
                 $referer->save();
@@ -76,7 +77,7 @@ class OfferController extends Controller
                 $referer->increment('count');
             }
         }
-        
+
         if ($this->getGateFactory()->allows('job-delete')) {
             $flag = $this->getFlagFactory()->takeForJob($job->id);
         }
