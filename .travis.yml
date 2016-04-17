@@ -17,6 +17,7 @@ install:
   - composer install
 
 before_script:
+  - make install-gulp
   - psql -c 'create database coyote_test;' -U postgres
   - mongo coyote_test --eval 'db.addUser("travis", "test");'
   - cp .env.testing .env
@@ -24,6 +25,7 @@ before_script:
   - php artisan migrate --seed --env="testing"
   - php vendor/bin/codecept build
   - make file-permission
+  - make assets-production
   - phantomjs --webdriver=4444 2>&1 >/dev/null &
   - sleep 5
   - php -S 127.0.0.1:8000 -t public/ 2>&1 >/dev/null &
