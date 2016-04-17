@@ -14,7 +14,6 @@ use Coyote\Stream\Activities\Update as Stream_Update;
 use Coyote\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Stream\Objects\Microblog as Stream_Microblog;
 use Illuminate\Http\Request;
-use Storage;
 
 /**
  * Class SubmitController
@@ -78,16 +77,17 @@ class SubmitController extends Controller
 
         if ($request->has('thumbnail') || count($media['image']) > 0) {
             $delete = array_diff($media['image'], (array) $request->get('thumbnail'));
+            $fs = $this->getFilesystemFactory();
 
             foreach ($delete as $name) {
-                Storage::disk('public')->delete('microblog/' . $name);
+                $fs->delete(config('filesystems.microblog') . $name);
                 unset($media['image'][array_search($name, $media['image'])]);
             }
 
             $insert = array_diff((array) $request->get('thumbnail'), $media['image']);
 
             foreach ($insert as $name) {
-                Storage::disk('public')->move('tmp/' . $name, 'microblog/' . $name);
+                $fs->move('tmp/' . $name, config('filesystems.microblog') . $name);
                 $media['image'][] = $name;
             }
 
@@ -222,7 +222,7 @@ class SubmitController extends Controller
             $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
             $path = 'tmp/' . $fileName;
 
-            Storage::disk('public')->put($path, file_get_contents($request->file('photo')->getRealPath()));
+            $this->getFilesystemFactory()->put($path, file_get_contents($request->file('photo')->getRealPath()));
 
             return response()->json([
                 'url' => asset('storage/' . $path),
@@ -247,11 +247,19 @@ class SubmitController extends Controller
         $fileName = uniqid() . '.png';
         $path = 'tmp/' . $fileName;
 
-        Storage::disk('public')->put($path, file_get_contents('data://' . substr($input, 7)));
+        $this->getFilesystemFactory()->put($path, file_get_contents('data://' . substr($input, 7)));
 
         return response()->json([
             'name' => $fileName,
             'url' => asset('storage/' . $path)
         ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Filesystem\Filesystem;
+     */
+    private function getFilesystemFactory()
+    {
+        return app('filesystem.disk');
     }
 }

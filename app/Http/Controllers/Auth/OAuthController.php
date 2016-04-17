@@ -4,11 +4,10 @@ namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Illuminate\Support\Facades\Auth;
 use Coyote\Stream\Activities\Login as Stream_Login;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Objects\Person as Stream_Person;
-use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Http\Response;
 use Coyote\Thumbnail;
 
 class OAuthController extends Controller
@@ -36,7 +35,7 @@ class OAuthController extends Controller
      */
     public function login($provider)
     {
-        return Socialite::driver($provider)->redirect();
+        return $this->getSocialiteFactory()->driver($provider)->redirect();
     }
 
     /**
@@ -47,7 +46,7 @@ class OAuthController extends Controller
      */
     public function callback($provider)
     {
-        $oauth = Socialite::driver($provider)->user();
+        $oauth = $this->getSocialiteFactory()->driver($provider)->user();
         $user = $this->user->findWhere(['provider' => $provider, 'provider_id' => $oauth->getId()])->first();
 
         // if record does not exist, we must create new user in database
@@ -70,7 +69,9 @@ class OAuthController extends Controller
                 // jest ona gubiona
                 return redirect()->route('register', [
                     'error' => sprintf(
-                        'Adres e-mail %s jest już przypisany do użytkownika %s', $oauth->getEmail(), $user->name
+                        'Adres e-mail %s jest już przypisany do użytkownika %s',
+                        $oauth->getEmail(),
+                        $user->name
                     )
                 ]);
             }
@@ -80,13 +81,13 @@ class OAuthController extends Controller
 
             if ($photoUrl) {
                 $fileName = uniqid() . '.png';
-                $dir = public_path('storage/photo/');
-                $path = $dir . $fileName;
+                $path = config('filesystems.photo') . $fileName;
 
-                file_put_contents($path, file_get_contents($photoUrl), FILE_BINARY);
+                $fs = $this->getFilesystemFactory();
+                $fs->put($path, file_get_contents($photoUrl));
 
                 $thumbnail = new Thumbnail\Thumbnail(new Thumbnail\Objects\Photo());
-                $thumbnail->make($path);
+                $thumbnail->make(public_path('storage/' . $path));
             }
 
             $user = $this->user->create([
@@ -105,7 +106,23 @@ class OAuthController extends Controller
             stream(Stream_Login::class);
         }
 
-        Auth::login($user, true);
+        auth()->login($user, true);
         return redirect()->intended(route('home'));
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Filesystem\Filesystem;
+     */
+    private function getFilesystemFactory()
+    {
+        return app('filesystem.disk');
+    }
+
+    /**
+     * @return \Laravel\Socialite\Contracts\Factory
+     */
+    public function getSocialiteFactory()
+    {
+        return app(\Laravel\Socialite\Contracts\Factory::class);
     }
 }

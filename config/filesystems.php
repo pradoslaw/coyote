@@ -16,6 +16,23 @@ return [
     */
 
     'default' => 'public',
+    
+    /*
+    | Directory for user photos
+    */
+    
+    'photo' => 'photo/',
+    
+    /*
+    | Directory for post's attachments
+    */
+    'forum' => 'forum/',
+
+    /*
+    | Directory for post's attachments
+    */
+    'microblog' => 'microblog/',
+    
     /*
     |--------------------------------------------------------------------------
     | Default Cloud Filesystem Disk

@@ -8,7 +8,6 @@ use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Illuminate\Http\Request;
 use Guzzle\Http\Mimetypes;
 use Coyote\Http\Controllers\Controller;
-use Storage;
 
 /**
  * Class AttachmentController
@@ -58,15 +57,16 @@ class AttachmentController extends Controller
         ]);
 
         if ($request->file('attachment')->isValid()) {
+            $fs = $this->getFilesystemFactory();
             $fileName = uniqid() . '.' . strtolower($request->file('attachment')->getClientOriginalExtension());
 
-            $path = 'forum/' . $fileName;
-            Storage::disk('public')->put($path, file_get_contents($request->file('attachment')->getRealPath()));
+            $path = config('filesystems.forum') . $fileName;
+            $fs->put($path, file_get_contents($request->file('attachment')->getRealPath()));
 
             $mime = new Mimetypes();
 
             $data = [
-                'size' => Storage::disk('public')->size($path),
+                'size' => $fs->size($path),
                 'mime' => $mime->fromFilename($fileName),
                 'file' => $fileName,
                 'name' => $request->file('attachment')->getClientOriginalName()
@@ -90,14 +90,16 @@ class AttachmentController extends Controller
             abort(500, 'File is too big');
         }
 
-        $fileName = uniqid() . '.png';
-        $path = 'forum/' . $fileName;
+        $fs = $this->getFilesystemFactory();
 
-        Storage::disk('public')->put($path, file_get_contents('data://' . substr($input, 7)));
+        $fileName = uniqid() . '.png';
+        $path = config('filesystems.forum') . $fileName;
+
+        $fs->put($path, file_get_contents('data://' . substr($input, 7)));
         $mime = new Mimetypes();
 
         $data = [
-            'size' => Storage::disk('public')->size($path),
+            'size' => $fs->size($path),
             'mime' => $mime->fromFilename($fileName),
             'file' => $fileName,
             'name' => $fileName
@@ -141,9 +143,25 @@ class AttachmentController extends Controller
         ];
 
         if ($isImage) {
-            return response()->make(Storage::disk('public')->get('forum/' . $attachment->file), 200, $headers);
+            return response()->make(
+                $this->getFilesystemFactory()->get('forum/' . $attachment->file),
+                200,
+                $headers
+            );
         } else {
-            return response()->download(public_path('storage/forum/' . $attachment->file), $attachment->name, $headers);
+            return response()->download(
+                public_path('storage/' . config('filesystems.forum') . $attachment->file),
+                $attachment->name,
+                $headers
+            );
         }
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Filesystem\Filesystem;
+     */
+    private function getFilesystemFactory()
+    {
+        return app('filesystem.disk');
     }
 }
