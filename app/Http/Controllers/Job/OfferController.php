@@ -6,7 +6,8 @@ use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface;
-use Coyote\Repositories\Contracts\JobRepositoryInterface ;
+use Coyote\Repositories\Contracts\JobRepositoryInterface;
+use Coyote\Repositories\Contracts\FlagRepositoryInterface;
 use Coyote\Firm;
 use Coyote\Job;
 
@@ -75,6 +76,10 @@ class OfferController extends Controller
                 $referer->increment('count');
             }
         }
+        
+        if ($this->getGateFactory()->allows('job-delete')) {
+            $flag = $this->getFlagFactory()->takeForJob($job->id);
+        }
 
         return $this->view('job.offer', [
             'ratesList'         => Job::getRatesList(),
@@ -83,7 +88,15 @@ class OfferController extends Controller
             'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days,
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
         ])->with(
-            compact('job', 'firm', 'tags')
+            compact('job', 'firm', 'tags', 'flag')
         );
+    }
+
+    /**
+     * @return FlagRepositoryInterface
+     */
+    protected function getFlagFactory()
+    {
+        return app(FlagRepositoryInterface::class);
     }
 }

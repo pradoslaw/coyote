@@ -17,6 +17,12 @@ interface FlagRepositoryInterface extends RepositoryInterface
     public function takeForPosts(array $postsId);
 
     /**
+     * @param int $jobId
+     * @return mixed
+     */
+    public function takeForJob($jobId);
+
+    /**
      * @param $key
      * @param $value
      */

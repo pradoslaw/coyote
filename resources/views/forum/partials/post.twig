@@ -75,15 +75,7 @@
             <div class="col-xs-10 col-body">
 
                 {% for flag in flags[post.id] %}
-                    {{ form_open({'url': route('flag.delete', [flag.id]), 'class': 'alert alert-danger alert-report'}) }}
-                        <button type="submit" class="close" data-dismiss="alert" aria-label="Close" title="Usuń"><span aria-hidden="true">&times;</span></button>
-
-                        {{ flag.user_name }} z powodu <strong>{{ flag.name }}</strong> dnia {{ flag.created_at|format_date }}
-
-                        {% if flag.text %}
-                            <br><br>{{ flag.text }}
-                        {% endif %}
-                    {{ form_close() }}
+                    {% include 'components.flag' %}
                 {% endfor %}
 
                 <div class="col-vote">
@@ -176,7 +168,7 @@
                             </a>
                         {% endif %}
 
-                        <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" class="btn btn-xs btn-report" href="{{ route('flag') }}" data-url="{{ url }}" data-post-id="{{ post.id }}" data-topic-id="{{ topic.id }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" class="btn btn-xs btn-report" href="{{ route('flag') }}" data-url="{{ url }}" data-metadata="{{ {'post_id': post.id, 'topic_id': topic.id, 'permission': 'forum-delete'}|encrypt }}">
                             <i class="fa fa-flag"></i>
                             <span class="hidden-xs">Raportuj</span>
                         </a>

@@ -23,7 +23,7 @@ use Coyote\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Gate;
+use Illuminate\Contracts\Auth\Access\Gate;
 
 class TopicController extends BaseController
 {
@@ -73,8 +73,10 @@ class TopicController extends BaseController
             $page = $this->post->getPage($request->get('p'), $topic->id);
         }
 
+        $gate = $this->getGateFactory();
+
         // user with forum-update ability WILL see every post
-        if (Gate::allows('delete', $forum)) {
+        if ($gate->allows('delete', $forum)) {
             $this->post->pushCriteria(new WithTrashed());
             $replies = $topic->replies_real;
         }
@@ -123,22 +125,26 @@ class TopicController extends BaseController
             }
         }
 
-        if (Gate::allows('delete', $forum)) {
+        if ($gate->allows('delete', $forum)) {
             $activities = [];
             $postsId = $posts->pluck('id')->toArray();
 
             // here we go. if user has delete ability, for sure he/she would like to know
             // why posts were deleted and by whom
-            $collection = $this->getFromStream('Post', $postsId, 'Delete');
+            $collection = $this->findByObject('Post', $postsId, 'Delete');
 
             foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
                 $activities[$row->first()['object.id']] = $row->first();
             }
 
-            $flags = app(FlagRepositoryInterface::class)->takeForPosts($postsId);
+            // @todo Jezeli raportowany jest post na forum to sprawdzane jest globalne uprawnienie danego
+            // uzytkownika. Oznacza to, ze lokalni moderatorzy nie beda mogli czytac raportow
+            if ($gate->allows('forum-delete')) {
+                $flags = app(FlagRepositoryInterface::class)->takeForPosts($postsId);
+            }
         }
 
-        if (Gate::allows('delete', $forum) || Gate::allows('move', $forum)) {
+        if ($gate->allows('delete', $forum) || $gate->allows('move', $forum)) {
             $reasonList = Reason::lists('name', 'id')->toArray();
         }
 
@@ -146,11 +152,11 @@ class TopicController extends BaseController
 
         // if topic is locked we need to fetch information when and by whom
         if ($topic->is_locked) {
-            $warnings['lock'] = $this->getFromStream('Topic', $topic->id, 'Lock')->last();
+            $warnings['lock'] = $this->findByObject('Topic', $topic->id, 'Lock')->last();
         }
 
         if ($topic->prev_forum_id) {
-            $warnings['move'] = $this->getFromStream('Topic', $topic->id, 'Move')->last();
+            $warnings['move'] = $this->findByObject('Topic', $topic->id, 'Move')->last();
         }
 
         // increase topic views counter
@@ -429,8 +435,24 @@ class TopicController extends BaseController
      * @param $verb
      * @return mixed
      */
-    private function getFromStream($object, $id, $verb)
+    protected function findByObject($object, $id, $verb)
     {
-        return app('Stream')->findByObject($object, $id, $verb);
+        return $this->getStreamFactory()->findByObject($object, $id, $verb);
+    }
+
+    /**
+     * @return \Coyote\Stream\Stream
+     */
+    protected function getStreamFactory()
+    {
+        return app('Stream');
+    }
+
+    /**
+     * @return Gate
+     */
+    protected function getGateFactory()
+    {
+        return app(Gate::class);
     }
 }

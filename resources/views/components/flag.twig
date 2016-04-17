@@ -1,0 +1,9 @@
+{{ form_open({'url': route('flag.delete', [flag.id]), 'class': 'alert alert-danger alert-report'}) }}
+    <button type="submit" class="close" data-dismiss="alert" aria-label="Close" title="Usuń"><span aria-hidden="true">&times;</span></button>
+
+    {{ flag.user_name }} z powodu <strong>{{ flag.name }}</strong> dnia {{ flag.created_at|format_date }}
+
+    {% if flag.text %}
+        <br><br>{{ flag.text }}
+    {% endif %}
+{{ form_close() }}

@@ -283,10 +283,6 @@
             </div>
         {{ form_close() }}
     {% endif %}
-
-    {% if can('delete', forum) %}
-        {{ modals.confirm('Czy chcesz zamknąć ten raport?', 'Zamknięcie raportu', 'modal-report', 'Tak, zamknij') }}
-    {% endif %}
 {% endblock %}
 
 {% block body %}

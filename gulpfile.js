@@ -26,6 +26,7 @@ elixir(function (mix) {
         'components/session.js',
         'components/vcard.js',
         'components/popover.js',
+        'components/flag.js',
         'main.js'
     ];
 

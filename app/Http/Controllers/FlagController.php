@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Flag\Type;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface as Flag;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Http\Request;
 use Coyote\Stream\Objects\Flag as Stream_Flag;
 use Coyote\Stream\Activities\Create as Stream_Create;
@@ -44,15 +45,30 @@ class FlagController extends Controller
      */
     public function save(Request $request)
     {
-        $this->validate($request, [
+        $rules = [
             'url'           => 'required|string',
-            'metadata'      => 'json',
+            'metadata'      => 'required',
             'type_id'       => 'integer|exists:flag_types,id',
-            'text'          => 'string'
-        ]);
+            'text'          => 'string',
+            '_token'        => 'throttle'
+        ];
+
+        $validator = $this->getValidationFactory()->make($request->all(), $rules);
+        $validator->after(function ($validator) use ($request) {
+            $metadata = $this->decrypt($request->get('metadata'));
+
+            if (empty($metadata['permission'])) {
+                $validator->errors()->add('metadata', trans('validation.string', ['attribute' => 'string']));
+            }
+        });
+
+        $this->validateWith($validator);
 
         \DB::transaction(function () use ($request) {
-            $flag = $this->flag->create($request->all() + ['user_id' => $this->userId]);
+            $data = $request->all() + ['user_id' => $this->userId];
+            $data['metadata'] = $this->decrypt($data['metadata']);
+
+            $flag = $this->flag->create($data);
             $object = new Stream_Flag(['id' => $flag->id, 'displayName' => excerpt($request->text)]);
 
             stream(Stream_Create::class, $object);
@@ -67,10 +83,41 @@ class FlagController extends Controller
         $flag = $this->flag->findOrFail($id);
         $object = new Stream_Flag(['id' => $flag->id]);
 
+        // @todo Jezeli raportowany jest post na forum to sprawdzane jest globalne uprawnienie danego
+        // uzytkownika. Oznacza to, ze lokalni moderatorzy nie beda mogli czytac raportow
+        if ($this->getGateFactory()->denies($flag->metadata->permission)) {
+            return response('Unauthorized.', 401);
+        }
+
         $flag->moderator_id = $this->userId;
         $flag->save();
 
         $flag->delete();
         stream(Stream_Delete::class, $object);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function modal()
+    {
+        return view('flag.modal');
+    }
+
+    /**
+     * @return Encrypter
+     */
+    protected function getCryptFactory()
+    {
+        return app(Encrypter::class);
+    }
+
+    /**
+     * @param $metadata
+     * @return string
+     */
+    protected function decrypt($metadata)
+    {
+        return $this->getCryptFactory()->decrypt($metadata);
     }
 }

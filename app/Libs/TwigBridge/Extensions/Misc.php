@@ -5,6 +5,7 @@ namespace TwigBridge\Extensions;
 use Coyote\Declination;
 use Twig_Extension;
 use Twig_SimpleFunction;
+use Twig_SimpleFilter;
 
 class Misc extends Twig_Extension
 {
@@ -50,7 +51,19 @@ class Misc extends Twig_Extension
                 [
                     'is_safe' => ['html'],
                 ]
-            ),
+            )
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return [
+            new Twig_SimpleFilter('encrypt', function ($data) {
+                return app('encrypter')->encrypt($data);
+            }),
         ];
     }
 

@@ -1390,6 +1390,43 @@ $(function() {
 });
 $(function() {
     'use strict';
+    
+    /**
+     * Show "flag to report" page
+     */
+    $('.btn-report').click(function() {
+        $.get($(this).attr('href'), {url: $(this).data('url'), metadata: $(this).data('metadata')}, function(html) {
+            $(html).appendTo('body');
+
+            $('#flag').find('.modal').modal('show');
+        });
+
+        return false;
+    });
+
+    /**
+     * Close flagged post report
+     */
+    $('.alert-report').submit(function() {
+        var url = $(this).attr('action');
+        var $this = $(this);
+
+        $.get(url, function(html) {
+            $('body').append(html);
+
+            $('#modal-report').modal('show').one('click', '.danger', function() {
+                $.post(url);
+                $this.fadeOut();
+
+                $('#modal-report').modal('hide').remove();
+            });
+        });
+
+        return false;
+    });
+});
+$(function() {
+    'use strict';
 
     $.ajaxSetup({
         headers: {
