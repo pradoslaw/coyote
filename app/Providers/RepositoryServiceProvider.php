@@ -7,6 +7,44 @@ use Illuminate\Support\ServiceProvider;
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
+     * Repositories to bind
+     *
+     * @var array
+     */
+    private $eloquent = [
+        'Flag',
+        'Word',
+        'Tag',
+        'Topic',
+        'Forum',
+        'Pm',
+        'Session',
+        'Setting',
+        'Alert',
+        'Reputation',
+        'Microblog',
+        'User',
+        'Post',
+        'Page',
+        'Firewall',
+        'Job',
+        'Firm',
+        'Block',
+
+        'Post' => [
+            'Attachment',
+            'Log',
+            'Accept',
+            'Vote',
+            'Comment'
+        ],
+
+        'Forum' => [
+            'Order'
+        ]
+    ];
+
+    /**
      * Bootstrap the application services.
      *
      * @return void
@@ -28,7 +66,7 @@ class RepositoryServiceProvider extends ServiceProvider
             'Coyote\\Repositories\\Mongodb\\StreamRepository'
         );
 
-        $this->bind('', $this->eloquent());
+        $this->bind('', $this->eloquent);
     }
 
     /**
@@ -58,46 +96,5 @@ class RepositoryServiceProvider extends ServiceProvider
                 );
             }
         }
-    }
-
-    /**
-     * Repositories to bind
-     *
-     * @return array
-     */
-    private function eloquent()
-    {
-        return [
-            'Flag',
-            'Word',
-            'Tag',
-            'Topic',
-            'Forum',
-            'Pm',
-            'Session',
-            'Setting',
-            'Alert',
-            'Reputation',
-            'Microblog',
-            'User',
-            'Post',
-            'Page',
-            'Firewall',
-            'Job',
-            'Firm',
-            'Block',
-
-            'Post' => [
-                'Attachment',
-                'Log',
-                'Accept',
-                'Vote',
-                'Comment'
-            ],
-
-            'Forum' => [
-                'Order'
-            ]
-        ];
     }
 }
