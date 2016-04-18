@@ -584,7 +584,7 @@ $(function () {
 
     $('#box-my-tags').on('click', '.btn-settings', function() {
         $('#box-my-tags').find('.tag-clouds').toggle();
-        $('#tags-form').toggle().find('input[name="tags"]').focus();
+        $('#tags-form').toggle().find('input[name="tags"]').inputFocus();
     })
         .on('click', '.btn-add', function() {
             $('#box-my-tags').find('.btn-settings').click();
