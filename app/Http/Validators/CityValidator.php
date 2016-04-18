@@ -2,7 +2,7 @@
 
 namespace Coyote;
 
-use Coyote\Parser\Reference\City;
+use Coyote\Services\Parser\Reference\City;
 
 class CityValidator
 {

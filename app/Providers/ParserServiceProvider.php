@@ -3,12 +3,12 @@
 namespace Coyote\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Coyote\Parser\Scenarios\Microblog as Parser_Microblog;
-use Coyote\Parser\Scenarios\Comment as Parser_Comment;
-use Coyote\Parser\Scenarios\Sig as Parser_Sig;
-use Coyote\Parser\Scenarios\Pm as Parser_Pm;
-use Coyote\Parser\Scenarios\Post as Parser_Post;
-use Coyote\Parser\Scenarios\Job as Parser_Job;
+use Coyote\Services\Parser\Scenarios\Microblog as Parser_Microblog;
+use Coyote\Services\Parser\Scenarios\Comment as Parser_Comment;
+use Coyote\Services\Parser\Scenarios\Sig as Parser_Sig;
+use Coyote\Services\Parser\Scenarios\Pm as Parser_Pm;
+use Coyote\Services\Parser\Scenarios\Post as Parser_Post;
+use Coyote\Services\Parser\Scenarios\Job as Parser_Job;
 
 class ParserServiceProvider extends ServiceProvider
 {

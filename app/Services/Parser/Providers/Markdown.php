@@ -1,12 +1,11 @@
 <?php
 
-namespace Coyote\Parser\Providers;
+namespace Coyote\Services\Parser\Providers;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 
 /**
  * Class Markdown
- * @package Coyote\Parser\Providers
  */
 class Markdown extends \Parsedown implements ProviderInterface
 {

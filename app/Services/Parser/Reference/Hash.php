@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Parser\Reference;
+namespace Coyote\Services\Parser\Reference;
 
 class Hash
 {

@@ -1,16 +1,13 @@
 <?php
 
-namespace Coyote\Parser\Scenarios;
+namespace Coyote\Services\Parser\Scenarios;
 
-use Coyote\Parser\Parser;
-use Coyote\Parser\Providers\Censore;
-use Coyote\Parser\Providers\Link;
-use Coyote\Parser\Providers\Purifier;
-use Coyote\Parser\Providers\SimpleMarkdown;
-use Coyote\Parser\Providers\Smilies;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
+use Coyote\Services\Parser\Parser;
+use Coyote\Services\Parser\Providers\Censore;
+use Coyote\Services\Parser\Providers\Link;
+use Coyote\Services\Parser\Providers\Purifier;
+use Coyote\Services\Parser\Providers\SimpleMarkdown;
+use Coyote\Services\Parser\Providers\Smilies;
 use Debugbar;
 
 class Sig extends Scenario

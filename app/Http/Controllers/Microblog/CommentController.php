@@ -3,8 +3,8 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Parser\Reference\Login as Ref_Login;
-use Coyote\Parser\Reference\Hash as Ref_Hash;
+use Coyote\Services\Parser\Reference\Login as Ref_Login;
+use Coyote\Services\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Services\Alert\Alert as Alerts;

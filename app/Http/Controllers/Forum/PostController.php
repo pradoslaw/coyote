@@ -9,7 +9,7 @@ use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Log;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
-use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Services\Parser\Reference\Login as Ref_Login;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;

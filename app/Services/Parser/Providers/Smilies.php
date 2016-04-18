@@ -1,10 +1,9 @@
 <?php
 
-namespace Coyote\Parser\Providers;
+namespace Coyote\Services\Parser\Providers;
 
 /**
  * Class Smilies
- * @package Coyote\Parser\Providers
  */
 class Smilies implements ProviderInterface
 {

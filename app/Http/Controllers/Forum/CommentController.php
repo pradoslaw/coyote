@@ -15,7 +15,7 @@ use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Http\Request;
-use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Services\Parser\Reference\Login as Ref_Login;
 // @uzyc factory
 use Gate;
 

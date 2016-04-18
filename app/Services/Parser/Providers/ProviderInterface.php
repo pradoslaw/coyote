@@ -1,10 +1,9 @@
 <?php
 
-namespace Coyote\Parser\Providers;
+namespace Coyote\Services\Parser\Providers;
 
 /**
  * Interface ProviderInterface
- * @package Coyote\Parser\Providers
  */
 interface ProviderInterface
 {

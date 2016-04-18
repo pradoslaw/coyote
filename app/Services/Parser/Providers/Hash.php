@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Parser\Providers;
+namespace Coyote\Services\Parser\Providers;
 
 trait Hash
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Parser\Scenarios;
+namespace Coyote\Services\Parser\Scenarios;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
 use Illuminate\Contracts\Cache\Repository as Cache;
@@ -46,20 +46,12 @@ abstract class Scenario
     protected $enableCache = true;
 
     /**
-     * @param Cache $cache
-     * @param User $user
-     * @param Word $word
-     * @param Page $page
+     * @param App $app
      */
     public function __construct(App $app)
     {
         $this->app = $app;
         $this->cache = $app['Illuminate\Contracts\Cache\Repository'];
-//        $this->request = $request;
-//        $this->cache = $cache;
-//        $this->user = $user;
-//        $this->word = $word;
-//        $this->page = $page;
     }
 
     /**

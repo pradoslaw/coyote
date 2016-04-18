@@ -13,7 +13,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
-use Coyote\Parser\Reference\Login as Ref_Login;
+use Coyote\Services\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -25,7 +25,6 @@ use Coyote\Services\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Auth\Access\Gate;
 
 class TopicController extends BaseController
 {

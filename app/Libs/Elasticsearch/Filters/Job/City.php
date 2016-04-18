@@ -5,7 +5,7 @@ namespace Coyote\Elasticsearch\Filters\Job;
 use Coyote\Elasticsearch\DslInterface;
 use Coyote\Elasticsearch\Filter;
 use Coyote\Elasticsearch\QueryBuilderInterface;
-use Coyote\Parser\Reference;
+use Coyote\Services\Parser\Reference;
 
 class City extends Filter implements DslInterface
 {

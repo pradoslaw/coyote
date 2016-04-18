@@ -1,12 +1,11 @@
 <?php
 
-namespace Coyote\Parser\Providers;
+namespace Coyote\Services\Parser\Providers;
 
 use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 
 /**
  * Class Censore
- * @package Coyote\Parser\Providers
  */
 class Censore implements ProviderInterface
 {

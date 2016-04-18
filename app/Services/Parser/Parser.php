@@ -1,12 +1,11 @@
 <?php
 
-namespace Coyote\Parser;
+namespace Coyote\Services\Parser;
 
-use Coyote\Parser\Providers\ProviderInterface;
+use Coyote\Services\Parser\Providers\ProviderInterface;
 
 /**
  * Class Parser
- * @package Coyote\Parser
  */
 final class Parser
 {

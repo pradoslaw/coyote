@@ -1,16 +1,15 @@
 <?php
 
-namespace Coyote\Parser\Scenarios;
+namespace Coyote\Services\Parser\Scenarios;
 
-use Coyote\Parser\Parser;
-use Coyote\Parser\Providers\Censore;
-use Coyote\Parser\Providers\Geshi;
-use Coyote\Parser\Providers\Link;
-use Coyote\Parser\Providers\Markdown;
-use Coyote\Parser\Providers\Purifier;
-use Coyote\Parser\Providers\Smilies;
+use Coyote\Services\Parser\Parser;
+use Coyote\Services\Parser\Providers\Censore;
+use Coyote\Services\Parser\Providers\Geshi;
+use Coyote\Services\Parser\Providers\Link;
+use Coyote\Services\Parser\Providers\Markdown;
+use Coyote\Services\Parser\Providers\Purifier;
 
-class Post extends Scenario
+class Job extends Scenario
 {
     /**
      * Parse post
@@ -20,7 +19,7 @@ class Post extends Scenario
      */
     public function parse($text)
     {
-        start_measure('parsing', 'Parsing post...');
+        start_measure('parsing', 'Parsing job data...');
 
         $isInCache = $this->isInCache($text);
         if ($isInCache) {
@@ -40,11 +39,6 @@ class Post extends Scenario
 
                     return $parser;
                 });
-            }
-
-            if ($this->isSmiliesAllowed()) {
-                $parser->attach(new Smilies());
-                $text = $parser->parse($text);
             }
         }
         stop_measure('parsing');

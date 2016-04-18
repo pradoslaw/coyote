@@ -1,13 +1,12 @@
 <?php
 
-namespace Coyote\Parser\Providers;
+namespace Coyote\Services\Parser\Providers;
 
 use HTMLPurifier;
 use HTMLPurifier_Config;
 
 /**
  * Class Purifier
- * @package Coyote\Parser\Providers
  */
 class Purifier implements ProviderInterface
 {

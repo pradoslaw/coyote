@@ -1,25 +1,26 @@
 <?php
 
-namespace Coyote\Parser\Scenarios;
+namespace Coyote\Services\Parser\Scenarios;
 
-use Coyote\Parser\Parser;
-use Coyote\Parser\Providers\Censore;
-use Coyote\Parser\Providers\Link;
-use Coyote\Parser\Providers\Purifier;
-use Coyote\Parser\Providers\SimpleMarkdown;
-use Coyote\Parser\Providers\Smilies;
+use Coyote\Services\Parser\Parser;
+use Coyote\Services\Parser\Providers\Censore;
+use Coyote\Services\Parser\Providers\Geshi;
+use Coyote\Services\Parser\Providers\Link;
+use Coyote\Services\Parser\Providers\Markdown;
+use Coyote\Services\Parser\Providers\Purifier;
+use Coyote\Services\Parser\Providers\Smilies;
 
-class Comment extends Scenario
+class Microblog extends Scenario
 {
     /**
-     * Parse comment
+     * Parse microblog
      *
      * @param string $text
      * @return string
      */
     public function parse($text)
     {
-        start_measure('parsing', 'Parsing comment...');
+        start_measure('parsing', 'Parsing microblog...');
 
         $isInCache = $this->isInCache($text);
         if ($isInCache) {
@@ -31,10 +32,11 @@ class Comment extends Scenario
 
             if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach((new SimpleMarkdown($this->app['Coyote\Repositories\Eloquent\UserRepository']))->setEnableHashParser(true));
-                    $parser->attach((new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id|class],code'));
+                    $parser->attach((new Markdown($this->app['Coyote\Repositories\Eloquent\UserRepository']))->setBreaksEnabled(true)->setEnableHashParser(true));
+                    $parser->attach(new Purifier());
                     $parser->attach(new Link($this->app['Coyote\Repositories\Eloquent\PageRepository'], $this->app['Illuminate\Http\Request']));
                     $parser->attach(new Censore($this->app['Coyote\Repositories\Eloquent\WordRepository']));
+                    $parser->attach(new Geshi());
 
                     return $parser;
                 });

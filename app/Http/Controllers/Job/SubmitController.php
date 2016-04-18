@@ -14,7 +14,7 @@ use Coyote\Repositories\Contracts\FirmRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Http\Request;
-use Coyote\Parser\Reference\City;
+use Coyote\Services\Parser\Reference\City;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;

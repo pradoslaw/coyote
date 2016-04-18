@@ -1,6 +1,6 @@
 <?php
 
-use Coyote\Parser\Providers\Link;
+use Coyote\Services\Parser\Providers\Link;
 use Faker\Factory;
 
 class LinkTest extends \Codeception\TestCase\Test

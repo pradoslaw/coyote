@@ -1,13 +1,12 @@
 <?php
 
-namespace Coyote\Parser\Providers;
+namespace Coyote\Services\Parser\Providers;
 
 /**
  * Uproszczony Markdown, np. dla komentarzy na forum czy stopek w postach gdzie nie mozemy sobie pozwolic
  * na obsluge pelnego markdowna
  *
  * Class SimpleMarkdown
- * @package Coyote\Parser\Providers
  */
 class SimpleMarkdown extends Markdown implements ProviderInterface
 {

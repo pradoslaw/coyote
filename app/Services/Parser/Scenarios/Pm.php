@@ -1,13 +1,13 @@
 <?php
 
-namespace Coyote\Parser\Scenarios;
+namespace Coyote\Services\Parser\Scenarios;
 
-use Coyote\Parser\Parser;
-use Coyote\Parser\Providers\Geshi;
-use Coyote\Parser\Providers\Link;
-use Coyote\Parser\Providers\Markdown;
-use Coyote\Parser\Providers\Purifier;
-use Coyote\Parser\Providers\Smilies;
+use Coyote\Services\Parser\Parser;
+use Coyote\Services\Parser\Providers\Geshi;
+use Coyote\Services\Parser\Providers\Link;
+use Coyote\Services\Parser\Providers\Markdown;
+use Coyote\Services\Parser\Providers\Purifier;
+use Coyote\Services\Parser\Providers\Smilies;
 
 class Pm extends Scenario
 {

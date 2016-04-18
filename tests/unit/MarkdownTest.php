@@ -1,6 +1,6 @@
 <?php
 
-use Coyote\Parser\Providers\Markdown;
+use Coyote\Services\Parser\Providers\Markdown;
 
 class MarkdownTest extends \Codeception\TestCase\Test
 {

@@ -8,7 +8,7 @@ use Coyote\Elasticsearch\Query;
 use Coyote\Elasticsearch\QueryBuilderInterface;
 use Coyote\Elasticsearch\Sort;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Parser\Reference\City;
+use Coyote\Services\Parser\Reference\City;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Illuminate\Http\Request;
