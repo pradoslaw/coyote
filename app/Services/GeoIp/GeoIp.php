@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote;
+namespace Coyote\Services\GeoIp;
 
 use Guzzle\Http\Client as HttpClient;
 use Guzzle\Http\Exception\ClientErrorResponseException;

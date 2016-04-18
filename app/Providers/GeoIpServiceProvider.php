@@ -2,7 +2,7 @@
 
 namespace Coyote\Providers;
 
-use Coyote\GeoIp;
+use Coyote\Services\GeoIp\GeoIp;
 use Guzzle\Http\Client;
 use Illuminate\Support\ServiceProvider;
 

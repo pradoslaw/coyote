@@ -10,7 +10,7 @@ class GeoIpTest extends \Codeception\TestCase\Test
     protected $tester;
 
     /**
-     * @var \Coyote\GeoIp
+     * @var \Coyote\Services\GeoIp\GeoIp
      */
     protected $geoIp;
 
@@ -44,7 +44,7 @@ class GeoIpTest extends \Codeception\TestCase\Test
 
     public function testNormalizeByLocale()
     {
-        $normalize = new \Coyote\GeoIp\Normalizers\Locale('pl');
+        $normalize = new \Coyote\Services\GeoIp\Normalizers\Locale('pl');
 
         $result = $normalize->normalize($this->geoIp->city('Wroclaw'));
         $this->assertEquals('Wrocław', $result['name']);

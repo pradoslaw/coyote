@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\GeoIp\Normalizers;
+namespace Coyote\Services\GeoIp\Normalizers;
 
 interface NormalizerInterface
 {

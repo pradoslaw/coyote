@@ -37,7 +37,7 @@ class SubmitController extends Controller
     private $tag;
 
     /**
-     * @var \Coyote\GeoIp
+     * @var \Coyote\Services\GeoIp\GeoIp
      */
     private $geoIp;
 
