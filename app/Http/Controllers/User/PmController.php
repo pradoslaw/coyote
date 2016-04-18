@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmWasSent;
+use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -16,7 +17,7 @@ use Carbon;
  */
 class PmController extends BaseController
 {
-    use HomeTrait;
+    use HomeTrait, FilesystemFactory;
 
     /**
      * @var User
@@ -217,18 +218,20 @@ class PmController extends BaseController
         }
 
         $fileName = uniqid() . '.png';
-        $path = public_path('storage/pm/' . $fileName);
+        $path = 'pm/' . $fileName;
 
-        file_put_contents($path, file_get_contents('data://' . substr($input, 7)));
+        $fs = $this->getFilesystemFactory();
+        $fs->put($path, file_get_contents('data://' . substr($input, 7)));
+
         $mime = new Mimetypes();
 
         return response()->json([
-            'size' => filesize($path),
+            'size' => $fs->size($path),
             'suffix' => 'png',
             'name' => $fileName,
             'file' => $fileName,
             'mime'  => $mime->fromFilename($fileName),
-            'url' => cdn('storage/pm/' . $fileName)
+            'url' => cdn('storage/' . $path)
         ]);
     }
 }

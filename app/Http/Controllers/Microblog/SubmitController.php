@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
@@ -21,6 +22,8 @@ use Illuminate\Http\Request;
  */
 class SubmitController extends Controller
 {
+    use FilesystemFactory;
+    
     /**
      * @var Microblog
      */
@@ -253,13 +256,5 @@ class SubmitController extends Controller
             'name' => $fileName,
             'url' => asset('storage/' . $path)
         ]);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\Filesystem\Filesystem;
-     */
-    private function getFilesystemFactory()
-    {
-        return app('filesystem.disk');
     }
 }

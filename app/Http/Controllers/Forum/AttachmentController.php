@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
@@ -15,6 +16,8 @@ use Coyote\Http\Controllers\Controller;
  */
 class AttachmentController extends Controller
 {
+    use FilesystemFactory;
+    
     /**
      * @var Attachment
      */
@@ -155,13 +158,5 @@ class AttachmentController extends Controller
                 $headers
             );
         }
-    }
-
-    /**
-     * @return \Illuminate\Contracts\Filesystem\Filesystem;
-     */
-    private function getFilesystemFactory()
-    {
-        return app('filesystem.disk');
     }
 }
