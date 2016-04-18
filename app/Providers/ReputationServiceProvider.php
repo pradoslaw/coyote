@@ -34,7 +34,7 @@ class ReputationServiceProvider extends ServiceProvider
             $segments = explode('\\', $provider);
             array_shift($segments);
 
-            $class = '\\Coyote\\Reputation\\' . implode('\\', $segments);
+            $class = '\\Coyote\\Services\\Reputation\\' . implode('\\', $segments);
 
             $this->app->bind($provider, function ($app) use ($class) {
                 return new $class(

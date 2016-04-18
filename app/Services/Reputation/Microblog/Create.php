@@ -1,12 +1,11 @@
 <?php
 
-namespace Coyote\Reputation\Microblog;
+namespace Coyote\Services\Reputation\Microblog;
 
-use Coyote\Reputation\ReputationInterface;
+use Coyote\Services\Reputation\ReputationInterface;
 
 /**
  * Class Create
- * @package Coyote\Reputation\Microblog
  */
 class Create extends Microblog implements ReputationInterface
 {

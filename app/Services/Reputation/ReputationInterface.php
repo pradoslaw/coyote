@@ -1,10 +1,9 @@
 <?php
 
-namespace Coyote\Reputation;
+namespace Coyote\Services\Reputation;
 
 /**
  * Interface ReputationInterface
- * @package Coyote\Reputation
  */
 interface ReputationInterface
 {

@@ -1,13 +1,12 @@
 <?php
 
-namespace Coyote\Reputation\Post;
+namespace Coyote\Services\Reputation\Post;
 
-use Coyote\Reputation\ReputationInterface;
-use Coyote\Reputation\Reputation;
+use Coyote\Services\Reputation\ReputationInterface;
+use Coyote\Services\Reputation\Reputation;
 
 /**
  * Class Accept
- * @package Coyote\Reputation\Post
  */
 class Accept extends Reputation implements ReputationInterface
 {

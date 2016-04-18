@@ -1,14 +1,13 @@
 <?php
 
-namespace Coyote\Reputation\Microblog;
+namespace Coyote\Services\Reputation\Microblog;
 
-use Coyote\Reputation\Reputation;
-use Coyote\Reputation\ReputationInterface;
+use Coyote\Services\Reputation\Reputation;
+use Coyote\Services\Reputation\ReputationInterface;
 use Coyote\Microblog as Model;
 
 /**
  * Class Microblog
- * @package Coyote\Reputation\Microblog
  */
 abstract class Microblog extends Reputation implements ReputationInterface
 {

@@ -1,12 +1,11 @@
 <?php
 
-namespace Coyote\Reputation;
+namespace Coyote\Services\Reputation;
 
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface;
 
 /**
  * Class Reputation
- * @package Coyote\Reputation
  */
 abstract class Reputation implements ReputationInterface
 {

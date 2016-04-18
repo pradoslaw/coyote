@@ -1,10 +1,9 @@
 <?php
 
-namespace Coyote\Reputation;
+namespace Coyote\Services\Reputation;
 
 /**
  * Class Custom
- * @package Coyote\Reputation
  */
 class Custom extends Reputation implements ReputationInterface
 {
