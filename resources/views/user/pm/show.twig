@@ -4,7 +4,10 @@
     <div id="wrap">
         <div id="overview">
             {% for item in talk %}
-                {% include 'user.pm.message' with {'content': '<div class="pm-text">' ~ item.text ~ '</div>'} %}
+                {% include 'user.pm.message' with {
+                    content: '<div class="pm-text">' ~ item.text ~ '</div>',
+                    link_to_profile: true
+                } %}
             {% endfor %}
         </div>
     </div>

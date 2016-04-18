@@ -6,7 +6,6 @@ use Coyote\Events\PmWasSent;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Services\Alert\Providers\Pm as Alert_Pm;
 use Illuminate\Http\Request;
 use Guzzle\Http\Mimetypes;
 use Carbon;
@@ -18,7 +17,7 @@ use Carbon;
 class PmController extends BaseController
 {
     use HomeTrait;
-    
+
     /**
      * @var User
      */
@@ -153,11 +152,19 @@ class PmController extends BaseController
      */
     public function save(Request $request)
     {
-        $this->validate($request, [
-            'recipient'          => 'required|username|user_exist|different:' . auth()->user()->name,
+        $validator = $this->getValidationFactory()->make($request->all(), [
+            'recipient'          => 'required|username|user_exist',
             'text'               => 'required',
             'root_id'            => 'sometimes|exists:pm'
         ]);
+
+        $validator->after(function ($validator) use ($request) {
+            if (mb_strtolower($request->get('recipient')) === mb_strtolower(auth()->user()->name)) {
+                $validator->errors()->add('recipient', trans('validation.custom.recipient.different'));
+            }
+        });
+
+        $this->validateWith($validator);
 
         return \DB::transaction(function () use ($request) {
             $recipient = $this->user->findByName($request->get('recipient'));
@@ -168,7 +175,7 @@ class PmController extends BaseController
             $excerpt = excerpt($request->get('text'));
 
             // we need to send notification to recipient
-            (new Alert_Pm($this->alert))->with([
+            app('Alert\Pm')->with([
                 'user_id'     => $pm->author_id,
                 'sender_id'   => $user->id,
                 'sender_name' => $user->name,
