@@ -2,10 +2,11 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Stream\Activities\Accept as Stream_Accept;
-use Coyote\Stream\Activities\Reject as Stream_Reject;
-use Coyote\Stream\Objects\Post as Stream_Post;
-use Coyote\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\Stream\Activities\Accept as Stream_Accept;
+use Coyote\Services\Stream\Activities\Reject as Stream_Reject;
+use Coyote\Services\Stream\Objects\Post as Stream_Post;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+// @todo uzyc factory zamiast facade
 use Gate;
 
 class AcceptController extends BaseController

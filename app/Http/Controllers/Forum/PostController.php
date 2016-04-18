@@ -10,13 +10,13 @@ use Coyote\Post\Log;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Parser\Reference\Login as Ref_Login;
-use Coyote\Stream\Activities\Create as Stream_Create;
-use Coyote\Stream\Activities\Update as Stream_Update;
-use Coyote\Stream\Objects\Topic as Stream_Topic;
-use Coyote\Stream\Objects\Post as Stream_Post;
-use Coyote\Stream\Actor as Stream_Actor;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\Stream\Objects\Post as Stream_Post;
+use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\User;
-use Gate;
+use Gate; // @todo uzyc factory
 use Illuminate\Http\Request;
 
 class PostController extends BaseController

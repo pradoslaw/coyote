@@ -5,8 +5,8 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Illuminate\Http\Request;
-use Coyote\Stream\Activities\Vote as Stream_Vote;
-use Coyote\Stream\Objects\Microblog as Stream_Microblog;
+use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
+use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 
 /**
  * Ocena glosow na dany wpis na mikro (lub wyswietlanie loginow ktorzy oddali ow glos)

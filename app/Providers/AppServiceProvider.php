@@ -52,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('Stream', function ($app) {
-            return new $app['Coyote\\Stream\\Stream']($app['Coyote\\Repositories\\Contracts\\StreamRepositoryInterface']);
+            return new $app['Coyote\\Services\\Stream\\Stream']($app['Coyote\\Repositories\\Contracts\\StreamRepositoryInterface']);
         });
     }
 }

@@ -7,8 +7,8 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Coyote\Stream\Activities\Login as Stream_Login;
-use Coyote\Stream\Activities\Logout as Stream_Logout;
+use Coyote\Services\Stream\Activities\Login as Stream_Login;
+use Coyote\Services\Stream\Activities\Logout as Stream_Logout;
 use Validator;
 
 class LoginController extends Controller
@@ -55,6 +55,7 @@ class LoginController extends Controller
      */
     public function signin(Request $request)
     {
+        // @todo uzyc validateWith()
         $validator = Validator::make($request->only(['name', 'password']), [
             'name'                  => 'required|username',
             'password'              => 'required'

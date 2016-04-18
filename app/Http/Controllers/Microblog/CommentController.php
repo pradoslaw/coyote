@@ -8,11 +8,11 @@ use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Alert\Alert as Alerts;
-use Coyote\Stream\Activities\Create as Stream_Create;
-use Coyote\Stream\Activities\Update as Stream_Update;
-use Coyote\Stream\Activities\Delete as Stream_Delete;
-use Coyote\Stream\Objects\Microblog as Stream_Microblog;
-use Coyote\Stream\Objects\Comment as Stream_Comment;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
+use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller

@@ -6,9 +6,9 @@ use Coyote\Flag\Type;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface as Flag;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Http\Request;
-use Coyote\Stream\Objects\Flag as Stream_Flag;
-use Coyote\Stream\Activities\Create as Stream_Create;
-use Coyote\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Objects\Flag as Stream_Flag;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 
 class FlagController extends Controller
 {

@@ -5,6 +5,8 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Events\PostWasSaved;
 use Coyote\Forum\Reason;
+use Coyote\Http\Factories\GateFactory;
+use Coyote\Http\Factories\StreamFactory;
 use Coyote\Http\Requests\SubjectRequest;
 use Coyote\Post\Log;
 use Coyote\Http\Controllers\Controller;
@@ -14,12 +16,12 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
-use Coyote\Stream\Activities\Create as Stream_Create;
-use Coyote\Stream\Activities\Update as Stream_Update;
-use Coyote\Stream\Objects\Topic as Stream_Topic;
-use Coyote\Stream\Objects\Post as Stream_Post;
-use Coyote\Stream\Objects\Forum as Stream_Forum;
-use Coyote\Stream\Actor as Stream_Actor;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\Stream\Objects\Post as Stream_Post;
+use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
+use Coyote\Services\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
 use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -27,6 +29,8 @@ use Illuminate\Contracts\Auth\Access\Gate;
 
 class TopicController extends BaseController
 {
+    use StreamFactory, GateFactory;
+
     /**
      * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
@@ -438,21 +442,5 @@ class TopicController extends BaseController
     protected function findByObject($object, $id, $verb)
     {
         return $this->getStreamFactory()->findByObject($object, $id, $verb);
-    }
-
-    /**
-     * @return \Coyote\Stream\Stream
-     */
-    protected function getStreamFactory()
-    {
-        return app('Stream');
-    }
-
-    /**
-     * @return Gate
-     */
-    protected function getGateFactory()
-    {
-        return app(Gate::class);
     }
 }

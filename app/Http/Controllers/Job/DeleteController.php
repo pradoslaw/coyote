@@ -5,8 +5,8 @@ namespace Coyote\Http\Controllers\Job;
 use Coyote\Events\JobWasDeleted;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Job;
-use Coyote\Stream\Objects\Job as Stream_Job;
-use Coyote\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Objects\Job as Stream_Job;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 
 class DeleteController extends Controller
 {

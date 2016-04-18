@@ -5,9 +5,9 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\LogRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
-use Coyote\Stream\Objects\Topic as Stream_Topic;
-use Coyote\Stream\Objects\Post as Stream_Post;
-use Coyote\Stream\Activities\Rollback as Stream_Rollback;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\Stream\Objects\Post as Stream_Post;
+use Coyote\Services\Stream\Activities\Rollback as Stream_Rollback;
 use Coyote\Post\Log;
 
 class LogController extends BaseController

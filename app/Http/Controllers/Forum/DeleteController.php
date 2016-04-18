@@ -6,14 +6,15 @@ use Coyote\Forum\Reason;
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface;
-use Coyote\Stream\Activities\Delete as Stream_Delete;
-use Coyote\Stream\Activities\Restore as Stream_Restore;
-use Coyote\Stream\Objects\Topic as Stream_Topic;
-use Coyote\Stream\Objects\Post as Stream_Post;
-use Coyote\Stream\Objects\Forum as Stream_Forum;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Activities\Restore as Stream_Restore;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\Stream\Objects\Post as Stream_Post;
+use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Illuminate\Http\Request;
+// @todo uzyc factory
 use Gate;
 
 class DeleteController extends BaseController

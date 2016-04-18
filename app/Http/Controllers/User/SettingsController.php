@@ -2,8 +2,8 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Stream\Activities\Update;
-use Coyote\Stream\Objects\Person;
+use Coyote\Services\Stream\Activities\Update;
+use Coyote\Services\Stream\Objects\Person;
 use Coyote\User;
 use Coyote\Actkey;
 use Coyote\Group;

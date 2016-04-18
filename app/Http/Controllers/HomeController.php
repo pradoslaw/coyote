@@ -6,8 +6,8 @@ use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
-use Coyote\Stream\Stream;
-use Cache;
+use Coyote\Services\Stream\Stream;
+use Cache; // @todo zmienic z facade na factory
 
 class HomeController extends Controller
 {

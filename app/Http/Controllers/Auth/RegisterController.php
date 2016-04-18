@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-use Coyote\Stream\Activities\Create as Stream_Create;
-use Coyote\Stream\Objects\Person as Stream_Person;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Objects\Person as Stream_Person;
 
 class RegisterController extends Controller
 {

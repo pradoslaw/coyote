@@ -48,7 +48,7 @@ function excerpt($value, $limit = 84)
  * @param null $activity
  * @param null $object
  * @param null $target
- * @return \Coyote\Stream\Stream
+ * @return \Coyote\Services\Stream\Stream
  */
 function stream($activity = null, $object = null, $target = null)
 {
@@ -56,9 +56,9 @@ function stream($activity = null, $object = null, $target = null)
 
     if ($activity) {
         if (is_string($activity)) {
-            $actor = new Coyote\Stream\Actor(auth()->user());
+            $actor = new Coyote\Services\Stream\Actor(auth()->user());
 
-            $class = 'Coyote\\Stream\\Activities\\' . ucfirst(camel_case(class_basename($activity)));
+            $class = 'Coyote\\Services\\Stream\\Activities\\' . ucfirst(camel_case(class_basename($activity)));
             $stream->add(new $class($actor, $object, $target));
         } else {
             $stream->add($activity);

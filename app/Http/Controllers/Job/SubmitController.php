@@ -15,9 +15,10 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Http\Request;
 use Coyote\Parser\Reference\City;
-use Coyote\Stream\Objects\Job as Stream_Job;
-use Coyote\Stream\Activities\Create as Stream_Create;
-use Coyote\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Objects\Job as Stream_Job;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\GeoIp\Normalizers\Locale;
 
 class SubmitController extends Controller
 {
@@ -396,7 +397,7 @@ class SubmitController extends Controller
 
         try {
             // @todo Ten mechanizm trzeba bedzie zmienic w przypadku angielskiej wersji serwisu
-            $normalizer = new \Coyote\GeoIp\Normalizers\Locale(config('app.locale'));
+            $normalizer = new Locale(config('app.locale'));
 
             // we just want a first hit of a results with local name of the city
             // so Warsaw will become Warszawa

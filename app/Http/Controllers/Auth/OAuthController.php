@@ -7,9 +7,9 @@ use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Http\Factories\ThumbnailFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Services\Thumbnail\Objects\Photo;
-use Coyote\Stream\Activities\Login as Stream_Login;
-use Coyote\Stream\Activities\Create as Stream_Create;
-use Coyote\Stream\Objects\Person as Stream_Person;
+use Coyote\Services\Stream\Activities\Login as Stream_Login;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Objects\Person as Stream_Person;
 use Illuminate\Http\Response;
 
 class OAuthController extends Controller

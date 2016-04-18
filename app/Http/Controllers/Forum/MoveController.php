@@ -2,9 +2,9 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Stream\Objects\Topic as Stream_Topic;
-use Coyote\Stream\Activities\Move as Stream_Move;
-use Coyote\Stream\Objects\Forum as Stream_Forum;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\Stream\Activities\Move as Stream_Move;
+use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Forum\Reason;
 use Illuminate\Http\Request;

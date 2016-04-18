@@ -2,9 +2,9 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Stream\Activities\Vote as Stream_Vote;
-use Coyote\Stream\Objects\Topic as Stream_Topic;
-use Coyote\Stream\Objects\Post as Stream_Post;
+use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\Stream\Objects\Post as Stream_Post;
 
 class VoteController extends BaseController
 {

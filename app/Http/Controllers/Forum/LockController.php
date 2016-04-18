@@ -2,9 +2,9 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Stream\Activities\Lock as Stream_Lock;
-use Coyote\Stream\Activities\Unlock as Stream_Unlock;
-use Coyote\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\Stream\Activities\Lock as Stream_Lock;
+use Coyote\Services\Stream\Activities\Unlock as Stream_Unlock;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 
 class LockController extends BaseController
 {

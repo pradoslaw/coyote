@@ -9,13 +9,14 @@ use Coyote\Repositories\Contracts\Post\CommentRepositoryInterface as Comment;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Stream\Activities\Create as Stream_Create;
-use Coyote\Stream\Activities\Update as Stream_Update;
-use Coyote\Stream\Activities\Delete as Stream_Delete;
-use Coyote\Stream\Objects\Comment as Stream_Comment;
-use Coyote\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Http\Request;
 use Coyote\Parser\Reference\Login as Ref_Login;
+// @uzyc factory
 use Gate;
 
 class CommentController extends Controller
