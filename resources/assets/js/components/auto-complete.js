@@ -57,7 +57,7 @@
         };
 
         var change = function (value) {
-            value = $.trim(value).toString().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&#34;").toLowerCase().replace(/ /g, '-');
+            value = $.trim(value).toString();
 
             $('li', dropdown).removeClass('hover').show();
             $this.val(value);
