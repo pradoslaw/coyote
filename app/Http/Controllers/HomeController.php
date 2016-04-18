@@ -13,7 +13,7 @@ class HomeController extends Controller
 {
     public function index(Microblog $microblog, Reputation $reputation, Stream $stream, Topic $topic)
     {
-        $viewers = app()->make('viewers');
+        $viewers = app('session.viewers');
 
         start_measure('stream', 'Stream activities');
         // take last stream activity for forum

@@ -1,9 +1,8 @@
 <?php
 
-namespace Coyote\Session;
+namespace Coyote\Services\Session;
 
 use Illuminate\Session\DatabaseSessionHandler;
-use Illuminate\Support\Facades\DB;
 
 class Handler extends DatabaseSessionHandler
 {
@@ -25,7 +24,7 @@ class Handler extends DatabaseSessionHandler
 
         $data = [
             'payload'       => base64_encode($data),
-            'updated_at'    => DB::raw('NOW()'),
+            'updated_at'    => \DB::raw('NOW()'),
             'user_id'       => $userId,
             'url'           => $url,
             'ip'            => $ip,

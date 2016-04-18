@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Session;
+namespace Coyote\Services\Session;
 
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Illuminate\Http\Request;

@@ -3,8 +3,8 @@
 namespace Coyote\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Coyote\Session\Viewers;
-use Coyote\Session\Handler;
+use Coyote\Services\Session\Viewers;
+use Coyote\Services\Session\Handler;
 
 class SessionServiceProvider extends ServiceProvider
 {
@@ -33,7 +33,7 @@ class SessionServiceProvider extends ServiceProvider
             return new Handler($databaseConnection, $table);
         });
 
-        $this->app->bind('viewers', function ($app) {
+        $this->app->bind('session.viewers', function ($app) {
             return new Viewers(
                 $app['Coyote\Repositories\Eloquent\SessionRepository'],
                 $app['Illuminate\Http\Request']
