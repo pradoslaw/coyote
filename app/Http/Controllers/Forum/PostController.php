@@ -16,7 +16,6 @@ use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\User;
-use Gate; // @todo uzyc factory
 use Illuminate\Http\Request;
 
 class PostController extends BaseController

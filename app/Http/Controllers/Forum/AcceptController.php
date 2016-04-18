@@ -6,8 +6,6 @@ use Coyote\Services\Stream\Activities\Accept as Stream_Accept;
 use Coyote\Services\Stream\Activities\Reject as Stream_Reject;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
-// @todo uzyc factory zamiast facade
-use Gate;
 
 class AcceptController extends BaseController
 {
@@ -33,7 +31,7 @@ class AcceptController extends BaseController
             return response()->json(['error' => 'Forum jest zablokowane.'], 500);
         }
 
-        if (Gate::denies('update', $forum) && $topic->firstPost()->value('user_id') !== $this->userId) {
+        if ($this->getGateFactory()->denies('update', $forum) && $topic->firstPost()->value('user_id') !== $this->userId) {
             return response()->json(['error' => 'Możesz zaakceptować post tylko we własnym wątku.'], 500);
         }
 

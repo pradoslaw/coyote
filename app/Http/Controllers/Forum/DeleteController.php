@@ -14,8 +14,6 @@ use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Illuminate\Http\Request;
-// @todo uzyc factory
-use Gate;
 
 class DeleteController extends BaseController
 {
@@ -48,7 +46,7 @@ class DeleteController extends BaseController
         $topic = $this->topic->withTrashed()->find($post->topic_id);
 
         // Step 4. Only moderators can delete this post if topic (or forum) was locked
-        if (Gate::denies('delete', $forum)) {
+        if ($this->getGateFactory()->denies('delete', $forum)) {
             if ($topic->is_locked || $forum->is_locked || $post->id < $topic->last_post_id || $post->deleted_at) {
                 abort(401, 'Unauthorized');
             }
