@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Thumbnail\Objects;
+namespace Coyote\Services\Thumbnail\Objects;
 
 /**
  * Class Logo
- * @package Coyote\Thumbnail\Objects
+ * @package Coyote\Services\Thumbnail\Objects
  */
 class Logo extends Object implements ObjectInterface
 {

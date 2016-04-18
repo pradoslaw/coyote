@@ -197,7 +197,9 @@ return [
         // Obsluga MongoDB w Laravel
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         // Pakiet do budowania menu
-        Lavary\Menu\ServiceProvider::class
+        Lavary\Menu\ServiceProvider::class,
+        // Serwis do tworzenia miniatur (logo, zdjecie)
+        Coyote\Providers\ThumbnailServiceProvider::class,
 
     ],
     /*

@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Thumbnail\Objects;
+namespace Coyote\Services\Thumbnail\Objects;
 
 interface ObjectInterface
 {

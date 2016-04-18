@@ -2,14 +2,16 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Http\Factories\FilesystemFactory;
+use Coyote\Http\Factories\ThumbnailFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Services\Thumbnail\Objects\Photo;
 use Coyote\Session;
 use Illuminate\Http\Request;
-use Coyote\Thumbnail;
 
 class HomeController extends BaseController
 {
-    use HomeTrait;
+    use HomeTrait, FilesystemFactory, ThumbnailFactory;
 
     /**
      * @param User $user
@@ -64,17 +66,15 @@ class HomeController extends BaseController
 
         if ($request->file('photo')->isValid()) {
             $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
-            $path = public_path('storage/photo/');
+            $path = public_path('storage/' . config('filesystems.photo'));
 
             $request->file('photo')->move($path, $fileName);
 
-            $thumbnail = new Thumbnail\Thumbnail(new Thumbnail\Objects\Photo());
-            $thumbnail->make($path . $fileName);
-
-            $user->update(['photo' => $fileName], auth()->user()->id);
+            $this->getThumbnailFactory()->setObject(new Photo())->make($path . $fileName);
+            $user->update(['photo' => $fileName], $this->userId);
 
             return response()->json([
-                'url' => url('storage/photo/' . $fileName)
+                'url' => asset('storage/' . config('filesystems.photo') . $fileName)
             ]);
         }
     }

@@ -32,6 +32,11 @@ return [
     | Directory for post's attachments
     */
     'microblog' => 'microblog/',
+
+    /*
+    | Directory for firm's logo
+    */
+    'logo' => 'logo/',
     
     /*
     |--------------------------------------------------------------------------

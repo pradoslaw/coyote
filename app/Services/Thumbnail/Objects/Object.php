@@ -1,12 +1,12 @@
 <?php
 
-namespace Coyote\Thumbnail\Objects;
+namespace Coyote\Services\Thumbnail\Objects;
 
 use Imagine\Image;
 
 /**
  * Class Object
- * @package Coyote\Thumbnail\Objects
+ * @package Coyote\Services\Thumbnail\Objects
  */
 abstract class Object implements ObjectInterface
 {

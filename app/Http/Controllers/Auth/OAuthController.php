@@ -3,15 +3,19 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Factories\FilesystemFactory;
+use Coyote\Http\Factories\ThumbnailFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Services\Thumbnail\Objects\Photo;
 use Coyote\Stream\Activities\Login as Stream_Login;
 use Coyote\Stream\Activities\Create as Stream_Create;
 use Coyote\Stream\Objects\Person as Stream_Person;
 use Illuminate\Http\Response;
-use Coyote\Thumbnail;
 
 class OAuthController extends Controller
 {
+    use FilesystemFactory, ThumbnailFactory;
+    
     /**
      * @var User
      */
@@ -86,8 +90,7 @@ class OAuthController extends Controller
                 $fs = $this->getFilesystemFactory();
                 $fs->put($path, file_get_contents($photoUrl));
 
-                $thumbnail = new Thumbnail\Thumbnail(new Thumbnail\Objects\Photo());
-                $thumbnail->make(public_path('storage/' . $path));
+                $this->getThumbnailFactory()->setObject(new Photo())->make(public_path('storage/' . $path));
             }
 
             $user = $this->user->create([
@@ -108,14 +111,6 @@ class OAuthController extends Controller
 
         auth()->login($user, true);
         return redirect()->intended(route('home'));
-    }
-
-    /**
-     * @return \Illuminate\Contracts\Filesystem\Filesystem;
-     */
-    private function getFilesystemFactory()
-    {
-        return app('filesystem.disk');
     }
 
     /**

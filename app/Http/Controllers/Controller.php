@@ -8,11 +8,10 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
-use Illuminate\Contracts\Auth\Access\Gate;
 
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests, Coyote\Http\Factories\GateFactory;
 
     /**
      * @var Coyote\Breadcrumb
@@ -139,13 +138,5 @@ abstract class Controller extends BaseController
     protected function getSetting($name, $default = null)
     {
         return isset($this->getSettings()[$name]) ? $this->settings[$name] : $default;
-    }
-
-    /**
-     * @return Gate
-     */
-    protected function getGateFactory()
-    {
-        return app(Gate::class);
     }
 }
