@@ -66,9 +66,9 @@ class HomeController extends BaseController
 
         if ($request->file('photo')->isValid()) {
             $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
-            $path = public_path('storage/' . config('filesystems.photo'));
+            $path = config('filesystems.photo');
 
-            $request->file('photo')->move($path, $fileName);
+            $this->getFilesystemFactory()->put($path, file_get_contents($request->file('photo')->getRealPath()));
 
             $this->getThumbnailFactory()->setObject(new Photo())->make($path . $fileName);
             $user->update(['photo' => $fileName], $this->userId);
