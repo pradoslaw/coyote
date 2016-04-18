@@ -1,17 +1,16 @@
 <?php
 
-namespace Coyote\Alert;
+namespace Coyote\Services\Alert;
 
-use Coyote\Alert\Providers\ProviderInterface;
+use Coyote\Services\Alert\Providers\ProviderInterface;
 
 /**
  * Class Alert
- * @package Coyote\Alert
  */
 class Alert
 {
     /**
-     * @var ProviderInterface
+     * @var ProviderInterface[]
      */
     protected $alerts = [];
 

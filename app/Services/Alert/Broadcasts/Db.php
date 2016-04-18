@@ -1,14 +1,13 @@
 <?php
 
-namespace Coyote\Alert\Broadcasts;
+namespace Coyote\Services\Alert\Broadcasts;
 
-use Coyote\Alert\Providers\ProviderInterface;
+use Coyote\Services\Alert\Providers\ProviderInterface;
 use Coyote\Events\AlertWasBroadcasted;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 
 /**
  * Class Db
- * @package Coyote\Alert\Broadcasts
  */
 class Db extends Broadcast
 {

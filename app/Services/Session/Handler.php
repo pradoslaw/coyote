@@ -45,6 +45,6 @@ class Handler extends DatabaseSessionHandler
      */
     public function gc($lifetime)
     {
-        $this->getQuery()->where('updated_at', '<=', DB::raw("NOW() - INTERVAL '$lifetime seconds'"))->delete();
+        $this->getQuery()->where('updated_at', '<=', \DB::raw("NOW() - INTERVAL '$lifetime seconds'"))->delete();
     }
 }

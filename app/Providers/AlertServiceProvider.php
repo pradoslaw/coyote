@@ -3,7 +3,6 @@
 namespace Coyote\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Coyote\Alert\Providers\Post\Login as Alert_Post_Login;
 
 class AlertServiceProvider extends ServiceProvider
 {
@@ -35,7 +34,7 @@ class AlertServiceProvider extends ServiceProvider
             $segments = explode('\\', $provider);
             array_shift($segments);
 
-            $class = '\\Coyote\\Alert\\Providers\\' . implode('\\', $segments);
+            $class = '\\Coyote\\Services\\Alert\\Providers\\' . implode('\\', $segments);
 
             $this->app->bind($provider, function ($app) use ($class) {
                 return new $class(

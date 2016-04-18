@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Alert\Alert;
+use Coyote\Services\Alert\Alert;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\CommentRepositoryInterface as Comment;

@@ -1,10 +1,9 @@
 <?php
 
-namespace Coyote\Alert\Broadcasts;
+namespace Coyote\Services\Alert\Broadcasts;
 
 /**
  * Class Broadcast
- * @package Coyote\Alert\Broadcasts
  */
 abstract class Broadcast
 {

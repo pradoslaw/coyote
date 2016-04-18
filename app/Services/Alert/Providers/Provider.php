@@ -1,14 +1,13 @@
 <?php
 
-namespace Coyote\Alert\Providers;
+namespace Coyote\Services\Alert\Providers;
 
-use Coyote\Alert\Broadcasts\Db as Broadcast_Db;
-use Coyote\Alert\Broadcasts\Email as Broadcast_Email;
+use Coyote\Services\Alert\Broadcasts\Db as Broadcast_Db;
+use Coyote\Services\Alert\Broadcasts\Email as Broadcast_Email;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 
 /**
  * Class Provider
- * @package Coyote\Alert\Providers
  */
 abstract class Provider implements ProviderInterface
 {

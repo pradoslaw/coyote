@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Alert\Alert;
+use Coyote\Services\Alert\Alert;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Http\Requests\PostRequest;

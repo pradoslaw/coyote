@@ -1,13 +1,12 @@
 <?php
 
-namespace Coyote\Alert\Broadcasts;
+namespace Coyote\Services\Alert\Broadcasts;
 
-use Coyote\Alert\Providers\ProviderInterface;
+use Coyote\Services\Alert\Providers\ProviderInterface;
 use Illuminate\Support\Facades\Mail;
 
 /**
  * Class Email
- * @package Coyote\Alert\Broadcasts
  */
 class Email extends Broadcast
 {

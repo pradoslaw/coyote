@@ -6,7 +6,7 @@ use Coyote\Events\PmWasSent;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Alert\Providers\Pm as Alert_Pm;
+use Coyote\Services\Alert\Providers\Pm as Alert_Pm;
 use Illuminate\Http\Request;
 use Guzzle\Http\Mimetypes;
 use Carbon;

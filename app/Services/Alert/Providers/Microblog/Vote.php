@@ -1,15 +1,15 @@
 <?php
 
-namespace Coyote\Alert\Providers\Microblog;
+namespace Coyote\Services\Alert\Providers\Microblog;
 
 use Coyote\Alert;
-use Coyote\Alert\Providers\Provider;
+use Coyote\Services\Alert\Providers\Provider;
+use Coyote\Services\Alert\Providers\ProviderInterface;
 
 /**
  * Class Vote
- * @package Coyote\Alert\Providers\Microblog
  */
-class Vote extends Provider implements Alert\Providers\ProviderInterface
+class Vote extends Provider implements ProviderInterface
 {
     const ID = Alert::MICROBLOG_VOTE;
     const EMAIL = 'emails.alerts.microblog.vote';

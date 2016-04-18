@@ -1,10 +1,9 @@
 <?php
 
-namespace Coyote\Alert\Providers;
+namespace Coyote\Services\Alert\Providers;
 
 /**
  * Interface ProviderInterface
- * @package Coyote\Alert\Providers
  */
 interface ProviderInterface
 {

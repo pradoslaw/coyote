@@ -1,17 +1,17 @@
 <?php
 
-namespace Coyote\Alert\Providers\Microblog;
+namespace Coyote\Services\Alert\Providers\Microblog;
 
 use Coyote\Alert;
-use Coyote\Alert\Providers\Provider;
+use Coyote\Services\Alert\Providers\Provider;
+use Coyote\Services\Alert\Providers\ProviderInterface;
 
 /**
- * Class Watch
- * @package Coyote\Alert\Providers\Microblog
+ * Class Subscriber
  */
-class Login extends Provider implements Alert\Providers\ProviderInterface
+class Subscriber extends Provider implements ProviderInterface
 {
-    const ID = Alert::MICROBLOG_LOGIN;
+    const ID = Alert::MICROBLOG_SUBSCRIBER;
     const EMAIL = null;
 
     /**

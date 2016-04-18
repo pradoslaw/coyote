@@ -1,11 +1,12 @@
 <?php
 
-namespace Coyote\Alert\Providers\Post;
+namespace Coyote\Services\Alert\Providers\Post;
 
 use Coyote\Alert;
-use Coyote\Alert\Providers\Provider;
+use Coyote\Services\Alert\Providers\Provider;
+use Coyote\Services\Alert\Providers\ProviderInterface;
 
-abstract class Base extends Provider implements Alert\Providers\ProviderInterface
+abstract class Base extends Provider implements ProviderInterface
 {
     /**
      * @var int

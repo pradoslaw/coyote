@@ -7,7 +7,7 @@ use Coyote\Parser\Reference\Login as Ref_Login;
 use Coyote\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Alert\Alert as Alerts;
+use Coyote\Services\Alert\Alert as Alerts;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
