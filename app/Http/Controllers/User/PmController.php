@@ -159,11 +159,11 @@ class PmController extends BaseController
             'root_id'            => 'sometimes|exists:pm'
         ]);
 
-        $validator->after(function ($validator) use ($request) {
-            if (mb_strtolower($request->get('recipient')) === mb_strtolower(auth()->user()->name)) {
-                $validator->errors()->add('recipient', trans('validation.custom.recipient.different'));
-            }
-        });
+//        $validator->after(function ($validator) use ($request) {
+//            if (mb_strtolower($request->get('recipient')) === mb_strtolower(auth()->user()->name)) {
+//                $validator->errors()->add('recipient', trans('validation.custom.recipient.different'));
+//            }
+//        });
 
         $this->validateWith($validator);
 
