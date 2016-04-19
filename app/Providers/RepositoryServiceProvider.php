@@ -30,6 +30,7 @@ class RepositoryServiceProvider extends ServiceProvider
         'Job',
         'Firm',
         'Block',
+        'Poll',
 
         'Post' => [
             'Attachment',

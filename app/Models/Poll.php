@@ -22,4 +22,12 @@ class Poll extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function items()
+    {
+        return $this->hasMany('Coyote\Poll\Item');
+    }
 }
