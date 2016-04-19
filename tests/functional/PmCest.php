@@ -3,7 +3,7 @@
 use Coyote\User;
 use Faker\Factory;
 
-class PpmCest
+class PmCest
 {
     private $user;
     private $recipient;
