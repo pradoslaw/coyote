@@ -134,6 +134,7 @@ class PostController extends BaseController
      * @param \Coyote\Topic $topic
      * @param \Coyote\Post|null $post
      * @return \Illuminate\Http\RedirectResponse
+     * @todo Refaktoryzacja procesu publikowania/edycji posta
      */
     public function save(PostRequest $request, $forum, $topic, $post = null)
     {
