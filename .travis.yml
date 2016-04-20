@@ -36,3 +36,6 @@ before_script:
   - php artisan es:mapping --force
 
 script: php vendor/bin/codecept run
+
+after_script:
+  - cat $TRAVIS_BUILD_DIR/storage/logs/*.log
