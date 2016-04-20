@@ -6,6 +6,7 @@ services:
   - postgresql
   - mongodb
   - elasticsearch
+  - redis-server
 
 addons:
   postgresql: "9.3"
