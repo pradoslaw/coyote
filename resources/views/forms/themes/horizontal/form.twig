@@ -1,0 +1,5 @@
+{{ form_open(form.attr|merge({class: (form.attr.class|default('') ~ ' form-horizontal')|trim})) }}
+    {% for field in fields %}
+        {{ form_row(field) }}
+    {% endfor %}
+{{ form_close() }}

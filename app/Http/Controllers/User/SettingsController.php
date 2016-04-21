@@ -2,17 +2,15 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Http\Factories\MailFactory;
+use Coyote\Http\Forms\User as Forms;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
-use Coyote\User;
 use Coyote\Actkey;
-use Coyote\Group;
-use Coyote\Http\Requests\UserSettingsRequest;
-use Illuminate\Support\Facades\Mail;
 
 class SettingsController extends BaseController
 {
-    use SettingsTrait;
+    use SettingsTrait, MailFactory;
 
     /**
      * @return \Illuminate\Http\Response
@@ -21,36 +19,38 @@ class SettingsController extends BaseController
     {
         $this->breadcrumb->push('Ustawienia', route('user.settings'));
 
-        $groupList = [null => '-- wybierz --'] + Group\User::groupList(auth()->user()->id)->toArray();
-
-        $email = Actkey::where('user_id', auth()->user()->id)->value('email');
+        $email = auth()->user()->actkey()->value('email');
+        $form = $this->createForm(Forms\SettingsForm::class, null, [
+            'url' => route('user.settings')
+        ]);
 
         return $this->view('user.settings', [
-            'formatList'        => User::dateFormatList(),
-            'yearList'          => User::birthYearList(),
-            'groupList'         => $groupList,
-            'email'             => $email
+            'email'             => $email,
+            'form'              => $form
         ]);
     }
 
     /**
-     * @param UserSettingsRequest $request
+     * @param Forms\SettingsForm $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(UserSettingsRequest $request)
+    public function save(Forms\SettingsForm $request)
     {
         \DB::transaction(function () use ($request) {
+            /**
+             * @var \Coyote\User $user
+             */
             $user = auth()->user();
 
             if ($user->email !== $request->get('email')) {
                 $email = $request->get('email');
 
                 // kasujemy poprzednie rekordu zwiazane z tym userem
-                Actkey::where('user_id', $user->id)->delete();
+                $user->actkey()->delete();
                 // przed zmiana e-maila trzeba wyslac link potwierdzajacy
                 $url = Actkey::createLink($user->id, $email);
 
-                Mail::queue('emails.email', ['url' => $url], function ($message) use ($email) {
+                $this->getMailFactory()->queue('emails.email', ['url' => $url], function ($message) use ($email) {
                     $message->to($email);
                     $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
                 });
@@ -59,6 +59,7 @@ class SettingsController extends BaseController
                     $request['email'] = $user->email;
                 }
             }
+
             $user->fill($request->all())->save();
             stream(Update::class, new Person());
         });

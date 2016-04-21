@@ -1,0 +1,16 @@
+{% extends 'forms.themes.inline.row' %}
+
+{% block label %}{% endblock %}
+{% block wrap %}
+    <div class="checkbox">
+        {% if not ('[]' in name) %}
+            {{ form_hidden(name, 0) }}
+        {% endif %}
+
+        {% include 'forms.themes.inline.checkbox_widget' %}
+
+        <label for="{{ attr.id }}">
+            {{ label }}
+        </label>
+    </div>
+{% endblock %}

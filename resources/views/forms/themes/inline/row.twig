@@ -1,0 +1,13 @@
+{% import 'components.forms' as forms %}
+
+<div {{ forms.attr(row_attr|merge({class: (row_attr.class|default('') ~ ' form-group ' ~ (error ? ' has-error'))|trim})) }}>
+    {% block label %}{% include 'forms.themes.inline.label' %}{% endblock %}
+
+    {% block wrap %}
+        {% block widget %}{{ include('forms.themes.inline.' ~ type ~ '_widget') }}{% endblock widget %}
+
+        {% block error %}
+            {% include 'forms.themes.inline.error' %}
+        {% endblock %}
+    {% endblock %}
+</div>

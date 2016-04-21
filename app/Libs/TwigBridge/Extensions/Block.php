@@ -2,11 +2,9 @@
 
 namespace TwigBridge\Extensions;
 
-use Carbon\Carbon;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Twig_Extension;
 use Twig_SimpleFunction;
-use Twig_SimpleFilter;
 
 class Block extends Twig_Extension
 {

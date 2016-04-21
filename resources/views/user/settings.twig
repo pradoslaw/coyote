@@ -5,24 +5,23 @@
 
 {% block wrapper %}
     {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.settings'), 'class': 'form-horizontal'}) }}
-
         <section class="panel panel-wrapper">
             <div class="panel-body">
                 <h2>Podstawowa konfiguracja</h2>
 
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        {{ forms.text('email', 'E-mail', user_input('email'), {'id': 'email'}, 'Jeżeli chcesz zmienić adres e-mail, na nową skrzynkę zostanie wygenerowany klucz aktywacyjny') }}
+                        {{ form_row(form.email) }}
 
-                        {% if groupList|length > 1 %}
-                            {{ forms.select('group_id', 'Domyślna grupa', groupList, user_input('group_id'), {}, 'Nazwa grupy będzie wyświetlana pod avatarem, np. na forum') }}
+                        {% if form.group_id is not null %}
+                            {{ form_row(form.group_id) }}
                         {% endif %}
 
-                        {{ forms.select('date_format', 'Format daty', formatList, user_input('date_format')) }}
-                        {{ forms.text('website', 'Strona domowa', user_input('website'), {}, 'Strona domowa, portfolio itp.') }}
-                        {{ forms.checkbox('allow_smilies', 'Pokazuj emotikony', 1, user_input('allow_smilies')) }}
-                        {{ forms.checkbox('allow_subscribe', 'Automatycznie obserwuj wątki oraz wpisy na mikroblogu, w których biorę udział', 1, user_input('allow_subscribe')) }}
-                        {{ forms.submit('Zapisz', 'Zapisywanie...') }}
+                        {{ form_row(form.date_format) }}
+                        {{ form_row(form.website) }}
+                        {{ form_row(form.allow_smilies) }}
+                        {{ form_row(form.allow_subscribe) }}
+                        {{ form_row(form.submit) }}
                     </div>
                 </div>
 
@@ -30,13 +29,12 @@
 
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        {{ forms.text('firm', 'Nazwa firmy', user_input('firm')) }}
-                        {{ forms.element(form_text('position', user_input('position'), {'class': 'form-control', 'placeholder': 'Np. Junior Java Developer'}), 'Stanowisko', errors.first('position')) }}
-
-                        {{ forms.textarea('bio', 'O sobie', user_input('bio'), 3, {}, 'W tym polu możesz zamieścić krótką informację o sobie, czym się zajmujesz, co cię interesuje. Ta informacja zostanie wyświetlona na Twoim profilu') }}
-                        {{ forms.select('birthyear', 'Rok urodzenia', yearList, user_input('birthyear'), {}, 'Na podstawie roku urodzenia, w Twoim profilu będzie widoczny Twój wiek') }}
-                        {{ forms.text('location', 'Miejsce zamieszkania', user_input('location')) }}
-                        {{ forms.submit('Zapisz', 'Zapisywanie...') }}
+                        {{ form_row(form.firm) }}
+                        {{ form_row(form.position) }}
+                        {{ form_row(form.bio) }}
+                        {{ form_row(form.birthyear) }}
+                        {{ form_row(form.location) }}
+                        {{ form_row(form.submit) }}
                     </div>
                 </div>
 
@@ -44,10 +42,10 @@
 
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        {{ forms.checkbox('allow_count', 'Pokazuj licznik postów', 1, user_input('allow_count')) }}
-                        {{ forms.checkbox('allow_sig', 'Wyświetlaj sygnaturki użytkowników', 1, user_input('allow_sig')) }}
-                        {{ forms.textarea('sig', 'Sygnatura', user_input('sig'), 3, {}, 'Podpis będzie widoczny przy każdym Twoim poście. Uwaga! Użytkownicy posiadający mniej niż 50 punktów reputacji nie mogą umieszczać linków w tym polu') }}
-                        {{ forms.submit('Zapisz', 'Zapisywanie...') }}
+                        {{ form_row(form.allow_count) }}
+                        {{ form_row(form.allow_sig) }}
+                        {{ form_row(form.sig) }}
+                        {{ form_row(form.submit) }}
                     </div>
                 </div>
             </div>

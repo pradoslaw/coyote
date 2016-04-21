@@ -106,6 +106,7 @@ return [
             'TwigBridge\Extensions\Misc',
             'TwigBridge\Extensions\Elasticsearch',
             'TwigBridge\Extensions\Block',
+            'TwigBridge\Extensions\FormBuilder',
 //             'TwigBridge\Extension\Laravel\Legacy\Facades',
         ],
         /*

@@ -1,0 +1,7 @@
+{% extends 'forms.themes.inline.row' %}
+{% import 'components.forms' as forms %}
+
+{% block wrap %}
+    {{ form_file(name, {'style': 'visibility: hidden; height: 1px'}) }}
+    {{ form_text(name ~ '_placeholder', value, {'class': 'form-control', 'readonly': 'readonly'}|merge(attr)) }}
+{% endblock %}

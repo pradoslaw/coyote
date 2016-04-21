@@ -139,4 +139,15 @@ abstract class Controller extends BaseController
     {
         return isset($this->getSettings()[$name]) ? $this->settings[$name] : $default;
     }
+
+    /**
+     * @param $formClass
+     * @param mixed $data
+     * @param array $options
+     * @return \Coyote\Services\FormBuilder\Form
+     */
+    protected function createForm($formClass, $data = null, array $options = [])
+    {
+        return (new Coyote\Services\FormBuilder\FormBuilder())->createForm($formClass, $data, $options);
+    }
 }

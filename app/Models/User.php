@@ -120,6 +120,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function actkey()
+    {
+        return $this->hasMany('Coyote\Actkey');
+    }
+
+    /**
      * Cache permissions for this user
      *
      * @return mixed

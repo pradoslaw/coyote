@@ -1,0 +1,5 @@
+{{ form_open(form.attr) }}
+    {% for field in fields %}
+        {{ form_row(field) }}
+    {% endfor %}
+{{ form_close() }}
