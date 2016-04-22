@@ -5,16 +5,10 @@ namespace Coyote\Http\Forms\User;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Group;
 use Coyote\User;
+use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 
 class SettingsForm extends Form
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->setData(auth()->user());
-    }
-
     public function buildForm()
     {
         // id uzytkownika, ktorego ustawienia wlasnie edytujemy

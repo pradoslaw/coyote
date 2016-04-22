@@ -1,4 +1,4 @@
-{{ form_open(form.attr|merge({class: (form.attr.class|default('') ~ ' form-horizontal')|trim})) }}
+{% include 'forms.themes.horizontal.form_widget' %}
     {% for field in fields %}
         {{ form_row(field) }}
     {% endfor %}

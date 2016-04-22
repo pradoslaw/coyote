@@ -20,9 +20,7 @@ class SettingsController extends BaseController
         $this->breadcrumb->push('Ustawienia', route('user.settings'));
 
         $email = auth()->user()->actkey()->value('email');
-        $form = $this->createForm(Forms\SettingsForm::class, null, [
-            'url' => route('user.settings')
-        ]);
+        $form = $this->getForm();
 
         return $this->view('user.settings', [
             'email'             => $email,
@@ -31,11 +29,25 @@ class SettingsController extends BaseController
     }
 
     /**
-     * @param Forms\SettingsForm $request
+     * @return \Coyote\Services\FormBuilder\Form
+     */
+    protected function getForm()
+    {
+        return $this->createForm(Forms\SettingsForm::class, auth()->user(), [
+            'url' => route('user.settings')
+        ]);
+    }
+
+    /**
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(Forms\SettingsForm $request)
+    public function save()
     {
+        $form = $this->getForm();
+        $form->validate();
+
+        $request = $form->getRequest();
+
         \DB::transaction(function () use ($request) {
             /**
              * @var \Coyote\User $user

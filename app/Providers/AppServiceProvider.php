@@ -1,7 +1,10 @@
 <?php namespace Coyote\Providers;
 
+use Coyote\Services\FormBuilder\FormBuilder;
+use Coyote\Services\FormBuilder\FormInterface;
 use Illuminate\Support\ServiceProvider;
-use Validator;
+use Illuminate\Routing\Events\RouteMatched;
+use Illuminate\Routing\Redirector;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,21 +15,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Validator::extend('username', 'Coyote\UserValidator@validateName');
-        Validator::extend('user_unique', 'Coyote\UserValidator@validateUnique');
-        Validator::extend('user_exist', 'Coyote\UserValidator@validateExist');
-        Validator::extend('password', 'Coyote\PasswordValidator@validatePassword');
-        Validator::extend('reputation', 'Coyote\ReputationValidator@validateReputation');
-        Validator::extend('tag', 'Coyote\TagValidator@validateTag');
-        Validator::extend('tag_creation', 'Coyote\TagCreationValidator@validateTag');
-        Validator::extend('throttle', 'Coyote\ThrottleValidator@validateThrottle');
-        Validator::extend('city', 'Coyote\CityValidator@validateCity');
+        $this->app['validator']->extend('username', 'Coyote\UserValidator@validateName');
+        $this->app['validator']->extend('user_unique', 'Coyote\UserValidator@validateUnique');
+        $this->app['validator']->extend('user_exist', 'Coyote\UserValidator@validateExist');
+        $this->app['validator']->extend('password', 'Coyote\PasswordValidator@validatePassword');
+        $this->app['validator']->extend('reputation', 'Coyote\ReputationValidator@validateReputation');
+        $this->app['validator']->extend('tag', 'Coyote\TagValidator@validateTag');
+        $this->app['validator']->extend('tag_creation', 'Coyote\TagCreationValidator@validateTag');
+        $this->app['validator']->extend('throttle', 'Coyote\ThrottleValidator@validateThrottle');
+        $this->app['validator']->extend('city', 'Coyote\CityValidator@validateCity');
 
-        Validator::replacer('reputation', function ($message, $attribute, $rule, $parameters) {
+        $this->app['validator']->replacer('reputation', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);
         });
 
-        Validator::replacer('tag_creation', function ($message, $attribute, $rule, $parameters) {
+        $this->app['validator']->replacer('tag_creation', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);
         });
 
@@ -53,6 +56,18 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind('Stream', function ($app) {
             return new $app['Coyote\\Services\\Stream\\Stream']($app['Coyote\\Repositories\\Contracts\\StreamRepositoryInterface']);
+        });
+
+        $this->app->singleton('form.builder', function ($app) {
+            return new FormBuilder($app);
+        });
+
+        $this->app['events']->listen(RouteMatched::class, function () {
+            $this->app->resolving(function (FormInterface $form, $app) {
+                $form->setContainer($app)
+                    ->setRedirector($app->make(Redirector::class))
+                    ->setRequest($app->make('request'));
+            });
         });
     }
 }

@@ -373,7 +373,7 @@ abstract class Field
     protected function getDataValue($name)
     {
         if ($this->parent->isSubmitted()) {
-            return $this->parent->get($name);
+            return $this->parent->getRequest()->get($name);
         } else {
             $data = $this->parent->getData();
 

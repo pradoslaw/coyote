@@ -2,8 +2,24 @@
 
 namespace Coyote\Services\FormBuilder;
 
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Routing\Redirector;
+
 class FormBuilder
 {
+    /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     * @param Container  $container
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * @param $formClass
      * @param mixed $data
@@ -18,7 +34,7 @@ class FormBuilder
             );
         }
 
-        $form = app()->make($formClass)->setData($data)->setOptions($options);
+        $form = $this->container->make($formClass)->setData($data)->setOptions($options);
         $form->buildForm();
 
         return $form;

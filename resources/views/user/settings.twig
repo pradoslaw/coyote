@@ -4,31 +4,29 @@
 {% import 'components/forms.twig' as forms %}
 
 {% block wrapper %}
-    {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.settings'), 'class': 'form-horizontal'}) }}
+    {{ form_start(form) }}
         <section class="panel panel-wrapper">
             <div class="panel-body">
                 <h2>Podstawowa konfiguracja</h2>
 
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                <ul class="nav nav-panel">
+                    <li role="presentation" class="active"><a href="#basic" data-toggle="tab" role="tab">Podstawowe informacje</a></li>
+                    <li role="presentation"><a href="#carieer" data-toggle="tab" role="tab">Kariera</a></li>
+                    <li role="presentation"><a href="#forum" data-toggle="tab" role="tab">Forum</a></li>
+                </ul>
+
+                <div class="panel panel-default tab-content">
+                    <div class="panel-body tab-pane active" role="tabpanel" id="basic">
                         {{ form_row(form.email) }}
-
-                        {% if form.group_id is not null %}
-                            {{ form_row(form.group_id) }}
-                        {% endif %}
-
+                        {{ form_row(form.group_id) }}
                         {{ form_row(form.date_format) }}
                         {{ form_row(form.website) }}
                         {{ form_row(form.allow_smilies) }}
                         {{ form_row(form.allow_subscribe) }}
                         {{ form_row(form.submit) }}
                     </div>
-                </div>
 
-                <h2>Kariera</h2>
-
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                    <div class="panel-body tab-pane" role="tabpanel" id="carieer">
                         {{ form_row(form.firm) }}
                         {{ form_row(form.position) }}
                         {{ form_row(form.bio) }}
@@ -36,12 +34,8 @@
                         {{ form_row(form.location) }}
                         {{ form_row(form.submit) }}
                     </div>
-                </div>
 
-                <h2>Forum</h2>
-
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                    <div class="panel-body tab-pane" role="tabpanel" id="forum">
                         {{ form_row(form.allow_count) }}
                         {{ form_row(form.allow_sig) }}
                         {{ form_row(form.sig) }}
@@ -55,6 +49,8 @@
 
 {% block body %}
     {{ parent() }}
+
+    <script src="{{ cdn('js/tab.js') }}"></script>
 
     {% if email %}
         <div class="alert alert-warning alert-popover bottom" data-id="change-email" data-containment="input[name=email]">

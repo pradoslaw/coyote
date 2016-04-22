@@ -148,6 +148,6 @@ abstract class Controller extends BaseController
      */
     protected function createForm($formClass, $data = null, array $options = [])
     {
-        return (new Coyote\Services\FormBuilder\FormBuilder())->createForm($formClass, $data, $options);
+        return app('form.builder')->createForm($formClass, $data, $options);
     }
 }

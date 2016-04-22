@@ -40,7 +40,7 @@ class FormBuilder extends Twig_Extension
 
     public function formStart(Form $form)
     {
-        return app('form')->open($form->attr);
+        return $form->renderForm();
     }
 
     public function formEnd()
@@ -48,9 +48,17 @@ class FormBuilder extends Twig_Extension
         return app('form')->close();
     }
 
-    public function formRow(Field $field)
+    /**
+     * @param Field $field
+     * @return mixed|null
+     */
+    public function formRow($field)
     {
-        return $field->render();
+        if ($field instanceof Field) {
+            return $field->render();
+        }
+
+        return null;
     }
 
     // @todo zastapic przez intefejs
