@@ -1,6 +1,6 @@
 {% extends 'forms.themes.horizontal.row' %}
-{% set form_group_offset = 'col-md-offset-4' %}
-{% set form_group_class = 'col-md-6' %}
+{% set form_group_offset = form_group_offset|default('col-md-offset-4') %}
+{% set form_group_class = form_group_class|default('col-md-6') %}
 
 {% block label %}{% endblock %}
 {% block wrap %}
@@ -10,7 +10,7 @@
         {% endif %}
 
         <div class="checkbox">
-            {% include 'forms.themes.horizontal.checkbox_widget' %}
+            {{ include(widget_path) }}
 
             <label for="{{ attr.id }}">
                 {{ label }}

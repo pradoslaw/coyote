@@ -7,7 +7,7 @@
             {{ form_hidden(name, 0) }}
         {% endif %}
 
-        {% include 'forms.themes.inline.checkbox_widget' %}
+        {{ include(widget_path) }}
 
         <label for="{{ attr.id }}">
             {{ label }}

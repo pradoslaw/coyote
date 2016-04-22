@@ -2,10 +2,10 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Services\Alert\Alert;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
-use Coyote\Http\Requests\PostRequest;
 use Coyote\Post\Log;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
@@ -34,6 +34,8 @@ class PostController extends BaseController
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
+        $form = $this->getForm($forum, $topic, $post);
+
         // list of post's attachments
         $attachments = collect();
 
@@ -44,25 +46,7 @@ class PostController extends BaseController
             $this->authorize('update', [$post, $forum]);
             $this->breadcrumb->push('Edycja', url($request->path()));
 
-            if ($post->id === $topic->first_post_id) {
-                // get topic tags only if this post is the FIRST post in topic
-                $tags = $topic->getTagNames();
-            }
-
-            $text = $post->text; // we're gonna pass this variable to the view
             $attachments = $attachments->merge($post->attachments()->get());
-        }
-
-        if (auth()->check()) {
-            $subscribe = $topic->subscribers()->forUser($this->userId)->exists();
-
-            // we're creating new post...
-            if ($post === null && $subscribe == false && auth()->user()->allow_subscribe) {
-                // if this is the first post in this topic, subscribe option depends on user's default setting
-                if ($topic->users()->forUser($this->userId)->exists()) {
-                    $subscribe = true;
-                }
-            }
         }
 
         // IDs of posts that user want to quote...
@@ -94,7 +78,7 @@ class PostController extends BaseController
             }
 
             unset($post); // <-- delete this variable. we don't want to pass it to twig
-            $text = $body;
+            $form->text->setValue($body);
         }
 
         if ($request->old('attachments')) {
@@ -102,7 +86,7 @@ class PostController extends BaseController
         }
 
         return $this->view('forum.submit')->with(
-            compact('forum', 'topic', 'post', 'text', 'title', 'tags', 'subscribe', 'attachments')
+            compact('forum', 'topic', 'post', 'title', 'tags', 'attachments', 'form')
         );
     }
 
@@ -116,28 +100,35 @@ class PostController extends BaseController
      */
     public function edit($forum, $topic, $post)
     {
+        $form = $this->getForm($forum, $topic, $post);
+
+        // @todo przeniesc do formularza
         if ($post->id === $topic->first_post_id) {
             // get topic tags only if this post is the FIRST post in topic
             $tags = $topic->getTagNames();
         }
-        $subscribe = $topic->subscribers()->forUser($this->userId)->count();
+
         $attachments = $post->attachments()->get();
 
-        return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'tags', 'subscribe', 'attachments'));
+        return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'tags', 'attachments', 'form'));
     }
 
     /**
      * Save post (edit or create)
      *
-     * @param PostRequest $request
      * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
      * @param \Coyote\Post|null $post
      * @return \Illuminate\Http\RedirectResponse
      * @todo Refaktoryzacja procesu publikowania/edycji posta
      */
-    public function save(PostRequest $request, $forum, $topic, $post = null)
+    public function save($forum, $topic, $post = null)
     {
+        $form = $this->getForm($forum, $topic, $post);
+        $form->validate();
+
+        $request = $form->getRequest();
+
         // parsing text and store it in cache
         $text = app()->make('Parser\Post')->parse($request->text);
 
@@ -307,5 +298,20 @@ class PostController extends BaseController
         } else {
             $post->subscribers()->create(['user_id' => $this->userId]);
         }
+    }
+
+    /**
+     * @param \Coyote\Forum $forum
+     * @param \Coyote\Topic $topic
+     * @param \Coyote\Post $post
+     * @return \Coyote\Http\Forms\Forum\PostForm
+     */
+    protected function getForm($forum, $topic = null, $post = null)
+    {
+        return $this->createForm(PostForm::class, [
+            'forum' => $forum,
+            'topic' => $topic,
+            'post' => $post
+        ]);
     }
 }

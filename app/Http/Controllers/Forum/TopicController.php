@@ -7,6 +7,7 @@ use Coyote\Events\PostWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Factories\StreamFactory;
+use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Http\Requests\SubjectRequest;
 use Coyote\Post\Log;
 use Coyote\Http\Controllers\Controller;
@@ -199,6 +200,17 @@ class TopicController extends BaseController
     }
 
     /**
+     * @param $forum
+     * @return \Coyote\Http\Forms\Forum\PostForm
+     */
+    protected function getForm($forum)
+    {
+        return $this->createForm(PostForm::class, [
+            'forum' => $forum
+        ]);
+    }
+
+    /**
      * @param Request $request
      * @param \Coyote\Forum $forum
      * @return \Illuminate\View\View
@@ -208,25 +220,26 @@ class TopicController extends BaseController
         $this->breadcrumb($forum);
         $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
 
+        $form = $this->getForm($forum);
+
         if ($request->old('attachments')) {
             $attachments = app(AttachmentRepositoryInterface::class)->findByFile(request()->old('attachments'));
         }
 
-        if (auth()->check()) {
-            // default subscribe setting
-            $subscribe = auth()->user()->allow_subscribe;
-        }
-
-        return Controller::view('forum.submit')->with(compact('forum', 'attachments', 'subscribe'));
+        return Controller::view('forum.submit')->with(compact('forum', 'attachments', 'subscribe', 'form'));
     }
 
     /**
      * @param \Coyote\Forum $forum
-     * @param PostRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($forum, PostRequest $request)
+    public function save($forum)
     {
+        $form = $this->getForm($forum);
+        $form->validate();
+
+        $request = $form->getRequest();
+
         $url = \DB::transaction(function () use ($request, $forum) {
             // create new topic
             $topic = $this->topic->create($request->all() + ['forum_id' => $forum->id]);

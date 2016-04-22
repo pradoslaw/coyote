@@ -3,7 +3,5 @@
 
 {% block label %}{% endblock %}
 {% block wrap %}
-    <button type="submit" style="margin-right: 15px;" {{ forms.attr(attr|merge({'class': 'btn btn-primary'})) }}>
-        {{ label }}
-    </button>
+    {{ include(widget_path) }}
 {% endblock %}

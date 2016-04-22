@@ -6,21 +6,15 @@
         {{ form_hidden('attachments[]', attachment.file) }}
     {% endfor %}
 
-    {% if post.id == topic.first_post_id %}
-        {{ form_hidden('subject', topic.subject) }}
+    {% for tag in tags %}
+        {{ form_hidden('tags[]', tag) }}
+    {% endfor %}
 
-        {% for tag in tags %}
-            {{ form_hidden('tags[]', tag) }}
-        {% endfor %}
-    {% endif %}
+    {{ form_widget(form.subject, {type: 'hidden'}) }}
+    {{ form_widget(form.subscribe, {type: 'hidden'}) }}
+    {{ form_widget(form.text, {attr: {rows: 3}}) }}
+    {{ form_widget(form.submit, {attr: {title: 'Kliknij, aby wysłać (Ctrl+Enter)', class: 'btn-xs pull-right'}}) }}
 
-    {% if subscribe %}
-        {{ form_hidden('subscribe', true) }}
-    {% endif %}
-
-    {{ form_textarea('text', post.text, {'class': 'form-control', 'rows': 5, 'data-prompt-url': route('forum.prompt', [topic.id])}) }}
-
-    <button type="submit" class="btn btn-xs btn-primary pull-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</button>
     <button class="btn btn-xs btn-danger pull-right btn-reset" style="margin-right: 10px">Anuluj</button>
 {{ form_close() }}
 {% endspaceless %}

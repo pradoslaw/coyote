@@ -50,30 +50,56 @@ class FormBuilder extends Twig_Extension
 
     /**
      * @param Field $field
+     * @param array $options
      * @return mixed|null
      */
-    public function formRow($field)
+    public function formRow($field, array $options = [])
     {
-        if ($field instanceof Field) {
-            return $field->render();
-        }
-
-        return null;
+        return $this->renderFormElement('renderRow', $field, $options);
     }
 
     // @todo zastapic przez intefejs
-    public function formLabel(Field $field)
+    public function formLabel($field, array $options = [])
     {
-        return $field->renderLabel();
+        return $this->renderFormElement('renderLabel', $field, $options);
     }
 
-    public function formWidget(Field $field)
+    /**
+     * @param Field $field
+     * @param array $options
+     * @return string
+     */
+    public function formWidget($field, array $options = [])
     {
-        return $field->renderWidget();
+        return $this->renderFormElement('renderWidget', $field, $options);
     }
 
-    public function formError(Field $field)
+    /**
+     * @param $field
+     * @param array $options
+     * @return null
+     */
+    public function formError($field, array $options = [])
     {
-        return $field->renderError();
+        return $this->renderFormElement('renderError', $field, $options);
+    }
+
+    /**
+     * @param $element
+     * @param $field
+     * @param array $options
+     * @return null
+     */
+    private function renderFormElement($element, $field, $options = [])
+    {
+        if ($field instanceof Field) {
+            if (!empty($options)) {
+                $field->mergeOptions($options);
+            }
+
+            return $field->$element();
+        }
+
+        return null;
     }
 }

@@ -4,6 +4,7 @@ namespace Coyote\Services\FormBuilder\Fields;
 
 use Coyote\Services\FormBuilder\Form;
 use Illuminate\View\View;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 abstract class Field
 {
@@ -96,13 +97,6 @@ abstract class Field
 
         $this->setDefaultOptions($options);
         $this->setupValue();
-    }
-
-    protected function setupValue()
-    {
-        if ($this->value === null) {
-            $this->setValue($this->getDataValue($this->name));
-        }
     }
 
     /**
@@ -309,6 +303,36 @@ abstract class Field
     }
 
     /**
+     * @param array $options
+     * @return $this
+     */
+    public function mergeOptions(array $options)
+    {
+        $reflection = new \ReflectionClass($this);
+
+        foreach ($options as $key => $values) {
+            $baseName = ucfirst(camel_case($key));
+            $setter = 'set' . $baseName;
+
+            if (method_exists($this, $setter)) {
+                $getter = 'get' . $baseName;
+
+                if ($reflection->hasMethod($getter)
+                    && $reflection->getMethod($getter)->getNumberOfParameters() === 0) {
+                    $currentValue = $this->$getter();
+
+                    if (is_array($currentValue)) {
+                        $values = array_merge_recursive($currentValue, $values);
+                    }
+                }
+                $this->$setter($values);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return array|null
      */
     public function getErrors()
@@ -359,23 +383,13 @@ abstract class Field
     }
 
     /**
-     * @param $view
-     * @param array $data
-     * @return View
-     */
-    public function view($view, $data = [])
-    {
-        return view($this->getTheme() . '.' . $view, $data);
-    }
-
-    /**
      * @return string
      * @throws \Exception
      * @throws \Throwable
      */
     public function renderLabel()
     {
-        return $this->view('label', $this->fieldData())->render();
+        return $this->view($this->getViewPath('label'), $this->viewData())->render();
     }
 
     /**
@@ -385,7 +399,7 @@ abstract class Field
      */
     public function renderWidget()
     {
-        return $this->view($this->getType() . '_widget', $this->fieldData())->render();
+        return $this->view($this->getWidgetPath(), $this->viewData())->render();
     }
 
     /**
@@ -395,7 +409,7 @@ abstract class Field
      */
     public function renderError()
     {
-        return $this->view('error', $this->fieldData())->render();
+        return $this->view($this->getViewPath('error'), $this->viewData())->render();
     }
 
     /**
@@ -405,7 +419,64 @@ abstract class Field
      */
     public function render()
     {
-        return $this->view($this->getTemplate(), $this->fieldData())->render();
+        return $this->view($this->getViewPath($this->getTemplate()), $this->viewData())->render();
+    }
+
+    /**
+     * Find widget in home  directory and theme directory
+     *
+     * @return string
+     */
+    protected function getWidgetPath()
+    {
+        $result = '';
+        $paths = [$this->getTheme(), 'forms.widgets']; // @todo domyslna sciezka dla widgetow przeniesc do konfiga!
+
+        foreach ($paths as $path) {
+            $path .= '.' . $this->getType() . '_widget';
+
+            if (view()->exists($path)) {
+                $result = $path;
+                break;
+            }
+        }
+
+        if (!$result) {
+            throw new FileNotFoundException(sprintf('Can\'t find widget %s_widget', $this->getType()));
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get full path to the view (with theme name)
+     *
+     * @param $view
+     * @return string
+     */
+    protected function getViewPath($view)
+    {
+        return $this->getTheme() . '.' . $view;
+    }
+
+    /**
+     * @param $view
+     * @param array $data
+     * @return View
+     */
+    protected function view($view, $data = [])
+    {
+        return view($view, $data);
+    }
+
+    /**
+     * Setup field value when initialized
+     */
+    protected function setupValue()
+    {
+        if ($this->value === null) {
+            $this->setValue($this->getDataValue($this->name));
+        }
     }
 
     /**
@@ -426,13 +497,13 @@ abstract class Field
             }
         }
 
-        return null;
+        return $this->getValue();
     }
 
     /**
      * @return array
      */
-    protected function fieldData()
+    protected function viewData()
     {
         $result = [];
 
