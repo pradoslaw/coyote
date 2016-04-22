@@ -49,6 +49,10 @@
                         <i class="fa fa-eye"></i>
                         {{ declination(job.visits, ['odsłony', 'odsłon', 'odsłony']) }}
                     </li>
+                    <li class="applications">
+                        <i class="fa fa-files-o"></i>
+                        {{ declination(job.applications.count(), ['aplikacji', 'aplikacja', 'aplikacji']) }}
+                    </li>
                 {% endif %}
 
                 <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
