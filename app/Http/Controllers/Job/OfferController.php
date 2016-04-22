@@ -37,11 +37,10 @@ class OfferController extends Controller
     }
 
     /**
-     * @param Request $request
      * @param int $id
      * @return \Illuminate\View\View
      */
-    public function index(Request $request, $id)
+    public function index($id)
     {
         // call method from repository to fetch job data and country name and currency
         $job = $this->job->findById($id);
