@@ -54,3 +54,12 @@ img[src*="logo-gray"] {
 // --------------------------------
 
 @import "job/offer";
+
+// Formularz wysylania aplikacji w odpowiedzi na oferty pracy
+// ---------------------------------
+
+#job-application {
+  input[readonly] {
+    background-color: transparent;
+  }
+}

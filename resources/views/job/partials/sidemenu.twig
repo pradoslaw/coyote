@@ -1,0 +1,38 @@
+{% import 'components.modals' as modals %}
+
+<ul class="side-menu">
+    <li>
+        <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}">
+            <i class="fa fa-fw fa-star-o"></i>
+            <i class="fa fa-fw fa-star"></i>
+
+            {{ not subscribed ? 'Dodaj do ulubionych' : 'Usuń z ulubionych' }}
+        </a>
+    </li>
+    {% if can('update', job) %}
+        <li>
+            <a class="btn-edit" href="{{ route('job.submit', [job.id]) }}">
+                <i class="fa fa-fw fa-edit"></i>
+                Edycja oferty
+            </a>
+        </li>
+    {% endif %}
+    <li>
+        <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fa fa-fw fa-pencil"></i> Dodaj ofertę pracy</a>
+    </li>
+    {% if can('delete', job) %}
+        <li>
+            <a class="btn-delete" href="#modal-delete" data-toggle="modal"><i class="fa fa-fw fa-remove"></i> Usuń tę ofertę pracy</a>
+        </li>
+    {% endif %}
+    <li>
+        <a class="btn-move" href="javascript:"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
+    </li>
+    <li>
+        <a class="btn-report" href="{{ route('flag') }}" data-url="{{ route('job.offer', [job.id, job.path]) }}" data-metadata="{{ {'job_id': job.id, 'permission': 'job-delete'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
+    </li>
+</ul>
+
+{{ form_open({'url': route('job.delete', [job.id]) }) }}
+    {{ modals.confirm('Czy chcesz usunąć tę ofertę pracy?', 'Usuwanie', 'modal-delete') }}
+{{ form_close() }}

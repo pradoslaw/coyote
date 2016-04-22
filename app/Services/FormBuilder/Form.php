@@ -253,6 +253,17 @@ abstract class Form implements FormInterface
     }
 
     /**
+     * @param $name
+     * @param $value
+     * @return $this
+     */
+    public function addAttr($name, $value)
+    {
+        $this->attr[$name] = $value;
+        return $this;
+    }
+
+    /**
      * @param array $attr
      * @return $this
      */
@@ -375,6 +386,14 @@ abstract class Form implements FormInterface
         return $this->view('form_widget', [
             'form' => $this
         ])->render();
+    }
+
+    /**
+     * @return array
+     */
+    public function all()
+    {
+        return $this->request->all();
     }
 
     /**

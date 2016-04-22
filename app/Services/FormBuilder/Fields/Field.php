@@ -77,6 +77,11 @@ abstract class Field
     protected $valueProperty = 'value';
 
     /**
+     * @var bool
+     */
+    protected $required = false;
+
+    /**
      * Field constructor.
      * @param $name
      * @param $type
@@ -191,6 +196,14 @@ abstract class Field
     public function setRules($rules)
     {
         $this->rules = $rules;
+
+        if ($rules) {
+            $rules = explode('|', $rules);
+
+            if (in_array('required', $rules)) {
+                $this->setRequired(true);
+            }
+        }
         return $this;
     }
 
@@ -264,6 +277,35 @@ abstract class Field
     public function setRowAttr($rowAttr)
     {
         $this->rowAttr = $rowAttr;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRequired()
+    {
+        return $this->required;
+    }
+
+    /**
+     * Method alias
+     *
+     * @return bool
+     */
+    public function getRequired()
+    {
+        return $this->isRequired();
+    }
+
+    /**
+     * @param boolean $required
+     * @return $this
+     */
+    public function setRequired($required)
+    {
+        $this->required = $required;
+
+        return $this;
     }
 
     /**

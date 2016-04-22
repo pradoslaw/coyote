@@ -4,8 +4,6 @@
     {{ parent() }}
 {% endblock %}
 
-{% import 'components.modals' as modals %}
-
 {% block container %}
     <div class="row" style="margin-top: 20px">
         <div class="col-md-9">
@@ -14,62 +12,41 @@
                     <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.path]) }}</h1>
                     <h3>Wypełnij poniższy formularz, aby zgłosić swoją ofertę</h3>
 
-                    {#{{ form_label(form.email) }}#}
-                    {#{{ form_widget(form.email) }}#}
-                    {#{{ form_error(form.email) }}#}
+                    <div class="alert alert-warning">
+                        Serwis 4programmers.net <strong>nie przechowuje</strong> na swoich serwerach żadnych danych osobowych,
+                        w tym CV oraz listu motywacyjnego.<br>
 
-                    {#{{ form_row(form.name) }}#}
+                        Informacje te są automatycznie wysyłane do potencjalnego pracodawcy/zleceniodawcy,
+                        a następnie <strong>usuwane z naszych serwerów</strong>.
+                    </div>
+
                     {{ form(form) }}
-
-
-                    {#{{ form_open({'url': route('job.candidate', [job.id])}) }}#}
-                    {#{{ forms.inline(form_text('email', input_old('email'), {'class': 'form-control'), 'E-mail', errors.first('name')) }}#}
-                    {#{{ forms.inline(form_password('password', {'class': 'form-control'}), 'Hasło', errors.first('password')) }}#}
-                    {#{{ form_close() }}#}
                 </div>
             </div>
         </div>
 
         <aside class="col-md-3">
-            <ul class="side-menu">
-                <li>
-                    <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}">
-                        <i class="fa fa-fw fa-star-o"></i>
-                        <i class="fa fa-fw fa-star"></i>
-
-                        {{ not subscribed ? 'Dodaj do ulubionych' : 'Usuń z ulubionych' }}
-                    </a>
-                </li>
-                {% if can('update', job) %}
-                    <li>
-                        <a class="btn-edit" href="{{ route('job.submit', [job.id]) }}">
-                            <i class="fa fa-fw fa-edit"></i>
-                            Edycja oferty
-                        </a>
-                    </li>
-                {% endif %}
-                <li>
-                    <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fa fa-fw fa-pencil"></i> Dodaj ofertę pracy</a>
-                </li>
-                {% if can('delete', job) %}
-                    <li>
-                        <a class="btn-delete" href="#modal-delete" data-toggle="modal"><i class="fa fa-fw fa-remove"></i> Usuń tę ofertę pracy</a>
-                    </li>
-                {% endif %}
-                <li>
-                    <a class="btn-move" href="javascript:"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
-                </li>
-                <li>
-                    <a class="btn-report" href="{{ route('flag') }}" data-url="{{ route('job.offer', [job.id, job.path]) }}" data-metadata="{{ {'job_id': job.id, 'permission': 'job-delete'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
-                </li>
-            </ul>
-
+            {% include 'job.partials.sidemenu' %}
             {{ render_block('job_ads') }}
-
         </aside>
     </div>
+{% endblock %}
 
-    {{ form_open({'url': route('job.delete', [job.id]) }) }}
-    {{ modals.confirm('Czy chcesz usunąć tę ofertę pracy?', 'Usuwanie', 'modal-delete') }}
-    {{ form_close() }}
+{% block body %}
+    {{ parent() }}
+
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="{{ cdn('js/job-tinymce.js') }}"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $('input[name="cv_placeholder"]').click(function() {
+                $('input[name="cv"]').click();
+            });
+
+            $(':file').change(function() {
+                $(this).next().val($(this).val());
+            })
+        });
+    </script>
 {% endblock %}

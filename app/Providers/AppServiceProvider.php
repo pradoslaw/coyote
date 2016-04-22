@@ -2,6 +2,7 @@
 
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
+use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
@@ -67,6 +68,10 @@ class AppServiceProvider extends ServiceProvider
                 $form->setContainer($app)
                     ->setRedirector($app->make(Redirector::class))
                     ->setRequest($app->make('request'));
+
+                if ($form instanceof ValidatesWhenResolved && $form->isSubmitted()) {
+                    $form->buildForm();
+                }
             });
         });
     }

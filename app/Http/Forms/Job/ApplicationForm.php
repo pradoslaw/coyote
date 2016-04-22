@@ -3,10 +3,22 @@
 namespace Coyote\Http\Forms\Job;
 
 use Coyote\Services\FormBuilder\Form;
+use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 
-class ApplicationForm extends Form
+class ApplicationForm extends Form implements ValidatesWhenResolved
 {
     protected $theme = self::THEME_INLINE;
+
+    /**
+     * It's public so we can use use attr from twig
+     *
+     * @var array
+     */
+    public $attr = [
+        'method' => self::POST,
+        'id' => 'job-application',
+        'files' => true
+    ];
 
     public function buildForm()
     {
@@ -30,15 +42,18 @@ class ApplicationForm extends Form
             ])
             ->add('cv', 'file', [
                 'rules' => 'max:' . (config('filesystems.upload_max_size') * 1024) . '|mimes:pdf,doc,docx,rtf',
-                'label' => 'CV/List motywacyjny',
-                'help' => 'CV/résumé z rozszerzeniem *.pdf, *.doc, *.docx lub *.rtf.'
+                'label' => 'CV/Resume',
+                'help' => 'CV/résumé z rozszerzeniem *.pdf, *.doc, *.docx lub *.rtf.',
+                'attr' => [
+                    'placeholder' => 'Kliknij, aby dodać załącznik'
+                ]
             ])
             ->add('message', 'textarea', [
                 'rules' => 'string|required|max:5000',
                 'label' => 'Wiadomość dla pracodawcy/zleceniodawcy',
                 'help' => 'Taką wiadomość otrzyma osoba, która wystawiła ogłoszenie'
             ])
-            ->add('copy', 'checkbox', [
+            ->add('cc', 'checkbox', [
                 'label' => 'Wyślij kopię e-maila również do mnie',
                 'value' => 1
             ])
