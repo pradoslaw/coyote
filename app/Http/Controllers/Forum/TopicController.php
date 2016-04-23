@@ -2,29 +2,14 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Events\TopicWasSaved;
-use Coyote\Events\PostWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Factories\StreamFactory;
-use Coyote\Http\Forms\Forum\PostForm;
-use Coyote\Http\Requests\SubjectRequest;
-use Coyote\Post\Log;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface;
-use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
-use Coyote\Services\Parser\Reference\Login as Ref_Login;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
-use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
-use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
-use Coyote\Services\Stream\Objects\Post as Stream_Post;
-use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
-use Coyote\Services\Stream\Actor as Stream_Actor;
 use Illuminate\Http\Request;
-use Coyote\Http\Requests\PostRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TopicController extends BaseController
@@ -200,118 +185,6 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param $forum
-     * @return \Coyote\Http\Forms\Forum\PostForm
-     */
-    protected function getForm($forum)
-    {
-        return $this->createForm(PostForm::class, [
-            'forum' => $forum
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param \Coyote\Forum $forum
-     * @return \Illuminate\View\View
-     */
-    public function submit(Request $request, $forum)
-    {
-        $this->breadcrumb($forum);
-        $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
-
-        $form = $this->getForm($forum);
-
-        return Controller::view('forum.submit')->with(compact('forum', 'attachments', 'subscribe', 'form'));
-    }
-
-    /**
-     * @param \Coyote\Forum $forum
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save($forum)
-    {
-        $form = $this->getForm($forum);
-        $form->validate();
-
-        $request = $form->getRequest();
-
-        $url = \DB::transaction(function () use ($request, $forum) {
-            // create new topic
-            $topic = $this->topic->create($request->all() + ['forum_id' => $forum->id]);
-            // create new post and assign it to topic. don't worry about the rest: trigger will do the work
-            $post = $this->post->create($request->all() + [
-                'user_id'   => $this->userId,
-                'topic_id'  => $topic->id,
-                'forum_id'  => $forum->id,
-                'ip'        => request()->ip(),
-                'browser'   => request()->browser(),
-                'host'      => request()->server('SERVER_NAME')
-            ]);
-
-            $tags = $request->get('tags', []);
-
-            // assign tags to topic
-            $topic->setTags($tags);
-
-            // assign attachments to the post
-            $post->setAttachments($request->get('attachments', []));
-
-            // save it in log...
-            (new Log())
-                ->setPost($post)
-                ->fill(['subject' => $topic->subject, 'tags' => $tags])
-                ->save();
-
-            if (auth()->check()) {
-                $topic->subscribe($this->userId, $request->get('subscribe'));
-                // automatically subscribe post
-                $post->subscribe($this->userId, true);
-            }
-
-            // parsing text and store it in cache
-            // it's important. don't remove below line so that text in activity can be saved without markdown
-            $post->text = app()->make('Parser\Post')->parse($request->text);
-
-            // get id of users that were mentioned in the text
-            $usersId = $forum->onlyUsersWithAccess((new Ref_Login())->grab($post->text));
-
-            if ($usersId) {
-                app()->make('Alert\Post\Login')->with([
-                    'users_id'    => $usersId,
-                    'sender_id'   => $this->userId,
-                    'sender_name' => $request->get('user_name', auth()->user()->name),
-                    'subject'     => excerpt($request->subject),
-                    'excerpt'     => excerpt($post->text),
-                    'url'         => route('forum.topic', [$forum->path, $topic->id, $topic->path], false)
-                ])->notify();
-            }
-
-            $actor = new Stream_Actor(auth()->user());
-
-            if (auth()->guest()) {
-                $actor->displayName = $request->get('user_name');
-            }
-            app()->make('Stream')->add(
-                new Stream_Create(
-                    $actor,
-                    (new Stream_Topic)->map($topic, $forum, $post->text),
-                    (new Stream_Forum)->map($forum)
-                )
-            );
-
-            // fire the event. it can be used to index a content and/or add page path to "pages" table
-            event(new TopicWasSaved($topic));
-            // add post to elasticsearch
-            event(new PostWasSaved($post));
-
-            return route('forum.topic', [$forum->path, $topic->id, $topic->path]);
-        });
-
-        return redirect()->to($url);
-    }
-
-    /**
      * @param Topic $topic
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
@@ -371,73 +244,6 @@ class TopicController extends BaseController
 
         if (!$isUnread) {
             $this->forum->markAsRead($topic->forum_id, $this->userId, $this->sessionId);
-        }
-    }
-
-    /**
-     * @param \Coyote\Topic $topic
-     * @param SubjectRequest $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function subject($topic, SubjectRequest $request)
-    {
-        $forum = $topic->forum()->first();
-        $this->authorize('update', $forum);
-
-        $url = \DB::transaction(function () use ($request, $forum, $topic) {
-            $topic->fill(['subject' => $request->get('subject')]);
-
-            $post = $this->post->find($topic->first_post_id);
-            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
-
-            if ($topic->isDirty()) {
-                $original = $topic->getOriginal();
-
-                $topic->save();
-                $tags = $topic->getTagNames();
-
-                // save it in log...
-                (new Log)
-                    ->setPost($post)
-                    ->fill(['user_id' => $this->userId, 'subject' => $topic->subject, 'tags' => $tags])
-                    ->save();
-
-                $post->fill([
-                    'edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId
-                ])
-                ->save();
-
-                if ($post->user_id) {
-                    app()->make('Alert\Topic\Subject')->with([
-                        'users_id'    => $forum->onlyUsersWithAccess([$post->user_id]),
-                        'sender_id'   => $this->userId,
-                        'sender_name' => auth()->user()->name,
-                        'subject'     => excerpt($original['subject']),
-                        'excerpt'     => excerpt($topic->subject),
-                        'url'         => $url
-                    ])->notify();
-                }
-
-                // fire the event. it can be used to index a content and/or add page path to "pages" table
-                event(new TopicWasSaved($topic));
-                // add post to elasticsearch
-                event(new PostWasSaved($post));
-            }
-
-            // put action into activity stream
-            stream(
-                Stream_Update::class,
-                (new Stream_Post(['url' => $url]))->map($post),
-                (new Stream_Topic())->map($topic, $forum)
-            );
-
-            return $url;
-        });
-
-        if ($request->ajax()) {
-            return response(url($url));
-        } else {
-            return redirect()->to($url);
         }
     }
 

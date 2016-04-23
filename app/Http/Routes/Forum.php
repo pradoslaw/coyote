@@ -25,15 +25,17 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Paste', ['uses' => 'AttachmentController@paste', 'as' => 'paste']);
 
     // formularz dodawania nowego watku na forum
-    Route::get('{forum}/Submit', ['uses' => 'TopicController@submit', 'as' => 'topic.submit', 'middleware' => ['forum.access', 'forum.write']]);
-    Route::post('{forum}/Submit', ['uses' => 'TopicController@save', 'middleware' => ['forum.access', 'forum.write']]);
+    Route::get('{forum}/Submit/{topic?}', ['uses' => 'SubmitController@index', 'as' => 'topic.submit', 'middleware' => ['forum.access', 'forum.write']]);
+    Route::post('{forum}/Submit{topic?}', ['uses' => 'SubmitController@save', 'middleware' => ['forum.access', 'forum.write']]);
+    // dodawanie lub edycja posta na forum
+    Route::get('{forum}/Submit/{topic}/{post?}', ['uses' => 'SubmitController@index', 'as' => 'post.submit', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
+    Route::post('{forum}/Submit/{topic}/{post?}', ['uses' => 'SubmitController@save', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
+    Route::get('{forum}/{topic}/Edit/{post}', ['uses' => 'SubmitController@edit', 'as' => 'post.edit', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
+    // szybka zmiana tytulu watku
+    Route::post('Topic/Subject/{topic}', ['uses' => 'SubmitController@subject', 'as' => 'topic.subject', 'middleware' => 'auth']);
+
     Route::post('{forum}/Mark', ['uses' => 'CategoryController@mark', 'as' => 'category.mark', 'middleware' => 'forum.access']);
     Route::post('{forum}/Section', ['uses' => 'CategoryController@section', 'as' => 'section']);
-
-    // dodawanie lub edycja posta na forum
-    Route::get('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@submit', 'as' => 'post.submit', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
-    Route::post('{forum}/{topic}/Submit/{post?}', ['uses' => 'PostController@save', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
-    Route::get('{forum}/{topic}/Edit/{post}', ['uses' => 'PostController@edit', 'as' => 'post.edit', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
 
     // obserwowanie danego watku na forum
     Route::post('Topic/Subscribe/{topic}', ['uses' => 'TopicController@subscribe', 'as' => 'topic.subscribe', 'middleware' => 'auth']);
@@ -45,8 +47,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Topic/Move/{topic}', ['uses' => 'MoveController@index', 'as' => 'move']);
     // oznacz watek jako przeczytany
     Route::post('Topic/Mark/{topic}', ['uses' => 'TopicController@mark', 'as' => 'topic.mark']);
-    // szybka zmiana tytulu watku
-    Route::post('Topic/Subject/{topic}', ['uses' => 'TopicController@subject', 'as' => 'topic.subject', 'middleware' => 'auth']);
+
     // dziennik zdarzen dla watku
     Route::get('Stream/{topic}', ['uses' => 'StreamController@index', 'as' => 'stream', 'middleware' => ['auth']]);
 

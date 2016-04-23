@@ -2,6 +2,12 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Topic;
+use Coyote\User;
+use Illuminate\Http\Request;
+use Coyote\Forum;
+use Coyote\Post;
+
 interface PostRepositoryInterface extends RepositoryInterface
 {
     /**
@@ -50,4 +56,14 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function findPosts(array $postsId, $topicId);
+
+    /**
+     * @param Request $request
+     * @param User $user
+     * @param Forum $forum
+     * @param Topic $topic
+     * @param Post $post
+     * @return Post $post
+     */
+    public function save(Request $request, User $user, Forum $forum, &$topic, &$post);
 }

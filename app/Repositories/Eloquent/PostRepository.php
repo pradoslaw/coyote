@@ -2,10 +2,13 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Coyote\Forum;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
-use Coyote\Post\Subscriber;
-use Coyote\Post\Attachment;
+use Coyote\Topic;
+use Coyote\User;
 use DB;
+use Illuminate\Http\Request;
 
 class PostRepository extends Repository implements PostRepositoryInterface
 {
@@ -15,56 +18,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
     public function model()
     {
         return 'Coyote\Post';
-    }
-
-    /**
-     * @param int $userId
-     * @return mixed
-     */
-    private function prepare($userId)
-    {
-        $sql = $this->model
-                    ->selectRaw(
-                        'DISTINCT ON(posts.id)
-                        posts.*,
-                        author.name AS author_name,
-                        author.photo,
-                        author.is_active,
-                        author.is_blocked,
-                        author.sig,
-                        author.location,
-                        author.posts AS author_posts,
-                        author.allow_sig,
-                        author.allow_smilies,
-                        author.allow_count,
-                        author.created_at AS author_created_at,
-                        author.visited_at AS author_visited_at,
-                        editor.name AS editor_name,
-                        editor.name AS editor_is_active,
-                        editor.name AS editor_is_blocked,
-                        groups.name AS group_name,
-                        sessions.updated_at AS session_updated_at,
-                        pa.user_id AS accept_on'
-                    )
-                    ->leftJoin('sessions', 'sessions.user_id', '=', 'posts.user_id')
-                    ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
-                    ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
-                    ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
-                    ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')
-                    ->orderBy('posts.id');
-
-        if ($userId) {
-            // pobieramy wartosc "id" a nie "created_at" poniewaz kiedys created_at nie bylo zapisywane
-            $sql = $sql->addSelect(['pv.id AS vote_on', 'ps.id AS subscribe_on'])
-                        ->leftJoin('post_votes AS pv', function ($join) use ($userId) {
-                            $join->on('pv.post_id', '=', 'posts.id')->on('pv.user_id', '=', DB::raw($userId));
-                        })
-                        ->leftJoin('post_subscribers AS ps', function ($join) use ($userId) {
-                            $join->on('ps.post_id', '=', 'posts.id')->on('ps.user_id', '=', DB::raw($userId));
-                        });
-        }
-
-        return $sql;
     }
 
     /**
@@ -156,5 +109,146 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 ->whereIn('posts.id', $postsId)
                 ->where('topic_id', $topicId) // <-- this condition for extra security
                 ->get();
+    }
+
+    /**
+     * @param Request $request
+     * @param User $user
+     * @param Forum $forum
+     * @param Topic $topic
+     * @param Post $post
+     * @return Post $post
+     */
+    public function save(Request $request, User $user, Forum $forum, &$topic, &$post)
+    {
+        $topic = $this->initialize($topic, Topic::class);
+        $post = $this->initialize($post, Post::class);
+
+        $postId = $post->id;
+        $log = new Post\Log();
+
+        /**
+         * @var $topic Topic
+         */
+        $topic->fill($request->all());
+        $topic->forum()->associate($forum);
+
+        $topic->save();
+
+        $tags = $request->get('tags', []);
+        // assign tags to topic
+        $topic->setTags($tags);
+
+        /**
+         * @var $post Post
+         */
+        $post->fill($request->all());
+
+        if (empty($postId)) {
+            if ($user) {
+                $post->user()->associate($user);
+            }
+
+            /**
+             * @var $request \Coyote\Http\CustomRequest
+             */
+            $post->ip = $request->ip();
+            $post->browser = $request->browser();
+            $post->host = $request->server('SERVER_NAME');
+        }
+
+        $log->fillWithPost($post)->fill(['subject' => $topic->subject, 'tags' => $tags]);
+        $isDirty = $log->isDirtyComparedToPrevious();
+
+        if ($isDirty && !empty($postId)) {
+            $post->fill([
+                'edit_count' => $post->edit_count + 1, 'editor_id' => $user->id
+            ]);
+        }
+
+        $post->forum()->associate($forum);
+        $post->topic()->associate($topic);
+
+        $post->save();
+
+        if ($isDirty) {
+            if ($user) {
+                $log->user_id = $user->id;
+            }
+            $post->logs()->save($log);
+        }
+
+        // assign attachments to the post
+        $post->setAttachments($request->get('attachments', []));
+
+        if ($user) {
+            if (empty($postId)) {
+                // automatically subscribe post
+                $post->subscribe($user->id, true);
+            }
+
+            $topic->subscribe($user->id, $request->get('subscribe'));
+        }
+
+        return $post;
+    }
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    private function prepare($userId)
+    {
+        $sql = $this->model
+            ->selectRaw(
+                'DISTINCT ON(posts.id)
+                        posts.*,
+                        author.name AS author_name,
+                        author.photo,
+                        author.is_active,
+                        author.is_blocked,
+                        author.sig,
+                        author.location,
+                        author.posts AS author_posts,
+                        author.allow_sig,
+                        author.allow_smilies,
+                        author.allow_count,
+                        author.created_at AS author_created_at,
+                        author.visited_at AS author_visited_at,
+                        editor.name AS editor_name,
+                        editor.name AS editor_is_active,
+                        editor.name AS editor_is_blocked,
+                        groups.name AS group_name,
+                        sessions.updated_at AS session_updated_at,
+                        pa.user_id AS accept_on'
+            )
+            ->leftJoin('sessions', 'sessions.user_id', '=', 'posts.user_id')
+            ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
+            ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
+            ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
+            ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')
+            ->orderBy('posts.id');
+
+        if ($userId) {
+            // pobieramy wartosc "id" a nie "created_at" poniewaz kiedys created_at nie bylo zapisywane
+            $sql = $sql->addSelect(['pv.id AS vote_on', 'ps.id AS subscribe_on'])
+                ->leftJoin('post_votes AS pv', function ($join) use ($userId) {
+                    $join->on('pv.post_id', '=', 'posts.id')->on('pv.user_id', '=', DB::raw($userId));
+                })
+                ->leftJoin('post_subscribers AS ps', function ($join) use ($userId) {
+                    $join->on('ps.post_id', '=', 'posts.id')->on('ps.user_id', '=', DB::raw($userId));
+                });
+        }
+
+        return $sql;
+    }
+
+    private function initialize($object, $model)
+    {
+        if (is_null($object)) {
+            $object = new $model;
+        }
+
+        return $object;
     }
 }

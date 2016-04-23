@@ -123,6 +123,22 @@ class Post extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('Coyote\User');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function logs()
+    {
+        return $this->hasMany('Coyote\Post\Log');
+    }
+
+    /**
      * Enable/disable subscription for this post
      *
      * @param int $userId
