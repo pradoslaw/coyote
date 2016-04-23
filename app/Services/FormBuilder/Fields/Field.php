@@ -512,7 +512,7 @@ abstract class Field
         foreach ($reflection->getMethods() as $method) {
             $name = $method->getName();
 
-            if (substr($name, 0, 3) === 'get' && $method->getNumberOfParameters() === 0) {
+            if (substr($name, 0, 3) === 'get' && $method->getNumberOfParameters() === 0 && !$method->isPrivate()) {
                 $withoutPrefix = substr($name, 3);
                 $result[snake_case($withoutPrefix)] = $this->$name();
             }

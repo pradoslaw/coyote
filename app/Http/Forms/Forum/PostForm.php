@@ -170,6 +170,11 @@ class PostForm extends Form
             ]);
         }
 
+        $this->add('attachments', 'form', [
+            'class' => 'Coyote\Http\Forms\Forum\AttachmentForm',
+            'data' => $this->post->attachments()->get()
+        ]);
+
         $this->add('submit', 'submit', [
             'label' => 'Zapisz',
             'attr' => [

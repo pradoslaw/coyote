@@ -3,6 +3,7 @@
 namespace TwigBridge\Extensions;
 
 use Coyote\Services\FormBuilder\Fields\Field;
+use Coyote\Services\FormBuilder\Fields\Form as ChildForm;
 use Coyote\Services\FormBuilder\Form;
 use Twig_Extension;
 use Twig_SimpleFunction;
@@ -33,9 +34,15 @@ class FormBuilder extends Twig_Extension
         ];
     }
 
-    public function form(Form $form)
+    public function form($form)
     {
-        return $form->render();
+        if ($form instanceof Form) {
+            return $form->render();
+        } elseif ($form instanceof ChildForm) {
+            return $form->getForm()->render();
+        }
+        
+        return null;
     }
 
     public function formStart(Form $form)
@@ -55,7 +62,7 @@ class FormBuilder extends Twig_Extension
      */
     public function formRow($field, array $options = [])
     {
-        return $this->renderFormElement('renderRow', $field, $options);
+        return $this->renderFormElement('render', $field, $options);
     }
 
     // @todo zastapic przez intefejs

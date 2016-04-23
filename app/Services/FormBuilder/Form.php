@@ -156,6 +156,14 @@ abstract class Form implements FormInterface
     }
 
     /**
+     * @return Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
      * @return mixed
      */
     abstract public function buildForm();

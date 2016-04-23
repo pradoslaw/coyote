@@ -222,10 +222,6 @@ class TopicController extends BaseController
 
         $form = $this->getForm($forum);
 
-        if ($request->old('attachments')) {
-            $attachments = app(AttachmentRepositoryInterface::class)->findByFile(request()->old('attachments'));
-        }
-
         return Controller::view('forum.submit')->with(compact('forum', 'attachments', 'subscribe', 'form'));
     }
 

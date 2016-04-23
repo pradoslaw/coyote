@@ -45,8 +45,6 @@ class PostController extends BaseController
             // make sure user can edit this post
             $this->authorize('update', [$post, $forum]);
             $this->breadcrumb->push('Edycja', url($request->path()));
-
-            $attachments = $attachments->merge($post->attachments()->get());
         }
 
         // IDs of posts that user want to quote...
@@ -79,10 +77,6 @@ class PostController extends BaseController
 
             unset($post); // <-- delete this variable. we don't want to pass it to twig
             $form->text->setValue($body);
-        }
-
-        if ($request->old('attachments')) {
-            $attachments = app(AttachmentRepositoryInterface::class)->findByFile($request->old('attachments'));
         }
 
         return $this->view('forum.submit')->with(

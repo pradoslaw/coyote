@@ -36,34 +36,6 @@
             {{ form_row(form.subject) }}
             {{ form_row(form.user_name) }}
 
-            {#{% if topic is not defined or topic.first_post_id == post.id %}#}
-                {#<div class="form-group {{ errors.first('subject') ? 'has-error' }}">#}
-                    {#<label class="col-md-2 control-label">Temat</label>#}
-                    {#<div class="col-md-10">#}
-                        {#{{ form_text('subject', input_old('subject', topic.subject), {'class': 'form-control', 'tabindex': 1, 'autofocus': 'autofocus'}) }}#}
-
-                        {#{% if errors.first('subject') %}#}
-                            {#<span class="help-block">{{ errors.first('subject') }}</span>#}
-                        {#{% endif %}#}
-                    {#</div>#}
-                {#</div>#}
-            {#{% endif %}#}
-
-            {#{% if auth_guest() or (post.id and not post.user_id) %}#}
-                {#<div class="form-group {{ errors.first('user_name') ? 'has-error' }}">#}
-                    {#<label class="col-md-2 control-label">Autor</label>#}
-                    {#<div class="col-md-10">#}
-                        {#{{ form_text('user_name', input_old('user_name', post.user_name), {'class': 'form-control', 'tabindex': 2}) }}#}
-
-                        {#{% if errors.first('user_name') %}#}
-                            {#<span class="help-block">{{ errors.first('user_name') }}</span>#}
-                        {#{% else %}#}
-                            {#<span class="help-block">Wpisz swoją nazwę użytkownika</span>#}
-                        {#{% endif %}#}
-                    {#</div>#}
-                {#</div>#}
-            {#{% endif %}#}
-
             <div id="text-area" class="row">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs">
@@ -75,8 +47,7 @@
 
                     <div class="tab-content">
                         {{ form_row(form.text) }}
-
-                        {% include 'forum.partials.attachments' %}
+                        {{ form(form.attachments) }}
 
                         <div role="tabpanel" class="tab-pane" id="poll">
                             <div class="panel panel-forum">
@@ -94,54 +65,11 @@
                 </div>
             </div>
 
-            {#{% if topic.first_post_id == post.id %}#}
-                {#<div class="form-group {{ errors.any('tags') ? 'has-error' }}">#}
-                    {#<label class="col-md-2 control-label">Tagi</label>#}
-                    {#<div class="col-md-10">#}
-                        {#<input id="tags" name="tags" value="{{ input_old('tags', tags)|join(', ') }}" class="form-control" tabindex="4" placeholder="{{ forum.require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net' }}">#}
-
-                        {#{% if errors.any('tags') %}#}
-                            {#<span class="help-block">{{ errors.first('tags') }}</span>#}
-                        {#{% else %}#}
-                            {#<span class="help-block">Możesz opisać swój wątek słowami kluczowymi - np. c#, .net (max. 5 tagów)</span>#}
-                        {#{% endif %}#}
-                    {#</div>#}
-                {#</div>#}
-                {{ form_row(form.tags) }}
-                {{ form_row(form.is_sticky) }}
-
-                {#{% if can('sticky', forum) %}#}
-                    {#<div class="form-group">#}
-                        {#<div class="col-md-10 col-md-offset-2">#}
-                            {#<label>#}
-                                {#{{ form_hidden('is_sticky', 0) }}#}
-                                {#{{ form_checkbox('is_sticky', 1, input_old('is_sticky', topic.is_sticky)) }}#}
-                                {#Przyklejony#}
-                            {#</label>#}
-                        {#</div>#}
-                    {#</div>#}
-                {#{% endif %}#}
-            {#{% endif %}#}
-
-            {#{% if auth_check() %}#}
-                {#<div class="form-group">#}
-                    {#<div class="col-md-10 col-md-offset-2">#}
-                        {#<label>#}
-                            {#{{ form_checkbox('subscribe', 1, input_old('subscribe', subscribe)) }}#}
-                            {#Obserwuj wątek#}
-                        {#</label>#}
-                    {#</div>#}
-                {#</div>#}
-            {#{% endif %}#}
+            {{ form_row(form.tags) }}
+            {{ form_row(form.is_sticky) }}
 
             {{ form_row(form.subscribe) }}
             {{ form_row(form.submit) }}
-
-            {#<div class="form-group">#}
-                {#<div class="col-md-10 col-md-offset-2">#}
-                    {#<button type="submit" class="btn btn-primary" data-submit-state="Wysyłanie...">Wyślij</button>#}
-                {#</div>#}
-            {#</div>#}
 
             {{ form_close() }}
         </div>
