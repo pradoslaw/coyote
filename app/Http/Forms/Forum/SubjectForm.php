@@ -2,9 +2,9 @@
 
 namespace Coyote\Http\Forms\Forum;
 
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
+use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 
-class SubjectForm extends PostForm implements ValidatesWhenResolved
+class SubjectForm extends PostForm implements ValidatesWhenSubmitted
 {
     public function buildForm()
     {

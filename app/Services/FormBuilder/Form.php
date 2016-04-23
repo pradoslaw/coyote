@@ -421,6 +421,15 @@ abstract class Form implements FormInterface
             return $this->container->call([$this, 'validator'], compact('factory'));
         }
 
+        return $this->makeValidatorInstance($factory);
+    }
+
+    /**
+     * @param ValidationFactory $factory
+     * @return Validator
+     */
+    protected function makeValidatorInstance(ValidationFactory $factory)
+    {
         return $factory->make(
             $this->request->all(),
             $this->container->call([$this, 'rules']),

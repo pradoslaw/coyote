@@ -1,0 +1,81 @@
+<?php
+
+namespace Coyote\Http\Forms\Auth;
+
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Services\FormBuilder\Form;
+use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+
+class LoginForm extends Form implements ValidatesWhenSubmitted
+{
+    /**
+     * @var string
+     */
+    protected $theme = self::THEME_INLINE;
+
+    /**
+     * @var UserRepository
+     */
+    protected $userRepository;
+
+    /**
+     * @var \Coyote\User
+     */
+    protected $user;
+
+    /**
+     * @param UserRepository $userRepository
+     */
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    public function buildForm()
+    {
+        $this
+            ->add('name', 'text', [
+                'rules' => 'required|username',
+                'label' => 'Nazwa użytkownika',
+                'attr' => [
+                    'autofocus' => 'autofocus'
+                ]
+            ])
+            ->add('password', 'password', [
+                'rules' => 'required',
+                'label' => 'Hasło'
+            ]);
+    }
+
+    /**
+     * @return \Coyote\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param ValidationFactory $factory
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validator(ValidationFactory $factory)
+    {
+        $validator = $this->makeValidatorInstance($factory);
+
+        $validator->after(function ($validator) {
+            $this->user = $this->userRepository->findByName(mb_strtolower($this->request->get('name')));
+
+            if (!$this->user) {
+                $validator->errors()->add('name', trans('validation.user_exist'));
+            }
+
+            if ($this->user && (!$this->user->is_active || $this->user->is_blocked)) {
+                $validator->errors()->add('name', trans('validation.user_active'));
+            }
+        });
+
+        return $validator;
+    }
+}

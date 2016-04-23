@@ -1,7 +1,7 @@
-{% extends 'layout.twig' %}
+{% extends 'layout' %}
 {% block title %}Logowanie{{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
 {% block container %}
     <div class="row" style="margin-top: 25px">
@@ -9,11 +9,11 @@
             <div id="box-login" class="col-sm-5">
                 <h1>Logowanie do systemu</h1>
 
-                {% include 'auth/oauth.twig' %}
+                {% include 'auth.oauth' %}
 
-                {{ form_open({'method': 'POST', 'role': 'form', 'url': route('login')}) }}
-                    {{ forms.inline(form_text('name', input_old('name'), {'class': 'form-control', 'autofocus': 'autofucs'}), 'Nazwa użytkownika', errors.first('name')) }}
-                    {{ forms.inline(form_password('password', {'class': 'form-control'}), 'Hasło', errors.first('password')) }}
+                {{ form_start(form) }}
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.password) }}
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="Logowanie...">
@@ -22,7 +22,7 @@
 
                         <a href="{{ url('Password') }}">Zapomniałeś hasła?</a>
                     </div>
-                {{ form_close() }}
+                {{ form_end() }}
             </div>
 
             <div id="box-login-sidebar" class="col-sm-5 col-sm-offset-2 hidden-xs">

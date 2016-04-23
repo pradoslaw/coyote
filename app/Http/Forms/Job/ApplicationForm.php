@@ -3,9 +3,9 @@
 namespace Coyote\Http\Forms\Job;
 
 use Coyote\Services\FormBuilder\Form;
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
+use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 
-class ApplicationForm extends Form implements ValidatesWhenResolved
+class ApplicationForm extends Form implements ValidatesWhenSubmitted
 {
     protected $theme = self::THEME_INLINE;
 

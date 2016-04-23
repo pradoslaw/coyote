@@ -4,25 +4,24 @@ namespace Coyote\Http\Controllers\Auth;
 
 use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Http\Forms\Auth\LoginForm;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Logout as Stream_Logout;
-use Validator;
 
 class LoginController extends Controller
 {
     /**
-     * @var User
+     * @var UserRepository
      */
     private $user;
 
     /**
      * LoginController constructor.
-     * @param User $user
+     * @param UserRepository $user
      */
-    public function __construct(User $user)
+    public function __construct(UserRepository $user)
     {
         parent::__construct();
         $this->middleware('guest', ['except' => 'signout']);
@@ -44,42 +43,24 @@ class LoginController extends Controller
             $request->session()->put('url.intended', url()->previous());
         }
 
-        return $this->view('auth.login');
+        $form = $this->createForm(LoginForm::class, null, [
+            'url' => route('login')
+        ]);
+
+        return $this->view('auth.login', compact('form'));
     }
 
     /**
      * Logowanie uzytkownika
      *
-     * @param Request $request
+     * @param LoginForm $form
      * @return $this|\Illuminate\Http\RedirectResponse
      */
-    public function signin(Request $request)
+    public function signin(LoginForm $form)
     {
-        // @todo uzyc validateWith()
-        $validator = Validator::make($request->only(['name', 'password']), [
-            'name'                  => 'required|username',
-            'password'              => 'required'
-        ]);
+        $user = $form->getUser();
 
-        $user = null;
-
-        $validator->after(function ($validator) use ($request, &$user) {
-            $user = $this->user->findByName(mb_strtolower($request->get('name')));
-
-            if (!$user) {
-                $validator->errors()->add('name', trans('validation.user_exist'));
-            }
-
-            if ($user && (!$user->is_active || $user->is_blocked)) {
-                $validator->errors()->add('name', trans('validation.user_active'));
-            }
-        });
-
-        if ($validator->fails()) {
-            return back()->withInput()->withErrors($validator);
-        }
-
-        if (Auth::attempt(['name' => $user->name, 'password' => $request->get('password')], true)) {
+        if (auth()->attempt(['name' => $user->name, 'password' => $form->password->getValue()], true)) {
             // put information into the activity stream...
             stream(Stream_Login::class);
             return redirect()->intended(route('home'));
@@ -93,19 +74,19 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function signout()
+    public function signout(Request $request)
     {
         $user = $this->user->findOrFail($this->userId);
 
         $user->ip = request()->ip();
-        $user->browser = request()->browser(); // metoda browser() nie jest dostepna dla testow funkcjonalnych
+        $user->browser = $request->browser(); // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $user->visited_at = Carbon::now();
         $user->visits = auth()->user()->visits + 1;
         $user->save();
 
         stream(Stream_Logout::class);
 
-        Auth::logout();
+        auth()->logout();
         return back();
     }
 }
