@@ -185,7 +185,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param Topic $topic
+     * @param \Coyote\Topic $topic
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function subscribe($topic)

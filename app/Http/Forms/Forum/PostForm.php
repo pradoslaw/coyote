@@ -8,6 +8,7 @@ use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Topic;
+use Illuminate\Contracts\Validation\Validator;
 
 class PostForm extends Form
 {
@@ -209,5 +210,26 @@ class PostForm extends Form
         }
 
         return $subscribe;
+    }
+
+    /**
+     * Format the errors from the given Validator instance.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return array
+     */
+    protected function formatErrors(Validator $validator)
+    {
+        $messages = $validator->errors();
+
+        for ($i = 0; $i <= 5; $i++) {
+            $error = $messages->first("tags.$i");
+
+            if ($error) {
+                $validator->errors()->add('tags', $error);
+            }
+        }
+
+        return $validator->getMessageBag()->toArray();
     }
 }

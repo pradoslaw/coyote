@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Forms\Forum\SubjectForm;
 use Illuminate\Http\Request;
 use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -176,13 +177,18 @@ class SubmitController extends BaseController
 
     /**
      * @param \Coyote\Topic $topic
-     * @param SubjectRequest $request
+     * @param SubjectForm $form
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @todo moze jakas refaktoryzacja? przeniesienie do repozytorium? na pewno logowanie o tym, ze zostal zmieniony
+     * tytul a nie tresc posta (jak to jest obecnie)
      */
-    public function subject($topic, SubjectRequest $request)
+    public function subject($topic, SubjectForm $form)
     {
         $forum = $topic->forum()->first();
         $this->authorize('update', $forum);
+
+        $request = $form->getRequest();
 
         $url = \DB::transaction(function () use ($request, $forum, $topic) {
             $topic->fill(['subject' => $request->get('subject')]);
