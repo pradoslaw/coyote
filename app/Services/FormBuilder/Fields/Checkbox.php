@@ -24,7 +24,8 @@ class Checkbox extends Field
      */
     public function setChecked($flag)
     {
-        $this->checked = (bool) $flag;
+        $this->setValue($flag ? $this->checkedValue : $this->uncheckedValue);
+        
         return $this;
     }
 
@@ -32,6 +33,15 @@ class Checkbox extends Field
      * @return bool
      */
     public function getChecked()
+    {
+        return $this->checked;
+    }
+
+    /**
+     * alias
+     * @return bool
+     */
+    public function isChecked()
     {
         return $this->checked;
     }
@@ -46,10 +56,13 @@ class Checkbox extends Field
 
     /**
      * @param int $checkedValue
+     * @return $this
      */
     public function setCheckedValue($checkedValue)
     {
         $this->checkedValue = $checkedValue;
+        
+        return $this;
     }
 
     /**
@@ -62,10 +75,13 @@ class Checkbox extends Field
 
     /**
      * @param int $uncheckedValue
+     * @return $this
      */
     public function setUncheckedValue($uncheckedValue)
     {
         $this->uncheckedValue = $uncheckedValue;
+        
+        return $this;
     }
 
     /**
@@ -88,7 +104,7 @@ class Checkbox extends Field
      */
     public function setValue($value)
     {
-        parent::setValue($this->checkedValue);
-        $this->setChecked($this->checkedValue === $value);
+        parent::setValue($value);
+        $this->checked = $this->checkedValue === $value;
     }
 }

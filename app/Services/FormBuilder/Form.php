@@ -170,6 +170,15 @@ abstract class Form implements FormInterface
     abstract public function buildForm();
 
     /**
+     * Remove existing fields and build them again.
+     */
+    public function rebuildForm()
+    {
+        $this->fields = [];
+        $this->buildForm();
+    }
+
+    /**
      * @return bool
      */
     public function authorize()
@@ -260,12 +269,17 @@ abstract class Form implements FormInterface
 
     /**
      * @param array|mixed $data
+     * @param bool $rebuildForm
      * @return $this
      */
-    public function setData($data)
+    public function setData($data, $rebuildForm = true)
     {
-        if (!empty($data)) {
+//        if (!empty($data)) {
             $this->data = $data;
+//        }
+
+        if ($rebuildForm && !empty($this->fields)) {
+            $this->rebuildForm();
         }
 
         return $this;

@@ -369,7 +369,7 @@ abstract class Field
      */
     public function renderWidget()
     {
-        return $this->view($this->getWidgetPath($this->getWidgetName()), $this->viewData())->render();
+        return $this->view($this->getWidgetPath(), $this->viewData())->render();
     }
 
     /**
