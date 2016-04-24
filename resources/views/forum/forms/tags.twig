@@ -6,5 +6,5 @@
 {% block widget %}
     {# Nie moge tutaj uzyc funkcji form_text() poniewaz odczytuje ona wartosc pola z sesji #}
     {# a tutaj musimy zastosowac filtr join() i zamienic tablice na string #}
-    <input type="text" name="{{ name }}" value="{{ value|join(', ') }}" {{ forms.attr(attr) }}>
+    <input type="text" name="{{ name }}" value="{{ children_values|join(', ') }}" {{ forms.attr(attr) }}>
 {% endblock %}

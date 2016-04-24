@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\FormBuilder;
 
+use Coyote\Services\FormBuilder\Fields\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidatesWhenResolvedTrait;
 use Illuminate\Routing\Redirector;
@@ -14,7 +15,7 @@ use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 abstract class Form implements FormInterface
 {
-    use ValidatesWhenResolvedTrait;
+    use ValidatesWhenResolvedTrait, CreateFieldTrait;
 
     const GET = 'GET';
     const POST = 'POST';
@@ -184,7 +185,7 @@ abstract class Form implements FormInterface
      */
     public function add($name, $type, array $options = [])
     {
-        $this->fields[$name] = $this->makeField($name, $type, $options);
+        $this->fields[$name] = $this->makeField($name, $type, $this, $options);
         return $this;
     }
 
@@ -571,53 +572,36 @@ abstract class Form implements FormInterface
      */
     protected function setupRules()
     {
-        foreach ($this->fields as $name => $field) {
+        $this->makeRules($this->fields);
+    }
+
+    /**
+     * @param array $fields
+     */
+    protected function makeRules(array $fields)
+    {
+        foreach ($fields as $field) {
             $rules = $field->getRules();
 
             if ($rules) {
-                $this->rules[$name] = $rules;
+                $this->rules[$this->transformNameToRule($field->getName())] = $rules;
+            }
+
+            if ($field instanceof Collection) {
+                $this->makeRules($field->getChildren());
             }
         }
     }
 
     /**
+     * Prepare laravel's rule name. Transforms string like tags[0] to tags.*
+     *
      * @param $name
-     * @param string $type
-     * @param array $options
      * @return mixed
      */
-    protected function makeField($name, $type = 'text', array $options = [])
+    protected function transformNameToRule($name)
     {
-        $fieldType = $this->getFieldType($type);
-        $options = $this->setupFieldOptions($options);
-
-        return new $fieldType($name, $type, $this, $options);
-    }
-
-    /**
-     * @param array $options
-     * @return array
-     */
-    protected function setupFieldOptions(array $options)
-    {
-        $default = ['theme' => $this->getTheme()];
-
-        foreach ($default as $name => $value) {
-            if (empty($options[$name])) {
-                $options[$name] = $value;
-            }
-        }
-
-        return $options;
-    }
-
-    /**
-     * @param $type
-     * @return string
-     */
-    protected function getFieldType($type)
-    {
-        return __NAMESPACE__ . '\\Fields\\' . ucfirst($type);
+        return preg_replace('/\[.*\]/', '.*', $name);
     }
 
     public function __call($name, $arguments)

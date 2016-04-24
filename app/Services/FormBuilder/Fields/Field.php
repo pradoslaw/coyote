@@ -3,6 +3,7 @@
 namespace Coyote\Services\FormBuilder\Fields;
 
 use Coyote\Services\FormBuilder\Form;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\View;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
@@ -95,7 +96,9 @@ abstract class Field
         $this->setType($type);
         $this->setParent($parent);
 
+        // 1) Set up options (attributes, field value)
         $this->setDefaultOptions($options);
+        // 2) Set up the value (from model, request, session etc) if it wasn't set before
         $this->setupValue();
     }
 
@@ -337,7 +340,7 @@ abstract class Field
      */
     public function getErrors()
     {
-        return $this->parent->errors() ? $this->parent->errors()->get($this->name) : null;
+        return $this->parent->errors() ? $this->parent->errors()->get($this->transformToDotSyntax($this->name)) : null;
     }
 
     /**
@@ -345,7 +348,7 @@ abstract class Field
      */
     public function getError()
     {
-        return $this->parent->errors() ? $this->parent->errors()->first($this->name) : null;
+        return $this->parent->errors() ? $this->parent->errors()->first($this->transformToDotSyntax($this->name)) : null;
     }
 
     /**
@@ -474,30 +477,74 @@ abstract class Field
      */
     protected function setupValue()
     {
-        if ($this->value === null) {
-            $this->setValue($this->getDataValue($this->name));
+        if ($this->parent->isSubmitted()) {
+            $this->setValue($this->parent->getRequest()->get($this->name));
+        } elseif ($this->hasOldInput($this->name)) {
+            $this->setValue($this->getOldInput($this->name));
+        } elseif ($this->value === null) {
+            $this->setValue($this->getDataValue($this->parent->getData(), $this->name));
         }
     }
 
     /**
-     * @param $name
+     * @param mixed $data
+     * @param string $name
      * @return mixed|null
+     *
+     * @todo ta nazwa jest mylaca bo sugeruje, ze pobieramy dane tylko z danych przekazanych
+     * do formularza, ale pobieramy rowniez z sesji oraz z POST
      */
-    protected function getDataValue($name)
+    protected function getDataValue($data, $name)
     {
-        if ($this->parent->isSubmitted()) {
-            return $this->parent->getRequest()->get($name);
-        } else {
-            $data = $this->parent->getData();
+        $name = $this->transformToDotSyntax($name);
 
-            if (is_object($data)) {
-                return $data->$name ?? null;
-            } elseif (is_array($data)) {
-                return $data[$name] ?? null;
-            }
+        if (is_string($data)) {
+            return $data;
+        } elseif (is_object($data)) {
+            return object_get($this->loadModelRelation($data, $name), $name);
+        } elseif (is_array($data)) {
+            return array_get($data, $name);
         }
 
         return $this->getValue();
+    }
+
+    /**
+     * @param $key
+     * @return mixed
+     */
+    protected function getOldInput($key)
+    {
+        return $this->parent->getRequest()->session()->getOldInput($key);
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    protected function hasOldInput($key)
+    {
+        return $this->parent->getRequest()->session()->hasOldInput($key);
+    }
+
+    /**
+     * If object is a instance of Eloquent model, we have to make sure that relations were loaded
+     *
+     * @param $model
+     * @param $key
+     * @return mixed
+     */
+    protected function loadModelRelation($model, $key)
+    {
+        if (!($model instanceof Model)) {
+            return $model;
+        }
+
+        if (!isset($model->$key) && method_exists($model, $key)) {
+            $model->getRelationValue($key);
+        }
+
+        return $model;
     }
 
     /**
@@ -533,6 +580,15 @@ abstract class Field
                 $this->$methodName($values);
             }
         }
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public function transformToDotSyntax($string)
+    {
+        return str_replace(['.', '[]', '[', ']'], ['_', '', '.', ''], $string);
     }
 
     /**

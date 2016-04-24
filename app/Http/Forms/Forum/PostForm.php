@@ -140,18 +140,23 @@ class PostForm extends Form
         ]);
 
         if ($this->post->id === $this->topic->first_post_id) {
-            $this->add('tags', 'text', [
+            $this->add('tags', 'collection', [
                 'rules' => self::RULE_TAGS,
                 'label' => 'Tagi',
                 'required' => $this->forum->require_tag,
                 'help' => 'Możesz opisać swój wątek słowami kluczowymi - np. c#, .net (max. 5 tagów).',
                 'template' => 'tags',
-                'value' => $this->topic->getTagNames(),
+                'value' => $this->topic->tags()->get(),
                 'attr' => [
                     'tabindex' => 4,
                     'id' => 'tags',
                     'placeholder' => $this->forum->require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'
-                ]
+                ],
+                'property' => 'name',
+                'child_attr' => [
+                    'type' => 'hidden'
+                ],
+
             ]);
 
             if ($this->userId && $this->user->can('sticky', $this->forum)) { // can sticky
