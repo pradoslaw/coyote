@@ -15,7 +15,7 @@ use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 abstract class Form implements FormInterface
 {
-    use ValidatesWhenResolvedTrait, CreateFieldTrait;
+    use ValidatesWhenResolvedTrait, CreateFieldTrait, RenderTrait;
 
     const GET = 'GET';
     const POST = 'POST';
@@ -222,38 +222,6 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @return string
-     */
-    public function getTheme()
-    {
-        return $this->theme;
-    }
-
-    /**
-     * @param string $theme
-     */
-    public function setTheme($theme)
-    {
-        $this->theme = $theme;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * @param string $template
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-    }
-
-    /**
      * @return array
      */
     public function getAttr()
@@ -321,16 +289,6 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param $view
-     * @param array $data
-     * @return mixed
-     */
-    public function view($view, $data = [])
-    {
-        return view($this->getTheme() . '.' . $view, $data);
-    }
-
-    /**
      * @return array
      */
     public function rules()
@@ -379,7 +337,7 @@ abstract class Form implements FormInterface
      */
     public function render()
     {
-        return $this->view($this->getTemplate(), [
+        return $this->view($this->getViewPath($this->getTemplate()), [
             'form' => $this,
             'fields' => $this->fields
         ])->render();
@@ -392,7 +350,7 @@ abstract class Form implements FormInterface
      */
     public function renderForm()
     {
-        return $this->view('form_widget', [
+        return $this->view($this->getWidgetPath(), [
             'form' => $this
         ])->render();
     }
@@ -403,6 +361,14 @@ abstract class Form implements FormInterface
     public function all()
     {
         return $this->request->all();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getWidgetName()
+    {
+        return 'form_widget';
     }
 
     /**

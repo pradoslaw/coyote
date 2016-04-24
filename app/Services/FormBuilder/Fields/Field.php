@@ -3,12 +3,13 @@
 namespace Coyote\Services\FormBuilder\Fields;
 
 use Coyote\Services\FormBuilder\Form;
+use Coyote\Services\FormBuilder\RenderTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\View\View;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 abstract class Field
 {
+    use RenderTrait;
+    
     const DEFAULT_TEMPLATE = 'row';
 
     /**
@@ -353,40 +354,6 @@ abstract class Field
 
     /**
      * @return string
-     */
-    public function getTheme()
-    {
-        return $this->theme;
-    }
-
-    /**
-     * @param string $theme
-     */
-    public function setTheme($theme)
-    {
-        $this->theme = $theme;
-    }
-
-    /**
-     * @param $template
-     * @return $this
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * @return string
      * @throws \Exception
      * @throws \Throwable
      */
@@ -402,7 +369,7 @@ abstract class Field
      */
     public function renderWidget()
     {
-        return $this->view($this->getWidgetPath(), $this->viewData())->render();
+        return $this->view($this->getWidgetPath($this->getWidgetName()), $this->viewData())->render();
     }
 
     /**
@@ -423,53 +390,6 @@ abstract class Field
     public function render()
     {
         return $this->view($this->getViewPath($this->getTemplate()), $this->viewData())->render();
-    }
-
-    /**
-     * Find widget in home  directory and theme directory
-     *
-     * @return string
-     */
-    protected function getWidgetPath()
-    {
-        $result = '';
-        $paths = [$this->getTheme(), 'forms.widgets']; // @todo domyslna sciezka dla widgetow przeniesc do konfiga!
-
-        foreach ($paths as $path) {
-            $path .= '.' . $this->getType() . '_widget';
-
-            if (view()->exists($path)) {
-                $result = $path;
-                break;
-            }
-        }
-
-        if (!$result) {
-            throw new FileNotFoundException(sprintf('Can\'t find widget %s_widget', $this->getType()));
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get full path to the view (with theme name)
-     *
-     * @param $view
-     * @return string
-     */
-    protected function getViewPath($view)
-    {
-        return $this->getTheme() . '.' . $view;
-    }
-
-    /**
-     * @param $view
-     * @param array $data
-     * @return View
-     */
-    protected function view($view, $data = [])
-    {
-        return view($view, $data);
     }
 
     /**
@@ -566,6 +486,14 @@ abstract class Field
         }
 
         return $result;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getWidgetName()
+    {
+        return $this->getType() . '_widget';
     }
 
     /**

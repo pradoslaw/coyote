@@ -1,13 +1,13 @@
 {% spaceless %}
-{{ form_open({'url': route('forum.post.submit', [forum.path, topic.id, post.id])}) }}
+    {{ form_start(form) }}
     {{ form_hidden('human', 1) }}
 
     {% for attachment in attachments %}
         {{ form_hidden('attachments[]', attachment.file) }}
     {% endfor %}
 
-    {% for tag in tags %}
-        {{ form_hidden('tags[]', tag) }}
+    {% for tag in form.tags.children %}
+        {{ form_widget(tag) }}
     {% endfor %}
 
     {{ form_widget(form.subject, {type: 'hidden'}) }}
@@ -16,5 +16,5 @@
     {{ form_widget(form.submit, {attr: {title: 'Kliknij, aby wysłać (Ctrl+Enter)', class: 'btn-xs pull-right'}}) }}
 
     <button class="btn btn-xs btn-danger pull-right btn-reset" style="margin-right: 10px">Anuluj</button>
-{{ form_close() }}
+    {{ form_end() }}
 {% endspaceless %}

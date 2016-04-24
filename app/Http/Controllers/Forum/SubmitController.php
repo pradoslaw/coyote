@@ -162,16 +162,9 @@ class SubmitController extends BaseController
     public function edit($forum, $topic, $post)
     {
         $form = $this->getForm($forum, $topic, $post);
-
-        // @todo przeniesc do formularza
-        if ($post->id === $topic->first_post_id) {
-            // get topic tags only if this post is the FIRST post in topic
-            $tags = $topic->getTagNames();
-        }
-
         $attachments = $post->attachments()->get();
 
-        return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'tags', 'attachments', 'form'));
+        return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'attachments', 'form'));
     }
 
 
@@ -259,6 +252,8 @@ class SubmitController extends BaseController
             'forum' => $forum,
             'topic' => $topic,
             'post' => $post
+        ], [
+            'url' => route('forum.post.submit', [$forum->path, $topic ? $topic->id : null, $post ? $post->id : null])
         ]);
     }
 

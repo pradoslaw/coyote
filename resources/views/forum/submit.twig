@@ -18,7 +18,7 @@
 {% block container %}
     <div id="form-wrapper" class="row">
         <div class="col-sm-9">
-            {{ form_open({'method': 'POST', 'id': 'submit-form', 'role': 'form', 'url': url(request().path), 'class': 'form-horizontal'}) }}
+            {{ form_start(form) }}
 
             {% if diff_in_months(topic.last_post_created_at) >= 6 %}
                 <p class="alert alert-danger">
@@ -71,7 +71,7 @@
             {{ form_row(form.subscribe) }}
             {{ form_row(form.submit) }}
 
-            {{ form_close() }}
+            {{ form_end() }}
         </div>
 
         <aside class="col-sm-3">
