@@ -65,9 +65,10 @@ class PostForm extends Form
 
     /**
      * @param array|mixed $data
+     * @param bool $rebuildForm
      * @return $this
      */
-    public function setData($data)
+    public function setData($data, $rebuildForm = true)
     {
         if (is_array($data)) {
             foreach ($data as $key => $value) {
@@ -77,7 +78,7 @@ class PostForm extends Form
             }
         }
 
-        return parent::setData($data);
+        return parent::setData($data, $rebuildForm);
     }
 
     /**

@@ -22,7 +22,7 @@ class TopicCest
         $I->click('Newbie');
         $I->click('Nowy wątek');
 
-        $I->click('Wyślij');
+        $I->click('Zapisz');
 
         $I->wait(1);
         $I->see('Temat musi posiadać minimum 3 znaki długości.');
@@ -82,6 +82,6 @@ class TopicCest
 
         $I->fillField('subject', $subject);
         $I->fillField('text', $text);
-        $I->click('Wyślij');
+        $I->click('Zapisz');
     }
 }

@@ -27,12 +27,13 @@ class AttachmentForm extends Form
 
     /**
      * @param array|mixed $data
+     * @param bool $rebuildForm
      * @return $this
      */
-    public function setData($data)
+    public function setData($data, $rebuildForm = true)
     {
         $this->attachments = $data;
-        return parent::setData($data);
+        return parent::setData($data, $rebuildForm);
     }
 
     public function buildForm()
