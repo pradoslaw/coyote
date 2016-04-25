@@ -228,7 +228,7 @@ abstract class Form implements FormInterface
 
     /**
      * @return string
-     * @todo zmiana nazwy na getMethod()
+     * @deprecated
      */
     public function getFormMethod()
     {
@@ -236,11 +236,30 @@ abstract class Form implements FormInterface
     }
 
     /**
+     * @return mixed
+     */
+    public function getMethod()
+    {
+        return $this->attr['method'];
+    }
+
+    /**
      * @param string $formMethod
+     * @deprecated
      */
     public function setFormMethod($formMethod)
     {
         $this->attr['method'] = $formMethod;
+    }
+
+    /**
+     * @param $method
+     * @return $this
+     */
+    public function setMethod($method)
+    {
+        $this->attr['method'] = $method;
+        return $this;
     }
 
     /**
@@ -253,10 +272,12 @@ abstract class Form implements FormInterface
 
     /**
      * @param mixed $url
+     * @return $this
      */
     public function setUrl($url)
     {
         $this->attr['url'] = $url;
+        return $this;
     }
 
     /**
@@ -284,7 +305,18 @@ abstract class Form implements FormInterface
      */
     public function setAttr($attr)
     {
-        $this->attr = $attr;
+        // user want's to set attributes BUT maybe he does not want to override url attribute?
+//        $url = array_get($this->attr, 'url');
+//        $method = array_get($this->attr, 'method');
+        $only = array_only($this->attr, ['url', 'method']);
+
+        $this->attr = array_merge($only, $attr);
+
+//        if (!isset($this->attr['url'])) {
+//            $this->setUrl($url);
+//        }
+//        if (!isset($))
+
         return $this;
     }
 

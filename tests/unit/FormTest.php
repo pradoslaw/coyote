@@ -43,12 +43,35 @@ class FormTest extends \Codeception\TestCase\Test
     {
     }
 
+    public function testCreateFormAndSetAttributes()
+    {
+        $form = $this->createForm(TestForm::class, null, ['url' => 'http://foo.com']);
+        $this->assertInstanceOf(\Illuminate\Http\Request::class, $form->getRequest());
+
+        $this->assertEquals('http://foo.com', $form->getUrl());
+
+        $form->setUrl('http://bar.com');
+        $this->assertEquals('http://bar.com', $form->getUrl());
+
+        $form->setAttr(['id' => 'submit-form']);
+        $this->assertArrayHasKey('id', $form->getAttr());
+        $this->assertEquals('http://bar.com', $form->getUrl());
+
+        $form->setAttr(['id' => 'submit-form', 'url' => 'http://kung-fu.com']);
+        $this->assertEquals('http://kung-fu.com', $form->getUrl());
+
+        $this->assertEquals('POST', $form->getMethod());
+        $form->setMethod('GET');
+        $this->assertEquals('GET', $form->getMethod());
+
+        $form->setAttr(['id' => 'foo-form']);
+        $this->assertEquals('GET', $form->getMethod());
+    }
 
     // tests
     public function testBuildFormWithDefaultValues()
     {
         $form = $this->createForm(TestForm::class);
-
         $this->assertInstanceOf(\Illuminate\Http\Request::class, $form->getRequest());
 
         $tags = collect([
@@ -216,7 +239,7 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertEquals($value, $form->getField($key)->getValue());
     }
 
-    private function createForm($class)
+    private function createForm($class, $data = null, array $options = [])
     {
         $request = app()->make('request');
         $request->setSession(app('session')->driver('array'));
@@ -224,7 +247,9 @@ class FormTest extends \Codeception\TestCase\Test
         $form = new $class();
         $form->setContainer(app())
             ->setRedirector(app(Redirector::class))
-            ->setRequest($request);
+            ->setRequest($request)
+            ->setData($data)
+            ->setOptions($options);
 
         return $form;
     }
