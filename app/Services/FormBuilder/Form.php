@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\FormBuilder;
 
+use Coyote\Services\FormBuilder\Fields\ChildForm;
 use Coyote\Services\FormBuilder\Fields\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidatesWhenResolvedTrait;
@@ -110,6 +111,15 @@ abstract class Form implements FormInterface
      * @var array
      */
     protected $dontFlash = ['password', 'password_confirmation'];
+
+    /**
+     * Form can have a name if it is children form
+     *
+     * @var string
+     */
+//    protected $name;
+
+    protected $enableValidation = true;
 
     /**
      * @param Request $request
@@ -274,9 +284,7 @@ abstract class Form implements FormInterface
      */
     public function setData($data, $rebuildForm = true)
     {
-//        if (!empty($data)) {
-            $this->data = $data;
-//        }
+        $this->data = $data;
 
         if ($rebuildForm && !empty($this->fields)) {
             $this->rebuildForm();
@@ -298,6 +306,44 @@ abstract class Form implements FormInterface
                 $this->$methodName($values);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function isValidationEnabled()
+    {
+        return $this->enableValidation;
+    }
+
+    /**
+     * @param bool $flag
+     * @return $this
+     */
+    public function setEnableValidation($flag)
+    {
+        $this->enableValidation = (bool) $flag;
 
         return $this;
     }
@@ -393,8 +439,8 @@ abstract class Form implements FormInterface
     protected function getValidatorInstance()
     {
         $factory = $this->container->make(ValidationFactory::class);
-
-        if ($this->isSubmitted()) {
+var_dump($this->isValidationEnabled());
+        if ($this->isSubmitted() && $this->isValidationEnabled()) {
             $this->setupRules();
         }
 
@@ -553,6 +599,7 @@ abstract class Form implements FormInterface
     protected function setupRules()
     {
         $this->makeRules($this->fields);
+        //dd($this->rules);
     }
 
     /**
@@ -567,7 +614,12 @@ abstract class Form implements FormInterface
                 $this->rules[$this->transformNameToRule($field->getName())] = $rules;
             }
 
+            // @todo: moze da sie to zrobic jakos lepiej. byc moze przeniesc ten kod do metody getRules()
+            // klas dziedziczacych po Field?
             if ($field instanceof Collection) {
+                $this->makeRules($field->getChildren());
+            }
+            if ($field instanceof ChildForm) {
                 $this->makeRules($field->getChildren());
             }
         }
@@ -581,7 +633,7 @@ abstract class Form implements FormInterface
      */
     protected function transformNameToRule($name)
     {
-        return preg_replace('/\[.*\]/', '.*', $name);
+        return trim(str_replace(['[', ']'], '', preg_replace('/\[[0-9]+\]/', '.*.', $name)), '.');
     }
 
     public function __call($name, $arguments)

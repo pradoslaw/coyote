@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 abstract class Field
 {
     use RenderTrait;
-    
+
     const DEFAULT_TEMPLATE = 'row';
 
     /**
@@ -401,7 +401,7 @@ abstract class Field
             $this->setValue($this->parent->getRequest()->get($this->name));
         } elseif ($this->hasOldInput($this->name)) {
             $this->setValue($this->getOldInput($this->name));
-        } elseif ($this->value === null) {
+        } elseif ($this->value === null && !($this instanceof ChildForm)) {
             $this->setValue($this->getDataValue($this->parent->getData(), $this->name));
         }
     }
@@ -410,9 +410,6 @@ abstract class Field
      * @param mixed $data
      * @param string $name
      * @return mixed|null
-     *
-     * @todo ta nazwa jest mylaca bo sugeruje, ze pobieramy dane tylko z danych przekazanych
-     * do formularza, ale pobieramy rowniez z sesji oraz z POST
      */
     protected function getDataValue($data, $name)
     {

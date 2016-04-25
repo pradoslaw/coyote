@@ -121,12 +121,6 @@ class Collection extends Field
             );
         }
 
-        if (is_null($this->property)) {
-            throw new \InvalidArgumentException(
-                'Collection field [' . $this->name . '] requires [property] attribute.'
-            );
-        }
-
         $data = $this->value;
         if ($data instanceof \Illuminate\Support\Collection) {
             $data = $data->all();
@@ -135,8 +129,19 @@ class Collection extends Field
         $count = count($data);
         for ($i = 0; $i < $count; $i++) {
             $field = $this->makeField($this->name . '[' . $i . ']', $type, $this->parent, $this->childAttr);
-            $field->setValue($this->getDataValue($data[$i], $this->property));
+            $value = $data[$i];
 
+            if (!($field instanceof ChildForm)) {
+                if (is_null($this->property)) {
+                    throw new \InvalidArgumentException(
+                        'Collection field [' . $this->name . '] requires [property] attribute.'
+                    );
+                }
+
+                $value = $this->getDataValue($data[$i], $this->property);
+            }
+
+            $field->setValue($value);
             $this->children[] = $field;
         }
     }

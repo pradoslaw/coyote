@@ -42,6 +42,6 @@ trait CreateFieldTrait
      */
     protected function getFieldType($type)
     {
-        return __NAMESPACE__ . '\\Fields\\' . ucfirst($type);
+        return __NAMESPACE__ . '\\Fields\\' . ucfirst(camel_case($type));
     }
 }

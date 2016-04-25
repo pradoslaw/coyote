@@ -3,7 +3,7 @@
 namespace TwigBridge\Extensions;
 
 use Coyote\Services\FormBuilder\Fields\Field;
-use Coyote\Services\FormBuilder\Fields\Form as ChildForm;
+use Coyote\Services\FormBuilder\Fields\ChildForm as ChildForm;
 use Coyote\Services\FormBuilder\Form;
 use Twig_Extension;
 use Twig_SimpleFunction;
