@@ -25,9 +25,19 @@ abstract class Form implements FormInterface
     const THEME_HORIZONTAL = 'forms.themes.horizontal';
 
     /**
+     * @experimental
+     */
+    const PRE_RENDER = 'form.pre_render';
+
+    /**
      * @var \Illuminate\Http\Request
      */
     protected $request;
+
+    /**
+     * @var array
+     */
+    protected $events = [];
 
     /**
      * It's public so we can use use attr from twig
@@ -113,12 +123,8 @@ abstract class Form implements FormInterface
     protected $dontFlash = ['password', 'password_confirmation'];
 
     /**
-     * Form can have a name if it is children form
-     *
-     * @var string
+     * @var bool
      */
-//    protected $name;
-
     protected $enableValidation = true;
 
     /**
@@ -198,6 +204,18 @@ abstract class Form implements FormInterface
 
     /**
      * @param $name
+     * @param \Closure $listener
+     * @return $this
+     */
+    public function addEventListener($name, \Closure $listener)
+    {
+        $this->events[] = ['name' => $name, 'listener' => $listener];
+
+        return $this;
+    }
+
+    /**
+     * @param $name
      * @param $type
      * @param array $options
      * @return $this
@@ -210,6 +228,7 @@ abstract class Form implements FormInterface
 
     /**
      * @return string
+     * @todo zmiana nazwy na getMethod()
      */
     public function getFormMethod()
     {
@@ -397,6 +416,8 @@ abstract class Form implements FormInterface
      */
     public function render()
     {
+        $this->fireEvents(self::PRE_RENDER);
+
         return $this->view($this->getViewPath($this->getTemplate()), [
             'form' => $this,
             'fields' => $this->fields
@@ -410,6 +431,8 @@ abstract class Form implements FormInterface
      */
     public function renderForm()
     {
+        $this->fireEvents(self::PRE_RENDER);
+
         return $this->view($this->getWidgetPath(), [
             'form' => $this
         ])->render();
@@ -522,6 +545,19 @@ abstract class Form implements FormInterface
     }
 
     /**
+     * @param $name
+     */
+    protected function fireEvents($name)
+    {
+        foreach ($this->events as $idx => $event) {
+            if ($name === $event['name']) {
+                $event['listener']($this);
+                unset($this->events[$idx]);
+            }
+        }
+    }
+
+    /**
      * Handle a failed validation attempt.
      *
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
@@ -599,7 +635,6 @@ abstract class Form implements FormInterface
     protected function setupRules()
     {
         $this->makeRules($this->fields);
-        //dd($this->rules);
     }
 
     /**

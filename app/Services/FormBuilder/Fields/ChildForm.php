@@ -138,7 +138,7 @@ class ChildForm extends Field
      */
     public function __call($name, $arguments)
     {
-        if (!method_exists($this->form, $name)) {
+        if (!method_exists($this->form, $name) && is_null($this->form->get($name))) {
             throw new \BadMethodCallException(
                 'Method [' . $name . '] does not exist on form [' . get_class($this->form) . ']'
             );

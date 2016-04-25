@@ -65,10 +65,13 @@ class Collection extends Field
 
     /**
      * @param array $childAttr
+     * @return $this
      */
     public function setChildAttr($childAttr)
     {
         $this->childAttr = $childAttr;
+
+        return $this;
     }
 
     /**
@@ -127,6 +130,12 @@ class Collection extends Field
         }
 
         $count = count($data);
+
+        // reset array element's index. element could've been deleted in form so $data can look like
+        // [2 => 'foo', 3 => 'bar']. as you can see there is no element of index 0 and 1. that can
+        // cause problems in for loop.
+        $data = array_values($data);
+
         for ($i = 0; $i < $count; $i++) {
             $field = $this->makeField($this->name . '[' . $i . ']', $type, $this->parent, $this->childAttr);
             $value = $data[$i];

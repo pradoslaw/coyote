@@ -18,28 +18,30 @@ class AttachmentForm extends Form
     /**
      * @var string
      */
-    protected $template = 'attachments';
+    protected $template = 'attachment';
 
     /**
-     * @var \Coyote\Post\Attachment[]
+     * @var bool
      */
-    public $attachments;
+    protected $enableValidation = false;
 
     /**
-     * @param array|mixed $data
-     * @param bool $rebuildForm
-     * @return $this
+     * @var array
+     *
+     * @todo ustawiamy formularz jako HTTP GET przez co nie bedzie walidowany podczas dodawania zalacznikow.
+     * to jest bug i nie powinno byc to konieczne. do poprawy!
      */
-    public function setData($data, $rebuildForm = true)
-    {
-        $this->attachments = $data;
-        return parent::setData($data, $rebuildForm);
-    }
+    public $attr = ['method' => 'PUT'];
 
     public function buildForm()
     {
-        $this->add('attachments', 'hidden', [
-            'template' => 'attachment'
-        ]);
+        $this
+            ->add('file', 'hidden', [
+                'template' => 'attachment'
+            ])
+            ->add('name', 'control')
+            ->add('mime', 'control')
+            ->add('created_at', 'control')
+            ->add('size', 'control');
     }
 }

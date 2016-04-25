@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\LogRepositoryInterface;
+use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
@@ -21,11 +22,12 @@ class LogController extends BaseController
      * LogController constructor.
      * @param Forum $forum
      * @param Topic $topic
+     * @param Post $post
      * @param LogRepositoryInterface $log
      */
-    public function __construct(Forum $forum, Topic $topic, LogRepositoryInterface $log)
+    public function __construct(Forum $forum, Topic $topic, Post $post, LogRepositoryInterface $log)
     {
-        parent::__construct($forum, $topic);
+        parent::__construct($forum, $topic, $post);
 
         $this->log = $log;
     }

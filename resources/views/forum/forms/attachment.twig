@@ -1,19 +1,19 @@
 <tr>
     <td>
-        {% if attachment.file|split('.')[1] in ['jpg', 'jpeg', 'gif', 'png'] %}
-            <a href="javascript:" class="btn-append" data-url="{{ cdn('storage/forum/' ~ attachment.file) }}">{{ attachment.name }}</a>
+        {% if form.file.value|split('.')[1] in ['jpg', 'jpeg', 'gif', 'png'] %}
+            <a href="javascript:" class="btn-append" data-url="{{ cdn('storage/forum/' ~ form.file.value) }}">{{ form.name.value }}</a>
         {% else %}
-            {{ attachment.name }}
+            {{ form.name.value }}
         {% endif %}
     </td>
-    <td>{{ attachment.mime }}</td>
-    <td>{{ attachment.created_at|format_date }}</td>
-    <td>{{ (attachment.size / 1024)|round(2) }} kB</td>
+    <td>{{ form.mime.value }}</td>
+    <td>{{ form.created_at.value|format_date }}</td>
+    <td>{{ (form.size.value / 1024)|round(2) }} kB</td>
     <td>
         <button type="button" title="Usuń załącznik" class="btn btn-default btn-xs btn-del">
             <i class="fa fa-remove"></i>
         </button>
 
-        <input type="hidden" name="attachments[]" value="{{ attachment.file }}">
+        {{ form_widget(form.file) }}
     </td>
 </tr>

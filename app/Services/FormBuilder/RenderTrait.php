@@ -86,6 +86,10 @@ trait RenderTrait
      */
     protected function view($view, $data = [])
     {
+        if (!view()->exists($view)) {
+            throw new FileNotFoundException(sprintf('Can\'t find view %s', $view));
+        }
+        
         return view($view, $data);
     }
 }

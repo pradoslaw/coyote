@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Forms\Forum\AttachmentForm;
 use Coyote\Http\Forms\Forum\SubjectForm;
 use Illuminate\Http\Request;
 use Coyote\Http\Forms\Forum\PostForm;
@@ -134,6 +135,7 @@ class SubmitController extends BaseController
         });
 
         // is this a quick edit (via ajax)?
+        // @todo to nie powinno sie raczej tu znajdowac. przeniesc do middleware?
         if ($request->ajax()) {
             $data = ['post' => ['text' => $post->text, 'attachments' => $post->attachments()->get()]];
 
@@ -162,11 +164,9 @@ class SubmitController extends BaseController
     public function edit($forum, $topic, $post)
     {
         $form = $this->getForm($forum, $topic, $post);
-        $attachments = $post->attachments()->get();
 
         return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'attachments', 'form'));
     }
-
 
     /**
      * @param \Coyote\Topic $topic
@@ -253,7 +253,11 @@ class SubmitController extends BaseController
             'topic' => $topic,
             'post' => $post
         ], [
-            'url' => route('forum.post.submit', [$forum->path, $topic ? $topic->id : null, $post ? $post->id : null])
+            'attr' => [
+                'id' => 'submit-form',
+                'method' => PostForm::POST,
+                'url' => route('forum.post.submit', [$forum->path, $topic ? $topic->id : null, $post ? $post->id : null]),
+            ]
         ]);
     }
 

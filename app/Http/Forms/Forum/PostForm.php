@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Forum;
 
+use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
 use Coyote\User;
 use Illuminate\Http\Request;
 use Coyote\Forum;
@@ -61,6 +62,17 @@ class PostForm extends Form
         $this->post = new Post();
         $this->topic = new Topic();
         $this->forum = new Forum();
+
+        $this->addEventListener(self::PRE_RENDER, function (Form $form) {
+            if ($form->getRequest()->session()->hasOldInput('attachments')) {
+                $repository = app(AttachmentRepositoryInterface::class);
+
+                $oldInput = $form->getRequest()->session()->getOldInput('attachments');
+                array_pluck($oldInput, 'file');
+
+                $form->get('attachments')->setValue($repository->findByFile($oldInput));
+            }
+        });
     }
 
     /**
@@ -177,9 +189,13 @@ class PostForm extends Form
             ]);
         }
 
-        $this->add('attachments', 'form', [
-            'class' => 'Coyote\Http\Forms\Forum\AttachmentForm',
-            'data' => $this->post->attachments()->get()
+        $this->add('attachments', 'collection', [
+            'value' => $this->post->attachments()->get(),
+            'template' => 'attachments',
+            'child_attr' => [
+                'type' => 'child_form',
+                'class' => 'Coyote\Http\Forms\Forum\AttachmentForm',
+            ]
         ]);
 
         $this->add('submit', 'submit', [

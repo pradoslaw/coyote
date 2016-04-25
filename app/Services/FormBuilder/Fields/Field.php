@@ -498,12 +498,21 @@ abstract class Field
      */
     protected function setDefaultOptions(array $options)
     {
+        // if default value was provided, we would like to set it at the end after all other options
+        // because setting value can modify children elements in Collection.php. Before creating children
+        // forms, we want to make sure that other options has been set.
+        $defaultValue = array_pull($options, 'value');
+
         foreach ($options as $key => $values) {
             $methodName = 'set' . ucfirst(camel_case($key));
 
             if (method_exists($this, $methodName)) {
                 $this->$methodName($values);
             }
+        }
+
+        if ($defaultValue) {
+            $this->setValue($defaultValue);
         }
     }
 

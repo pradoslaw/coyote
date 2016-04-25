@@ -164,7 +164,7 @@ class Post extends Model
         $rows = [];
 
         foreach ($attachments as $attachment) {
-            $rows[] = Attachment::where('file', $attachment)->first();
+            $rows[] = Attachment::where('file', $attachment['file'])->first();
         }
 
         $this->attachments()->saveMany($rows);

@@ -2,8 +2,8 @@
     {{ form_start(form) }}
     {{ form_hidden('human', 1) }}
 
-    {% for attachment in attachments %}
-        {{ form_hidden('attachments[]', attachment.file) }}
+    {% for attachment in form.attachments.children %}
+        {{ form_widget(attachment.file) }}
     {% endfor %}
 
     {% for tag in form.tags.children %}

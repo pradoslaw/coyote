@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Factories\FilesystemFactory;
+use Coyote\Http\Forms\Forum\AttachmentForm;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
@@ -17,7 +18,7 @@ use Coyote\Http\Controllers\Controller;
 class AttachmentController extends Controller
 {
     use FilesystemFactory;
-    
+
     /**
      * @var Attachment
      */
@@ -56,7 +57,11 @@ class AttachmentController extends Controller
     public function upload(Request $request)
     {
         $this->validate($request, [
-            'attachment'  => 'required|max:' . (config('filesystems.upload_max_size') * 1024) . '|mimes:' . config('filesystems.upload_mimes')
+            'attachment'  => sprintf(
+                'required|max:%s|mimes:%s',
+                config('filesystems.upload_max_size') * 1024,
+                config('filesystems.upload_mimes')
+            )
         ]);
 
         if ($request->file('attachment')->isValid()) {
@@ -76,7 +81,8 @@ class AttachmentController extends Controller
             ];
 
             $this->attachment->create($data);
-            return view('forum.partials.attachment', ['attachment' => $data]);
+
+            return $this->renderForm($data);
         }
     }
 
@@ -109,7 +115,7 @@ class AttachmentController extends Controller
         ];
 
         $this->attachment->create($data);
-        return view('forum.partials.attachment', ['attachment' => $data]);
+        return $this->renderForm($data);
     }
 
     /**
@@ -158,5 +164,18 @@ class AttachmentController extends Controller
                 $headers
             );
         }
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    protected function renderForm($data)
+    {
+        $form = $this->createForm(AttachmentForm::class, $data);
+        // we're changing field name because front end expect this field to be an array
+        $form->get('file')->setName('attachments[][file]');
+
+        return $form->render();
     }
 }

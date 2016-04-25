@@ -11,9 +11,8 @@
                 </tr>
             </thead>
             <tbody>
-                {% for attachment in form.attachments %}
-                    {% include 'forum.partials.attachment' %}
-                    {#{{ form_row(form.fields.attachments) }}#}
+                {% for field in children %}
+                    {{ form(field) }}
                 {% else %}
                     <tr>
                         <td colspan="5" class="text-center">Brak załączników.</td>

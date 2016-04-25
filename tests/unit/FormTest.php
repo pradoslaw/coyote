@@ -125,6 +125,38 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertEquals('coyote', $form->tags->getChildren()[1]->getValue());
     }
 
+    public function testBuildFormWithCollection()
+    {
+        $form = $this->createForm(TestForm::class);
+        $tags = collect([
+            ['id' => 1, 'name' => 'c++'],
+            ['id' => 2, 'name' => 'c#']
+        ]);
+
+        $form->add('tags_v1', 'collection', [
+            'property' => 'name',
+            'value' => $tags,
+            'child_attr' => [
+                'type' => 'text'
+            ]
+        ]);
+        $form->add('tags_v2', 'collection', [
+            'property' => 'name',
+            'child_attr' => [
+                'type' => 'text'
+            ],
+            'value' => $tags
+        ]);
+
+        $form->buildForm();
+
+        $this->assertEquals('c++', $form->tags_v1->getChildren()[0]->getValue());
+        $this->assertEquals('c#', $form->tags_v1->getChildren()[1]->getValue());
+
+        $this->assertEquals('c++', $form->tags_v2->getChildren()[0]->getValue());
+        $this->assertEquals('c#', $form->tags_v2->getChildren()[1]->getValue());
+    }
+
     public function testBuildFormWithObjectValues()
     {
         $fake = Factory::create();
