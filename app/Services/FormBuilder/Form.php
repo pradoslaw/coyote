@@ -439,7 +439,7 @@ abstract class Form implements FormInterface
     protected function getValidatorInstance()
     {
         $factory = $this->container->make(ValidationFactory::class);
-var_dump($this->isValidationEnabled());
+
         if ($this->isSubmitted() && $this->isValidationEnabled()) {
             $this->setupRules();
         }
