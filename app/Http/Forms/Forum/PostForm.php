@@ -163,6 +163,7 @@ class PostForm extends Form
                 'attr' => [
                     'tabindex' => 4,
                     'id' => 'tags',
+                    'class' => 'form-control',
                     'placeholder' => $this->forum->require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'
                 ],
                 'property' => 'name',

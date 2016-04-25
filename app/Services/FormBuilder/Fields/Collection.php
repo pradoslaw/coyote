@@ -124,6 +124,10 @@ class Collection extends Field
             );
         }
 
+        if (empty($this->value)) {
+            return false;
+        }
+
         $data = $this->value;
         if ($data instanceof \Illuminate\Support\Collection) {
             $data = $data->all();
