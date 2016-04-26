@@ -60,7 +60,7 @@ class HomeController extends Controller
 
     /**
      * @param string $tag
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function tag($tag)
     {
@@ -71,7 +71,7 @@ class HomeController extends Controller
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function mine()
     {
