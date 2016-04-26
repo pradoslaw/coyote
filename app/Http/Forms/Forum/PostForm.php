@@ -19,11 +19,6 @@ class PostForm extends Form
     const RULE_STICKY               = 'sometimes|bool';
     const RULE_TAGS                 = 'array|max:5';
     const RULE_TAG                  = 'max:25|tag|tag_creation:2';
-    const RULE_POLL_TITLE           = 'string';
-    const RULE_POLL_ITEMS           = 'required_with:title';
-    // @todo dodac walidator sprawdzajacy ilosc (oraz dlugosc) linii
-    const RULE_POLL_MAX_ITEMS       = 'required_with:title|integer|min:1|max:20';
-    const RULE_POLL_LENGTH          = 'required_with:title|integer';
     const RULE_HUMAN                = 'required';
     const RULE_THROTTLE             = 'throttle'; // must be at the end
 
@@ -121,6 +116,10 @@ class PostForm extends Form
                     'tabindex' => 1,
                     'autofocus' => 'autofocus'
                 ]
+            ]);
+
+            $this->add('poll', 'child_form', [
+                'class' => 'Coyote\Http\Forms\Forum\PollForm'
             ]);
         }
 
