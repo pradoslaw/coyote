@@ -121,7 +121,7 @@ class Response implements \Countable, \IteratorAggregate, ResponseInterface
 
     /**
      * @param null $name
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|array
      */
     public function getAggregations($name = null)
     {

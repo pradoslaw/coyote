@@ -27,7 +27,7 @@ interface ResponseInterface
     public function getHighlights();
 
     /**
-     * @return array
+     * @return \Illuminate\Support\Collection|array
      */
     public function getAggregations();
 }
