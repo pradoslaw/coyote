@@ -7,21 +7,24 @@ use Coyote\Http\Controllers\Controller;
 class WikiController extends Controller
 {
     /**
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function category()
     {
         $this->breadcrumb->push('Delphi', '/Delphi');
 
-        return parent::view('wiki/category');
+        return $this->view('wiki/category');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function article()
     {
         $this->breadcrumb->push('Delphi', '/Delphi');
         $this->breadcrumb->push('Lorem ipsum lores', '/Delphi/Lorem_ipsum');
 
-        return parent::view('wiki/article');
+        return $this->view('wiki/article');
     }
 
     public function postIndex()

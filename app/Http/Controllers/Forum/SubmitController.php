@@ -286,7 +286,7 @@ class SubmitController extends BaseController
             $postsId[] = $request->input('quote');
         }
 
-        if ($postsId) {
+        if (!empty($postsId)) {
             $posts = $this->post->findPosts(array_unique($postsId), $topic->id);
 
             // builds text with quoted posts

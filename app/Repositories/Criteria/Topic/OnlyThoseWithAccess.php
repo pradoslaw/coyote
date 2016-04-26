@@ -35,7 +35,7 @@ class OnlyThoseWithAccess extends Criteria
                     ->where('forum_access.forum_id', '=', \DB::raw('topics.forum_id'));
             });
 
-            if ($this->groupsId) {
+            if (!empty($this->groupsId)) {
                 $sub->orWhereExists(function ($sub) {
                     return $sub->select('forum_id')
                         ->from('forum_access')

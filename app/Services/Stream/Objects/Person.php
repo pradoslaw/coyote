@@ -9,7 +9,7 @@ class Person extends Object
      */
     public function __construct(array $data = [])
     {
-        if (!$data) {
+        if (empty($data)) {
             $data = auth()->user()->toArray();
         }
 

@@ -306,17 +306,9 @@ abstract class Form implements FormInterface
     public function setAttr($attr)
     {
         // user want's to set attributes BUT maybe he does not want to override url attribute?
-//        $url = array_get($this->attr, 'url');
-//        $method = array_get($this->attr, 'method');
         $only = array_only($this->attr, ['url', 'method']);
 
         $this->attr = array_merge($only, $attr);
-
-//        if (!isset($this->attr['url'])) {
-//            $this->setUrl($url);
-//        }
-//        if (!isset($))
-
         return $this;
     }
 
@@ -444,7 +436,7 @@ abstract class Form implements FormInterface
     /**
      * Render entire form
      *
-     * @return mixed
+     * @return string
      */
     public function render()
     {
@@ -459,7 +451,7 @@ abstract class Form implements FormInterface
     /**
      * Render only opening tag
      *
-     * @return mixed
+     * @return string
      */
     public function renderForm()
     {

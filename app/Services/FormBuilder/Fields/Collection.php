@@ -34,7 +34,7 @@ class Collection extends Field
     {
         parent::__construct($name, $type, $parent, $options);
 
-        if ($this->value && !$this->children) {
+        if ($this->value && empty($this->children)) {
             $this->createChildren();
         }
     }

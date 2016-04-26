@@ -7,6 +7,7 @@ use Coyote\Http\Forms\User as Forms;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\Actkey;
+use Illuminate\Http\Request;
 
 class SettingsController extends BaseController
 {
@@ -79,13 +80,16 @@ class SettingsController extends BaseController
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
     }
 
-    public function ajax()
+    /**
+     * @param Request $request
+     */
+    public function ajax(Request $request)
     {
-        $name = array_keys($_POST)[0];
+        $name = array_keys($request->all())[0];
         $name = trim(strip_tags(htmlspecialchars($name)));
 
         if (!empty($name)) {
-            $value = trim(strip_tags(htmlspecialchars(request()->get($name))));
+            $value = trim(strip_tags(htmlspecialchars($request->get($name))));
 
             $this->setSetting(str_replace('_', '.', $name), $value);
         }

@@ -15,7 +15,7 @@ class HomeController extends BaseController
 
     /**
      * @param User $user
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(User $user)
     {
@@ -43,7 +43,7 @@ class HomeController extends BaseController
             $row['browser'] = $browser;
         }
 
-        return parent::view('user.home', [
+        return $this->view('user.home', [
             'rank'                  => $user->rank(auth()->user()->id),
             'total_users'           => $user->countUsersWithReputation(),
             'ip'                    => request()->ip(),

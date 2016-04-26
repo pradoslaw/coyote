@@ -13,7 +13,7 @@ class PasswordController extends Controller
     /**
      * Formularz generuje link umozliwiajacy reset hasla
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getIndex()
     {
@@ -90,7 +90,7 @@ class PasswordController extends Controller
         ) + ['is_confirm' => 1]; // <-- its important! only record with confirmed email address!!
 
         // walidacja poprawnosci hasla. jedyne wymaganie to posiadanie hasla max 3 znakowego
-        Password::validator(function (array $credentials) {
+        Password::validator(function () {
             return true;
         });
 

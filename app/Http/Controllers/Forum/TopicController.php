@@ -205,7 +205,7 @@ class TopicController extends BaseController
      * @param $id
      * @param User $user
      * @param Request $request
-     * @return $this
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function prompt($id, User $user, Request $request)
     {

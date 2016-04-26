@@ -106,7 +106,7 @@ class CommentController extends Controller
                 // get id of users that were mentioned in the text
                 $usersId = $ref->grab($microblog->text);
 
-                if ($usersId) {
+                if (!empty($usersId)) {
                     $alert->attach(app()->make('Alert\Microblog\Login')->with($alertData)->setUsersId($usersId));
                 }
 

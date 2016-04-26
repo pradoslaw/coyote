@@ -22,12 +22,16 @@ class ApplicationController extends Controller
         $this->breadcrumb->push('Aplikuj na to stanowisko pracy');
 
         $form = $this->createForm(ApplicationForm::class);
+//        $form->tags->setValue($job->tags()->get());
+//        $form->setData((object) ['email' => 'asdadadsa']);
 
         if ($this->userId) {
-            $form->email->setValue(auth()->user()->email);
+//            $form->email->setValue(auth()->user()->email);
             // set default message
-            $form->message->setValue(view('job.partials.application', compact('job')));
+//            $form->message->setValue(view('job.partials.application', compact('job')));
         }
+//        echo $form->render();exit;
+//        dd($form->get('tags')->getChildren()[0]->render());
 
         return $this->view('job.application', compact('job', 'form'))->with(
             'subscribed',
@@ -43,8 +47,9 @@ class ApplicationController extends Controller
     public function save(Job $job, ApplicationForm $form)
     {
         $attachment = [];
-
-        $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->sessionId];
+dd($form->all(),$form->get('tags')->getValue());
+//dd($form->get('tags')->getChildren()->getValues());
+        $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->sessionId];dd($data);
         $file = $form->getRequest()->file('cv');
 
         if ($file !== null) {

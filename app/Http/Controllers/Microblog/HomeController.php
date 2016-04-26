@@ -24,7 +24,7 @@ class HomeController extends Controller
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -49,7 +49,7 @@ class HomeController extends Controller
             }
         }
 
-        return parent::view('microblog.home', [
+        return $this->view('microblog.home', [
             'count'                     => $this->microblog->count(),
             'count_user'                => $this->microblog->countForUser($this->userId),
             'pagination'                => $microblogs->render(),

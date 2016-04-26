@@ -7,7 +7,7 @@ use Coyote\Http\Controllers\Controller;
 class HomeController extends Controller
 {
     /**
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {

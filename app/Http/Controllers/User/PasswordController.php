@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class PasswordController extends BaseController
 {
     use SettingsTrait;
-    
+
     /**
      * @return \Illuminate\Http\Response
      */
@@ -18,7 +18,7 @@ class PasswordController extends BaseController
     {
         $this->breadcrumb->push('Zmiana hasła', route('user.password'));
 
-        return parent::view('user.password');
+        return $this->view('user.password');
     }
 
     /**

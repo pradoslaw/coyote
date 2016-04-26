@@ -70,7 +70,7 @@ class PmController extends BaseController
      *
      * @param int $id
      * @param Request $request
-     * @return $this
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id, Request $request)
     {

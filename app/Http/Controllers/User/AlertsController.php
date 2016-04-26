@@ -64,7 +64,7 @@ class AlertsController extends BaseController
         // mark as read
         $this->mark($alerts);
 
-        return parent::view('user.alerts.home')->with(compact('alerts', 'session'));
+        return $this->view('user.alerts.home')->with(compact('alerts', 'session'));
     }
 
     /**
@@ -82,7 +82,7 @@ class AlertsController extends BaseController
             }
         }
 
-        if ($markId) {
+        if (!empty($markId)) {
             $this->alert->markAsRead($markId);
         }
 
@@ -101,7 +101,7 @@ class AlertsController extends BaseController
                 ->where('user_id', auth()->user()->id)
                 ->get();
 
-        return parent::view('user.alerts.settings', compact('settings'));
+        return $this->view('user.alerts.settings', compact('settings'));
     }
 
     /**

@@ -85,7 +85,7 @@ class SubmitController extends Controller
                 $job->city = $job->locations()->get()->implode('city', ', ');
                 $job->deadline = (new Carbon($job->deadline_at))->diff(Carbon::now())->days;
 
-                $job->tags = $job->tags()->get()->each(function (&$item, $key) {
+                $job->tags = $job->tags()->get()->each(function (&$item) {
                     $item->priority = $item->pivot->priority;
                 });
 
@@ -353,7 +353,6 @@ class SubmitController extends Controller
                 $job->firm_id = $firm->id; // it's important to assign firm id to the offer
 
                 $firm->benefits()->delete();
-//                $benefits = array_filter(array_unique(array_map('trim', $data['benefits'])));
 
                 foreach ($data['benefits'] as $benefit) {
                     $firm->benefits()->create([

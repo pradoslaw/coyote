@@ -19,7 +19,7 @@ class SkillsController extends BaseController
 
         $skills = User\Skill::where('user_id', auth()->user()->id)->orderBy('order')->get();
 
-        return parent::view('user.skills.home')->with('skills', $skills);
+        return $this->view('user.skills.home')->with('skills', $skills);
     }
 
     /**

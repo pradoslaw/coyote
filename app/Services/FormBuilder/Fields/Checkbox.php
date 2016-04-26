@@ -14,8 +14,14 @@ class Checkbox extends Field
      */
     protected $checked;
 
+    /**
+     * @var int
+     */
     protected $checkedValue = 1;
 
+    /**
+     * @var int
+     */
     protected $uncheckedValue = 0;
 
     /**
@@ -105,6 +111,6 @@ class Checkbox extends Field
     public function setValue($value)
     {
         parent::setValue($value);
-        $this->checked = $this->checkedValue === $value;
+        $this->checked = $this->checkedValue == $value;
     }
 }

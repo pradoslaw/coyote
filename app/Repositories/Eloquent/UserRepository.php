@@ -19,7 +19,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
     public function lookupName($name, $orderByUsersId = [])
     {
         $sql = $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%');
-        if ($orderByUsersId) {
+        if (!empty($orderByUsersId)) {
             // @todo To moze nie zadzialac na postgresie
             $sql->orderBy(\DB::raw('id IN(' . implode(',', $orderByUsersId) . ')'), 'DESC');
         }

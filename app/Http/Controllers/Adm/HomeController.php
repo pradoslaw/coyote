@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     /**
      * @param Request $request
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function index(Request $request)
     {

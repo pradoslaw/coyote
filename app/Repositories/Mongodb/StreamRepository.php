@@ -29,15 +29,15 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
                 ->offset($offset)
                 ->take($limit);
 
-        if ($objects) {
+        if (!empty($objects)) {
             $result->whereIn('object.objectType', $this->toArray($objects));
         }
 
-        if ($verbs) {
+        if (!empty($verbs)) {
             $result->whereIn('verb', $this->toArray($verbs));
         }
 
-        if ($targets) {
+        if (!empty($targets)) {
             $result->whereIn('target.objectType', $this->toArray($targets));
         }
 
@@ -56,14 +56,14 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
     {
         $result = $this->model->whereIn('object.objectType', $this->toArray($objects));
 
-        if ($id) {
+        if (!empty($id)) {
             if (!is_array($id)) {
                 $id = [$id];
             }
             $result->whereIn('object.id', $id);
         }
 
-        if ($verbs) {
+        if (!empty($verbs)) {
             $result->whereIn('verb', $this->toArray($verbs));
         }
 

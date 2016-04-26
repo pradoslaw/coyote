@@ -41,7 +41,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
             $values[] = "($item,$key)";
         });
 
-        if (!$values) {
+        if (empty($values)) {
             return false;
         }
 

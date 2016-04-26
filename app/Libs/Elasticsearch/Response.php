@@ -72,7 +72,7 @@ class Response implements \Countable, \IteratorAggregate, ResponseInterface
      * Get the raw hits from
      * Elasticsearch results.
      *
-     * @return array
+     * @return array|\Illuminate\Support\Collection
      */
     public function getHits()
     {
@@ -121,7 +121,7 @@ class Response implements \Countable, \IteratorAggregate, ResponseInterface
 
     /**
      * @param null $name
-     * @return array|static
+     * @return \Illuminate\Support\Collection
      */
     public function getAggregations($name = null)
     {
@@ -130,7 +130,7 @@ class Response implements \Countable, \IteratorAggregate, ResponseInterface
         }
 
         $data = array_get($this->aggregations, "$name.buckets");
-        return collect($data)->lists('doc_count', 'key');
+        return collect($data)->pluck('doc_count', 'key');
     }
 
     /**

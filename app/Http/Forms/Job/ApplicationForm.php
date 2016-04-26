@@ -38,7 +38,8 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
             ->add('phone', 'text', [
                 'rules'  => 'string',
                 'label' => 'Numer telefonu',
-                'help' => 'Podanie numeru telefonu nie jest obowiązkowe, ale pozwoli na szybki kontakt.'
+                'help' => 'Podanie numeru telefonu nie jest obowiązkowe, ale pozwoli na szybki kontakt.',
+                'value' => 'nr tel'
             ])
             ->add('cv', 'file', [
                 'rules' => 'max:' . (config('filesystems.upload_max_size') * 1024) . '|mimes:pdf,doc,docx,rtf',
@@ -56,6 +57,18 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
             ->add('cc', 'checkbox', [
                 'label' => 'Wyślij kopię e-maila również do mnie',
                 'value' => 1
+            ])
+            ->add('tags', 'collection', [
+
+
+                'label' => 'Tagi',
+                'child_attr' => [
+                    'type' => 'child_form',
+                    'class' => 'Coyote\Http\Forms\Job\TagForm',
+
+                ],
+
+                'value' => collect([['id' => 1, 'name' => 'adam']])
             ])
             ->add('submit', 'submit', [
                 'label' => 'Zapisz',

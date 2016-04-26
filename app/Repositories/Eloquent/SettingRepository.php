@@ -52,7 +52,7 @@ class SettingRepository extends Repository implements SettingRepositoryInterface
      * @param $userId
      * @param $sessionId
      * @param null $default
-     * @return null|static
+     * @return string
      */
     public function getItem($name, $userId, $sessionId, $default = null)
     {

@@ -5,14 +5,13 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Illuminate\Http\Request;
-use Gate;
 
 class CategoryController extends BaseController
 {
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
-     * @return $this
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($forum, Request $request)
     {
@@ -47,8 +46,8 @@ class CategoryController extends BaseController
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
-        if (Gate::allows('delete', $forum)) {
-            $flags = app()->make('FlagRepository')->takeForTopics($topics->groupBy('id')->keys()->toArray());
+        if ($this->getGateFactory()->allows('delete', $forum)) {
+            $flags = app('FlagRepository')->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
         $collapse = $this->getSetting('forum.collapse') ? unserialize($this->getSetting('forum.collapse')) : [];

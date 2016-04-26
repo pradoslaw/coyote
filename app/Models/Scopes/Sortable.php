@@ -29,7 +29,7 @@ trait Sortable
             // column can has a value. for example we want to filter by column topics.last_post_id
             // we don't want to pass such a long column name in query string. instead  we can set up an alias
             // like last that can be mapped as topics.last_post_id
-            if ($alias) {
+            if (!empty($alias)) {
                 foreach ($alias as $col => $val) {
                     if ($sort === $col) {
                         $sort = $val;

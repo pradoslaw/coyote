@@ -65,7 +65,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
      */
     public function resetCriteria()
     {
-        if ($this->criteria) {
+        if (!empty($this->criteria)) {
             $this->criteria = [];
             $this->makeModel();
         }

@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
 class SubmitController extends Controller
 {
     use FilesystemFactory;
-    
+
     /**
      * @var Microblog
      */
@@ -118,7 +118,7 @@ class SubmitController extends Controller
                 // get id of users that were mentioned in the text
                 $usersId = $ref->grab($microblog->text);
 
-                if ($usersId) {
+                if (!empty($usersId)) {
                     app()->make('Alert\Microblog\Login')->with([
                         'users_id'    => $usersId,
                         'sender_id'   => $user->id,

@@ -48,7 +48,7 @@ trait Elasticsearch
     {
         $mapping = $this->getMapping();
 
-        if ($mapping) {
+        if (!empty($mapping)) {
             $params = $this->getParams();
             $params['body'] = $mapping;
 

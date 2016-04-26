@@ -30,7 +30,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
      */
     public function paginate($userId, $perPage = 20)
     {
-        $alerts = $this->prepare($userId, $perPage)->paginate($perPage);
+        $alerts = $this->prepare($userId)->paginate($perPage);
         $alerts = $this->parse($alerts);
 
         return $alerts;

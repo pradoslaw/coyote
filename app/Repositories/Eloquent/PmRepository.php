@@ -39,7 +39,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
     /**
      * @param int $userId
      * @param int $perPage
-     * @return LengthAwarePaginator
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function paginate($userId, $perPage = 10)
     {
@@ -56,9 +56,11 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 ->get();
 
         return new LengthAwarePaginator(
-            $result, $count, $perPage, LengthAwarePaginator::resolveCurrentPage(), [
-                'path' => LengthAwarePaginator::resolveCurrentPath()
-            ]
+            $result,
+            $count,
+            $perPage,
+            LengthAwarePaginator::resolveCurrentPage(),
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
     }
 

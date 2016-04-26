@@ -64,7 +64,7 @@ class City extends Filter implements DslInterface
      */
     public function apply(QueryBuilderInterface $queryBuilder)
     {
-        if (!$this->cities) {
+        if (empty($this->cities)) {
             return $queryBuilder->getBody();
         }
 

@@ -52,7 +52,7 @@ class AttachmentController extends Controller
      * Upload file to server
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|string
      */
     public function upload(Request $request)
     {
@@ -89,7 +89,7 @@ class AttachmentController extends Controller
     /**
      * Paste image from clipboard
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|string
      */
     public function paste()
     {
@@ -122,7 +122,7 @@ class AttachmentController extends Controller
      * Download the attachment (or show image)
      *
      * @param $id
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\Response
      */
     public function download($id)
     {
@@ -168,7 +168,7 @@ class AttachmentController extends Controller
 
     /**
      * @param $data
-     * @return mixed
+     * @return string
      */
     protected function renderForm($data)
     {

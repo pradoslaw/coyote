@@ -3,23 +3,22 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface;
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Coyote\Session;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 
 class VcardController extends Controller
 {
     /**
      * @param $id
-     * @param UserRepositoryInterface $user
-     * @param SessionRepositoryInterface $session
+     * @param UserRepository $user
+     * @param SessionRepository $session
      * @return mixed
      */
-    public function index($id, UserRepositoryInterface $user, SessionRepositoryInterface $session)
+    public function index($id, UserRepository $user, SessionRepository $session)
     {
         $data = $user->find($id);
         if (!$data) {
-            exit;
+            return response();
         }
 
         return view('components.vcard')->with('user', $data)->with([

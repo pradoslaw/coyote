@@ -125,7 +125,7 @@ abstract class Reputation implements ReputationInterface
      */
     public function save(array $args = [])
     {
-        if ($args) {
+        if (!empty($args)) {
             foreach ($args as $arg => $value) {
                 $this->{'set' . camel_case($arg)}($value);
             }

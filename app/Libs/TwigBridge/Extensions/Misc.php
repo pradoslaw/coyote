@@ -27,7 +27,7 @@ class Misc extends Twig_Extension
             new Twig_SimpleFunction('declination', [Declination::class, 'format']),
             new Twig_SimpleFunction(
                 'sortable',
-                function ($name) {
+                function () {
                     $args = func_get_args();
 
                     $column = array_shift($args);

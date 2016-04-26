@@ -18,7 +18,7 @@ class AlertWasBroadcasted extends Event implements ShouldBroadcast
     private $userId;
 
     /**
-     * @var ProviderInterface
+     * @var array
      */
     public $alert;
 
