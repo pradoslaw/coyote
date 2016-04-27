@@ -159,7 +159,7 @@ class CommentController extends Controller
     public function edit($id)
     {
         $comment = $this->comment->findOrFail($id);
-        list(,, $forum) = $this->checkAbility($comment->post_id);
+        list(, , $forum) = $this->checkAbility($comment->post_id);
 
         $this->authorize('update', [$comment, $forum]);
 
