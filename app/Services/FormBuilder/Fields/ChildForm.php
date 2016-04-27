@@ -5,7 +5,7 @@ namespace Coyote\Services\FormBuilder\Fields;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 
-class ChildForm extends Field
+class ChildForm extends ParentType
 {
     /**
      * @var string
@@ -23,11 +23,6 @@ class ChildForm extends Field
     protected $form;
 
     /**
-     * @var Field[]
-     */
-    protected $children = [];
-
-    /**
      * ChildForm constructor.
      * @param $name
      * @param $type
@@ -38,7 +33,6 @@ class ChildForm extends Field
     {
         parent::__construct($name, $type, $parent, $options);
 
-//        if ($this->value && empty($this->children)) {
         if (empty($this->children)) {
             $this->createChildren();
         }
@@ -72,14 +66,6 @@ class ChildForm extends Field
     }
 
     /**
-     * @return array
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-    /**
      * @param mixed $value
      */
     public function setValue($value)
@@ -90,16 +76,6 @@ class ChildForm extends Field
             $this->children = [];
             $this->createChildren();
         }
-    }
-
-    /**
-     * Get a child
-     *
-     * @return mixed
-     */
-    public function getChild($key)
-    {
-        return array_get($this->children, $key);
     }
 
     /**
@@ -127,6 +103,7 @@ class ChildForm extends Field
         $this->form->setEnableValidation(false);
         $this->children = $this->form->getFields();
 
+        /** @var Field $child */
         foreach ($this->children as $child) {
             $child->setName($this->name . '[' . $child->getName() . ']');
         }

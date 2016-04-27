@@ -5,7 +5,7 @@ namespace Coyote\Services\FormBuilder\Fields;
 use Coyote\Services\FormBuilder\CreateFieldTrait;
 use Coyote\Services\FormBuilder\Form as ParentForm;
 
-class Collection extends Field
+class Collection extends ParentType
 {
     use CreateFieldTrait;
 
@@ -18,11 +18,6 @@ class Collection extends Field
      * @var Field[]
      */
     protected $childAttr = [];
-
-    /**
-     * @var array
-     */
-    protected $children = [];
 
     /**
      * @param $name
@@ -86,15 +81,7 @@ class Collection extends Field
             $this->createChildren();
         }
     }
-
-    /**
-     * @return array
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
+    
     /**
      * Get children values as array
      *

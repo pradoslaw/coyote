@@ -34,6 +34,7 @@ class FormBuilder
             );
         }
 
+        /** @var FormInterface $form */
         $form = $this->container->make($formClass)->setData($data)->setOptions($options);
         $form->buildForm();
 

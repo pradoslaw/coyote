@@ -2,21 +2,11 @@
 
 namespace Coyote\Services\FormBuilder;
 
-use Coyote\Services\FormBuilder\Fields\ChildForm;
-use Coyote\Services\FormBuilder\Fields\Collection;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidatesWhenResolvedTrait;
-use Illuminate\Routing\Redirector;
-use Illuminate\Container\Container;
-use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exception\HttpResponseException;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Coyote\Services\FormBuilder\Fields\ParentType;
 
-abstract class Form implements FormInterface
+abstract class Form extends FormRequest implements FormInterface
 {
-    use ValidatesWhenResolvedTrait, CreateFieldTrait, RenderTrait;
+    use CreateFieldTrait, RenderTrait;
 
     const GET = 'GET';
     const POST = 'POST';
@@ -28,11 +18,6 @@ abstract class Form implements FormInterface
      * @experimental
      */
     const PRE_RENDER = 'form.pre_render';
-
-    /**
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
 
     /**
      * @var array
@@ -64,121 +49,9 @@ abstract class Form implements FormInterface
     protected $fields = [];
 
     /**
-     * @var array
-     */
-    protected $rules = [];
-
-    /**
      * @var mixed|array
      */
     protected $data;
-
-    /**
-     * The container instance.
-     *
-     * @var \Illuminate\Container\Container
-     */
-    protected $container;
-
-    /**
-     * The redirector instance.
-     *
-     * @var \Illuminate\Routing\Redirector
-     */
-    protected $redirector;
-
-    /**
-     * The URI to redirect to if validation fails.
-     *
-     * @var string
-     */
-    protected $redirect;
-
-    /**
-     * The route to redirect to if validation fails.
-     *
-     * @var string
-     */
-    protected $redirectRoute;
-
-    /**
-     * The controller action to redirect to if validation fails.
-     *
-     * @var string
-     */
-    protected $redirectAction;
-
-    /**
-     * The key to be used for the view error bag.
-     *
-     * @var string
-     */
-    protected $errorBag = 'default';
-
-    /**
-     * The input keys that should not be flashed on redirect.
-     *
-     * @var array
-     */
-    protected $dontFlash = ['password', 'password_confirmation'];
-
-    /**
-     * @var bool
-     */
-    protected $enableValidation = true;
-
-    /**
-     * @param Request $request
-     * @return $this
-     */
-    public function setRequest(Request $request)
-    {
-        $this->request = $request;
-
-        return $this;
-    }
-
-    /**
-     * @return Request
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-     * Set the Redirector instance.
-     *
-     * @param  \Illuminate\Routing\Redirector  $redirector
-     * @return Form
-     */
-    public function setRedirector(Redirector $redirector)
-    {
-        $this->redirector = $redirector;
-
-        return $this;
-    }
-
-    /**
-     * Set the container implementation.
-     *
-     * @param  \Illuminate\Container\Container  $container
-     * @return $this
-     */
-    public function setContainer(Container $container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * @return Container
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
 
     /**
      * @return mixed
@@ -186,20 +59,12 @@ abstract class Form implements FormInterface
     abstract public function buildForm();
 
     /**
-     * Remove existing fields and build them again.
+     * @inheritdoc
      */
     public function rebuildForm()
     {
         $this->fields = [];
         $this->buildForm();
-    }
-
-    /**
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
     }
 
     /**
@@ -215,10 +80,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param string $name
-     * @param string $type
-     * @param array $options
-     * @return $this
+     * @inheritdoc
      */
     public function add($name, $type, array $options = [])
     {
@@ -227,16 +89,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @return string
-     * @deprecated
-     */
-    public function getFormMethod()
-    {
-        return $this->attr['method'];
-    }
-
-    /**
-     * @return mixed
+     * @inheritdoc
      */
     public function getMethod()
     {
@@ -244,17 +97,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param string $formMethod
-     * @deprecated
-     */
-    public function setFormMethod($formMethod)
-    {
-        $this->attr['method'] = $formMethod;
-    }
-
-    /**
-     * @param $method
-     * @return $this
+     * @inheritdoc
      */
     public function setMethod($method)
     {
@@ -263,7 +106,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @return mixed
+     * @inheritdoc
      */
     public function getUrl()
     {
@@ -271,8 +114,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param mixed $url
-     * @return $this
+     * @inheritdoc
      */
     public function setUrl($url)
     {
@@ -281,7 +123,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getAttr()
     {
@@ -289,19 +131,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param $name
-     * @param $value
-     * @return $this
-     */
-    public function addAttr($name, $value)
-    {
-        $this->attr[$name] = $value;
-        return $this;
-    }
-
-    /**
-     * @param array $attr
-     * @return $this
+     * @inheritdoc
      */
     public function setAttr($attr)
     {
@@ -313,7 +143,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @return array|mixed
+     * @inheritdoc
      */
     public function getData()
     {
@@ -321,9 +151,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param array|mixed $data
-     * @param bool $rebuildForm
-     * @return $this
+     * @inheritdoc
      */
     public function setData($data, $rebuildForm = true)
     {
@@ -337,8 +165,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param array $options
-     * @return $this
+     * @inheritdoc
      */
     public function setOptions(array $options = [])
     {
@@ -354,53 +181,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isValidationEnabled()
-    {
-        return $this->enableValidation;
-    }
-
-    /**
-     * @param bool $flag
-     * @return $this
-     */
-    public function setEnableValidation($flag)
-    {
-        $this->enableValidation = (bool) $flag;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function rules()
-    {
-        return $this->rules;
-    }
-
-    /**
-     * @return mixed
+     * @inheritdoc
      */
     public function errors()
     {
@@ -408,8 +189,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param $field
-     * @return mixed|null
+     * @inheritdoc
      */
     public function getField($field)
     {
@@ -417,8 +197,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param $field
-     * @return mixed|null
+     * @inheritdoc
      */
     public function get($field)
     {
@@ -426,7 +205,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getFields()
     {
@@ -434,9 +213,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * Render entire form
-     *
-     * @return string
+     * @inheritdoc
      */
     public function render()
     {
@@ -449,25 +226,30 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * Render only opening tag
-     *
-     * @return string
+     * @inheritdoc
      */
     public function renderForm()
     {
         $this->fireEvents(self::PRE_RENDER);
 
-        return $this->view($this->getWidgetPath(), [
-            'form' => $this
-        ])->render();
+        return $this->view($this->getWidgetPath(), ['form' => $this])->render();
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function all()
     {
         return $this->request->all();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isSubmitted()
+    {
+        // @todo obsluga dla metody GET
+        return $this->request->method() === $this->getMethod();
     }
 
     /**
@@ -476,96 +258,6 @@ abstract class Form implements FormInterface
     protected function getWidgetName()
     {
         return 'form_widget';
-    }
-
-    /**
-     * Get the validator instance for the request.
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function getValidatorInstance()
-    {
-        $factory = $this->container->make(ValidationFactory::class);
-
-        if ($this->isSubmitted() && $this->isValidationEnabled()) {
-            $this->setupRules();
-        }
-
-        if (method_exists($this, 'validator')) {
-            return $this->container->call([$this, 'validator'], compact('factory'));
-        }
-
-        return $this->makeValidatorInstance($factory);
-    }
-
-    /**
-     * @param ValidationFactory $factory
-     * @return Validator
-     */
-    protected function makeValidatorInstance(ValidationFactory $factory)
-    {
-        return $factory->make(
-            $this->request->all(),
-            $this->container->call([$this, 'rules']),
-            $this->messages(),
-            $this->attributes()
-        );
-    }
-
-    /**
-     * Set custom messages for validator errors.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [];
-    }
-
-    /**
-     * Set custom attributes for validator errors.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [];
-    }
-
-    /**
-     * Get the proper failed validation response for the request.
-     *
-     * @param  array  $errors
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function response(array $errors)
-    {
-        if ($this->request->ajax() || $this->request->wantsJson()) {
-            return new JsonResponse($errors, 422);
-        }
-
-        return $this->redirector->to($this->getRedirectUrl())
-            ->withInput($this->request->except($this->dontFlash))
-            ->withErrors($errors, $this->errorBag);
-    }
-
-    /**
-     * Get the response for a forbidden operation.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function forbiddenResponse()
-    {
-        return new Response('Forbidden', 403);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSubmitted()
-    {
-        // @todo obsluga dla metody GET
-        return $this->request->method() === $this->getFormMethod();
     }
 
     /**
@@ -579,78 +271,6 @@ abstract class Form implements FormInterface
                 unset($this->events[$idx]);
             }
         }
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exception\HttpResponseException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException($this->response(
-            $this->formatErrors($validator)
-        ));
-    }
-
-    /**
-     * Determine if the request passes the authorization check.
-     *
-     * @return bool
-     */
-    protected function passesAuthorization()
-    {
-        if (method_exists($this, 'authorize')) {
-            return $this->container->call([$this, 'authorize']);
-        }
-
-        return false;
-    }
-
-    /**
-     * Handle a failed authorization attempt.
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exception\HttpResponseException
-     */
-    protected function failedAuthorization()
-    {
-        throw new HttpResponseException($this->forbiddenResponse());
-    }
-
-    /**
-     * Format the errors from the given Validator instance.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return array
-     */
-    protected function formatErrors(Validator $validator)
-    {
-        return $validator->getMessageBag()->toArray();
-    }
-
-    /**
-     * Get the URL to redirect to on a validation error.
-     *
-     * @return string
-     */
-    protected function getRedirectUrl()
-    {
-        $url = $this->redirector->getUrlGenerator();
-
-        if ($this->redirect) {
-            return $url->to($this->redirect);
-        } elseif ($this->redirectRoute) {
-            return $url->route($this->redirectRoute);
-        } elseif ($this->redirectAction) {
-            return $url->action($this->redirectAction);
-        }
-
-        return $url->previous();
     }
 
     /**
@@ -675,10 +295,7 @@ abstract class Form implements FormInterface
 
             // @todo: moze da sie to zrobic jakos lepiej. byc moze przeniesc ten kod do metody getRules()
             // klas dziedziczacych po Field?
-            if ($field instanceof Collection) {
-                $this->makeRules($field->getChildren());
-            }
-            if ($field instanceof ChildForm) {
+            if ($field instanceof ParentType) {
                 $this->makeRules($field->getChildren());
             }
         }
@@ -695,11 +312,20 @@ abstract class Form implements FormInterface
         return trim(str_replace(['[', ']'], '', preg_replace('/\[[0-9]+\]/', '.*.', $name)), '.');
     }
 
+    /**
+     * @param $name
+     * @param $arguments
+     * @return mixed|null
+     */
     public function __call($name, $arguments)
     {
         return $this->getField($name);
     }
 
+    /**
+     * @param $key
+     * @return mixed|null
+     */
     public function __get($key)
     {
         return $this->getField($key);
