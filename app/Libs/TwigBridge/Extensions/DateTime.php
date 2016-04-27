@@ -45,7 +45,7 @@ class DateTime extends Twig_Extension
     /**
      * Dodatkowe filtry Twig zwiazane z formatowaniem danych uzytkownika
      *
-     * @return array
+     * @return Twig_SimpleFilter[]
      */
     public function getFilters()
     {
