@@ -7,7 +7,7 @@ trait CreateFieldTrait
     /**
      * @param $name
      * @param string $type
-     * @param mixed $parent
+     * @param Form $parent
      * @param array $options
      * @return mixed
      */
@@ -37,7 +37,7 @@ trait CreateFieldTrait
     }
 
     /**
-     * @param $type
+     * @param string $type
      * @return string
      */
     protected function getFieldType($type)

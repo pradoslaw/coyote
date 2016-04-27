@@ -14,7 +14,7 @@ use Gate;
 class HomeController extends BaseController
 {
     /**
-     * @param null $view
+     * @param string $view
      * @param array $data
      * @return mixed
      */
@@ -85,7 +85,7 @@ class HomeController extends BaseController
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function preview(Request $request)
     {

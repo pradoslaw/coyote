@@ -45,7 +45,7 @@ class RegisterController extends Controller
      * Obsluga formularza rejestracji uzytkownika
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function signup(Request $request)
     {

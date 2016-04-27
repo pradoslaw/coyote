@@ -82,7 +82,7 @@ abstract class Controller extends BaseController
     /**
      * Renders view with breadcrumb
      *
-     * @param null $view
+     * @param string|null $view
      * @param array $data
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -103,7 +103,7 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param $value
      */
     protected function setSetting($name, $value)
@@ -132,7 +132,7 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param null $default
      * @return null
      */

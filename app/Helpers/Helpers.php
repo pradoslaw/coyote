@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @param $value
+ * @param string $value
  * @param int $limit
  * @param string $end
  * @return string
@@ -71,7 +71,7 @@ function stream($activity = null, $object = null, $target = null)
 /**
  * Creates CDN assets url
  *
- * @param $path
+ * @param string $path
  * @param null $secure
  * @return string
  */
@@ -93,7 +93,7 @@ function cdn($path, $secure = null)
  * Uppercase first character of each word
  *
  * @param $string
- * @return mixed|string
+ * @return string
  */
 function capitalize($string)
 {

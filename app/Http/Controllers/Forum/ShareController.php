@@ -2,10 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 
 /**
  * Class ShareController
@@ -15,7 +12,7 @@ class ShareController extends BaseController
 {
     /**
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function index($id)
     {

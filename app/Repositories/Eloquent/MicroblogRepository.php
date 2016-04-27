@@ -35,7 +35,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
-     * @param null|int $perPage
+     * @param integer $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage = 10)

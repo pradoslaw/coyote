@@ -159,7 +159,7 @@ class Job extends Model
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public static function getRatesList()
     {
@@ -167,7 +167,7 @@ class Job extends Model
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public static function getEmploymentList()
     {
@@ -226,7 +226,7 @@ class Job extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function tags()
     {

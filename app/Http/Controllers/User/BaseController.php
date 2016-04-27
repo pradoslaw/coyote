@@ -18,7 +18,7 @@ abstract class BaseController extends Controller
     /**
      * Renders view with breadcrumb
      *
-     * @param null $view
+     * @param string $view
      * @param array $data
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

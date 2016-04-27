@@ -151,8 +151,8 @@ class Topic extends Model
     }
 
     /**
-     * @param $userId
-     * @param $sessionId
+     * @param integer $userId
+     * @param string $sessionId
      * @return mixed
      */
     public function markTime($userId, $sessionId)
@@ -172,8 +172,8 @@ class Topic extends Model
      * Mark topic as read
      *
      * @param $markTime
-     * @param $userId
-     * @param $sessionId
+     * @param integer $userId
+     * @param string $sessionId
      */
     public function markAsRead($markTime, $userId, $sessionId)
     {

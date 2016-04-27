@@ -9,7 +9,6 @@ use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
 use Guzzle\Http\Mimetypes;
-use Carbon;
 
 /**
  * Class PmController
@@ -139,7 +138,7 @@ class PmController extends BaseController
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function preview(Request $request)
     {

@@ -104,7 +104,7 @@ abstract class Field
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -146,7 +146,7 @@ abstract class Field
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getType()
     {
@@ -172,7 +172,7 @@ abstract class Field
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getLabel()
     {
@@ -214,7 +214,7 @@ abstract class Field
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getHelp()
     {
@@ -436,7 +436,7 @@ abstract class Field
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return bool
      */
     protected function hasOldInput($key)
@@ -448,7 +448,7 @@ abstract class Field
      * If object is a instance of Eloquent model, we have to make sure that relations were loaded
      *
      * @param $model
-     * @param $key
+     * @param string $key
      * @return mixed
      */
     protected function loadModelRelation($model, $key)
@@ -526,7 +526,7 @@ abstract class Field
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function __toString()
     {

@@ -21,11 +21,11 @@ class StreamController extends BaseController
 
         $activities = $stream->whereNested(function ($query) use ($topic) {
             $query->where('target.objectType', 'topic')
-                  ->where('target.id', $topic->id);
+                    ->where('target.id', $topic->id);
         })
         ->whereNested(function ($query) use ($topic) {
             $query->where('object.objectType', 'topic')
-                  ->where('object.id', $topic->id);
+                    ->where('object.id', $topic->id);
         }, 'or')
         ->orderBy('_id', 'DESC')
         ->paginate();

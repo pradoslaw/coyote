@@ -43,8 +43,8 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
     }
 
     /**
-     * @param $dateTime
-     * @param $limit
+     * @param string $dateTime
+     * @param integer $limit
      * @return mixed
      */
     private function getReputation($dateTime, $limit)

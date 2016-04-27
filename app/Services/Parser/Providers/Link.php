@@ -33,7 +33,7 @@ class Link implements ProviderInterface
 
     /**
      * @param string $text
-     * @return mixed|string
+     * @return string
      * @todo Parsowanie linkow "starego" coyote typu [[Foo]]
      */
     public function parse($text)
@@ -57,6 +57,9 @@ class Link implements ProviderInterface
         return $text;
     }
 
+    /**
+     * @param string $url
+     */
     private function getPathFromUrl($url)
     {
         $component = parse_url($url);

@@ -46,7 +46,7 @@ class OAuthController extends Controller
      * Obtain the user information from GitHub.
      *
      * @param string $provider
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function callback($provider)
     {

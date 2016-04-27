@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\Job;
 
 use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface;

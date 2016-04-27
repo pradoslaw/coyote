@@ -10,6 +10,9 @@ class WithTag extends Criteria
 {
     private $tag;
 
+    /**
+     * @param string $tag
+     */
     public function __construct($tag)
     {
         $this->tag = $tag;

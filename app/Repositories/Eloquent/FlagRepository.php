@@ -16,7 +16,7 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     }
 
     /**
-     * @param $value
+     * @param integer $value
      * @return string
      */
     private function strVal($value)
@@ -85,7 +85,7 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
 
     /**
      * @param array $data
-     * @return mixed
+     * @return string
      */
     private function join(array $data)
     {

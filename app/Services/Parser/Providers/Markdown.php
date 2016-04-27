@@ -97,7 +97,7 @@ class Markdown extends \Parsedown implements ProviderInterface
      * Find the position of the first occurrence of a character in a string
      *
      * @param $haystack
-     * @param $needle
+     * @param string $needle
      * @param int $offset
      * @return bool|mixed
      */
@@ -166,7 +166,7 @@ class Markdown extends \Parsedown implements ProviderInterface
 
     /**
      * @param string $text
-     * @return mixed|string
+     * @return string
      */
     public function parse($text)
     {

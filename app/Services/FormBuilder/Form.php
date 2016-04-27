@@ -150,7 +150,7 @@ abstract class Form implements FormInterface
      * Set the Redirector instance.
      *
      * @param  \Illuminate\Routing\Redirector  $redirector
-     * @return \Illuminate\Foundation\Http\FormRequest
+     * @return Form
      */
     public function setRedirector(Redirector $redirector)
     {
@@ -203,7 +203,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param \Closure $listener
      * @return $this
      */
@@ -215,8 +215,8 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param $name
-     * @param $type
+     * @param string $name
+     * @param string $type
      * @param array $options
      * @return $this
      */
@@ -373,7 +373,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @return string
+     * @return boolean
      */
     public function isValidationEnabled()
     {
@@ -569,7 +569,7 @@ abstract class Form implements FormInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      */
     protected function fireEvents($name)
     {
@@ -688,7 +688,7 @@ abstract class Form implements FormInterface
      * Prepare laravel's rule name. Transforms string like tags[0] to tags.*
      *
      * @param $name
-     * @return mixed
+     * @return string
      */
     protected function transformNameToRule($name)
     {
