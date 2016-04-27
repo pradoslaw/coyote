@@ -72,7 +72,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
      * @param $postId
      * @param $topicId
      * @param int $perPage
-     * @return mixed
+     * @return double
      */
     public function getPage($postId, $topicId, $perPage = 10)
     {

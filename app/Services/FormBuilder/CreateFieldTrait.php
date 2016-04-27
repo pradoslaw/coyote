@@ -5,7 +5,7 @@ namespace Coyote\Services\FormBuilder;
 trait CreateFieldTrait
 {
     /**
-     * @param $name
+     * @param string $name
      * @param string $type
      * @param Form $parent
      * @param array $options

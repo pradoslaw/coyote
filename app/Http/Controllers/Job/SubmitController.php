@@ -441,7 +441,7 @@ class SubmitController extends Controller
 
     /**
      * @param Request $request
-     * @param $next
+     * @param \Illuminate\Http\RedirectResponse $next
      * @return \Illuminate\Http\RedirectResponse
      */
     private function next(Request $request, $next)
