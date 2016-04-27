@@ -21,6 +21,9 @@ class ApplicationController extends Controller
         $this->breadcrumb->push($job->title, route('job.offer', [$job->id, $job->path]));
         $this->breadcrumb->push('Aplikuj na to stanowisko pracy');
 
+        /**
+         * @var ApplicationForm $form
+         */
         $form = $this->createForm(ApplicationForm::class);
 
         if ($this->userId) {
