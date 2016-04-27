@@ -13,7 +13,7 @@ use Menu;
 class BaseController extends Controller
 {
     /**
-     * @return mixed
+     * @return \Lavary\Menu\Menu
      */
     protected function menu()
     {

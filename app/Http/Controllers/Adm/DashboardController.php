@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Adm;
 class DashboardController extends BaseController
 {
     /**
-     * @return \Illuminate\View\View
+     * @inheritdoc
      */
     public function index()
     {
