@@ -12,6 +12,8 @@ class PollForm extends Form
     const RULE_MAX_ITEMS       = 'required_with:title|integer|min:1|max:20';
     const RULE_LENGTH          = 'required_with:title|integer';
 
+//    protected $template = 'poll_form';
+
     public function buildForm()
     {
         $this

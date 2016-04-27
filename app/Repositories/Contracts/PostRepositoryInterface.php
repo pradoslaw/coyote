@@ -59,11 +59,11 @@ interface PostRepositoryInterface extends RepositoryInterface
 
     /**
      * @param Request $request
-     * @param User $user
+     * @param User|null $user
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
      * @return Post $post
      */
-    public function save(Request $request, User $user, Forum $forum, &$topic, &$post);
+    public function save(Request $request, $user, Forum $forum, &$topic, &$post);
 }

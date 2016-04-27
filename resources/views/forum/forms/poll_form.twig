@@ -1,0 +1,13 @@
+<div role="tabpanel" class="tab-pane" id="poll">
+    <div class="panel panel-forum">
+        <div class="panel-body">
+            {% for field in children %}
+                {{ form_row(field) }}
+            {% endfor %}
+            {#{{ forms.text('title', 'Tytuł ankiety', poll.title) }}#}
+            {#{{ forms.textarea('items', 'Odpowiedzi w ankiecie', poll.items, 10, {}, 'Maksymalnie 20 odpowiedzi. Każda w nowej linii. Jeżeli chcesz usunąć pozostaw pustą linię.') }}#}
+            {#{{ forms.text('max_items', 'Ilość możliwych odpowiedzi', poll.max_items, {}, 'odaj liczbę określającą ilość możliwych odpowiedzi.') }}#}
+            {#{{ forms.text('length', 'Długość działania', poll.length, {}, 'Okreś długość działania ankiety (w dniach). 0 oznacza brak terminu ważności') }}#}
+        </div>
+    </div>
+</div>

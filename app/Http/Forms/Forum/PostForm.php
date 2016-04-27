@@ -119,7 +119,8 @@ class PostForm extends Form
             ]);
 
             $this->add('poll', 'child_form', [
-                'class' => 'Coyote\Http\Forms\Forum\PollForm'
+                'class' => PollForm::class,
+                'template' => 'poll_form'
             ]);
         }
 
@@ -184,8 +185,7 @@ class PostForm extends Form
             $this->add('subscribe', 'checkbox', [
                 'rules' => 'boolean',
                 'label' => 'Obserwuj wątek',
-                'value' => 1,
-                'checked' => $this->isPostSubscribed()
+                'value' => $this->isSubscribed()
             ]);
         }
 
@@ -194,7 +194,7 @@ class PostForm extends Form
             'template' => 'attachments',
             'child_attr' => [
                 'type' => 'child_form',
-                'class' => 'Coyote\Http\Forms\Forum\AttachmentForm',
+                'class' => AttachmentForm::class,
             ]
         ]);
 
@@ -211,7 +211,7 @@ class PostForm extends Form
      *
      * @return bool|mixed
      */
-    protected function isPostSubscribed()
+    protected function isSubscribed()
     {
         if (!$this->userId) {
             return false;
@@ -224,8 +224,10 @@ class PostForm extends Form
 
             // we're creating new post...
             if ($this->post->id === null && $subscribe === false && $this->user->allow_subscribe) {
+                $subscribe = false;
+
                 // if this is the first post in this topic, subscribe option depends on user's default setting
-                if ($this->topic->users()->forUser($this->userId)->exists()) {
+                if (!$this->topic->users()->forUser($this->userId)->exists()) {
                     $subscribe = true;
                 }
             }

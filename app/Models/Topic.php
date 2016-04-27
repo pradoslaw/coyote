@@ -6,6 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Coyote\Models\Scopes\Sortable;
 
+/**
+ * @property int $id
+ * @property string $path
+ * @property int $replies
+ * @property int $replies_real
+ * @property string $last_post_created_at
+ * @property int $last_post_id
+ * @property int $first_post_id
+ * @property int $is_locked
+ * @property int $views
+ * @property int $forum_id
+ * @property int $prev_forum_id
+ * @property string $subject
+ * @property \Coyote\Forum $forum
+ */
 class Topic extends Model
 {
     use SoftDeletes, Sortable, Taggable;

@@ -4,6 +4,10 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $path
+ */
 class Forum extends Model
 {
     /**

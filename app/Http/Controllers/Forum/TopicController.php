@@ -162,14 +162,6 @@ class TopicController extends BaseController
 
         if (auth()->check()) {
             $subscribers = $topic->subscribers()->lists('topic_id', 'user_id');
-            $subscribe = isset($subscribers[$this->userId]);
-
-            if (!$subscribe && auth()->user()->allow_subscribe) {
-                // if this is the first post in this topic, subscribe option depends on user's default setting
-                if (!$topic->users()->forUser($this->userId)->exists()) {
-                    $subscribe = true;
-                }
-            }
         }
 
         $this->breadcrumb($forum);
@@ -179,8 +171,10 @@ class TopicController extends BaseController
         $this->pushForumCriteria();
         $forumList = $this->forum->forumList();
 
+        $form = $this->getForm($forum, $topic);
+
         return $this->view('forum.topic', ['markTime' => $topicMarkTime ? $topicMarkTime : $forumMarkTime])->with(
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'warnings', 'subscribers', 'subscribe', 'flags')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'warnings', 'subscribers', 'flags', 'form')
         );
     }
 

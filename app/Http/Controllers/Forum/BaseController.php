@@ -7,6 +7,7 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Http\Forms\Forum\PostForm;
 
 abstract class BaseController extends Controller
 {
@@ -125,5 +126,26 @@ abstract class BaseController extends Controller
         }
 
         return $tags;
+    }
+
+    /**
+     * @param \Coyote\Forum $forum
+     * @param \Coyote\Topic $topic
+     * @param \Coyote\Post $post
+     * @return \Coyote\Http\Forms\Forum\PostForm
+     */
+    protected function getForm($forum, $topic = null, $post = null)
+    {
+        return $this->createForm(PostForm::class, [
+            'forum' => $forum,
+            'topic' => $topic,
+            'post' => $post
+        ], [
+            'attr' => [
+                'id' => 'submit-form',
+                'method' => PostForm::POST,
+                'url' => route('forum.post.submit', [$forum->path, $topic ? $topic->id : null, $post ? $post->id : null]),
+            ]
+        ]);
     }
 }

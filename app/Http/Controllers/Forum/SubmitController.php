@@ -5,7 +5,6 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
 use Illuminate\Http\Request;
-use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
@@ -236,27 +235,6 @@ class SubmitController extends BaseController
         } else {
             return redirect()->to($url);
         }
-    }
-
-    /**
-     * @param \Coyote\Forum $forum
-     * @param \Coyote\Topic $topic
-     * @param \Coyote\Post $post
-     * @return \Coyote\Http\Forms\Forum\PostForm
-     */
-    protected function getForm($forum, $topic = null, $post = null)
-    {
-        return $this->createForm(PostForm::class, [
-            'forum' => $forum,
-            'topic' => $topic,
-            'post' => $post
-        ], [
-            'attr' => [
-                'id' => 'submit-form',
-                'method' => PostForm::POST,
-                'url' => route('forum.post.submit', [$forum->path, $topic ? $topic->id : null, $post ? $post->id : null]),
-            ]
-        ]);
     }
 
     /**
