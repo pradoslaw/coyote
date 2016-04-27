@@ -201,6 +201,9 @@
         {% endembed %}
     </div>
 
+    {# Nie usuwac! Tutaj beda wyswietlane ewentualne bledy AJAX #}
+    {{ modals.alert('Błąd', 'Błąd', 'alert') }}
+
     {% if auth_check() %}
         {{ modals.confirm('Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'modal-comment-delete') }}
 

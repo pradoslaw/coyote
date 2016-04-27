@@ -83,13 +83,6 @@ $(function () {
         window.location.href = $(this).data('url') + '?perPage=' + $(this).val();
     });
 
-    function toPost(url) {
-        var form = $('<form>', {'method': 'POST', 'action': url});
-        form.append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">');
-
-        return form;
-    }
-
     function error(text) {
         $('#alert').modal('show').find('.modal-body').text(text);
     }
@@ -98,7 +91,8 @@ $(function () {
      * Restore deleted post
      */
     $('.btn-res').click(function() {
-        toPost($(this).attr('href')).submit();
+        var form = $('<form>', {'method': 'POST', 'action': $(this).attr('href')});
+        form.append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">').submit();
 
         return false;
     });
