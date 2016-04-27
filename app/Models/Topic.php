@@ -30,7 +30,7 @@ class Topic extends Model
      *
      * @var array
      */
-    protected $fillable = ['subject', 'path', 'forum_id', 'is_sticky', 'is_announcement'];
+    protected $fillable = ['subject', 'path', 'forum_id', 'is_sticky', 'is_announcement', 'poll_id'];
 
     /**
      * @var string
@@ -148,6 +148,14 @@ class Topic extends Model
     public function firstPost()
     {
         return $this->hasOne('Coyote\Post', 'id', 'first_post_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function poll()
+    {
+        return $this->belongsTo('Coyote\Poll');
     }
 
     /**

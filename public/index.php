@@ -55,7 +55,7 @@ $app->alias('request', 'Coyote\Http\CustomRequest');
 $kernel = $app->make('Illuminate\Contracts\Http\Kernel');
 
 $response = $kernel->handle(
-    $request = Coyote\Http\CustomRequest::capture()
+    $request = Coyote\Http\Requests\CustomRequest::capture()
 );
 
 $response->send();

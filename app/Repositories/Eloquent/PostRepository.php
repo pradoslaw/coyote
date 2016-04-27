@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Forum;
+use Coyote\Poll;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Topic;
@@ -113,17 +114,13 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
-     * @param Request $request
-     * @param User|null $user
-     * @param Forum $forum
-     * @param Topic $topic
-     * @param Post $post
-     * @return Post $post
+     * @inheritdoc
      */
-    public function save(Request $request, $user, Forum $forum, &$topic, &$post)
+    public function save(Request $request, $user, Forum $forum, &$topic, &$post, $poll)
     {
         $topic = $this->initialize($topic, Topic::class);
         $post = $this->initialize($post, Post::class);
+        $poll = $this->initialize($poll, Poll::class);
 
         $postId = $post->id;
         $log = new Post\Log();
@@ -133,6 +130,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
          */
         $topic->fill($request->all());
         $topic->forum()->associate($forum);
+        $topic->poll()->associate($poll);
 
         $topic->save();
 

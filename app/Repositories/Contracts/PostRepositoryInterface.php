@@ -7,6 +7,7 @@ use Coyote\User;
 use Illuminate\Http\Request;
 use Coyote\Forum;
 use Coyote\Post;
+use Coyote\Poll;
 
 interface PostRepositoryInterface extends RepositoryInterface
 {
@@ -63,7 +64,8 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
+     * @param Poll $poll
      * @return Post $post
      */
-    public function save(Request $request, $user, Forum $forum, &$topic, &$post);
+    public function save(Request $request, $user, Forum $forum, &$topic, &$post, $poll);
 }

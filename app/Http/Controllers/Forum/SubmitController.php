@@ -79,7 +79,7 @@ class SubmitController extends BaseController
 
             $activity = $post ? new Stream_Update($actor) : new Stream_Create($actor);
             // saving post through repository... we need to pass few object to save relationships
-            $this->post->save($request, auth()->user(), $forum, $topic, $post);
+            $this->post->save($request, auth()->user(), $forum, $topic, $post, null);
 
             // url to the post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false) . '?p=' . $post->id . '#id' . $post->id;
