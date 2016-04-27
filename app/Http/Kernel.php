@@ -16,7 +16,7 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \Coyote\Http\Middleware\VerifyCsrfToken::class,
-        \Coyote\Http\Middleware\FirewallBlacklist::class
+        \Coyote\Http\Middleware\FirewallBlacklist::class        
     ];
 
     /**
@@ -54,6 +54,7 @@ class Kernel extends HttpKernel
         'forum.write'   => Middleware\ForumWrite::class,
         'topic.access'  => Middleware\RedirectIfMoved::class,
         'job.session'   => Middleware\VerifyJobSession::class,
-        'job.revalidate'=> Middleware\RevalidateJobSession::class
+        'job.revalidate'=> Middleware\RevalidateJobSession::class,
+        'topic.unread'  => Middleware\RedirectToUnread::class
     ];
 }

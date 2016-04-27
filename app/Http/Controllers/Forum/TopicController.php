@@ -2,15 +2,18 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Factories\StreamFactory;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
+use Coyote\Services\Parser\Providers\ProviderInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Coyote\Topic;
+use Illuminate\Support\Collection;
 
 class TopicController extends BaseController
 {
@@ -25,28 +28,12 @@ class TopicController extends BaseController
      */
     public function index($forum, $topic, $slug, Request $request)
     {
-        // pobranie daty i godziny ostatniego razu gdy uzytkownik przeczytal ten watek
-        $topicMarkTime = $topic->markTime($this->userId, $this->sessionId);
-        // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
-        $forumMarkTime = $forum->markTime($this->userId, $this->sessionId);
-
-        if ($request->get('view') === 'unread') {
-            if ($topicMarkTime < $topic->last_post_created_at && $forumMarkTime < $topic->last_post_created_at) {
-                $markTime = max($topicMarkTime, $forumMarkTime);
-
-                if ($markTime) {
-                    $postId = $this->post->getFirstUnreadPostId($topic->id, $markTime);
-
-                    if ($postId && $postId !== $topic->first_post_id) {
-                        $url = route('forum.topic', [$forum->path, $topic->id, $topic->path]);
-                        return redirect()->to($url . '?p=' . $postId . '#id' . $postId);
-                    }
-                }
-            }
-        }
+        // get the topic (and forum) mark time value from middleware
+        // @see \Coyote\Http\Middleware\RedirectToUnread
+        $markTime = $request->attributes->get('mark_time');
 
         // current page...
-        $page = $request->page;
+        $page = $request->get('page');
         // number of answers
         $replies = $topic->replies;
 
@@ -71,17 +58,12 @@ class TopicController extends BaseController
         }
 
         // magic happens here. get posts for given topic
+        /* @var Collection */
         $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $this->userId, $page, $perPage);
         $paginate = new LengthAwarePaginator($posts, $replies, $perPage, $page, ['path' => ' ']);
 
-        $parser = [
-            'post' => app()->make('Parser\Post'),
-            'comment' => app()->make('Parser\Comment'),
-            'sig' => app()->make('Parser\Sig')
-        ];
-
-        $markTime = null;
         start_measure('Parsing...');
+        $parser = $this->getParsers();
 
         foreach ($posts as &$post) {
             // parse post or get it from cache
@@ -94,19 +76,25 @@ class TopicController extends BaseController
             foreach ($post->comments as &$comment) {
                 $comment->text = $parser['comment']->parse($comment->text);
             }
-
-            $markTime = $post->created_at->toDateTimeString();
         }
 
         stop_measure('Parsing...');
 
-        if ($topicMarkTime < $markTime && $forumMarkTime < $markTime) {
+        $postsId = $posts->pluck('id')->toArray();
+        $dateTimeString = $posts->last()->created_at->toDateTimeString();
+
+        if ($markTime[Topic::class] < $dateTimeString && $markTime[Forum::class] < $dateTimeString) {
             // mark topic as read
-            $topic->markAsRead($markTime, $this->userId, $this->sessionId);
+            $topic->markAsRead($dateTimeString, $this->userId, $this->sessionId);
             $isUnread = true;
 
-            if ($forumMarkTime < $markTime) {
-                $isUnread = $this->topic->isUnread($forum->id, $forumMarkTime, $this->userId, $this->sessionId);
+            if ($markTime[Forum::class] < $dateTimeString) {
+                $isUnread = $this->topic->isUnread(
+                    $forum->id,
+                    $markTime[Forum::class],
+                    $this->userId,
+                    $this->sessionId
+                );
             }
 
             if (!$isUnread) {
@@ -114,38 +102,8 @@ class TopicController extends BaseController
             }
         }
 
-        if ($gate->allows('delete', $forum)) {
-            $activities = [];
-            $postsId = $posts->pluck('id')->toArray();
-
-            // here we go. if user has delete ability, for sure he/she would like to know
-            // why posts were deleted and by whom
-            $collection = $this->findByObject('Post', $postsId, 'Delete');
-
-            foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
-                $activities[$row->first()['object.id']] = $row->first();
-            }
-
-            // @todo Jezeli raportowany jest post na forum to sprawdzane jest globalne uprawnienie danego
-            // uzytkownika. Oznacza to, ze lokalni moderatorzy nie beda mogli czytac raportow
-            if ($gate->allows('forum-delete')) {
-                $flags = app(FlagRepositoryInterface::class)->takeForPosts($postsId);
-            }
-        }
-
         if ($gate->allows('delete', $forum) || $gate->allows('move', $forum)) {
             $reasonList = Reason::lists('name', 'id')->toArray();
-        }
-
-        $warnings = [];
-
-        // if topic is locked we need to fetch information when and by whom
-        if ($topic->is_locked) {
-            $warnings['lock'] = $this->findByObject('Topic', $topic->id, 'Lock')->last();
-        }
-
-        if ($topic->prev_forum_id) {
-            $warnings['move'] = $this->findByObject('Topic', $topic->id, 'Move')->last();
         }
 
         // increase topic views counter
@@ -160,10 +118,6 @@ class TopicController extends BaseController
             );
         }
 
-        if (auth()->check()) {
-            $subscribers = $topic->subscribers()->lists('topic_id', 'user_id');
-        }
-
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
@@ -173,9 +127,91 @@ class TopicController extends BaseController
 
         $form = $this->getForm($forum, $topic);
 
-        return $this->view('forum.topic', ['markTime' => $topicMarkTime ? $topicMarkTime : $forumMarkTime])->with(
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'activities', 'reasonList', 'warnings', 'subscribers', 'flags', 'form')
-        );
+        return $this->view(
+            'forum.topic',
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'reasonList', 'form')
+        )->with([
+            'markTime'      => $markTime[Topic::class] ? $markTime[Topic::class] : $markTime[Forum::class],
+            'flags'         => $this->getFlags($postsId),
+            'warnings'      => $this->getWarnings($topic),
+            'subscribers'   => auth()->check() ? $topic->subscribers()->lists('topic_id', 'user_id') : [],
+            'activities'    => $this->getActivities($forum, $postsId)
+        ]);
+    }
+
+    /**
+     * @return ProviderInterface[]
+     */
+    private function getParsers()
+    {
+        return [
+            'post'      => app('Parser\Post'),
+            'comment'   => app('Parser\Comment'),
+            'sig'       => app('Parser\Sig')
+        ];
+    }
+
+    /**
+     * @param array $postsId
+     * @return mixed
+     */
+    private function getFlags($postsId)
+    {
+        $gate = $this->getGateFactory();
+        $flags = [];
+
+        // @todo Jezeli raportowany jest post na forum to sprawdzane jest globalne uprawnienie danego
+        // uzytkownika. Oznacza to, ze lokalni moderatorzy nie beda mogli czytac raportow
+        if ($gate->allows('forum-delete')) {
+            $flags = app(FlagRepositoryInterface::class)->takeForPosts($postsId);
+        }
+
+        return $flags;
+    }
+
+    /**
+     * @param \Coyote\Forum $forum
+     * @param $postsId $postsId
+     * @return array
+     */
+    private function getActivities($forum, $postsId)
+    {
+        $gate = $this->getGateFactory();
+        $activities = [];
+
+        if ($gate->allows('delete', $forum)) {
+            $activities = [];
+
+            // here we go. if user has delete ability, for sure he/she would like to know
+            // why posts were deleted and by whom
+            $collection = $this->findByObject('Post', $postsId, 'Delete');
+
+            foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
+                $activities[$row->first()['object.id']] = $row->first();
+            }
+        }
+
+        return $activities;
+    }
+
+    /**
+     * @param \Coyote\Topic $topic
+     * @return array
+     */
+    private function getWarnings($topic)
+    {
+        $warnings = [];
+
+        // if topic is locked we need to fetch information when and by whom
+        if ($topic->is_locked) {
+            $warnings['lock'] = $this->findByObject('Topic', $topic->id, 'Lock')->last();
+        }
+
+        if ($topic->prev_forum_id) {
+            $warnings['move'] = $this->findByObject('Topic', $topic->id, 'Move')->last();
+        }
+
+        return $warnings;
     }
 
     /**
