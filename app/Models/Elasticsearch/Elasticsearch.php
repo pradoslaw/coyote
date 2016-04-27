@@ -30,7 +30,7 @@ trait Elasticsearch
     }
 
     /**
-     * @param $body
+     * @param array $body
      * @return ResponseInterface
      */
     public function search($body)

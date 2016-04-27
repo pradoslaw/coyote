@@ -102,14 +102,14 @@ interface FormInterface
     /**
      * Render entire form
      *
-     * @return string
+     * @return mixed
      */
     public function render();
 
     /**
      * Render only opening tag
      *
-     * @return string
+     * @return mixed
      */
     public function renderForm();
 

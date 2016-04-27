@@ -12,7 +12,6 @@ use Coyote\Elasticsearch\Sort;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
-use Gate;
 
 class SearchController extends BaseController
 {
@@ -65,7 +64,7 @@ class SearchController extends BaseController
 
             // we cannot allowed regular uesrs to search by IP or host
             foreach ([self::FIELD_IP, self::FIELD_HOST, self::FIELD_BROWSER] as $filter) {
-                if (!Gate::allows('forum-update')) {
+                if (!$this->getGateFactory()->allows('forum-update')) {
                     $parser->removeFilter($filter); // user is not ALLOWED to use this filter
                 }
             }

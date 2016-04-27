@@ -33,7 +33,7 @@
                 <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
 
                 {% if can('update', forum) %}
-                    <small><a href="#" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
+                    <small><a href="{{ route('forum.search', {'q': 'ip:' ~ post.ip}) }}" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
                 {% endif %}
             </div>
         </div>
