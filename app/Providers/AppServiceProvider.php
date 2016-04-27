@@ -1,8 +1,11 @@
 <?php namespace Coyote\Providers;
 
+use Coyote\Repositories\Contracts\SettingRepositoryInterface;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
+use Coyote\Services\Stream\Stream;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
@@ -51,12 +54,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('Setting', function ($app) {
-            return new $app['Coyote\\Repositories\\Contracts\\SettingRepositoryInterface']($app);
+        $this->app->singleton('setting', function ($app) {
+            return new $app[SettingRepositoryInterface::class]($app);
         });
 
-        $this->app->bind('Stream', function ($app) {
-            return new $app['Coyote\\Services\\Stream\\Stream']($app['Coyote\\Repositories\\Contracts\\StreamRepositoryInterface']);
+        $this->app->bind('stream', function ($app) {
+            return new $app[Stream::class]($app[StreamRepositoryInterface::class]);
         });
 
         $this->app->singleton('form.builder', function ($app) {

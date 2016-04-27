@@ -108,7 +108,7 @@ abstract class Controller extends BaseController
      */
     protected function setSetting($name, $value)
     {
-        app()->make('Setting')->setItem($name, $value, $this->userId, $this->sessionId);
+        app('setting')->setItem($name, $value, $this->userId, $this->sessionId);
 
         if (!is_array($this->settings)) {
             $this->settings;
@@ -125,7 +125,7 @@ abstract class Controller extends BaseController
     protected function getSettings()
     {
         if (is_null($this->settings)) {
-            $this->settings = app()->make('Setting')->getAll($this->userId, $this->sessionId);
+            $this->settings = app('setting')->getAll($this->userId, $this->sessionId);
         }
 
         return $this->settings;
