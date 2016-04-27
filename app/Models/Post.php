@@ -7,6 +7,23 @@ use Coyote\Post\Attachment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $forum_id
+ * @property int $topic_id
+ * @property int $score
+ * @property int $edit_count
+ * @property int $editor_id
+ * @property string $created_at
+ * @property string $deleted_at
+ * @property string $updated_at
+ * @property string $user_name
+ * @property string $text
+ * @property string $ip
+ * @property string $browser
+ * @property string $host
+ */
 class Post extends Model
 {
     use SoftDeletes, Elasticsearch;

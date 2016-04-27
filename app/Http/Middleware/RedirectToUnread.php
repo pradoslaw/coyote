@@ -9,9 +9,14 @@ use Coyote\Topic;
 
 class RedirectToUnread
 {
+    /**
+     * @var PostRepository
+     */
     protected $post;
 
-
+    /**
+     * @param PostRepository $post
+     */
     public function __construct(PostRepository $post)
     {
         $this->post = $post;
@@ -41,18 +46,20 @@ class RedirectToUnread
 
         $request->attributes->set('mark_time', $markTime);
 
-        if ($request->get('view') === 'unread') {
-            if ($markTime[Topic::class] < $topic->last_post_created_at
-                && $markTime[Forum::class] < $topic->last_post_created_at) {
-                $max = max($markTime[Topic::class], $markTime[Forum::class]);
+        if ($request->get('view') !== 'unread') {
+            return $next($request);
+        }
 
-                if ($max) {
-                    $postId = $this->post->getFirstUnreadPostId($topic->id, $max);
+        if ($markTime[Topic::class] < $topic->last_post_created_at
+            && $markTime[Forum::class] < $topic->last_post_created_at) {
+            $max = max($markTime[Topic::class], $markTime[Forum::class]);
 
-                    if ($postId && $postId !== $topic->first_post_id) {
-                        $url = route('forum.topic', [$forum->path, $topic->id, $topic->path]);
-                        return redirect()->to($url . '?p=' . $postId . '#id' . $postId);
-                    }
+            if ($max) {
+                $postId = $this->post->getFirstUnreadPostId($topic->id, $max);
+
+                if ($postId && $postId !== $topic->first_post_id) {
+                    $url = route('forum.topic', [$forum->path, $topic->id, $topic->path]);
+                    return redirect()->to($url . '?p=' . $postId . '#id' . $postId);
                 }
             }
         }

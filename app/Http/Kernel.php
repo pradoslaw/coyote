@@ -16,7 +16,7 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \Coyote\Http\Middleware\VerifyCsrfToken::class,
-        \Coyote\Http\Middleware\FirewallBlacklist::class        
+        \Coyote\Http\Middleware\FirewallBlacklist::class
     ];
 
     /**

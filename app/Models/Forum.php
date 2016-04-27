@@ -6,7 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
+ * @property int $parent_id
+ * @property int $topics
+ * @property int $posts
+ * @property int $order
+ * @property int $last_post_id
+ * @property int $is_locked
+ * @property int $require_tag
+ * @property int $enable_prune
+ * @property int $enable_reputation
+ * @property int $enable_anonymous
+ * @property int $prune_days
+ * @property int $prune_last
+ * @property string $name
  * @property string $path
+ * @property string $title
+ * @property string $description
+ * @property string $section
+ * @property string $url
  */
 class Forum extends Model
 {

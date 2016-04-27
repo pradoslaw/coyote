@@ -112,7 +112,7 @@ class ChildForm extends Field
         if (!is_string($this->class)) {
             throw new \InvalidArgumentException('Child form field [' . $this->name . '] requires [class] attribute.');
         }
-var_dump('test');
+
         $this->form = $this->parent->getContainer()->make('form.builder')->createForm(
             $this->class,
             $this->value

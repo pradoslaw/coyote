@@ -124,7 +124,7 @@ class PostForm extends Form
             ]);
         }
 
-        if (!$this->userId || (empty($this->post->id) && !empty($this->post->user_name))) {
+        if ($this->userId === null || (empty($this->post->id) && !empty($this->post->user_name))) {
             $this->add('user_name', 'text', [
                 'rules' => self::RULE_USER_NAME,
                 'help' => 'Wpisz swoją nazwę użytkownika.',
@@ -173,7 +173,7 @@ class PostForm extends Form
 
             ]);
 
-            if ($this->userId && $this->user->can('sticky', $this->forum)) { // can sticky
+            if ($this->userId !== null && $this->user->can('sticky', $this->forum)) { // can sticky
                 $this->add('is_sticky', 'checkbox', [
                     'rules' => self::RULE_STICKY,
                     'label' => 'Przyklejony'
@@ -181,7 +181,7 @@ class PostForm extends Form
             }
         }
 
-        if ($this->userId) {
+        if ($this->userId !== null) {
             $this->add('subscribe', 'checkbox', [
                 'rules' => 'boolean',
                 'label' => 'Obserwuj wątek',
