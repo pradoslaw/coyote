@@ -32,7 +32,7 @@ class QueryParser
     /**
      * QueryParser constructor.
      * @param $inputQuery
-     * @param array $allowedKeywords   Keywords like "ip", "user", "browser"
+     * @param string[] $allowedKeywords   Keywords like "ip", "user", "browser"
      */
     public function __construct($inputQuery, array $allowedKeywords)
     {
@@ -60,8 +60,8 @@ class QueryParser
     }
 
     /**
-     * @param $filter
-     * @return mixed|null
+     * @param string $filter
+     * @return string
      */
     public function pullFilter($filter)
     {
@@ -72,7 +72,7 @@ class QueryParser
     }
 
     /**
-     * @param $filter
+     * @param string $filter
      */
     public function removeFilter($filter)
     {
@@ -96,7 +96,7 @@ class QueryParser
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFilteredQuery()
     {

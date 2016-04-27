@@ -75,7 +75,7 @@ class PasswordController extends Controller
      * Ustawienie nowego hasla i ponowne logowanie uzytkownika
      *
      * @param Request $request
-     * @return $this|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postReset(Request $request)
     {

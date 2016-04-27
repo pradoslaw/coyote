@@ -38,7 +38,7 @@ class ApplicationController extends Controller
     /**
      * @param Job $job
      * @param ApplicationForm $form
-     * @return mixed
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function save(Job $job, ApplicationForm $form)
     {

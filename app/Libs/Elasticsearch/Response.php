@@ -41,7 +41,7 @@ class Response implements \Countable, \IteratorAggregate, ResponseInterface
      * Transform results array to laravel's collection
      *
      * @param array $array
-     * @return array|\Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection
      */
     protected function collect(array $array)
     {

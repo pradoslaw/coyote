@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Forms\Forum\AttachmentForm;
 use Coyote\Http\Forms\Forum\SubjectForm;
 use Illuminate\Http\Request;
 use Coyote\Http\Forms\Forum\PostForm;
@@ -17,7 +16,6 @@ use Coyote\Services\Parser\Reference\Login as Ref_Login;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Services\Alert\Alert;
-use Coyote\Http\Requests\SubjectRequest;
 use Coyote\Post\Log;
 use Coyote\User;
 
@@ -171,7 +169,7 @@ class SubmitController extends BaseController
     /**
      * @param \Coyote\Topic $topic
      * @param SubjectForm $form
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      *
      * @todo moze jakas refaktoryzacja? przeniesienie do repozytorium? na pewno logowanie o tym, ze zostal zmieniony
      * tytul a nie tresc posta (jak to jest obecnie)
@@ -265,7 +263,7 @@ class SubmitController extends BaseController
      * Format post text in case of quoting
      *
      * @param Request $request
-     * @param $topic
+     * @param \Coyote\Topic $topic
      * @return string
      */
     protected function getDefaultText(Request $request, $topic)

@@ -330,7 +330,7 @@ class HomeController extends Controller
 
     /**
      * @param Request $request
-     * @param array $keys
+     * @param string[] $keys
      * @return bool
      */
     protected function inputNotEmpty(Request $request, array $keys)

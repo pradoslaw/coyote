@@ -6,7 +6,7 @@ class Geshi implements ProviderInterface
 {
     /**
      * @param string $text
-     * @return mixed|string
+     * @return string
      */
     public function parse($text)
     {

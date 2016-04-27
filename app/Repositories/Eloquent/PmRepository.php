@@ -4,8 +4,6 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\PmRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Illuminate\Http\Request;
-use Illuminate\Container\Container as App;
 use Coyote\Pm;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;

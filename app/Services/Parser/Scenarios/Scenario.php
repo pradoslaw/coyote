@@ -90,7 +90,7 @@ abstract class Scenario
     }
 
     /**
-     * @param $text
+     * @param string $text
      * @return bool
      */
     protected function isInCache($text)
@@ -99,7 +99,7 @@ abstract class Scenario
     }
 
     /**
-     * @param $text
+     * @param string $text
      * @return mixed
      */
     protected function getFromCache($text)

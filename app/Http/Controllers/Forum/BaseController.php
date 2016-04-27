@@ -7,7 +7,6 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Gate;
 
 abstract class BaseController extends Controller
 {
@@ -60,7 +59,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @param null $view
+     * @param string|null $view
      * @param array $data
      * @return $this
      */

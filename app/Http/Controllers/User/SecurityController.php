@@ -21,7 +21,7 @@ class SecurityController extends BaseController
 
     /**
      * @param Request $request
-     * @return $this
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function save(Request $request)
     {
