@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Requests;
+namespace Coyote\Http;
 
 use Illuminate\Http\Request;
 
