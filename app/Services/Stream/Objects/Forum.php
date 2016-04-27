@@ -8,7 +8,7 @@ class Forum extends Object
 {
     /**
      * @param Model $forum
-     * @return mixed
+     * @return Forum
      */
     public function map(Model $forum)
     {

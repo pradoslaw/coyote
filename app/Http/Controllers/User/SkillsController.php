@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\User;
 use Illuminate\Http\Request;
 

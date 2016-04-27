@@ -186,7 +186,7 @@ class TopicController extends BaseController
 
     /**
      * @param \Coyote\Topic $topic
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function subscribe($topic)
     {
@@ -248,9 +248,9 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param $object
+     * @param string $object
      * @param $id
-     * @param $verb
+     * @param string $verb
      * @return mixed
      */
     protected function findByObject($object, $id, $verb)

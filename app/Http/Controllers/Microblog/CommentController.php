@@ -44,7 +44,7 @@ class CommentController extends Controller
      *
      * @param Request $request
      * @param null|int $id
-     * @return $this
+     * @return \Illuminate\Http\JsonResponse
      */
     public function save(Request $request, $id = null)
     {
@@ -158,7 +158,7 @@ class CommentController extends Controller
      * Edycja komentarza na mikroblogu.
      *
      * @param int $id
-     * @return string
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function edit($id)
     {

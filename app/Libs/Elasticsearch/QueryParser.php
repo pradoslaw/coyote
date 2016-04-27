@@ -51,7 +51,7 @@ class QueryParser
     }
 
     /**
-     * @param $filter
+     * @param string $filter
      * @return mixed|null
      */
     public function getFilter($filter)

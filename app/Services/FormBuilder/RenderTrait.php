@@ -71,7 +71,7 @@ trait RenderTrait
     /**
      * Get full path to the view (with theme name)
      *
-     * @param $view
+     * @param string $view
      * @return string
      */
     protected function getViewPath($view)
@@ -80,7 +80,7 @@ trait RenderTrait
     }
 
     /**
-     * @param $view
+     * @param string $view
      * @param array $data
      * @return View
      */
