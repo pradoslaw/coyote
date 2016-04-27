@@ -52,7 +52,6 @@
             "app/Libs",
             "app/Models",
             "app/Http/Validators",
-            "app/Http/Requests",
             "app/Plugins"
         ],
         "psr-4": {
