@@ -759,7 +759,7 @@ class Migrate extends Command
                 ->chunk(100000, function ($sql) use ($bar) {
 
                     foreach ($sql as $row) {
-                        $row = $this->skipPrefix('topic_', (array)$row);
+                        $row = $this->skipPrefix('topic_', (array) $row);
 
                         $this->rename($row, 'forum', 'forum_id');
                         $this->rename($row, 'vote', 'score');
@@ -885,7 +885,7 @@ class Migrate extends Command
                 ->chunk(50000, function ($sql) use ($bar) {
 
                     foreach ($sql as $row) {
-                        $row = $this->skipPrefix('post_', (array)$row);
+                        $row = $this->skipPrefix('post_', (array) $row);
 
                         $this->rename($row, 'forum', 'forum_id');
                         $this->rename($row, 'topic', 'topic_id');
@@ -1085,7 +1085,7 @@ class Migrate extends Command
                 ->chunk(50000, function ($sql) use ($bar) {
 
                     foreach ($sql as $row) {
-                        $row = $this->skipPrefix('microblog_', (array)$row);
+                        $row = $this->skipPrefix('microblog_', (array) $row);
 
                         $this->rename($row, 'parent', 'parent_id');
                         $this->rename($row, 'user', 'user_id');
@@ -1242,7 +1242,7 @@ class Migrate extends Command
 
         try {
             foreach ($firms as $row) {
-                $row = $this->skipPrefix('firm_', (array)$row);
+                $row = $this->skipPrefix('firm_', (array) $row);
 
                 $this->rename($row, 'user', 'user_id');
                 $this->rename($row, 'agency', 'is_agency');
@@ -1329,7 +1329,7 @@ class Migrate extends Command
 
         try {
             foreach ($jobs as $row) {
-                $row = $this->skipPrefix('job_', (array)$row);
+                $row = $this->skipPrefix('job_', (array) $row);
 
                 $this->rename($row, 'user', 'user_id');
                 $this->rename($row, 'firm', 'firm_id');
@@ -1385,7 +1385,7 @@ class Migrate extends Command
 
         try {
             foreach ($locations as $row) {
-                $row = $this->skipPrefix('location_', (array)$row);
+                $row = $this->skipPrefix('location_', (array) $row);
                 $this->rename($row, 'job', 'job_id');
 
                 $row['city'] = str_ireplace(array_keys($replace), array_values($replace), $row['city']);
@@ -1452,7 +1452,7 @@ class Migrate extends Command
 
         try {
             foreach ($candidates as $row) {
-                $row = $this->skipPrefix('apply_', (array)$row);
+                $row = $this->skipPrefix('apply_', (array) $row);
 
                 $this->rename($row, 'user', 'user_id');
                 $this->rename($row, 'time', 'created_at');
@@ -1534,7 +1534,7 @@ class Migrate extends Command
                 $this->rename($row, 'job', 'job_id');
 
                 if (strlen($row['url']) <= 250) {
-                    DB::table('job_referers')->insert((array)$row);
+                    DB::table('job_referers')->insert((array) $row);
                 }
 
                 $bar->advance();

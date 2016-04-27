@@ -33,7 +33,7 @@ class QueryBuilder implements QueryBuilderInterface
         'highlight' => [
             'pre_tags' => ['<em class="highlight">'],
             'post_tags' => ["</em>"],
-            'fields' => [ ]
+            'fields' => []
         ],
 
     ];

@@ -33,7 +33,7 @@ class Microblog extends Model
      *
      * @var array
      */
-    protected $attributes  = ['votes' => 0];
+    protected $attributes = ['votes' => 0];
 
     public static function boot()
     {
