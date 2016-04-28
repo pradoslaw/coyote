@@ -10,9 +10,6 @@ use Coyote\Post;
 use Coyote\Poll;
 
 /**
- * Interface PostRepositoryInterface
- * @package Coyote\Repositories\Contracts
- *
  * @method \Coyote\Elasticsearch\ResponseInterface search(array $body)
  */
 interface PostRepositoryInterface extends RepositoryInterface

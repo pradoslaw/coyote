@@ -29,7 +29,7 @@ class Purge extends Command
      */
     public function handle()
     {
-        $es = app('Elasticsearch');
+        $es = app('elasticsearch');
         $es->deleteByQuery([
             'index' => config('elasticsearch.default_index'),
             'type'  => 'jobs',

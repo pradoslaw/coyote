@@ -39,7 +39,7 @@ class Create extends Command
         $index = config('elasticsearch.default_index');
 
         if ($this->option('force') || $this->confirm("Do you want to create index $index in Elasticsearch?", true)) {
-            $client = app('Elasticsearch');
+            $client = app('elasticsearch');
 
             $params = [
                 'index' => $index,

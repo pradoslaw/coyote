@@ -2,6 +2,8 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Services\Elasticsearch\QueryBuilder;
+use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Illuminate\Support\ServiceProvider;
 use Elasticsearch\ClientBuilder;
 
@@ -21,9 +23,10 @@ class ElasticsearchServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('Elasticsearch', function ($app) {
+        $this->app->singleton('elasticsearch', function ($app) {
             $logger = ClientBuilder::defaultLogger(
-                $app['config']->get('elasticsearch.logPath'), $app['config']->get('elasticsearch.logLevel')
+                $app['config']->get('elasticsearch.logPath'),
+                $app['config']->get('elasticsearch.logLevel')
             );
 
             return ClientBuilder::create()
@@ -32,7 +35,7 @@ class ElasticsearchServiceProvider extends ServiceProvider
                 ->build();
         });
 
-        $this->app->bind('Coyote\Elasticsearch\QueryBuilderInterface', 'Coyote\Elasticsearch\QueryBuilder');
+        $this->app->bind(QueryBuilderInterface::class, QueryBuilder::class);
     }
 
     /**
@@ -42,6 +45,6 @@ class ElasticsearchServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['Elasticsearch', 'Coyote\Elasticsearch\QueryBuilderInterface'];
+        return ['elasticsearch', QueryBuilderInterface::class];
     }
 }

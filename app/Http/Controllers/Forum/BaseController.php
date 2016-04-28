@@ -60,9 +60,11 @@ abstract class BaseController extends Controller
     }
 
     /**
+     * Renders view with breadcrumb
+     *
      * @param string|null $view
      * @param array $data
-     * @return $this
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     protected function view($view = null, $data = [])
     {

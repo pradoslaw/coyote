@@ -2,11 +2,11 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Elasticsearch\Aggs;
-use Coyote\Elasticsearch\Filters;
-use Coyote\Elasticsearch\Query;
-use Coyote\Elasticsearch\QueryBuilderInterface;
-use Coyote\Elasticsearch\Sort;
+use Coyote\Services\Elasticsearch\Aggs;
+use Coyote\Services\Elasticsearch\Filters;
+use Coyote\Services\Elasticsearch\Query;
+use Coyote\Services\Elasticsearch\QueryBuilderInterface;
+use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Services\Parser\Reference\City;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;

@@ -2,7 +2,6 @@
 
 namespace Coyote;
 
-use Coyote\Elasticsearch\Elasticsearch;
 use Coyote\Post\Attachment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Post extends Model
 {
-    use SoftDeletes, Elasticsearch;
+    use SoftDeletes, Searchable;
 
     /**
      * The attributes that are mass assignable.

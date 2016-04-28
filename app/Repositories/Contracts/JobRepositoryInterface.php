@@ -2,6 +2,9 @@
 
 namespace Coyote\Repositories\Contracts;
 
+/**
+ * @method \Coyote\Elasticsearch\ResponseInterface search(array $body)
+ */
 interface JobRepositoryInterface extends RepositoryInterface
 {
     /**

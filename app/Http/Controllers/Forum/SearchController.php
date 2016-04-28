@@ -2,14 +2,13 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Elasticsearch\Filters\Post\Forum;
-use Coyote\Elasticsearch\Filters\Term;
-use Coyote\Elasticsearch\Highlight;
-use Coyote\Elasticsearch\Query;
-use Coyote\Elasticsearch\QueryBuilderInterface as QueryBuilder;
-use Coyote\Elasticsearch\QueryParser;
-use Coyote\Elasticsearch\Sort;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Services\Elasticsearch\Filters\Post\Forum;
+use Coyote\Services\Elasticsearch\Filters\Term;
+use Coyote\Services\Elasticsearch\Highlight;
+use Coyote\Services\Elasticsearch\Query;
+use Coyote\Services\Elasticsearch\QueryBuilderInterface as QueryBuilder;
+use Coyote\Services\Elasticsearch\QueryParser;
+use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
 
@@ -22,12 +21,11 @@ class SearchController extends BaseController
 
     /**
      * @param Request $request
-     * @param Post $post
      * @param User $user
      * @param QueryBuilder $queryBuilder
      * @return mixed
      */
-    public function index(Request $request, Post $post, User $user, QueryBuilder $queryBuilder)
+    public function index(Request $request, User $user, QueryBuilder $queryBuilder)
     {
         $this->breadcrumb->push('Szukaj', route('forum.search'));
 
@@ -99,7 +97,7 @@ class SearchController extends BaseController
             $build = $queryBuilder->build();
             debugbar()->debug($build);
 
-            $response = $post->search($build);
+            $response = $this->post->search($build);
             $highlights = $response->getHighlights();
 
             if ($response->totalHits() > 0) {

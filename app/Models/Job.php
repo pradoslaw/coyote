@@ -2,13 +2,12 @@
 
 namespace Coyote;
 
-use Coyote\Elasticsearch\Elasticsearch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Job extends Model
 {
-    use SoftDeletes, Elasticsearch;
+    use SoftDeletes, Searchable;
 
     const MONTH           = 1;
     const YEAR            = 2;
@@ -330,6 +329,6 @@ class Job extends Model
      */
     protected function getResponseClass()
     {
-        return 'Coyote\Elasticsearch\Response\Job';
+        return \Coyote\Services\Elasticsearch\Response\Job::class;
     }
 }
