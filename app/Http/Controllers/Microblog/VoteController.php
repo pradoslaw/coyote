@@ -43,6 +43,7 @@ class VoteController extends Controller
             return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
         }
 
+        /** @var \Coyote\Microblog $microblog */
         $microblog = $this->microblog->findOrFail($id);
         $vote = $microblog->voters()->forUser($this->userId)->first();
 
@@ -59,15 +60,10 @@ class VoteController extends Controller
                 $microblog->votes--;
             } else {
                 $microblog->voters()->create(['user_id' => $this->userId, 'ip' => $request->getClientIp()]);
-
                 $microblog->votes++;
             }
 
-            $microblog->score = \Coyote\Microblog::getScore(
-                $microblog->votes,
-                $microblog->bonus,
-                $microblog->created_at->getTimestamp()
-            );
+            $microblog->score = $microblog->getScore();
 
             // reputacje przypisujemy tylko za ocene wpisu a nie komentarza!!
             if (!$microblog->parent_id) {
@@ -106,7 +102,7 @@ class VoteController extends Controller
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function voters($id)
     {

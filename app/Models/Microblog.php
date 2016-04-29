@@ -9,6 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property MediaInterface[] $media
+ * @property int $id
+ * @property int $user_id
+ * @property int $parent_id
+ * @property int $votes
+ * @property int $score
+ * @property int $is_sponsored
+ * @property int $bonus
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $deleted_at
  */
 class Microblog extends Model
 {
@@ -44,23 +54,24 @@ class Microblog extends Model
     {
         parent::boot();
 
+        /**
+         * @var $this $model
+         */
         static::creating(function ($model) {
             // nadajemy domyslna wartosc sortowania przy dodawaniu elementu
-            $model->score = Microblog::getScore(0, (int) $model->bonus, time());
+            $model->score = $model->getScore();
         });
     }
 
     /**
      * Prosty "algorytm" do generowania rankingu danego wpisu na podstawie ocen i czasu dodania
      *
-     * @param $votes
-     * @param $bonus
-     * @param $timestamp
      * @return int
      */
-    public static function getScore($votes, $bonus, $timestamp)
+    public function getScore()
     {
-        $log = $votes || $bonus ? log($votes + $bonus, 2) : 0;
+        $timestamp = $this->created_at ? strtotime($this->created_at) : time();
+        $log = ($this->votes || $this->bonus) ? log((int) $this->votes + (int) $this->bonus, 2) : 0;
 
         // magia dzieje sie tutaj :) ustalanie "mocy" danego wpisu. na tej podstawie wyswietlane
         // sa wpisy na stronie glownej. liczba glosow swiadczy o ich popularnosci
