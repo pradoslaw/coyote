@@ -6,8 +6,10 @@ use Coyote\Forum;
 use Coyote\Job;
 use Coyote\Firm;
 use Coyote\Microblog;
+use Coyote\Pm;
 use Coyote\Policies\MicroblogPolicy;
 use Coyote\Policies\ForumPolicy;
+use Coyote\Policies\PmPolicy;
 use Coyote\Policies\PostPolicy;
 use Coyote\Policies\JobPolicy;
 use Coyote\Policies\FirmPolicy;
@@ -29,7 +31,8 @@ class AuthServiceProvider extends ServiceProvider
         Post::class => PostPolicy::class,
         Post\Comment::class => PostCommentPolicy::class,
         Job::class => JobPolicy::class,
-        Firm::class => FirmPolicy::class
+        Firm::class => FirmPolicy::class,
+        Pm::class => PmPolicy::class
     ];
 
     /**

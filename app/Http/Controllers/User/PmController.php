@@ -54,7 +54,7 @@ class PmController extends BaseController
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
-        $pm = $this->pm->paginate(auth()->user()->id);
+        $pm = $this->pm->paginate($this->userId);
         $parser = app()->make('Parser\Pm');
 
         foreach ($pm as &$row) {
@@ -69,21 +69,16 @@ class PmController extends BaseController
      *
      * @param int $id
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function show($id, Request $request)
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
-        $pm = $this->pm->find($id, ['user_id', 'author_id', 'root_id', 'id']);
+        $pm = $this->pm->findOrFail($id, ['user_id', 'author_id', 'root_id', 'id']);
+        $this->authorize('show', $pm);
 
-        if (!$pm) {
-            return redirect()->route('user.pm');
-        }
-        if ($pm->user_id !== auth()->user()->id) {
-            abort(500);
-        }
-        $talk = $this->pm->talk(auth()->user()->id, $pm->root_id, 10, $request->query('offset', 0));
+        $talk = $this->pm->talk($this->userId, $pm->root_id, 10, (int) $request->query('offset', 0));
         $parser = app()->make('Parser\Pm');
 
         foreach ($talk as &$row) {
@@ -96,7 +91,7 @@ class PmController extends BaseController
 
             // IF we have unread alert that is connected with that message... then we also have to mark it as read
             if (auth()->user()->alerts_unread) {
-                $this->alert->markAsReadByUrl(auth()->user()->id, route('user.pm.show', [$row['id']], false));
+                $this->alert->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
             }
         }
 
@@ -111,13 +106,13 @@ class PmController extends BaseController
     /**
      * Get last 10 conversations
      *
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function ajax()
     {
         $parser = app()->make('Parser\Pm');
 
-        $pm = $this->pm->takeForUser(auth()->user()->id);
+        $pm = $this->pm->takeForUser($this->userId);
         foreach ($pm as &$row) {
             $row->text = $parser->parse($row->text);
         }
@@ -198,9 +193,7 @@ class PmController extends BaseController
     public function delete($id)
     {
         $pm = $this->pm->findOrFail($id, ['id', 'user_id', 'root_id']);
-        if ($pm->user_id !== auth()->user()->id) {
-            abort(500);
-        }
+        $this->authorize('show', $pm);
 
         $pm->delete();
         return back()->with('success', 'Wiadomość poprawnie usunięta');
