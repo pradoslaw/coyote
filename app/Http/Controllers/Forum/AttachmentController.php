@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Http\Factories\FilesystemFactory;
+use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Forms\Forum\AttachmentForm;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
@@ -17,7 +17,7 @@ use Coyote\Http\Controllers\Controller;
  */
 class AttachmentController extends Controller
 {
-    use FilesystemFactory;
+    use MediaFactory;
 
     /**
      * @var Attachment
@@ -64,24 +64,18 @@ class AttachmentController extends Controller
             )
         ]);
 
-        $fs = $this->getFilesystemFactory();
-        $fileName = uniqid() . '.' . strtolower($request->file('attachment')->getClientOriginalExtension());
-
-        $path = config('filesystems.forum') . $fileName;
-        $fs->put($path, file_get_contents($request->file('attachment')->getRealPath()));
-
+        $media = $this->getMediaFactory('attachment')->upload($request->file('attachment'));
         $mime = new Mimetypes();
 
         $data = [
-            'size' => $fs->size($path),
-            'mime' => $mime->fromFilename($fileName),
-            'file' => $fileName,
-            'name' => $request->file('attachment')->getClientOriginalName()
+            'size' => $media->size(),
+            'file' => $media->getFilename(),
+            'name' => $media->getName(),
+            'mime' => $mime->fromFilename($media->path())
         ];
 
-        $this->attachment->create($data);
-
-        return $this->renderForm($data);
+        $attachment = $this->attachment->create($data);
+        return $this->renderForm($attachment);
     }
 
     /**
@@ -99,23 +93,19 @@ class AttachmentController extends Controller
         );
 
         $this->validateWith($validator);
-        $fs = $this->getFilesystemFactory();
 
-        $fileName = uniqid() . '.png';
-        $path = config('filesystems.forum') . $fileName;
-
-        $fs->put($path, file_get_contents('data://' . substr($input, 7)));
+        $media = $this->getMediaFactory('attachment')->put($input);
         $mime = new Mimetypes();
 
         $data = [
-            'size' => $fs->size($path),
-            'mime' => $mime->fromFilename($fileName),
-            'file' => $fileName,
-            'name' => $fileName
+            'size' => $media->size(),
+            'mime' => $mime->fromFilename($media->path()),
+            'file' => $media->getFilename(),
+            'name' => $media->getName()
         ];
 
-        $this->attachment->create($data);
-        return $this->renderForm($data);
+        $attachment = $this->attachment->create($data);
+        return $this->renderForm($attachment);
     }
 
     /**
@@ -126,6 +116,7 @@ class AttachmentController extends Controller
      */
     public function download($id)
     {
+        /** @var \Coyote\Post\Attachment $attachment */
         $attachment = $this->attachment->findOrFail($id);
         $post = $this->post->findOrNew($attachment->post_id, ['id', 'forum_id']);
         $forum = $this->forum->find($post->forum_id);
@@ -139,7 +130,7 @@ class AttachmentController extends Controller
         $attachment->count = $attachment->count + 1;
         $attachment->save();
 
-        $isImage = in_array(pathinfo($attachment->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
+        $isImage = $attachment->file->isImage();
 
         $headers = [
             'Content-Type' => $attachment->mime,
@@ -153,13 +144,13 @@ class AttachmentController extends Controller
 
         if ($isImage) {
             return response()->make(
-                $this->getFilesystemFactory()->get('forum/' . $attachment->file),
+                $attachment->file->get(),
                 200,
                 $headers
             );
         } else {
             return response()->download(
-                public_path('storage/' . config('filesystems.forum') . $attachment->file),
+                $attachment->file->path(),
                 $attachment->name,
                 $headers
             );

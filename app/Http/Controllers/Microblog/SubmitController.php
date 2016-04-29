@@ -6,6 +6,7 @@ use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FilesystemFactory;
+use Coyote\Http\Factories\MediaFactory;
 use Coyote\Services\Parser\Reference\Login as Ref_Login;
 use Coyote\Services\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
@@ -22,7 +23,7 @@ use Illuminate\Http\Request;
  */
 class SubmitController extends Controller
 {
-    use FilesystemFactory;
+    use FilesystemFactory, MediaFactory;
 
     /**
      * @var Microblog
@@ -62,36 +63,38 @@ class SubmitController extends Controller
         $microblog = $this->microblog->findOrNew($id);
         $data = $request->only(['text']);
 
+        $media = [];
+
         if ($id === null) {
             $user = auth()->user();
             $data['user_id'] = $user->id;
-
-            $media = ['image' => []];
         } else {
             $this->authorize('update', $microblog);
 
             $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
-            $media = $microblog->media;
 
-            if (empty($media['image'])) {
-                $media = ['image' => []];
+            if (!empty($microblog->media)) {
+                /** @var \Coyote\Services\Media\MediaInterface $item */
+                foreach ($microblog->media as $item) {
+                    $media[] = $item->getFilename();
+                }
             }
         }
 
-        if ($request->has('thumbnail') || count($media['image']) > 0) {
-            $delete = array_diff($media['image'], (array) $request->get('thumbnail'));
+        if ($request->has('thumbnail') || count($media) > 0) {
+            $delete = array_diff($media, (array) $request->get('thumbnail'));
             $fs = $this->getFilesystemFactory();
 
             foreach ($delete as $name) {
-                $fs->delete(config('filesystems.microblog') . $name);
-                unset($media['image'][array_search($name, $media['image'])]);
+                // @todo te metode nalezy przeniesc do serwisu Media
+                $fs->delete('attachment/' . $name);
+                unset($media[array_search($name, $media)]);
             }
 
-            $insert = array_diff((array) $request->get('thumbnail'), $media['image']);
+            $insert = array_diff((array) $request->get('thumbnail'), $media);
 
             foreach ($insert as $name) {
-                $fs->move('tmp/' . $name, config('filesystems.microblog') . $name);
-                $media['image'][] = $name;
+                $media[] = $name;
             }
 
             $microblog->media = $media;
@@ -160,7 +163,7 @@ class SubmitController extends Controller
      * Edycja wpisu na mikroblogu. Odeslanie formularza zawierajacego tresc + zalaczniki
      *
      * @param int $id
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
@@ -169,9 +172,10 @@ class SubmitController extends Controller
 
         $thumbnails = [];
 
-        if (isset($microblog->media['image'])) {
-            foreach ($microblog->media['image'] as $name) {
-                $thumbnails[$name] = url('storage/microblog/' . $name);
+        if (!empty($microblog->media)) {
+            /** @var \Coyote\Services\Media\MediaInterface $media */
+            foreach ($microblog->media as $media) {
+                $thumbnails[$media->getFilename()] = $media->url();
             }
         }
 
@@ -181,7 +185,7 @@ class SubmitController extends Controller
     /**
      * Return small piece of code (thumbnail container)
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory
      */
     public function thumbnail()
     {
@@ -221,14 +225,11 @@ class SubmitController extends Controller
             'photo'             => 'required|image|max:' . (config('filesystems.upload_max_size') * 1024)
         ]);
 
-        $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
-        $path = 'tmp/' . $fileName;
-
-        $this->getFilesystemFactory()->put($path, file_get_contents($request->file('photo')->getRealPath()));
+        $media = $this->getMediaFactory('attachment')->upload($request->file('photo'));
 
         return response()->json([
-            'url' => asset('storage/' . $path),
-            'name' => $fileName
+            'url' => $media->url(),
+            'name' => $media->getFilename()
         ]);
     }
 

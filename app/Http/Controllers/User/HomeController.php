@@ -2,16 +2,14 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Factories\FilesystemFactory;
-use Coyote\Http\Factories\ThumbnailFactory;
+use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Services\Thumbnail\Objects\Photo;
 use Coyote\Session;
 use Illuminate\Http\Request;
 
 class HomeController extends BaseController
 {
-    use HomeTrait, FilesystemFactory, ThumbnailFactory;
+    use HomeTrait, MediaFactory;
 
     /**
      * @param User $user
@@ -64,16 +62,11 @@ class HomeController extends BaseController
             'photo'             => 'required|image'
         ]);
 
-        $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
-        $path = config('filesystems.photo') . $fileName;
-
-        $this->getFilesystemFactory()->put($path, file_get_contents($request->file('photo')->getRealPath()));
-
-        $this->getThumbnailFactory()->setObject(new Photo())->make('storage/' . $path);
-        $user->update(['photo' => $fileName], $this->userId);
+        $media = $this->getMediaFactory('user_photo')->upload($request->file('photo'));
+        $user->update(['photo' => $media->getFilename()], $this->userId);
 
         return response()->json([
-            'url' => asset('storage/' . $path)
+            'url' => $media->url()
         ]);
     }
 

@@ -21,22 +21,22 @@ return [
     | Directory for user photos
     */
     
-    'photo' => 'photo/',
-    
-    /*
-    | Directory for post's attachments
-    */
-    'forum' => 'forum/',
-
-    /*
-    | Directory for post's attachments
-    */
-    'microblog' => 'microblog/',
-
-    /*
-    | Directory for firm's logo
-    */
-    'logo' => 'logo/',
+//    'photo' => 'photo/',
+//    
+//    /*
+//    | Directory for post's attachments
+//    */
+//    'forum' => 'forum/',
+//
+//    /*
+//    | Directory for post's attachments
+//    */
+//    'microblog' => 'microblog/',
+//
+//    /*
+//    | Directory for firm's logo
+//    */
+//    'logo' => 'logo/',
     
     /*
     |--------------------------------------------------------------------------

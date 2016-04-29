@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmWasSent;
 use Coyote\Http\Factories\FilesystemFactory;
+use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -16,7 +17,7 @@ use Guzzle\Http\Mimetypes;
  */
 class PmController extends BaseController
 {
-    use HomeTrait, FilesystemFactory;
+    use HomeTrait, MediaFactory;
 
     /**
      * @var User
@@ -212,7 +213,7 @@ class PmController extends BaseController
     public function paste()
     {
         $input = file_get_contents("php://input");
-        
+
         $validator = $this->getValidationFactory()->make(
             ['length' => strlen($input)],
             ['length' => 'max:' . config('filesystems.upload_max_size') * 1024 * 1024]
@@ -220,21 +221,16 @@ class PmController extends BaseController
 
         $this->validateWith($validator);
 
-        $fileName = uniqid() . '.png';
-        $path = 'pm/' . $fileName;
-
-        $fs = $this->getFilesystemFactory();
-        $fs->put($path, file_get_contents('data://' . substr($input, 7)));
-
+        $media = $this->getMediaFactory('screenshot')->put($input);
         $mime = new Mimetypes();
 
         return response()->json([
-            'size' => $fs->size($path),
+            'size' => $media->size(),
             'suffix' => 'png',
-            'name' => $fileName,
-            'file' => $fileName,
-            'mime'  => $mime->fromFilename($fileName),
-            'url' => cdn('storage/' . $path)
+            'name' => $media->getName(),
+            'file' => $media->getFilename(),
+            'mime'  => $mime->fromFilename($media->path()),
+            'url' => $media->url()
         ]);
     }
 }

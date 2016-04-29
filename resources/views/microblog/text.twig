@@ -2,10 +2,10 @@
 
 {% if microblog.thumbnails|length > 0 %}
     <div class="thumbnails row">
-        {% for name, image in microblog.thumbnails %}
+        {% for url, thumbnail in microblog.thumbnails %}
             <div class="col-xs-6 col-md-3">
-                <a href="{{ cdn('storage/microblog/' ~ name) }}" class="thumbnail" data-toggle="lightbox" data-gallery="gallery-{{ microblog.id }}">
-                    <img src="{{ image }}">
+                <a href="{{ url }}" class="thumbnail" data-toggle="lightbox" data-gallery="gallery-{{ microblog.id }}">
+                    <img src="{{ thumbnail }}">
                 </a>
             </div>
         {% endfor %}

@@ -1,7 +1,7 @@
 <tr>
     <td>
-        {% if form.file.value|split('.')[1] in ['jpg', 'jpeg', 'gif', 'png'] %}
-            <a href="javascript:" class="btn-append" data-url="{{ cdn('storage/forum/' ~ form.file.value) }}">{{ form.name.value }}</a>
+        {% if form.file.value.isImage %}
+            <a href="javascript:" class="btn-append" data-url="{{ form.file.value.url }}">{{ form.name.value }}</a>
         {% else %}
             {{ form.name.value }}
         {% endif %}

@@ -119,11 +119,13 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function thumbnails($microblogs)
     {
         $apply = function ($microblog) {
-            if (isset($microblog->media['image'])) {
+            if (!empty($microblog->media)) {
                 $thumbnails = [];
 
-                foreach ($microblog->media['image'] as $name) {
-                    $thumbnails[$name] = Image::url(url('/storage/microblog/' . $name), 180, 180);
+                /** @var \Coyote\Services\Media\MediaInterface $media */
+                foreach ($microblog->media as $media) {
+                    // @todo do usuniecia facade Image
+                    $thumbnails[$media->url()] = Image::url($media->url(), 180, 180);
                 }
 
                 $microblog->thumbnails = $thumbnails;

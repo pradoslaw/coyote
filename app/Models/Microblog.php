@@ -2,9 +2,14 @@
 
 namespace Coyote;
 
+use Coyote\Services\Media\Factories\AbstractFactory;
+use Coyote\Services\Media\MediaInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property MediaInterface[] $media
+ */
 class Microblog extends Model
 {
     use SoftDeletes, Taggable;
@@ -63,12 +68,24 @@ class Microblog extends Model
     }
 
     /**
-     * @param $media
      * @return mixed
      */
-    public function getMediaAttribute($media)
+    public function getMediaAttribute()
     {
-        return json_decode($media, true);
+        $json = json_decode($this->attributes['media'], true);
+        $media = [];
+
+        if (!empty($json['image'])) {
+            $factory = $this->getMediaFactory();
+
+            foreach ($json['image'] as $image) {
+                $media[] = $factory->make([
+                    'file_name' => $image,
+                ]);
+            }
+        }
+
+        return $media;
     }
 
     /**
@@ -76,6 +93,10 @@ class Microblog extends Model
      */
     public function setMediaAttribute($media)
     {
+        if (!empty($media)) {
+            $media = ['image' => $media];
+        }
+        
         $this->attributes['media'] = json_encode($media);
     }
 
@@ -117,5 +138,13 @@ class Microblog extends Model
     public function page()
     {
         return $this->morphOne('Coyote\Page', 'content');
+    }
+
+    /**
+     * @return AbstractFactory
+     */
+    protected function getMediaFactory()
+    {
+        return app('media.attachment');
     }
 }

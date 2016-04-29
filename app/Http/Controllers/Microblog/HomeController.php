@@ -6,7 +6,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
-use Cache;
+use Cache; // @todo do usuniecia facade
 
 class HomeController extends Controller
 {
@@ -24,7 +24,7 @@ class HomeController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -32,6 +32,7 @@ class HomeController extends Controller
         $this->microblog->resetCriteria();
 
         // let's cache microblog tags. we don't need to run this query every time
+        // @todo usunac facade
         $tags = Cache::remember('microblog:tags', 30, function () {
             return $this->microblog->getTags();
         });
@@ -60,7 +61,7 @@ class HomeController extends Controller
 
     /**
      * @param string $tag
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function tag($tag)
     {
@@ -71,7 +72,7 @@ class HomeController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function mine()
     {

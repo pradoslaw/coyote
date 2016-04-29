@@ -187,6 +187,8 @@ return [
         Coyote\Providers\ElasticsearchServiceProvider::class,
         // Geokodowanie przy pomocy uslugi geo-ip.pl
         Coyote\Providers\GeoIpServiceProvider::class,
+        // Uploadowanie zalacznikow, zdjec oraz generowanie URL do tychze plikow
+        \Coyote\Providers\MediaServiceProvider::class,
 
         // Klasa wspierajaca budowanie znacznikow HTML
         Collective\Html\HtmlServiceProvider::class,

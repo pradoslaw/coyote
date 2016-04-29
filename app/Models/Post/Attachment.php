@@ -3,9 +3,15 @@
 namespace Coyote\Post;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use DB;
 
+/**
+ * @property string $name
+ * @property string $mime
+ * @property int $size
+ * @property int $count
+ * @property int $post_id
+ * @property \Coyote\Services\Media\MediaInterface $file
+ */
 class Attachment extends Model
 {
     /**
@@ -33,5 +39,16 @@ class Attachment extends Model
     public function post()
     {
         return $this->belongsTo('Coyote\Post');
+    }
+
+    /**
+     * @return \Coyote\Services\Media\MediaInterface
+     */
+    public function getFileAttribute()
+    {
+        return app('media.attachment')->make([
+            'file_name' => $this->attributes['file'],
+            'name' => $this->attributes['name']
+        ]);
     }
 }

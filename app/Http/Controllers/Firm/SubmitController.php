@@ -3,14 +3,12 @@
 namespace Coyote\Http\Controllers\Firm;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Factories\FilesystemFactory;
-use Coyote\Http\Factories\ThumbnailFactory;
-use Coyote\Services\Thumbnail\Objects\Logo;
+use Coyote\Http\Factories\MediaFactory;
 use Illuminate\Http\Request;
 
 class SubmitController extends Controller
 {
-    use FilesystemFactory, ThumbnailFactory;
+    use MediaFactory;
 
     /**
      * @param Request $request
@@ -22,17 +20,11 @@ class SubmitController extends Controller
             'logo'             => 'required|image'
         ]);
 
-        $fs = $this->getFilesystemFactory();
-        $fileName = uniqid() . '.' . $request->file('logo')->getClientOriginalExtension();
-
-        $path = config('filesystems.logo') . $fileName;
-        $fs->put($path, file_get_contents($request->file('logo')->getRealPath()));
-
-        $this->getThumbnailFactory()->setObject(new Logo())->make('storage/' . $path);
+        $media = $this->getMediaFactory('logo')->upload($request->file('logo'));
 
         return response()->json([
-            'url' => asset('storage/' . $path),
-            'name' => $fileName
+            'url' => $media->url(),
+            'name' => $media->getFilename()
         ]);
     }
 }
