@@ -17,7 +17,7 @@ interface ResponseInterface
      * Get the raw hits array from
      * Elasticsearch results.
      *
-     * @return array
+     * @return array|\Illuminate\Support\Collection
      */
     public function getHits();
 

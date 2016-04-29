@@ -84,7 +84,7 @@ abstract class Controller extends BaseController
      *
      * @param string|null $view
      * @param array $data
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     protected function view($view = null, $data = [])
     {
