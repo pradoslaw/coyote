@@ -64,26 +64,24 @@ class AttachmentController extends Controller
             )
         ]);
 
-        if ($request->file('attachment')->isValid()) {
-            $fs = $this->getFilesystemFactory();
-            $fileName = uniqid() . '.' . strtolower($request->file('attachment')->getClientOriginalExtension());
+        $fs = $this->getFilesystemFactory();
+        $fileName = uniqid() . '.' . strtolower($request->file('attachment')->getClientOriginalExtension());
 
-            $path = config('filesystems.forum') . $fileName;
-            $fs->put($path, file_get_contents($request->file('attachment')->getRealPath()));
+        $path = config('filesystems.forum') . $fileName;
+        $fs->put($path, file_get_contents($request->file('attachment')->getRealPath()));
 
-            $mime = new Mimetypes();
+        $mime = new Mimetypes();
 
-            $data = [
-                'size' => $fs->size($path),
-                'mime' => $mime->fromFilename($fileName),
-                'file' => $fileName,
-                'name' => $request->file('attachment')->getClientOriginalName()
-            ];
+        $data = [
+            'size' => $fs->size($path),
+            'mime' => $mime->fromFilename($fileName),
+            'file' => $fileName,
+            'name' => $request->file('attachment')->getClientOriginalName()
+        ];
 
-            $this->attachment->create($data);
+        $this->attachment->create($data);
 
-            return $this->renderForm($data);
-        }
+        return $this->renderForm($data);
     }
 
     /**
@@ -95,10 +93,12 @@ class AttachmentController extends Controller
     {
         $input = file_get_contents("php://input");
 
-        if (strlen($input) > (config('filesystems.upload_max_size') * 1024 * 1024)) {
-            abort(500, 'File is too big');
-        }
+        $validator = $this->getValidationFactory()->make(
+            ['length' => strlen($input)],
+            ['length' => 'max:' . config('filesystems.upload_max_size') * 1024 * 1024]
+        );
 
+        $this->validateWith($validator);
         $fs = $this->getFilesystemFactory();
 
         $fileName = uniqid() . '.png';

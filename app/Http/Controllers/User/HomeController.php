@@ -64,19 +64,17 @@ class HomeController extends BaseController
             'photo'             => 'required|image'
         ]);
 
-        if ($request->file('photo')->isValid()) {
-            $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
-            $path = config('filesystems.photo');
+        $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
+        $path = config('filesystems.photo') . $fileName;
 
-            $this->getFilesystemFactory()->put($path, file_get_contents($request->file('photo')->getRealPath()));
+        $this->getFilesystemFactory()->put($path, file_get_contents($request->file('photo')->getRealPath()));
 
-            $this->getThumbnailFactory()->setObject(new Photo())->make($path . $fileName);
-            $user->update(['photo' => $fileName], $this->userId);
+        $this->getThumbnailFactory()->setObject(new Photo())->make('storage/' . $path);
+        $user->update(['photo' => $fileName], $this->userId);
 
-            return response()->json([
-                'url' => asset('storage/' . config('filesystems.photo') . $fileName)
-            ]);
-        }
+        return response()->json([
+            'url' => asset('storage/' . $path)
+        ]);
     }
 
     /**

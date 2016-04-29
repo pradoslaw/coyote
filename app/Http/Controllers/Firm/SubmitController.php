@@ -3,13 +3,14 @@
 namespace Coyote\Http\Controllers\Firm;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Http\Factories\ThumbnailFactory;
 use Coyote\Services\Thumbnail\Objects\Logo;
 use Illuminate\Http\Request;
 
 class SubmitController extends Controller
 {
-    use ThumbnailFactory;
+    use FilesystemFactory, ThumbnailFactory;
 
     /**
      * @param Request $request
@@ -21,17 +22,17 @@ class SubmitController extends Controller
             'logo'             => 'required|image'
         ]);
 
-        if ($request->file('logo')->isValid()) {
-            $fileName = uniqid() . '.' . $request->file('logo')->getClientOriginalExtension();
-            $path = public_path('storage/' . config('filesystems.logo'));
+        $fs = $this->getFilesystemFactory();
+        $fileName = uniqid() . '.' . $request->file('logo')->getClientOriginalExtension();
 
-            $request->file('logo')->move($path, $fileName);
-            $this->getThumbnailFactory()->setObject(new Logo())->make($path . $fileName);
+        $path = config('filesystems.logo') . $fileName;
+        $fs->put($path, file_get_contents($request->file('logo')->getRealPath()));
 
-            return response()->json([
-                'url' => asset('storage/' . config('filesystems.logo') . $fileName),
-                'name' => $fileName
-            ]);
-        }
+        $this->getThumbnailFactory()->setObject(new Logo())->make('storage/' . $path);
+
+        return response()->json([
+            'url' => asset('storage/' . $path),
+            'name' => $fileName
+        ]);
     }
 }

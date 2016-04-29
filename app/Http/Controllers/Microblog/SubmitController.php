@@ -221,17 +221,15 @@ class SubmitController extends Controller
             'photo'             => 'required|image|max:' . (config('filesystems.upload_max_size') * 1024)
         ]);
 
-        if ($request->file('photo')->isValid()) {
-            $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
-            $path = 'tmp/' . $fileName;
+        $fileName = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
+        $path = 'tmp/' . $fileName;
 
-            $this->getFilesystemFactory()->put($path, file_get_contents($request->file('photo')->getRealPath()));
+        $this->getFilesystemFactory()->put($path, file_get_contents($request->file('photo')->getRealPath()));
 
-            return response()->json([
-                'url' => asset('storage/' . $path),
-                'name' => $fileName
-            ]);
-        }
+        return response()->json([
+            'url' => asset('storage/' . $path),
+            'name' => $fileName
+        ]);
     }
 
     /**
@@ -243,9 +241,12 @@ class SubmitController extends Controller
     {
         $input = file_get_contents("php://input");
 
-        if (strlen($input) > (config('filesystems.upload_max_size') * 1024 * 1024)) {
-            abort(500, 'File is too big');
-        }
+        $validator = $this->getValidationFactory()->make(
+            ['length' => strlen($input)],
+            ['length' => 'max:' . config('filesystems.upload_max_size') * 1024 * 1024]
+        );
+
+        $this->validateWith($validator);
 
         $fileName = uniqid() . '.png';
         $path = 'tmp/' . $fileName;

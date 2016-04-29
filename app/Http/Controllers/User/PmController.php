@@ -212,9 +212,13 @@ class PmController extends BaseController
     public function paste()
     {
         $input = file_get_contents("php://input");
-        if (strlen($input) > (config('filesystems.upload_max_size') * 1024 * 1024)) {
-            abort(500, 'File is too big');
-        }
+        
+        $validator = $this->getValidationFactory()->make(
+            ['length' => strlen($input)],
+            ['length' => 'max:' . config('filesystems.upload_max_size') * 1024 * 1024]
+        );
+
+        $this->validateWith($validator);
 
         $fileName = uniqid() . '.png';
         $path = 'pm/' . $fileName;
