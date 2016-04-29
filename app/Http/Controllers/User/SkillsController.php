@@ -10,7 +10,7 @@ class SkillsController extends BaseController
     use SettingsTrait;
 
     /**
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function index()
     {

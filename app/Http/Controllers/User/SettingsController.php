@@ -14,7 +14,7 @@ class SettingsController extends BaseController
     use SettingsTrait, MailFactory;
 
     /**
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {

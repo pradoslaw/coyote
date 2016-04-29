@@ -33,7 +33,7 @@ class LoginController extends Controller
      * Widok formularza logowania
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -54,7 +54,7 @@ class LoginController extends Controller
      * Logowanie uzytkownika
      *
      * @param LoginForm $form
-     * @return $this|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function signin(LoginForm $form)
     {
