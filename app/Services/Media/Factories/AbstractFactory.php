@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Media\Factories;
 
+use Coyote\Services\Thumbnail\Factory as Thumbnail;
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
 // don't remove below line
@@ -15,11 +16,34 @@ abstract class AbstractFactory
     protected $filesystem;
 
     /**
-     * @param Filesystem $filesystem
+     * @var Thumbnail
      */
-    public function __construct(Filesystem $filesystem)
+    protected $thumbnail;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param Thumbnail $thumbnail
+     */
+    public function __construct(Filesystem $filesystem, Thumbnail $thumbnail)
     {
         $this->filesystem = $filesystem;
+        $this->thumbnail = $thumbnail;
+    }
+
+    /**
+     * @return Filesystem
+     */
+    public function getFilesystem()
+    {
+        return $this->filesystem;
+    }
+
+    /**
+     * @return Thumbnail
+     */
+    public function getThumbnail()
+    {
+        return $this->thumbnail;
     }
 
     /**
@@ -28,6 +52,9 @@ abstract class AbstractFactory
     abstract public function getMedia() : MediaInterface;
 
     /**
+     * Create the new media class based on options. This method is being used in model to initialize
+     * appropriate object.
+     *
      * @param array $options
      * @return MediaInterface
      */
@@ -89,7 +116,7 @@ abstract class AbstractFactory
      * @param string $extension
      * @return string
      */
-    public function getHumanName($extension)
+    protected function getHumanName($extension)
     {
         return 'screenshot-' . date('YmdHis') . '.' . $extension;
     }

@@ -12,6 +12,6 @@ class ScreenshotFactory extends AbstractFactory
      */
     public function getMedia() : MediaInterface
     {
-        return new Screenshot($this->filesystem);
+        return new Screenshot($this);
     }
 }

@@ -2,7 +2,7 @@
 
 
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return array(
     | to generate the right URL.
     |
     */
-    'host' => '',
+    'host' => env('CDN'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,9 +36,9 @@ return array(
     | A list a directories to look for images
     |
     */
-    'src_dirs' => array(
-        public_path('microblog')
-    ),
+    'src_dirs' => [
+        public_path('storage/attachment')
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -115,4 +115,4 @@ return array(
     */
     'memory_limit' => '128M'
 
-);
+];

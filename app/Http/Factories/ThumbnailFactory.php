@@ -5,7 +5,7 @@ namespace Coyote\Http\Factories;
 trait ThumbnailFactory
 {
     /**
-     * @return \Coyote\Services\Thumbnail\Thumbnail
+     * @return \Coyote\Services\Thumbnail\Factory
      */
     private function getThumbnailFactory()
     {

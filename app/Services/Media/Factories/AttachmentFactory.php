@@ -12,6 +12,6 @@ class AttachmentFactory extends AbstractFactory
      */
     public function getMedia() : MediaInterface
     {
-        return new Attachment($this->filesystem);
+        return new Attachment($this);
     }
 }

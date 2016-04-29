@@ -13,4 +13,14 @@ interface ObjectInterface
      * @return \Imagine\Image\ImageInterface
      */
     public function getInterface();
+
+    /**
+     * @return mixed
+     */
+    public function getWidth();
+
+    /**
+     * @return mixed
+     */
+    public function getHeight();
 }

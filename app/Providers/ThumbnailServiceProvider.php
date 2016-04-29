@@ -2,7 +2,7 @@
 
 namespace Coyote\Providers;
 
-use Coyote\Services\Thumbnail\Thumbnail;
+use Coyote\Services\Thumbnail\Factory;
 use Illuminate\Support\ServiceProvider;
 
 class ThumbnailServiceProvider extends ServiceProvider
@@ -32,7 +32,7 @@ class ThumbnailServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('thumbnail', function ($app) {
-            return new Thumbnail(
+            return new Factory(
                 $app['image']
             );
         });

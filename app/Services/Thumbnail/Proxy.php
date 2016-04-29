@@ -5,11 +5,7 @@ namespace Coyote\Services\Thumbnail;
 use Coyote\Services\Thumbnail\Objects\ObjectInterface;
 use Folklore\Image\ImageManager;
 
-/**
- * Class Thumbnail
- * @package Coyote\Services\Thumbnail
- */
-class Thumbnail
+abstract class Proxy implements ThumbnailInterface
 {
     /**
      * @var ImageManager
@@ -40,20 +36,8 @@ class Thumbnail
     }
 
     /**
-     * @param $path
-     * @throws \Exception
+     * @param string $path
+     * @return mixed
      */
-    public function make($path)
-    {
-        if (!$this->object instanceof ObjectInterface) {
-            throw new \Exception('$object must implement ObjectInterface');
-        }
-        
-        $thumbnail = $this->imageManager->open($path)->thumbnail(
-            $this->object->getBox(),
-            $this->object->getInterface()
-        );
-
-        $thumbnail->save($path);
-    }
+    abstract public function make($path);
 }

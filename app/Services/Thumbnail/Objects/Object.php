@@ -35,4 +35,20 @@ abstract class Object implements ObjectInterface
     {
         return Image\ImageInterface::THUMBNAIL_OUTBOUND;
     }
+
+    /**
+     * @return int
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
 }

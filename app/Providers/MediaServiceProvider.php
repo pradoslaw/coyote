@@ -12,7 +12,7 @@ use Illuminate\Support\ServiceProvider;
 class MediaServiceProvider extends ServiceProvider
 {
     use FilesystemFactory;
-    
+
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -37,20 +37,20 @@ class MediaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('media.attachment', function () {
-            return new AttachmentFactory($this->getFilesystemFactory());
+        $this->app->singleton('media.attachment', function ($app) {
+            return new AttachmentFactory($this->getFilesystemFactory(), $app['thumbnail']);
         });
 
-        $this->app->singleton('media.logo', function () {
-            return new LogoFactory($this->getFilesystemFactory());
+        $this->app->singleton('media.logo', function ($app) {
+            return new LogoFactory($this->getFilesystemFactory(), $app['thumbnail']);
         });
 
-        $this->app->singleton('media.screenshot', function () {
-            return new ScreenshotFactory($this->getFilesystemFactory());
+        $this->app->singleton('media.screenshot', function ($app) {
+            return new ScreenshotFactory($this->getFilesystemFactory(), $app['thumbnail']);
         });
 
-        $this->app->singleton('media.user_photo', function () {
-            return new UserPhotoFactory($this->getFilesystemFactory());
+        $this->app->singleton('media.user_photo', function ($app) {
+            return new UserPhotoFactory($this->getFilesystemFactory(), $app['thumbnail']);
         });
     }
 

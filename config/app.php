@@ -187,6 +187,8 @@ return [
         Coyote\Providers\ElasticsearchServiceProvider::class,
         // Geokodowanie przy pomocy uslugi geo-ip.pl
         Coyote\Providers\GeoIpServiceProvider::class,
+        // Serwis do tworzenia miniatur (logo, zdjecie)
+        Coyote\Providers\ThumbnailServiceProvider::class,
         // Uploadowanie zalacznikow, zdjec oraz generowanie URL do tychze plikow
         \Coyote\Providers\MediaServiceProvider::class,
 
@@ -200,8 +202,7 @@ return [
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         // Pakiet do budowania menu
         Lavary\Menu\ServiceProvider::class,
-        // Serwis do tworzenia miniatur (logo, zdjecie)
-        Coyote\Providers\ThumbnailServiceProvider::class,
+
 
     ],
     /*

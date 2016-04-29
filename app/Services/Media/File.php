@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Media;
 
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Coyote\Services\Media\Factories\AbstractFactory as MediaFactory;
 
 abstract class File implements MediaInterface
 {
@@ -22,16 +22,16 @@ abstract class File implements MediaInterface
     protected $filename;
 
     /**
-     * @var Filesystem
+     * @var MediaFactory
      */
-    protected $filesystem;
+    protected $factory;
 
     /**
-     * @param Filesystem $filesystem
+     * @param MediaFactory $factory
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(MediaFactory $factory)
     {
-        $this->filesystem = $filesystem;
+        $this->factory = $factory;
 
         if (empty($this->directory)) {
             $this->directory = strtolower(class_basename($this));
@@ -93,7 +93,7 @@ abstract class File implements MediaInterface
      */
     public function put($content)
     {
-        $this->filesystem->put($this->relative(), $content);
+        $this->factory->getFilesystem()->put($this->relative(), $content);
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class File implements MediaInterface
      */
     public function get()
     {
-        return $this->filesystem->get($this->relative());
+        return $this->factory->getFilesystem()->get($this->relative());
     }
 
     /**
@@ -109,7 +109,23 @@ abstract class File implements MediaInterface
      */
     public function size()
     {
-        return $this->filesystem->size($this->relative());
+        return $this->factory->getFilesystem()->size($this->relative());
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImage()
+    {
+        return in_array(pathinfo($this->getFilename(), PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function delete()
+    {
+        return $this->factory->getFilesystem()->delete($this->relative());
     }
 
     /**
@@ -127,14 +143,6 @@ abstract class File implements MediaInterface
     {
         $default = config('filesystems.default');
         return config("filesystems.disks.$default.root");
-    }
-
-    /**
-     * @return bool
-     */
-    public function isImage()
-    {
-        return in_array(pathinfo($this->getFilename(), PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
     }
 
     /**
