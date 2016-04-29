@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmWasSent;
-use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;

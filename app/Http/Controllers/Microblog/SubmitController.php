@@ -52,7 +52,7 @@ class SubmitController extends Controller
      *
      * @param Request $request
      * @param null|int $id
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function save(Request $request, $id = null)
     {
@@ -110,7 +110,7 @@ class SubmitController extends Controller
 
             $object = (new Stream_Microblog())->map($microblog);
 
-            if (!$id) {
+            if ($id === null) {
                 // increase reputation points
                 app()->make('Reputation\Microblog\Create')->map($microblog)->save();
 
@@ -248,15 +248,11 @@ class SubmitController extends Controller
         );
 
         $this->validateWith($validator);
-
-        $fileName = uniqid() . '.png';
-        $path = 'tmp/' . $fileName;
-
-        $this->getFilesystemFactory()->put($path, file_get_contents('data://' . substr($input, 7)));
+        $media = $this->getMediaFactory('attachment')->put($input);
 
         return response()->json([
-            'name' => $fileName,
-            'url' => asset('storage/' . $path)
+            'name' => $media->getFilename(),
+            'url' => $media->url()
         ]);
     }
 }

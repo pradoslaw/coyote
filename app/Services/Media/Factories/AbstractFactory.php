@@ -34,7 +34,7 @@ abstract class AbstractFactory
     public function make(array $options = [])
     {
         $media = $this->getMedia();
-        
+
         if ($options) {
             foreach ($options as $name => $value) {
                 $method = camel_case('set_' . $name);
@@ -44,7 +44,7 @@ abstract class AbstractFactory
                 }
             }
         }
-        
+
         return $media;
     }
 
@@ -63,7 +63,7 @@ abstract class AbstractFactory
     }
 
     /**
-     * @param $content
+     * @param mixed $content
      * @return MediaInterface
      */
     public function put($content)

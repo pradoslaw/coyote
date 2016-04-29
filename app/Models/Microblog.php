@@ -68,11 +68,12 @@ class Microblog extends Model
     }
 
     /**
+     * @param string $value
      * @return mixed
      */
-    public function getMediaAttribute()
+    public function getMediaAttribute($value)
     {
-        $json = json_decode($this->attributes['media'], true);
+        $json = json_decode($value, true);
         $media = [];
 
         if (!empty($json['image'])) {
@@ -96,7 +97,7 @@ class Microblog extends Model
         if (!empty($media)) {
             $media = ['image' => $media];
         }
-        
+
         $this->attributes['media'] = json_encode($media);
     }
 
