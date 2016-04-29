@@ -2,14 +2,8 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Services\Elasticsearch\Filters\Post\Forum;
-use Coyote\Services\Elasticsearch\Filters\Term;
-use Coyote\Services\Elasticsearch\Highlight;
-use Coyote\Services\Elasticsearch\Query;
-use Coyote\Services\Elasticsearch\QueryBuilderInterface as QueryBuilder;
-use Coyote\Services\Elasticsearch\QueryParser;
-use Coyote\Services\Elasticsearch\Sort;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Services\Elasticsearch\Factory\Forum\SearchFactory;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Request;
 
 class SearchController extends BaseController
@@ -21,11 +15,10 @@ class SearchController extends BaseController
 
     /**
      * @param Request $request
-     * @param User $user
-     * @param QueryBuilder $queryBuilder
+     * @param UserRepository $user
      * @return mixed
      */
-    public function index(Request $request, User $user, QueryBuilder $queryBuilder)
+    public function index(Request $request, UserRepository $user)
     {
         $this->breadcrumb->push('Szukaj', route('forum.search'));
 
@@ -42,59 +35,9 @@ class SearchController extends BaseController
             $this->validate($request, ['f' => 'sometimes|int|in:' . implode(',', $forumsId)]);
 
             // we need to limit results to given categories...
-            $filterForum = new Forum($request->has('f') ? $request->get('f') : $forumsId);
-            $queryBuilder->addFilter($filterForum);
+            $builder = (new SearchFactory())->build($request, $request->has('f') ? $request->get('f') : $forumsId);
 
-            // parse given query and fetch keywords and filters
-            $parser = new QueryParser(
-                $request->get('q'),
-                [self::FIELD_IP, self::FIELD_USER, self::FIELD_BROWSER, self::FIELD_HOST]
-            );
-
-            // only for see returned values in debugbar
-            debugbar()->debug(
-                $parser->getFilteredQuery(),
-                $parser->getFilters()
-            );
-
-            $queryBuilder->addSort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
-            $queryBuilder->addHighlight(new Highlight(['topic.subject', 'text', 'tags']));
-
-            // we cannot allowed regular uesrs to search by IP or host
-            foreach ([self::FIELD_IP, self::FIELD_HOST, self::FIELD_BROWSER] as $filter) {
-                if (!$this->getGateFactory()->allows('forum-update')) {
-                    $parser->removeFilter($filter); // user is not ALLOWED to use this filter
-                }
-            }
-
-            if ($parser->getFilter(self::FIELD_USER)) {
-                $value = mb_strtolower($parser->pullFilter(self::FIELD_USER));
-                $result = $user->findByName($value);
-
-                if ($result) {
-                    $field = 'user_id';
-                    $value = $result->id;
-                } else {
-                    $field = 'user_name';
-                }
-
-                $queryBuilder->addFilter(new Term($field, $value));
-            }
-
-            // filter by browser is not part of the filter. we need to append it to query
-            $parser->appendQuery(['browser' => $parser->pullFilter(self::FIELD_BROWSER)]);
-
-            // we need to apply rest of the filters
-            foreach ($parser->getFilters() as $field => $value) {
-                $queryBuilder->addFilter(new Term($field, $value));
-            }
-
-            // specify query string and fields
-            if ($parser->getFilteredQuery()) {
-                $queryBuilder->addQuery(new Query($parser->getFilteredQuery(), ['text', 'topic.subject', 'tags']));
-            }
-
-            $build = $queryBuilder->build();
+            $build = $builder->build();
             debugbar()->debug($build);
 
             $response = $this->post->search($build);

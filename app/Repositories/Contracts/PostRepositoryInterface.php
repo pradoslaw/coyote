@@ -10,7 +10,7 @@ use Coyote\Post;
 use Coyote\Poll;
 
 /**
- * @method \Coyote\Elasticsearch\ResponseInterface search(array $body)
+ * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
  */
 interface PostRepositoryInterface extends RepositoryInterface
 {
