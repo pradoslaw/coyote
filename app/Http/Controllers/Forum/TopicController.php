@@ -24,7 +24,7 @@ class TopicController extends BaseController
      * @param \Coyote\Topic $topic
      * @param string $slug
      * @param Request $request
-     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\View\View
      */
     public function index($forum, $topic, $slug, Request $request)
     {

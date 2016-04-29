@@ -27,7 +27,7 @@ class SubmitController extends BaseController
      * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
      * @param \Coyote\Post|null $post
-     * @return mixed
+     * @return \Illuminate\View\View
      */
     public function index(Request $request, $forum, $topic = null, $post = null)
     {

@@ -116,7 +116,7 @@ class HomeController extends Controller
     /**
      * @param Request $request
      * @param $name
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function city(Request $request, $name)
     {
@@ -128,7 +128,7 @@ class HomeController extends Controller
     /**
      * @param Request $request
      * @param $name
-     * @return HomeController
+     * @return \Illuminate\View\View
      */
     public function tag(Request $request, $name)
     {
@@ -140,7 +140,7 @@ class HomeController extends Controller
     /**
      * @param Request $request
      * @param $name
-     * @return HomeController
+     * @return \Illuminate\View\View
      */
     public function firm(Request $request, $name)
     {
@@ -151,7 +151,7 @@ class HomeController extends Controller
 
     /**
      * @param Request $request
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function remote(Request $request)
     {
@@ -162,7 +162,7 @@ class HomeController extends Controller
 
     /**
      * @param Request $request
-     * @return $this
+     * @return \Illuminate\View\View
      */
     private function load(Request $request)
     {

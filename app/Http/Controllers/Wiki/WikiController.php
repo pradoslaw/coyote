@@ -7,7 +7,7 @@ use Coyote\Http\Controllers\Controller;
 class WikiController extends Controller
 {
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function category()
     {
@@ -17,7 +17,7 @@ class WikiController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function article()
     {

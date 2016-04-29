@@ -15,7 +15,7 @@ class HomeController extends BaseController
 
     /**
      * @param User $user
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function index(User $user)
     {

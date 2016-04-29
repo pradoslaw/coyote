@@ -48,7 +48,7 @@ class PmController extends BaseController
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -126,7 +126,7 @@ class PmController extends BaseController
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function submit()
     {
