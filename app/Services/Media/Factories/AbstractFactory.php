@@ -98,7 +98,7 @@ abstract class AbstractFactory
         $media = $this->getMedia();
         $media->setName($this->getHumanName('png'));
         $media->setFilename($this->getUniqueName('png'));
-        $media->put(file_get_contents('data://' . substr($content, 7)));
+        $media->put($content);
 
         return $media;
     }

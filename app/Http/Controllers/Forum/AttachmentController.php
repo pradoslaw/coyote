@@ -94,7 +94,7 @@ class AttachmentController extends Controller
 
         $this->validateWith($validator);
 
-        $media = $this->getMediaFactory('attachment')->put($input);
+        $media = $this->getMediaFactory('attachment')->put(file_get_contents('data://' . substr($input, 7)));
         $mime = new Mimetypes();
 
         $data = [

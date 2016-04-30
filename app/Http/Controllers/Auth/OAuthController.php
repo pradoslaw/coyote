@@ -3,10 +3,8 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Factories\FilesystemFactory;
-use Coyote\Http\Factories\ThumbnailFactory;
+use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Services\Thumbnail\Objects\Photo;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
@@ -14,8 +12,8 @@ use Illuminate\Http\Response;
 
 class OAuthController extends Controller
 {
-    use FilesystemFactory, ThumbnailFactory;
-    
+    use MediaFactory;
+
     /**
      * @var User
      */
@@ -81,22 +79,17 @@ class OAuthController extends Controller
             }
 
             $photoUrl = isset($oauth->avatar_original) ? $oauth->avatar_original : $oauth->getAvatar();
-            $fileName = null;
+            $filename = null;
 
             if ($photoUrl) {
-                $fileName = uniqid() . '.png';
-                $path = config('filesystems.photo') . $fileName;
-
-                $fs = $this->getFilesystemFactory();
-                $fs->put($path, file_get_contents($photoUrl));
-
-                $this->getThumbnailFactory()->setObject(new Photo())->make(public_path('storage/' . $path));
+                $media = $this->getMediaFactory('user_photo')->put(file_get_contents($photoUrl));
+                $filename = $media->getFilename();
             }
 
             $user = $this->user->create([
                 'name' => $name,
                 'email' => $oauth->getEmail(),
-                'photo' => $fileName,
+                'photo' => $filename,
                 'is_active' => 1,
                 'is_confirm' => 1,
                 'provider' => $provider,

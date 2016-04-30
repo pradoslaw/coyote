@@ -213,7 +213,7 @@ class PmController extends BaseController
 
         $this->validateWith($validator);
 
-        $media = $this->getMediaFactory('screenshot')->put($input);
+        $media = $this->getMediaFactory('screenshot')->put(file_get_contents('data://' . substr($input, 7)));
         $mime = new Mimetypes();
 
         return response()->json([
