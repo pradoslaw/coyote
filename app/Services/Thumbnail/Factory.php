@@ -21,7 +21,7 @@ class Factory
     }
 
     /**
-     * Create thumbnail file and replace original.
+     * Return object that can create thumbnail file and replace original.
      *
      * @param ObjectInterface $object
      * @return ThumbnailInterface
@@ -32,7 +32,7 @@ class Factory
     }
 
     /**
-     * Create URL to the thumbnail.
+     * Return object that can create URL to the thumbnail.
      *
      * @param ObjectInterface $object
      * @return ThumbnailInterface
