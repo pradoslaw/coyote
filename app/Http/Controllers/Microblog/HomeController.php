@@ -3,13 +3,15 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Factories\CacheFactory;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
-use Cache; // @todo do usuniecia facade
 
 class HomeController extends Controller
 {
+    use CacheFactory;
+    
     /**
      * @var Microblog
      */
@@ -32,8 +34,7 @@ class HomeController extends Controller
         $this->microblog->resetCriteria();
 
         // let's cache microblog tags. we don't need to run this query every time
-        // @todo usunac facade
-        $tags = Cache::remember('microblog:tags', 30, function () {
+        $tags = $this->getCacheFactory()->remember('microblog:tags', 30, function () {
             return $this->microblog->getTags();
         });
 

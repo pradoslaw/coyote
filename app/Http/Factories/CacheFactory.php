@@ -2,13 +2,15 @@
 
 namespace Coyote\Http\Factories;
 
+use Illuminate\Contracts\Cache\Repository;
+
 trait CacheFactory
 {
     /**
-     * @return \Illuminate\Contracts\Cache\Repository
+     * @return Repository
      */
     private function getCacheFactory()
     {
-        return app(\Illuminate\Contracts\Cache\Repository::class);
+        return app(Repository::class);
     }
 }
