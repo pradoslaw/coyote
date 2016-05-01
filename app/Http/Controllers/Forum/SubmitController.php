@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
+use Coyote\Repositories\Contracts\PollRepositoryInterface;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -81,9 +82,11 @@ class SubmitController extends BaseController
                 $actor->displayName = $request->get('user_name');
             }
 
+            $poll = $this->savePoll($request, $topic->id);
+
             $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
             // saving post through repository... we need to pass few object to save relationships
-            $this->post->save($request, auth()->user(), $forum, $topic, $post);
+            $this->post->save($request, auth()->user(), $forum, $topic, $post, $poll);
 
             // url to the post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false) . '?p=' . $post->id . '#id' . $post->id;
@@ -152,6 +155,28 @@ class SubmitController extends BaseController
         }
 
         return redirect()->to($url);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $pollId
+     * @return \Coyote\Poll|null
+     */
+    private function savePoll(Request $request, $pollId)
+    {
+        if ($request->has('poll.title')) {
+            return $this->getPollRepository()->updateOrCreate($pollId, $request->get('poll'));
+        }
+
+        return null;
+    }
+
+    /**
+     * @return PollRepositoryInterface
+     */
+    private function getPollRepository()
+    {
+        return app(PollRepositoryInterface::class);
     }
 
     /**

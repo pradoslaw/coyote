@@ -24,6 +24,15 @@ class Poll extends Model
     public $timestamps = false;
 
     /**
+     * @var array
+     */
+    protected $attributes = [
+        'is_enabled' => 1,
+        'max_items' => 1,
+        'length' => 0
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function items()

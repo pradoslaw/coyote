@@ -59,13 +59,21 @@ class PostForm extends Form
         $this->forum = new Forum();
 
         $this->addEventListener(self::PRE_RENDER, function (Form $form) {
-            if ($form->getRequest()->session()->hasOldInput('attachments')) {
+            $session = $form->getRequest()->session();
+
+            if ($session->hasOldInput('attachments')) {
                 $repository = app(AttachmentRepositoryInterface::class);
 
-                $oldInput = $form->getRequest()->session()->getOldInput('attachments');
+                $oldInput = $session->getOldInput('attachments');
                 array_pluck($oldInput, 'file');
 
                 $form->get('attachments')->setValue($repository->findByFile($oldInput));
+            }
+
+            if (!$session->hasOldInput('poll')) {
+                $form->get('poll')->get('items')->setValue(
+                    $form->get('poll')->get('items')->getValue()->implode('text', "\n")
+                );
             }
         });
     }
@@ -120,8 +128,36 @@ class PostForm extends Form
 
             $this->add('poll', 'child_form', [
                 'class' => PollForm::class,
-                'template' => 'poll_form'
+                'template' => 'poll_form',
+                'value' => $this->topic->poll()->getResults()
             ]);
+
+            $this->add('tags', 'collection', [
+                'rules' => self::RULE_TAGS,
+                'label' => 'Tagi',
+                'required' => $this->forum->require_tag,
+                'help' => 'Możesz opisać swój wątek słowami kluczowymi - np. c#, .net (max. 5 tagów).',
+                'template' => 'tags',
+                'value' => $this->topic->tags()->get(),
+                'attr' => [
+                    'tabindex' => 4,
+                    'id' => 'tags',
+                    'class' => 'form-control',
+                    'placeholder' => $this->forum->require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'
+                ],
+                'property' => 'name',
+                'child_attr' => [
+                    'type' => 'hidden'
+                ],
+
+            ]);
+
+            if ($this->userId !== null && $this->user->can('sticky', $this->forum)) { // can sticky
+                $this->add('is_sticky', 'checkbox', [
+                    'rules' => self::RULE_STICKY,
+                    'label' => 'Przyklejony'
+                ]);
+            }
         }
 
         if ($this->userId === null || (empty($this->post->id) && !empty($this->post->user_name))) {
@@ -151,35 +187,6 @@ class PostForm extends Form
                 'id' => 'body'
             ]
         ]);
-
-        if ($this->post->id === $this->topic->first_post_id) {
-            $this->add('tags', 'collection', [
-                'rules' => self::RULE_TAGS,
-                'label' => 'Tagi',
-                'required' => $this->forum->require_tag,
-                'help' => 'Możesz opisać swój wątek słowami kluczowymi - np. c#, .net (max. 5 tagów).',
-                'template' => 'tags',
-                'value' => $this->topic->tags()->get(),
-                'attr' => [
-                    'tabindex' => 4,
-                    'id' => 'tags',
-                    'class' => 'form-control',
-                    'placeholder' => $this->forum->require_tag ? 'Minimum 1 tag jest wymagany' : 'Np. c#, .net'
-                ],
-                'property' => 'name',
-                'child_attr' => [
-                    'type' => 'hidden'
-                ],
-
-            ]);
-
-            if ($this->userId !== null && $this->user->can('sticky', $this->forum)) { // can sticky
-                $this->add('is_sticky', 'checkbox', [
-                    'rules' => self::RULE_STICKY,
-                    'label' => 'Przyklejony'
-                ]);
-            }
-        }
 
         if ($this->userId !== null) {
             $this->add('subscribe', 'checkbox', [

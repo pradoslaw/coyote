@@ -24,6 +24,8 @@ class RouteDefaultModelListener
 
     /**
      * Create the event listener.
+     *
+     * @param App $app
      */
     public function __construct(App $app)
     {

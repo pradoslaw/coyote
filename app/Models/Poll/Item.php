@@ -16,10 +16,17 @@ class Item extends Model
      *
      * @var array
      */
-    protected $fillable = ['text', 'poll_id', 'total'];
+    protected $fillable = ['text', 'poll_id'];
 
     /**
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * @var array
+     */
+    protected $attributes = [
+        'total' => 0
+    ];
 }

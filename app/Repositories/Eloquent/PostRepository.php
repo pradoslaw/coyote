@@ -116,7 +116,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(Request $request, $user, Forum $forum, Topic $topic, Post $post)
+    public function save(Request $request, $user, Forum $forum, Topic $topic, Post $post, Poll $poll)
     {
         $postId = $post->id;
         $log = new Post\Log();
@@ -126,6 +126,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
          */
         $topic->fill($request->all());
         $topic->forum()->associate($forum);
+        $topic->poll()->associate($poll);
 
         $topic->save();
 

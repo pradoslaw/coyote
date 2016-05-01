@@ -18,6 +18,7 @@ use Coyote\Models\Scopes\Sortable;
  * @property int $views
  * @property int $forum_id
  * @property int $prev_forum_id
+ * @property int $poll_id
  * @property string $subject
  * @property \Coyote\Forum $forum
  */
