@@ -50,7 +50,7 @@ class CommentController extends Controller
     {
         $this->validate($request, [
             'parent_id'     => 'sometimes|integer|exists:microblogs,id',
-            'text'          => 'required|string|max:5000|throttle'
+            'text'          => 'required|string|max:5000|throttle:' . $id
         ]);
 
         $microblog = $this->microblog->findOrNew($id);
