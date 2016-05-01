@@ -29,11 +29,11 @@ class SubmitController extends BaseController
      * @param \Coyote\Post|null $post
      * @return \Illuminate\View\View
      */
-    public function index(Request $request, $forum, $topic = null, $post = null)
+    public function index(Request $request, $forum, $topic, $post = null)
     {
         $this->breadcrumb($forum);
 
-        if (!empty($topic)) {
+        if (!empty($topic->id)) {
             $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
 
             if ($post === null) {
@@ -64,8 +64,12 @@ class SubmitController extends BaseController
      * @param \Coyote\Post|null $post
      * @return mixed
      */
-    public function save($forum, $topic = null, $post = null)
+    public function save($forum, $topic, $post = null)
     {
+        if (is_null($post)) {
+            $post = $this->post->makeModel();
+        }
+
         $form = $this->getForm($forum, $topic, $post);
         $form->validate();
 
@@ -77,9 +81,9 @@ class SubmitController extends BaseController
                 $actor->displayName = $request->get('user_name');
             }
 
-            $activity = $post ? new Stream_Update($actor) : new Stream_Create($actor);
+            $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
             // saving post through repository... we need to pass few object to save relationships
-            $this->post->save($request, auth()->user(), $forum, $topic, $post, null);
+            $this->post->save($request, auth()->user(), $forum, $topic, $post);
 
             // url to the post
             $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false) . '?p=' . $post->id . '#id' . $post->id;

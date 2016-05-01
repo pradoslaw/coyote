@@ -31,6 +31,7 @@ class RepositoryServiceProvider extends ServiceProvider
         'Firm',
         'Block',
         'Poll',
+        'Pastebin',
 
         'Post' => [
             'Attachment',

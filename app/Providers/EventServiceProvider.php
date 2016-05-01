@@ -1,7 +1,9 @@
 <?php namespace Coyote\Providers;
 
+use Coyote\Listeners\RouteDefaultModelListener;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Routing\Events\RouteMatched;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -11,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'event.name' => [
-            'EventListener',
+        RouteMatched::class => [
+            RouteDefaultModelListener::class,
         ],
     ];
 

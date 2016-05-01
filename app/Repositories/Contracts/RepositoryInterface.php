@@ -3,9 +3,18 @@
 namespace Coyote\Repositories\Contracts;
 
 use Coyote\Repositories\Criteria\Criteria;
+use Illuminate\Database\Eloquent\Model;
 
 interface RepositoryInterface
 {
+    /**
+     * Creates instance of model
+     *
+     * @return Model
+     * @throws \Exception
+     */
+    public function makeModel();
+    
     /**
      * @return $this
      */
