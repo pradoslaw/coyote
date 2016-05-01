@@ -2,21 +2,21 @@
 
 <div class="row">
     <div class="col-md-12">
-        <textarea cols="110" rows="2" placeholder="Kliknij, aby dodać wpis" tabindex="1" name="text" style="height: 45px;" data-paste-url="{{ route('microblog.paste') }}" data-prompt-url="{{ route('user.prompt') }}">{{ text }}</textarea>
+        <textarea cols="110" rows="2" placeholder="Kliknij, aby dodać wpis" tabindex="1" name="text" style="height: 45px;" data-paste-url="{{ route('microblog.paste') }}" data-prompt-url="{{ route('user.prompt') }}">{{ microblog.text }}</textarea>
     </div>
 </div>
 
 <div class="row submit-area">
     <div class="col-xs-12">
         <div class="row thumbnails">
-            {% for name, image in thumbnails %}
+            {% for media in microblog.media %}
                 <div class="col-sm-2">
                     <a href="javascript:" class="thumbnail">
-                        <img src="{{ image }}">
+                        <img src="{{ thumbnail(media) }}">
 
                         <div class="btn-flush">
                             <i class="fa fa-remove fa-2x"></i>
-                            <input type="hidden" name="thumbnail[]" value="{{ name }}">
+                            <input type="hidden" name="thumbnail[]" value="{{ media }}">
                         </div>
                     </a>
                 </div>
@@ -39,10 +39,10 @@
                     Opublikuj
                 </button>
 
-                {% if id is defined %}
-                <button data-id="{{ id }}" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger pull-right" style="margin-right: 10px" tabindex="3">
-                    Anuluj
-                </button>
+                {% if microblog.id is defined %}
+                    <button data-id="{{ microblog.id }}" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger pull-right" style="margin-right: 10px" tabindex="3">
+                        Anuluj
+                    </button>
                 {% endif %}
             </div>
         </div>

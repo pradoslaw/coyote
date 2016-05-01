@@ -106,10 +106,10 @@ class Microblog extends Model
     public function setMediaAttribute($media)
     {
         if (!empty($media)) {
-            $media = ['image' => $media];
+            $media = json_encode(['image' => $media]);
         }
 
-        $this->attributes['media'] = json_encode($media);
+        $this->attributes['media'] = $media;
     }
 
     /**

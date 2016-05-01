@@ -2,8 +2,15 @@
 
 namespace Coyote\Services\Media;
 
+use Coyote\Services\Media\Factories\AbstractFactory as MediaFactory;
+
 interface MediaInterface
 {
+    /**
+     * @return MediaFactory
+     */
+    public function getFactory();
+    
     /**
      * @return string
      */

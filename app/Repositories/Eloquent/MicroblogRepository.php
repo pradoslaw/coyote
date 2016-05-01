@@ -26,10 +26,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function findOrFail($id, $columns = ['*'])
     {
-        $result = $this->prepare()->findOrFail($id);
-
-        // generuje url do miniaturek dolaczonych do wpisu
-        $result = $this->thumbnails($result);
+        $result = $this->prepare()->findOrFail($id, $columns);
 
         return $result;
     }
@@ -47,8 +44,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->orderBy('microblogs.id', 'DESC')
                 ->paginate($perPage);
 
-        // generuje url do miniaturek dolaczonych do wpisu
-        $result = $this->thumbnails($result);
         // zostawiamy jedynie 2 ostatnie komentarze
         $result = $this->slice($result);
 
@@ -73,8 +68,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->take($limit)
                 ->get();
 
-        // generuje url do miniaturek dolaczonych do wpisu
-        $result = $this->thumbnails($result);
         // zostawiamy jedynie 2 ostatnie komentarze
         $result = $this->slice($result);
 
@@ -108,37 +101,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function getComments($parentId)
     {
         return $this->prepare(false)->whereIn('parent_id', $parentId)->orderBy('id')->get();
-    }
-
-    /**
-     * Metoda generuje URL do miniaturek jezeli zostaly one dolaczone do wpisu
-     *
-     * @param mixed $microblogs
-     * @return mixed
-     */
-    public function thumbnails($microblogs)
-    {
-        $apply = function ($microblog) {
-            if (!empty($microblog->media)) {
-                $thumbnails = [];
-
-                /** @var \Coyote\Services\Media\MediaInterface $media */
-                foreach ($microblog->media as $media) {
-                    // @todo do usuniecia facade Image
-                    $thumbnails[$media->url()] = Image::url($media->url(), 180, 180);
-                }
-
-                $microblog->thumbnails = $thumbnails;
-            }
-        };
-
-        if ($microblogs instanceof Microblog) {
-            $apply($microblogs);
-        } else {
-            $microblogs->each($apply);
-        }
-
-        return $microblogs;
     }
 
     /**

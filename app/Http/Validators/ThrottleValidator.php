@@ -11,6 +11,10 @@ class ThrottleValidator
 {
     public function validateThrottle($attribute, $value, $parameters, $validator)
     {
+        if (!empty($parameters[0])) {
+            return true;
+        }
+
         $request = request();
         $key = $request->ip();
 

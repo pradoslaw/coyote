@@ -2,6 +2,7 @@
 
 namespace Coyote\Events;
 
+use Coyote\Microblog;
 use Illuminate\Queue\SerializesModels;
 
 class MicroblogWasDeleted extends Event
@@ -16,9 +17,9 @@ class MicroblogWasDeleted extends Event
     /**
      * Create a new event instance.
      *
-     * @param \Coyote\Microblog $microblog
+     * @param Microblog $microblog
      */
-    public function __construct($microblog)
+    public function __construct(Microblog $microblog)
     {
         $this->microblog = $microblog->toArray();
     }

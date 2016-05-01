@@ -22,14 +22,6 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     public function takePopular($limit);
 
     /**
-     * Metoda generuje URL do miniaturek jezeli zostaly one dolaczone do wpisu
-     *
-     * @param mixed $microblogs
-     * @return mixed
-     */
-    public function thumbnails($microblogs);
-
-    /**
      * Pobranie komentarzy od danego wpisu w mikroblogu
      *
      * @param array $parentId

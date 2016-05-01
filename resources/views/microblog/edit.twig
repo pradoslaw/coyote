@@ -1,4 +1,4 @@
-<form method="POST" class="microblog-submit" action="{{ route('microblog.save', [id]) }}">
-    <input type="hidden" name="id" value="{{ id }}">
-    {% include 'microblog/form.twig' %}
-</form>
+{{ form_open({url: route('microblog.save', [microblog.id]), class: 'microblog-submit'}) }}
+{{ form_hidden('id', microblog.id) }}
+{% include 'microblog.form' %}
+{{ form_close() }}

@@ -57,13 +57,11 @@ class SubmitController extends Controller
     public function save(Request $request, $id = null)
     {
         $this->validate($request, [
-            'text'          => 'required|string|max:10000|throttle'
+            'text'          => 'required|string|max:10000|throttle:' . $id
         ]);
 
         $microblog = $this->microblog->findOrNew($id);
         $data = $request->only(['text']);
-
-        $media = [];
 
         if ($id === null) {
             $user = auth()->user();
@@ -72,32 +70,17 @@ class SubmitController extends Controller
             $this->authorize('update', $microblog);
 
             $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
-
-            if (!empty($microblog->media)) {
-                /** @var \Coyote\Services\Media\MediaInterface $item */
-                foreach ($microblog->media as $item) {
-                    $media[] = $item->getFilename();
-                }
-            }
         }
 
-        if ($request->has('thumbnail') || count($media) > 0) {
-            $delete = array_diff($media, (array) $request->get('thumbnail'));
-            $fs = $this->getFilesystemFactory();
-
-            foreach ($delete as $name) {
-                // @todo te metode nalezy przeniesc do serwisu Media
-                $fs->delete('attachment/' . $name);
-                unset($media[array_search($name, $media)]);
+        if ($request->has('thumbnail') || count($microblog->media) > 0) {
+            /** @var \Coyote\Services\Media\MediaInterface $media */
+            foreach ($microblog->media as $media) {
+                if (!in_array($media->getFilename(), $request->get('thumbnail', []))) {
+                    $media->delete();
+                }
             }
 
-            $insert = array_diff((array) $request->get('thumbnail'), $media);
-
-            foreach ($insert as $name) {
-                $media[] = $name;
-            }
-
-            $microblog->media = $media;
+            $microblog->media = $request->get('thumbnail');
         }
 
         $microblog->fill($data);
@@ -146,11 +129,6 @@ class SubmitController extends Controller
             event(new MicroblogWasSaved($microblog));
         });
 
-        // jezeli wpis zawiera jakies zdjecia, generujemy linki do miniatur
-        // metoda thumbnails() przyjmuje w parametrze tablice tablic (wpisow, tj. mikroblogow)
-        // stad takie zapis:
-        $microblog = $this->microblog->thumbnails($microblog);
-
         // do przekazania do widoku...
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
             $microblog->$key = $user->$key;
@@ -170,16 +148,7 @@ class SubmitController extends Controller
         $microblog = $this->microblog->findOrFail($id);
         $this->authorize('update', $microblog);
 
-        $thumbnails = [];
-
-        if (!empty($microblog->media)) {
-            /** @var \Coyote\Services\Media\MediaInterface $media */
-            foreach ($microblog->media as $media) {
-                $thumbnails[$media->getFilename()] = $media->url();
-            }
-        }
-
-        return view('microblog.edit', ['thumbnails' => $thumbnails])->with($microblog->toArray());
+        return view('microblog.edit')->with('microblog', $microblog);
     }
 
     /**
@@ -199,13 +168,14 @@ class SubmitController extends Controller
      */
     public function delete($id)
     {
-        $microblog = $this->microblog->findOrFail($id, ['id', 'user_id']);
+        $microblog = $this->microblog->findOrFail($id);
         $this->authorize('delete', $microblog);
 
         \DB::transaction(function () use ($microblog) {
             $microblog->delete();
             // cofniecie pkt reputacji
             app()->make('Reputation\Microblog\Create')->undo($microblog->id);
+            $microblog->media = null; // MUST remove closure before serializing object
 
             event(new MicroblogWasDeleted($microblog));
             // put this to activity stream

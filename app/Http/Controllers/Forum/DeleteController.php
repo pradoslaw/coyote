@@ -122,7 +122,7 @@ class DeleteController extends BaseController
 
                     $post->delete();
                     // delete post's flags
-                    app('FlagRepository')->deleteBy('post_id', $post->id);
+                    app(FlagRepositoryInterface::class)->deleteBy('post_id', $post->id);
 
                     if ($subscribersId) {
                         app()->make('Alert\Post\Delete')

@@ -39,6 +39,14 @@ abstract class File implements MediaInterface
     }
 
     /**
+     * @return MediaFactory
+     */
+    public function getFactory()
+    {
+        return $this->factory;
+    }
+
+    /**
      * @return string
      */
     public function getFilename()
