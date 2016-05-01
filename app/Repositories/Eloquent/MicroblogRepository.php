@@ -5,8 +5,6 @@ namespace Coyote\Repositories\Eloquent;
 use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
-use Coyote\Tag;
-use Image;
 
 /**
  * Class MicroblogRepository
