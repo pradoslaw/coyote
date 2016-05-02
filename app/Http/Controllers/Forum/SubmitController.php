@@ -82,7 +82,7 @@ class SubmitController extends BaseController
                 $actor->displayName = $request->get('user_name');
             }
 
-            $poll = $this->savePoll($request, $topic->id);
+            $poll = $this->savePoll($request, $topic->poll_id);
 
             $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
             // saving post through repository... we need to pass few object to save relationships
