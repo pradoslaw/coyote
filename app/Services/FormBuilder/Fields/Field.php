@@ -417,10 +417,10 @@ abstract class Field
 
         if (is_string($data)) {
             return $data;
+        } elseif (is_array($data) || $data instanceof \ArrayAccess) {
+            return array_get($data, $name);
         } elseif (is_object($data)) {
             return object_get($this->loadModelRelation($data, $name), $name);
-        } elseif (is_array($data)) {
-            return array_get($data, $name);
         }
 
         return $this->getValue();
@@ -500,7 +500,7 @@ abstract class Field
     {
         // if default value was provided, we would like to set it at the end after all other options
         // because setting value can modify children elements in Collection.php. Before creating children
-        // forms, we want to make sure that other options has been set.
+        // forms, we want to make sure that other options have been set.
         $defaultValue = array_pull($options, 'value');
 
         foreach ($options as $key => $values) {
@@ -511,7 +511,7 @@ abstract class Field
             }
         }
 
-        if ($defaultValue) {
+        if ($defaultValue !== null) {
             $this->setValue($defaultValue);
         }
     }

@@ -225,7 +225,7 @@ class PostForm extends Form
      */
     protected function isSubscribed()
     {
-        if (!$this->userId) {
+        if ($this->userId === null) {
             return false;
         }
 

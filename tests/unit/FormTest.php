@@ -28,6 +28,17 @@ class SampleForm extends \Coyote\Services\FormBuilder\Form
     }
 }
 
+class PollForm extends \Coyote\Services\FormBuilder\Form
+{
+    public function buildForm()
+    {
+        $this
+            ->add('title', 'text')
+            ->add('items', 'text')
+            ->add('length', 'text');
+    }
+}
+
 class FormTest extends \Codeception\TestCase\Test
 {
     /**
@@ -97,6 +108,9 @@ class FormTest extends \Codeception\TestCase\Test
                 'type' => 'text'
             ]
         ]);
+        $form->add('experience', 'text', [
+            'value' => 0
+        ]);
 
         $form->buildForm();
 
@@ -146,6 +160,8 @@ class FormTest extends \Codeception\TestCase\Test
 
         $this->assertEquals('pascal', $form->tags->getChildren()[0]->getValue());
         $this->assertEquals('coyote', $form->tags->getChildren()[1]->getValue());
+
+        $this->assertTrue(0 === $form->get('experience')->getValue());
     }
 
     public function testBuildFormWithCollection()
@@ -206,6 +222,60 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertEquals('c#', $form->tags->getChildren()[1]->getValue());
     }
 
+    public function testBuildFormWithEmptyChildForm()
+    {
+        $form = $this->createForm(TestForm::class);
+        $this->assertInstanceOf(\Illuminate\Http\Request::class, $form->getRequest());
+
+        $child = $this->createForm(PollForm::class);
+        $child->buildForm();
+
+        $form->add('poll', 'child_form', ['class' => $child]);
+        $form->buildForm();
+
+        $this->assertNotEmpty($form->get('poll')->getForm()->getFields());
+        $this->assertNotEmpty($form->get('poll')->getChildren());
+        $this->assertEquals($form->get('poll')->getForm()->getFields(), $form->get('poll')->getChildren());
+
+        $this->assertInstanceOf(\Illuminate\Http\Request::class, $form->get('poll')->getRequest());
+        $this->assertEquals('poll[title]', $form->get('poll')->get('title')->getName());
+        $this->assertEquals('poll[items]', $form->get('poll')->get('items')->getName());
+    }
+
+    public function testBuildFormWithChildFormAndFillUpWithArray()
+    {
+        $faker = Faker\Factory::create();
+        $value = ['title' => $title = $faker->text(50), 'items' => $items = "Answer 1\nAnswer 2"];
+
+        $this->fillUpChildFormWithData($value);
+    }
+
+    public function testBuildFormWithChildFormAndFillUpWithCollection()
+    {
+        $faker = Faker\Factory::create();
+        $value = collect(['title' => $title = $faker->text(50), 'items' => $items = "Answer 1\nAnswer 2"]);
+
+        $this->fillUpChildFormWithData($value);
+    }
+
+    private function fillUpChildFormWithData($value)
+    {
+        $form = $this->createForm(TestForm::class);
+
+        $child = $this->createForm(PollForm::class);
+        $child->buildForm();
+
+        $form->add('poll', 'child_form', [
+            'class' => $child,
+            'value' => $value
+        ]);
+        $form->buildForm();
+
+        $this->assertEquals($value['title'], $form->get('poll')->getForm()->get('title')->getValue());
+        $this->assertEquals($value['title'], $form->get('poll')->get('title')->getValue());
+        $this->assertEquals($value['items'], $form->get('poll')->get('items')->getValue());
+    }
+
     public function testBuildFormWithObjectValues()
     {
         $fake = Factory::create();
@@ -233,6 +303,26 @@ class FormTest extends \Codeception\TestCase\Test
         ];
 
         $this->fillWithData($data);
+    }
+
+    public function testBuildFormAndFillUpWithCollection()
+    {
+        $faker = Faker\Factory::create();
+
+        $data = collect([
+            'name' => $faker->name,
+            'email' => $faker->email,
+            'bio' => $faker->text(),
+            'group_id' => 1
+        ]);
+
+        $form = $this->createForm(SampleForm::class, $data);
+        $form->buildForm();
+
+        $this->assertValue('name', $data['name'], $form);
+        $this->assertValue('email', $data['email'], $form);
+        $this->assertValue('bio', $data['bio'], $form);
+        $this->assertValue('group_id', $data['group_id'], $form);
     }
 
     private function fillWithData($data)
@@ -267,16 +357,21 @@ class FormTest extends \Codeception\TestCase\Test
 
     private function createForm($class, $data = null, array $options = [])
     {
-        $request = app()->make('request');
-        $request->setSession(app('session')->driver('array'));
-
         $form = new $class();
         $form->setContainer(app())
             ->setRedirector(app(Redirector::class))
-            ->setRequest($request)
+            ->setRequest($this->getRequest())
             ->setData($data)
             ->setOptions($options);
 
         return $form;
+    }
+
+    private function getRequest()
+    {
+        $request = app()->make('request');
+        $request->setSession(app('session')->driver('array'));
+
+        return $request;
     }
 }

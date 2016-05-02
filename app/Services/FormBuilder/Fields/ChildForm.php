@@ -85,14 +85,7 @@ class ChildForm extends ParentType
      */
     protected function createChildren()
     {
-        if (!is_string($this->class)) {
-            throw new \InvalidArgumentException('Child form field [' . $this->name . '] requires [class] attribute.');
-        }
-
-        $this->form = $this->parent->getContainer()->make('form.builder')->createForm(
-            $this->class,
-            $this->value
-        );
+        $this->form = $this->createForm();
 
         if ($this->form instanceof ValidatesWhenSubmitted) {
             throw new \InvalidArgumentException(
@@ -107,6 +100,32 @@ class ChildForm extends ParentType
         foreach ($this->children as $child) {
             $child->setName($this->name . '[' . $child->getName() . ']');
         }
+    }
+
+    /**
+     * @return Form
+     */
+    protected function createForm()
+    {
+        if (is_null($this->class)) {
+            throw new \InvalidArgumentException('Child form field [' . $this->name . '] requires [class] attribute.');
+        } elseif ($this->class instanceof Form) {
+            $this->form = $this->class;
+            $this->class = class_basename($this->form);
+
+            if (null !== $this->value) {
+                $this->form->setData($this->value);
+            }
+        } elseif (is_string($this->class)) {
+            $this->form = $this->parent->getContainer()->make('form.builder')->createForm(
+                $this->class,
+                $this->value
+            );
+        } else {
+            throw new \InvalidArgumentException('Child form [class] attribute passed in wrong format.');
+        }
+
+        return $this->form;
     }
 
     /**

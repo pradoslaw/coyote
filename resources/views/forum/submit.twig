@@ -31,6 +31,10 @@
                 <p class="alert alert-danger">
                     {{ errors.first('_token') }}
                 </p>
+            {% elseif errors.any %}
+                <p class="alert alert-danger">
+                    Formularz nie jest poprawny. Proszę sprawdzić poprawność wprowadzonych danych i spróbować ponownie.
+                </p>
             {% endif %}
 
             {{ form_row(form.subject) }}
