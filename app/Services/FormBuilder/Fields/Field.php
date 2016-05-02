@@ -414,13 +414,14 @@ abstract class Field
     protected function getDataValue($data, $name)
     {
         $name = $this->transformToDotSyntax($name);
+        $data = $this->loadModelRelation($data, $name);
 
         if (is_string($data)) {
             return $data;
         } elseif (is_array($data) || $data instanceof \ArrayAccess) {
             return array_get($data, $name);
         } elseif (is_object($data)) {
-            return object_get($this->loadModelRelation($data, $name), $name);
+            return object_get($data, $name);
         }
 
         return $this->getValue();
