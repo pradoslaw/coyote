@@ -116,7 +116,7 @@
                 {% if post.edit_count %}
                     <div class="edit-info">
                         <strong>
-                            <a class="btn-history" title="Zobacz historię zmian tego postu" href="{{ route('forum.post.log', [post.id]) }}">
+                            <a class="btn-history" title="Zobacz historię zmian tego postu" href="{{ can('update', forum) ? route('forum.post.log', [post.id]) : 'javascript:' }}">
                                 <i class="fa fa-external-link"></i>
                             </a>
 
