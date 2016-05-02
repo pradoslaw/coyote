@@ -7,7 +7,7 @@ use Coyote\Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Topic;
 
-class RedirectToUnread
+class ScrollToPost
 {
     /**
      * @var PostRepository

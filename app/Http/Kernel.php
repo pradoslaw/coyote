@@ -55,6 +55,6 @@ class Kernel extends HttpKernel
         'topic.access'  => Middleware\RedirectIfMoved::class,
         'job.session'   => Middleware\VerifyJobSession::class,
         'job.revalidate'=> Middleware\RevalidateJobSession::class,
-        'topic.unread'  => Middleware\RedirectToUnread::class
+        'topic.scroll'  => Middleware\ScrollToPost::class
     ];
 }
