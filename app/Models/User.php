@@ -9,6 +9,39 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * @property int $id
+ * @property int $is_active
+ * @property int $is_confirm
+ * @property int $is_blocked
+ * @property int $group_id
+ * @property int $visits
+ * @property int $alerts
+ * @property int $pm
+ * @property int $alerts_unread
+ * @property int $pm_unread
+ * @property int $posts
+ * @property int $allow_count
+ * @property int $allow_subscribe
+ * @property int $allow_smilies
+ * @property int $allow_sig
+ * @property int $birthyear
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string $provider
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $visited_at
+ * @property string $date_format
+ * @property string $timezone
+ * @property string $ip
+ * @property string $browser
+ * @property string $website
+ * @property string $location
+ * @property string $firm
+ * @property string $position
+ */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword;

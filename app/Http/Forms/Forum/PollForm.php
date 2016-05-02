@@ -33,7 +33,7 @@ class PollForm extends Form
                 'rules' => self::RULE_LENGTH,
                 'label' => 'Długość działania',
                 'help' => 'Okreś długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.',
-                'value' => '0'
+                'value' => 0
             ]);
     }
 }
