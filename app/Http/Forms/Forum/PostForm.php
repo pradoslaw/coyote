@@ -10,6 +10,7 @@ use Coyote\Post;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Topic;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Collection;
 
 class PostForm extends Form
 {
@@ -70,10 +71,14 @@ class PostForm extends Form
                 $form->get('attachments')->setValue($repository->findByFile($oldInput));
             }
 
-            if (!$session->hasOldInput('poll')) {
-                $form->get('poll')->get('items')->setValue(
-                    $form->get('poll')->get('items')->getValue()->implode('text', "\n")
-                );
+            if ($form->get('poll') !== null) {
+                $value = $form->get('poll')->get('items')->getValue();
+
+                if ($value instanceof Collection) {
+                    $form->get('poll')->get('items')->setValue(
+                        $value->implode('text', "\n")
+                    );
+                }
             }
         });
     }

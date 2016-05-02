@@ -67,8 +67,8 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
-     * @param Poll $poll
+     * @param Poll|null $poll
      * @return Post $post
      */
-    public function save(Request $request, $user, Forum $forum, Topic $topic, Post $post, Poll $poll);
+    public function save(Request $request, $user, Forum $forum, Topic $topic, Post $post, $poll);
 }
