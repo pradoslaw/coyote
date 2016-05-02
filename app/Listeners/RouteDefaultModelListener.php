@@ -60,7 +60,7 @@ class RouteDefaultModelListener
 
         foreach ($segments as $segment) {
             $len = strlen($segment);
-            if ($segment[0] === '{' && $segment[$len - 1] === '}' && $segment[$len - 2] === '?') {
+            if ($len > 0 && $segment[0] === '{' && $segment[$len - 1] === '}' && $segment[$len - 2] === '?') {
                 $optional[] = substr($segment, 1, -2);
             }
         }
