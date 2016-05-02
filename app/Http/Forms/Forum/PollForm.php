@@ -8,9 +8,11 @@ class PollForm extends Form
 {
     const RULE_TITLE           = 'string|max:100';
     // @todo dodac walidator sprawdzajacy ilosc (oraz dlugosc) linii
-    const RULE_ITEMS           = 'required_with:title';
-    const RULE_MAX_ITEMS       = 'required_with:title|integer|min:1';
-    const RULE_LENGTH          = 'required_with:title|integer';
+    // @todo musimy pisac "poll.title" jezeli ten formularz jest dzieckiem. reguly powinny byc zmieniane
+    // przez klase Form
+    const RULE_ITEMS           = 'required_with:poll.title';
+    const RULE_MAX_ITEMS       = 'required_with:poll.title|integer|min:1';
+    const RULE_LENGTH          = 'required_with:poll.title|integer';
 
     public function buildForm()
     {

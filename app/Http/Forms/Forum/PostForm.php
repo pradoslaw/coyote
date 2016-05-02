@@ -152,7 +152,8 @@ class PostForm extends Form
                 ],
                 'property' => 'name',
                 'child_attr' => [
-                    'type' => 'hidden'
+                    'type' => 'hidden',
+                    'rules' => self::RULE_TAG
                 ],
 
             ]);

@@ -13,8 +13,8 @@ class TagCreationValidator
             return true;
         }
 
-        $tag = Tag::where('name', $value)->pluck('id');
-        if ($tag) {
+        $tag = Tag::where('name', $value)->value('id');
+        if (!is_null($tag)) {
             return true;
         }
 

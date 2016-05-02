@@ -278,38 +278,7 @@ abstract class Form extends FormRequest implements FormInterface
      */
     protected function setupRules()
     {
-        $this->makeRules($this->fields);
-    }
-
-    /**
-     * @param array $fields
-     */
-    protected function makeRules(array $fields)
-    {
-        foreach ($fields as $field) {
-            $rules = $field->getRules();
-
-            if ($rules) {
-                $this->rules[$this->transformNameToRule($field->getName())] = $rules;
-            }
-
-            // @todo: moze da sie to zrobic jakos lepiej. byc moze przeniesc ten kod do metody getRules()
-            // klas dziedziczacych po Field?
-            if ($field instanceof ParentType) {
-                $this->makeRules($field->getChildren());
-            }
-        }
-    }
-
-    /**
-     * Prepare laravel's rule name. Transforms string like tags[0] to tags.*
-     *
-     * @param $name
-     * @return string
-     */
-    protected function transformNameToRule($name)
-    {
-        return trim(str_replace(['[', ']'], '', preg_replace('/\[[0-9]+\]/', '.*.', $name)), '.');
+        $this->rules = (new Rules($this))->getRules();
     }
 
     /**
