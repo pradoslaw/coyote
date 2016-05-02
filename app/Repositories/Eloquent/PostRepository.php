@@ -3,11 +3,9 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Forum;
-use Coyote\Poll;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Topic;
-use Coyote\User;
 use DB;
 use Illuminate\Http\Request;
 
