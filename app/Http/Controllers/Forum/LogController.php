@@ -91,7 +91,7 @@ class LogController extends BaseController
                 $topic->save();
             }
 
-            $log = (new Log())->setLog($log);
+            $log = (new Log())->fill($log->toArray());
             $log->user_id = $this->userId;
             $log->save();
 
