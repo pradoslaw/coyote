@@ -25,7 +25,7 @@ file-permission:
 
 migration:
 	php artisan migrate --force
-	
+
 seed:
 	php artisan db:seed
 
@@ -42,11 +42,10 @@ assets-production:
 
 assets_dev:
 	gulp
-    
+
 dump-autoload:
 	php artisan clear-compiled
-    
+
 cache-config:
-	php artisan config:clear
 	php artisan config:cache
 	php artisan optimize
