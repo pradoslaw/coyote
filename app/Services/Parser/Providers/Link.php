@@ -59,6 +59,7 @@ class Link implements ProviderInterface
 
     /**
      * @param string $url
+     * @return string
      */
     private function getPathFromUrl($url)
     {

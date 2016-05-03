@@ -1,7 +1,10 @@
 <?php
 
-namespace Coyote\Services\Parser\Scenarios;
+namespace Coyote\Services\Parser\Factories;
 
+use Coyote\Repositories\Contracts\PageRepositoryInterface;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Parser;
 use Coyote\Services\Parser\Providers\Censore;
 use Coyote\Services\Parser\Providers\Link;
@@ -9,7 +12,7 @@ use Coyote\Services\Parser\Providers\Purifier;
 use Coyote\Services\Parser\Providers\SimpleMarkdown;
 use Coyote\Services\Parser\Providers\Smilies;
 
-class Comment extends Scenario
+class CommentFactory extends AbstractFactory
 {
     /**
      * Parse comment
@@ -17,7 +20,7 @@ class Comment extends Scenario
      * @param string $text
      * @return string
      */
-    public function parse($text)
+    public function parse(string $text) : string
     {
         start_measure('parsing', 'Parsing comment...');
 
@@ -31,10 +34,10 @@ class Comment extends Scenario
 
             if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach((new SimpleMarkdown($this->app['Coyote\Repositories\Eloquent\UserRepository']))->setEnableHashParser(true));
+                    $parser->attach((new SimpleMarkdown($this->app[UserRepositoryInterface::class]))->setEnableHashParser(true));
                     $parser->attach((new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id|class],code'));
-                    $parser->attach(new Link($this->app['Coyote\Repositories\Eloquent\PageRepository'], $this->app['Illuminate\Http\Request']));
-                    $parser->attach(new Censore($this->app['Coyote\Repositories\Eloquent\WordRepository']));
+                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->app['request']));
+                    $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 
                     return $parser;
                 });

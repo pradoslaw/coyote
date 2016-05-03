@@ -3,12 +3,12 @@
 namespace Coyote\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Coyote\Services\Parser\Scenarios\Microblog as Parser_Microblog;
-use Coyote\Services\Parser\Scenarios\Comment as Parser_Comment;
-use Coyote\Services\Parser\Scenarios\Sig as Parser_Sig;
-use Coyote\Services\Parser\Scenarios\Pm as Parser_Pm;
-use Coyote\Services\Parser\Scenarios\Post as Parser_Post;
-use Coyote\Services\Parser\Scenarios\Job as Parser_Job;
+use Coyote\Services\Parser\Factories\MicroblogFactory;
+use Coyote\Services\Parser\Factories\CommentFactory;
+use Coyote\Services\Parser\Factories\SigFactory;
+use Coyote\Services\Parser\Factories\PmFactory;
+use Coyote\Services\Parser\Factories\PostFactory;
+use Coyote\Services\Parser\Factories\JobFactory;
 
 class ParserServiceProvider extends ServiceProvider
 {
@@ -37,27 +37,27 @@ class ParserServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('Parser\Microblog', function ($app) {
-            return new Parser_Microblog($app);
+            return new MicroblogFactory($app);
         });
 
         $this->app->bind('Parser\Comment', function ($app) {
-            return new Parser_Comment($app);
+            return new CommentFactory($app);
         });
 
         $this->app->bind('Parser\Sig', function ($app) {
-            return new Parser_Sig($app);
+            return new SigFactory($app);
         });
 
         $this->app->bind('Parser\Pm', function ($app) {
-            return new Parser_Pm($app);
+            return new PmFactory($app);
         });
 
         $this->app->bind('Parser\Post', function ($app) {
-            return new Parser_Post($app);
+            return new PostFactory($app);
         });
 
         $this->app->bind('Parser\Job', function ($app) {
-            return new Parser_Job($app);
+            return new JobFactory($app);
         });
     }
 

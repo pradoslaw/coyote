@@ -1,18 +1,21 @@
 <?php
 
-namespace Coyote\Services\Parser\Scenarios;
+namespace Coyote\Services\Parser\Factories;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
-use Illuminate\Contracts\Cache\Repository as Cache;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 use Illuminate\Http\Request;
 use Illuminate\Container\Container as App;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
-abstract class Scenario
+abstract class AbstractFactory
 {
     const CACHE_EXPIRATION = 60 * 24 * 30; // 30d
 
+    /**
+     * @var App
+     */
     protected $app;
 
     /**
@@ -51,8 +54,14 @@ abstract class Scenario
     public function __construct(App $app)
     {
         $this->app = $app;
-        $this->cache = $app['Illuminate\Contracts\Cache\Repository'];
+        $this->cache = $app[Cache::class];
     }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    abstract public function parse(string $text) : string;
 
     /**
      * @param bool $flag
@@ -84,7 +93,7 @@ abstract class Scenario
      * @param $text
      * @return string
      */
-    protected function getCacheKey($text)
+    protected function generateCacheKey($text)
     {
         return 'text:' . class_basename($this) . md5($text);
     }
@@ -95,7 +104,7 @@ abstract class Scenario
      */
     protected function isInCache($text)
     {
-        return $this->enableCache && $this->cache->has($this->getCacheKey($text));
+        return $this->enableCache && $this->cache->has($this->generateCacheKey($text));
     }
 
     /**
@@ -104,7 +113,7 @@ abstract class Scenario
      */
     protected function getFromCache($text)
     {
-        return $this->cache->get($this->getCacheKey($text));
+        return $this->cache->get($this->generateCacheKey($text));
     }
 
     /**
@@ -118,7 +127,7 @@ abstract class Scenario
     {
         $parser = $closure();
 
-        $key = $this->getCacheKey($text);
+        $key = $this->generateCacheKey($text);
         $text = $parser->parse($text);
 
         if ($this->enableCache) {
