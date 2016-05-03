@@ -76,7 +76,7 @@ class SubmitController extends BaseController
 
         $request = $form->getRequest();
 
-        $url = \DB::transaction(function () use ($request, $forum, $topic, $post) {
+        return \DB::transaction(function () use ($request, $forum, $topic, $post) {
             $actor = new Stream_Actor(auth()->user());
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
@@ -135,26 +135,9 @@ class SubmitController extends BaseController
             // add post to elasticsearch
             event(new PostWasSaved($post));
 
-            return $url;
+            $request->attributes->set('url', $url);
+            return $post;
         });
-
-        // is this a quick edit (via ajax)?
-        // @todo to nie powinno sie raczej tu znajdowac. przeniesc do middleware?
-        if ($request->ajax()) {
-            $data = ['post' => ['text' => $post->text, 'attachments' => $post->attachments()->get()]];
-
-            if (auth()->user()->allow_sig && $post->user_id) {
-                $parser = app('Parser\Sig');
-                $user = User::find($post->user_id, ['sig']);
-
-                if ($user->sig) {
-                    $data['post']['sig'] = $parser->parse($user->sig);
-                }
-            }
-            return view('forum.partials.text', $data);
-        }
-
-        return redirect()->to($url);
     }
 
     /**

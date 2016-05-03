@@ -26,10 +26,10 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     // formularz dodawania nowego watku na forum
     Route::get('{forum}/Submit/{topic?}', ['uses' => 'SubmitController@index', 'as' => 'topic.submit', 'middleware' => ['forum.access', 'forum.write']]);
-    Route::post('{forum}/Submit/{topic?}', ['uses' => 'SubmitController@save', 'middleware' => ['forum.access', 'forum.write']]);
+    Route::post('{forum}/Submit/{topic?}', ['uses' => 'SubmitController@save', 'middleware' => ['forum.access', 'forum.write', 'post.response']]);
     // dodawanie lub edycja posta na forum
     Route::get('{forum}/Submit/{topic}/{post?}', ['uses' => 'SubmitController@index', 'as' => 'post.submit', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
-    Route::post('{forum}/Submit/{topic}/{post?}', ['uses' => 'SubmitController@save', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
+    Route::post('{forum}/Submit/{topic}/{post?}', ['uses' => 'SubmitController@save', 'middleware' => ['topic.access', 'forum.access', 'forum.write', 'post.response']]);
     Route::get('{forum}/{topic}/Edit/{post}', ['uses' => 'SubmitController@edit', 'as' => 'post.edit', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
     // szybka zmiana tytulu watku
     Route::post('Topic/Subject/{topic}', ['uses' => 'SubmitController@subject', 'as' => 'topic.subject', 'middleware' => 'auth']);
