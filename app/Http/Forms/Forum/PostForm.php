@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Forum;
 
+use Coyote\Poll;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
 use Coyote\User;
 use Illuminate\Http\Request;
@@ -131,10 +132,15 @@ class PostForm extends Form
                 ]
             ]);
 
+            $poll = $this->topic->poll()->getResults();
+            if (!$poll) {
+                $poll = $this->container->make(Poll::class);
+            }
+
             $this->add('poll', 'child_form', [
                 'class' => PollForm::class,
                 'template' => 'poll_form',
-                'value' => $this->topic->poll()->getResults()
+                'value' => $poll
             ]);
 
             $this->add('tags', 'collection', [

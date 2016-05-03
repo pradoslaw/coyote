@@ -28,14 +28,18 @@ class PollForm extends Form
             ->add('max_items', 'text', [
                 'rules' => self::RULE_MAX_ITEMS,
                 'label' => 'Ilość możliwych odpowiedzi',
-                'help' => 'Minimalnie jedna możliwa odpowiedź w ankiecie.',
-                'value' => 1
+                'help' => 'Minimalnie jedna możliwa odpowiedź w ankiecie.'
             ])
             ->add('length', 'text', [
                 'rules' => self::RULE_LENGTH,
                 'label' => 'Długość działania',
-                'help' => 'Okreś długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.',
-                'value' => 0
+                'help' => 'Okreś długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.'
             ]);
+
+        if (!empty($this->data->id)) {
+            $this->add('remove', 'checkbox', [
+                'label' => 'Usuń ankietę'
+            ]);
+        }
     }
 }

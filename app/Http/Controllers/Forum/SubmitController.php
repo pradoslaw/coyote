@@ -164,7 +164,9 @@ class SubmitController extends BaseController
      */
     private function savePoll(Request $request, $pollId)
     {
-        if ($request->has('poll.title')) {
+        if ($request->has('poll.remove')) {
+            $this->getPollRepository()->delete($pollId);
+        } elseif ($request->has('poll.title')) {
             return $this->getPollRepository()->updateOrCreate($pollId, $request->get('poll'));
         }
 
@@ -191,7 +193,7 @@ class SubmitController extends BaseController
     {
         $form = $this->getForm($forum, $topic, $post);
 
-        return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'attachments', 'form'));
+        return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'form'));
     }
 
     /**

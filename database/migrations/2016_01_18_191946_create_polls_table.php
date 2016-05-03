@@ -23,7 +23,7 @@ class CreatePollsTable extends Migration
         });
 
         Schema::table('topics', function (Blueprint $table) {
-            $table->foreign('poll_id')->references('id')->on('polls');
+            $table->foreign('poll_id')->references('id')->on('polls')->onDelete('set null');
         });
     }
 

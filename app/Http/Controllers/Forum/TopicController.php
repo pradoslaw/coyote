@@ -29,7 +29,7 @@ class TopicController extends BaseController
     public function index($forum, $topic, $slug, Request $request)
     {
         // get the topic (and forum) mark time value from middleware
-        // @see \Coyote\Http\Middleware\RedirectToUnread
+        // @see \Coyote\Http\Middleware\ScrollToPost
         $markTime = $request->attributes->get('mark_time');
 
         // current page...
