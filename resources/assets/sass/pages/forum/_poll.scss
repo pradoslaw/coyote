@@ -1,0 +1,34 @@
+.box-poll {
+  width: 90%;
+  margin: 0 auto 20px auto;
+
+  strong {
+    color: $gray-dark;
+  }
+
+  > .row {
+    padding: 8px 5px 8px 5px;
+    border-top: 1px solid $border-color;
+
+    &:first-child {
+      border-top: none;
+    }
+
+    > div:first-child {
+      padding-left: 0;
+    }
+  }
+
+  .checkbox, .radio {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .progress {
+    height: 15px;
+  }
+
+  .voted {
+    background-color: $unread-bg;
+  }
+}

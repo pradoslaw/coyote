@@ -2,10 +2,13 @@
 
 namespace Coyote\Poll;
 
+use Coyote\Models\Scopes\ForUser;
 use Illuminate\Database\Eloquent\Model;
 
 class Vote extends Model
 {
+    use ForUser;
+    
     /**
      * @var string
      */

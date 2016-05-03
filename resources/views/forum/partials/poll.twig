@@ -1,0 +1,69 @@
+{% if topic.poll_id %}
+    {% set total_votes = 0 %}
+
+    {% for item in topic.poll.items %}
+        {% set total_votes = total_votes + item.total %}
+    {% endfor %}
+
+    {% set expired = topic.poll.hasExpired() %}
+    {% set item_id = auth_check() ? topic.poll.userVote(user('id')) : null %}
+    {% set is_voteable = item_id is null and auth_check() and not expired and not topic.is_locked %}
+
+    <div class="box-poll">
+        <div class="row">
+            <div class="col-xs-12">
+                <strong>{{ topic.poll.title }}</strong>
+            </div>
+        </div>
+
+        {% for item in topic.poll.items %}
+            {% set percentage = topic.poll.votes ? (100 * item.total / total_votes)|round : 0 %}
+
+            <div class="row {{ item_id == item.id ? 'voted' }}">
+                <div class="col-sm-6">
+                    {% if is_voteable %}
+                        {% if topic.poll.max_items > 1 %}
+                            <div class="checkbox">
+                                {{ form_checkbox('items[]', item.id, false, {id: 'item-' ~ item.id}) }}
+
+                                <label for="item-{{ item.id }}">
+                                    {{ item.text }}
+                                </label>
+                            </div>
+                        {% else %}
+                            <div class="radio">
+                                {{ form_radio('items[]', item.id, false, {id: 'item-' ~ item.id}) }}
+
+                                <label for="item-{{ item.id }}">
+                                    {{ item.text }}
+                                </label>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {{ item.text }}
+                    {% endif %}
+                </div>
+                <div class="col-sm-2">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage }}%;">
+                            <span class="sr-only">{{ percentage }}%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    {{ percentage }}%
+
+                    [{{ item.total }}]
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if is_voteable %}
+            <div class="row">
+                <div class="col-xs-12">
+                    {{ form_submit('Głosuj', {class: 'btn btn-sm btn-primary'}) }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

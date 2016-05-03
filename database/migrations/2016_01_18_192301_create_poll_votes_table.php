@@ -15,12 +15,15 @@ class CreatePollVotesTable extends Migration
         Schema::create('poll_votes', function (Blueprint $table) {
             $table->smallInteger('id', true);
             $table->integer('user_id');
+            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->smallInteger('poll_id');
+            $table->smallInteger('item_id');
             $table->string('ip', 45);
 
             $table->index('poll_id');
 
             $table->foreign('poll_id')->references('id')->on('polls')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('poll_items')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('no action');
         });
     }
