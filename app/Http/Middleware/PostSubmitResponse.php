@@ -46,8 +46,10 @@ class PostSubmitResponse
                 }
             }
             return view('forum.partials.text', $data);
+        } elseif ($request->attributes->has('url')) {
+            return redirect()->to($request->attributes->get('url'));
+        } else {
+            return $response;
         }
-
-        return redirect()->to($request->attributes->get('url'));
     }
 }
