@@ -47,5 +47,6 @@ class Select extends Text
     public function setChoices($choices)
     {
         $this->choices = $choices;
+        return $this;
     }
 }

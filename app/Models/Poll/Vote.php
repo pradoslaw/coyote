@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Vote extends Model
 {
     use ForUser;
-    
+
     /**
      * @var string
      */
@@ -19,7 +19,7 @@ class Vote extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'poll_id', 'ip'];
+    protected $fillable = ['user_id', 'poll_id', 'ip', 'item_id'];
 
     /**
      * @var bool

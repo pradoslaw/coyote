@@ -73,6 +73,9 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);
     Route::get('Comment/{id}', ['uses' => 'CommentController@edit', 'middleware' => 'auth']);
     Route::post('Comment/Delete/{id}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
+    
+    // glosowanie w ankiecie
+    Route::post('{forum}/Poll/{id}', ['uses' => 'PollController@vote', 'as' => 'poll.vote', 'middleware' => ['auth', 'forum.access']]);
 
     // skrocony link do posta
     Route::get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);

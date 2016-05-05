@@ -12,7 +12,7 @@ class Checkbox extends Field
     /**
      * @var bool
      */
-    protected $checked;
+    protected $checked = false;
 
     /**
      * @var int
@@ -25,13 +25,18 @@ class Checkbox extends Field
     protected $uncheckedValue = 0;
 
     /**
+     * @var int
+     */
+//    protected $value = 1;
+
+    /**
      * @param $flag
      * @return $this
      */
     public function setChecked($flag)
     {
         $this->setValue($flag ? $this->checkedValue : $this->uncheckedValue);
-        
+
         return $this;
     }
 
@@ -67,7 +72,7 @@ class Checkbox extends Field
     public function setCheckedValue($checkedValue)
     {
         $this->checkedValue = $checkedValue;
-        
+
         return $this;
     }
 
@@ -86,7 +91,7 @@ class Checkbox extends Field
     public function setUncheckedValue($uncheckedValue)
     {
         $this->uncheckedValue = $uncheckedValue;
-        
+
         return $this;
     }
 

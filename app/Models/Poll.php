@@ -43,7 +43,7 @@ class Poll extends Model
      */
     public function items()
     {
-        return $this->hasMany('Coyote\Poll\Item');
+        return $this->hasMany('Coyote\Poll\Item')->orderBy('id');
     }
 
     /**
@@ -55,19 +55,27 @@ class Poll extends Model
     }
 
     /**
+     * @return static
+     */
+    public function expiredAt()
+    {
+        return $this->created_at->addDay($this->length);
+    }
+
+    /**
      * @return bool
      */
     public function hasExpired()
     {
-        return $this->length > 0 ? Carbon::now() > $this->created_at->addDay($this->length) : false;
+        return $this->length > 0 ? Carbon::now() > $this->expiredAt() : false;
     }
 
     /**
      * @param int $userId
-     * @return mixed
+     * @return array
      */
-    public function userVote($userId)
+    public function userVotedItems($userId)
     {
-        return $this->votes()->forUser($userId)->value('item_id');
+        return $this->votes()->forUser($userId)->lists('item_id')->toArray();
     }
 }

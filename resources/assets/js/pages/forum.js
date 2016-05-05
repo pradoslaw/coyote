@@ -501,6 +501,26 @@ $(function () {
     });
 
     /**
+     * Post poll's votes
+     */
+    $('#poll-form').submit(function() {
+        $.post($(this).attr('action'), $(this).serialize(), function(html) {
+            $('.box-poll').replaceWith(html);
+        });
+
+        return false;
+    }).on('change', ':radio, :checkbox', function() {
+        var submit = $('#poll-form').find(':submit');
+        var items = $('input[name^="items"]:checked').length;
+
+        if (items > 0 && items <= parseInt($('input[name="max_items"]').val())) {
+            submit.removeAttr('disabled');
+        } else {
+            submit.attr('disabled', 'disabled');
+        }
+    });
+
+    /**
      * Upload attachment
      */
     $('#btn-upload').click(function() {

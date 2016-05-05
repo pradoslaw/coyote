@@ -147,10 +147,10 @@ class SubmitController extends BaseController
      */
     private function savePoll(Request $request, $pollId)
     {
-        if ($request->has('poll.remove')) {
+        if ($request->input('poll.remove')) {
             $this->getPollRepository()->delete($pollId);
         } elseif ($request->has('poll.title')) {
-            return $this->getPollRepository()->updateOrCreate($pollId, $request->get('poll'));
+            return $this->getPollRepository()->updateOrCreate($pollId, $request->input('poll'));
         }
 
         return null;

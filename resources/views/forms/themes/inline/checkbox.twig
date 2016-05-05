@@ -4,7 +4,7 @@
 {% block wrap %}
     <div class="checkbox">
         {% if not ('[]' in name) %}
-            {{ form_hidden(name, 0) }}
+            {{ form_hidden(name, unchecked_value) }}
         {% endif %}
 
         {{ include(widget_path) }}

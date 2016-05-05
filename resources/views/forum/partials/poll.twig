@@ -6,20 +6,27 @@
     {% endfor %}
 
     {% set expired = topic.poll.hasExpired() %}
-    {% set item_id = auth_check() ? topic.poll.userVote(user('id')) : null %}
-    {% set is_voteable = item_id is null and auth_check() and not expired and not topic.is_locked %}
+    {% set items_id = auth_check() ? topic.poll.userVotedItems(user('id')) : null %}
+    {% set is_voteable = not items_id and auth_check() and not expired and not topic.is_locked %}
+
+    {{ form_open({url: route('forum.poll.vote', [forum.path, topic.poll.id]), id: 'poll-form'}) }}
+    {{ form_hidden('max_items', topic.poll.max_items) }}
 
     <div class="box-poll">
         <div class="row">
             <div class="col-xs-12">
                 <strong>{{ topic.poll.title }}</strong>
+
+                {% if topic.poll.max_items > 1 %}
+                    <em class="max-items">(* możesz oddać maksymalnie {{ declination(topic.poll.max_items, ['głos', 'głosy', 'głosów']) }})</em>
+                {% endif %}
             </div>
         </div>
 
         {% for item in topic.poll.items %}
-            {% set percentage = topic.poll.votes ? (100 * item.total / total_votes)|round : 0 %}
+            {% set percentage = total_votes ? (100 * item.total / total_votes)|round : 0 %}
 
-            <div class="row {{ item_id == item.id ? 'voted' }}">
+            <div class="row {{ item.id in items_id ? 'voted' }}">
                 <div class="col-sm-6">
                     {% if is_voteable %}
                         {% if topic.poll.max_items > 1 %}
@@ -61,9 +68,19 @@
         {% if is_voteable %}
             <div class="row">
                 <div class="col-xs-12">
-                    {{ form_submit('Głosuj', {class: 'btn btn-sm btn-primary'}) }}
+                    {{ form_submit('Głosuj', {class: 'btn btn-sm btn-primary', disabled: 'disabled', 'data-submit-state': 'Proszę czekać...'}) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if expired %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <p><em>Ankieta wygasła {{ topic.poll.expiredAt()|format_date }}</em></p>
                 </div>
             </div>
         {% endif %}
     </div>
+
+    {{ form_close() }}
 {% endif %}

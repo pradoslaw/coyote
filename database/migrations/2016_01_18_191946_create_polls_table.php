@@ -17,9 +17,8 @@ class CreatePollsTable extends Migration
             $table->string('title');
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->timestampTz('updated_at')->nullable();
-            $table->smallInteger('length');
+            $table->smallInteger('length')->default(0);
             $table->smallInteger('max_items')->default(1);
-            $table->tinyInteger('is_enabled')->default(1);
         });
 
         Schema::table('topics', function (Blueprint $table) {
