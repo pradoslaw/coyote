@@ -91,7 +91,7 @@ elixir(function (mix) {
          | Scrollbar uzywany m.in w oknie powiadomien, wiadomosci prywatnych czy tez na stronie glownej
          | gdzie wyswietlane sa ostatnie aktywnosci z forum
          */
-        .scripts(['../bower/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js'], 'public/js/perfect-scrollbar.js')
+        .scripts(['../bower/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js'], 'public/js/perfect-scrollbar.js')
 
         /*
          | Plugin animujacy tlo danego elementu strony (mikroblog, post) dla usprawnienia ubsability

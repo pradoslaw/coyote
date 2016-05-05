@@ -20,7 +20,6 @@ dependency-install:
 
 file-permission:
 	chmod -R 777 storage/
-	chmod -R 777 public/storage/
 	chmod 777 bootstrap/cache/
 
 migration:
@@ -35,7 +34,7 @@ install-gulp:
 	npm install
 
 install-assets:
-	bower install --allow-root
+	bower update --allow-root
 
 assets-production:
 	gulp --production
