@@ -101,13 +101,13 @@ return [
             'TwigBridge\Extension\Laravel\Form',
             'TwigBridge\Extension\Laravel\Html',
 
-            'TwigBridge\Extensions\User',
-            'TwigBridge\Extensions\DateTime',
-            'TwigBridge\Extensions\Misc',
-            'TwigBridge\Extensions\Elasticsearch',
-            'TwigBridge\Extensions\Block',
-            'TwigBridge\Extensions\FormBuilder',
-//             'TwigBridge\Extension\Laravel\Legacy\Facades',
+            'Coyote\Services\TwigBridge\Extensions\User',
+            'Coyote\Services\TwigBridge\Extensions\DateTime',
+            'Coyote\Services\TwigBridge\Extensions\Misc',
+            'Coyote\Services\TwigBridge\Extensions\Elasticsearch',
+            'Coyote\Services\TwigBridge\Extensions\Block',
+            'Coyote\Services\TwigBridge\Extensions\FormBuilder',
+            'Coyote\Services\TwigBridge\Extensions\Media'
         ],
         /*
         |--------------------------------------------------------------------------

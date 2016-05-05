@@ -1,6 +1,6 @@
 <?php
 
-namespace TwigBridge\Extensions;
+namespace Coyote\Services\TwigBridge\Extensions;
 
 use Carbon\Carbon;
 use Twig_Extension;

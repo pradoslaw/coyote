@@ -43,11 +43,7 @@
                     {{ form_hidden('logo', logo) }}
 
                     <a href="javascript:" id="logo" class="img-thumbnail">
-                        {% if not logo %}
-                            <img src="{{ cdn('img/logo-gray.png') }}">
-                        {% else %}
-                            <img src="{{ cdn('storage/logo/' ~ logo) }}">
-                        {% endif %}
+                        <img src="{{ logo(logo) }}">
 
                         {% if input_old('logo', firm.logo) %}
                             <div class="btn-flush">

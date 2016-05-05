@@ -1,13 +1,16 @@
 <?php
 
-namespace TwigBridge\Extensions;
+namespace Coyote\Services\TwigBridge\Extensions;
 
+use Coyote\Http\Factories\CacheFactory;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
 class Block extends Twig_Extension
 {
+    use CacheFactory;
+
     /**
      * {@inheritDoc}
      */
@@ -28,14 +31,14 @@ class Block extends Twig_Extension
             new Twig_SimpleFunction(
                 'render_block',
                 function ($name) {
-                    $cache = app('cache');
+                    $cache = $this->getCacheFactory();
                     $content = $cache->get('block:' . $name);
 
                     if ($content) {
                         return $content;
                     }
 
-                    $block = app(BlockRepositoryInterface::class)->findBy('name', $name);
+                    $block = $this->getBlockRepository()->findBy('name', $name);
                     if (!$block) {
                         return '';
                     }
@@ -53,5 +56,13 @@ class Block extends Twig_Extension
                 ]
             )
         ];
+    }
+
+    /**
+     * @return BlockRepositoryInterface
+     */
+    private function getBlockRepository()
+    {
+        return app(BlockRepositoryInterface::class);
     }
 }

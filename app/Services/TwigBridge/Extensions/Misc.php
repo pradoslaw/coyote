@@ -1,6 +1,6 @@
 <?php
 
-namespace TwigBridge\Extensions;
+namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Declination;
 use Coyote\Services\Media\MediaInterface;

@@ -60,7 +60,7 @@
                             {% for item in firms %}
                                 <tr>
                                     <td style="width: 10%">
-                                        <img class="img-thumbnail" src="{{ cdn(item.logo ? ('storage/logo/' ~ item.logo) : 'img/logo-gray.png') }}">
+                                        <img class="img-thumbnail" src="{{ logo(item.logo) }}">
                                     </td>
                                     <td>
                                         <h4>{{ item.name }}</h4>

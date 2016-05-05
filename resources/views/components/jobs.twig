@@ -2,7 +2,7 @@
     <div class="media">
         <div class="media-left">
             <a href="{{ route('job.offer', [job.id, job.path]) }}" title="{{ job.title }}">
-                <img class="media-object" src="{{ cdn(job.logo ? 'storage/logo/' ~ job.logo : 'img/logo-gray.png') }}" alt="{{ job.firm_name }}">
+                <img class="media-object" src="{{ logo(job.logo) }}" alt="{{ job.firm_name }}">
             </a>
         </div>
         <div class="media-body">

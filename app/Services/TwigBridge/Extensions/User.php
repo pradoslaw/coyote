@@ -1,13 +1,15 @@
 <?php
 
-namespace TwigBridge\Extensions;
+namespace Coyote\Services\TwigBridge\Extensions;
 
-use Gate;
+use Coyote\Http\Factories\GateFactory;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
 class User extends Twig_Extension
 {
+    use GateFactory;
+
     /**
      * {@inheritDoc}
      */
@@ -94,14 +96,6 @@ class User extends Twig_Extension
                 ['is_safe' => ['html']]
             ),
 
-            // funkcja generuje URL do zdjecia usera lub domyslny avatar jezeli brak
-            new Twig_SimpleFunction(
-                'user_photo',
-                function ($photo) {
-                    return $photo ? cdn('storage/photo/' . $photo) : cdn('img/avatar.png');
-                }
-            ),
-
             new Twig_SimpleFunction(
                 'can',
                 function ($ability, $policy = null, $object = null) {
@@ -110,7 +104,7 @@ class User extends Twig_Extension
                     }
 
                     if ($policy === null) {
-                        return Gate::allows($ability);
+                        return $this->getGateFactory()->allows($ability);
                     }
 
                     return policy($policy)->$ability(auth()->user(), $policy, $object);

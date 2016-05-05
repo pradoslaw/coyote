@@ -1,6 +1,6 @@
 <?php
 
-namespace TwigBridge\Extensions;
+namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Services\FormBuilder\Fields\Field;
 use Coyote\Services\FormBuilder\Fields\ChildForm as ChildForm;

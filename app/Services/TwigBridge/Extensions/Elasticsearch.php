@@ -1,6 +1,6 @@
 <?php
 
-namespace TwigBridge\Extensions;
+namespace Coyote\Services\TwigBridge\Extensions;
 
 use Twig_Extension;
 use Twig_SimpleFunction;
