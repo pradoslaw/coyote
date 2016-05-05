@@ -131,6 +131,7 @@ elixir(function (mix) {
         'js/forum.js',
         'js/job.js',
         'js/job-submit.js',
+        'js/job-tinymce.js',
         'js/posting.js',
         'js/wikieditor.js',
         'js/auto-complete.js',
