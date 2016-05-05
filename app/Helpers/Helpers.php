@@ -45,9 +45,9 @@ function excerpt($value, $limit = 84)
 }
 
 /**
- * @param null $activity
- * @param null $object
- * @param null $target
+ * @param \Coyote\Services\Stream\Activities\Activity|null $activity
+ * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $object
+ * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $target
  * @return \Coyote\Services\Stream\Stream
  */
 function stream($activity = null, $object = null, $target = null)
@@ -61,6 +61,13 @@ function stream($activity = null, $object = null, $target = null)
             $class = 'Coyote\\Services\\Stream\\Activities\\' . ucfirst(camel_case(class_basename($activity)));
             $stream->add(new $class($actor, $object, $target));
         } else {
+            if ($object !== null) {
+                $activity->setObject($object);
+            }
+            if ($target !== null) {
+                $activity->setTarget($target);
+            }
+
             $stream->add($activity);
         }
     }
