@@ -2,7 +2,8 @@
 
 namespace Coyote\Http\Controllers;
 
-use Coyote;
+use Coyote\Http\Factories\GateFactory;
+use Coyote\Services\Breadcrumb\Breadcrumb;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -12,10 +13,10 @@ use Lavary\Menu\Menu;
 
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests, Coyote\Http\Factories\GateFactory;
+    use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests, GateFactory;
 
     /**
-     * @var Coyote\Breadcrumb
+     * @var Breadcrumb
      */
     protected $breadcrumb;
 
@@ -48,7 +49,7 @@ abstract class Controller extends BaseController
      */
     public function __construct()
     {
-        $this->breadcrumb = new Coyote\Breadcrumb();
+        $this->breadcrumb = new Breadcrumb();
         $this->userId = auth()->check() ? auth()->user()->id : null;
         $this->sessionId = request()->session()->getId();
 

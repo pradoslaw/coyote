@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\TwigBridge\Extensions;
 
-use Coyote\Declination;
+use Coyote\Services\Declination\Declination;
 use Coyote\Services\Media\MediaInterface;
 use Coyote\Services\Thumbnail\Objects\Microblog;
 use Twig_Extension;

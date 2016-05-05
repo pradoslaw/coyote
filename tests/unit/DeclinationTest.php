@@ -17,7 +17,7 @@ class DeclinationTest extends \Codeception\TestCase\Test
 
     private function getSeconds($value)
     {
-        return Coyote\Declination::format($value, ['sekunda', 'sekundy', 'sekund']);
+        return Coyote\Services\Declination\Declination::format($value, ['sekunda', 'sekundy', 'sekund']);
     }
 
     // tests

@@ -7,7 +7,7 @@ use Coyote\Alert\Setting;
 use Coyote\Alert\Sender;
 use Coyote\Alert\Type;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface;
-use Coyote\Declination;
+use Coyote\Services\Declination\Declination;
 
 /**
  * Class AlertRepository

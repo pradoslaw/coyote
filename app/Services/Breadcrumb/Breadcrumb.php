@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote;
+namespace Coyote\Services\Breadcrumb;
 
 /**
  * Prosta klasa sluzaca do budowania elementu obecnego na kazdej podstronie, czyli breadcrumb

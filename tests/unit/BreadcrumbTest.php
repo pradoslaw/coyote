@@ -1,6 +1,6 @@
 <?php
 
-use Coyote\Breadcrumb;
+use Coyote\Services\Breadcrumb\Breadcrumb;
 
 class BreadcrumbTest extends \Codeception\TestCase\Test
 {

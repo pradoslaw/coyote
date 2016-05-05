@@ -49,7 +49,6 @@
     "autoload": {
         "classmap": [
             "database",
-            "app/Libs",
             "app/Models",
             "app/Http/Validators",
             "app/Plugins"
