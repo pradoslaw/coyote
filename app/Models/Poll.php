@@ -22,7 +22,7 @@ class Poll extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'length', 'votes', 'max_items', 'is_enabled'];
+    protected $fillable = ['title', 'length', 'votes', 'max_items'];
 
     /**
      * @var string
@@ -33,7 +33,6 @@ class Poll extends Model
      * @var array
      */
     protected $attributes = [
-        'is_enabled' => 1,
         'max_items' => 1,
         'length' => 0
     ];
