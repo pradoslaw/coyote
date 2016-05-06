@@ -72,6 +72,14 @@ class Forum extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function order()
+    {
+        return $this->hasMany('Coyote\Forum\Order');
+    }
+
+    /**
      * Checks ability for specified forum and user id
      *
      * @param string $name

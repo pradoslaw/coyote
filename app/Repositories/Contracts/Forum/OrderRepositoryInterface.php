@@ -8,7 +8,7 @@ interface OrderRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param int $userId
-     * @return mixed
+     * @param array $data
      */
-    public function takeForUser($userId);
+    public function saveForUser($userId, array $data);
 }

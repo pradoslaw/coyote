@@ -7,6 +7,7 @@ use Coyote\Repositories\Contracts\RepositoryInterface;
 use Coyote\Repositories\Criteria\Criteria;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
+use Illuminate\Database\Query\Expression;
 
 abstract class Repository implements RepositoryInterface, CriteriaInterface
 {
@@ -265,8 +266,24 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
         return $model->get($columns);
     }
 
+    /**
+     * @param $method
+     * @param $args
+     * @return mixed
+     */
     public function __call($method, $args)
     {
         return call_user_func_array([$this->model, $method], $args);
+    }
+
+    /**
+     * Get a new raw query expression.
+     *
+     * @param  mixed  $value
+     * @return \Illuminate\Database\Query\Expression
+     */
+    protected function raw($value)
+    {
+        return new Expression($value);
     }
 }

@@ -321,3 +321,54 @@
     top: 43px;
   }
 }
+
+// Edycja kolejnosci wyswietlania kategorii forum
+@import "../pages/forum/home";
+
+ul.table-forum {
+  border: 1px solid $border-color;
+  background: #fff;
+  border-radius: 3px;
+
+  li {
+    padding: 5px;
+    border-bottom: 1px solid $border-color;
+    position: relative;
+
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    h3 > a {
+      cursor: move;
+    }
+  }
+
+  .col-forum-description {
+    p {
+      width: 90%;
+    }
+  }
+
+  .btn-hide {
+    position: absolute;
+    top: 50%;
+    right: 1%;
+    font-size: $font-size-large;
+    margin-top: -8px;
+
+    .fa-lock {
+      display: none;
+    }
+  }
+
+  .btn-hide.btn-hidden {
+    .fa-lock {
+      display: inline;
+    }
+
+    .fa-unlock {
+      display: none;
+    }
+  }
+}

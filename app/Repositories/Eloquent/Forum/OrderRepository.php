@@ -17,14 +17,14 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
 
     /**
      * @param int $userId
-     * @return mixed
+     * @param array $data
      */
-    public function takeForUser($userId)
+    public function saveForUser($userId, array $data)
     {
-        return $this->model->select(['forums.id', 'forum_orders.section', 'hidden', 'forum_orders.order'])
-                    ->join('forums', 'forums.id', '=', 'forum_id')
-                    ->where('user_id', $userId)
-                    ->orderBy('order')
-                    ->get();
+        $this->model->where('user_id', $userId)->delete();
+        
+        foreach ($data as $row) {
+            $this->model->create($row + ['user_id' => $userId]);
+        }
     }
 }

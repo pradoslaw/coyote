@@ -2,8 +2,8 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Repositories\Contracts\ForumRepositoryInterface;
-use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface as OrderRepository;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 
@@ -11,10 +11,22 @@ class ForumController extends BaseController
 {
     use SettingsTrait;
 
+    /**
+     * @var ForumRepository
+     */
     private $forum;
+
+    /**
+     * @var OrderRepository
+     */
     private $order;
-    
-    public function __construct(ForumRepositoryInterface $forum, OrderRepositoryInterface $order)
+
+    /**
+     * ForumController constructor.
+     * @param ForumRepository $forum
+     * @param OrderRepository $order
+     */
+    public function __construct(ForumRepository $forum, OrderRepository $order)
     {
         parent::__construct();
 
@@ -32,9 +44,7 @@ class ForumController extends BaseController
         $groupsId = auth()->user()->groups()->lists('id')->toArray();
 
         $this->forum->pushCriteria(new OnlyThoseWithAccess($groupsId));
-        $sections = $this->forum->groupBySections($this->userId, null);
-        
-        $this->order->takeForUser($this->userId);
+        $sections = $this->forum->getOrderForUser($this->userId);
 
         return $this->view('user.forum')->with(compact('sections'));
     }
@@ -45,7 +55,12 @@ class ForumController extends BaseController
      */
     public function save(Request $request)
     {
-        //
-        return back()->with('success', 'Zmiany zostały poprawie zapisane');
+        $this->validate($request, [
+            'forum.*.is_hidden'       => 'int',
+            'forum.*.order'           => 'int',
+            'forum.*.section'         => 'string|max:50'
+        ]);
+
+        $this->order->saveForUser($this->userId, $request->input('forum'));
     }
 }

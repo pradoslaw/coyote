@@ -15,6 +15,12 @@ interface ForumRepositoryInterface extends RepositoryInterface
     public function groupBySections($userId, $sessionId, $parentId = null);
 
     /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getOrderForUser($userId);
+
+    /**
      * Builds up a category list that can be shown in a <select>
      *
      * @return array

@@ -6,6 +6,7 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Forum\Track as Forum_Track;
 use Coyote\Topic\Track as Topic_Track;
 use Coyote\Topic;
+use Illuminate\Support\Collection;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
 {
@@ -82,16 +83,9 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
         // execute query and fetch all forum categories
         $parents = $this->buildTree($result, $parentId);
+        $parents = $this->fillUpSectionNames($parents);
 
-        // we must fill section field in every row just to group rows by section name.
-        $section = '';
         foreach ($parents as &$parent) {
-            if ($parent->section) {
-                $section = $parent->section;
-            } else {
-                $parent->section = $section;
-            }
-
             if (isset($parent->subs)) {
                 foreach ($parent->subs as $child) {
                     $parent->topics += $child->topics;
@@ -122,7 +116,52 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * @param \Collection $rowset
+     * @param int $userId
+     * @return mixed
+     */
+    public function getOrderForUser($userId)
+    {
+        $this->applyCriteria();
+
+        $sql = $this->model
+                    ->select([
+                        'forums.*',
+                        'forum_orders.is_hidden',
+                        $this->raw('CASE WHEN forum_orders.section IS NOT NULL THEN forum_orders.section ELSE forums.section END')
+                    ])
+                    ->leftJoin('forum_orders', function ($join) use ($userId) {
+                        $join->on('forum_orders.forum_id', '=', 'forums.id')
+                                ->on('forum_orders.user_id', '=', $this->raw($userId));
+                    })
+                    ->whereNull('parent_id')
+                    ->orderByRaw('(CASE WHEN forum_orders.order IS NOT NULL THEN forum_orders.order ELSE forums.order END)');
+
+        $parents = $sql->get();
+
+        return $this->fillUpSectionNames($parents)->groupBy('section');
+    }
+
+    /**
+     * @param array $parents
+     * @return array
+     */
+    private function fillUpSectionNames($parents)
+    {
+        // we must fill section field in every row just to group rows by section name.
+        $section = '';
+        foreach ($parents as &$parent) {
+            if ($parent->section) {
+                $section = $parent->section;
+            } else {
+                $parent->section = $section;
+            }
+        }
+
+        return $parents;
+    }
+
+    /**
+     * @param Collection $rowset
      * @param int $parentId
      * @return mixed
      */
