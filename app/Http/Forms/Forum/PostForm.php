@@ -89,7 +89,12 @@ class PostForm extends Form
      */
     public function rules()
     {
-        return parent::rules() + ['_token' => self::RULE_THROTTLE];
+        $rule = self::RULE_THROTTLE;
+        if (!empty($this->post->id)) {
+            $rule .= ':' . $this->post->id;
+        }
+
+        return parent::rules() + ['_token' => $rule];
     }
 
     /**
