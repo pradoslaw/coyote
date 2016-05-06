@@ -85,6 +85,14 @@ class PostForm extends Form
     }
 
     /**
+     * @return array
+     */
+    public function rules()
+    {
+        return parent::rules() + ['_token' => self::RULE_THROTTLE];
+    }
+
+    /**
      * @param array|mixed $data
      * @param bool $rebuildForm
      * @return $this
