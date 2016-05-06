@@ -2,10 +2,9 @@
 
 namespace Coyote\Listeners;
 
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Routing\Events\RouteMatched;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Container\Container as App;
 
 class RouteDefaultModelListener
@@ -14,7 +13,8 @@ class RouteDefaultModelListener
      * @var array
      */
     protected $default = [
-        'topic' => TopicRepositoryInterface::class
+        'topic' => TopicRepositoryInterface::class,
+        'microblog' => MicroblogRepositoryInterface::class,
     ];
 
     /**

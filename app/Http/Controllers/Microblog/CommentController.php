@@ -43,19 +43,20 @@ class CommentController extends Controller
      * Publikowanie komentarza na mikroblogu
      *
      * @param Request $request
-     * @param null|int $id
+     * @param \Coyote\Microblog $microblog
      * @return \Illuminate\Http\JsonResponse
      */
-    public function save(Request $request, $id = null)
+    public function save(Request $request, $microblog)
     {
+        $originalId = $microblog->id;
+
         $this->validate($request, [
             'parent_id'     => 'sometimes|integer|exists:microblogs,id',
-            'text'          => 'required|string|max:5000|throttle:' . $id
+            'text'          => 'required|string|max:5000|throttle:' . $originalId
         ]);
 
-        $microblog = $this->microblog->findOrNew($id);
 
-        if ($id === null) {
+        if (empty($originalId)) {
             $user = auth()->user();
             $data = $request->only(['text', 'parent_id']) + ['user_id' => $user->id];
         } else {
@@ -66,21 +67,21 @@ class CommentController extends Controller
         }
 
         $microblog->fill($data);
-
-        // we need to get parent entry only for notification
-        $parent = $this->microblog->find($microblog->parent_id);
-
         $isSubscribed = false;
 
-        \DB::transaction(function () use ($id, &$microblog, $user, $parent, &$isSubscribed) {
+        \DB::transaction(function () use ($originalId, $microblog, $user, &$isSubscribed) {
             $microblog->save();
+
+            // we need to get parent entry only for notification
+            /** @var \Coyote\Microblog $parent */
+            $parent = $microblog->parent()->first();
 
             // we need to parse text first (and store it in cache)
             $microblog->text = app()->make('Parser\Comment')->parse($microblog->text);
             // get parsed content from cache
             $parent->text = app()->make('Parser\Microblog')->parse($parent->text);
 
-            if (!$id) {
+            if (!$originalId) {
                 $subscribers = $parent->subscribers()->lists('user_id')->toArray();
                 $alert = new Alerts();
 
@@ -157,12 +158,11 @@ class CommentController extends Controller
     /**
      * Edycja komentarza na mikroblogu.
      *
-     * @param int $id
+     * @param \Coyote\Microblog
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function edit($id)
+    public function edit($microblog)
     {
-        $microblog = $this->microblog->findOrFail($id);
         $this->authorize('update', $microblog);
 
         return response($microblog->text);
@@ -171,11 +171,10 @@ class CommentController extends Controller
     /**
      * Usuniecie komentarza z mikrobloga
      *
-     * @param int $id
+     * @param \Coyote\Microblog $microblog
      */
-    public function delete($id)
+    public function delete($microblog)
     {
-        $microblog = $this->microblog->findOrFail($id, ['id', 'user_id']);
         $this->authorize('delete', $microblog);
 
         \DB::transaction(function () use ($microblog) {

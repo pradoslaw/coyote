@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 
 /**
  * Class SubscribeController
@@ -14,13 +13,11 @@ class SubscribeController extends Controller
     /**
      * Mozliwosc obserwowania danego wpisu na mikroblogu
      *
-     * @param Microblog $repository
+     * @param \Coyote\Microblog $microblog
      * @return \Illuminate\Http\JsonResponse
      */
-    public function post($id, Microblog $repository)
+    public function post($microblog)
     {
-        $microblog = $repository->findOrFail($id);
-
         if (auth()->guest()) {
             return response()->json(['error' => 'Musisz być zalogowany, aby móc obserwować ten wpis.'], 500);
         }

@@ -51,19 +51,18 @@ class SubmitController extends Controller
      * Publikowanie wpisu na mikroblogu
      *
      * @param Request $request
-     * @param null|int $id
+     * @param \Coyote\Microblog $microblog
      * @return \Illuminate\View\View
      */
-    public function save(Request $request, $id = null)
+    public function save(Request $request, $microblog)
     {
         $this->validate($request, [
-            'text'          => 'required|string|max:10000|throttle:' . $id
+            'text'          => 'required|string|max:10000|throttle:' . $microblog->id
         ]);
 
-        $microblog = $this->microblog->findOrNew($id);
         $data = $request->only(['text']);
 
-        if ($id === null) {
+        if (empty($microblog->id)) {
             $user = auth()->user();
             $data['user_id'] = $user->id;
         } else {
@@ -83,9 +82,10 @@ class SubmitController extends Controller
             $microblog->media = $request->get('thumbnail');
         }
 
+        $originalId = $microblog->id;
         $microblog->fill($data);
 
-        \DB::transaction(function () use (&$microblog, $id, $user) {
+        \DB::transaction(function () use (&$microblog, $user, $originalId) {
             $microblog->save();
 
             // parsing text and store it in cache
@@ -93,7 +93,7 @@ class SubmitController extends Controller
 
             $object = (new Stream_Microblog())->map($microblog);
 
-            if ($id === null) {
+            if (empty($originalId)) {
                 // increase reputation points
                 app()->make('Reputation\Microblog\Create')->map($microblog)->save();
 
@@ -134,18 +134,17 @@ class SubmitController extends Controller
             $microblog->$key = $user->$key;
         }
 
-        return view($id ? 'microblog.text' : 'microblog.microblog')->with('microblog', $microblog);
+        return view($originalId ? 'microblog.text' : 'microblog.microblog')->with('microblog', $microblog);
     }
 
     /**
      * Edycja wpisu na mikroblogu. Odeslanie formularza zawierajacego tresc + zalaczniki
      *
-     * @param int $id
+     * @param \Coyote\Microblog $microblog
      * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit($microblog)
     {
-        $microblog = $this->microblog->findOrFail($id);
         $this->authorize('update', $microblog);
 
         return view('microblog.edit')->with('microblog', $microblog);
@@ -164,11 +163,10 @@ class SubmitController extends Controller
     /**
      * Usuniecie wpisu z mikrobloga
      *
-     * @param $id
+     * @param \Coyote\Microblog $microblog
      */
-    public function delete($id)
+    public function delete($microblog)
     {
-        $microblog = $this->microblog->findOrFail($id);
         $this->authorize('delete', $microblog);
 
         \DB::transaction(function () use ($microblog) {

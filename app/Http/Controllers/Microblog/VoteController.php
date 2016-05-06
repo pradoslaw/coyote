@@ -32,19 +32,17 @@ class VoteController extends Controller
     }
 
     /**
-     * @param $id
+     * @param \Coyote\Microblog $microblog
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function post($id, Request $request)
+    public function post($microblog, Request $request)
     {
         if (auth()->guest()) {
             return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
         }
 
-        /** @var \Coyote\Microblog $microblog */
-        $microblog = $this->microblog->findOrFail($id);
         $vote = $microblog->voters()->forUser($this->userId)->first();
 
         if (!config('app.debug') && $this->userId === $microblog->user_id) {
@@ -101,13 +99,11 @@ class VoteController extends Controller
     }
 
     /**
-     * @param $id
+     * @param \Coyote\Microblog $microblog
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function voters($id)
+    public function voters($microblog)
     {
-        $microblog = $this->microblog->find($id);
-
         return response(
             $microblog->voters()
                 ->join('users', 'users.id', '=', 'user_id')

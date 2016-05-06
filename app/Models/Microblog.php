@@ -153,6 +153,14 @@ class Microblog extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function parent()
+    {
+        return $this->hasOne('Coyote\Microblog', 'id', 'parent_id');
+    }
+
+    /**
      * @return AbstractFactory
      */
     protected function getMediaFactory()
