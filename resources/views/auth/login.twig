@@ -16,11 +16,9 @@
                     {{ form_row(form.password) }}
 
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="Logowanie...">
-                            Logowanie
-                        </button>
+                        {{ form_widget(form.submit) }}
 
-                        <a href="{{ url('Password') }}">Zapomniałeś hasła?</a>
+                        <a href="{{ url('Password') }}" style="margin-left: 15px">Zapomniałeś hasła?</a>
                     </div>
                 {{ form_end() }}
             </div>

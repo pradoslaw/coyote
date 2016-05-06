@@ -45,6 +45,12 @@ class LoginForm extends Form implements ValidatesWhenSubmitted
             ->add('password', 'password', [
                 'rules' => 'required',
                 'label' => 'Hasło'
+            ])
+            ->add('submit', 'submit', [
+                'label' => 'Logowanie',
+                'attr' => [
+                    'data-submit-state' => 'Logowanie...'
+                ]
             ]);
     }
 

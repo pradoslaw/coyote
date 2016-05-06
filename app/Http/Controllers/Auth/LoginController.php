@@ -72,6 +72,7 @@ class LoginController extends Controller
     /**
      * Wylogowanie uzytkownika
      *
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function signout(Request $request)

@@ -4,26 +4,26 @@ namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Actkey;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\DB;
+use Coyote\Http\Factories\MailFactory;
+use Coyote\Http\Forms\Auth\RegisterForm;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
 
 class RegisterController extends Controller
 {
+    use MailFactory;
+
     /**
-     * @var User
+     * @var UserRepository
      */
     private $user;
 
     /**
      * RegisterController constructor.
-     * @param User $user
+     * @param UserRepository $user
      */
-    public function __construct(User $user)
+    public function __construct(UserRepository $user)
     {
         parent::__construct();
         $this->middleware('guest');
@@ -37,26 +37,24 @@ class RegisterController extends Controller
     public function index()
     {
         $this->breadcrumb->push('Rejestracja', route('register'));
+        $form = $this->createForm(RegisterForm::class, null, [
+            'url' => route('register')
+        ]);
 
-        return $this->view('auth.register');
+        return $this->view('auth.register', compact('form'));
     }
 
     /**
      * Obsluga formularza rejestracji uzytkownika
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  RegisterForm  $form
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function signup(Request $request)
+    public function signup(RegisterForm $form)
     {
-        $this->validate($request, [
-            'name'                  => 'required|min:2|max:28|username|user_unique',
-            'email'                 => 'required|email|max:255|unique:users,email,NULL,id,is_confirm,1',
-            'password'              => 'required|confirmed|min:3',
-            'human'                 => 'required'
-        ]);
+        $request = $form->getRequest();
 
-        DB::transaction(function () use ($request) {
+        \DB::transaction(function () use ($request) {
             $email = $request->input('email');
 
             $user = $this->user->create([
@@ -67,12 +65,12 @@ class RegisterController extends Controller
 
             $url = Actkey::createLink($user->id);
 
-            Mail::queue('emails.signup', ['url' => $url], function ($message) use ($email) {
+            $this->getMailFactory()->queue('emails.signup', ['url' => $url], function ($message) use ($email) {
                 $message->to($email);
                 $message->subject('Dziękujemy za rejestrację. Potwierdź autentyczność swojego adresu e-mail');
             });
 
-            Auth::login($user, true);
+            auth()->login($user, true);
             stream(Stream_Create::class, new Stream_Person());
         });
 
