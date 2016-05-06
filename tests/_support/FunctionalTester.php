@@ -37,11 +37,9 @@ class FunctionalTester extends \Codeception\Actor
             'created_at' => new \DateTime(),
             'updated_at' => new \DateTime(),
         ];
-        
+
         $id = $this->haveRecord('users', array_merge($data, ['password' => bcrypt($data['password'])]));
-        $data['id'] = $id;
-        
-        return $data;
+        return User::find($id);
     }
 
     public function logInAsRandomUser()
@@ -50,5 +48,27 @@ class FunctionalTester extends \Codeception\Actor
         $this->amLoggedAs($user);
 
         return $user;
+    }
+    
+    public function logInAsAdmin()
+    {
+        $user = User::where('name', 'admin')->first();
+        $this->amLoggedAs($user);
+        
+        return $user;
+    }
+
+    public function createForum($attributes = [])
+    {
+        $fake = Factory::create();
+
+        $data = [
+            'name' => $name = $fake->name,
+            'path' => str_slug($name),
+            'description' => $fake->text
+        ];
+        
+        $id = $this->haveRecord('forums', array_merge($data, $attributes));
+        return $this->grabRecord('forums', ['id' => $id]);
     }
 }

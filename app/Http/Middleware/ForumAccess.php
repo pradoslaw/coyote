@@ -4,7 +4,7 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 
-class ForumAccess
+class ForumAccess extends AbstractMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,11 +19,7 @@ class ForumAccess
         $hasAccess = $forum->userCanAccess($request->user() ? $request->user()->id : null);
 
         if (!$hasAccess) {
-            if ($request->ajax()) {
-                return response('Unauthorized.', 401);
-            } else {
-                abort(401, 'Unauthorized');
-            }
+            return $this->unauthorized($request);
         }
 
         return $next($request);

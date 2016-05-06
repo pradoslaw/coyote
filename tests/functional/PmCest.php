@@ -25,7 +25,7 @@ class PmCest
         $text = $fake->realText();
 
         $I->amOnRoute('user.pm.submit');
-        $I->fillField(['name' => 'recipient'], $this->recipient['name']);
+        $I->fillField(['name' => 'recipient'], $this->recipient->name);
         $I->fillField(['name' => 'text'], $text);
         $I->click('Wyślij', '#box-pm');
 
@@ -44,7 +44,7 @@ class PmCest
     public function tryToWriteMessagetoMyselfAndFail(FunctionalTester $I)
     {
         $I->amOnRoute('user.pm.submit');
-        $I->fillField(['name' => 'recipient'], $this->user['name']);
+        $I->fillField(['name' => 'recipient'], $this->user->name);
         $I->click('Wyślij', '#box-pm');
         $I->seeFormErrorMessage('recipient', 'Nie można wysłać wiadomości do samego siebie.');
     }

@@ -31,4 +31,9 @@ class Access extends Model
      * @var string
      */
     protected $primaryKey = null;
+
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
 }

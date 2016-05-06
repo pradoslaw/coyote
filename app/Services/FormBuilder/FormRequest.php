@@ -5,7 +5,6 @@ namespace Coyote\Services\FormBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Container\Container;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exception\HttpResponseException;
@@ -250,16 +249,6 @@ abstract class FormRequest
     }
 
     /**
-     * Get the response for a forbidden operation.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function forbiddenResponse()
-    {
-        return new Response('Forbidden', 403);
-    }
-
-    /**
      * Handle a failed validation attempt.
      *
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
@@ -275,20 +264,6 @@ abstract class FormRequest
     }
 
     /**
-     * Determine if the request passes the authorization check.
-     *
-     * @return bool
-     */
-    protected function passesAuthorization()
-    {
-        if (method_exists($this, 'authorize')) {
-            return $this->container->call([$this, 'authorize']);
-        }
-
-        return false;
-    }
-
-    /**
      * Handle a failed authorization attempt.
      *
      * @return void
@@ -297,7 +272,7 @@ abstract class FormRequest
      */
     protected function failedAuthorization()
     {
-        throw new HttpResponseException($this->forbiddenResponse());
+        throw new HttpException(403);
     }
 
     /**

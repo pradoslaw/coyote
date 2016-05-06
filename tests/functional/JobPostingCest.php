@@ -10,7 +10,7 @@ class JobPostingCest
     public function _before(FunctionalTester $I)
     {
         $this->user = $I->createUser();
-        $I->amLoggedAs(['name' => $this->user['name'], 'password' => $this->user['password']]);
+        $I->amLoggedAs($this->user);
     }
 
     public function _after(FunctionalTester $I)

@@ -19,6 +19,8 @@
                                 <a href="{{ route('forum.category.mark', [forum.path]) }}"
                                    class="ico {{ forum.is_locked ? 'lock' }} {{ forum.forum_unread ? 'new' }}"
                                    title="{{ forum.is_locked ? 'Forum zablokowane' : 'Kliknij, aby oznaczyć jako przeczytane' }}"></a>
+                            {% elseif forum.is_locked %}
+                                <span class="ico lock" title="Forum zablokowane"></span>
                             {% else %}
                                 <span class="ico normal" title="Brak nowych postów"></span>
                             {% endif %}

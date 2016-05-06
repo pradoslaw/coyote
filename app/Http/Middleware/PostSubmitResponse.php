@@ -37,7 +37,7 @@ class PostSubmitResponse
             $post = $response->getOriginalContent();
             $data = ['post' => ['text' => $post->text, 'attachments' => $post->attachments()->get()]];
 
-            if (auth()->user()->allow_sig && $post->user_id) {
+            if ($request->user()->allow_sig && $post->user_id) {
                 $parser = app('Parser\Sig');
                 $user = $this->user->find($post->user_id, ['sig']);
 
