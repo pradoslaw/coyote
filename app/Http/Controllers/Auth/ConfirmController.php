@@ -3,23 +3,25 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Actkey;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Http\Factories\MailFactory;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Mail;
 
 class ConfirmController extends Controller
 {
+    use MailFactory;
+    
     /**
-     * @var User
+     * @var UserRepository
      */
     private $user;
 
     /**
      * ConfirmController constructor.
-     * @param User $user
+     * @param UserRepository $user
      */
-    public function __construct(User $user)
+    public function __construct(UserRepository $user)
     {
         parent::__construct();
 
@@ -82,7 +84,7 @@ class ConfirmController extends Controller
         $url = Actkey::createLink($userId);
         $email = $request->email;
 
-        Mail::queue('emails.email', ['url' => $url], function ($message) use ($email) {
+        $this->getMailFactory()->queue('emails.email', ['url' => $url], function ($message) use ($email) {
             $message->to($email);
             $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
         });
