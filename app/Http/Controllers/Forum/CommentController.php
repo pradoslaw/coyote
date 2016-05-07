@@ -2,7 +2,8 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Services\Alert\Alert;
+use Coyote\Http\Factories\GateFactory;
+use Coyote\Services\Alert\Container;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\CommentRepositoryInterface as Comment;
@@ -16,11 +17,11 @@ use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Http\Request;
 use Coyote\Services\Parser\Reference\Login as Ref_Login;
-// @uzyc factory
-use Gate;
 
 class CommentController extends Controller
 {
+    use GateFactory;
+    
     /**
      * @var Comment
      */
@@ -110,7 +111,7 @@ class CommentController extends Controller
             stream($activity, $object, $target);
 
             if (!$id) {
-                $alert = new Alert();
+                $alert = new Container();
                 $notification = [
                     'sender_id'   => $this->userId,
                     'sender_name' => auth()->user()->name,
@@ -187,6 +188,11 @@ class CommentController extends Controller
         });
     }
 
+    /**
+     * @todo przeniesc do middleware
+     * @param $postId
+     * @return array
+     */
     private function checkAbility($postId)
     {
         $post = $this->post->findOrFail($postId, ['id', 'topic_id', 'forum_id']);
@@ -200,7 +206,7 @@ class CommentController extends Controller
         $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'path', 'subject', 'is_locked']);
 
         // Only moderators can delete this post if topic (or forum) was locked
-        if (Gate::denies('delete', $forum)) {
+        if ($this->getGateFactory()->denies('delete', $forum)) {
             if ($topic->is_locked || $forum->is_locked || $post->deleted_at) {
                 abort(401, 'Unauthorized');
             }

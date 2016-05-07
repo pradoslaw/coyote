@@ -15,7 +15,7 @@ use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\Services\Parser\Reference\Login as Ref_Login;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
-use Coyote\Services\Alert\Alert;
+use Coyote\Services\Alert\Container;
 use Coyote\Post\Log;
 use Coyote\User;
 
@@ -95,7 +95,7 @@ class SubmitController extends BaseController
             // it's important. don't remove below line so that text in activity can be saved without markdown
             $post->text = app('Parser\Post')->parse($request->text);
 
-            $alert = new Alert();
+            $alert = new Container();
             $notification = [
                 'sender_id'   => $this->userId,
                 'sender_name' => $request->get('user_name', $this->userId ? auth()->user()->name : ''),

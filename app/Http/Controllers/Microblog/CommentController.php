@@ -7,7 +7,7 @@ use Coyote\Services\Parser\Reference\Login as Ref_Login;
 use Coyote\Services\Parser\Reference\Hash as Ref_Hash;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Services\Alert\Alert as Alerts;
+use Coyote\Services\Alert\Container;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
@@ -83,7 +83,7 @@ class CommentController extends Controller
 
             if (!$originalId) {
                 $subscribers = $parent->subscribers()->lists('user_id')->toArray();
-                $alert = new Alerts();
+                $alert = new Container();
 
                 // we need to send alerts AFTER saving comment to database because we need ID of comment
                 $alertData = [

@@ -4,10 +4,7 @@ namespace Coyote\Services\Alert;
 
 use Coyote\Services\Alert\Providers\ProviderInterface;
 
-/**
- * Class Alert
- */
-class Alert
+class Container
 {
     /**
      * @var ProviderInterface[]
