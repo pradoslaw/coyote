@@ -195,7 +195,7 @@ class TopicController extends BaseController
 
     /**
      * @param \Coyote\Forum $forum
-     * @param $postsId $postsId
+     * @param int[] $postsId
      * @return array
      */
     private function getActivities($forum, $postsId)
