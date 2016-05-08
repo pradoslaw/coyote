@@ -1307,6 +1307,9 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    /**
+     * @todo usunac z tekstu <p> oraz </p> otaczajace tekst bo inaczej markdown nie dziala
+     */
     public function migrateJobs()
     {
         $this->info('Jobs...');

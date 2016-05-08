@@ -27,22 +27,18 @@ class JobFactory extends AbstractFactory
         $isInCache = $this->isInCache($text);
         if ($isInCache) {
             $text = $this->getFromCache($text);
-        }
-
-        if (!$isInCache || $this->isSmiliesAllowed()) {
+        } else {
             $parser = new Parser();
 
-            if (!$isInCache) {
-                $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));
-                    $parser->attach(new Purifier());
-                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
-                    $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
-                    $parser->attach(new Geshi());
+            $text = $this->cache($text, function () use ($parser) {
+                $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));
+                $parser->attach(new Purifier());
+                $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
+                $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
+                $parser->attach(new Geshi());
 
-                    return $parser;
-                });
-            }
+                return $parser;
+            });
         }
         stop_measure('parsing');
 

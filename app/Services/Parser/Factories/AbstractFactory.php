@@ -2,12 +2,10 @@
 
 namespace Coyote\Services\Parser\Factories;
 
-use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 use Illuminate\Http\Request;
 use Illuminate\Container\Container as App;
 use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Contracts\Auth\Factory as Auth;
 
 abstract class AbstractFactory
 {
@@ -29,19 +27,9 @@ abstract class AbstractFactory
     protected $cache;
 
     /**
-     * @var User
+     * @var Auth
      */
-    protected $user;
-
-    /**
-     * @var Word
-     */
-    protected $word;
-
-    /**
-     * @var Page
-     */
-    protected $page;
+    protected $auth;
 
     /**
      * @var bool
@@ -54,8 +42,10 @@ abstract class AbstractFactory
     public function __construct(App $app)
     {
         $this->app = $app;
+
         $this->cache = $app[Cache::class];
         $this->request = $app[Request::class];
+        $this->auth = $app[Auth::class];
     }
 
     /**
@@ -87,14 +77,14 @@ abstract class AbstractFactory
      */
     public function isSmiliesAllowed()
     {
-        return auth()->check() && auth()->user()->allow_smilies;
+        return $this->auth->check() && $this->auth->user()->allow_smilies;
     }
 
     /**
      * @param $text
      * @return string
      */
-    protected function generateCacheKey($text)
+    protected function cacheKey($text)
     {
         return 'text:' . class_basename($this) . md5($text);
     }
@@ -105,7 +95,7 @@ abstract class AbstractFactory
      */
     protected function isInCache($text)
     {
-        return $this->enableCache && $this->cache->has($this->generateCacheKey($text));
+        return $this->enableCache && $this->cache->has($this->cacheKey($text));
     }
 
     /**
@@ -114,7 +104,7 @@ abstract class AbstractFactory
      */
     protected function getFromCache($text)
     {
-        return $this->cache->get($this->generateCacheKey($text));
+        return $this->cache->get($this->cacheKey($text));
     }
 
     /**
@@ -128,7 +118,7 @@ abstract class AbstractFactory
     {
         $parser = $closure();
 
-        $key = $this->generateCacheKey($text);
+        $key = $this->cacheKey($text);
         $text = $parser->parse($text);
 
         if ($this->enableCache) {

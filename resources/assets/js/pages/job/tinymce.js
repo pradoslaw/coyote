@@ -13,6 +13,9 @@ tinymce.init({
     toolbar_items_size: 'small',
     elementpath: false,
     statusbar: false,
+    force_br_newlines : false,
+    force_p_newlines : false,
+    forced_root_block : '',
 
     content_style: "* {font-size: 13px; font-family: Arial, sans-serif;}",
 
