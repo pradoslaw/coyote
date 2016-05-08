@@ -7,10 +7,8 @@ use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 /**
  * Class Censore
  */
-class Censore implements ParserInterface
+class Censore extends Parser implements ParserInterface
 {
-    use Hash;
-
     /**
      * @var Word
      */

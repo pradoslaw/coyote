@@ -5,10 +5,8 @@ namespace Coyote\Services\Parser\Parsers;
 /**
  * Class Smilies
  */
-class Smilies implements ParserInterface
+class Smilies extends Parser implements ParserInterface
 {
-    use Hash;
-
     private $smilies = [
         ':)'            => 'smile.gif'
     ];
@@ -24,7 +22,7 @@ class Smilies implements ParserInterface
 
         $patterns = $replacements = [];
 
-        while (list($var, $value) = each($this->smilies)) {
+        foreach ($this->smilies as $var => $value) {
             $patterns[] = '#(?<=^|[\n ]|\.)' . preg_quote($var, '#') . '#';
             $replacements[] = '<img class="img-smile" alt="' . $var . '" title="' . $var . '" src="' . cdn('img/smilies/' . $value) . '" />';
         }

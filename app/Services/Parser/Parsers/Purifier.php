@@ -10,6 +10,9 @@ use HTMLPurifier_Config;
  */
 class Purifier implements ParserInterface
 {
+    /**
+     * @var HTMLPurifier_Config
+     */
     private $config;
 
     public function __construct()
@@ -24,17 +27,29 @@ class Purifier implements ParserInterface
         $this->config->autoFinalize = false;
     }
 
+    /**
+     * @param $config
+     */
     public function setConfig($config)
     {
         $this->config = $config;
     }
 
+    /**
+     * @param $key
+     * @param $value
+     * @return $this
+     */
     public function set($key, $value)
     {
         $this->config->set($key, $value);
         return $this;
     }
 
+    /**
+     * @param string $text
+     * @return string
+     */
     public function parse($text)
     {
         $def = $this->config->getHTMLDefinition(true);

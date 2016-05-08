@@ -2,9 +2,49 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
-trait Hash
+abstract class Parser
 {
+    /**
+     * @var array
+     */
     protected $hash = [];
+
+    /**
+     * @param string $text
+     * @param array|string $element
+     * @return string
+     */
+    protected function hashBlock($text, $element)
+    {
+        return $this->hashElement($text, $element);
+    }
+
+    /**
+     * @param string $text
+     * @param array|string $element
+     * @return string
+     */
+    protected function hashInline($text, $element)
+    {
+        return $this->hashElement($text, $element, true);
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    protected function unhash($text)
+    {
+        if ($this->hash) {
+            foreach ($this->hash as $uniqId => $data) {
+                $text = str_replace($uniqId, $data, $text);
+            }
+
+            $this->hash = [];
+        }
+
+        return $text;
+    }
 
     /**
      * @param string $text
@@ -12,7 +52,7 @@ trait Hash
      * @param bool|false $inline
      * @return string
      */
-    protected function hashElement($text, $element, $inline = false)
+    private function hashElement($text, $element, $inline = false)
     {
         if (is_array($element)) {
             foreach ($element as $name) {
@@ -40,23 +80,13 @@ trait Hash
         return $text;
     }
 
-    protected function hashBlock($text, $element)
-    {
-        return $this->hashElement($text, $element);
-    }
-
-    protected function hashInline($text, $element)
-    {
-        return $this->hashElement($text, $element, true);
-    }
-
     /**
      * @param string $text
      * @param int $start
      * @param int $end
      * @return string
      */
-    protected function hashPart($text, $start, $end)
+    private function hashPart($text, $start, $end)
     {
         $uniqId = uniqid('', true);
         $length = $end - $start;
@@ -64,23 +94,6 @@ trait Hash
 
         $text = substr_replace($text, $uniqId, $start, $length);
         $this->hash[$uniqId] = $match;
-
-        return $text;
-    }
-
-    /**
-     * @param string $text
-     * @return string
-     */
-    protected function unhash($text)
-    {
-        if ($this->hash) {
-            foreach ($this->hash as $uniqId => $data) {
-                $text = str_replace($uniqId, $data, $text);
-            }
-
-            $this->hash = [];
-        }
 
         return $text;
     }

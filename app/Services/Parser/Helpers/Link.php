@@ -4,6 +4,10 @@ namespace Coyote\Services\Parser\Helpers;
 
 class Link
 {
+    /**
+     * @param string $html
+     * @return array
+     */
     public function filter($html)
     {
         $links = [];

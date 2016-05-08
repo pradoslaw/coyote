@@ -5,7 +5,7 @@ namespace Coyote\Services\Parser\Helpers;
 class Login
 {
     /**
-     * @param $html
+     * @param string $html
      * @return array
      */
     public function grab($html)

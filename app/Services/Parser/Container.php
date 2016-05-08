@@ -20,7 +20,7 @@ final class Container
     }
 
     /**
-     *
+     * Remove all parsers from container
      */
     public function detach()
     {
