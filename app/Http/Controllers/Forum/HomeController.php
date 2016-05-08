@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Http\Factories\GateFactory;
+use Coyote\Repositories\Contracts\FlagRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
@@ -9,10 +11,11 @@ use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTag;
 use Illuminate\Http\Request;
-use Gate;
 
 class HomeController extends BaseController
 {
+    use GateFactory;
+
     /**
      * @param string $view
      * @param array $data
@@ -94,11 +97,9 @@ class HomeController extends BaseController
     }
 
     /**
-     * @param int $userId
-     * @param string $sessionId
      * @return $this
      */
-    private function load($userId, $sessionId)
+    private function load()
     {
         $groupsId = [];
 
@@ -107,12 +108,12 @@ class HomeController extends BaseController
         }
 
         $this->topic->pushCriteria(new OnlyThoseWithAccess($groupsId));
-        $topics = $this->topic->paginate($userId, $sessionId);
+        $topics = $this->topic->paginate($this->userId, $this->sessionId);
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
-        if ($topics && Gate::allows('forum-delete')) {
-            $flags = app()->make('FlagRepository')->takeForTopics($topics->groupBy('id')->keys()->toArray());
+        if ($topics && $this->getGateFactory()->allows('forum-delete')) {
+            $flags = app(FlagRepositoryInterface::class)->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
         return $this->view('forum.topics')->with(compact('topics', 'flags'));
@@ -123,7 +124,7 @@ class HomeController extends BaseController
      */
     public function all()
     {
-        return $this->load($this->userId, $this->sessionId);
+        return $this->load();
     }
 
     /**
@@ -132,7 +133,7 @@ class HomeController extends BaseController
     public function unanswered()
     {
         $this->topic->pushCriteria(new Unanswered());
-        return $this->load($this->userId, $this->sessionId);
+        return $this->load();
     }
 
     /**
@@ -141,7 +142,7 @@ class HomeController extends BaseController
     public function mine()
     {
         $this->topic->pushCriteria(new OnlyMine($this->userId));
-        return $this->load($this->userId, $this->sessionId);
+        return $this->load();
     }
 
     /**
@@ -151,7 +152,7 @@ class HomeController extends BaseController
     public function user($userId)
     {
         $this->topic->pushCriteria(new OnlyMine($userId));
-        return $this->load($this->userId, $this->sessionId);
+        return $this->load();
     }
 
     /**
@@ -160,7 +161,7 @@ class HomeController extends BaseController
     public function subscribes()
     {
         $this->topic->pushCriteria(new Subscribes($this->userId));
-        return $this->load($this->userId, $this->sessionId);
+        return $this->load();
     }
 
     /**
@@ -170,7 +171,7 @@ class HomeController extends BaseController
     public function tag($name)
     {
         $this->topic->pushCriteria(new WithTag($name));
-        return $this->load($this->userId, $this->sessionId);
+        return $this->load();
     }
 
     /**
@@ -180,7 +181,7 @@ class HomeController extends BaseController
     {
         $forums = $this->forum->all(['id']);
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, $this->userId, request()->session()->getId());
+            $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
         }
     }
 }

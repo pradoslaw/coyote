@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Repositories\Contracts\FlagRepositoryInterface;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Illuminate\Http\Request;
@@ -23,14 +24,9 @@ class CategoryController extends BaseController
 
         $this->forum->skipCriteria(true);
         // execute query: get all subcategories that user can has access to
-        $sections = $this->forum->groupBySections($this->userId, $request->session()->getId(), $forum->id);
-
-        if ($request->has('perPage')) {
-            $perPage = max(10, min($request->get('perPage'), 50));
-            $this->setSetting('forum.topics_per_page', $perPage);
-        } else {
-            $perPage = $this->getSetting('forum.topics_per_page', 20);
-        }
+        $sections = $this->forum->groupBySections($this->userId, $this->sessionId, $forum->id);
+        // number of topics per one page
+        $perPage = $this->perPage($request, 'forum.topics_per_page', 20);
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
@@ -47,7 +43,7 @@ class CategoryController extends BaseController
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
         if ($this->getGateFactory()->allows('delete', $forum)) {
-            $flags = app('FlagRepository')->takeForTopics($topics->groupBy('id')->keys()->toArray());
+            $flags = app(FlagRepositoryInterface::class)->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
         $collapse = $this->getSetting('forum.collapse') ? unserialize($this->getSetting('forum.collapse')) : [];

@@ -4,11 +4,15 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Forum;
 use Coyote\Forum\Reason;
+use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Factories\StreamFactory;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
+use Coyote\Services\Elasticsearch\Factory\Forum\MoreLikeThisFactory;
+use Coyote\Services\Elasticsearch\Response\TopHits;
 use Coyote\Services\Parser\Providers\ProviderInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -17,7 +21,7 @@ use Illuminate\Support\Collection;
 
 class TopicController extends BaseController
 {
-    use StreamFactory, GateFactory;
+    use StreamFactory, GateFactory, CacheFactory;
 
     /**
      * @param \Coyote\Forum $forum
@@ -36,13 +40,8 @@ class TopicController extends BaseController
         $page = $request->get('page');
         // number of answers
         $replies = $topic->replies;
-
-        if ($request->has('perPage')) {
-            $perPage = max(10, min($request->get('perPage'), 50));
-            $this->setSetting('forum.posts_per_page', $perPage);
-        } else {
-            $perPage = $this->getSetting('forum.posts_per_page', 10);
-        }
+        // number of posts per one page
+        $perPage = $this->perPage($request, 'forum.posts_per_page', 10);
 
         // user wants to show certain post. we need to calculate page number based on post id.
         if ($request->has('p')) {
@@ -54,8 +53,33 @@ class TopicController extends BaseController
         // user with forum-update ability WILL see every post
         if ($gate->allows('delete', $forum)) {
             $this->post->pushCriteria(new WithTrashed());
+            // user is able to see real number of posts in this topic
             $replies = $topic->replies_real;
         }
+
+        start_measure('More like this');
+
+        // build "more like this" block. it's important to send elasticsearch query before
+        // send SQL query to database because search() method exists only in Model and not Builder class.
+        $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, 60 * 24, function () use ($topic) {
+            $this->forum->pushCriteria(new OnlyThoseWithAccess());
+
+            $builder = (new MoreLikeThisFactory())->build($topic, $this->forum->lists('id'));
+
+            $build = $builder->build();
+            debugbar()->debug($build);
+
+            // set custom response class
+            $this->post->setResponse(TopHits::class);
+            // search related topics
+            $mlt = $this->post->search($build);
+
+            // it's important to reset criteria for the further queries
+            $this->forum->resetCriteria();
+            return $mlt;
+        });
+
+        stop_measure('More like this');
 
         // magic happens here. get posts for given topic
         /* @var Collection */
@@ -129,7 +153,7 @@ class TopicController extends BaseController
 
         return $this->view(
             'forum.topic',
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'reasonList', 'form')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'reasonList', 'form', 'mlt')
         )->with([
             'markTime'      => $markTime[Topic::class] ? $markTime[Topic::class] : $markTime[Forum::class],
             'flags'         => $this->getFlags($postsId),

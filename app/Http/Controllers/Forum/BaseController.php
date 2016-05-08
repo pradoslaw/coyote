@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Http\Forms\Forum\PostForm;
+use Illuminate\Http\Request;
 
 abstract class BaseController extends Controller
 {
@@ -149,5 +150,23 @@ abstract class BaseController extends Controller
                 'url' => route('forum.post.submit', [$forum->path, $topic ? $topic->id : null, $post ? $post->id : null]),
             ]
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param string $setting
+     * @param int $default
+     * @return int
+     */
+    protected function perPage(Request $request, $setting, $default)
+    {
+        if ($request->has('perPage')) {
+            $perPage = max(10, min($request->get('perPage'), 50));
+            $this->setSetting($setting, $perPage);
+        } else {
+            $perPage = $this->getSetting($setting, $default);
+        }
+        
+        return $perPage;
     }
 }

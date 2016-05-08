@@ -135,7 +135,7 @@ abstract class Controller extends BaseController
     /**
      * @param string $name
      * @param null $default
-     * @return null
+     * @return mixed|null
      */
     protected function getSetting($name, $default = null)
     {

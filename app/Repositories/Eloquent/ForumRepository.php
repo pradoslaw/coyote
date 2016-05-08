@@ -50,9 +50,9 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                         $join->on('forum_id', '=', 'forums.id');
 
                         if ($userId) {
-                            $join->on('forum_track.user_id', '=', \DB::raw($userId));
+                            $join->on('forum_track.user_id', '=', $this->raw($userId));
                         } else {
-                            $join->on('forum_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
+                            $join->on('forum_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
                         }
                     })
                     ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
@@ -62,9 +62,9 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                         $join->on('topic_track.topic_id', '=', 'topics.id');
 
                         if ($userId) {
-                            $join->on('topic_track.user_id', '=', \DB::raw($userId));
+                            $join->on('topic_track.user_id', '=', $this->raw($userId));
                         } else {
-                            $join->on('topic_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
+                            $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
                         }
                     })
                     ->orderBy('order');
@@ -186,6 +186,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     /**
      * Builds up a category list that can be shown in a <select>
      *
+     * @param string $key
      * @return array
      */
     public function forumList($key = 'path')
@@ -215,13 +216,13 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function getTagClouds()
     {
         return (new Topic\Tag())
-                ->select(['name', \DB::raw('COUNT(*) AS count')])
+                ->select(['name', $this->raw('COUNT(*) AS count')])
                 ->join('tags', 'tags.id', '=', 'tag_id')
                 ->join('topics', 'topics.id', '=', 'topic_id')
                     ->whereNull('topics.deleted_at')
                     ->whereNull('tags.deleted_at')
                 ->groupBy('name')
-                ->orderBy(\DB::raw('COUNT(*)'), 'DESC')
+                ->orderBy($this->raw('COUNT(*)'), 'DESC')
                 ->limit(10)
                 ->get()
                 ->lists('count', 'name')
@@ -235,7 +236,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function getTagsWeight(array $tags)
     {
         return (new Topic\Tag())
-                ->select(['name', \DB::raw('COUNT(*) AS count')])
+                ->select(['name', $this->raw('COUNT(*) AS count')])
                 ->join('tags', 'tags.id', '=', 'tag_id')
                 ->join('topics', 'topics.id', '=', 'topic_id')
                     ->whereIn('tags.name', $tags)
@@ -259,7 +260,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         // builds data to update
         $attributes = ['forum_id' => $forumId] + ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
         // execute a query...
-        Forum_Track::updateOrCreate($attributes, $attributes + ['marked_at' => \DB::raw('NOW()'), 'forum_id' => $forumId]);
+        Forum_Track::updateOrCreate($attributes, $attributes + ['marked_at' => $this->raw('NOW()'), 'forum_id' => $forumId]);
         $track = new Topic_Track();
 
         foreach ($attributes as $key => $value) {

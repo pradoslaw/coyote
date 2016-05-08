@@ -8,6 +8,8 @@ use Illuminate\Contracts\Support\Arrayable;
 
 trait Searchable
 {
+    protected $response = Response::class;
+
     /**
      * Index data in elasticsearch
      *
@@ -40,7 +42,7 @@ trait Searchable
         $params = $this->getParams();
         $params['body'] = $body;
 
-        return $this->getResponse($this->getClient()->search($params));
+        return $this->buildResponse($this->getClient()->search($params));
     }
 
     /**
@@ -76,9 +78,9 @@ trait Searchable
      * @param $response
      * @return ResponseInterface
      */
-    protected function getResponse($response)
+    protected function buildResponse($response)
     {
-        return app($this->getResponseClass(), [$response]);
+        return app($this->getResponse(), [$response]);
     }
 
     /**
@@ -142,11 +144,19 @@ trait Searchable
     }
 
     /**
+     * @param string $response
+     */
+    public function setResponse($response)
+    {
+        $this->response = $response;
+    }
+
+    /**
      * @return string
      */
-    protected function getResponseClass()
+    public function getResponse()
     {
-        return Response::class;
+        return $this->response;
     }
 
     /**
