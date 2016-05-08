@@ -163,7 +163,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     /**
      * @param Collection $rowset
      * @param int $parentId
-     * @return mixed
+     * @return Collection
      */
     private function buildTree($rowset, $parentId = null)
     {

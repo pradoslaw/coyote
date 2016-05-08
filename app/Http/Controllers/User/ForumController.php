@@ -35,7 +35,7 @@ class ForumController extends BaseController
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function index()
     {
