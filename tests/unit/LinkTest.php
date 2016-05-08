@@ -1,6 +1,6 @@
 <?php
 
-use Coyote\Services\Parser\Providers\Link;
+use Coyote\Services\Parser\Parsers\Link;
 use Faker\Factory;
 
 class LinkTest extends \Codeception\TestCase\Test
@@ -9,7 +9,7 @@ class LinkTest extends \Codeception\TestCase\Test
      * @var \UnitTester
      */
     protected $tester;
-    
+
     /**
      * @var Link
      */
