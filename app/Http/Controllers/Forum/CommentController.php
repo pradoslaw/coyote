@@ -16,7 +16,7 @@ use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Http\Request;
-use Coyote\Services\Parser\Reference\Login as Ref_Login;
+use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 
 class CommentController extends Controller
 {
@@ -77,6 +77,11 @@ class CommentController extends Controller
             'post_id'       => 'required|integer|exists:posts,id'
         ]);
 
+        /**
+         * @var \Coyote\Post $post
+         * @var \Coyote\Topic $topic
+         * @var \Coyote\Forum $forum
+         */
         list($post, $topic, $forum) = $this->checkAbility($request->get('post_id'));
 
         $comment = $this->comment->findOrNew($id);
@@ -130,7 +135,7 @@ class CommentController extends Controller
                 }
 
                 // get id of users that were mentioned in the text
-                $subscribersId = $forum->onlyUsersWithAccess((new Ref_Login())->grab($comment->text));
+                $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($comment->text));
 
                 if ($subscribersId) {
                     $alert->attach(

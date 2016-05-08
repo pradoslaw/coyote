@@ -12,7 +12,7 @@ use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Services\Stream\Actor as Stream_Actor;
-use Coyote\Services\Parser\Reference\Login as Ref_Login;
+use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Services\Alert\Container;
@@ -113,7 +113,7 @@ class SubmitController extends BaseController
             }
 
             // get id of users that were mentioned in the text
-            $subscribersId = $forum->onlyUsersWithAccess((new Ref_Login())->grab($post->text));
+            $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($post->text));
             if ($subscribersId) {
                 $alert->attach(app()->make('Alert\Post\Login')->with($notification)->setUsersId($subscribersId));
             }

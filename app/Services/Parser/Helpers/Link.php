@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Parser\Reference;
+namespace Coyote\Services\Parser\Helpers;
 
 class Link
 {

@@ -7,8 +7,8 @@ use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Services\Parser\Reference\Login as Ref_Login;
-use Coyote\Services\Parser\Reference\Hash as Ref_Hash;
+use Coyote\Services\Parser\Helpers\Login as LoginHelper;
+use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -100,9 +100,9 @@ class SubmitController extends Controller
                 // put this to activity stream
                 stream(Stream_Create::class, $object);
 
-                $ref = new Ref_Login();
+                $helper = new LoginHelper();
                 // get id of users that were mentioned in the text
-                $usersId = $ref->grab($microblog->text);
+                $usersId = $helper->grab($microblog->text);
 
                 if (!empty($usersId)) {
                     app()->make('Alert\Microblog\Login')->with([
@@ -123,8 +123,8 @@ class SubmitController extends Controller
                 stream(Stream_Update::class, $object);
             }
 
-            $ref = new Ref_Hash();
-            $microblog->setTags($ref->grab($microblog->text));
+            $helper = new HashHelper();
+            $microblog->setTags($helper->grab($microblog->text));
 
             event(new MicroblogWasSaved($microblog));
         });

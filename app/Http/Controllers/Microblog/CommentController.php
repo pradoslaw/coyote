@@ -3,8 +3,8 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Services\Parser\Reference\Login as Ref_Login;
-use Coyote\Services\Parser\Reference\Hash as Ref_Hash;
+use Coyote\Services\Parser\Helpers\Login as LoginHelper;
+use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Services\Alert\Container;
@@ -103,9 +103,9 @@ class CommentController extends Controller
                     );
                 }
 
-                $ref = new Ref_Login();
+                $helper = new LoginHelper();
                 // get id of users that were mentioned in the text
-                $usersId = $ref->grab($microblog->text);
+                $usersId = $helper->grab($microblog->text);
 
                 if (!empty($usersId)) {
                     $alert->attach(app()->make('Alert\Microblog\Login')->with($alertData)->setUsersId($usersId));
@@ -132,8 +132,8 @@ class CommentController extends Controller
                 $activity = Stream_Update::class;
             }
 
-            $ref = new Ref_Hash();
-            $microblog->setTags($ref->grab($microblog->text));
+            $helper = new HashHelper();
+            $microblog->setTags($helper->grab($microblog->text));
 
             // map microblog object into stream activity object
             $object = (new Stream_Comment())->map($microblog);
@@ -180,7 +180,7 @@ class CommentController extends Controller
         \DB::transaction(function () use ($microblog) {
             $microblog->delete();
 
-            $parent = $this->microblog->find($microblog->parent_id);
+            $parent = $microblog->parent()->first();
             $object = (new Stream_Comment())->map($microblog);
             $target = (new Stream_Microblog())->map($parent);
 

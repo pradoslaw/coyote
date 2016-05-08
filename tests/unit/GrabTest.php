@@ -19,7 +19,7 @@ class GrabTest extends \Codeception\TestCase\Test
     // tests
     public function testParseUserName()
     {
-        $hash = new \Coyote\Services\Parser\Reference\Hash();
+        $hash = new \Coyote\Services\Parser\Helpers\Hash();
         $tags = $hash->grab('<a href="">#słoma</a>');
 
         $this->assertEquals('słoma', $tags[0]);
@@ -27,12 +27,12 @@ class GrabTest extends \Codeception\TestCase\Test
         $tags = $hash->grab('<a href="">słoma</a>');
         $this->assertEquals(0, count($tags));
     }
-    
+
     public function testGrabCityName()
     {
-        $city = new \Coyote\Services\Parser\Reference\City();
-        
-        $cities = $city->grab('Wrocław, Warszawa');        
+        $city = new \Coyote\Services\Parser\Helpers\City();
+
+        $cities = $city->grab('Wrocław, Warszawa');
         $this->assertEquals(2, count($cities));
         $this->assertEquals('Wrocław', $cities[0]);
         $this->assertEquals('Warszawa', $cities[1]);
