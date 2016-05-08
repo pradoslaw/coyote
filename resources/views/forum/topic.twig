@@ -202,22 +202,24 @@
             {% endblock %}
 
             {% block related %}
-                <section id="box-related" class="box related">
-                    <h4 class="border"><i class="fa fa-eye fa-fw"></i> Strony pokrewne</h4>
+                {% if mlt %}
+                    <section id="box-related" class="box related">
+                        <h4 class="border"><i class="fa fa-eye fa-fw"></i> Strony pokrewne</h4>
 
-                    <div>
-                        <ul>
-                            {% for page in mlt %}
-                                <li>
-                                    <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.path, page.topic.id, page.topic.path]) }}" title="{{ page.topic.subject }}">
-                                        <strong>{{ page.topic.subject }}</strong>
-                                        <small>{{ page.updated_at|format_date }}</small>
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </section>
+                        <div>
+                            <ul>
+                                {% for page in mlt %}
+                                    <li>
+                                        <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.path, page.topic.id, page.topic.path]) }}" title="{{ page.topic.subject }}">
+                                            <strong>{{ page.topic.subject }}</strong>
+                                            <small>{{ page.updated_at|format_date }}</small>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </section>
+                {% endif %}
             {% endblock %}
         {% endembed %}
     </div>
