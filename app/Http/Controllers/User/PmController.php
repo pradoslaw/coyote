@@ -55,7 +55,7 @@ class PmController extends BaseController
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
         $pm = $this->pm->paginate($this->userId);
-        $parser = app()->make('Parser\Pm');
+        $parser = app('parser.pm');
 
         foreach ($pm as &$row) {
             $row->text = $parser->parse($row->text);
@@ -79,7 +79,7 @@ class PmController extends BaseController
         $this->authorize('show', $pm);
 
         $talk = $this->pm->talk($this->userId, $pm->root_id, 10, (int) $request->query('offset', 0));
-        $parser = app()->make('Parser\Pm');
+        $parser = app('parser.pm');
 
         foreach ($talk as &$row) {
             $row['text'] = $parser->parse($row['text']);
@@ -110,7 +110,7 @@ class PmController extends BaseController
      */
     public function ajax()
     {
-        $parser = app()->make('Parser\Pm');
+        $parser = app('parser.pm');
 
         $pm = $this->pm->takeForUser($this->userId);
         foreach ($pm as &$row) {
@@ -137,7 +137,7 @@ class PmController extends BaseController
      */
     public function preview(Request $request)
     {
-        $parser = app()->make('Parser\Pm');
+        $parser = app('parser.pm');
         return response($parser->parse($request->get('text')));
     }
 

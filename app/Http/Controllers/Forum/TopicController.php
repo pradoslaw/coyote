@@ -169,9 +169,9 @@ class TopicController extends BaseController
     private function getParsers()
     {
         return [
-            'post'      => app('Parser\Post'),
-            'comment'   => app('Parser\Comment'),
-            'sig'       => app('Parser\Sig')
+            'post'      => app('parser.post'),
+            'comment'   => app('parser.comment'),
+            'sig'       => app('parser.sig')
         ];
     }
 

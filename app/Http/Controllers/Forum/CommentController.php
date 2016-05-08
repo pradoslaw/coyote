@@ -107,7 +107,7 @@ class CommentController extends Controller
             $comment->save();
 
             // we need to parse text first (and store it in cache)
-            $parser = app()->make('Parser\Comment');
+            $parser = app('parser.comment');
             $comment->text = $parser->parse($comment->text);
 
             // it is IMPORTANT to parse text first, and then put information to activity stream.

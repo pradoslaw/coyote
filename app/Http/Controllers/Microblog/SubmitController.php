@@ -89,7 +89,7 @@ class SubmitController extends Controller
             $microblog->save();
 
             // parsing text and store it in cache
-            $microblog->text = app()->make('Parser\Microblog')->parse($microblog->text);
+            $microblog->text = app('parser.microblog')->parse($microblog->text);
 
             $object = (new Stream_Microblog())->map($microblog);
 

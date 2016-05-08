@@ -285,7 +285,7 @@ class SubmitController extends Controller
             }
         }
 
-        $parser = app('Parser\Job');
+        $parser = app('parser.job');
 
         foreach (['description', 'requirements', 'recruitment'] as $name) {
             if (!empty($job[$name])) {
@@ -375,7 +375,7 @@ class SubmitController extends Controller
             event(new JobWasSaved($job));
             $request->session()->forget(['job', 'firm']);
 
-            $parser = app('Parser\Job');
+            $parser = app('parser.job');
             $job->description = $parser->parse($job->description);
 
             stream($activity, (new Stream_Job)->map($job));

@@ -36,27 +36,27 @@ class ParserServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('Parser\Microblog', function ($app) {
+        $this->app->bind('parser.microblog', function ($app) {
             return new MicroblogFactory($app);
         });
 
-        $this->app->bind('Parser\Comment', function ($app) {
+        $this->app->bind('parser.comment', function ($app) {
             return new CommentFactory($app);
         });
 
-        $this->app->bind('Parser\Sig', function ($app) {
+        $this->app->bind('parser.sig', function ($app) {
             return new SigFactory($app);
         });
 
-        $this->app->bind('Parser\Pm', function ($app) {
+        $this->app->bind('parser.pm', function ($app) {
             return new PmFactory($app);
         });
 
-        $this->app->bind('Parser\Post', function ($app) {
+        $this->app->bind('parser.post', function ($app) {
             return new PostFactory($app);
         });
 
-        $this->app->bind('Parser\Job', function ($app) {
+        $this->app->bind('parser.job', function ($app) {
             return new JobFactory($app);
         });
     }
@@ -72,12 +72,12 @@ class ParserServiceProvider extends ServiceProvider
          * UWAGA! Po dodaniu nowego elementu do tablicy trzeba wykonac php artisan clear-compiled
          */
         return [
-            'Parser\Microblog',
-            'Parser\Comment',
-            'Parser\Sig',
-            'Parser\Pm',
-            'Parser\Post',
-            'Parser\Job'
+            'parser.microblog',
+            'parser.comment',
+            'parser.sig',
+            'parser.pm',
+            'parser.post',
+            'parser.job'
         ];
     }
 }

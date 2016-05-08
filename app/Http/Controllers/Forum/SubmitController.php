@@ -93,7 +93,7 @@ class SubmitController extends BaseController
 
             // parsing text and store it in cache
             // it's important. don't remove below line so that text in activity can be saved without markdown
-            $post->text = app('Parser\Post')->parse($request->text);
+            $post->text = app('parser.post')->parse($request->text);
 
             $alert = new Container();
             $notification = [

@@ -47,7 +47,7 @@ class OfferController extends Controller
         $this->breadcrumb->push('Praca', route('job.home'));
         $this->breadcrumb->push($job->title, route('job.offer', [$job->id, $job->path]));
 
-        $parser = app('Parser\Job');
+        $parser = app('parser.job');
 
         foreach (['description', 'requirements', 'recruitment'] as $name) {
             if (!empty($job->$name)) {

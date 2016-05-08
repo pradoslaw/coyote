@@ -77,9 +77,9 @@ class CommentController extends Controller
             $parent = $microblog->parent()->first();
 
             // we need to parse text first (and store it in cache)
-            $microblog->text = app()->make('Parser\Comment')->parse($microblog->text);
+            $microblog->text = app('parser.comment')->parse($microblog->text);
             // get parsed content from cache
-            $parent->text = app()->make('Parser\Microblog')->parse($parent->text);
+            $parent->text = app('parser.microblog')->parse($parent->text);
 
             if (!$originalId) {
                 $subscribers = $parent->subscribers()->lists('user_id')->toArray();
@@ -196,7 +196,7 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        $parser = app()->make('Parser\Comment');
+        $parser = app('parser.comment');
         $comments = $this->microblog->getComments([$id])->slice(0, -2);
 
         foreach ($comments as &$comment) {
