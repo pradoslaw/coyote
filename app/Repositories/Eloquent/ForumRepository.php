@@ -215,13 +215,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function getTagClouds()
     {
-        return (new Topic\Tag())
-                ->select(['name', $this->raw('COUNT(*) AS count')])
-                ->join('tags', 'tags.id', '=', 'tag_id')
-                ->join('topics', 'topics.id', '=', 'topic_id')
-                    ->whereNull('topics.deleted_at')
-                    ->whereNull('tags.deleted_at')
-                ->groupBy('name')
+        return $this->prepareTags()
                 ->orderBy($this->raw('COUNT(*)'), 'DESC')
                 ->limit(10)
                 ->get()
@@ -235,17 +229,25 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function getTagsWeight(array $tags)
     {
-        return (new Topic\Tag())
+        return $this->prepareTags()
+                    ->whereIn('tags.name', $tags)
+                    ->get()
+                    ->lists('count', 'name')
+                    ->toArray();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function prepareTags()
+    {
+        return $this->app->make(Topic\Tag::class)
                 ->select(['name', $this->raw('COUNT(*) AS count')])
                 ->join('tags', 'tags.id', '=', 'tag_id')
                 ->join('topics', 'topics.id', '=', 'topic_id')
-                    ->whereIn('tags.name', $tags)
                     ->whereNull('topics.deleted_at')
                     ->whereNull('tags.deleted_at')
-                ->groupBy('name')
-                ->get()
-                ->lists('count', 'name')
-                ->toArray();
+                ->groupBy('name');
     }
 
     /**
