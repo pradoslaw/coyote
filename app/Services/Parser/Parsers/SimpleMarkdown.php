@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Parser\Providers;
+namespace Coyote\Services\Parser\Parsers;
 
 /**
  * Uproszczony Markdown, np. dla komentarzy na forum czy stopek w postach gdzie nie mozemy sobie pozwolic
@@ -8,7 +8,7 @@ namespace Coyote\Services\Parser\Providers;
  *
  * Class SimpleMarkdown
  */
-class SimpleMarkdown extends Markdown implements ProviderInterface
+class SimpleMarkdown extends Markdown implements ParserInterface
 {
     protected function blockHeader($line)
     {

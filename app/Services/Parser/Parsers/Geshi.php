@@ -1,8 +1,8 @@
 <?php
 
-namespace Coyote\Services\Parser\Providers;
+namespace Coyote\Services\Parser\Parsers;
 
-class Geshi implements ProviderInterface
+class Geshi implements ParserInterface
 {
     /**
      * @param string $text

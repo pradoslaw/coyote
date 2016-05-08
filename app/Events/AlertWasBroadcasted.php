@@ -4,7 +4,6 @@ namespace Coyote\Events;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Coyote\Services\Alert\Providers\ProviderInterface;
 
 class AlertWasBroadcasted extends Event implements ShouldBroadcast
 {

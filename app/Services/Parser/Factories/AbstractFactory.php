@@ -116,6 +116,7 @@ abstract class AbstractFactory
      */
     public function cache($text, \Closure $closure)
     {
+        /** @var \Coyote\Services\Parser\Container $parser */
         $parser = $closure();
 
         $key = $this->cacheKey($text);

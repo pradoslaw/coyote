@@ -1,11 +1,11 @@
 <?php
 
-namespace Coyote\Services\Parser\Providers;
+namespace Coyote\Services\Parser\Parsers;
 
 /**
  * Class Smilies
  */
-class Smilies implements ProviderInterface
+class Smilies implements ParserInterface
 {
     use Hash;
 

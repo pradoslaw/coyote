@@ -4,12 +4,12 @@ namespace Coyote\Services\Parser\Factories;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Coyote\Services\Parser\Parser;
-use Coyote\Services\Parser\Providers\Geshi;
-use Coyote\Services\Parser\Providers\Link;
-use Coyote\Services\Parser\Providers\Markdown;
-use Coyote\Services\Parser\Providers\Purifier;
-use Coyote\Services\Parser\Providers\Smilies;
+use Coyote\Services\Parser\Container;
+use Coyote\Services\Parser\Parsers\Geshi;
+use Coyote\Services\Parser\Parsers\Link;
+use Coyote\Services\Parser\Parsers\Markdown;
+use Coyote\Services\Parser\Parsers\Purifier;
+use Coyote\Services\Parser\Parsers\Smilies;
 
 class PmFactory extends AbstractFactory
 {
@@ -23,7 +23,7 @@ class PmFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing private message...');
 
-        $parser = new Parser();
+        $parser = new Container();
 
         // we don't want to cache user's private messages
         $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));

@@ -5,12 +5,12 @@ namespace Coyote\Services\Parser\Factories;
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
-use Coyote\Services\Parser\Parser;
-use Coyote\Services\Parser\Providers\Censore;
-use Coyote\Services\Parser\Providers\Geshi;
-use Coyote\Services\Parser\Providers\Link;
-use Coyote\Services\Parser\Providers\Markdown;
-use Coyote\Services\Parser\Providers\Purifier;
+use Coyote\Services\Parser\Container;
+use Coyote\Services\Parser\Parsers\Censore;
+use Coyote\Services\Parser\Parsers\Geshi;
+use Coyote\Services\Parser\Parsers\Link;
+use Coyote\Services\Parser\Parsers\Markdown;
+use Coyote\Services\Parser\Parsers\Purifier;
 
 class JobFactory extends AbstractFactory
 {
@@ -28,7 +28,7 @@ class JobFactory extends AbstractFactory
         if ($isInCache) {
             $text = $this->getFromCache($text);
         } else {
-            $parser = new Parser();
+            $parser = new Container();
 
             $text = $this->cache($text, function () use ($parser) {
                 $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));

@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Services\Parser\Providers;
+namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
 
-class Link implements ProviderInterface
+class Link implements ParserInterface
 {
     const LINK_TAG_REGEXP = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
 

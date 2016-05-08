@@ -1,13 +1,13 @@
 <?php
 
-namespace Coyote\Services\Parser\Providers;
+namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 
 /**
  * Class Censore
  */
-class Censore implements ProviderInterface
+class Censore implements ParserInterface
 {
     use Hash;
 

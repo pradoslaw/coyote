@@ -13,7 +13,7 @@ use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Services\Elasticsearch\Factory\Forum\MoreLikeThisFactory;
 use Coyote\Services\Elasticsearch\Response\TopHits;
-use Coyote\Services\Parser\Providers\ProviderInterface;
+use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Topic;
@@ -164,7 +164,7 @@ class TopicController extends BaseController
     }
 
     /**
-     * @return ProviderInterface[]
+     * @return ParserInterface[]
      */
     private function getParsers()
     {

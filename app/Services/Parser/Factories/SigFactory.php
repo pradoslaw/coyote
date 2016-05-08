@@ -5,12 +5,12 @@ namespace Coyote\Services\Parser\Factories;
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
-use Coyote\Services\Parser\Parser;
-use Coyote\Services\Parser\Providers\Censore;
-use Coyote\Services\Parser\Providers\Link;
-use Coyote\Services\Parser\Providers\Purifier;
-use Coyote\Services\Parser\Providers\SimpleMarkdown;
-use Coyote\Services\Parser\Providers\Smilies;
+use Coyote\Services\Parser\Container;
+use Coyote\Services\Parser\Parsers\Censore;
+use Coyote\Services\Parser\Parsers\Link;
+use Coyote\Services\Parser\Parsers\Purifier;
+use Coyote\Services\Parser\Parsers\SimpleMarkdown;
+use Coyote\Services\Parser\Parsers\Smilies;
 
 class SigFactory extends AbstractFactory
 {
@@ -30,7 +30,7 @@ class SigFactory extends AbstractFactory
         }
 
         if (!$isInCache || $this->isSmiliesAllowed()) {
-            $parser = new Parser();
+            $parser = new Container();
 
             if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {

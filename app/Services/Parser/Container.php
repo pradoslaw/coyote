@@ -2,22 +2,19 @@
 
 namespace Coyote\Services\Parser;
 
-use Coyote\Services\Parser\Providers\ProviderInterface;
+use Coyote\Services\Parser\Parsers\ParserInterface;
 
-/**
- * Class Parser
- */
-final class Parser
+final class Container
 {
     /**
-     * @var array
+     * @var ParserInterface[]
      */
     private $parsers = [];
 
     /**
-     * @param ProviderInterface $parser
+     * @param ParserInterface $parser
      */
-    public function attach(ProviderInterface $parser)
+    public function attach(ParserInterface $parser)
     {
         $this->parsers[] = $parser;
     }

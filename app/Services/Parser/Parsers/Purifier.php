@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Parser\Providers;
+namespace Coyote\Services\Parser\Parsers;
 
 use HTMLPurifier;
 use HTMLPurifier_Config;
@@ -8,7 +8,7 @@ use HTMLPurifier_Config;
 /**
  * Class Purifier
  */
-class Purifier implements ProviderInterface
+class Purifier implements ParserInterface
 {
     private $config;
 

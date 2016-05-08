@@ -1,11 +1,11 @@
 <?php
 
-namespace Coyote\Services\Parser\Providers;
+namespace Coyote\Services\Parser\Parsers;
 
 /**
- * Interface ProviderInterface
+ * Interface ParserInterface
  */
-interface ProviderInterface
+interface ParserInterface
 {
     /**
      * @param string $text
