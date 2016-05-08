@@ -9,19 +9,20 @@ class LinkTest extends \Codeception\TestCase\Test
      * @var \UnitTester
      */
     protected $tester;
+    
     /**
      * @var Link
      */
     protected $link;
 
-    protected $request;
+    /**
+     * @var mixed
+     */
+    protected $repository;
 
     protected function _before()
     {
-        $repository = new \Coyote\Repositories\Eloquent\PageRepository(app());
-        $this->link = new Link($repository, request());
-
-        $this->request = request();
+        $this->repository = new \Coyote\Repositories\Eloquent\PageRepository(app());
     }
 
     protected function _after()
@@ -31,16 +32,29 @@ class LinkTest extends \Codeception\TestCase\Test
     // tests
     public function testParseInternalLinks()
     {
+        $host = '4programmers.net';
+        $this->link = new Link($this->repository, $host);
+
         $fake = Factory::create();
 
         $title = $fake->title;
         $path = '/Forum/' . str_slug($title);
 
-        $url = 'http://' . $this->request->getHost() . $path;
-
         $now = new \DateTime('now');
         $this->tester->haveRecord('pages', ['title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now]);
 
+        $url = 'http://' . $host . $path;
+        $this->parse($url, $title);
+
+        $host = 'dev.4programmers.net';
+        $this->link = new Link($this->repository, $host);
+
+        $url = 'http://' . $host . $path;
+        $this->parse($url, $title);
+    }
+
+    private function parse($url, $title)
+    {
         $input = $this->link->parse(link_to($url));
         $this->tester->assertEquals("<a href=\"$url\">$title</a>", $input);
 

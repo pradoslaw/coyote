@@ -28,7 +28,7 @@ class PmFactory extends AbstractFactory
         // we don't want to cache user's private messages
         $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));
         $parser->attach(new Purifier());
-        $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->app['request']));
+        $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
         $parser->attach(new Geshi());
 
         if ($this->isSmiliesAllowed()) {

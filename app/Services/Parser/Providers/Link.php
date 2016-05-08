@@ -3,7 +3,6 @@
 namespace Coyote\Services\Parser\Providers;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
-use Illuminate\Http\Request;
 
 class Link implements ProviderInterface
 {
@@ -15,20 +14,20 @@ class Link implements ProviderInterface
     private $page;
 
     /**
-     * @var Request
+     * @var string
      */
-    private $request;
+    private $host;
 
     /**
      * Link constructor.
      *
      * @param Page $page
-     * @param Request $request
+     * @param string $host
      */
-    public function __construct(Page $page, Request $request)
+    public function __construct(Page $page, string $host)
     {
         $this->page = $page;
-        $this->request = $request;
+        $this->host = $host;
     }
 
     /**
@@ -73,16 +72,18 @@ class Link implements ProviderInterface
             $host = implode('.', array_slice($parts, -2, 2));
 
             // sprawdzamy, czy mamy do czynienia z linkiem wewnetrznym
-            if (stripos($this->request->getHost(), $host) !== false) {
+            if (stripos($this->host, $host) !== false) {
                 if ($parts[0] == 'www') {
                     array_shift($parts);
                 }
 
                 $path = urldecode($component['path']);
 
-                if (count($parts) > 2) {
-                    $path = ucfirst(array_shift($parts)) . '/' . $path;
-                }
+                // jezeli forum na nowym coyote nie bedzie dzialalo pod subdomena, to nie potrzebujemy
+                // pinizszego kodu
+//                if (count($parts) > 2) {
+//                    $path = ucfirst(array_shift($parts)) . '/' . $path;
+//                }
             }
         }
 

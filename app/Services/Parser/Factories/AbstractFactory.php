@@ -55,6 +55,7 @@ abstract class AbstractFactory
     {
         $this->app = $app;
         $this->cache = $app[Cache::class];
+        $this->request = $app[Request::class];
     }
 
     /**
