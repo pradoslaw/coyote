@@ -11,16 +11,35 @@ class PostCommentPolicy
 {
     use HandlesAuthorization;
 
+    /**
+     * @param string $ability
+     * @param User $user
+     * @param Comment $comment
+     * @param Forum $forum
+     * @return bool
+     */
     private function check($ability, User $user, Comment $comment, Forum $forum)
     {
         return $user->id === $comment->user_id || $forum->ability($ability, $user->id) || $user->ability($ability);
     }
 
+    /**
+     * @param User $user
+     * @param Comment $comment
+     * @param Forum $forum
+     * @return bool
+     */
     public function update(User $user, Comment $comment, Forum $forum)
     {
         return $this->check('forum-update', $user, $comment, $forum);
     }
 
+    /**
+     * @param User $user
+     * @param Comment $comment
+     * @param Forum $forum
+     * @return bool
+     */
     public function delete(User $user, Comment $comment, Forum $forum)
     {
         return $this->check('forum-delete', $user, $comment, $forum);
