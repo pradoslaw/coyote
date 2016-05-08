@@ -97,7 +97,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     private function load()
     {
@@ -108,8 +108,15 @@ class HomeController extends BaseController
         }
 
         $this->topic->pushCriteria(new OnlyThoseWithAccess($groupsId));
-        $topics = $this->topic->paginate($this->userId, $this->sessionId);
+        return $this->topic->paginate($this->userId, $this->sessionId);
+    }
 
+    /**
+     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $topics
+     * @return \Illuminate\Contracts\View\View
+     */
+    private function render($topics)
+    {
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
         if ($topics && $this->getGateFactory()->allows('forum-delete')) {
@@ -120,11 +127,19 @@ class HomeController extends BaseController
     }
 
     /**
+     * @return \Illuminate\Contracts\View\View
+     */
+    private function loadAndRender()
+    {
+        return $this->render($this->load());
+    }
+
+    /**
      * @return \Illuminate\View\View
      */
     public function all()
     {
-        return $this->load();
+        return $this->loadAndRender();
     }
 
     /**
@@ -133,7 +148,7 @@ class HomeController extends BaseController
     public function unanswered()
     {
         $this->topic->pushCriteria(new Unanswered());
-        return $this->load();
+        return $this->loadAndRender();
     }
 
     /**
@@ -141,8 +156,7 @@ class HomeController extends BaseController
      */
     public function mine()
     {
-        $this->topic->pushCriteria(new OnlyMine($this->userId));
-        return $this->load();
+        return $this->user($this->userId);
     }
 
     /**
@@ -152,7 +166,13 @@ class HomeController extends BaseController
     public function user($userId)
     {
         $this->topic->pushCriteria(new OnlyMine($userId));
-        return $this->load();
+        $topics = $this->load();
+
+        $topics->load(['posts' => function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        }]);
+
+        return $this->render($topics)->with('user_id', $userId);
     }
 
     /**
@@ -161,7 +181,7 @@ class HomeController extends BaseController
     public function subscribes()
     {
         $this->topic->pushCriteria(new Subscribes($this->userId));
-        return $this->load();
+        return $this->loadAndRender();
     }
 
     /**
@@ -171,7 +191,7 @@ class HomeController extends BaseController
     public function tag($name)
     {
         $this->topic->pushCriteria(new WithTag($name));
-        return $this->load();
+        return $this->loadAndRender();
     }
 
     /**

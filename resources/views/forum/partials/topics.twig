@@ -20,6 +20,10 @@
                 {% for topic in topics %}
                     {% set url = route('forum.topic', [topic.forum_path, topic.id, topic.path]) %}
 
+                    {% if user_id is defined %}
+                        {% set url = url ~ '?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id %}
+                    {% endif %}
+
                     {% if forum is defined and not topic.is_sticky and previous.is_sticky %}
                         <tr>
                             <td colspan="4" class="sticky"></td>

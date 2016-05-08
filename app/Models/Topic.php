@@ -204,7 +204,10 @@ class Topic extends Model
         // builds data to update
         $attributes = ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
         // execute a query...
-        $this->tracks()->updateOrCreate($attributes, $attributes + ['marked_at' => $markTime, 'forum_id' => $this->forum_id]);
+        $this->tracks()->updateOrCreate($attributes, $attributes + [
+            'marked_at' => $markTime,
+            'forum_id' => $this->forum_id
+        ]);
     }
 
     /**
