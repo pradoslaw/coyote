@@ -6,6 +6,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Http\Forms\Forum\PostForm;
 use Illuminate\Http\Request;
@@ -90,6 +91,7 @@ abstract class BaseController extends Controller
         }
 
         $this->forum->pushCriteria(new OnlyThoseWithAccess($groupsId));
+        $this->forum->pushCriteria(new AccordingToUserOrder($this->userId));
     }
 
     /**
@@ -166,7 +168,7 @@ abstract class BaseController extends Controller
         } else {
             $perPage = $this->getSetting($setting, $default);
         }
-        
+
         return $perPage;
     }
 }

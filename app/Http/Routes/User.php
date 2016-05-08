@@ -76,6 +76,7 @@ Route::group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
 
     Route::get('Forum', ['uses' => 'ForumController@index', 'as' => 'forum']);
     Route::post('Forum', 'ForumController@save');
+    Route::post('Forum/Restore', ['uses' => 'ForumController@restore', 'as' => 'forum.restore']);
 });
 
 // wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera

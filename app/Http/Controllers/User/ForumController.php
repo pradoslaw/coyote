@@ -63,4 +63,13 @@ class ForumController extends BaseController
 
         $this->order->saveForUser($this->userId, $request->input('forum'));
     }
+
+    /**
+     * Restore action
+     */
+    public function restore()
+    {
+        $this->order->deleteForUser($this->userId);
+        return back();
+    }
 }

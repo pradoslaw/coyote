@@ -282,7 +282,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
      * @param  mixed  $value
      * @return \Illuminate\Database\Query\Expression
      */
-    protected function raw($value)
+    public function raw($value)
     {
         return new Expression($value);
     }

@@ -47,7 +47,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                         'is_confirm'
                     ])
                     ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
-                        $join->on('forum_id', '=', 'forums.id');
+                        $join->on('forum_track.forum_id', '=', 'forums.id');
 
                         if ($userId) {
                             $join->on('forum_track.user_id', '=', $this->raw($userId));
@@ -66,8 +66,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                         } else {
                             $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
                         }
-                    })
-                    ->orderBy('order');
+                    });
 
         if ($parentId) {
             $sql->where('parent_id', $parentId);
@@ -177,7 +176,9 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
         // we merge children with parent element
         foreach ($children as $parentId => $child) {
-            $parents[$parentId]->subs = $child;
+            if (!empty($parents[$parentId])) {
+                $parents[$parentId]->subs = $child;
+            }
         }
 
         return $parents;
@@ -194,7 +195,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         $this->applyCriteria();
 
         $list = [];
-        $result = $this->model->select(['id', 'name', 'path', 'parent_id'])->orderBy('order')->get();
+        $result = $this->model->select(['forums.id', 'name', 'path', 'parent_id'])->get();
         $tree = $this->buildTree($result);
 
         foreach ($tree as $parent) {
@@ -215,7 +216,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function getTagClouds()
     {
-        return $this->prepareTags()
+        return $this->tagModel()
                 ->orderBy($this->raw('COUNT(*)'), 'DESC')
                 ->limit(10)
                 ->get()
@@ -229,7 +230,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function getTagsWeight(array $tags)
     {
-        return $this->prepareTags()
+        return $this->tagModel()
                     ->whereIn('tags.name', $tags)
                     ->get()
                     ->lists('count', 'name')
@@ -239,7 +240,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     /**
      * @return mixed
      */
-    private function prepareTags()
+    private function tagModel()
     {
         return $this->app->make(Topic\Tag::class)
                 ->select(['name', $this->raw('COUNT(*) AS count')])

@@ -21,10 +21,18 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
      */
     public function saveForUser($userId, array $data)
     {
-        $this->model->where('user_id', $userId)->delete();
+        $this->deleteForUser($userId);
         
         foreach ($data as $row) {
             $this->model->create($row + ['user_id' => $userId]);
         }
+    }
+
+    /**
+     * @param int $userId
+     */
+    public function deleteForUser($userId)
+    {
+        $this->model->where('user_id', $userId)->delete();
     }
 }

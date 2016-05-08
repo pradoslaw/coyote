@@ -325,6 +325,12 @@
 // Edycja kolejnosci wyswietlania kategorii forum
 @import "../pages/forum/home";
 
+#sortable {
+  h2 {
+    cursor: move;
+  }
+}
+
 ul.table-forum {
   border: 1px solid $border-color;
   background: #fff;
@@ -362,13 +368,17 @@ ul.table-forum {
     }
   }
 
-  .btn-hide.btn-hidden {
+  .btn-hidden {
     .fa-lock {
       display: inline;
     }
 
     .fa-unlock {
       display: none;
+    }
+
+    h3, p {
+      opacity: .5;
     }
   }
 }

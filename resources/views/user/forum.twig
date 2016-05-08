@@ -1,11 +1,13 @@
 {% extends 'user.base' %}
 {% block title %}Personalizacja forum {{ parent() }}{% endblock %}
 
+{% import 'components.modals' as modals %}
+
 {% block content %}
     <h2>Personalizacja forum</h2>
 
-    {{ form_open({url: route('user.forum'), id: 'submit-form'}) }}
-        <div class="panel panel-default">
+    <div class="panel panel-default">
+        {{ form_open({url: route('user.forum'), id: 'submit-form'}) }}
             <div id="sortable" class="panel-body">
 
                 {% for name, forums in sections %}
@@ -15,19 +17,19 @@
 
                             <ul class="table-forum list-unstyled">
                                 {% for forum in forums %}
-                                    <li class="col-forum-description" data-forum-id="{{ forum.id }}">
+                                    {% set is_hidden = forum.is_hidden|default(0) %}
+
+                                    <li class="col-forum-description {{ is_hidden ? 'btn-hidden' }}">
                                         <h3><a title="{{ forum.name }}" href="javascript:">{{ forum.name }}</a></h3>
 
                                         <p>{{ forum.description }}</p>
-
-                                        {% set is_hidden = forum.is_hidden|default(0) %}
 
                                         {{ form_hidden('forum[' ~ forum.id ~ '][section]', loop.index0 == 0 ? name, {class: 'section'}) }}
                                         {{ form_hidden('forum[' ~ forum.id ~ '][forum_id]', forum.id) }}
                                         {{ form_hidden('forum[' ~ forum.id ~ '][order]', forum.order, {class: 'order'}) }}
                                         {{ form_hidden('forum[' ~ forum.id ~ '][is_hidden]', is_hidden, {class: 'is_hidden'}) }}
 
-                                        <a href="javascript:" class="btn-hide pull-right {{ is_hidden ? 'btn-hidden' }}" title="Pokaż lub ukryj kategorię forum">
+                                        <a href="javascript:" class="btn-hide pull-right" title="Pokaż lub ukryj kategorię forum">
                                             <i class="fa fa-lock"></i>
                                             <i class="fa fa-unlock"></i>
                                         </a>
@@ -38,14 +40,23 @@
                     </section>
                 {% endfor %}
             </div>
-        </div>
-    {{ form_close() }}
+        {{ form_close() }}
+
+        {{ form_open({url: route('user.forum.restore'), id: 'restore-form'}) }}
+            <div class="panel-body">
+                {{ form_button('Przywróć domyślne ustawienia', {class: 'btn btn-danger', id: 'btn-restore', 'data-toggle': 'modal', 'data-target': '#confirm'}) }}
+            </div>
+        {{ form_close() }}
+    </div>
+
+    {{ modals.confirm('Czy chcesz przywrócić ustawienia domyślne?', 'Czy chcesz kontynuować?', 'confirm', 'Tak, przywróć domyślne') }}
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
 
     <script src="{{ cdn('js/jquery-ui.js') }}"></script>
+    <script src="{{ cdn('js/modal.js') }}"></script>
     <script>
         $(function() {
             var form = $('#submit-form');
@@ -58,21 +69,29 @@
                     $(this).parent().find('.col-forum-description:first').children('.section').val(section);
                 });
 
+                form.submit();
+            };
+
+            form.submit(function() {
                 $('.col-forum-description').each(function(index) {
                     $('.order', this).val(index + 1);
+                    $('.is_hidden', this).val(+$(this).hasClass('btn-hidden'));
                 });
 
                 $.post(form.attr('action'), form.serialize());
-            };
+                return false;
+            });
 
             $('.table-forum').sortable({helper: 'clone', update: onUpdate});
             $('#sortable').sortable({update: onUpdate});
 
             $('.btn-hide').click(function() {
-                $(this).toggleClass('btn-hidden');
-                $(this).prev('.is_hidden').val($(this).hasClass('btn-hidden') ? 1 : 0);
+                $(this).parents('.col-forum-description').toggleClass('btn-hidden');
+                form.submit();
+            });
 
-                $.post(form.attr('action'), form.serialize());
+            $('#confirm').find('.btn-danger').click(function() {
+                $('#restore-form').submit();
             });
         });
     </script>

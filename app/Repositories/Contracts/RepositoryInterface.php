@@ -125,4 +125,12 @@ interface RepositoryInterface
      * @return \Illuminate\Database\Eloquent\Collection|null
      */
     public function findWhere($where, $columns = ['*']);
+
+    /**
+     * Get a new raw query expression.
+     *
+     * @param  mixed  $value
+     * @return \Illuminate\Database\Query\Expression
+     */
+    public function raw($value);
 }

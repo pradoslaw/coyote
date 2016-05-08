@@ -11,4 +11,9 @@ interface OrderRepositoryInterface extends RepositoryInterface
      * @param array $data
      */
     public function saveForUser($userId, array $data);
+
+    /**
+     * @param int $userId
+     */
+    public function deleteForUser($userId);
 }
