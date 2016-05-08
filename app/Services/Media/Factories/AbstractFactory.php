@@ -90,7 +90,7 @@ abstract class AbstractFactory
     }
 
     /**
-     * @param mixed $content
+     * @param string $content
      * @return MediaInterface
      */
     public function put($content)

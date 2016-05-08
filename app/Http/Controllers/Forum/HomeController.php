@@ -19,7 +19,7 @@ class HomeController extends BaseController
     /**
      * @param string $view
      * @param array $data
-     * @return mixed
+     * @return \Illuminate\View\View
      */
     protected function view($view = null, $data = [])
     {
@@ -70,7 +70,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -120,7 +120,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function all()
     {
@@ -128,7 +128,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function unanswered()
     {
@@ -137,7 +137,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function mine()
     {
@@ -147,7 +147,7 @@ class HomeController extends BaseController
 
     /**
      * @param int $userId
-     * @return HomeController
+     * @return \Illuminate\View\View
      */
     public function user($userId)
     {
@@ -156,7 +156,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function subscribes()
     {
@@ -166,7 +166,7 @@ class HomeController extends BaseController
 
     /**
      * @param string $name
-     * @return HomeController
+     * @return \Illuminate\View\View
      */
     public function tag($name)
     {
