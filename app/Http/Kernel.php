@@ -56,6 +56,7 @@ class Kernel extends HttpKernel
         'job.session'   => Middleware\VerifyJobSession::class,
         'job.revalidate'=> Middleware\RevalidateJobSession::class,
         'topic.scroll'  => Middleware\ScrollToPost::class,
-        'post.response' => Middleware\PostSubmitResponse::class
+        'post.response' => Middleware\PostSubmitResponse::class,
+        'comment.access' => Middleware\CommentAccess::class
     ];
 }

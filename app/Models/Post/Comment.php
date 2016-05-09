@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 
+/**
+ * @property $text string
+ * @property $post_id int
+ * @property $user_id int
+ * @property $id int
+ */
 class Comment extends Model
 {
     use SoftDeletes;

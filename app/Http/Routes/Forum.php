@@ -70,10 +70,10 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::post('Post/Rollback/{post}/{id}', ['uses' => 'LogController@rollback', 'as' => 'post.rollback']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
-    Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);
-    Route::get('Comment/{id}', ['uses' => 'CommentController@edit', 'middleware' => 'auth']);
-    Route::post('Comment/Delete/{id}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
-    
+    Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => ['auth', 'comment.access']]);
+    Route::get('Comment/{id}', ['uses' => 'CommentController@edit', 'middleware' => ['auth', 'comment.access']]);
+    Route::post('Comment/Delete/{id}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => ['auth', 'comment.access']]);
+
     // glosowanie w ankiecie
     Route::post('{forum}/Poll/{id}', ['uses' => 'PollController@vote', 'as' => 'poll.vote', 'middleware' => ['auth', 'forum.access']]);
 

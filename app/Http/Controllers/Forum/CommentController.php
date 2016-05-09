@@ -2,14 +2,9 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Http\Factories\GateFactory;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Alert\Container;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Contracts\Post\CommentRepositoryInterface as Comment;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
@@ -20,49 +15,37 @@ use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 
 class CommentController extends Controller
 {
-    use GateFactory;
-    
     /**
-     * @var Comment
+     * @var \Coyote\Post\Comment
      */
     private $comment;
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var Topic
+     * @var \Coyote\Topic
      */
     private $topic;
 
     /**
-     * @var Forum
+     * @var \Coyote\Forum
      */
     private $forum;
 
     /**
-     * @var Post
+     * @var \Coyote\Post
      */
     private $post;
 
     /**
-     * @param Comment $comment
-     * @param User $user
-     * @param Topic $topic
-     * @param Forum $forum
-     * @param Post $post
+     * @param Request $request
      */
-    public function __construct(Comment $comment, User $user, Topic $topic, Forum $forum, Post $post)
+    public function __construct(Request $request)
     {
         parent::__construct();
 
-        $this->comment = $comment;
-        $this->user = $user;
-        $this->topic = $topic;
-        $this->forum = $forum;
-        $this->post = $post;
+        // set variables from middleware
+        foreach ($request->attributes->keys() as $key) {
+            $this->$key = $request->attributes->get($key);
+        }
     }
 
     /**
@@ -77,42 +60,38 @@ class CommentController extends Controller
             'post_id'       => 'required|integer|exists:posts,id'
         ]);
 
-        /**
-         * @var \Coyote\Post $post
-         * @var \Coyote\Topic $topic
-         * @var \Coyote\Forum $forum
-         */
-        list($post, $topic, $forum) = $this->checkAbility($request->get('post_id'));
-
-        $comment = $this->comment->findOrNew($id);
-        $target = (new Stream_Topic())->map($topic, $forum);
+        $target = (new Stream_Topic())->map($this->topic, $this->forum);
 
         if ($id === null) {
             $user = auth()->user();
-            $data = $request->only(['text']) + ['user_id' => $user->id, 'post_id' => $request->get('post_id')];
+            $data = $request->only(['text']) + ['user_id' => $user->id, 'post_id' => $request->input('post_id')];
 
             $activity = Stream_Create::class;
         } else {
-            $this->authorize('update', [$comment, $forum]);
+            $this->authorize('update', [$this->comment, $this->forum]);
 
-            $user = $this->user->find($comment->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
+            $user = app(UserRepositoryInterface::class)->find(
+                $this->comment->user_id,
+                ['id', 'name', 'is_blocked', 'is_active', 'photo']
+            );
             $data = $request->only(['text']);
 
             $activity = Stream_Update::class;
         }
 
-        $comment->fill($data);
+        $this->comment->fill($data);
 
-        \DB::transaction(function () use ($comment, $id, $post, $topic, $forum, $activity, $target) {
-            $comment->save();
+        \DB::transaction(function () use ($id, $activity, $target) {
+            $this->comment->save();
 
             // we need to parse text first (and store it in cache)
+            /** @var \Coyote\Services\Parser\Parsers\ParserInterface $parser */
             $parser = app('parser.comment');
-            $comment->text = $parser->parse($comment->text);
+            $this->comment->text = $parser->parse($this->comment->text);
 
             // it is IMPORTANT to parse text first, and then put information to activity stream.
             // so that we will save plan text (without markdown)
-            $object = (new Stream_Comment())->map($post, $comment, $forum, $topic);
+            $object = (new Stream_Comment())->map($this->post, $this->comment, $this->forum, $this->topic);
             stream($activity, $object, $target);
 
             if (!$id) {
@@ -120,12 +99,14 @@ class CommentController extends Controller
                 $notification = [
                     'sender_id'   => $this->userId,
                     'sender_name' => auth()->user()->name,
-                    'subject'     => excerpt($topic->subject),
-                    'excerpt'     => excerpt($comment->text),
+                    'subject'     => excerpt($this->topic->subject),
+                    'excerpt'     => excerpt($this->comment->text),
                     'url'         => $object->url
                 ];
 
-                $subscribersId = $forum->onlyUsersWithAccess($post->subscribers()->lists('user_id')->toArray());
+                $subscribersId = $this->forum->onlyUsersWithAccess(
+                    $this->post->subscribers()->lists('user_id')->toArray()
+                );
 
                 if ($subscribersId) {
                     $alert->attach(
@@ -135,7 +116,7 @@ class CommentController extends Controller
                 }
 
                 // get id of users that were mentioned in the text
-                $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($comment->text));
+                $subscribersId = $this->forum->onlyUsersWithAccess((new LoginHelper())->grab($this->comment->text));
 
                 if ($subscribersId) {
                     $alert->attach(
@@ -146,77 +127,49 @@ class CommentController extends Controller
                 $alert->notify();
 
                 // subscribe post. notify about all future comments to this post
-                $post->subscribe($this->userId, true);
+                $this->post->subscribe($this->userId, true);
             }
         });
 
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
-            $comment->$key = $user->$key;
+            $this->comment->$key = $user->$key;
         }
 
         // we need to pass is_writeable variable to let know that we are able to edit/delete this comment
-        return view('forum.partials.comment', ['is_writeable' => true])->with(compact('comment', 'forum'));
+        return view('forum.partials.comment', [
+            'is_writeable' => true,
+            'comment' => $this->comment,
+            'forum' => $this->forum
+        ]);
     }
 
     /**
-     * @param $id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        $comment = $this->comment->findOrFail($id);
-        list(, , $forum) = $this->checkAbility($comment->post_id);
+        $this->authorize('update', [$this->comment, $this->forum]);
 
-        $this->authorize('update', [$comment, $forum]);
-
-        return view('forum.partials.form', ['post' => ['id' => $comment->post_id]])->with('comment', $comment);
+        return view('forum.partials.form', [
+            'post' => ['id' => $this->comment->post_id],
+            'comment' => $this->comment
+        ]);
     }
 
     /**
-     * @param $id
      * @throws \Exception
      */
-    public function delete($id)
+    public function delete()
     {
-        $comment = $this->comment->findOrFail($id);
-        list($post, $topic, $forum) = $this->checkAbility($comment->post_id);
+        $this->authorize('delete', [$this->comment, $this->forum]);
 
-        $this->authorize('delete', [$comment, $forum]);
+        $target = (new Stream_Topic())->map($this->topic, $this->forum);
+        $object = (new Stream_Comment())->map($this->post, $this->comment, $this->forum, $this->topic);
 
-        $target = (new Stream_Topic())->map($topic, $forum);
-        $object = (new Stream_Comment())->map($post, $comment, $forum, $topic);
-
-        \DB::transaction(function () use ($comment, $object, $target) {
-            $comment->delete();
+        \DB::transaction(function () use ($object, $target) {
+            $this->comment->delete();
 
             stream(Stream_Delete::class, $object, $target);
         });
-    }
-
-    /**
-     * @todo przeniesc do middleware
-     * @param $postId
-     * @return array
-     */
-    private function checkAbility($postId)
-    {
-        $post = $this->post->findOrFail($postId, ['id', 'topic_id', 'forum_id']);
-        $forum = $this->forum->findOrFail($post->forum_id);
-
-        // Maybe user does not have an access to this category?
-        if (!$forum->userCanAccess($this->userId)) {
-            abort(401, 'Unauthorized');
-        }
-
-        $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'path', 'subject', 'is_locked']);
-
-        // Only moderators can delete this post if topic (or forum) was locked
-        if ($this->getGateFactory()->denies('delete', $forum)) {
-            if ($topic->is_locked || $forum->is_locked || $post->deleted_at) {
-                abort(401, 'Unauthorized');
-            }
-        }
-
-        return [$post, $topic, $forum];
     }
 }
