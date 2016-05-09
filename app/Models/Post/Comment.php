@@ -4,13 +4,12 @@ namespace Coyote\Post;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use DB;
 
 /**
- * @property $text string
- * @property $post_id int
- * @property $user_id int
- * @property $id int
+ * @property string $text
+ * @property int $post_id
+ * @property int $user_id
+ * @property int $id
  */
 class Comment extends Model
 {
