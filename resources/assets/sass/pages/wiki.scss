@@ -107,11 +107,11 @@ article > header {
   }
 
   h5 {
-    font-size: 15px;
-    margin-top: 20px;
+    font-size: 14px;
+    margin-top: 10px;
 
     a {
-      color: $gray-light;
+      color: $gray;
     }
   }
 
@@ -121,16 +121,16 @@ article > header {
     padding-top: 12px;
     margin: 13px 0 20px 0;
 
-    i {
-      color: $gray;
-      font-size: $font-size-base + 1;
-    }
-
     a {
       color: inherit;
     }
 
     li {
+      i {
+        color: $gray;
+        font-size: $font-size-base + 1;
+      }
+
       @media screen and (max-width: $screen-xs) {
         display: block !important;
         font-size: 90%;
