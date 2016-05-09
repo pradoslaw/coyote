@@ -35,7 +35,7 @@ abstract class Parser
      */
     protected function unhash($text)
     {
-        if ($this->hash) {
+        if (!empty($this->hash)) {
             foreach ($this->hash as $uniqId => $data) {
                 $text = str_replace($uniqId, $data, $text);
             }
