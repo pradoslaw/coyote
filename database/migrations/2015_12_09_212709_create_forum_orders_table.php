@@ -17,7 +17,7 @@ class CreateForumOrdersTable extends Migration
             $table->smallInteger('forum_id');
             $table->integer('user_id');
             $table->string('section', 50)->nullable();
-            $table->tinyInteger('hidden')->default(0);
+            $table->tinyInteger('is_hidden')->default(0);
             $table->smallInteger('order');
 
             $table->index('forum_id');
