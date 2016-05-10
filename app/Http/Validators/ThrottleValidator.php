@@ -25,6 +25,7 @@ class ThrottleValidator
 
         $delay = 60;
 
+        // @todo Sprawdzenie reputacji uzytkownika. Jezeli jest wieksza niz X pkt to wylaczamy walidator.
         if (!empty($request->user())) {
             $key .= $request->user()->id;
             $delay = 15;
