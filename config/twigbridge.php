@@ -97,7 +97,7 @@ return [
             'TwigBridge\Extension\Laravel\Session',
             'TwigBridge\Extension\Laravel\Str',
             'TwigBridge\Extension\Laravel\Translator',
-            'TwigBridge\Extension\Laravel\Url',
+//            'TwigBridge\Extension\Laravel\Url',
             'TwigBridge\Extension\Laravel\Form',
             'TwigBridge\Extension\Laravel\Html',
 
@@ -173,7 +173,10 @@ return [
             'excerpt',
             'request',
             'cdn',
-            'old'
+            'old',
+            'route',
+            'url',
+            'asset'
         ],
         /*
         |--------------------------------------------------------------------------

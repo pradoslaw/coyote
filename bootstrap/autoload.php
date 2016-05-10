@@ -14,6 +14,7 @@ define('LARAVEL_START', microtime(true));
 |
 */
 
+require __DIR__ . '/../app/Helpers/Laravel.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 /*
