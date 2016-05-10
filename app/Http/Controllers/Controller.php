@@ -58,7 +58,7 @@ abstract class Controller extends BaseController
 
         if ($this->userId) {
             if (config('services.ws.host')) {
-                $this->public['ws'] = config('services.ws.host') . ':' . config('services.ws.port');
+                $this->public['ws'] = config('services.ws.host') . (':' . config('services.ws.port') ?: '');
                 // token contains channel name
                 $this->public['token'] = app('encrypter')->encrypt('user:' . $this->userId . '|' . time());
             }
