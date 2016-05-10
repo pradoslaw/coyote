@@ -22,7 +22,9 @@ function Realtime() {
     };
 
     if (typeof _config.ws !== 'undefined') {
-        handler = new WebSocket('ws://' + _config.ws + '/realtime?token=' + _config.token);
+        handler = new WebSocket(
+            window.location.protocol === 'https:' ? 'wss' : 'ws' + '://' + _config.ws + '/realtime?token=' + _config.token
+        );
 
         handler.onopen = function (e) {
         };
