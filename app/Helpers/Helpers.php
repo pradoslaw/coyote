@@ -18,6 +18,7 @@ function html_limit($value, $limit = 100, $end = '...')
  * Removes all html tags and converts entities to their applicable characters
  *
  * @param string $value
+ * @param bool $stripTags
  * @return string
  */
 function plain($value, $stripTags = true)
