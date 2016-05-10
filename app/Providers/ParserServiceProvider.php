@@ -2,6 +2,7 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Services\Parser\Factories\WikiFactory;
 use Illuminate\Support\ServiceProvider;
 use Coyote\Services\Parser\Factories\MicroblogFactory;
 use Coyote\Services\Parser\Factories\CommentFactory;
@@ -59,6 +60,10 @@ class ParserServiceProvider extends ServiceProvider
         $this->app->bind('parser.job', function ($app) {
             return new JobFactory($app);
         });
+
+        $this->app->bind('parser.wiki', function ($app) {
+            return new WikiFactory($app);
+        });
     }
 
     /**
@@ -77,7 +82,8 @@ class ParserServiceProvider extends ServiceProvider
             'parser.sig',
             'parser.pm',
             'parser.post',
-            'parser.job'
+            'parser.job',
+            'parser.wiki'
         ];
     }
 }

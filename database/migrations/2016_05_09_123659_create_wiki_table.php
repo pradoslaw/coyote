@@ -22,7 +22,7 @@ class CreateWikiTable extends Migration
             $table->timestampsTz();
             $table->softDeletes();
             $table->text('excerpt')->nullable();
-            $table->text('text');
+            $table->text('text')->nullable();
             $table->tinyInteger('is_locked')->default(0);
             $table->string('template')->nullable();
 

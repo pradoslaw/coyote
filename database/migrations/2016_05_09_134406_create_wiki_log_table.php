@@ -18,9 +18,9 @@ class CreateWikiLogTable extends Migration
             $table->integer('user_id');
             $table->integer('parent_id')->nullable();
             $table->string('title');
-            $table->text('path');
+            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->text('excerpt')->nullable();
-            $table->text('text');
+            $table->text('text')->nullable();
             $table->text('comment')->nullable();
             $table->string('ip', 45)->nullable();
             $table->string('browser')->nullable();

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 class Wiki extends Model
 {
     const DEFAULT_TEMPLATE = 'show';
-    
+
     /**
      * @var string
      */
@@ -30,7 +30,7 @@ class Wiki extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'title', 'long_title', 'excerpt', 'text'];
+    protected $fillable = ['parent_id', 'title', 'long_title', 'excerpt', 'text', 'template'];
 
     /**
      * @var string
@@ -43,6 +43,20 @@ class Wiki extends Model
     protected $attributes = [
         'template' => self::DEFAULT_TEMPLATE
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            /** @var \Coyote\Wiki $model */
+            $model->path = $model->slug;
+
+            if ($model->parent_id) {
+                $model->path = $model->parent()->value('path') . '/' . $model->path;
+            }
+        });
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
@@ -61,11 +75,28 @@ class Wiki extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function logs()
+    {
+        return $this->hasMany('Coyote\Wiki\Log');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function parent()
+    {
+        return $this->hasOne('Coyote\Wiki', 'id', 'parent_id');
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)
     {
         $this->attributes['title'] = $title;
-        $this->attributes['slug'] = str_slug($title);
+        // ucfirst() tylko dla zachowania kompatybilnosci wstecz
+        $this->attributes['slug'] = ucfirst(str_slug($title));
     }
 }

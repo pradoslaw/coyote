@@ -1,4 +1,4 @@
-{% extends 'layout.twig' %}
+{% extends 'wiki.base' %}
 {% block title %}Delphi{{ parent() }}{% endblock %}
 
 {% import 'components/forms.twig' as forms %}
@@ -188,14 +188,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="/css/wiki.css">
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
 {% endblock %}

@@ -1,5 +1,5 @@
-{% extends 'layout.twig' %}
-{% block title %}Delphi :: Lorem ipsum{{ parent() }}{% endblock %}
+{% extends 'wiki.base' %}
+{% block title %}{{ wiki.long_title|default(wiki.title) }}{{ parent() }}{% endblock %}
 
 {% block container %}
     <div class="row">
@@ -17,7 +17,7 @@
                     <article itemscope itemtype="http://schema.org/Article">
                         <header>
                             <h1 itemprop="name"><a href="{{ url(wiki.path) }}">{{ wiki.title }}</a></h1>
-                            <h5><a href="#">Adam Boduch</a></h5>
+                            <h5>{{ link_to_profile(author) }}</h5>
 
                             <ul class="list-inline">
                                 <li title="Data opublikowania" class="date" itemprop="datePublished" content="2006-03-02T13:34">
@@ -42,9 +42,7 @@
                         </header>
 
                         <div itemprop="articleBody">
-                            Adipiscing augue sociis tristique cras. Egestas mattis! Scelerisque tincidunt duis purus eros, vel ac, platea scelerisque? Non nunc, ut phasellus sagittis nisi mauris sit, parturient habitasse massa sociis, elementum dictumst, porttitor, proin tempor in, odio augue, amet porta tincidunt elementum enim massa? Lundium urna porta a eros vel a lacus, adipiscing? A! A lectus, placerat etiam ac facilisis elit lundium? Porta? Risus non dis dolor purus in nec ac ultricies, mus magna enim hac nisi? Porttitor in et in cras? Placerat ultrices, integer elit! Aliquet purus elementum egestas ac sed? Et. Aenean cras dictumst! Pellentesque a mattis sagittis integer? Vel vut natoque cursus elit. Aliquet, augue sed ut. Ultricies proin ac, porttitor. Nunc amet etiam proin sagittis egestas ridiculus augue.
-
-                            Et mus in cursus porttitor porttitor in sagittis scelerisque, non nec ac, turpis in odio! Dignissim cursus dis diam adipiscing vel ut turpis, enim ac turpis et a a! Facilisis parturient ut et porttitor vel. Integer ut habitasse ac, quis. Pulvinar sit tincidunt et. Facilisis tincidunt, etiam. Quis porttitor, in! Augue sed quis, porta rhoncus odio nunc parturient pulvinar, et magna. Aliquet eros. Urna elementum nascetur magna, purus. Elementum enim penatibus auctor cras turpis sed non augue, cursus etiam, elit augue nisi cum sagittis urna, nascetur, sagittis. Montes ac? Turpis porta? Ut nisi turpis dictumst nec porta in tincidunt, dignissim a. Augue cum. Magna tincidunt purus magna, phasellus nisi nunc etiam adipiscing vel! Et turpis penatibus sed urna porta.
+                            {{ wiki.text }}
                         </div>
                     </article>
                 </div>
@@ -288,14 +286,4 @@
             </section>
         </aside>
     </div>
-{% endblock %}
-
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="/css/wiki.css">
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
 {% endblock %}
