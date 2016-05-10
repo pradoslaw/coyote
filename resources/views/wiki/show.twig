@@ -109,7 +109,7 @@
 
         <aside class="col-sm-3">
             <section id="box-maintain">
-                <a href="#" class="btn btn-sm btn-default">Edycja</a>
+                <a href="{{ route('wiki.submit', [wiki.path]) }}" class="btn btn-sm btn-default" title="Kliknij, aby edytować ten artykuł">Edycja</a>
                 <a href="#" class="btn btn-sm btn-primary">Nowa strona</a>
             </section>
 
@@ -128,22 +128,24 @@
                 </li>
             </ul>
 
-            <section id="box-author" class="box">
-                <h4 class="border"><i class="fa fa-male fa-fw"></i> O autorze</h4>
+            {% if author.bio %}
+                <section id="box-author" class="box">
+                    <h4 class="border"><i class="fa fa-male fa-fw"></i> O autorze</h4>
 
-                <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object img-thumbnail" src="/img/avatar.png" style="width: 65px; height: 65px;" alt="Shalom">
-                        </a>
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="{{ route('profile', [author.id]) }}">
+                                <img class="media-object img-thumbnail" src="{{ user_photo(author.photo) }}" style="width: 65px; height: 65px;" alt="{{ author.name }}">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <blockquote>
+                                {{ author.bio }}
+                            </blockquote>
+                        </div>
                     </div>
-                    <div class="media-body">
-                        <blockquote>
-                            Programista aplikacji webowych, developer oraz założyciel serwisu 4programmers.net
-                        </blockquote>
-                    </div>
-                </div>
-            </section>
+                </section>
+            {% endif %}
 
             <section id="box-authors" class="box">
                 <h4 class="border"><i class="fa fa-users fa-fw"></i> Stronę współtworzą</h4>
