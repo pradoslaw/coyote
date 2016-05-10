@@ -3,6 +3,7 @@ function Realtime() {
 
     var self = this;
     var handler = null;
+    var timerId = null;
     this._callbacks = {};
 
     this.on = function(event, fn) {
@@ -21,12 +22,16 @@ function Realtime() {
         return self;
     };
 
-    if (typeof _config.ws !== 'undefined') {
+    function connect() {
         handler = new WebSocket(
             (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + _config.ws + '/realtime?token=' + _config.token
         );
 
         handler.onopen = function (e) {
+            if (timerId !== null) {
+                clearInterval(timerId);
+                timerId = null;
+            }
         };
 
         handler.onmessage = function (e) {
@@ -38,7 +43,16 @@ function Realtime() {
         };
 
         handler.onclose = function (e) {
+            if (timerId === null) {
+                timerId = setInterval(function() {
+                    connect();
+                }, 5000);
+            }
         };
+    }
+
+    if (typeof _config.ws !== 'undefined') {
+        connect();
     }
 }
 
