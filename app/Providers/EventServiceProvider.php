@@ -1,6 +1,8 @@
 <?php namespace Coyote\Providers;
 
-use Coyote\Listeners\RouteDefaultModelListener;
+use Coyote\Events\UserWasSaved;
+use Coyote\Listeners\BindRouteDefaultModel;
+use Coyote\Listeners\FlushUserCache;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
@@ -14,8 +16,11 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         RouteMatched::class => [
-            RouteDefaultModelListener::class,
+            BindRouteDefaultModel::class,
         ],
+        UserWasSaved::class => [
+            FlushUserCache::class
+        ]
     ];
 
     /**

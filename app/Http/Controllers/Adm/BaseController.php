@@ -12,7 +12,7 @@ use Lavary\Menu\Menu;
 class BaseController extends Controller
 {
     /**
-     * @return \Lavary\Menu\Menu
+     * @return \Lavary\Menu\Builder
      */
     protected function buildMenu()
     {

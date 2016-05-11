@@ -5,20 +5,23 @@ namespace Coyote\Repositories\Criteria\Topic;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Contracts\RepositoryInterface;
 use Coyote\Repositories\Criteria\Criteria;
+use Coyote\User;
 
 class OnlyThoseWithAccess extends Criteria
 {
     /**
      * @var array
      */
-    private $groupsId;
+    private $groupsId = [];
 
     /**
-     * @param array $groupsId
+     * @param \Coyote\User|null $user
      */
-    public function __construct(array $groupsId = [])
+    public function __construct($user = null)
     {
-        $this->groupsId = $groupsId;
+        if ($user instanceof User) {
+            $this->groupsId = $user->getGroupsId();
+        }
     }
 
     /**

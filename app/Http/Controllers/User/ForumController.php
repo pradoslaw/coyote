@@ -42,9 +42,7 @@ class ForumController extends BaseController
     {
         $this->breadcrumb->push('Personalizacja forum', route('user.forum'));
 
-        $groupsId = auth()->user()->groups()->lists('id')->toArray();
-
-        $this->forum->pushCriteria(new OnlyThoseWithAccess($groupsId));
+        $this->forum->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
         $sections = $this->forum->getOrderForUser($this->userId);
 
         return $this->view('user.forum')->with(compact('sections'));

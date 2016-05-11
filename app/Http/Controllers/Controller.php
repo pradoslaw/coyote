@@ -4,6 +4,9 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\GateFactory;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface;
+use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
+use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Breadcrumb\Breadcrumb;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -76,7 +79,7 @@ abstract class Controller extends BaseController
     /**
      * Application menu. Menu can be overwrite in admin panel.
      *
-     * @return Menu
+     * @return \Lavary\Menu\Builder
      */
     protected function buildMenu()
     {
@@ -87,8 +90,21 @@ abstract class Controller extends BaseController
             $menu->add('Pastebin', ['route' => 'pastebin.home'])->active('Pastebin/*');
         });
 
-        $cache = $this->getCacheFactory();
-        // cache user customized menu
+        // cache user customized menu for 7 days
+        $categories = $this->getCacheFactory()->remember('menu-for-user:' . $this->userId, 60 * 24 * 7, function () {
+            /** @var ForumRepositoryInterface $repository */
+            $repository = app(ForumRepositoryInterface::class);
+
+            $repository->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
+            $repository->pushCriteria(new AccordingToUserOrder($this->userId));
+            $repository->applyCriteria();
+
+            return $repository->select(['name', 'path'])->whereNull('parent_id')->get();
+        });
+
+        foreach ($categories as $forum) {
+            $menu->forum->add($forum->name, route('forum.category', [$forum->path]));
+        }
 
         return $menu;
     }

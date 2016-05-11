@@ -161,7 +161,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Cache permissions for this user
+     * @return int[]
+     */
+    public function getGroupsId()
+    {
+        return $this->groups()->lists('id')->toArray();
+    }
+
+    /**
+     * Get user's permissions (including all user's groups)
      *
      * @return mixed
      */

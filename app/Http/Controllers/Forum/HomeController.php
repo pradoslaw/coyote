@@ -101,13 +101,7 @@ class HomeController extends BaseController
      */
     private function load()
     {
-        $groupsId = [];
-
-        if (auth()->check()) {
-            $groupsId = auth()->user()->groups()->lists('id')->toArray();
-        }
-
-        $this->topic->pushCriteria(new OnlyThoseWithAccess($groupsId));
+        $this->topic->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
         return $this->topic->paginate($this->userId, $this->sessionId);
     }
 

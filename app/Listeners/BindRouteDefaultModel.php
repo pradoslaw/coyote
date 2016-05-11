@@ -7,7 +7,7 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Container\Container as App;
 
-class RouteDefaultModelListener
+class BindRouteDefaultModel
 {
     /**
      * @var array
