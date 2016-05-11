@@ -133,7 +133,7 @@
                                     <img class="img-thumbnail" src="{{ user_photo(topic.poster_photo) }}" width="35" height="35">
                                 </a>
                             {% else %}
-                                <img class="img-thumbnail" src="{{ asset('img/avatar.png') }}" width="35" height="35">
+                                <img class="img-thumbnail" src="{{ cdn('img/avatar.png') }}" width="35" height="35">
                             {% endif %}
 
                             <span class="timestamp" data-timestamp="{{ topic.last_created_at|timestamp }}" title="{{ topic.last_created_at|format_date(false) }}">{{ topic.last_created_at|format_date }}</span><br>

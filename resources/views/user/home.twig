@@ -176,7 +176,7 @@
 
             $('#btn-delete-photo').on('click', function() {
                 $.post($(this).attr('href'), function() {
-                    $('#photo img, .avatar img').attr('src', '{{ asset('img/avatar.png') }}');
+                    $('#photo img, .avatar img').attr('src', '{{ cdn('img/avatar.png') }}');
                     $('#btn-delete-photo').remove();
                 });
 
