@@ -43,6 +43,8 @@ function Realtime() {
         };
 
         handler.onclose = function (e) {
+            console.log('Connection closed...');
+
             if (timerId === null) {
                 timerId = setInterval(function() {
                     connect();
