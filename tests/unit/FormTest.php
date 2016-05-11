@@ -68,7 +68,7 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertArrayHasKey('id', $form->getAttr());
         $this->assertEquals('http://bar.com', $form->getUrl());
 
-        $form->setAttr(['id' => 'submit-form', 'url' => 'http://kung-fu.com']);
+        $form->setAttr(['id' => 'submit-form', 'action' => 'http://kung-fu.com']);
         $this->assertEquals('http://kung-fu.com', $form->getUrl());
 
         $this->assertEquals('POST', $form->getMethod());
