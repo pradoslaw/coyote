@@ -214,8 +214,6 @@ $(function () {
     });
 
     ws.on('alert', function(data) {
-        console.log(data);
-
         Alerts.set(Alerts.get() + 1);
         Alerts.clear();
 
