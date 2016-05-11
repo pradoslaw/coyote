@@ -10,7 +10,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 
 ## Wymagania
 
-* PHP >= 5.6
+* PHP 7
     * Moduł GD
     * Moduł mongodb
     * Moduł mcrypt
@@ -29,7 +29,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 
 ## Instalacja
 
-* `apt-get install php5-gd` (dla PHP5) lub `sudo apt-get install php7.0-gd` (PHP 7)
+* `sudo apt-get install php7.0-gd`
 * `sudo pecl install mongodb`
 * `git clone https://github.com/adam-boduch/coyote.git .`
 * `psql -c 'create database coyote;' -U postgres`
@@ -40,11 +40,11 @@ Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja k
 ### Problemy podczas instalacji
 #### Class 'MongoClient' not found
 
-Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php5-fpm restart` (zakładając, że używasz PHP5 a nie PHP7)
+Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php7.0-fpm restart` (zakładając, że używasz PHP5 a nie PHP7)
 
 #### Use of undefined constant MCRYPT_RIJNDAEL_128 - assumed 'MCRYPT_RIJNDAEL_128'
 
-Czy biblioteka mcrypt jest zainstalowana? Jeżeli nie to `apt-get install php5-mcrypt`. Jeżeli tak to `service php5-fpm restart` (zakładając, że używasz PHP5 a nie PHP7)
+Czy biblioteka mcrypt jest zainstalowana? Jeżeli nie to `apt-get install php7.0-mcrypt`. Jeżeli tak to `service php7.0-fpm restart`.
 
 ## Uruchomienie
 

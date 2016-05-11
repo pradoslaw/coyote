@@ -1,6 +1,4 @@
-{% import 'components.forms' as forms %}
-
-<form {{ forms.attr({action: route('microblog.save', [microblog.id]), class: 'microblog-submit'}) }}>
-    {{ form_hidden('id', microblog.id) }}
-    {% include 'microblog.form' %}
-</form>
+{{ form_open({url: route('microblog.save', [microblog.id]), class: 'microblog-submit'}) }}
+{{ form_hidden('id', microblog.id) }}
+{% include 'microblog.form' %}
+{{ form_close() }}

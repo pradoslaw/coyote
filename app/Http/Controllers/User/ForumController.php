@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Events\UserWasSaved;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface as OrderRepository;
 use Illuminate\Http\Request;
@@ -62,6 +63,7 @@ class ForumController extends BaseController
         ]);
 
         $this->order->saveForUser($this->userId, $request->input('forum'));
+        event(new UserWasSaved($this->userId));
     }
 
     /**
@@ -70,6 +72,8 @@ class ForumController extends BaseController
     public function restore()
     {
         $this->order->deleteForUser($this->userId);
+        event(new UserWasSaved($this->userId));
+        
         return back();
     }
 }

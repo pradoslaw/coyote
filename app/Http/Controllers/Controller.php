@@ -2,8 +2,10 @@
 
 namespace Coyote\Http\Controllers;
 
+use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Services\Breadcrumb\Breadcrumb;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -13,7 +15,7 @@ use Lavary\Menu\Menu;
 
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests, GateFactory;
+    use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests, GateFactory, CacheFactory;
 
     /**
      * @var Breadcrumb
@@ -64,12 +66,10 @@ abstract class Controller extends BaseController
             'cdn' => config('app.cdn') ? ('//' . config('app.cdn')) : url()->route('home')
         ];
 
-        if ($this->userId) {
-            if (config('services.ws.host')) {
-                $this->public['ws'] = config('services.ws.host') . (':' . config('services.ws.port') ?: '');
-                // token contains channel name
-                $this->public['token'] = app('encrypter')->encrypt('user:' . $this->userId . '|' . time());
-            }
+        if ($this->userId && config('services.ws.host')) {
+            $this->public['ws'] = config('services.ws.host') . (':' . config('services.ws.port') ?: '');
+            // token contains channel name
+            $this->public['token'] = app(Encrypter::class)->encrypt('user:' . $this->userId . '|' . time());
         }
     }
 
@@ -78,14 +78,19 @@ abstract class Controller extends BaseController
      *
      * @return Menu
      */
-    protected function menu()
+    protected function buildMenu()
     {
-        return app('menu')->make('main', function ($menu) {
-            $menu->add('Forum', ['route' => 'forum.home'])->active('Forum/*');
+        $menu = app(Menu::class)->make('main', function ($menu) {
+            $menu->add('Forum', ['route' => 'forum.home', 'as' => 'forum'])->active('Forum/*');
             $menu->add('Mikroblogi', ['route' => 'microblog.home'])->active('Mikroblogi/*');
             $menu->add('Praca', ['route' => 'job.home'])->active('Praca/*');
             $menu->add('Pastebin', ['route' => 'pastebin.home'])->active('Pastebin/*');
         });
+
+        $cache = $this->getCacheFactory();
+        // cache user customized menu
+
+        return $menu;
     }
 
     /**
@@ -105,7 +110,7 @@ abstract class Controller extends BaseController
         }
 
         if (!request()->ajax()) {
-            $data['menu'] = $this->menu();
+            $data['menu'] = $this->buildMenu();
         }
 
         return view($view, $data);

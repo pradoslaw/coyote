@@ -3,8 +3,7 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Menu;
+use Lavary\Menu\Menu;
 
 /**
  * Class BaseController
@@ -15,9 +14,10 @@ class BaseController extends Controller
     /**
      * @return \Lavary\Menu\Menu
      */
-    protected function menu()
+    protected function buildMenu()
     {
-        return Menu::make('adm', function ($menu) {
+        return $this->getMenuFactory()->make('adm', function ($menu) {
+            /** @var \Lavary\Menu\Builder $menu */
             $dashboard = $menu->add('Strona główna', ['route' => 'adm.dashboard']);
             $dashboard->prepend('<i class="fa fa-desktop fa-fw"></i>');
 
@@ -34,5 +34,13 @@ class BaseController extends Controller
             $forum->add('Kategorie', ['route' => 'adm.forum.category']);
             $forum->add('Uprawnienia', ['route' => 'adm.forum.access']);
         });
+    }
+
+    /**
+     * @return Menu
+     */
+    protected function getMenuFactory()
+    {
+        return app(Menu::class);
     }
 }

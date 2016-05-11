@@ -2,6 +2,8 @@
 
 namespace Coyote\Services\FormBuilder;
 
+use Coyote\Services\FormBuilder\Fields\ParentType;
+
 abstract class Form extends FormRequest implements FormInterface
 {
     use CreateFieldTrait, RenderTrait;
@@ -28,8 +30,7 @@ abstract class Form extends FormRequest implements FormInterface
      * @var array
      */
     public $attr = [
-        'method' => self::POST,
-        'accept-charset' => 'UTF-8'
+        'method' => self::POST
     ];
 
     /**
@@ -109,7 +110,7 @@ abstract class Form extends FormRequest implements FormInterface
      */
     public function getUrl()
     {
-        return $this->attr['action'];
+        return $this->attr['url'];
     }
 
     /**
@@ -117,7 +118,7 @@ abstract class Form extends FormRequest implements FormInterface
      */
     public function setUrl($url)
     {
-        $this->attr['action'] = $url;
+        $this->attr['url'] = $url;
         return $this;
     }
 
@@ -135,7 +136,7 @@ abstract class Form extends FormRequest implements FormInterface
     public function setAttr($attr)
     {
         // user want's to set attributes BUT maybe he does not want to override url attribute?
-        $only = array_only($this->attr, ['action', 'method']);
+        $only = array_only($this->attr, ['url', 'method']);
 
         $this->attr = array_merge($only, $attr);
         return $this;

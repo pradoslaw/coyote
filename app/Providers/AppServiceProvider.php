@@ -19,6 +19,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // set cloud flare as trusted proxy
+        $this->app['request']->setTrustedProxies($this->app['config']->get('cloudflare.ip'));
+        $this->app['request']->server->set(
+            'HTTPS',
+            $this->app['request']->server('HTTP_X_FORWARDED_PROTO') === 'https'
+        );
+
         $this->app['validator']->extend('username', 'Coyote\UserValidator@validateName');
         $this->app['validator']->extend('user_unique', 'Coyote\UserValidator@validateUnique');
         $this->app['validator']->extend('user_exist', 'Coyote\UserValidator@validateExist');
