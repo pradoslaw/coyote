@@ -11,11 +11,12 @@ function Realtime() {
         return self;
     };
 
-    this.emit = function(event, data) {
+    this.emit = function(event, data, handler) {
         if (self._callbacks[event]) {
             var callbacks = self._callbacks[event].slice(0);
+
             for (var i = 0, len = callbacks.length; i < len; ++i) {
-                callbacks[i].apply(this, [data]);
+                callbacks[i].apply(this, [data, handler]);
             }
         }
 
@@ -38,7 +39,7 @@ function Realtime() {
             var data = JSON.parse(e.data);
 
             if (data.event) {
-                self.emit(data.event, data.data);
+                self.emit(data.event, data.data, handler);
             }
         };
 
@@ -60,3 +61,8 @@ function Realtime() {
 
 // global object
 var ws = new Realtime();
+
+// response to the heartbeat event
+ws.on('hb', function(data, handler) {
+    handler.send(data);
+});
