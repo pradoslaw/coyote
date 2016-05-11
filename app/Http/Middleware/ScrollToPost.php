@@ -58,7 +58,7 @@ class ScrollToPost
                 $postId = $this->post->getFirstUnreadPostId($topic->id, $max);
 
                 if ($postId && $postId !== $topic->first_post_id) {
-                    $url = route('forum.topic', [$forum->path, $topic->id, $topic->path]);
+                    $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug]);
                     return redirect()->to($url . '?p=' . $postId . '#id' . $postId);
                 }
             }

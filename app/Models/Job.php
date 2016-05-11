@@ -256,7 +256,7 @@ class Job extends Model
         $title = trim($title);
 
         $this->attributes['title'] = $title;
-        $this->attributes['path'] = str_slug($title, '_');
+        $this->attributes['slug'] = str_slug($title, '_');
     }
 
     /**

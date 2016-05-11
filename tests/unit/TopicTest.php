@@ -18,7 +18,7 @@ class TopicTest extends \Codeception\TestCase\Test
     protected function _before()
     {
         $fake = Factory::create();
-        $this->forum = Forum::create(['name' => $fake->name, 'path' => $fake->name, 'description' => 'Lorem ipsum']);
+        $this->forum = Forum::create(['name' => $fake->name, 'slug' => $fake->name, 'description' => 'Lorem ipsum']);
         $this->user = User::create(['name' => $fake->name, 'email' => $fake->email, 'password' => $fake->password]);
     }
 
@@ -35,7 +35,7 @@ class TopicTest extends \Codeception\TestCase\Test
             $userName = $fake->name;
         }
 
-        $topic = Topic::create(['subject' => $fake->name, 'path' => $fake->name, 'forum_id' => $this->forum->id]);
+        $topic = Topic::create(['subject' => $fake->name, 'slug' => $fake->name, 'forum_id' => $this->forum->id]);
         Post::create([
             'topic_id' => $topic->id,
             'forum_id' => $this->forum->id,
@@ -138,7 +138,7 @@ class TopicTest extends \Codeception\TestCase\Test
 
         $this->assertEquals(1, $this->tester->grabRecord('forums', ['id' => $this->forum->id])->topics);
 
-        $newForum = Forum::create(['name' => $fake->name, 'path' => $fake->name, 'description' => 'Lorem ipsum']);
+        $newForum = Forum::create(['name' => $fake->name, 'slug' => $fake->name, 'description' => 'Lorem ipsum']);
 
         $topic->forum_id = $newForum->id;
         $topic->save();

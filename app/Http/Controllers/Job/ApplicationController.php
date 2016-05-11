@@ -18,7 +18,7 @@ class ApplicationController extends Controller
      */
     public function submit(Job $job)
     {
-        $this->breadcrumb->push($job->title, route('job.offer', [$job->id, $job->path]));
+        $this->breadcrumb->push($job->title, route('job.offer', [$job->id, $job->slug]));
         $this->breadcrumb->push('Aplikuj na to stanowisko pracy');
 
         /**
@@ -83,7 +83,7 @@ class ApplicationController extends Controller
         });
 
         return redirect()
-            ->route('job.offer', [$job->id, $job->path])
+            ->route('job.offer', [$job->id, $job->slug])
             ->with('success', 'Zgłoszenie zostało prawidłowo wysłane.');
     }
 }

@@ -25,7 +25,7 @@ interface ForumRepositoryInterface extends RepositoryInterface
      *
      * @return array
      */
-    public function forumList($key = 'path');
+    public function forumList($key = 'slug');
 
     /**
      * @return array

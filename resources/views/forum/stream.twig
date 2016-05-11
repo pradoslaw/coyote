@@ -5,7 +5,7 @@
     <div id="index" class="sidebar">
         {% include "forum.partials.top" %}
 
-        {% set back_url = route('forum.topic', [forum.path, topic.id, topic.path]) %}
+        {% set back_url = route('forum.topic', [forum.slug, topic.id, topic.slug]) %}
         <h1>{{ link_to(back_url, topic.subject) }}</h1>
 
         <main id="mainbar">

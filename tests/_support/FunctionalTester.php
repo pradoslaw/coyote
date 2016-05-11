@@ -64,7 +64,7 @@ class FunctionalTester extends \Codeception\Actor
 
         $data = [
             'name' => $name = $fake->name,
-            'path' => str_slug($name),
+            'slug' => str_slug($name),
             'description' => $fake->text
         ];
         

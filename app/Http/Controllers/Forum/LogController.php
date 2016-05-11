@@ -46,7 +46,7 @@ class LogController extends BaseController
         $this->authorize('update', $forum);
 
         $this->breadcrumb($forum);
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
+        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
         $this->breadcrumb->push('Historia postu', route('forum.post.log', [$post->id]));
 
         $logs = $this->log->takeForPost($post->id);
@@ -95,7 +95,7 @@ class LogController extends BaseController
             $log->user_id = $this->userId;
             $log->save();
 
-            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
 
             stream(
                 Stream_Rollback::class,
@@ -104,6 +104,6 @@ class LogController extends BaseController
             );
         });
 
-        return redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path])->with('success', 'Post został przywrócony.');
+        return redirect()->route('forum.topic', [$forum->slug, $topic->id, $topic->slug])->with('success', 'Post został przywrócony.');
     }
 }

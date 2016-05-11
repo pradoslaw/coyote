@@ -99,11 +99,11 @@ abstract class Controller extends BaseController
             $repository->pushCriteria(new AccordingToUserOrder($this->userId));
             $repository->applyCriteria();
 
-            return $repository->select(['name', 'path'])->whereNull('parent_id')->get();
+            return $repository->select(['name', 'slug'])->whereNull('parent_id')->get();
         });
 
         foreach ($categories as $forum) {
-            $menu->forum->add($forum->name, route('forum.category', [$forum->path]));
+            $menu->forum->add($forum->name, route('forum.category', [$forum->slug]));
         }
 
         return $menu;

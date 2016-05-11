@@ -29,7 +29,7 @@ class ShowErrorIfNotFound extends AbstractMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $result = $this->wiki->findBy('path', trim($request->path(), '/'));
+        $result = $this->wiki->findBy('slug', trim($request->path(), '/'));
         if (empty($result)) {
             abort(404);
         }

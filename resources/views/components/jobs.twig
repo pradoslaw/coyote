@@ -1,12 +1,12 @@
 {% for job in jobs %}
     <div class="media">
         <div class="media-left">
-            <a href="{{ route('job.offer', [job.id, job.path]) }}" title="{{ job.title }}">
+            <a href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title }}">
                 <img class="media-object" src="{{ logo(job.logo) }}" alt="{{ job.firm_name }}">
             </a>
         </div>
         <div class="media-body">
-            <h5 class="media-heading"><a href="{{ route('job.offer', [job.id, job.path]) }}" title="{{ job.title }}">{{ job.title }}</a></h5>
+            <h5 class="media-heading"><a href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title }}">{{ job.title }}</a></h5>
             <p><a class="employer" href="{{ route('job.firm', [job.firm_name]) }}">{{ job.firm_name }}</a></p>
 
             <p class="bottom">

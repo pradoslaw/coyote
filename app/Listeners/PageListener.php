@@ -43,7 +43,7 @@ class PageListener implements ShouldQueue
             'content_type' => Topic::class
         ], [
             'title' => $event->topic->subject,
-            'path' => route('forum.topic', [$event->topic->forum->path, $event->topic->id, $event->topic->path], false)
+            'path' => route('forum.topic', [$event->topic->forum->slug, $event->topic->id, $event->topic->slug], false)
         ]);
     }
 
@@ -65,7 +65,7 @@ class PageListener implements ShouldQueue
             'content_type' => Forum::class
         ], [
             'title' => $event->forum->name,
-            'path' => route('forum.category', [$event->forum->path], false)
+            'path' => route('forum.category', [$event->forum->slug], false)
         ]);
     }
 
@@ -109,7 +109,7 @@ class PageListener implements ShouldQueue
             'content_type'  => Job::class,
         ], [
             'title' => $event->job->title,
-            'path' => route('job.offer', [$event->job->id, $event->job->path], false)
+            'path' => route('job.offer', [$event->job->id, $event->job->slug], false)
         ]);
     }
 

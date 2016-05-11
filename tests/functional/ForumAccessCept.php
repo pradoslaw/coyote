@@ -2,7 +2,7 @@
 $I = new FunctionalTester($scenario);
 $I->wantTo('test access forum only for admin users');
 
-$forum = $I->createForum(['name' => 'Admin forum', 'path' => 'Admin_forum']);
+$forum = $I->createForum(['name' => 'Admin forum', 'slug' => 'Admin_forum']);
 
 // tabela nie ma klucza glownego, dlatego tworzymy przez model poniewaz codeception
 // zawsze zaklada ze jest klucz "id"

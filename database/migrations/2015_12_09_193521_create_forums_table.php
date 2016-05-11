@@ -16,7 +16,7 @@ class CreateForumsTable extends Migration
             $table->smallInteger('id', true);
             $table->smallInteger('parent_id')->nullable();
             $table->string('name', 50);
-            $table->string('path', 50);
+            $table->string('slug', 50);
             $table->string('title', 200)->nullable();
             $table->string('description', 255);
             $table->string('section', 50)->nullable();

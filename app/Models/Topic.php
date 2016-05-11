@@ -8,7 +8,7 @@ use Coyote\Models\Scopes\Sortable;
 
 /**
  * @property int $id
- * @property string $path
+ * @property string $slug
  * @property int $replies
  * @property int $replies_real
  * @property string $last_post_created_at
@@ -31,7 +31,7 @@ class Topic extends Model
      *
      * @var array
      */
-    protected $fillable = ['subject', 'path', 'forum_id', 'is_sticky', 'is_announcement', 'poll_id'];
+    protected $fillable = ['subject', 'slug', 'forum_id', 'is_sticky', 'is_announcement', 'poll_id'];
 
     /**
      * @var string
@@ -76,7 +76,7 @@ class Topic extends Model
     public function setSubjectAttribute($subject)
     {
         $this->attributes['subject'] = $subject;
-        $this->attributes['path'] = str_slug($subject, '_');
+        $this->attributes['slug'] = str_slug($subject, '_');
     }
 
     /**

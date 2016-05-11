@@ -20,7 +20,7 @@ class AcceptController extends BaseController
         }
 
         // post belongs to this topic:
-        $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject', 'first_post_id', 'is_locked']);
+        $topic = $this->topic->find($post->topic_id, ['id', 'slug', 'subject', 'first_post_id', 'is_locked']);
 
         if ($topic->is_locked) {
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
@@ -39,7 +39,7 @@ class AcceptController extends BaseController
             $result = $topic->accept()->where('topic_id', $topic->id)->first();
 
             // build url to post
-            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
             // excerpt of post text. used in reputation and alert
             $excerpt = excerpt($post->text);
 

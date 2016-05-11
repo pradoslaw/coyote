@@ -1,4 +1,4 @@
-{% set url = route('forum.topic', [forum.path, topic.id, topic.path], false) ~ '?p=' ~ post.id ~ '#id' ~ post.id %}
+{% set url = route('forum.topic', [forum.slug, topic.id, topic.slug], false) ~ '?p=' ~ post.id ~ '#id' ~ post.id %}
 {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
 
 <div class="post" {{ index == 0 ? 'id="first-post"' }}>
@@ -181,7 +181,7 @@
                             <i class="fa fa-plus"></i>
                         </a>
 
-                        <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="{{ route('forum.post.submit', [forum.path, topic.id]) }}?quote={{ post.id }}" class="btn btn-xs btn-quote">
+                        <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}?quote={{ post.id }}" class="btn btn-xs btn-quote">
                             <i class="fa fa-quote-right"></i>
                             <span class="hidden-xs">Cytuj</span>
                         </a>
@@ -202,11 +202,11 @@
                     {% endif %}
 
                     {% if can('update', post, forum) and not post.deleted_at %}
-                        <a href="{{ route('forum.post.submit', [forum.path, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
+                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
                             <i class="fa fa-pencil"></i>
                             <span class="hidden-xs">Edytuj</span>
                         </a>
-                        <a href="{{ route('forum.post.edit', [forum.path, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="{{ post.id }}" class="btn btn-xs btn-fast-edit">
+                        <a href="{{ route('forum.post.edit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="{{ post.id }}" class="btn btn-xs btn-fast-edit">
                             <i class="fa fa-pencil"></i>
                             <span class="hidden-xs">Szybka edycja</span>
                         </a>

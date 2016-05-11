@@ -17,7 +17,7 @@ class CreateJobsTable extends Migration
             $table->integer('user_id');
             $table->smallInteger('firm_id')->nullable();
             $table->string('title');
-            $table->string('path');
+            $table->string('slug');
             $table->timestampsTz();
             $table->softDeletes();
             $table->text('description');

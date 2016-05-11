@@ -11,14 +11,14 @@
             </ul>
 
             {% if forum is defined and not forum.is_locked %}
-                <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right" style="margin-top: 6px">Nowy wątek</a>
+                <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right" style="margin-top: 6px">Nowy wątek</a>
             {% endif %}
             <div class="clearfix"></div>
 
             <table>
                 {% set previous = null %}
                 {% for topic in topics %}
-                    {% set url = route('forum.topic', [topic.forum_path, topic.id, topic.path]) %}
+                    {% set url = route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) %}
 
                     {% if user_id is defined %}
                         {% set url = url ~ '?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id %}
@@ -105,7 +105,7 @@
 
                         {% if forum is not defined %}
                             <td class="col-category">
-                                {{ link_to_route('forum.category', topic.forum_name, [topic.forum_path]) }}
+                                {{ link_to_route('forum.category', topic.forum_name, [topic.forum_slug]) }}
                             </td>
                         {% endif %}
 
@@ -164,7 +164,7 @@
                                 <i class="fa fa-arrow-circle-right"></i>
                             </a>
 
-                            {{ form_select('forum', forumList, forum.path, {'class': 'pull-right', 'id': 'sel-forum-list'}) }}
+                            {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list'}) }}
                         {% endif %}
                     </td>
                 </tr>
@@ -172,7 +172,7 @@
         </div>
 
         {% if topics.count() > 10 and forum is defined and not forum.is_locked %}
-            <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
         {% endif %}
     </div>
 </section>

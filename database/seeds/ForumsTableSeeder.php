@@ -55,7 +55,7 @@ class ForumsTableSeeder extends Seeder
 
         $row = Coyote\Forum::create([
             'name' => 'Newbie',
-            'path' => 'Newbie',
+            'slug' => 'Newbie',
             'section' => 'Podstawy programowania',
             'description' => 'Jeżeli jesteś kompletnym laikiem jeżeli chodzi o programowanie, to jest odpowiednia kategoria dla Ciebie. Tutaj możesz zadawać pytania o podstawy programowania, nie narażając się, że Twój temat zostanie skasowany z powodu niskiego poziomu merytorycznego.'
         ]);
@@ -64,7 +64,7 @@ class ForumsTableSeeder extends Seeder
 
         $parent = Coyote\Forum::create([
             'name' => 'Python',
-            'path' => 'Python',
+            'slug' => 'Python',
             'description' => 'Forum o Pythonie.'
         ]);
 
@@ -72,7 +72,7 @@ class ForumsTableSeeder extends Seeder
 
         $row = Coyote\Forum::create([
             'name' => 'Dla początkujących',
-            'path' => 'Python/Dla_poczatkujacych',
+            'slug' => 'Python/Dla_poczatkujacych',
             'description' => 'Forum o Pythonie dla dla początkujących.',
             'parent_id' => $parent->id,
             'section' => 'Podkategorie'
@@ -82,7 +82,7 @@ class ForumsTableSeeder extends Seeder
 
         $row = Coyote\Forum::create([
             'name' => 'Dla zaawansowanych',
-            'path' => 'Python/Dla_zaawansowanych',
+            'slug' => 'Python/Dla_zaawansowanych',
             'description' => 'Forum o Pythonie dla zaawansowanych',
             'parent_id' => $parent->id
         ]);
@@ -91,7 +91,7 @@ class ForumsTableSeeder extends Seeder
 
         $row = Coyote\Forum::create([
             'name' => '4programmers.net',
-            'path' => '4programmers',
+            'slug' => '4programmers',
             'description' => 'Przejdź do 4programmers.net',
             'url' => 'http://4programmers.net',
             'section' => 'Inne'

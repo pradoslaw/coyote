@@ -34,7 +34,7 @@
             {{ form_open({'url': route('job.submit'), 'class': '', 'id': 'job-posting'}) }}
                 {{ form_hidden('id', job.id) }}
                 {{ form_hidden('firm_id', job.firm_id) }}
-                {{ form_hidden('path', job.path) }}
+                {{ form_hidden('slug', job.slug) }}
                 {{ form_hidden('done', 0) }}
 
                 <div class="panel panel-default">

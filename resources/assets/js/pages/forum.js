@@ -153,7 +153,7 @@ $(function () {
      * Move to another category
      */
     $('#btn-move ul a').click(function() {
-        $('#modal-move').modal('show').find(':hidden[name="path"]').val($(this).data('path'));
+        $('#modal-move').modal('show').find(':hidden[name="slug"]').val($(this).data('slug'));
 
         return false;
     });

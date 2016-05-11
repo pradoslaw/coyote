@@ -29,7 +29,7 @@
         <a class="btn-move" href="javascript:"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
     </li>
     <li>
-        <a class="btn-report" href="{{ route('flag') }}" data-url="{{ route('job.offer', [job.id, job.path]) }}" data-metadata="{{ {'job_id': job.id, 'permission': 'job-delete'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
+        <a class="btn-report" href="{{ route('flag') }}" data-url="{{ route('job.offer', [job.id, job.slug]) }}" data-metadata="{{ {'job_id': job.id, 'permission': 'job-delete'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
     </li>
 </ul>
 

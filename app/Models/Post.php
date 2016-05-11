@@ -194,7 +194,7 @@ class Post extends Model
     protected function getIndexBody()
     {
         // additionally index few fields from topics table...
-        $topic = $this->topic()->first(['subject', 'path', 'forum_id', 'id', 'first_post_id']);
+        $topic = $this->topic()->first(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
         // we need to index every field from posts except:
         $body = array_except($this->toArray(), ['deleted_at', 'edit_count', 'editor_id']);
 
@@ -210,7 +210,7 @@ class Post extends Model
 
         return array_merge($body, [
             'topic' => $topic,
-            'forum' => $this->forum()->first(['name', 'path'])
+            'forum' => $this->forum()->first(['name', 'slug'])
         ]);
     }
 }

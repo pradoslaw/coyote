@@ -9,7 +9,7 @@
     {% set items_id = auth_check() ? topic.poll.userVotedItems(user('id')) : null %}
     {% set is_voteable = not items_id and auth_check() and not expired and not topic.is_locked %}
 
-    {{ form_open({url: route('forum.poll.vote', [forum.path, topic.poll.id]), id: 'poll-form'}) }}
+    {{ form_open({url: route('forum.poll.vote', [forum.slug, topic.poll.id]), id: 'poll-form'}) }}
     {{ form_hidden('max_items', topic.poll.max_items) }}
 
     <div class="box-poll">

@@ -20,8 +20,8 @@ class ForumTest extends \Codeception\TestCase\Test
 
     private function create()
     {
-        Forum::create(['name' => 'A', 'path' => 'A', 'description' => 'Lorem ipsum']);
-        Forum::create(['name' => 'B', 'path' => 'B', 'description' => 'Lorem ipsum']);
+        Forum::create(['name' => 'A', 'slug' => 'A', 'description' => 'Lorem ipsum']);
+        Forum::create(['name' => 'B', 'slug' => 'B', 'description' => 'Lorem ipsum']);
     }
 
     // tests

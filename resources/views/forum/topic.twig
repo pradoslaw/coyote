@@ -32,7 +32,7 @@
             </p>
         {% endif %}
 
-        <h1>{{ link_to_route('forum.topic', topic.subject, [forum.path, topic.id, topic.path]) }}</h1>
+        <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
 
         <nav>
             {{ paginate|raw }}
@@ -49,8 +49,8 @@
 
                     <div id="box-post" class="table-forum">
                         {% if is_writeable %}
-                            <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
-                            <a href="{{ route('forum.topic.submit', [forum.path]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                            <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
+                            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
                         {% endif %}
 
                         <div class="clearfix"></div>
@@ -68,13 +68,13 @@
                                 <a id="btn-goto" class="btn pull-right" href="javascript:">
                                     <i class="fa fa-arrow-circle-right"></i>
                                 </a>
-                                {{ form_select('forum', forumList, forum.path, {'class': 'pull-right', 'id': 'sel-forum-list'}) }}
+                                {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list'}) }}
                                 <div class="clearfix"></div>
                             </div>
                         </div>
 
                         {% if is_writeable %}
-                            <a href="{{ route('forum.post.submit', [forum.path, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
+                            <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
 
                             {% if auth_check() and not too_old %}
                                 <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
@@ -183,11 +183,11 @@
                                 <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
 
                                 <ul id="collapse-sub" class="collapse">
-                                    {% for path, name in forumList %}
-                                        {% if path == forum.path %}
+                                    {% for slug, name in forumList %}
+                                        {% if slug == forum.slug %}
                                             <li><a style="color: #ccc">{{ name|raw }}</a></li>
                                         {% else %}
-                                            <li><a data-path="{{ path }}" href="javascript:">{{ name|raw }}</a></li>
+                                            <li><a data-slug="{{ slug }}" href="javascript:">{{ name|raw }}</a></li>
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -210,7 +210,7 @@
                             <ul>
                                 {% for page in mlt %}
                                     <li>
-                                        <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.path, page.topic.id, page.topic.path]) }}" title="{{ page.topic.subject }}">
+                                        <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.slug, page.topic.id, page.topic.slug]) }}" title="{{ page.topic.subject }}">
                                             <strong>{{ page.topic.subject }}</strong>
                                             <small>{{ page.updated_at|format_date }}</small>
                                         </a>
@@ -256,7 +256,7 @@
         {% if can('move', forum) %}
             {{ form_open({'url': route('forum.move', [topic.id])}) }}
                 <div class="modal fade" id="modal-move" tabindex="-1" role="dialog" aria-labelledby="modal-move" aria-hidden="true">
-                    {{ form_hidden('path') }}
+                    {{ form_hidden('slug') }}
 
                     <div class="modal-dialog">
                         <div class="modal-content">

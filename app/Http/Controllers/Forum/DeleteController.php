@@ -54,7 +54,7 @@ class DeleteController extends BaseController
 
         $url = \DB::transaction(function () use ($post, $topic, $forum, $request) {
             // build url to post
-            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
 
             $notification = [
                 'sender_id'   => $this->userId,
@@ -78,7 +78,7 @@ class DeleteController extends BaseController
             if ($post->id === $topic->first_post_id) {
                 if (is_null($topic->deleted_at)) {
                     $activity = Stream_Delete::class;
-                    $redirect = redirect()->route('forum.category', [$forum->path]);
+                    $redirect = redirect()->route('forum.category', [$forum->slug]);
 
                     $subscribersId = $topic->subscribers()->lists('user_id');
                     if ($post->user_id !== null) {
@@ -104,7 +104,7 @@ class DeleteController extends BaseController
                     $topic->restore();
 
                     event(new TopicWasSaved($topic));
-                    $redirect = redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path]);
+                    $redirect = redirect()->route('forum.topic', [$forum->slug, $topic->id, $topic->slug]);
                 }
 
                 $object = (new Stream_Topic())->map($topic, $forum);

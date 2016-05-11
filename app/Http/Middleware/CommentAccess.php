@@ -111,7 +111,7 @@ class CommentAccess
             return response('Unauthorized.', 401);
         }
 
-        $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'path', 'subject', 'is_locked']);
+        $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'slug', 'subject', 'is_locked']);
 
         // Only moderators can delete this post if topic (or forum) was locked
         if ($this->gate->denies('delete', $forum)) {

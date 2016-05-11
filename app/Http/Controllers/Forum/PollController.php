@@ -37,7 +37,7 @@ class PollController extends BaseController
             ]);
         }
 
-        return view('forum.partials.poll', ['forum' => ['path' => $forum->path], 'topic' => [
+        return view('forum.partials.poll', ['forum' => ['slug' => $forum->slug], 'topic' => [
             'is_locked' => false,
             'poll_id' => $pollId,
             'poll' => $poll

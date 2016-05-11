@@ -143,7 +143,7 @@ class TopicController extends BaseController
         }
 
         $this->breadcrumb($forum);
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
+        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
         // create forum list for current user (according to user's privileges)
         $this->pushForumCriteria();

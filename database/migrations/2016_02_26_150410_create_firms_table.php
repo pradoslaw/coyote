@@ -16,7 +16,7 @@ class CreateFirmsTable extends Migration
             $table->smallInteger('id', true);
             $table->integer('user_id');
             $table->string('name', 100);
-            $table->string('path')->nullable();
+            $table->string('slug')->nullable();
             $table->timestampsTz();
             $table->softDeletes();
             $table->string('logo', 45)->nullable();

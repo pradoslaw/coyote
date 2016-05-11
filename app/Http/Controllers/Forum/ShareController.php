@@ -21,14 +21,14 @@ class ShareController extends BaseController
             abort(404);
         }
 
-        $forum = $this->forum->find($post->forum_id, ['id', 'path']);
+        $forum = $this->forum->find($post->forum_id, ['id', 'slug']);
 
-        if ($post->deleted_at !== null && Gate::denies('delete', $forum)) {
+        if ($post->deleted_at !== null && $this->getGateFactory()->denies('delete', $forum)) {
             abort(404);
         }
 
-        $topic = $this->topic->find($post->topic_id, ['id', 'path']);
-        $url = route('forum.topic', [$forum->path, $topic->id, $topic->path]) . '?p=' . $id . '#id' . $id;
+        $topic = $this->topic->find($post->topic_id, ['id', 'slug']);
+        $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug]) . '?p=' . $id . '#id' . $id;
 
         return redirect($url);
     }

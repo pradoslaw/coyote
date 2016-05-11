@@ -13,7 +13,7 @@
         <table>
             <tbody>
                 {% for job in jobs %}
-                    {% set url = route('job.offer', [job.id, job.path]) %}
+                    {% set url = route('job.offer', [job.id, job.slug]) %}
 
                     <tr>
                         <td class="col-logo">

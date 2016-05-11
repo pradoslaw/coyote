@@ -14,7 +14,7 @@ class Forum extends Object
     {
         $this->id = $forum->id;
         $this->displayName = $forum->name;
-        $this->url = route('forum.category', [$forum->path], false);
+        $this->url = route('forum.category', [$forum->slug], false);
 
         return $this;
     }

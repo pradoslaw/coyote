@@ -37,7 +37,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                         'topic_track.marked_at AS topic_marked_at',
                         'subject',
                         'topics.id AS topic_id',
-                        'topics.path AS topic_path',
+                        'topics.slug AS topic_slug',
                         'posts.user_id',
                         'posts.created_at',
                         'posts.user_name AS anonymous_name',
@@ -77,7 +77,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         foreach ($result as &$row) {
             $row->forum_unread = $row->created_at > $row->forum_marked_at;
             $row->topic_unread = $row->created_at > $row->topic_marked_at && $row->created_at > $row->forum_marked_at;
-            $row->route = route('forum.topic', [$row->path, $row->topic_id, $row->topic_path]);
+            $row->route = route('forum.topic', [$row->slug, $row->topic_id, $row->topic_slug]);
         }
 
         // execute query and fetch all forum categories
@@ -190,12 +190,12 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      * @param string $key
      * @return array
      */
-    public function forumList($key = 'path')
+    public function forumList($key = 'slug')
     {
         $this->applyCriteria();
 
         $list = [];
-        $result = $this->model->select(['forums.id', 'name', 'path', 'parent_id'])->get();
+        $result = $this->model->select(['forums.id', 'name', 'slug', 'parent_id'])->get();
         $tree = $this->buildTree($result);
 
         foreach ($tree as $parent) {

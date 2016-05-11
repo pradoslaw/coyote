@@ -64,7 +64,7 @@
                                     </div>
 
                                     <div class="col-xs-10 col-subject">
-                                         <h5><a href="{{ route('forum.topic', [post.forum.path, post.topic_id, post.topic.path]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(highlights[post.id]['topic.subject'], post.topic.subject) }}</a></h5>
+                                         <h5><a href="{{ route('forum.topic', [post.forum.slug, post.topic_id, post.topic.slug]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(highlights[post.id]['topic.subject'], post.topic.subject) }}</a></h5>
                                     </div>
                                 </div>
 
@@ -77,7 +77,7 @@
 
                                         <p class="hidden-xs">
                                             <strong>Kategoria:</strong>
-                                            <small>{{ link_to_route('forum.category', post.forum.name, [post.forum.path]) }}</small>
+                                            <small>{{ link_to_route('forum.category', post.forum.name, [post.forum.slug]) }}</small>
                                         </p>
 
                                         {% if can('forum-update') %}

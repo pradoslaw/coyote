@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $prune_days
  * @property int $prune_last
  * @property string $name
- * @property string $path
+ * @property string $slug
  * @property string $title
  * @property string $description
  * @property string $section
@@ -32,7 +32,7 @@ class Forum extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'name', 'path', 'description', 'section', 'url'];
+    protected $fillable = ['parent_id', 'name', 'slug', 'description', 'section', 'url'];
 
     /**
      * @var bool

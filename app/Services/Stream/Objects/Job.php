@@ -13,7 +13,7 @@ class Job extends Object
     public function map(Model $job)
     {
         $this->id = $job->id;
-        $this->url = route('job.offer', [$job->id, $job->path], false);
+        $this->url = route('job.offer', [$job->id, $job->slug], false);
         $this->displayName = excerpt($job->description);
 
         return $this;

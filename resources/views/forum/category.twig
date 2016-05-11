@@ -6,7 +6,7 @@
 {% block container %}
 
     <div id="index" class="sidebar">
-        <h1>{{ link_to_route('forum.category', forum.title|default(forum.name), [forum.path]) }}</h1>
+        <h1>{{ link_to_route('forum.category', forum.title|default(forum.name), [forum.slug]) }}</h1>
 
         <nav>
             {{ topics.render()|raw }}
@@ -44,7 +44,7 @@
                 <div class="box">
                     <ul class="side-menu">
                         <li class="btn-mark-read">
-                            <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.category.mark', [forum.path]) }}" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
+                            <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.category.mark', [forum.slug]) }}" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
                         </li>
                         <li class="btn-atom">
                             <a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>

@@ -35,7 +35,7 @@ class SubmitController extends BaseController
         $this->breadcrumb($forum);
 
         if (!empty($topic->id)) {
-            $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
+            $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
             if ($post === null) {
                 $this->breadcrumb->push('Odpowiedz', url($request->path()));
@@ -43,7 +43,7 @@ class SubmitController extends BaseController
                 $this->breadcrumb->push('Edycja', url($request->path()));
             }
         } else {
-            $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->path]));
+            $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->slug]));
         }
 
         if (!empty($post)) {
@@ -89,7 +89,7 @@ class SubmitController extends BaseController
             $this->post->save($request, auth()->user(), $forum, $topic, $post, $poll);
 
             // url to the post
-            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false) . '?p=' . $post->id . '#id' . $post->id;
+            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false) . '?p=' . $post->id . '#id' . $post->id;
 
             // parsing text and store it in cache
             // it's important. don't remove below line so that text in activity can be saved without markdown
@@ -198,7 +198,7 @@ class SubmitController extends BaseController
             $topic->fill(['subject' => $request->get('subject')]);
 
             $post = $this->post->find($topic->first_post_id);
-            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false);
+            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
 
             if ($topic->isDirty()) {
                 $original = $topic->getOriginal();

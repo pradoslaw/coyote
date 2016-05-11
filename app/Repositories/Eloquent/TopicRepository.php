@@ -70,7 +70,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         'poster.is_active AS poster_is_active',
                         'poster.is_blocked AS poster_is_blocked',
                         'poster.photo AS poster_photo',
-                        'forums.path AS forum_path',
+                        'forums.slug AS forum_slug',
                         'forums.name AS forum_name',
                         'prev.name AS prev_forum_name',
                         'pa.post_id AS post_accept_id'
@@ -127,9 +127,11 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         }
 
         return new LengthAwarePaginator(
-            $result, $pagination->total(), $perPage, LengthAwarePaginator::resolveCurrentPage(), [
-                'path' => LengthAwarePaginator::resolveCurrentPath()
-            ]
+            $result,
+            $pagination->total(),
+            $perPage,
+            LengthAwarePaginator::resolveCurrentPage(),
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
     }
 
@@ -186,7 +188,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     'id',
                     'forum_id',
                     'subject',
-                    'path',
+                    'slug',
                     'is_locked',
                     'last_post_created_at',
                     'views',
@@ -209,7 +211,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         $this->applyCriteria();
 
         return $this->model
-                    ->select(['topics.*', 'forums.name', 'forums.path AS forum_path'])
+                    ->select(['topics.*', 'forums.name', 'forums.slug AS forum_slug'])
                     ->from(\DB::raw("($sub) AS topics"))
                     ->join('forums', 'forums.id', '=', 'forum_id')
                     ->where('forums.is_locked', 0)
@@ -233,9 +235,9 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         'topics.id',
                         'forum_id',
                         'subject',
-                        'topics.path',
+                        'topics.slug',
                         'forums.name',
-                        'forums.path AS forum_path',
+                        'forums.slug AS forum_slug',
                         'last_post_created_at',
                         'views',
                         'score',
@@ -273,9 +275,9 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         'topics.id',
                         'topics.forum_id',
                         'topics.subject',
-                        'topics.path',
+                        'topics.slug',
                         'forums.name',
-                        'forums.path AS forum_path',
+                        'forums.slug AS forum_slug',
                         'last_post_created_at',
                         'views',
                         'topics.score',

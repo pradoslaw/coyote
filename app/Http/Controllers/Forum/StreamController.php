@@ -16,7 +16,7 @@ class StreamController extends BaseController
      */
     public function index($topic, Stream $stream)
     {
-        $forum = $this->forum->find($topic->forum_id, ['id', 'path', 'name', 'parent_id']);
+        $forum = $this->forum->find($topic->forum_id, ['id', 'slug', 'name', 'parent_id']);
         $this->authorize('update', $forum);
 
         $activities = $stream->whereNested(function ($query) use ($topic) {
@@ -43,7 +43,7 @@ class StreamController extends BaseController
         $decorate = $this->getStreamFactory()->decorate($collection);
 
         $this->breadcrumb($forum);
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->path, $topic->id, $topic->path]));
+        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
         $this->breadcrumb->push('Dziennik zdarzeń', route('forum.stream', [$topic->id]));
 
         return $this->view('forum.stream')->with(compact('topic', 'forum', 'activities', 'decorate'));

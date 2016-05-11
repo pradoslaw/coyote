@@ -27,7 +27,7 @@ class VoteController extends BaseController
             return response()->json(['error' => 'Forum jest zablokowane.'], 500);
         }
 
-        $topic = $this->topic->find($post->topic_id, ['id', 'path', 'subject', 'is_locked']);
+        $topic = $this->topic->find($post->topic_id, ['id', 'slug', 'subject', 'is_locked']);
         if ($topic->is_locked) {
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
         }
@@ -36,7 +36,7 @@ class VoteController extends BaseController
             $result = $post->votes()->forUser($this->userId)->first();
 
             // build url to post
-            $url = route('forum.topic', [$forum->path, $topic->id, $topic->path], false) . '?p=' . $post->id . '#id' . $post->id;
+            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false) . '?p=' . $post->id . '#id' . $post->id;
             // excerpt of post text. used in reputation and alert
             $excerpt = excerpt($post->text);
 

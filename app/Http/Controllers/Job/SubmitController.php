@@ -381,7 +381,7 @@ class SubmitController extends Controller
             stream($activity, (new Stream_Job)->map($job));
         });
 
-        return redirect()->route('job.offer', [$job->id, $job->path])->with('success', 'Oferta została prawidłowo dodana.');
+        return redirect()->route('job.offer', [$job->id, $job->slug])->with('success', 'Oferta została prawidłowo dodana.');
     }
 
     /**
@@ -434,7 +434,7 @@ class SubmitController extends Controller
         if (empty($job['id'])) {
             $this->breadcrumb->push('Wystaw ofertę pracy', route('job.submit'));
         } else {
-            $this->breadcrumb->push($job['title'], route('job.offer', [$job['id'], $job['path']]));
+            $this->breadcrumb->push($job['title'], route('job.offer', [$job['id'], $job['slug']]));
             $this->breadcrumb->push('Edycja oferty', route('job.submit'));
         }
     }

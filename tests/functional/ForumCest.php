@@ -14,7 +14,7 @@ class ForumCest
         $I->click($forum->name, 'a');
         $I->dontSee('Nowy wątek');
 
-        $I->amOnRoute('forum.topic.submit', [$forum->path]);
+        $I->amOnRoute('forum.topic.submit', [$forum->slug]);
         $I->seeResponseCodeIs(401);
     }
 

@@ -18,7 +18,7 @@ class MoveController extends BaseController
      */
     public function index($topic, Request $request)
     {
-        $rules = ['path' => 'required|exists:forums'];
+        $rules = ['slug' => 'required|exists:forums'];
 
         // it must be like that. only if reason has been chosen, we need to validate it.
         if ($request->get('reason')) {
@@ -29,7 +29,7 @@ class MoveController extends BaseController
         $old = $topic->forum()->first(); // old category
 
         $this->authorize('move', $old);
-        $forum = $this->forum->findBy('path', $request->get('path'));
+        $forum = $this->forum->findBy('slug', $request->get('slug'));
 
         if (!$forum->userCanAccess($this->userId)) {
             abort(401);
@@ -71,7 +71,7 @@ class MoveController extends BaseController
             if ($recipientsId) {
                 app()->make('Alert\Topic\Move')
                     ->with($notification)
-                    ->setUrl(route('forum.topic', [$forum->path, $topic->id, $topic->path], false))
+                    ->setUrl(route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false))
                     ->setUsersId($recipientsId)
                     ->notify();
             }
@@ -81,6 +81,6 @@ class MoveController extends BaseController
             stream(Stream_Move::class, $object, (new Stream_Forum())->map($forum));
         });
 
-        return redirect()->route('forum.topic', [$forum->path, $topic->id, $topic->path])->with('success', 'Wątek został przeniesiony');
+        return redirect()->route('forum.topic', [$forum->slug, $topic->id, $topic->slug])->with('success', 'Wątek został przeniesiony');
     }
 }

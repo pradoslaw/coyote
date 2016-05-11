@@ -54,11 +54,11 @@ abstract class BaseController extends Controller
     public function breadcrumb($forum)
     {
         if ($forum->parent_id) {
-            $parent = $this->forum->find($forum->parent_id, ['path', 'name']);
-            $this->breadcrumb->push($parent->name, route('forum.category', [$parent->path]));
+            $parent = $this->forum->find($forum->parent_id, ['slug', 'name']);
+            $this->breadcrumb->push($parent->name, route('forum.category', [$parent->slug]));
         }
 
-        $this->breadcrumb->push($forum->name, route('forum.category', [$forum->path]));
+        $this->breadcrumb->push($forum->name, route('forum.category', [$forum->slug]));
     }
 
     /**
@@ -140,7 +140,7 @@ abstract class BaseController extends Controller
             'topic' => $topic,
             'post' => $post
         ], [
-            'url' => route('forum.post.submit', [$forum->path, $topic ? $topic->id : null, $post ? $post->id : null]),
+            'url' => route('forum.post.submit', [$forum->slug, $topic ? $topic->id : null, $post ? $post->id : null]),
             'attr' => [
                 'id' => 'submit-form',
                 'method' => PostForm::POST

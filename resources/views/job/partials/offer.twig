@@ -17,7 +17,7 @@
         {% endif %}
 
         <div id="job-offer" class="media-body">
-            <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.path]) }}</h1>
+            <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
 
             {% if firm.name %}
                 <a class="employer" title="Zobacz oferty pracy z firmy {{ firm.name }}" href="{{ route('job.firm', [firm.name]) }}">{{ firm.name }}</a>

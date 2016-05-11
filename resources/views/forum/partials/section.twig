@@ -2,7 +2,7 @@
     <div class="panel-body">
         <h2 class="pull-left">{{ name }}</h2>
 
-        <a class="pull-right toggle {{ not collapse[forums[0].id] ? 'in' }}" data-toggle="collapse" href="#{{ name|replace(' ', '-') }}" aria-expanded="true" data-ajax="{{ route('forum.section', [forums[0].path]) }}">
+        <a class="pull-right toggle {{ not collapse[forums[0].id] ? 'in' }}" data-toggle="collapse" href="#{{ name|replace(' ', '-') }}" aria-expanded="true" data-ajax="{{ route('forum.section', [forums[0].slug]) }}">
             <i class="fa fa-minus-square-o"></i>
             <i class="fa fa-plus-square-o"></i>
         </a>
@@ -16,7 +16,7 @@
                     <tr id="forum-{{ forum.id }}">
                         <td class="col-icon hidden-xxs">
                             {% if forum.forum_unread %}
-                                <a href="{{ route('forum.category.mark', [forum.path]) }}"
+                                <a href="{{ route('forum.category.mark', [forum.slug]) }}"
                                    class="ico {{ forum.is_locked ? 'lock' }} {{ forum.forum_unread ? 'new' }}"
                                    title="{{ forum.is_locked ? 'Forum zablokowane' : 'Kliknij, aby oznaczyć jako przeczytane' }}"></a>
                             {% elseif forum.is_locked %}
@@ -26,7 +26,7 @@
                             {% endif %}
                         </td>
                         <td class="col-forum-description">
-                            <h3><a title="{{ forum.name }}" data-category="Forum-Name" href="{{ route('forum.category', [forum.path]) }}">{{ forum.name }}</a></h3>
+                            <h3><a title="{{ forum.name }}" data-category="Forum-Name" href="{{ route('forum.category', [forum.slug]) }}">{{ forum.name }}</a></h3>
 
                             <p>{{ forum.description }}</p>
 
@@ -34,7 +34,7 @@
                                 <ul class="list-unstyled">
                                     {% for sub in forum.subs %}
                                         <li {{ sub.forum_unread ? 'class="sub-unread"' }}>
-                                            <a href="{{ route('forum.category', [sub.path]) }}">{{ sub.name }}</a>
+                                            <a href="{{ route('forum.category', [sub.slug]) }}">{{ sub.name }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>

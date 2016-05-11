@@ -1,7 +1,7 @@
 Dzień dobry,<br /><br />
 
 W związku z ogłoszeniem zamieszczonym w serwisie 4programmers.net zgłaszam chęć udziału w procesie rekrutacji.<br />
-URL do oferty: {{ link_to_route('job.offer', job.title, [job.id, job.path]) }}<br /><br />
+URL do oferty: {{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}<br /><br />
 
 {% if auth_check() %}
 Link do mojego profilu w serwisie 4programmers.net: {{ link_to(route('profile', [user('id')])) }}<br />

@@ -40,8 +40,8 @@ class RouteServiceProvider extends ServiceProvider
         $router->model('pastebin', PastebinRepositoryInterface::class);
         $router->model('microblog', MicroblogRepositoryInterface::class);
 
-        $router->bind('forum', function ($path) {
-            return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('path', $path)->firstOrFail();
+        $router->bind('forum', function ($slug) {
+            return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();
         });
 
         parent::boot($router);
