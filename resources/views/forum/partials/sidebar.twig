@@ -20,7 +20,7 @@
             </div>
         {% endif %}
 
-        {{ form_open({'method': 'post', 'url': route('forum.tag.save'), 'id': 'tags-form', 'style': 'display: none'}) }}
+        <form {{ forms.attr({'method': 'post', 'action': route('forum.tag.save'), 'id': 'tags-form', 'style': 'display: none'}) }}>
             <div class="row">
                 <div class="col-xs-9">
                     {{ form_text('tags', tags.user|keys|join(', '), {'class': 'form-control input-sm'}) }}
@@ -29,7 +29,7 @@
                     {{ form_submit('Zapisz', {'class': 'btn btn-primary btn-sm', 'data-submit-state': 'Zapisywanie...'}) }}
                 </div>
             </div>
-        {{ form_close() }}
+        </form>
     </div>
 
     <div id="box-popular-tags" class="box">

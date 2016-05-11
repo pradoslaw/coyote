@@ -1,1 +1,2 @@
-{{ form_open(form.attr) }}
+{% import 'components.forms' as forms %}
+<form {{ forms.attr(form.attr) }}>

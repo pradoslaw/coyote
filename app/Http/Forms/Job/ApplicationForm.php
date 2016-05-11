@@ -17,7 +17,7 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
     public $attr = [
         'method' => self::POST,
         'id' => 'job-application',
-        'files' => true
+        'enctype' => 'multipart/form-data'
     ];
 
     public function buildForm()
