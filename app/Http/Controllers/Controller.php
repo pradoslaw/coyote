@@ -59,7 +59,10 @@ abstract class Controller extends BaseController
     protected function buildPublic()
     {
         // URL to main page and CDN
-        $this->public = ['public' => url()->route('home'), 'cdn' => config('app.cdn') ? : url()->route('home')];
+        $this->public = [
+            'public' => url()->route('home'),
+            'cdn' => config('app.cdn') ? ('//' . config('app.cdn')) : url()->route('home')
+        ];
 
         if ($this->userId) {
             if (config('services.ws.host')) {
