@@ -146,10 +146,10 @@ abstract class BaseController extends Controller
             'topic' => $topic,
             'post' => $post
         ], [
+            'url' => route('forum.post.submit', [$forum->path, $topic ? $topic->id : null, $post ? $post->id : null]),
             'attr' => [
                 'id' => 'submit-form',
-                'method' => PostForm::POST,
-                'url' => route('forum.post.submit', [$forum->path, $topic ? $topic->id : null, $post ? $post->id : null]),
+                'method' => PostForm::POST
             ]
         ]);
     }

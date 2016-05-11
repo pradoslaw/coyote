@@ -45,7 +45,7 @@ class TopicController extends BaseController
 
         // user wants to show certain post. we need to calculate page number based on post id.
         if ($request->has('p')) {
-            $page = $this->post->getPage($request->get('p'), $topic->id);
+            $page = $this->post->getPage($request->get('p'), $topic->id, $perPage);
         }
 
         $gate = $this->getGateFactory();

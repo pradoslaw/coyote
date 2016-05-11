@@ -1,2 +1,3 @@
 {% import 'components.forms' as forms %}
 <form {{ forms.attr(form.attr|merge({class: (form.attr.class|default('') ~ ' form-horizontal')|trim})) }}>
+{{ form_token() }}
