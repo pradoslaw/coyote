@@ -4,11 +4,24 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\PostWasDeleted;
 use Coyote\Events\PostWasSaved;
-use Coyote\Post;
+use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PostListener implements ShouldQueue
 {
+    /**
+     * @var PostRepository
+     */
+    protected $post;
+
+    /**
+     * @param PostRepository $post
+     */
+    public function __construct(PostRepository $post)
+    {
+        $this->post = $post;
+    }
+
     /**
      * @param PostWasSaved $event
      */
@@ -22,7 +35,7 @@ class PostListener implements ShouldQueue
      */
     public function onPostDelete(PostWasDeleted $event)
     {
-        Post::withTrashed()->find($event->post['id'])->deleteFromIndex();
+        $this->post->withTrashed()->find($event->post['id'])->deleteFromIndex();
     }
 
     /**

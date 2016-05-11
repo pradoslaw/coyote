@@ -14,21 +14,21 @@ use Coyote\Microblog;
 use Coyote\Job;
 use Coyote\Topic;
 use Coyote\Forum;
-use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
+use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PageListener implements ShouldQueue
 {
     /**
-     * @var Page
+     * @var PageRepository
      */
     protected $page;
 
     /**
      * PageListener constructor.
-     * @param Page $page
+     * @param PageRepository $page
      */
-    public function __construct(Page $page)
+    public function __construct(PageRepository $page)
     {
         $this->page = $page;
     }

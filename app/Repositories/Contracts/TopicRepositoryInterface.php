@@ -2,6 +2,10 @@
 
 namespace Coyote\Repositories\Contracts;
 
+/**
+ * @package Coyote\Repositories\Contracts
+ * @method $this withTrashed()
+ */
 interface TopicRepositoryInterface extends RepositoryInterface
 {
     /**

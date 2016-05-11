@@ -12,6 +12,7 @@ use Coyote\Poll;
 /**
  * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
  * @method void setResponse(string $response)
+ * @method $this withTrashed()
  */
 interface PostRepositoryInterface extends RepositoryInterface
 {

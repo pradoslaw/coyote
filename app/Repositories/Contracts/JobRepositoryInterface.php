@@ -4,6 +4,7 @@ namespace Coyote\Repositories\Contracts;
 
 /**
  * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
+ * @method $this withTrashed()
  */
 interface JobRepositoryInterface extends RepositoryInterface
 {

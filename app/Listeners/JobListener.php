@@ -4,10 +4,25 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\JobWasDeleted;
 use Coyote\Events\JobWasSaved;
-use Coyote\Job;
+use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 
+// Uwaga! Tutaj specjalnie nie implementujemy interfejsu ShouldQueue poniewaz chcemy zeby usuniecie
+// czy dodanie oferty do indeksu nastapilo momentalnie.
 class JobListener
 {
+    /**
+     * @var JobRepository
+     */
+    protected $job;
+
+    /**
+     * @param JobRepository $job
+     */
+    public function __construct(JobRepository $job)
+    {
+        $this->job = $job;
+    }
+
     /**
      * @param JobWasSaved $event
      */
@@ -21,7 +36,7 @@ class JobListener
      */
     public function onJobDelete(JobWasDeleted $event)
     {
-        Job::withTrashed()->find($event->job['id'])->deleteFromIndex();
+        $this->job->withTrashed()->find($event->job['id'])->deleteFromIndex();
     }
 
     /**
