@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $ip
  * @property string $browser
  * @property string $host
+ * @property \Coyote\Forum $forum
+ * @property \Coyote\Topic $topic
  */
 class Post extends Model
 {

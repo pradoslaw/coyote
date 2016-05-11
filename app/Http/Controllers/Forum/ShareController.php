@@ -2,8 +2,6 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-
 /**
  * Class ShareController
  * @package Coyote\Http\Controllers\Forum
@@ -16,20 +14,17 @@ class ShareController extends BaseController
      */
     public function index($id)
     {
+        /** @var \Coyote\Post $post */
         $post = $this->post->withTrashed()->find($id, ['id', 'topic_id', 'forum_id', 'deleted_at']);
         if (!$post) {
             abort(404);
         }
 
-        $forum = $this->forum->find($post->forum_id, ['id', 'slug']);
-
-        if ($post->deleted_at !== null && $this->getGateFactory()->denies('delete', $forum)) {
+        if ($post->deleted_at !== null && $this->getGateFactory()->denies('delete', $post->forum)) {
             abort(404);
         }
 
-        $topic = $this->topic->find($post->topic_id, ['id', 'slug']);
-        $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug]) . '?p=' . $id . '#id' . $id;
-
-        return redirect($url);
+        $route = route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug]);
+        return redirect($route .  '?p=' . $id . '#id' . $id);
     }
 }

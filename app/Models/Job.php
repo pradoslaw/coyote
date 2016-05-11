@@ -5,6 +5,9 @@ namespace Coyote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property string $slug
+ */
 class Job extends Model
 {
     use SoftDeletes, Searchable;
