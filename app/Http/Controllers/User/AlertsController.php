@@ -2,9 +2,9 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Request;
 use Carbon;
 
@@ -16,20 +16,20 @@ class AlertsController extends BaseController
     }
 
     /**
-     * @var User
+     * @var UserRepository
      */
     private $user;
 
     /**
-     * @var Alert
+     * @var AlertRepository
      */
     private $alert;
 
     /**
-     * @param User $user
-     * @param Alert $alert
+     * @param UserRepository $user
+     * @param AlertRepository $alert
      */
-    public function __construct(User $user, Alert $alert)
+    public function __construct(UserRepository $user, AlertRepository $alert)
     {
         parent::__construct();
 
@@ -50,10 +50,10 @@ class AlertsController extends BaseController
     }
 
     /**
-     * @param Session $session
+     * @param SessionRepository $session
      * @return $this
      */
-    public function index(Session $session)
+    public function index(SessionRepository $session)
     {
         $this->breadcrumb->push('Powiadomienia', route('user.alerts'));
 
@@ -111,11 +111,11 @@ class AlertsController extends BaseController
     }
 
     /**
-     * @param Session $session
+     * @param SessionRepository $session
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ajax(Session $session, Request $request)
+    public function ajax(SessionRepository $session, Request $request)
     {
         $unread = auth()->user()->alerts_unread;
 
@@ -153,7 +153,7 @@ class AlertsController extends BaseController
         } else {
             if (auth()->user()->alerts_unread) {
                 $this->alert->where('user_id', $this->userId)->where('read_at', 'IS', null)->update([
-                    'read_at' => Carbon::now()
+                    'read_at' => Carbon\Carbon::now()
                 ]);
             }
 
