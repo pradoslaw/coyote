@@ -38,7 +38,8 @@
         "lavary/laravel-menu": "dev-master",
         "elasticsearch/elasticsearch": "~2.0",
         "guzzlehttp/guzzle": "^6.2",
-        "adam-boduch/geshi": "dev-master"
+        "adam-boduch/geshi": "dev-master",
+        "aginev/datagrid": "1.0.*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.*",

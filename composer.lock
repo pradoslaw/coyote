@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1ceca2e6a873b26e6e360de3d3822f17",
-    "content-hash": "3556eb7d5fe7e8f74e176096e0cd0af8",
+    "hash": "5b850ebdc8d55301a8e9cf9d9a60ca12",
+    "content-hash": "08fd9fe275a9e0e70f0a842299c26a94",
     "packages": [
         {
             "name": "adam-boduch/geshi",
@@ -39,6 +39,51 @@
                 "issues": "https://github.com/adam-boduch/geshi/issues"
             },
             "time": "2016-04-15 15:47:02"
+        },
+        {
+            "name": "aginev/datagrid",
+            "version": "v1.0.10",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:aginev/datagrid.git",
+                "reference": "f3dda2139756dd7a19c9a7cac577e6d22a9f4106"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aginev/datagrid/zipball/f3dda2139756dd7a19c9a7cac577e6d22a9f4106",
+                "reference": "f3dda2139756dd7a19c9a7cac577e6d22a9f4106",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "5.*",
+                "illuminate/support": "5.*",
+                "illuminate/view": "5.*",
+                "laravelcollective/html": "5.2.*",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Aginev\\Datagrid\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Atanas Ginev",
+                    "email": "naskospam@gmail.com"
+                }
+            ],
+            "description": "Datagrid package for Laravel v5",
+            "homepage": "http://aginev.com",
+            "keywords": [
+                "Datagrid Package for Laravel v5",
+                "datagrid"
+            ],
+            "time": "2016-04-06 11:54:25"
         },
         {
             "name": "barryvdh/laravel-debugbar",
