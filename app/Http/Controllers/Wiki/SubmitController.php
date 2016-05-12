@@ -9,18 +9,13 @@ class SubmitController extends BaseController
 {
     /**
      * @param \Coyote\Wiki $wiki
-     * @param Request $request
      * @return $this
      */
-    public function index($wiki, Request $request)
+    public function index($wiki)
     {
         $form = $this->createForm(WikiForm::class, $wiki, [
             'url' => route('wiki.submit', [$wiki->id])
         ]);
-
-        if ($request->has('parentId')) {
-            $form->get('parent_id')->setValue($request->get('parentId'));
-        }
 
         $this->breadcrumb->push('Edycja strony');
 

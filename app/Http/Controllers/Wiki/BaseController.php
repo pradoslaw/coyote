@@ -14,6 +14,11 @@ abstract class BaseController extends Controller
     protected $wiki;
 
     /**
+     * @var \Coyote\Wiki[]
+     */
+    protected $parents;
+
+    /**
      * @param Request $request
      * @param WikiRepository $wiki
      */
@@ -31,7 +36,9 @@ abstract class BaseController extends Controller
     protected function buildBreadcrumb($wiki)
     {
         if (!empty($wiki)) {
-            $this->wiki->parents($wiki->id)->reverse()->each(function ($item) {
+            $this->parents = $this->wiki->parents($wiki->id);
+            
+            $this->parents->reverse()->each(function ($item) {
                 /** @var \Coyote\Wiki $item */
                 $this->breadcrumb->push($item->title, url($item->path));
             });

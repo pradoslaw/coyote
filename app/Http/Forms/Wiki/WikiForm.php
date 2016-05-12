@@ -33,7 +33,8 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
             ->add('parent_id', 'select', [
                 'label' => 'Strona macierzysta',
                 'choices' => $this->getTreeList(),
-                'empty_value' => '--'
+                'empty_value' => '--',
+                'value' => $this->request->input('parentId')
             ])
             ->add('long_title', 'text', [
                 'rules' => 'string|max:200',
