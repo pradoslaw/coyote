@@ -74,10 +74,18 @@ Konfiguracja projektu znajduje się w pliku `.env`. **Szczególnie** zaleca się
 Supervisor jest narzędziem monitorującym procesy, działającym w środowisku Linux. W Laravel dostępny jest
 mechanizm kolejkowania zadań (np. indeksowanie treści w Elasticsearch), który można uruchomić przy pomocy
 
-`artisan queue:listen --sleep=10`
+`php artisan queue:listen --sleep=10`
 
 Supervisor ma na celu automatyczne uruchamianie tego procesu po starcie systemu i pilnownie, aby zawsze był uruchomiony.
 Konfigurację supervisor możesz znaleźć w pliku `supervisor.conf`. Więcej informacji: https://laravel.com/docs/5.2/queues
+
+### Ustawienia crona
+
+W przypadku ustawienia środowiska na `production` w pliku `.env`, konieczne będzie ustawienie crona aby wykonywać
+pewne czynności cykliczne.
+
+1. W konsoli wpisz `crontab -e`
+2. Dodaj linię: `* * * * * php /var/www/path-to-app/artisan schedule:run >> /dev/null 2>&1`
 
 ## Jak mozesz pomoc?
 
