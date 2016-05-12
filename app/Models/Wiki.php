@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Wiki extends Model
 {
+    use SoftDeletes;
+
     const DEFAULT_TEMPLATE = 'show';
 
     /**
@@ -95,7 +98,7 @@ class Wiki extends Model
      */
     public function setTitleAttribute($title)
     {
-        $this->attributes['title'] = $title;
+        $this->attributes['title'] = ucfirst($title);
         // ucfirst() tylko dla zachowania kompatybilnosci wstecz
         $this->attributes['slug'] = ucfirst(str_slug($title));
     }

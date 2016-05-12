@@ -11,48 +11,6 @@ class ForumsTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('permissions')->insert([
-            'name'           => 'forum-sticky',
-            'description'    => 'Zakładanie przyklejonych tematów',
-            'default'        => false
-        ]);
-
-        \DB::table('permissions')->insert([
-            'name'           => 'forum-announcement',
-            'description'    => 'Pisanie ogłoszeń',
-            'default'        => false
-        ]);
-
-        \DB::table('permissions')->insert([
-            'name'           => 'forum-delete',
-            'description'    => 'Kasowanie wątków i komentarzy',
-            'default'        => false
-        ]);
-
-        \DB::table('permissions')->insert([
-            'name'           => 'forum-update',
-            'description'    => 'Edycja postów i komentarzy',
-            'default'        => false
-        ]);
-
-        \DB::table('permissions')->insert([
-            'name'           => 'forum-lock',
-            'description'    => 'Blokowanie wątków',
-            'default'        => false
-        ]);
-
-        \DB::table('permissions')->insert([
-            'name'           => 'forum-move',
-            'description'    => 'Przenoszenie wątków',
-            'default'        => false
-        ]);
-
-        \DB::table('permissions')->insert([
-            'name'           => 'forum-merge',
-            'description'    => 'Łączenie postów',
-            'default'        => false
-        ]);
-
         $row = Coyote\Forum::create([
             'name' => 'Newbie',
             'slug' => 'Newbie',

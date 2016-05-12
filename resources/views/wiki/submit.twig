@@ -1,0 +1,30 @@
+{% extends 'wiki.base' %}
+{% block title %}
+    {% spaceless %}
+        {% if wiki.id is not null %}
+            Edycja strony {{ wiki.title }}
+        {% else %}
+            Dodaj nową stronę
+        {% endif %}
+
+        {{ parent() }}
+    {% endspaceless %}
+{% endblock %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-sm-9">
+            {{ form(form) }}
+        </div>
+        <div class="col-sm-3">
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
+{% endblock %}

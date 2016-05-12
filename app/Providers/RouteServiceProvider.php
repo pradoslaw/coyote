@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 
@@ -33,12 +34,15 @@ class RouteServiceProvider extends ServiceProvider
         $router->pattern('id', '[0-9]+');
         $router->pattern('forum', '[A-Za-z\-\_\/]+');
         $router->pattern('tag', '([a-ząęśżźćółń0-9\-\.\#\+])+');
+        $router->pattern('slug', '.*');
+        $router->pattern('path', '.*');
 
         $router->model('user', UserRepositoryInterface::class);
         $router->model('post', PostRepositoryInterface::class);
         $router->model('topic', TopicRepositoryInterface::class);
         $router->model('pastebin', PastebinRepositoryInterface::class);
         $router->model('microblog', MicroblogRepositoryInterface::class);
+        $router->model('wiki', WikiRepositoryInterface::class);
 
         $router->bind('forum', function ($slug) {
             return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();

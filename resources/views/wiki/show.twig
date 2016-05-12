@@ -42,7 +42,7 @@
                         </header>
 
                         <div itemprop="articleBody">
-                            {{ wiki.text }}
+                            {{ wiki.text|raw }}
                         </div>
                     </article>
                 </div>
@@ -109,8 +109,8 @@
 
         <aside class="col-sm-3">
             <section id="box-maintain">
-                <a href="{{ route('wiki.submit', [wiki.path]) }}" class="btn btn-sm btn-default" title="Kliknij, aby edytować ten artykuł">Edycja</a>
-                <a href="#" class="btn btn-sm btn-primary">Nowa strona</a>
+                <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-default" title="Kliknij, aby edytować ten artykuł">Edycja</a>
+                <a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" class="btn btn-sm btn-primary" title="Dodaj nową stronę w tej kategorii">Nowa strona</a>
             </section>
 
             <ul class="side-menu">
