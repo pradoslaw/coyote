@@ -34,18 +34,18 @@ class Email extends Broadcast
         || !$user['is_confirm'] || $user['is_blocked']) {
             return false;
         }
-        
+
         $data = $alert->toArray();
         $data['headline'] = $this->parse($data, $data['headline']);
-        
+
         $email = $user['user_email'];
 
-        $this->mailer->send($alert->emailTemplate(), $data, function ($message) use ($email, $data) {
+        $this->mailer->queue($alert->emailTemplate(), $data, function ($message) use ($email, $data) {
             $message->subject($data['headline']);
             $message->to($email);
             $message->from('no-reply@4programmers.net', $data['sender_name']);
         });
-        
+
         return true;
     }
 }
