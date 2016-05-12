@@ -2,7 +2,6 @@
 
 namespace Coyote\Services\Alert\Providers;
 
-use Coyote\Repositories\Criteria\Alert\ForDefinedType;
 use Coyote\Services\Alert\Broadcasts\Db as Broadcast_Db;
 use Coyote\Services\Alert\Broadcasts\Email as Broadcast_Email;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
@@ -321,7 +320,7 @@ abstract class Provider implements ProviderInterface
             if (substr($methodName, 0, 3) == 'get') {
                 $reflect = new \ReflectionMethod($this, $methodName);
 
-                if (!$reflect->getNumberOfRequiredParameters()) {
+                if (!$reflect->getNumberOfRequiredParameters() && $reflect->isPublic()) {
                     $value = $this->$methodName();
 
                     if (is_string($value) || is_numeric($value)) {
