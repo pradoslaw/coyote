@@ -1,7 +1,7 @@
 {% extends 'user.base' %}
 {% block title %}Ustawienia powiadomień :: {{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
 {% block content %}
     <h2>Ustawienia powiadomień</h2>
@@ -34,11 +34,11 @@
                         {{ setting.name }}
                     </div>
                     <div class="col-xs-2">
-                        {{ form_hidden('profile[' ~ setting.id ~ ']', 0) }}
+                        {{ form_hidden('settings[' ~ setting.id ~ '][profile]', 0) }}
 
                         <div class="checkbox">
                             {% set random = 'id' ~ random() %}
-                            {{ form_checkbox('profile[' ~ setting.id ~ ']', 1, setting.profile, {'id': random}) }}
+                            {{ form_checkbox('settings[' ~ setting.id ~ '][profile]', 1, setting.profile, {'id': random}) }}
 
                             <label for="{{ random }}">
 
@@ -46,11 +46,11 @@
                         </div>
                     </div>
                     <div class="col-xs-2">
-                        {{ form_hidden('email[' ~ setting.id ~ ']', 0) }}
+                        {{ form_hidden('settings[' ~ setting.id ~ '][email]', 0) }}
 
                         <div class="checkbox">
                             {% set random = 'id' ~ random() %}
-                            {{ form_checkbox('email[' ~ setting.id ~ ']', 1, setting.email, {'id': random}) }}
+                            {{ form_checkbox('settings[' ~ setting.id ~ '][email]', 1, setting.email, {'id': random}) }}
 
                             <label for="{{ random }}">
 

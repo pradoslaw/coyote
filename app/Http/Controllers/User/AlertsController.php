@@ -6,7 +6,6 @@ use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Illuminate\Http\Request;
-use Coyote\Alert\Setting;
 use Carbon;
 
 class AlertsController extends BaseController
@@ -58,8 +57,8 @@ class AlertsController extends BaseController
     {
         $this->breadcrumb->push('Powiadomienia', route('user.alerts'));
 
-        $alerts = $this->alert->paginate(auth()->user()->id);
-        $session = $session->findBy('user_id', auth()->user()->id, ['created_at']);
+        $alerts = $this->alert->paginate($this->userId);
+        $session = $session->findBy('user_id', $this->userId, ['created_at']);
 
         // mark as read
         $this->mark($alerts);
@@ -95,11 +94,7 @@ class AlertsController extends BaseController
     public function settings()
     {
         $this->breadcrumb->push('Ustawienia powiadomień', route('user.alerts.settings'));
-
-        $settings = Setting::select(['alert_settings.*', 'alert_types.name'])
-                ->join('alert_types', 'alert_types.id', '=', 'type_id')
-                ->where('user_id', auth()->user()->id)
-                ->get();
+        $settings = $this->alert->getUserSettings($this->userId);
 
         return $this->view('user.alerts.settings', compact('settings'));
     }
@@ -110,13 +105,8 @@ class AlertsController extends BaseController
      */
     public function save(Request $request)
     {
-        $settings = ['profile' => $request->get('profile'), 'email' => $request->get('email')];
+        $this->alert->setUserSettings($this->userId, $request->input('settings'));
 
-        foreach (array_keys($settings) as $mode) {
-            while (list($setting, $value) = each($settings[$mode])) {
-                Setting::where('id', $setting)->where('user_id', auth()->user()->id)->update([$mode => $value]);
-            }
-        }
         return back()->with('success', 'Zmiany zostały zapisane');
     }
 
@@ -162,12 +152,12 @@ class AlertsController extends BaseController
             $this->alert->update(['is_marked' => true], $id);
         } else {
             if (auth()->user()->alerts_unread) {
-                $this->alert->where('user_id', auth()->user()>id)->where('read_at', 'IS', null)->update([
+                $this->alert->where('user_id', $this->userId)->where('read_at', 'IS', null)->update([
                     'read_at' => Carbon::now()
                 ]);
             }
 
-            $this->alert->where('user_id', auth()->user()->id)->update(['is_marked' => true]);
+            $this->alert->where('user_id', $this->userId)->update(['is_marked' => true]);
         }
     }
 }

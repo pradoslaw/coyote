@@ -1,0 +1,13 @@
+{# powiadomienie o wystapieniu logina we wpisanie na mikroblogu #}
+{% extends 'emails.layout' %}
+
+{% block container %}
+    Witaj,<br><br>
+
+    {{ sender_name }} użył Twojego loginu w treści wpisu mikrobloga.<br>
+    Aby go przeczytać, kliknij w poniższy link:<br><br>
+
+    Link do wpisu: {{ link_to(url) }}<br><br>
+
+    <b>Prosimy nie odpowiadać na tego e-maila. Jest on generowany automatycznie.</b>
+{% endblock %}

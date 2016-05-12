@@ -2,9 +2,10 @@
 
 namespace Coyote\Services\Alert\Providers;
 
+use Coyote\Repositories\Criteria\Alert\ForDefinedType;
 use Coyote\Services\Alert\Broadcasts\Db as Broadcast_Db;
 use Coyote\Services\Alert\Broadcasts\Email as Broadcast_Email;
-use Coyote\Repositories\Contracts\AlertRepositoryInterface;
+use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
 
 /**
  * Class Provider
@@ -12,7 +13,7 @@ use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 abstract class Provider implements ProviderInterface
 {
     /**
-     * @var AlertRepositoryInterface
+     * @var AlertRepository
      */
     protected $repository;
 
@@ -62,11 +63,11 @@ abstract class Provider implements ProviderInterface
     protected $headline;
 
     /**
-     * @param AlertRepositoryInterface $repository
+     * @param AlertRepository $repository
      * @param array $args
      * @throws \Exception
      */
-    public function __construct(AlertRepositoryInterface $repository, array $args = [])
+    public function __construct(AlertRepository $repository, array $args = [])
     {
         $this->repository = $repository;
         $this->typeId = static::ID;
@@ -302,7 +303,7 @@ abstract class Provider implements ProviderInterface
      *
      * @return string
      */
-    public function email()
+    public function emailTemplate()
     {
         return static::EMAIL;
     }
@@ -310,7 +311,7 @@ abstract class Provider implements ProviderInterface
     /**
      * Konwertuje obiekt alertu to tablicy
      *
-     * @return mixed
+     * @return array
      */
     public function toArray()
     {
@@ -338,7 +339,7 @@ abstract class Provider implements ProviderInterface
     /**
      * Generuje powiadomienie oraz zwraca ID userow do ktorych zostalo wyslane
      *
-     * @return array
+     * @return int[]
      */
     public function notify()
     {
@@ -353,29 +354,43 @@ abstract class Provider implements ProviderInterface
             unset($this->usersId[$index]);
         }
 
-        if ($this->getUsersId()) {
-            // pobranie ustawien powiadomienia dla userow. byc moze maja oni wylaczone powiadomienie tego typu?
-            $users = $this->repository->userSettings($this->typeId, $this->getUsersId());
+        if ($this->usersId) {
+            $recipients = $this->send();
+        }
 
-            foreach ($users as $user) {
-                // wysylamy powiadomienie ktore bedzie widoczne w profilu uzytkownika
-                if ($user['profile']) {
-                    $notifier = new Broadcast_Db($this->repository, $user['user_id']);
-                    $notifier->send($this);
+        return array_unique($recipients);
+    }
 
-                    $recipients[] = $user['user_id'];
-                }
+    /**
+     * @return int[]
+     */
+    protected function send()
+    {
+        $recipients = [];
 
-                if ($user['email'] && $this->email() && $user['user_email'] && $user['is_active']
-                    && $user['is_confirm'] && !$user['is_blocked']) {
-                    $notifier = new Broadcast_Email($this->email(), $user['user_email']);
-                    $notifier->send($this);
+        // pobranie ustawien powiadomienia dla userow. byc moze maja oni wylaczone powiadomienie tego typu?
+        $users = $this->getUsersSettings();
+        $broadcast = ['profile' => app(Broadcast_Db::class), 'email' => app(Broadcast_Email::class)];
 
-                    $recipients[] = $user['user_id'];
+        foreach ($users as $user) {
+            foreach ($broadcast as $type => $object) {
+                if ($user[$type]) {
+                    if ($object->send($user, $this)) {
+                        $recipients[] = $user['user_id'];
+                    }
                 }
             }
         }
 
-        return array_unique($recipients);
+        return $recipients;
+    }
+
+    /**
+     * @return \Coyote\Alert\Setting[]
+     */
+    protected function getUsersSettings()
+    {
+        // pobranie ustawien powiadomienia dla userow. byc moze maja oni wylaczone powiadomienie tego typu?
+        return $this->repository->getUserSettings($this->usersId)->where('type_id', $this->typeId);
     }
 }

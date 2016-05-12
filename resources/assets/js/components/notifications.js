@@ -217,11 +217,9 @@ $(function () {
         Alerts.set(Alerts.get() + 1);
         Alerts.clear();
 
-        if (DesktopNotifications.isAllowed()) {
-            DesktopNotifications.doNotify(data.headline, data.subject, data.url);
-        }
+        DesktopNotifications.doNotify(data.headline, data.subject, data.url);
     })
     .on('pm', function(data) {
-        // @todo Increase priv msg counter
+        DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
     });
 });

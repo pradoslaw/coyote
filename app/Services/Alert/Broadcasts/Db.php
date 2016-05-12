@@ -4,7 +4,7 @@ namespace Coyote\Services\Alert\Broadcasts;
 
 use Coyote\Services\Alert\Providers\ProviderInterface;
 use Coyote\Events\AlertWasBroadcasted;
-use Coyote\Repositories\Contracts\AlertRepositoryInterface;
+use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
 
 /**
  * Class Db
@@ -12,38 +12,33 @@ use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 class Db extends Broadcast
 {
     /**
-     * @var AlertRepositoryInterface
+     * @var AlertRepository
      */
     protected $repository;
 
     /**
-     * @var
-     */
-    protected $userId;
-
-    /**
      * Db constructor.
      *
-     * @param AlertRepositoryInterface $repository
-     * @param $userId
+     * @param AlertRepository $repository
      */
-    public function __construct(AlertRepositoryInterface $repository, $userId)
+    public function __construct(AlertRepository $repository)
     {
         $this->repository = $repository;
-        $this->userId = $userId;
     }
 
     /**
+     * @param mixed $user
      * @param ProviderInterface $alert
+     * @return bool
      */
-    public function send(ProviderInterface $alert)
+    public function send($user, ProviderInterface $alert)
     {
-        $result = $this->repository->findByObjectId($this->userId, $alert->objectId(), ['id']);
+        $result = $this->repository->findByObjectId($user['user_id'], $alert->objectId(), ['id']);
 
         if (!$result) {
             $object = $this->repository->create([
                 'type_id'           => $alert->getTypeId(),
-                'user_id'           => $this->userId,
+                'user_id'           => $user['user_id'],
                 'subject'           => $alert->getSubject(),
                 'excerpt'           => $alert->getExcerpt(),
                 'url'               => $alert->getUrl(),
@@ -54,7 +49,7 @@ class Db extends Broadcast
 
             $data['headline'] = $this->parse($data, $data['headline']);
             // broadcast this event to save notification to redis
-            event(new AlertWasBroadcasted($this->userId, $data));
+            event(new AlertWasBroadcasted($user['user_id'], $data));
 
             $alertId = $object->id;
         } else {
@@ -62,5 +57,6 @@ class Db extends Broadcast
         }
 
         $this->repository->addSender($alertId, $alert->getSenderId(), $alert->getSenderName());
+        return true;
     }
 }

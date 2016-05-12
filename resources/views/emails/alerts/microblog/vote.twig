@@ -1,9 +1,9 @@
 {# powiadomienie o ocenie wpisu na mikro #}
-{% extends 'emails/layout.twig' %}
+{% extends 'emails.layout' %}
 
 {% block container %}
     Witaj,<br><br>
 
     Informujemy, że {{ sender_name }} <b>docenił</b> Twój wpis na mikroblogu.<br>
-    Link do wpisu: <a href="{{ url(url) }}">{{ url(url) }}</a><br>
+    Link do wpisu: {{ link_to(url) }}<br>
 {% endblock %}

@@ -69,10 +69,12 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
      */
     public function markAsReadByUrl($userId, $url)
     {
-        $this->model->where('user_id', $userId)
-                    ->whereNull('read_at')
-                    ->where('url', $url)
-                    ->update(['read_at' => Carbon::now()]);
+        $this
+            ->model
+            ->where('user_id', $userId)
+            ->whereNull('read_at')
+            ->where('url', $url)
+            ->update(['read_at' => Carbon::now()]);
     }
 
     /**
@@ -109,14 +111,15 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
      */
     private function prepare($userId)
     {
-        return $this->model
+        return $this
+                ->model
                 ->select(['alerts.*', 'alert_types.headline'])
                 ->where('user_id', $userId)
                 ->with(['senders' => function ($sql) {
                     $sql->select([
                         'alert_id',
                         'user_id',
-                        \DB::raw('COALESCE(users.name, alert_senders.name) AS name'),
+                        $this->raw('COALESCE(users.name, alert_senders.name) AS name'),
                         'photo',
                         'is_blocked',
                         'is_active'
@@ -134,24 +137,50 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
      */
     public function headlinePattern($typeId)
     {
-        return (new Type())->find($typeId, ['headline'])['headline'];
+        return $this->app->make(Type::class)->find($typeId, ['headline'])['headline'];
     }
 
     /**
-     * Gets notification settings for given user and notification type
+     * Gets notification settings for given user
      *
-     * @param $typeId
-     * @param $usersId
+     * @param int|int[] $userId
      * @return mixed
      */
-    public function userSettings($typeId, $usersId)
+    public function getUserSettings($userId)
     {
-        return (new Setting())
-                ->select(['alert_settings.*', 'users.email AS user_email', 'is_active', 'is_blocked', 'is_confirm'])
-                ->where('type_id', '=', $typeId)
-                ->whereIn('user_id', $usersId)
+        if (!is_array($userId)) {
+            $userId = [$userId];
+        }
+
+        return $this
+                ->app
+                ->make(Setting::class)
+                ->select([
+                    'alert_settings.*',
+                    'alert_types.name',
+                    'users.email AS user_email',
+                    'is_active',
+                    'is_blocked',
+                    'is_confirm'
+                ])
+                ->whereIn('user_id', $userId)
                 ->join('users', 'users.id', '=', 'user_id')
+                ->join('alert_types', 'alert_types.id', '=', 'type_id')
+                ->orderBy('alert_types.id')
                 ->get();
+    }
+
+    /**
+     * @param int $userId
+     * @param array $data
+     */
+    public function setUserSettings($userId, array $data)
+    {
+        $model = $this->app->make(Setting::class);
+
+        foreach ($data as $id => $row) {
+            $model->where('user_id', $userId)->where('id', $id)->update($row);
+        }
     }
 
     /**
@@ -164,7 +193,9 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
      */
     public function findByObjectId($userId, $objectId, $columns = ['*'])
     {
-        return $this->model->select($columns)
+        return $this
+                ->model
+                ->select($columns)
                 ->where('user_id', '=', $userId)
                 ->where('object_id', '=', $objectId)
                 ->whereNull('read_at')
@@ -181,6 +212,6 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
      */
     public function addSender($alertId, $userId, $senderName)
     {
-        (new Sender())->create(['alert_id' => $alertId, 'user_id' => $userId, 'name' => $senderName]);
+        $this->app->make(Sender::class)->create(['alert_id' => $alertId, 'user_id' => $userId, 'name' => $senderName]);
     }
 }

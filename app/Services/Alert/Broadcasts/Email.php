@@ -3,7 +3,7 @@
 namespace Coyote\Services\Alert\Broadcasts;
 
 use Coyote\Services\Alert\Providers\ProviderInterface;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Contracts\Mail\Mailer;
 
 /**
  * Class Email
@@ -11,37 +11,41 @@ use Illuminate\Support\Facades\Mail;
 class Email extends Broadcast
 {
     /**
-     * @var string
+     * @var Mailer
      */
-    private $email;
+    protected $mailer;
 
     /**
-     * @var string
+     * @param Mailer $mailer
      */
-    private $view;
-
-    /**
-     * @param $view
-     * @param $email
-     */
-    public function __construct($view, $email)
+    public function __construct(Mailer $mailer)
     {
-        $this->view = $view;
-        $this->email = $email;
+        $this->mailer = $mailer;
     }
 
     /**
+     * @param mixed $user
      * @param ProviderInterface $alert
+     * @return bool
      */
-    public function send(ProviderInterface $alert)
+    public function send($user, ProviderInterface $alert)
     {
+        if (!$user['email'] || !$alert->emailTemplate() || !$user['user_email'] || !$user['is_active']
+        || !$user['is_confirm'] || $user['is_blocked']) {
+            return false;
+        }
+        
         $data = $alert->toArray();
         $data['headline'] = $this->parse($data, $data['headline']);
+        
+        $email = $user['user_email'];
 
-        Mail::queue($this->view, $data, function ($message) use ($data) {
+        $this->mailer->send($alert->emailTemplate(), $data, function ($message) use ($email, $data) {
             $message->subject($data['headline']);
-            $message->to($this->email);
+            $message->to($email);
             $message->from('no-reply@4programmers.net', $data['sender_name']);
         });
+        
+        return true;
     }
 }

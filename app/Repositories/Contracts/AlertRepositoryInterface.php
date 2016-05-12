@@ -47,13 +47,18 @@ interface AlertRepositoryInterface extends RepositoryInterface
     public function headlinePattern($typeId);
 
     /**
-     * Gets notification settings for given user and notification type
+     * Gets notification settings for given user
      *
-     * @param $typeId
-     * @param $usersId
+     * @param int|int[] $userId
      * @return mixed
      */
-    public function userSettings($typeId, $usersId);
+    public function getUserSettings($userId);
+
+    /**
+     * @param int $userId
+     * @param array $data
+     */
+    public function setUserSettings($userId, array $data);
 
     /**
      * Gets first unread notification for given user and notification id (object_id)

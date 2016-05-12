@@ -136,7 +136,7 @@ interface ProviderInterface
      *
      * @return string
      */
-    public function email();
+    public function emailTemplate();
 
     /**
      * Konwertuje obiekt alertu to tablicy
