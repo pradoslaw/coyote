@@ -16,7 +16,8 @@ class ShowController extends BaseController
 
         return $this->view('wiki.' . $wiki->template, [
             'wiki' => $wiki,
-            'author' => $author
+            'author' => $author,
+            'parents' => $this->parents->slice(1)->reverse() // we skip current page
         ]);
     }
 }

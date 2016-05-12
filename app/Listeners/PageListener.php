@@ -10,11 +10,14 @@ use Coyote\Events\ForumWasSaved;
 use Coyote\Events\ForumWasDeleted;
 use Coyote\Events\JobWasSaved;
 use Coyote\Events\JobWasDeleted;
+use Coyote\Events\WikiWasDeleted;
+use Coyote\Events\WikiWasSaved;
 use Coyote\Microblog;
 use Coyote\Job;
 use Coyote\Topic;
 use Coyote\Forum;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
+use Coyote\Wiki;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PageListener implements ShouldQueue
@@ -122,6 +125,28 @@ class PageListener implements ShouldQueue
     }
 
     /**
+     * @param WikiWasSaved $event
+     */
+    public function onWikiSave(WikiWasSaved $event)
+    {
+        $event->wiki->page()->updateOrCreate([
+            'content_id'    => $event->wiki->id,
+            'content_type'  => Wiki::class,
+        ], [
+            'title' => $event->wiki->title,
+            'path' => route('wiki.show', [$event->wiki->path], false)
+        ]);
+    }
+
+    /**
+     * @param WikiWasDeleted $event
+     */
+    public function onWikiDelete(WikiWasDeleted $event)
+    {
+        $this->page->findByContent($event->wiki['id'], Wiki::class)->delete();
+    }
+
+    /**
      * Register the listeners for the subscriber.
      *
      * @param  \Illuminate\Events\Dispatcher  $events
@@ -166,6 +191,16 @@ class PageListener implements ShouldQueue
         $events->listen(
             'Coyote\Events\JobWasDeleted',
             'Coyote\Listeners\PageListener@onJobDelete'
+        );
+
+        $events->listen(
+            'Coyote\Events\WikiWasSaved',
+            'Coyote\Listeners\PageListener@onWikiSave'
+        );
+
+        $events->listen(
+            'Coyote\Events\WikiWasDeleted',
+            'Coyote\Listeners\PageListener@onWikiDelete'
         );
     }
 }

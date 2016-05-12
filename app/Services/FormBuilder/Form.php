@@ -91,6 +91,25 @@ abstract class Form extends FormRequest implements FormInterface
     /**
      * @inheritdoc
      */
+    public function addAfter($after, $name, $type, array $options = [])
+    {
+        $offset = array_search($after, array_keys($this->fields));
+
+        $beforeFields = array_slice($this->fields, 0, $offset + 1);
+        $afterFields = array_slice($this->fields, $offset + 1);
+
+        $this->fields = $beforeFields;
+
+        $this->add($name, $type, $options);
+
+        $this->fields += $afterFields;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getMethod()
     {
         return $this->attr['method'];

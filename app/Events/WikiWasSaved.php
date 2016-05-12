@@ -1,0 +1,24 @@
+<?php
+
+namespace Coyote\Events;
+
+use Coyote\Wiki;
+use Illuminate\Queue\SerializesModels;
+
+class WikiWasSaved extends Event
+{
+    use SerializesModels;
+
+    /**
+     * @var Wiki
+     */
+    public $wiki;
+
+    /**
+     * @param Wiki $wiki
+     */
+    public function __construct(Wiki $wiki)
+    {
+        $this->wiki = $wiki;
+    }
+}

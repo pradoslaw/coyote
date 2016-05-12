@@ -2,8 +2,11 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
+use Coyote\Events\WikiWasSaved;
 use Coyote\Http\Forms\Wiki\WikiForm;
-use Illuminate\Http\Request;
+use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
 
 class SubmitController extends BaseController
 {
@@ -31,15 +34,32 @@ class SubmitController extends BaseController
         $request = $form->getRequest();
         $wiki->fill($request->all());
 
+        // @todo mozna by to jakis zrefaktoryzowac? troche lipnie to wyglada...
+        if ($request->user()->can('wiki-admin')) {
+            $wiki->is_locked = $request->input('is_locked');
+            $wiki->template = $request->input('template');
+        }
+
         $path = \DB::transaction(function () use ($wiki, $request) {
+            // we need to know if those attributes were changed. if so, we need to add new record to the history.
+            $isDirty = $wiki->isDirty(['title', 'parent_id', 'excerpt', 'text']);
+            $isExist = $wiki->exists;
+
             $wiki->save();
-            // add new version to the history
-            $wiki->logs()->create($wiki->toArray() + [
-                'user_id'   => $this->userId,
-                'ip'        => $request->ip(),
-                'host'      => $request->getHost(),
-                'browser'   => $request->browser()
-            ]);
+
+            if ($isDirty) {
+                // add new version to the history
+                $wiki->logs()->create($wiki->toArray() + [
+                    'user_id'   => $this->userId,
+                    'ip'        => $request->ip(),
+                    'host'      => $request->getHost(),
+                    'browser'   => $request->browser()
+                ]);
+            }
+
+            stream($isExist ? Stream_Update::class : Stream_Create::class, (new Stream_Wiki())->map($wiki));
+            // add to elasticsaech index and pages table...
+            event(new WikiWasSaved($wiki));
 
             return $wiki->path;
         });

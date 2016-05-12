@@ -7,9 +7,15 @@
             <div class="panel panel-default" style="margin-top: 13px">
                 <div class="panel-heading">
                     <h2 class="box-header">
-                        <a title="Delphi" href="http://4programmers.net/Delphi">Programowanie w języku Delphi</a>
-                        <span class="hidden-xs">»</span>
-                        <a class="hidden-xs" href="http://4programmers.net/Delphi/Kompendium">Delphi 7. Kompendium programisty</a>
+                        {% for parent in parents %}
+                            <a title="{{ parent.long_title|default(parent.title) }}" href="{{ url(parent.path) }}">{{ parent.title }}</a>
+
+                            {% if not loop.last %}
+                                <span class="hidden-xs">»</span>
+                            {% endif %}
+                        {% endfor %}
+
+                        {#<a class="hidden-xs" href="http://4programmers.net/Delphi/Kompendium">Delphi 7. Kompendium programisty</a>#}
                     </h2>
                 </div>
 

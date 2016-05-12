@@ -33,7 +33,7 @@ class Wiki extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'title', 'long_title', 'excerpt', 'text', 'template'];
+    protected $fillable = ['parent_id', 'title', 'long_title', 'excerpt', 'text'];
 
     /**
      * @var string
@@ -47,6 +47,13 @@ class Wiki extends Model
         'template' => self::DEFAULT_TEMPLATE
     ];
 
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'is_locked' => 'bool'
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -57,6 +64,8 @@ class Wiki extends Model
 
             if ($model->parent_id) {
                 $model->path = $model->parent()->value('path') . '/' . $model->path;
+            } else {
+                $model->parent_id = null;
             }
         });
     }
@@ -66,7 +75,7 @@ class Wiki extends Model
      */
     public function page()
     {
-        return $this->morphOne('Coyote\Wiki', 'content');
+        return $this->morphOne('Coyote\Page', 'content');
     }
 
     /**
@@ -100,6 +109,6 @@ class Wiki extends Model
     {
         $this->attributes['title'] = ucfirst($title);
         // ucfirst() tylko dla zachowania kompatybilnosci wstecz
-        $this->attributes['slug'] = ucfirst(str_slug($title));
+        $this->attributes['slug'] = ucfirst(str_slug($title, '_'));
     }
 }

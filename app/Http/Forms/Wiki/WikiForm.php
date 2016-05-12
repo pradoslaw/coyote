@@ -5,6 +5,7 @@ namespace Coyote\Http\Forms\Wiki;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
+use Illuminate\Contracts\Auth\Access\Gate;
 
 class WikiForm extends Form implements ValidatesWhenSubmitted
 {
@@ -16,11 +17,18 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
     protected $wiki;
 
     /**
-     * @param WikiRepository $wiki
+     * @var Gate
      */
-    public function __construct(WikiRepository $wiki)
+    protected $gate;
+
+    /**
+     * @param WikiRepository $wiki
+     * @param Gate $gate
+     */
+    public function __construct(WikiRepository $wiki, Gate $gate)
     {
         $this->wiki = $wiki;
+        $this->gate = $gate;
     }
 
     public function buildForm()
@@ -32,6 +40,7 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
             ])
             ->add('parent_id', 'select', [
                 'label' => 'Strona macierzysta',
+                'rules' => 'sometimes|int|exists:wiki,id',
                 'choices' => $this->getTreeList(),
                 'empty_value' => '--',
                 'value' => $this->request->input('parentId')
@@ -61,6 +70,19 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
                     'data-submit-state' => 'Zapisywanie...'
                 ]
             ]);
+
+        if ($this->gate->allows('wiki-admin')) {
+            $this->addAfter('excerpt', 'is_locked', 'checkbox', [
+                'label' => 'Zablokuj tę stronę do dalszej edycji',
+                'help' => 'Tylko osoby z odpowiednim uprawnieniem będa mogły edytować tę stronę.'
+            ]);
+
+            $this->addAfter('text', 'template', 'select', [
+                'label' => 'Szablon',
+                'choices' => $this->getTemplateList(),
+                'help' => 'Ten widok Twig zostanie użyty do wyświetlenia tej strony.'
+            ]);
+        }
     }
 
     /**
@@ -69,5 +91,14 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
     protected function getTreeList()
     {
         return $this->wiki->treeList();
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getTemplateList()
+    {
+        $templates = ['show', 'category', 'blog.show', 'help.show'];
+        return array_combine($templates, $templates);
     }
 }
