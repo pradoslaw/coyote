@@ -111,4 +111,17 @@ class Wiki extends Model
         // ucfirst() tylko dla zachowania kompatybilnosci wstecz
         $this->attributes['slug'] = ucfirst(str_slug($title, '_'));
     }
+
+    /**
+     * @param array $data
+     * @param bool $authorized
+     */
+    public function fillGuarded(array $data, $authorized)
+    {
+        if ($authorized) {
+            foreach ($data as $key => $value) {
+                $this->$key = $value;
+            }
+        }
+    }
 }

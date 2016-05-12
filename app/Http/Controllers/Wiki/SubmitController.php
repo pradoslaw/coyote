@@ -32,13 +32,9 @@ class SubmitController extends BaseController
     public function save($wiki, WikiForm $form)
     {
         $request = $form->getRequest();
-        $wiki->fill($request->all());
 
-        // @todo mozna by to jakis zrefaktoryzowac? troche lipnie to wyglada...
-        if ($request->user()->can('wiki-admin')) {
-            $wiki->is_locked = $request->input('is_locked');
-            $wiki->template = $request->input('template');
-        }
+        $wiki->fill($request->all());
+        $wiki->fillGuarded($request->only(['is_locked', 'template']), $request->user()->can('wiki-admin'));
 
         $path = \DB::transaction(function () use ($wiki, $request) {
             // we need to know if those attributes were changed. if so, we need to add new record to the history.
