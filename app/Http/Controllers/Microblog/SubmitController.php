@@ -82,10 +82,10 @@ class SubmitController extends Controller
             $microblog->media = $request->get('thumbnail');
         }
 
-        $originalId = $microblog->id;
+        $isExist = $microblog->exists;
         $microblog->fill($data);
 
-        \DB::transaction(function () use (&$microblog, $user, $originalId) {
+        \DB::transaction(function () use (&$microblog, $user, $isExist) {
             $microblog->save();
 
             // parsing text and store it in cache
@@ -93,9 +93,9 @@ class SubmitController extends Controller
 
             $object = (new Stream_Microblog())->map($microblog);
 
-            if (empty($originalId)) {
+            if (!$isExist) {
                 // increase reputation points
-                app()->make('Reputation\Microblog\Create')->map($microblog)->save();
+                app('Reputation\Microblog\Create')->map($microblog)->save();
 
                 // put this to activity stream
                 stream(Stream_Create::class, $object);
@@ -105,7 +105,7 @@ class SubmitController extends Controller
                 $usersId = $helper->grab($microblog->text);
 
                 if (!empty($usersId)) {
-                    app()->make('Alert\Microblog\Login')->with([
+                    app('Alert\Microblog\Login')->with([
                         'users_id'    => $usersId,
                         'sender_id'   => $user->id,
                         'sender_name' => $user->name,
@@ -134,7 +134,7 @@ class SubmitController extends Controller
             $microblog->$key = $user->$key;
         }
 
-        return view($originalId ? 'microblog.text' : 'microblog.microblog')->with('microblog', $microblog);
+        return view($isExist ? 'microblog.text' : 'microblog.microblog')->with('microblog', $microblog);
     }
 
     /**
@@ -172,7 +172,7 @@ class SubmitController extends Controller
         \DB::transaction(function () use ($microblog) {
             $microblog->delete();
             // cofniecie pkt reputacji
-            app()->make('Reputation\Microblog\Create')->undo($microblog->id);
+            app('Reputation\Microblog\Create')->undo($microblog->id);
             $microblog->media = null; // MUST remove closure before serializing object
 
             event(new MicroblogWasDeleted($microblog));
