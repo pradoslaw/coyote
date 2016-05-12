@@ -353,7 +353,7 @@ abstract class Provider implements ProviderInterface
             unset($this->usersId[$index]);
         }
 
-        if ($this->usersId) {
+        if (!empty($this->usersId)) {
             $recipients = $this->send();
         }
 
