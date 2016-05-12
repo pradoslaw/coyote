@@ -86,7 +86,7 @@
             <div id="hint-text" class="sidebar-hint" style="display: none;">
                 <h4>Jak formatować treść postu</h4>
 
-                <p>► Kod źródłowy umieszczaj pomiędzy znacznikami <code>&lt;code&gt;</code> a <code>&lt;/code&gt;</code> np. <code>&lt;code=php&gt; &lt;/code&gt;</code></p>
+                <p>► Kod źródłowy umieszczaj pomiędzy <code>```</code> a <code>```</code>. Jeżeli chcesz włączyć kolorowanie składnii, dodaj nazwę języka, np. <code>```php</code></p>
                 <p>► Stosuj <code><strong>**pogrubienie**</strong> i <cite>*pochylenie*</cite></code></p>
                 <p>► <code><tt>`**brak formatowania**`</tt></code></p>
                 <p>► <code>`polecenia języka programowania`</code></p>
@@ -96,7 +96,7 @@
                 <p>► <cite>Shift+Tab</cite> tworzy wcięcie.</p>
                 <p>► <cite>Ctrl+V</cite> wkleja obrazek ze schowka (<strong>tylko Chrome oraz Firefox</strong>)</p>
             </div>
-            <div id="hint-tag" class="sidebar-hint" style="display: none;">
+            <div id="hint-tags" class="sidebar-hint" style="display: none;">
                 <h4>Jak tagować wątki</h4>
 
                 <p>► Tagi pozwalają grupować podobne wątki.</p>
@@ -129,10 +129,10 @@
 
     <script type="text/javascript">
         $(function() {
-            var toolTipHints = $('#hint-subject, #hint-text, #hint-tag, #hint-user_name');
+            var toolTipHints = $('#hint-subject, #hint-text, #hint-tags, #hint-user_name');
 
-            $('#submit-form').delegate('input[name="subject"], textarea[name="text"], input[name="user_name"], #tag', 'focus', function () {
-                var name = typeof $(this).attr('name') == 'undefined' ? 'tag' : $(this).attr('name');
+            $('#submit-form').delegate('input[name="subject"], textarea[name="text"], input[name="user_name"], #tags', 'focus', function () {
+                var name = typeof $(this).attr('name') == 'undefined' ? 'tags' : $(this).attr('name');
 
                 if ('hint-' + name != $('.sidebar-hint:visible').attr('id')) {
                     toolTipHints.each(function () {

@@ -236,6 +236,16 @@ class PostForm extends Form
                 'data-submit-state' => 'Zapisywanie...'
             ]
         ]);
+
+        $this->setAutofocus();
+    }
+
+    protected function setAutofocus()
+    {
+        // if subject is not present, set autofocus to textarea
+        if ($this->get('subject') === null) {
+            $this->get('text')->setAttr($this->get('text')->getAttr() + ['autofocus' => 'autofocus']);
+        }
     }
 
     /**
