@@ -43,6 +43,23 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     }
 
     /**
+     * @return array
+     */
+    public function treeList()
+    {
+        $this->applyCriteria();
+
+        $result = [];
+        $data = $this->model->from($this->sqlFunction('wiki_children'))->get(['id', 'title', 'depth']);
+
+        foreach ($data as $row) {
+            $result[$row['id']] = str_repeat('&nbsp;', $row['depth'] * 4) . $row['title'];
+        }
+
+        return $result;
+    }
+
+    /**
      * @param $name
      * @param array ...$args
      * @return \Illuminate\Database\Query\Expression
@@ -55,6 +72,6 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
             }
         }
 
-        return $this->raw(sprintf('%s(%s)', $name, implode(',', $args)));
+        return $this->raw(sprintf('%s(%s) AS "wiki"', $name, implode(',', $args)));
     }
 }

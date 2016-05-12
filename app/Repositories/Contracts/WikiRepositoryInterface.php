@@ -2,6 +2,10 @@
 
 namespace Coyote\Repositories\Contracts;
 
+/**
+ * @package Coyote\Repositories\Contracts
+ * @method $this withTrashed()
+ */
 interface WikiRepositoryInterface extends RepositoryInterface
 {
     /**
@@ -18,4 +22,9 @@ interface WikiRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function parents($id);
+
+    /**
+     * @return mixed
+     */
+    public function treeList();
 }

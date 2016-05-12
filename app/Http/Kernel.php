@@ -58,6 +58,6 @@ class Kernel extends HttpKernel
         'topic.scroll'  => Middleware\ScrollToPost::class,
         'post.response' => Middleware\PostSubmitResponse::class,
         'comment.access' => Middleware\CommentAccess::class,
-        'wiki.exist'    => Middleware\ShowErrorIfNotFound::class
+        'wiki'          => Middleware\WikiAccess::class
     ];
 }

@@ -11,20 +11,12 @@ class ShowController extends BaseController
         /** @var \Coyote\Wiki $wiki */
         $wiki  = $request->wiki;
 
-        $author = $wiki->logs()->first()->user()->first();
+        $author = $wiki->logs()->first()->user;
         $wiki->text = $this->getParser()->parse((string) $wiki->text);
 
         return $this->view('wiki.' . $wiki->template, [
             'wiki' => $wiki,
             'author' => $author
         ]);
-    }
-
-    /**
-     * @return \Coyote\Services\Parser\Parsers\ParserInterface
-     */
-    private function getParser()
-    {
-        return app('parser.wiki');
     }
 }

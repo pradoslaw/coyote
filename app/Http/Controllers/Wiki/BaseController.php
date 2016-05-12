@@ -30,9 +30,19 @@ abstract class BaseController extends Controller
      */
     protected function buildBreadcrumb($wiki)
     {
-        $this->wiki->parents($wiki->id)->reverse()->each(function ($item) {
-            /** @var \Coyote\Wiki $item */
-            $this->breadcrumb->push($item->title, url($item->path));
-        });
+        if (!empty($wiki)) {
+            $this->wiki->parents($wiki->id)->reverse()->each(function ($item) {
+                /** @var \Coyote\Wiki $item */
+                $this->breadcrumb->push($item->title, url($item->path));
+            });
+        }
+    }
+
+    /**
+     * @return \Coyote\Services\Parser\Parsers\ParserInterface
+     */
+    protected function getParser()
+    {
+        return app('parser.wiki');
     }
 }
