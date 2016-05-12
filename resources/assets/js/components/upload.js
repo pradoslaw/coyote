@@ -53,7 +53,9 @@
                             upload(e.target.result);
                         };
 
-                        fr.readAsDataURL(blob);
+                        if (blob) {
+                            fr.readAsDataURL(blob);
+                        }
                     }
                 };
             } else if (navigator.userAgent.indexOf("Firefox") > -1 && navigator.userAgent.indexOf("Trident") === -1) {
