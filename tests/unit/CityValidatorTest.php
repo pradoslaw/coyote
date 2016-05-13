@@ -19,7 +19,7 @@ class CityValidatorTest extends \Codeception\TestCase\Test
     // tests
     public function testValidateCityName()
     {
-        $validator = new \Coyote\CityValidator();
+        $validator = new \Coyote\Http\Validators\CityValidator();
 
         $this->assertTrue($validator->validateCity([], 'Wrocław', [], null));
         $this->assertTrue($validator->validateCity([], 'Wrocław, Warszawa', [], null));
