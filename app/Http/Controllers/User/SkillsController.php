@@ -16,7 +16,7 @@ class SkillsController extends BaseController
     {
         $this->breadcrumb->push('Umiejętności', route('user.skills'));
 
-        $skills = User\Skill::where('user_id', auth()->user()->id)->orderBy('order')->get();
+        $skills = auth()->user()->skills()->orderBy('order')->get();
 
         return $this->view('user.skills.home')->with('skills', $skills);
     }
@@ -27,10 +27,8 @@ class SkillsController extends BaseController
      */
     public function save(Request $request)
     {
-        $userId = auth()->user()->id;
-
         $this->validate($request, [
-            'name'              => 'required|string|max:100|unique:user_skills,name,NULL,id,user_id,' . $userId,
+            'name'              => 'required|string|max:100|unique:user_skills,name,NULL,id,user_id,' . $this->userId,
             'rate'              => 'required|integer|min:1|max:6'
         ], [
             'name.required'     => 'Proszę wpisać nazwę umiejętności',
@@ -38,7 +36,7 @@ class SkillsController extends BaseController
             'rate.min'          => 'Nie wprowadziłeś oceny swojej umiejętności.'
         ]);
 
-        $skill = User\Skill::create($request->all() + ['user_id' => $userId]);
+        $skill = auth()->user()->skills()->create($request->all());
         return view('user.skills.list')->with('item', $skill);
     }
 
@@ -47,11 +45,7 @@ class SkillsController extends BaseController
      */
     public function delete($id)
     {
-        $skill = User\Skill::findOrFail($id, ['id', 'user_id']);
-        if ($skill->user_id !== auth()->user()->id) {
-            abort(500);
-        }
-
+        $skill = auth()->user()->skills()->findOrFail($id, ['id', 'user_id']);
         $skill->delete();
     }
 
@@ -64,10 +58,7 @@ class SkillsController extends BaseController
     {
         \DB::transaction(function () use ($request) {
             foreach ($request->get('order') as $id => $order) {
-                \DB::table('user_skills')
-                    ->where('id', $id)
-                    ->where('user_id', auth()->user()->id)
-                    ->update(['order' => intval($order) + 1]);
+                auth()->user()->skills()->where('id', $id)->update(['order' => intval($order) + 1]);
             }
         });
     }

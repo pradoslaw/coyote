@@ -55,17 +55,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     /**
      * The attributes that are mass assignable.
+     * group_id (default group id) can be in fillable list because controller must validate if user really
+     * has access to this group.
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'salt', 'password', 'group_id', 'is_active', 'is_confirm', 'provider', 'provider_id', 'photo', 'date_format', 'location', 'website', 'bio', 'sig', 'firm', 'position', 'birthyear', 'allow_count', 'allow_smilies', 'allow_sig', 'allow_subscribe'];
+    protected $fillable = ['name', 'email', 'password', 'group_id', 'is_active', 'is_confirm', 'provider', 'provider_id', 'photo', 'date_format', 'location', 'website', 'bio', 'sig', 'firm', 'position', 'birthyear', 'allow_count', 'allow_smilies', 'allow_sig', 'allow_subscribe'];
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token', 'salt'];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * @var string
@@ -158,6 +160,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function actkey()
     {
         return $this->hasMany('Coyote\Actkey');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function skills()
+    {
+        return $this->hasMany('Coyote\User\Skill');
     }
 
     /**

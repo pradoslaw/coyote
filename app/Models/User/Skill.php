@@ -11,7 +11,7 @@ class Skill extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'rate', 'order', 'user_id'];
+    protected $fillable = ['name', 'rate', 'order'];
 
     /**
      * The database table used by the model.
@@ -20,5 +20,8 @@ class Skill extends Model
      */
     protected $table = 'user_skills';
 
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 }
