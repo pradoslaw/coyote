@@ -1,8 +1,9 @@
 <?php
 
-namespace Coyote;
+namespace Coyote\Http\Validators;
 
 use Coyote\Services\Parser\Helpers\City;
+use Illuminate\Validation\Validator;
 
 class CityValidator
 {
@@ -12,7 +13,7 @@ class CityValidator
      * @param $attribute
      * @param $value
      * @param $parameters
-     * @param \Illuminate\Validation\Validator $validator
+     * @param Validator $validator
      * @return bool
      */
     public function validateCity($attribute, $value, $parameters, $validator)
@@ -21,8 +22,8 @@ class CityValidator
 
         foreach ($grabber->grab($value) as $city) {
             if (!preg_match('/' . self::REGEXP . '/u', trim($city))) {
-                if ($validator instanceof \Illuminate\Validation\Validator) {
-                    $validator->addReplacer('city', function ($message, $attribute, $rule, $parameters) use ($city) {
+                if ($validator instanceof Validator) {
+                    $validator->addReplacer('city', function ($message) use ($city) {
                         return str_replace(':value', $city, $message);
                     });
                 }

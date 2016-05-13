@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Stream;
 
-use Coyote\Repositories\Contracts\StreamRepositoryInterface;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Coyote\Services\Stream\Objects\ObjectInterface;
 use Coyote\Services\Stream\Objects;
 
@@ -12,14 +12,14 @@ use Coyote\Services\Stream\Objects;
 class Stream
 {
     /**
-     * @var StreamRepositoryInterface
+     * @var StreamRepository
      */
     private $repository;
 
     /**
-     * @param StreamRepositoryInterface $repository
+     * @param StreamRepository $repository
      */
-    public function __construct(StreamRepositoryInterface $repository)
+    public function __construct(StreamRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -48,6 +48,7 @@ class Stream
             $class = __NAMESPACE__ . '\\Render\\' . ucfirst(camel_case($row['object.objectType']));
             $decorator = new $class($row);
 
+            /** @var \Coyote\Services\Stream\Render\Render $decorator */
             $result[$index] = $decorator->render();
         }
 

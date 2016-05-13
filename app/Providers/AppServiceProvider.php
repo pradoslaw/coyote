@@ -21,20 +21,21 @@ class AppServiceProvider extends ServiceProvider
     {
         // set cloud flare as trusted proxy
         $this->app['request']->setTrustedProxies($this->app['config']->get('cloudflare.ip'));
+        // force HTTPS according to cloudflare HTTP_X_FORWARDED_PROTO header
         $this->app['request']->server->set(
             'HTTPS',
             $this->app['request']->server('HTTP_X_FORWARDED_PROTO') === 'https'
         );
 
-        $this->app['validator']->extend('username', 'Coyote\UserValidator@validateName');
-        $this->app['validator']->extend('user_unique', 'Coyote\UserValidator@validateUnique');
-        $this->app['validator']->extend('user_exist', 'Coyote\UserValidator@validateExist');
-        $this->app['validator']->extend('password', 'Coyote\PasswordValidator@validatePassword');
-        $this->app['validator']->extend('reputation', 'Coyote\ReputationValidator@validateReputation');
-        $this->app['validator']->extend('tag', 'Coyote\TagValidator@validateTag');
-        $this->app['validator']->extend('tag_creation', 'Coyote\TagCreationValidator@validateTag');
-        $this->app['validator']->extend('throttle', 'Coyote\ThrottleValidator@validateThrottle');
-        $this->app['validator']->extend('city', 'Coyote\CityValidator@validateCity');
+        $this->app['validator']->extend('username', 'Coyote\Http\Validators\UserValidator@validateName');
+        $this->app['validator']->extend('user_unique', 'Coyote\Http\Validators\UserValidator@validateUnique');
+        $this->app['validator']->extend('user_exist', 'Coyote\Http\Validators\UserValidator@validateExist');
+        $this->app['validator']->extend('password', 'Coyote\Http\Validators\PasswordValidator@validatePassword');
+        $this->app['validator']->extend('reputation', 'Coyote\Http\Validators\ReputationValidator@validateReputation');
+        $this->app['validator']->extend('tag', 'Coyote\Http\Validators\TagValidator@validateTag');
+        $this->app['validator']->extend('tag_creation', 'Coyote\Http\Validators\TagValidator@validateTagCreation');
+        $this->app['validator']->extend('throttle', 'Coyote\Http\Validators\ThrottleValidator@validateThrottle');
+        $this->app['validator']->extend('city', 'Coyote\Http\Validators\CityValidator@validateCity');
 
         $this->app['validator']->replacer('reputation', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);
@@ -66,7 +67,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('stream', function ($app) {
-            return new $app[Stream::class]($app[StreamRepositoryInterface::class]);
+            return new Stream($app[StreamRepositoryInterface::class]);
         });
 
         $this->app->singleton('form.builder', function ($app) {

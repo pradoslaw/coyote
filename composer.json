@@ -51,7 +51,6 @@
         "classmap": [
             "database",
             "app/Models",
-            "app/Http/Validators",
             "app/Plugins"
         ],
         "psr-4": {

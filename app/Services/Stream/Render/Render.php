@@ -19,6 +19,9 @@ abstract class Render
         $this->stream = $stream;
     }
 
+    /**
+     * @return Model
+     */
     public function render()
     {
         $translator = app('translator');
@@ -37,6 +40,10 @@ abstract class Render
         return $this->stream;
     }
 
+    /**
+     * @param string $message
+     * @return array
+     */
     protected function makeParameters($message)
     {
         $parameters = [];
@@ -59,6 +66,9 @@ abstract class Render
         return $parameters;
     }
 
+    /**
+     * @return string
+     */
     protected function actor()
     {
         return link_to(
@@ -68,16 +78,25 @@ abstract class Render
         );
     }
 
+    /**
+     * @return mixed
+     */
     protected function excerpt()
     {
         return $this->stream['object.displayName'];
     }
 
+    /**
+     * @return mixed
+     */
     protected function verb()
     {
         return trans('stream.' . $this->stream['verb']);
     }
 
+    /**
+     * @return string
+     */
     protected function object()
     {
         return link_to(
@@ -86,6 +105,9 @@ abstract class Render
         );
     }
 
+    /**
+     * @return string
+     */
     protected function target()
     {
         return link_to(

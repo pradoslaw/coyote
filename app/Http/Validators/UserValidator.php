@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote;
+namespace Coyote\Http\Validators;
 
 /**
  * Class UserValidator
