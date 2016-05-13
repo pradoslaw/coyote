@@ -221,5 +221,13 @@ $(function () {
     })
     .on('pm', function(data) {
         DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
+        var dropdown = $('#messages');
+        var value = (parseInt($('.badge', dropdown).text()) || 0) + 1;
+
+        if (value === 1) {
+            $('> a:first', dropdown).prepend('<span class="badge">' + value + '</span>');
+        } else {
+            $('.badge', dropdown).text(value);
+        }
     });
 });
