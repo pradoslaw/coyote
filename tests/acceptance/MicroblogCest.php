@@ -33,6 +33,16 @@ class MicroblogCest
         $I->canSee('Testowy wpis na mikroblogu');
     }
 
+    public function postAndGetError(AcceptanceTester $I)
+    {
+        $I->wantTo('write new message but it is too fast so I suppose to see error message');
+
+        $I->amOnPage('/Mikroblogi');
+        $I->submitForm('.microblog-submit', ['text' => 'Kolejny wpis']);
+        $I->wait(1);
+        $I->see('Musisz odczekać chwilę przed dodaniem kolejnego wpisu.');
+    }
+
     public function comment(AcceptanceTester $I)
     {
         $I->wantTo('post a comment');
