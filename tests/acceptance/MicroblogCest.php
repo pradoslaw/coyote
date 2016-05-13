@@ -40,7 +40,7 @@ class MicroblogCest
         $I->amOnPage('/Mikroblogi');
         $I->submitForm('.microblog-submit', ['text' => 'Kolejny wpis']);
         $I->wait(1);
-        $I->see('Musisz odczekać chwilę przed dodaniem kolejnego wpisu.');
+        $I->see('przed dodaniem kolejnego wpisu.'); // wystarczy tylko fragment tego zdania
     }
 
     public function comment(AcceptanceTester $I)

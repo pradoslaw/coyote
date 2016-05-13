@@ -61,7 +61,7 @@ class TopicCest
         $this->submit($I, $fake->title, $fake->text, $fake->userName);
 
         $I->wait(1);
-        $I->see('Musisz odczekać chwilę przed dodaniem kolejnego wpisu.');
+        $I->see('przed dodaniem kolejnego wpisu.');
     }
 
     public function createTopicAsAuthenticatedUser(AcceptanceTester $I)
@@ -69,6 +69,8 @@ class TopicCest
         $I->wantTo('Create new topic as authenticated user');
         $I->login('admin', '123');
         $I->amOnPage('/Forum/Newbie/Submit');
+
+        $I->wait(15); // czekamy 15 sekund aby nie zalapac sie na walidacje spamowania
 
         $fake = Factory::create();
         $text = $fake->text;
