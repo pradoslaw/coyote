@@ -24,14 +24,4 @@ class HomeController extends Controller
     {
         return view('pastebin.show');
     }
-
-    /**
-     * Zapis tresci pastebin do bazy danych
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save()
-    {
-        return back();
-    }
 }
