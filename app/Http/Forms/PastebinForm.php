@@ -8,6 +8,25 @@ class PastebinForm extends Form
 {
     public function buildForm()
     {
-        // TODO: Implement buildForm() method.
+        $this
+            ->add('content', 'text')
+            ->add('syntax', 'select', [
+                'choices' => $this->getSyntaxList(),
+                'label' => 'Kolorowanie składni'
+            ])
+            ->add('expires', 'select', [
+                'choices' => $this->getExpiresList(),
+                'label' => 'Wygaśnie'
+            ]);
+    }
+
+    private function getSyntaxList()
+    {
+        return [];
+    }
+
+    public function getExpiresList()
+    {
+        return [];
     }
 }
