@@ -19,7 +19,7 @@ class CreatePastebinTable extends Migration
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->smallInteger('expires')->nullable();
             $table->text('text');
-            $table->string('syntax');
+            $table->string('mode');
         });
     }
 

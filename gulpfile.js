@@ -128,7 +128,8 @@ elixir(function (mix) {
         .sass('pages/adm.scss')
         .sass('pages/pastebin.scss');
 
-    mix.copy('resources/assets/bower/codemirror/lib/codemirror.css', 'public/css/codemirror.css');
+    mix.copy('resources/assets/bower/codemirror/lib/codemirror.css', 'public/css/codemirror.css')
+        .copy('resources/assets/bower/codemirror/mode', 'public/js/codemirror');
 
     mix.version([
         'js/main.js',

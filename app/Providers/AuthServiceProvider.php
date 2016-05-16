@@ -36,6 +36,20 @@ class AuthServiceProvider extends ServiceProvider
     ];
 
     /**
+     * Global permissions
+     *
+     * @var array
+     */
+    protected $permissions = [
+        'adm-access',
+        'forum-delete',
+        'forum-update',
+        'job-delete',
+        'wiki-admin',
+        'pastebin-delete'
+    ];
+
+    /**
      * Register any application authentication / authorization services.
      *
      * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
@@ -45,7 +59,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies($gate);
 
-        foreach (['adm-access', 'forum-delete', 'forum-update', 'job-delete', 'wiki-admin'] as $ability) {
+        foreach ($this->permissions as $ability) {
             $gate->define($ability, function ($user) use ($ability) {
                 return $user->ability($ability);
             });

@@ -37,7 +37,8 @@ class ShowController extends Controller
             'form' => $this->createForm(PastebinForm::class, $pastebin, [
                 'url' => route('pastebin.submit')
             ]),
-            'latest' => $latest
+            'latest' => $latest,
+            'pastebin' => $pastebin
         ]);
     }
 }

@@ -3,25 +3,10 @@
 namespace Coyote\Http\Forms;
 
 use Coyote\Services\FormBuilder\Form;
-
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
-use Illuminate\Contracts\Auth\Guard;
 
 class PastebinForm extends Form implements ValidatesWhenSubmitted
 {
-    /**
-     * @var Guard
-     */
-    protected $auth;
-
-    /**
-     * @param Guard $auth
-     */
-    public function __construct(Guard $auth)
-    {
-        $this->auth = $auth;
-    }
-
     public function buildForm()
     {
         $this
@@ -40,11 +25,11 @@ class PastebinForm extends Form implements ValidatesWhenSubmitted
                 'rules' => 'required|string|min:2|max:100',
                 'help' => 'Nazwa, tytuł wpisu. Może to być po prostu Twój nick.'
             ])
-            ->add('syntax', 'select', [
-                'choices' => $this->getSyntaxList(),
+            ->add('mode', 'select', [
+                'choices' => $this->getModeList(),
                 'label' => 'Kolorowanie składni',
                 'empty_value' => '--',
-                'rules' => 'sometimes|in:' . implode(',', array_keys($this->getSyntaxList()))
+                'rules' => 'sometimes|in:' . implode(',', array_keys($this->getModeList()))
             ])
             ->add('expires', 'select', [
                 'choices' => $this->getExpiresList(),
@@ -61,13 +46,13 @@ class PastebinForm extends Form implements ValidatesWhenSubmitted
                 ]
             ])
             ->add('human_email', 'text', [
-                'rules' => 'max:0',
+                'rules' => 'max:0', // anti spam bot detection
                 'row_attr' => [
                     'style' => 'display: none'
                 ]
             ]);
 
-        if ($this->auth->check()) {
+        if (!empty($this->request->user())) {
             $this->get('title')->setValue($this->request->user()->name);
         }
     }
@@ -75,7 +60,7 @@ class PastebinForm extends Form implements ValidatesWhenSubmitted
     /**
      * @return array
      */
-    private function getSyntaxList()
+    private function getModeList()
     {
         return [
             'c_cpp' => 'C++',

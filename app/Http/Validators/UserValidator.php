@@ -2,11 +2,26 @@
 
 namespace Coyote\Http\Validators;
 
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+
 /**
  * Class UserValidator
  */
 class UserValidator
 {
+    /**
+     * @var UserRepository
+     */
+    protected $user;
+    
+    /**
+     * @param UserRepository $user
+     */
+    public function __construct(UserRepository $user)
+    {
+        $this->user = $user;
+    }
+
     /**
      * Walidator sprawdza poprawnosc nazwy uzytkownika pod katem uzytych znakow. Nazwa uzytkownika
      * moze zawierac jedynie okreslony zbior znakow.
@@ -33,10 +48,10 @@ class UserValidator
      */
     public function validateUnique($attribute, $value, $parameters, $validator)
     {
-        $id = isset($parameters[0]) ? (int) $parameters[0] : null;
-        $user = app('UserRepository')->findByName(mb_strtolower($value));
+        $userId = isset($parameters[0]) ? (int) $parameters[0] : null;
+        $user = $this->user->findByName(mb_strtolower($value));
 
-        if ($user && $id !== $user->id) {
+        if ($user && $userId !== $user->id) {
             return false;
         }
 
@@ -54,6 +69,6 @@ class UserValidator
      */
     public function validateExist($attribute, $value, $parameters, $validator)
     {
-        return app('UserRepository')->findByName(mb_strtolower($value)) !== null;
+        return $this->user->findByName(mb_strtolower($value)) !== null;
     }
 }

@@ -49,10 +49,16 @@
     {{ parent() }}
 
     <script src="{{ cdn('js/codemirror.js') }}"></script>
+    <script src="{{ cdn('js/codemirror/htmlmixed/htmlmixed.js') }}"></script>
+
+    {% if pastebin.mode %}
+        <script src="{{ cdn('js/codemirror/' ~ pastebin.mode ~ '/' ~ pastebin.mode ~ '.js') }}"></script>
+    {% endif %}
+
     <script>
         var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
             lineNumbers: true,
-            mode: "javascript"
+            mode: "{{ pastebin.mode }}"
         });
     </script>
 {% endblock %}

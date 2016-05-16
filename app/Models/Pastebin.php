@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $expires
  * @property string $text
  * @property string $title
- * @property string $syntax
+ * @property string $mode
  */
 class Pastebin extends Model
 {
@@ -24,7 +24,7 @@ class Pastebin extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'text', 'expires', 'title', 'syntax'];
+    protected $fillable = ['user_id', 'text', 'expires', 'title', 'mode'];
 
     /**
      * @var string
@@ -40,4 +40,16 @@ class Pastebin extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            /** @var \Coyote\Pastebin $model */
+            if (empty($model->expires)) {
+                $model->expires = null;
+            }
+        });
+    }
 }
