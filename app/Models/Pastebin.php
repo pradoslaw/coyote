@@ -4,6 +4,14 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $expires
+ * @property string $text
+ * @property string $title
+ * @property string $syntax
+ */
 class Pastebin extends Model
 {
     /**
@@ -16,7 +24,7 @@ class Pastebin extends Model
      *
      * @var array
      */
-    protected $fillable = ['text', 'expired_at', 'user_name', 'syntax'];
+    protected $fillable = ['user_id', 'text', 'expires', 'title', 'syntax'];
 
     /**
      * @var string
@@ -26,5 +34,10 @@ class Pastebin extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'expired_at'];
+    protected $dates = ['created_at'];
+
+    /**
+     * @var bool
+     */
+    public $timestamps = false;
 }

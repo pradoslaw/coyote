@@ -3,6 +3,7 @@
 namespace Coyote\Listeners;
 
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
+use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Illuminate\Routing\Events\RouteMatched;
@@ -16,7 +17,8 @@ class BindRouteDefaultModel
     protected $default = [
         'topic' => TopicRepositoryInterface::class,
         'microblog' => MicroblogRepositoryInterface::class,
-        'wiki' => WikiRepositoryInterface::class
+        'wiki' => WikiRepositoryInterface::class,
+        'pastebin' => PastebinRepositoryInterface::class
     ];
 
     /**

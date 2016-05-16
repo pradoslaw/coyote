@@ -1,14 +1,58 @@
-{% extends 'layout.twig' %}
+{% extends 'layout' %}
 {% block title %}Pastebin {{ parent() }}{% endblock %}
 
 {% block container %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>Pastebin - wklej swój kod!</h1>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-sm-2">
+            <section id="box-related" class="box related">
+                <h4 class="border"><i class="fa fa-eye fa-fw"></i> Ostatnie wpisy</h4>
+
+                <div>
+                    <ul>
+                        {% for item in latest %}
+                            <li>
+                                <a data-category="forum-related" href="{{ route('pastebin.show', [item.id]) }}" title="{{ item.title }}">
+                                    <strong>{{ item.title }}</strong>
+                                    <small>{{ item.created_at|format_date }}</small>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <p><em>(brak wpisów)</em></p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-sm-10">
+            {{ form(form) }}
+        </div>
+    </div>
 {% endblock %}
 
 {% block head %}
     {{ parent() }}
+
+    <link rel="stylesheet" href="{{ cdn('css/codemirror.css') }}">
+    <link rel="stylesheet" href="{{ cdn('css/pastebin.css') }}">
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
+
+    <script src="{{ cdn('js/codemirror.js') }}"></script>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+            lineNumbers: true,
+            mode: "javascript"
+        });
+    </script>
 {% endblock %}

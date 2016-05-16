@@ -17,6 +17,8 @@ class PermissionsTableSeeder extends Seeder
             'default'        => false
         ]);
 
+        \DB::table('group_permissions')->where('permission_id', '=', $id)->update(['value' => true]);
+
         \DB::table('permissions')->insert([
             'name'           => 'forum-sticky',
             'description'    => 'Zakładanie przyklejonych tematów',
@@ -65,6 +67,10 @@ class PermissionsTableSeeder extends Seeder
             'default'        => false
         ]);
 
-        \DB::table('group_permissions')->where('permission_id', '=', $id)->update(['value' => true]);
+        \DB::table('permissions')->insert([
+            'name'           => 'pastebin-delete',
+            'description'    => 'Usuwanie wpisów z Pastebin',
+            'default'        => false
+        ]);
     }
 }

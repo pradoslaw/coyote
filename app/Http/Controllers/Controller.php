@@ -87,7 +87,7 @@ abstract class Controller extends BaseController
             $menu->add('Forum', ['route' => 'forum.home', 'as' => 'forum'])->active('Forum/*');
             $menu->add('Mikroblogi', ['route' => 'microblog.home'])->active('Mikroblogi/*');
             $menu->add('Praca', ['route' => 'job.home'])->active('Praca/*');
-            $menu->add('Pastebin', ['route' => 'pastebin.home'])->active('Pastebin/*');
+            $menu->add('Pastebin', ['route' => 'pastebin.show'])->active('Pastebin/*');
         });
 
         // cache user customized menu for 7 days

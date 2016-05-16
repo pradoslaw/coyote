@@ -111,7 +111,9 @@ elixir(function (mix) {
             '../bower/jquery-ui/ui/minified/mouse.min.js',
             '../bower/jquery-ui/ui/minified/resizable.min.js',
             '../bower/jquery-ui/ui/minified/sortable.min.js'
-        ], 'public/js/jquery-ui.js');
+        ], 'public/js/jquery-ui.js')
+
+        .scripts(['../bower/codemirror/lib/codemirror.js'], 'public/js/codemirror.js');
 
     mix.sass('main.scss')
         .sass('pages/auth.scss')
@@ -123,7 +125,10 @@ elixir(function (mix) {
         .sass('pages/profile.scss')
         .sass('pages/job.scss')
         .sass('pages/errors.scss')
-        .sass('pages/adm.scss');
+        .sass('pages/adm.scss')
+        .sass('pages/pastebin.scss');
+
+    mix.copy('resources/assets/bower/codemirror/lib/codemirror.css', 'public/css/codemirror.css');
 
     mix.version([
         'js/main.js',
@@ -141,6 +146,7 @@ elixir(function (mix) {
         'js/perfect-scrollbar.js',
         'js/animate-colors.js',
         'js/jquery-ui.js',
+        'js/codemirror.js',
 
         'css/main.css',
         'css/auth.css',
@@ -151,7 +157,9 @@ elixir(function (mix) {
         'css/user.css',
         'css/profile.css',
         'css/job.css',
-        'css/errors.css'
+        'css/errors.css',
+        'css/codemirror.css',
+        'css/pastebin.css'
     ]);
 });
 
