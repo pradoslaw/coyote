@@ -106,7 +106,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         if ($userId) {
             $sql = $sql->addSelect(['ts.created_at AS subscribe_on'])
                         ->leftJoin('topic_subscribers AS ts', function ($join) use ($userId) {
-                            $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', DB::raw($userId));
+                            $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
                         });
         }
 
