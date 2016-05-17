@@ -101,6 +101,11 @@ class Wiki extends Model
     {
         return $this->hasOne('Coyote\Wiki', 'id', 'parent_id');
     }
+    
+    public function children()
+    {
+        return $this->hasMany('Coyote\Wiki', 'parent_id', 'id');
+    }
 
     /**
      * @param string $title

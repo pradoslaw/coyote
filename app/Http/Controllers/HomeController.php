@@ -2,57 +2,172 @@
 
 namespace Coyote\Http\Controllers;
 
-use Coyote\Http\Factories\CacheFactory;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
-use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
+use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
+use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Services\Session\Viewers;
 use Coyote\Services\Stream\Stream;
 
 class HomeController extends Controller
 {
-    use CacheFactory;
+    /**
+     * @var MicroblogRepository
+     */
+    protected $microblog;
 
-    public function index(Microblog $microblog, Reputation $reputation, Stream $stream, Topic $topic)
-    {
-        $viewers = $this->getSessionViewersFactory();
+    /**
+     * @var ReputationRepository
+     */
+    protected $reputation;
 
-        start_measure('stream', 'Stream activities');
-        // take last stream activity for forum
-        $activities = $stream->take(10, 0, ['Topic', 'Post', 'Comment'], ['Create', 'Update'], ['Forum', 'Post', 'Topic']);
-        stop_measure('stream');
+    /**
+     * @var Stream
+     */
+    protected $stream;
 
-        $topic->pushCriteria(new OnlyThoseWithAccess());
-        $cache = $this->getCacheFactory();
+    /**
+     * @var TopicRepository
+     */
+    protected $topic;
 
-        return $this->view('home', [
-            'viewers'              => $viewers->render(),
-            'microblogs'           => $microblog->take(10),
-            'activities'           => $activities,
-            'reputation'           => $cache->remember('homepage:reputation', 30, function () use ($reputation) {
-                return [
-                    'month'   => $reputation->monthly(),
-                    'year'    => $reputation->yearly(),
-                    'total'   => $reputation->total()
-                ];
-            }),
-            'settings'             => $this->getSettings(),
-            'newest'               => $cache->remember('homepage:newest', 30, function () use ($topic) {
-                return $topic->newest();
-            }),
-            'voted'                 => $cache->remember('homepage:voted', 30, function () use ($topic) {
-                return $topic->voted();
-            }),
-            'interesting'           => $topic->interesting($this->userId),
-        ]);
+    /**
+     * @var WikiRepository
+     */
+    protected $wiki;
+
+    /**
+     * @param MicroblogRepository $microblog
+     * @param ReputationRepository $reputation
+     * @param Stream $stream
+     * @param TopicRepository $topic
+     * @param WikiRepository $wiki
+     */
+    public function __construct(
+        MicroblogRepository $microblog,
+        ReputationRepository $reputation,
+        Stream $stream,
+        TopicRepository $topic,
+        WikiRepository $wiki
+    ) {
+        parent::__construct();
+
+        $this->microblog = $microblog;
+        $this->reputation = $reputation;
+        $this->stream = $stream;
+        $this->topic = $topic;
+        $this->wiki = $wiki;
     }
 
     /**
-     * @return Viewers
+     * @return $this
      */
-    private function getSessionViewersFactory()
+    public function index()
     {
-        return app(Viewers::class);
+        $result = [];
+        $reflection = new \ReflectionClass($this);
+
+        $cache = $this->getCacheFactory();
+
+        $this->topic->pushCriteria(new OnlyThoseWithAccess());
+
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PRIVATE) as $method) {
+            $method = $method->getName();
+            $snake = snake_case($method);
+
+            if (substr($snake, 0, 3) === 'get') {
+                $name = substr($snake, 4);
+
+                if (in_array($name, ['reputation', 'newest', 'voted', 'blog'])) {
+                    $result[$name] = $cache->remember('homepage:' . $name, 30, function () use ($method) {
+                        return $this->$method();
+                    });
+                } else {
+                    $result[$name] = $this->$method();
+                }
+            }
+        }
+
+        return $this->view('home', $result)->with('settings', $this->getSettings());
+    }
+
+    /**
+     * @return array
+     */
+    private function getReputation()
+    {
+        return [
+            'month'   => $this->reputation->monthly(),
+            'year'    => $this->reputation->yearly(),
+            'total'   => $this->reputation->total()
+        ];
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getBlog()
+    {
+        /** @var \Coyote\Wiki $parent */
+        $parent = $this->wiki->findBy('path', 'Blog', ['id', 'parent_id']);
+        return $parent->children()->latest()->limit(5)->get(['created_at', 'path', 'title', 'long_title']);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getMicroblogs()
+    {
+        return $this->microblog->take(10);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getVoted()
+    {
+        return $this->topic->voted();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getNewest()
+    {
+        return $this->topic->newest();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getInteresting()
+    {
+        return $this->topic->interesting($this->userId);
+    }
+
+    /**
+     * @return array
+     */
+    private function getActivities()
+    {
+        // take last stream activity for forum
+        return $this->stream->take(
+            10, // limit
+            0,
+            ['Topic', 'Post', 'Comment'], // objects
+            ['Create', 'Update'], // actions
+            ['Forum', 'Post', 'Topic'] // targets
+        );
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    private function getViewers()
+    {
+        /** @var Viewers $viewers */
+        $viewers = app(Viewers::class);
+        return $viewers->render();
     }
 }

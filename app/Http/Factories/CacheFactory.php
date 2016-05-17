@@ -9,7 +9,7 @@ trait CacheFactory
     /**
      * @return Repository
      */
-    private function getCacheFactory()
+    protected function getCacheFactory()
     {
         return app(Repository::class);
     }

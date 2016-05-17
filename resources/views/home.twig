@@ -179,34 +179,16 @@
 
                 <div class="panel panel-news">
                     <div class="panel-body">
-                        <h5><a title="Zobacz zmiany w serwisie 4programmers.net" href="http://4programmers.net/Blog">Nowości w serwisie</a></h5>
+                        <h5><a title="Zobacz zmiany w serwisie 4programmers.net" href="{{ url('Blog') }}">Nowości w serwisie</a></h5>
 
                         <ul>
-                            <li>
-                                <small class="hidden-xs">11 maj 2015</small>
+                            {% for article in blog %}
+                                <li>
+                                    <small class="hidden-xs">{{ article.created_at|date('d M Y') }}</small>
 
-                                <a href="http://4programmers.net/Blog/Grupowanie_powiadomień_z_mikrobloga">Grupowanie powiadomień z mikrobloga</a>
-                            </li>
-                            <li>
-                                <small class="hidden-xs">30 lis 2014</small>
-
-                                <a href="http://4programmers.net/Blog/Wyświetlanie_kwoty_na_rękę_w_przypadku_kontraktu">Wyświetlanie kwoty na rękę w przypadku kontraktu</a>
-                            </li>
-                            <li>
-                                <small class="hidden-xs">07 lis 2014</small>
-
-                                <a href="http://4programmers.net/Blog/Kosmetyczne_zmiany_w_module_Praca">Kosmetyczne (?) zmiany w module Praca</a>
-                            </li>
-                            <li>
-                                <small class="hidden-xs">13 paź 2014</small>
-
-                                <a href="http://4programmers.net/Blog/Grupowanie_powiadomień_tego_samego_typu">Grupowanie powiadomień tego samego typu</a>
-                            </li>
-                            <li>
-                                <small class="hidden-xs">23 kwi 2014</small>
-
-                                <a href="http://4programmers.net/Blog/Co_nowego_na_forum_w_nieco_odmienionej_formie">"Co nowego na forum" w nieco odmienionej formie</a>
-                            </li>
+                                    <a href="{{ url(article.path) }}" title="{{ article.long_title|default(article.title) }}">{{ article.title }}</a>
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
