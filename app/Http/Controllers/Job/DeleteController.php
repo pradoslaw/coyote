@@ -17,7 +17,7 @@ class DeleteController extends Controller
      */
     public function index(Job $job)
     {
-        \DB::transaction(function () use ($job) {
+        $this->transaction(function () use ($job) {
             $job->delete();
             event(new JobWasDeleted($job));
 

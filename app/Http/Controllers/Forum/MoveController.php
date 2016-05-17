@@ -35,7 +35,7 @@ class MoveController extends BaseController
             abort(401);
         }
 
-        \DB::transaction(function () use ($topic, $forum, $old, $request) {
+        $this->transaction(function () use ($topic, $forum, $old, $request) {
             $reason = null;
 
             $notification = [

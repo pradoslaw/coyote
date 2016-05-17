@@ -32,7 +32,7 @@ class VoteController extends BaseController
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
         }
 
-        \DB::transaction(function () use ($post, $topic, $forum) {
+        $this->transaction(function () use ($post, $topic, $forum) {
             $result = $post->votes()->forUser($this->userId)->first();
 
             // build url to post

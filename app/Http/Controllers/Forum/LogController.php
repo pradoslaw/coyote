@@ -80,7 +80,7 @@ class LogController extends BaseController
 
         $post->fill(['text' => $log->text, 'edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId]);
 
-        \DB::transaction(function () use ($post, $log, $topic, $forum) {
+        $this->transaction(function () use ($post, $log, $topic, $forum) {
             $post->save();
 
             if ($post->id === $topic->first_post_id) {

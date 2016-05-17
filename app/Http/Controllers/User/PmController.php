@@ -161,7 +161,7 @@ class PmController extends BaseController
 
         $this->validateWith($validator);
 
-        return \DB::transaction(function () use ($request) {
+        return $this->transaction(function () use ($request) {
             $recipient = $this->user->findByName($request->get('recipient'));
 
             $user = auth()->user();

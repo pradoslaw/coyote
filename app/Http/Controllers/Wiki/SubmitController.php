@@ -28,6 +28,7 @@ class SubmitController extends BaseController
     /**
      * @param \Coyote\Wiki $wiki
      * @param WikiForm $form
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function save($wiki, WikiForm $form)
     {
@@ -36,7 +37,7 @@ class SubmitController extends BaseController
         $wiki->fill($request->all());
         $wiki->fillGuarded($request->only(['is_locked', 'template']), $request->user()->can('wiki-admin'));
 
-        $path = \DB::transaction(function () use ($wiki, $request) {
+        $path = $this->transaction(function () use ($wiki, $request) {
             // we need to know if those attributes were changed. if so, we need to add new record to the history.
             $isDirty = $wiki->isDirty(['title', 'parent_id', 'excerpt', 'text']);
             $isExist = $wiki->exists;

@@ -56,7 +56,7 @@ class SkillsController extends BaseController
      */
     public function order(Request $request)
     {
-        \DB::transaction(function () use ($request) {
+        $this->transaction(function () use ($request) {
             foreach ($request->get('order') as $id => $order) {
                 auth()->user()->skills()->where('id', $id)->update(['order' => intval($order) + 1]);
             }

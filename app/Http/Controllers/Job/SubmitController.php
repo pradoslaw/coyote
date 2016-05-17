@@ -338,7 +338,7 @@ class SubmitController extends Controller
 
         $job->deadline_at = Carbon::now()->addDay($data['deadline']);
 
-        \DB::transaction(function () use (&$job, $request, $locations, $tags) {
+        $this->transaction(function () use (&$job, $request, $locations, $tags) {
             $activity = $job->id ? Stream_Update::class : Stream_Create::class;
 
             if ($request->session()->has('firm.name')) {

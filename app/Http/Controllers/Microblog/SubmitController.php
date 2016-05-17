@@ -85,7 +85,7 @@ class SubmitController extends Controller
         $isExist = $microblog->exists;
         $microblog->fill($data);
 
-        \DB::transaction(function () use (&$microblog, $user, $isExist) {
+        $this->transaction(function () use (&$microblog, $user, $isExist) {
             $microblog->save();
 
             // parsing text and store it in cache
@@ -169,7 +169,7 @@ class SubmitController extends Controller
     {
         $this->authorize('delete', $microblog);
 
-        \DB::transaction(function () use ($microblog) {
+        $this->transaction(function () use ($microblog) {
             $microblog->delete();
             // cofniecie pkt reputacji
             app('Reputation\Microblog\Create')->undo($microblog->id);

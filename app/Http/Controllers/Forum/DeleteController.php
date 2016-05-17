@@ -52,7 +52,7 @@ class DeleteController extends BaseController
             }
         }
 
-        $url = \DB::transaction(function () use ($post, $topic, $forum, $request) {
+        $url = $this->transaction(function () use ($post, $topic, $forum, $request) {
             // build url to post
             $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
 

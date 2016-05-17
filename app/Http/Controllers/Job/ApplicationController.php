@@ -57,7 +57,7 @@ class ApplicationController extends Controller
             ];
         }
 
-        \DB::transaction(function () use ($job, $data, $attachment) {
+        $this->transaction(function () use ($job, $data, $attachment) {
             $job->applications()->create($data);
             $job = $job->toArray();
 

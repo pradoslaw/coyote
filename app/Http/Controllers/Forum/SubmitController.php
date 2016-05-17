@@ -76,7 +76,7 @@ class SubmitController extends BaseController
 
         $request = $form->getRequest();
 
-        return \DB::transaction(function () use ($request, $forum, $topic, $post) {
+        return $this->transaction(function () use ($request, $forum, $topic, $post) {
             $actor = new Stream_Actor(auth()->user());
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
@@ -194,7 +194,7 @@ class SubmitController extends BaseController
 
         $request = $form->getRequest();
 
-        $url = \DB::transaction(function () use ($request, $forum, $topic) {
+        $url = $this->transaction(function () use ($request, $forum, $topic) {
             $topic->fill(['subject' => $request->get('subject')]);
 
             $post = $this->post->find($topic->first_post_id);

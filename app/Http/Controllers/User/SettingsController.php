@@ -50,7 +50,7 @@ class SettingsController extends BaseController
 
         $request = $form->getRequest();
 
-        \DB::transaction(function () use ($request) {
+        $this->transaction(function () use ($request) {
             /**
              * @var \Coyote\User $user
              */

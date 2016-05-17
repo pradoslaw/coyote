@@ -81,7 +81,7 @@ class CommentController extends Controller
 
         $this->comment->fill($data);
 
-        \DB::transaction(function () use ($id, $activity, $target) {
+        $this->transaction(function () use ($id, $activity, $target) {
             $this->comment->save();
 
             // we need to parse text first (and store it in cache)
@@ -166,7 +166,7 @@ class CommentController extends Controller
         $target = (new Stream_Topic())->map($this->topic, $this->forum);
         $object = (new Stream_Comment())->map($this->post, $this->comment, $this->forum, $this->topic);
 
-        \DB::transaction(function () use ($object, $target) {
+        $this->transaction(function () use ($object, $target) {
             $this->comment->delete();
 
             stream(Stream_Delete::class, $object, $target);

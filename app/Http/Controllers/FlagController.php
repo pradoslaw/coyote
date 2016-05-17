@@ -64,7 +64,7 @@ class FlagController extends Controller
 
         $this->validateWith($validator);
 
-        \DB::transaction(function () use ($request) {
+        $this->transaction(function () use ($request) {
             $data = $request->all() + ['user_id' => $this->userId];
             $data['metadata'] = $this->decrypt($data['metadata']);
 

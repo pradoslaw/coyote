@@ -16,7 +16,7 @@ class LockController extends BaseController
         $forum = $topic->forum()->first();
         $this->authorize('lock', $forum);
 
-        \DB::transaction(function () use ($topic, $forum) {
+        $this->transaction(function () use ($topic, $forum) {
             $topic->lock();
 
             stream(

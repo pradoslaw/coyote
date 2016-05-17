@@ -54,7 +54,7 @@ class RegisterController extends Controller
     {
         $request = $form->getRequest();
 
-        \DB::transaction(function () use ($request) {
+        $this->transaction(function () use ($request) {
             $email = $request->input('email');
 
             $user = $this->user->create([

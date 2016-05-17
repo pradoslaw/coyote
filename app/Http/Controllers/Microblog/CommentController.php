@@ -69,7 +69,7 @@ class CommentController extends Controller
         $microblog->fill($data);
         $isSubscribed = false;
 
-        \DB::transaction(function () use ($originalId, $microblog, $user, &$isSubscribed) {
+        $this->transaction(function () use ($originalId, $microblog, $user, &$isSubscribed) {
             $microblog->save();
 
             // we need to get parent entry only for notification
@@ -177,7 +177,7 @@ class CommentController extends Controller
     {
         $this->authorize('delete', $microblog);
 
-        \DB::transaction(function () use ($microblog) {
+        $this->transaction(function () use ($microblog) {
             $microblog->delete();
 
             $parent = $microblog->parent()->first();

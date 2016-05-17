@@ -35,7 +35,7 @@ class AcceptController extends BaseController
             return response()->json(['error' => 'Możesz zaakceptować post tylko we własnym wątku.'], 500);
         }
 
-        \DB::transaction(function () use ($topic, $post, $forum) {
+        $this->transaction(function () use ($topic, $post, $forum) {
             $result = $topic->accept()->where('topic_id', $topic->id)->first();
 
             // build url to post
