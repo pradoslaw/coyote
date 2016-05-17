@@ -147,6 +147,8 @@
                 validateUrl: '{{ route('forum.tag.validate') }}',
                 promptUrl: '{{ route('forum.tag.prompt') }}'
             });
+
+            $('#submit-form').find('textarea, input[type="text"]').first().focus();
         });
     </script>
 {% endblock %}
