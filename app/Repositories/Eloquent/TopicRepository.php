@@ -4,12 +4,11 @@ namespace Coyote\Repositories\Eloquent;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
-use Coyote\Topic\Subscriber;
-use Coyote\Topic\Track;
 use Coyote\Topic;
-use Coyote\Tag;
-use DB;
 
+/**
+ * @method $this withTrashed()
+ */
 class TopicRepository extends Repository implements TopicRepositoryInterface
 {
     /**
@@ -47,7 +46,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
 
         $from = \DB::table('topics AS t')
                     ->select(['t.*', 'x.ordering'])
-                    ->join(\DB::raw('(VALUES ' . implode(',', $values) . ') AS x (id, ordering)'), 't.id', '=', 'x.id')
+                    ->join($this->raw('(VALUES ' . implode(',', $values) . ') AS x (id, ordering)'), 't.id', '=', 'x.id')
                     ->orderBy('x.ordering')
                     ->toSql();
 
@@ -75,7 +74,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         'prev.name AS prev_forum_name',
                         'pa.post_id AS post_accept_id'
                     ])
-                    ->from(\DB::raw("($from) AS topics"))
+                    ->from($this->raw("($from) AS topics"))
                     ->join('forums', 'forums.id', '=', 'topics.forum_id')
                     ->leftJoin('forums AS prev', 'prev.id', '=', 'prev_forum_id')
                     ->join('posts AS first', 'first.id', '=', 'topics.first_post_id')
@@ -86,18 +85,18 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         $join->on('forum_track.forum_id', '=', 'topics.forum_id');
 
                         if ($userId) {
-                            $join->on('forum_track.user_id', '=', \DB::raw($userId));
+                            $join->on('forum_track.user_id', '=', $this->raw($userId));
                         } else {
-                            $join->on('forum_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
+                            $join->on('forum_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
                         }
                     })
                     ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
                         $join->on('topic_track.topic_id', '=', 'topics.id');
 
                         if ($userId) {
-                            $join->on('topic_track.user_id', '=', \DB::raw($userId));
+                            $join->on('topic_track.user_id', '=', $this->raw($userId));
                         } else {
-                            $join->on('topic_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
+                            $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
                         }
                     })
                     ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
@@ -151,9 +150,9 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         $join->on('topic_track.topic_id', '=', 'topics.id');
 
                         if ($userId) {
-                            $join->on('topic_track.user_id', '=', \DB::raw($userId));
+                            $join->on('topic_track.user_id', '=', $this->raw($userId));
                         } else {
-                            $join->on('topic_track.session_id', '=', \DB::raw("'" . $sessionId . "'"));
+                            $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
                         }
                     })
                     ->where('topics.forum_id', $forumId)
@@ -173,7 +172,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     public function addViews($topicId, $value = 1)
     {
         $this->model->timestamps = false;
-        $this->model->where('id', $topicId)->update(['views' => \DB::raw('views + ' . $value)]);
+        $this->model->where('id', $topicId)->update(['views' => $this->raw('views + ' . $value)]);
         $this->model->timestamps = true;
     }
 
@@ -183,6 +182,8 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
      */
     private function getPackage($sort)
     {
+        $this->makeModel();
+
         return $this->model
                 ->select([
                     'id',
@@ -212,7 +213,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
 
         return $this->model
                     ->select(['topics.*', 'forums.name', 'forums.slug AS forum_slug'])
-                    ->from(\DB::raw("($sub) AS topics"))
+                    ->from($this->raw("($sub) AS topics"))
                     ->join('forums', 'forums.id', '=', 'forum_id')
                     ->where('forums.is_locked', 0)
                     ->limit($limit)
@@ -283,7 +284,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         'topics.score',
                         'topics.deleted_at'
                     ])
-                    ->from(\DB::raw("($sub) AS topics"))
+                    ->from($this->raw("($sub) AS topics"))
                     ->withTrashed()
                     ->join('forums', 'forums.id', '=', 'forum_id')
                     ->join('posts', 'posts.id', '=', 'first_post_id')
@@ -293,7 +294,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
 
         if ($userId) {
             $sql->leftJoin('topic_visits AS tv', function ($join) use ($userId) {
-                $join->on('tv.topic_id', '=', 'topics.id')->on('tv.user_id', '=', \DB::raw($userId));
+                $join->on('tv.topic_id', '=', 'topics.id')->on('tv.user_id', '=', $this->raw($userId));
             });
 
             $algo .= ' - CASE
@@ -303,6 +304,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                         END';
         }
 
-        return $sql->orderBy(\DB::raw($algo), 'DESC')->get();
+        return $sql->orderBy($this->raw($algo), 'DESC')->get();
     }
 }
