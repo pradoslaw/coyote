@@ -22,6 +22,7 @@ class TopicCest
         $I->see('Newbie');
         $I->click('Newbie', '.col-forum-description');
         $I->click('Nowy wątek');
+        $I->fillField('user_name', ''); // specjalnie ustawiamy pusta wartosc (inaczej JS sam
 
         $I->click('Zapisz');
 
