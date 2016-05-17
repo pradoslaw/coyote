@@ -89,7 +89,6 @@
                         <div class="form-group row">
                             <label for="salary-input" class="col-xs-1 control-label">od</label>
 
-
                             <div class="col-xs-4">
                                 {{ form_text('salary', request('salary'), {'id': 'salary-input', 'class': 'input-sm form-control'}) }}
                             </div>
@@ -116,7 +115,7 @@
             </div>
         </main>
 
-        <aside class="col-lg-3">
+        <aside class="col-lg-3 col-lg-offset-0 col-md-9 col-md-offset-3 col-sm-9 col-sm-offset-3">
             {% if subscribes|length %}
                 <section class="box sidebar-job-offers">
                     <h4><i class="fa fa-star fa-fw"></i> Obserwowane oferty pracy</h4>
