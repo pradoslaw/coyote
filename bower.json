@@ -7,7 +7,6 @@
     "awesome-bootstrap-checkbox": "^0.3.7",
     "ekko-lightbox": "^4.0.1",
     "jquery-color-animation": "color-animation#^1.6.0",
-    "jquery-ui": "^1.11.4",
-    "codemirror": "^5.14.2"
+    "jquery-ui": "^1.11.4"
   }
 }
