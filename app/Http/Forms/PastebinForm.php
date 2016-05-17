@@ -53,7 +53,18 @@ class PastebinForm extends Form implements ValidatesWhenSubmitted
             ]);
 
         if (!empty($this->request->user())) {
+            // user's login as default title
             $this->get('title')->setValue($this->request->user()->name);
+
+            if (!empty($this->getData()->id) && $this->request->user()->can('pastebin-delete')) {
+                $this->add('remove', 'button', [
+                    'label' => 'Usuń',
+                    'attr' => [
+                        'id' => 'btn-delete',
+                        'class' => 'btn btn-danger'
+                    ]
+                ]);
+            }
         }
     }
 

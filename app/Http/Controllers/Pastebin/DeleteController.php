@@ -19,6 +19,6 @@ class DeleteController extends Controller
             stream(Stream_Delete::class, (new Stream_Pastebin())->map($pastebin));
         });
 
-        return redirect()->route('pastebin.show');
+        return redirect()->route('pastebin.show')->with('success', 'Wpis został poprawnie usunięty.');
     }
 }
