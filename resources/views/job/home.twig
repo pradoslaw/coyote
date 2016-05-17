@@ -89,6 +89,7 @@
                         <div class="form-group row">
                             <label for="salary-input" class="col-xs-1 control-label">od</label>
 
+
                             <div class="col-xs-4">
                                 {{ form_text('salary', request('salary'), {'id': 'salary-input', 'class': 'input-sm form-control'}) }}
                             </div>
@@ -234,7 +235,7 @@
                     <h4>Dla pracodawców</h4>
 
                     <span class="outline">
-                        <a href="{{ route('job.submit') }}" class="btn btn-primary" title="Dodaj ofertę pracy zupełnie za darmo!">Dodaj ofertę pracy</a>
+                        <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary" title="Dodaj ofertę pracy zupełnie za darmo!">Dodaj ofertę pracy</a>
                     </span>
 
                     <p>* żadnych ukrytych kosztów!</p>
