@@ -40,8 +40,6 @@ class SubmitController extends BaseController
         $path = $this->transaction(function () use ($wiki, $request) {
             // we need to know if those attributes were changed. if so, we need to add new record to the history.
             $isDirty = $wiki->isDirty(['title', 'parent_id', 'excerpt', 'text']);
-            $isExist = $wiki->exists;
-
             $wiki->save();
 
             if ($isDirty) {
@@ -54,7 +52,10 @@ class SubmitController extends BaseController
                 ]);
             }
 
-            stream($isExist ? Stream_Update::class : Stream_Create::class, (new Stream_Wiki())->map($wiki));
+            stream(
+                $wiki->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
+                (new Stream_Wiki())->map($wiki)
+            );
             // add to elasticsaech index and pages table...
             event(new WikiWasSaved($wiki));
 
