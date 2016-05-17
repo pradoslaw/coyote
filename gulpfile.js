@@ -43,7 +43,11 @@ elixir(function (mix) {
             '../bower/bootstrap/js/modal.js',
             '../bower/bootstrap/js/tab.js',
             '../bower/bootstrap/js/popover.js',
-            'pages/forum.js'
+            'components/input-focus.js', // <-- potrzebne przy edycji tagow
+            'pages/forum/draft.js',
+            'pages/forum/tags.js',
+            'pages/forum/sidebar.js',
+            'pages/forum/posting.js'
         ], 'public/js/forum.js')
 
         /*

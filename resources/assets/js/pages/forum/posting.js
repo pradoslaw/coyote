@@ -1,61 +1,5 @@
-var SCREEN_MD = 1024;
-
 $(function () {
     'use strict';
-
-    function toggleSidebar(flag) {
-        $('#btn-toggle-sidebar').toggleClass('sidebar-hidden', !flag);
-        $('#sidebar').toggle(flag);
-        $('#index').toggleClass('sidebar', flag).children('.btn-watch-xs, .btn-atom-xs, .btn-mark-read-xs').toggleClass('show', !flag);
-    }
-
-    if ($('#sidebar').is(':hidden')) {
-        $('#index').children('.btn-watch-xs, .btn-atom-xs, .btn-mark-read-xs').addClass('show');
-    }
-
-    $(document).click(function (e) {
-        var container = $('#sidebar, #btn-toggle-sidebar');
-
-        if ($('#sidebar').css('position') === 'absolute' && !container.is(e.target) && container.has(e.target).length == 0) {
-            $('#sidebar').hide();
-        }
-    });
-
-    if ($(window).width() <= SCREEN_MD) {
-        $('#btn-toggle-sidebar').addClass('sidebar-hidden');
-    }
-
-    $('#btn-toggle-sidebar').click(function () {
-        if ($(window).width() <= SCREEN_MD) {
-            $('#sidebar').toggle();
-
-            var handler = function () {
-                if ($(window).width() > SCREEN_MD) {
-                    if ($('#index').hasClass('sidebar')) {
-                        toggleSidebar(true);
-                        $(window).unbind('resize', handler);
-                    }
-                }
-            };
-
-            $(window).unbind('resize', handler).bind('resize', handler);
-        }
-        else {
-            var flag = $('#index').hasClass('sidebar');
-            toggleSidebar(!flag);
-
-            $.ajax({
-                type: 'POST',
-                url: _config.public + '/User/Settings/Ajax',
-                data: {'forum_sidebar': !flag},
-                dataType: 'html',
-                crossDomain: true,
-                xhrFields: {
-                    withCredentials: true
-                }
-            });
-        }
-    });
 
     /**
      * Show post preview
@@ -579,61 +523,12 @@ $(function () {
         $('.nav-tabs a:first').tab('show');
     });
 
-    /**
-     * Custom tags
-     */
-    var applyTags = function(tags) {
-        $('.col-subject').find('.tag-clouds a').each(function() {
-            if ($.inArray($(this).data('tag'), tags) > -1) {
-                $(this).parents('tr').addClass('tagged');
-            }
-        });
-    };
-
-    var filterTags = function(string) {
-        return string.replace(new RegExp(',', 'g'), ' ').split(' ').filter(function(element) {
-            return element !== '';
-        });
-    };
-
-    $('#box-my-tags').on('click', '.btn-settings', function() {
-        $('#box-my-tags').find('.tag-clouds').toggle();
-        $('#tags-form').toggle().find('input[name="tags"]').inputFocus();
-    })
-        .on('click', '.btn-add', function() {
-            $('#box-my-tags').find('.btn-settings').click();
-        });
-
-    $('#tags-form').submit(function() {
-        var $form = $(this);
-        var tags = $('input[name="tags"]', this).val();
-
-        tags = filterTags(tags);
-        $(':input', $form).attr('disabled', 'disabled');
-
-        $.post($form.attr('action'), {'tags': tags}, function(html) {
-            var object = $('#box-my-tags');
-
-            object.find('.tag-clouds').replaceWith(html).show();
-            $form.hide();
-
-            $('.tagged').removeClass('tagged');
-            applyTags(tags);
-        }).always(function() {
-            $(':input', $form).removeAttr('disabled');
-        });
-
-        return false;
-    });
-
-    var tags = $.trim($('#tags-form').find('input[name="tags"]').val());
-
-    if (tags) {
-        applyTags(filterTags(tags));
-    }
-
     if (jQuery.fn.pasteImage) {
-        $('#submit-form textarea[name="text"]').pasteImage(function (textarea, html) {
+        var $form = $('#submit-form');
+
+        $form
+            .find('textarea[name="text"]')
+            .pasteImage(function (textarea, html) {
                 $('#attachments .text-center').remove();
                 $('#attachments tbody').append(html);
 
@@ -644,6 +539,8 @@ $(function () {
             .prompt()
             .fastSubmit()
             .autogrow();
+
+        $form.draft();
     }
 
     /////////////////////////////////////////////////////////////////////////////////
