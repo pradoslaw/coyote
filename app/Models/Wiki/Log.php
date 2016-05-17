@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $wiki_id
  * @property int $user_id
  * @property int $parent_id
+ * @property int $length
+ * @property int $diff
  * @property string $title
  * @property string $path
  * @property string $slug
