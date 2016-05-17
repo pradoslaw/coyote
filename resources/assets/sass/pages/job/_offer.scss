@@ -102,7 +102,7 @@
   border-top: 1px solid $border-color;
 
   li {
-    @media screen and (max-width: $screen-xs) {
+    @media screen and (max-width: $screen-sm) {
       display: block !important;
       font-size: 90%;
       margin-bottom: 10px;
