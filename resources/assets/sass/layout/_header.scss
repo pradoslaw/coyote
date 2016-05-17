@@ -52,6 +52,10 @@ header {
         border: 1px solid #fff;
         border-radius: 5px;
       }
+
+      @media screen and (max-width: $screen-sm) {
+        display: inline-block;
+      }
     }
   }
 
