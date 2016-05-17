@@ -46,6 +46,36 @@ function excerpt($value, $limit = 84)
 }
 
 /**
+ * Zwraca tablice najczesciej wykorzystywanych slow kluczowych w tekscie
+ *
+ * @param string $text
+ * @param int $limit Limit slow kluczowych
+ * @return array
+ */
+function keywords($text, $limit = 10)
+{
+    $text = preg_replace('/[^a-zA-Z0-9 -]/', '', mb_strtolower(plain($text), 'UTF-8'));
+    $keywords = [];
+
+    foreach (explode(' ', $text) as $word) {
+        if (mb_strlen($word, 'UTF-8') >= 3) {
+            $keywords[] = $word;
+        }
+    }
+
+    $keywords = array_count_values($keywords);
+    arsort($keywords);
+
+    $keywords = array_keys($keywords);
+
+    if ($limit) {
+        $keywords = array_slice($keywords, 0, $limit);
+    }
+
+    return $keywords;
+}
+
+/**
  * @param \Coyote\Services\Stream\Activities\Activity|null $activity
  * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $object
  * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $target

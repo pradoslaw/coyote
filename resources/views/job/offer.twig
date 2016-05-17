@@ -1,13 +1,18 @@
 {% extends 'job.base' %}
 {% block title %}
-    {{ job.title }}
+    {% spaceless %}
+        {{ job.title }}
 
-    {% if job.firm_id and not firm.is_agency %}
-        @ {{ firm.name }}
-    {% endif %}
+        {% if job.firm_id and not firm.is_agency %}
+            @ {{ firm.name }}
+        {% endif %}
 
-    {{ parent() }}
+        {{ parent() }}
+    {% endspaceless %}
 {% endblock %}
+
+{% block description %}{{ excerpt(job.description) }}{% endblock %}
+{% block keywords %}{{ keywords(job.description)|join(',') }}{% endblock %}
 
 {% block container %}
     <div class="row" style="margin-top: 20px">
