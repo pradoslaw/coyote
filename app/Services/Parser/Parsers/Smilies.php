@@ -8,7 +8,25 @@ namespace Coyote\Services\Parser\Parsers;
 class Smilies extends Parser implements ParserInterface
 {
     private $smilies = [
-        ':)'            => 'smile.gif'
+        ':)'        => 'smile.gif',
+        ':-)'       => 'smile.gif',
+        ';)'        => 'wink.gif',
+        ';-)'       => 'wink.gif',
+        ':-|'       => 'neutral.gif',
+        ':D'        => 'laugh.gif',
+        ':-D'       => 'laugh.gif',
+        ':('        => 'sad.gif',
+        ':-('       => 'sad.gif',
+        ':P'        => 'tongue1.gif',
+        ':p'        => 'tongue1.gif',
+        ':-P'       => 'tongue1.gif',
+        ':-/'       => 'confused.gif',
+        ':/'        => 'damn.gif',
+        ':['        => 'mad.gif',
+        ':-['       => 'mad.gif',
+        ':|'        => 'zonk.gif',
+        ':]'        => 'squared.gif',
+        ':d'        => 'teeth.gif'
     ];
 
     /**
