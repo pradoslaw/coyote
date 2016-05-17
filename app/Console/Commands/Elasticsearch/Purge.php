@@ -2,8 +2,6 @@
 
 namespace Coyote\Console\Commands\Elasticsearch;
 
-use Coyote\Repositories\Contracts\JobRepositoryInterface;
-use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Illuminate\Console\Command;
 
 class Purge extends Command
@@ -29,8 +27,7 @@ class Purge extends Command
      */
     public function handle()
     {
-        $es = app('elasticsearch');
-        $es->deleteByQuery([
+        app('elasticsearch')->deleteByQuery([
             'index' => config('elasticsearch.default_index'),
             'type'  => 'jobs',
             'body'  => [

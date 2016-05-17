@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         'Coyote\Console\Commands\PurgeViews',
+        'Coyote\Console\Commands\PurgePastebin',
         'Coyote\Console\Commands\Migrate',
         'Coyote\Console\Commands\Elasticsearch\Mapping',
         'Coyote\Console\Commands\Elasticsearch\Create',
@@ -29,5 +30,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('coyote:counter')->everyFiveMinutes();
         $schedule->command('es:purge')->hourly();
+        $schedule->command('pastebin:purge')->hourly();
     }
 }
