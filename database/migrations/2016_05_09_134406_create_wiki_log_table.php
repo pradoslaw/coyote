@@ -22,8 +22,8 @@ class CreateWikiLogTable extends Migration
             $table->text('excerpt')->nullable();
             $table->text('text')->nullable();
             $table->text('comment')->nullable();
-            $table->integer('length');
-            $table->integer('diff');
+            $table->integer('length')->default(0);
+            $table->integer('diff')->default(0);
             $table->tinyInteger('is_restored')->default(0);
             $table->string('ip', 45)->nullable();
             $table->string('browser')->nullable();
