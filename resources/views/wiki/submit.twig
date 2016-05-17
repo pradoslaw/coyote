@@ -34,4 +34,10 @@
 
     <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
     <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
+
+    <script>
+        $(function() {
+            $('textarea[name="text"]').wikiEditor();
+        })
+    </script>
 {% endblock %}
