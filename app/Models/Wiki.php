@@ -101,7 +101,10 @@ class Wiki extends Model
     {
         return $this->hasOne('Coyote\Wiki', 'id', 'parent_id');
     }
-    
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function children()
     {
         return $this->hasMany('Coyote\Wiki', 'parent_id', 'id');
