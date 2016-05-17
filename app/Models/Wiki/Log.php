@@ -30,7 +30,7 @@ class Log extends Model
      *
      * @var array
      */
-    protected $fillable = ['wiki_id', 'parent_id', 'user_id', 'title', 'excerpt', 'text', 'comment', 'ip', 'host', 'browser'];
+    protected $fillable = ['wiki_id', 'parent_id', 'user_id', 'title', 'excerpt', 'text', 'comment', 'ip', 'host', 'browser', 'length', 'diff'];
 
     /**
      * @var string

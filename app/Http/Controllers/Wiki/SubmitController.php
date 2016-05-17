@@ -48,7 +48,8 @@ class SubmitController extends BaseController
                     'user_id'   => $this->userId,
                     'ip'        => $request->ip(),
                     'host'      => $request->getHost(),
-                    'browser'   => $request->browser()
+                    'browser'   => $request->browser(),
+                    'length'    => mb_strlen($wiki->text)
                 ]);
             }
 
