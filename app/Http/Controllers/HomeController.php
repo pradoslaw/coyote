@@ -61,7 +61,7 @@ class HomeController extends Controller
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function index()
     {
