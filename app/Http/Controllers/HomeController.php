@@ -111,6 +111,10 @@ class HomeController extends Controller
     {
         /** @var \Coyote\Wiki $parent */
         $parent = $this->wiki->findBy('path', 'Blog', ['id', 'parent_id']);
+        if (!$parent) {
+            return [];
+        }
+        
         return $parent->children()->latest()->limit(5)->get(['created_at', 'path', 'title', 'long_title']);
     }
 
