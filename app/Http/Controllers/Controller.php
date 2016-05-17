@@ -9,6 +9,7 @@ use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Breadcrumb\Breadcrumb;
 use Illuminate\Contracts\Encryption\Encrypter;
+use Illuminate\Database\Connection;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -180,5 +181,14 @@ abstract class Controller extends BaseController
     protected function createForm($formClass, $data = null, array $options = [])
     {
         return app('form.builder')->createForm($formClass, $data, $options);
+    }
+
+    /**
+     * @param \Closure $callback
+     * @return mixed
+     */
+    protected function transaction(\Closure $callback)
+    {
+        return app(Connection::class)->transaction($callback);
     }
 }

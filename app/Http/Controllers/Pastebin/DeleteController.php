@@ -14,7 +14,7 @@ class DeleteController extends Controller
      */
     public function index($pastebin)
     {
-        \DB::transaction(function () use ($pastebin) {
+        $this->transaction(function () use ($pastebin) {
             $pastebin->delete();
             stream(Stream_Delete::class, (new Stream_Pastebin())->map($pastebin));
         });

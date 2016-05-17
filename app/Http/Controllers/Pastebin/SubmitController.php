@@ -33,7 +33,7 @@ class SubmitController extends Controller
      */
     public function save(PastebinForm $form)
     {
-        $pastebin = \DB::transaction(function () use ($form) {
+        $pastebin = $this->transaction(function () use ($form) {
             $pastebin = $this->pastebin->create(['user_id' => $this->userId] + $form->all());
             stream(Stream_Create::class, (new Stream_Pastebin())->map($pastebin));
 
