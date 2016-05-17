@@ -40,6 +40,6 @@ class SubmitController extends Controller
             return $pastebin;
         });
 
-        return redirect()->route('pastebin.show', [$pastebin->id]);
+        return redirect()->route('pastebin.show', [$pastebin->id])->with('success', 'Wpis został prawidłowo dodany.');
     }
 }
