@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('salt', 34)->nullable();
             $table->string('password', 64)->nullable();
             $table->string('provider', 50)->nullable();
-            $table->bigInteger('provider_id')->nullable();
+            $table->string('provider_id', 64)->nullable();
             $table->rememberToken();
             $table->timestampsTz();
             $table->tinyInteger('is_active')->default(1);
