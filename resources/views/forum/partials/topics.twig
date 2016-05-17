@@ -11,7 +11,7 @@
             </ul>
 
             {% if forum is defined and not forum.is_locked %}
-                <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right" style="margin-top: 6px">Nowy wątek</a>
+                <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right" style="margin-top: 6px; margin-bottom: 10px">Nowy wątek</a>
             {% endif %}
             <div class="clearfix"></div>
 
