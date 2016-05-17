@@ -1,5 +1,6 @@
 {% extends 'wiki.base' %}
 {% block title %}{{ wiki.long_title|default(wiki.title) }}{{ parent() }}{% endblock %}
+{% block description %}{{ excerpt(wiki.excerpt|default(wiki.text|slice(0, 200))) }}{% endblock %}
 
 {% block container %}
     <div class="row">
@@ -14,8 +15,6 @@
                                 <span class="hidden-xs">»</span>
                             {% endif %}
                         {% endfor %}
-
-                        {#<a class="hidden-xs" href="http://4programmers.net/Delphi/Kompendium">Delphi 7. Kompendium programisty</a>#}
                     </h2>
                 </div>
 
@@ -126,12 +125,15 @@
                 <li class="btn-history">
                     <a href="javascript:">Historia i autorzy</a>
                 </li>
-                <li class="btn-delete">
-                    <a href="javascript:">Usuń artykuł</a>
-                </li>
-                <li class="btn-purge">
-                    <a href="javascript:">Usuń cache</a>
-                </li>
+
+                {% if can('wiki-admin') %}
+                    <li class="btn-delete">
+                        <a href="javascript:">Usuń artykuł</a>
+                    </li>
+                    <li class="btn-purge">
+                        <a href="javascript:">Usuń cache</a>
+                    </li>
+                {% endif %}
             </ul>
 
             {% if author.bio %}
