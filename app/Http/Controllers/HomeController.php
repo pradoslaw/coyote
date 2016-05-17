@@ -73,7 +73,7 @@ class HomeController extends Controller
         $this->topic->pushCriteria(new OnlyThoseWithAccess());
 
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PRIVATE) as $method) {
-            $method = $method->getName();
+            $method = $method->name;
             $snake = snake_case($method);
 
             if (substr($snake, 0, 3) === 'get') {
@@ -114,7 +114,7 @@ class HomeController extends Controller
         if (!$parent) {
             return [];
         }
-        
+
         return $parent->children()->latest()->limit(5)->get(['created_at', 'path', 'title', 'long_title']);
     }
 
