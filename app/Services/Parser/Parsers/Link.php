@@ -7,6 +7,7 @@ use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
 class Link implements ParserInterface
 {
     const LINK_TAG_REGEXP = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
+    const LINK_INTERNAL_REGEXP = '\[\[(.*?)(\|(.*?))*\]\]';
 
     /**
      * @var Page
@@ -33,22 +34,35 @@ class Link implements ParserInterface
     /**
      * @param string $text
      * @return string
-     * @todo Parsowanie linkow "starego" coyote typu [[Foo]]
      */
     public function parse($text)
     {
-        if (preg_match_all('/' . self::LINK_TAG_REGEXP . '/siU', $text, $matches, PREG_SET_ORDER)) {
-            for ($i = 0; $i < count($matches); $i++) {
-                $link = $matches[$i][2];
-                $title = $matches[$i][3];
+        $text = $this->parseInternalLinks($text);
+        $text = $this->parseInternalAccessors($text);
 
-                if ($title === $link && ($path = $this->getPathFromUrl($link)) !== false) {
-                    $page = $this->page->findByPath($path);
-                    $html = $matches[$i][0];
+        return $text;
+    }
 
-                    if ($page) {
-                        $text = str_replace($html, link_to($link, $page->title), $text);
-                    }
+    /**
+     * @param $text
+     * @return mixed
+     */
+    protected function parseInternalLinks($text)
+    {
+        if (!preg_match_all('/' . self::LINK_TAG_REGEXP . '/siU', $text, $matches, PREG_SET_ORDER)) {
+            return $text;
+        }
+
+        for ($i = 0, $count = count($matches); $i < $count; $i++) {
+            $link = $matches[$i][2];
+            $title = $matches[$i][3];
+
+            if ($title === $link && ($path = $this->getPathFromUrl($link)) !== false) {
+                $page = $this->page->findByPath($path);
+                $html = $matches[$i][0];
+
+                if ($page) {
+                    $text = str_replace($html, link_to($link, $page->title), $text);
                 }
             }
         }
@@ -57,8 +71,50 @@ class Link implements ParserInterface
     }
 
     /**
-     * @param string $url
+     * Parse "old" coyote links like [[Foo/Bar]] to http://4programmers.net/Foo/Bar
+     *
+     * @param $text
      * @return string
+     */
+    protected function parseInternalAccessors($text)
+    {
+        if (!preg_match_all('/' . self::LINK_INTERNAL_REGEXP . '/i', $text, $matches, PREG_SET_ORDER)) {
+            return $text;
+        }
+
+        for ($i = 0, $count = count($matches); $i < $count; $i++) {
+            $origin = $matches[$i][0];
+
+            $path = '/' . str_replace(' ', '_', trim($matches[$i][1], '/'));
+            $title = $matches[$i][3] ?? null;
+            $hash = $this->getHashFromPath($path);
+
+            $page = $this->page->findByPath($path);
+            $attr = [];
+
+            if (empty($page)) {
+                $attr = ['class' => 'link-broken', 'title' => 'Dokument nie istnieje'];
+
+                if (empty($title)) {
+                    $title = last(explode('/', $path));
+                }
+            } else {
+                $path = $page->path;
+                $title = $title ?: $page->title;
+            }
+
+            $text = str_replace($origin, link_to($path . ($hash ? '#' . $hash : ''), $title, $attr), $text);
+        }
+
+        return $text;
+    }
+
+    /**
+     * Get path from url only if it's internal link (false if it's NOT internal link)
+     *
+     * @example http://4programmers.net/Foo/Bar => /Foo/Bar
+     * @param string $url
+     * @return string|bool
      */
     private function getPathFromUrl($url)
     {
@@ -88,5 +144,21 @@ class Link implements ParserInterface
         }
 
         return $path;
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
+    private function getHashFromPath(&$path)
+    {
+        $hash = '';
+        
+        if (($pos = strpos($path, '#')) !== false) {
+            $hash = htmlspecialchars(substr($path, $pos + 1));
+            $path = substr($path, 0, $pos);
+        }
+
+        return $hash;
     }
 }
