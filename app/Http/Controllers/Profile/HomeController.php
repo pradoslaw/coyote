@@ -58,7 +58,7 @@ class HomeController extends Controller
             'rank'          => $this->user->rank($user->id),
             'total_users'   => $this->user->countUsersWithReputation(),
             'reputation'    => $this->reputation->takeForUser($user->id),
-            'skills'        => Skill::where('user_id', $user->id)->orderBy('order')->get()
+            'skills'        => $user->skills()->orderBy('order')->get()
         ]);
     }
 }
