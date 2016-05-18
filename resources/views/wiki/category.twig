@@ -1,14 +1,24 @@
-{% extends 'wiki.base' %}
-{% block title %}Delphi{{ parent() }}{% endblock %}
+{% extends 'wiki.page' %}
 
 {% import 'components/forms.twig' as forms %}
 
 {% block container %}
     <div class="box">
         <ul class="nav nav-panel">
-            <li role="presentation" class="active"><a href="javascript:"><i class="fa fa-paragraph"></i></a></li>
-            <li role="presentation"><a href="#">Edycja</a></li>
-            <li role="presentation"><a href="#">Napisz nowy artykuł w tym dziale</a></li>
+            <li role="presentation" class="active"><a href="{{ url(wiki.path) }}"><i class="fa fa-paragraph"></i></a></li>
+
+            {% if can('wiki-admin') or not wiki.is_locked %}
+                <li role="presentation">
+                    <a href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować ten artykuł">
+                        Edycja
+                        {% if wiki.is_locked %}
+                            (strona zablokowana)
+                        {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+
+            <li role="presentation"><a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" title="Dodaj nową stronę w tej kategorii">Napisz nowy artykuł w tym dziale</a></li>
             <li role="presentation"><a href="#">Zakończ obserwację</a></li>
             <li role="presentation"><a href="#">Historia i autorzy</a></li>
         </ul>
@@ -17,12 +27,10 @@
             <div class="panel-body">
                 <article>
                     <header>
-                        <h1>Programowanie w języku Delphi</h1>
+                        <h1>{{ wiki.title }}</h1>
                     </header>
 
-                    Witamy w wortalu tematycznym poświęconym językowi Delphi. Pomóż nam rozwijać encyklopedie tego języka. Wciąż pozostaje wiele do zrobienia. Naszym celem jest opisanie podstawowych mechanizmów Delphi, słów kluczowych, biblioteki RTL. W późniejszym etapie zajmiemy się opisaniem biblioteki VCL.
-
-                    Ac? Mauris purus massa odio in nec dolor sit massa, nunc arcu! Aliquam mus aliquam odio enim aliquet turpis adipiscing elementum dolor lacus lundium et! Velit augue! Quis? Nec phasellus? Mattis phasellus phasellus tristique amet ultrices enim sit, dis duis porta, mus parturient facilisis urna rhoncus montes turpis natoque tortor pulvinar turpis odio auctor ac, augue sagittis rhoncus amet nascetur. Natoque aenean pulvinar! Amet! Tortor porta turpis elit mid lundium lundium sit cursus tincidunt cras scelerisque nunc, etiam, facilisis magna pulvinar, urna hac urna! Cras, aliquet porta in, non cum, parturient, integer, integer non placerat turpis! Lorem mid aliquam tempor. Placerat, amet integer? Amet lorem. Platea et in! Vut augue montes porttitor, sed cursus, amet mattis purus, nascetur porttitor cras.
+                    {{ wiki.text|raw }}
                 </article>
             </div>
         </div>

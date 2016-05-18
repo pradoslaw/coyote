@@ -1,0 +1,7 @@
+{% extends 'wiki.base' %}
+
+{% set description = excerpt(wiki.excerpt|default(wiki.text|slice(0, 200))) %}
+
+{% block title %}{{ wiki.long_title|default(wiki.title) }}{{ parent() }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+{% block keywords %}{{ keywords(description)|join(',') }}{% endblock %}

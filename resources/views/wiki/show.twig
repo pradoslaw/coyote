@@ -1,6 +1,4 @@
-{% extends 'wiki.base' %}
-{% block title %}{{ wiki.long_title|default(wiki.title) }}{{ parent() }}{% endblock %}
-{% block description %}{{ excerpt(wiki.excerpt|default(wiki.text|slice(0, 200))) }}{% endblock %}
+{% extends 'wiki.page' %}
 
 {% block container %}
     <div class="row">
