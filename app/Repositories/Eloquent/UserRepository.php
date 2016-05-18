@@ -21,7 +21,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
         $sql = $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%');
         if (!empty($orderByUsersId)) {
             // @todo To moze nie zadzialac na postgresie
-            $sql->orderBy(\DB::raw('id IN(' . implode(',', $orderByUsersId) . ')'), 'DESC');
+            $sql->orderBy($this->raw('id IN(' . implode(',', $orderByUsersId) . ')'), 'DESC');
         }
 
         return $sql->orderBy('visited_at', 'DESC')->limit(5)->get();
@@ -105,7 +105,8 @@ class UserRepository extends Repository implements UserRepositoryInterface
      */
     protected function findByCaseInsensitive($field, $value)
     {
-        return $this->model
+        return $this
+            ->model
             ->select(['id', 'name', 'photo', 'is_active', 'is_blocked', 'is_confirm'])
             ->whereRaw("LOWER($field) = ?", [mb_strtolower($value)])
             ->first();
