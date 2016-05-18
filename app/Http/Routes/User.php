@@ -48,7 +48,11 @@ Route::group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     Route::get('Pm/Ajax', ['uses' => 'PmController@ajax', 'as' => 'pm.ajax']);
     Route::post('Pm/Paste', ['uses' => 'PmController@paste', 'as' => 'pm.paste']);
 
-    Route::get('Favorites', ['uses' => 'FavoritesController@index', 'as' => 'favorites']);
+    Route::get('Favorites', ['uses' => 'FavoritesController@forum', 'as' => 'favorites']);
+    Route::get('Favorites/Forum', ['uses' => 'FavoritesController@forum', 'as' => 'favorites.forum']);
+    Route::get('Favorites/Job', ['uses' => 'FavoritesController@job', 'as' => 'favorites.job']);
+    Route::get('Favorites/Microblog', ['uses' => 'FavoritesController@microblog', 'as' => 'favorites.microblog']);
+    Route::get('Favorites/Wiki', ['uses' => 'FavoritesController@wiki', 'as' => 'favorites.wiki']);
     Route::post('Favorites', 'FavoritesController@save');
 
     Route::get('Profiles', ['uses' => 'ProfilesController@index', 'as' => 'profiles']);

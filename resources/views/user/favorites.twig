@@ -1,0 +1,22 @@
+{% extends 'user.base' %}
+{% block title %}Ulubione i obserwowane strony{{ parent() }}{% endblock %}
+
+{% import 'components.forms' as forms %}
+
+{% block content %}
+    <h2>Ulubione i obserwowane strony</h2>
+
+    <ul class="nav nav-panel">
+        {% for tab in tabs.roots() %}
+            <li {{ forms.attr(tab.attr) }}>
+                <a href="{{ tab.url }}">{{ tab.title|raw }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+        </div>
+    </div>
+{% endblock %}
