@@ -72,7 +72,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
                 (
                     SELECT COUNT(*)
                     FROM users
-                    WHERE reputation >= u1.reputation
+                    WHERE reputation >= u1.reputation AND reputation > 0
 
                 ) AS rank
                 FROM users u1
