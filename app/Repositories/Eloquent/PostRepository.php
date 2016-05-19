@@ -58,7 +58,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $sql->load(['comments' => function ($sub) {
             $sub->select([
                 'post_comments.*', 'name', 'is_active', 'is_blocked'
-            ])->join('users', 'users.id', '=', 'user_id');
+            ])->join('users', 'users.id', '=', 'user_id')->orderBy('id');
         }]);
         $sql->load('attachments');
 

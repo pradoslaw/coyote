@@ -317,7 +317,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
 
         return $this
             ->model
-//            ->make(Topic\Subscriber::class)
             ->select([
                 'subject',
                 'topics.slug AS topic_slug',
