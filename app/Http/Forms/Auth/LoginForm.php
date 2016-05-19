@@ -29,6 +29,8 @@ class LoginForm extends Form implements ValidatesWhenSubmitted
      */
     public function __construct(UserRepository $userRepository)
     {
+        parent::__construct();
+        
         $this->userRepository = $userRepository;
     }
 

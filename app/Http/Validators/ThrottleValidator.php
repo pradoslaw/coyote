@@ -53,13 +53,17 @@ class ThrottleValidator
             return true;
         }
 
+        // we need to calculate delay between request (it depends on user)
         $delay = $this->getFloodDelay();
+        // build cache key name
         $key = $this->getCacheKeyName();
 
         $flood = $this->cache->get($key, 0);
 
         if (!$flood || time() - $flood > $delay) {
-            if (empty($validator->invalid())) {
+            // validation passes. it's good. now we can save current timestamp to the cache.
+            // next time we can retrieve it and compare it to the current timestamp.
+            if (!$validator->messages()->count()) {
                 $this->cache->put($key, time(), $delay);
             }
 
