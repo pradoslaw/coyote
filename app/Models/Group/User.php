@@ -20,7 +20,14 @@ class User extends Model
      */
     protected $table = 'group_users';
 
+    /**
+     * @var bool
+     */
     public $timestamps = false;
+
+    /**
+     * @var string
+     */
     protected $primaryKey = 'group_id';
 
     /**

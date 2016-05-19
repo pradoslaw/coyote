@@ -2,8 +2,6 @@
 
 namespace Coyote\Services\FormBuilder;
 
-use Coyote\Services\FormBuilder\Fields\ParentType;
-
 abstract class Form extends FormRequest implements FormInterface
 {
     use CreateFieldTrait, RenderTrait;
@@ -15,14 +13,9 @@ abstract class Form extends FormRequest implements FormInterface
     const THEME_HORIZONTAL = 'forms.themes.horizontal';
 
     /**
-     * @experimental
+     * @var FormEvents
      */
-    const PRE_RENDER = 'form.pre_render';
-
-    /**
-     * @var array
-     */
-    protected $events = [];
+    protected $events;
 
     /**
      * It's public so we can use use attr from twig
@@ -54,6 +47,14 @@ abstract class Form extends FormRequest implements FormInterface
     protected $data;
 
     /**
+     * Form constructor.
+     */
+    public function __construct()
+    {
+        $this->events = new FormEvents($this);
+    }
+
+    /**
      * @return mixed
      */
     abstract public function buildForm();
@@ -74,8 +75,7 @@ abstract class Form extends FormRequest implements FormInterface
      */
     public function addEventListener($name, \Closure $listener)
     {
-        $this->events[] = ['name' => $name, 'listener' => $listener];
-
+        $this->events->addListener($name, $listener);
         return $this;
     }
 
@@ -236,7 +236,7 @@ abstract class Form extends FormRequest implements FormInterface
      */
     public function render()
     {
-        $this->fireEvents(self::PRE_RENDER);
+        $this->events->dispatch(FormEvents::PRE_RENDER);
 
         return $this->view($this->getViewPath($this->getTemplate()), [
             'form' => $this,
@@ -249,7 +249,7 @@ abstract class Form extends FormRequest implements FormInterface
      */
     public function renderForm()
     {
-        $this->fireEvents(self::PRE_RENDER);
+        $this->events->dispatch(FormEvents::PRE_RENDER);
 
         return $this->view($this->getWidgetPath(), ['form' => $this])->render();
     }
@@ -277,19 +277,6 @@ abstract class Form extends FormRequest implements FormInterface
     protected function getWidgetName()
     {
         return 'form_widget';
-    }
-
-    /**
-     * @param string $name
-     */
-    protected function fireEvents($name)
-    {
-        foreach ($this->events as $idx => $event) {
-            if ($name === $event['name']) {
-                $event['listener']($this);
-                unset($this->events[$idx]);
-            }
-        }
     }
 
     /**

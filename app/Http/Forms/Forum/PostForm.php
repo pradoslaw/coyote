@@ -4,12 +4,13 @@ namespace Coyote\Http\Forms\Forum;
 
 use Coyote\Poll;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
+use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\User;
-use Illuminate\Http\Request;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Topic;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Collection;
 
@@ -56,11 +57,13 @@ class PostForm extends Form
      */
     public function __construct()
     {
+        parent::__construct();
+        
         $this->post = new Post();
         $this->topic = new Topic();
         $this->forum = new Forum();
 
-        $this->addEventListener(self::PRE_RENDER, function (Form $form) {
+        $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) {
             $session = $form->getRequest()->session();
 
             if ($session->hasOldInput('attachments')) {

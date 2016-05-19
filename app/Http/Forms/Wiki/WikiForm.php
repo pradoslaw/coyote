@@ -27,6 +27,8 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
      */
     public function __construct(WikiRepository $wiki, Gate $gate)
     {
+        parent::__construct();
+        
         $this->wiki = $wiki;
         $this->gate = $gate;
     }
