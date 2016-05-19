@@ -81,7 +81,7 @@ class FavoritesController extends BaseController
     {
         $subscribed = $repository->getSubscribed($this->userId);
 
-        return parent::view(
+        return $this->view(
             'user.favorites',
             [
                 'tabs' => $this->getTabs(),
