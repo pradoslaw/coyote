@@ -11,6 +11,7 @@ use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTag;
 use Illuminate\Http\Request;
+use Lavary\Menu\Menu;
 
 class HomeController extends BaseController
 {
@@ -23,9 +24,10 @@ class HomeController extends BaseController
      */
     protected function view($view = null, $data = [])
     {
-        $route = request()->route()->getName();
+        $route = $this->getRouter()->getCurrentRoute()->getName();
+        $request = $this->getRouter()->getCurrentRequest();
 
-        $tabs = app('menu')->make('tabs', function ($menu) {
+        $tabs = app(Menu::class)->make('tabs', function ($menu) {
             $tabs = [
                 'forum.home'            => 'Kategorie',
                 'forum.all'             => 'Wszystkie',
@@ -43,18 +45,18 @@ class HomeController extends BaseController
         });
 
         if ($route == 'forum.tag') {
-            $tabs->add('Wątki z: ' . request()->route('tag'), [
+            $tabs->add('Wątki z: ' . $request->route('tag'), [
                 'route' => [
-                    'forum.tag', urlencode(request()->route('tag'))
+                    'forum.tag', urlencode($request->route('tag'))
                 ]
             ]);
         }
 
         if ($route == 'forum.user') {
-            $user = app(UserRepositoryInterface::class)->find(request()->route('id'));
+            $user = app(UserRepositoryInterface::class)->find($request->route('id'));
             $tabs->add('Posty: ' . $user->name, [
                 'route' => [
-                    'forum.user', request()->route('id')
+                    'forum.user', $request->route('id')
                 ]
             ]);
         }
