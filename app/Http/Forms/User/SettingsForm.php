@@ -10,9 +10,12 @@ class SettingsForm extends Form
 {
     public function buildForm()
     {
+        /** @var \Coyote\User $user */
+        $user = $this->getData();
+
         // id uzytkownika, ktorego ustawienia wlasnie edytujemy
-        $userId = $this->getData()->id;
-        $groupList = Group\User::groupList($userId)->toArray();
+        $userId = $user->id;
+        $groupList = $user->groups()->lists('name', 'id')->toArray();
 
         $this->add('email', 'email', [
             'rules' => 'required|email|unique:users,email,' . $userId . ',id,is_confirm,1',
