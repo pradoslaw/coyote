@@ -6,11 +6,13 @@ $(function () {
 
         if (typeof jqxhr.responseJSON.error !== 'undefined') {
             error = jqxhr.responseJSON.error;
-        } else {
+        } else if (typeof jqxhr.responseJSON.text !== 'undefined') {
             error = jqxhr.responseJSON.text;
         }
 
-        $('#alert').modal('show').find('.modal-body').text(error);
+        if (error) {
+            $('#alert').modal('show').find('.modal-body').text(error);
+        }
     });
 
     // zawartosc tresci wpisow
