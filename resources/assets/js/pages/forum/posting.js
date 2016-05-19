@@ -280,7 +280,7 @@ $(function () {
      * Change forum category
      */
     $('#sel-forum-list').change(function() {
-        window.location.href = forumUrl + '/' + $(this).val();
+        window.location.href = $(this).data('url') + '/' + $(this).val();
     });
 
     /**

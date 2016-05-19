@@ -68,7 +68,9 @@
                                 <a id="btn-goto" class="btn pull-right" href="javascript:">
                                     <i class="fa fa-arrow-circle-right"></i>
                                 </a>
-                                {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list'}) }}
+
+                                {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
+
                                 <div class="clearfix"></div>
                             </div>
                         </div>

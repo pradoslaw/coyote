@@ -164,7 +164,7 @@
                                 <i class="fa fa-arrow-circle-right"></i>
                             </a>
 
-                            {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list'}) }}
+                            {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
                         {% endif %}
                     </td>
                 </tr>

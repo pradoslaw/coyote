@@ -2,7 +2,7 @@ var SCREEN_MD = 1024;
 
 $(function() {
     "use strict";
-    
+
     function toggleSidebar(flag) {
         $('#btn-toggle-sidebar').toggleClass('sidebar-hidden', !flag);
         $('#sidebar').toggle(flag);
@@ -41,13 +41,13 @@ $(function() {
             $(window).unbind('resize', handler).bind('resize', handler);
         }
         else {
-            var flag = $('#index').hasClass('sidebar');
-            toggleSidebar(!flag);
+            var flag = !$('#index').hasClass('sidebar');
+            toggleSidebar(flag);
 
             $.ajax({
                 type: 'POST',
                 url: _config.public + '/User/Settings/Ajax',
-                data: {'forum_sidebar': !flag},
+                data: {'forum_sidebar': +flag},
                 dataType: 'html',
                 crossDomain: true,
                 xhrFields: {
