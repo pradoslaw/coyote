@@ -121,13 +121,7 @@
                 <div class="col-xs-12">
                     <div class="pull-right">
                         Ilość odpowiedzi na stronę
-                        <span class="form-inline">
-                            <select name="perPage" class="form-control input-sm" data-url="{{ url(request().path()) }}">
-                                {% for i in 1..5 %}
-                                    <option value="{{ i * 10 }}" {{ paginate.perPage() == i * 10 ? 'selected="selected"' }}>{{ i * 10 }}</option>
-                                {% endfor %}
-                            </select>
-                        </span>
+                        {% include 'forum.partials.per_page' %}
                     </div>
                 </div>
             </section>
