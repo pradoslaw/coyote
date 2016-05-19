@@ -52,4 +52,10 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @param int $limit
      */
     public function interesting($userId, $limit = 7);
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getSubscribed($userId);
 }

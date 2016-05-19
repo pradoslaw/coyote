@@ -204,4 +204,20 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->lists('count', 'name')
                 ->toArray();
     }
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getSubscribed($userId)
+    {
+        return $this
+            ->app
+            ->make(Microblog\Subscriber::class)
+            ->select(['microblogs.id', 'microblog_subscribers.created_at', 'microblogs.text'])
+            ->join('microblogs', 'microblogs.id', '=', 'microblog_id')
+            ->where('microblog_subscribers.user_id', $userId)
+            ->orderBy('microblog_subscribers.id', 'DESC')
+            ->paginate();
+    }
 }

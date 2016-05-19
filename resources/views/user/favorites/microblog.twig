@@ -1,0 +1,10 @@
+{% for microblog in subscribed %}
+    <tr>
+        <td><a href="{{ route('microblog.view', [microblog.id]) }}">{{ excerpt(microblog.text) }}</a></td>
+        <td>{{ microblog.created_at ? microblog.created_at|format_date : '--' }}</td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="2" style="text-align: center">Brak obserwowanych wpisów na mikroblogu.</td>
+    </tr>
+{% endfor %}

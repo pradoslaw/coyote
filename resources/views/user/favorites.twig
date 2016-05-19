@@ -8,7 +8,7 @@
 
     <ul class="nav nav-panel">
         {% for tab in tabs.roots() %}
-            <li {{ forms.attr(tab.attr) }}>
+            <li {{ forms.attr(tab.link.attr) }}>
                 <a href="{{ tab.url }}">{{ tab.title|raw }}</a>
             </li>
         {% endfor %}
@@ -16,7 +16,21 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
+            <nav>{{ paginate|raw }}</nav>
 
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Tytuł</th>
+                        <th>Data dodania do obserwowanych</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ include(partial) }}
+                </tbody>
+            </table>
+
+            <nav>{{ paginate|raw }}</nav>
         </div>
     </div>
 {% endblock %}

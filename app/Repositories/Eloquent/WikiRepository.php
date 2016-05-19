@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
+use Coyote\Wiki;
 
 class WikiRepository extends Repository implements WikiRepositoryInterface
 {
@@ -57,6 +58,22 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getSubscribed($userId)
+    {
+        return $this
+            ->app
+            ->make(Wiki\Subscriber::class)
+            ->select()
+            ->join('wiki', 'wiki.id', '=', 'wiki_id')
+            ->where('wiki_subscribers.user_id', $userId)
+            ->orderBy('wiki_subscribers.id', 'DESC')
+            ->paginate();
     }
 
     /**

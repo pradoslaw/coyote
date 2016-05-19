@@ -40,4 +40,10 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getTagsWeight(array $tagsId);
+    
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getSubscribed($userId);
 }

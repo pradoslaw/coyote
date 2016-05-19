@@ -27,4 +27,10 @@ interface WikiRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function treeList();
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getSubscribed($userId);
 }

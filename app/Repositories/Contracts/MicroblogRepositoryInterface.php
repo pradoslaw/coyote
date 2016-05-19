@@ -35,4 +35,10 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getTags();
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getSubscribed($userId);
 }

@@ -16,6 +16,7 @@ class CreateMicroblogSubscribersTable extends Migration
             $table->increments('id');
             $table->mediumInteger('microblog_id');
             $table->mediumInteger('user_id');
+            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'))->nullable();
 
             $table->unique(['microblog_id', 'user_id']);
 

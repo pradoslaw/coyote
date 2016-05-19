@@ -2,6 +2,11 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
+use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
+use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Lavary\Menu\Menu;
 
 class FavoritesController extends BaseController
@@ -12,58 +17,91 @@ class FavoritesController extends BaseController
     {
         parent::__construct();
 
-        $this->breadcrumb->push('Ulubione i obserwowane strony');
+        $this->breadcrumb->push('Ulubione i obserwowane strony', route('user.favorites'));
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function forum()
+    public function index()
     {
-        return $this->view('user.favorites');
+        return redirect()->action('User\FavoritesController@forum');
     }
 
     /**
+     * @param TopicRepository $topic
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function job()
+    public function forum(TopicRepository $topic)
     {
-        return $this->view('user.favorites');
+        $topic->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
+        $this->breadcrumb->push('Wątki na forum', route('user.favorites.forum'));
+
+        return $this->load($topic);
     }
 
     /**
+     * @param JobRepository $job
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function microblog()
+    public function job(JobRepository $job)
     {
-        return $this->view('user.favorites');
+        $this->breadcrumb->push('Oferty pracy', route('user.favorites.job'));
+
+        return $this->load($job);
     }
 
     /**
+     * @param MicroblogRepository $microblog
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function wiki()
+    public function microblog(MicroblogRepository $microblog)
     {
-        return $this->view('user.favorites');
+        $this->breadcrumb->push('Mikroblogi', route('user.favorites.microblog'));
+
+        return $this->load($microblog);
     }
 
     /**
-     * @param null $view
-     * @param array $data
+     * @param WikiRepository $wiki
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    protected function view($view = null, $data = [])
+    public function wiki(WikiRepository $wiki)
     {
-        return parent::view($view, $data + ['tabs' => $this->getTabs()]);
+        $this->breadcrumb->push('Artykuły', route('user.favorites.wiki'));
+
+        return $this->load($wiki);
     }
 
+    /**
+     * @param $repository
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    protected function load($repository)
+    {
+        $subscribed = $repository->getSubscribed($this->userId);
+
+        return parent::view(
+            'user.favorites',
+            [
+                'tabs' => $this->getTabs(),
+                'partial' => $this->getRouter()->currentRouteName(),
+                'subscribed' => $subscribed,
+                'paginate' => $subscribed->links()
+            ]
+        );
+    }
+
+    /**
+     * @return mixed
+     */
     protected function getTabs()
     {
         return app(Menu::class)->make('favorites', function ($menu) {
-            $menu->add('Wątki na forum', ['route' => 'user.favorites.forum'])->activate();
-            $menu->add('Oferty pracy', ['route' => 'user.favorites.job', 'as' => 'job']);
-            $menu->add('Mikroblogi', ['route' => 'user.favorites.microblog', 'as' => 'microblog']);
-            $menu->add('Wiki', ['route' => 'user.favorites.wiki', 'as' => 'wiki']);
+            $menu->add('Wątki na forum', ['route' => 'user.favorites.forum'])->active('User/Favorites/Forum');
+            $menu->add('Oferty pracy', ['route' => 'user.favorites.job'])->active('User/Favorites/Job');
+            $menu->add('Mikroblogi', ['route' => 'user.favorites.microblog'])->active('User/Favorites/Microblog');
+            $menu->add('Artykuły', ['route' => 'user.favorites.wiki'])->active('User/Favorites/Wiki');
         });
     }
 }

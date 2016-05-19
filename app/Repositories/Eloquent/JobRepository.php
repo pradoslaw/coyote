@@ -3,7 +3,11 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
+use Coyote\Job;
 
+/**
+ * @method $this withTrashed()
+ */
 class JobRepository extends Repository implements JobRepositoryInterface
 {
     /**
@@ -101,5 +105,21 @@ class JobRepository extends Repository implements JobRepositoryInterface
                     ->whereNull('jobs.deleted_at')
                     ->whereNull('tags.deleted_at')
                 ->groupBy('name');
+    }
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getSubscribed($userId)
+    {
+        return $this
+            ->app
+            ->make(Job\Subscriber::class)
+            ->select(['jobs.id', 'title', 'slug', 'job_subscribers.created_at'])
+            ->join('jobs', 'jobs.id', '=', 'job_subscribers.job_id')
+            ->where('job_subscribers.user_id', $userId)
+            ->orderBy('job_subscribers.id', 'DESC')
+            ->paginate();
     }
 }
