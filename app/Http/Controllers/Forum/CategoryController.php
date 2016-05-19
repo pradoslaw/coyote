@@ -42,7 +42,7 @@ class CategoryController extends BaseController
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
-        if ($this->getGateFactory()->allows('delete', $forum)) {
+        if ($topics !== false && $this->getGateFactory()->allows('delete', $forum)) {
             $flags = app(FlagRepositoryInterface::class)->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 

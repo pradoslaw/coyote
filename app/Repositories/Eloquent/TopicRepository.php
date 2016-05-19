@@ -25,7 +25,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
      * @param string $order
      * @param string $direction
      * @param int $perPage
-     * @return mixed
+     * @return false|LengthAwarePaginator
      */
     public function paginate($userId, $sessionId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
     {
