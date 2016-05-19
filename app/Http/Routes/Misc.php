@@ -17,3 +17,5 @@ Route::get('Flag', ['uses' => 'FlagController@index', 'as' => 'flag', 'middlewar
 Route::post('Flag', ['uses' => 'FlagController@save', 'middleware' => 'auth']);
 Route::post('Flag/Delete/{id}', ['uses' => 'FlagController@delete', 'middleware' => 'auth', 'as' => 'flag.delete']);
 Route::get('Flag/Delete/{id}', ['uses' => 'FlagController@modal', 'middleware' => 'auth', 'as' => 'flag.modal']);
+
+Route::get('Sitemap', ['uses' => 'SitemapController@index', 'as' => 'sitemap']);
