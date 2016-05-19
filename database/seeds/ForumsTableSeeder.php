@@ -48,10 +48,9 @@ class ForumsTableSeeder extends Seeder
         event(new \Coyote\Events\ForumWasSaved($row));
 
         $row = Coyote\Forum::create([
-            'name' => '4programmers.net',
-            'slug' => '4programmers',
-            'description' => 'Przejdź do 4programmers.net',
-            'url' => 'http://4programmers.net',
+            'name' => 'Off-Topic',
+            'slug' => 'Off-Topic',
+            'description' => 'Miejsce na dyskusje niepasujące do pozostałych kategorii forum, niekoniecznie związane z programowaniem',
             'section' => 'Inne'
         ]);
 
