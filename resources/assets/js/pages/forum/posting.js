@@ -164,8 +164,7 @@ $(function () {
      * Delete post/topic
      */
     $('.post').on('click', '.btn-del', function() {
-        $('#modal-post-delete').parent().attr('action', $(this).attr('href'));
-        $('#modal-post-delete').modal('show');
+        $('#modal-post-delete').modal('show').parent().attr('action', $(this).attr('href'));
 
         return false;
     });
@@ -315,7 +314,8 @@ $(function () {
         .error(function(event, jqxhr) {
             if (typeof event.responseJSON.text !== 'undefined') {
                 error(event.responseJSON.text);
-            } else if (typeof event.responseJSON.error !== 'undefined') {
+            }
+            else if (typeof event.responseJSON.error !== 'undefined') {
                 error(event.responseJSON.error);
             }
         });
