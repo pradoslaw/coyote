@@ -202,7 +202,7 @@
             {% endblock %}
 
             {% block related %}
-                {% if mlt %}
+                {% if mlt|length > 0 %}
                     <section id="box-related" class="box related">
                         <h4 class="border"><i class="fa fa-eye fa-fw"></i> Strony pokrewne</h4>
 
