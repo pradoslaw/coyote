@@ -25,8 +25,6 @@ class CategoryController extends BaseController
         $this->forum->skipCriteria(true);
         // execute query: get all subcategories that user can has access to
         $sections = $this->forum->groupBySections($this->userId, $this->sessionId, $forum->id);
-        // number of topics per one page
-        $perPage = $this->perPage($request, 'forum.topics_per_page', 20);
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
@@ -34,10 +32,10 @@ class CategoryController extends BaseController
         // get topics according to given criteria
         $topics = $this->topic->paginate(
             $this->userId,
-            $request->getSession()->getId(),
+            $this->sessionId,
             'topics.last_post_id',
             'DESC',
-            $perPage
+            $this->topicsPerPage($request)
         );
 
         // we need to get an information about flagged topics. that's how moderators can notice
@@ -46,10 +44,11 @@ class CategoryController extends BaseController
             $flags = app(FlagRepositoryInterface::class)->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
-        $collapse = $this->getSetting('forum.collapse') ? unserialize($this->getSetting('forum.collapse')) : [];
+        $collapse = $this->collapse();
+        $postsPerPage = $this->postsPerPage($this->getRouter()->getCurrentRequest());
 
         return $this->view('forum.category')->with(
-            compact('forumList', 'forum', 'topics', 'sections', 'collapse', 'flags')
+            compact('forumList', 'forum', 'topics', 'sections', 'collapse', 'flags', 'postsPerPage')
         );
     }
 

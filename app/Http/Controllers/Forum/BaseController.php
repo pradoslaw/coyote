@@ -103,7 +103,7 @@ abstract class BaseController extends Controller
     protected function getTagClouds()
     {
         // let's cache tags. we don't need to run this query every time
-        return app('cache')->remember('forum:tags', 60 * 24, function () {
+        return $this->getCacheFactory()->remember('forum:tags', 60 * 24, function () {
             return $this->forum->getTagClouds();
         });
     }
@@ -164,5 +164,31 @@ abstract class BaseController extends Controller
         }
 
         return $perPage;
+    }
+
+    /**
+     * @param Request $request
+     * @return int
+     */
+    protected function postsPerPage(Request $request)
+    {
+        return $this->perPage($request, 'forum.posts_per_page', 10);
+    }
+
+    /**
+     * @param Request $request
+     * @return int
+     */
+    protected function topicsPerPage(Request $request)
+    {
+        return $this->perPage($request, 'forum.topics_per_page', 20);
+    }
+
+    /**
+     * @return array|mixed
+     */
+    protected function collapse()
+    {
+        return $this->getSetting('forum.collapse') ? unserialize($this->getSetting('forum.collapse')) : [];
     }
 }

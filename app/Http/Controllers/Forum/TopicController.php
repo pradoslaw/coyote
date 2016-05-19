@@ -41,7 +41,7 @@ class TopicController extends BaseController
         // number of answers
         $replies = $topic->replies;
         // number of posts per one page
-        $perPage = $this->perPage($request, 'forum.posts_per_page', 10);
+        $perPage = $this->postsPerPage($request);
 
         // user wants to show certain post. we need to calculate page number based on post id.
         if ($request->has('p')) {
@@ -132,7 +132,7 @@ class TopicController extends BaseController
 
         // increase topic views counter
         // only for developing purposes. it increases counter every time user hits the page
-        if (\App::environment('local', 'dev')) {
+        if (app()->environment('local', 'dev')) {
             $this->topic->addViews($topic->id);
         } else {
             // on production environment: store hit in redis

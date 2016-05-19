@@ -78,10 +78,7 @@ class HomeController extends BaseController
         // execute query: get all categories that user can has access
         $sections = $this->forum->groupBySections($this->userId, $this->sessionId);
         // get categories collapse
-        $collapse = $this->getSetting('forum.collapse');
-        if ($collapse) {
-            $collapse = unserialize($collapse);
-        }
+        $collapse = $this->collapse();
 
         return $this->view('forum.home')->with(compact('sections', 'collapse'));
     }
@@ -102,7 +99,14 @@ class HomeController extends BaseController
     private function load()
     {
         $this->topic->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
-        return $this->topic->paginate($this->userId, $this->sessionId);
+
+        return $this->topic->paginate(
+            $this->userId,
+            $this->sessionId,
+            'topics.last_post_id',
+            'DESC',
+            $this->topicsPerPage($this->getRouter()->getCurrentRequest())
+        );
     }
 
     /**
@@ -113,11 +117,13 @@ class HomeController extends BaseController
     {
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
-        if ($topics && $this->getGateFactory()->allows('forum-delete')) {
+        if (!empty($topics) && $this->getGateFactory()->allows('forum-delete')) {
             $flags = app(FlagRepositoryInterface::class)->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
-        return $this->view('forum.topics')->with(compact('topics', 'flags'));
+        $postsPerPage = $this->postsPerPage($this->getRouter()->getCurrentRequest());
+
+        return $this->view('forum.topics')->with(compact('topics', 'flags', 'postsPerPage'));
     }
 
     /**
