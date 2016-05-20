@@ -95,30 +95,32 @@ class SubmitController extends BaseController
             // it's important. don't remove below line so that text in activity can be saved without markdown
             $post->text = app('parser.post')->parse($request->text);
 
-            $alert = new Container();
-            $notification = [
-                'sender_id'   => $this->userId,
-                'sender_name' => $request->get('user_name', $this->userId ? auth()->user()->name : ''),
-                'subject'     => excerpt($topic->subject),
-                'excerpt'     => excerpt($post->text),
-                'url'         => $url
-            ];
+            if ($topic->wasRecentlyCreated) {
+                $alert = new Container();
+                $notification = [
+                    'sender_id' => $this->userId,
+                    'sender_name' => $request->get('user_name', $this->userId ? auth()->user()->name : ''),
+                    'subject' => excerpt($topic->subject),
+                    'excerpt' => excerpt($post->text),
+                    'url' => $url
+                ];
 
-            $subscribersId = $forum->onlyUsersWithAccess($topic->subscribers()->lists('user_id')->toArray());
-            if ($subscribersId) {
-                $alert->attach(
-                    // $subscribersId can be int or array. we need to cast to array type
-                    app()->make('Alert\Topic\Subscriber')->with($notification)->setUsersId($subscribersId)
-                );
+                $subscribersId = $forum->onlyUsersWithAccess($topic->subscribers()->lists('user_id')->toArray());
+                if ($subscribersId) {
+                    $alert->attach(
+                        // $subscribersId can be int or array. we need to cast to array type
+                        app('Alert\Topic\Subscriber')->with($notification)->setUsersId($subscribersId)
+                    );
+                }
+
+                // get id of users that were mentioned in the text
+                $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($post->text));
+                if ($subscribersId) {
+                    $alert->attach(app('Alert\Post\Login')->with($notification)->setUsersId($subscribersId));
+                }
+
+                $alert->notify();
             }
-
-            // get id of users that were mentioned in the text
-            $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($post->text));
-            if ($subscribersId) {
-                $alert->attach(app()->make('Alert\Post\Login')->with($notification)->setUsersId($subscribersId));
-            }
-
-            $alert->notify();
 
             if ($post->id === $topic->first_post_id) {
                 $object = (new Stream_Topic)->map($topic, $forum, $post->text);
