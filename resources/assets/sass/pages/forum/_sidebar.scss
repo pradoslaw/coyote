@@ -13,6 +13,7 @@
     border:                   2px solid $border-color;
     padding:                  6px 10px;
     box-shadow:               5px 5px 6px #AAA;
+    width:                    45%; // na urzadzeniach mobilnych rozszerzamy to okno aby cokolwiek bylo tam widac
   }
 }
 
@@ -102,26 +103,16 @@
 // Ikony wyswietlane po prawej stronie nad tabelka - np. z lista watkow. M.in. przycisk do ukrywania menu bocznego
 // -------------------------------------------------------------------------------------------
 
-.btn-mark-read-xs, .btn-atom-xs, #btn-toggle-sidebar {
+//.btn-mark-read-xs, .btn-atom-xs,
+#btn-toggle-sidebar {
   position: absolute;
   bottom: 5px;
   font-size: 18px;
+  right: 0;
 
   i {
     color: $gray;
   }
-}
-
-.btn-mark-read-xs, .btn-atom-xs {
-  display: none;
-
-  @media screen and (max-width: $screen-md) {
-    display: block;
-  }
-}
-
-#btn-toggle-sidebar {
-  right: 0;
 
   i.fa-close {
     display: inline-block;
@@ -151,14 +142,6 @@
   i.fa-bars {
     display: inline-block !important;
   }
-}
-
-.btn-mark-read-xs {
-  right: 55px;
-}
-
-.btn-atom-xs {
-  right: 28px;
 }
 
 #box-count {

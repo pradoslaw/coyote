@@ -3,107 +3,106 @@
 
 {% import 'components.modals' as modal %}
 
-{% set url = route('forum.post.log', [log.post_id]) %}
+{% set url = route('forum.post.log', [post.id]) %}
 
-{% block container %}
-    <div id="index" class="sidebar">
-        {% include "forum.partials.top" %}
+{% block content %}
 
-        <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
+    {% include "forum.partials.top" %}
 
-        <main id="mainbar">
-            <section class="panel panel-wrapper">
-                <div class="panel-body">
-                    {% for log in logs %}
-                        <div class="post">
-                            <div class="post-body">
-                                <div class="row">
-                                    <div class="col-xs-2 col-user">
-                                        <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
-                                            {% if log.user_id %}
-                                                {{ link_to_profile(log.user_id, log.author_name, log.is_active, log.is_blocked) }}
-                                            {% else %}
-                                                {{ log.user_name }}
-                                            {% endif %}
-                                        </h5>
-                                    </div>
+    <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
 
-                                    <div class="col-xs-10 col-time">
-                                        <a title="Link do tego postu" id="id{{ log.id }}" class="post-link" href="{{ url ~ '#id' ~ log.id }}"></a>
-
-                                        <h5 style="display: inline"><a href="{{ url }}">{{ log.subject }}</a></h5>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-xs-2 col-user hidden-xss">
-                                        <p class="hidden-xs">
-                                            <strong>Data:</strong>
-                                            <small>{{ post.created_at|format_date }}</small>
-                                        </p>
-
-                                        <p class="hidden-xs">
-                                            <strong>IP:</strong>
-                                            <small>{{ log.ip }}</small>
-                                        </p>
-
-                                        <p class="hidden-xs">
-                                            <strong>Host:</strong>
-                                            <small title="{{ log.host }}">{{ log.host }}</small>
-                                        </p>
-
-                                        <p class="hidden-xs">
-                                            <strong>Przeglądarka:</strong>
-                                            <small title="{{ log.browser }}">{{ log.browser }}</small>
-                                        </p>
-                                    </div>
-
-                                    <div class="col-xs-10 col-body">
-                                        <div class="post-content">
-                                            {{ log.text|raw }}
-                                        </div>
-
-                                        {% if log.tags %}
-                                            <ul class="tag-clouds">
-                                                {% for tag in log.tags %}
-                                                    <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
-                                                {% endfor %}
-                                            </ul>
+    <main id="mainbar">
+        <section class="panel panel-wrapper">
+            <div class="panel-body">
+                {% for log in logs %}
+                    <div class="post">
+                        <div class="post-body">
+                            <div class="row">
+                                <div class="col-xs-2 col-user">
+                                    <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
+                                        {% if log.user_id %}
+                                            {{ link_to_profile(log.user_id, log.author_name, log.is_active, log.is_blocked) }}
+                                        {% else %}
+                                            {{ log.user_name }}
                                         {% endif %}
-                                    </div>
+                                    </h5>
                                 </div>
 
-                                {% if not loop.first %}
-                                    <div class="row">
-                                        <div class="col-xs-2 col-bottom" style="height: 32px"></div>
-                                        <div class="col-xs-10 col-bottom">
-                                            <a data-toggle="tooltip" data-placement="top" title="Cofnij do tej wersji" data-category="postLinks" data-action="rollback" href="{{ route('forum.post.rollback', [post.id, log.id]) }}" class="btn btn-xs btn-rollback">
-                                                <i class="fa fa-undo"></i>
-                                                <span class="hidden-xs">Cofnij do tej wersji</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                {% endif %}
+                                <div class="col-xs-10 col-time">
+                                    <a title="Link do tej wersji postu" id="id{{ log.id }}" class="post-link" href="{{ url ~ '#id' ~ log.id }}"></a>
+
+                                    <h5 style="display: inline"><a href="{{ url }}#id{{ log.id }}">{{ log.subject }}</a></h5>
+                                </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-xs-2 col-user hidden-xss">
+                                    <p class="hidden-xs">
+                                        <strong>Data:</strong>
+                                        <small>{{ post.created_at|format_date }}</small>
+                                    </p>
+
+                                    <p class="hidden-xs">
+                                        <strong>IP:</strong>
+                                        <small>{{ log.ip }}</small>
+                                    </p>
+
+                                    <p class="hidden-xs">
+                                        <strong>Host:</strong>
+                                        <small title="{{ log.host }}">{{ log.host }}</small>
+                                    </p>
+
+                                    <p class="hidden-xs">
+                                        <strong>Przeglądarka:</strong>
+                                        <small title="{{ log.browser }}">{{ log.browser }}</small>
+                                    </p>
+                                </div>
+
+                                <div class="col-xs-10 col-body">
+                                    <div class="post-content">
+                                        {{ log.text|raw }}
+                                    </div>
+
+                                    {% if log.tags %}
+                                        <ul class="tag-clouds">
+                                            {% for tag in log.tags %}
+                                                <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if not loop.first %}
+                                <div class="row">
+                                    <div class="col-xs-2 col-bottom" style="height: 32px"></div>
+                                    <div class="col-xs-10 col-bottom">
+                                        <a data-toggle="tooltip" data-placement="top" title="Cofnij do tej wersji" data-category="postLinks" data-action="rollback" href="{{ route('forum.post.rollback', [post.id, log.id]) }}" class="btn btn-xs btn-rollback">
+                                            <i class="fa fa-undo"></i>
+                                            <span class="hidden-xs">Cofnij do tej wersji</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
-                    {% endfor %}
-                </div>
-            </section>
-        </main>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
 
-        {% embed 'forum.partials.sidebar' %}
-            {% block side_menu %}
-                <div class="box">
-                    <ul class="side-menu">
-                        <li class="btn-diff">
-                            <a title="Pokaż różnice w postach" href="{{ url }}?diff=1">Pokaż różnice</a>
-                        </li>
-                    </ul>
-                </div>
-            {% endblock %}
-        {% endembed %}
+    {% embed 'forum.partials.sidebar' %}
+        {% block side_menu %}
+            <div class="box">
+                <ul class="side-menu">
+                    <li class="btn-diff">
+                        <a title="Pokaż różnice w postach" href="{{ url }}?diff=1">Pokaż różnice</a>
+                    </li>
+                </ul>
+            </div>
+        {% endblock %}
+    {% endembed %}
 
-    </div>
 
     {{ form_open({'url': '', 'id': 'form-rollback'}) }}
     {{ modal.confirm('Treść postu zostanie zastąpiona. Czy chcesz kontynuować?', 'Potwierdź operację', 'confirm', 'Tak, cofnij') }}

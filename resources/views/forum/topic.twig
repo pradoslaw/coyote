@@ -7,218 +7,216 @@
 {% set is_writeable = can('update', forum) ? true : (not (forum.is_locked or topic.is_locked)) %}
 {% set too_old = diff_in_months(topic.last_post_created_at) >= 6 %}
 
-{% block container %}
+{% block content %}
 
-    <div id="index" class="sidebar">
-        {% if warnings.lock %}
-            <p class="alert alert-warning">
-                Wątek zablokowany {{ warnings.lock.created_at|format_date }} przez <a href="{{ url(warnings.lock.actor.url) }}">{{ warnings.lock.actor.displayName }}</a>.
-            </p>
-        {% endif %}
+    {% if warnings.lock %}
+        <p class="alert alert-warning">
+            Wątek zablokowany {{ warnings.lock.created_at|format_date }} przez <a href="{{ url(warnings.lock.actor.url) }}">{{ warnings.lock.actor.displayName }}</a>.
+        </p>
+    {% endif %}
 
-        {% if warnings.move %}
-            <p class="alert alert-warning">
-                Wątek przeniesiony {{ warnings.move.created_at|format_date }} z {{ warnings.move.object.forum.name }} przez <a href="{{ url(warnings.move.actor.url) }}">{{ warnings.move.actor.displayName }}</a>.
+    {% if warnings.move %}
+        <p class="alert alert-warning">
+            Wątek przeniesiony {{ warnings.move.created_at|format_date }} z {{ warnings.move.object.forum.name }} przez <a href="{{ url(warnings.move.actor.url) }}">{{ warnings.move.actor.displayName }}</a>.
 
-                {% if warnings.move.object.reasonName %}
-                    Powód: <strong>{{ warnings.move.object.reasonName }}</strong>
-                {% endif %}
-            </p>
-        {% endif %}
-
-        {% if errors.first('_token') %}
-            <p class="alert alert-danger">
-                {{ errors.first('_token') }}
-            </p>
-        {% endif %}
-
-        <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
-
-        <nav>
-            {{ paginate|raw }}
-        </nav>
-
-        {% include "forum.partials.top" %}
-
-        <main id="mainbar">
-
-            {% include 'forum.partials.poll' %}
-
-            <section class="panel panel-wrapper">
-                <div class="panel-body">
-
-                    <div id="box-post" class="table-forum">
-                        {% if is_writeable %}
-                            <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
-                            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
-                        {% endif %}
-
-                        <div class="clearfix"></div>
-
-                        {% for post in posts %}
-                            {{ include('forum.partials.post', {index: loop.index0}) }}
-                        {% endfor %}
-
-                        <div class="post" id="last-post">
-                            <div class="col-footer-nav">
-                                <nav class="pull-left">
-                                    {{ paginate|raw }}
-                                </nav>
-
-                                <a id="btn-goto" class="btn pull-right" href="javascript:">
-                                    <i class="fa fa-arrow-circle-right"></i>
-                                </a>
-
-                                {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
-
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-
-                        {% if is_writeable %}
-                            <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
-
-                            {% if auth_check() and not too_old %}
-                                <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                </div>
-            </section>
-
-            {% if auth_check() and is_writeable and not too_old %}
-                {{ form_start(form) }}
-                    <section id="box-fast-form" class="row">
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <ul class="nav nav-tabs">
-                                        <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
-                                        <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Załączniki</a></li>
-                                        <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
-                                    </ul>
-
-                                    <div class="tab-content">
-                                        {{ form_row(form.text, {attr: {'placeholder': 'Kliknij, aby napisać szybką odpowiedź...', style: 'height: 80px'}}) }}
-                                        {{ form_row(form.attachments) }}
-
-                                        {% include 'forum.partials.preview' %}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    {{ form_widget(form.submit, {attr: {class: 'pull-right'}}) }}
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {{ form_widget(form.subscribe, {type: 'hidden'}) }}
-                {{ form_end(form) }}
+            {% if warnings.move.object.reasonName %}
+                Powód: <strong>{{ warnings.move.object.reasonName }}</strong>
             {% endif %}
+        </p>
+    {% endif %}
 
-            <section class="row">
-                <div class="col-xs-12">
-                    <div class="pull-right">
-                        Ilość odpowiedzi na stronę
-                        {% include 'forum.partials.per_page' with {perPage: paginate.perPage()} %}
+    {% if errors.first('_token') %}
+        <p class="alert alert-danger">
+            {{ errors.first('_token') }}
+        </p>
+    {% endif %}
+
+    <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
+
+    <nav>
+        {{ paginate|raw }}
+    </nav>
+
+    {% include "forum.partials.top" %}
+
+    <main id="mainbar">
+
+        {% include 'forum.partials.poll' %}
+
+        <section class="panel panel-wrapper">
+            <div class="panel-body">
+
+                <div id="box-post" class="table-forum">
+                    {% if is_writeable %}
+                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
+                        <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                    {% endif %}
+
+                    <div class="clearfix"></div>
+
+                    {% for post in posts %}
+                        {{ include('forum.partials.post', {index: loop.index0}) }}
+                    {% endfor %}
+
+                    <div class="post" id="last-post">
+                        <div class="col-footer-nav">
+                            <nav class="pull-left">
+                                {{ paginate|raw }}
+                            </nav>
+
+                            <a id="btn-goto" class="btn pull-right" href="javascript:">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+
+                            {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
+
+                            <div class="clearfix"></div>
+                        </div>
                     </div>
+
+                    {% if is_writeable %}
+                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
+
+                        {% if auth_check() and not too_old %}
+                            <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
+                        {% endif %}
+                    {% endif %}
                 </div>
-            </section>
+            </div>
+        </section>
 
-            {{ viewers|raw }}
-        </main>
-
-        {% embed 'forum.partials.sidebar' %}
-            {% block side_menu %}
-                <div class="box">
-                    <ul class="side-menu" style="margin-top: 5px">
-                        {% if auth_check() %}
-                            <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
-                                <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
-                                    <span>
-                                        {% if subscribers[user('id')] is not defined %}
-                                            Obserwuj wątek
-                                        {% else %}
-                                            Zakończ obserwację
-                                        {% endif %}
-                                    </span>
-
-                                    {% if subscribers.count() > 0 %}
-                                        <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
-                                    {% endif %}
-                                </a>
-                            </li>
-                        {% endif %}
-
-                        {#<li class="btn-atom">#}
-                            {#<a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>#}
-                        {#</li>#}
-
-                        {% if can('update', forum) %}
-                            <li id="btn-log"><a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
-                            <li id="btn-edit-subject"><a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
-                        {% endif %}
-
-                        {% if can('lock', forum) %}
-                            <li id="btn-lock" {{ topic.is_locked ? 'class="on"' }}>
-                                <a href="{{ route('forum.lock', [topic.id]) }}" title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">
-                                    {% if topic.is_locked %}
-                                        Odblokuj wątek
-                                    {% else %}
-                                        Zablokuj wątek
-                                    {% endif %}
-                                </a>
-                            </li>
-                        {% endif %}
-
-                        {% if can('move', forum) %}
-                            <li id="btn-move">
-                                <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
-
-                                <ul id="collapse-sub" class="collapse">
-                                    {% for slug, name in forumList %}
-                                        {% if slug == forum.slug %}
-                                            <li><a style="color: #ccc">{{ name|raw }}</a></li>
-                                        {% else %}
-                                            <li><a data-slug="{{ slug }}" href="javascript:">{{ name|raw }}</a></li>
-                                        {% endif %}
-                                    {% endfor %}
+        {% if auth_check() and is_writeable and not too_old %}
+            {{ form_start(form) }}
+                <section id="box-fast-form" class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <ul class="nav nav-tabs">
+                                    <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
+                                    <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Załączniki</a></li>
+                                    <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
                                 </ul>
-                            </li>
-                        {% endif %}
 
-                        {#{% if can('sticky', forum) %}#}
-                            {#<li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>#}
-                        {#{% endif %}#}
-                    </ul>
+                                <div class="tab-content">
+                                    {{ form_row(form.text, {attr: {'placeholder': 'Kliknij, aby napisać szybką odpowiedź...', style: 'height: 80px'}}) }}
+                                    {{ form_row(form.attachments) }}
+
+                                    {% include 'forum.partials.preview' %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                {{ form_widget(form.submit, {attr: {class: 'pull-right'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {{ form_widget(form.subscribe, {type: 'hidden'}) }}
+            {{ form_end(form) }}
+        {% endif %}
+
+        <section class="row">
+            <div class="col-xs-12">
+                <div class="pull-right">
+                    Ilość odpowiedzi na stronę
+                    {% include 'forum.partials.per_page' with {perPage: paginate.perPage()} %}
                 </div>
-            {% endblock %}
+            </div>
+        </section>
 
-            {% block related %}
-                {% if mlt|length > 0 %}
-                    <section id="box-related" class="box related">
-                        <h4 class="border"><i class="fa fa-eye fa-fw"></i> Strony pokrewne</h4>
+        {{ viewers|raw }}
+    </main>
 
-                        <div>
-                            <ul>
-                                {% for page in mlt %}
-                                    <li>
-                                        <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.slug, page.topic.id, page.topic.slug]) }}" title="{{ page.topic.subject }}">
-                                            <strong>{{ page.topic.subject }}</strong>
-                                            <small>{{ page.updated_at|format_date }}</small>
-                                        </a>
-                                    </li>
+    {% embed 'forum.partials.sidebar' %}
+        {% block side_menu %}
+            <div class="box">
+                <ul class="side-menu" style="margin-top: 5px">
+                    {% if auth_check() %}
+                        <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
+                            <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
+                                <span>
+                                    {% if subscribers[user('id')] is not defined %}
+                                        Obserwuj wątek
+                                    {% else %}
+                                        Zakończ obserwację
+                                    {% endif %}
+                                </span>
+
+                                {% if subscribers.count() > 0 %}
+                                    <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {#<li class="btn-atom">#}
+                        {#<a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>#}
+                    {#</li>#}
+
+                    {% if can('update', forum) %}
+                        <li id="btn-log"><a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
+                        <li id="btn-edit-subject"><a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
+                    {% endif %}
+
+                    {% if can('lock', forum) %}
+                        <li id="btn-lock" {{ topic.is_locked ? 'class="on"' }}>
+                            <a href="{{ route('forum.lock', [topic.id]) }}" title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">
+                                {% if topic.is_locked %}
+                                    Odblokuj wątek
+                                {% else %}
+                                    Zablokuj wątek
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if can('move', forum) %}
+                        <li id="btn-move">
+                            <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
+
+                            <ul id="collapse-sub" class="collapse">
+                                {% for slug, name in forumList %}
+                                    {% if slug == forum.slug %}
+                                        <li><a style="color: #ccc">{{ name|raw }}</a></li>
+                                    {% else %}
+                                        <li><a data-slug="{{ slug }}" href="javascript:">{{ name|raw }}</a></li>
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
-                        </div>
-                    </section>
-                {% endif %}
-            {% endblock %}
-        {% endembed %}
-    </div>
+                        </li>
+                    {% endif %}
+
+                    {#{% if can('sticky', forum) %}#}
+                        {#<li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>#}
+                    {#{% endif %}#}
+                </ul>
+            </div>
+        {% endblock %}
+
+        {% block related %}
+            {% if mlt|length > 0 %}
+                <section id="box-related" class="box related">
+                    <h4 class="border"><i class="fa fa-eye fa-fw"></i> Strony pokrewne</h4>
+
+                    <div>
+                        <ul>
+                            {% for page in mlt %}
+                                <li>
+                                    <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.slug, page.topic.id, page.topic.slug]) }}" title="{{ page.topic.subject }}">
+                                        <strong>{{ page.topic.subject }}</strong>
+                                        <small>{{ page.updated_at|format_date }}</small>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </section>
+            {% endif %}
+        {% endblock %}
+    {% endembed %}
 
     {# Nie usuwac! Tutaj beda wyswietlane ewentualne bledy AJAX #}
     {{ modals.alert('Błąd', 'Błąd', 'alert') }}

@@ -1,68 +1,67 @@
 {% extends 'forum.base' %}
 {% block title %}Dziennik zdarzeń{{ parent() }}{% endblock %}
 
-{% block container %}
-    <div id="index" class="sidebar">
-        {% include "forum.partials.top" %}
+{% block content %}
+    {% include "forum.partials.top" %}
 
-        {% set back_url = route('forum.topic', [forum.slug, topic.id, topic.slug]) %}
-        <h1>{{ link_to(back_url, topic.subject) }}</h1>
+    {% set back_url = route('forum.topic', [forum.slug, topic.id, topic.slug]) %}
 
-        <main id="mainbar">
-            <ul class="nav nav-panel" style="margin-bottom: 0">
-                <li role="presentation" class="active"><a href="#stream" role="tab" data-toggle="tab">Aktywność użytkowników</a></li>
-                <li role="presentation"><a href="#visits" role="tab" data-toggle="tab">Wizyty</a></li>
-            </ul>
+    <h1>{{ link_to(back_url, topic.subject) }}</h1>
 
-            <div class="panel panel-default">
-                <div id="stream" role="tabpanel" class="panel-body tab-pane active">
-                    <nav class="text-center">{{ activities.render()|raw }}</nav>
+    <main id="mainbar">
+        <ul class="nav nav-panel" style="margin-bottom: 0">
+            <li role="presentation" class="active"><a href="#stream" role="tab" data-toggle="tab">Aktywność użytkowników</a></li>
+            <li role="presentation"><a href="#visits" role="tab" data-toggle="tab">Wizyty</a></li>
+        </ul>
 
-                    <div class="stream">
-                        {% for activity in decorate %}
-                            <div class="media">
-                                <div class="media-left hidden-xs">
-                                    <a href="{{ activity.actor.url }}">
-                                        <img class="media-object img-thumbnail" src="{{ user_photo(activity.actor.image) }}" style="width: 38px; height: 38px;" alt="">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <i class="fa fa-laptop pull-right bubble" title="{{ activity.ip }}"></i>
-                                    <i class="fa fa-globe pull-right bubble" title="{{ activity.browser }}"></i>
+        <div class="panel panel-default">
+            <div id="stream" role="tabpanel" class="panel-body tab-pane active">
+                <nav class="text-center">{{ activities.render()|raw }}</nav>
 
-                                    <p title="{{ activity.headline|striptags }}">{{ activity.headline|raw }}</p>
-                                    <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
-
-                                    {% if activity.excerpt %}
-                                        <div class="well well-sm">{{ activity.excerpt|raw }}</div>
-                                    {% endif %}
-                                </div>
+                <div class="stream">
+                    {% for activity in decorate %}
+                        <div class="media">
+                            <div class="media-left hidden-xs">
+                                <a href="{{ activity.actor.url }}">
+                                    <img class="media-object img-thumbnail" src="{{ user_photo(activity.actor.image) }}" style="width: 38px; height: 38px;" alt="">
+                                </a>
                             </div>
-                        {% endfor %}
-                    </div>
+                            <div class="media-body">
+                                <i class="fa fa-laptop pull-right bubble" title="{{ activity.ip }}"></i>
+                                <i class="fa fa-globe pull-right bubble" title="{{ activity.browser }}"></i>
 
-                    <nav class="text-center">{{ activities.render()|raw }}</nav>
+                                <p title="{{ activity.headline|striptags }}">{{ activity.headline|raw }}</p>
+                                <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
+
+                                {% if activity.excerpt %}
+                                    <div class="well well-sm">{{ activity.excerpt|raw }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
 
-                <div id="visits" role="tabpanel" class="panel-body tab-pane">
-                </div>
+                <nav class="text-center">{{ activities.render()|raw }}</nav>
             </div>
 
-            {{ viewers|raw }}
-        </main>
+            <div id="visits" role="tabpanel" class="panel-body tab-pane">
+            </div>
+        </div>
 
-        {% embed 'forum.partials.sidebar' %}
-            {% block side_menu %}
-                <div class="box">
-                    <ul class="side-menu">
-                        <li class="btn-back">
-                            <a title="Powrót do wątku" href="{{ back_url }}">Powrót do: {{ topic.subject }}</a>
-                        </li>
-                    </ul>
-                </div>
-            {% endblock %}
-        {% endembed %}
-    </div>
+        {{ viewers|raw }}
+    </main>
+
+    {% embed 'forum.partials.sidebar' %}
+        {% block side_menu %}
+            <div class="box">
+                <ul class="side-menu">
+                    <li class="btn-back">
+                        <a title="Powrót do wątku" href="{{ back_url }}">Powrót do: {{ topic.subject }}</a>
+                    </li>
+                </ul>
+            </div>
+        {% endblock %}
+    {% endembed %}
 {% endblock %}
 
 {% block body %}

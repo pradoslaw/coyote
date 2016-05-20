@@ -13,3 +13,9 @@
 
     <script src="{{ cdn('js/forum.js') }}" type="text/javascript"></script>
 {% endblock %}
+
+{% block container %}
+    <div id="index" class="{{ sidebar ? 'sidebar' }}">
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}

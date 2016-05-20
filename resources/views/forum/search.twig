@@ -9,154 +9,151 @@
     {% endif %}
 {% endblock %}
 
-{% block container %}
+{% block content %}
+    {% include "forum.partials.top" %}
 
-    <div id="index" class="sidebar">
-        {% include "forum.partials.top" %}
-
-        <main id="mainbar">
-            <div class="row">
-                <div id="box-search" class="col-md-7 col-sm-12 col-xs-12">
-                    {{ form_open({'method': 'GET', 'role': 'form', 'url': route('forum.search'), 'class': 'form-inline outline', 'id': 'box-search'}) }}
-                        <div class="form-group input-keywords col-sm-5 col-xs-5">
-                            <div class="col-content">
-                                {{ form_text('q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
-                            </div>
+    <main id="mainbar">
+        <div class="row">
+            <div id="box-search" class="col-md-7 col-sm-12 col-xs-12">
+                {{ form_open({'method': 'GET', 'role': 'form', 'url': route('forum.search'), 'class': 'form-inline outline', 'id': 'box-search'}) }}
+                    <div class="form-group input-keywords col-sm-5 col-xs-5">
+                        <div class="col-content">
+                            {{ form_text('q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
                         </div>
+                    </div>
 
-                        <div class="form-group input-category col-sm-5 col-xs-5">
-                            <div class="col-content">
-                                {{ form_select('f', {'': 'Wszystkie kategorie'} + forumList, input_get('f'), {'class': 'form-control'}) }}
-                            </div>
+                    <div class="form-group input-category col-sm-5 col-xs-5">
+                        <div class="col-content">
+                            {{ form_select('f', {'': 'Wszystkie kategorie'} + forumList, input_get('f'), {'class': 'form-control'}) }}
                         </div>
+                    </div>
 
-                        <div class="form-group col-sm-2 col-xs-2">
-                            <button class="btn btn-primary btn-search" type="submit">
-                                <i class="fa fa-search"></i> <span class="hidden-xxs">Szukaj</span>
-                            </button>
-                        </div>
-                    {{ form_close() }}
-                </div>
+                    <div class="form-group col-sm-2 col-xs-2">
+                        <button class="btn btn-primary btn-search" type="submit">
+                            <i class="fa fa-search"></i> <span class="hidden-xxs">Szukaj</span>
+                        </button>
+                    </div>
+                {{ form_close() }}
             </div>
+        </div>
 
-            {% if response %}
-                <section id="box-search-results" class="panel panel-wrapper">
-                <div class="panel-body">
-                    <ul id="sort" class="hidden-xs">
-                        <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
-                        <li>{{ sortable('id', 'Data utworzenia', ['_score', 'desc']) }}</li>
-                    </ul>
+        {% if response %}
+            <section id="box-search-results" class="panel panel-wrapper">
+            <div class="panel-body">
+                <ul id="sort" class="hidden-xs">
+                    <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
+                    <li>{{ sortable('id', 'Data utworzenia', ['_score', 'desc']) }}</li>
+                </ul>
 
-                    <div class="clearfix"></div>
+                <div class="clearfix"></div>
 
-                    {% for post in response %}
-                        <div class="post">
-                            <div class="post-body">
-                                <div class="row">
-                                    <div class="col-xs-2 col-user">
-                                        <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
-                                            {% if post.user_id %}
-                                                {{ link_to_profile(users[post.user_id]) }}
-                                            {% else %}
-                                                {{ post.user_name }}
-                                            {% endif %}
-                                        </h5>
-                                    </div>
-
-                                    <div class="col-xs-10 col-subject">
-                                         <h5><a href="{{ route('forum.topic', [post.forum.slug, post.topic_id, post.topic.slug]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(highlights[post.id]['topic.subject'], post.topic.subject) }}</a></h5>
-                                    </div>
+                {% for post in response %}
+                    <div class="post">
+                        <div class="post-body">
+                            <div class="row">
+                                <div class="col-xs-2 col-user">
+                                    <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
+                                        {% if post.user_id %}
+                                            {{ link_to_profile(users[post.user_id]) }}
+                                        {% else %}
+                                            {{ post.user_name }}
+                                        {% endif %}
+                                    </h5>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-xs-2 col-user hidden-xss">
-                                        <p class="hidden-xs">
-                                            <strong>Data:</strong>
-                                            <small>{{ post.created_at|format_date }}</small>
-                                        </p>
-
-                                        <p class="hidden-xs">
-                                            <strong>Kategoria:</strong>
-                                            <small>{{ link_to_route('forum.category', post.forum.name, [post.forum.slug]) }}</small>
-                                        </p>
-
-                                        {% if can('forum-update') %}
-                                            <p class="hidden-xs">
-                                                <strong>IP:</strong>
-                                                <small>{{ post.ip }}</small>
-                                            </p>
-
-                                            <p class="hidden-xs">
-                                                <strong>Host:</strong>
-                                                <small title="{{ post.host }}">{{ post.host }}</small>
-                                            </p>
-
-                                            <p class="hidden-xs">
-                                                <strong>Przeglądarka:</strong>
-                                                <small title="{{ post.browser }}">{{ post.browser }}</small>
-                                            </p>
-                                        {% endif %}
-                                    </div>
-
-                                    <div class="col-xs-10 col-body">
-                                        <div class="post-content">
-                                            {{ elastic_highlight(highlights[post.id]['text'], post.text) }}
-                                        </div>
-
-                                        {% if post.tags %}
-                                            <ul class="tag-clouds">
-                                                {% for tag in post.tags %}
-                                                    <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
-                                                {% endfor %}
-                                            </ul>
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-xs-2 col-bottom"></div>
-                                    <div class="col-xs-10 col-bottom"></div>
+                                <div class="col-xs-10 col-subject">
+                                     <h5><a href="{{ route('forum.topic', [post.forum.slug, post.topic_id, post.topic.slug]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(highlights[post.id]['topic.subject'], post.topic.subject) }}</a></h5>
                                 </div>
                             </div>
-                        </div>
-                    {% else %}
-                        <div class="post">
-                            <p style="text-align: center; margin-top: 9px">Brak wątków spełniających kryteria.</p>
-                        </div>
-                    {% endfor %}
 
+                            <div class="row">
+                                <div class="col-xs-2 col-user hidden-xss">
+                                    <p class="hidden-xs">
+                                        <strong>Data:</strong>
+                                        <small>{{ post.created_at|format_date }}</small>
+                                    </p>
+
+                                    <p class="hidden-xs">
+                                        <strong>Kategoria:</strong>
+                                        <small>{{ link_to_route('forum.category', post.forum.name, [post.forum.slug]) }}</small>
+                                    </p>
+
+                                    {% if can('forum-update') %}
+                                        <p class="hidden-xs">
+                                            <strong>IP:</strong>
+                                            <small>{{ post.ip }}</small>
+                                        </p>
+
+                                        <p class="hidden-xs">
+                                            <strong>Host:</strong>
+                                            <small title="{{ post.host }}">{{ post.host }}</small>
+                                        </p>
+
+                                        <p class="hidden-xs">
+                                            <strong>Przeglądarka:</strong>
+                                            <small title="{{ post.browser }}">{{ post.browser }}</small>
+                                        </p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-xs-10 col-body">
+                                    <div class="post-content">
+                                        {{ elastic_highlight(highlights[post.id]['text'], post.text) }}
+                                    </div>
+
+                                    {% if post.tags %}
+                                        <ul class="tag-clouds">
+                                            {% for tag in post.tags %}
+                                                <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-2 col-bottom"></div>
+                                <div class="col-xs-10 col-bottom"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="post">
+                        <p style="text-align: center; margin-top: 9px">Brak wątków spełniających kryteria.</p>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </section>
+        {% endif %}
+
+        {{ viewers|raw }}
+    </main>
+
+    {% embed 'forum.partials.sidebar' %}
+        {% block side_menu %}
+            {% if response %}
+                <div id="box-count" class="box">
+                    <strong>{{ response.totalHits()|number_format(0, '', ' ') }}</strong>
+                    <span>{{ declination(response.totalHits(), declination, true) }}</span>
                 </div>
-            </section>
             {% endif %}
 
-            {{ viewers|raw }}
-        </main>
+            <div id="box-search-tips" class="box">
+                <h4 class="border"><i class="fa fa-question-circle"></i> Wskazówki wyszukiwania</h4>
 
-        {% embed 'forum.partials.sidebar' %}
-            {% block side_menu %}
-                {% if response %}
-                    <div id="box-count" class="box">
-                        <strong>{{ response.totalHits()|number_format(0, '', ' ') }}</strong>
-                        <span>{{ declination(response.totalHits(), declination, true) }}</span>
-                    </div>
-                {% endif %}
+                <ul>
+                    <li><kbd>user:"Lorem ipsum"</kbd> lub <kbd>user:foo</kbd></li>
 
-                <div id="box-search-tips" class="box">
-                    <h4 class="border"><i class="fa fa-question-circle"></i> Wskazówki wyszukiwania</h4>
-
-                    <ul>
-                        <li><kbd>user:"Lorem ipsum"</kbd> lub <kbd>user:foo</kbd></li>
-
-                        {% if can('forum-update') %}
-                            <li><kbd>ip:127.0.0.1</kbd></li>
-                            <li><kbd>host:coyote.dev</kbd></li>
-                            <li><kbd>browser:"Mozilla Firefox"</kbd></li>
-                        {% endif %}
-                    </ul>
-                </div>
-            {% endblock %}
-        {% endembed %}
-    </div>
+                    {% if can('forum-update') %}
+                        <li><kbd>ip:127.0.0.1</kbd></li>
+                        <li><kbd>host:coyote.dev</kbd></li>
+                        <li><kbd>browser:"Mozilla Firefox"</kbd></li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endblock %}
+    {% endembed %}
 {% endblock %}
 
 {% block body %}

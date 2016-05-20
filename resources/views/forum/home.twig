@@ -9,51 +9,49 @@
 
 {% import 'components.forms' as forms %}
 
-{% block container %}
-    <div id="index" class="sidebar">
-        <ul class="nav nav-tabs">
-            {% for item in tabs.roots() %}
-                <li {{ forms.attr(item.attr) }}>
-                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                </li>
+{% block content %}
+    <ul class="nav nav-tabs">
+        {% for item in tabs.roots() %}
+            <li {{ forms.attr(item.attr) }}>
+                <a href="{{ item.url }}">{{ item.title|raw }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% include "forum.partials.top" %}
+
+    <main id="mainbar">
+        {% block mainbar %}
+            {% for name, forums in sections %}
+                {% include 'forum.partials.section' %}
             {% endfor %}
-        </ul>
+        {% endblock %}
 
-        {% include "forum.partials.top" %}
+        {{ viewers|raw }}
+    </main>
 
-        <main id="mainbar">
-            {% block mainbar %}
-                {% for name, forums in sections %}
-                    {% include 'forum.partials.section' %}
-                {% endfor %}
-            {% endblock %}
-
-            {{ viewers|raw }}
-        </main>
-
-        {% embed 'forum.partials.sidebar' %}
-            {% block side_menu %}
-                {% if topics.total() %}
-                    <div id="box-count" class="box">
-                        <strong>{{ topics.total()|number_format(0, '', ' ') }}</strong>
-                        <span>{{ declination(topics.total(), ['wątek', 'wątki', 'wątków'], true) }}</span>
-                    </div>
-                {% endif %}
-
-                <div class="box">
-                    <ul class="side-menu">
-                        <li class="btn-mark-read">
-                            <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.mark') }}" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
-                        </li>
-                        {#<li class="btn-atom">#}
-                            {#<a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>#}
-                        {#</li>#}
-                        <li id="btn-setting">
-                            <a title="Zmień kolejność wyświetlanych kategorii" href="{{ route('user.forum') }}" data-category="forum-sidebar-buttons" data-value="setting">Personalizacja forum</a>
-                        </li>
-                    </ul>
+    {% embed 'forum.partials.sidebar' %}
+        {% block side_menu %}
+            {% if topics.total() %}
+                <div id="box-count" class="box">
+                    <strong>{{ topics.total()|number_format(0, '', ' ') }}</strong>
+                    <span>{{ declination(topics.total(), ['wątek', 'wątki', 'wątków'], true) }}</span>
                 </div>
-            {% endblock %}
-        {% endembed %}
-    </div>
+            {% endif %}
+
+            <div class="box">
+                <ul class="side-menu">
+                    <li class="btn-mark-read">
+                        <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.mark') }}" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
+                    </li>
+                    {#<li class="btn-atom">#}
+                        {#<a href="http://forum.4programmers.net?export=atom" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>#}
+                    {#</li>#}
+                    <li id="btn-setting">
+                        <a title="Zmień kolejność wyświetlanych kategorii" href="{{ route('user.forum') }}" data-category="forum-sidebar-buttons" data-value="setting">Personalizacja forum</a>
+                    </li>
+                </ul>
+            </div>
+        {% endblock %}
+    {% endembed %}
 {% endblock %}

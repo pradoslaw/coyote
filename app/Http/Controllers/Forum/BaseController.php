@@ -75,7 +75,8 @@ abstract class BaseController extends Controller
                 'popular'   => $this->getTagClouds(),
                 'user'      => $this->getUserTags()
             ],
-            'viewers' => $this->getViewers()
+            'viewers' => $this->getViewers(),
+            'sidebar' => $this->getSetting('forum.sidebar', true)
         ]);
     }
 

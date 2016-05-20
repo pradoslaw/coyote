@@ -6,11 +6,7 @@ $(function() {
     function toggleSidebar(flag) {
         $('#btn-toggle-sidebar').toggleClass('sidebar-hidden', !flag);
         $('#sidebar').toggle(flag);
-        $('#index').toggleClass('sidebar', flag).children('.btn-watch-xs, .btn-atom-xs, .btn-mark-read-xs').toggleClass('show', !flag);
-    }
-
-    if ($('#sidebar').is(':hidden')) {
-        $('#index').children('.btn-watch-xs, .btn-atom-xs, .btn-mark-read-xs').addClass('show');
+        $('#index').toggleClass('sidebar', flag);
     }
 
     $(document).click(function (e) {
