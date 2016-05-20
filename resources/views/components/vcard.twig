@@ -10,7 +10,7 @@
                 <span class="status {{ session_at ?: 'offline' }}">{{ session_at ? 'Online' : 'Offline' }}</span>
 
                 {% if user.group.name %}
-                    <span class="label label-warning">{{ user.group.name }}</span>
+                    <span class="label label-default">{{ user.group.name }}</span>
                 {% endif %}
             </div>
 
