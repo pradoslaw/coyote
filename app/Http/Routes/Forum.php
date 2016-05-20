@@ -12,7 +12,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('Tag/Validate', ['uses' => 'TagController@valid', 'as' => 'tag.validate']);
     Route::get('All', ['uses' => 'HomeController@all', 'as' => 'all']);
     Route::get('Unanswered', ['uses' => 'HomeController@unanswered', 'as' => 'unanswered']);
-    Route::get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine']);
+    Route::get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine', 'middleware' => 'auth']);
     Route::get('Subscribes', ['uses' => 'HomeController@subscribes', 'as' => 'subscribes']);
     Route::get('User/{id}', ['uses' => 'HomeController@user', 'as' => 'user']);
     Route::post('Mark', ['uses' => 'HomeController@mark', 'as' => 'mark']);
