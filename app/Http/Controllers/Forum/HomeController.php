@@ -24,7 +24,7 @@ class HomeController extends BaseController
      */
     protected function view($view = null, $data = [])
     {
-        $route = $this->getRouter()->getCurrentRoute()->getName();
+        $route = $this->getRouter()->currentRouteName();
         $request = $this->getRouter()->getCurrentRequest();
 
         $tabs = app(Menu::class)->make('tabs', function ($menu) {
