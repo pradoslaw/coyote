@@ -47,7 +47,7 @@ class SubmitController extends BaseController
                 $wiki->logs()->create($wiki->toArray() + [
                     'user_id'   => $this->userId,
                     'ip'        => $request->ip(),
-                    'host'      => $request->getHost(),
+                    'host'      => gethostbyaddr($request->ip()),
                     'browser'   => $request->browser(),
                     'length'    => mb_strlen($wiki->text)
                 ]);
