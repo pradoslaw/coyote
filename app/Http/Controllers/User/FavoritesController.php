@@ -98,10 +98,16 @@ class FavoritesController extends BaseController
     protected function getTabs()
     {
         return app(Menu::class)->make('favorites', function ($menu) {
-            $menu->add('Wątki na forum', ['route' => 'user.favorites.forum']);
-            $menu->add('Oferty pracy', ['route' => 'user.favorites.job']);
-            $menu->add('Mikroblogi', ['route' => 'user.favorites.microblog']);
-            $menu->add('Artykuły', ['route' => 'user.favorites.wiki']);
+            $tabs = [
+                'user.favorites.forum' => 'Wątki na forum',
+                'user.favorites.job' => 'Oferty pracy',
+                'user.favorites.microblog' => 'Mikroblogi',
+                'user.favorites.wiki' => 'Artykuły'
+            ];
+
+            foreach ($tabs as $route => $label) {
+                $menu->add($label, ['route' => $route])->active(ltrim(route($route, [], false)));
+            }
         });
     }
 }
