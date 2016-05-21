@@ -9,8 +9,8 @@
     <div id="box-start" class="panel panel-default">
         <div class="panel-body">
 
-            <div class="row">
-                <div class="col-sm-1 hidden-xs">
+            <div class="media">
+                <div class="media-left hidden-xs">
                     <div id="photo" class="img-thumbnail">
                         <img src="{{ user_photo(user('photo')) }}">
 
@@ -24,46 +24,47 @@
                     <a id="upload" href="javascript:" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
                 </div>
 
-                <form id="upload-form" action="{{ route('user.photo.upload') }}">
-                    <input type="file" id="input-file" name="photo" style="visibility: hidden; height: 0">
-                </form>
+                <div class="media-body">
+                    <form id="upload-form" action="{{ route('user.photo.upload') }}">
+                        <input type="file" id="input-file" name="photo" style="visibility: hidden; height: 0">
+                    </form>
 
-                <div class="col-sm-11" style="padding-left: 20px">
-                    <ul class="list-inline">
-                        <li title="Ostatnia wizyta">
-                            <i class="fa fa-sign-in fa-fw"></i>
-                            {{ user('visited_at')|format_date }}
-                        </li>
-                        <li title="Twoje aktualne IP">
-                            <i class="fa fa-home fa-fw"></i>
-                            {{ ip }}
-                        </li>
-                        <li title="Data rejestracji">
-                            <i class="fa fa-user-plus fa-fw"></i>
-                            {{ user('created_at')|format_date }}
-                        </li>
-                        <li title="Ilość wizyt">
-                            <i class="fa fa-eye fa-fw"></i>
-                            {{ user('visits')|number_format(0, ',', ' ') }}
-                        </li>
-                    </ul>
+                    <div class="col-sm-11" style="padding-left: 20px">
+                        <ul class="list-inline">
+                            <li title="Ostatnia wizyta">
+                                <i class="fa fa-sign-in fa-fw"></i>
+                                {{ user('visited_at')|format_date }}
+                            </li>
+                            <li title="Twoje aktualne IP">
+                                <i class="fa fa-home fa-fw"></i>
+                                {{ ip }}
+                            </li>
+                            <li title="Data rejestracji">
+                                <i class="fa fa-user-plus fa-fw"></i>
+                                {{ user('created_at')|format_date }}
+                            </li>
+                            <li title="Ilość wizyt">
+                                <i class="fa fa-eye fa-fw"></i>
+                                {{ user('visits')|number_format(0, ',', ' ') }}
+                            </li>
+                        </ul>
 
-                    <div class="box-reputation">
-                        <h5><i class="fa fa-line-chart"></i> Twoja reputacja</h5>
+                        <div class="box-reputation">
+                            <h5><i class="fa fa-line-chart"></i> Twoja reputacja</h5>
 
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;">
 
+                                </div>
+
+                                <span class="rep"><strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong> <small>punktów</small></span>
+
+                                {% if total_users > 0 %}
+                                    <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
+                                {% endif %}
                             </div>
-
-                            <span class="rep"><strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong> <small>punktów</small></span>
-
-                            {% if total_users > 0 %}
-                                <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
-                            {% endif %}
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
