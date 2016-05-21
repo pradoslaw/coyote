@@ -8,7 +8,7 @@
         <small class="pull-right">{{ item.created_at|format_date }}</small>
         <h3 class="media-heading">
             {% if link_to_profile %}
-                {{ link_to_profile(item.author_id, item.name, item.is_active, item.is_blocked) }}
+                {{ link_to_profile(item.user_id, item.name, item.is_active, item.is_blocked) }}
             {% else %}
                 <a href="{{ route('user.pm.show', [item.id]) }}">{{ item.name }}</a>
             {% endif %}
