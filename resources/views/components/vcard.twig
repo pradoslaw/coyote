@@ -1,6 +1,9 @@
+{% set visited_at = max(session_at, user.visited_at)|format_date %}
+{% set created_at = user.created_at|format_date %}
+
 <div id="vcard">
     <div id="vcard-header">
-        <a href="#">{{ user.name }}</a>
+        <a href="{{ route('profile', [user.id]) }}">{{ user.name }}</a>
     </div>
 
     <div id="vcard-content">
@@ -16,12 +19,12 @@
 
             <div class="col-xs-9">
                 <ul class="list-inline">
-                    <li title="Ostatnia wizyta">
-                        <i class="fa fa-sign-in fa-fw"></i> {{ max(session_at, user.visited_at)|format_date }}
+                    <li title="Ostatnia wizyta: {{ visited_at }}">
+                        <i class="fa fa-sign-in fa-fw"></i> {{ visited_at }}
                     </li>
-                    <li title="Data rejestracji">
+                    <li title="Data rejestracji: {{ created_at }}">
                         <i class="fa fa-user-plus fa-fw"></i>
-                        {{ user.created_at|format_date }}
+                        {{ created_at }}
                     </li>
                 </ul>
 
@@ -39,6 +42,16 @@
                             <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
                         {% endif %}
                     </div>
+                </div>
+
+                <div class="box-buttons">
+                    <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-xs btn-default">
+                        <i class="fa fa-search"></i>
+                    </a>
+
+                    <a href="{{ route('user.pm.submit', {to: user.id}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-xs btn-default">
+                        <i class="fa fa-envelope"></i>
+                    </a>
                 </div>
             </div>
         </div>

@@ -29,11 +29,16 @@
     margin-top: 12px;
   }
 
-  .list-inline {
+  .list-inline, .box-reputation {
     border-bottom: 1px solid $border-color;
     padding-bottom: 10px;
+  }
+
+  .list-inline {
     color: $gray-light;
     font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
 
     li:first-child {
       padding-left: 0;
@@ -66,5 +71,14 @@
 
   .status.offline {
     background-color: $gray-light;
+  }
+
+  .box-buttons {
+    padding-top: 10px;
+    font-size: 15px;
+
+    a {
+      color: $gray-light;
+    }
   }
 }
