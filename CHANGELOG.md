@@ -48,3 +48,4 @@
 - Dla moderatorów: dziennik zdarzeń wygląda teraz inaczej oraz zawiera więcej informacji o akcji w danym wątku
 - Generowanie losowych nicków dla użytkowników anonimowych: dodanie większej ilości kombinacji
 - Użytkownicy z reputacją powyzej 100 pkt nie muszą czekać ani sekundy przed dodaniem kolejnego posta
+- Usunięcie możliwości eksportowania widoków do rss (docelowo zastąpione API)
