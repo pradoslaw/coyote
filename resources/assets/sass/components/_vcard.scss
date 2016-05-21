@@ -39,10 +39,6 @@
     font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
-
-    li:first-child {
-      padding-left: 0;
-    }
   }
 
   h6 {
@@ -60,7 +56,7 @@
   }
 
   .status {
-    width: 100%;
+    width: 76px;
     display: inline-block;
     background-color: $brand-primary;
     border-bottom-left-radius: 4px;

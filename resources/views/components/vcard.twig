@@ -7,8 +7,8 @@
     </div>
 
     <div id="vcard-content">
-        <div class="row">
-            <div class="col-xs-3">
+        <div class="media">
+            <div class="media-left">
                 <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
                 <span class="status {{ session_at ?: 'offline' }}">{{ session_at ? 'Online' : 'Offline' }}</span>
 
@@ -17,7 +17,7 @@
                 {% endif %}
             </div>
 
-            <div class="col-xs-9">
+            <div class="media-body">
                 <ul class="list-inline">
                     <li title="Ostatnia wizyta: {{ visited_at }}">
                         <i class="fa fa-sign-in fa-fw"></i> {{ visited_at }}
