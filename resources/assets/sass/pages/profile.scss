@@ -31,7 +31,7 @@
     small {
       font-size: 80%;
       vertical-align: top;
-      padding-top: 2px;
+      padding-top: 4px;
       display: inline-block;
       color: $gray-light;
     }
@@ -51,6 +51,8 @@
     font-size: 12px;
 
     li {
+      cursor: help;
+
       @media screen and (max-width: $screen-xs) {
         display: block !important;
         font-size: 90%;
