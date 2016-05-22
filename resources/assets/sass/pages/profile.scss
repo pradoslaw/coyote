@@ -4,6 +4,7 @@
 @import "../vendor/font-awesome/variables";
 @import "../components/tags";
 @import "../components/progress-bars";
+@import "../components/metadata";
 
 #user-nav-tabs {
   margin: 20px 0;
@@ -42,38 +43,8 @@
     font-size: 13px;
   }
 
-  // @todo Ponizszy blok jest uzywany rowniez w artykulach oraz w profilu usera (plik wiki.scss). Moze nalezaloby zastosowac DRY?
-  .metadata {
-    margin: 10px 0 12px 2px;
-    padding-top: 10px;
-    border-top: 1px solid $border-color;
-    color: $gray-light;
-    font-size: 12px;
-
-    li {
-      cursor: help;
-
-      @media screen and (max-width: $screen-xs) {
-        display: block !important;
-        font-size: 90%;
-        margin-bottom: 10px;
-        padding-left: 0;
-        padding-right: 0;
-      }
-    }
-  }
-
-  .metadata, .base-info {
+  .list-inline {
     margin-left: 0;
-
-    a {
-      color: inherit;
-    }
-
-    i {
-      color: $gray;
-      font-size: $font-size-base + 1;
-    }
 
     li {
       &:first-child {

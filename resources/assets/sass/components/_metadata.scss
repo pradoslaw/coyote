@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+.metadata {
+  color: $gray-light;
+  margin: 10px 0 12px 2px;
+  padding-top: 10px;
+  border-top: 1px solid $border-color;
+  font-size: 12px;
+
+  i {
+    color: $gray;
+    font-size: $font-size-base + 1;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  li {
+    cursor: help;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    @media screen and (max-width: $screen-xs) {
+      display: block !important;
+      font-size: 90%;
+      margin-bottom: 10px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}

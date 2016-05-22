@@ -6,6 +6,7 @@
 @import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
 @import "../components/related";
 @import "../components/sidemenu";
+@import "../components/metadata";
 
 // Style zwiazane ze strona prezentujaca kategorie danego tekstu. Zawiera m.in. liste artykulow
 // ----------------------------------------------------------------------------------------------
@@ -112,30 +113,6 @@ article > header {
 
     a {
       color: $gray;
-    }
-  }
-
-  ul {
-    color: $gray-light;
-    border-top: 1px solid $border-color;
-    padding-top: 12px;
-    margin: 13px 0 20px 0;
-
-    a {
-      color: inherit;
-    }
-
-    li {
-      i {
-        color: $gray;
-        font-size: $font-size-base + 1;
-      }
-
-      @media screen and (max-width: $screen-xs) {
-        display: block !important;
-        font-size: 90%;
-        margin-bottom: 5px;
-      }
     }
   }
 }

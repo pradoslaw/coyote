@@ -3,6 +3,7 @@
 @import "../helpers/variables";
 @import "../helpers/mixins";
 @import "../components/sidemenu";
+@import "../components/metadata";
 @import "../vendor/font-awesome/variables";
 
 #user-nav-tabs {
@@ -16,18 +17,13 @@
 }
 
 #box-start {
-  .list-inline {
-    border-bottom: 1px solid $border-color;
+  .metadata {
+    padding-top: 0;
+    margin-top: 0;
     padding-bottom: 10px;
-    color: $gray-light;
-    font-size: 12px;
-
-    li {
-      @media screen and (max-width: $screen-xs) {
-        display: block;
-        margin-bottom: 5px;
-      }
-    }
+    border-bottom: 1px solid $border-color;
+    border-top: 0;
+    margin-left: -2px;
   }
 
   h5 {
@@ -44,7 +40,7 @@
   }
 
   .box-reputation {
-    margin-top: 22px;
+    margin-top: 10px;
   }
 
   .img-thumbnail {

@@ -74,44 +74,16 @@
   }
 }
 
-// @todo Ponizszy blok jest uzywany rowniez w artykulach oraz w profilu usera (plik wiki.scss). Moze nalezaloby zastosowac DRY?
-.metadata {
-  color: $gray-light;
-
-  i {
-    color: $gray;
-    font-size: $font-size-base + 1;
-  }
-
-  a {
-    color: inherit;
-  }
-}
-
 .metadata.location {
   display: inline;
-
-  li {
-    font-size: 12px;
-  }
+  border-top: 0;
 }
 
 .metadata.primary {
-  margin: 10px 0 12px 2px;
-  padding-top: 10px;
-  border-top: 1px solid $border-color;
-
   li {
-    @media screen and (max-width: $screen-sm) {
-      display: block !important;
-      font-size: 90%;
-      margin-bottom: 10px;
-      padding-left: 0;
-      padding-right: 0;
-    }
 
     &:first-child {
-      padding-left: 0;
+      //padding-left: 0;
     }
   }
 }
