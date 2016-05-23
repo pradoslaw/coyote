@@ -404,6 +404,9 @@ $(() => {
 
             $('.btn-firm').not(self).removeClass('btn-primary').addClass('btn-default');
             self.addClass('btn-primary').removeClass('btn-default');
+
+            tinymce.EditorManager.editors = [];
+            initTinymce();
         });
 
         return false;
