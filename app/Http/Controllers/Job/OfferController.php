@@ -4,30 +4,31 @@ namespace Coyote\Http\Controllers\Job;
 
 use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\FirmRepositoryInterface;
-use Coyote\Repositories\Contracts\JobRepositoryInterface;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface;
+use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
+use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
 use Coyote\Firm;
 use Coyote\Job;
+use Coyote\Services\Elasticsearch\Factories\Job\MoreLikeThisFactory;
 
 class OfferController extends Controller
 {
     /**
-     * @var JobRepositoryInterface
+     * @var JobRepository
      */
     private $job;
 
     /**
-     * @var FirmRepositoryInterface
+     * @var FirmRepository
      */
     private $firm;
 
     /**
      * OfferController constructor.
-     * @param JobRepositoryInterface $job
-     * @param FirmRepositoryInterface $firm
+     * @param JobRepository $job
+     * @param FirmRepository $firm
      */
-    public function __construct(JobRepositoryInterface $job, FirmRepositoryInterface $firm)
+    public function __construct(JobRepository $job, FirmRepository $firm)
     {
         parent::__construct();
 
@@ -80,6 +81,14 @@ class OfferController extends Controller
             $flag = $this->getFlagFactory()->takeForJob($job->id);
         }
 
+        $builder = (new MoreLikeThisFactory())->build($job);
+
+        $build = $builder->build();
+        debugbar()->debug($build);
+
+        // search related topics
+        $mlt = $this->job->search($build)->getSource();
+        
         return $this->view('job.offer', [
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
@@ -87,15 +96,15 @@ class OfferController extends Controller
             'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days,
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
         ])->with(
-            compact('job', 'firm', 'tags', 'flag')
+            compact('job', 'firm', 'tags', 'flag', 'mlt')
         );
     }
 
     /**
-     * @return FlagRepositoryInterface
+     * @return FlagRepository
      */
     protected function getFlagFactory()
     {
-        return app(FlagRepositoryInterface::class);
+        return app(FlagRepository::class);
     }
 }

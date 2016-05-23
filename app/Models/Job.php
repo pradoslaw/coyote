@@ -6,7 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ * @property int $id
+ * @property int $user_id
+ * @property int $firm_id
+ * @property int $salary_from
+ * @property int $salary_to
+ * @property int $country_id
+ * @property int $currency_id
+ * @property int $is_remote
+ * @property int $enable_apply
+ * @property int $visits
+ * @property float $score
+ * @property float $rank
  * @property string $slug
+ * @property string $title
+ * @property string $description
+ * @property string $recruitment
+ * @property string $requirements
+ * @property string $email
  */
 class Job extends Model
 {

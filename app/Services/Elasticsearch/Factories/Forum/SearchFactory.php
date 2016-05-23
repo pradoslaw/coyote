@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Factory\Forum;
+namespace Coyote\Services\Elasticsearch\Factories\Forum;
 
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;

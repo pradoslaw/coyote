@@ -70,7 +70,17 @@
                 </section>
             {% endif %}
 
-            {{ render_block('job_ads') }}
+            {% if mlt|length %}
+                <section class="box sidebar-job-offers">
+                    <h4><i class="fa fa-star fa-fw"></i> Podobne oferty</h4>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            {% include 'components.jobs' with {'jobs': mlt} %}
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
 
         </aside>
     </div>

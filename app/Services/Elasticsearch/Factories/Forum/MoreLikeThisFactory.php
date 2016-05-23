@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Factory\Forum;
+namespace Coyote\Services\Elasticsearch\Factories\Forum;
 
 use Coyote\Services\Elasticsearch\Aggs\Forum\Topic;
 use Coyote\Services\Elasticsearch\Filters\NotTerm;

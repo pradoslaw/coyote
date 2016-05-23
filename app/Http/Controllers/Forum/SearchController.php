@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Services\Elasticsearch\Factory\Forum\SearchFactory;
+use Coyote\Services\Elasticsearch\Factories\Forum\SearchFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Request;
 

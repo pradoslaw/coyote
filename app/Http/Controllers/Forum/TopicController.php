@@ -11,7 +11,7 @@ use Coyote\Repositories\Contracts\FlagRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
-use Coyote\Services\Elasticsearch\Factory\Forum\MoreLikeThisFactory;
+use Coyote\Services\Elasticsearch\Factories\Forum\MoreLikeThisFactory;
 use Coyote\Services\Elasticsearch\Response\TopHits;
 use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
