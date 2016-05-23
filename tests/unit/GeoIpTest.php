@@ -16,7 +16,7 @@ class GeoIpTest extends \Codeception\TestCase\Test
 
     protected function _before()
     {
-        $this->geoIp = app('GeoIp');
+        $this->geoIp = app('geo-ip');
     }
 
     protected function _after()

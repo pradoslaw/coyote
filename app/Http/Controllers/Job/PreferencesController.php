@@ -9,6 +9,7 @@ class PreferencesController extends Controller
 {
     /**
      * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Contracts\Routing\ResponseFactory
      */
     public function index(Request $request)
     {

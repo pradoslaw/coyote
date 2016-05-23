@@ -34,6 +34,8 @@ Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     Route::get('Application/{job}', ['uses' => 'ApplicationController@submit', 'as' => 'candidate']);
     Route::post('Application/{job}', ['uses' => 'ApplicationController@save', 'as' => 'candidate']);
+
+    Route::get('Ad', ['uses' => 'AdController@index', 'as' => 'ad']);
 });
 
 Route::group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {

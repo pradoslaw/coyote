@@ -61,7 +61,7 @@ class SubmitController extends Controller
         $this->firm = $firm;
         $this->tag = $tag;
 
-        $this->geoIp = app('GeoIp');
+        $this->geoIp = app('geo-ip');
 
         $this->public['firm_partial'] = route('job.submit.firm.partial');
     }

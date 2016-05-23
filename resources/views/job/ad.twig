@@ -1,0 +1,15 @@
+<section id="box-job-offers" class="box sidebar-job-offers">
+    <h4><a href="{{ route('job.home') }}">Oferty pracy</a></h4>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {% include 'components.jobs' %}
+
+            <div class="media">
+                {% if location.city %}
+                    <a href="{{ route('job.city', [location.city]) }}" class="text-align">Więcej ofert w pobliżu {{ location.city }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>

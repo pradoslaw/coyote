@@ -22,7 +22,7 @@ class GeoIpServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('GeoIp', function ($app) {
+        $this->app->bind('geo-ip', function ($app) {
             return new GeoIp(
                 new Client(),
                 $app['config']->get('services.geo-ip.host'),
@@ -38,6 +38,6 @@ class GeoIpServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['GeoIp'];
+        return ['geo-ip'];
     }
 }
