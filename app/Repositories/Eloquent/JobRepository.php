@@ -6,6 +6,7 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 
 /**
+ * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
  * @method $this withTrashed()
  */
 class JobRepository extends Repository implements JobRepositoryInterface
@@ -51,9 +52,9 @@ class JobRepository extends Repository implements JobRepositoryInterface
     public function subscribes($userId)
     {
         return $this->model
-                    ->select(['jobs.*', 'firms.name AS firm_name', 'firms.logo', 'currencies.name AS currency_name'])
+                    ->select(['jobs.*', 'firms.name AS firm.name', 'firms.logo AS firm.logo', 'currencies.name AS currency_name'])
                     ->join('job_subscribers', function ($join) use ($userId) {
-                        $join->on('job_id', '=', 'jobs.id')->on('job_subscribers.user_id', '=', \DB::raw($userId));
+                        $join->on('job_id', '=', 'jobs.id')->on('job_subscribers.user_id', '=', $this->raw($userId));
                     })
                     ->leftJoin('firms', 'firms.id', '=', 'firm_id')
                     ->join('currencies', 'currencies.id', '=', 'currency_id')

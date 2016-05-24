@@ -7,7 +7,7 @@
 
             <div class="media">
                 {% if location.city %}
-                    <a href="{{ route('job.city', [location.city]) }}" class="text-align">Więcej ofert w pobliżu {{ location.city }}</a>
+                    <a href="{{ route('job.city', [location.city_name]) }}" class="text-align">Więcej ofert w pobliżu {{ location.city_name }}</a>
                 {% else %}
                     <a href="{{ route('job.home') }}" class="text-align">Więcej ofert pracy</a>
                 {% endif %}
