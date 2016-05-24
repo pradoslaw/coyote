@@ -1,5 +1,5 @@
 <section id="box-job-offers" class="box sidebar-job-offers">
-    <h4><a href="{{ route('job.home') }}">Oferty pracy</a></h4>
+    <h4><a href="{{ route('job.home') }}" title="Szukaj pracy jako programista">Oferty pracy</a></h4>
 
     <div class="panel panel-default">
         <div class="panel-body">
@@ -8,6 +8,8 @@
             <div class="media">
                 {% if location.city %}
                     <a href="{{ route('job.city', [location.city]) }}" class="text-align">Więcej ofert w pobliżu {{ location.city }}</a>
+                {% else %}
+                    <a href="{{ route('job.home') }}" class="text-align">Więcej ofert pracy</a>
                 {% endif %}
             </div>
         </div>
