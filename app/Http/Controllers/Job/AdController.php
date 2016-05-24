@@ -38,9 +38,14 @@ class AdController extends Controller
         $builder->setSize(0, 4);
         $builder->addSort(new Geodistance($location['latitude'], $location['longitude']));
 
+        // search jobs that might be close to your location
         return view('job.ad', ['jobs' => $this->job->search($builder->build()), 'location' => $location]);
     }
 
+    /**
+     * @param string $ip
+     * @return array
+     */
     protected function getLocation($ip)
     {
         return $this->getCacheFactory()->remember('ip:' . $ip, 60, function () use ($ip) {

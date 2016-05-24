@@ -21,7 +21,7 @@ class BlocksTableSeeder extends Seeder
         if (this.readyState !== 4 ) return;
         if (this.status !== 200) return;
         
-        document.getElementById('job-ad').innerHTML= this.responseText;
+        document.getElementById('job-ad').innerHTML = this.responseText;
     };
     xhr.send();
 </script>
