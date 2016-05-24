@@ -8,15 +8,15 @@
     </ul>
 {% endmacro %}
 
-<div class="panel-body">
+<div id="job-offer" class="panel-body">
     <div class="media">
         {% if firm.logo %}
-            <div class="media-left">
-                <img class="media-object" src="{{ logo(firm.logo) }}" style="width: 70px; height: 70px;" alt="{{ firm.name }}">
+            <div class="media-left hidden-xxs">
+                <img class="media-object" src="{{ logo(firm.logo) }}" alt="{{ firm.name }}">
             </div>
         {% endif %}
 
-        <div id="job-offer" class="media-body">
+        <div class="media-body">
             <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
 
             {% if firm.name %}
@@ -108,7 +108,7 @@
 
                 <ul class="benefits list-group row">
                     {% for benefit in firm.benefits %}
-                        <li class="list-group-item col-xs-6 checked"><i class="fa fa-check fa-fw"></i> {{ benefit.name }}</li>
+                        <li class="list-group-item col-xs-12 col-sm-6 checked"><i class="fa fa-check fa-fw"></i> {{ benefit.name }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}

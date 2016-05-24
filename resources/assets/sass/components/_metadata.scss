@@ -31,4 +31,9 @@
       padding-right: 0;
     }
   }
+
+  @media screen and (max-width: $screen-xs) {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
 }

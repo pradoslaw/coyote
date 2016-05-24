@@ -1,7 +1,9 @@
 @charset "UTF-8";
 
 #job-offer {
-  padding: 0 20px;
+  .media-body {
+    padding: 0 20px;
+  }
 
   h1 {
     font-size: 22px;
@@ -70,6 +72,16 @@
       @media screen and (max-width: $screen-sm) {
         display: none;
       }
+    }
+  }
+
+  .media-object {
+    width: 70px;
+    height: 70px;
+
+    @media screen and (max-width: $screen-sm) {
+      width: 40px;
+      height: 40px;
     }
   }
 }
