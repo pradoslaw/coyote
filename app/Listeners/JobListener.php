@@ -4,6 +4,7 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\JobWasDeleted;
 use Coyote\Events\JobWasSaved;
+use Coyote\Jobs\UpdateJobOffers;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 
 // Uwaga! Tutaj specjalnie nie implementujemy interfejsu ShouldQueue poniewaz chcemy zeby usuniecie
@@ -29,6 +30,11 @@ class JobListener
     public function onJobSave(JobWasSaved $event)
     {
         $event->job->putToIndex();
+
+        // we need to update elasticsearch index by updating firm name and logo in all job offers
+        if ($event->job->firm_id) {
+            dispatch(new UpdateJobOffers($event->job->firm_id));
+        }
     }
 
     /**

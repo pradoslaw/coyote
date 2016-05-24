@@ -347,7 +347,7 @@ class Job extends Model
     /**
      * @return string
      */
-    protected function getResponse()
+    public function getResponse()
     {
         return \Coyote\Services\Elasticsearch\Response\Job::class;
     }
