@@ -7,11 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
- * @property int $parent_id
  * @property string $title
  * @property string $long_title
  * @property string $slug
- * @property string $path
  * @property string $excerpt
  * @property string $text
  * @property int $is_locked
@@ -33,7 +31,7 @@ class Wiki extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'title', 'long_title', 'excerpt', 'text'];
+    protected $fillable = ['title', 'long_title', 'excerpt', 'text'];
 
     /**
      * @var string
@@ -53,22 +51,6 @@ class Wiki extends Model
     protected $casts = [
         'is_locked' => 'bool'
     ];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($model) {
-            /** @var \Coyote\Wiki $model */
-            $model->path = $model->slug;
-
-            if ($model->parent_id) {
-                $model->path = $model->parent()->value('path') . '/' . $model->path;
-            } else {
-                $model->parent_id = null;
-            }
-        });
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
@@ -92,6 +74,14 @@ class Wiki extends Model
     public function logs()
     {
         return $this->hasMany('Coyote\Wiki\Log');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function paths()
+    {
+        return $this->hasMany('Coyote\Wiki\Path');
     }
 
     /**

@@ -14,11 +14,9 @@ class CreateWikiTable extends Migration
     {
         Schema::create('wiki', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('parent_id')->nullable();
             $table->string('title');
             $table->string('long_title')->nullable();
             $table->string('slug');
-            $table->text('path');
             $table->timestampsTz();
             $table->softDeletes();
             $table->text('excerpt')->nullable();
@@ -26,13 +24,8 @@ class CreateWikiTable extends Migration
             $table->tinyInteger('is_locked')->default(0);
             $table->string('template')->nullable();
 
-            $table->index('parent_id');
             $table->index('deleted_at');
-
-            $table->foreign('parent_id')->references('id')->on('wiki')->onDelete('cascade');
         });
-
-        DB::unprepared('CREATE INDEX "wiki_path_index" ON "wiki" USING btree (LOWER(path))');
     }
 
     /**
