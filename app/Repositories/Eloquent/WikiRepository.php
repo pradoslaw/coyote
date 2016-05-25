@@ -30,18 +30,6 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     }
 
     /**
-     * @param int $pathId
-     * @return mixed
-     */
-    public function findByPathId($pathId)
-    {
-        return $this
-            ->model
-            ->where('path_id', $pathId)
-            ->first();
-    }
-
-    /**
      * Get children articles of given parent_id.
      *
      * @param int|null $parentId
