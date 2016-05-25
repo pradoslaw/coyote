@@ -38,14 +38,14 @@ class WikiAccess extends AbstractMiddleware
      */
     public function handle($request, Closure $next, $ability = '')
     {
-        $result = $this->wiki->withTrashed()->where('path', trim($request->route('path'), '/'))->first();
+        $result = $this->wiki->findByPath(trim($request->route('path'), '/'));
 
         if (empty($result) || (!is_null($result->deleted_at) && $this->gate->denies($ability))) {
             abort(404);
         }
 
         $request->wiki = $result;
-        
+
         return $next($request);
     }
 }

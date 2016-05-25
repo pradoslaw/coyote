@@ -9,19 +9,30 @@ namespace Coyote\Repositories\Contracts;
 interface WikiRepositoryInterface extends RepositoryInterface
 {
     /**
+     * @param string $path
+     * @return mixed
+     */
+    public function findByPath($path);
+
+    /**
+     * @param int $pathId
+     * @return mixed
+     */
+    public function findByPathId($pathId);
+
+    /**
      * Get children articles of given parent_id.
      *
      * @param int|null $parentId
-     * @param int $depth
      * @return mixed
      */
-    public function children($parentId = null, $depth = 10);
+    public function children($parentId = null);
 
     /**
-     * @param int $id
+     * @param int $pathId
      * @return mixed
      */
-    public function parents($id);
+    public function parents($pathId);
 
     /**
      * @return mixed

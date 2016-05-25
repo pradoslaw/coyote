@@ -39,7 +39,7 @@ class SubmitController extends BaseController
 
         $path = $this->transaction(function () use ($wiki, $request) {
             // we need to know if those attributes were changed. if so, we need to add new record to the history.
-            $isDirty = $wiki->isDirty(['title', 'parent_id', 'excerpt', 'text']);
+            $isDirty = $wiki->isDirty(['title', 'excerpt', 'text']);
             $wiki->save();
 
             if ($isDirty) {
@@ -51,6 +51,11 @@ class SubmitController extends BaseController
                     'browser'   => $request->browser(),
                     'length'    => mb_strlen($wiki->text)
                 ]);
+            }
+
+            if ($wiki->wasRecentlyCreated) {
+                $parent = $this->wiki->findByPathId((int) $request->input('path_id'));
+                $wiki->createPath($parent, $wiki->slug);
             }
 
             stream(

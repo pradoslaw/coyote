@@ -13,7 +13,7 @@ class CreateWikiChildrenFunction extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE OR REPLACE FUNCTION wiki_children(_parent_id INTEGER DEFAULT NULL) RETURNS TABLE (depth INTEGER, node INTEGER[], root_id INTEGER, parent_id INTEGER, path TEXT, id INTEGER, title VARCHAR(255), long_title VARCHAR(255), slug VARCHAR(255), created_at TIMESTAMPTZ, updated_at TIMESTAMPTZ, deleted_at TIMESTAMP, excerpt TEXT, "text" TEXT, is_locked SMALLINT, template VARCHAR(255), children BIGINT) AS $$
+CREATE OR REPLACE FUNCTION wiki_children(_parent_id INTEGER DEFAULT NULL) RETURNS TABLE (depth INTEGER, node INTEGER[], root_id INTEGER, parent_id INTEGER, path TEXT, path_id INTEGER, id INTEGER, title VARCHAR(255), long_title VARCHAR(255), slug VARCHAR(255), created_at TIMESTAMPTZ, updated_at TIMESTAMPTZ, deleted_at TIMESTAMP, excerpt TEXT, "text" TEXT, is_locked SMALLINT, template VARCHAR(255), children BIGINT) AS $$
     WITH RECURSIVE nodes AS (
         (
             SELECT 1 AS depth, ARRAY[id] AS node, id AS root_id, *

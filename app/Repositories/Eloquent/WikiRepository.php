@@ -16,31 +16,57 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     }
 
     /**
+     * @param string $path
+     * @return mixed
+     */
+    public function findByPath($path)
+    {
+        return $this
+            ->model
+            ->withTrashed() // @todo hmm, to chyba powinno byc dodane poprzez criteria a nie wpiasne "na stale"
+            ->from('wiki_view')
+            ->where('path', $path)
+            ->first();
+    }
+
+    /**
+     * @param int $pathId
+     * @return mixed
+     */
+    public function findByPathId($pathId)
+    {
+        return $this
+            ->model
+            ->from('wiki_view AS wiki')
+            ->where('path_id', $pathId)
+            ->first();
+    }
+
+    /**
      * Get children articles of given parent_id.
      *
      * @param int|null $parentId
-     * @param int $depth
      * @return mixed
      */
-    public function children($parentId = null, $depth = 10)
+    public function children($parentId = null)
     {
         $this->applyCriteria();
 
         return $this
             ->model
-            ->from($this->sqlFunction('wiki_children', $parentId, $depth))
+            ->from($this->rawFunction('wiki_children', $parentId))
             ->get();
     }
 
     /**
-     * @param int $id
+     * @param int $pathId
      * @return mixed
      */
-    public function parents($id)
+    public function parents($pathId)
     {
         $this->applyCriteria();
 
-        return $this->model->from($this->sqlFunction('wiki_parents', $id))->get();
+        return $this->model->from($this->rawFunction('wiki_parents', $pathId))->get();
     }
 
     /**
@@ -51,10 +77,10 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         $this->applyCriteria();
 
         $result = [];
-        $data = $this->model->from($this->sqlFunction('wiki_children'))->get(['id', 'title', 'depth']);
+        $data = $this->model->from($this->rawFunction('wiki_children'))->get(['path_id', 'title', 'depth']);
 
         foreach ($data as $row) {
-            $result[$row['id']] = str_repeat('&nbsp;', $row['depth'] * 4) . $row['title'];
+            $result[$row['path_id']] = str_repeat('&nbsp;', $row['depth'] * 4) . $row['title'];
         }
 
         return $result;
@@ -81,7 +107,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
      * @param array ...$args
      * @return \Illuminate\Database\Query\Expression
      */
-    private function sqlFunction($name, ...$args)
+    private function rawFunction($name, ...$args)
     {
         foreach ($args as &$arg) {
             if ($arg === null) {

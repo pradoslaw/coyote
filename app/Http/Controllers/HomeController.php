@@ -110,7 +110,7 @@ class HomeController extends Controller
     private function getBlog()
     {
         /** @var \Coyote\Wiki $parent */
-        $parent = $this->wiki->findBy('path', 'Blog', ['id', 'parent_id']);
+        $parent = $this->wiki->findByPath('Blog');
         if (!$parent) {
             return [];
         }

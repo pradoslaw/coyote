@@ -14,7 +14,7 @@ class Path extends Model
     /**
      * @var string
      */
-    protected $table = 'wiki_path';
+    protected $table = 'wiki_paths';
 
     /**
      * The attributes that are mass assignable.

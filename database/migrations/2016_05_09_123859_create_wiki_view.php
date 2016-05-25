@@ -16,6 +16,7 @@ class CreateWikiView extends Migration
 CREATE OR REPLACE VIEW "wiki_view" AS 
  SELECT wiki_paths.parent_id,
     wiki_paths.path,
+    wiki_paths.id AS path_id,
     wiki.id,
     wiki.title,
     wiki.long_title,

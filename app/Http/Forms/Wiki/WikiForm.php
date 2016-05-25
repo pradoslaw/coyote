@@ -28,7 +28,7 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
     public function __construct(WikiRepository $wiki, Gate $gate)
     {
         parent::__construct();
-        
+
         $this->wiki = $wiki;
         $this->gate = $gate;
     }
@@ -39,13 +39,6 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
             ->add('title', 'text', [
                 'rules' => 'required|string|min:1|max:200',
                 'label' => 'Tytuł'
-            ])
-            ->add('parent_id', 'select', [
-                'label' => 'Strona macierzysta',
-                'rules' => 'sometimes|int|exists:wiki,id',
-                'choices' => $this->getTreeList(),
-                'empty_value' => '--',
-                'value' => $this->request->input('parentId')
             ])
             ->add('long_title', 'text', [
                 'rules' => 'string|max:200',
@@ -83,6 +76,16 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Szablon',
                 'choices' => $this->getTemplateList(),
                 'help' => 'Ten widok Twig zostanie użyty do wyświetlenia tej strony.'
+            ]);
+        }
+
+        if (empty($this->getData()->id)) {
+            $this->addAfter('title', 'path_id', 'select', [
+                'label' => 'Strona macierzysta',
+                'rules' => 'sometimes|int|exists:wiki_paths,id',
+                'choices' => $this->getTreeList(),
+                'empty_value' => '--',
+                'value' => $this->request->input('pathId')
             ]);
         }
     }

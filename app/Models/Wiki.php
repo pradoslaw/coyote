@@ -85,19 +85,18 @@ class Wiki extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @param mixed $parent
+     * @param string $slug
      */
-    public function parent()
+    public function createPath($parent, $slug)
     {
-        return $this->hasOne('Coyote\Wiki', 'id', 'parent_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function children()
-    {
-        return $this->hasMany('Coyote\Wiki', 'parent_id', 'id');
+        if (!empty($parent)) {
+            $data = ['parent_id' => $parent->path_id, 'path' => $parent->path . '/' . $slug];
+        } else {
+            $data = ['path' => $slug];
+        }
+        
+        $this->paths()->create($data);
     }
 
     /**

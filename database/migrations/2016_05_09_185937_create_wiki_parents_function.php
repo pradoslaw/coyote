@@ -13,19 +13,19 @@ class CreateWikiParentsFunction extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE OR REPLACE FUNCTION wiki_parents(_id INTEGER) RETURNS SETOF wiki_view AS $$
+CREATE OR REPLACE FUNCTION wiki_parents(_path_id INTEGER) RETURNS SETOF wiki_view AS $$
     WITH RECURSIVE node_rec AS (
         (
             SELECT *
             FROM   wiki_view
-            WHERE  id = _id
+            WHERE  path_id = _path_id
         )
         
         UNION ALL
         
         SELECT n.*
         FROM   node_rec r 
-        JOIN   wiki_view    n ON n.id = r.parent_id
+        JOIN   wiki_view    n ON n.path_id = r.parent_id
     )
     SELECT *
     FROM   node_rec
