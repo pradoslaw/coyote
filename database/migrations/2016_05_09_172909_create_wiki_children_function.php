@@ -17,7 +17,7 @@ CREATE OR REPLACE FUNCTION wiki_children(_parent_id INTEGER DEFAULT NULL) RETURN
     WITH RECURSIVE nodes AS (
         (
             SELECT 1 AS depth, ARRAY[id] AS node, id AS root_id, *
-            FROM   wiki_view
+            FROM   wiki
             WHERE  (CASE WHEN _parent_id IS NULL THEN parent_id IS NULL ELSE parent_id = _parent_id END)
         )
             
@@ -25,7 +25,7 @@ CREATE OR REPLACE FUNCTION wiki_children(_parent_id INTEGER DEFAULT NULL) RETURN
         
         SELECT r.depth + 1, r.node || n.id, r.root_id, n.*
         FROM   nodes r 
-        JOIN   wiki_view    n ON n.parent_id = r.id
+        JOIN   wiki n ON n.parent_id = r.path_id
     )
     SELECT *, COUNT (*) OVER (PARTITION BY nodes.root_id) - COUNT (*) OVER (PARTITION BY nodes.root_id ORDER BY depth) AS children
     FROM   nodes

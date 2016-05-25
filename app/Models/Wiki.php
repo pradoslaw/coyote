@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
+ * @property int $path_id
+ * @property int $parent_id
  * @property string $title
  * @property string $long_title
  * @property string $slug
  * @property string $excerpt
  * @property string $text
+ * @property string $path
  * @property int $is_locked
  * @property string $template
  */
@@ -85,40 +88,18 @@ class Wiki extends Model
     }
 
     /**
-     * @param mixed $parent
-     * @param string $slug
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function createPath($parent, $slug)
+    public function parent()
     {
-        if (!empty($parent)) {
-            $data = ['parent_id' => $parent->path_id, 'path' => $parent->path . '/' . $slug];
-        } else {
-            $data = ['path' => $slug];
-        }
-        
-        $this->paths()->create($data);
+        return $this->hasOne('Coyote\Wiki', 'path_id', 'parent_id');
     }
 
     /**
-     * @param string $title
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function setTitleAttribute($title)
+    public function children()
     {
-        $this->attributes['title'] = ucfirst($title);
-        // ucfirst() tylko dla zachowania kompatybilnosci wstecz
-        $this->attributes['slug'] = ucfirst(str_slug($title, '_'));
-    }
-
-    /**
-     * @param array $data
-     * @param bool $authorized
-     */
-    public function fillGuarded(array $data, $authorized)
-    {
-        if ($authorized) {
-            foreach ($data as $key => $value) {
-                $this->$key = $value;
-            }
-        }
+        return $this->hasMany('Coyote\Wiki', 'parent_id', 'path_id');
     }
 }

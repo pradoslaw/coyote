@@ -4,6 +4,7 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Wiki;
+use Illuminate\Http\Request;
 
 class WikiRepository extends Repository implements WikiRepositoryInterface
 {
@@ -24,7 +25,6 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         return $this
             ->model
             ->withTrashed() // @todo hmm, to chyba powinno byc dodane poprzez criteria a nie wpiasne "na stale"
-            ->from('wiki_view')
             ->where('path', $path)
             ->first();
     }
@@ -37,7 +37,6 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     {
         return $this
             ->model
-            ->from('wiki_view AS wiki')
             ->where('path_id', $pathId)
             ->first();
     }
@@ -100,6 +99,42 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
             ->where('wiki_subscribers.user_id', $userId)
             ->orderBy('wiki_subscribers.id', 'DESC')
             ->paginate();
+    }
+
+    /**
+     * @param \Coyote\Wiki $wiki
+     * @param Request $request
+     */
+    public function save($wiki, Request $request)
+    {
+        /** @var \Coyote\Wiki\Page $page */
+        $page = $this->app->make(Wiki\Page::class)->findOrNew($wiki->id);
+
+        $page->fill($request->all());
+        $page->fillGuarded($request->only(['is_locked', 'template']), $request->user()->can('wiki-admin'));
+
+        // we need to know if those attributes were changed. if so, we need to add new record to the history.
+        $isDirty = $page->isDirty(['title', 'excerpt', 'text']);
+        $page->save();
+
+        if ($isDirty) {
+            // add new version to the history
+            $page->logs()->create($page->toArray() + [
+                'user_id'   => $request->user()->id,
+                'ip'        => $request->ip(),
+                'host'      => gethostbyaddr($request->ip()),
+                'browser'   => $request->browser(),
+                'length'    => mb_strlen($page->text)
+            ]);
+        }
+
+        if ($page->wasRecentlyCreated) {
+            $parent = $this->findByPathId((int) $request->input('path_id'));
+            $wiki->forceFill($page->createPath($parent, $page->slug)->toArray());
+        }
+
+        $wiki->forceFill($page->toArray());
+        $wiki->wasRecentlyCreated = $page->wasRecentlyCreated;
     }
 
     /**

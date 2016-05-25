@@ -20,8 +20,10 @@ class CreateWikiPathsTable extends Migration
 
             $table->index('parent_id');
             $table->index('wiki_id');
+        });
 
-//            $table->foreign('parent_id')->references('wiki_id')->on('wiki_paths')->onDelete('cascade');
+        Schema::table('wiki_paths', function (Blueprint $table) {
+            $table->foreign('parent_id')->references('id')->on('wiki_paths')->onDelete('cascade');
         });
 
         DB::unprepared('CREATE INDEX "wiki_paths_path_index" ON "wiki_paths" USING btree (LOWER(path))');

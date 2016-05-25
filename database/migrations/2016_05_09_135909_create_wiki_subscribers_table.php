@@ -21,7 +21,7 @@ class CreateWikiSubscribersTable extends Migration
             $table->unique(['wiki_id', 'user_id']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('wiki_id')->references('id')->on('wiki')->onDelete('cascade');
+            $table->foreign('wiki_id')->references('id')->on('wiki_pages')->onDelete('cascade');
         });
     }
 

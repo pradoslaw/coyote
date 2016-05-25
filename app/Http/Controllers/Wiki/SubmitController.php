@@ -34,29 +34,8 @@ class SubmitController extends BaseController
     {
         $request = $form->getRequest();
 
-        $wiki->fill($request->all());
-        $wiki->fillGuarded($request->only(['is_locked', 'template']), $request->user()->can('wiki-admin'));
-
         $path = $this->transaction(function () use ($wiki, $request) {
-            // we need to know if those attributes were changed. if so, we need to add new record to the history.
-            $isDirty = $wiki->isDirty(['title', 'excerpt', 'text']);
-            $wiki->save();
-
-            if ($isDirty) {
-                // add new version to the history
-                $wiki->logs()->create($wiki->toArray() + [
-                    'user_id'   => $this->userId,
-                    'ip'        => $request->ip(),
-                    'host'      => gethostbyaddr($request->ip()),
-                    'browser'   => $request->browser(),
-                    'length'    => mb_strlen($wiki->text)
-                ]);
-            }
-
-            if ($wiki->wasRecentlyCreated) {
-                $parent = $this->wiki->findByPathId((int) $request->input('path_id'));
-                $wiki->createPath($parent, $wiki->slug);
-            }
+            $this->wiki->save($wiki, $request);
 
             stream(
                 $wiki->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,

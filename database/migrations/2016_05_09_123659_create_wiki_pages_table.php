@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWikiTable extends Migration
+class CreateWikiPagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateWikiTable extends Migration
      */
     public function up()
     {
-        Schema::create('wiki', function (Blueprint $table) {
+        Schema::create('wiki_pages', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
             $table->string('long_title')->nullable();
@@ -35,6 +35,6 @@ class CreateWikiTable extends Migration
      */
     public function down()
     {
-        Schema::drop('wiki');
+        Schema::drop('wiki_pages');
     }
 }

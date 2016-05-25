@@ -2,6 +2,8 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Illuminate\Http\Request;
+
 /**
  * @package Coyote\Repositories\Contracts
  * @method $this withTrashed()
@@ -44,4 +46,10 @@ interface WikiRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getSubscribed($userId);
+
+    /**
+     * @param \Coyote\Wiki $wiki
+     * @param Request $request
+     */
+    public function save($wiki, Request $request);
 }

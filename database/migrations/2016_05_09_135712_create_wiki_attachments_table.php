@@ -24,7 +24,7 @@ class CreateWikiAttachmentsTable extends Migration
             $table->index('wiki_id');
             $table->unique('file');
 
-            $table->foreign('wiki_id')->references('id')->on('wiki')->onDelete('cascade');
+            $table->foreign('wiki_id')->references('id')->on('wiki_pages')->onDelete('cascade');
         });
     }
 

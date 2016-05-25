@@ -11,11 +11,11 @@ class WikiTableSeeder extends Seeder
      */
     public function run()
     {
-        $wiki = Coyote\Wiki::create(['title' => 'Blog', 'template' => 'blog.home']);
+        $wiki = Coyote\Wiki\Page::create(['title' => 'Blog', 'template' => 'blog.home']);
         $wiki->logs()->create(['user_id' => 1, 'title' => 'Blog', 'ip' => 'localhost', 'browser' => '(none)', 'host' => '(none)']);
         $wiki->paths()->create(['path' => 'Blog']);
 
-        $wiki = Coyote\Wiki::create(['title' => 'Pomoc', 'template' => 'help.home']);
+        $wiki = Coyote\Wiki\Page::create(['title' => 'Pomoc', 'template' => 'help.home']);
         $wiki->logs()->create(['user_id' => 1, 'title' => 'Pomoc', 'ip' => 'localhost', 'browser' => '(none)', 'host' => '(none)']);
         $wiki->paths()->create(['path' => 'Pomoc']);
     }
