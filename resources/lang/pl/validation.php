@@ -80,6 +80,7 @@ return [
     'user_exist'           => 'Użytkownik o podanej nazwie nie istnieje.',
     'user_unique'          => 'Konto o podanej nazwie użytkownika już istnieje.',
     'user_active'          => 'Konto o tym loginie zostało zablokowane.',
+    'user_access'          => 'Dostęp do konta z tego adresu IP jest niemożliwy.',
     'password'             => 'Podano nieprawidłowe hasło.',
     'reputation'           => 'Potrzebujesz :point punktów reputacji aby zmienić zawartość tego pola.',
     'tag'                  => 'Podany tag zawiera nieprawidłowe znaki.',

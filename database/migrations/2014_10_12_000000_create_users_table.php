@@ -32,7 +32,6 @@ class CreateUsersTable extends Migration
             $table->mediumInteger('group_id')->nullable();
             $table->string('date_format', 32)->default('%Y-%m-%d %H:%M');
             $table->string('timezone')->default('Europe/Warsaw');
-            $table->integer('flood')->default(0);
             $table->timestampTz('visited_at')->nullable();
             $table->mediumInteger('visits')->default(0);
             $table->string('ip', 45)->nullable();

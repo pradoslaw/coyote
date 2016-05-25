@@ -30,7 +30,7 @@ class LoginForm extends Form implements ValidatesWhenSubmitted
     public function __construct(UserRepository $userRepository)
     {
         parent::__construct();
-        
+
         $this->userRepository = $userRepository;
     }
 
@@ -77,10 +77,14 @@ class LoginForm extends Form implements ValidatesWhenSubmitted
 
             if (!$this->user) {
                 $validator->errors()->add('name', trans('validation.user_exist'));
-            }
+            } else {
+                if (!$this->user->is_active || $this->user->is_blocked) {
+                    $validator->errors()->add('name', trans('validation.user_active'));
+                }
 
-            if ($this->user && (!$this->user->is_active || $this->user->is_blocked)) {
-                $validator->errors()->add('name', trans('validation.user_active'));
+                if (!$this->user->hasAccessByIp($this->request->ip())) {
+                    $validator->errors()->add('name', trans('validation.user_access'));
+                }
             }
         });
 

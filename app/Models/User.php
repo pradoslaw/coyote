@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\Cache;
  * @property string $location
  * @property string $firm
  * @property string $position
+ * @property string $access_ip
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -185,12 +186,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     private function getPermissions()
     {
-        return $this->permissions()
-                ->join('permissions AS p', 'p.id', '=', 'group_permissions.permission_id')
-                ->orderBy('value')
-                ->select(['name', 'value'])
-                ->get()
-                ->lists('value', 'name');
+        return $this
+            ->permissions()
+            ->join('permissions AS p', 'p.id', '=', 'group_permissions.permission_id')
+            ->orderBy('value')
+            ->select(['name', 'value'])
+            ->get()
+            ->lists('value', 'name');
     }
 
     /**
@@ -239,5 +241,30 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         $this->groups()->detach($group);
         Cache::tags('permission:' . $this->id)->flush();
+    }
+
+    /**
+     * @param string $ip
+     * @return bool
+     */
+    public function hasAccessByIp($ip)
+    {
+        if (empty($this->access_ip)) {
+            return true;
+        }
+
+        $access = false;
+        $ipParts = explode('.', $this->access_ip);
+
+        for ($i = 0; $i < count($ipParts); $i += 4) {
+            $regexp = str_replace('*', '.*', str_replace('.', '\.', implode('.', array_slice($ipParts, $i, 4))));
+
+            if (preg_match('#^' . $regexp . '$#', $ip)) {
+                $access = true;
+                break;
+            }
+        }
+
+        return $access;
     }
 }
