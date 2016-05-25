@@ -36,6 +36,11 @@ class ThrottleValidator
     {
         $this->request = $request;
         $this->cache = $cache;
+
+        // we need to calculate delay between request (it depends on user)
+        $this->lockoutTime = $this->lockoutTime();
+        // build cache key name
+        $this->key = $this->getThrottleKey();
     }
 
     /**
@@ -53,37 +58,58 @@ class ThrottleValidator
             return true;
         }
 
-        // we need to calculate delay between request (it depends on user)
-        $delay = $this->getFloodDelay();
-        // build cache key name
-        $key = $this->getCacheKeyName();
-
-        $flood = $this->cache->get($key, 0);
-
-        if (!$flood || time() - $flood > $delay) {
+        if (!$this->tooManyAttempts()) {
             // validation passes. it's good. now we can save current timestamp to the cache.
             // next time we can retrieve it and compare it to the current timestamp.
             if (!$validator->messages()->count()) {
-                $this->cache->put($key, time(), $delay);
+                $this->hit();
             }
 
             return true;
         }
 
-        $validator->addReplacer('throttle', function ($message) use ($delay, $flood) {
-            $seconds = $delay - round(time() - $flood);
+        $validator->addReplacer('throttle', function ($message) {
             $declination = new Declination();
 
-            return str_replace(':delay', $declination->format($seconds, ['sekundę', 'sekundy', 'sekund']), $message);
+            return str_replace(
+                ':delay',
+                $declination->format($this->availableIn(), ['sekundę', 'sekundy', 'sekund']),
+                $message
+            );
         });
 
         return false;
     }
 
     /**
+     * @return bool
+     */
+    protected function tooManyAttempts()
+    {
+        $timestamp = $this->cache->get($this->key, 0);
+        return !($timestamp === 0 || time() - $timestamp > $this->lockoutTime);
+    }
+
+    /**
+     * @void
+     */
+    protected function hit()
+    {
+        $this->cache->put($this->key, time(), $this->lockoutTime);
+    }
+
+    /**
+     * @return int
+     */
+    protected function availableIn()
+    {
+        return $this->lockoutTime - round(time() - $this->cache->get($this->key));
+    }
+
+    /**
      * @return string
      */
-    protected function getCacheKeyName()
+    protected function getThrottleKey()
     {
         $key = $this->request->ip();
 
@@ -99,18 +125,18 @@ class ThrottleValidator
     /**
      * @return int
      */
-    protected function getFloodDelay()
+    protected function lockoutTime()
     {
-        $delay = self::ANONYMOUS_DELAY;
+        $lockoutTime = self::ANONYMOUS_DELAY;
 
         if (!empty($this->request->user())) {
-            $delay = self::REGISTERED_DELAY;
+            $lockoutTime = self::REGISTERED_DELAY;
 
             if ($this->request->user()->reputation >= self::MIN_REPUTATION_POINT) {
-                $delay = 0;
+                $lockoutTime = 0;
             }
         }
 
-        return $delay;
+        return $lockoutTime;
     }
 }
