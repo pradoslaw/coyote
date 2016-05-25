@@ -107,7 +107,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
     {
         return $this
             ->model
-            ->select(['id', 'name', 'photo', 'is_active', 'is_blocked', 'is_confirm'])
+            ->select(['id', 'name', 'photo', 'email', 'is_active', 'is_blocked', 'is_confirm', 'alert_failure'])
             ->whereRaw("LOWER($field) = ?", [mb_strtolower($value)])
             ->first();
     }

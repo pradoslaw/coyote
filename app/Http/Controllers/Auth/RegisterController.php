@@ -37,6 +37,7 @@ class RegisterController extends Controller
     public function index()
     {
         $this->breadcrumb->push('Rejestracja', route('register'));
+        
         $form = $this->createForm(RegisterForm::class, null, [
             'url' => route('register')
         ]);

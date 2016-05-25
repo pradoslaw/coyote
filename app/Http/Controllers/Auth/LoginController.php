@@ -6,12 +6,15 @@ use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\LoginForm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Logout as Stream_Logout;
 
 class LoginController extends Controller
 {
+    use ThrottlesLogins;
+
     /**
      * @var UserRepository
      */
@@ -66,6 +69,19 @@ class LoginController extends Controller
             return redirect()->intended(route('home'));
         }
 
+        $lockedOut = $this->hasTooManyLoginAttempts($form->getRequest());
+
+        if ($lockedOut) {
+            $this->fireLockoutEvent($form->getRequest());
+
+            return $this->sendLockoutResponse($form->getRequest());
+        } else {
+            // If the login attempt was unsuccessful we will increment the number of attempts
+            // to login and redirect the user back to the login form. Of course, when this
+            // user surpasses their maximum number of attempts they will get locked out.
+            $this->incrementLoginAttempts($form->getRequest());
+        }
+
         return back()->withInput()->withErrors(['password' => 'Podane hasło jest nieprawidłowe.']);
     }
 
@@ -89,5 +105,25 @@ class LoginController extends Controller
 
         auth()->logout();
         return back();
+    }
+
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function loginUsername()
+    {
+        return 'name';
+    }
+
+    /**
+     * Get the maximum number of login attempts for delaying further attempts.
+     *
+     * @return int
+     */
+    protected function maxLoginAttempts()
+    {
+        return 3;
     }
 }
