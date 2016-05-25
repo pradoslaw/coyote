@@ -13,7 +13,7 @@ class CreateWikiPathsTable extends Migration
     public function up()
     {
         Schema::create('wiki_paths', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('path_id');
             $table->integer('wiki_id');
             $table->integer('parent_id')->nullable();
             $table->text('path');
@@ -23,7 +23,7 @@ class CreateWikiPathsTable extends Migration
         });
 
         Schema::table('wiki_paths', function (Blueprint $table) {
-            $table->foreign('parent_id')->references('id')->on('wiki_paths')->onDelete('cascade');
+            $table->foreign('parent_id')->references('path_id')->on('wiki_paths')->onDelete('cascade');
         });
 
         DB::unprepared('CREATE INDEX "wiki_paths_path_index" ON "wiki_paths" USING btree (LOWER(path))');

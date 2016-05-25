@@ -82,7 +82,7 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
         if (empty($this->getData()->id)) {
             $this->addAfter('title', 'path_id', 'select', [
                 'label' => 'Strona macierzysta',
-                'rules' => 'sometimes|int|exists:wiki_paths,id',
+                'rules' => 'sometimes|int|exists:wiki_paths,path_id',
                 'choices' => $this->getTreeList(),
                 'empty_value' => '--',
                 'value' => $this->request->input('pathId')

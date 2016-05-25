@@ -33,6 +33,11 @@ class Path extends Model
      */
     public $timestamps = false;
 
+    /**
+     * @var string
+     */
+    public $primaryKey = 'path_id';
+
     public static function boot()
     {
         parent::boot();

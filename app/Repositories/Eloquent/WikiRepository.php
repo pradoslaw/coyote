@@ -129,7 +129,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         }
 
         if ($page->wasRecentlyCreated) {
-            $parent = $this->findByPathId((int) $request->input('path_id'));
+            $parent = $this->app->make(Wiki\Path::class)->findOrNew((int) $request->input('path_id'));
             $wiki->forceFill($page->createPath($parent, $page->slug)->toArray());
         }
 
