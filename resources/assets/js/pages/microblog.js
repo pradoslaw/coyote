@@ -59,7 +59,7 @@ $(function () {
             if (count > 0) {
                 var $this = $(this);
 
-                if (typeof $this.attr('title') === 'undefined') {
+                if (typeof $this.attr('title') === 'undefined' || $this.attr('title') === '') {
                     timeoutId = setTimeout(function() {
                         $.get($this.attr('href'), function(html) {
                             $this.attr('title', html);

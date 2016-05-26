@@ -109,7 +109,7 @@ class VoteController extends Controller
                 ->join('users', 'users.id', '=', 'user_id')
                 ->get(['users.name'])
                 ->lists('name')
-                ->implode('name', "\n")
+                ->implode("\n")
         );
     }
 }
