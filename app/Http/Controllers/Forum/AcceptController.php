@@ -91,7 +91,7 @@ class AcceptController extends BaseController
                         }
 
                         // send notification to the user
-                        app()->make('Alert\Post\Accept')
+                        app('alert.post.accept')
                             ->setPostId($post->id)
                             ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
                             ->setSubject(excerpt($topic->subject))

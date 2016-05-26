@@ -78,7 +78,7 @@ class VoteController extends Controller
             stream(Stream_Vote::class, (new Stream_Microblog())->map($microblog));
 
             if (!$vote) {
-                app()->make('Alert\Microblog\Vote')
+                app('alert.microblog.vote')
                     ->setMicroblogId($microblog->id)
                     ->addUserId($microblog->user_id)
                     ->setSubject(excerpt($microblog->text))

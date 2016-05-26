@@ -99,7 +99,7 @@ class CommentController extends Controller
                 if ($subscribers) {
                     // new comment. should we send a notification?
                     $alert->attach(
-                        app()->make('Alert\Microblog\Subscriber')->with($alertData)->setUsersId($subscribers)
+                        app('alert.microblog.subscriber')->with($alertData)->setUsersId($subscribers)
                     );
                 }
 
@@ -108,7 +108,7 @@ class CommentController extends Controller
                 $usersId = $helper->grab($microblog->text);
 
                 if (!empty($usersId)) {
-                    $alert->attach(app()->make('Alert\Microblog\Login')->with($alertData)->setUsersId($usersId));
+                    $alert->attach(app('alert.microblog.login')->with($alertData)->setUsersId($usersId));
                 }
 
                 // send a notify

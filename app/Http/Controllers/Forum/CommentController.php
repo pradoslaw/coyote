@@ -111,7 +111,7 @@ class CommentController extends Controller
                 if ($subscribersId) {
                     $alert->attach(
                         // $subscribersId can be int or array. we need to cast to array type
-                        app()->make('Alert\Post\Subscriber')->with($notification)->setUsersId($subscribersId)
+                        app('alert.post.subscriber')->with($notification)->setUsersId($subscribersId)
                     );
                 }
 
@@ -120,7 +120,7 @@ class CommentController extends Controller
 
                 if ($subscribersId) {
                     $alert->attach(
-                        app()->make('Alert\Post\Comment\Login')->with($notification)->setUsersId($subscribersId)
+                        app('alert.post.comment.login')->with($notification)->setUsersId($subscribersId)
                     );
                 }
 

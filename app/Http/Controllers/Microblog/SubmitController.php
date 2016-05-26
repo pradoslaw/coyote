@@ -105,7 +105,7 @@ class SubmitController extends Controller
                 $usersId = $helper->grab($microblog->text);
 
                 if (!empty($usersId)) {
-                    app('Alert\Microblog\Login')->with([
+                    app('alert.microblog.login')->with([
                         'users_id'    => $usersId,
                         'sender_id'   => $user->id,
                         'sender_name' => $user->name,

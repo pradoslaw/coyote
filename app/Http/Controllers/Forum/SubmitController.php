@@ -95,7 +95,7 @@ class SubmitController extends BaseController
             // it's important. don't remove below line so that text in activity can be saved without markdown
             $post->text = app('parser.post')->parse($request->text);
 
-            if ($topic->wasRecentlyCreated) {
+            if ($post->wasRecentlyCreated) {
                 $alert = new Container();
                 $notification = [
                     'sender_id' => $this->userId,
@@ -105,18 +105,18 @@ class SubmitController extends BaseController
                     'url' => $url
                 ];
 
+                // $subscribersId can be int or array. we need to cast to array type
                 $subscribersId = $forum->onlyUsersWithAccess($topic->subscribers()->lists('user_id')->toArray());
                 if ($subscribersId) {
                     $alert->attach(
-                        // $subscribersId can be int or array. we need to cast to array type
-                        app('Alert\Topic\Subscriber')->with($notification)->setUsersId($subscribersId)
+                        app('alert.topic.subscriber')->with($notification)->setUsersId($subscribersId)
                     );
                 }
 
                 // get id of users that were mentioned in the text
                 $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($post->text));
                 if ($subscribersId) {
-                    $alert->attach(app('Alert\Post\Login')->with($notification)->setUsersId($subscribersId));
+                    $alert->attach(app('alert.post.login')->with($notification)->setUsersId($subscribersId));
                 }
 
                 $alert->notify();
@@ -191,6 +191,7 @@ class SubmitController extends BaseController
      */
     public function subject($topic, SubjectForm $form)
     {
+        /** @var \Coyote\Forum $forum */
         $forum = $topic->forum()->first();
         $this->authorize('update', $forum);
 
@@ -220,7 +221,7 @@ class SubmitController extends BaseController
                 ->save();
 
                 if ($post->user_id) {
-                    app()->make('Alert\Topic\Subject')->with([
+                    app('alert.topic.subject')->with([
                         'users_id'    => $forum->onlyUsersWithAccess([$post->user_id]),
                         'sender_id'   => $this->userId,
                         'sender_name' => auth()->user()->name,

@@ -170,7 +170,7 @@ class PmController extends BaseController
             $excerpt = excerpt($request->get('text'));
 
             // we need to send notification to recipient
-            app('Alert\Pm')->with([
+            app('alert.pm')->with([
                 'user_id'     => $pm->author_id,
                 'sender_id'   => $user->id,
                 'sender_name' => $user->name,

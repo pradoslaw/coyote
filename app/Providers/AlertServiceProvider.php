@@ -3,6 +3,7 @@
 namespace Coyote\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 
 class AlertServiceProvider extends ServiceProvider
 {
@@ -31,14 +32,14 @@ class AlertServiceProvider extends ServiceProvider
     public function register()
     {
         foreach ($this->provides() as $provider) {
-            $segments = explode('\\', $provider);
+            $segments = explode('.', $provider);
             array_shift($segments);
 
-            $class = '\\Coyote\\Services\\Alert\\Providers\\' . implode('\\', $segments);
+            $class = '\\Coyote\\Services\\Alert\\Providers\\' . implode('\\', array_map('ucwords', $segments));
 
             $this->app->bind($provider, function ($app) use ($class) {
                 return new $class(
-                    $app['Coyote\Repositories\Contracts\AlertRepositoryInterface']
+                    $app[AlertRepositoryInterface::class]
                 );
             });
         }
@@ -55,23 +56,23 @@ class AlertServiceProvider extends ServiceProvider
          * UWAGA! Po dodaniu nowego elementu do tablicy trzeba wykonac php artisan clear-compiled
          */
         return [
-            'Alert\Microblog\Login',
-            'Alert\Microblog\Subscriber',
-            'Alert\Microblog\Vote',
+            'alert.microblog.login',
+            'alert.microblog.subscriber',
+            'alert.microblog.vote',
 
-            'Alert\Post\Login',
-            'Alert\Post\Delete',
-            'Alert\Post\Subscriber',
-            'Alert\Post\Comment\Login',
-            'Alert\Post\Vote',
-            'Alert\Post\Accept',
+            'alert.post.login',
+            'alert.post.delete',
+            'alert.post.subscriber',
+            'alert.post.comment.login',
+            'alert.post.vote',
+            'alert.post.accept',
 
-            'Alert\Topic\Subscriber',
-            'Alert\Topic\Delete',
-            'Alert\Topic\Move',
-            'Alert\Topic\Subject',
-            
-            'Alert\Pm'
+            'alert.topic.subscriber',
+            'alert.topic.delete',
+            'alert.topic.move',
+            'alert.topic.subject',
+
+            'alert.pm'
         ];
     }
 }

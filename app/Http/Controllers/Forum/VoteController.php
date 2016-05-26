@@ -50,7 +50,7 @@ class VoteController extends BaseController
                 $post->score++;
 
                 // send notification to the user
-                app()->make('Alert\Post\Vote')
+                app('alert.post.vote')
                     ->setPostId($post->id)
                     ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
                     ->setSubject(excerpt($topic->subject))
@@ -64,7 +64,7 @@ class VoteController extends BaseController
             // increase/decrease reputation points according to the forum settings
             if ($post->user_id && $forum->enable_reputation) {
                 // add or subtract reputation points
-                app()->make('Reputation\Post\Vote')
+                app('Reputation\Post\Vote')
                     ->setUserId($post->user_id)
                     ->setIsPositive(!count($result))
                     ->setUrl($url)

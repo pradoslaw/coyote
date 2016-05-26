@@ -90,7 +90,7 @@ class DeleteController extends BaseController
                     app(FlagRepositoryInterface::class)->deleteBy('topic_id', $topic->id);
 
                     if ($subscribersId) {
-                        app()->make('Alert\Topic\Delete')
+                        app('alert.topic.delete')
                             ->with($notification)
                             ->setUrl($url)
                             ->setUsersId($subscribersId->toArray())
@@ -125,7 +125,7 @@ class DeleteController extends BaseController
                     app(FlagRepositoryInterface::class)->deleteBy('post_id', $post->id);
 
                     if ($subscribersId) {
-                        app()->make('Alert\Post\Delete')
+                        app('alert.post.delete')
                             ->with($notification)
                             ->setUrl($url)
                             ->setUsersId($subscribersId->toArray())

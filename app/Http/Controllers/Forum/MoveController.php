@@ -69,7 +69,7 @@ class MoveController extends BaseController
             $recipientsId = $forum->onlyUsersWithAccess([$post->user_id]);
 
             if ($recipientsId) {
-                app()->make('Alert\Topic\Move')
+                app('alert.topic.move')
                     ->with($notification)
                     ->setUrl(route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false))
                     ->setUsersId($recipientsId)
