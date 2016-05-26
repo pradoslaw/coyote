@@ -85,9 +85,12 @@ abstract class Controller extends BaseController
     protected function buildMenu()
     {
         $menu = app(Menu::class)->make('main', function ($menu) {
+            // @todo tymczasowo wyswietlana ikona "Nowosc" przy ofertach pracy.
+            $badge = app('html')->tag('span', 'Nowość', ['class' => 'badge new']);
+
             $menu->add('Forum', ['route' => 'forum.home', 'as' => 'forum'])->active('Forum/*');
             $menu->add('Mikroblogi', ['route' => 'microblog.home'])->active('Mikroblogi/*');
-            $menu->add('Praca', ['route' => 'job.home'])->active('Praca/*');
+            $menu->add('Praca', ['route' => 'job.home'])->append($badge)->active('Praca/*');
             $menu->add('Pastebin', ['route' => 'pastebin.show'])->active('Pastebin/*');
         });
 

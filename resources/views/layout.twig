@@ -47,7 +47,7 @@
 
                             {% for item in menu.roots() %}
                                 <li {{ forms.attr(item.attr) }}>
-                                    <a href="{{ item.url }}">{{ item.title }}</a>
+                                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
 
                                     {% if item.hasChildren() %}
                                         <ul class="dropdown-menu left">
