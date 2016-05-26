@@ -5,8 +5,8 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Alert\Container;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -18,22 +18,22 @@ use Illuminate\Http\Request;
 class CommentController extends Controller
 {
     /**
-     * @var Microblog
+     * @var MicroblogRepository
      */
     private $microblog;
 
     /**
-     * @var User
+     * @var UserRepository
      */
     private $user;
 
     /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
      *
-     * @param Microblog $microblog
-     * @param User $user
+     * @param MicroblogRepository $microblog
+     * @param UserRepository $user
      */
-    public function __construct(Microblog $microblog, User $user)
+    public function __construct(MicroblogRepository $microblog, UserRepository $user)
     {
         $this->microblog = $microblog;
         $this->user = $user;
@@ -48,15 +48,12 @@ class CommentController extends Controller
      */
     public function save(Request $request, $microblog)
     {
-        $originalId = $microblog->id;
-
         $this->validate($request, [
             'parent_id'     => 'sometimes|integer|exists:microblogs,id',
-            'text'          => 'required|string|max:5000|throttle:' . $originalId
+            'text'          => 'required|string|max:5000|throttle:' . $microblog->id
         ]);
 
-
-        if (empty($originalId)) {
+        if (empty($microblog->id)) {
             $user = auth()->user();
             $data = $request->only(['text', 'parent_id']) + ['user_id' => $user->id];
         } else {
@@ -69,7 +66,7 @@ class CommentController extends Controller
         $microblog->fill($data);
         $isSubscribed = false;
 
-        $this->transaction(function () use ($originalId, $microblog, $user, &$isSubscribed) {
+        $this->transaction(function () use ($microblog, $user, &$isSubscribed) {
             $microblog->save();
 
             // we need to get parent entry only for notification
@@ -81,13 +78,13 @@ class CommentController extends Controller
             // get parsed content from cache
             $parent->text = app('parser.microblog')->parse($parent->text);
 
-            if (!$originalId) {
+            if ($microblog->wasRecentlyCreated) {
                 $subscribers = $parent->subscribers()->lists('user_id')->toArray();
                 $alert = new Container();
 
                 // we need to send alerts AFTER saving comment to database because we need ID of comment
                 $alertData = [
-                    'microblog_id'=> $microblog->id,
+                    'microblog_id'=> $microblog->parent_id, // <-- parent_id NOT id (to generate currect alerts object_id)
                     'content'     => $microblog->text,
                     'excerpt'     => excerpt($microblog->text),
                     'sender_id'   => $user->id,

@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
@@ -17,15 +17,15 @@ use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 class VoteController extends Controller
 {
     /**
-     * @var Microblog
+     * @var MicroblogRepository
      */
     private $microblog;
 
     /**
      * VoteController constructor.
-     * @param Microblog $microblog
+     * @param MicroblogRepository $microblog
      */
-    public function __construct(Microblog $microblog)
+    public function __construct(MicroblogRepository $microblog)
     {
         parent::__construct();
         $this->microblog = $microblog;
