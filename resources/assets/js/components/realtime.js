@@ -1,9 +1,12 @@
 function Realtime() {
     'use strict';
 
+    var DEFAULT_INTERVAL = 5000;
+
     var self = this;
     var handler = null;
     var timerId = null;
+
     this._callbacks = {};
 
     this.on = function(event, fn) {
@@ -31,6 +34,7 @@ function Realtime() {
         handler.onopen = function (e) {
             if (timerId !== null) {
                 clearInterval(timerId);
+
                 timerId = null;
             }
         };
@@ -44,17 +48,13 @@ function Realtime() {
         };
 
         handler.onclose = function (e) {
-            console.log('Connection closed...');
-
             if (timerId === null) {
-                timerId = setInterval(function() {
-                    connect();
-                }, 5000);
+                timerId = setInterval(connect, DEFAULT_INTERVAL);
             }
         };
     }
 
-    if (typeof _config.ws !== 'undefined') {
+    if (typeof _config.ws !== 'undefined' && ('WebSocket' in window && window.WebSocket !== null)) {
         connect();
     }
 }
