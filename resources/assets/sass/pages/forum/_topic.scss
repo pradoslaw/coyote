@@ -291,6 +291,10 @@
   a {
     color: $text-color;
   }
+
+  .btn-history {
+    text-decoration: none;
+  }
 }
 
 .vote-count, .vote-up, .vote-accept {
