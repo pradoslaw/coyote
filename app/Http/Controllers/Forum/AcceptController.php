@@ -44,7 +44,7 @@ class AcceptController extends BaseController
             $excerpt = excerpt($post->text);
 
             // add or subtract reputation points
-            $reputation = app()->make('Reputation\Post\Accept');
+            $reputation = app('reputation.post.accept');
             $target = (new Stream_Topic())->map($topic, $forum);
 
             // user might change his mind and accept different post (or he can uncheck solved post)

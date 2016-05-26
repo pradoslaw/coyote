@@ -67,7 +67,7 @@ class VoteController extends Controller
             if (!$microblog->parent_id) {
                 $url = route('microblog.view', [$microblog->id], false) . '#entry-' . $microblog->id;
 
-                app()->make('Reputation\Microblog\Vote')->map($microblog)->setUrl($url)->setIsPositive(!$vote)->save();
+                app('reputation.microblog.vote')->map($microblog)->setUrl($url)->setIsPositive(!$vote)->save();
             } else {
                 $url = route('microblog.view', [$microblog->parent_id], false) . '#comment-' . $microblog->id;
             }

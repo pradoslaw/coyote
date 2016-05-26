@@ -64,7 +64,7 @@ class VoteController extends BaseController
             // increase/decrease reputation points according to the forum settings
             if ($post->user_id && $forum->enable_reputation) {
                 // add or subtract reputation points
-                app('Reputation\Post\Vote')
+                app('reputation.post.vote')
                     ->setUserId($post->user_id)
                     ->setIsPositive(!count($result))
                     ->setUrl($url)

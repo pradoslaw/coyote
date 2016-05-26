@@ -95,7 +95,7 @@ class SubmitController extends Controller
 
             if (!$isExist) {
                 // increase reputation points
-                app('Reputation\Microblog\Create')->map($microblog)->save();
+                app('reputation.microblog.create')->map($microblog)->save();
 
                 // put this to activity stream
                 stream(Stream_Create::class, $object);
@@ -172,7 +172,7 @@ class SubmitController extends Controller
         $this->transaction(function () use ($microblog) {
             $microblog->delete();
             // cofniecie pkt reputacji
-            app('Reputation\Microblog\Create')->undo($microblog->id);
+            app('reputation.microblog.create')->undo($microblog->id);
             $microblog->media = null; // MUST remove closure before serializing object
 
             event(new MicroblogWasDeleted($microblog));
