@@ -10,4 +10,9 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      * @return bool
      */
     public function filter($userId, $ip);
+
+    /**
+     * Purge expired firewall entries
+     */
+    public function purge();
 }

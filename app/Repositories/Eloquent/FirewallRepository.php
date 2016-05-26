@@ -16,18 +16,6 @@ class FirewallRepository extends Repository implements FirewallRepositoryInterfa
         return 'Coyote\Firewall';
     }
 
-    private function load()
-    {
-        if ($this->app['cache']->has(self::CACHE_KEY)) {
-            $result = json_decode($this->app['cache']->get(self::CACHE_KEY), true);
-        } else {
-            $result = $this->all()->toArray();
-            $this->app['cache']->forever(self::CACHE_KEY, json_encode($result));
-        }
-
-        return $result;
-    }
-
     /**
      * @param $userId
      * @param $ip
@@ -49,6 +37,26 @@ class FirewallRepository extends Repository implements FirewallRepositoryInterfa
                 $result = $row;
                 break;
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Purge expired firewall entries
+     */
+    public function purge()
+    {
+        $this->model->whereNotNull('expire_at')->where('expire_at', '<=', $this->raw('NOW()'))->delete();
+    }
+
+    private function load()
+    {
+        if ($this->app['cache']->has(self::CACHE_KEY)) {
+            $result = json_decode($this->app['cache']->get(self::CACHE_KEY), true);
+        } else {
+            $result = $this->all()->toArray();
+            $this->app['cache']->forever(self::CACHE_KEY, json_encode($result));
         }
 
         return $result;
