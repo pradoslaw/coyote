@@ -106,6 +106,8 @@ $(function () {
         var url = $(this).children().attr('href');
 
         if ($('li', alerts).length <= 1) {
+            $('<li><i class="fa fa-spin fa-spinner"></i></li>').appendTo(alerts);
+
             $.get(url, function (json) {
                 alerts.html(json.html);
 
