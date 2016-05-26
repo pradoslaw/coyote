@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 // odstep potrzebny z uwagi na klase .navbar-fixed-top ktora powoduje iz menu jest przyklejone do gornej krawedzi
-body {
+body.fixed-top {
   padding-top: 56px;
 }
 

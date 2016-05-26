@@ -1,4 +1,4 @@
-{% extends 'layout.twig' %}
+{% extends 'layout' %}
 
 {% block head %}
     {{ parent() }}
@@ -30,10 +30,11 @@
 
             <ul class="list-unstyled navbar-nav">
 
-                {% import 'components/forms.twig' as forms %}
+                {% import 'components.forms' as forms %}
+
                 {% for item in menu.roots() %}
-                    <li {{ _self.attr(item.attr) }}>
-                        <a href="{{ item.url }}" {{ _self.attr(item.link.attr) }}>{{ item.title|raw }}</a>
+                    <li {{ forms.attr(item.attr) }}>
+                        <a href="{{ item.url }}" {{ forms.attr(item.link.attr) }}>{{ item.title|raw }}</a>
 
                         {% if item.hasChildren() %}
                             <ul id="{{ item.url[1:] }}" class="list-unstyled collapse {{ item.attr['class'] == 'active' ? 'in' }}">

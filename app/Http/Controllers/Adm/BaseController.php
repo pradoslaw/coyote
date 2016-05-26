@@ -17,22 +17,28 @@ class BaseController extends Controller
     protected function buildMenu()
     {
         return $this->getMenuFactory()->make('adm', function ($menu) {
-            /** @var \Lavary\Menu\Builder $menu */
-            $dashboard = $menu->add('Strona główna', ['route' => 'adm.dashboard']);
-            $dashboard->prepend('<i class="fa fa-desktop fa-fw"></i>');
+            $html = app('html');
+            $fa = function ($icon) use ($html) {
+                return $html->tag('i', '', ['class' => "fa $icon"]);
+            };
 
-            $user = $menu->add('Użytkownicy', ['route' => 'adm.user']);
-            $user->prepend('<i class="fa fa-user fa-fw"></i>');
+            /** @var \Lavary\Menu\Builder $menu */
+            $menu->add('Strona główna', ['route' => 'adm.dashboard'])->prepend($fa('fa-desktop fa-fw'));
+            $menu->add('Użytkownicy', ['route' => 'adm.user'])->prepend($fa('fa-user fa-fw'));
+            $menu->add('Bany', ['route' => 'adm.firewall'])->prepend($fa('fa-ban fa-fw'));
 
             $forum = $menu->add('Forum', []);
             $forum->link->attr(['data-toggle' => "collapse", 'aria-expanded' => "false", 'aria-controls' => "menu-forum"]);
             $forum->link->href('#menu-forum');
 
-            $forum->prepend('<i class="fa fa-comments fa-fw"></i>');
-            $forum->append('<i class="arrow fa fa-angle-left pull-right"></i>');
+            $forum->prepend($fa('fa-comments fa-fw'));
+            $forum->append($html->tag('i', '', ['class' => 'arrow fa fa-angle-left pull-right']));
 
             $forum->add('Kategorie', ['route' => 'adm.forum.category']);
             $forum->add('Uprawnienia', ['route' => 'adm.forum.access']);
+
+            $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper-o fa-fw'));
+            $menu->add('Logi', ['route' => 'adm.log'])->prepend($fa('fa-file-o fa-fw'));
         });
     }
 

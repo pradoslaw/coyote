@@ -13,4 +13,7 @@ Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm:1'], 'prefix' 
     Route::get('User', 'UserController@index')->name('user');
     Route::get('Stream', 'StreamController@index')->name('stream');
     Route::get('Cache', 'CacheController@index')->name('cache');
+    Route::get('Firewall', 'FirewallController@index')->name('firewall');
+    Route::get('Stream', 'StreamController@index')->name('stream');
+    Route::get('Log', 'LogController@index')->name('log');
 });

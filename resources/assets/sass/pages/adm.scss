@@ -2,6 +2,10 @@
 @import "../vendor/bootstrap/variables";
 @import "../helpers/variables";
 
+body.fixed-top {
+  padding-top: 0;
+}
+
 #wrapper {
   padding: 0 15px 0 15px;
   margin-left: 222px;
