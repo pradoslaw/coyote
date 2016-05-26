@@ -39,7 +39,8 @@
         "elasticsearch/elasticsearch": "~2.0",
         "guzzlehttp/guzzle": "^6.2",
         "adam-boduch/geshi": "dev-master",
-        "aginev/datagrid": "1.0.*"
+        "view-components/grids": "^0.5.1",
+        "view-components/eloquent-data-processing": "^1.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.*",

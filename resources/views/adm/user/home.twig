@@ -1,2 +1,6 @@
 {% extends 'adm/base.twig' %}
 {% block title %}Użytkownicy {{ parent() }}{% endblock %}
+
+{% block container %}
+{{ grid|raw }}
+{% endblock %}
