@@ -17,7 +17,7 @@ class ViewController extends Controller
         $microblog = $repository->findOrFail($id);
 
         $microblog->text = app('parser.microblog')->parse($microblog->text);
-        $parser = app('parser.comment');
+        $parser = app('parser.microblog.comment');
 
         foreach ($microblog->comments as &$comment) {
             $comment->text = $parser->parse($comment->text);

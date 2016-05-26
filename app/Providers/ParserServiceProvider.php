@@ -5,10 +5,11 @@ namespace Coyote\Providers;
 use Coyote\Services\Parser\Factories\WikiFactory;
 use Illuminate\Support\ServiceProvider;
 use Coyote\Services\Parser\Factories\MicroblogFactory;
-use Coyote\Services\Parser\Factories\CommentFactory;
+use Coyote\Services\Parser\Factories\MicroblogCommentFactory;
 use Coyote\Services\Parser\Factories\SigFactory;
 use Coyote\Services\Parser\Factories\PmFactory;
 use Coyote\Services\Parser\Factories\PostFactory;
+use Coyote\Services\Parser\Factories\CommentFactory;
 use Coyote\Services\Parser\Factories\JobFactory;
 
 class ParserServiceProvider extends ServiceProvider
@@ -41,8 +42,8 @@ class ParserServiceProvider extends ServiceProvider
             return new MicroblogFactory($app);
         });
 
-        $this->app->bind('parser.comment', function ($app) {
-            return new CommentFactory($app);
+        $this->app->bind('parser.microblog.comment', function ($app) {
+            return new MicroblogCommentFactory($app);
         });
 
         $this->app->bind('parser.sig', function ($app) {
@@ -55,6 +56,10 @@ class ParserServiceProvider extends ServiceProvider
 
         $this->app->bind('parser.post', function ($app) {
             return new PostFactory($app);
+        });
+
+        $this->app->bind('parser.comment', function ($app) {
+            return new CommentFactory($app);
         });
 
         $this->app->bind('parser.job', function ($app) {
@@ -78,10 +83,11 @@ class ParserServiceProvider extends ServiceProvider
          */
         return [
             'parser.microblog',
-            'parser.comment',
+            'parser.microblog.comment',
             'parser.sig',
             'parser.pm',
             'parser.post',
+            'parser.comment',
             'parser.job',
             'parser.wiki'
         ];
