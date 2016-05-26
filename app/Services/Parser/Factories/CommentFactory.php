@@ -27,7 +27,7 @@ class CommentFactory extends AbstractFactory
      */
     public function parse(string $text) : string
     {
-        start_measure('parsing', 'Parsing comment...');
+        start_measure('parsing', get_class($this));
 
         $isInCache = $this->isInCache($text);
         if ($isInCache) {
