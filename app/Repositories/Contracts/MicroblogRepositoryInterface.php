@@ -41,4 +41,15 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getSubscribed($userId);
+
+    /**
+     * @return int
+     */
+    public function count();
+
+    /**
+     * @param int $userId
+     * @return null|int
+     */
+    public function countForUser($userId);
 }

@@ -123,7 +123,19 @@ class HomeController extends Controller
      */
     private function getMicroblogs()
     {
-        return $this->microblog->take(10);
+        // @todo podobny kod (w 99%) znajduje sie w kontrolerze Microblog\HomeController@index
+        $microblogs = $this->microblog->take(10);
+        $parser = ['main' => app('parser.microblog'), 'comment' => app('parser.microblog.comment')];
+
+        foreach ($microblogs as &$microblog) {
+            $microblog->text = $parser['main']->parse($microblog->text);
+
+            foreach ($microblog->comments as &$comment) {
+                $comment->text = $parser['comment']->parse($comment->text);
+            }
+        }
+
+        return $microblogs;
     }
 
     /**

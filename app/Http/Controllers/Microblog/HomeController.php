@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\CacheFactory;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
 
@@ -13,11 +13,11 @@ class HomeController extends Controller
     use CacheFactory;
     
     /**
-     * @var Microblog
+     * @var MicroblogRepository
      */
     private $microblog;
 
-    public function __construct(Microblog $microblog)
+    public function __construct(MicroblogRepository $microblog)
     {
         parent::__construct();
 
