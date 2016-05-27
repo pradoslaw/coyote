@@ -75,11 +75,4 @@ $(() => {
 
         return false;
     });
-
-    /**
-     * Delete job offer
-     */
-    $('#modal-delete').find('.btn-danger').click((e) => {
-        $(e.currentTarget).parents('form').submit();
-    });
 });

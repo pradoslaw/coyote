@@ -1,6 +1,6 @@
 $(function() {
     'use strict';
-    
+
     /**
      * Show "flag to report" page
      */
@@ -29,6 +29,7 @@ $(function() {
                 $this.fadeOut();
 
                 $('#modal-report').modal('hide').remove();
+                return false;
             });
         });
 

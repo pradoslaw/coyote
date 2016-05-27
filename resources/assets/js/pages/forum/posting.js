@@ -46,12 +46,7 @@ $(function () {
      */
     $('.btn-rollback').click(function() {
         $('#form-rollback').attr('action', $(this).attr('href'));
-
-        $('#confirm').modal('show').one('click', '.danger', function() {
-            $(this).attr('disabled', 'disabled').text('Przywracanie...');
-
-            $('#form-rollback').submit();
-        });
+        $('#confirm').modal('show').find('.btn-danger').attr('data-submit-state', 'Przywracanie...');
 
         return false;
     });

@@ -144,6 +144,7 @@ $(function () {
                 });
 
                 $('#confirm').modal('hide');
+                return false;
             });
 
             return false;
@@ -230,6 +231,7 @@ $(function () {
                 });
 
                 $('#confirm').modal('hide');
+                return false;
             });
 
             return false;

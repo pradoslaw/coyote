@@ -389,6 +389,8 @@ $(() => {
                 $('#modal-firm').modal('hide');
                 initialize();
             });
+
+            return false;
         });
     });
 

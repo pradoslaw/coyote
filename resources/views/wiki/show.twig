@@ -141,14 +141,14 @@
                 {% if can('wiki-admin') %}
                     {% if not wiki.deleted_at %}
                         <li class="btn-delete">
-                            <a href="#delete-wiki-modal" data-toggle="modal">Usuń artykuł</a>
+                            <a href="#modal-delete" data-toggle="modal">Usuń artykuł</a>
                         </li>
                         <li class="btn-purge">
                             <a href="javascript:">Usuń cache</a>
                         </li>
                     {% else %}
                         <li class="btn-restore">
-                            <a href="#restore-wiki-modal" data-toggle="modal">Przywróć usuniętą wersję</a>
+                            <a href="#modal-restore" data-toggle="modal">Przywróć usuniętą wersję</a>
                         </li>
                     {% endif %}
                 {% endif %}
@@ -317,11 +317,11 @@
 
     {% if can('wiki-admin') %}
         {{ form_open({url: route('wiki.delete', [wiki.id])}) }}
-        {{ modals.confirm('Czy chcesz usunąć ten artykuł?', 'Usuń artykuł', 'delete-wiki-modal') }}
+        {{ modals.confirm('Czy chcesz usunąć ten artykuł?', 'Usuń artykuł', 'modal-delete') }}
         {{ form_close() }}
 
         {{ form_open({url: route('wiki.restore', [wiki.id])}) }}
-        {{ modals.confirm('Czy chcesz przywrócić ten artykuł? Będzie on wówczas dostępny dla innych użytkowników.', 'Przywróć artykuł', 'restore-wiki-modal', 'Tak, przywróć') }}
+        {{ modals.confirm('Czy chcesz przywrócić ten artykuł? Będzie on wówczas dostępny dla innych użytkowników.', 'Przywróć artykuł', 'modal-restore', 'Tak, przywróć') }}
         {{ form_close() }}
     {% endif %}
 {% endblock %}
