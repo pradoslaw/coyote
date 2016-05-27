@@ -287,3 +287,18 @@ article > header {
     margin-top: -9px;
   }
 }
+
+// Wyswietlanie przyciskow z nazwami kategorii w ktorych znajduje sie dana strona
+// -------------------------------------------------------------------------------
+
+.wiki-categories {
+  margin-bottom: 10px;
+  vertical-align: middle;
+
+  .btn-warning {
+    padding: 4px;
+    font-weight: bold;
+    box-shadow: 1px 1px $btn-warning-border;
+    margin: 0 5px;
+  }
+}

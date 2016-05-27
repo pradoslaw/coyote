@@ -58,4 +58,10 @@ interface WikiRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function restore($id);
+
+    /**
+     * @param int $id
+     * @return \Coyote\Wiki[]
+     */
+    public function getAllCategories($id);
 }

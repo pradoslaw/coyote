@@ -63,6 +63,18 @@
                 </div>
             </div>
 
+            {% if categories|length > 0 %}
+                <div class="wiki-categories">
+                    <i class="fa fa-folder-open text-warning"></i>
+
+                    {% for category in categories %}
+                        <a class="btn btn-sm btn-warning" title="Strona znajduje się w kategorii: {{ category.title }}">{{ category.title }}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="clearfix"></div>
+
             <div id="box-comment">
                 <h4>0 komentarzy</h4>
 

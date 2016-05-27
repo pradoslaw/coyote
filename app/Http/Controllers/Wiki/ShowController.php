@@ -13,10 +13,11 @@ class ShowController extends BaseController
 
         $author = $wiki->logs()->first()->user;
         $wiki->text = $this->getParser()->parse((string) $wiki->text);
-
+        
         return $this->view('wiki.' . $wiki->template, [
             'wiki' => $wiki,
             'author' => $author,
+            'categories' => $this->wiki->getAllCategories($wiki->id),
             'parents' => $this->parents->slice(1)->reverse() // we skip current page
         ]);
     }

@@ -6,6 +6,9 @@ use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Wiki;
 use Illuminate\Http\Request;
 
+/**
+ * @method $this withTrashed()
+ */
 class WikiRepository extends Repository implements WikiRepositoryInterface
 {
     /**
@@ -139,6 +142,20 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     public function restore($id)
     {
         return $this->app->make(Wiki\Page::class)->withTrashed()->findOrFail($id)->restore();
+    }
+
+    /**
+     * @param int $id
+     * @return Wiki[]
+     */
+    public function getAllCategories($id)
+    {
+        return $this
+            ->model
+            ->select(['parent.*'])
+            ->where('wiki.id', $id)
+            ->join('wiki AS parent', 'parent.path_id', '=', 'wiki.parent_id')
+            ->get();
     }
 
     /**
