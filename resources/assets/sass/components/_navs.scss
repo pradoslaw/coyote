@@ -6,8 +6,14 @@
   }
 }
 
-.nav-panel {
+.nav > li > a {
+  @media screen and (max-width: $screen-xs) {
+    padding: 5px;
+    font-size: 12px;
+  }
+}
 
+.nav-panel {
   position: relative;
   text-align: left;
   list-style: none;
