@@ -73,65 +73,7 @@
                 </div>
             {% endif %}
 
-            <div class="clearfix"></div>
-
-            <div id="box-comment">
-                <h4>0 komentarzy</h4>
-
-                <div class="row">
-                    <div class="col-sm-1 hidden-xs">
-                        <a href="#">
-                            <img src="/img/shalom.png" class="img-thumbnail">
-                        </a>
-                    </div>
-                    <div class="col-sm-11">
-                        <div class="panel panel-transparent">
-                            <div class="panel-body comment">
-                                {{ form_open() }}
-
-                                <div class="form-group">
-                                    <textarea name="content" class="form-control" placeholder="Kliknij, aby dodać nowy komentarz" required></textarea>
-                                    {#<span class="help-block">Formatowanie Markdown jest włączone</span>#}
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-sm btn-primary pull-right">Dodaj komentarz</button>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                                {{ form_close() }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-1 hidden-xs">
-                        <a href="#">
-                            <img src="/img/shalom.png" class="img-thumbnail">
-                        </a>
-                    </div>
-                    <div class="col-sm-11">
-                        <div class="panel panel-transparent">
-                            <div class="panel-body comment">
-                                <ul class="list-inline">
-                                    <li>
-                                        <a data-user-id="71123" href="#">Shalom</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="timestamp" data-timestamp="1442898090">dzisiaj, 07:01</a>
-                                    </li>
-                                </ul>
-
-                                <p>
-                                    Augue rhoncus sociis proin, rhoncus augue mus nec? Et arcu, et rhoncus, lundium proin magna habitasse. Duis dis adipiscing odio urna eros nunc porta. Lacus porta est non! Et cursus, nunc placerat? Nisi non, phasellus sociis. Lundium arcu lundium a, pellentesque adipiscing nisi tincidunt vut dolor placerat aliquam phasellus est tristique. Rhoncus, massa, lacus amet nec odio in amet sit elementum ac lacus? Adipiscing montes ac, pellentesque!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
+            {% include 'wiki.partials.comments' %}
         </div>
 
         <aside class="col-sm-3">

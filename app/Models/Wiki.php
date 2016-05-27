@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $path
  * @property int $is_locked
  * @property string $template
+ * @property Wiki\Comment[] $comments
  */
 class Wiki extends Model
 {
@@ -101,5 +102,13 @@ class Wiki extends Model
     public function children()
     {
         return $this->hasMany('Coyote\Wiki', 'parent_id', 'path_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany('Coyote\Wiki\Comment');
     }
 }

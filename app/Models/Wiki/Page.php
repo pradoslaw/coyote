@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Page extends Model
 {
     use SoftDeletes;
-    
+
     /**
      * @var string
      */
@@ -50,6 +50,14 @@ class Page extends Model
     public function paths()
     {
         return $this->hasMany('Coyote\Wiki\Path', 'wiki_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany('Coyote\Wiki\Comment', 'wiki_id', 'id');
     }
 
     /**
