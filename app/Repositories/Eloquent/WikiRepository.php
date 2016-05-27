@@ -22,9 +22,9 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
      */
     public function findByPath($path)
     {
+        $this->applyCriteria();
         return $this
             ->model
-            ->withTrashed() // @todo hmm, to chyba powinno byc dodane poprzez criteria a nie wpiasne "na stale"
             ->where('path', $path)
             ->first();
     }
@@ -38,7 +38,6 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     public function children($parentId = null)
     {
         $this->applyCriteria();
-
         return $this
             ->model
             ->from($this->rawFunction('wiki_children', $parentId))
@@ -52,7 +51,6 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     public function parents($pathId)
     {
         $this->applyCriteria();
-
         return $this->model->from($this->rawFunction('wiki_parents', $pathId))->get();
     }
 
@@ -123,6 +121,24 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
 
         $wiki->forceFill($page->toArray());
         $wiki->wasRecentlyCreated = $page->wasRecentlyCreated;
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function delete($id)
+    {
+        return $this->app->make(Wiki\Page::class)->destroy($id);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function restore($id)
+    {
+        return $this->app->make(Wiki\Page::class)->withTrashed()->findOrFail($id)->restore();
     }
 
     /**

@@ -46,4 +46,16 @@ interface WikiRepositoryInterface extends RepositoryInterface
      * @param Request $request
      */
     public function save($wiki, Request $request);
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function delete($id);
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function restore($id);
 }

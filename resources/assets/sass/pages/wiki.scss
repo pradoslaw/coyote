@@ -155,6 +155,10 @@ article > header {
   .btn-purge:before {
     content: $fa-var-trash-o;
   }
+
+  .btn-restore:before {
+    content: $fa-var-rotate-left;
+  }
 }
 
 // Wyswietlanie informacji o autorze

@@ -1,8 +1,16 @@
 {% extends 'wiki.page' %}
 
+{% import 'components.modals' as modals %}
+
 {% block container %}
     <div class="row">
         <div class="col-sm-9">
+            {% if wiki.deleted_at %}
+                <div class="alert alert-danger">
+                    <strong>Uwaga!</strong> Ta strona została usunięta. Możesz ją przywrócić jeżeli chcesz, aby była widoczna dla innych użytkowników.
+                </div>
+            {% endif %}
+
             <div class="panel panel-default" style="margin-top: 13px">
                 <div class="panel-heading">
                     <h2 class="box-header">
@@ -43,6 +51,10 @@
                                 </li>
                             </ul>
                         </header>
+
+                        {% if wiki.excerpt %}
+                            <p><strong>{{ wiki.excerpt }}</strong></p>
+                        {% endif %}
 
                         <div itemprop="articleBody">
                             {{ wiki.text|raw }}
@@ -111,10 +123,12 @@
         </div>
 
         <aside class="col-sm-3">
-            <section id="box-maintain">
-                <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-default" title="Kliknij, aby edytować ten artykuł">Edycja</a>
-                <a href="{{ route('wiki.submit') }}?pathId={{ wiki.path_id }}" class="btn btn-sm btn-primary" title="Dodaj nową stronę w tej kategorii">Nowa strona</a>
-            </section>
+            {% if not wiki.deleted_at %}
+                <section id="box-maintain">
+                    <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-default" title="Kliknij, aby edytować ten artykuł">Edycja</a>
+                    <a href="{{ route('wiki.submit') }}?pathId={{ wiki.path_id }}" class="btn btn-sm btn-primary" title="Dodaj nową stronę w tej kategorii">Nowa strona</a>
+                </section>
+            {% endif %}
 
             <ul class="side-menu">
                 <li class="btn-watch">
@@ -125,12 +139,18 @@
                 </li>
 
                 {% if can('wiki-admin') %}
-                    <li class="btn-delete">
-                        <a href="javascript:">Usuń artykuł</a>
-                    </li>
-                    <li class="btn-purge">
-                        <a href="javascript:">Usuń cache</a>
-                    </li>
+                    {% if not wiki.deleted_at %}
+                        <li class="btn-delete">
+                            <a href="#delete-wiki-modal" data-toggle="modal">Usuń artykuł</a>
+                        </li>
+                        <li class="btn-purge">
+                            <a href="javascript:">Usuń cache</a>
+                        </li>
+                    {% else %}
+                        <li class="btn-restore">
+                            <a href="#restore-wiki-modal" data-toggle="modal">Przywróć usuniętą wersję</a>
+                        </li>
+                    {% endif %}
                 {% endif %}
             </ul>
 
@@ -294,4 +314,20 @@
             </section>
         </aside>
     </div>
+
+    {% if can('wiki-admin') %}
+        {{ form_open({url: route('wiki.delete', [wiki.id])}) }}
+        {{ modals.confirm('Czy chcesz usunąć ten artykuł?', 'Usuń artykuł', 'delete-wiki-modal') }}
+        {{ form_close() }}
+
+        {{ form_open({url: route('wiki.restore', [wiki.id])}) }}
+        {{ modals.confirm('Czy chcesz przywrócić ten artykuł? Będzie on wówczas dostępny dla innych użytkowników.', 'Przywróć artykuł', 'restore-wiki-modal', 'Tak, przywróć') }}
+        {{ form_close() }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="{{ cdn('js/modal.js') }}"></script>
 {% endblock %}

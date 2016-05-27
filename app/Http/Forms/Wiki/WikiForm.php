@@ -46,7 +46,7 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
                 'help' => 'Rozszerzony tytuł będzie widoczny na pasku tytułu w przeglądarce.'
             ])
             ->add('excerpt', 'textarea', [
-                'rules' => 'string|max:255',
+                'rules' => 'string|max:500',
                 'label' => 'Zajawka',
                 'help' => 'Skrócony opis tekstu, wstęp.',
                 'attr' => [

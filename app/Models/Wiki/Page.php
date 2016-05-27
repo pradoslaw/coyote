@@ -3,6 +3,7 @@
 namespace Coyote\Wiki;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Page extends Model
 {
+    use SoftDeletes;
+    
     /**
      * @var string
      */

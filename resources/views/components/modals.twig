@@ -1,5 +1,5 @@
 {% macro confirm(message, title='Czy chcesz kontynuować?', id='confirm', okLabel='Tak, usuń') %}
-    <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">
+    <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ id }}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -10,7 +10,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                    <a href="javascript:" class="btn btn-danger danger">{{ okLabel }}</a>
+                    <button type="submit" class="btn btn-danger danger">{{ okLabel }}</button>
                 </div>
             </div>
         </div>

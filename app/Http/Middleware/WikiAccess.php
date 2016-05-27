@@ -4,6 +4,7 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
+use Coyote\Repositories\Criteria\Wiki\WithTrashed;
 use Illuminate\Contracts\Auth\Access\Gate;
 
 class WikiAccess extends AbstractMiddleware
@@ -38,9 +39,13 @@ class WikiAccess extends AbstractMiddleware
      */
     public function handle($request, Closure $next, $ability = '')
     {
+        if ($this->gate->allows($ability)) {
+            $this->wiki->pushCriteria(new WithTrashed());
+        }
+
         $result = $this->wiki->findByPath(trim($request->route('path'), '/'));
 
-        if (empty($result) || (!is_null($result->deleted_at) && $this->gate->denies($ability))) {
+        if (empty($result)) {
             abort(404);
         }
 
