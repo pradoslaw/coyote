@@ -5,7 +5,8 @@ function initTinymce() {
         plugins: [
             "advlist lists spellchecker",
             "code",
-            "paste"
+            "paste",
+            "autoresize"
         ],
 
         toolbar1: "bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | cut copy paste | bullist numlist | undo redo | outdent indent",
@@ -17,8 +18,9 @@ function initTinymce() {
         force_br_newlines: false,
         force_p_newlines: false,
         forced_root_block: '',
+        autoresize_bottom_margin: 20,
 
-        content_style: "* {font-size: 13px; font-family: Arial, sans-serif;}",
+        content_style: "body, * {font-size: 14px !important; font-family: Arial, sans-serif !important;}",
 
         setup: function (ed) {
             ed.on('init', function (args) {
