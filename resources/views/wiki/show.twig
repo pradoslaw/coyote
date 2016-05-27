@@ -31,11 +31,11 @@
                             <h5>{{ link_to_profile(author) }}</h5>
 
                             <ul class="metadata list-inline">
-                                <li title="Data opublikowania" class="date" itemprop="datePublished" content="2006-03-02T13:34">
+                                <li title="Data opublikowania" class="date" itemprop="datePublished" content="{{ wiki.created_at|iso_8601 }}">
                                     <i class="fa fa-calendar"></i>
                                     {{ wiki.created_at }}
                                 </li>
-                                <li title="Data ostatniej zmiany" class="edit-date" itemprop="dateModified" content="2013-09-30T09:06">
+                                <li title="Data ostatniej zmiany" class="edit-date" itemprop="dateModified" content="{{ wiki.updated_at|iso_8601 }}">
                                     <i class="fa fa-calendar-o"></i>
                                     {{ wiki.updated_at }}
                                 </li>

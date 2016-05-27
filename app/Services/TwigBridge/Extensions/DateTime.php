@@ -70,11 +70,11 @@ class DateTime extends Twig_Extension
             }),
 
             new Twig_SimpleFilter('timestamp', function ($dateTime) {
-                if ($dateTime instanceof Carbon) {
-                    return $dateTime->getTimestamp();
-                } else {
-                    return strtotime($dateTime);
-                }
+                return $this->toCarbon($dateTime)->getTimestamp();
+            }),
+            
+            new Twig_SimpleFilter('iso_8601', function ($dateTime) {
+                return $this->toCarbon($dateTime)->format(Carbon::ISO8601);
             })
         ];
     }
