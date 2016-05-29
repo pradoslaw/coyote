@@ -12,7 +12,7 @@
                         {{ link_to_profile(comment.user) }}
                     </li>
                     <li>
-                        <a href="#" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
+                        <a href="#comment-{{ comment.id }}" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
                     </li>
                 </ul>
 

@@ -49,9 +49,9 @@
                                         {{ declination(wiki.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}
                                     </a>
                                 </li>
-                                <li class="counter" itemprop="interactionCount" value="UserPageVisits:3166">
+                                <li class="counter" itemprop="interactionCount" value="UserPageVisits:{{ wiki.views }}">
                                     <i class="fa fa-eye"></i>
-                                    3166 odsłon
+                                    {{ declination(wiki.views, ['odsłona', 'odsłony', 'odsłon']) }}
                                 </li>
                             </ul>
                         </header>

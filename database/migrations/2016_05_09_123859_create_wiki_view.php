@@ -27,7 +27,8 @@ CREATE OR REPLACE VIEW "wiki" AS SELECT
     wiki_pages.excerpt,
     wiki_pages.text,
     wiki_pages.is_locked,
-    wiki_pages.template
+    wiki_pages.template,
+    wiki_pages.views
    FROM wiki_paths
    JOIN wiki_pages ON (wiki_pages.id = wiki_paths.wiki_id)');
     }
