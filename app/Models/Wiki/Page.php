@@ -84,13 +84,13 @@ class Page extends Model
     }
 
     /**
-     * @param mixed $parent
+     * @param \Coyote\Wiki\Path $parent
      * @param string $slug
      * @return $this
      */
     public function createPath($parent, $slug)
     {
-        if (!empty($parent)) {
+        if (!empty($parent->path_id)) {
             $data = ['parent_id' => $parent->path_id, 'path' => $parent->path . '/' . $slug];
         } else {
             $data = ['path' => $slug];

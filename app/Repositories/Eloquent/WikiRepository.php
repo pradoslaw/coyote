@@ -40,11 +40,46 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
      */
     public function children($parentId = null)
     {
-        $this->applyCriteria();
+        return $this->prepareChildren($parentId)->get();
+    }
+
+    /**
+     * @param int|null $parentId
+     * @return mixed
+     */
+    public function getCatalog($parentId = null)
+    {
+        $comments = $this
+            ->app
+            ->make(Wiki\Comment::class)
+            ->select([$this->raw('COUNT(*)')])
+            ->where('wiki_id', '=', $this->raw('wiki.id'))
+            ->toSql();
+
         return $this
-            ->model
-            ->from($this->rawFunction('wiki_children', $parentId))
-            ->get();
+            ->prepareChildren($parentId)
+            ->select([
+                'wiki.*',
+                'users.name AS user_name',
+                'users.photo',
+                'users.id AS user_id',
+                $this->raw("($comments) AS comments")
+            ])
+            ->join('users', function ($join) {
+                $sub = $this
+                        ->app
+                        ->make(Wiki\Log::class)
+                        ->select(['user_id'])
+                        ->where('wiki_id', '=', $this->raw('wiki.id'))
+                        ->orderBy('id')
+                        ->limit(1)
+                        ->toSql();
+
+                $join->on('users.id', '=', $this->raw("($sub)"));
+            })
+            ->where('parent_id', $parentId)
+            ->where('children', 0)
+            ->paginate();
     }
 
     /**
@@ -172,5 +207,15 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         }
 
         return $this->raw(sprintf('%s(%s) AS "wiki"', $name, implode(',', $args)));
+    }
+
+    /**
+     * @param int $parentId
+     * @return mixed
+     */
+    private function prepareChildren($parentId)
+    {
+        $this->applyCriteria();
+        return $this->model->from($this->rawFunction('wiki_children', $parentId));
     }
 }

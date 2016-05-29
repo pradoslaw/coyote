@@ -25,6 +25,12 @@ interface WikiRepositoryInterface extends RepositoryInterface
     public function children($parentId = null);
 
     /**
+     * @param int|null $parentId
+     * @return mixed
+     */
+    public function getCatalog($parentId = null);
+
+    /**
      * @param int $pathId
      * @return mixed
      */

@@ -18,7 +18,7 @@
                 </li>
             {% endif %}
 
-            <li role="presentation"><a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" title="Dodaj nową stronę w tej kategorii">Napisz nowy artykuł w tym dziale</a></li>
+            <li role="presentation"><a href="{{ route('wiki.submit') }}?pathId={{ wiki.path_id }}" title="Dodaj nową stronę w tej kategorii">Napisz nowy artykuł w tym dziale</a></li>
             <li role="presentation"><a href="#">Zakończ obserwację</a></li>
             <li role="presentation"><a href="#">Historia i autorzy</a></li>
         </ul>
@@ -45,152 +45,58 @@
                 <div class="pull-right" style="width: 5px; height: 40px; background-color: #fafafa"></div>
             </div>
 
-            <div class="clearfix">...</div>
+            <div class="clearfix"></div>
 
             <div class="panel panel-transparent">
                 <div class="panel-body">
 
-                    <div id="folder" class="panel">
-                        <div class="panel-body">
-                            <ol class="list-group">
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/NET">.NET (<em>22</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Artykuły">Artykuły (<em>164</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Data_i_czas">Data i czas (<em>84</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Dyrektywy_kompilatora">Dyrektywy kompilatora (<em>26</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/FAQ">FAQ (<em>486</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Gotowce">Gotowce (<em>218</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Kody_źródłowe">Kody źródłowe (<em>1</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Kompendium">Delphi 7. Kompendium programisty (<em>34</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Moduły">Moduły (<em>500</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/OOP">OOP (<em>38</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Operacje_liczbowe">Operacje liczbowe (<em>68</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Pliki">Pliki (<em>84</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Składnia_języka">Składnia języka (<em>28</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Typy_danych">Typy danych (<em>48</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Vademecum">Delphi 2005. Kompendium programisty (<em>16</em>)</a>
-                                </li>
-                                <li class="list-group-item col-sm-4">
-                                    <a href="http://4programmers.net/Delphi/Łańcuchy">Łańcuchy (<em>117</em>)</a>
-                                </li>
-                            </ol>
+                    {% if folders|length > 0 %}
+                        <div id="folder" class="panel">
+                            <div class="panel-body">
+                                <ol class="list-group">
+                                    {% for wiki in folders %}
+                                        <li class="list-group-item col-sm-4">
+                                            <a href="{{ url(wiki.path) }}">{{ wiki.title }} (<em>{{ wiki.children }}</em>)</a>
+                                        </li>
+                                    {% endfor %}
+                                </ol>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
 
                     <div class="text-center">
-                        <ul class="pagination pagination-sm">
-                            <li class="disabled">
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li>
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
+                        {{ children.links()|raw }}
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="panel panel-default panel-catalog">
-                                <div class="panel-body">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <a href="#">
-                                                <img class="media-object img-thumbnail" src="/img/shalom.png" style="max-width: 45px;" alt="">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Implementacja listy dwukierunkowej ze znacznikiem</a></h4>
+                        {% for child in children %}
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-catalog">
+                                    <div class="panel-body">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a href="{{ route('profile', [child.user_id]) }}" title="Autor: {{ child.user_name }}">
+                                                    <img class="media-object img-thumbnail" src="{{ user_photo(child.photo) }}" style="max-width: 45px;" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading"><a href="{{ url(child.path) }}">{{ child.title }}</a></h4>
 
-                                            <ul class="list-inline">
-                                                <li class="date">04 wrzesień 2015, 21:30</li>
-                                                <li class="comments">0 komentarzy</li>
-                                                <li class="views">164 odsłony</li>
-                                            </ul>
+                                                <ul class="list-inline">
+                                                    <li class="date" title="{{ child.created_at|format_date(false) }}">{{ child.created_at|format_date }}</li>
+                                                    <li class="comments">{{ declination(wiki.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}</li>
+                                                    <li class="views">164 odsłony</li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="panel panel-default panel-catalog">
-                                <div class="panel-body">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <a href="#">
-                                                <img class="media-object img-thumbnail" src="/img/shalom.png" style="max-width: 45px;" alt="">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#">Implementacja listy dwukierunkowej ze znacznikiem</a></h4>
-
-                                            <ul class="list-inline">
-                                                <li class="date">04 wrzesień 2015, 21:30</li>
-                                                <li class="comments">0 komentarzy</li>
-                                                <li class="views">164 odsłony</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
 
                     <div class="text-center">
-                        <ul class="pagination pagination-sm">
-                            <li class="disabled">
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li>
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
+                        {{ children.links()|raw }}
                     </div>
                 </div>
             </div>

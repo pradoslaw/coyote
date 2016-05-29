@@ -69,7 +69,7 @@
                     <i class="fa fa-folder-open text-warning"></i>
 
                     {% for category in categories %}
-                        <a class="btn btn-sm btn-warning" title="Strona znajduje się w kategorii: {{ category.title }}">{{ category.title }}</a>
+                        <a class="btn btn-sm btn-warning" title="Strona znajduje się w kategorii: {{ category.title }}" href="{{ url(category.path) }}">{{ category.title }}</a>
                     {% endfor %}
                 </div>
             {% endif %}

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $wiki_id
  * @property int $parent_id
+ * @property int $path_id
  * @property string $path
  */
 class Path extends Model
