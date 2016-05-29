@@ -88,8 +88,8 @@
 
                                                 <ul class="list-inline">
                                                     <li class="date" title="{{ child.created_at|format_date(false) }}">{{ child.created_at|format_date }}</li>
-                                                    <li class="comments">{{ declination(wiki.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}</li>
-                                                    <li class="views">{{ declination(wiki.views, ['odsłona', 'odsłony', 'odsłon']) }}</li>
+                                                    <li class="comments">{{ declination(child.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}</li>
+                                                    <li class="views">{{ declination(child.views, ['odsłona', 'odsłony', 'odsłon']) }}</li>
                                                 </ul>
                                             </div>
                                         </div>
