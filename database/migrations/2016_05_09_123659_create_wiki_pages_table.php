@@ -23,7 +23,7 @@ class CreateWikiPagesTable extends Migration
             $table->text('text')->nullable();
             $table->tinyInteger('is_locked')->default(0);
             $table->string('template')->nullable();
-            $table->integer('visits')->default(0);
+            $table->integer('views')->default(0);
 
             $table->index('deleted_at');
         });
