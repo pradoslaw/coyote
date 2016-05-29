@@ -161,8 +161,17 @@ article > header {
   }
 }
 
+.text-excerpt {
+  margin-bottom: 0;
+
+  strong {
+    font-size: 20px;
+  }
+}
+
 // Wyswietlanie informacji o autorze
 // --------------------------------
+
 #box-author {
   blockquote {
     border: none;
