@@ -111,4 +111,13 @@ class Wiki extends Model
     {
         return $this->hasMany('Coyote\Wiki\Comment');
     }
+
+    /**
+     * @param int $userId
+     * @return bool
+     */
+    public function wasUserInvolved($userId)
+    {
+        return $this->logs()->forUser($userId)->exists();
+    }
 }

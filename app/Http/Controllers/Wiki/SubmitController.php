@@ -35,7 +35,13 @@ class SubmitController extends BaseController
         $request = $form->getRequest();
 
         $path = $this->transaction(function () use ($wiki, $request) {
+            $subscribe = auth()->user()->allow_subscribe
+                && ($wiki->wasRecentlyCreated || !$wiki->wasUserInvolved($this->userId));
             $this->wiki->save($wiki, $request);
+
+            if ($subscribe) {
+                $wiki->subscribers()->create(['user_id' => $this->userId]);
+            }
 
             stream(
                 $wiki->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,

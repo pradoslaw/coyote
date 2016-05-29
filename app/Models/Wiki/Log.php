@@ -2,6 +2,7 @@
 
 namespace Coyote\Wiki;
 
+use Coyote\Models\Scopes\ForUser;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -22,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Log extends Model
 {
+    use ForUser;
+    
     /**
      * @var string
      */
