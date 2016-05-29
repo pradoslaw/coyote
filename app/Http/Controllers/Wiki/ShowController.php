@@ -36,6 +36,7 @@ class ShowController extends BaseController
             'parents' => $this->parents->slice(1)->reverse(), // we skip current page
             'folders' => $this->getFolders($wiki->path_id),
             'children' => $this->getCatalog($wiki->path_id),
+            'subscribed' => $wiki->subscribers()->forUser($this->userId)->exists(),
             'form' => $this->createForm(CommentForm::class, [], [
                 'url' => route('wiki.comment.save', [$wiki->id])
             ])

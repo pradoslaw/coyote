@@ -2,11 +2,12 @@
 
 <ul class="side-menu">
     <li>
-        <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}">
+        {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
+        <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}">
             <i class="fa fa-fw fa-star-o"></i>
             <i class="fa fa-fw fa-star"></i>
 
-            {{ not subscribed ? 'Dodaj do ulubionych' : 'Usuń z ulubionych' }}
+            <span>{{ labels[not subscribed] }}</span>
         </a>
     </li>
     {% if can('update', job) %}

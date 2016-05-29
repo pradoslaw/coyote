@@ -28,16 +28,6 @@ $(() => {
 
     new Filter('#box-filter');
 
-    $('.btn-subscribe').click((e) => {
-        $(e.currentTarget).toggleClass('on');
-
-        $.post($(e.currentTarget).attr('href')).fail((e) => {
-            $('#modal-unauthorized').modal('show');
-        });
-
-        return false;
-    });
-
     $('#editor').on('shown.bs.modal', (e) => {
         $('#tags').tag({
             promptUrl: _config.promptUrl

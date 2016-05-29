@@ -91,15 +91,6 @@
   border-top: 0;
 }
 
-.metadata.primary {
-  li {
-
-    &:first-child {
-      //padding-left: 0;
-    }
-  }
-}
-
 .tag-clouds {
   padding: 5px 0;
 
@@ -115,12 +106,6 @@
 .side-menu {
   li a {
     padding-left: 2px;
-  }
-
-  .on:hover {
-    i {
-      color: lighten($alt-link-hover-color, 5%);
-    }
   }
 }
 

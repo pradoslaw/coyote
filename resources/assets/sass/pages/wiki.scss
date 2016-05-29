@@ -140,24 +140,8 @@ article > header {
 }
 
 .side-menu {
-  .btn-watch:before {
-    content: $fa-var-star-o;
-  }
-
-  .btn-history:before {
-    content: $fa-var-history;
-  }
-
-  .btn-delete:before {
-    content: $fa-var-remove;
-  }
-
-  .btn-purge:before {
-    content: $fa-var-trash-o;
-  }
-
-  .btn-restore:before {
-    content: $fa-var-rotate-left;
+  li a {
+    padding-left: 2px;
   }
 }
 

@@ -32,7 +32,8 @@ elixir(function (mix) {
 
     mix.babel(['pages/job/submit.js'], 'public/js/job-submit.js')
         .babel(['pages/job/tinymce.js'], 'public/js/job-tinymce.js')
-        .babel(['pages/job.js', '../bower/bootstrap/js/modal.js'], 'public/js/job.js');
+        .babel(['pages/job.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js'], 'public/js/job.js')
+        .babel(['pages/wiki.js', 'components/subscribe.js'], 'public/js/wiki.js');
 
     mix.scripts(base, 'public/js/main.js')
         /*

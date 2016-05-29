@@ -36,6 +36,11 @@
           opacity: 1;
         }
       }
+
+      &:focus {
+        text-decoration: none;
+        outline: none;
+      }
     }
 
     &:before {
@@ -57,5 +62,39 @@
       top: 4px;
       font-size: 17px;
     }
+  }
+
+  .on:hover {
+    i {
+      color: lighten($alt-link-hover-color, 5%);
+    }
+  }
+}
+
+
+// Favorite icon can be shown in multiple places
+// ------------------------------------------------
+
+.btn-subscribe {
+  .fa-star-o {
+    display: inline-block;
+  }
+
+  .fa-star {
+    display: none;
+  }
+}
+
+.btn-subscribe.on {
+  .fa-star-o {
+    display: none;
+  }
+
+  .fa-star {
+    display: inline-block;
+  }
+
+  i {
+    color: lighten($alt-link-hover-color, 5%);
   }
 }

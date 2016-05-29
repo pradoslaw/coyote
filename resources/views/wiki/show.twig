@@ -40,9 +40,9 @@
                                     {{ wiki.updated_at }}
                                 </li>
                                 <li class="comment">
-                                    <a href="#comments" title="Zobacz komentarze" itemprop="interactionCount" value="UserComments:0">
+                                    <a href="#box-comment" title="Zobacz komentarze" itemprop="interactionCount" value="UserComments:{{ wiki.comments }}">
                                         <i class="fa fa-comments"></i>
-                                        0 komentarzy
+                                        {{ declination(wiki.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}
                                     </a>
                                 </li>
                                 <li class="counter" itemprop="interactionCount" value="UserPageVisits:3166">
@@ -86,24 +86,30 @@
             {% endif %}
 
             <ul class="side-menu">
-                <li class="btn-watch">
-                    <a href="javascript:">Dodaj do ulubionych</a>
+                <li>
+                    {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
+                    <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('wiki.subscribe', [wiki.id]) }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}" title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
+                        <i class="fa fa-fw fa-star-o"></i>
+                        <i class="fa fa-fw fa-star"></i>
+
+                        <span>{{ labels[not subscribed] }}</span>
+                    </a>
                 </li>
-                <li class="btn-history">
-                    <a href="javascript:">Historia i autorzy</a>
+                <li>
+                    <a href="javascript:"><i class="fa fa-fw fa-history"></i> Historia i autorzy</a>
                 </li>
 
                 {% if can('wiki-admin') %}
                     {% if not wiki.deleted_at %}
-                        <li class="btn-delete">
-                            <a href="#modal-delete" data-toggle="modal">Usuń artykuł</a>
+                        <li>
+                            <a href="#modal-delete" data-toggle="modal"><i class="fa fa-fw fa-remove"></i> Usuń artykuł</a>
                         </li>
-                        <li class="btn-purge">
-                            <a href="javascript:">Usuń cache</a>
+                        <li>
+                            <a href="javascript:"><i class="fa fa-fw fa-trash-o"></i> Usuń cache</a>
                         </li>
                     {% else %}
-                        <li class="btn-restore">
-                            <a href="#modal-restore" data-toggle="modal">Przywróć usuniętą wersję</a>
+                        <li>
+                            <a href="#modal-restore" data-toggle="modal"><i class="fa fa-fw fa-rotate-left"></i> Przywróć usuniętą wersję</a>
                         </li>
                     {% endif %}
                 {% endif %}

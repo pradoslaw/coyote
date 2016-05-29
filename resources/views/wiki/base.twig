@@ -5,3 +5,9 @@
 
     <link rel="stylesheet" href="{{ cdn('css/wiki.css') }}">
 {% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="{{ cdn('js/wiki.js') }}"></script>
+{% endblock %}
