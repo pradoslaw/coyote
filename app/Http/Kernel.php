@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
         'post.response' => Middleware\PostSubmitResponse::class,
         'comment.access' => Middleware\CommentAccess::class,
         'wiki.access'   => Middleware\WikiAccess::class,
-        'wiki.lock'     => Middleware\WikiLock::class
+        'wiki.lock'     => Middleware\WikiLock::class,
+        'page.hit'      => Middleware\PageHit::class
     ];
 }

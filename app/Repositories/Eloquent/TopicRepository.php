@@ -166,17 +166,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     }
 
     /**
-     * @param int $topicId
-     * @param int $value
-     */
-    public function addViews($topicId, $value = 1)
-    {
-        $this->model->timestamps = false;
-        $this->model->where('id', $topicId)->update(['views' => $this->raw('views + ' . $value)]);
-        $this->model->timestamps = true;
-    }
-
-    /**
      * @param string $sort
      * @return mixed
      */

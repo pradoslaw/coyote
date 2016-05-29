@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTopicVisitsTable extends Migration
+class CreatePageVisitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,15 +12,18 @@ class CreateTopicVisitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('topic_visits', function (Blueprint $table) {
+        Schema::create('page_visits', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('topic_id');
+            $table->integer('page_id');
             $table->integer('user_id');
             $table->timestampTz('created_at');
             $table->timestampTz('updated_at');
             $table->smallInteger('visits')->default(0);
 
-            $table->index(['topic_id', 'user_id']);
+            $table->index('page_id');
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
         });
     }
 
@@ -31,6 +34,6 @@ class CreateTopicVisitsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('topic_visits');
+        Schema::drop('page_visits');
     }
 }

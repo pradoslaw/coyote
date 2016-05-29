@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Wiki\Page;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $path_id
  * @property int $parent_id
+ * @property int $views
  * @property string $title
  * @property string $long_title
  * @property string $slug
@@ -119,5 +121,20 @@ class Wiki extends Model
     public function wasUserInvolved($userId)
     {
         return $this->logs()->forUser($userId)->exists();
+    }
+
+    /**
+     * @param string $column
+     * @param int $amount
+     * @param array $extra
+     * @return mixed
+     */
+    public function increment($column, $amount = 1, array $extra = [])
+    {
+        // we cannot update view so let's update "views" column in wiki_pages table
+        $page = new Page();
+        $page->timestamps = false;
+
+        $page->where('id', $this->id)->update([$column => $this->views + $amount]);
     }
 }

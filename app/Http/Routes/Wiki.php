@@ -13,5 +13,5 @@ Route::group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
     Route::post('Wiki/Subscribe/{wiki}', ['uses' => 'SubscribeController@index', 'as' => 'subscribe', 'middleware' => 'auth']);
 
     // deleted pages are visible only for users with privilege
-    Route::get('{path}', ['as' => 'show', 'uses' => 'ShowController@index', 'middleware' => 'wiki.access:wiki-admin']);
+    Route::get('{path}', ['as' => 'show', 'uses' => 'ShowController@index', 'middleware' => ['wiki.access:wiki-admin', 'page.hit']]);
 });

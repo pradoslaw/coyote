@@ -54,7 +54,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // widok kategorii forum
     Route::get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);
     // widok wyswietlania watku. {topic}
-    Route::get('{forum}/{topic}-{slug}', ['uses' => 'TopicController@index', 'as' => 'topic', 'middleware' => ['forum.access', 'topic.access', 'topic.scroll']]);
+    Route::get('{forum}/{topic}-{slug}', ['uses' => 'TopicController@index', 'as' => 'topic', 'middleware' => ['forum.access', 'topic.access', 'topic.scroll', 'page.hit']]);
 
     // usuwanie posta
     Route::post('Post/Delete/{id}', ['uses' => 'DeleteController@index', 'as' => 'post.delete', 'middleware' => 'auth']);

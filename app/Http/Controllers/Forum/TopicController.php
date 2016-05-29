@@ -130,18 +130,6 @@ class TopicController extends BaseController
             $reasonList = Reason::lists('name', 'id')->toArray();
         }
 
-        // increase topic views counter
-        // only for developing purposes. it increases counter every time user hits the page
-        if (app()->environment('local', 'dev')) {
-            $this->topic->addViews($topic->id);
-        } else {
-            // on production environment: store hit in redis
-            app('redis')->sadd(
-                'counter:topic:' . $topic->id,
-                $this->userId ?: $this->sessionId . ';' . round(time() / 300) * 300
-            );
-        }
-
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 

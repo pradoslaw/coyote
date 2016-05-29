@@ -4,6 +4,10 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $content_id
+ * @property string $content_type
+ */
 class Page extends Model
 {
     /**
@@ -19,5 +23,13 @@ class Page extends Model
     public function content()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function visits()
+    {
+        return $this->hasMany('Coyote\Page\Visit');
     }
 }

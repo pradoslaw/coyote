@@ -30,12 +30,6 @@ interface TopicRepositoryInterface extends RepositoryInterface
     public function isUnread($forumId, $markTime, $userId, $sessionId);
 
     /**
-     * @param int $topicId
-     * @param int $value
-     */
-    public function addViews($topicId, $value = 1);
-
-    /**
      * @param int $limit
      * @return mixed
      */

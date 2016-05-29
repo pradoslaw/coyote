@@ -14,7 +14,7 @@ use Coyote\Services\Elasticsearch\Factories\Job\MoreLikeThisFactory;
 class OfferController extends Controller
 {
     use FlagFactory;
-    
+
     /**
      * @var JobRepository
      */
@@ -66,7 +66,7 @@ class OfferController extends Controller
             $firm->description = $parser->parse($firm->description);
         }
 
-        $job->increment('visits');
+        $job->increment('views');
         $previous = url()->previous();
 
         if ($previous && mb_strlen($previous) < 200) {
