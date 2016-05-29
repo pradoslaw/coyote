@@ -147,6 +147,7 @@ elixir(function (mix) {
         'js/perfect-scrollbar.js',
         'js/animate-colors.js',
         'js/jquery-ui.js',
+        'js/wiki.js',
 
         'css/main.css',
         'css/auth.css',
