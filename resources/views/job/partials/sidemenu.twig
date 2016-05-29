@@ -10,6 +10,7 @@
             <span>{{ labels[not subscribed] }}</span>
         </a>
     </li>
+
     {% if can('update', job) %}
         <li>
             <a class="btn-edit" href="{{ route('job.submit', [job.id]) }}">
@@ -18,20 +19,28 @@
             </a>
         </li>
     {% endif %}
+
     <li>
         <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fa fa-fw fa-pencil"></i> Dodaj ofertę pracy</a>
     </li>
+
     {% if can('delete', job) %}
         <li>
             <a class="btn-delete" href="#modal-delete" data-toggle="modal"><i class="fa fa-fw fa-remove"></i> Usuń tę ofertę pracy</a>
         </li>
     {% endif %}
-    <li>
-        <a class="btn-move" href="javascript:"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
-    </li>
-    <li>
-        <a class="btn-report" href="{{ route('flag') }}" data-url="{{ route('job.offer', [job.id, job.slug]) }}" data-metadata="{{ {'job_id': job.id, 'permission': 'job-delete'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
-    </li>
+
+    {% if can('job-delete') %}
+        <li>
+            <a class="btn-move" href="javascript:"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
+        </li>
+    {% endif %}
+
+    {% if auth_check() %}
+        <li>
+            <a class="btn-report" href="{{ route('flag') }}" data-url="{{ route('job.offer', [job.id, job.slug]) }}" data-metadata="{{ {'job_id': job.id, 'permission': 'job-delete'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
+        </li>
+    {% endif %}
 </ul>
 
 {{ form_open({'url': route('job.delete', [job.id]) }) }}
