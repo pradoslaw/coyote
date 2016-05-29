@@ -16,15 +16,6 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     }
 
     /**
-     * @param integer $value
-     * @return string
-     */
-    private function strVal($value)
-    {
-        return "'" . $value . "'";
-    }
-
-    /**
      * @param array $topicsId
      * @return mixed
      */
@@ -42,11 +33,7 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
      */
     public function takeForPosts(array $postsId)
     {
-        return $this->build()
-                    ->addSelect(\DB::raw("metadata->>'post_id' AS post_id"))
-                    ->whereRaw("metadata->>'post_id' IN(" . $this->join($postsId) . ")")
-                    ->get()
-                    ->groupBy('post_id');
+        return $this->build('post_id', $postsId)->get()->groupBy('post_id');
     }
 
     /**
@@ -55,12 +42,16 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
      */
     public function takeForJob($jobId)
     {
-        $jobId = $this->strVal($jobId);
+        return $this->build('job_id', [$jobId])->first();
+    }
 
-        return $this->build()
-                    ->addSelect(\DB::raw("metadata->>'job_id' AS job_id"))
-                    ->whereRaw("metadata->>'job_id' IN($jobId)")
-                    ->first();
+    /**
+     * @param int $wikiId
+     * @return mixed
+     */
+    public function takeForWiki($wikiId)
+    {
+        return $this->build('wiki_id', [$wikiId])->first();
     }
 
     /**
@@ -73,14 +64,30 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     }
 
     /**
+     * @param string $index
+     * @param mixed $data
      * @return Builder
      */
-    private function build()
+    private function build($index, $data)
     {
-        return $this->model
-                    ->select(['flags.*', 'users.name AS user_name', 'flag_types.name'])
-                    ->join('flag_types', 'flag_types.id', '=', 'type_id')
-                    ->join('users', 'users.id', '=', 'user_id');
+        $data = $this->join($data);
+
+        return $this
+            ->model
+            ->select(['flags.*', 'users.name AS user_name', 'flag_types.name'])
+            ->join('flag_types', 'flag_types.id', '=', 'type_id')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->addSelect($this->raw("metadata->>'$index' AS $index"))
+            ->whereRaw("metadata->>'$index' IN($data)");
+    }
+
+    /**
+     * @param integer $value
+     * @return string
+     */
+    private function strVal($value)
+    {
+        return "'" . $value . "'";
     }
 
     /**

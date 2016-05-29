@@ -2,8 +2,8 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\GateFactory;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
@@ -15,7 +15,7 @@ use Lavary\Menu\Menu;
 
 class HomeController extends BaseController
 {
-    use GateFactory;
+    use GateFactory, FlagFactory;
 
     /**
      * @param string $view
@@ -120,7 +120,7 @@ class HomeController extends BaseController
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
         if (!empty($topics) && $this->getGateFactory()->allows('forum-delete')) {
-            $flags = app(FlagRepositoryInterface::class)->takeForTopics($topics->groupBy('id')->keys()->toArray());
+            $flags = $this->getFlagFactory()->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
         $postsPerPage = $this->postsPerPage($this->getRouter()->getCurrentRequest());

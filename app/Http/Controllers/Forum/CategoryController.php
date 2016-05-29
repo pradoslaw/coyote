@@ -2,13 +2,15 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Repositories\Contracts\FlagRepositoryInterface;
+use Coyote\Http\Factories\FlagFactory;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
 {
+    use FlagFactory;
+    
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
@@ -41,7 +43,7 @@ class CategoryController extends BaseController
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
         if ($topics !== false && $this->getGateFactory()->allows('delete', $forum)) {
-            $flags = app(FlagRepositoryInterface::class)->takeForTopics($topics->groupBy('id')->keys()->toArray());
+            $flags = $this->getFlagFactory()->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
         $collapse = $this->collapse();

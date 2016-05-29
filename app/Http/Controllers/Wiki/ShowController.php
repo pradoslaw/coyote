@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
+use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Forms\Wiki\CommentForm;
 use Coyote\Repositories\Criteria\Wiki\DirectAncestor;
 use Coyote\Repositories\Criteria\Wiki\OnlyWithChildren;
@@ -9,6 +10,8 @@ use Illuminate\Http\Request;
 
 class ShowController extends BaseController
 {
+    use FlagFactory;
+
     /**
      * @param Request $request
      * @return \Illuminate\View\View
@@ -37,6 +40,7 @@ class ShowController extends BaseController
             'folders' => $this->getFolders($wiki->path_id),
             'children' => $this->getCatalog($wiki->path_id),
             'subscribed' => $wiki->subscribers()->forUser($this->userId)->exists(),
+            'flag' => $this->getGateFactory()->allows('wiki-admin') ? $this->getFlagFactory()->takeForWiki($wiki->id) : '',
             'form' => $this->createForm(CommentForm::class, [], [
                 'url' => route('wiki.comment.save', [$wiki->id])
             ])

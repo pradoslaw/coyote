@@ -4,15 +4,17 @@ namespace Coyote\Http\Controllers\Job;
 
 use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Factories\FlagFactory;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
 use Coyote\Firm;
 use Coyote\Job;
 use Coyote\Services\Elasticsearch\Factories\Job\MoreLikeThisFactory;
 
 class OfferController extends Controller
 {
+    use FlagFactory;
+    
     /**
      * @var JobRepository
      */
@@ -88,7 +90,7 @@ class OfferController extends Controller
 
         // search related topics
         $mlt = $this->job->search($build)->getSource();
-        
+
         return $this->view('job.offer', [
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
@@ -98,13 +100,5 @@ class OfferController extends Controller
         ])->with(
             compact('job', 'firm', 'tags', 'flag', 'mlt')
         );
-    }
-
-    /**
-     * @return FlagRepository
-     */
-    protected function getFlagFactory()
-    {
-        return app(FlagRepository::class);
     }
 }

@@ -5,9 +5,9 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
+use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Factories\StreamFactory;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 
 class TopicController extends BaseController
 {
-    use StreamFactory, GateFactory, CacheFactory;
+    use StreamFactory, GateFactory, CacheFactory, FlagFactory;
 
     /**
      * @param \Coyote\Forum $forum
@@ -187,7 +187,7 @@ class TopicController extends BaseController
         // @todo Jezeli raportowany jest post na forum to sprawdzane jest globalne uprawnienie danego
         // uzytkownika. Oznacza to, ze lokalni moderatorzy nie beda mogli czytac raportow
         if ($gate->allows('forum-delete')) {
-            $flags = app(FlagRepositoryInterface::class)->takeForPosts($postsId);
+            $flags = $this->getFlagFactory()->takeForPosts($postsId);
         }
 
         return $flags;

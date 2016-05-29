@@ -23,6 +23,12 @@ interface FlagRepositoryInterface extends RepositoryInterface
     public function takeForJob($jobId);
 
     /**
+     * @param int $wikiId
+     * @return mixed
+     */
+    public function takeForWiki($wikiId);
+
+    /**
      * @param $key
      * @param $value
      */

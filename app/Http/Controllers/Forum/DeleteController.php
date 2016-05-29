@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\PostWasDeleted;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface;
+use Coyote\Http\Factories\FlagFactory;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Activities\Restore as Stream_Restore;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 
 class DeleteController extends BaseController
 {
+    use FlagFactory;
+    
     /**
      * Delete post or whole thread
      *
@@ -87,7 +89,7 @@ class DeleteController extends BaseController
 
                     $topic->delete();
                     // delete topic's flag
-                    app(FlagRepositoryInterface::class)->deleteBy('topic_id', $topic->id);
+                    $this->getFlagFactory()->deleteBy('topic_id', $topic->id);
 
                     if ($subscribersId) {
                         app('alert.topic.delete')
@@ -122,7 +124,7 @@ class DeleteController extends BaseController
 
                     $post->delete();
                     // delete post's flags
-                    app(FlagRepositoryInterface::class)->deleteBy('post_id', $post->id);
+                    $this->getFlagFactory()->deleteBy('post_id', $post->id);
 
                     if ($subscribersId) {
                         app('alert.post.delete')
