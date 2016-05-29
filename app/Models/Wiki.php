@@ -2,7 +2,7 @@
 
 namespace Coyote;
 
-use Coyote\Wiki\Page;
+use Coyote\Wiki\Page as Wiki_Page;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -132,7 +132,7 @@ class Wiki extends Model
     public function increment($column, $amount = 1, array $extra = [])
     {
         // we cannot update view so let's update "views" column in wiki_pages table
-        $page = new Page();
+        $page = new Wiki_Page();
         $page->timestamps = false;
 
         $page->where('id', $this->id)->update([$column => $this->views + $amount]);
