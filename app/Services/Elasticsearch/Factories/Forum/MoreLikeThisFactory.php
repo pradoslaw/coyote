@@ -33,6 +33,8 @@ class MoreLikeThisFactory
         $builder->addFilter(new Forum($forumId));
         $builder->addFilter(new NotTerm('topic_id', $topic->id));
 
+        $builder->setSize(0, 10);
+
         return $builder;
     }
 }
