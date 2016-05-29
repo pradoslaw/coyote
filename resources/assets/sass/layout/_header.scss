@@ -75,6 +75,7 @@ header.navbar-default {
     padding: 2px 3px;
     top: 4px;
     right: -10px;
+    z-index: 1;
 
     @media screen and (max-width: $screen-sm) {
       display: none;
