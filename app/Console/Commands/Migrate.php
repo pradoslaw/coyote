@@ -757,7 +757,6 @@ class Migrate extends Command
                 ->join('post AS p2', 'p2.post_id', '=', 'topic_first_post_id')
                 ->orderBy('topic_id')
                 ->chunk(100000, function ($sql) use ($bar) {
-
                     foreach ($sql as $row) {
                         $row = $this->skipPrefix('topic_', (array) $row);
 
@@ -883,7 +882,6 @@ class Migrate extends Command
                 ->select(['post.*', 'text_content AS post_content'])
                 ->join('post_text', 'text_id', '=', 'post_text')
                 ->chunk(50000, function ($sql) use ($bar) {
-
                     foreach ($sql as $row) {
                         $row = $this->skipPrefix('post_', (array) $row);
 
@@ -1083,7 +1081,6 @@ class Migrate extends Command
             DB::connection('mysql')
                 ->table('microblog')
                 ->chunk(50000, function ($sql) use ($bar) {
-
                     foreach ($sql as $row) {
                         $row = $this->skipPrefix('microblog_', (array) $row);
 
