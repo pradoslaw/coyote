@@ -3,8 +3,6 @@
 namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Services\Declination\Declination;
-use Coyote\Services\Media\MediaInterface;
-use Coyote\Services\Thumbnail\Objects\Microblog;
 use Twig_Extension;
 use Twig_SimpleFunction;
 use Twig_SimpleFilter;
@@ -27,8 +25,7 @@ class Misc extends Twig_Extension
         return [
             new Twig_SimpleFunction('timer', [$this, 'getGenerationTime']),
             new Twig_SimpleFunction('declination', [Declination::class, 'format']),
-            new Twig_SimpleFunction('sortable', [$this, 'sortable'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('thumbnail', [$this, 'thumbnail'])
+            new Twig_SimpleFunction('sortable', [$this, 'sortable'], ['is_safe' => ['html']])
         ];
     }
 
@@ -63,18 +60,6 @@ class Misc extends Twig_Extension
         } else {
             return number_format($timer, 2) . ' s';
         }
-    }
-
-    /**
-     * Generate thumbnail URL for microblog attachments...
-     *
-     * @param MediaInterface $media
-     * @return string
-     */
-    public function thumbnail(MediaInterface $media)
-    {
-        // @todo obecnie generuje miniatury tylko dla mikroblogow. moze warto to rozszerzyc?
-        return $media->getFactory()->getThumbnail()->url(new Microblog())->make($media->url());
     }
 
     /**
