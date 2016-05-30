@@ -35,7 +35,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->pattern('forum', '[A-Za-z\-\_\/]+');
         $router->pattern('tag', '([a-ząęśżźćółń0-9\-\.\#\+])+');
         $router->pattern('slug', '.*');
-        $router->pattern('path', '.*');
+        $router->pattern('path', '.*'); // being used on wiki routes
 
         $router->model('user', UserRepositoryInterface::class);
         $router->model('post', PostRepositoryInterface::class);
