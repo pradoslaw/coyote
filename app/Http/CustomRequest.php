@@ -12,6 +12,6 @@ class CustomRequest extends Request
      */
     public function browser()
     {
-        return filter_var($this->header('User-Agent'), FILTER_SANITIZE_STRING);
+        return str_limit(filter_var($this->header('User-Agent'), FILTER_SANITIZE_STRING), 900);
     }
 }
