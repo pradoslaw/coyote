@@ -19,6 +19,7 @@ use Coyote\Forum;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Wiki;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Console\Kernel;
 
 class PageListener implements ShouldQueue
 {
@@ -28,12 +29,18 @@ class PageListener implements ShouldQueue
     protected $page;
 
     /**
-     * PageListener constructor.
-     * @param PageRepository $page
+     * @var Kernel
      */
-    public function __construct(PageRepository $page)
+    protected $kernel;
+
+    /**
+     * @param PageRepository $page
+     * @param Kernel $kernel
+     */
+    public function __construct(PageRepository $page, Kernel $kernel)
     {
         $this->page = $page;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -41,6 +48,8 @@ class PageListener implements ShouldQueue
      */
     public function onTopicSave(TopicWasSaved $event)
     {
+        $this->purgePageViews();
+
         $event->topic->page()->updateOrCreate([
             'content_id' => $event->topic->id,
             'content_type' => Topic::class
@@ -107,6 +116,8 @@ class PageListener implements ShouldQueue
      */
     public function onJobSave(JobWasSaved $event)
     {
+        $this->purgePageViews();
+
         $event->job->page()->updateOrCreate([
             'content_id'    => $event->job->id,
             'content_type'  => Job::class,
@@ -129,6 +140,8 @@ class PageListener implements ShouldQueue
      */
     public function onWikiSave(WikiWasSaved $event)
     {
+        $this->purgePageViews();
+
         $event->wiki->page()->updateOrCreate([
             'content_id'    => $event->wiki->id,
             'content_type'  => Wiki::class,
@@ -202,5 +215,13 @@ class PageListener implements ShouldQueue
             'Coyote\Events\WikiWasDeleted',
             'Coyote\Listeners\PageListener@onWikiDelete'
         );
+    }
+
+    // before changing page path we MUST save page views that are stored in redis
+    private function purgePageViews()
+    {
+        if (!app()->environment('local', 'dev')) {
+            $this->kernel->call('coyote:counter');
+        }
     }
 }
