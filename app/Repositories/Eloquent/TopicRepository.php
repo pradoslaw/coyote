@@ -290,7 +290,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     ->on('pages.content_type', '=', $this->raw('?'));
             })
             ->leftJoin('page_visits AS pv', function ($join) use ($userId) {
-                    $join->on('pv.page_id', '=', 'pages.id')->on('pv.user_id', '=', $this->raw($userId));
+                $join->on('pv.page_id', '=', 'pages.id')->on('pv.user_id', '=', $this->raw($userId));
             })
             ->addBinding($this->model(), 'join');
 
