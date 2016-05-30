@@ -79,7 +79,7 @@ class HomeController extends Controller
             if (substr($snake, 0, 3) === 'get') {
                 $name = substr($snake, 4);
 
-                if (in_array($name, ['reputation', 'newest', 'voted', 'blog'])) {
+                if (in_array($name, ['reputation', 'newest', 'voted', 'blog', 'patronage'])) {
                     $result[$name] = $cache->remember('homepage:' . $name, 30, function () use ($method) {
                         return $this->$method();
                     });
@@ -185,5 +185,19 @@ class HomeController extends Controller
         /** @var Viewers $viewers */
         $viewers = app(Viewers::class);
         return $viewers->render();
+    }
+
+    /**
+     * @return array
+     */
+    private function getPatronage()
+    {
+        /** @var \Coyote\Wiki $parent */
+        $parent = $this->wiki->findByPath('Patronat');
+        if (!$parent) {
+            return [];
+        }
+
+        return $parent->children()->latest()->limit(1)->first(['path', 'title', 'excerpt']);
     }
 }

@@ -181,13 +181,14 @@
     }
   }
 
-  h6 {
-    color: #949494;
-    font-size: $font-size-base;
-  }
+  // data wydarzenia (aktualnie nie ma)
+  //h6 {
+  //  color: #949494;
+  //  font-size: $font-size-base;
+  //}
 
   .patronage-content {
-    padding-top: 10px;
+    padding-top: 5px;
     line-height: 130%;
     font-size: $font-size-small;
 
@@ -267,7 +268,7 @@
     span.microblog:after {
       content: $fa-var-male;
     }
-    
+
     span.comment:after {
       content: $fa-var-comments;
     }

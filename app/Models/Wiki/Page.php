@@ -19,6 +19,8 @@ class Page extends Model
 {
     use SoftDeletes;
 
+    const DEFAULT_TEMPLATE = 'show';
+
     /**
      * @var string
      */
@@ -35,6 +37,20 @@ class Page extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    protected $attributes = [
+        'template' => self::DEFAULT_TEMPLATE
+    ];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'is_locked' => 'bool'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

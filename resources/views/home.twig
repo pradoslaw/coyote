@@ -155,19 +155,19 @@
 
             <section id="box-patronage" class="box">
                 <div class="panel panel-patronage">
-                    <h3><a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="http://4programmers.net/Patronat" data-category="Patronage" data-value="Logo">Patronujemy</a></h3>
+                    <h3><a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}" data-category="Patronage" data-value="Logo">Patronujemy</a></h3>
 
                     <div class="panel-body">
-                        <h4><a href="http://4programmers.net/Patronat/Bezpłatne_Targi_Kariera_IT_w_Katowicach">Bezpłatne Targi Kariera IT w Katowicach</a></h4>
+                        <h4><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h4>
 
-                        <h6>12 września 2015, Katowice</h6>
+                        {#<h6>12 września 2015, Katowice</h6>#}
                         <div class="patronage-content">
                             <!--							<a href="--><!--?//= url('Patronat'); ?--><!--"><img src="--><!--?//= Url::site(); ?--><!--template/img/apple-touch.png" width="65" /></a>-->
-                            <a href="http://4programmers.net/Patronat/Bezpłatne_Targi_Kariera_IT_w_Katowicach">12 września w Katowicach w Hotelu Qubus Prestige odbędzie się kolejna edycja bezpłatnych targów Kariera IT. Wydarzenie jest skierowane do specjalistów IT oraz studentów ostatnich lat kierunków informatycznych. Dla uczestników targów przygotowane są liczne atrakcje: prelekcje merytoryczne, prezentacje ofert pracy, pokazy nowinek technologicznych i konkursy z nagrodami.</a>
+                            <a href="{{ url(patronage.path) }}">{{ patronage.excerpt }}</a>
                         </div>
 
                         <div class="patronage-footer">
-                            <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="http://4programmers.net/Patronat">
+                            <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}">
                                 <i class="fa fa-arrow-right fa-fw"></i> Zainteresowany patronatem? Dowiedz się więcej
                             </a>
                         </div>
