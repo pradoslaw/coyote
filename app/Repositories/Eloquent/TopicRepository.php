@@ -246,6 +246,8 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     /**
      * @param int $userId
      * @param int $limit
+     *
+     * @todo sprawdzic na bazie produkcyjnej czy takie zapytanie nie jest zbyt wolne
      */
     public function interesting($userId, $limit = 7)
     {
@@ -282,13 +284,19 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     ->limit($limit);
 
         if ($userId) {
-            $sql->leftJoin('topic_visits AS tv', function ($join) use ($userId) {
-                $join->on('tv.topic_id', '=', 'topics.id')->on('tv.user_id', '=', $this->raw($userId));
-            });
+            $sql->leftJoin('pages', function ($join) {
+                $join
+                    ->on('pages.content_id', '=', $this->raw('topics.id'))
+                    ->on('pages.content_type', '=', $this->raw('?'));
+            })
+            ->leftJoin('page_visits AS pv', function ($join) use ($userId) {
+                    $join->on('pv.page_id', '=', 'pages.id')->on('pv.user_id', '=', $this->raw($userId));
+            })
+            ->addBinding($this->model(), 'join');
 
             $algo .= ' - CASE
-                            WHEN tv.updated_at IS NOT NULL AND tv.updated_at > last_post_created_at
-                            THEN (extract(epoch from tv.updated_at) - extract(epoch from last_post_created_at)) / 450
+                            WHEN pv.updated_at IS NOT NULL AND pv.updated_at > last_post_created_at
+                            THEN (extract(epoch from pv.updated_at) - extract(epoch from last_post_created_at)) / 450
                             ELSE 0
                         END';
         }

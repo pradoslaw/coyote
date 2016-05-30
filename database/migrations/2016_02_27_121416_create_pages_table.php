@@ -20,6 +20,8 @@ class CreatePagesTable extends Migration
             $table->string('path', 2000);
             $table->integer('content_id')->nullable();
             $table->string('content_type')->nullable();
+            
+            $table->index(['content_id', 'content_type']);
         });
 
         DB::unprepared('CREATE INDEX "pages_path_index" ON "pages" USING btree (LOWER(path))');

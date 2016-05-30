@@ -1170,6 +1170,9 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    /**
+     * @todo tabela topic_visits juz nie istnieje
+     */
     public function migrateTopicVisits()
     {
         $this->info('Topic visits...');
