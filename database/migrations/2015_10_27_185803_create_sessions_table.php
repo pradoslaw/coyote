@@ -19,8 +19,8 @@ class CreateSessionsTable extends Migration
             $table->text('payload');
             $table->dateTimeTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->dateTimeTz('updated_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
-            $table->string('url');
-            $table->string('browser');
+            $table->string('url', 4000);
+            $table->string('browser', 1000);
             $table->string('robot')->nullable();
         });
     }
