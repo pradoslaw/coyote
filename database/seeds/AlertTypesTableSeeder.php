@@ -51,13 +51,13 @@ class AlertTypesTableSeeder extends Seeder
                       'profile'  => true,
                       'email'    => true
         ]);
-        Type::create(['id'       => Alert::PAGE,
+        Type::create(['id'       => Alert::WIKI_SUBSCRIBER,
                       'name'     => 'Powiadamiaj o zmianie w obserwowanym tekście',
                       'headline' => 'Modyfikacja strony',
                       'profile'  => true,
                       'email'    => true
         ]);
-        Type::create(['id'       => Alert::COMMENT,
+        Type::create(['id'       => Alert::WIKI_COMMENT,
                       'name'     => 'Powiadamiaj o komentarzach w obserwowanych artykułach',
                       'headline' => '{sender} dodał komentarz',
                       'profile'  => true,
