@@ -71,6 +71,9 @@ class AlertServiceProvider extends ServiceProvider
             'alert.topic.delete',
             'alert.topic.move',
             'alert.topic.subject',
+            
+            'alert.wiki.subscriber',
+            'alert.wiki.comment',
 
             'alert.pm'
         ];

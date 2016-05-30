@@ -12,8 +12,8 @@ class Alert extends Model
     const TOPIC_DELETE = 4;
     const POST_DELETE = 5;
     const POST_SUBSCRIBER = 6;
-    const PAGE = 7;
-    const COMMENT = 8;
+    const WIKI_SUBSCRIBER = 7;
+    const WIKI_COMMENT = 8;
     const POST_EDIT = 10;
     const TOPIC_SUBJECT = 11;
     const POST_ACCEPT = 12;

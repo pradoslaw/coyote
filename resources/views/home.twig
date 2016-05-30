@@ -153,27 +153,29 @@
                 </div>
             </section>
 
-            <section id="box-patronage" class="box">
-                <div class="panel panel-patronage">
-                    <h3><a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}" data-category="Patronage" data-value="Logo">Patronujemy</a></h3>
+            {% if patronage %}
+                <section id="box-patronage" class="box">
+                    <div class="panel panel-patronage">
+                        <h3><a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}" data-category="Patronage" data-value="Logo">Patronujemy</a></h3>
 
-                    <div class="panel-body">
-                        <h4><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h4>
+                        <div class="panel-body">
+                            <h4><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h4>
 
-                        {#<h6>12 września 2015, Katowice</h6>#}
-                        <div class="patronage-content">
-                            <!--							<a href="--><!--?//= url('Patronat'); ?--><!--"><img src="--><!--?//= Url::site(); ?--><!--template/img/apple-touch.png" width="65" /></a>-->
-                            <a href="{{ url(patronage.path) }}">{{ patronage.excerpt }}</a>
-                        </div>
+                            {#<h6>12 września 2015, Katowice</h6>#}
+                            <div class="patronage-content">
+                                <!--							<a href="--><!--?//= url('Patronat'); ?--><!--"><img src="--><!--?//= Url::site(); ?--><!--template/img/apple-touch.png" width="65" /></a>-->
+                                <a href="{{ url(patronage.path) }}">{{ patronage.excerpt }}</a>
+                            </div>
 
-                        <div class="patronage-footer">
-                            <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}">
-                                <i class="fa fa-arrow-right fa-fw"></i> Zainteresowany patronatem? Dowiedz się więcej
-                            </a>
+                            <div class="patronage-footer">
+                                <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}">
+                                    <i class="fa fa-arrow-right fa-fw"></i> Zainteresowany patronatem? Dowiedz się więcej
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            {% endif %}
 
             <section id="box-whats-new" class="box">
 

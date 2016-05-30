@@ -1,9 +1,7 @@
 <div class="clearfix"></div>
 
 <div id="box-comment">
-    {% if wiki.comments|length > 0 %}
-        <h4>{{ declination(wiki.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}</h4>
-    {% endif %}
+    <h4>{{ declination(wiki.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}</h4>
 
     {% if auth_check() %}
         <div class="row">

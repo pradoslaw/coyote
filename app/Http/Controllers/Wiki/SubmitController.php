@@ -39,6 +39,18 @@ class SubmitController extends BaseController
                 && ($wiki->wasRecentlyCreated || !$wiki->wasUserInvolved($this->userId));
             $this->wiki->save($wiki, $request);
 
+            $subscribersId = $wiki->subscribers()->lists('user_id')->toArray();
+
+            app('alert.wiki.subscriber')
+                ->with([
+                    'subject' => $wiki->title,
+                    'users_id' => $subscribersId,
+                    'url' => route('wiki.show', [$wiki->path], false),
+                    'sender_name' => auth()->user()->name,
+                    'excerpt' => excerpt($wiki->text)
+                ])
+                ->notify();
+
             if ($subscribe) {
                 $wiki->subscribers()->create(['user_id' => $this->userId]);
             }
