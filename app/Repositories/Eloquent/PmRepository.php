@@ -75,7 +75,9 @@ class PmRepository extends Repository implements PmRepositoryInterface
     {
         $sub = $this->model->select([
                     'pm.*',
-                    \DB::raw(sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS host_id', Pm::SENTBOX))
+                    $this->raw(
+                        sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS host_id', Pm::SENTBOX)
+                    )
                 ])
                 ->whereRaw("user_id = $userId")
                 ->whereRaw("root_id = '$rootId'")
@@ -153,7 +155,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
      */
     private function prepare($userId)
     {
-        return \DB::table(\DB::raw('(' . $this->subSql($userId)->toSql() . ') AS m'))
+        return \DB::table($this->raw('(' . $this->subSql($userId)->toSql() . ') AS m'))
             ->select([
                 'm.id',
                 'm.author_id',
@@ -179,8 +181,9 @@ class PmRepository extends Repository implements PmRepositoryInterface
      */
     private function subSql($userId)
     {
-        return $this->model
-            ->select([\DB::raw('DISTINCT ON (root_id) pm.*')])
+        return $this
+            ->model
+            ->select([$this->raw('DISTINCT ON (root_id) pm.*')])
             ->whereRaw("user_id = $userId")
             ->orderBy('root_id')
             ->orderBy('pm.id', 'DESC');

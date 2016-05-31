@@ -71,6 +71,26 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
     }
 
     /**
+     * @param int $topicId
+     * @return mixed
+     */
+    public function takeForTopic($topicId)
+    {
+        return $this
+            ->model
+            ->whereNested(function ($query) use ($topicId) {
+                $query->where('target.objectType', 'topic')
+                    ->where('target.id', $topicId);
+            })
+            ->whereNested(function ($query) use ($topicId) {
+                $query->where('object.objectType', 'topic')
+                    ->where('object.id', $topicId);
+            }, 'or')
+            ->orderBy('_id', 'DESC')
+            ->paginate();
+    }
+
+    /**
      * Transform string to array and converts to lower case
      *
      * @param $object

@@ -16,6 +16,11 @@ class Page extends Model
      * @var array
      */
     protected $fillable = ['title', 'path'];
+    
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

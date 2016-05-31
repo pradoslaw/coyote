@@ -32,4 +32,19 @@ class PageRepository extends Repository implements PageRepositoryInterface
     {
         return $this->model->select()->where('content_id', $id)->where('content_type', $content)->first();
     }
+
+    /**
+     * @param int $pageId
+     * @return mixed
+     */
+    public function visits($pageId)
+    {
+        return $this
+            ->model
+            ->select(['page_visits.*', 'users.name AS user_name', 'users.is_active', 'users.is_blocked'])
+            ->join('page_visits', 'page_visits.page_id', '=', 'pages.id')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->where('pages.id', $pageId)
+            ->get();
+    }
 }

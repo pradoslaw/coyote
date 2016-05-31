@@ -3,33 +3,24 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Factories\StreamFactory;
-use Coyote\Repositories\Contracts\StreamRepositoryInterface as Stream;
+use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 
 class StreamController extends BaseController
 {
     use StreamFactory;
 
     /**
-     * @param $topic
-     * @param Stream $stream
+     * @param \Coyote\Topic $topic
+     * @param StreamRepository $stream
+     * @param PageRepository $page
      * @return mixed
      */
-    public function index($topic, Stream $stream)
+    public function index($topic, StreamRepository $stream, PageRepository $page)
     {
-        $forum = $this->forum->find($topic->forum_id, ['id', 'slug', 'name', 'parent_id']);
-        $this->authorize('update', $forum);
+        $this->authorize('update', $topic->forum);
 
-        $activities = $stream->whereNested(function ($query) use ($topic) {
-            $query->where('target.objectType', 'topic')
-                    ->where('target.id', $topic->id);
-        })
-        ->whereNested(function ($query) use ($topic) {
-            $query->where('object.objectType', 'topic')
-                    ->where('object.id', $topic->id);
-        }, 'or')
-        ->orderBy('_id', 'DESC')
-        ->paginate();
-
+        $activities = $stream->takeForTopic($topic->id);
         $collection = $activities->items();
 
         // nie wiem czemu przy zastosowaniu pagination() musze tutaj rzutowac te elementy na array
@@ -42,10 +33,12 @@ class StreamController extends BaseController
 
         $decorate = $this->getStreamFactory()->decorate($collection);
 
-        $this->breadcrumb($forum);
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
+        $visits = $page->visits($topic->page()->getResults()->id);
+//dd($visits);
+        $this->breadcrumb($topic->forum);
+        $this->breadcrumb->push($topic->subject, route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug]));
         $this->breadcrumb->push('Dziennik zdarzeń', route('forum.stream', [$topic->id]));
 
-        return $this->view('forum.stream')->with(compact('topic', 'forum', 'activities', 'decorate'));
+        return $this->view('forum.stream')->with(compact('topic', 'forum', 'activities', 'decorate', 'visits'));
     }
 }

@@ -16,4 +16,10 @@ interface PageRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function findByContent($id, $content);
+
+    /**
+     * @param int $pageId
+     * @return mixed
+     */
+    public function visits($pageId);
 }

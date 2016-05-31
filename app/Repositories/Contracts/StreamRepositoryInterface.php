@@ -25,4 +25,10 @@ interface StreamRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function findByObject($objects, $id = [], $verbs = []);
+
+    /**
+     * @param int $topicId
+     * @return mixed
+     */
+    public function takeForTopic($topicId);
 }

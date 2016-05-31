@@ -23,4 +23,9 @@ class Visit extends Model
      * @var string
      */
     protected $table = 'page_visits';
+
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
 }
