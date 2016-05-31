@@ -159,7 +159,8 @@ elixir(function (mix) {
         'css/profile.css',
         'css/job.css',
         'css/errors.css',
-        'css/pastebin.css'
+        'css/pastebin.css',
+        'css/adm.css'
     ]);
 });
 
