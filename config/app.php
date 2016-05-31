@@ -193,6 +193,8 @@ return [
         Coyote\Providers\MediaServiceProvider::class,
         // Przegladarnie logow laravela w panelu administracyjnym
         Coyote\Providers\LogViewerProvider::class,
+        // Generowanie mapy strony
+        Coyote\Providers\SitemapProvider::class,
 
         // Klasa wspierajaca budowanie znacznikow HTML
         Collective\Html\HtmlServiceProvider::class,

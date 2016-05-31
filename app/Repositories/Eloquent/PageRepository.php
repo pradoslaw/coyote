@@ -34,6 +34,16 @@ class PageRepository extends Repository implements PageRepositoryInterface
     }
 
     /**
+     * Build query for sitemap.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function forSitemap()
+    {
+        return $this->model->where('allow_sitemap', 1);
+    }
+
+    /**
      * @param int $pageId
      * @return mixed
      */

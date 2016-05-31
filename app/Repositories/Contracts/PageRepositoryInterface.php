@@ -18,6 +18,13 @@ interface PageRepositoryInterface extends RepositoryInterface
     public function findByContent($id, $content);
 
     /**
+     * Build query for sitemap.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function forSitemap();
+
+    /**
      * @param int $pageId
      * @return mixed
      */

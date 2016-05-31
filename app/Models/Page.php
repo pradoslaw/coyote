@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $content_id
  * @property string $content_type
+ * @property string $path
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  */
 class Page extends Model
 {
