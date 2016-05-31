@@ -20,6 +20,7 @@ class CreatePagesTable extends Migration
             $table->string('path', 2000);
             $table->integer('content_id')->nullable();
             $table->string('content_type')->nullable();
+            $table->tinyInteger('allow_sitemap')->default(1);
             
             $table->index(['content_id', 'content_type']);
         });
