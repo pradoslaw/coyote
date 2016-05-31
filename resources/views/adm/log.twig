@@ -26,7 +26,7 @@
                                         <a href="#log-{{ loop.index }}" data-toggle="collapse" title="{{ log.file }} [{{ log.line }}]">{{ log.message }}</a>
 
                                         <code class="collapse" id="log-{{ loop.index }}">
-                                            {{ (log.stack|join('<br>')|raw) }}
+                                            {{ log.stack ? log.stack|join('<br>')|raw : '--' }}
                                         </code>
                                     </td>
                                 </tr>
