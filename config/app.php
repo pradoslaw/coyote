@@ -190,7 +190,9 @@ return [
         // Serwis do tworzenia miniatur (logo, zdjecie)
         Coyote\Providers\ThumbnailServiceProvider::class,
         // Uploadowanie zalacznikow, zdjec oraz generowanie URL do tychze plikow
-        \Coyote\Providers\MediaServiceProvider::class,
+        Coyote\Providers\MediaServiceProvider::class,
+        // Przegladarnie logow laravela w panelu administracyjnym
+        Coyote\Providers\LogViewerProvider::class,
 
         // Klasa wspierajaca budowanie znacznikow HTML
         Collective\Html\HtmlServiceProvider::class,

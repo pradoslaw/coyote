@@ -6,6 +6,12 @@ body.fixed-top {
   padding-top: 0;
 }
 
+// override class from main.scss
+.max-width {
+  width: auto;
+  max-width: none;
+}
+
 #wrapper {
   padding: 0 15px 0 15px;
   margin-left: 222px;
@@ -136,6 +142,11 @@ body.fixed-top {
     padding: 10px 15px;
   }
 }
+
+// Tabela z logami laravela
+// ---------------------------------------------------------
+
+@import "adm/log";
 
 //#page-header {
 //  background-color: #fff;

@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.table-log {
+  > tbody > tr > td {
+    font-size: 12px;
+
+    a {
+      color: $link-color-darker;
+    }
+  }
+}

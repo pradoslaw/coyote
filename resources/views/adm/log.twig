@@ -1,0 +1,40 @@
+{% extends 'adm.base' %}
+{% block title %}Logi {{ parent() }}{% endblock %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Logi systemowe</div>
+                <div class="panel-body">
+                    {{ logs.links()|raw }}
+
+                    <table class="table table-bordered table-striped table-log table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Typ</th>
+                                <th>{{ sortable('date', 'Data i czas', ['date', 'desc']) }}</th>
+                                <th>Komunikat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                                <tr>
+                                    <td>{{ log.level }}</td>
+                                    <td>{{ log.date }}</td>
+                                    <td>
+                                        <a href="#log-{{ loop.index }}" data-toggle="collapse" title="{{ log.file }} [{{ log.line }}]">{{ log.message }}</a>
+
+                                        <code class="collapse" id="log-{{ loop.index }}">
+                                            {{ (log.stack|join('<br>')|raw) }}
+                                        </code>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

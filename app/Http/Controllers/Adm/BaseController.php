@@ -38,7 +38,17 @@ class BaseController extends Controller
             $forum->add('Uprawnienia', ['route' => 'adm.forum.access']);
 
             $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper-o fa-fw'));
-            $menu->add('Logi', ['route' => 'adm.log'])->prepend($fa('fa-file-o fa-fw'));
+            
+            $log = $menu->add('Logi', ['route' => 'adm.log'])->prepend($fa('fa-file-o fa-fw'));
+            $log->link->attr(['data-toggle' => "collapse", 'aria-expanded' => "false", 'aria-controls' => "menu-log"]);
+            $log->link->href('#menu-log');
+
+            $logViewer = $this->getLogViewer();
+            $files = $logViewer->getFiles();
+
+            foreach ($files as $file) {
+                $log->add($file, route('adm.log', ['file' => $file]));
+            }
         });
     }
 
@@ -48,5 +58,13 @@ class BaseController extends Controller
     protected function getMenuFactory()
     {
         return app(Menu::class);
+    }
+
+    /**
+     * @return \Coyote\Services\LogViewer\LogViewer
+     */
+    protected function getLogViewer()
+    {
+        return app('log-viewer');
     }
 }

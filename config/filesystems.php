@@ -50,6 +50,10 @@ return [
             'driver' => 'local',
             'root'   => public_path() . '/uploads',
         ],
+        'log'        => [
+            'driver' => 'local',
+            'root'   => storage_path() . '/logs'
+        ],
         's3'        => [
             'driver' => 's3',
             'key'    => 'your-key',
