@@ -1,11 +1,23 @@
 function Realtime() {
     'use strict';
 
+    /**
+     * default interal between retries
+     *
+     * @type {number}
+     */
     var DEFAULT_INTERVAL = 5000;
+
+    /**
+     * maximum number of failure retries before giving up
+     *
+     * @type {number}
+     */
+    var MAX_RETRIES = 50;
 
     var self = this;
     var handler = null;
-    var timerId = null;
+    var retries = 0;
 
     this._callbacks = {};
 
@@ -32,11 +44,7 @@ function Realtime() {
         );
 
         handler.onopen = function (e) {
-            if (timerId !== null) {
-                clearInterval(timerId);
-
-                timerId = null;
-            }
+            retries = 0;
         };
 
         handler.onmessage = function (e) {
@@ -48,8 +56,8 @@ function Realtime() {
         };
 
         handler.onclose = function (e) {
-            if (timerId === null) {
-                timerId = setInterval(connect, DEFAULT_INTERVAL);
+            if (++retries < MAX_RETRIES) {
+                setTimeout(connect, DEFAULT_INTERVAL * retries);
             }
         };
     }
