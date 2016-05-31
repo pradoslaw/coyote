@@ -15,13 +15,20 @@ abstract class Aggs implements DslInterface
     protected $field;
 
     /**
+     * @var int
+     */
+    protected $size ;
+
+    /**
      * Aggs constructor.
      * @param string $name
      * @param string $field
+     * @param int $size
      */
-    public function __construct($name, $field)
+    public function __construct($name, $field, $size = 15)
     {
         $this->name = $name;
         $this->field = $field;
+        $this->size = $size;
     }
 }

@@ -10,7 +10,7 @@ class Topic extends Aggs\Terms implements DslInterface
 {
     public function __construct()
     {
-        parent::__construct('topic_id', 'topic_id');
+        parent::__construct('topic_id', 'topic_id', 10);
     }
 
     /**
