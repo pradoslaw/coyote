@@ -6,7 +6,7 @@ trait FilesystemFactory
 {
     /**
      * @param string $disk
-     * @return \Illuminate\Contracts\Filesystem\Filesystem;
+     * @return \Illuminate\Contracts\Filesystem\Filesystem
      */
     private function getFilesystemFactory($disk = null)
     {

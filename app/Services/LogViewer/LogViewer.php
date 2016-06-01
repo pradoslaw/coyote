@@ -141,7 +141,7 @@ class LogViewer
     }
 
     /**
-     * @param $line
+     * @param string $line
      * @param $matches
      * @return int
      */

@@ -92,7 +92,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
             if ($count === 2 && $alert->user->name !== $alert->senders[1]->name) {
                 $sender = $alert->user->name . ' (oraz ' . $alert->senders[1]->name . ')';
             } elseif ($count > 2) {
-                $sender = $alert->user->name . ' (oraz ' . Declination::format($count, ['osoba', 'osoby', 'osób']) .')';
+                $sender = $alert->user->name . ' (oraz ' . Declination::format($count, ['osoba', 'osoby', 'osób']) . ')';
             } else {
                 $sender = $alert->user->name;
             }

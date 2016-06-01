@@ -134,7 +134,7 @@ class Sitemap
     }
 
     /**
-     * @param $filename
+     * @param string $filename
      * @return string
      */
     protected function path($filename)

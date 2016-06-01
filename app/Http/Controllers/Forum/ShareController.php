@@ -25,6 +25,6 @@ class ShareController extends BaseController
         }
 
         $route = route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug]);
-        return redirect($route .  '?p=' . $id . '#id' . $id);
+        return redirect($route . '?p=' . $id . '#id' . $id);
     }
 }

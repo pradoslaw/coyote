@@ -7,7 +7,6 @@ use Coyote\Http\Controllers\User\UserMenuTrait;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\User\Skill;
 
 class HomeController extends Controller
 {

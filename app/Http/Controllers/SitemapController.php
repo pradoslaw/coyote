@@ -8,7 +8,7 @@ class SitemapController extends Controller
 {
     /**
      * @param PageRepository $page
-     * @return $this
+     * @return \Illuminate\Http\Response
      */
     public function index(PageRepository $page)
     {

@@ -2,12 +2,11 @@
 
 namespace Coyote\Services\Stream\Objects;
 
-use Coyote\Microblog as Model;
-
 class Comment extends Object
 {
     /**
      * @param array ...$args
+     * @param \Coyote\Post $args
      * @return $this
      * @throws \Exception
      */
