@@ -199,7 +199,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * Sprawdza uprawnienie danego usera (w bazie danych) do wykonania danej czynnosci. Sprawdzane
      * sa wszystkie grupy uzytkownika do ktorych jest przypisany
      *
-     * @param $ability
+     * @param string $ability
      * @return bool
      */
     public function ability($ability)

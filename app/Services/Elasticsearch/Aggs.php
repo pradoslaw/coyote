@@ -17,7 +17,7 @@ abstract class Aggs implements DslInterface
     /**
      * @var int
      */
-    protected $size ;
+    protected $size;
 
     /**
      * Aggs constructor.
