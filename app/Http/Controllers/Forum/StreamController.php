@@ -34,7 +34,7 @@ class StreamController extends BaseController
         $decorate = $this->getStreamFactory()->decorate($collection);
 
         $visits = $page->visits($topic->page()->getResults()->id);
-//dd($visits);
+
         $this->breadcrumb($topic->forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug]));
         $this->breadcrumb->push('Dziennik zdarzeń', route('forum.stream', [$topic->id]));
