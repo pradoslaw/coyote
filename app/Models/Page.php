@@ -18,7 +18,7 @@ class Page extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'path'];
+    protected $fillable = ['title', 'path', 'allow_sitemap'];
     
     /**
      * @var string

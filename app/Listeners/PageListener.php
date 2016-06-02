@@ -4,6 +4,7 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
+use Coyote\Events\TopicWasMoved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\ForumWasSaved;
@@ -48,14 +49,31 @@ class PageListener implements ShouldQueue
      */
     public function onTopicSave(TopicWasSaved $event)
     {
+        $this->updateTopic($event->topic);
+    }
+
+    /**
+     * @param TopicWasMoved $event
+     */
+    public function onTopicMove(TopicWasMoved $event)
+    {
+        $this->updateTopic($event->topic);
+    }
+
+    /**
+     * @param Topic $topic
+     */
+    private function updateTopic(Topic $topic)
+    {
         $this->purgePageViews();
 
-        $event->topic->page()->updateOrCreate([
-            'content_id' => $event->topic->id,
+        $topic->page()->updateOrCreate([
+            'content_id' => $topic->id,
             'content_type' => Topic::class
         ], [
-            'title' => $event->topic->subject,
-            'path' => route('forum.topic', [$event->topic->forum->slug, $event->topic->id, $event->topic->slug], false)
+            'title' => $topic->subject,
+            'path' => route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug], false),
+            'allow_sitemap' => !$topic->forum->access()->exists()
         ]);
     }
 
@@ -169,6 +187,11 @@ class PageListener implements ShouldQueue
         $events->listen(
             'Coyote\Events\TopicWasSaved',
             'Coyote\Listeners\PageListener@onTopicSave'
+        );
+
+        $events->listen(
+            'Coyote\Events\TopicWasMoved',
+            'Coyote\Listeners\PageListener@onTopicMove'
         );
 
         $events->listen(
