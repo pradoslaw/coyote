@@ -172,7 +172,7 @@ class Job extends Model
 
             $timestamp = $model->created_at ? strtotime($model->created_at) : time();
 
-            $seconds = ($timestamp - 1380585600) / 45000;
+            $seconds = ($timestamp - 1380585600) / 35000;
             $model->rank = number_format($model->score + $seconds, 6, '.', '');
         });
     }
