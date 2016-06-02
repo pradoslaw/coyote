@@ -1,6 +1,16 @@
 {% set url = route('forum.topic', [forum.slug, topic.id, topic.slug], false) ~ '?p=' ~ post.id ~ '#id' ~ post.id %}
 {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
 
+{% macro render_name(post) %}
+    <h5 class="{{ post.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ post.session_updated_at ? 'online' : 'offline' }}">
+        {% if post.user_id %}
+            {{ link_to_profile(post.user_id, post.author_name, post.is_active, post.is_blocked) }}
+        {% else %}
+            {{ post.user_name }}
+        {% endif %}
+    </h5>
+{% endmacro %}
+
 <div class="post" {{ index == 0 ? 'id="first-post"' }}>
     {% if post.deleted_at %}
         <div class="post-delete">
@@ -17,17 +27,11 @@
     <div id="post-{{ post.id }}" class="post-body {{ post.deleted_at ? 'deleted' }} {{ (index == 0 or post.deleted_at) ? 'collapse' }} {{ (paginate.currentPage() > 1 and index == 0) or post.deleted_at ? '' : 'in' }}">
 
         <div class="row">
-            <div class="col-xs-2 col-user">
-                <h5 class="{{ post.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ post.session_updated_at ? 'online' : 'offline' }}">
-                    {% if post.user_id %}
-                        {{ link_to_profile(post.user_id, post.author_name, post.is_active, post.is_blocked) }}
-                    {% else %}
-                        {{ post.user_name }}
-                    {% endif %}
-                </h5>
+            <div class="col-sm-2 hidden-xs col-user">
+                {{ _self.render_name(post) }}
             </div>
 
-            <div class="col-xs-10 col-time">
+            <div class="col-sm-10 col-xs-12 col-time">
                 <a title="Link do tego postu" id="id{{ post.id }}" class="post-link {{ post.created_at > markTime ? 'unread' }}" href="{{ url }}"></a>
 
                 <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
@@ -37,8 +41,16 @@
                 {% endif %}
             </div>
         </div>
+        <div class="row visible-xs">
+            <div class="col-xs-12 col-user">
+                {{ _self.render_name(post) }}
+            </div>
+        </div>
+
+        <div class="row hidden-xs hidden-sm hidden-md hidden-lg"></div>
+
         <div class="row">
-            <div class="col-xs-2 col-user hidden-xss">
+            <div class="col-sm-2 col-user hidden-xs">
                 {% if post.user_id %}
                     <div class="avatar">
                         <img class="img-responsive" src="{{ user_photo(post.photo) }}" {{ not post.photo ? 'style="max-width: 75px"' }}>
@@ -72,7 +84,8 @@
                     {% endif %}
                 {% endif %}
             </div>
-            <div class="col-xs-10 col-body">
+
+            <div class="col-sm-10 col-xs-12 col-body">
 
                 {% for flag in flags[post.id] %}
                     {% include 'components.flag' %}
@@ -144,8 +157,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-2 col-bottom" style="height: 32px"></div>
-            <div class="col-xs-10 col-bottom">
+            <div class="col-sm-2 hidden-xs col-bottom" style="height: 32px"></div>
+            <div class="col-sm-10 col-xs-12 col-bottom">
 
                 {% if not post.deleted_at %}
                     {% if auth_check() %}
