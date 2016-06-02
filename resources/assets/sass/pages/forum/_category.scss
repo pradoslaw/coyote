@@ -131,11 +131,11 @@
     margin: 1px 4px 0 0;
   }
 
-  // @todo do zastanowienia: czy potrzebujemy liczbe glosow oddanych na dany watek, przy temacie?
   .score {
     background: $brand-primary;
     font-size: 9px;
     border: 1px solid #fff;
+    cursor: help;
   }
 
   // jako, ze na malych ekranach ukrywane sa kolumny - np. z iloscia odpowiedzi oraz z data ostatniego posta

@@ -78,9 +78,12 @@
                             <h5>
                                 <a title="{{ topic.subject }}" href="{{ url }}">{{ topic.subject }}</a>
 
-                                {#<span class="badge score">#}
-                                    {#12#}
-                                {#</span>#}
+                                {% if topic.score %}
+                                    <span class="badge score" title="Ilość głosów oddanych na ten wątek">
+                                        <i class="fa fa-fire"></i>
+                                        {{ topic.score }}
+                                    </span>
+                                {% endif %}
 
                                 {% if flags[topic.id] is defined %}
                                     <a href="{{ flags[topic.id] }}" title="Przejdź do raportowanego postu">
