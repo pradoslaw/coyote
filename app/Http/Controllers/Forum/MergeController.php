@@ -46,7 +46,7 @@ class MergeController extends BaseController
                 (new Stream_Topic())->map($topic, $forum)
             );
 
-            return route('forum.topic',  [$forum->slug, $topic->id, $topic->slug]) . '?p=' . $previous->id . '#id' . $previous->id;
+            return route('forum.topic', [$forum->slug, $topic->id, $topic->slug]) . '?p=' . $previous->id . '#id' . $previous->id;
         });
 
         return redirect()->to($url)->with('success', 'Posty zostały połączone.');
