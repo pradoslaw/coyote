@@ -181,6 +181,18 @@
                             </a>
                         {% endif %}
 
+                        {% if not post.deleted_at and can('merge', forum) and post.id != topic.first_post_id %}
+                            <div class="dropdown pull-right">
+                                <button class="btn btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Więcej...">
+                                    <span class="caret"></span>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a href="{{ route('forum.post.merge', [post.id]) }}" class="btn-merge"><i class="fa fa-compress fa-fw"></i> Połącz z poprzednim</a></li>
+                                </ul>
+                            </div>
+                        {% endif %}
+
                         <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" class="btn btn-xs btn-report" href="{{ route('flag') }}" data-url="{{ url }}" data-metadata="{{ {'post_id': post.id, 'topic_id': topic.id, 'permission': 'forum-delete'}|encrypt }}">
                             <i class="fa fa-flag"></i>
                             <span class="hidden-xs">Raportuj</span>

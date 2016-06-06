@@ -199,7 +199,7 @@
   background-color: #ececec;
 
   // @todo ten styl tyczy sie wszystkich przyciskow pod postem? jest sens je wszystkie listowac?
-  .btn-sub, .btn-share, .btn-comment, .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del, .btn-res, .btn-rollback {
+  .btn-sub, .btn-share, .btn-comment, .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del, .btn-res, .btn-rollback, .dropdown-toggle {
     color: $text-color;
     opacity: .9;
     border: 1px solid transparent;
@@ -235,6 +235,10 @@
 
   .btn-multi-quote.active {
     border-left: 1px solid #555;
+  }
+
+  .dropdown-toggle {
+    background-color: transparent;
   }
 }
 

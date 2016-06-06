@@ -68,6 +68,8 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('Post/Log/{post}', ['uses' => 'LogController@log', 'as' => 'post.log']);
     // przywrocenie poprzedniej wersji posta
     Route::post('Post/Rollback/{post}/{id}', ['uses' => 'LogController@rollback', 'as' => 'post.rollback']);
+    // mergowanie posta z poprzednim
+    Route::post('Post/Merge/{post}', ['uses' => 'MergeController@index', 'as' => 'post.merge']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
     Route::post('Comment/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => ['auth', 'comment.access']]);

@@ -294,6 +294,12 @@
             </div>
         {{ form_close() }}
     {% endif %}
+
+    {% if can('merge', forum) %}
+        {{ form_open({'url': '#'}) }}
+        {{ modals.confirm('Czy chcesz połaczyć ten post z poprzednim?', 'Czy chcesz połączyć?', 'modal-merge', 'Tak, połącz') }}
+        {{ form_close() }}
+    {% endif %}
 {% endblock %}
 
 {% block body %}

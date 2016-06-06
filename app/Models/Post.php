@@ -189,6 +189,20 @@ class Post extends Model
     }
 
     /**
+     * Get previous post. We use it in merge controller.
+     *
+     * @return mixed
+     */
+    public function previous()
+    {
+        return (new static)
+            ->where('topic_id', $this->topic_id)
+            ->where('id', '<', $this->id)
+            ->orderBy('id', 'DESC')
+            ->first();
+    }
+
+    /**
      * Return data to index in elasticsearch
      *
      * @return array

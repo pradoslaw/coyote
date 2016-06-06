@@ -189,6 +189,15 @@ $(function () {
     });
 
     /**
+     * Merge with previous
+     */
+    $('.btn-merge').click(function() {
+        $('#modal-merge').modal('show').parent().attr('action', $(this).attr('href'));
+
+        return false;
+    });
+
+    /**
      * Add to multi quote list
      */
     $('.btn-multi-quote').click(function() {
