@@ -195,6 +195,8 @@ return [
         Coyote\Providers\LogViewerProvider::class,
         // Generowanie mapy strony
         Coyote\Providers\SitemapProvider::class,
+        // Generowanie tabel
+        Coyote\Providers\GridServiceProvider::class,
 
         // Klasa wspierajaca budowanie znacznikow HTML
         Collective\Html\HtmlServiceProvider::class,

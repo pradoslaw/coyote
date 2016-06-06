@@ -3,14 +3,8 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Services\Grid\Source\Eloquent;
 use Illuminate\Http\Request;
-use ViewComponents\Eloquent\EloquentDataProvider;
-use ViewComponents\Grids\Component\Column;
-use ViewComponents\Grids\Component\ColumnSortingControl;
-use ViewComponents\Grids\Grid;
-use ViewComponents\ViewComponents\Component\Control\PaginationControl;
-use ViewComponents\ViewComponents\Customization\CssFrameworks\BootstrapStyling;
-use ViewComponents\ViewComponents\Input\InputSource;
 
 class UserController extends BaseController
 {
@@ -29,27 +23,18 @@ class UserController extends BaseController
      */
     public function index(Request $request)
     {
-        $input = new InputSource($request->all());
+        $grid = $this->getGrid();
 
-        $provider = new EloquentDataProvider($this->user->newQuery());
-        $grid = new Grid($provider, [
-            new Column('id'),
-            new Column('name', 'Nazwa użytkownika'),
-            new Column('email', 'E-mail'),
-            new Column('created_at', 'Data rejestracji'),
-            new Column('visited_at', 'Data ost. wizyty'),
-            new Column('is_active', 'Aktywny'),
-            new Column('is_blocked', 'Zablokowany'),
-            new Column('ip', 'IP'),
-
-            new ColumnSortingControl('id', $input->option('sort')),
-            new ColumnSortingControl('name', $input->option('sort')),
-            new ColumnSortingControl('is_active', $input->option('sort')),
-            new PaginationControl($input->option('page', 1), 5)
-        ]);
-
-        $customization = new BootstrapStyling();
-        $customization->apply($grid);
+        $grid->setSource(new Eloquent($this->user->newQuery()));
+        
+        $grid->addColumn('id', 'text');
+        $grid->addColumn('name', 'text', ['label' => 'Nazwa użytkownika']);
+        $grid->addColumn('email', 'text', ['label' => 'E-mail']);
+        $grid->addColumn('created_at', 'text', ['label' => 'Data rejestracji']);
+        $grid->addColumn('visited_at', 'text', ['label '=> 'Data ost. wizyty']);
+        $grid->addColumn('is_active', 'text', ['label' => 'Aktywny']);
+        $grid->addColumn('is_blocked', 'text', ['label' => 'Zablokowany']);
+        $grid->addColumn('ip', 'text', ['label' => 'IP']);
 
         return $this->view('adm.user.home', ['grid' => $grid->render()]);
     }

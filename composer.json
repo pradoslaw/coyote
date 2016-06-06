@@ -43,9 +43,7 @@
         "elasticsearch/elasticsearch": "~2.0",
         "guzzlehttp/guzzle": "^6.2",
         "adam-boduch/geshi": "dev-master",
-        "chrisboulton/php-diff": "dev-master",
-        "view-components/grids": "^0.5.1",
-        "view-components/eloquent-data-processing": "^1.2"
+        "chrisboulton/php-diff": "dev-master"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.*",
@@ -81,7 +79,7 @@
             "php artisan optimize"
         ],
         "post-create-project-cmd": [
-            "php -r \"copy('.env.default', '.env');\"",
+            "php -r \"copy('.env.production', '.env');\"",
             "php artisan key:generate"
         ]
     },
