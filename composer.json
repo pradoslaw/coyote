@@ -4,6 +4,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/adam-boduch/geshi"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/wouter2203/php-diff"
         }
     ],
     "description": "4programmers.net",
@@ -39,6 +43,7 @@
         "elasticsearch/elasticsearch": "~2.0",
         "guzzlehttp/guzzle": "^6.2",
         "adam-boduch/geshi": "dev-master",
+        "chrisboulton/php-diff": "dev-master",
         "view-components/grids": "^0.5.1",
         "view-components/eloquent-data-processing": "^1.2"
     },

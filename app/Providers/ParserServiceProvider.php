@@ -11,6 +11,7 @@ use Coyote\Services\Parser\Factories\PmFactory;
 use Coyote\Services\Parser\Factories\PostFactory;
 use Coyote\Services\Parser\Factories\CommentFactory;
 use Coyote\Services\Parser\Factories\JobFactory;
+use Coyote\Services\Parser\Factories\DiffFactory;
 
 class ParserServiceProvider extends ServiceProvider
 {
@@ -69,6 +70,10 @@ class ParserServiceProvider extends ServiceProvider
         $this->app->bind('parser.wiki', function ($app) {
             return new WikiFactory($app);
         });
+        
+        $this->app->bind('parser.diff', function ($app) {
+            return new DiffFactory($app);
+        });
     }
 
     /**
@@ -89,7 +94,8 @@ class ParserServiceProvider extends ServiceProvider
             'parser.post',
             'parser.comment',
             'parser.job',
-            'parser.wiki'
+            'parser.wiki',
+            'parser.diff'
         ];
     }
 }

@@ -3,18 +3,19 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Contracts\Post\LogRepositoryInterface;
+use Coyote\Repositories\Contracts\Post\LogRepositoryInterface as LogRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Activities\Rollback as Stream_Rollback;
 use Coyote\Post\Log;
+use Illuminate\Http\Request;
 
 class LogController extends BaseController
 {
     /**
-     * @var LogRepositoryInterface
+     * @var LogRepository
      */
     private $log;
 
@@ -23,9 +24,9 @@ class LogController extends BaseController
      * @param Forum $forum
      * @param Topic $topic
      * @param Post $post
-     * @param LogRepositoryInterface $log
+     * @param LogRepository $log
      */
-    public function __construct(Forum $forum, Topic $topic, Post $post, LogRepositoryInterface $log)
+    public function __construct(Forum $forum, Topic $topic, Post $post, LogRepository $log)
     {
         parent::__construct($forum, $topic, $post);
 
@@ -35,10 +36,11 @@ class LogController extends BaseController
     /**
      * Show post history
      *
+     * @param Request $request
      * @param \Coyote\Post $post
      * @return mixed
      */
-    public function log($post)
+    public function log(Request $request, $post)
     {
         $topic = $this->topic->find($post->topic_id);
         $forum = $this->forum->find($post->forum_id);
@@ -50,14 +52,18 @@ class LogController extends BaseController
         $this->breadcrumb->push('Historia postu', route('forum.post.log', [$post->id]));
 
         $logs = $this->log->takeForPost($post->id);
-        $parser = app('parser.post');
+        $parser = app('parser.' . ($request->has('diff') ? 'diff' : 'post'));
 
-        if (!request()->get('diff')) {
-            foreach ($logs as &$log) {
-                $log->text = $parser->parse($log->text);
+        foreach ($logs as $index => &$log) {
+            if ($request->has('diff')) {
+                if (isset($logs[$index + 1])) {
+                    $parser->setContext($logs[$index + 1]->text);
+                } else {
+                    $parser->setContext(null);
+                }
             }
-        } else {
-            // @todo wyswietlanie diff
+
+            $log->text = $parser->parse($log->text);
         }
 
         return $this->view('forum.log')->with(compact('logs', 'post', 'forum', 'topic'));

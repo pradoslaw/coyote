@@ -96,7 +96,11 @@
             <div class="box">
                 <ul class="side-menu">
                     <li class="btn-diff">
-                        <a title="Pokaż różnice w postach" href="{{ url }}?diff=1">Pokaż różnice</a>
+                        {% if request().has('diff') %}
+                            <a title="Ukryj różnice w postach" href="{{ url }}">Ukryj różnice</a>
+                        {% else %}
+                            <a title="Pokaż różnice w postach" href="{{ url }}?diff=1">Pokaż różnice</a>
+                        {% endif %}
                     </li>
                 </ul>
             </div>

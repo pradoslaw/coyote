@@ -49,6 +49,6 @@ class MergeController extends BaseController
             return route('forum.topic',  [$forum->slug, $topic->id, $topic->slug]) . '?p=' . $previous->id . '#id' . $previous->id;
         });
 
-        return redirect()->to($url);
+        return redirect()->to($url)->with('success', 'Posty zostały połączone.');
     }
 }
