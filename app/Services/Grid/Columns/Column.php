@@ -10,11 +10,11 @@ abstract class Column
      * @var Grid
      */
     protected $grid;
-    
+
     /**
      * @var string
      */
-    protected $label;
+    protected $title;
 
     /**
      * @var string
@@ -41,7 +41,7 @@ abstract class Column
     public function setGrid($grid)
     {
         $this->grid = $grid;
-        
+
         return $this;
     }
 
@@ -56,18 +56,18 @@ abstract class Column
     /**
      * @return string
      */
-    public function getLabel()
+    public function getTitle()
     {
-        return $this->label;
+        return $this->title;
     }
 
     /**
-     * @param string $label
+     * @param string $title
      * @return $this
      */
-    public function setLabel($label)
+    public function setTitle($title)
     {
-        $this->label = $label;
+        $this->title = $title;
 
         return $this;
     }
@@ -108,6 +108,24 @@ abstract class Column
         $this->sortable = (bool) $flag;
 
         return $this;
+    }
+
+    /**
+     * @param mixed $value
+     * @return \Illuminate\Support\HtmlString
+     */
+    public function render($value)
+    {
+        return (string) $this->grid->getHtmlBuilder()->tag('td', (string) $this->setupValue($value));
+    }
+
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
+    protected function setupValue($value)
+    {
+        return $value;
     }
 
     /**

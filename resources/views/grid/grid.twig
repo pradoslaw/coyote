@@ -17,7 +17,7 @@
                 {% for row in data %}
                     <tr>
                         {% for column in columns %}
-                            <td>{{ row[column.name] }}</td>
+                            {{ grid_render(column, row[column.name]) }}
                         {% endfor %}
                     </tr>
                 {% endfor %}

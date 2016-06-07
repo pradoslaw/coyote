@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Grid;
 
+use Collective\Html\HtmlBuilder;
 use Coyote\Services\Grid\Columns\Column;
 use Coyote\Services\Grid\Source\SourceInterface;
 use Illuminate\Http\Request;
@@ -20,6 +21,11 @@ class Grid
      * @var ValidationFactory
      */
     protected $validator;
+
+    /**
+     * @var HtmlBuilder
+     */
+    protected $htmlBuilder;
 
     /**
      * @var SourceInterface
@@ -53,13 +59,15 @@ class Grid
     ];
 
     /**
-     * Grid constructor.
      * @param Request $request
+     * @param ValidationFactory $validator
+     * @param HtmlBuilder $htmlBuilder
      */
-    public function __construct(Request $request, ValidationFactory $validator)
+    public function __construct(Request $request, ValidationFactory $validator, HtmlBuilder $htmlBuilder)
     {
         $this->request = $request;
         $this->validator = $validator;
+        $this->htmlBuilder = $htmlBuilder;
     }
 
     /**
@@ -68,6 +76,14 @@ class Grid
     public function getRequest()
     {
         return $this->request;
+    }
+
+    /**
+     * @return HtmlBuilder
+     */
+    public function getHtmlBuilder()
+    {
+        return $this->htmlBuilder;
     }
 
     /**

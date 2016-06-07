@@ -22,7 +22,8 @@ class Grid extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('grid_column', [&$this, 'column'], ['is_safe' => ['html']])
+            new Twig_SimpleFunction('grid_column', [&$this, 'column'], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction('grid_render', [&$this, 'render'], ['is_safe' => ['html']])
         ];
     }
 
@@ -45,11 +46,21 @@ class Grid extends Twig_Extension
 
             return link_to(
                 $column->getGrid()->getRequest()->path() . '?' . http_build_query($parameters),
-                $column->getLabel(),
+                $column->getTitle(),
                 ['class' => "sort " . ($direction == $column->getName() ? strtolower($direction) : '')]
             );
         } else {
-            return $column->getLabel();
+            return $column->getTitle();
         }
+    }
+
+    /**
+     * @param Column $column
+     * @param string $data
+     * @return string
+     */
+    public function render(Column $column, $data)
+    {
+        return $column->render($data);
     }
 }
