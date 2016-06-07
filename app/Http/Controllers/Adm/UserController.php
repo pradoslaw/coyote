@@ -4,12 +4,17 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Grid\Source\Eloquent;
-use Illuminate\Http\Request;
 
 class UserController extends BaseController
 {
+    /**
+     * @var UserRepository
+     */
     private $user;
 
+    /**
+     * @param UserRepository $user
+     */
     public function __construct(UserRepository $user)
     {
         parent::__construct();
@@ -21,21 +26,21 @@ class UserController extends BaseController
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
         $grid = $this->getGrid();
 
-        $grid->setSource(new Eloquent($this->user->newQuery()));
-
-        // asdadasdas
-        $grid->addColumn('id', 'text');
-        $grid->addColumn('name', 'text', ['label' => 'Nazwa użytkownika']);
-        $grid->addColumn('email', 'text', ['label' => 'E-mail']);
-        $grid->addColumn('created_at', 'text', ['label' => 'Data rejestracji']);
-        $grid->addColumn('visited_at', 'text', ['label '=> 'Data ost. wizyty']);
-        $grid->addColumn('is_active', 'text', ['label' => 'Aktywny']);
-        $grid->addColumn('is_blocked', 'text', ['label' => 'Zablokowany']);
-        $grid->addColumn('ip', 'text', ['label' => 'IP']);
+        $grid
+            ->setSource(new Eloquent($this->user->newQuery()))
+            ->setDefaultOrder('id', 'desc')
+            ->addColumn('id', 'text', ['label' => 'ID', 'sortable' => true])
+            ->addColumn('name', 'text', ['label' => 'Nazwa użytkownika', 'sortable' => true])
+            ->addColumn('email', 'text', ['label' => 'E-mail'])
+            ->addColumn('created_at', 'text', ['label' => 'Data rejestracji'])
+            ->addColumn('visited_at', 'text', ['label '=> 'Data ost. wizyty', 'sortable' => true])
+            ->addColumn('is_active', 'text', ['label' => 'Aktywny'])
+            ->addColumn('is_blocked', 'text', ['label' => 'Zablokowany'])
+            ->addColumn('ip', 'text', ['label' => 'IP']);
 
         return $this->view('adm.user.home', ['grid' => $grid->render()]);
     }

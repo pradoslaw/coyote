@@ -107,6 +107,7 @@ return [
             'Coyote\Services\TwigBridge\Extensions\Elasticsearch',
             'Coyote\Services\TwigBridge\Extensions\Block',
             'Coyote\Services\TwigBridge\Extensions\FormBuilder',
+            'Coyote\Services\TwigBridge\Extensions\Grid',
             'Coyote\Services\TwigBridge\Extensions\Media'
         ],
         /*

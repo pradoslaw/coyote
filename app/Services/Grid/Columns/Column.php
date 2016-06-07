@@ -2,8 +2,15 @@
 
 namespace Coyote\Services\Grid\Columns;
 
+use Coyote\Services\Grid\Grid;
+
 abstract class Column
 {
+    /**
+     * @var Grid
+     */
+    protected $grid;
+    
     /**
      * @var string
      */
@@ -17,11 +24,33 @@ abstract class Column
     /**
      * @var bool
      */
-    protected $sortable;
+    protected $sortable = false;
 
+    /**
+     * @param array $options
+     */
     public function __construct(array $options = [])
     {
         $this->setDefaultOptions($options);
+    }
+
+    /**
+     * @param Grid $grid
+     * @return $this
+     */
+    public function setGrid($grid)
+    {
+        $this->grid = $grid;
+        
+        return $this;
+    }
+
+    /**
+     * @return Grid
+     */
+    public function getGrid()
+    {
+        return $this->grid;
     }
 
     /**
@@ -109,6 +138,8 @@ abstract class Column
      */
     public function __get($name)
     {
+        $name = camel_case($name);
+
         if (!isset($this->$name)) {
             throw new \InvalidArgumentException(
                 sprintf("Field %s does not exist in %s class", $name, get_class($this))

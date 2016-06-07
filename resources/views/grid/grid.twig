@@ -1,14 +1,30 @@
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            {% for column in columns %}
-                <th>
-                    {{ column.label }}
-                </th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
+<div class="panel panel-default">
+    <div class="panel-body">
 
-    </tbody>
-</table>
+        {{ pagination|raw }}
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                        <th>
+                            {{ grid_column(column) }}
+                        </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                        {% for column in columns %}
+                            <td>{{ row[column.name] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {{ pagination|raw }}
+    </div>
+</div>
+

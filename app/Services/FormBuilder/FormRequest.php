@@ -272,7 +272,7 @@ abstract class FormRequest
      */
     protected function failedAuthorization()
     {
-        throw new HttpException(403);
+        throw new HttpResponseException(403);
     }
 
     /**

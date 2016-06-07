@@ -13,7 +13,7 @@ class GridServiceProvider extends ServiceProvider
      * @var bool
      */
     protected $defer = true;
-    
+
     /**
      * Bootstrap the application services.
      *
@@ -32,7 +32,7 @@ class GridServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('grid', function ($app) {
-            return new Grid($app['request']);
+            return new Grid($app['request'], $app['validator']);
         });
     }
 
