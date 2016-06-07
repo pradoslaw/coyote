@@ -26,7 +26,8 @@ class UserController extends BaseController
         $grid = $this->getGrid();
 
         $grid->setSource(new Eloquent($this->user->newQuery()));
-        
+
+        // asdadasdas
         $grid->addColumn('id', 'text');
         $grid->addColumn('name', 'text', ['label' => 'Nazwa użytkownika']);
         $grid->addColumn('email', 'text', ['label' => 'E-mail']);
