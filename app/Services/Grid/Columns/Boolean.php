@@ -47,11 +47,12 @@ class Boolean extends Column
     }
 
     /**
-     * @param mixed $value
+     * @param mixed $data
      * @return mixed
      */
-    protected function setupValue($value)
+    protected function setupValue($data)
     {
+        $value = parent::setupValue($data);
         return [0 => $this->falseLabel, 1 => $this->trueLabel][$value];
     }
 }

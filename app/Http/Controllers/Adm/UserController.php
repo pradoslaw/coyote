@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Services\Grid\Order;
 use Coyote\Services\Grid\Source\Eloquent;
 
 class UserController extends BaseController
@@ -32,7 +33,7 @@ class UserController extends BaseController
 
         $grid
             ->setSource(new Eloquent($this->user->newQuery()))
-            ->setDefaultOrder('id', 'desc')
+            ->setDefaultOrder(new Order('id', 'desc'))
             ->addColumn('id', 'text', [
                 'title' => 'ID',
                 'sortable' => true

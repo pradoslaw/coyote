@@ -2,6 +2,8 @@
 
 namespace Coyote\Services\Grid\Source;
 
+use Coyote\Services\Grid\Order;
+
 class Eloquent implements SourceInterface
 {
     /**
@@ -18,23 +20,12 @@ class Eloquent implements SourceInterface
     }
 
     /**
-     * @param string $column
-     * @param string $direction
-     * @return $this
-     */
-    public function orderBy($column, $direction)
-    {
-        $this->source->orderBy($column, $direction);
-
-        return $this;
-    }
-
-    /**
      * @param int $perPage
+     * @param Order $order
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage)
+    public function execute($perPage, Order $order)
     {
-        return $this->source->paginate($perPage);
+        return $this->source->orderBy($order->getColumn(), $order->getDirection())->paginate($perPage);
     }
 }

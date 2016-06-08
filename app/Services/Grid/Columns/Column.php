@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Grid\Columns;
 
+use Coyote\Services\Grid\Decorators\DecoratorInterface;
 use Coyote\Services\Grid\Grid;
 
 abstract class Column
@@ -25,6 +26,11 @@ abstract class Column
      * @var bool
      */
     protected $sortable = false;
+
+    /**
+     * @var DecoratorInterface[]
+     */
+    protected $decorators = [];
 
     /**
      * @param array $options
@@ -111,20 +117,55 @@ abstract class Column
     }
 
     /**
-     * @param mixed $value
-     * @return \Illuminate\Support\HtmlString
+     * @param DecoratorInterface $decorator
+     * @return $this
      */
-    public function render($value)
+    public function addDecorator(DecoratorInterface $decorator)
     {
-        return (string) $this->grid->getHtmlBuilder()->tag('td', (string) $this->setupValue($value));
+        $this->decorators[] = $decorator;
+
+        return $this;
     }
 
     /**
-     * @param mixed $value
+     * @param DecoratorInterface[] $decorators
+     * @return $this
+     */
+    public function setDecorators(array $decorators)
+    {
+        $this->decorators = $decorators;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $data
+     * @return \Illuminate\Support\HtmlString
+     */
+    public function render($data)
+    {
+        $value = (string) $this->setupValue($data);
+
+        foreach ($this->decorators as $decorator) {
+            //
+        }
+        return (string) $this->grid->getHtmlBuilder()->tag('td', $value);
+    }
+
+    /**
+     * @param mixed $data
      * @return mixed
      */
-    protected function setupValue($value)
+    protected function setupValue($data)
     {
+        $value = null;
+
+        if (is_array($data) || $data instanceof \ArrayAccess) {
+            $value = array_get($data, $this->name);
+        } elseif (is_object($data)) {
+            $value = object_get($data, $this->name);
+        }
+
         return $value;
     }
 

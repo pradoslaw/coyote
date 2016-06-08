@@ -3,7 +3,7 @@
 
         {{ pagination|raw }}
 
-        <table class="table table-bordered table-striped">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     {% for column in columns %}
@@ -17,7 +17,7 @@
                 {% for row in data %}
                     <tr>
                         {% for column in columns %}
-                            {{ grid_render(column, row[column.name]) }}
+                            {{ grid_render(column, row) }}
                         {% endfor %}
                     </tr>
                 {% endfor %}

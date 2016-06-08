@@ -2,18 +2,14 @@
 
 namespace Coyote\Services\Grid\Source;
 
+use Coyote\Services\Grid\Order;
+
 interface SourceInterface
 {
     /**
-     * @param string $column
-     * @param string $direction
-     * @return $this
-     */
-    public function orderBy($column, $direction);
-    
-    /**
      * @param int $perPage
+     * @param Order $order
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage);
+    public function execute($perPage, Order $order);
 }

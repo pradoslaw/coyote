@@ -51,12 +51,9 @@ class Grid
     ];
 
     /**
-     * @var array
+     * @var Order
      */
-    protected $order = [
-        'column' => '',
-        'direction' => ''
-    ];
+    protected $order;
 
     /**
      * @param Request $request
@@ -68,6 +65,8 @@ class Grid
         $this->request = $request;
         $this->validator = $validator;
         $this->htmlBuilder = $htmlBuilder;
+
+        $this->makeDefaultOrder();
     }
 
     /**
@@ -118,30 +117,18 @@ class Grid
     }
 
     /**
-     * @param string $column
-     * @param string $direction
+     * @param Order $order
      * @return $this
      */
-    public function setDefaultOrder($column, $direction)
+    public function setDefaultOrder(Order $order)
     {
-        $this->defaultOrder = [
-            'column'    => $column,
-            'direction' => $direction
-        ];
+        $this->order = $order;
 
         return $this;
     }
 
     /**
-     * @return array
-     */
-    public function getDefaultOrder()
-    {
-        return $this->defaultOrder;
-    }
-
-    /**
-     * @return array
+     * @return Order
      */
     public function getOrder()
     {
@@ -186,20 +173,18 @@ class Grid
      */
     protected function getPaginator()
     {
-        $this->order = [
-            'column'    => $this->request->get('column', $this->defaultOrder['column']),
-            'direction' => $this->request->get('direction', $this->defaultOrder['direction'])
-        ];
+        $this->order = new Order(
+            $this->request->get('column', $this->defaultOrder['column']),
+            $this->request->get('direction', $this->defaultOrder['direction'])
+        );
 
         $validator = $this->getValidatorInstance();
 
         if ($validator->fails()) {
-            $this->order = $this->defaultOrder;
+            $this->makeDefaultOrder();
         }
 
-        $this->source->orderBy($this->order['column'], $this->order['direction']);
-
-        return $this->source->paginate($this->perPage);
+        return $this->source->execute($this->perPage, $this->order);
     }
 
     /**
@@ -219,6 +204,11 @@ class Grid
             'column' => 'sometimes|in:' . implode(',', $allowed),
             'direction' => 'sometimes|in:asc,desc'
         ]);
+    }
+
+    protected function makeDefaultOrder()
+    {
+        $this->order = new Order($this->defaultOrder['column'], $this->defaultOrder['direction']);
     }
 
     /**

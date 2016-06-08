@@ -34,7 +34,7 @@ class Grid extends Twig_Extension
     public function column(Column $column)
     {
         if ($column->isSortable()) {
-            $direction = $column->getGrid()->getOrder()['direction'];
+            $direction = $column->getGrid()->getOrder()->getDirection();
 
             $parameters = array_merge(
                 $column->getGrid()->getRequest()->all(),
