@@ -4,6 +4,7 @@ namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Services\Grid\Cell;
 use Coyote\Services\Grid\Columns\Column;
+use Coyote\Services\Grid\Grid as Grid_Object;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -23,9 +24,19 @@ class Grid extends Twig_Extension
     public function getFunctions()
     {
         return [
+            new Twig_SimpleFunction('grid', [&$this, 'grid'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('grid_column', [&$this, 'column'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('grid_cell', [&$this, 'cell'], ['is_safe' => ['html']])
         ];
+    }
+
+    /**
+     * @param Grid_Object $grid
+     * @return string
+     */
+    public function grid(Grid_Object $grid)
+    {
+        return $grid->render();
     }
 
     /**

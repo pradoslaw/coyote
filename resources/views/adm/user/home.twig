@@ -1,6 +1,6 @@
-{% extends 'adm/base.twig' %}
+{% extends 'adm.base' %}
 {% block title %}Użytkownicy {{ parent() }}{% endblock %}
 
 {% block container %}
-{{ grid|raw }}
+    {{ grid(grid) }}
 {% endblock %}

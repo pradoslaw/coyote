@@ -8,7 +8,7 @@
 
 {% block body %}
     <div id="container-fluid">
-        <div id="navbar-border-top"></div>
+        <div id="navbar-border-top" class="navbar-fixed-top"></div>
 
         <aside id="adm-menu" class="navbar-default">
             <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
@@ -51,13 +51,24 @@
         </aside>
 
         <main id="wrapper">
+            {% if session_has('success') %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="alert alert-success">
+                            <i class="fa fa-check"></i>
+
+                            {{ session_get('success') }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <div id="adm-header" class="row">
                 <div class="col-xs-12">
                     <a id="sidebar-toggle" href="javascript:" class="btn btn-default" title="">
                         <i class="fa fa-bars"></i>
                     </a>
                 </div>
-
             </div>
 
             {{ breadcrumb|raw }}
