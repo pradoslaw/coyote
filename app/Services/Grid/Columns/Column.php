@@ -3,6 +3,7 @@
 namespace Coyote\Services\Grid\Columns;
 
 use Coyote\Services\Grid\Decorators\DecoratorInterface;
+use Coyote\Services\Grid\Decorators\Link;
 use Coyote\Services\Grid\Grid;
 
 abstract class Column
@@ -115,10 +116,13 @@ abstract class Column
 
         return $this;
     }
-    
+
+    /**
+     * @param \Closure $closure
+     */
     public function setClickable(\Closure $closure)
     {
-        //
+        $this->addDecorator((new Link())->render($closure));
     }
 
     /**

@@ -14,6 +14,11 @@ class Cell
     /**
      * @var mixed
      */
+    protected $data;
+
+    /**
+     * @var mixed
+     */
     protected $value;
 
     /**
@@ -23,7 +28,10 @@ class Cell
     public function __construct(Column $column, $data)
     {
         $this->column = $column;
-        $this->value = $this->setupValue($data);
+        $this->data = $data;
+
+        $this->setupValue();
+        $this->decorate();
     }
 
     /**
@@ -37,25 +45,50 @@ class Cell
     /**
      * @return mixed
      */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param mixed $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * @param mixed $data
-     * @return mixed
-     */
-    protected function setupValue($data)
+    protected function setupValue()
     {
         $value = null;
 
-        if (is_array($data) || $data instanceof \ArrayAccess) {
-            $value = array_get($data, $this->column->getName());
-        } elseif (is_object($data)) {
-            $value = object_get($data, $this->column->getName());
+        if (is_array($this->data) || $this->data instanceof \ArrayAccess) {
+            $this->value = array_get($this->data, $this->column->getName());
+        } elseif (is_object($this->data)) {
+            $this->value = object_get($this->data, $this->column->getName());
         }
+    }
 
-        return $value;
+    protected function decorate()
+    {
+        foreach ($this->column->getDecorators() as $decorator) {
+            $decorator->decorate($this);
+        }
     }
 }

@@ -11,6 +11,9 @@ Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm:1'], 'prefix' 
     Route::get('Forum/Access', 'Forum\AccessController@index')->name('forum.access');
 
     Route::get('User', 'UserController@index')->name('user');
+    Route::get('User/Save/{id}', 'UserController@edit')->name('user.save');
+    Route::post('User/Save/{id}', 'UserController@save');
+    
     Route::get('Stream', 'StreamController@index')->name('stream');
     Route::get('Cache', 'CacheController@index')->name('cache');
     Route::get('Firewall', 'FirewallController@index')->name('firewall');

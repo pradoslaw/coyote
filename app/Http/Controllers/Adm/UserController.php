@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Services\Grid\Decorators\Boolean;
 use Coyote\Services\Grid\Order;
 use Coyote\Services\Grid\Source\Eloquent;
 
@@ -40,7 +41,11 @@ class UserController extends BaseController
             ])
             ->addColumn('name', 'text', [
                 'title' => 'Nazwa użytkownika',
-                'sortable' => true
+                'sortable' => true,
+                'clickable' => function ($user) {
+                    /** @var \Coyote\User $user */
+                    return link_to_route('adm.user.save', $user->name, [$user->id]);
+                }
             ])
             ->addColumn('email', 'text', [
                 'title' => 'E-mail'
@@ -53,10 +58,12 @@ class UserController extends BaseController
                 'sortable' => true
             ])
             ->addColumn('is_active', 'boolean', [
-                'title' => 'Aktywny'
+                'title' => 'Aktywny',
+                'decorators' => [new Boolean()]
             ])
             ->addColumn('is_blocked', 'boolean', [
-                'title' => 'Zablokowany'
+                'title' => 'Zablokowany',
+                'decorators' => [new Boolean()]
             ])
             ->addColumn('ip', 'text', [
                 'title' => 'IP'
