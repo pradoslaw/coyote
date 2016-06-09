@@ -46,20 +46,20 @@ class Grid extends Twig_Extension
     public function column(Column $column)
     {
         if ($column->isSortable()) {
-            $direction = $column->getGrid()->getOrder()->getDirection();
+            $order = $column->getGrid()->getOrder();
 
             $parameters = array_merge(
                 $column->getGrid()->getRequest()->all(),
                 [
                     'column' => $column->getName(),
-                    'direction' => $direction == 'desc' ? 'asc' : 'desc'
+                    'direction' => $order->getDirection() == 'desc' ? 'asc' : 'desc'
                 ]
             );
 
             $text = link_to(
                 $column->getGrid()->getRequest()->path() . '?' . http_build_query($parameters),
                 $column->getTitle(),
-                ['class' => "sort " . ($direction == $column->getName() ? strtolower($direction) : '')]
+                ['class' => 'sort ' . ($order->getColumn() == $column->getName() ? strtolower($order->getDirection()) : '')]
             );
         } else {
             $text = $column->getTitle();

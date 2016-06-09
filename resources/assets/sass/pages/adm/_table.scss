@@ -1,0 +1,30 @@
+.table a {
+  color: $link-color-darker;
+}
+
+.table th a.sort {
+  display: block;
+  color: $gray;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:before {
+    font-family: FontAwesome;
+    float: right;
+    content: $fa-var-sort;
+  }
+}
+
+.table th a.sort.asc {
+  &:before {
+    content: $fa-var-sort-asc;
+  }
+}
+
+.table th a.sort.desc {
+  &:before {
+    content: $fa-var-sort-desc;
+  }
+}
