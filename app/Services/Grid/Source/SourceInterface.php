@@ -8,8 +8,14 @@ interface SourceInterface
 {
     /**
      * @param int $perPage
+     * @param int $currentPage
      * @param Order $order
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return mixed
      */
-    public function execute($perPage, Order $order);
+    public function execute($perPage, $currentPage, Order $order);
+
+    /**
+     * @return int
+     */
+    public function total();
 }

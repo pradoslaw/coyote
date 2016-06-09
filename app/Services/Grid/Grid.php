@@ -7,6 +7,8 @@ use Coyote\Services\Grid\Columns\Column;
 use Coyote\Services\Grid\Source\SourceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class Grid
 {
@@ -159,38 +161,97 @@ class Grid
      */
     public function render()
     {
-        $paginator = $this->getPaginator()->appends($this->request->except('page'));
+        $rows = $this->getRows();
+        $paginator = $this->getPaginator($rows)->appends($this->request->except('page'));
 
         return view(self::DEFAULT_TEMPLATE, [
             'columns'       => $this->columns,
-            'data'          => $paginator->items(),
+            'rows'          => $rows,
             'pagination'    => $paginator->render()
         ]);
     }
 
     /**
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param Rows $rows
+     * @return LengthAwarePaginator
      */
-    protected function getPaginator()
+    protected function getPaginator(Rows $rows)
     {
-        $this->order = new Order(
-            $this->request->get('column', $this->defaultOrder['column']),
-            $this->request->get('direction', $this->defaultOrder['direction'])
-        );
+        return new LengthAwarePaginator($rows, $this->source->total(), $this->perPage, $this->resolveCurrentPage(), [
+            'path' => $this->resolveCurrentPath(),
+        ]);
+    }
 
-        $validator = $this->getValidatorInstance();
+    /**
+     * @return Rows
+     */
+    protected function getRows()
+    {
+        if ($this->request->has('column')) {
+            $this->order = new Order(
+                $this->request->get('column', $this->defaultOrder['column']),
+                $this->request->get('direction', $this->defaultOrder['direction'])
+            );
 
-        if ($validator->fails()) {
-            $this->makeDefaultOrder();
+            $validator = $this->getValidatorInstance();
+
+            if ($validator->fails()) {
+                $this->makeDefaultOrder();
+            }
         }
 
-        return $this->source->execute($this->perPage, $this->order);
+        $data = $this->execute();
+        $rows = new Rows();
+
+        foreach ($data as $item) {
+            $row = new Row();
+
+            foreach ($this->columns as $column) {
+                $row->addCell(new Cell($column, $item));
+            }
+
+            $rows->addRow($row);
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function execute()
+    {
+        return $this->source->execute($this->perPage, $this->resolveCurrentPage(), $this->order);
+    }
+
+    /**
+     * @return int
+     */
+    protected function resolveCurrentPage()
+    {
+        return Paginator::resolveCurrentPage();
+    }
+
+    /**
+     * @return string
+     */
+    protected function resolveCurrentPath()
+    {
+        return Paginator::resolveCurrentPath();
     }
 
     /**
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function getValidatorInstance()
+    {
+        return $this->validator->make($this->request->all(), $this->getValidatorRules());
+    }
+
+    /**
+     * @return array
+     */
+    protected function getValidatorRules()
     {
         $allowed = [];
 
@@ -200,10 +261,10 @@ class Grid
             }
         }
 
-        return $this->validator->make($this->request->all(), [
+        return [
             'column' => 'sometimes|in:' . implode(',', $allowed),
             'direction' => 'sometimes|in:asc,desc'
-        ]);
+        ];
     }
 
     protected function makeDefaultOrder()

@@ -12,6 +12,11 @@ class Eloquent implements SourceInterface
     protected $source;
 
     /**
+     * @var int
+     */
+    protected $total;
+
+    /**
      * @param \Illuminate\Database\Eloquent\Builder $source
      */
     public function __construct($source)
@@ -21,11 +26,27 @@ class Eloquent implements SourceInterface
 
     /**
      * @param int $perPage
+     * @param int $currentPage
      * @param Order $order
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function execute($perPage, Order $order)
+    public function execute($perPage, $currentPage, Order $order)
     {
-        return $this->source->orderBy($order->getColumn(), $order->getDirection())->paginate($perPage);
+        $this->total = $this->source->count();
+
+        return $this
+            ->source
+            ->orderBy($order->getColumn(), $order->getDirection())
+            ->skip(($currentPage - 1) * $perPage)
+            ->take($perPage)
+            ->get();
+    }
+
+    /**
+     * @return int
+     */
+    public function total()
+    {
+        return $this->total;
     }
 }

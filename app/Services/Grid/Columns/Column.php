@@ -115,6 +115,11 @@ abstract class Column
 
         return $this;
     }
+    
+    public function setClickable(\Closure $closure)
+    {
+        //
+    }
 
     /**
      * @param DecoratorInterface $decorator
@@ -139,34 +144,11 @@ abstract class Column
     }
 
     /**
-     * @param mixed $data
-     * @return \Illuminate\Support\HtmlString
+     * @return \Coyote\Services\Grid\Decorators\DecoratorInterface[]
      */
-    public function render($data)
+    public function getDecorators()
     {
-        $value = (string) $this->setupValue($data);
-
-        foreach ($this->decorators as $decorator) {
-            //
-        }
-        return (string) $this->grid->getHtmlBuilder()->tag('td', $value);
-    }
-
-    /**
-     * @param mixed $data
-     * @return mixed
-     */
-    protected function setupValue($data)
-    {
-        $value = null;
-
-        if (is_array($data) || $data instanceof \ArrayAccess) {
-            $value = array_get($data, $this->name);
-        } elseif (is_object($data)) {
-            $value = object_get($data, $this->name);
-        }
-
-        return $value;
+        return $this->decorators;
     }
 
     /**

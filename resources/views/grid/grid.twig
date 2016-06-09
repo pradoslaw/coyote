@@ -7,17 +7,15 @@
             <thead>
                 <tr>
                     {% for column in columns %}
-                        <th>
-                            {{ grid_column(column) }}
-                        </th>
+                        {{ grid_column(column) }}
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                {% for row in data %}
+                {% for row in rows %}
                     <tr>
-                        {% for column in columns %}
-                            {{ grid_render(column, row) }}
+                        {% for cell in row %}
+                            {{ grid_cell(cell) }}
                         {% endfor %}
                     </tr>
                 {% endfor %}

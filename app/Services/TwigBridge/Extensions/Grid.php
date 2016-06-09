@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\TwigBridge\Extensions;
 
+use Coyote\Services\Grid\Cell;
 use Coyote\Services\Grid\Columns\Column;
 use Twig_Extension;
 use Twig_SimpleFunction;
@@ -23,7 +24,7 @@ class Grid extends Twig_Extension
     {
         return [
             new Twig_SimpleFunction('grid_column', [&$this, 'column'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('grid_render', [&$this, 'render'], ['is_safe' => ['html']])
+            new Twig_SimpleFunction('grid_cell', [&$this, 'cell'], ['is_safe' => ['html']])
         ];
     }
 
@@ -44,23 +45,24 @@ class Grid extends Twig_Extension
                 ]
             );
 
-            return link_to(
+            $text = link_to(
                 $column->getGrid()->getRequest()->path() . '?' . http_build_query($parameters),
                 $column->getTitle(),
                 ['class' => "sort " . ($direction == $column->getName() ? strtolower($direction) : '')]
             );
         } else {
-            return $column->getTitle();
+            $text = $column->getTitle();
         }
+
+        return $column->getGrid()->getHtmlBuilder()->tag('th', (string) $text);
     }
 
     /**
-     * @param Column $column
-     * @param string $data
+     * @param Cell $cell
      * @return string
      */
-    public function render(Column $column, $data)
+    public function cell(Cell $cell)
     {
-        return $column->render($data);
+        return $cell->getColumn()->getGrid()->getHtmlBuilder()->tag('td', (string) $cell->getValue());
     }
 }
