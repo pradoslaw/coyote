@@ -3,7 +3,7 @@
 namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Services\Grid\Cell;
-use Coyote\Services\Grid\Columns\Column;
+use Coyote\Services\Grid\Column;
 use Coyote\Services\Grid\Grid as Grid_Object;
 use Twig_Extension;
 use Twig_SimpleFunction;

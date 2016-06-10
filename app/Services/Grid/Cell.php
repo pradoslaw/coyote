@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Grid;
 
-use Coyote\Services\Grid\Columns\Column;
+use Coyote\Services\Grid\Column;
 
 class Cell
 {

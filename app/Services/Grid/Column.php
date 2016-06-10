@@ -1,12 +1,11 @@
 <?php
 
-namespace Coyote\Services\Grid\Columns;
+namespace Coyote\Services\Grid;
 
 use Coyote\Services\Grid\Decorators\DecoratorInterface;
 use Coyote\Services\Grid\Decorators\Link;
-use Coyote\Services\Grid\Grid;
 
-abstract class Column
+class Column
 {
     /**
      * @var Grid

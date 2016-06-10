@@ -3,7 +3,6 @@
 namespace Coyote\Services\Grid;
 
 use Collective\Html\HtmlBuilder;
-use Coyote\Services\Grid\Columns\Column;
 use Coyote\Services\Grid\Source\SourceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
@@ -100,16 +99,15 @@ class Grid
 
     /**
      * @param string $name
-     * @param string $type
      * @param array $options
      * @return $this
      */
-    public function addColumn($name, $type = '', array $options = [])
+    public function addColumn($name, array $options = [])
     {
         if ($name instanceof Column) {
             $column = $name;
         } else {
-            $column = $this->makeColumn($name, $type, $options);
+            $column = $this->makeColumn($name, $options);
         }
 
         $column->setGrid($this);
@@ -274,25 +272,14 @@ class Grid
 
     /**
      * @param string $name
-     * @param string $type
      * @param array $options
      * @return Column
      */
-    protected function makeColumn($name, $type, array $options = [])
+    protected function makeColumn($name, array $options = [])
     {
-        $fieldType = $this->getFieldType($type);
         $options = $this->setupColumnOptions($name, $options);
 
-        return new $fieldType($options);
-    }
-
-    /**
-     * @param string $type
-     * @return string
-     */
-    protected function getFieldType($type)
-    {
-        return __NAMESPACE__ . '\\Columns\\' . ucfirst(camel_case($type));
+        return new Column($options);
     }
 
     /**

@@ -39,11 +39,11 @@ class UserController extends BaseController
         $grid
             ->setSource(new Eloquent($this->user->newQuery()))
             ->setDefaultOrder(new Order('id', 'desc'))
-            ->addColumn('id', 'text', [
+            ->addColumn('id', [
                 'title' => 'ID',
                 'sortable' => true
             ])
-            ->addColumn('name', 'text', [
+            ->addColumn('name', [
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
                 'clickable' => function ($user) {
@@ -51,25 +51,25 @@ class UserController extends BaseController
                     return link_to_route('adm.user.save', $user->name, [$user->id]);
                 }
             ])
-            ->addColumn('email', 'text', [
+            ->addColumn('email', [
                 'title' => 'E-mail'
             ])
-            ->addColumn('created_at', 'text', [
+            ->addColumn('created_at', [
                 'title' => 'Data rejestracji'
             ])
-            ->addColumn('visited_at', 'text', [
+            ->addColumn('visited_at', [
                 'title' => 'Data ost. wizyty',
                 'sortable' => true
             ])
-            ->addColumn('is_active', 'boolean', [
+            ->addColumn('is_active', [
                 'title' => 'Aktywny',
                 'decorators' => [new Boolean()]
             ])
-            ->addColumn('is_blocked', 'boolean', [
+            ->addColumn('is_blocked', [
                 'title' => 'Zablokowany',
                 'decorators' => [new Boolean()]
             ])
-            ->addColumn('ip', 'text', [
+            ->addColumn('ip', [
                 'title' => 'IP'
             ]);
 
