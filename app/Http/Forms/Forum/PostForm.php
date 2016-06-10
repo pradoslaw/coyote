@@ -16,14 +16,15 @@ use Illuminate\Support\Collection;
 
 class PostForm extends Form
 {
-    const RULE_USER_NAME            = 'sometimes|required|string|max:20|unique:users,name';
+    const RULE_USER_NAME            = 'sometimes|required|string|max:20';
+    const RULE_USER_UNIQUE          = 'unique:users,name';
     const RULE_SUBJECT              = 'sometimes|required|min:3|max:200';
     const RULE_TEXT                 = 'required';
     const RULE_STICKY               = 'sometimes|bool';
     const RULE_TAGS                 = 'array|max:5';
     const RULE_TAG                  = 'max:25|tag|tag_creation:2';
     const RULE_HUMAN                = 'required';
-    const RULE_THROTTLE             = 'throttle'; // must be at the end
+    const RULE_THROTTLE             = 'throttle';
 
     protected $theme = 'forum.forms';
 
@@ -58,7 +59,7 @@ class PostForm extends Form
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->post = new Post();
         $this->topic = new Topic();
         $this->forum = new Forum();
@@ -188,9 +189,9 @@ class PostForm extends Form
             }
         }
 
-        if ($this->userId === null || (empty($this->post->id) && !empty($this->post->user_name))) {
+        if ($this->canSeeUsername()) {
             $this->add('user_name', 'text', [
-                'rules' => self::RULE_USER_NAME,
+                'rules' => self::RULE_USER_NAME . (!$this->isUpdating() ? '|' . self::RULE_USER_UNIQUE : ''),
                 'help' => 'Wpisz swoją nazwę użytkownika.',
                 'label' => 'Nazwa użytkownika',
                 'value' => $this->post->user_name,
@@ -290,5 +291,21 @@ class PostForm extends Form
         }
 
         return $validator->getMessageBag()->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    private function isUpdating()
+    {
+        return !empty($this->post->id);
+    }
+
+    /**
+     * @return bool
+     */
+    private function canSeeUsername()
+    {
+        return $this->userId === null || (!empty($this->post->user_name) && $this->isUpdating());
     }
 }
