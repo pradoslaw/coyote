@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Adm;
 use Coyote\Http\Forms\User\SettingsForm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Grid\Decorators\Boolean;
+use Coyote\Services\Grid\Decorators\Ip;
 use Coyote\Services\Grid\Order;
 use Coyote\Services\Grid\Source\Eloquent;
 use Coyote\Services\Stream\Activities\Update;
@@ -70,7 +71,8 @@ class UserController extends BaseController
                 'decorators' => [new Boolean()]
             ])
             ->addColumn('ip', [
-                'title' => 'IP'
+                'title' => 'IP',
+                'decorators' => [new Ip()]
             ]);
 
         return $this->view('adm.user.home', ['grid' => $grid]);

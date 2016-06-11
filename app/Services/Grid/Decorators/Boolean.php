@@ -17,6 +17,21 @@ class Boolean extends Decorator
     protected $falseLabel = 'Nie';
 
     /**
+     * @var string
+     */
+    protected $trueIcon = 'fa-check-circle';
+
+    /**
+     * @var string
+     */
+    protected $falseIcon = 'fa-minus';
+
+    /**
+     * @var bool
+     */
+    protected $textual = false;
+
+    /**
      * @return string
      */
     public function getTrueLabel()
@@ -49,11 +64,64 @@ class Boolean extends Decorator
     }
 
     /**
+     * @return string
+     */
+    public function getFalseIcon()
+    {
+        return $this->falseIcon;
+    }
+
+    /**
+     * @param string $falseIcon
+     */
+    public function setFalseIcon($falseIcon)
+    {
+        $this->falseIcon = $falseIcon;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTrueIcon()
+    {
+        return $this->trueIcon;
+    }
+
+    /**
+     * @param string $trueIcon
+     */
+    public function setTrueIcon($trueIcon)
+    {
+        $this->trueIcon = $trueIcon;
+    }
+
+    /**
+     * @param $flag
+     */
+    public function setTextual($flag)
+    {
+        $this->textual = (bool) $flag;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTextual()
+    {
+        return $this->textual;
+    }
+
+    /**
      * @param Cell $cell
      * @return void
      */
     public function decorate(Cell $cell)
     {
         $cell->setValue([0 => $this->falseLabel, 1 => $this->trueLabel][$cell->getValue()]);
+    }
+
+    protected function renderGraphical()
+    {
+        
     }
 }
