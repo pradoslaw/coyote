@@ -24,6 +24,10 @@
                                 {{ grid_cell(cell) }}
                             {% endfor %}
                         </tr>
+                    {% else %}
+                        <tr>
+                            {{ grid_no_data(grid) }}
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

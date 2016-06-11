@@ -27,7 +27,8 @@ class Grid extends Twig_Extension
             new Twig_SimpleFunction('grid', [&$this, 'grid'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('grid_column', [&$this, 'column'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('grid_cell', [&$this, 'cell'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('grid_filter', [&$this, 'filter'], ['is_safe' => ['html']])
+            new Twig_SimpleFunction('grid_filter', [&$this, 'filter'], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction('grid_no_data', [&$this, 'noData'], ['is_safe' => ['html']])
         ];
     }
 
@@ -91,5 +92,18 @@ class Grid extends Twig_Extension
     public function cell(Cell $cell)
     {
         return $cell->getColumn()->getGrid()->getHtmlBuilder()->tag('td', (string) $cell->getValue());
+    }
+
+    /**
+     * @param Grid_Object $grid
+     * @return \Illuminate\Support\HtmlString
+     */
+    public function noData(Grid_Object $grid)
+    {
+        return $grid->getHtmlBuilder()->tag(
+            'td',
+            (string) $grid->getNoDataMessage(),
+            ['colspan' => count($grid->getColumns()), 'style' => 'text-align: center']
+        );
     }
 }

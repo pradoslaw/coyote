@@ -44,6 +44,11 @@ class Grid
     protected $perPage = 15;
 
     /**
+     * @var string
+     */
+    protected $noDataMessage = 'Brak danych do wyświetlenia.';
+
+    /**
      * @var array
      */
     protected $defaultOrder = [
@@ -122,6 +127,14 @@ class Grid
     }
 
     /**
+     * @return Column[]
+     */
+    public function getColumns()
+    {
+        return $this->columns;
+    }
+
+    /**
      * @param Order $order
      * @return $this
      */
@@ -162,6 +175,22 @@ class Grid
     /**
      * @return string
      */
+    public function getNoDataMessage()
+    {
+        return $this->noDataMessage;
+    }
+
+    /**
+     * @param string $noDataMessage
+     */
+    public function setNoDataMessage($noDataMessage)
+    {
+        $this->noDataMessage = $noDataMessage;
+    }
+
+    /**
+     * @return string
+     */
     public function render()
     {
         $rows = $this->getRows();
@@ -170,7 +199,8 @@ class Grid
         return view(self::DEFAULT_TEMPLATE, [
             'columns'       => $this->columns,
             'rows'          => $rows,
-            'pagination'    => $paginator->render()
+            'pagination'    => $paginator->render(),
+            'grid'          => $this
         ]);
     }
 
@@ -202,7 +232,7 @@ class Grid
                 $this->makeDefaultOrder();
             }
         }
-               
+
 
         $data = $this->execute();
         $rows = new Rows();
