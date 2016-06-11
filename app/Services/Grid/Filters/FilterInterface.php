@@ -19,5 +19,10 @@ interface FilterInterface
     /**
      * @return mixed
      */
+    public function getOperator();
+
+    /**
+     * @return mixed
+     */
     public function render();
 }

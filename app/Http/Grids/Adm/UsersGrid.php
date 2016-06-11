@@ -32,11 +32,11 @@ class UsersGrid extends Grid
                     /** @var \Coyote\User $user */
                     return link_to_route('adm.user.save', $user->name, [$user->id]);
                 },
-                'filter' => new Text(FilterOperation::OPERATOR_LIKE)
+                'filter' => new Text(FilterOperation::OPERATOR_ILIKE)
             ])
             ->addColumn('email', [
                 'title' => 'E-mail',
-                'filter' => new Text(FilterOperation::OPERATOR_LIKE)
+                'filter' => new Text(FilterOperation::OPERATOR_ILIKE)
             ])
             ->addColumn('created_at', [
                 'title' => 'Data rejestracji'
@@ -58,7 +58,7 @@ class UsersGrid extends Grid
             ->addColumn('ip', [
                 'title' => 'IP',
                 'decorators' => [new Ip()],
-                'filter' => new Text(FilterOperation::OPERATOR_LIKE)
+                'filter' => new Text(FilterOperation::OPERATOR_ILIKE)
             ]);
     }
 }

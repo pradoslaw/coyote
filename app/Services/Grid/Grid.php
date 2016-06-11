@@ -202,6 +202,7 @@ class Grid
                 $this->makeDefaultOrder();
             }
         }
+               
 
         $data = $this->execute();
         $rows = new Rows();
@@ -224,6 +225,7 @@ class Grid
      */
     protected function execute()
     {
+        $this->source->setFiltersData($this->columns, $this->request);
         return $this->source->execute($this->perPage, $this->resolveCurrentPage(), $this->order);
     }
 
