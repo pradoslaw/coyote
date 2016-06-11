@@ -33,7 +33,6 @@ class GridServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('grid.builder', function ($app) {
-//            return new Grid($app['request'], $app['validator'], $app['html']);
             return new GridBuilder($app);
         });
     }

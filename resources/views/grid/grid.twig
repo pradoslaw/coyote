@@ -3,24 +3,33 @@
 
         {{ pagination|raw }}
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    {% for column in columns %}
-                        {{ grid_column(column) }}
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in rows %}
+        <form method="get">
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        {% for cell in row %}
-                            {{ grid_cell(cell) }}
+                        {% for column in columns %}
+                            {{ grid_column(column) }}
                         {% endfor %}
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    <tr>
+                        {% for column in columns %}
+                            {{ grid_filter(column) }}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            {% for cell in row %}
+                                {{ grid_cell(cell) }}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <input type="submit" style="visibility: hidden;" />
+        </form>
 
         {{ pagination|raw }}
     </div>

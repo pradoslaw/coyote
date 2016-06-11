@@ -4,6 +4,7 @@ namespace Coyote\Services\Grid;
 
 use Coyote\Services\Grid\Decorators\DecoratorInterface;
 use Coyote\Services\Grid\Decorators\Link;
+use Coyote\Services\Grid\Filters\FilterInterface;
 
 class Column
 {
@@ -31,6 +32,11 @@ class Column
      * @var DecoratorInterface[]
      */
     protected $decorators = [];
+
+    /**
+     * @var FilterInterface
+     */
+    protected $filter;
 
     /**
      * @param array $options
@@ -152,6 +158,34 @@ class Column
     public function getDecorators()
     {
         return $this->decorators;
+    }
+
+    /**
+     * @param FilterInterface $filter
+     * @return $this
+     */
+    public function setFilter(FilterInterface $filter)
+    {
+        $filter->setColumn($this);
+        $this->filter = $filter;
+
+        return $this;
+    }
+
+    /**
+     * @return FilterInterface
+     */
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFilterable()
+    {
+        return $this->filter !== null;
     }
 
     /**

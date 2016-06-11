@@ -26,7 +26,8 @@ class Grid extends Twig_Extension
         return [
             new Twig_SimpleFunction('grid', [&$this, 'grid'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('grid_column', [&$this, 'column'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('grid_cell', [&$this, 'cell'], ['is_safe' => ['html']])
+            new Twig_SimpleFunction('grid_cell', [&$this, 'cell'], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction('grid_filter', [&$this, 'filter'], ['is_safe' => ['html']])
         ];
     }
 
@@ -66,6 +67,21 @@ class Grid extends Twig_Extension
         }
 
         return $column->getGrid()->getHtmlBuilder()->tag('th', (string) $text);
+    }
+
+    /**
+     * @param Column $column
+     * @return string
+     */
+    public function filter(Column $column)
+    {
+        $filter = '';
+
+        if ($column->isFilterable()) {
+            $filter = (string) $column->getFilter()->render();
+        }
+
+        return $column->getGrid()->getHtmlBuilder()->tag('th', (string) $filter);
     }
 
     /**
