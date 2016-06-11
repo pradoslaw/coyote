@@ -7,7 +7,7 @@ use Coyote\Services\Grid\Filters\FilterOperation;
 use Coyote\Services\Grid\Order;
 use Illuminate\Http\Request;
 
-class Eloquent implements SourceInterface
+class EloquentDataSource implements SourceInterface
 {
     /**
      * @var \Illuminate\Database\Eloquent\Builder
