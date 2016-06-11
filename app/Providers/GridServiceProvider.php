@@ -3,6 +3,7 @@
 namespace Coyote\Providers;
 
 use Coyote\Services\Grid\Grid;
+use Coyote\Services\Grid\GridBuilder;
 use Illuminate\Support\ServiceProvider;
 
 class GridServiceProvider extends ServiceProvider
@@ -31,8 +32,9 @@ class GridServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('grid', function ($app) {
-            return new Grid($app['request'], $app['validator'], $app['html']);
+        $this->app->bind('grid.builder', function ($app) {
+//            return new Grid($app['request'], $app['validator'], $app['html']);
+            return new GridBuilder($app);
         });
     }
 
@@ -43,6 +45,6 @@ class GridServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['grid'];
+        return ['grid.builder'];
     }
 }

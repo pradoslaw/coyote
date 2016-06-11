@@ -3,7 +3,6 @@
 namespace Coyote\Services\FormBuilder;
 
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Routing\Redirector;
 
 class FormBuilder
 {

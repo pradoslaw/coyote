@@ -3,10 +3,8 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Forms\User\SettingsForm;
+use Coyote\Http\Grids\Adm\UsersGrid;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Services\Grid\Decorators\Boolean;
-use Coyote\Services\Grid\Decorators\Ip;
-use Coyote\Services\Grid\Order;
 use Coyote\Services\Grid\Source\Eloquent;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
@@ -35,45 +33,7 @@ class UserController extends BaseController
      */
     public function index()
     {
-        $grid = $this->getGrid();
-
-        $grid
-            ->setSource(new Eloquent($this->user->newQuery()))
-            ->setDefaultOrder(new Order('id', 'desc'))
-            ->addColumn('id', [
-                'title' => 'ID',
-                'sortable' => true
-            ])
-            ->addColumn('name', [
-                'title' => 'Nazwa użytkownika',
-                'sortable' => true,
-                'clickable' => function ($user) {
-                    /** @var \Coyote\User $user */
-                    return link_to_route('adm.user.save', $user->name, [$user->id]);
-                }
-            ])
-            ->addColumn('email', [
-                'title' => 'E-mail'
-            ])
-            ->addColumn('created_at', [
-                'title' => 'Data rejestracji'
-            ])
-            ->addColumn('visited_at', [
-                'title' => 'Data ost. wizyty',
-                'sortable' => true
-            ])
-            ->addColumn('is_active', [
-                'title' => 'Aktywny',
-                'decorators' => [new Boolean()]
-            ])
-            ->addColumn('is_blocked', [
-                'title' => 'Zablokowany',
-                'decorators' => [new Boolean()]
-            ])
-            ->addColumn('ip', [
-                'title' => 'IP',
-                'decorators' => [new Ip()]
-            ]);
+        $grid = $this->getGrid()->createGrid(UsersGrid::class)->setSource(new Eloquent($this->user->newQuery()));
 
         return $this->view('adm.user.home', ['grid' => $grid]);
     }

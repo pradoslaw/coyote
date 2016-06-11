@@ -117,11 +117,21 @@ class Boolean extends Decorator
      */
     public function decorate(Cell $cell)
     {
-        $cell->setValue([0 => $this->falseLabel, 1 => $this->trueLabel][$cell->getValue()]);
+        if ($this->textual) {
+            $this->renderTextual($cell);
+        } else {
+            $this->renderGraphical($cell);
+        }
     }
 
-    protected function renderGraphical()
+    protected function renderGraphical(Cell $cell)
     {
-        
+        $class = [0 => $this->falseIcon, 1 => $this->trueIcon][$cell->getValue()];
+        $cell->setValue($cell->getColumn()->getGrid()->getHtmlBuilder()->tag('i', '', ['class' => "fa $class"]));
+    }
+
+    protected function renderTextual(Cell $cell)
+    {
+        $cell->setValue([0 => $this->falseLabel, 1 => $this->trueLabel][$cell->getValue()]);
     }
 }

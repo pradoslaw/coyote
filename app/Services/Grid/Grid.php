@@ -70,6 +70,11 @@ class Grid
         $this->makeDefaultOrder();
     }
 
+    public function buildGrid()
+    {
+        //
+    }
+
     /**
      * @return Request
      */

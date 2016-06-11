@@ -69,10 +69,10 @@ class BaseController extends Controller
     }
 
     /**
-     * @return \Coyote\Services\Grid\Grid
+     * @return \Coyote\Services\Grid\GridBuilder
      */
     protected function getGrid()
     {
-        return app('grid');
+        return app('grid.builder');
     }
 }
