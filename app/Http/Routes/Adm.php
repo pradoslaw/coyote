@@ -13,10 +13,14 @@ Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm:1'], 'prefix' 
     Route::get('User', 'UserController@index')->name('user');
     Route::get('User/Save/{user}', 'UserController@edit')->name('user.save');
     Route::post('User/Save/{user}', 'UserController@save');
-    
+
+    Route::get('Firewall', 'FirewallController@index')->name('firewall');
+    Route::get('Firewall/Save/{firewall?}', 'FirewallController@edit')->name('firewall.save');
+    Route::post('Firewall/Save/{firewall?}', 'FirewallController@save');
+
     Route::get('Stream', 'StreamController@index')->name('stream');
     Route::get('Cache', 'CacheController@index')->name('cache');
-    Route::get('Firewall', 'FirewallController@index')->name('firewall');
+
     Route::get('Stream', 'StreamController@index')->name('stream');
     Route::get('Log', 'LogController@index')->name('log');
 });

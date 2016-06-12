@@ -1,0 +1,19 @@
+{% extends 'adm.base' %}
+{% block title %}Edycja banu {{ parent() }}{% endblock %}
+
+{% block container %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function() {
+            $(':checkbox[name="lifetime"]').change(function() {
+                $('#expire-at').attr('disabled', $(this).is(':checked'));
+            })
+            .trigger('change');
+        });
+    </script>
+{% endblock %}

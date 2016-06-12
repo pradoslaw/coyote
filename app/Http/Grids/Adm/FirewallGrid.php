@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Grids\Adm;
 
+use Coyote\Services\Grid\Decorators\StrLimit;
 use Coyote\Services\Grid\Filters\FilterOperation;
 use Coyote\Services\Grid\Filters\Text;
 use Coyote\Services\Grid\Grid;
@@ -16,14 +17,21 @@ class FirewallGrid extends Grid
             ->setDefaultOrder(new Order('id', 'desc'))
             ->addColumn('id', [
                 'title' => 'ID',
-                'sortable' => true
+                'sortable' => true,
+                'clickable' => function ($row) {
+                    /** @var \Coyote\Firewall $row */
+                    return link_to_route('adm.firewall.save', $row->id, [$row->id]);
+                }
             ])
-            ->addColumn('name', [
+            ->addColumn('user_name', [
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
-                'clickable' => function ($user) {
-                    /** @var \Coyote\User $user */
-                    return link_to_route('adm.user.save', $user->name, [$user->user_id]);
+                'clickable' => function ($row) {
+                    if (empty($row->user_name)) {
+                        return '--';
+                    }
+
+                    return link_to_route('adm.user.save', $row->user_name, [$row->user_id]);
                 },
                 'filter' => new Text(FilterOperation::OPERATOR_ILIKE)
             ])
@@ -36,13 +44,17 @@ class FirewallGrid extends Grid
                 'title' => 'Data przedawnienia'
             ])
             ->addColumn('reason', [
-                'title' => 'Powód'
+                'title' => 'Powód',
+                'decorators' => [new StrLimit()]
             ])
             ->addColumn('created_at', [
                 'title' => 'Data utworzenia'
             ])
             ->addColumn('moderator_name', [
-                'title' => 'Założony przez'
+                'title' => 'Założony przez',
+                'clickable' => function ($row) {
+                    return link_to_route('adm.user.save', $row->moderator_name, [$row->moderator_id]);
+                }
             ]);
     }
 }
