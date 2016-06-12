@@ -8,6 +8,8 @@ class FormEvents
      * @experimental
      */
     const PRE_RENDER = 'form.pre_render';
+    const PRE_SUBMIT = 'form.pre_submit';
+    const POST_SUBMIT = 'form.post_submit';
 
     /**
      * @var FormInterface

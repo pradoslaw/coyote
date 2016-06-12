@@ -13,11 +13,6 @@ abstract class Form extends FormRequest implements FormInterface
     const THEME_HORIZONTAL = 'forms.themes.horizontal';
 
     /**
-     * @var FormEvents
-     */
-    protected $events;
-
-    /**
      * It's public so we can use use attr from twig
      *
      * @var array
@@ -76,6 +71,7 @@ abstract class Form extends FormRequest implements FormInterface
     public function addEventListener($name, \Closure $listener)
     {
         $this->events->addListener($name, $listener);
+
         return $this;
     }
 
@@ -85,6 +81,7 @@ abstract class Form extends FormRequest implements FormInterface
     public function add($name, $type, array $options = [])
     {
         $this->fields[$name] = $this->makeField($name, $type, $this, $options);
+
         return $this;
     }
 
@@ -121,6 +118,7 @@ abstract class Form extends FormRequest implements FormInterface
     public function setMethod($method)
     {
         $this->attr['method'] = $method;
+
         return $this;
     }
 
@@ -138,6 +136,7 @@ abstract class Form extends FormRequest implements FormInterface
     public function setUrl($url)
     {
         $this->attr['url'] = $url;
+
         return $this;
     }
 
@@ -158,6 +157,7 @@ abstract class Form extends FormRequest implements FormInterface
         $only = array_only($this->attr, ['url', 'method']);
 
         $this->attr = array_merge($only, $attr);
+
         return $this;
     }
 
@@ -259,7 +259,13 @@ abstract class Form extends FormRequest implements FormInterface
      */
     public function all()
     {
-        return $this->request->all();
+        $values = [];
+
+        foreach ($this->fields as $field) {
+            $values[$field->getName()] = $field->getValue();
+        }
+
+        return $values;
     }
 
     /**

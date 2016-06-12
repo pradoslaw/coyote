@@ -116,7 +116,9 @@ elixir(function (mix) {
             '../bower/jquery-ui/ui/minified/mouse.min.js',
             '../bower/jquery-ui/ui/minified/resizable.min.js',
             '../bower/jquery-ui/ui/minified/sortable.min.js'
-        ], 'public/js/jquery-ui.js');
+        ], 'public/js/jquery-ui.js')
+    
+        .scripts(['../bower/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'], 'public/js/datepicker.js');
 
     mix.sass('main.scss')
         .sass('pages/auth.scss')
@@ -130,6 +132,8 @@ elixir(function (mix) {
         .sass('pages/errors.scss')
         .sass('pages/adm.scss')
         .sass('pages/pastebin.scss');
+    
+    mix.copy('resources/assets/bower/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css', 'public/css/datepicker.css');
 
     mix.version([
         'js/main.js',

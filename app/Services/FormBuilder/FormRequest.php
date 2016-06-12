@@ -3,18 +3,16 @@
 namespace Coyote\Services\FormBuilder;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
-use Illuminate\Validation\ValidatesWhenResolvedTrait;
 
 abstract class FormRequest
 {
-    use ValidatesWhenResolvedTrait;
-
     /**
      * @var \Illuminate\Http\Request
      */
@@ -78,6 +76,11 @@ abstract class FormRequest
      * @var array
      */
     protected $rules = [];
+
+    /**
+     * @var FormEvents
+     */
+    protected $events;
 
     /**
      * Set up the validation rules
@@ -170,9 +173,39 @@ abstract class FormRequest
     }
 
     /**
-     * Get the validator instance for the request.
+     * Validate the class instance.
      *
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return \Illuminate\Validation\Validator
+     */
+    public function validate()
+    {
+        $this->events->dispatch(FormEvents::PRE_SUBMIT);
+        $instance = $this->getValidatorInstance();
+
+        if (!$this->authorize()) {
+            $this->failedAuthorization();
+        } elseif ($instance->fails()) {
+            $this->failedValidation($instance);
+        } elseif ($instance->passes()) {
+            $this->events->dispatch(FormEvents::POST_SUBMIT);
+        }
+
+        return $instance;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return $this->validate()->passes();
+    }
+
+    /**
+     * Get the validator instance for the request.
+     * This code overrides getValidatorInstance() method from ValidatesWhenResolvedTrait.
+     *
+     * @return \Illuminate\Validation\Validator
      */
     protected function getValidatorInstance()
     {
@@ -272,7 +305,7 @@ abstract class FormRequest
      */
     protected function failedAuthorization()
     {
-        throw new HttpResponseException(403);
+        throw new HttpResponseException($this->forbiddenResponse());
     }
 
     /**
@@ -304,5 +337,15 @@ abstract class FormRequest
         }
 
         return $url->previous();
+    }
+
+    /**
+     * Get the response for a forbidden operation.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    protected function forbiddenResponse()
+    {
+        return new Response('Forbidden', 403);
     }
 }

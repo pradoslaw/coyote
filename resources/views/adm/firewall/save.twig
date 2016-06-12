@@ -8,12 +8,22 @@
 {% block body %}
     {{ parent() }}
 
+    <link rel="stylesheet" href="{{ asset('css/datepicker.css') }}">
+
+    <script type="text/javascript" src="{{ asset('js/datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/auto-complete.js') }}"></script>
     <script type="text/javascript">
         $(function() {
             $(':checkbox[name="lifetime"]').change(function() {
                 $('#expire-at').attr('disabled', $(this).is(':checked'));
             })
             .trigger('change');
+
+            $('#expire-at').datepicker({format: 'yyyy-mm-dd'});
+
+            $('#username').autocomplete({
+                url: '{{ route('user.prompt') }}'
+            });
         });
     </script>
 {% endblock %}

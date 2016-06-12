@@ -34,14 +34,14 @@ class GridBuilder
         /** @var Grid $grid */
         $grid = $this->container->make($gridClass);
         $grid->buildGrid();
-        
+
         return $grid;
     }
 
     /**
      * @return Grid
      */
-    public function createGridBuilder()
+    public function createBuilder()
     {
         return $this->createGrid(Grid::class);
     }
