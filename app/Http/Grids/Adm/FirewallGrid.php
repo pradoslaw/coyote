@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Grids\Adm;
 
+use Coyote\Services\Grid\Decorators\DateTimeFormat;
 use Coyote\Services\Grid\Decorators\StrLimit;
 use Coyote\Services\Grid\Filters\FilterOperation;
 use Coyote\Services\Grid\Filters\Text;
@@ -41,7 +42,8 @@ class FirewallGrid extends Grid
                 'filter' => new Text(FilterOperation::OPERATOR_ILIKE)
             ])
             ->addColumn('expire_at', [
-                'title' => 'Data przedawnienia'
+                'title' => 'Data przedawnienia',
+                'decorators' => [new DateTimeFormat('Y-m-d')]
             ])
             ->addColumn('reason', [
                 'title' => 'Powód',

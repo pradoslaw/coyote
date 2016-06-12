@@ -1,7 +1,9 @@
 <?php namespace Coyote\Providers;
 
+use Coyote\Events\FirewallWasSaved;
 use Coyote\Events\UserWasSaved;
 use Coyote\Listeners\BindRouteDefaultModel;
+use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
 use Coyote\Listeners\SendLockoutEmail;
 use Illuminate\Auth\Events\Lockout;
@@ -19,7 +21,8 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         RouteMatched::class => [BindRouteDefaultModel::class],
         UserWasSaved::class => [FlushUserCache::class],
-        Lockout::class => [SendLockoutEmail::class]
+        Lockout::class => [SendLockoutEmail::class],
+        FirewallWasSaved::class => [FlushFirewallCache::class]
     ];
 
     /**

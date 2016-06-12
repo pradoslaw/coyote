@@ -33,6 +33,12 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             if (!empty($this->data->user_id)) {
                 $form->get('name')->setValue($userRepository->find($this->data->user_id, ['name'])->value('name'));
             }
+
+            if (empty($this->data->id)) {
+                $this->get('expire_at')->setValue(Carbon::now()->addDay(1));
+            } else {
+                $form->get('expire_at')->setValue(Carbon::parse($form->get('expire_at')->getValue())->format('Y-m-d'));
+            }
         });
     }
 
@@ -58,7 +64,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ])
             ->add('expire_at', 'text', [
                 'label' => 'Data wygaśnięcia',
-                'rules' => 'sometimes|date_format:Y-m-d',
+                'rules' => 'required_if:lifetime,0|date_format:Y-m-d',
                 'attr' => [
                     'id' => 'expire-at'
                 ]
@@ -73,9 +79,13 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
                     'data-submit-state' => 'Zapisywanie...'
                 ]
             ]);
+    }
 
-        if (empty($this->data->id)) {
-            $this->get('expire_at')->setValue(Carbon::now()->addDay(1));
-        }
+    /**
+     * @return array
+     */
+    public function messages()
+    {
+        return ['expire_at.required_if' => 'To pole jest wymagane.'];
     }
 }

@@ -16,6 +16,10 @@
         $(function() {
             $(':checkbox[name="lifetime"]').change(function() {
                 $('#expire-at').attr('disabled', $(this).is(':checked'));
+
+                if ($(this).is(':checked')) {
+                    $('#expire-at').val('');
+                }
             })
             .trigger('change');
 

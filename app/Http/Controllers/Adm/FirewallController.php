@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
+use Coyote\Events\FirewallWasSaved;
 use Coyote\Http\Forms\FirewallForm;
 use Coyote\Http\Grids\Adm\FirewallGrid;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface as FirewallRepository;
@@ -74,6 +75,8 @@ class FirewallController extends BaseController
                 $firewall->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
                 (new Stream_Firewall())->map($firewall)
             );
+
+            event(new FirewallWasSaved($firewall));
         });
 
         return redirect()->route('adm.firewall')->with('success', 'Zapisano poprawnie.');

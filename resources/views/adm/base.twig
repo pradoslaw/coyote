@@ -51,6 +51,16 @@
         </aside>
 
         <main id="wrapper">
+            <div id="adm-header" class="row">
+                <div class="col-xs-12">
+                    <a id="sidebar-toggle" href="javascript:" class="btn btn-default" title="">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                </div>
+            </div>
+
+            {{ breadcrumb|raw }}
+
             {% if session_has('success') %}
                 <div class="row">
                     <div class="col-xs-12">
@@ -62,16 +72,6 @@
                     </div>
                 </div>
             {% endif %}
-
-            <div id="adm-header" class="row">
-                <div class="col-xs-12">
-                    <a id="sidebar-toggle" href="javascript:" class="btn btn-default" title="">
-                        <i class="fa fa-bars"></i>
-                    </a>
-                </div>
-            </div>
-
-            {{ breadcrumb|raw }}
 
             {% block container %}
 
