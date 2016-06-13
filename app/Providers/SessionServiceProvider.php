@@ -27,10 +27,11 @@ class SessionServiceProvider extends ServiceProvider
         $this->app->session->extend('coyote', function ($app) {
             $connectionName     = $app['config']->get('session.connection');
             $databaseConnection = $app['db']->connection($connectionName);
+            $lifetime = $app['config']->get('session.lifetime');
 
             $table = $databaseConnection->getTablePrefix() . $app['config']->get('session.table');
 
-            return new Handler($databaseConnection, $table);
+            return new Handler($databaseConnection, $table, $lifetime);
         });
 
         $this->app->bind('session.viewers', function ($app) {
