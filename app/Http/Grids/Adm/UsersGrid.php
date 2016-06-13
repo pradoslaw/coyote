@@ -9,6 +9,7 @@ use Coyote\Services\Grid\Grid;
 use Coyote\Services\Grid\Decorators\Boolean;
 use Coyote\Services\Grid\Decorators\Ip;
 use Coyote\Services\Grid\Order;
+use Coyote\Services\Grid\RowActions\EditButton;
 
 class UsersGrid extends Grid
 {
@@ -59,6 +60,10 @@ class UsersGrid extends Grid
                 'title' => 'IP',
                 'decorators' => [new Ip()],
                 'filter' => new Text(FilterOperation::OPERATOR_ILIKE)
-            ]);
+            ])
+            ->addRowAction(new EditButton(function ($user) {
+                /** @var \Coyote\User $user */
+                return route('adm.user.save', [$user->id]);
+            }));
     }
 }

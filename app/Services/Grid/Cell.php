@@ -2,9 +2,7 @@
 
 namespace Coyote\Services\Grid;
 
-use Coyote\Services\Grid\Column;
-
-class Cell
+class Cell implements CellInterface
 {
     /**
      * @var Column

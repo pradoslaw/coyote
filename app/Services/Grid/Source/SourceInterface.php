@@ -3,9 +3,17 @@
 namespace Coyote\Services\Grid\Source;
 
 use Coyote\Services\Grid\Order;
+use Illuminate\Http\Request;
+use Coyote\Services\Grid\Column;
 
 interface SourceInterface
 {
+    /**
+     * @param Column[] $columns
+     * @param Request $request
+     */
+    public function setFiltersData($columns, Request $request);
+    
     /**
      * @param int $perPage
      * @param int $currentPage

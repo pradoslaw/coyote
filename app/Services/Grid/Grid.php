@@ -3,6 +3,7 @@
 namespace Coyote\Services\Grid;
 
 use Collective\Html\HtmlBuilder;
+use Coyote\Services\Grid\RowActions\RowAction;
 use Coyote\Services\Grid\Source\SourceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
@@ -47,6 +48,11 @@ class Grid
      * @var string
      */
     protected $noDataMessage = 'Brak danych do wyświetlenia.';
+
+    /**
+     * @var RowAction[]
+     */
+    protected $rowActions = [];
 
     /**
      * @var array
@@ -189,6 +195,18 @@ class Grid
     }
 
     /**
+     * @param RowAction $rowAction
+     * @return $this
+     */
+    public function addRowAction(RowAction $rowAction)
+    {
+        $rowAction->setGrid($this);
+        $this->rowActions[] = $rowAction;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function render()
@@ -237,6 +255,10 @@ class Grid
         $data = $this->execute();
         $rows = new Rows();
 
+        // special column for action buttons
+        $actions = new Column(['name' => '__actions__']);
+        $actions->setGrid($this);
+
         foreach ($data as $item) {
             $row = new Row();
 
@@ -244,8 +266,11 @@ class Grid
                 $row->addCell(new Cell($column, $item));
             }
 
+            $row->addCell(new Action($actions, $this->rowActions, $item));
             $rows->addRow($row);
         }
+
+        $this->columns[] = $actions;
 
         return $rows;
     }

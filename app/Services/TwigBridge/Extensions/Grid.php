@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\TwigBridge\Extensions;
 
-use Coyote\Services\Grid\Cell;
+use Coyote\Services\Grid\CellInterface;
 use Coyote\Services\Grid\Column;
 use Coyote\Services\Grid\Grid as Grid_Object;
 use Twig_Extension;
@@ -86,10 +86,10 @@ class Grid extends Twig_Extension
     }
 
     /**
-     * @param Cell $cell
+     * @param CellInterface $cell
      * @return string
      */
-    public function cell(Cell $cell)
+    public function cell(CellInterface $cell)
     {
         return $cell->getColumn()->getGrid()->getHtmlBuilder()->tag('td', (string) $cell->getValue());
     }

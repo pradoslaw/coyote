@@ -5,15 +5,15 @@ namespace Coyote\Services\Grid;
 class Row implements \IteratorAggregate
 {
     /**
-     * @var Cell[]
+     * @var CellInterface[]
      */
     protected $cells = [];
 
     /**
-     * @param Cell $cell
+     * @param CellInterface $cell
      * @return $this
      */
-    public function addCell(Cell $cell)
+    public function addCell(CellInterface $cell)
     {
         $this->cells[] = $cell;
 

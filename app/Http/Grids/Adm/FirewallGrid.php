@@ -9,6 +9,7 @@ use Coyote\Services\Grid\Filters\Text;
 use Coyote\Services\Grid\Grid;
 use Coyote\Services\Grid\Decorators\Ip;
 use Coyote\Services\Grid\Order;
+use Coyote\Services\Grid\RowActions\EditButton;
 
 class FirewallGrid extends Grid
 {
@@ -57,6 +58,9 @@ class FirewallGrid extends Grid
                 'clickable' => function ($row) {
                     return link_to_route('adm.user.save', $row->moderator_name, [$row->moderator_id]);
                 }
-            ]);
+            ])
+            ->addRowAction(new EditButton(function ($data) {
+                return route('adm.firewall.save', [$data->id]);
+            }));
     }
 }
