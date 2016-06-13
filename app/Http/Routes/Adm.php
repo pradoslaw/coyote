@@ -17,6 +17,7 @@ Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm:1'], 'prefix' 
     Route::get('Firewall', 'FirewallController@index')->name('firewall');
     Route::get('Firewall/Save/{firewall?}', 'FirewallController@edit')->name('firewall.save');
     Route::post('Firewall/Save/{firewall?}', 'FirewallController@save');
+    Route::post('Firewall/Delete/{firewall}', 'FirewallController@delete')->name('firewall.delete');
 
     Route::get('Stream', 'StreamController@index')->name('stream');
     Route::get('Cache', 'CacheController@index')->name('cache');

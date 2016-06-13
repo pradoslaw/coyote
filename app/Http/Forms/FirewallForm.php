@@ -73,11 +73,13 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Bezterminowo',
                 'checked' => empty($this->data->expire_at)
             ])
-            ->add('submit', 'submit', [
+            ->add('submit', 'submit_with_delete', [
                 'label' => 'Zapisz',
                 'attr' => [
                     'data-submit-state' => 'Zapisywanie...'
-                ]
+                ],
+                'delete_url' => empty($this->data->id) ? '' : route('adm.firewall.delete', [$this->data->id]),
+                'delete_visibility' => !empty($this->data->id)
             ]);
     }
 

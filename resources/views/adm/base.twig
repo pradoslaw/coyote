@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="{{ cdn('css/adm.css') }}">
 {% endblock %}
 
+{% import 'components.modals' as modals %}
+
 {% block body %}
     <div id="container-fluid">
         <div id="navbar-border-top" class="navbar-fixed-top"></div>
@@ -79,7 +81,13 @@
         </main>
     </div>
 
+    {{ form_open({url: '#'}) }}
+    {{ modals.confirm('Czy na pewno usunąć?', 'Czy usunąć ten wpis?', 'modal-delete') }}
+    {{ form_close() }}
+
     <script src="{{ cdn('js/main.js') }}"></script>
+    <script src="{{ cdn('js/modal.js') }}"></script>
+
     <script type="text/javascript">
         $(function() {
             $('.collapse').on('hidden.bs.collapse show.bs.collapse', function() {
@@ -100,6 +108,10 @@
                     obj.animate({'left': '-=220'});
                     $('#wrapper').animate({'margin-left': '-=220'});
                 }
+            });
+
+            $('#modal-delete').on('shown.bs.modal', function() {
+                $(this).parent().attr('action', $('button[data-toggle="modal"]').data('delete-url'));
             });
         });
     </script>

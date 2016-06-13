@@ -1,0 +1,5 @@
+{% include 'forms.widgets.submit_widget' %}
+
+{% if delete_visibility %}
+    {{ form_button(delete_label, delete_attr|merge({class: (delete_attr.class|default('') ~ ' btn btn-danger')|trim, type: 'button', 'data-delete-url': delete_url})) }}
+{% endif %}

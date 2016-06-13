@@ -1,5 +1,6 @@
 <?php namespace Coyote\Providers;
 
+use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
 use Coyote\Events\UserWasSaved;
 use Coyote\Listeners\BindRouteDefaultModel;
@@ -22,7 +23,8 @@ class EventServiceProvider extends ServiceProvider
         RouteMatched::class => [BindRouteDefaultModel::class],
         UserWasSaved::class => [FlushUserCache::class],
         Lockout::class => [SendLockoutEmail::class],
-        FirewallWasSaved::class => [FlushFirewallCache::class]
+        FirewallWasSaved::class => [FlushFirewallCache::class],
+        FirewallWasDeleted::class => [FlushFirewallCache::class]
     ];
 
     /**

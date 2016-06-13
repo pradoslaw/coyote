@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
+use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
 use Coyote\Http\Forms\FirewallForm;
 use Coyote\Http\Grids\Adm\FirewallGrid;
@@ -10,6 +11,7 @@ use Coyote\Repositories\Criteria\FirewallList;
 use Coyote\Services\Grid\Source\EloquentDataSource;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Firewall as Stream_Firewall;
 
 class FirewallController extends BaseController
@@ -80,5 +82,21 @@ class FirewallController extends BaseController
         });
 
         return redirect()->route('adm.firewall')->with('success', 'Zapisano poprawnie.');
+    }
+
+    /**
+     * @param \Coyote\Firewall $firewall
+     * @return mixed
+     */
+    public function delete($firewall)
+    {
+        $this->transaction(function () use ($firewall) {
+            $firewall->delete();
+
+            stream(Stream_Delete::class, (new Stream_Firewall())->map($firewall));
+            event(new FirewallWasDeleted($firewall));
+        });
+
+        return redirect()->route('adm.firewall')->with('success', 'Rekord został poprawnie usunięty.');
     }
 }

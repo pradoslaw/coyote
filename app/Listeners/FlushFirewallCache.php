@@ -2,7 +2,6 @@
 
 namespace Coyote\Listeners;
 
-use Coyote\Events\UserWasSaved;
 use Coyote\Repositories\Eloquent\FirewallRepository;
 use Illuminate\Contracts\Cache\Repository;
 
@@ -23,8 +22,6 @@ class FlushFirewallCache
 
     /**
      * Handle the event.
-     *
-     * @param  UserWasSaved  $event
      */
     public function handle()
     {
