@@ -6,7 +6,6 @@ use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
-use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Factories\StreamFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
@@ -17,20 +16,18 @@ use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Topic;
-use Illuminate\Support\Collection;
 
 class TopicController extends BaseController
 {
-    use StreamFactory, GateFactory, CacheFactory, FlagFactory;
+    use StreamFactory, CacheFactory, FlagFactory;
 
     /**
+     * @param Request $request
      * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
-     * @param string $slug
-     * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function index($forum, $topic, $slug, Request $request)
+    public function index(Request $request, $forum, $topic)
     {
         // get the topic (and forum) mark time value from middleware
         // @see \Coyote\Http\Middleware\ScrollToPost
@@ -82,7 +79,7 @@ class TopicController extends BaseController
         stop_measure('More like this');
 
         // magic happens here. get posts for given topic
-        /* @var Collection */
+        /* @var \Illuminate\Support\Collection $posts */
         $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $this->userId, $page, $perPage);
         $paginate = new LengthAwarePaginator($posts, $replies, $perPage, $page, ['path' => ' ']);
 

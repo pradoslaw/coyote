@@ -2,5 +2,9 @@
 {% block title %}Użytkownicy :: {{ user.name }} :: {{ parent() }}{% endblock %}
 
 {% block container %}
-    {{ form(form) }}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {{ form(form) }}
+        </div>
+    </div>
 {% endblock %}
