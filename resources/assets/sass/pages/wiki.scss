@@ -233,6 +233,9 @@ article > header {
   }
 }
 
+// Style dla konkretnego, jednego komentarza do tekstu
+// -------------------------------------------------------
+
 .comment {
   color: $gray-light;
   position: relative;
@@ -281,6 +284,11 @@ article > header {
     border-right-color: $border-color;
     border-width: 9px;
     margin-top: -9px;
+  }
+
+  // formularz edycji komentarza: domyslnie ukryty
+  form {
+    display: none;
   }
 }
 

@@ -7,8 +7,8 @@ Route::group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
     Route::post('Delete/{wiki}', ['as' => 'delete', 'uses' => 'DeleteController@index', 'middleware' => ['auth', 'can:wiki-admin']]);
     Route::post('Restore/{id}', ['as' => 'restore', 'uses' => 'RestoreController@index', 'middleware' => ['auth', 'can:wiki-admin']]);
 
-    Route::get('Comment/{wiki}/{id?}', ['as' => 'comment.edit', 'CommentController@edit', 'middleware' => 'auth']);
-    Route::post('Comment/{wiki}/{id?}', ['as' => 'comment.save', 'CommentController@save', 'middleware' => 'auth']);
+    Route::post('Comment/Save/{wiki}/{id?}', ['as' => 'comment.save', 'uses' => 'CommentController@save', 'middleware' => 'auth']);
+    Route::post('Comment/Delete/{wiki}/{id?}', ['as' => 'comment.delete', 'uses' => 'CommentController@delete', 'middleware' => 'auth']);
 
     Route::post('Wiki/Subscribe/{wiki}', ['uses' => 'SubscribeController@index', 'as' => 'subscribe', 'middleware' => 'auth']);
 

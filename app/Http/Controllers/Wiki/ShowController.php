@@ -28,6 +28,7 @@ class ShowController extends BaseController
         $wiki->load('comments.user');
 
         foreach ($wiki->comments as &$comment) {
+            $comment->original_text = $comment->text;
             /** @var \Coyote\Wiki\Comment $comment */
             $comment->text = $parser->parse($comment->text);
         }

@@ -7,6 +7,17 @@
     <div class="col-sm-11">
         <div class="panel panel-transparent">
             <div class="panel-body comment">
+                <div class="dropdown pull-right">
+                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="comment-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu">
+                        <li><a href="javascript:" class="btn-edit" data-id="{{ comment.id }}"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
+                        <li><a href="#modal-confirm-{{ comment.id }}" data-toggle="modal" class="btn-remove" data-id="{{ comment.id }}"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
+                    </ul>
+                </div>
+
                 <ul class="list-inline">
                     <li>
                         {{ link_to_profile(comment.user) }}
@@ -16,9 +27,25 @@
                     </li>
                 </ul>
 
-                <p>
+                {{ form_open({url: route('wiki.comment.save', [comment.id]), class: 'comment-edit-form'}) }}
+                    <div class="form-group">
+                        {{ form_widget(form.text, {value: comment.original_text}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_widget(form.submit) }}
+                        {{ form_widget(form.cancel) }}
+
+                        <div class="clearfix"></div>
+                    </div>
+                {{ form_close() }}
+
+                <p class="comment-content">
                     {{ comment.text }}
                 </p>
+
+                {{ form_open({url: route('wiki.comment.delete', [comment.id])}) }}
+                {{ modals.confirm('Czy chcesz usunąć ten komentarz?', 'Czy chcesz usunąć?', 'modal-confirm-' ~ comment.id) }}
+                {{ form_close() }}
             </div>
         </div>
     </div>

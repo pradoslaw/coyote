@@ -6,7 +6,6 @@ class Comment extends Object
 {
     /**
      * @param array ...$args
-     * @param \Coyote\Post $args
      * @return $this
      * @throws \Exception
      */
@@ -45,5 +44,16 @@ class Comment extends Object
         $this->id = $comment->id;
         $this->displayName = excerpt($comment->text);
         $this->url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false) . '?p=' . $post->id . '#comment-' . $comment->id;
+    }
+
+    /**
+     * @param \Coyote\Wiki $wiki
+     * @param \Coyote\Wiki\Comment $comment
+     */
+    private function wiki($wiki, $comment)
+    {
+        $this->id = $comment->id;
+        $this->displayName = excerpt($comment->text);
+        $this->url = url($wiki->path) . '#comment-' . $comment->id;
     }
 }
