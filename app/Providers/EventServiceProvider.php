@@ -7,6 +7,11 @@ use Coyote\Listeners\BindRouteDefaultModel;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
 use Coyote\Listeners\SendLockoutEmail;
+use Coyote\Listeners\WikiListener;
+use Coyote\Listeners\PageListener;
+use Coyote\Listeners\PostListener;
+use Coyote\Listeners\TopicListener;
+use Coyote\Listeners\JobListener;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -33,10 +38,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
-        'Coyote\Listeners\PageListener',
-        'Coyote\Listeners\PostListener',
-        'Coyote\Listeners\TopicListener',
-        'Coyote\Listeners\JobListener',
+        PageListener::class,
+        PostListener::class,
+        TopicListener::class,
+        JobListener::class,
+        WikiListener::class,
     ];
 
     /**

@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Wiki extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Searchable;
 
     /**
      * @var string
@@ -41,6 +41,22 @@ class Wiki extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * Elasticsearch type mapping
+     *
+     * @var array
+     */
+    protected $mapping = [
+        "created_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
+        "updated_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
@@ -120,5 +136,22 @@ class Wiki extends Model
         $page->timestamps = false;
 
         $page->where('id', $this->id)->update([$column => $this->views + $amount]);
+    }
+
+    /**
+     * Default data to index in elasticsearch
+     *
+     * @return mixed
+     */
+    protected function getIndexBody()
+    {
+        $body = $this->toArray();
+        foreach (['created_at', 'updated_at'] as $column) {
+            if (!empty($body[$column])) {
+                $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
+            }
+        }
+
+        return array_except($body, ['is_locked', 'templates', 'views']);
     }
 }

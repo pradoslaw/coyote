@@ -5,9 +5,12 @@ namespace Coyote\Console\Commands\Elasticsearch;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Illuminate\Console\Command;
+use Illuminate\Container\Container as App;
 
 class Index extends Command
 {
+    use EsTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -32,17 +35,18 @@ class Index extends Command
      */
     protected $post;
 
+    protected $app;
+
     /**
      * Mapping constructor.
      * @param PostRepositoryInterface $post
      * @param JobRepositoryInterface $job
      */
-    public function __construct(PostRepositoryInterface $post, JobRepositoryInterface $job)
+    public function __construct(App $app)
     {
         parent::__construct();
 
-        $this->post = $post;
-        $this->job = $job;
+        $this->app = $app;
     }
 
     /**
@@ -53,47 +57,58 @@ class Index extends Command
     public function handle()
     {
         if ($this->confirm('Do you want to index data in Elasticsearch?', true)) {
-            $model = ucfirst($this->option('model'));
+            $model = $this->option('model');
 
             if (!$model) {
-                $this->indexAll();
+                $this->all();
             } else {
-                if (!method_exists($this, "index{$model}")) {
-                    $this->error("$model does not exist");
-                }
-
-                $this->{'index' . $model}();
+                $this->one($model);
             }
 
             $this->info('Done.');
         }
     }
 
-    private function indexAll()
+    /**
+     * @param string $model
+     */
+    private function one($model)
     {
-        foreach (get_class_methods($this) as $method) {
-            if ($method !== 'indexAll' && $method !== 'index' && 'index' === substr($method, 0, 5)) {
-                $this->$method();
-            }
+        $className = 'Coyote\\' . ucfirst(strtolower($model));
+        $models = $this->getSuitableModels();
+
+        if (!in_array($className, $models)) {
+            $this->error("Model $className does not exist nor implement Searchable trait.");
+        }
+
+        $this->index($className);
+    }
+
+    private function all()
+    {
+        foreach ($this->getSuitableModels() as $className) {
+            $this->index($className);
         }
     }
 
-    private function indexPost()
+    /**
+     * @param string $className
+     */
+    private function index($className)
     {
-        $this->line('Indexing posts in Elasticsearch...');
-        $this->index($this->post);
-        $this->info('Success');
-    }
+        $model = $this->app->make($className);
+        $this->line("Indexing $className ...");
 
-    private function indexJob()
-    {
-        $this->line('Indexing jobs in Elasticsearch...');
-        $this->index($this->job->select()->whereNull('deleted_at')->where('deadline_at', '>=', \DB::raw('NOW()')));
-        $this->info('Success');
-    }
+        $builder = $model->select();
+        if (method_exists($model, 'getDeletedAtColumn')) {
+            $builder->whereNull($model->getDeletedAtColumn());
+        }
 
-    private function index($model)
-    {
+        // ugly hack for job offers...
+        if (get_class($model) === 'Coyote\Job') {
+            $builder->where('deadline_at', '>=', \DB::raw('NOW()'));
+        }
+
         $bar = $this->output->createProgressBar($model->count());
 
         $model->chunk(10000, function ($rowset) use ($bar) {
@@ -105,5 +120,6 @@ class Index extends Command
         });
 
         $bar->finish();
+        $this->info("\n" . $className . '... Done.');
     }
 }

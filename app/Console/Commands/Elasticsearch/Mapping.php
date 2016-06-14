@@ -2,12 +2,14 @@
 
 namespace Coyote\Console\Commands\Elasticsearch;
 
-use Coyote\Repositories\Contracts\JobRepositoryInterface;
-use Coyote\Repositories\Contracts\PostRepositoryInterface;
+use Coyote\Searchable;
 use Illuminate\Console\Command;
+use Illuminate\Container\Container as App;
 
 class Mapping extends Command
 {
+    use EsTrait;
+    
     /**
      * The name and signature of the console command.
      *
@@ -23,26 +25,18 @@ class Mapping extends Command
     protected $description = 'Create Elasticsearch mapping.';
 
     /**
-     * @var JobRepositoryInterface
+     * @var App
      */
-    protected $job;
+    protected $app;
 
     /**
-     * @var PostRepositoryInterface
+     * @param App $app
      */
-    protected $post;
-
-    /**
-     * Mapping constructor.
-     * @param PostRepositoryInterface $post
-     * @param JobRepositoryInterface $job
-     */
-    public function __construct(PostRepositoryInterface $post, JobRepositoryInterface $job)
+    public function __construct(App $app)
     {
         parent::__construct();
 
-        $this->post = $post;
-        $this->job = $job;
+        $this->app = $app;
     }
 
     /**
@@ -56,35 +50,35 @@ class Mapping extends Command
             $model = ucfirst($this->option('model'));
 
             if (!$model) {
-                $this->putMapping();
+                $this->all();
             } else {
-                if (!method_exists($this, "mapping{$model}")) {
-                    $this->error("$model does not exist");
-                }
-
-                $this->{'mapping' . $model}();
-            }
-
-            $this->info('Done.');
-        }
-    }
-
-    private function putMapping()
-    {
-        foreach (get_class_methods($this) as $method) {
-            if ('mapping' === substr($method, 0, 7)) {
-                $this->$method();
+                $this->one($model);
             }
         }
     }
 
-    private function mappingPost()
+    /**
+     * @param string $model
+     */
+    private function one($model)
     {
-        $this->post->putMapping();
+        $model = $this->app->make('Coyote\\' . $model);
+
+        if ($model instanceof Searchable) {
+            $this->error(get_class($model) . " has to implement Searchable trait.");
+        }
+
+        $model->putMapping();
+        $this->info('Done.');
     }
 
-    private function mappingJob()
+    private function all()
     {
-        $this->job->putMapping();
+        foreach ($this->getSuitableModels() as $className) {
+            $model = $this->app->make($className);
+            $model->putMapping();
+
+            $this->info($className . '... Done.');
+        }
     }
 }
