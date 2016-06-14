@@ -4,6 +4,12 @@ namespace Coyote\Job;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $job_id
+ * @property string $city
+ * @property double $latitude
+ * @property double $longitude
+ */
 class Location extends Model
 {
     /**

@@ -16,6 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $is_remote
  * @property int $enable_apply
  * @property int $visits
+ * @property int $rate_id
+ * @property int $employment_id
+ * @property int $views
  * @property float $score
  * @property float $rank
  * @property string $slug
@@ -295,7 +298,7 @@ class Job extends Model
     protected function getIndexBody()
     {
         // maximum offered salary
-        $salary = $this->salary_to;
+        $salary = max($this->salary_from, $this->salary_to);
         $body = array_except($this->toArray(), ['deleted_at', 'enable_apply']);
 
         // we need to calculate monthly salary in order to sorting data by salary
@@ -313,6 +316,7 @@ class Job extends Model
 
         // We need to transform locations to format acceptable by elasticsearch.
         // I'm talking here about the coordinates
+        /** @var \Coyote\Job\Location $location */
         foreach ($this->locations()->get(['city', 'longitude', 'latitude']) as $location) {
             $nested = ['city' => $location->city];
 
