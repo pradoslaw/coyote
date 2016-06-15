@@ -14,7 +14,9 @@ use Coyote\Policies\PostPolicy;
 use Coyote\Policies\JobPolicy;
 use Coyote\Policies\FirmPolicy;
 use Coyote\Policies\PostCommentPolicy;
+use Coyote\Policies\WikiCommentPolicy;
 use Coyote\Post;
+use Coyote\Wiki;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -32,7 +34,8 @@ class AuthServiceProvider extends ServiceProvider
         Post\Comment::class => PostCommentPolicy::class,
         Job::class => JobPolicy::class,
         Firm::class => FirmPolicy::class,
-        Pm::class => PmPolicy::class
+        Pm::class => PmPolicy::class,
+        Wiki\Comment::class => WikiCommentPolicy::class
     ];
 
     /**

@@ -287,7 +287,7 @@ article > header {
   }
 
   // formularz edycji komentarza: domyslnie ukryty
-  form {
+  form.comment-edit-form {
     display: none;
 
     button[type="submit"] {

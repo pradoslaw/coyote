@@ -8,6 +8,7 @@ use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 
 class CommentController extends Controller
 {
@@ -47,5 +48,29 @@ class CommentController extends Controller
         $comment->text = $parser->parse($comment->text);
 
         return view('wiki.partials.comment', ['comment' => $comment, 'wiki' => $wiki, 'form' => $form]);
+    }
+
+    /**
+     * @param \Coyote\Wiki $wiki
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete($wiki, $id)
+    {
+        /** @var \Coyote\Wiki\Comment $comment */
+        $comment = $wiki->comments()->findOrFail($id);
+        $this->authorize('delete', [$comment]);
+
+        $this->transaction(function () use ($comment, $wiki) {
+            $comment->delete();
+
+            stream(
+                Stream_Delete::class,
+                (new Stream_Comment())->map($wiki, $comment),
+                (new Stream_Wiki())->map($wiki)
+            );
+        });
+
+        return redirect()->back()->with('success', 'Komentarz został usunięty.');
     }
 }

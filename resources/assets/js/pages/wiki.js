@@ -1,6 +1,6 @@
 $(() => {
 
-    $('#box-comment').on('submit', 'form', (e) => {
+    $('#box-comment').on('submit', 'form.comment-edit-form', (e) => {
         let form = $(e.currentTarget);
 
         $.post(form.attr('action'), form.serialize(), (html) => {
