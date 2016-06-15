@@ -41,6 +41,11 @@ class CommentController extends Controller
             );
         });
 
-        return view('wiki.partials.comment', ['comment' => $comment]);
+        $parser = app('parser.comment');
+
+        $comment->original_text = $comment->text;
+        $comment->text = $parser->parse($comment->text);
+
+        return view('wiki.partials.comment', ['comment' => $comment, 'wiki' => $wiki, 'form' => $form]);
     }
 }

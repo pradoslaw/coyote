@@ -33,7 +33,7 @@ elixir(function (mix) {
     mix.babel(['pages/job/submit.js'], 'public/js/job-submit.js')
         .babel(['pages/job/tinymce.js'], 'public/js/job-tinymce.js')
         .babel(['pages/job.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js'], 'public/js/job.js')
-        .babel(['pages/wiki.js', 'components/subscribe.js'], 'public/js/wiki.js');
+        .babel(['pages/wiki.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js'], 'public/js/wiki.js');
 
     mix.scripts(base, 'public/js/main.js')
         /*
@@ -44,7 +44,6 @@ elixir(function (mix) {
             '../bower/bootstrap/js/modal.js',
             '../bower/bootstrap/js/tab.js',
             '../bower/bootstrap/js/popover.js',
-            'components/input-focus.js', // <-- potrzebne przy edycji tagow
             'pages/forum/draft.js',
             'pages/forum/tags.js',
             'pages/forum/sidebar.js',
@@ -57,8 +56,7 @@ elixir(function (mix) {
         .scripts([
             '../bower/jquery-color-animation/jquery.animate-colors-min.js',
             '../bower/ekko-lightbox/dist/ekko-lightbox.min.js',
-            'pages/microblog.js',
-            'components/wikieditor.js'
+            'pages/microblog.js'
         ], 'public/js/microblog.js')
 
         /*
@@ -117,7 +115,7 @@ elixir(function (mix) {
             '../bower/jquery-ui/ui/minified/resizable.min.js',
             '../bower/jquery-ui/ui/minified/sortable.min.js'
         ], 'public/js/jquery-ui.js')
-    
+
         .scripts(['../bower/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'], 'public/js/datepicker.js');
 
     mix.sass('main.scss')
@@ -132,7 +130,7 @@ elixir(function (mix) {
         .sass('pages/errors.scss')
         .sass('pages/adm.scss')
         .sass('pages/pastebin.scss');
-    
+
     mix.copy('resources/assets/bower/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css', 'public/css/datepicker.css');
 
     mix.version([

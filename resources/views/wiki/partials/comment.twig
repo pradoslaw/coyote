@@ -27,7 +27,9 @@
                     </li>
                 </ul>
 
-                {{ form_open({url: route('wiki.comment.save', [comment.id]), class: 'comment-edit-form'}) }}
+                {{ form_open({url: route('wiki.comment.save', [wiki.id, comment.id]), class: 'comment-edit-form'}) }}
+                    {{ form_hidden('comment_id', comment.id) }}
+
                     <div class="form-group">
                         {{ form_widget(form.text, {value: comment.original_text}) }}
                     </div>
@@ -40,7 +42,7 @@
                 {{ form_close() }}
 
                 <p class="comment-content">
-                    {{ comment.text }}
+                    {{ comment.text|raw }}
                 </p>
 
                 {{ form_open({url: route('wiki.comment.delete', [comment.id])}) }}

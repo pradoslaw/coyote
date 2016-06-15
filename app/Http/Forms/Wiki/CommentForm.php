@@ -16,7 +16,8 @@ class CommentForm extends Form
                 'attr' => [
                     'placeholder' => 'Kliknij, aby dodać nowy komentarz',
                     'cols' => 5,
-                    'rows' => 3
+                    'rows' => 3,
+                    'data-prompt-url' => route('user.prompt')
                 ]
             ])
             ->add('cancel', 'button', [
@@ -32,5 +33,18 @@ class CommentForm extends Form
                     'class' => 'btn-sm pull-right'
                 ]
             ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function rules()
+    {
+        $rule = 'throttle';
+        if (!empty($this->data->id)) {
+            $rule .= ':' . $this->data->id;
+        }
+
+        return parent::rules() + ['_token' => $rule];
     }
 }

@@ -289,6 +289,10 @@ article > header {
   // formularz edycji komentarza: domyslnie ukryty
   form {
     display: none;
+
+    button[type="submit"] {
+      margin-left: 10px;
+    }
   }
 }
 
