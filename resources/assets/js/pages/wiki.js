@@ -1,6 +1,6 @@
 $(() => {
 
-    $('#box-comment').on('submit', 'form.comment-edit-form', (e) => {
+    $('#box-comment').on('submit', 'form.comment-form', (e) => {
         let form = $(e.currentTarget);
 
         $.post(form.attr('action'), form.serialize(), (html) => {
@@ -32,11 +32,14 @@ $(() => {
     .on('click', '.btn-edit', (e) => {
         let self = $(e.currentTarget);
 
-        $('.comment-edit-form, .comment-content', '#comment-' + self.data('id')).toggle();
-        $('.comment-edit-form').find('textarea').inputFocus();
+        $('.comment-form, .comment-content', '#comment-' + self.data('id')).toggle();
+        $('.comment-form').find('textarea').inputFocus();
     })
-    .on('click', 'button.btn-danger', (e) => {
-        $(e.currentTarget).parents('form').hide().next('.comment-content').show();
+    .on('click', 'button.btn-cancel', (e) => {
+        let form = $(e.currentTarget).parents('form');
+
+        form.hide();
+        form.prev('.comment-content').show();
     })
     .on('focus', 'textarea:not(.clicked)', (e) => {
         $(e.currentTarget).addClass('clicked').autogrow().prompt().fastSubmit();

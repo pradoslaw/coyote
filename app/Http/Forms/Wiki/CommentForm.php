@@ -10,6 +10,8 @@ class CommentForm extends Form
 
     public function buildForm()
     {
+        $this->setAttr(['class' => 'comment-form']);
+        
         $this
             ->add('text', 'textarea', [
                 'rules' => 'required|string',
@@ -23,7 +25,7 @@ class CommentForm extends Form
             ->add('cancel', 'button', [
                 'label' => 'Anuluj',
                 'attr' => [
-                    'class' => 'btn btn-sm pull-right btn-danger'
+                    'class' => 'btn btn-sm pull-right btn-danger btn-cancel'
                 ]
             ])
             ->add('submit', 'submit', [

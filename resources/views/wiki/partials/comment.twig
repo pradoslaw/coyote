@@ -34,7 +34,7 @@
                 </p>
 
                 {% if can('wiki-admin') or comment.user_id == user('id') %}
-                    {{ form_open({url: route('wiki.comment.save', [wiki.id, comment.id]), class: 'comment-edit-form'}) }}
+                    {{ form_open({url: route('wiki.comment.save', [wiki.id, comment.id]), class: 'comment-form'}) }}
                     {{ form_hidden('comment_id', comment.id) }}
 
                     <div class="form-group">
