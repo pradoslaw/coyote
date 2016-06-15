@@ -11,10 +11,16 @@ $(() => {
 
         return false;
     })
-    .on('click', '.btn-edit', () => {
+    .on('click', '.btn-edit', (e) => {
         let self = $(e.currentTarget);
         let commentId = self.data('id');
 
-        $('#comment-' + commentId).find('.comment-edit-form, .comment-content').toggle();
-    });
+        $('.comment-edit-form, .comment-content', '#comment-' + commentId).toggle();
+    })
+        .on('click', 'button.btn-danger', (e) => {
+            let self = $(e.currentTarget);
+
+            self.parents('form').next('.comment-content').show();
+            self.parents('form').hide();
+        });
 });
