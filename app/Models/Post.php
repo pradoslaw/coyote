@@ -27,7 +27,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Post extends Model
 {
-    use SoftDeletes, Searchable;
+    use SoftDeletes;
+    use Searchable {
+        getIndexBody as parentGetIndexBody;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -209,19 +212,15 @@ class Post extends Model
      */
     protected function getIndexBody()
     {
+        $body = $this->parentGetIndexBody();
+        
         // additionally index few fields from topics table...
         $topic = $this->topic()->first(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
         // we need to index every field from posts except:
-        $body = array_except($this->toArray(), ['deleted_at', 'edit_count', 'editor_id']);
+        $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id']);
 
         if ($topic->first_post_id == $body['id']) {
             $body['tags'] = $topic->tags()->lists('name');
-        }
-
-        foreach (['created_at', 'updated_at'] as $column) {
-            if (!empty($body[$column])) {
-                $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
-            }
         }
 
         return array_merge($body, [

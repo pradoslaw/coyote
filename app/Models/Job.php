@@ -30,7 +30,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Job extends Model
 {
-    use SoftDeletes, Searchable;
+    use SoftDeletes;
+    use Searchable {
+        getIndexBody as parentGetIndexBody;
+    }
 
     const MONTH           = 1;
     const YEAR            = 2;
@@ -297,9 +300,11 @@ class Job extends Model
      */
     protected function getIndexBody()
     {
+        $body = $this->parentGetIndexBody();
+
         // maximum offered salary
         $salary = max($this->salary_from, $this->salary_to);
-        $body = array_except($this->toArray(), ['deleted_at', 'enable_apply']);
+        $body = array_except($body, ['deleted_at', 'enable_apply']);
 
         // we need to calculate monthly salary in order to sorting data by salary
         if ($salary && $this->rate_id != self::MONTH) {
@@ -338,12 +343,6 @@ class Job extends Model
             'firm'              => $this->firm()->first(['name', 'logo']),
             'tags'              => $this->tags()->orderBy('priority', 'DESC')->pluck('name')
         ]);
-
-        foreach (['created_at', 'updated_at', 'deadline_at'] as $column) {
-            if (!empty($body[$column])) {
-                $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
-            }
-        }
 
         return $body;
     }

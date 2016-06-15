@@ -23,7 +23,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Wiki extends Model
 {
-    use SoftDeletes, Searchable;
+    use SoftDeletes;
+    use Searchable {
+        getIndexBody as parentGetIndexBody;
+    }
 
     /**
      * @var string
@@ -145,12 +148,7 @@ class Wiki extends Model
      */
     protected function getIndexBody()
     {
-        $body = $this->toArray();
-        foreach (['created_at', 'updated_at'] as $column) {
-            if (!empty($body[$column])) {
-                $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
-            }
-        }
+        $body = $this->parentGetIndexBody();
 
         return array_except($body, ['is_locked', 'templates', 'views']);
     }
