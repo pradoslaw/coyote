@@ -30,14 +30,15 @@ class Actkey extends Model
      */
     public static function createLink($userId, $email = null)
     {
-        $result = self::create([
-            'actkey'   => str_random(),
+        self::create([
+            'actkey'   => $code = str_random(),
             'user_id'  => $userId,
             'email' => $email
         ]);
 
         // taki format linku zachowany jest ze wzgledu na wsteczna kompatybilnosc.
         // z czasem mozemy zmienic ten format aby wskazywal na /User/Confirm/Email/<id>/<actkey>
-        return url('Confirm/email') . '?id=' . $userId . '&actkey=' . $result->actkey;
+        // @todo...
+        return url('Confirm/Email') . '?id=' . $userId . '&actkey=' . $code;
     }
 }

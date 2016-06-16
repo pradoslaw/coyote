@@ -4,10 +4,9 @@ namespace Coyote\Services\Alert\Providers\Wiki;
 
 use Coyote\Alert;
 use Coyote\Services\Alert\Providers\Provider;
-use Coyote\Services\Alert\Providers\ProviderInterface;
 
-class Subscriber extends Provider implements ProviderInterface
+class Subscriber extends Provider
 {
     const ID = Alert::WIKI_SUBSCRIBER;
-    const EMAIL = null;
+    const EMAIL = 'emails.alerts.wiki.subscriber';
 }

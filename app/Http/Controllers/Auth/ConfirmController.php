@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class ConfirmController extends Controller
 {
     use MailFactory;
-    
+
     /**
      * @var UserRepository
      */
@@ -32,7 +32,7 @@ class ConfirmController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getIndex(Request $request)
+    public function index(Request $request)
     {
         if ($this->userId && $request->user()->is_confirm) {
             return redirect()->route('user.home')->with('success', 'Adres e-mail jest już potwierdzony.');
@@ -46,7 +46,7 @@ class ConfirmController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postIndex(Request $request)
+    public function generateLink(Request $request)
     {
         $this->validate($request, [
             'email' => 'required|email|max:255|unique:users,email,NULL,id,is_confirm,1',
@@ -73,9 +73,10 @@ class ConfirmController extends Controller
             // warunek zostanie spelniony tylko wowczas gdy np. 2 lub wiecej uzytkownikow zostalo
             // zarejestrowanych na ten sam adres e-mail
             if ($result->count() > 1) {
-                return back()->withInput()
-                            ->withErrors('email', 'Ten e-mail przypisany jest do dwóch kont. Wybierz, które z nich ma zostać potwierdzone')
-                            ->with('users', $result->lists('name', 'name')->toArray());
+                return back()
+                    ->withInput()
+                    ->withErrors('email', 'Ten e-mail przypisany jest do dwóch kont. Wybierz, które z nich ma zostać potwierdzone')
+                    ->with('users', $result->lists('name', 'name')->toArray());
             }
 
             $userId = $result->first()->id;
@@ -98,9 +99,9 @@ class ConfirmController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getEmail(Request $request)
+    public function email(Request $request)
     {
-        $actkey = Actkey::where('user_id', $request->id)->where('actkey', $request->actkey)->firstOrFail();
+        $actkey = Actkey::where('user_id', $request->input('id'))->where('actkey', $request->input('actkey'))->firstOrFail();
 
         $user = $this->user->findOrFail($request->get('id'));
         $user->is_confirm = 1;

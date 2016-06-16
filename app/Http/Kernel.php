@@ -11,12 +11,12 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \Coyote\Http\Middleware\EncryptCookies::class,
-        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Illuminate\Session\Middleware\StartSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \Coyote\Http\Middleware\VerifyCsrfToken::class,
-        \Coyote\Http\Middleware\FirewallBlacklist::class
+//        \Coyote\Http\Middleware\EncryptCookies::class,
+//        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+//        \Illuminate\Session\Middleware\StartSession::class,
+//        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+//        \Coyote\Http\Middleware\VerifyCsrfToken::class,
+//        \Coyote\Http\Middleware\FirewallBlacklist::class
     ];
 
     /**
@@ -26,13 +26,12 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            // @todo nie wiem czemu po upgrade laravela, nie dzialaja reguly z grupy web
-//            \Coyote\Http\Middleware\EncryptCookies::class,
-//            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-//            \Illuminate\Session\Middleware\StartSession::class,
-//            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-//            \Coyote\Http\Middleware\VerifyCsrfToken::class,
-//            \Coyote\Http\Middleware\FirewallBlacklist::class
+            \Coyote\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Coyote\Http\Middleware\VerifyCsrfToken::class,
+            \Coyote\Http\Middleware\FirewallBlacklist::class
         ],
         'api' => [
             'throttle:60,1',

@@ -4,10 +4,9 @@ namespace Coyote\Services\Alert\Providers\Wiki;
 
 use Coyote\Alert;
 use Coyote\Services\Alert\Providers\Provider;
-use Coyote\Services\Alert\Providers\ProviderInterface;
 
-class Comment extends Provider implements ProviderInterface
+class Comment extends Provider
 {
     const ID = Alert::WIKI_COMMENT;
-    const EMAIL = null;
+    const EMAIL = 'emails.alerts.wiki.comment';
 }

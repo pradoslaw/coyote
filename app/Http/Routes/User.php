@@ -11,8 +11,13 @@ Route::get('Register', ['uses' => 'Auth\RegisterController@index', 'as' => 'regi
 Route::post('Register', 'Auth\RegisterController@signup');
 
 // przypominanie hasla
+// @todo do zmiany metoda controller() na post() oraz get()
 Route::controller('Password', 'Auth\PasswordController');
-Route::controller('Confirm', 'Auth\ConfirmController');
+
+// potwierdzenie adresu e-mail
+Route::get('Confirm', 'Auth\ConfirmController@index')->name('confirm');
+Route::post('Confirm', 'Auth\ConfirmController@generateLink');
+Route::get('Confirm/Email', 'Auth\ConfirmController@email');
 
 Route::get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login', 'as' => 'oauth']);
 Route::get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');
