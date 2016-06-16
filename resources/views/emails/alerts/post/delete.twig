@@ -1,0 +1,7 @@
+{# powiadomienie o usunieciu posta #}
+{% extends 'emails.layout' %}
+
+{% block content %}
+    <b>{{ sender_name }}</b> usunął post w wątku <b>{{ subject }}</b>.<br>
+    Otrzymujesz tego e-maila ponieważ obserwowałeś ten post.<br><br>
+{% endblock %}

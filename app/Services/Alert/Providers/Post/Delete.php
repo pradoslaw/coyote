@@ -9,7 +9,7 @@ use Coyote\Services\Alert\Providers\ProviderInterface;
 class Delete extends Provider implements ProviderInterface
 {
     const ID = Alert::POST_DELETE;
-    const EMAIL = null;
+    const EMAIL = 'emails.alerts.post.delete';
 
     /**
      * @var string

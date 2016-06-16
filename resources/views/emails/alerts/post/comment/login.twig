@@ -1,13 +1,9 @@
 {# powiadomienie o wystapieniu logina w komentarzu na forum #}
-{% extends 'emails/layout.twig' %}
+{% extends 'emails.layout' %}
 
-{% block container %}
-    Witaj,<br><br>
-
-    {{ sender_name }} użył Twojego loginu w treści komentarza postu w wątku {{ subject }}.<br>
+{% block content %}
+    <b>{{ sender_name }}</b> użył Twojego loginu w treści komentarza postu w wątku <b>{{ subject }}</b>.<br>
     Aby przeczytać ten komentarz, kliknij w poniższy link:<br><br>
 
-    Link do wpisu: <a href="{{ url(url) }}">{{ url(url) }}</a><br><br>
-
-    <b>Prosimy nie odpowiadać na tego e-maila. Jest on generowany automatycznie.</b>
+    Link do wpisu: {{ link_to(url) }}
 {% endblock %}

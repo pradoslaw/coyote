@@ -8,5 +8,5 @@ use Coyote\Services\Alert\Providers\ProviderInterface;
 class Accept extends Base implements ProviderInterface
 {
     const ID = Alert::POST_ACCEPT;
-    const EMAIL = null;
+    const EMAIL = 'emails.alerts.post.accept';
 }

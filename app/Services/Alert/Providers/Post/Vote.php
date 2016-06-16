@@ -3,10 +3,9 @@
 namespace Coyote\Services\Alert\Providers\Post;
 
 use Coyote\Alert;
-use Coyote\Services\Alert\Providers\ProviderInterface;
 
-class Vote extends Base implements ProviderInterface
+class Vote extends Base
 {
     const ID = Alert::POST_VOTE;
-    const EMAIL = null;
+    const EMAIL = 'emails.alerts.post.vote';
 }
