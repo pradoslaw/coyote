@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
 
 class HomeController extends Controller
 {
@@ -21,7 +20,7 @@ class HomeController extends Controller
         if ($request->isMethod('post')) {
             $this->validate($request, ['password' => 'required']);
 
-            if (Auth::validate(['name' => auth()->user()->name, 'password' => $request->get('password')])) {
+            if (auth()->validate(['name' => auth()->user()->name, 'password' => $request->get('password')])) {
                 $request->session()->put('admin', true);
                 return redirect()->route('adm.dashboard');
             } else {
