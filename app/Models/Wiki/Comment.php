@@ -2,6 +2,7 @@
 
 namespace Coyote\Wiki;
 
+use Coyote\Models\Scopes\ForUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Comment extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, ForUser;
 
     /**
      * The database table used by the model.
@@ -41,5 +42,15 @@ class Comment extends Model
     public function user()
     {
         return $this->belongsTo('Coyote\User');
+    }
+
+    /**
+     * @param int $wikiId
+     * @param int $userId
+     * @return bool
+     */
+    public function wasUserInvolved($wikiId, $userId)
+    {
+        return $this->where('wiki_id', $wikiId)->forUser($userId)->exists();
     }
 }

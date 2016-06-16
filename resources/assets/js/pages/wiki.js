@@ -22,8 +22,17 @@ $(() => {
             modal.modal('show');
 
             if (typeof event.responseJSON !== 'undefined') {
-                let key = Object.keys(event.responseJSON)[0];
-                modal.find('.modal-body').text(event.responseJSON[key][0]);
+                let error = '';
+
+                if (typeof event.responseJSON.error !== 'undefined') {
+                    error = event.responseJSON.error;
+                }
+                else {
+                    let key = Object.keys(event.responseJSON)[0];
+                    error = event.responseJSON[key][0];
+                }
+
+                modal.find('.modal-body').text();
             }
         });
 

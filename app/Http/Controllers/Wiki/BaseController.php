@@ -37,7 +37,7 @@ abstract class BaseController extends Controller
     {
         if (!empty($wiki)) {
             $this->parents = $this->wiki->parents($wiki->path_id);
-            
+
             $this->parents->reverse()->each(function ($item) {
                 /** @var \Coyote\Wiki $item */
                 $this->breadcrumb->push($item->title, url($item->path));

@@ -35,8 +35,7 @@ class SubmitController extends BaseController
         $request = $form->getRequest();
 
         $path = $this->transaction(function () use ($wiki, $request) {
-            $subscribe = auth()->user()->allow_subscribe
-                && ($wiki->wasRecentlyCreated || !$wiki->wasUserInvolved($this->userId));
+            $subscribe = auth()->user()->allow_subscribe && !$wiki->wasUserInvolved($this->userId);
             $this->wiki->save($wiki, $request);
 
             $subscribersId = $wiki->subscribers()->lists('user_id')->toArray();
@@ -46,12 +45,15 @@ class SubmitController extends BaseController
                     'subject' => $wiki->title,
                     'users_id' => $subscribersId,
                     'url' => route('wiki.show', [$wiki->path], false),
+                    'sender_id' => $this->userId,
                     'sender_name' => auth()->user()->name,
                     'excerpt' => excerpt($wiki->text)
                 ])
                 ->notify();
 
-            if ($subscribe) {
+            // we DO NOT want to add another row into the table. we MUST check whether user is already
+            // on subscribers list or not.
+            if ($subscribe && !in_array($this->userId, $subscribersId)) {
                 $wiki->subscribers()->create(['user_id' => $this->userId]);
             }
 
