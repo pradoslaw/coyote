@@ -6,7 +6,6 @@ use Coyote\Http\Controllers\Controller;
 use Illuminate\Mail\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Auth;
 
 class PasswordController extends Controller
 {
@@ -98,7 +97,7 @@ class PasswordController extends Controller
             $user->password = bcrypt($password);
             $user->save();
 
-            Auth::login($user);
+            auth()->login($user);
         });
 
         switch ($response) {

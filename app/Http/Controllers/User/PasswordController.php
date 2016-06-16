@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PasswordController extends BaseController
 {
@@ -35,7 +34,7 @@ class PasswordController extends BaseController
         $user->password = bcrypt($request->get('password'));
         $user->save();
 
-        Auth::login($user);
+        auth()->login($user);
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
     }
