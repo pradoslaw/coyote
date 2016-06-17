@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
 
         if (strpos(php_sapi_name(), 'cli') === false) {
             // show mongodb queries in laravel debugbar
-            \DB::connection('mongodb')->enableQueryLog();
+            $this->app['db']->connection('mongodb')->enableQueryLog();
         }
     }
 
