@@ -23,6 +23,6 @@ Actkey::create([
     'user_id'    => $userId
 ]);
 
-$I->amOnPage("/Confirm/email?id=$userId&actkey=$actkey");
+$I->amOnPage("/Confirm/Email?id=$userId&actkey=$actkey");
 $I->see('Adres e-mail został pozytywnie potwierdzony');
 $I->dontSeeRecord('actkeys', ['actkey' => $actkey, 'user_id' => $userId]);
