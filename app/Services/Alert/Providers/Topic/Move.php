@@ -3,9 +3,8 @@
 namespace Coyote\Services\Alert\Providers\Topic;
 
 use Coyote\Alert;
-use Coyote\Services\Alert\Providers\ProviderInterface;
 
-class Move extends Base implements ProviderInterface
+class Move extends Base
 {
     const ID = Alert::TOPIC_MOVE;
     const EMAIL = 'emails.alerts.topic.move';

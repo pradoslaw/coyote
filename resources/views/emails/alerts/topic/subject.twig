@@ -1,0 +1,40 @@
+{% extends 'emails.layout' %}
+
+{% block content %}
+    <b>{{ sender }}</b> zmienił tytuł Twojego wątku <b>{{ subject }}</b> na <b>{{ excerpt }}</b>.<br>
+    Link do wątku: {{ link_to(url) }}<br><br>
+
+    Wielu początkujących użytkowników ma problem z prawidłowym i rzeczowym tytułowaniem wątków. Prosimy o dostosowanie się do wskazówek przedstawionych w tym e-mailu.<br><br>
+
+    <h2>Dlaczego prawidłowe tytułowanie wątków jest tak ważne?</h2><br><br>
+
+    ► Rzeczowe nazewnictwo pomaga użytkownikom oszczędzać czas. Czy nazwanie wątku pomocy jest jednoznaczne z jego treścią? Czy mówi coś o temacie poza tym, że autor potrzebuje pomocy? W 90% przypadków autor potrzebuje pomocy.<br>
+    ► Właściwe tytułowanie wpływa na lepszą indeksację w wyszukiwarce (nie tylko tej na forum), stąd inni użytkownicy będą mogli łatwiej odnaleźć Twój wątek zamiast zakładać nowy. Czy szukając czegoś w wyszukiwarce wpisujesz słowo pomoc? Nie sadzę.<br>
+    ► Lepsza identyfikacja problemu: przy dobrym tytule wątku, czytelnicy prościej będą mogli rozpoznać Twój problem, a tym samym - pomoc w jego rozwiązaniu.<br><br>
+
+    <h2>Jak tytułować wątki na forum?</h2><br><br>
+
+    ► Unikaj jednowyrazowych tematów wątków!<br>
+    ► Nie bój się pisać pełnymi zdaniami!<br>
+    ► Limit znaków w polu temat wątku wynosi aż 100 znaków - wykorzystaj to!<br>
+    ► Postaraj się zawrzeć w tytule jak najwięcej informacji dotyczących Twojego problemu.<br>
+    ► Nie używaj prefiksów w tytule wątków. Zamiast tego używaj tagów!<br><br>
+
+    <h2>Przykłady ZŁEGO tytułowania wątków</h2><br><br>
+
+    ► [php] logowanie<br>
+    ► Problem jednej minuty<br>
+    ► [Delphi] Komponenty Indy<br>
+    ► Ograniczony int???<br>
+    ► Prosta procedura w TSQL<br>
+    ► Opera<br><br>
+
+    <h2>Przykłady DOBREGO tytułowania wątków</h2><br><br>
+
+    ► Jak zrealizować proces logowania użytkownika w PHP?<br>
+    ► Czy istnieje w Delphi funkcja odwrotna do IncMinute()?<br>
+    ► Skąd mogę pobrać komponent Indy?<br>
+    ► Jak ustawić ograniczenia zakresu dla pola typu int?<br>
+    ► Jak przypisać rezultat zapytania do zmiennej?<br>
+    ► Opera 11.01 - co o niej sądzicie?<br>
+{% endblock %}
