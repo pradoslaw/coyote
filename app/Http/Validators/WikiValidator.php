@@ -46,7 +46,7 @@ class WikiValidator
      */
     public function validateUnique($attribute, $value, $parameters, $validator)
     {
-        $wikiId = $parameters[0] ?? null;
+        $wikiId = (int) $parameters[0] ?? null;
         $wiki = $this->wiki->findWhere(
             ['slug' => Wiki::slug($value), 'parent_id' => $this->request->input('path_id') ?: null],
             ['id']

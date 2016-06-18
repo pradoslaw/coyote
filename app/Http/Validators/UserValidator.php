@@ -48,7 +48,7 @@ class UserValidator
      */
     public function validateUnique($attribute, $value, $parameters, $validator)
     {
-        $userId = $parameters[0] ?? null;
+        $userId = (int) $parameters[0] ?? null;
         $user = $this->user->findByName(mb_strtolower($value));
 
         if ($user && $userId !== $user->id) {
