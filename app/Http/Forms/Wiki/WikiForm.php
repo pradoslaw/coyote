@@ -4,10 +4,9 @@ namespace Coyote\Http\Forms\Wiki;
 
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Services\FormBuilder\Form;
-use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 use Illuminate\Contracts\Auth\Access\Gate;
 
-class WikiForm extends Form implements ValidatesWhenSubmitted
+class WikiForm extends Form
 {
     protected $theme = self::THEME_INLINE;
 
@@ -37,7 +36,7 @@ class WikiForm extends Form implements ValidatesWhenSubmitted
     {
         $this
             ->add('title', 'text', [
-                'rules' => 'required|string|min:1|max:200',
+                'rules' => 'required|string|min:1|max:200|wiki_route|wiki_unique:' . ($this->data->id ?? null),
                 'label' => 'Tytuł'
             ])
             ->add('long_title', 'text', [

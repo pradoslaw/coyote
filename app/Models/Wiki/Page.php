@@ -2,6 +2,7 @@
 
 namespace Coyote\Wiki;
 
+use Coyote\Wiki;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -83,7 +84,7 @@ class Page extends Model
     {
         $this->attributes['title'] = ucfirst($title);
         // ucfirst() tylko dla zachowania kompatybilnosci wstecz
-        $this->attributes['slug'] = ucfirst(str_slug($title, '_'));
+        $this->attributes['slug'] = Wiki::slug($title);
     }
 
     /**

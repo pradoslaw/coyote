@@ -16,10 +16,7 @@ class SubmitController extends BaseController
      */
     public function index($wiki)
     {
-        $form = $this->createForm(WikiForm::class, $wiki, [
-            'url' => route('wiki.submit', [$wiki->id])
-        ]);
-
+        $form = $this->getForm($wiki);
         $this->breadcrumb->push('Edycja strony');
 
         return $this->view('wiki.submit')->with(compact('form', 'wiki'));
@@ -27,11 +24,13 @@ class SubmitController extends BaseController
 
     /**
      * @param \Coyote\Wiki $wiki
-     * @param WikiForm $form
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($wiki, WikiForm $form)
+    public function save($wiki)
     {
+        $form = $this->getForm($wiki);
+        $form->validate();
+
         $request = $form->getRequest();
 
         $path = $this->transaction(function () use ($wiki, $request) {
@@ -68,5 +67,16 @@ class SubmitController extends BaseController
         });
 
         return redirect()->to($path)->with('success', 'Zmiany zostały zapisane.');
+    }
+
+    /**
+     * @param \Coyote\Wiki $wiki
+     * @return \Coyote\Services\FormBuilder\Form
+     */
+    protected function getForm($wiki)
+    {
+        return $this->createForm(WikiForm::class, $wiki, [
+            'url' => route('wiki.submit', [$wiki->id])
+        ]);
     }
 }

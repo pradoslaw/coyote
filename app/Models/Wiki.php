@@ -62,6 +62,15 @@ class Wiki extends Model
     ];
 
     /**
+     * @param $title
+     * @return string
+     */
+    public static function slug($title)
+    {
+        return ucfirst(str_slug($title, '_'));
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function page()

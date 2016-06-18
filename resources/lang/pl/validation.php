@@ -87,6 +87,8 @@ return [
     'tag_creation'         => 'Potrzebujesz :point punktów reputacji, aby utworzyć nowy tag. Wybierz już istniejący.',
     'throttle'             => 'Musisz odczekać jeszcze :delay przed dodaniem kolejnego wpisu.',
     'city'                 => '":value" nie jest prawidłową nazwą miejscowości.',
+    'wiki_unique'          => 'Uuups. Strona o tym tytule już istnieje w tej kategorii. Proszę wpisać inny tytuł.',
+    'wiki_route'           => 'Nie można dodać strony o tym tytule ponieważ koliduje z już istniejącą.',
 
     /*
     |--------------------------------------------------------------------------
