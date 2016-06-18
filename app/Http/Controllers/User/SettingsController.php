@@ -64,10 +64,14 @@ class SettingsController extends BaseController
                 // przed zmiana e-maila trzeba wyslac link potwierdzajacy
                 $url = Actkey::createLink($user->id, $email);
 
-                $this->getMailFactory()->queue('emails.email', ['url' => $url], function ($message) use ($email) {
-                    $message->to($email);
-                    $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
-                });
+                $this->getMailFactory()->queue(
+                    'emails.user.change_email',
+                    ['url' => $url],
+                    function ($message) use ($email) {
+                        $message->to($email);
+                        $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
+                    }
+                );
 
                 if ($user->is_confirm) {
                     $request['email'] = $user->email;
@@ -76,7 +80,7 @@ class SettingsController extends BaseController
 
             $user->fill($request->all())->save();
             stream(Update::class, new Person());
-            
+
             event(new UserWasSaved($user->id));
         });
 

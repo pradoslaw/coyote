@@ -66,7 +66,7 @@ class RegisterController extends Controller
 
             $url = Actkey::createLink($user->id);
 
-            $this->getMailFactory()->queue('emails.signup', ['url' => $url], function ($message) use ($email) {
+            $this->getMailFactory()->queue('emails.auth.register', ['url' => $url], function ($message) use ($email) {
                 $message->to($email);
                 $message->subject('Dziękujemy za rejestrację. Potwierdź autentyczność swojego adresu e-mail');
             });

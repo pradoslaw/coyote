@@ -7,5 +7,5 @@ use Coyote\Alert;
 class Subscriber extends Base
 {
     const ID = Alert::MICROBLOG_SUBSCRIBER;
-    const EMAIL = null;
+    const EMAIL = 'emails.alerts.microblog.subscriber';
 }

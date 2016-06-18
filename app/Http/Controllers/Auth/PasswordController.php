@@ -42,10 +42,10 @@ class PasswordController extends Controller
 
         switch ($response) {
             case Password::RESET_LINK_SENT:
-                return redirect()->back()->with('success', 'Na podany adres e-mail wysłane zostały dalsze instrukcje');
+                return back()->with('success', 'Na podany adres e-mail wysłane zostały dalsze instrukcje.');
 
             case Password::INVALID_USER:
-                return redirect()->back()->withErrors([
+                return back()->withErrors([
                     'email' => sprintf(
                         'Ten adres e-mail nie został zweryfikowany. %s aby go potwierdzić', link_to('Confirm', 'Kliknij')
                     )
@@ -85,7 +85,7 @@ class PasswordController extends Controller
         ]);
 
         $credentials = $request->only(
-            'email', 'password', 'password_confirmation', 'token'
+            ['email', 'password', 'password_confirmation', 'token']
         ) + ['is_confirm' => 1]; // <-- its important! only record with confirmed email address!!
 
         // walidacja poprawnosci hasla. jedyne wymaganie to posiadanie hasla max 3 znakowego
@@ -106,11 +106,11 @@ class PasswordController extends Controller
 
             default:
                 $errors = [
-                    Password::INVALID_USER => 'Podany adres e-mail nie jest przypisany do żadnego konta',
+                    Password::INVALID_USER => 'Podany adres e-mail nie jest przypisany do żadnego konta.',
                     Password::INVALID_TOKEN => 'URL jest nieprawidłowy. Być może ten link nie jest już aktywny?'
                 ];
 
-                return redirect()->back()
+                return back()
                     ->withInput($request->only('email'))
                     ->withErrors(['email' => $errors[$response]]);
         }

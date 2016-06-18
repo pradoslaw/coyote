@@ -1,8 +1,6 @@
 {% extends 'emails.layout' %}
 
-{% block container %}
-    Witaj,<br><br>
-
+{% block content %}
     Otrzymujesz ten list w związku z nieudaną próbą logowania na konto <b>{{ name }}</b>, w serwisie 4programmers.net.<br><br>
 
     IP: {{ ip }}<br>
@@ -10,6 +8,5 @@
     Data i czas: {{ "now"|format_date(false) }}<br><br>
 
     Jeżeli to nie Ty, próbowałeś zalogować się na konto, prosimy skontaktować się z supportem serwisu 4programmers.net,
-    pod adresem: {{ config_get('mail.from.address') }}. Może to oznaczać próbę włamania na Twoje konto.<br><br>
-
+    pod adresem: {{ config_get('mail.from.address') }}. Może to oznaczać próbę włamania na Twoje konto.
 {% endblock %}

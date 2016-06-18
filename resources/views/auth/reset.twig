@@ -11,7 +11,7 @@
         <div class="panel-body">
             {{ form_open({'method': 'POST', 'role': 'form', 'url': url('Password/reset'), 'class': 'form-horizontal'}) }}
             {{ form_hidden('token', token) }}
-            {{ forms.text('email', 'E-mail', input_old('email'), {}, 'Proszę podać swój adres e-mail oraz nowe hasło do konta.') }}
+            {{ forms.text('email', 'E-mail', input_old('email', request('email')), {}, 'Proszę podać swój adres e-mail oraz nowe hasło do konta.') }}
             {{ forms.password('password', 'Hasło', '') }}
             {{ forms.password('password_confirmation', 'Hasło (powtórnie)', '') }}
             {{ forms.submit('Ustaw nowe hasło', 'Wysyłanie...') }}
