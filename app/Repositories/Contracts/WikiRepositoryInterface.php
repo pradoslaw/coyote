@@ -54,6 +54,13 @@ interface WikiRepositoryInterface extends RepositoryInterface
     public function save($wiki, Request $request);
 
     /**
+     * @param int $wikiId
+     * @param int $pathId
+     * @return \Coyote\Wiki\Path
+     */
+    public function clone($wikiId, $pathId);
+
+    /**
      * @param int $id
      * @return mixed
      */

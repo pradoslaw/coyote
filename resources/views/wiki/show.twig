@@ -111,6 +111,12 @@
                         <li>
                             <a href="javascript:"><i class="fa fa-fw fa-trash-o"></i> Usuń cache</a>
                         </li>
+                        <li>
+                            <a href="{{ route('wiki.clone', [wiki.id]) }}"><i class="fa fa-fw fa-clone"></i> Kopiuj artykuł</a>
+                        </li>
+                        <li>
+                            <a href="javascript:"><i class="fa fa-fw fa-arrows"></i> Przenieś artykuł</a>
+                        </li>
                     {% else %}
                         <li>
                             <a href="#modal-restore" data-toggle="modal"><i class="fa fa-fw fa-rotate-left"></i> Przywróć usuniętą wersję</a>
@@ -288,7 +294,7 @@
 
     {% if can('wiki-admin') %}
         {{ form_open({url: route('wiki.delete', [wiki.id])}) }}
-        {{ modals.confirm('Czy chcesz usunąć ten artykuł?', 'Usuń artykuł', 'modal-delete') }}
+        {{ modals.confirm('Czy chcesz usunąć ten artykuł <strong>wraz ze stronami potomnymi</strong>?', 'Usuń artykuł', 'modal-delete') }}
         {{ form_close() }}
 
         {{ form_open({url: route('wiki.restore', [wiki.id])}) }}

@@ -16,15 +16,15 @@ class DeleteController extends BaseController
     {
         $this->transaction(function () use ($wiki) {
             $this->wiki->delete($wiki->id);
-            
+
             stream(
                 Stream_Delete::class,
                 (new Stream_Wiki())->map($wiki)
             );
-            
+
             event(new WikiWasDeleted($wiki));
         });
-        
+
         return back()->with('success', 'Strona została usunięta.');
     }
 }

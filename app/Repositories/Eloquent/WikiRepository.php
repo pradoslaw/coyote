@@ -162,6 +162,20 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     }
 
     /**
+     * @param int $wikiId
+     * @param int $pathId
+     * @return \Coyote\Wiki\Path
+     */
+    public function clone($wikiId, $pathId)
+    {
+        $parent = $this->app->make(Wiki\Path::class)->findOrNew($pathId);
+        /** @var \Coyote\Wiki\Page $page */
+        $page = $this->app->make(Wiki\Page::class)->findOrNew($wikiId);
+        
+        return $page->createPath($parent, $page->slug);
+    }
+
+    /**
      * @param int $id
      * @return mixed
      */

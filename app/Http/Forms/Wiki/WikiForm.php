@@ -8,6 +8,8 @@ use Illuminate\Contracts\Auth\Access\Gate;
 
 class WikiForm extends Form
 {
+    use TreeListTrait;
+    
     protected $theme = self::THEME_INLINE;
 
     /**
@@ -87,14 +89,6 @@ class WikiForm extends Form
                 'value' => $this->request->input('pathId')
             ]);
         }
-    }
-
-    /**
-     * @return array
-     */
-    protected function getTreeList()
-    {
-        return $this->wiki->treeList();
     }
 
     /**
