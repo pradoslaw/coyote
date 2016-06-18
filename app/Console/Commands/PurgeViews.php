@@ -73,9 +73,10 @@ class PurgeViews extends Command
                     $this->store($page, $hits);
 
                     $this->info('Added ' . count($hits) . ' views to: ' . $path);
-                    $redis->del($key);
                 }
             }
+
+            $redis->del($key); // remove key from redis no matter what
         }
     }
 
