@@ -88,7 +88,7 @@
 
                                                 <ul class="list-inline">
                                                     <li class="date" title="{{ child.created_at|format_date(false) }}">{{ child.created_at|format_date }}</li>
-                                                    <li class="comments">{{ declination(child.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}</li>
+                                                    <li class="comments">{{ declination(child.comments, ['komentarz', 'komentarzy', 'komentarzy']) }}</li>
                                                     <li class="views">{{ declination(child.views, ['odsłona', 'odsłony', 'odsłon']) }}</li>
                                                 </ul>
                                             </div>
