@@ -36,7 +36,7 @@ abstract class BaseController extends Controller
     protected function buildBreadcrumb($wiki)
     {
         if (!empty($wiki)) {
-            $this->parents = $this->wiki->parents($wiki->path_id);
+            $this->parents = $this->wiki->parents($wiki->id);
 
             $this->parents->reverse()->each(function ($item) {
                 /** @var \Coyote\Wiki $item */

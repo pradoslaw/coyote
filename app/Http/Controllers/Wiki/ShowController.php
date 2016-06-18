@@ -36,10 +36,10 @@ class ShowController extends BaseController
         return $this->view('wiki.' . $wiki->template, [
             'wiki' => $wiki,
             'author' => $author,
-            'categories' => $this->wiki->getAllCategories($wiki->id),
+            'categories' => $this->wiki->getAllCategories($wiki->wiki_id),
             'parents' => $this->parents->slice(1)->reverse(), // we skip current page
-            'folders' => $this->getFolders($wiki->path_id),
-            'children' => $this->getCatalog($wiki->path_id),
+            'folders' => $this->getFolders($wiki->id),
+            'children' => $this->getCatalog($wiki->id),
             'subscribed' => $wiki->subscribers()->forUser($this->userId)->exists(),
             'flag' => $this->getGateFactory()->allows('wiki-admin') ? $this->getFlagFactory()->takeForWiki($wiki->id) : '',
             'form' => $this->createForm(CommentForm::class, [], [

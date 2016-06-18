@@ -9,7 +9,9 @@ use Illuminate\Contracts\Auth\Access\Gate;
 class WikiForm extends Form
 {
     use TreeListTrait;
-    
+
+    const RULE_PARENT_ID = 'sometimes|int|exists:wiki_paths,path_id';
+
     protected $theme = self::THEME_INLINE;
 
     /**
@@ -81,12 +83,16 @@ class WikiForm extends Form
         }
 
         if (empty($this->getData()->id)) {
-            $this->addAfter('title', 'path_id', 'select', [
+            $this->addAfter('title', 'parent_id', 'select', [
                 'label' => 'Strona macierzysta',
-                'rules' => 'sometimes|int|exists:wiki_paths,path_id',
+                'rules' => self::RULE_PARENT_ID,
                 'choices' => $this->getTreeList(),
                 'empty_value' => '--',
-                'value' => $this->request->input('pathId')
+                'value' => $this->request->input('parentId')
+            ]);
+        } else {
+            $this->add('parent_id', 'hidden', [
+                'rules' => self::RULE_PARENT_ID
             ]);
         }
     }

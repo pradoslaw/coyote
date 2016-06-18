@@ -48,7 +48,7 @@ class WikiValidator
     {
         $wikiId = (int) $parameters[0] ?? null;
         $wiki = $this->wiki->findWhere(
-            ['slug' => Wiki::slug($value), 'parent_id' => $this->request->input('path_id') ?: null],
+            ['slug' => Wiki::slug($value), 'parent_id' => $this->request->input('parent_id') ?: null],
             ['id']
         );
 
@@ -71,8 +71,8 @@ class WikiValidator
         $slug = Wiki::slug($value);
         $path = '/' . $slug;
 
-        if (!empty($this->request->input('path_id'))) {
-            $wiki = $this->wiki->findBy('path_id', $this->request->input('path_id'), ['path']);
+        if (!empty($this->request->input('parent_id'))) {
+            $wiki = $this->wiki->find($this->request->input('parent_id'), ['path']);
             $path = '/' . $wiki->path . '/' . $slug;
         }
 

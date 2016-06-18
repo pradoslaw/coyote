@@ -100,10 +100,10 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         $this->applyCriteria();
 
         $result = [];
-        $data = $this->model->from($this->rawFunction('wiki_children'))->get(['path_id', 'title', 'depth']);
+        $data = $this->model->from($this->rawFunction('wiki_children'))->get(['id', 'title', 'depth']);
 
         foreach ($data as $row) {
-            $result[$row['path_id']] = str_repeat('&nbsp;', $row['depth'] * 4) . $row['title'];
+            $result[$row['id']] = str_repeat('&nbsp;', $row['depth'] * 4) . $row['title'];
         }
 
         return $result;
@@ -132,7 +132,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     public function save($wiki, Request $request)
     {
         /** @var \Coyote\Wiki\Page $page */
-        $page = $this->app->make(Wiki\Page::class)->findOrNew($wiki->id);
+        $page = $this->app->make(Wiki\Page::class)->findOrNew($wiki->wiki_id);
 
         $page->fill($request->all());
         $page->fillGuarded($request->only(['is_locked', 'template']), $request->user()->can('wiki-admin'));
@@ -153,11 +153,13 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         }
 
         if ($page->wasRecentlyCreated) {
-            $parent = $this->app->make(Wiki\Path::class)->findOrNew((int) $request->input('path_id'));
+            $parent = $this->app->make(Wiki\Path::class)->findOrNew((int) $request->input('parent_id'));
             $wiki->forceFill($page->createPath($parent, $page->slug)->toArray());
+
+            $wiki->id = $wiki->path_id;
         }
 
-        $wiki->forceFill($page->toArray());
+        $wiki->forceFill(array_except($page->toArray(), ['id']));
         $wiki->wasRecentlyCreated = $page->wasRecentlyCreated;
     }
 
@@ -171,7 +173,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         $parent = $this->app->make(Wiki\Path::class)->findOrNew($pathId);
         /** @var \Coyote\Wiki\Page $page */
         $page = $this->app->make(Wiki\Page::class)->findOrNew($wikiId);
-        
+
         return $page->createPath($parent, $page->slug);
     }
 
@@ -202,8 +204,8 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         return $this
             ->model
             ->select(['parent.*'])
-            ->where('wiki.id', $id)
-            ->join('wiki AS parent', 'parent.path_id', '=', 'wiki.parent_id')
+            ->where('wiki.wiki_id', $id)
+            ->join('wiki AS parent', 'parent.id', '=', 'wiki.parent_id')
             ->get();
     }
 

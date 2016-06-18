@@ -18,14 +18,14 @@ CREATE OR REPLACE FUNCTION wiki_parents(_path_id INTEGER) RETURNS SETOF wiki AS 
         (
             SELECT *
             FROM   wiki
-            WHERE  path_id = _path_id
+            WHERE  "id" = _path_id
         )
         
         UNION ALL
         
         SELECT n.*
         FROM   node_rec r 
-        JOIN   wiki    n ON n.path_id = r.parent_id
+        JOIN   wiki    n ON n."id" = r.parent_id
     )
     SELECT *
     FROM   node_rec

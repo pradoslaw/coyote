@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
- * @property int $path_id
+ * @property int $wiki_id
  * @property int $parent_id
  * @property int $views
  * @property string $title
@@ -83,7 +83,7 @@ class Wiki extends Model
      */
     public function subscribers()
     {
-        return $this->hasMany('Coyote\Wiki\Subscriber');
+        return $this->hasMany('Coyote\Wiki\Subscriber', 'wiki_id', 'wiki_id');
     }
 
     /**
@@ -91,7 +91,7 @@ class Wiki extends Model
      */
     public function logs()
     {
-        return $this->hasMany('Coyote\Wiki\Log');
+        return $this->hasMany('Coyote\Wiki\Log', 'wiki_id', 'wiki_id');
     }
 
     /**
@@ -107,7 +107,7 @@ class Wiki extends Model
      */
     public function parent()
     {
-        return $this->hasOne('Coyote\Wiki', 'path_id', 'parent_id');
+        return $this->hasOne('Coyote\Wiki', 'id', 'parent_id');
     }
 
     /**
@@ -115,7 +115,7 @@ class Wiki extends Model
      */
     public function children()
     {
-        return $this->hasMany('Coyote\Wiki', 'parent_id', 'path_id');
+        return $this->hasMany('Coyote\Wiki', 'parent_id', 'id');
     }
 
     /**
