@@ -17,7 +17,7 @@ class CloneController extends BaseController
     {
         return $this->view('wiki.clone', [
             'form' => $this->createForm(CloneForm::class, $wiki, [
-                'url' => route('wiki.clone', $wiki->id)
+                'url' => route('wiki.clone', [$wiki->id])
             ])
         ]);
     }
