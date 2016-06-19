@@ -15,15 +15,18 @@
                 {% endfor %}
             </div>
 
-            {{ form_open({'id': 'rate-form', 'method': 'POST', 'role': 'form', 'url': route('user.skills'), 'class': 'form-horizontal'}) }}
-            {{ form_hidden('rate', 0) }}
+            {{ form_start(form) }}
+            {{ form_widget(form.rate, {type: 'hidden', value: 0}) }}
 
             <div class="form-group">
                 <div class="col-sm-9 col-md-10 col-lg-11 col-xs-8">
-                    {{ form_text('name', '', {'class': 'form-control', 'placeholder': 'Np. java, c#'}) }}
+                    {{ form_widget(form.name) }}
 
                     <div class="alert alert-warning alert-popover top hidden-xs hidden-sm" data-id="skills">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
                         Umiejętności będą widoczne na Twoim profilu.
                     </div>
                 </div>
@@ -45,7 +48,7 @@
                 </div>
             </div>
 
-            {{ form_close() }}
+            {{ form_end(form) }}
         </div>
     </div>
 

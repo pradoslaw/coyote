@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Http\Forms\User\SkillsForm;
 use Coyote\User;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class SkillsController extends BaseController
 
         $skills = auth()->user()->skills()->get();
 
-        return $this->view('user.skills.home')->with('skills', $skills);
+        return $this->view('user.skills.home')->with(['skills' => $skills, 'form' => $this->getForm()]);
     }
 
     /**
@@ -27,16 +28,13 @@ class SkillsController extends BaseController
      */
     public function save(Request $request)
     {
-        $this->validate($request, [
-            'name'              => 'required|string|max:100|unique:user_skills,name,NULL,id,user_id,' . $this->userId,
-            'rate'              => 'required|integer|min:1|max:6'
-        ], [
-            'name.required'     => 'Proszę wpisać nazwę umiejętności',
-            'name.unique'       => 'Taka umiejętność znajduje się już na Twojej liście.',
-            'rate.min'          => 'Nie wprowadziłeś oceny swojej umiejętności.'
-        ]);
+        $form = $this->getForm();
+        $skill = null;
 
-        $skill = auth()->user()->skills()->create($request->all());
+        if ($form->isValid()) {
+            $skill = auth()->user()->skills()->create($request->all());
+        }
+
         return view('user.skills.list')->with('item', $skill);
     }
 
@@ -61,5 +59,15 @@ class SkillsController extends BaseController
                 auth()->user()->skills()->where('id', $id)->update(['order' => intval($order) + 1]);
             }
         });
+    }
+
+    /**
+     * @return \Coyote\Services\FormBuilder\Form
+     */
+    protected function getForm()
+    {
+        return $this->createForm(SkillsForm::class, (object) array_only(auth()->user()->toArray(), ['id']), [
+            'url' => route('user.skills')
+        ]);
     }
 }
