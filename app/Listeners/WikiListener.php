@@ -69,7 +69,8 @@ class WikiListener implements ShouldQueue
             {
                 return $this->wikiId;
             }
-        })->deleteFromIndex();
+        }
+        )->deleteFromIndex();
     }
 
     /**
