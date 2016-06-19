@@ -29,6 +29,7 @@ CREATE OR REPLACE FUNCTION wiki_children(_parent_id INTEGER DEFAULT NULL) RETURN
     )
     SELECT *, COUNT (*) OVER (PARTITION BY nodes.root_id) - COUNT (*) OVER (PARTITION BY nodes.root_id ORDER BY depth) AS children
     FROM   nodes
+    WHERE  deleted_at IS NULL
     ORDER  BY node;
 
 $$ LANGUAGE sql;        
