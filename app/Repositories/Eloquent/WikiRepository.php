@@ -26,9 +26,13 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     public function findByPath($path)
     {
         $this->applyCriteria();
+
+        // we need to get page by path. there can be more than one page of giving location.
+        // one can be deleted but we have to retrieve the newest one.
         return $this
             ->model
             ->where('path', $path)
+            ->orderBy('wiki_id', 'DESC') // <-- DO NOT remove this line
             ->first();
     }
 
@@ -70,7 +74,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
                         ->app
                         ->make(Wiki\Log::class)
                         ->select(['user_id'])
-                        ->where('wiki_id', '=', $this->raw('wiki.id'))
+                        ->where('wiki_id', '=', $this->raw('wiki.wiki_id'))
                         ->orderBy('id')
                         ->limit(1)
                         ->toSql();
@@ -241,6 +245,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     private function prepareChildren($parentId)
     {
         $this->applyCriteria();
+
         return $this->model->from($this->rawFunction('wiki_children', $parentId));
     }
 }
