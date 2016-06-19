@@ -89,6 +89,6 @@ class Rules
      */
     protected function transformNestedName($name)
     {
-        return str_replace(['[', ']'], ['.', ''], $name);
+        return preg_replace('/\.[0-9]+\./', '.*.', str_replace(['[', ']'], ['.', ''], $name));
     }
 }

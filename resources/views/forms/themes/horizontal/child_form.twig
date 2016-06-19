@@ -1,1 +1,3 @@
-{{ form(form) }}
+{% for child in children %}
+    {{ form_row(child) }}
+{% endfor %}

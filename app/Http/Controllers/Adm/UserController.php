@@ -49,26 +49,42 @@ class UserController extends BaseController
 
         return $this->view('adm.user.save', [
             'user' => $user,
-            'form' => $this->createForm(AdminForm::class, $user, [
-                'url' => route('adm.user.save', [$user->id])
-            ])
+            'form' => $this->getForm($user)
         ]);
     }
 
     /**
      * @param \Coyote\User $user
-     * @param AdminForm $form
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($user, AdminForm $form)
+    public function save($user)
     {
-        $this->transaction(function () use ($user, $form) {
-            $user->fill($form->getRequest()->all())->save();
-            stream(Update::class, new Person());
+        $form = $this->getForm($user);
+        $form->validate();
 
+        $data = $form->all();
+
+        $this->transaction(function () use ($user, $data) {
+            $user->fill($data)->save();
+            $user->skills()->delete();
+
+            if (!empty($data['skills'])) {
+                foreach ($data['skills'] as $idx => $skill) {
+                    $user->skills()->create($skill + ['order' => $idx + 1]);
+                }
+            }
+
+            stream(Update::class, new Person());
             event(new UserWasSaved($user->id));
         });
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
+    }
+
+    protected function getForm($user)
+    {
+        return $this->createForm(AdminForm::class, $user, [
+            'url' => route('adm.user.save', [$user->id])
+        ]);
     }
 }

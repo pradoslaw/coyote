@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Forms\User;
 
-use Coyote\Services\FormBuilder\Form;
 use Coyote\Group;
 use Coyote\User;
 

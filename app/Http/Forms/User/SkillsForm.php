@@ -9,11 +9,11 @@ class SkillsForm extends Form
     public function buildForm()
     {
         $this->setAttr(['id' => 'rate-form']);
-        
+
         $this
             ->add('name', 'text', [
                 'label' => 'Nazwa',
-                'rules' => 'required|string|max:100|unique:user_skills,name,NULL,id,user_id,' . $this->data->id,
+                'rules' => 'required|string|max:100|unique:user_skills,name,NULL,id,user_id,' . ($this->data->id ?? 0),
                 'attr' => [
                     'placeholder' => 'Np. java, c#'
                 ]
