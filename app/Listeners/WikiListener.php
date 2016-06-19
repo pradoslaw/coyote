@@ -5,6 +5,7 @@ namespace Coyote\Listeners;
 use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
+use Coyote\Searchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class WikiListener implements ShouldQueue
@@ -31,11 +32,44 @@ class WikiListener implements ShouldQueue
     }
 
     /**
+     * Remove page from elasticsearch.
+     *
      * @param WikiWasDeleted $event
      */
     public function onWikiDelete(WikiWasDeleted $event)
     {
-        $this->wiki->withTrashed()->find($event->wiki['id'])->deleteFromIndex();
+        (new class($event->wiki['id']) {
+            use Searchable;
+
+            /**
+             * @var int
+             */
+            private $wikiId;
+
+            /**
+             * @param int $wikiId
+             */
+            public function __construct($wikiId)
+            {
+                $this->wikiId = $wikiId;
+            }
+
+            /**
+             * @return string
+             */
+            public function getTable()
+            {
+                return 'wiki';
+            }
+
+            /**
+             * @return int
+             */
+            public function getKey()
+            {
+                return $this->wikiId;
+            }
+        })->deleteFromIndex();
     }
 
     /**

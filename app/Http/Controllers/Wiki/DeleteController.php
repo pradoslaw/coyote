@@ -16,7 +16,9 @@ class DeleteController extends BaseController
     public function delete($wiki)
     {
         $this->transaction(function () use ($wiki) {
+            // get all copies of article
             $paths = $this->wiki->findAllBy('wiki_id', $wiki->wiki_id);
+            // remove article content with all copies
             $this->wiki->delete($wiki->wiki_id);
 
             stream(
