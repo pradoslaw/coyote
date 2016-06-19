@@ -168,7 +168,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function skills()
     {
-        return $this->hasMany('Coyote\User\Skill');
+        return $this->hasMany('Coyote\User\Skill')->orderBy('order');
     }
 
     /**

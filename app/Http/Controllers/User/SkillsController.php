@@ -16,7 +16,7 @@ class SkillsController extends BaseController
     {
         $this->breadcrumb->push('Umiejętności', route('user.skills'));
 
-        $skills = auth()->user()->skills()->orderBy('order')->get();
+        $skills = auth()->user()->skills()->get();
 
         return $this->view('user.skills.home')->with('skills', $skills);
     }

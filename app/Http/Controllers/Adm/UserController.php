@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
-use Coyote\Http\Forms\User\SettingsForm;
+use Coyote\Http\Forms\User\AdminForm;
 use Coyote\Http\Grids\Adm\UsersGrid;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Grid\Source\EloquentDataSource;
@@ -49,7 +49,7 @@ class UserController extends BaseController
 
         return $this->view('adm.user.save', [
             'user' => $user,
-            'form' => $this->createForm(SettingsForm::class, $user, [
+            'form' => $this->createForm(AdminForm::class, $user, [
                 'url' => route('adm.user.save', [$user->id])
             ])
         ]);
@@ -57,10 +57,10 @@ class UserController extends BaseController
 
     /**
      * @param \Coyote\User $user
-     * @param SettingsForm $form
+     * @param AdminForm $form
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($user, SettingsForm $form)
+    public function save($user, AdminForm $form)
     {
         $this->transaction(function () use ($user, $form) {
             $user->fill($form->getRequest()->all())->save();
