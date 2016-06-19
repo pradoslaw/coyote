@@ -123,7 +123,7 @@ class Wiki extends Model
      */
     public function comments()
     {
-        return $this->hasMany('Coyote\Wiki\Comment');
+        return $this->hasMany('Coyote\Wiki\Comment', 'wiki_id', 'wiki_id');
     }
 
     /**

@@ -32,7 +32,7 @@ class CloneForm extends Form implements ValidatesWhenSubmitted
             ])
             ->add('parent_id', 'select', [
                 'label' => 'Nowa strona macierzysta',
-                'rules' => 'required|int|exists:wiki_paths,path_id',
+                'rules' => 'sometimes|int|exists:wiki_paths,path_id',
                 'choices' => $this->getTreeList(),
                 'empty_value' => '--',
                 'value' => ''
