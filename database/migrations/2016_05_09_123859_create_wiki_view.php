@@ -13,11 +13,11 @@ class CreateWikiView extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE OR REPLACE VIEW "wiki" AS SELECT 
-    wiki_paths.parent_id,
-    wiki_paths.path,
+CREATE OR REPLACE VIEW "wiki" AS SELECT
     wiki_paths.path_id AS id,
-    wiki_pages.id AS wiki_id,
+    wiki_paths.parent_id,
+    wiki_pages.id AS wiki_id,    
+    wiki_paths.path,
     wiki_pages.title,
     wiki_pages.long_title,
     wiki_pages.slug,
@@ -30,7 +30,8 @@ CREATE OR REPLACE VIEW "wiki" AS SELECT
     wiki_pages.template,
     wiki_pages.views
    FROM wiki_paths
-   JOIN wiki_pages ON (wiki_pages.id = wiki_paths.wiki_id)');
+   JOIN wiki_pages ON (wiki_pages.id = wiki_paths.wiki_id)
+   WHERE wiki_paths.deleted_at IS NULL');
     }
 
     /**

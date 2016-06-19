@@ -170,41 +170,50 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
      */
     public function clone($wikiId, $pathId)
     {
-        $parent = $this->app->make(Wiki\Path::class)->findOrNew($pathId);
+        $parent = $this->app->make(Wiki\Path::class)->find($pathId);
         /** @var \Coyote\Wiki\Page $page */
-        $page = $this->app->make(Wiki\Page::class)->findOrNew($wikiId);
+        $page = $this->app->make(Wiki\Page::class)->find($wikiId);
 
         return $page->createPath($parent, $page->slug);
     }
 
     /**
-     * @param int $id
+     * @param int $wikiId
      * @return mixed
      */
-    public function delete($id)
+    public function delete($wikiId)
     {
-        return $this->app->make(Wiki\Page::class)->destroy($id);
+        return $this->app->make(Wiki\Page::class)->destroy($wikiId);
     }
 
     /**
-     * @param int $id
+     * @param int $pathId
      * @return mixed
      */
-    public function restore($id)
+    public function unlink($pathId)
     {
-        return $this->app->make(Wiki\Page::class)->withTrashed()->findOrFail($id)->restore();
+        return $this->app->make(Wiki\Path::class)->destroy($pathId);
     }
 
     /**
-     * @param int $id
+     * @param int $wikiId
+     * @return mixed
+     */
+    public function restore($wikiId)
+    {
+        return $this->app->make(Wiki\Page::class)->withTrashed()->findOrFail($wikiId)->restore();
+    }
+
+    /**
+     * @param int $wikiId
      * @return Wiki[]
      */
-    public function getAllCategories($id)
+    public function getAllCategories($wikiId)
     {
         return $this
             ->model
             ->select(['parent.*'])
-            ->where('wiki.wiki_id', $id)
+            ->where('wiki.wiki_id', $wikiId)
             ->join('wiki AS parent', 'parent.id', '=', 'wiki.parent_id')
             ->get();
     }

@@ -7,7 +7,8 @@ Route::group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
     Route::get('Clone/{wiki}', ['as' => 'clone', 'uses' => 'CloneController@index', 'middleware' => ['auth', 'can:wiki-admin']]);
     Route::post('Clone/{wiki}', ['uses' => 'CloneController@save', 'middleware' => ['auth', 'can:wiki-admin']]);
 
-    Route::post('Delete/{wiki}', ['as' => 'delete', 'uses' => 'DeleteController@index', 'middleware' => ['auth', 'can:wiki-admin']]);
+    Route::post('Delete/{wiki}', ['as' => 'delete', 'uses' => 'DeleteController@delete', 'middleware' => ['auth', 'can:wiki-admin']]);
+    Route::post('Unlink/{wiki}', ['as' => 'unlink', 'uses' => 'DeleteController@unlink', 'middleware' => ['auth', 'can:wiki-admin']]);
     Route::post('Restore/{id}', ['as' => 'restore', 'uses' => 'RestoreController@index', 'middleware' => ['auth', 'can:wiki-admin']]);
 
     Route::post('Comment/Save/{wiki}/{id?}', ['as' => 'comment.save', 'uses' => 'CommentController@save', 'middleware' => 'auth']);

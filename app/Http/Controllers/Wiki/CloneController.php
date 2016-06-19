@@ -9,6 +9,10 @@ use Coyote\Services\Stream\Activities\Copy as Stream_Copy;
 
 class CloneController extends BaseController
 {
+    /**
+     * @param \Coyote\Wiki $wiki
+     * @return \Illuminate\View\View
+     */
     public function index($wiki)
     {
         return $this->view('wiki.clone', [
@@ -18,15 +22,26 @@ class CloneController extends BaseController
         ]);
     }
 
+    /**
+     * @param \Coyote\Wiki $wiki
+     * @param CloneForm $form
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save($wiki, CloneForm $form)
     {
         $path = $this->transaction(function () use ($wiki, $form) {
-            $path = $this->wiki->clone($wiki->id, $form->get('path_id')->getValue());
+            // clone page to new location
+            $path = $this->wiki->clone($wiki->wiki_id, $form->get('parent_id')->getValue());
             $wiki->forceFill($path->toArray());
 
+            $wiki->id = $wiki->path_id;
+
             stream(Stream_Copy::class, (new Stream_Wiki())->map($wiki));
+            event(new WikiWasSaved($wiki));
+
+            return $path->path;
         });
 
-        return redirect()->to($path->path)->with('success', 'Strona poprawnie skopiowana.');
+        return redirect()->to($path)->with('success', 'Strona poprawnie skopiowana.');
     }
 }

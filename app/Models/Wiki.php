@@ -147,7 +147,7 @@ class Wiki extends Model
         $page = new Wiki_Page();
         $page->timestamps = false;
 
-        $page->where('id', $this->id)->update([$column => $this->views + $amount]);
+        $page->where('id', $this->wiki_id)->update([$column => $this->views + $amount]);
     }
 
     /**

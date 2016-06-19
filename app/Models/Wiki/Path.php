@@ -3,6 +3,7 @@
 namespace Coyote\Wiki;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $wiki_id
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Path extends Model
 {
+    use SoftDeletes;
+    
     /**
      * @var string
      */

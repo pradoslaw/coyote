@@ -61,20 +61,26 @@ interface WikiRepositoryInterface extends RepositoryInterface
     public function clone($wikiId, $pathId);
 
     /**
-     * @param int $id
+     * @param int $wikiId
      * @return mixed
      */
-    public function delete($id);
+    public function delete($wikiId);
 
     /**
-     * @param int $id
+     * @param int $pathId
      * @return mixed
      */
-    public function restore($id);
+    public function unlink($pathId);
 
     /**
-     * @param int $id
+     * @param int $wikiId
+     * @return mixed
+     */
+    public function restore($wikiId);
+
+    /**
+     * @param int $wikiId
      * @return \Coyote\Wiki[]
      */
-    public function getAllCategories($id);
+    public function getAllCategories($wikiId);
 }

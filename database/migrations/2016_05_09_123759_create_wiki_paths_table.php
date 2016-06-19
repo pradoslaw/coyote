@@ -17,9 +17,11 @@ class CreateWikiPathsTable extends Migration
             $table->integer('wiki_id');
             $table->integer('parent_id')->nullable();
             $table->text('path');
+            $table->softDeletes();
 
             $table->index('parent_id');
             $table->index('wiki_id');
+            $table->index('deleted_at');
         });
 
         Schema::table('wiki_paths', function (Blueprint $table) {
