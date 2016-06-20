@@ -31,19 +31,19 @@ class OnlyThoseWithAccess extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->whereNested(function ($sub) use ($model) {
-            $sub->whereNotExists(function ($sub) {
+        return $model->whereNested(function ($sub) use ($model, $repository) {
+            $sub->whereNotExists(function ($sub) use ($repository) {
                 return $sub->select('forum_id')
                     ->from('forum_access')
-                    ->where('forum_access.forum_id', '=', \DB::raw('topics.forum_id'));
+                    ->where('forum_access.forum_id', '=', $repository->raw('topics.forum_id'));
             });
 
             if (!empty($this->groupsId)) {
-                $sub->orWhereExists(function ($sub) {
+                $sub->orWhereExists(function ($sub) use ($repository) {
                     return $sub->select('forum_id')
                         ->from('forum_access')
                         ->whereIn('group_id', $this->groupsId)
-                        ->where('forum_access.forum_id', '=', \DB::raw('topics.forum_id'));
+                        ->where('forum_access.forum_id', '=', $repository->raw('topics.forum_id'));
                 });
             }
         });
