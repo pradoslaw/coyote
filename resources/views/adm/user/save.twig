@@ -2,9 +2,29 @@
 {% block title %}Użytkownicy :: {{ user.name }} :: {{ parent() }}{% endblock %}
 
 {% block container %}
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <ul class="nav nav-panel" role="tablist">
+        <li role="presentation" class="active"><a href="#settings" role="tab" data-toggle="tab">Ustawienia</a></li>
+        <li role="presentation"><a href="#skills" role="tab" data-toggle="tab">Umiejętności</a></li>
+        <li role="presentation"><a href="#groups" role="tab" data-toggle="tab">Grupy użytkownika</a></li>
+    </ul>
+
+    <div class="panel panel-default tab-content">
+        <div id="settings" class="panel-body tab-pane active">
             {{ form(form) }}
         </div>
+
+        <div id="skills" class="panel-body tab-pane">
+
+        </div>
+
+        <div id="groups" class="panel-body tab-pane">
+
+        </div>
     </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="{{ cdn('js/tab.js') }}"></script>
 {% endblock %}
