@@ -25,11 +25,6 @@ class Checkbox extends Field
     protected $uncheckedValue = 0;
 
     /**
-     * @var int
-     */
-//    protected $value = 1;
-
-    /**
      * @param $flag
      * @return $this
      */

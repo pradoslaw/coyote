@@ -15,24 +15,19 @@ class Collection extends ParentType
     protected $property;
 
     /**
-     * @var Field[]
-     */
-    protected $childAttr = [];
-
-    /**
      * @param $name
      * @param $type
      * @param ParentForm $parent
      * @param array $options
      */
-    public function __construct($name, $type, ParentForm $parent, array $options)
-    {
-        parent::__construct($name, $type, $parent, $options);
-
-        if ($this->value && empty($this->children)) {
-            $this->createChildren();
-        }
-    }
+//    public function __construct($name, $type, ParentForm $parent, array $options)
+//    {
+//        parent::__construct($name, $type, $parent, $options);
+//
+//        if ($this->value && empty($this->children)) {
+//            $this->createChildren();
+//        }
+//    }
 
     /**
      * @return mixed
@@ -48,25 +43,6 @@ class Collection extends ParentType
     public function setProperty($property)
     {
         $this->property = $property;
-    }
-
-    /**
-     * @return array
-     */
-    public function getChildAttr()
-    {
-        return $this->childAttr;
-    }
-
-    /**
-     * @param array $childAttr
-     * @return $this
-     */
-    public function setChildAttr($childAttr)
-    {
-        $this->childAttr = $childAttr;
-
-        return $this;
     }
 
     /**
@@ -122,9 +98,9 @@ class Collection extends ParentType
 
         $count = count($data);
 
-        // reset array element's index. element could've been deleted in form so $data can look like
-        // [2 => 'foo', 3 => 'bar']. as you can see there is no element of index 0 and 1. that can
-        // cause problems in for loop.
+        // reset array element's index. element could've been deleted in form (like in PRE_RENDER form event)
+        // so $data can look like [2 => 'foo', 3 => 'bar']. as you can see there is no element of index 0 and 1.
+        // that can cause problems in for loop.
         $data = array_values($data);
 
         for ($i = 0; $i < $count; $i++) {

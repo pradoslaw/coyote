@@ -13,6 +13,11 @@ class Group extends Model
      */
     protected $fillable = ['name', 'description', 'user_id'];
 
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
+
     public function users()
     {
         // group belongs to many users
