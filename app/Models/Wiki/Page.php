@@ -107,12 +107,26 @@ class Page extends Model
      */
     public function createPath($parent, $slug)
     {
+        $data['path'] = $this->makePath($parent->path, $slug);
+        
         if (!empty($parent->path_id)) {
-            $data = ['parent_id' => $parent->path_id, 'path' => $parent->path . '/' . $slug];
-        } else {
-            $data = ['path' => $slug];
+            $data = ['parent_id' => $parent->path_id];
         }
 
         return $this->paths()->create($data);
+    }
+
+    /**
+     * @param string $parentPath
+     * @param string $slug
+     * @return string
+     */
+    public function makePath($parentPath, $slug)
+    {
+        if (empty($parentPath)) {
+            return $slug;
+        } else {
+            return $parentPath . '/' . $slug;
+        }
     }
 }

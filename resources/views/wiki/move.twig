@@ -1,0 +1,22 @@
+{% extends 'wiki.base' %}
+{% block title %}
+    Przenieś stronę do nowej lokalizacji{{ parent }}
+{% endblock %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Wybierz nową lokalizację dla strony
+                </div>
+                <div class="panel-body">
+                    {{ form(form) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+
+        </div>
+    </div>
+{% endblock %}

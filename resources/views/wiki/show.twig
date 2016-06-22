@@ -120,7 +120,7 @@
                             <a href="{{ route('wiki.clone', [wiki.id]) }}"><i class="fa fa-fw fa-clone"></i> Utwórz kopię</a>
                         </li>
                         <li>
-                            <a href="javascript:"><i class="fa fa-fw fa-arrows"></i> Przenieś artykuł</a>
+                            <a href="{{ route('wiki.move', [wiki.id]) }}"><i class="fa fa-fw fa-arrows"></i> Przenieś artykuł</a>
                         </li>
                     {% else %}
                         <li>

@@ -174,11 +174,30 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
      */
     public function clone($wikiId, $pathId)
     {
-        $parent = $this->app->make(Wiki\Path::class)->find($pathId);
-        /** @var \Coyote\Wiki\Page $page */
-        $page = $this->app->make(Wiki\Page::class)->find($wikiId);
+        $parent = $this->getPath($pathId);
+        $page = $this->getPage($wikiId);
 
         return $page->createPath($parent, $page->slug);
+    }
+
+    /**
+     * @param int $id   Current path id
+     * @param int $wikiId   Current page id
+     * @param int $pathId   New path id
+     * @return \Coyote\Wiki\Path
+     */
+    public function move($id, $wikiId, $pathId)
+    {
+        // current path
+        $current = $this->getPath($id);
+
+        // new path
+        $path = $this->getPath($pathId);
+        // current page
+        $page = $this->getPage($wikiId);
+        
+        $current->update(['path' => $page->makePath($path->path, $page->slug), 'parent_id' => $pathId]);
+        return $current;
     }
 
     /**
@@ -220,6 +239,24 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
             ->where('wiki.wiki_id', $wikiId)
             ->join('wiki AS parent', 'parent.id', '=', 'wiki.parent_id')
             ->get();
+    }
+
+    /**
+     * @param int $pathId
+     * @return \Coyote\Wiki\Path
+     */
+    private function getPath($pathId)
+    {
+        return $this->app->make(Wiki\Path::class)->find($pathId);
+    }
+
+    /**
+     * @param int $wikiId
+     * @return \Coyote\Wiki\Page
+     */
+    private function getPage($wikiId)
+    {
+        return $this->app->make(Wiki\Page::class)->find($wikiId);
     }
 
     /**

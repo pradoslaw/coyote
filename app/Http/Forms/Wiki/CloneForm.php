@@ -11,8 +11,15 @@ class CloneForm extends Form implements ValidatesWhenSubmitted
     use TreeListTrait;
 
     protected $theme = self::THEME_INLINE;
+
+    /**
+     * @var WikiRepository
+     */
     protected $wiki;
 
+    /**
+     * @param WikiRepository $wiki
+     */
     public function __construct(WikiRepository $wiki)
     {
         parent::__construct();

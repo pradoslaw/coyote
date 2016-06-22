@@ -61,6 +61,14 @@ interface WikiRepositoryInterface extends RepositoryInterface
     public function clone($wikiId, $pathId);
 
     /**
+     * @param int $id   Current path id
+     * @param int $wikiId   Current page id
+     * @param int $pathId   New path id
+     * @return \Coyote\Wiki\Path
+     */
+    public function move($id, $wikiId, $pathId);
+
+    /**
      * @param int $wikiId
      * @return mixed
      */
