@@ -108,9 +108,9 @@ class Page extends Model
     public function createPath($parent, $slug)
     {
         $data['path'] = $this->makePath($parent->path, $slug);
-        
+
         if (!empty($parent->path_id)) {
-            $data = ['parent_id' => $parent->path_id];
+            $data['parent_id'] = $parent->path_id;
         }
 
         return $this->paths()->create($data);
