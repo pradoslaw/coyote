@@ -21,22 +21,6 @@ class ChildForm extends ParentType
      * @var Form
      */
     protected $form;
-//
-//    /**
-//     * ChildForm constructor.
-//     * @param $name
-//     * @param $type
-//     * @param Form $parent
-//     * @param array $options
-//     */
-//    public function __construct($name, $type, Form $parent, array $options)
-//    {
-//        parent::__construct($name, $type, $parent, $options);
-//
-//        if (empty($this->children)) {
-//            $this->createChildren();
-//        }
-//    }
 
     /**
      * @return mixed

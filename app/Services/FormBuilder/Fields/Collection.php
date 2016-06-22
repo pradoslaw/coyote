@@ -3,7 +3,6 @@
 namespace Coyote\Services\FormBuilder\Fields;
 
 use Coyote\Services\FormBuilder\CreateFieldTrait;
-use Coyote\Services\FormBuilder\Form as ParentForm;
 
 class Collection extends ParentType
 {
@@ -13,21 +12,6 @@ class Collection extends ParentType
      * @var
      */
     protected $property;
-
-    /**
-     * @param $name
-     * @param $type
-     * @param ParentForm $parent
-     * @param array $options
-     */
-//    public function __construct($name, $type, ParentForm $parent, array $options)
-//    {
-//        parent::__construct($name, $type, $parent, $options);
-//
-//        if ($this->value && empty($this->children)) {
-//            $this->createChildren();
-//        }
-//    }
 
     /**
      * @return mixed
