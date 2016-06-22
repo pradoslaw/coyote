@@ -38,39 +38,11 @@ class WikiListener implements ShouldQueue
      */
     public function onWikiDelete(WikiWasDeleted $event)
     {
-        (new class($event->wiki['id']) {
-            use Searchable;
-
-            /**
-             * @var int
-             */
-            private $wikiId;
-
-            /**
-             * @param int $wikiId
-             */
-            public function __construct($wikiId)
-            {
-                $this->wikiId = $wikiId;
-            }
-
-            /**
-             * @return string
-             */
-            public function getTable()
-            {
-                return 'wiki';
-            }
-
-            /**
-             * @return int
-             */
-            public function getKey()
-            {
-                return $this->wikiId;
-            }
+        try {
+            $this->wiki->withTrashed()->find($event->wiki['id'])->deleteFromIndex();
+        } catch (\Exception $e) {
+            app('log')->warning($e->getMessage());
         }
-        )->deleteFromIndex();
     }
 
     /**

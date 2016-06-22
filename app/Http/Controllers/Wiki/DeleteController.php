@@ -18,8 +18,6 @@ class DeleteController extends BaseController
         $this->transaction(function () use ($wiki) {
             // get all copies of article
             $paths = $this->wiki->findAllBy('wiki_id', $wiki->wiki_id);
-            // remove article content with all copies
-            $this->wiki->delete($wiki->wiki_id);
 
             stream(
                 Stream_Delete::class,
@@ -27,6 +25,7 @@ class DeleteController extends BaseController
             );
 
             foreach ($paths as $path) {
+                $this->wiki->unlink($path->id);
                 event(new WikiWasDeleted($path));
             }
         });

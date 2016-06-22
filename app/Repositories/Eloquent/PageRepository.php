@@ -30,7 +30,13 @@ class PageRepository extends Repository implements PageRepositoryInterface
      */
     public function findByContent($id, $content)
     {
-        return $this->model->select()->where('content_id', $id)->where('content_type', $content)->first();
+        // we use firstOrNew() because we don't want to return NULL
+        return $this
+            ->model
+            ->select()
+            ->where('content_id', $id)
+            ->where('content_type', $content)
+            ->firstOrNew(['id' => null]);
     }
 
     /**

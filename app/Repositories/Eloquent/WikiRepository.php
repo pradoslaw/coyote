@@ -200,12 +200,12 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     }
 
     /**
-     * @param int $wikiId
+     * @param int $pathId
      * @return mixed
      */
-    public function restore($wikiId)
+    public function restore($pathId)
     {
-        return $this->app->make(Wiki\Page::class)->withTrashed()->findOrFail($wikiId)->restore();
+        return $this->app->make(Wiki\Path::class)->withTrashed()->findOrFail($pathId)->restore();
     }
 
     /**

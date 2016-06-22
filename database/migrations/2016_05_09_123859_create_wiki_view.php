@@ -23,15 +23,14 @@ CREATE OR REPLACE VIEW "wiki" AS SELECT
     wiki_pages.slug,
     wiki_pages.created_at,
     wiki_pages.updated_at,
-    wiki_pages.deleted_at,
+    wiki_paths.deleted_at,
     wiki_pages.excerpt,
     wiki_pages.text,
     wiki_pages.is_locked,
     wiki_pages.template,
     wiki_pages.views
    FROM wiki_paths
-   JOIN wiki_pages ON (wiki_pages.id = wiki_paths.wiki_id)
-   WHERE wiki_paths.deleted_at IS NULL');
+   JOIN wiki_pages ON (wiki_pages.id = wiki_paths.wiki_id)');
     }
 
     /**
