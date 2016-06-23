@@ -34,10 +34,17 @@
 
     <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
     <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/tab.js') }}"></script>
 
     <script>
         $(function() {
             $('textarea[name="text"]').wikiEditor().fastSubmit().autogrow();
+
+            $('.nav').find('a[href="#preview"]').click(function() {
+                $.post('{{ route('wiki.preview') }}', {text: $('textarea[name="text"]').val()}, function(html) {
+                    $('#preview').html(html);
+                });
+            });
         })
     </script>
 {% endblock %}

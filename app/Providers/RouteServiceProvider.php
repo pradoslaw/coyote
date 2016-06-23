@@ -33,6 +33,7 @@ class RouteServiceProvider extends ServiceProvider
     public function boot(Router $router)
     {
         $router->pattern('id', '[0-9]+');
+        $router->pattern('wiki', '[0-9]+');
         $router->pattern('forum', '[A-Za-z\-\_\/]+');
         $router->pattern('tag', '([a-ząęśżźćółń0-9\-\.\#\+])+');
         $router->pattern('slug', '.*');

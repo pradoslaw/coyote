@@ -7,6 +7,7 @@ use Coyote\Http\Forms\Wiki\WikiForm;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Illuminate\Http\Request;
 
 class SubmitController extends BaseController
 {
@@ -67,6 +68,15 @@ class SubmitController extends BaseController
         });
 
         return redirect()->to($path)->with('success', 'Zmiany zostały zapisane.');
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function preview(Request $request)
+    {
+        return response($this->getParser()->parse((string) $request->input('text')));
     }
 
     /**
