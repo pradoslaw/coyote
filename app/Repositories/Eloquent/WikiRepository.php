@@ -183,7 +183,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
     /**
      * @param int $id   Current path id
      * @param int $wikiId   Current page id
-     * @param int $pathId   New path id
+     * @param int|null $pathId   New path id
      * @return \Coyote\Wiki\Path
      */
     public function move($id, $wikiId, $pathId)
@@ -195,7 +195,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
         $path = $this->getPath($pathId);
         // current page
         $page = $this->getPage($wikiId);
-        
+
         $current->update(['path' => $page->makePath($path->path, $page->slug), 'parent_id' => $pathId]);
         return $current;
     }
@@ -247,7 +247,8 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
      */
     private function getPath($pathId)
     {
-        return $this->app->make(Wiki\Path::class)->find($pathId);
+        // findOrNew() because $pathId can be null.
+        return $this->app->make(Wiki\Path::class)->findOrNew((int) $pathId);
     }
 
     /**
