@@ -214,7 +214,7 @@
 
                     {% if (post.id == topic.last_post_id and can('delete', post, forum)) or can('delete', forum) %}
                         {% if post.deleted_at %}
-                            <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.delete', [post.id]) }}" class="btn btn-xs btn-res">
+                            <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.restore', [post.id]) }}" class="btn btn-xs btn-res">
                                 <i class="fa fa-undo"></i>
                                 <span class="hidden-xs">Przywróć</span>
                             </a>

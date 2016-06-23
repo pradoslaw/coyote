@@ -57,7 +57,9 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     Route::get('{forum}/{topic}-{slug}', ['uses' => 'TopicController@index', 'as' => 'topic', 'middleware' => ['forum.access', 'topic.access', 'topic.scroll', 'page.hit']]);
 
     // usuwanie posta
-    Route::post('Post/Delete/{id}', ['uses' => 'DeleteController@index', 'as' => 'post.delete', 'middleware' => 'auth']);
+    Route::post('Post/Delete/{post}', ['uses' => 'DeleteController@index', 'as' => 'post.delete', 'middleware' => 'auth']);
+    // przywracanie posta
+    Route::post('Post/Restore/{id}', ['uses' => 'RestoreController@index', 'as' => 'post.restore', 'middleware' => 'auth']);
     // obserwowanie posta
     Route::post('Post/Subscribe/{post}', ['uses' => 'PostController@subscribe', 'as' => 'post.subscribe', 'middleware' => 'auth']);
     // glosowanie na dany post
