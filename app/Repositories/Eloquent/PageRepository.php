@@ -33,10 +33,7 @@ class PageRepository extends Repository implements PageRepositoryInterface
         // we use firstOrNew() because we don't want to return NULL
         return $this
             ->model
-            ->select()
-            ->where('content_id', $id)
-            ->where('content_type', $content)
-            ->firstOrNew(['id' => null]);
+            ->firstOrNew(['content_id' => $id, 'content_type' => $content]);
     }
 
     /**
