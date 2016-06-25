@@ -30,7 +30,7 @@ class StatsGrid extends Grid
             ->addColumn('sum', [
                 'title' => 'Sumuj',
                 'render' => function ($row) {
-                    return app('form')->checkbox('count[]', $row->id, true);
+                    return app('form')->checkbox('count[]', $row->id, true, ['class' => 'switcher']);
                 }
             ]);
     }
