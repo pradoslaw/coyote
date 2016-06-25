@@ -73,4 +73,10 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @return Post $post
      */
     public function save(Request $request, $user, Forum $forum, Topic $topic, Post $post, $poll);
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function takeRatesForUser($userId);
 }

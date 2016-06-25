@@ -1,0 +1,12 @@
+{% extends 'user.base' %}
+{% block title %}Moje oceny{{ parent() }}{% endblock %}
+
+{% block content %}
+    <h2>Moje oceny</h2>
+
+    <div id="box-start" class="panel panel-default">
+        <div class="panel-body">
+            {{ grid(grid) }}
+        </div>
+    </div>
+{% endblock %}

@@ -67,12 +67,4 @@ class BaseController extends Controller
     {
         return app('log-viewer');
     }
-
-    /**
-     * @return \Coyote\Services\Grid\GridBuilder
-     */
-    protected function getGrid()
-    {
-        return app('grid.builder');
-    }
 }
