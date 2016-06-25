@@ -218,8 +218,26 @@ class Grid
             'columns'       => $this->columns,
             'rows'          => $rows,
             'pagination'    => $paginator->render(),
-            'grid'          => $this
+            'grid'          => $this,
+            'has_filters'   => $this->hasFilters()
         ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFilters()
+    {
+        $hasFilters = false;
+
+        foreach ($this->columns as $column) {
+            if ($column->isFilterable()) {
+                $hasFilters = true;
+                break;
+            }
+        }
+
+        return $hasFilters;
     }
 
     /**

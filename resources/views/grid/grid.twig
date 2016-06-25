@@ -11,11 +11,13 @@
                             {{ grid_column(column) }}
                         {% endfor %}
                     </tr>
-                    <tr>
-                        {% for column in columns %}
-                            {{ grid_filter(column) }}
-                        {% endfor %}
-                    </tr>
+                    {% if has_filters %}
+                        <tr>
+                            {% for column in columns %}
+                                {{ grid_filter(column) }}
+                            {% endfor %}
+                        </tr>
+                    {% endif %}
                 </thead>
                 <tbody>
                     {% for row in rows %}

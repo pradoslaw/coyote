@@ -188,7 +188,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
         return $post;
     }
 
-
     /**
      * @param int $userId
      * @return mixed
@@ -212,6 +211,32 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->join('topics', 'topics.id', '=', 'posts.topic_id')
             ->join('forums', 'forums.id', '=', 'posts.forum_id')
             ->join('users', 'users.id', '=', 'post_votes.user_id')
+            ->where('posts.user_id', $userId);
+    }
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function takeAcceptsForUser($userId)
+    {
+        return $this
+            ->model
+            ->select([
+                'posts.id AS post_id',
+                'subject',
+                'posts.topic_id',
+                'posts.created_at',
+                'post_accepts.created_at AS accepted_at',
+                'topics.slug AS topic_slug',
+                'forums.slug AS forum_slug',
+                'users.id AS user_id',
+                'users.name AS user_name'
+            ])
+            ->join('post_accepts', 'post_accepts.post_id', '=', 'posts.id')
+            ->join('topics', 'topics.id', '=', 'posts.topic_id')
+            ->join('forums', 'forums.id', '=', 'posts.forum_id')
+            ->join('users', 'users.id', '=', 'post_accepts.user_id')
             ->where('posts.user_id', $userId);
     }
 

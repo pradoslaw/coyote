@@ -19,6 +19,6 @@ class RatesController extends BaseController
         $grid = $this->getGrid()->createGrid(RatesGrid::class);
         $grid->setSource(new EloquentDataSource($post->takeRatesForUser($this->userId)));
 
-        return $this->view('user.rates', ['grid' => $grid]);
+        return $this->view('user.rates')->with('grid', $grid);
     }
 }
