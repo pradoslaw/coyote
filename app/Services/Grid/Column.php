@@ -4,6 +4,7 @@ namespace Coyote\Services\Grid;
 
 use Coyote\Services\Grid\Decorators\DecoratorInterface;
 use Coyote\Services\Grid\Decorators\Link;
+use Coyote\Services\Grid\Decorators\Html;
 use Coyote\Services\Grid\Filters\FilterInterface;
 
 class Column
@@ -128,6 +129,14 @@ class Column
     public function setClickable(\Closure $closure)
     {
         $this->addDecorator((new Link())->render($closure));
+    }
+
+    /**
+     * @param \Closure $closure
+     */
+    public function setRender(\Closure $closure)
+    {
+        $this->addDecorator((new Html())->render($closure));
     }
 
     /**

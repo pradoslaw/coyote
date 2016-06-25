@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Grids\User;
 
-use Coyote\Services\Grid\Decorators\Html;
 use Coyote\Services\Grid\Grid;
 use Coyote\Services\Grid\Order;
 
@@ -30,9 +29,9 @@ class StatsGrid extends Grid
             ])
             ->addColumn('sum', [
                 'title' => 'Sumuj',
-                'decorators' => [(new Html())->render(function ($row) {
+                'render' => function ($row) {
                     return app('form')->checkbox('count[]', $row->id, true);
-                })]
+                }
             ]);
     }
 }
