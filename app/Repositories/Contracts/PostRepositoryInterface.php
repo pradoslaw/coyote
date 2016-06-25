@@ -85,4 +85,10 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function takeAcceptsForUser($userId);
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function takeStatsForUser($userId);
 }

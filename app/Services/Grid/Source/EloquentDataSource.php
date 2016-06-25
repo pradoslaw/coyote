@@ -15,11 +15,6 @@ class EloquentDataSource implements SourceInterface
     protected $source;
 
     /**
-     * @var int
-     */
-    protected $total;
-
-    /**
      * @param \Illuminate\Database\Eloquent\Builder $source
      */
     public function __construct($source)
@@ -52,8 +47,6 @@ class EloquentDataSource implements SourceInterface
      */
     public function execute($perPage, $currentPage, Order $order)
     {
-        $this->total = $this->source->count();
-
         return $this
             ->source
             ->orderBy($order->getColumn(), $order->getDirection())
@@ -67,7 +60,7 @@ class EloquentDataSource implements SourceInterface
      */
     public function total()
     {
-        return $this->total;
+        return $this->source->count();
     }
 
     /**

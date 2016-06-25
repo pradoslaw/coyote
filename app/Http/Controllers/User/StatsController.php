@@ -2,17 +2,27 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\User;
+use Coyote\Http\Grids\User\StatsGrid;
+use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
+use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Services\Grid\Source\EloquentDataSource;
 
 class StatsController extends BaseController
 {
     use HomeTrait;
 
     /**
+     * @param PostRepository $post
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(PostRepository $post)
     {
-        return $this->view('user.stats');
+        $post->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
+
+        $grid = $this->getGrid()->createGrid(StatsGrid::class);
+        $grid->setSource(new EloquentDataSource($post->takeStatsForUser($this->userId)));
+        $grid->setEnablePagination(false);
+
+        return $this->view('user.stats')->with('grid', $grid);
     }
 }

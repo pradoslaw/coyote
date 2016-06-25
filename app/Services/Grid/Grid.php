@@ -50,6 +50,18 @@ class Grid
     protected $noDataMessage = 'Brak danych do wyświetlenia.';
 
     /**
+     * @var Rows
+     */
+    protected $rows;
+
+    /**
+     * Total number of records.
+     *
+     * @var int
+     */
+    protected $total = 0;
+
+    /**
      * @var RowAction[]
      */
     protected $rowActions = [];
@@ -66,6 +78,11 @@ class Grid
      * @var Order
      */
     protected $order;
+
+    /**
+     * @var bool
+     */
+    protected $enablePagination = true;
 
     /**
      * @param Request $request
@@ -207,17 +224,40 @@ class Grid
     }
 
     /**
+     * @param bool $flag
+     * @return $this
+     */
+    public function setEnablePagination($flag)
+    {
+        $this->enablePagination = (bool) $flag;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaginationEnabled()
+    {
+        return $this->enablePagination;
+    }
+
+    /**
      * @return string
      */
     public function render()
     {
         $rows = $this->getRows();
-        $paginator = $this->getPaginator($rows)->appends($this->request->except('page'));
+        $paginator = null;
+
+        if ($this->enablePagination) {
+            $paginator = $this->getPaginator($rows)->appends($this->request->except('page'))->render();
+        }
 
         return view(self::DEFAULT_TEMPLATE, [
             'columns'       => $this->columns,
             'rows'          => $rows,
-            'pagination'    => $paginator->render(),
+            'pagination'    => $paginator,
             'grid'          => $this,
             'has_filters'   => $this->hasFilters()
         ]);
@@ -246,7 +286,7 @@ class Grid
      */
     protected function getPaginator(Rows $rows)
     {
-        return new LengthAwarePaginator($rows, $this->source->total(), $this->perPage, $this->resolveCurrentPage(), [
+        return new LengthAwarePaginator($rows, $this->total, $this->perPage, $this->resolveCurrentPage(), [
             'path' => $this->resolveCurrentPath(),
         ]);
     }
@@ -256,6 +296,10 @@ class Grid
      */
     protected function getRows()
     {
+        if (!empty($this->rows)) {
+            return $this->rows;
+        }
+
         if ($this->request->has('column')) {
             $this->order = new Order(
                 $this->request->get('column', $this->defaultOrder['column']),
@@ -269,9 +313,12 @@ class Grid
             }
         }
 
+        if ($this->enablePagination) {
+            $this->total = $this->source->total();
+        }
 
         $data = $this->execute();
-        $rows = new Rows();
+        $this->rows = new Rows();
 
         // special column for action buttons
         $actions = new Column(['name' => '__actions__']);
@@ -285,12 +332,12 @@ class Grid
             }
 
             $row->addCell(new Action($actions, $this->rowActions, $item));
-            $rows->addRow($row);
+            $this->rows->addRow($row);
         }
 
         $this->columns[] = $actions;
 
-        return $rows;
+        return $this->rows;
     }
 
     /**

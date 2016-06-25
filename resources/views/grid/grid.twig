@@ -1,42 +1,40 @@
-<div class="panel panel-default">
-    <div class="panel-body">
+<div class="grid">
 
-        {{ pagination|raw }}
+    {{ pagination|raw }}
 
-        <form method="get" id="filter-form">
-            <table class="table table-striped">
-                <thead>
+    <form method="get" id="filter-form">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                        {{ grid_column(column) }}
+                    {% endfor %}
+                </tr>
+                {% if has_filters %}
                     <tr>
                         {% for column in columns %}
-                            {{ grid_column(column) }}
+                            {{ grid_filter(column) }}
                         {% endfor %}
                     </tr>
-                    {% if has_filters %}
-                        <tr>
-                            {% for column in columns %}
-                                {{ grid_filter(column) }}
-                            {% endfor %}
-                        </tr>
-                    {% endif %}
-                </thead>
-                <tbody>
-                    {% for row in rows %}
-                        <tr>
-                            {% for cell in row %}
-                                {{ grid_cell(cell) }}
-                            {% endfor %}
-                        </tr>
-                    {% else %}
-                        <tr>
-                            {{ grid_no_data(grid) }}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                {% endif %}
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        {% for cell in row %}
+                            {{ grid_cell(cell) }}
+                        {% endfor %}
+                    </tr>
+                {% else %}
+                    <tr>
+                        {{ grid_no_data(grid) }}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-            <input type="submit" style="visibility: hidden;" />
-        </form>
+        <input type="submit" style="visibility: hidden;" />
+    </form>
 
-        {{ pagination|raw }}
-    </div>
+    {{ pagination|raw }}
 </div>

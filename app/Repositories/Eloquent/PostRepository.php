@@ -244,6 +244,31 @@ class PostRepository extends Repository implements PostRepositoryInterface
      * @param int $userId
      * @return mixed
      */
+    public function takeStatsForUser($userId)
+    {
+        $this->applyCriteria();
+
+        return $this
+            ->model
+            ->select([
+                'posts.forum_id',
+                'forums.slug',
+                'forums.name',
+                $this->raw('COUNT(posts.id) AS posts_count'),
+                $this->raw('COUNT(post_votes.id) AS votes_count')
+            ])
+            ->leftJoin('post_votes', 'post_votes.post_id', '=', 'posts.id')
+            ->join('forums', 'forums.id', '=', 'posts.forum_id')
+            ->where('posts.user_id', $userId)
+            ->groupBy('posts.forum_id')
+            ->groupBy('forums.slug')
+            ->groupBy('forums.name');
+    }
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
     private function prepare($userId)
     {
         $sql = $this->model
