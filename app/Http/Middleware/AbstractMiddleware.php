@@ -10,7 +10,7 @@ abstract class AbstractMiddleware
      */
     protected function unauthorized($request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response('Unauthorized.', 401);
         } else {
             abort(401, 'Unauthorized');
@@ -23,7 +23,7 @@ abstract class AbstractMiddleware
      */
     protected function login($request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response('Unauthorized.', 401);
         } else {
             return redirect()->guest(route('login'));

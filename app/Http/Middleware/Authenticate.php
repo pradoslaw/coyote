@@ -1,9 +1,11 @@
-<?php namespace Coyote\Http\Middleware;
+<?php
+
+namespace Coyote\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 
-class Authenticate
+class Authenticate extends AbstractMiddleware
 {
     /**
      * The Guard implementation.
@@ -32,11 +34,7 @@ class Authenticate
     public function handle($request, Closure $next)
     {
         if ($this->auth->guest()) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
-            } else {
-                return redirect()->guest(route('login'));
-            }
+            return $this->login($request);
         }
 
         return $next($request);

@@ -1,4 +1,6 @@
-<?php namespace Coyote\Http\Middleware;
+<?php
+
+namespace Coyote\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
