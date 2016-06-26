@@ -173,77 +173,27 @@
                         {% endfor %}
                     </ul>
                 </section>
+
+                <div class="clearfix"></div>
             {% endif %}
 
-            <div class="clearfix"></div>
+            {% if mlt|length > 0 %}
+                <section id="box-related" class="box related">
+                    <h4 class="border"><i class="fa fa-eye fa-fw"></i> Zobacz też</h4>
 
-            <section id="box-related" class="box related">
-                <h4 class="border"><i class="fa fa-eye fa-fw"></i> Zobacz też</h4>
-
-                <ul>
-                    <li>
-                        <a data-category="related" href="http://4programmers.net/Delphi/Artykuły/IntraWeb_jako_ISAPI" title="IntraWeb jako ISAPI">
-                            <strong>IntraWeb jako ISAPI</strong>
-                            <small>09 listopad 2003, 15:06</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="related" href="http://forum.4programmers.net/Delphi_Pascal/123350-MYSQL_i_IntraWEB" title="MYSQL i IntraWEB">
-                            <strong>MYSQL i IntraWEB</strong>
-                            <small>14 marzec 2008, 16:16</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="related" href="http://forum.4programmers.net/Delphi_Pascal/37891-IntraWeb" title="intraWeb">
-                            <strong>intraWeb</strong>
-                            <small>15 kwiecień 2003, 17:01</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="related" href="http://forum.4programmers.net/Delphi_Pascal/88732-Przekazywanie_danych_przez_zmianne_w_IntraWeb" title="przekazywanie danych przez zmianne w IntraWeb">
-                            <strong>przekazywanie danych przez zmianne w IntraWeb</strong>
-                            <small>26 lipiec 2009, 20:41</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="related" href="http://4programmers.net/Delphi/NET/Aplikacje_sieciowe" title="Aplikacje sieciowe">
-                            <strong>Aplikacje sieciowe</strong>
-                            <small>22 styczeń 2006, 11:18</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="related" href="http://forum.4programmers.net/Delphi_Pascal/90548-Polaczenie_ssl_w_IntraWeb" title="połączenie ssl w IntraWeb">
-                            <strong>połączenie ssl w IntraWeb</strong>
-                            <small>06 maj 2006, 01:09</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="related" href="http://forum.4programmers.net/Delphi_Pascal/119257-IntraWeb_czy_PHP" title="IntraWeb czy PHP?">
-                            <strong>IntraWeb czy PHP?</strong>
-                            <small>05 wrzesień 2010, 19:33</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="related" href="http://forum.4programmers.net/Delphi_Pascal/60941-Isapi_+_serwer_IntraWeb" title="Isapi + serwer IntraWeb">
-                            <strong>Isapi + serwer IntraWeb</strong>
-                            <small>12 listopad 2004, 17:53</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="related" href="http://forum.4programmers.net/Delphi_Pascal/32905-Delphi_w_html" title="Delphi w html">
-                            <strong>Delphi w html</strong>
-                            <small>26 lipiec 2009, 20:20</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="related" href="http://4programmers.net/Delphi/Kompendium/Rozdział_18" title="Rozdział 18. Delphi a Internet">
-                            <strong>Rozdział 18. Delphi a Internet</strong>
-                            <small>30 wrzesień 2013, 09:05</small>
-                        </a>
-                    </li>
-                </ul>
-            </section>
-            <div class="clearfix"></div>
+                    <ul>
+                        {% for item in mlt %}
+                            <li>
+                                <a href="{{ url(item.path) }}" title="{{ item.title }}">
+                                    <strong>{{ item.title }}</strong>
+                                    <small>{{ item.updated_at|format_date }}</small>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+                <div class="clearfix"></div>
+            {% endif %}
 
             <section class="related box">
                 <h4 class="border"><i class="fa fa-thumb-tack fa-fw"></i> Strony powiązane</h4>
