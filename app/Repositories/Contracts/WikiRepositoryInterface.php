@@ -17,6 +17,12 @@ interface WikiRepositoryInterface extends RepositoryInterface
     public function findByPath($path);
 
     /**
+     * @param string $path
+     * @return mixed
+     */
+    public function findNewLocation($path);
+
+    /**
      * Get children articles of given parent_id.
      *
      * @param int|null $parentId

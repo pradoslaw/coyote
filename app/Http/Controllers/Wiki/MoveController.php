@@ -30,7 +30,7 @@ class MoveController extends BaseController
     public function save($wiki, MoveForm $form)
     {
         $path = $this->transaction(function () use ($wiki, $form) {
-            // clone page to new location
+            // move page to new location
             $path = $this->wiki->move($wiki->id, $wiki->wiki_id, $form->get('parent_id')->getValue());
             $wiki->forceFill($path->toArray());
 

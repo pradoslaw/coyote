@@ -43,9 +43,17 @@ class WikiAccess extends AbstractMiddleware
             $this->wiki->pushCriteria(new WithTrashed());
         }
 
-        $result = $this->wiki->findByPath(trim($request->route('path'), '/'));
+        $path = trim($request->route('path'), '/');
+        $result = $this->wiki->findByPath($path);
 
         if (empty($result)) {
+            $location = $this->wiki->findNewLocation($path);
+
+            if (!empty($location)) {
+                return redirect()->to($location->path);
+            }
+
+            // throw 404
             abort(404);
         }
 

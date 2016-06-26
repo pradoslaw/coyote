@@ -38,6 +38,23 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
     }
 
     /**
+     * @param string $path
+     * @return mixed
+     */
+    public function findNewLocation($path)
+    {
+        return $this
+            ->app
+            ->make(Wiki\Redirect::class)
+            ->select(['wiki_paths.path'])
+            ->join('wiki_paths', 'wiki_paths.path_id', '=', $this->raw('wiki_redirects.path_id'))
+            ->where('wiki_redirects.path', $path)
+            ->whereNull('wiki_paths.deleted_at')
+            ->orderBy('wiki_redirects.id', 'DESC')
+            ->first();
+    }
+
+    /**
      * Get children articles of given parent_id.
      *
      * @param int|null $parentId
@@ -198,6 +215,10 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
         // current page
         $page = $this->getPage($wikiId);
 
+        // make a redirection so old links will redirect to new path
+        $this->app->make(Wiki\Redirect::class)->create(['path' => $current->path, 'path_id' => $current->path_id]);
+
+        // update current path and parent id
         $current->update(['path' => $page->makePath($path->path, $page->slug), 'parent_id' => $pathId]);
         return $current;
     }
