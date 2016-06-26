@@ -86,6 +86,7 @@ class Link implements ParserInterface
             $origin = $matches[$i][0];
 
             $path = '/' . str_replace(' ', '_', trim($matches[$i][1], '/'));
+
             $title = $matches[$i][3] ?? null;
             $hash = $this->getHashFromPath($path);
 
@@ -96,7 +97,7 @@ class Link implements ParserInterface
                 $attr = ['class' => 'link-broken', 'title' => 'Dokument nie istnieje'];
 
                 if (empty($title)) {
-                    $title = last(explode('/', $path));
+                    $title = str_replace('_', ' ', last(explode('/', $path)));
                 }
             } else {
                 $path = $page->path;
@@ -153,7 +154,7 @@ class Link implements ParserInterface
     private function getHashFromPath(&$path)
     {
         $hash = '';
-        
+
         if (($pos = strpos($path, '#')) !== false) {
             $hash = htmlspecialchars(substr($path, $pos + 1));
             $path = substr($path, 0, $pos);
