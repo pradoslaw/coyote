@@ -1,10 +1,11 @@
 {% extends 'user.base' %}
-{% block title %}Wiadomości prywatne {{ parent() }}{% endblock %}
+{% set page_name = page_name|default('Wiadomości prywatne') %}
+{% block title %}{{ page_name }} {{ parent() }}{% endblock %}
 
 {% import 'components/modals.twig' as modal %}
 
 {% block content %}
-    <h2>Wiadomości prywatne</h2>
+    <h2>{{ page_name }}</h2>
 
     <ul class="nav nav-panel">
         <li role="presentation" {{ parent != 'user.pm.submit' ? 'class="active"' }}><a href="{{ route('user.pm') }}">Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</a></li>

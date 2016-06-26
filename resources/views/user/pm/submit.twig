@@ -8,7 +8,7 @@
 
     <div class="form-group">
         <div class="col-md-12 {{ errors.has('recipient') > 0 ? 'has-error' }}">
-            {{ form_text('recipient', input_old('recipient', request().get('to')), {class: 'form-control', placeholder: 'Odbiorca...', id: 'recipient', tabindex: 1}) }}
+            {{ form_text('recipient', input_old('recipient', request().get('to')), {class: 'form-control', placeholder: 'Odbiorca...', id: 'recipient', tabindex: 1, autofocus: 'autofocus'}) }}
 
             {% if errors.first('recipient') %}
                 <span class="help-block">{{ errors.first('recipient') }}</span>
@@ -54,7 +54,7 @@
     <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            $('textarea[name="text"]').wikiEditor().prompt().fastSubmit().autogrow().pasteImage().focus();
+            $('textarea[name="text"]').wikiEditor().prompt().fastSubmit().autogrow().pasteImage();
             $('#recipient').autocomplete({
                 url: '{{ route('user.prompt') }}'
             });
