@@ -8,6 +8,18 @@
 @import "../components/sidemenu";
 @import "../components/metadata";
 
+// Styl dla linkow do stron, ktore nie istnieja
+// ----------------------------------------------
+
+.link-broken {
+  color: $alt-link-hover-color;
+  border-bottom: 1px dotted $alt-link-hover-color;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 // Style zwiazane ze strona prezentujaca kategorie danego tekstu. Zawiera m.in. liste artykulow
 // ----------------------------------------------------------------------------------------------
 

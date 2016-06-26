@@ -124,6 +124,7 @@ elixir(function (mix) {
         .sass('pages/microblog.scss')
         .sass('pages/forum.scss')
         .sass('pages/wiki.scss')
+        .sass('pages/help.scss')
         .sass('pages/user.scss')
         .sass('pages/profile.scss')
         .sass('pages/job.scss')
@@ -162,7 +163,8 @@ elixir(function (mix) {
         'css/job.css',
         'css/errors.css',
         'css/pastebin.css',
-        'css/adm.css'
+        'css/adm.css',
+        'css/help.css'
     ]);
 });
 

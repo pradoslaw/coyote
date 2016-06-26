@@ -1,0 +1,25 @@
+@charset "UTF-8";
+@import "../helpers/variables";
+
+.box-help-category {
+  h3 {
+    border-bottom: 1px solid $border-color;
+    color: $gray;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+
+    a {
+      color: inherit;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  ul {
+    li {
+      padding: 5px 0;
+    }
+  }
+}
