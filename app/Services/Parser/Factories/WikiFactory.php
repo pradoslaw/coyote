@@ -31,8 +31,10 @@ class WikiFactory extends AbstractFactory
             $parser = new Container();
 
             $text = $this->cache($text, function () use ($parser) {
+                $allowedTags = config('purifier')['HTML.Allowed'] . ',div[class]';
+
                 $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));
-                $parser->attach(new Purifier());
+                $parser->attach((new Purifier())->set('HTML.Allowed', $allowedTags));
                 $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                 $parser->attach(new Geshi());
 

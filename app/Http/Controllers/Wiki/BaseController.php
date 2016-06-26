@@ -46,7 +46,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @return \Coyote\Services\Parser\Parsers\ParserInterface
+     * @return \Coyote\Services\Parser\Factories\AbstractFactory
      */
     protected function getParser()
     {
