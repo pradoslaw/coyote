@@ -102,7 +102,7 @@ class WikiForm extends Form
      */
     protected function getTemplateList()
     {
-        $templates = ['show', 'category', 'blog.show', 'help.show'];
+        $templates = ['show', 'category', 'blog.home', 'blog.show', 'help.home', 'help.show'];
         return array_combine($templates, $templates);
     }
 }
