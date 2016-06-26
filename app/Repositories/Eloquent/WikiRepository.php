@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Wiki;
 use Illuminate\Http\Request;
@@ -9,7 +10,7 @@ use Illuminate\Http\Request;
 /**
  * @method $this withTrashed()
  */
-class WikiRepository extends Repository implements WikiRepositoryInterface
+class WikiRepository extends Repository implements WikiRepositoryInterface, SubscribableInterface
 {
     /**
      * @return \Coyote\Wiki
@@ -123,8 +124,9 @@ class WikiRepository extends Repository implements WikiRepositoryInterface
             ->app
             ->make(Wiki\Subscriber::class)
             ->select()
-            ->join('wiki', 'wiki.id', '=', 'wiki_id')
+            ->join('wiki', 'wiki.wiki_id', '=', 'wiki_subscribers.wiki_id')
             ->where('wiki_subscribers.user_id', $userId)
+            ->whereNull('deleted_at')
             ->orderBy('wiki_subscribers.id', 'DESC')
             ->paginate();
     }

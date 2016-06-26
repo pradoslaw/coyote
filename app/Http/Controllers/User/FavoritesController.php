@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
+use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
@@ -74,10 +75,10 @@ class FavoritesController extends BaseController
     }
 
     /**
-     * @param $repository
+     * @param SubscribableInterface $repository
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    protected function load($repository)
+    protected function load(SubscribableInterface $repository)
     {
         $subscribed = $repository->getSubscribed($this->userId);
 

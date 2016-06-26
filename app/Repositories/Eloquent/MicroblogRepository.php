@@ -5,12 +5,13 @@ namespace Coyote\Repositories\Eloquent;
 use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
+use Coyote\Repositories\Contracts\SubscribableInterface;
 
 /**
  * Class MicroblogRepository
  * @package Coyote\Repositories\Eloquent
  */
-class MicroblogRepository extends Repository implements MicroblogRepositoryInterface
+class MicroblogRepository extends Repository implements MicroblogRepositoryInterface, SubscribableInterface
 {
     public function model()
     {
@@ -217,6 +218,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->select(['microblogs.id', 'microblog_subscribers.created_at', 'microblogs.text'])
             ->join('microblogs', 'microblogs.id', '=', 'microblog_id')
             ->where('microblog_subscribers.user_id', $userId)
+            ->whereNull('deleted_at')
             ->orderBy('microblog_subscribers.id', 'DESC')
             ->paginate();
     }

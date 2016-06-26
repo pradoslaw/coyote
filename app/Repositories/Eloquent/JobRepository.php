@@ -4,12 +4,13 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
+use Coyote\Repositories\Contracts\SubscribableInterface;
 
 /**
  * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
  * @method $this withTrashed()
  */
-class JobRepository extends Repository implements JobRepositoryInterface
+class JobRepository extends Repository implements JobRepositoryInterface, SubscribableInterface
 {
     /**
      * @return \Coyote\Job
@@ -120,6 +121,7 @@ class JobRepository extends Repository implements JobRepositoryInterface
             ->select(['jobs.id', 'title', 'slug', 'job_subscribers.created_at'])
             ->join('jobs', 'jobs.id', '=', 'job_subscribers.job_id')
             ->where('job_subscribers.user_id', $userId)
+            ->whereNull('deleted_at')
             ->orderBy('job_subscribers.id', 'DESC')
             ->paginate();
     }
