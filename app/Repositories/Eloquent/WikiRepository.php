@@ -165,14 +165,26 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
         $page->save();
 
         if ($isDirty) {
+            $length = mb_strlen($page->text);
+            $diff = $length;
+
+            if ($wiki->exists) {
+                $old = $page->logs()->orderBy('id', 'DESC')->value('text');
+                // @todo make real diff
+                $diff = $length - mb_strlen($old);
+            }
+
             // add new version to the history
             $page->logs()->create($page->toArray() + [
                 'user_id'   => $request->user()->id,
                 'ip'        => $request->ip(),
                 'host'      => gethostbyaddr($request->ip()),
                 'browser'   => $request->browser(),
-                'length'    => mb_strlen($page->text)
+                'length'    => $length,
+                'diff'      => $diff
             ]);
+
+            $this->calculateAuthorsShare($page->id);
         }
 
         if ($page->wasRecentlyCreated) {
@@ -184,6 +196,31 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
 
         $wiki->forceFill(array_except($page->toArray(), ['id']));
         $wiki->wasRecentlyCreated = $page->wasRecentlyCreated;
+    }
+
+    /**
+     * @param int $wikiId
+     */
+    private function calculateAuthorsShare($wikiId)
+    {
+        $totalDiff = $this
+            ->app
+            ->make(Wiki\Log::class)
+            ->where('wiki_id', $wikiId)
+            ->where('diff', '>', 0)
+            ->where('is_restored', 0)
+            ->orderBy('id')
+            ->get(['diff'])
+            ->sum('diff');
+
+        $this->app->make(Wiki\Author::class)->where('wiki_id', $wikiId)->delete();
+
+        $insert = "INSERT INTO wiki_authors (wiki_id, user_id, share, length)
+                   SELECT wiki_id, user_id, SUM(diff::FLOAT) / $totalDiff * 100, SUM(diff) 
+                   FROM (SELECT * FROM wiki_log WHERE wiki_id = $wikiId AND diff > 0 AND is_restored = 0 ORDER BY id) AS t 
+                   GROUP BY user_id, wiki_id";
+
+        $this->app->make('db')->insert($insert);
     }
 
     /**

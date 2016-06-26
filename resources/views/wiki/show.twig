@@ -155,39 +155,26 @@
                 </section>
             {% endif %}
 
-            <section id="box-authors" class="box">
-                <h4 class="border"><i class="fa fa-users fa-fw"></i> Stronę współtworzą</h4>
+            {% if authors|length > 0 %}
+                <section id="box-authors" class="box">
+                    <h4 class="border"><i class="fa fa-users fa-fw"></i> Stronę współtworzą</h4>
 
-                <ul>
-                    <li>
-                        <a title="Udział w procesie tworzenia strony: 57.8603716%" href="#" data-user-id="1">
-                            <small>57,86%</small>
+                    <ul>
+                        {% for author in authors %}
+                            <li>
+                                <a title="Udział w procesie tworzenia strony: {{ author.share }}%" href="{{ route('profile', [author.user_id]) }}" data-user-id="{{ author.user_id }}">
+                                    <small>{{ author.share|round(1) }}%</small>
 
-                            <img src="/img/avatar.png" width="24" height="24">
+                                    <img src="{{ user_photo(author.photo) }}" width="24" height="24">
 
-                            Adam Boduch
-                        </a>
-                    </li>
-                    <li>
-                        <a title="Udział w procesie tworzenia strony: 41.9889502%" href="#" data-user-id="9688">
-                            <small>41,99%</small>
+                                    {{ author.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
 
-                            <img src="/img/avatar.png" width="24" height="24">
-
-                            rk7771
-                        </a>
-                    </li>
-                    <li>
-                        <a title="Udział w procesie tworzenia strony: 0.150678%" href="#" data-user-id="43956">
-                            <small>0,15%</small>
-
-                            <img src="/img/shalom.png" width="24" height="24">
-
-                            TomRiddle
-                        </a>
-                    </li>
-                </ul>
-            </section>
             <div class="clearfix"></div>
 
             <section id="box-related" class="box related">

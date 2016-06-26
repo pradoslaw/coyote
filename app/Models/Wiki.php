@@ -127,6 +127,17 @@ class Wiki extends Model
     }
 
     /**
+     * @return mixed
+     */
+    public function authors()
+    {
+        return $this
+            ->hasMany('Coyote\Wiki\Author', 'wiki_id', 'wiki_id')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->orderBy('share', 'DESC');
+    }
+
+    /**
      * @param int $userId
      * @return bool
      */

@@ -36,6 +36,7 @@ class ShowController extends BaseController
         return $this->view('wiki.' . $wiki->template, [
             'wiki' => $wiki,
             'author' => $author,
+            'authors' => $wiki->authors()->get(),
             'categories' => $this->wiki->getAllCategories($wiki->wiki_id),
             'parents' => $this->parents->slice(1)->reverse(), // we skip current page
             'folders' => $this->getFolders($wiki->id),
