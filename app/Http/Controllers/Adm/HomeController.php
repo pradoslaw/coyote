@@ -22,9 +22,13 @@ class HomeController extends Controller
 
             if (auth()->validate(['name' => auth()->user()->name, 'password' => $request->get('password')])) {
                 $request->session()->put('admin', true);
-                return redirect()->route('adm.dashboard');
+                return redirect()->intended(route('adm.dashboard'));
             } else {
                 return back()->withErrors('error');
+            }
+        } else {
+            if (!$request->session()->has('url.intended')) {
+                $request->session()->put('url.intended', url()->previous());
             }
         }
 
