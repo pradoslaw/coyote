@@ -29,10 +29,10 @@ $(() => {
                 }
                 else {
                     let key = Object.keys(event.responseJSON)[0];
-                    error = event.responseJSON[key][0];
+                    error = event.responseJSON[key];
                 }
 
-                modal.find('.modal-body').text();
+                modal.find('.modal-body').text(error);
             }
         });
 
