@@ -7,13 +7,15 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
+use Illuminate\Http\Request;
 
 class FirewallForm extends Form implements ValidatesWhenSubmitted
 {
     /**
+     * @param Request $request
      * @param UserRepository $userRepository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(Request $request, UserRepository $userRepository)
     {
         parent::__construct();
 
@@ -29,13 +31,20 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             }
         });
 
-        $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) use ($userRepository) {
-            if (!empty($this->data->user_id)) {
-                $form->get('name')->setValue($userRepository->find($this->data->user_id, ['name'])->value('name'));
+        $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) use ($request, $userRepository) {
+            $userId = $this->data->user_id ?? $request->input('user');
+
+            if (!empty($userId)) {
+                $user = $userRepository->find($userId, ['name']);
+
+                if (!empty($user)) {
+                    $form->get('name')->setValue($user->name);
+                }
             }
 
             if (empty($this->data->id)) {
                 $this->get('expire_at')->setValue(Carbon::now()->addDay(1));
+                $this->get('ip')->setValue($request->input('ip'));
             } else {
                 $form->get('expire_at')->setValue(Carbon::parse($form->get('expire_at')->getValue())->format('Y-m-d'));
             }

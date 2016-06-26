@@ -46,12 +46,22 @@
 
                 <div class="box-buttons">
                     <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-xs btn-default">
-                        <i class="fa fa-search"></i>
+                        <i class="fa fa-search fa-fw"></i>
                     </a>
 
                     <a href="{{ route('user.pm.submit', {to: user.id}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-xs btn-default">
-                        <i class="fa fa-envelope"></i>
+                        <i class="fa fa-envelope fa-fw"></i>
                     </a>
+
+                    {% if can('adm-access') %}
+                        <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zablokuj tego użytkownika" class="btn btn-xs btn-default pull-right">
+                            <i class="fa fa-ban fa-fw"></i>
+                        </a>
+
+                        <a href="{{ route('adm.user.save', [user.id]) }}" title="Przejdź do panelu administracyjnego" class="btn btn-xs btn-default pull-right">
+                            <i class="fa fa-cogs fa-fw"></i>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
