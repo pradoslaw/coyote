@@ -1,7 +1,5 @@
 {% extends 'wiki.page' %}
 
-{% import 'components.modals' as modals %}
-
 {% block container %}
     <div class="row">
         <div class="col-sm-9">
@@ -103,31 +101,7 @@
                     <a href="javascript:"><i class="fa fa-fw fa-history"></i> Historia i autorzy</a>
                 </li>
 
-                {% if can('wiki-admin') %}
-                    {% if not wiki.deleted_at %}
-                        <li>
-                            <a href="#modal-delete" data-toggle="modal"><i class="fa fa-fw fa-remove"></i> Usuń stronę</a>
-                        </li>
-                        {% if categories|length > 1 %}
-                            <li>
-                                <a href="#modal-unlink" data-toggle="modal" title="Artykuł nie zostanie usunięty, a jedynie jego kopia"><i class="fa fa-fw fa-chain-broken"></i> Usuń tylko tę kopię strony</a>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a href="javascript:"><i class="fa fa-fw fa-trash-o"></i> Usuń cache</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('wiki.clone', [wiki.id]) }}"><i class="fa fa-fw fa-clone"></i> Utwórz kopię</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('wiki.move', [wiki.id]) }}"><i class="fa fa-fw fa-arrows"></i> Przenieś stronę</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <a href="#modal-restore" data-toggle="modal"><i class="fa fa-fw fa-rotate-left"></i> Przywróć usuniętą wersję</a>
-                        </li>
-                    {% endif %}
-                {% endif %}
+                {% include 'wiki.partials.admin' %}
 
                 {% if auth_check() %}
                     <li>
@@ -233,20 +207,6 @@
             </section>
         </aside>
     </div>
-
-    {% if can('wiki-admin') %}
-        {{ form_open({url: route('wiki.delete', [wiki.id])}) }}
-        {{ modals.confirm('Czy chcesz usunąć ten artykuł <strong>wraz ze stronami potomnymi</strong>?', 'Usuń artykuł', 'modal-delete') }}
-        {{ form_close() }}
-
-        {{ form_open({url: route('wiki.restore', [wiki.id])}) }}
-        {{ modals.confirm('Czy chcesz przywrócić ten artykuł? Będzie on wówczas dostępny dla innych użytkowników.', 'Przywróć artykuł', 'modal-restore', 'Tak, przywróć') }}
-        {{ form_close() }}
-
-        {{ form_open({url: route('wiki.unlink', [wiki.id])}) }}
-        {{ modals.confirm('Czy usunąć tę kopię strony? Artykuł nadal będzie dostępny pod innym adresem.', 'Usuń tę kopię', 'modal-unlink') }}
-        {{ form_close() }}
-    {% endif %}
 {% endblock %}
 
 {% block body %}

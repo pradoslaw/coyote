@@ -5,3 +5,23 @@
 {% block title %}{{ wiki.long_title|default(wiki.title) }}{{ parent() }}{% endblock %}
 {% block description %}{{ description }}{% endblock %}
 {% block keywords %}{{ keywords(description)|join(',') }}{% endblock %}
+
+{% import 'components.modals' as modals %}
+
+{% block body %}
+    {{ parent() }}
+
+    {% if can('wiki-admin') %}
+        {{ form_open({url: route('wiki.delete', [wiki.id])}) }}
+        {{ modals.confirm('Czy chcesz usunąć ten artykuł <strong>wraz ze stronami potomnymi</strong>?', 'Usuń artykuł', 'modal-delete') }}
+        {{ form_close() }}
+
+        {{ form_open({url: route('wiki.restore', [wiki.id])}) }}
+        {{ modals.confirm('Czy chcesz przywrócić ten artykuł? Będzie on wówczas dostępny dla innych użytkowników.', 'Przywróć artykuł', 'modal-restore', 'Tak, przywróć') }}
+        {{ form_close() }}
+
+        {{ form_open({url: route('wiki.unlink', [wiki.id])}) }}
+        {{ modals.confirm('Czy usunąć tę kopię strony? Artykuł nadal będzie dostępny pod innym adresem.', 'Usuń tę kopię', 'modal-unlink') }}
+        {{ form_close() }}
+    {% endif %}
+{% endblock %}
