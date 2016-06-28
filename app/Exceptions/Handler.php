@@ -1,4 +1,6 @@
-<?php namespace Coyote\Exceptions;
+<?php
+
+namespace Coyote\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;

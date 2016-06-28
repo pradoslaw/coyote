@@ -3,15 +3,7 @@
 {% block container %}
     <div class="row">
         <div class="col-sm-9">
-            {% if wiki.deleted_at %}
-                <div class="alert alert-danger">
-                    <strong>Uwaga!</strong> Ta strona została usunięta. Możesz ją przywrócić jeżeli chcesz, aby była widoczna dla innych użytkowników.
-                </div>
-            {% endif %}
-
-            {% if flag %}
-                {% include 'components.flag' %}
-            {% endif %}
+            {% include 'wiki.partials.flag' %}
 
             <div class="panel panel-default" style="margin-top: 13px">
                 <div class="panel-heading">

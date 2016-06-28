@@ -6,7 +6,8 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
         'as' => 'submit',
         'uses' => 'SubmitController@index',
         'middleware' => [
-            'auth', 'wiki.lock']
+            'auth', 'wiki.lock'
+        ]
     ]);
     
     $this->post('Edit/{wiki?}', ['uses' => 'SubmitController@save', 'middleware' => ['auth', 'wiki.lock']]);

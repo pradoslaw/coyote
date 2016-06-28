@@ -3,15 +3,7 @@
 {% block container %}
     <div class="row">
         <div class="col-sm-9">
-            {% if wiki.deleted_at %}
-                <div class="alert alert-danger">
-                    <strong>Uwaga!</strong> Ta strona została usunięta. Możesz ją przywrócić jeżeli chcesz, aby była widoczna dla innych użytkowników.
-                </div>
-            {% endif %}
-
-            {% if flag %}
-                {% include 'components.flag' %}
-            {% endif %}
+            {% include 'wiki.partials.flag' %}
 
             <div class="panel panel-default" style="margin-top: 13px">
                 <div class="panel-heading">
@@ -41,58 +33,7 @@
         </div>
 
         <aside class="col-sm-3">
-            {% if not wiki.deleted_at and (can('wiki-admin') or not wiki.is_locked) %}
-                <section id="box-maintain">
-                    <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-default" title="Kliknij, aby edytować ten artykuł">Edycja {{ wiki.is_locked ? ' (strona zablokowana)' }}</a>
-                    <a href="{{ route('wiki.submit') }}?pathId={{ wiki.path_id }}" class="btn btn-sm btn-primary" title="Dodaj nową stronę w tej kategorii">Nowa strona</a>
-                </section>
-            {% endif %}
 
-            <ul class="side-menu">
-                <li>
-                    {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
-                    <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('wiki.subscribe', [wiki.id]) }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}" title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
-                        <i class="fa fa-fw fa-star-o"></i>
-                        <i class="fa fa-fw fa-star"></i>
-
-                        <span>{{ labels[not subscribed] }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:"><i class="fa fa-fw fa-history"></i> Historia i autorzy</a>
-                </li>
-
-                {% if can('wiki-admin') %}
-                    {% if not wiki.deleted_at %}
-                        <li>
-                            <a href="#modal-delete" data-toggle="modal"><i class="fa fa-fw fa-remove"></i> Usuń artykuł</a>
-                        </li>
-                        <li>
-                            <a href="javascript:"><i class="fa fa-fw fa-trash-o"></i> Usuń cache</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <a href="#modal-restore" data-toggle="modal"><i class="fa fa-fw fa-rotate-left"></i> Przywróć usuniętą wersję</a>
-                        </li>
-                    {% endif %}
-                {% endif %}
-
-                {% if auth_check() %}
-                    <li>
-                        <a class="btn-report" href="{{ route('flag') }}" data-url="{{ url(wiki.path) }}" data-metadata="{{ {'wiki_id': wiki.id, 'permission': 'wiki-admin'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
-                    </li>
-                {% endif %}
-            </ul>
         </aside>
     </div>
-
-    {% if can('wiki-admin') %}
-        {{ form_open({url: route('wiki.delete', [wiki.id])}) }}
-        {{ modals.confirm('Czy chcesz usunąć ten artykuł?', 'Usuń artykuł', 'modal-delete') }}
-        {{ form_close() }}
-
-        {{ form_open({url: route('wiki.restore', [wiki.id])}) }}
-        {{ modals.confirm('Czy chcesz przywrócić ten artykuł? Będzie on wówczas dostępny dla innych użytkowników.', 'Przywróć artykuł', 'modal-restore', 'Tak, przywróć') }}
-        {{ form_close() }}
-    {% endif %}
 {% endblock %}
