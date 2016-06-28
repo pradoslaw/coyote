@@ -99,6 +99,14 @@ class WikiForm extends Form
     }
 
     /**
+     * @return array
+     */
+    public function rules()
+    {
+        return parent::rules() + ['_token' => 'throttle:' . (int) ($this->data->id ?? null)];
+    }
+
+    /**
      * @return mixed
      */
     protected function getTemplateList()
