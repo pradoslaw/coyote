@@ -62,12 +62,24 @@ class Wiki extends Model
     ];
 
     /**
+     * Make slug. This function maintains compatibility to older 4programmers.net version.
+     *
      * @param $title
      * @return string
      */
     public static function slug($title)
     {
-        return ucfirst(str_slug($title, '_'));
+        $title = trim($title, '/.');
+        $title = str_replace(
+            ['^', '$', ';', '#', '&', '(', ')', '`', '\\', '|', ',', '?', '%', '~', '[', ']', '{', '}', ':', '\/', '=', '!', '"', "'", '<', '>'],
+            '',
+            $title
+        );
+
+        $title = ucfirst(mb_strtolower($title));
+        $title = str_replace(' ', '_', str_replace(["\t", "\n"], '', $title));
+
+        return trim(preg_replace('/[\\_]+/', '_', $title), '_');
     }
 
     /**
