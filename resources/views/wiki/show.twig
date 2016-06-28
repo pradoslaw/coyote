@@ -5,58 +5,8 @@
         <div class="col-sm-9">
             {% include 'wiki.partials.flag' %}
 
-            <div class="panel panel-default" style="margin-top: 13px">
-                <div class="panel-heading">
-                    <h2 class="box-header">
-                        {% for parent in parents %}
-                            <a title="{{ parent.long_title|default(parent.title) }}" href="{{ url(parent.path) }}">{{ parent.title }}</a>
-
-                            {% if not loop.last %}
-                                <span class="hidden-xs">»</span>
-                            {% endif %}
-                        {% endfor %}
-                    </h2>
-                </div>
-
-                <div class="panel-body">
-                    <article itemscope itemtype="http://schema.org/Article">
-                        <header>
-                            <h1 itemprop="name"><a href="{{ url(wiki.path) }}">{{ wiki.title }}</a></h1>
-                            <h5>{{ link_to_profile(author) }}</h5>
-
-                            <ul class="metadata list-inline">
-                                <li title="Data opublikowania" class="date" itemprop="datePublished" content="{{ wiki.created_at|iso_8601 }}">
-                                    <i class="fa fa-calendar"></i>
-                                    {{ wiki.created_at }}
-                                </li>
-                                <li title="Data ostatniej zmiany" class="edit-date" itemprop="dateModified" content="{{ wiki.updated_at|iso_8601 }}">
-                                    <i class="fa fa-calendar-o"></i>
-                                    {{ wiki.updated_at }}
-                                </li>
-                                <li class="comment">
-                                    <a href="#box-comment" title="Zobacz komentarze" itemprop="interactionCount" value="UserComments:{{ wiki.comments }}">
-                                        <i class="fa fa-comments"></i>
-                                        {{ declination(wiki.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}
-                                    </a>
-                                </li>
-                                <li class="counter" itemprop="interactionCount" value="UserPageVisits:{{ wiki.views }}">
-                                    <i class="fa fa-eye"></i>
-                                    {{ declination(wiki.views, ['odsłona', 'odsłony', 'odsłon']) }}
-                                </li>
-                            </ul>
-                        </header>
-
-                        {% if wiki.excerpt %}
-                            <p><strong>{{ wiki.excerpt }}</strong></p>
-                            <p class="text-excerpt text-center"><strong>***</strong></p>
-                        {% endif %}
-
-                        <div itemprop="articleBody">
-                            {{ wiki.text|raw }}
-                        </div>
-                    </article>
-                </div>
-            </div>
+            {% embed 'wiki.partials.content' %}
+            {% endembed %}
 
             {% if categories|length > 0 %}
                 <div class="wiki-categories">

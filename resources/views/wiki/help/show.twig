@@ -5,31 +5,15 @@
         <div class="col-sm-9">
             {% include 'wiki.partials.flag' %}
 
-            <div class="panel panel-default" style="margin-top: 13px">
-                <div class="panel-heading">
-                    <h2 class="box-header">
-                        {% for parent in parents %}
-                            <a title="{{ parent.long_title|default(parent.title) }}" href="{{ url(parent.path) }}">{{ parent.title }}</a>
+            {% embed 'wiki.partials.content' %}
+                {% block author %}{% endblock %}
+                {% block metadata %}{% endblock %}
+                {% block dropdown %}
+                    {{ include('wiki.partials.dropdown') }}
+                {% endblock %}
+            {% endembed %}
 
-                            {% if not loop.last %}
-                                <span class="hidden-xs">»</span>
-                            {% endif %}
-                        {% endfor %}
-                    </h2>
-                </div>
-
-                <div class="panel-body">
-                    <article itemscope itemtype="http://schema.org/Article">
-                        <header>
-                            <h1 itemprop="name"><a href="{{ url(wiki.path) }}">{{ wiki.title }}</a></h1>
-                        </header>
-
-                        <div itemprop="articleBody">
-                            {{ wiki.text|raw }}
-                        </div>
-                    </article>
-                </div>
-            </div>
+            {% include 'wiki.partials.comments' %}
         </div>
 
         <aside class="col-sm-3">
