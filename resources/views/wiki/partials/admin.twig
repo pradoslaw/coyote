@@ -9,7 +9,7 @@
             </li>
         {% endif %}
         <li>
-            <a href="javascript:"><i class="fa fa-fw fa-trash-o"></i> Usuń cache</a>
+            <a href="{{ route('wiki.purge', [wiki.id]) }}"><i class="fa fa-fw fa-trash-o"></i> Usuń cache</a>
         </li>
         <li>
             <a href="{{ route('wiki.clone', [wiki.id]) }}"><i class="fa fa-fw fa-clone"></i> Utwórz kopię</a>

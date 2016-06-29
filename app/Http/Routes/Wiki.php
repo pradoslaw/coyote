@@ -9,11 +9,19 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
             'auth', 'wiki.lock'
         ]
     ]);
-    
+
     $this->get('Create/{path}', ['as' => 'create', 'uses' => 'SubmitController@create', 'middleware' => ['auth']]);
-    
+
     $this->post('Edit/{wiki?}', ['uses' => 'SubmitController@save', 'middleware' => ['auth', 'wiki.lock']]);
     $this->post('Edit/Preview', ['as' => 'preview', 'uses' => 'SubmitController@preview', 'middleware' => 'auth']);
+
+    $this->get('Purge/{wiki}', [
+        'as' => 'purge',
+        'uses' => 'PurgeController@index',
+        'middleware' => [
+            'auth', 'can:wiki-admin'
+        ]
+    ]);
 
     $this->get('Clone/{wiki}', [
         'as' => 'clone',

@@ -81,30 +81,20 @@ abstract class AbstractFactory
     }
 
     /**
-     * @param $text
-     * @return string
-     */
-    protected function cacheKey($text)
-    {
-        return 'text:' . class_basename($this) . md5($text);
-    }
-
-    /**
-     * @param string $text
-     * @return bool
-     */
-    protected function isInCache($text)
-    {
-        return $this->enableCache && $this->cache->has($this->cacheKey($text));
-    }
-
-    /**
      * @param string $text
      * @return mixed
      */
-    protected function getFromCache($text)
+    public function getFromCache($text)
     {
         return $this->cache->get($this->cacheKey($text));
+    }
+
+    /**
+     * @param string $text
+     */
+    public function purgeFromCache($text)
+    {
+        $this->cache->forget($this->cacheKey($text));
     }
 
     /**
@@ -128,5 +118,23 @@ abstract class AbstractFactory
 
         $parser->detach();
         return $text;
+    }
+
+    /**
+     * @param $text
+     * @return string
+     */
+    protected function cacheKey($text)
+    {
+        return 'text:' . class_basename($this) . md5($text);
+    }
+
+    /**
+     * @param string $text
+     * @return bool
+     */
+    protected function isInCache($text)
+    {
+        return $this->enableCache && $this->cache->has($this->cacheKey($text));
     }
 }
