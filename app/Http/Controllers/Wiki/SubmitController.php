@@ -8,17 +8,51 @@ use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Illuminate\Http\Request;
+use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 
 class SubmitController extends BaseController
 {
     /**
+     * @param Request $request
+     * @param WikiRepository $wiki
+     */
+    public function __construct(Request $request, WikiRepository $wiki)
+    {
+        parent::__construct($request, $wiki);
+
+        $this->breadcrumb->push('Edycja strony');
+    }
+
+    /**
      * @param \Coyote\Wiki $wiki
      * @return $this
      */
-    public function index($wiki)
+    public function index($wiki, Request $request)
     {
         $form = $this->getForm($wiki);
-        $this->breadcrumb->push('Edycja strony');
+        
+        if (!$wiki->exists) {
+            $form->get('parent_id')->setValue($request->input('parentId'));
+        }
+        
+        return $this->view('wiki.submit')->with(compact('form', 'wiki'));
+    }
+
+    /**
+     * @param string $path
+     * @return $this
+     */
+    public function create($path)
+    {
+        $form = $this->getForm($this->wiki->newInstance());
+        $segments = explode('/', trim($path, '/'));
+
+        $form->get('title')->setValue(array_pop($segments));
+        $parent = $this->wiki->findByPath(implode('/', $segments));
+
+        if ($parent) {
+            $form->get('parent_id')->setValue($parent->id);
+        }
 
         return $this->view('wiki.submit')->with(compact('form', 'wiki'));
     }

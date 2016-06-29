@@ -95,7 +95,7 @@ class Link implements ParserInterface
 
             if (empty($page)) {
                 $attr = ['class' => 'link-broken', 'title' => 'Dokument nie istnieje'];
-                $path = 'Edit?path=' . $path;
+                $path = 'Create' . $path;
 
                 if (empty($title)) {
                     $title = str_replace('_', ' ', last(explode('/', $path)));

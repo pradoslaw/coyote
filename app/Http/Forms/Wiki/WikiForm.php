@@ -89,8 +89,6 @@ class WikiForm extends Form
                 'choices' => $this->getTreeList(),
                 'empty_value' => '--'
             ]);
-
-            $this->setupParent();
         } else {
             $this->add('parent_id', 'hidden', [
                 'rules' => self::RULE_PARENT_ID
@@ -113,21 +111,5 @@ class WikiForm extends Form
     {
         $templates = ['show', 'category', 'blog.home', 'blog.show', 'help.home', 'help.show'];
         return array_combine($templates, $templates);
-    }
-
-    private function setupParent()
-    {
-        if ($this->request->has('parentId')) {
-            $this->get('parent_id')->setValue($this->request->input('parentId'));
-        } elseif ($this->request->has('path')) {
-            $segments = explode('/', trim($this->request->get('path'), '/'));
-
-            $this->get('title')->setValue(array_pop($segments));
-            $parent = $this->wiki->findByPath(implode('/', $segments));
-
-            if ($parent) {
-                $this->get('parent_id')->setValue($parent->id);
-            }
-        }
     }
 }
