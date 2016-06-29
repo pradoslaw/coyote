@@ -11,13 +11,11 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        $id = \DB::table('permissions')->insert([
+        \DB::table('permissions')->insert([
             'name'           => 'adm-access',
             'description'    => 'Dostęp do panelu administracyjnego',
             'default'        => false
         ]);
-
-        \DB::table('group_permissions')->where('permission_id', '=', $id)->update(['value' => true]);
 
         \DB::table('permissions')->insert([
             'name'           => 'forum-sticky',
@@ -72,5 +70,8 @@ class PermissionsTableSeeder extends Seeder
             'description'    => 'Usuwanie wpisów z Pastebin',
             'default'        => false
         ]);
+
+        $group = \Coyote\Group::where('name', 'Administrator')->first();
+        \DB::table('group_permissions')->where('group_id', '=', $group->id)->update(['value' => true]);
     }
 }
