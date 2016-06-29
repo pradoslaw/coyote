@@ -22,6 +22,8 @@ class CreateWikiPathsTable extends Migration
             $table->index('parent_id');
             $table->index('wiki_id');
             $table->index('deleted_at');
+
+            $table->foreign('wiki_id')->references('id')->on('wiki_pages')->onDelete('cascade');
         });
 
         Schema::table('wiki_paths', function (Blueprint $table) {
