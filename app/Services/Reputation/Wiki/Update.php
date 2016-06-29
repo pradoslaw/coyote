@@ -59,23 +59,4 @@ class Update extends Wiki
             return $diffHours > 1 || ($logs[0]->user_id != $logs[1]->user_id);
         }
     }
-
-    /**
-     * Cofniecie pkt reputacji za dany wpis (np. przy usuwaniu wpisu)
-     *
-     * @param int $microblogId
-     */
-//    public function undo($microblogId)
-//    {
-//        $result = $this->reputation
-//            ->where('type_id', '=', self::ID)
-//            ->whereRaw("metadata->>'microblog_id' = ?", [$microblogId])
-//            ->first();
-//
-//        if ($result) {
-//            $this->setIsPositive(false);
-//
-//            $this->save($result->toArray());
-//        }
-//    }
 }

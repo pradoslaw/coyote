@@ -37,23 +37,4 @@ class Create extends Wiki
         
         return $this;
     }
-
-    /**
-     * Cofniecie pkt reputacji za dany wpis (np. przy usuwaniu wpisu)
-     *
-     * @param int $microblogId
-     */
-//    public function undo($microblogId)
-//    {
-//        $result = $this->reputation
-//            ->where('type_id', '=', self::ID)
-//            ->whereRaw("metadata->>'microblog_id' = ?", [$microblogId])
-//            ->first();
-//
-//        if ($result) {
-//            $this->setIsPositive(false);
-//
-//            $this->save($result->toArray());
-//        }
-//    }
 }

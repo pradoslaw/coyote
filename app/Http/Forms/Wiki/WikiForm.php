@@ -118,7 +118,7 @@ class WikiForm extends Form
     private function setupParent()
     {
         if ($this->request->has('parentId')) {
-            return $this->request->input('parentId');
+            $this->get('parent_id')->setValue($this->request->input('parentId'));
         } elseif ($this->request->has('path')) {
             $segments = explode('/', trim($this->request->get('path'), '/'));
 

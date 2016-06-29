@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\FormBuilder;
 
+use Coyote\Services\FormBuilder\Fields\Field;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Container\Container;
@@ -93,18 +94,18 @@ interface FormInterface
 
     /**
      * @param $field
-     * @return mixed|null
+     * @return Field|null
      */
     public function getField($field);
 
     /**
      * @param $field
-     * @return mixed|null
+     * @return Field|null
      */
     public function get($field);
 
     /**
-     * @return array
+     * @return Field[]
      */
     public function getFields();
 

@@ -19,6 +19,10 @@ class DeleteController extends BaseController
             // get all copies of article
             $paths = $this->wiki->findAllBy('wiki_id', $wiki->wiki_id);
 
+            // undo reputation points
+            app('reputation.wiki.create')->undo($wiki->wiki_id);
+            app('reputation.wiki.update')->undo($wiki->wiki_id);
+
             stream(
                 Stream_Delete::class,
                 (new Stream_Wiki())->map($wiki)

@@ -25,4 +25,24 @@ abstract class Wiki extends Reputation
         $this->setUrl('/' . $model->path); // "/" at the beginning for url compatibility
         $this->setWikiId($model->wiki_id);
     }
+
+    /**
+     * Cofniecie pkt reputacji za aktywnosc na danej stronie.
+     *
+     * @param int $wikiId
+     */
+    public function undo($wikiId)
+    {
+        $result = $this
+            ->reputation
+            ->where('type_id', static::ID)
+            ->whereRaw("metadata->>'wiki_id' = ?", [$wikiId])
+            ->get();
+
+        foreach ($result as $row) {
+            $this->setIsPositive(false);
+
+            $this->save($row->toArray());
+        }
+    }
 }
