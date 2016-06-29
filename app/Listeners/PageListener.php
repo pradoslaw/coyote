@@ -165,7 +165,7 @@ class PageListener implements ShouldQueue
             'content_type'  => Wiki::class,
         ], [
             'title' => $event->wiki->title,
-            'path' => route('wiki.show', [$event->wiki->path], false)
+            'path' => '/' . $event->wiki->path
         ]);
     }
 
