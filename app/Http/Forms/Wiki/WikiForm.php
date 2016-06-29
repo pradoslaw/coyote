@@ -89,6 +89,8 @@ class WikiForm extends Form
                 'choices' => $this->getTreeList(),
                 'empty_value' => '--'
             ]);
+            
+            $this->get('title')->setRules($this->get('title')->getRules() . '|reputation:1');
         } else {
             $this->add('parent_id', 'hidden', [
                 'rules' => self::RULE_PARENT_ID
@@ -101,13 +103,7 @@ class WikiForm extends Form
      */
     public function rules()
     {
-        $rules = parent::rules() + ['_token' => 'throttle:' . (int) ($this->data->id ?? null)];
-
-        if (empty($this->data->id)) {
-            $rules['title'] = 'reputation:1';
-        }
-
-        return $rules;
+        return parent::rules() + ['_token' => 'throttle:' . (int) ($this->data->id ?? null)];
     }
 
     /**
