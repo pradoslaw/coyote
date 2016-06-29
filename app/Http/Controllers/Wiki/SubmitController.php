@@ -30,11 +30,11 @@ class SubmitController extends BaseController
     public function index($wiki, Request $request)
     {
         $form = $this->getForm($wiki);
-        
+
         if (!$wiki->exists) {
             $form->get('parent_id')->setValue($request->input('parentId'));
         }
-        
+
         return $this->view('wiki.submit')->with(compact('form', 'wiki'));
     }
 
@@ -47,7 +47,7 @@ class SubmitController extends BaseController
         $form = $this->getForm($this->wiki->newInstance());
         $segments = explode('/', trim($path, '/'));
 
-        $form->get('title')->setValue(array_pop($segments));
+        $form->get('title')->setValue(str_replace('_', ' ', array_pop($segments)));
         $parent = $this->wiki->findByPath(implode('/', $segments));
 
         if ($parent) {
