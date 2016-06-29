@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $ip
  * @property string $browser
  * @property string $host
+ * @property \Carbon\Carbon $created_at
  */
 class Log extends Model
 {

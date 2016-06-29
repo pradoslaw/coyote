@@ -11,7 +11,7 @@ class Reputation extends Model
     const MICROBLOG = 3;
     const MICROBLOG_VOTE = 4;
     const WIKI_CREATE = 5;
-    const WIKI_EDIT = 6;
+    const WIKI_UPDATE = 6;
     const CUSTOM = 7;
     const WIKI_RATE = 8;
 

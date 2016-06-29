@@ -57,6 +57,8 @@ class SubmitController extends BaseController
                 $wiki->subscribers()->create(['user_id' => $this->userId]);
             }
 
+            app('reputation.wiki.' . ($wiki->wasRecentlyCreated ? 'create' : 'update'))->map($wiki)->save();
+
             stream(
                 $wiki->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
                 (new Stream_Wiki())->map($wiki)

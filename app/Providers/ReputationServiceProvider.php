@@ -60,7 +60,10 @@ class ReputationServiceProvider extends ServiceProvider
             'reputation.post.accept',
 
             'reputation.microblog.create',
-            'reputation.microblog.vote'
+            'reputation.microblog.vote',
+            
+            'reputation.wiki.create',
+            'reputation.wiki.update',
         ];
     }
 }
