@@ -101,7 +101,21 @@ class WikiForm extends Form
      */
     public function rules()
     {
-        return parent::rules() + ['_token' => 'throttle:' . (int) ($this->data->id ?? null)];
+        $rules = parent::rules() + ['_token' => 'throttle:' . (int) ($this->data->id ?? null)];
+
+        if (empty($this->data->id)) {
+            $rules['title'] = 'reputation:1';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * @return array
+     */
+    public function messages()
+    {
+        return ['title.reputation' => 'Aby dodać nową stronę, musisz posiadać minimum 1 pkt reputacji.'];
     }
 
     /**
