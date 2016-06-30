@@ -25,7 +25,7 @@ class SubmitController extends BaseController
 
     /**
      * @param \Coyote\Wiki $wiki
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function index($wiki, Request $request)
     {
@@ -40,7 +40,7 @@ class SubmitController extends BaseController
 
     /**
      * @param string $path
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function create($path)
     {
@@ -108,7 +108,7 @@ class SubmitController extends BaseController
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function preview(Request $request)
     {
