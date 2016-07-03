@@ -91,7 +91,7 @@ $(function () {
     /**
      * Move to another category
      */
-    $('#btn-move ul a').click(function() {
+    $('#btn-move ul a[href]').click(function() {
         $('#modal-move').modal('show').find(':hidden[name="slug"]').val($(this).data('slug'));
 
         return false;
