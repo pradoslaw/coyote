@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
+use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Http\Forms\Wiki\MoveForm;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
@@ -30,6 +31,10 @@ class MoveController extends BaseController
     public function save($wiki, MoveForm $form)
     {
         $path = $this->transaction(function () use ($wiki, $form) {
+            // current copy of the page will be used to call WikiWasDeleted event.
+            // that's because we need run some actions like revalidate cache or update wiki_links table.
+            $old = clone $wiki;
+
             // move page to new location
             $path = $this->wiki->move($wiki->id, $wiki->wiki_id, $form->get('parent_id')->getValue());
             $wiki->forceFill($path->toArray());
@@ -37,6 +42,8 @@ class MoveController extends BaseController
             $wiki->id = $wiki->path_id;
 
             stream(Stream_Move::class, (new Stream_Wiki())->map($wiki));
+
+            event(new WikiWasDeleted($old));
             event(new WikiWasSaved($wiki));
 
             return $path->path;
