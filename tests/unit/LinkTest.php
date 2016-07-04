@@ -52,7 +52,7 @@ class LinkTest extends \Codeception\TestCase\Test
         $url = 'http://' . $host . $path;
         $this->parse($url, $title);
     }
-    
+
     public function testParseInternalAccessors()
     {
         $host = '4programmers.net';
@@ -61,9 +61,8 @@ class LinkTest extends \Codeception\TestCase\Test
         $title = 'Forum dyskusyjne';
         $path = '/Discussion_board';
 
-        $now = new \DateTime('now');
-        $this->tester->haveRecord('pages', ['title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now]);
-                
+        $this->createPage($title, $path);
+
         $input = $this->link->parse('[[Discussion board]]');
         $this->tester->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
 
@@ -82,14 +81,29 @@ class LinkTest extends \Codeception\TestCase\Test
         $title = 'Newbie';
         $path = '/Discussion_board/Newbie';
 
-        $now = new \DateTime('now');
-        $this->tester->haveRecord('pages', ['title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now]);
+        $this->createPage($title, $path);
 
         $input = $this->link->parse('[[Discussion board/Newbie]]');
         $this->tester->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
 
         $input = $this->link->parse('[[Discussion board/Newbie|forum newbie]]');
         $this->tester->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">forum newbie</a>~", $input);
+
+        $title = 'Kim jesteśmy?';
+        $path = '/Kim_jesteśmy';
+
+        $this->createPage($title, $path);
+
+        $input = $this->link->parse('[[Kim jesteśmy?]]');
+        $this->tester->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
+    }
+
+    private function createPage($title, $path)
+    {
+        $now = new \DateTime('now');
+        $this->tester->haveRecord('pages', [
+            'title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now
+        ]);
     }
 
     private function parse($url, $title)

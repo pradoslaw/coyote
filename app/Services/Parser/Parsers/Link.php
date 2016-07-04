@@ -85,7 +85,7 @@ class Link implements ParserInterface
         for ($i = 0, $count = count($matches); $i < $count; $i++) {
             $origin = $matches[$i][0];
 
-            $path = '/' . str_replace(' ', '_', trim($matches[$i][1], '/'));
+            $path = '/' . str_replace(' ', '_', trim($matches[$i][1], '/?&'));
 
             $title = $matches[$i][3] ?? null;
             $hash = $this->getHashFromPath($path);
