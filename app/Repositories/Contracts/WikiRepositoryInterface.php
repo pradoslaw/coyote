@@ -102,7 +102,7 @@ interface WikiRepositoryInterface extends RepositoryInterface
      * @param string $path
      * @return \Coyote\Wiki[]
      */
-    public function getWikiWithBrokenLinks($path);
+    public function getWikiAssociatedLinksByPath($path);
 
     /**
      * New page was created so we need to fix broken links.

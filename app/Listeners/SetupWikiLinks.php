@@ -2,11 +2,11 @@
 
 namespace Coyote\Listeners;
 
+use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Services\Parser\Helpers\Link;
 use Illuminate\Http\Request;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 
@@ -38,7 +38,7 @@ class SetupWikiLinks implements ShouldQueue
      * @param  WikiWasSaved  $event
      * @return void
      */
-    public function handle(WikiWasSaved $event)
+    public function onWikiSave(WikiWasSaved $event)
     {
         // at this point, text is probably in cache, so we need to just read from it.
         $cache = $this->getParser()->parse($event->wiki->text);
@@ -56,11 +56,44 @@ class SetupWikiLinks implements ShouldQueue
             $event->wiki->links()->insert($link);
         }
 
-        foreach ($this->wiki->getWikiWithBrokenLinks($event->wiki->path) as $row) {
+        foreach ($this->wiki->getWikiAssociatedLinksByPath($event->wiki->path) as $row) {
             $this->getParser()->purgeFromCache($row->text);
         }
 
         $this->wiki->associateLink($event->wiki->path, $event->wiki->id);
+    }
+
+    /**
+     * @param WikiWasDeleted $event
+     */
+    public function onWikiDelete(WikiWasDeleted $event)
+    {
+        $this->getParser()->purgeFromCache($event->wiki['text']);
+        $links = $this->wiki->getWikiAssociatedLinksByPath($event->wiki['path']);
+
+        $this->wiki->dissociateLink($event->wiki['path']);
+
+        foreach ($links as $row) {
+            $this->getParser()->purgeFromCache($row['text']);
+        }
+    }
+
+    /**
+     * Register the listeners for the subscriber.
+     *
+     * @param  \Illuminate\Events\Dispatcher  $events
+     */
+    public function subscribe($events)
+    {
+        $events->listen(
+            'Coyote\Events\WikiWasSaved',
+            'Coyote\Listeners\SetupWikiLinks@onWikiSave'
+        );
+
+        $events->listen(
+            'Coyote\Events\WikiWasDeleted',
+            'Coyote\Listeners\SetupWikiLinks@onWikiDelete'
+        );
     }
 
     /**

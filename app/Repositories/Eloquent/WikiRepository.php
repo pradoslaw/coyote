@@ -202,7 +202,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
      * @param string $path
      * @return \Coyote\Wiki[]
      */
-    public function getWikiWithBrokenLinks($path)
+    public function getWikiAssociatedLinksByPath($path)
     {
         return $this
             ->model
