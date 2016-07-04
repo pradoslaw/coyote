@@ -150,6 +150,14 @@ class Wiki extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function links()
+    {
+        return $this->hasMany('Coyote\Wiki\Link', 'path_id', 'id');
+    }
+
+    /**
      * @param int $userId
      * @return bool
      */

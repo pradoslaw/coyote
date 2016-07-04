@@ -5,7 +5,6 @@ namespace Coyote\Listeners;
 use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
-use Coyote\Searchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class WikiListener implements ShouldQueue

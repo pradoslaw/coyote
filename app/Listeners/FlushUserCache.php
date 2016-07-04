@@ -5,6 +5,7 @@ namespace Coyote\Listeners;
 use Coyote\Events\UserWasSaved;
 use Illuminate\Contracts\Cache\Repository;
 
+// do not implement ShouldQueue interface. We need to flush cache immediately.
 class FlushUserCache
 {
     /**

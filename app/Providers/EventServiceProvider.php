@@ -3,10 +3,12 @@
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
 use Coyote\Events\UserWasSaved;
+use Coyote\Events\WikiWasSaved;
 use Coyote\Listeners\BindRouteDefaultModel;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
 use Coyote\Listeners\SendLockoutEmail;
+use Coyote\Listeners\SetupWikiLinks;
 use Coyote\Listeners\WikiListener;
 use Coyote\Listeners\PageListener;
 use Coyote\Listeners\PostListener;
@@ -29,7 +31,8 @@ class EventServiceProvider extends ServiceProvider
         UserWasSaved::class => [FlushUserCache::class],
         Lockout::class => [SendLockoutEmail::class],
         FirewallWasSaved::class => [FlushFirewallCache::class],
-        FirewallWasDeleted::class => [FlushFirewallCache::class]
+        FirewallWasDeleted::class => [FlushFirewallCache::class],
+        WikiWasSaved::class => [SetupWikiLinks::class]
     ];
 
     /**

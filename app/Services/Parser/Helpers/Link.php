@@ -13,8 +13,11 @@ class Link
         $links = [];
 
         $regexp = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
+
         if (preg_match_all("/$regexp/siU", $html, $matches, PREG_SET_ORDER)) {
-            $links[] = $matches[2];
+            for ($i = 0, $count = count($matches); $i < $count; $i++) {
+                $links[] = $matches[$i][2];
+            }
         }
 
         return array_unique($links);

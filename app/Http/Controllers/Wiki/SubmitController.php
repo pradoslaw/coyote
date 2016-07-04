@@ -97,7 +97,7 @@ class SubmitController extends BaseController
                 $wiki->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
                 (new Stream_Wiki())->map($wiki)
             );
-            // add to elasticsaech index and pages table...
+            // add to elasticsearch index and pages table...
             event(new WikiWasSaved($wiki));
 
             return $wiki->path;

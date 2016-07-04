@@ -199,6 +199,27 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
     }
 
     /**
+     * New page was created so we need to fix broken links.
+     *
+     * @param string $path
+     * @param int $pathId
+     */
+    public function associateLink($path, $pathId)
+    {
+        $this->app->make(Wiki\Link::class)->where('path', $path)->update(['ref_id' => $pathId]);
+    }
+
+    /**
+     * $path was deleted so we need to dissociate links.
+     *
+     * @param string $path
+     */
+    public function dissociateLink($path)
+    {
+        $this->app->make(Wiki\Link::class)->where('path', $path)->update(['ref_id' => null]);
+    }
+
+    /**
      * @param int $wikiId
      */
     private function calculateAuthorsShare($wikiId)

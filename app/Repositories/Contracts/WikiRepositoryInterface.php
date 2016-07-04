@@ -97,4 +97,19 @@ interface WikiRepositoryInterface extends RepositoryInterface
      * @return \Coyote\Wiki[]
      */
     public function getAllCategories($wikiId);
+
+    /**
+     * New page was created so we need to fix broken links.
+     *
+     * @param string $path
+     * @param int $pathId
+     */
+    public function associateLink($path, $pathId);
+
+    /**
+     * $path was deleted so we need to dissociate links.
+     *
+     * @param string $path
+     */
+    public function dissociateLink($path);
 }
