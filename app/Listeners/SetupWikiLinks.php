@@ -44,11 +44,9 @@ class SetupWikiLinks implements ShouldQueue
         $cache = $this->getParser()->parse($event->wiki->text);
 
         $links = $this->grabInternalLinks($cache);
-        $paths = $this->grabPathFromLink($links);
-
         $result = [];
 
-        foreach ($paths as $path) {
+        foreach ($this->grabPathFromLink($links) as $path) {
             $result[] = $this->buildWikiLinkRecord($path, $event->wiki->id);
         }
 
@@ -56,6 +54,10 @@ class SetupWikiLinks implements ShouldQueue
 
         foreach ($result as $link) {
             $event->wiki->links()->insert($link);
+        }
+
+        foreach ($this->wiki->getWikiWithBrokenLinks($event->wiki->path) as $row) {
+            $this->getParser()->purgeFromCache($row->text);
         }
 
         $this->wiki->associateLink($event->wiki->path, $event->wiki->id);

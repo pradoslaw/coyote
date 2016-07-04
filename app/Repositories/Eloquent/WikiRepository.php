@@ -199,6 +199,19 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
     }
 
     /**
+     * @param string $path
+     * @return \Coyote\Wiki[]
+     */
+    public function getWikiWithBrokenLinks($path)
+    {
+        return $this
+            ->model
+            ->join('wiki_links', 'wiki_links.path_id', '=', 'wiki.id')
+            ->where('wiki_links.path', $path)
+            ->get(['wiki.id', 'wiki_id', 'text']);
+    }
+
+    /**
      * New page was created so we need to fix broken links.
      *
      * @param string $path

@@ -99,6 +99,12 @@ interface WikiRepositoryInterface extends RepositoryInterface
     public function getAllCategories($wikiId);
 
     /**
+     * @param string $path
+     * @return \Coyote\Wiki[]
+     */
+    public function getWikiWithBrokenLinks($path);
+
+    /**
      * New page was created so we need to fix broken links.
      *
      * @param string $path
