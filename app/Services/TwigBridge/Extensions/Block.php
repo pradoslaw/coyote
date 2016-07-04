@@ -4,6 +4,7 @@ namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
+use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -54,8 +55,45 @@ class Block extends Twig_Extension
                 [
                     'is_safe' => ['html']
                 ]
-            )
+            ),
+
+            new Twig_SimpleFunction('render_help_context', [&$this, 'renderHelpContext'], ['is_safe' => ['html']])
         ];
+    }
+
+    /**
+     * @param string $helpId
+     * @param \Coyote\Wiki $wiki
+     * @return string
+     */
+    public function renderHelpContext($helpId, $wiki)
+    {
+        $children = $this->getWikiRepository()->children($helpId);
+        $html = '<ul>';
+
+        foreach ($children as $idx => $row) {
+            $depth = $row['depth'];
+            $nextDepth = isset($children[$idx + 1]) ? $children[$idx + 1]['depth'] : 1;
+
+            $link = link_to($row['path'], $row['title'], $row['id'] == $wiki->id ? ['class' => 'active'] : []);
+
+            if ($nextDepth > $depth) {
+                $html .= '<li>' . $link . "<ul>";
+            } else {
+                $html .= '<li>' . $link . "</li>";
+            }
+
+            if ($nextDepth < $depth) {
+                while ($nextDepth < $depth) {
+                    $html .= "\n</ul></li>";
+                    --$depth;
+                }
+            }
+        }
+
+        $html .= '</ul>';
+
+        return $html;
     }
 
     /**
@@ -64,5 +102,13 @@ class Block extends Twig_Extension
     private function getBlockRepository()
     {
         return app(BlockRepositoryInterface::class);
+    }
+
+    /**
+     * @return WikiRepositoryInterface
+     */
+    private function getWikiRepository()
+    {
+        return app(WikiRepositoryInterface::class);
     }
 }

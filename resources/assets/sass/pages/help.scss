@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import "../helpers/variables";
+@import "../vendor/bootstrap/variables";
 
 .box-help-category {
   h3 {
@@ -20,6 +21,37 @@
   ul {
     li {
       padding: 5px 0;
+    }
+  }
+}
+
+#help-sidebar
+{
+  ul {
+    list-style-type: none;
+    margin-left: 1.1em;
+    margin-top: 1em;
+    padding: 0;
+
+    li {
+      padding: 3px 0;
+      font-size: 12px;
+
+      a {
+        color: $gray;
+
+        &.active {
+          color: $brand-primary;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  > ul {
+    > li
+      > a {
+      font-weight: bold;
     }
   }
 }
