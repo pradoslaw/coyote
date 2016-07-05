@@ -45,7 +45,9 @@ class PostSubmitResponse
                     $data['post']['sig'] = $parser->parse($user->sig);
                 }
             }
-            return view('forum.partials.text', $data);
+
+            $view = (string) view('forum.partials.text', $data)->render();
+            return response($view);
         } elseif ($request->attributes->has('url')) {
             return redirect()->to($request->attributes->get('url'));
         } else {

@@ -30,7 +30,7 @@ Route::group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // dodawanie lub edycja posta na forum
     Route::get('{forum}/Submit/{topic}/{post?}', ['uses' => 'SubmitController@index', 'as' => 'post.submit', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
     Route::post('{forum}/Submit/{topic}/{post?}', ['uses' => 'SubmitController@save', 'middleware' => ['topic.access', 'forum.access', 'forum.write', 'post.response']]);
-    Route::get('{forum}/{topic}/Edit/{post}', ['uses' => 'SubmitController@edit', 'as' => 'post.edit', 'middleware' => ['topic.access', 'forum.access', 'forum.write']]);
+    Route::get('{forum}/{topic}/Edit/{post}', ['uses' => 'SubmitController@edit', 'as' => 'post.edit', 'middleware' => ['auth', 'topic.access', 'forum.access', 'forum.write']]);
     // szybka zmiana tytulu watku
     Route::post('Topic/Subject/{topic}', ['uses' => 'SubmitController@subject', 'as' => 'topic.subject', 'middleware' => 'auth']);
 
