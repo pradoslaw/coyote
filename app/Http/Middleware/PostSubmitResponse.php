@@ -25,7 +25,7 @@ class PostSubmitResponse
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @return mixed
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle($request, Closure $next)
     {
