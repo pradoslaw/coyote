@@ -26,6 +26,7 @@ class MoreLikeThisFactory
 
         $builder->addMoreLikeThis($mlt);
         $builder->addFilter(new NotTerm('id', $wiki->id));
+        $builder->addFilter(new NotTerm('wiki_id', $wiki->wiki_id));
 
         $builder->setSize(0, 10);
 
