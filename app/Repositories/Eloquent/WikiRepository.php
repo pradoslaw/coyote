@@ -222,7 +222,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
         return $this
             ->model
             ->join('wiki_links', 'wiki_links.path_id', '=', 'wiki.id')
-            ->where('wiki_links.path', $path)
+            ->whereRaw('LOWER(wiki_links.path) = ?', [mb_strtolower($path)])
             ->get(['wiki.id', 'wiki_id', 'text']);
     }
 
@@ -234,7 +234,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
      */
     public function associateLink($path, $pathId)
     {
-        $this->app->make(Wiki\Link::class)->where('path', $path)->update(['ref_id' => $pathId]);
+        $this->updateLinks($path, $pathId);
     }
 
     /**
@@ -244,7 +244,18 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
      */
     public function dissociateLink($path)
     {
-        $this->app->make(Wiki\Link::class)->where('path', $path)->update(['ref_id' => null]);
+        $this->updateLinks($path, null);
+    }
+
+    /**
+     * Update wiki_links table by path.
+     *
+     * @param string $path
+     * @param int $pathId
+     */
+    private function updateLinks($path, $pathId)
+    {
+        $this->app->make(Wiki\Link::class)->whereRaw('LOWER(path) = ?', [mb_strtolower($path)])->update(['ref_id' => $pathId]);
     }
 
     /**

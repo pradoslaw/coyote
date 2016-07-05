@@ -15,10 +15,16 @@ class WikiWasSaved extends Event
     public $wiki;
 
     /**
+     * @var string
+     */
+    public $host;
+
+    /**
      * @param Wiki $wiki
      */
     public function __construct(Wiki $wiki)
     {
         $this->wiki = $wiki;
+        $this->host = request()->getHost();
     }
 }

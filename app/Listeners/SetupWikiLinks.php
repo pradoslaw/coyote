@@ -6,29 +6,21 @@ use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Services\Parser\Helpers\Link;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 
 class SetupWikiLinks implements ShouldQueue
 {
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
      * @var WikiRepository
      */
     protected $wiki;
 
     /**
-     * @param Request $request
      * @param WikiRepository $wiki
      */
-    public function __construct(Request $request, WikiRepository $wiki)
+    public function __construct(WikiRepository $wiki)
     {
-        $this->request = $request;
         $this->wiki = $wiki;
     }
 
@@ -43,7 +35,7 @@ class SetupWikiLinks implements ShouldQueue
         // at this point, text is probably in cache, so we need to just read from it.
         $cache = $this->getParser()->parse($event->wiki->text);
 
-        $links = $this->grabInternalLinks($cache);
+        $links = $this->grabInternalLinks($event->host, $cache);
         $result = [];
 
         foreach ($this->grabPathFromLink($links) as $path) {
@@ -97,18 +89,19 @@ class SetupWikiLinks implements ShouldQueue
     }
 
     /**
+     * @param string $host
      * @param string $html
      * @return Collection
      */
-    private function grabInternalLinks($html)
+    private function grabInternalLinks($host, $html)
     {
         $helper = new Link();
         $links = collect($helper->filter($html)); // convert array to collection
 
-        return $links->filter(function ($url) {
+        return $links->filter(function ($url) use ($host) {
             $host = parse_url($url, PHP_URL_HOST);
 
-            return $this->request->getHost() === strtolower($host);
+            return $host === strtolower($host);
         });
     }
 
