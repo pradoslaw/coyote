@@ -16,7 +16,7 @@ class ShareController extends BaseController
     {
         /** @var \Coyote\Post $post */
         $post = $this->post->withTrashed()->find($id, ['id', 'topic_id', 'forum_id', 'deleted_at']);
-        if (!$post) {
+        if (!$post || !$post->topic) {
             abort(404);
         }
 
