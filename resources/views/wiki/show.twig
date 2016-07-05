@@ -93,60 +93,9 @@
                 <div class="clearfix"></div>
             {% endif %}
 
-            {% if mlt|length > 0 %}
-                <section id="box-related" class="box related">
-                    <h4 class="border"><i class="fa fa-eye fa-fw"></i> Zobacz też</h4>
+            {{ render_wiki_mlt(wiki) }}
+            {{ render_wiki_related(wiki.id) }}
 
-                    <ul>
-                        {% for item in mlt %}
-                            <li>
-                                <a href="{{ url(item.path) }}" title="{{ item.title }}">
-                                    <strong>{{ item.title }}</strong>
-                                    <small>{{ item.updated_at|format_date }}</small>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </section>
-                <div class="clearfix"></div>
-            {% endif %}
-
-            <section class="related box">
-                <h4 class="border"><i class="fa fa-thumb-tack fa-fw"></i> Strony powiązane</h4>
-
-                <ul>
-                    <li>
-                        <a data-category="linked" href="http://4programmers.net/Delphi">
-                            <strong>Programowanie w języku Delphi</strong>
-                            <small>26 wrzesień 2013, 23:17</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="linked" href="http://4programmers.net/Delphi/Kompendium">
-                            <strong>Delphi 7. Kompendium programisty</strong>
-                            <small>10 maj 2011, 19:24</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="linked" href="http://4programmers.net/Delphi/Interface">
-                            <strong>Interface</strong>
-                            <small>08 kwiecień 2006, 11:45</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="linked" href="http://4programmers.net/Delphi/Program">
-                            <strong>Program</strong>
-                            <small>28 styczeń 2006, 14:20</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-category="linked" href="http://4programmers.net/Delphi/Library">
-                            <strong>Library</strong>
-                            <small>09 sierpień 2006, 09:53</small>
-                        </a>
-                    </li>
-                </ul>
-            </section>
         </aside>
     </div>
 {% endblock %}

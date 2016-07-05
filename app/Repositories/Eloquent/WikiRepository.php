@@ -199,6 +199,21 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
     }
 
     /**
+     * @param int $pathId
+     * @return \Coyote\Wiki[]
+     */
+    public function getRelatedPages($pathId)
+    {
+        return $this
+            ->model
+            ->select(['wiki.path', 'title', 'updated_at'])
+            ->join('wiki_links', 'wiki_links.path_id', '=', 'wiki.id')
+            ->where('wiki_links.ref_id', $pathId)
+            ->limit(10)
+            ->get();
+    }
+
+    /**
      * @param string $path
      * @return \Coyote\Wiki[]
      */

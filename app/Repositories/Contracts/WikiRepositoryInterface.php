@@ -99,6 +99,12 @@ interface WikiRepositoryInterface extends RepositoryInterface
     public function getAllCategories($wikiId);
 
     /**
+     * @param int $pathId
+     * @return \Coyote\Wiki[]
+     */
+    public function getRelatedPages($pathId);
+
+    /**
      * @param string $path
      * @return \Coyote\Wiki[]
      */

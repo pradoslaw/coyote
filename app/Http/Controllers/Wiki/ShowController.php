@@ -6,7 +6,7 @@ use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Forms\Wiki\CommentForm;
 use Coyote\Repositories\Criteria\Wiki\DirectAncestor;
 use Coyote\Repositories\Criteria\Wiki\OnlyWithChildren;
-use Coyote\Services\Elasticsearch\Factories\Wiki\MoreLikeThisFactory;
+
 use Illuminate\Http\Request;
 
 class ShowController extends BaseController
@@ -34,9 +34,6 @@ class ShowController extends BaseController
             $comment->text = $parser->parse($comment->text);
         }
 
-        $builder = (new MoreLikeThisFactory())->build($wiki);
-        $build = $builder->build();
-
         return $this->view('wiki.' . $wiki->template, [
             'wiki' => $wiki,
             'author' => $author,
@@ -47,7 +44,6 @@ class ShowController extends BaseController
             'children' => $this->getCatalog($wiki->id),
             'subscribed' => $wiki->subscribers()->forUser($this->userId)->exists(),
             'flag' => $this->getGateFactory()->allows('wiki-admin') ? $this->getFlagFactory()->takeForWiki($wiki->id) : '',
-            'mlt' => $this->wiki->search($build)->getSource(),
             'form' => $this->createForm(CommentForm::class, [], [
                 'url' => route('wiki.comment.save', [$wiki->id])
             ])
