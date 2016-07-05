@@ -6,7 +6,6 @@ use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Forms\Wiki\CommentForm;
 use Coyote\Repositories\Criteria\Wiki\DirectAncestor;
 use Coyote\Repositories\Criteria\Wiki\OnlyWithChildren;
-
 use Illuminate\Http\Request;
 
 class ShowController extends BaseController
