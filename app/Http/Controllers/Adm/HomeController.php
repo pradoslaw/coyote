@@ -26,10 +26,6 @@ class HomeController extends Controller
             } else {
                 return back()->withErrors('error');
             }
-        } else {
-            if (!$request->session()->has('url.intended')) {
-                $request->session()->put('url.intended', url()->previous());
-            }
         }
 
         return view('adm.home');

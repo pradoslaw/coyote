@@ -8,7 +8,7 @@ use Coyote\Http\Factories\GateFactory;
 class AdmAccess
 {
     use GateFactory;
-    
+
     /**
      * Handle an incoming request.
      *
@@ -28,6 +28,10 @@ class AdmAccess
         // and we can show the page. otherwise we have to redirect to form where user
         // can re-enter his password
         if ($isLogged && !$request->session()->has('admin')) {
+            if (!$request->session()->has('url.intended')) {
+                $request->session()->put('url.intended', url()->previous());
+            }
+
             return redirect()->route('adm.home');
         }
 
