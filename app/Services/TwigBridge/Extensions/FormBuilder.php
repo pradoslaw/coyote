@@ -65,7 +65,11 @@ class FormBuilder extends Twig_Extension
         return $this->renderFormElement('render', $field, $options);
     }
 
-    // @todo zastapic przez intefejs
+    /**
+     * @param $field
+     * @param array $options
+     * @return mixed|null
+     */
     public function formLabel($field, array $options = [])
     {
         return $this->renderFormElement('renderLabel', $field, $options);
