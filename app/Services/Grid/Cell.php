@@ -86,7 +86,10 @@ class Cell implements CellInterface
     protected function decorate()
     {
         foreach ($this->column->getDecorators() as $decorator) {
-            $decorator->decorate($this);
+            // if decorator returns FALSE, we need to break the loop. next decorators WILL NOT be executed.
+            if (false === $decorator->decorate($this)) {
+                break;
+            }
         }
     }
 }

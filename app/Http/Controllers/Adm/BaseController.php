@@ -38,7 +38,8 @@ class BaseController extends Controller
             $forum->add('Uprawnienia', ['route' => 'adm.forum.access']);
 
             $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper-o fa-fw'));
-            
+            $menu->add('Raporty', ['route' => 'adm.flag'])->prepend($fa('fa-flag fa-fw'));
+
             $log = $menu->add('Logi', ['route' => 'adm.log'])->prepend($fa('fa-file-o fa-fw'));
             $log->link->attr(['data-toggle' => "collapse", 'aria-expanded' => "false", 'aria-controls' => "menu-log"]);
             $log->link->href('#menu-log');

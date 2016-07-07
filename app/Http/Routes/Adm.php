@@ -23,5 +23,6 @@ Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm:1'], 'prefix' 
     Route::get('Cache', 'CacheController@index')->name('cache');
 
     Route::get('Stream', 'StreamController@index')->name('stream');
+    Route::get('Flag', 'FlagController@index')->name('flag');
     Route::get('Log', 'LogController@index')->name('log');
 });

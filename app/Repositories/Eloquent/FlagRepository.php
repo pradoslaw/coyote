@@ -14,7 +14,7 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     {
         return 'Coyote\Flag';
     }
-
+    
     /**
      * @param array $topicsId
      * @return mixed

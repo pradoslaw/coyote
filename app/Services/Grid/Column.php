@@ -5,6 +5,7 @@ namespace Coyote\Services\Grid;
 use Coyote\Services\Grid\Decorators\DecoratorInterface;
 use Coyote\Services\Grid\Decorators\Link;
 use Coyote\Services\Grid\Decorators\Html;
+use Coyote\Services\Grid\Decorators\Placeholder;
 use Coyote\Services\Grid\Filters\FilterInterface;
 
 class Column
@@ -38,6 +39,11 @@ class Column
      * @var FilterInterface
      */
     protected $filter;
+
+    /**
+     * @var string
+     */
+    protected $placeholder;
 
     /**
      * @param array $options
@@ -140,6 +146,15 @@ class Column
     }
 
     /**
+     * @param string $placeholder
+     * @return $this
+     */
+    public function setPlaceholder($placeholder)
+    {
+        $this->addDecorator(new Placeholder($placeholder));
+    }
+
+    /**
      * @param DecoratorInterface $decorator
      * @return $this
      */
@@ -208,6 +223,13 @@ class Column
 
         if (empty($options['label'])) {
             $options['label'] = camel_case($options['name']);
+        }
+
+        // placeholder MUST be the first element in options array. that's because "placeholder" decorator
+        // can break further decorators.
+        $placeholder = array_pull($options, 'placeholder');
+        if (!empty($placeholder)) {
+            $options = array_merge(['placeholder' => $placeholder], $options);
         }
 
         foreach ($options as $key => $values) {
