@@ -7,6 +7,7 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Container;
 use Coyote\Services\Parser\Parsers\Censore;
+use Coyote\Services\Parser\Parsers\Emphasis;
 use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Purifier;
 use Coyote\Services\Parser\Parsers\SimpleMarkdown;
@@ -15,9 +16,32 @@ use Coyote\Services\Parser\Parsers\Smilies;
 class CommentFactory extends AbstractFactory
 {
     /**
+     * permission that is required for comment's author to run Emphasis parser
+     */
+    const PERMISSION = 'forum-update';
+
+    /**
      * @var bool
      */
     protected $enableHashParser = false;
+
+    /**
+     * @var int
+     */
+    protected $userId;
+
+    /**
+     * Set comment's author ID.
+     *
+     * @param int $userId
+     * @return $this
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
 
     /**
      * Parse comment
@@ -28,6 +52,8 @@ class CommentFactory extends AbstractFactory
     public function parse(string $text) : string
     {
         start_measure('parsing', get_class($this));
+
+        $this->setCacheId($this->userId);
 
         $isInCache = $this->isInCache($text);
         if ($isInCache) {
@@ -43,6 +69,14 @@ class CommentFactory extends AbstractFactory
                     $parser->attach((new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id|class],code'));
                     $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
+
+                    if (!empty($this->userId)) {
+                        $parser->attach(
+                            (new Emphasis($this->app[UserRepositoryInterface::class]))
+                                ->setUserId($this->userId)
+                                ->setAbility(self::PERMISSION)
+                        );
+                    }
 
                     return $parser;
                 });

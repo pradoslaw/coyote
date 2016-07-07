@@ -95,7 +95,7 @@ class TopicController extends BaseController
             }
 
             foreach ($post->comments as &$comment) {
-                $comment->text = $parser['comment']->parse($comment->text);
+                $comment->text = $parser['comment']->setUserId($comment->user_id)->parse($comment->text);
             }
         }
 

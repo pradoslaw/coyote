@@ -86,7 +86,7 @@ class CommentController extends Controller
 
             // we need to parse text first (and store it in cache)
             /** @var \Coyote\Services\Parser\Parsers\ParserInterface $parser */
-            $parser = app('parser.comment');
+            $parser = app('parser.comment')->setUserId($this->userId);
             $this->comment->text = $parser->parse($this->comment->text);
 
             // it is IMPORTANT to parse text first, and then put information to activity stream.

@@ -37,6 +37,11 @@ abstract class AbstractFactory
     protected $enableCache = true;
 
     /**
+     * @var string
+     */
+    private $cacheId;
+
+    /**
      * @param App $app
      */
     public function __construct(App $app)
@@ -121,12 +126,26 @@ abstract class AbstractFactory
     }
 
     /**
+     * Additional cache id parameter makes content unique. This is useful if we have like two identical comments
+     * but we want to parse and cache them differently.
+     *
+     * @param string $cacheId
+     * @return $this
+     */
+    public function setCacheId($cacheId)
+    {
+        $this->cacheId = $cacheId;
+
+        return $this;
+    }
+
+    /**
      * @param $text
      * @return string
      */
     protected function cacheKey($text)
     {
-        return 'text:' . class_basename($this) . md5($text);
+        return 'text:' . class_basename($this) . md5($text) . $this->cacheId;
     }
 
     /**
