@@ -247,6 +247,9 @@ class Grid
         return $this->enablePagination;
     }
 
+    /**
+     * @param callable $callback
+     */
     public function each(callable $callback)
     {
         $this->eachCallback = $callback;
@@ -344,6 +347,7 @@ class Grid
 
             $row->addCell(new Action($actions, $this->rowActions, $mixed));
 
+            // @todo sprawdzenie, czy call() dziala. niby bladem nie rzuca...
             $this->eachCallback->call($this, $row);
             $this->rows->addRow($row);
         }

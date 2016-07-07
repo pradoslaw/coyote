@@ -214,6 +214,9 @@ class Column
 
     /**
      * @param array $options
+     *
+     * @todo Jezeli podczas budowania tabeli, uzyjemy metody setClickable(), a nastepnie setDecorators() to
+     * ten pierwszy deokrator zostnie usuniety
      */
     protected function setDefaultOptions(array $options)
     {
