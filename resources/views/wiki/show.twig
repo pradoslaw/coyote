@@ -47,7 +47,7 @@
 
                 {% if auth_check() %}
                     <li>
-                        <a class="btn-report" href="{{ route('flag') }}" data-url="{{ url(wiki.path) }}" data-metadata="{{ {'wiki_id': wiki.id, 'permission': 'wiki-admin'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
+                        <a class="btn-report" href="{{ route('flag') }}" data-url="/{{ wiki.path }}" data-metadata="{{ {'wiki_id': wiki.id, 'permission': 'wiki-admin'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
                     </li>
                 {% endif %}
             </ul>
