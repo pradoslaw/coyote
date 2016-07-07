@@ -85,6 +85,11 @@ class Grid
     protected $enablePagination = true;
 
     /**
+     * @var callable
+     */
+    protected $eachCallback;
+
+    /**
      * @param Request $request
      * @param ValidationFactory $validator
      * @param HtmlBuilder $htmlBuilder
@@ -242,6 +247,11 @@ class Grid
         return $this->enablePagination;
     }
 
+    public function each(callable $callback)
+    {
+        $this->eachCallback = $callback;
+    }
+
     /**
      * @return string
      */
@@ -324,14 +334,17 @@ class Grid
         $actions = new Column(['name' => '__actions__']);
         $actions->setGrid($this);
 
-        foreach ($data as $item) {
-            $row = new Row();
+        foreach ($data as $mixed) {
+            $row = new Row($mixed);
+            $row->setGrid($this);
 
             foreach ($this->columns as $column) {
-                $row->addCell(new Cell($column, $item));
+                $row->addCell(new Cell($column, $mixed));
             }
 
-            $row->addCell(new Action($actions, $this->rowActions, $item));
+            $row->addCell(new Action($actions, $this->rowActions, $mixed));
+
+            $this->eachCallback->call($this, $row);
             $this->rows->addRow($row);
         }
 

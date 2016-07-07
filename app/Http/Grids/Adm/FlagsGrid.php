@@ -21,6 +21,7 @@ class FlagsGrid extends Grid
                 'sortable' => true
             ])
             ->addColumn('flag_type', [
+                'placeholder' => '--',
                 'title' => 'Typ'
             ])
             ->addColumn('user_name', [
@@ -54,6 +55,12 @@ class FlagsGrid extends Grid
                     return link_to_route('adm.user.save', $row->moderator_name, [$row->moderator_id]);
                 },
                 'placeholder' => '--'
-            ]);
+            ])
+            ->each(function ($row) {
+                /** @var $row \Coyote\Services\Grid\Row */
+                if (!empty($row->raw('deleted_at'))) {
+                    $row->class = 'strikeout';
+                }
+            });
     }
 }

@@ -4,7 +4,8 @@ namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Services\Grid\CellInterface;
 use Coyote\Services\Grid\Column;
-use Coyote\Services\Grid\Grid as Grid_Object;
+use Coyote\Services\Grid\Row;
+use Coyote\Services\Grid\Grid as GridObject;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -26,6 +27,7 @@ class Grid extends Twig_Extension
         return [
             new Twig_SimpleFunction('grid', [&$this, 'grid'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('grid_column', [&$this, 'column'], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction('grid_row', [&$this, 'row'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('grid_cell', [&$this, 'cell'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('grid_filter', [&$this, 'filter'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('grid_no_data', [&$this, 'noData'], ['is_safe' => ['html']])
@@ -33,10 +35,10 @@ class Grid extends Twig_Extension
     }
 
     /**
-     * @param Grid_Object $grid
+     * @param GridObject $grid
      * @return string
      */
-    public function grid(Grid_Object $grid)
+    public function grid(GridObject $grid)
     {
         return $grid->render();
     }
@@ -86,6 +88,20 @@ class Grid extends Twig_Extension
     }
 
     /**
+     * @param Row $row
+     * @return string
+     */
+    public function row(Row $row)
+    {
+        $cells = '';
+        foreach ($row as $cell) {
+            $cells .= $this->cell($cell);
+        }
+
+        return $row->getGrid()->getHtmlBuilder()->tag('tr', $cells, $row->getAttributes());
+    }
+
+    /**
      * @param CellInterface $cell
      * @return string
      */
@@ -95,10 +111,10 @@ class Grid extends Twig_Extension
     }
 
     /**
-     * @param Grid_Object $grid
+     * @param GridObject $grid
      * @return \Illuminate\Support\HtmlString
      */
-    public function noData(Grid_Object $grid)
+    public function noData(GridObject $grid)
     {
         return $grid->getHtmlBuilder()->tag(
             'td',
