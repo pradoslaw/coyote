@@ -22,6 +22,7 @@ class FlagController extends BaseController
         parent::__construct();
 
         $this->flag = $flag;
+        $this->breadcrumb->push('Raporty', route('adm.flag'));
     }
 
     /**
