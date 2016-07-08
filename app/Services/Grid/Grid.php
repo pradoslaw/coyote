@@ -348,7 +348,9 @@ class Grid
             $row->addCell(new Action($actions, $this->rowActions, $mixed));
 
             // @todo sprawdzenie, czy call() dziala. niby bladem nie rzuca...
-            $this->eachCallback->call($this, $row);
+            if ($this->eachCallback) {
+                $this->eachCallback->call($this, $row);
+            }
             $this->rows->addRow($row);
         }
 
