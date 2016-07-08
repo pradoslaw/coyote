@@ -94,6 +94,8 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
         'as' => 'subscribe',
         'middleware' => 'auth'
     ]);
+    
+    $this->get('History/{wiki}', ['uses' => 'HistoryController@index', 'as' => 'history']);
 
     // deleted pages are visible only for users with privilege
     $this->get('{path}', [
