@@ -86,6 +86,10 @@ class GroupsController extends BaseController
      */
     public function delete($group)
     {
+        if ($group->system) {
+            abort(401);
+        }
+
         $this->transaction(function () use ($group) {
             $group->delete();
 

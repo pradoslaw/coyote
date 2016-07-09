@@ -33,7 +33,7 @@ class GroupForm extends Form
                     'data-submit-state' => 'Zapisywanie...'
                 ],
                 'delete_url' => empty($this->data->id) ? '' : route('adm.groups.delete', [$this->data->id]),
-                'delete_visibility' => !empty($this->data->id)
+                'delete_visibility' => !empty($this->data->id) && !$this->data->system
             ]);
     }
 
@@ -43,7 +43,6 @@ class GroupForm extends Form
     public function messages()
     {
         return ['name.required' => 'To pole nie może być puste.'];
-
     }
 
     /**

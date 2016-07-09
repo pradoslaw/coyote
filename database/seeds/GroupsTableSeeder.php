@@ -11,9 +11,13 @@ class GroupsTableSeeder extends Seeder
      */
     public function run()
     {
-        $group = \Coyote\Group::create([
+        $group = new \Coyote\Group;
+        $group->fill([
            'name'           => 'Administrator'
         ]);
+
+        $group->system = true;
+        $group->save();
 
         $user = DB::table('users')->orderBy('id')->first();
 

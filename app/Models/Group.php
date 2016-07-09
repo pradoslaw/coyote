@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $description
  * @property int $partner
+ * @property int $system
  */
 class Group extends Model
 {
