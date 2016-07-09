@@ -24,7 +24,14 @@ class SampleForm extends \Coyote\Services\FormBuilder\Form
                     2 => 'Moderator'
                 ]
             ])
-            ->add('bio', 'textarea');
+            ->add('bio', 'textarea')
+            ->add('groups', 'choice', [
+                'choices' => [
+                    2 => 'Admin',
+                    4 => 'Moderator',
+                    8 => 'Unassigned Group'
+                ]
+            ]);
     }
 }
 
@@ -36,6 +43,46 @@ class PollForm extends \Coyote\Services\FormBuilder\Form
             ->add('title', 'text')
             ->add('items', 'text')
             ->add('length', 'text');
+    }
+}
+
+class Model
+{
+    public $name;
+    public $email;
+    public $bio;
+    public $group_id;
+
+    public function __construct()
+    {
+        $faker = Faker\Factory::create();
+
+        $this->name = $faker->name;
+        $this->email = $faker->email;
+        $this->bio = $faker->text();
+        $this->group_id = 1;
+    }
+
+    public function groups()
+    {
+        return collect([
+            ['id' => 2, 'name' => 'Admin'],
+            ['id' => 8, 'name' => 'Unassigned Group']
+        ]);
+    }
+
+    public function __isset($name)
+    {
+        return true;
+    }
+
+    public function __get($name)
+    {
+        if ($name == 'groups') {
+            return $this->groups();
+        } else {
+            return $this->$name;
+        }
     }
 }
 
@@ -284,7 +331,8 @@ class FormTest extends \Codeception\TestCase\Test
             'name' => $fake->name,
             'email' => $fake->email,
             'bio' => $fake->text,
-            'group_id' => 2
+            'group_id' => 2,
+            'groups' => [2, 8]
         ];
 
         // wypelnienie danymi
@@ -299,7 +347,8 @@ class FormTest extends \Codeception\TestCase\Test
             'name' => $fake->name,
             'email' => $fake->email,
             'bio' => $fake->text,
-            'group_id' => 2
+            'group_id' => 2,
+            'groups' => [2, 8]
         ];
 
         $this->fillWithData($data);
@@ -313,7 +362,8 @@ class FormTest extends \Codeception\TestCase\Test
             'name' => $faker->name,
             'email' => $faker->email,
             'bio' => $faker->text(),
-            'group_id' => 1
+            'group_id' => 1,
+            'groups' => [2, 8]
         ]);
 
         $form = $this->createForm(SampleForm::class, $data);
@@ -323,6 +373,47 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertValue('email', $data['email'], $form);
         $this->assertValue('bio', $data['bio'], $form);
         $this->assertValue('group_id', $data['group_id'], $form);
+        $this->assertValue('groups', $data['groups'], $form);
+    }
+
+    public function testBuildFormAndFillUpWithModel()
+    {
+        $model = new Model;
+
+        $form = $this->createForm(SampleForm::class, $model);
+        $form->buildForm();
+
+        $form->remove('groups');
+        $form->add('groups', 'choice', [
+            'choices' => [
+                2 => 'Admin',
+                4 => 'Moderator',
+                8 => 'Unassigned Group'
+            ],
+            'property' => 'id'
+        ]);
+
+        $this->assertValue('name', $model->name, $form);
+        $this->assertValue('email', $model->email, $form);
+        $this->assertValue('bio', $model->bio, $form);
+        $this->assertValue('group_id', $model->group_id, $form);
+
+        $groups = $form->get('groups');
+
+        $this->tester->assertEquals(3, count($groups->getChildren()));
+        $this->tester->assertEquals('Admin', $groups->getChild(0)->getLabel());
+        $this->tester->assertEquals('Moderator', $groups->getChild(1)->getLabel());
+        $this->tester->assertEquals('Unassigned Group', $groups->getChild(2)->getLabel());
+
+        $this->tester->assertTrue($groups->getChild(0)->isChecked());
+        $this->tester->assertFalse($groups->getChild(1)->isChecked());
+        $this->tester->assertTrue($groups->getChild(2)->isChecked());
+
+        $this->tester->assertEquals(2, $groups->getChild(0)->getCheckedValue());
+        $this->tester->assertEquals(4, $groups->getChild(1)->getCheckedValue());
+        $this->tester->assertEquals(8, $groups->getChild(2)->getCheckedValue());
+
+        $this->tester->assertEquals([2, 8], $groups->getChildrenValues());
     }
 
     private function fillWithData($data)
@@ -339,6 +430,7 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertInstanceOf(\Coyote\Services\FormBuilder\Fields\Text::class, $form->get('email'));
         $this->assertInstanceOf(\Coyote\Services\FormBuilder\Fields\Textarea::class, $form->get('bio'));
         $this->assertInstanceOf(\Coyote\Services\FormBuilder\Fields\Select::class, $form->get('group_id'));
+        $this->assertInstanceOf(\Coyote\Services\FormBuilder\Fields\Choice::class, $form->get('groups'));
 
         $data = (array) $data;
 
@@ -346,6 +438,7 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertValue('email', $data['email'], $form);
         $this->assertValue('bio', $data['bio'], $form);
         $this->assertValue('group_id', $data['group_id'], $form);
+        $this->assertValue('groups', $data['groups'], $form);
     }
 
     private function assertValue($key, $value, $form)
@@ -355,6 +448,12 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertEquals($value, $form->getField($key)->getValue());
     }
 
+    /**
+     * @param $class
+     * @param null $data
+     * @param array $options
+     * @return \Coyote\Services\FormBuilder\Form
+     */
     private function createForm($class, $data = null, array $options = [])
     {
         $form = new $class();

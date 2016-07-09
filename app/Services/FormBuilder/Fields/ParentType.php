@@ -43,6 +43,7 @@ abstract class ParentType extends Field
     /**
      * Get a child
      *
+     * @param int $key
      * @return mixed
      */
     public function getChild($key)

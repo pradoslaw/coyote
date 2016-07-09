@@ -88,6 +88,16 @@ abstract class Form extends FormRequest implements FormInterface
     /**
      * @inheritdoc
      */
+    public function remove($name)
+    {
+        unset($this->fields[$name]);
+        
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function addAfter($after, $name, $type, array $options = [])
     {
         $offset = array_search($after, array_keys($this->fields));

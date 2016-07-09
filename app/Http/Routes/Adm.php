@@ -25,4 +25,9 @@ Route::group(['namespace' => 'Adm', 'middleware' => ['auth', 'adm:1'], 'prefix' 
     Route::get('Stream', 'StreamController@index')->name('stream');
     Route::get('Flag', 'FlagController@index')->name('flag');
     Route::get('Log', 'LogController@index')->name('log');
+
+    Route::get('Groups', 'GroupsController@index')->name('groups');
+    Route::get('Groups/Save/{group?}', 'GroupsController@edit')->name('groups.save');
+    Route::post('Groups/Save/{group?}', 'GroupsController@save');
+    Route::post('Groups/Delete/{group}', 'GroupsController@delete')->name('groups.delete');
 });

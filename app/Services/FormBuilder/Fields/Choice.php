@@ -28,27 +28,48 @@ class Choice extends Collection
         return $this;
     }
 
+    /**
+     * Get children values as array
+     *
+     * @return array
+     */
+    public function getChildrenValues()
+    {
+        $values = [];
+
+        foreach ($this->children as $checkbox) {
+            /** @var \Coyote\Services\FormBuilder\Fields\Checkbox $checkbox */
+            if ($checkbox->isChecked()) {
+                $values[] = $checkbox->getValue();
+            }
+        }
+
+        return $values;
+    }
+
     /** @todo ability of creating list of radio buttons */
     public function createChildren()
     {
-        $this->createCheckboxes();
+        $this->buildCheckboxes();
     }
 
     /**
      * Create set of checkboxes
      */
-    private function createCheckboxes()
+    private function buildCheckboxes()
     {
         $name = $this->name . '[]';
 
-        $data = $this->value;
-        if ($data instanceof \Illuminate\Support\Collection) {
-            $data = $data->all();
+        $checkedValues = $this->value;
+        if ($checkedValues instanceof \Illuminate\Support\Collection) {
+            $checkedValues = $checkedValues->all();
         }
 
+        // we must cast to array datatype because $checkedValues can be null.
+        $checkedValues = (array) $checkedValues;
+
         if ($this->property) {
-            // we must cast to array datatype because $data can be null.
-            $data = array_pluck((array) $data, $this->property);
+            $checkedValues = array_pluck($checkedValues, $this->property);
         }
 
         foreach ($this->choices as $key => $label) {
@@ -57,7 +78,7 @@ class Choice extends Collection
             $this->children[] = $this->makeField($name, 'checkbox', $this->parent, $this->childAttr + [
                 'label' => $label,
                 'checked_value' => $key,
-                'checked' => in_array($key, $data),
+                'checked' => in_array($key, $checkedValues),
                 'attr' => [
                     'id' => $id
                 ],

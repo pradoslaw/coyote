@@ -4,6 +4,12 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property int $partner
+ */
 class Group extends Model
 {
     /**
@@ -11,7 +17,7 @@ class Group extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'user_id'];
+    protected $fillable = ['name', 'description', 'user_id', 'partner'];
 
     /**
      * @var string
@@ -23,8 +29,11 @@ class Group extends Model
         // group belongs to many users
     }
 
+    /**
+     * @return $this
+     */
     public function permissions()
     {
-        return $this->belongsToMany('Coyote\Permission', 'group_permissions');
+        return $this->belongsToMany('Coyote\Permission', 'group_permissions')->withPivot('value');
     }
 }

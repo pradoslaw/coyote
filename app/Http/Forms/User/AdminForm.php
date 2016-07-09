@@ -7,9 +7,20 @@ use Illuminate\Contracts\Auth\Access\Gate;
 
 class AdminForm extends SettingsForm
 {
+    /**
+     * @var GroupRepository
+     */
     protected $group;
+
+    /**
+     * @var Gate
+     */
     protected $gate;
 
+    /**
+     * @param GroupRepository $group
+     * @param Gate $gate
+     */
     public function __construct(GroupRepository $group, Gate $gate)
     {
         parent::__construct();

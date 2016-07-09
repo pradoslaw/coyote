@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
+use Coyote\Repositories\Contracts\GroupRepositoryInterface;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
@@ -47,6 +48,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->model('wiki', WikiRepositoryInterface::class);
         $router->model('pastebin', PastebinRepositoryInterface::class);
         $router->model('firewall', FirewallRepositoryInterface::class);
+        $router->model('group', GroupRepositoryInterface::class);
 
         $router->bind('forum', function ($slug) {
             return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();

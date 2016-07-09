@@ -28,6 +28,12 @@ interface FormInterface
     public function add($name, $type, array $options = []);
 
     /**
+     * @param string $name
+     * @return $this
+     */
+    public function remove($name);
+
+    /**
      * @param string $after     Name of the field after which new field is added
      * @param string $name      Field name which will be added
      * @param string $type

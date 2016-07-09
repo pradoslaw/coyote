@@ -3,6 +3,7 @@
 namespace Coyote\Listeners;
 
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
+use Coyote\Repositories\Contracts\GroupRepositoryInterface;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
@@ -20,7 +21,8 @@ class BindRouteDefaultModel
         'microblog' => MicroblogRepositoryInterface::class,
         'wiki' => WikiRepositoryInterface::class,
         'pastebin' => PastebinRepositoryInterface::class,
-        'firewall' => FirewallRepositoryInterface::class
+        'firewall' => FirewallRepositoryInterface::class,
+        'group' => GroupRepositoryInterface::class
     ];
 
     /**
