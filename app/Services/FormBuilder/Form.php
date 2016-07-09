@@ -91,7 +91,7 @@ abstract class Form extends FormRequest implements FormInterface
     public function remove($name)
     {
         unset($this->fields[$name]);
-        
+
         return $this;
     }
 
@@ -308,17 +308,26 @@ abstract class Form extends FormRequest implements FormInterface
      * @param $arguments
      * @return mixed|null
      */
-    public function __call($name, $arguments)
+//    public function __call($name, $arguments)
+//    {
+//        return $this->getField($name);
+//    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function __isset($name)
     {
-        return $this->getField($name);
+        return isset($this->fields[$name]);
     }
 
     /**
-     * @param $key
+     * @param $name
      * @return mixed|null
      */
-    public function __get($key)
+    public function __get($name)
     {
-        return $this->getField($key);
+        return $this->getField($name);
     }
 }

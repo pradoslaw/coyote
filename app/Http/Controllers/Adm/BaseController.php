@@ -35,7 +35,7 @@ class BaseController extends Controller
             $forum->prepend($fa('fa-comments fa-fw'));
             $forum->append($html->tag('i', '', ['class' => 'arrow fa fa-angle-left pull-right']));
 
-            $forum->add('Kategorie', ['route' => 'adm.forum.category']);
+            $forum->add('Kategorie', ['route' => 'adm.forum.categories']);
             $forum->add('Uprawnienia', ['route' => 'adm.forum.access']);
 
             $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper-o fa-fw'));

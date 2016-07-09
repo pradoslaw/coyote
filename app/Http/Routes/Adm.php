@@ -16,7 +16,15 @@ $this->group(
     function () {
         $this->get('Dashboard', 'DashboardController@index')->name('dashboard');
 
-        $this->get('Forum/Category', 'Forum\CategoryController@index')->name('forum.category');
+        $this->get('Forum/Categories', 'Forum\CategoriesController@index')->name('forum.categories');
+
+        $this->get('Forum/Categories/Save/{forum?}', [
+            'uses' => 'Forum\CategoriesController@edit',
+            'as' => 'forum.categories.save'
+        ]);
+
+        $this->post('Forum/Categories/Save/{forum?}', ['uses' => 'Forum\CategoriesController@save']);
+
         $this->get('Forum/Access', 'Forum\AccessController@index')->name('forum.access');
 
         $this->get('User', 'UserController@index')->name('user');
