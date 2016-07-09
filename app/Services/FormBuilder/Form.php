@@ -283,7 +283,6 @@ abstract class Form extends FormRequest implements FormInterface
      */
     public function isSubmitted()
     {
-        // @todo obsluga dla metody GET
         return $this->request->method() === $this->getMethod();
     }
 

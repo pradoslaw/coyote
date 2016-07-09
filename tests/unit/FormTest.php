@@ -2,12 +2,19 @@
 
 use Illuminate\Routing\Redirector;
 use Faker\Factory;
+use Illuminate\Contracts\Validation\Validator;
 
 class TestForm extends \Coyote\Services\FormBuilder\Form
 {
     public function buildForm()
     {
         // TODO: Implement buildForm() method.
+    }
+
+    // don't throw validate exception
+    protected function failedValidation(Validator $validator)
+    {
+        //
     }
 }
 
@@ -43,6 +50,26 @@ class PollForm extends \Coyote\Services\FormBuilder\Form
             ->add('title', 'text')
             ->add('items', 'text')
             ->add('length', 'text');
+    }
+}
+
+class SkillsForm extends \Coyote\Services\FormBuilder\Form
+{
+    public function buildForm()
+    {
+        $this
+            ->add('name', 'text', [
+                'label' => 'Nazwa',
+                'rules' => 'required|string|max:100',
+                'attr' => [
+                    'placeholder' => 'Np. java, c#'
+                ]
+            ])
+            ->add('rate', 'text', [
+                'label' => 'Ocena',
+                'rules' => 'required|integer|min:1|max:6'
+            ])
+            ->add('order', 'hidden');
     }
 }
 
@@ -92,9 +119,12 @@ class FormTest extends \Codeception\TestCase\Test
      * @var \UnitTester
      */
     protected $tester;
+    protected $request;
 
     protected function _before()
     {
+        $this->request = app()->make('request');
+        $this->request->setSession(app('session')->driver('array'));
     }
 
     protected function _after()
@@ -254,7 +284,6 @@ class FormTest extends \Codeception\TestCase\Test
             ]
         ]);
 
-        $form->buildForm();
         $this->assertEmpty($form->get('tags')->getChildren());
 
         $tags = collect([
@@ -267,6 +296,30 @@ class FormTest extends \Codeception\TestCase\Test
 
         $this->assertEquals('c++', $form->tags->getChildren()[0]->getValue());
         $this->assertEquals('c#', $form->tags->getChildren()[1]->getValue());
+    }
+
+    public function testBuildFormWithCollectionOfChildrenForms()
+    {
+        $form = $this->createForm(TestForm::class);
+        $form
+            ->add('name', 'text', [
+                'value' => 'Adam Boduch'
+            ])
+            ->add('skills', 'collection', [
+                'label' => 'Umiejętności',
+                'child_attr' => [
+                    'type' => 'child_form',
+                    'class' => $this->createForm(SkillsForm::class),
+                ]
+            ]);
+
+        $this->assertTrue($form->get('skills') instanceof \Coyote\Services\FormBuilder\Fields\Collection);
+
+//        $form->get('skills')->setValue([
+//            ['name' => 'c++', 'rate' => 5, 'order' => 1],
+//            ['name' => 'java', 'rate' => 2, 'order' => 2],
+//            ['name' => '.net', 'rate' => 3, 'order' => 3],
+//        ]);
     }
 
     public function testBuildFormWithEmptyChildForm()
@@ -416,6 +469,56 @@ class FormTest extends \Codeception\TestCase\Test
         $this->tester->assertEquals([2, 8], $groups->getChildrenValues());
     }
 
+    public function testPassesValidation()
+    {
+        $this->request['name'] = 'some name';
+        $this->request['description'] = 'somedesc';
+
+        $form = $this->createForm(TestForm::class);
+        $form
+            ->setMethod('GET')
+            ->add('name', 'text', [
+                'rules' => 'required|min:5'
+            ])
+            ->add('description', 'textarea', [
+                'rules' => 'max:10'
+            ]);
+
+        $this->assertTrue($form->isValid());
+
+        $this->assertEquals(
+            ['name' => 'required|min:5', 'description' => 'max:10'],
+            $form->rules()
+        );
+
+        $this->assertEquals(
+            ['name' => $this->request['name'], 'description' => $this->request['description']],
+            $form->all()
+        );
+    }
+
+    public function testFailsValidation()
+    {
+        $this->request['name'] = '';
+        $this->request['description'] = 'Lorem ipsum lores aaaaaaaaaaaaaaaaaaaaa';
+
+        $form = $this->createForm(TestForm::class);
+        $form
+            ->setMethod('GET')
+            ->add('name', 'text', [
+                'rules' => 'required|min:5'
+            ])
+            ->add('description', 'textarea', [
+                'rules' => 'max:10'
+            ]);
+
+        $validator = $form->validate();
+        $this->assertFalse($validator->passes());
+
+        $this->assertTrue($validator->errors()->has('name'));
+        $this->assertTrue($validator->errors()->has('description'));
+    }
+
     private function fillWithData($data)
     {
         // utworzenie instancji klasy
@@ -459,18 +562,10 @@ class FormTest extends \Codeception\TestCase\Test
         $form = new $class();
         $form->setContainer(app())
             ->setRedirector(app(Redirector::class))
-            ->setRequest($this->getRequest())
+            ->setRequest($this->request)
             ->setData($data)
             ->setOptions($options);
 
         return $form;
-    }
-
-    private function getRequest()
-    {
-        $request = app()->make('request');
-        $request->setSession(app('session')->driver('array'));
-
-        return $request;
     }
 }
