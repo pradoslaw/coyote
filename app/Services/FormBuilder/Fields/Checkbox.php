@@ -25,6 +25,11 @@ class Checkbox extends Field
     protected $uncheckedValue = 0;
 
     /**
+     * @var bool
+     */
+    protected $isChild = false;
+
+    /**
      * @param $flag
      * @return $this
      */
@@ -87,6 +92,25 @@ class Checkbox extends Field
     {
         $this->uncheckedValue = $uncheckedValue;
 
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isChild()
+    {
+        return $this->isChild;
+    }
+
+    /**
+     * @param boolean $flag
+     * @return $this
+     */
+    public function setIsChild($flag)
+    {
+        $this->isChild = (bool) $flag;
+        
         return $this;
     }
 

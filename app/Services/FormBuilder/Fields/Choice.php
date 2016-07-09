@@ -76,6 +76,7 @@ class Choice extends Collection
             $id = str_replace('.', '_', $this->name) . '_' . $key;
 
             $this->children[] = $this->makeField($name, 'checkbox', $this->parent, $this->childAttr + [
+                'is_child' => true,
                 'label' => $label,
                 'checked_value' => $key,
                 'checked' => in_array($key, $checkedValues),
