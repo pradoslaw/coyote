@@ -42,6 +42,16 @@ class AdminForm extends SettingsForm
             ]
         ]);
 
+        $this->addAfter('group_id', 'is_confirm', 'checkbox', [
+            'label' => 'Potwierdzony adres e-mail',
+            'rules' => 'bool'
+        ]);
+
+        $this->addAfter('group_id', 'is_active', 'checkbox', [
+            'label' => 'Konto aktywne',
+            'rules' => 'bool'
+        ]);
+
         $groups = $this->group->pluck('name', 'id')->toArray();
 
         $this->add('groups', 'choice', [
