@@ -7,6 +7,7 @@ use Coyote\Http\Grids\Adm\GroupsGrid;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
 use Coyote\Services\Grid\Source\EloquentDataSource;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Group as Stream_Group;
 use Illuminate\Contracts\Cache\Repository as Cache;
 
@@ -72,11 +73,32 @@ class GroupsController extends BaseController
                 );
             }
 
-            app(Cache::class)->forget('permissions');
+            $this->flushCache();
             stream(Stream_Update::class, (new Stream_Group())->map($group));
         });
 
         return redirect()->route('adm.groups')->with('success', 'Zapisano ustawienia grupy.');
+    }
+
+    /**
+     * @param \Coyote\Group $group
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete($group)
+    {
+        $this->transaction(function () use ($group) {
+            $group->delete();
+
+            $this->flushCache();
+            stream(Stream_Delete::class, (new Stream_Group())->map($group));
+        });
+
+        return redirect()->route('adm.groups')->with('success', 'Grupa została usunięta.');
+    }
+
+    private function flushCache()
+    {
+        app(Cache::class)->tags('permissions')->flush();
     }
 
     /**
