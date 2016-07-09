@@ -45,6 +45,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $permissions = [
         'adm-access',
+        'adm-group',
         'forum-delete',
         'forum-update',
         'job-delete',
