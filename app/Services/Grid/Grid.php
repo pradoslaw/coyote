@@ -3,6 +3,7 @@
 namespace Coyote\Services\Grid;
 
 use Collective\Html\HtmlBuilder;
+use Collective\Html\FormBuilder;
 use Coyote\Services\Grid\RowActions\RowAction;
 use Coyote\Services\Grid\Source\SourceInterface;
 use Illuminate\Http\Request;
@@ -28,6 +29,11 @@ class Grid
      * @var HtmlBuilder
      */
     protected $htmlBuilder;
+
+    /**
+     * @var FormBuilder
+     */
+    protected $formBuilder;
 
     /**
      * @var SourceInterface
@@ -93,12 +99,18 @@ class Grid
      * @param Request $request
      * @param ValidationFactory $validator
      * @param HtmlBuilder $htmlBuilder
+     * @param FormBuilder $formBuilder
      */
-    public function __construct(Request $request, ValidationFactory $validator, HtmlBuilder $htmlBuilder)
-    {
+    public function __construct(
+        Request $request,
+        ValidationFactory $validator,
+        HtmlBuilder $htmlBuilder,
+        FormBuilder $formBuilder
+    ) {
         $this->request = $request;
         $this->validator = $validator;
         $this->htmlBuilder = $htmlBuilder;
+        $this->formBuilder = $formBuilder;
 
         $this->makeDefaultOrder();
     }
@@ -122,6 +134,14 @@ class Grid
     public function getHtmlBuilder()
     {
         return $this->htmlBuilder;
+    }
+
+    /**
+     * @return FormBuilder
+     */
+    public function getFormBuilder()
+    {
+        return $this->formBuilder;
     }
 
     /**
@@ -326,10 +346,6 @@ class Grid
             }
         }
 
-        if ($this->enablePagination) {
-            $this->total = $this->source->total();
-        }
-
         $data = $this->execute();
         $this->rows = new Rows();
 
@@ -364,7 +380,12 @@ class Grid
      */
     protected function execute()
     {
-        $this->source->setFiltersData($this->columns, $this->request);
+        $this->source->applyFilters($this->columns, $this->request);
+
+        if ($this->enablePagination) {
+            $this->total = $this->source->total();
+        }
+
         return $this->source->execute($this->perPage, $this->resolveCurrentPage(), $this->order);
     }
 
@@ -436,6 +457,7 @@ class Grid
     protected function setupColumnOptions($name, array $options)
     {
         $default = ['name' => $name];
+
         return array_merge($default, $options);
     }
 

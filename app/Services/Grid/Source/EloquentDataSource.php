@@ -26,7 +26,7 @@ class EloquentDataSource implements SourceInterface
      * @param Column[] $columns
      * @param Request $request
      */
-    public function setFiltersData($columns, Request $request)
+    public function applyFilters($columns, Request $request)
     {
         foreach ($columns as $column) {
             if ($column->isFilterable() && $request->has($column->getName())) {

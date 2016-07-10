@@ -12,7 +12,7 @@ interface SourceInterface
      * @param Column[] $columns
      * @param Request $request
      */
-    public function setFiltersData($columns, Request $request);
+    public function applyFilters($columns, Request $request);
     
     /**
      * @param int $perPage

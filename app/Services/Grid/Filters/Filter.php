@@ -73,13 +73,34 @@ abstract class Filter implements FilterInterface
     }
 
     /**
-     * @param string $tag
-     * @param string $content
-     * @param array $attributes
-     * @return \Illuminate\Support\HtmlString
+     * @return \Collective\Html\HtmlBuilder
      */
-    protected function tag($tag, $content, array $attributes = [])
+    protected function getHtmlBuilder()
     {
-        return $this->column->getGrid()->getHtmlBuilder()->tag($tag, $content, $attributes);
+        return $this->column->getGrid()->getHtmlBuilder();
+    }
+
+    /**
+     * @return \Collective\Html\FormBuilder
+     */
+    protected function getFormBuilder()
+    {
+        return $this->column->getGrid()->getFormBuilder();
+    }
+
+    /**
+     * @return \Illuminate\Http\Request
+     */
+    protected function getRequest()
+    {
+        return $this->column->getGrid()->getRequest();
+    }
+
+    /**
+     * @return array|string
+     */
+    protected function getInput()
+    {
+        return $this->getRequest()->input($this->column->getName());
     }
 }
