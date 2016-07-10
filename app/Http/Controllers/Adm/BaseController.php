@@ -36,7 +36,7 @@ class BaseController extends Controller
             $forum->append($html->tag('i', '', ['class' => 'arrow fa fa-angle-left pull-right']));
 
             $forum->add('Kategorie', ['route' => 'adm.forum.categories']);
-            $forum->add('Uprawnienia', ['route' => 'adm.forum.access']);
+            $forum->add('Uprawnienia', ['route' => 'adm.forum.permissions']);
 
             $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper-o fa-fw'));
             $menu->add('Raporty', ['route' => 'adm.flag'])->prepend($fa('fa-flag fa-fw'));
@@ -56,7 +56,7 @@ class BaseController extends Controller
             if ($item->data('permission')) {
                 return auth()->user()->can($item->data('permission'));
             }
-            
+
             return true;
         });
     }

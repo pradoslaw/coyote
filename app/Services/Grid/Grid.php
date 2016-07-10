@@ -329,6 +329,10 @@ class Grid
      */
     protected function getRows()
     {
+        if (empty($this->source)) {
+            throw new \InvalidArgumentException('You MUST set the data grid source by calling setSource() method.');
+        }
+
         if (!empty($this->rows)) {
             return $this->rows;
         }
