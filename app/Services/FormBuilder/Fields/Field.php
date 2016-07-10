@@ -120,7 +120,7 @@ abstract class Field
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getValue()
     {

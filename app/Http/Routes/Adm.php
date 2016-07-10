@@ -18,12 +18,12 @@ $this->group(
 
         $this->get('Forum/Categories', 'Forum\CategoriesController@index')->name('forum.categories');
 
-        $this->get('Forum/Categories/Save/{forum?}', [
+        $this->get('Forum/Categories/Save/{id?}', [
             'uses' => 'Forum\CategoriesController@edit',
             'as' => 'forum.categories.save'
         ]);
 
-        $this->post('Forum/Categories/Save/{forum?}', ['uses' => 'Forum\CategoriesController@save']);
+        $this->post('Forum/Categories/Save/{id?}', ['uses' => 'Forum\CategoriesController@save']);
 
         $this->get('Forum/Access', 'Forum\AccessController@index')->name('forum.access');
 

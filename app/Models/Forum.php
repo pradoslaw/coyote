@@ -32,12 +32,34 @@ class Forum extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'name', 'slug', 'description', 'section', 'url'];
+    protected $fillable = [
+        'parent_id',
+        'name',
+        'slug',
+        'description',
+        'section',
+        'url',
+        'is_locked',
+        'require_tag',
+        'enable_reputation',
+        'enable_anonymous'
+    ];
 
     /**
      * @var bool
      */
     public $timestamps = false;
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            if (empty($model->parent_id)) {
+                $model->parent_id = null;
+            }
+        });
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -77,6 +99,15 @@ class Forum extends Model
     public function order()
     {
         return $this->hasMany('Coyote\Forum\Order');
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setNameAttribute($name)
+    {
+        $this->attributes['slug'] = str_replace(' ', '_', $name);
+        $this->attributes['name'] = $name;
     }
 
     /**
