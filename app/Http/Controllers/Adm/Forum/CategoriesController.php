@@ -8,6 +8,7 @@ use Coyote\Http\Grids\Adm\Forum\CategoriesGrid;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Criteria\Forum\TreeViewOrder;
 use Coyote\Services\Grid\Source\EloquentDataSource;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 class CategoriesController extends BaseController
 {
@@ -76,9 +77,16 @@ class CategoriesController extends BaseController
             foreach ((array) $form->get('access')->getValue() as $groupId) {
                 $forum->access()->create(['group_id' => $groupId]);
             }
+
+            $this->flushCache();
         });
 
-        return redirect()->route('adm.forum.categories', [$forum->id])->with('success', 'Zmiany zostały zapisane.');
+        return redirect()->route('adm.forum.categories')->with('success', 'Zmiany zostały zapisane.');
+    }
+
+    private function flushCache()
+    {
+        app(Cache::class)->tags('menu-for-user')->flush();
     }
 
     /**

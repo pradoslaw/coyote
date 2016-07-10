@@ -95,7 +95,7 @@ abstract class Controller extends BaseController
         });
 
         // cache user customized menu for 7 days
-        $categories = $this->getCacheFactory()->remember('menu-for-user:' . $this->userId, 60 * 24 * 7, function () {
+        $categories = $this->getCacheFactory()->tags(['menu-for-user'])->remember('menu-for-user:' . $this->userId, 60 * 24 * 7, function () {
             /** @var ForumRepositoryInterface $repository */
             $repository = app(ForumRepositoryInterface::class);
 

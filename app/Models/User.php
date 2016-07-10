@@ -206,14 +206,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         // @todo nie powinnismy uzywac cache w modelu
         if (config('cache.default') !== 'file') {
-            $key = 'permission:' . $this->id;
-
-            $permissions = Cache::tags(['permissions', $key])->rememberForever($key, function () {
+            $permissions = Cache::tags(['permissions'])->rememberForever('permission:' . $this->id, function () {
                 return $this->getPermissions();
             });
         } else {
             $permissions = $this->getPermissions();
         }
+
         return isset($permissions[$ability]) ? $permissions[$ability] : false;
     }
 
