@@ -24,8 +24,10 @@ $this->group(
         ]);
 
         $this->post('Forum/Categories/Save/{id?}', ['uses' => 'Forum\CategoriesController@save']);
+
         $this->get('Forum/Permissions', 'Forum\PermissionsController@index')->name('forum.permissions');
-        $this->post('Forum/Permissions', 'Forum\PermissionsController@save');
+        $this->get('Forum/Permissions/Save', 'Forum\PermissionsController@edit')->name('forum.permissions.save');
+        $this->post('Forum/Permissions/Save', 'Forum\PermissionsController@save');
 
         $this->get('User', 'UserController@index')->name('user');
         $this->get('User/Save/{user}', 'UserController@edit')->name('user.save');

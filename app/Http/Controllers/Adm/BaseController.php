@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Controllers\Controller;
 use Lavary\Menu\Menu;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 /**
  * Class BaseController
@@ -75,5 +76,10 @@ class BaseController extends Controller
     protected function getLogViewer()
     {
         return app('log-viewer');
+    }
+
+    protected function flushPermission()
+    {
+        app(Cache::class)->tags('permissions')->flush();
     }
 }

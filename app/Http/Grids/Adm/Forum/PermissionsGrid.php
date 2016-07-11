@@ -3,16 +3,15 @@
 namespace Coyote\Http\Grids\Adm\Forum;
 
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
-use Coyote\Services\Grid\Decorators\Boolean;
-use Coyote\Services\Grid\Decorators\StrLimit;
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\RowActions\EditButton;
 
 class PermissionsGrid extends Grid
 {
+    protected $defaultOrder = [];
+
     public function buildGrid()
     {
-        $group = app(GroupRepository::class);
+        $repository = app(GroupRepository::class);
         $form = $this->getFormBuilder();
 
         $this
@@ -23,12 +22,17 @@ class PermissionsGrid extends Grid
                 'title' => 'Opis'
             ]);
 
-        foreach ($group->all() as $row) {
-            $this->addColumn('group_' . $row->id, [
-                'title' => $row->name,
-//                'render' => function ($group) use ($form) {
-//                    return $form->checkbox('')
-//                }
+        foreach ($repository->all() as $group) {
+            $columnName = 'group_' . $group->id;
+
+            // column for each group
+            $this->addColumn($columnName, [
+                'title' => $group->name,
+                'render' => function ($row) use ($columnName, $form, $group) {
+                    $isChecked = (bool) $row[$columnName];
+                    // transfer 1 or 0 to checkbox
+                    return $form->checkbox('group[' . $group->id . '][' . $row['permission_id'] . ']', 1, $isChecked);
+                }
             ]);
         }
     }

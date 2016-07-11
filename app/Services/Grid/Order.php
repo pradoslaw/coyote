@@ -15,10 +15,10 @@ class Order
     protected $direction;
 
     /**
-     * @param string $column
-     * @param string $direction
+     * @param string|null $column
+     * @param string|null $direction
      */
-    public function __construct($column, $direction)
+    public function __construct($column = null, $direction = null)
     {
         $this->column = $column;
         $this->direction = $direction;

@@ -438,7 +438,9 @@ class Grid
 
     protected function makeDefaultOrder()
     {
-        $this->order = new Order($this->defaultOrder['column'], $this->defaultOrder['direction']);
+        $this->order = $this->defaultOrder
+            ? new Order($this->defaultOrder['column'], $this->defaultOrder['direction'])
+            : new Order();
     }
 
     /**

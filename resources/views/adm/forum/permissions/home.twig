@@ -1,6 +1,41 @@
 {% extends 'adm.base' %}
 {% block title %}Prawa dostępu do forum {{ parent() }}{% endblock %}
 
-{% block panel %}
-    {{ grid(grid) }}
+{% block container %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {{ form_open({url: route('adm.forum.permissions.save'), method: 'get', class: 'form-inline'}) }}
+            <div class="form-group">
+                <label>Wybierz kategorię</label>
+                {{ form_select('id', {'': '--'} + categoriesList, input_get('id'), {'class': 'form-control input-sm'}) }}
+            </div>
+
+            {{ form_submit('Wybierz', {class: 'btn btn-primary btn-sm'}) }}
+            {{ form_close() }}
+        </div>
+    </div>
+
+    {% if grid is defined %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {{ grid(grid) }}
+
+                {{ form_submit('Zapisz', {id: 'btn-save', class: 'btn btn-primary', 'data-submit-state': 'Zapisywanie...'}) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function() {
+            $('#filter-form').append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">');
+
+            $('#btn-save').click(function() {
+                $('#filter-form').attr('method', 'post').submit();
+            });
+        });
+    </script>
 {% endblock %}
