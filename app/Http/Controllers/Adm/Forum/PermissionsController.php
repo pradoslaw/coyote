@@ -56,7 +56,8 @@ class PermissionsController extends BaseController
 
         $data = collect();
 
-        foreach (Permission::all() as $permission) {
+        // ugly way to get only forum permissions
+        foreach (Permission::where('name', 'ilike', 'forum%')->get() as $permission) {
             $row = collect([
                 'name' => $permission->name,
                 'description' => $permission->description,
@@ -106,7 +107,7 @@ class PermissionsController extends BaseController
                     ]);
                 }
             }
-            
+
             $this->flushPermission();
         });
 
