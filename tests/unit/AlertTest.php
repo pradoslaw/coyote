@@ -40,7 +40,7 @@ class AlertTest extends \Codeception\TestCase\Test
 
     private function getUser($id)
     {
-        return $this->tester->grabRecord('users', ['id' => $id]);
+        return $this->tester->grabRecord('Coyote\User', ['id' => $id]);
     }
 
     // tests

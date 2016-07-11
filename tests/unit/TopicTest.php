@@ -52,7 +52,7 @@ class TopicTest extends \Codeception\TestCase\Test
 
     private function userHasPost($expected)
     {
-        $user = $this->tester->grabRecord('users', ['id' => $this->user->id]);
+        $user = $this->tester->grabRecord('Coyote\User', ['id' => $this->user->id]);
         $this->assertEquals($expected, $user->posts);
     }
 
@@ -60,15 +60,15 @@ class TopicTest extends \Codeception\TestCase\Test
     public function testTopicCreationAsAnonymousUser()
     {
         $this->tester->seeRecord('forums', ['name' => $this->forum->name]);
-        $before = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
+        $before = $this->tester->grabRecord('Coyote\Forum', ['id' => $this->forum->id]);
 
         $this->assertEquals(0, $before->topics);
 
         $this->create();
-        $after = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
+        $after = $this->tester->grabRecord('Coyote\Forum', ['id' => $this->forum->id]);
 
         $this->assertEquals(1, $after->topics);
-        $this->assertEquals(0, $this->tester->grabRecord('topics', ['forum_id' => $this->forum->id])->replies);
+        $this->assertEquals(0, $this->tester->grabRecord('Coyote\Topic', ['forum_id' => $this->forum->id])->replies);
     }
 
     public function testTopicCreationAsRegisteredUser()
@@ -82,7 +82,7 @@ class TopicTest extends \Codeception\TestCase\Test
         $topic = $this->create();
         $topic->forceDelete();
 
-        $forum = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
+        $forum = $this->tester->grabRecord('Coyote\Forum', ['id' => $this->forum->id]);
         $this->assertEquals(0, $forum->topics);
         $this->assertEquals(null, $forum->last_post_id);
         $this->tester->dontSeeRecord('posts', ['forum_id' => $this->forum->id]);
@@ -97,10 +97,10 @@ class TopicTest extends \Codeception\TestCase\Test
         $this->tester->seeRecord('topics', ['forum_id' => $topic->forum_id]);
         $topic = $this->tester->grabRecord('topics', ['forum_id' => $topic->forum_id]);
 
-        $this->assertEquals(0, $topic->replies);
-        $this->assertEquals(0, $topic->replies_real);
+        $this->assertEquals(0, $topic['replies']);
+        $this->assertEquals(0, $topic['replies_real']);
 
-        $forum = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
+        $forum = $this->tester->grabRecord('Coyote\Forum', ['id' => $this->forum->id]);
 
         $this->assertEquals(0, $forum->topics);
         $this->assertEquals(0, $forum->posts);
@@ -114,17 +114,17 @@ class TopicTest extends \Codeception\TestCase\Test
     {
         $topic = $this->create();
 
-        $before = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
+        $before = $this->tester->grabRecord('Coyote\Forum', ['id' => $this->forum->id]);
         $topic->delete();
         $topic->restore();
-        $after = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
+        $after = $this->tester->grabRecord('Coyote\Forum', ['id' => $this->forum->id]);
 
         $this->assertEquals($before->topics, $after->topics);
         $this->assertEquals(1, $after->posts);
 
         $this->tester->seeRecord('posts', ['forum_id' => $this->forum->id, 'deleted_at' => null]);
 
-        $forum = $this->tester->grabRecord('forums', ['id' => $this->forum->id]);
+        $forum = $this->tester->grabRecord('Coyote\Forum', ['id' => $this->forum->id]);
 
         $this->assertEquals(1, $forum->topics);
         $this->assertEquals(1, $forum->posts);
@@ -136,14 +136,14 @@ class TopicTest extends \Codeception\TestCase\Test
         $fake = Factory::create();
         $topic = $this->create();
 
-        $this->assertEquals(1, $this->tester->grabRecord('forums', ['id' => $this->forum->id])->topics);
+        $this->assertEquals(1, $this->tester->grabRecord('Coyote\Forum', ['id' => $this->forum->id])->topics);
 
         $newForum = Forum::create(['name' => $fake->name, 'slug' => $fake->name, 'description' => 'Lorem ipsum']);
 
         $topic->forum_id = $newForum->id;
         $topic->save();
 
-        $this->assertEquals(1, $this->tester->grabRecord('forums', ['id' => $newForum->id])->topics);
+        $this->assertEquals(1, $this->tester->grabRecord('Coyote\Forum', ['id' => $newForum->id])->topics);
         $this->tester->dontSeeRecord('posts', ['forum_id' => $this->forum->id]);
     }
 }

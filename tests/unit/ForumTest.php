@@ -30,8 +30,8 @@ class ForumTest extends \Codeception\TestCase\Test
         $this->create();
 
         $this->tester->seeRecord('forums', ['name' => 'A']);
-        $forumA = $this->tester->grabRecord('forums', ['name' => 'A']);
-        $forumB = $this->tester->grabRecord('forums', ['name' => 'B']);
+        $forumA = $this->tester->grabRecord('Coyote\Forum', ['name' => 'A']);
+        $forumB = $this->tester->grabRecord('Coyote\Forum', ['name' => 'B']);
 
         $this->assertEquals($forumA->order + 1, $forumB->order);
     }
@@ -40,9 +40,9 @@ class ForumTest extends \Codeception\TestCase\Test
     {
         $this->create();
 
-        $before = $this->tester->grabRecord('forums', ['name' => 'B']);
+        $before = $this->tester->grabRecord('Coyote\Forum', ['name' => 'B']);
         Forum::where('name', 'A')->delete();
-        $after = $this->tester->grabRecord('forums', ['name' => 'B']);
+        $after = $this->tester->grabRecord('Coyote\Forum', ['name' => 'B']);
 
         $this->assertEquals($before->order - 1, $after->order);
     }

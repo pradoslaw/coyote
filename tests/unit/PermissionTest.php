@@ -43,12 +43,12 @@ class PermissionTest extends \Codeception\TestCase\Test
         $this->testCreationNewGroup();
         $user = User::first();
 
-        $group = $this->tester->grabRecord('groups', ['name' => 'Grupa AA']);
+        $group = $this->tester->grabRecord('Coyote\Group', ['name' => 'Grupa AA']);
         DB::table('group_users')->insert(['user_id' => $user->id, 'group_id' => $group->id]);
 
         $this->testCreationNewPermission();
 
-        $permission = $this->tester->grabRecord('permissions', ['name' => 'do-smth']);
+        $permission = $this->tester->grabRecord('Coyote\Permission', ['name' => 'do-smth']);
         $this->tester->seeRecord('group_permissions', ['group_id' => $group->id, 'permission_id' => $permission->id, 'value' => false]);
     }
 }
