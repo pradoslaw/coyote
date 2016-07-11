@@ -1,7 +1,7 @@
 <?php
 use Coyote\User;
 
-$user = User::whereNull('provider_id')->first();
+$user = User::whereNull('provider_id')->where('is_active', 1)->where('is_blocked', 0)->first();
 
 $I = new FunctionalTester($scenario);
 $I->wantTo('Be logged as ' . $user->name);

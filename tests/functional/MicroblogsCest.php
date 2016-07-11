@@ -19,7 +19,7 @@ class MicroblogsCest
 
     private function grabUser(FunctionalTester $I)
     {
-        return $I->grabRecord('users', ['id' => $this->user->id]);
+        return $I->grabRecord('Coyote\User', ['id' => $this->user->id]);
     }
 
     // tests

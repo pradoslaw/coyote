@@ -69,6 +69,6 @@ class FunctionalTester extends \Codeception\Actor
         ];
         
         $id = $this->haveRecord('forums', array_merge($data, $attributes));
-        return $this->grabRecord('forums', ['id' => $id]);
+        return $this->grabRecord('Coyote\Forum', ['id' => $id]);
     }
 }

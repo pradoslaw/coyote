@@ -7,7 +7,7 @@ $forum = $I->createForum(['name' => 'Admin forum', 'slug' => 'Admin_forum']);
 // tabela nie ma klucza glownego, dlatego tworzymy przez model poniewaz codeception
 // zawsze zaklada ze jest klucz "id"
 \Coyote\Forum\Access::create(['forum_id' => $forum->id, 'group_id' => 1]);
-$row = $I->grabRecord('forum_access', ['forum_id' => $forum->id]);
+$row = $I->grabRecord('Coyote\Forum\Access', ['forum_id' => $forum->id]);
 
 $I->assertEquals(1, $row->group_id);
 

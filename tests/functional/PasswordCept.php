@@ -17,10 +17,12 @@ $I->fillField('email', 'joe@doe.com');
 $I->click('button[type=submit]');
 $I->see('Na podany adres e-mail wysłane zostały dalsze instrukcje');
 
+$I->seeRecord('users', ['name' => 'Joe Doe']);
+
 $I->seeRecord('password_resets', ['email' => 'joe@doe.com']);
 $record = $I->grabRecord('password_resets', ['email' => 'joe@doe.com']);
 
-$I->amOnPage('Password/reset/' . $record->token);
+$I->amOnPage('Password/reset/' . $record['token']);
 $I->fillField('email', 'joe@doe.com');
 $I->fillField('password', '1234');
 $I->fillField('password_confirmation', '1234');
