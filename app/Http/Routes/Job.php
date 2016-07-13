@@ -3,41 +3,61 @@
 /*
  * Modul "Praca"
  */
-Route::group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
-    Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
+/** @var $this \Illuminate\Routing\Router */
+$this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
+    $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
-    Route::get('Submit/{id?}', ['uses' => 'SubmitController@getIndex', 'as' => 'submit', 'middleware' => 'auth']);
-    Route::post('Submit', ['uses' => 'SubmitController@postIndex', 'middleware' => 'auth']);
+    $this->get('Submit/{id?}', ['uses' => 'SubmitController@getIndex', 'as' => 'submit', 'middleware' => 'auth']);
+    $this->post('Submit', ['uses' => 'SubmitController@postIndex', 'middleware' => 'auth']);
 
-    Route::get('Submit/Firm', ['uses' => 'SubmitController@getFirm', 'as' => 'submit.firm', 'middleware' => 'auth']);
-    Route::post('Submit/Firm', ['uses' => 'SubmitController@postFirm', 'middleware' => 'auth']);
-    Route::get('Submit/Firm/Partial/{id?}', ['uses' => 'SubmitController@getFirmPartial', 'as' => 'submit.firm.partial', 'middleware' => 'auth']);
+    $this->get('Submit/Firm', ['uses' => 'SubmitController@getFirm', 'as' => 'submit.firm', 'middleware' => 'auth']);
+    $this->post('Submit/Firm', ['uses' => 'SubmitController@postFirm', 'middleware' => 'auth']);
+    $this->get('Submit/Firm/Partial/{id?}', [
+        'uses' => 'SubmitController@getFirmPartial',
+        'as' => 'submit.firm.partial',
+        'middleware' => 'auth'
+    ]);
 
-    Route::get('Submit/Preview', ['uses' => 'SubmitController@getPreview', 'as' => 'submit.preview', 'middleware' => 'auth']);
-    Route::post('Submit/Save', ['uses' => 'SubmitController@save', 'as' => 'submit.save', 'middleware' => 'auth']);
+    $this->get('Submit/Preview', [
+        'uses' => 'SubmitController@getPreview',
+        'as' => 'submit.preview',
+        'middleware' => 'auth'
+    ]);
 
-    Route::post('Tag/Submit', ['uses' => 'TagController@submit', 'as' => 'submit.tag']);
-    Route::get('Tag/Prompt', ['uses' => 'TagController@prompt', 'as' => 'tag.prompt']);
-    Route::get('Tag/Validate', ['uses' => 'TagController@valid', 'as' => 'tag.validate']);
+    $this->post('Submit/Save', ['uses' => 'SubmitController@save', 'as' => 'submit.save', 'middleware' => 'auth']);
 
-    Route::post('Delete/{job}', ['uses' => 'DeleteController@index', 'as' => 'delete']);
+    $this->post('Tag/Submit', ['uses' => 'TagController@submit', 'as' => 'submit.tag']);
+    $this->get('Tag/Prompt', ['uses' => 'TagController@prompt', 'as' => 'tag.prompt']);
+    $this->get('Tag/Validate', ['uses' => 'TagController@valid', 'as' => 'tag.validate']);
 
-    Route::get('Technologia/{name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
-    Route::get('Zdalna', ['uses' => 'HomeController@remote', 'as' => 'remote']);
-    Route::get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city']);
-    Route::get('Firma/{name}', ['uses' => 'HomeController@firm', 'as' => 'firm']);
+    $this->post('Delete/{job}', ['uses' => 'DeleteController@index', 'as' => 'delete']);
 
-    Route::get('{id}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
+    $this->get('Technologia/{name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
+    $this->get('Zdalna', ['uses' => 'HomeController@remote', 'as' => 'remote']);
+    $this->get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city']);
+    $this->get('Firma/{name}', ['uses' => 'HomeController@firm', 'as' => 'firm']);
 
-    Route::post('Subscribe/{job}', ['uses' => 'SubscribeController@index', 'as' => 'subscribe', 'middleware' => 'auth']);
-    Route::post('Preferences', ['uses' => 'PreferencesController@index', 'as' => 'preferences']);
+    $this->get('{id}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
 
-    Route::get('Application/{job}', ['uses' => 'ApplicationController@submit', 'as' => 'candidate']);
-    Route::post('Application/{job}', ['uses' => 'ApplicationController@save', 'as' => 'candidate']);
+    $this->post('Subscribe/{job}', [
+        'uses' => 'SubscribeController@index',
+        'as' => 'subscribe',
+        'middleware' => 'auth'
+    ]);
 
-    Route::get('Ad', ['uses' => 'AdController@index', 'as' => 'ad']);
+    $this->post('Preferences', ['uses' => 'PreferencesController@index', 'as' => 'preferences']);
+
+    $this->get('Application/{job}', ['uses' => 'ApplicationController@submit', 'as' => 'candidate']);
+    $this->post('Application/{job}', ['uses' => 'ApplicationController@save', 'as' => 'candidate']);
+
+    // wyswietlanie promownych ofert pracy
+    $this->get('Ad', ['uses' => 'AdController@index', 'as' => 'ad']);
+
+    // move job offer
+    $this->get('Move/{job}', ['uses' => 'MoveController@index', 'as' => 'move', 'middleware' => 'can:job-delete']);
+    $this->post('Move/{job}', ['uses' => 'MoveController@move', 'middleware' => 'can:job-delete']);
 });
 
-Route::group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {
-    Route::post('Logo', ['uses' => 'SubmitController@logo', 'as' => 'logo']);
+$this->group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {
+    $this->post('Logo', ['uses' => 'SubmitController@logo', 'as' => 'logo']);
 });

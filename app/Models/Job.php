@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $recruitment
  * @property string $requirements
  * @property string $email
+ * @property \Coyote\User $user
  */
 class Job extends Model
 {
@@ -272,6 +273,14 @@ class Job extends Model
     public function applications()
     {
         return $this->hasMany('Coyote\Job\Application');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user()
+    {
+        return $this->belongsTo('Coyote\User');
     }
 
     /**

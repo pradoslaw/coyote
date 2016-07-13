@@ -30,9 +30,9 @@
         </li>
     {% endif %}
 
-    {% if can('job-delete') %}
+    {% if can('delete', job) %}
         <li>
-            <a class="btn-move" href="javascript:"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
+            <a class="btn-move" href="{{ route('job.move', [job.id]) }}"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
         </li>
     {% endif %}
 
