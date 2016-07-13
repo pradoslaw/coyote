@@ -7,6 +7,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\PollRepositoryInterface as PollRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Illuminate\Http\Request;
 use Coyote\Job;
@@ -31,6 +32,10 @@ class MoveController extends Controller
         $this->post = $post;
     }
 
+    /**
+     * @param Job $job
+     * @return $this
+     */
     public function index(Job $job)
     {
         $forum = app(ForumRepository::class);
@@ -41,7 +46,8 @@ class MoveController extends Controller
         return $this->view('job.move')->with([
             'forumList'         => $forum->forumList('id'),
             'preferred'         => $forum->findBy('name', 'Ogłoszenia drobne', ['id']),
-            'job'               => $job
+            'job'               => $job,
+            'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
         ]);
     }
 
@@ -67,12 +73,21 @@ class MoveController extends Controller
 
         $this->transaction(function () use ($request, $job, $forum, $topic, $post) {
             $poll = app(PollRepository::class)->newInstance();
+            /** @var StreamRepositoryInterface $stream */
+            $stream = app(StreamRepositoryInterface::class);
 
+            $log = $stream->findWhere(['object.objectType' => 'job', 'object.id' => $job->id, 'verb' => 'create'])->first();
             $this->post->save($request, $job->user, $forum, $topic, $post, $poll);
 
             if ($job->user_id !== $job->user->id) {
                 $post->subscribers()->create(['user_id' => $job->user_id]);
             }
+
+            // ugly fix: set correct IP according to job offer's author
+            $ip = ['ip' => $log->ip, 'browser' => $log->browser];
+
+            $post->update($ip);
+            $post->logs()->first()->update($ip);
 
             $job->delete();
             event(new JobWasDeleted($job));
