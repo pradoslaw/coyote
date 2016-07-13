@@ -114,7 +114,7 @@ class Grid
 
         $this->makeDefaultOrder();
     }
-
+    
     public function buildGrid()
     {
         //

@@ -7,11 +7,26 @@ use Coyote\Services\Grid\Grid;
 
 class PermissionsGrid extends Grid
 {
+    /**
+     * @var array
+     */
     protected $defaultOrder = [];
+
+    /**
+     * @var GroupRepository
+     */
+    protected $group;
+
+    /**
+     * @param GroupRepository $group
+     */
+    public function boot(GroupRepository $group)
+    {
+        $this->group = $group;
+    }
 
     public function buildGrid()
     {
-        $repository = app(GroupRepository::class);
         $form = $this->getFormBuilder();
 
         $this
@@ -22,7 +37,7 @@ class PermissionsGrid extends Grid
                 'title' => 'Opis'
             ]);
 
-        foreach ($repository->all() as $group) {
+        foreach ($this->group->all() as $group) {
             $columnName = 'group_' . $group->id;
 
             // column for each group

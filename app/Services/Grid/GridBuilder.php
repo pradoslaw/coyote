@@ -33,6 +33,12 @@ class GridBuilder
 
         /** @var Grid $grid */
         $grid = $this->container->make($gridClass);
+
+        if (method_exists($grid, 'boot')) {
+            // call method boot() if exists
+            $this->container->call([&$grid, 'boot']);
+        }
+
         $grid->buildGrid();
 
         return $grid;
