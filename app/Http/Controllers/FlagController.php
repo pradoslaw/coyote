@@ -77,6 +77,7 @@ class FlagController extends Controller
 
     /**
      * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function delete($id)
     {
@@ -85,7 +86,7 @@ class FlagController extends Controller
 
         // @todo Jezeli raportowany jest post na forum to sprawdzane jest globalne uprawnienie danego
         // uzytkownika. Oznacza to, ze lokalni moderatorzy nie beda mogli czytac raportow
-        if ($this->getGateFactory()->denies($flag->metadata->permission)) {
+        if (!empty($flag->metadata->permission) && $this->getGateFactory()->denies($flag->metadata->permission)) {
             return response('Unauthorized.', 401);
         }
 
