@@ -1,0 +1,45 @@
+{% extends 'adm.base' %}
+{% block title %}Dziennik zdarzeń {{ parent() }}{% endblock %}
+
+{% block container %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Formularz wyszukiwania</div>
+        <div class="panel-body">
+            {{ form(form) }}
+        </div>
+    </div>
+
+    {% if paginator.items() > 0 %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {{ paginator.render()|raw }}
+
+                <div class="stream">
+                    {% for activity in paginator %}
+                        <div class="media">
+                            <div class="media-left hidden-xs">
+                                <a href="{{ activity.actor.url }}">
+                                    <img class="media-object img-thumbnail" src="{{ user_photo(activity.actor.image) }}" style="width: 38px; height: 38px;" alt="">
+                                </a>
+                            </div>
+
+                            <div class="media-body">
+                                <i class="fa fa-laptop pull-right bubble" title="{{ activity.ip }}"></i>
+                                <i class="fa fa-globe pull-right bubble" title="{{ activity.browser }}"></i>
+
+                                <p title="{{ activity.headline|striptags }}">{{ activity.headline|raw }}</p>
+                                <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
+
+                                {% if activity.excerpt %}
+                                    <div class="well well-sm">{{ activity.excerpt|raw }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {{ paginator.render()|raw }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

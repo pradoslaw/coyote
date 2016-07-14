@@ -2,6 +2,8 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Http\Forms\Adm\StreamFilterForm;
+
 interface StreamRepositoryInterface extends RepositoryInterface
 {
     /**
@@ -31,4 +33,10 @@ interface StreamRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function takeForTopic($topicId);
+
+    /**
+     * @param StreamFilterForm $form
+     * @return mixed
+     */
+    public function filter(StreamFilterForm $form);
 }

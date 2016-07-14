@@ -31,16 +31,25 @@ body.fixed-top {
 
 // Login forum
 // --------------------
+
 @import "adm/login";
 
 // Sidebar
 // ----------------------
+
 @import "adm/sidebar";
 
 // Table (sorting)
 // --------------------
+
 @import "adm/table";
 
 // Tabela z logami laravela
 // ---------------------------------------------------------
+
 @import "adm/log";
+
+// Stream activity
+// -----------------------------
+
+@import "../components/stream";

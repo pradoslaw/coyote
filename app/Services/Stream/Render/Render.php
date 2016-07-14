@@ -9,6 +9,9 @@ use Coyote\Stream as Model;
  */
 abstract class Render
 {
+    /**
+     * @var Model
+     */
     protected $stream;
 
     /**
@@ -24,7 +27,7 @@ abstract class Render
      */
     public function render()
     {
-        $translator = app('translator');
+        $translator = trans();
         $id = 'stream.headline.' . $this->stream['object.objectType'];
 
         if ($translator->has($id . ':' . $this->stream['verb'])) {

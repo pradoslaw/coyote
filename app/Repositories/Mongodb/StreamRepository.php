@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Mongodb;
 
+use Coyote\Http\Forms\Adm\StreamFilterForm;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Repositories\Eloquent\Repository;
 
@@ -88,6 +89,31 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
             }, 'or')
             ->orderBy('_id', 'DESC')
             ->paginate();
+    }
+
+    /**
+     * @param StreamFilterForm $form
+     * @return mixed
+     */
+    public function filter(StreamFilterForm $form)
+    {
+        $sql = $this->model;
+
+        foreach ($form->getFields() as $field) {
+            $value = $field->getValue();
+
+            if (!empty($value)) {
+                if (is_string($value)) {
+                    $sql->ilike($field->getName(), $value);
+                } elseif ('created_at' == $field->getName()) {
+                    $sql->where('created_at', '>=', new \DateTime('-' . $value . ' seconds'));
+                } else {
+                    $sql->where($field->getName(), $value);
+                }
+            }
+        }
+
+        return $sql->orderBy('_id', 'DESC')->paginate();
     }
 
     /**

@@ -45,6 +45,10 @@ class Stream
         $result = [];
 
         foreach ($collection as $index => $row) {
+            if (empty($row['object.objectType'])) {
+                $row['object.objectType'] = 'object';
+            }
+            
             $class = __NAMESPACE__ . '\\Render\\' . ucfirst(camel_case($row['object.objectType']));
             $decorator = new $class($row);
 
