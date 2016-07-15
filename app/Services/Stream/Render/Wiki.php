@@ -17,10 +17,6 @@ class Wiki extends Render
      */
     protected function title()
     {
-        return link_to(
-            $this->stream['object.url'],
-            $this->stream['object.displayName'],
-            ['title' => $this->stream['object.displayName']]
-        );
+        return $this->objectName();
     }
 }

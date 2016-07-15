@@ -22,11 +22,7 @@ class Topic extends Render
      */
     protected function object()
     {
-        return link_to(
-            $this->stream['object.url'],
-            excerpt($this->stream['object.displayName']),
-            ['title' => $this->stream['object.displayName']]
-        );
+        return $this->objectName();
     }
 
     /**

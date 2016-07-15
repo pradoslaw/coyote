@@ -118,4 +118,16 @@ abstract class Render
             str_limit($this->stream['target.displayName'], 48)
         );
     }
+
+    /**
+     * @return string
+     */
+    protected function objectName()
+    {
+        return link_to(
+            $this->stream['object.url'],
+            $this->stream['object.displayName'],
+            ['title' => $this->stream['object.displayName']]
+        );
+    }
 }
