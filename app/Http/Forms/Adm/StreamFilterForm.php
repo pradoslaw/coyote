@@ -2,13 +2,15 @@
 
 namespace Coyote\Http\Forms\Adm;
 
+use Coyote\Http\Forms\EventsTrait;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\FormBuilder\Form;
-use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 
 class StreamFilterForm extends Form implements ValidatesWhenSubmitted
 {
+    use EventsTrait;
+
     const HOUR          = 60 * 60;
     const DAY           = self::HOUR * 24;
     const WEEK          = self::DAY * 7;
@@ -25,23 +27,19 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
     ];
 
     /**
-     * @param UserRepository $userRepository
+     * @var UserRepository
      */
-    public function __construct(UserRepository $userRepository)
+    protected $repository;
+
+    /**
+     * @param UserRepository $repository
+     */
+    public function __construct(UserRepository $repository)
     {
         parent::__construct();
 
-        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) use ($userRepository) {
-            $username = $form->get('actor.id')->getValue();
-            $form->add('user_id', 'hidden');
-
-            if ($username) {
-                /** @var \Coyote\User $user */
-                $user = $userRepository->findByName($username);
-
-                $form->get('user_id')->setValue($user->id);
-            }
-        });
+        $this->repository = $repository;
+        $this->transformUserNameToId('actor.id');
     }
 
     public function buildForm()

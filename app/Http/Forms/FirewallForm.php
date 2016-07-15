@@ -11,31 +11,29 @@ use Illuminate\Http\Request;
 
 class FirewallForm extends Form implements ValidatesWhenSubmitted
 {
+    use EventsTrait;
+
+    /**
+     * @var UserRepository
+     */
+    protected $repository;
+
     /**
      * @param Request $request
-     * @param UserRepository $userRepository
+     * @param UserRepository $repository
      */
-    public function __construct(Request $request, UserRepository $userRepository)
+    public function __construct(Request $request, UserRepository $repository)
     {
         parent::__construct();
+        $this->repository = $repository;
 
-        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) use ($userRepository) {
-            $username = $form->get('name')->getValue();
-            $form->add('user_id', 'hidden');
+        $this->transformUserNameToId('name');
 
-            if ($username) {
-                /** @var \Coyote\User $user */
-                $user = $userRepository->findByName($username);
-
-                $form->get('user_id')->setValue($user->id);
-            }
-        });
-
-        $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) use ($request, $userRepository) {
+        $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) use ($request) {
             $userId = $this->data->user_id ?? $request->input('user');
 
             if (!empty($userId)) {
-                $user = $userRepository->find($userId, ['name']);
+                $user = $this->repository->find($userId, ['name']);
 
                 if (!empty($user)) {
                     $form->get('name')->setValue($user->name);
