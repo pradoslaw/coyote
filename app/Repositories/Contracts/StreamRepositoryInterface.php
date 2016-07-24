@@ -2,7 +2,7 @@
 
 namespace Coyote\Repositories\Contracts;
 
-use Coyote\Http\Forms\Adm\StreamFilterForm;
+use Coyote\Http\Forms\StreamFilterForm;
 
 interface StreamRepositoryInterface extends RepositoryInterface
 {

@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Factories\StreamFactory;
-use Coyote\Http\Forms\Adm\StreamFilterForm;
+use Coyote\Http\Forms\StreamFilterForm;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 
 class StreamController extends BaseController
@@ -31,17 +31,8 @@ class StreamController extends BaseController
      */
     public function index()
     {
-        return $this->view('adm.stream', [
-            'form' => $this->getForm()
-        ]);
-    }
+        $form = $this->getForm();
 
-    /**
-     * @param StreamFilterForm $form
-     * @return \Illuminate\View\View
-     */
-    public function filter(StreamFilterForm $form)
-    {
         $paginator = $this->stream->filter($form);
         $this->getStreamFactory()->decorate($paginator->items());
 
@@ -52,12 +43,12 @@ class StreamController extends BaseController
     }
 
     /**
-     * @return \Coyote\Services\FormBuilder\Form
+     * @return \Coyote\Http\Forms\StreamFilterForm
      */
     private function getForm()
     {
         return $this->createForm(StreamFilterForm::class, null, [
-            'url' => route('adm.stream.filter')
+            'url' => route('adm.stream')
         ]);
     }
 }

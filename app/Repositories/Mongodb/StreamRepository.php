@@ -2,7 +2,7 @@
 
 namespace Coyote\Repositories\Mongodb;
 
-use Coyote\Http\Forms\Adm\StreamFilterForm;
+use Coyote\Http\Forms\StreamFilterForm;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Repositories\Eloquent\Repository;
 

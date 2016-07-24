@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Forms\Adm;
+namespace Coyote\Http\Forms;
 
 use Coyote\Http\Forms\EventsTrait;
 use Coyote\Repositories\Eloquent\UserRepository;

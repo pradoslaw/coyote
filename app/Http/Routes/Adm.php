@@ -55,7 +55,6 @@ $this->group(
         $this->get('Cache', 'CacheController@index')->name('cache');
 
         $this->get('Stream', 'StreamController@index')->name('stream');
-        $this->get('Stream/Filter', 'StreamController@filter')->name('stream.filter');
 
         $this->get('Flag', 'FlagController@index')->name('flag');
         $this->get('Log', 'LogController@index')->name('log');
