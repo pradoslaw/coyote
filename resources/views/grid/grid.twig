@@ -1,36 +1,57 @@
 <div class="grid">
 
-    {{ pagination|raw }}
+    {% block header %}
+        {% if add_url %}
+            <div class="pull-left">
+                <a class="btn btn-default btn-add" href="{{ add_url }}">
+                    <i class="fa fa-plus"></i>
+                    {{ add_label|default('Nowy') }}
+                </a>
+            </div>
 
-    <form method="get" id="filter-form">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    {% for column in columns %}
-                        {{ grid_column(column) }}
-                    {% endfor %}
-                </tr>
-                {% if has_filters %}
+            <div class="pull-right">{{ pagination|raw }}</div>
+        {% else %}
+            {{ pagination|raw }}
+        {% endif %}
+    {% endblock %}
+
+    {% block table %}
+        <form method="get" id="filter-form">
+            <table class="table table-striped">
+                <thead>
                     <tr>
                         {% for column in columns %}
-                            {{ grid_filter(column) }}
+                            {{ grid_column(column) }}
                         {% endfor %}
                     </tr>
-                {% endif %}
-            </thead>
-            <tbody>
-                {% for row in rows %}
-                    {{ grid_row(row) }}
-                {% else %}
-                    <tr>
-                        {{ grid_no_data(grid) }}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    {% if has_filters %}
+                        <tr>
+                            {% for column in columns %}
+                                {{ grid_filter(column) }}
+                            {% endfor %}
+                        </tr>
+                    {% endif %}
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        {{ grid_row(row) }}
+                    {% else %}
+                        <tr>
+                            {{ grid_no_data(grid) }}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
-        <input type="submit" style="visibility: hidden;" />
-    </form>
+            <input type="submit" style="visibility: hidden; height: 1px" />
+        </form>
+    {% endblock %}
 
-    {{ pagination|raw }}
+    {% block footer %}
+        {% if add_url %}
+            <div class="pull-right">{{ pagination|raw }}</div>
+        {% else %}
+            {{ pagination|raw }}
+        {% endif %}
+    {% endblock %}
 </div>

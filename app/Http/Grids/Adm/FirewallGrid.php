@@ -58,6 +58,9 @@ class FirewallGrid extends Grid
             ])
             ->addRowAction(new EditButton(function ($data) {
                 return route('adm.firewall.save', [$data->id]);
-            }));
+            }))
+            ->setData([
+                'add_url' => route('adm.firewall.save')
+            ]);
     }
 }

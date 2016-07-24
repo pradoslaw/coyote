@@ -37,6 +37,10 @@ class GroupsGrid extends Grid
             ])
             ->addRowAction(new EditButton(function ($group) {
                 return route('adm.groups.save', [$group->id]);
-            }));
+            }))
+            ->setData([
+                'add_url' => route('adm.groups.save'),
+                'add_label' => 'Nowa grupa'
+            ]);
     }
 }

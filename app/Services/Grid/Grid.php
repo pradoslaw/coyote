@@ -96,6 +96,11 @@ class Grid
     protected $eachCallback;
 
     /**
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * @param Request $request
      * @param ValidationFactory $validator
      * @param HtmlBuilder $htmlBuilder
@@ -276,6 +281,17 @@ class Grid
     }
 
     /**
+     * @param array $data
+     * @return $this
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+        
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function render()
@@ -293,7 +309,7 @@ class Grid
             'pagination'    => $paginator,
             'grid'          => $this,
             'has_filters'   => $this->hasFilters()
-        ]);
+        ], $this->data);
     }
 
     /**
@@ -312,22 +328,11 @@ class Grid
 
         return $hasFilters;
     }
-
-    /**
-     * @param Rows $rows
-     * @return LengthAwarePaginator
-     */
-    protected function getPaginator(Rows $rows)
-    {
-        return new LengthAwarePaginator($rows, $this->total, $this->perPage, $this->resolveCurrentPage(), [
-            'path' => $this->resolveCurrentPath(),
-        ]);
-    }
-
+    
     /**
      * @return Rows
      */
-    protected function getRows()
+    public function getRows()
     {
         if (empty($this->source)) {
             throw new \InvalidArgumentException('You MUST set the data grid source by calling setSource() method.');
@@ -377,6 +382,17 @@ class Grid
         $this->columns[] = $actions;
 
         return $this->rows;
+    }
+
+    /**
+     * @param Rows $rows
+     * @return LengthAwarePaginator
+     */
+    protected function getPaginator(Rows $rows)
+    {
+        return new LengthAwarePaginator($rows, $this->total, $this->perPage, $this->resolveCurrentPage(), [
+            'path' => $this->resolveCurrentPath(),
+        ]);
     }
 
     /**

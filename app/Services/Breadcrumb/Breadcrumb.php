@@ -34,7 +34,7 @@ class Breadcrumb implements \Countable
             foreach ($name as $key => $value) {
                 $this->push($key, $value);
             }
-        } else {
+        } elseif (is_string($name)) { // we don't want to add empty value
             $this->breadcrumbs[] = ['name' => $name, 'url' => $url];
         }
     }

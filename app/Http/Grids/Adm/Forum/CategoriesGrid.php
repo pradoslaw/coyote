@@ -45,6 +45,10 @@ class CategoriesGrid extends Grid
             ->addRowAction(new EditButton(function ($forum) {
                 /** @var \Coyote\Forum $forum */
                 return route('adm.forum.categories.save', [$forum->id]);
-            }));
+            }))
+            ->setData([
+                'add_url' => route('adm.forum.categories.save'),
+                'add_label' => 'Nowa kategoria'
+            ]);
     }
 }

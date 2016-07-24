@@ -34,3 +34,17 @@
     content: $fa-var-sort-desc;
   }
 }
+
+.grid {
+  table {
+    margin-bottom: 0;
+  }
+
+  .pagination {
+    margin: 8px 0;
+  }
+
+  .btn-add {
+    margin-bottom: 8px;
+  }
+}
