@@ -42,6 +42,7 @@ return [
         'job'           => ':actor :verb :object o pracę: :offer',
         'flag'          => ':actor :verb :object',
         'wiki'          => ':actor :verb :object :title',
-        'person'        => ':actor :verb :object'
+        'person'        => ':actor :verb :object',
+        'firewall'      => ':actor :verb :object'
     ]
 ];

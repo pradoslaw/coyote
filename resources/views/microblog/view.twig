@@ -1,13 +1,13 @@
-{% extends 'layout.twig' %}
+{% extends 'layout' %}
 {% block title %}{{ excerpt }}{{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
-{% import 'components/modals.twig' as modal %}
+{% import 'components.forms' as forms %}
+{% import 'components.modals' as modal %}
 
 {% block container %}
     <div id="microblog" class="row">
         <div class="col-md-12">
-            {% include "microblog/microblog.twig" %}
+            {% include "microblog.microblog" %}
         </div>
     </div>
 

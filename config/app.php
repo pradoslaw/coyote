@@ -208,8 +208,8 @@ return [
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         // Pakiet do budowania menu
         Lavary\Menu\ServiceProvider::class,
-
-
+        // Parsowanie user agent
+        Jenssegers\Agent\AgentServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------

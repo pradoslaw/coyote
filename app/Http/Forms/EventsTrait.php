@@ -7,17 +7,17 @@ use Coyote\Services\FormBuilder\Form;
 
 trait EventsTrait
 {
-    protected function transformUserNameToId($field)
+    protected function transformUserNameToId($from, $to = 'user_id')
     {
-        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) use ($field) {
-            $username = $form->get($field)->getValue();
-            $form->add('user_id', 'hidden');
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) use ($from, $to) {
+            $username = $form->get($from)->getValue();
+            $form->add($to, 'hidden');
 
             if ($username) {
                 /** @var \Coyote\User $user */
                 $user = $this->repository->findByName($username);
 
-                $form->get('user_id')->setValue($user->id);
+                $form->get($to)->setValue($user->id);
             }
         });
     }

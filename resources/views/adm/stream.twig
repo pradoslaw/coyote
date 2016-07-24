@@ -30,11 +30,16 @@
                                 <p title="{{ activity.headline|striptags }}">{{ activity.headline|raw }}</p>
                                 <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
 
+                                <small class="text-muted" title="{{ activity.ip }}">&bullet; {{ activity.ip }}</small>
+                                <small class="text-muted" title="{{ activity.browser }}">&bullet; {{ activity.agent.browser }}, {{ activity.agent.platform }}</small>
+
                                 {% if activity.excerpt %}
                                     <div class="well well-sm">{{ activity.excerpt|raw }}</div>
                                 {% endif %}
                             </div>
                         </div>
+                    {% else %}
+                        <span class="empty-result">Brak rekordów spełniających Twoje kryteria.</span>
                     {% endfor %}
                 </div>
 
@@ -42,4 +47,17 @@
             </div>
         </div>
     {% endif %}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ cdn('js/auto-complete.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('input[name="actor.id"]').autocomplete({
+                url: '{{ route('user.prompt') }}'
+            });
+        });
+    </script>
 {% endblock %}

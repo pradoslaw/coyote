@@ -3,6 +3,7 @@
 namespace Coyote\Services\Stream\Render;
 
 use Coyote\Stream as Model;
+use Jenssegers\Agent\Agent;
 
 /**
  * Class Render
@@ -27,6 +28,9 @@ abstract class Render
      */
     public function render()
     {
+        $agent = new Agent();
+        $agent->setUserAgent($this->stream['browser']);
+        
         $translator = trans();
         $id = 'stream.headline.' . $this->stream['object.objectType'];
 
@@ -39,6 +43,7 @@ abstract class Render
 
         $this->stream['headline'] = $translator->trans($id, $parameters);
         $this->stream['excerpt'] = $this->excerpt();
+        $this->stream['agent'] = $agent;
 
         return $this->stream;
     }

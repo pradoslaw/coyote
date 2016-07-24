@@ -102,13 +102,17 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
         foreach ($form->getFields() as $field) {
             $value = $field->getValue();
 
+            if ($field->getName() == 'user_name') { // I know - it sucks
+                continue;
+            }
+
             if (!empty($value)) {
-                if (is_string($value)) {
-                    $sql->ilike($field->getName(), $value);
-                } elseif ('created_at' == $field->getName()) {
-                    $sql->where('created_at', '>=', new \DateTime('-' . $value . ' seconds'));
+                if ('created_at' == $field->getName()) {
+                    $sql = $sql->where('created_at', '>=', new \DateTime('-' . $value . ' seconds'));
+                } elseif (is_string($value)) {
+                    $sql = $sql->where($field->getName(), 'like', str_replace('*', '%', $value));
                 } else {
-                    $sql->where($field->getName(), $value);
+                    $sql = $sql->where($field->getName(), $value);
                 }
             }
         }

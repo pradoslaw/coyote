@@ -39,7 +39,7 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
         parent::__construct();
 
         $this->repository = $repository;
-        $this->transformUserNameToId('actor.id');
+        $this->transformUserNameToId('user_name', 'actor.id');
     }
 
     public function buildForm()
@@ -52,7 +52,7 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Przeglądarka',
                 'help' => 'Użyj znaku * aby wyszukiwać po fragmencie tekstu.'
             ])
-            ->add('actor.id', 'text', [
+            ->add('user_name', 'text', [
                 'label' => 'Użytkownik'
             ])
             ->add('created_at', 'select', [

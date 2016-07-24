@@ -30,11 +30,9 @@
         "laravelcollective/html": "5.2.*",
         "twig/extensions": "^1.3",
         "barryvdh/laravel-debugbar": "^2.0",
-        "codeception/codeception": "*",
         "laravel/socialite": "^2.0",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.0",
-        "fzaninotto/faker": "^1.5",
         "erusev/parsedown-extra": "^0.7.0",
         "jenssegers/mongodb": "^3.0",
         "folklore/image": "0.3.*",
@@ -43,9 +41,12 @@
         "elasticsearch/elasticsearch": "~2.0",
         "guzzlehttp/guzzle": "^6.2",
         "adam-boduch/geshi": "dev-master",
-        "chrisboulton/php-diff": "dev-master"
+        "chrisboulton/php-diff": "dev-master",
+        "jenssegers/agent": "^2.3"
     },
     "require-dev": {
+        "fzaninotto/faker": "^1.5",
+        "codeception/codeception": "*",
         "squizlabs/php_codesniffer": "2.*",
         "phpmd/phpmd" : "@stable",
         "symfony/css-selector": "2.8.*|3.0.*",
