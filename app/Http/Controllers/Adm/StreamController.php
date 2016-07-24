@@ -23,7 +23,7 @@ class StreamController extends BaseController
         parent::__construct();
 
         $this->stream = $stream;
-        $this->breadcrumb->push('Dziennik zdarzeń');
+        $this->breadcrumb->push('Dziennik zdarzeń', route('adm.stream'));
     }
 
     /**

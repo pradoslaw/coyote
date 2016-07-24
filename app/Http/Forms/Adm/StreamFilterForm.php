@@ -53,7 +53,10 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
                 'help' => 'Użyj znaku * aby wyszukiwać po fragmencie tekstu.'
             ])
             ->add('user_name', 'text', [
-                'label' => 'Użytkownik'
+                'label' => 'Użytkownik',
+                'attr' => [
+                    'autocomplete' => 'off'
+                ]
             ])
             ->add('created_at', 'select', [
                 'label' => 'Data i czas',

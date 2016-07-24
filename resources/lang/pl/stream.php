@@ -15,8 +15,8 @@ return [
     'lock' => 'zablokował',
     'unlock' => 'odblokował',
     'copy' => 'skopiował',
-    'login' => 'zalogował',
-    'logout' => 'wylogował',
+    'login' => 'zalogował się',
+    'logout' => 'wylogował się',
     'unlink' => 'usunął kopie',
     'merge' => 'połączył',
 
@@ -43,6 +43,7 @@ return [
         'flag'          => ':actor :verb :object',
         'wiki'          => ':actor :verb :object :title',
         'person'        => ':actor :verb :object',
-        'firewall'      => ':actor :verb :object'
+        'firewall'      => ':actor :verb :object',
+        'object'        => ':actor :verb'
     ]
 ];

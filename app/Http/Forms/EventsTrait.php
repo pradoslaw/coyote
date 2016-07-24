@@ -17,7 +17,9 @@ trait EventsTrait
                 /** @var \Coyote\User $user */
                 $user = $this->repository->findByName($username);
 
-                $form->get($to)->setValue($user->id);
+                if ($user) {
+                    $form->get($to)->setValue($user->id);
+                }
             }
         });
     }
