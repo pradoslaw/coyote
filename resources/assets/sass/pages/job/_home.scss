@@ -284,21 +284,6 @@ $header-footer-border: #c7c7c7;
       background-color: $unread-bg;
     }
   }
-
-  .empty-result {
-    background: url("/img/sad-face.png") no-repeat top left;
-    padding-left: 70px;
-
-    p {
-      margin-top: 9px;
-      font-size: 14px;
-      text-align: center;
-
-      a {
-        text-decoration: underline;
-      }
-    }
-  }
 }
 
 #clients {

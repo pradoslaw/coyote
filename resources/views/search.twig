@@ -3,24 +3,6 @@
 {% block title %}Szukaj{{ parent() }}{% endblock %}
 
 {% block container %}
-    {#<div class="row">#}
-        {#<div class="col-sm-4">#}
-
-        {#</div>#}
-
-        {#<div class="col-sm-8">#}
-            {#{{ form_open({url: route('search')}) }}#}
-                {#<div class="input-group">#}
-                    {#<input type="text" class="form-control">#}
-                    {#{{ form_text('q', input_old('q'), {class: 'form-control'}) }}#}
-                    {#<span class="input-group-btn">#}
-                        {#<button class="btn btn-default" type="button">Go!</button>#}
-                        {#{{ form_button('Szukaj', {class: 'btn btn-default'}) }}#}
-                    {#</span>#}
-                {#</div>#}
-            {#{{ form_close() }}#}
-        {#</div>#}
-    {#</div>#}
     <div class="row">
         <div id="box-search" class="col-md-7 col-sm-12 col-xs-12">
             {{ form_open({method: 'GET', role: 'form', url: route('search'), class: 'form-inline outline', id: 'box-search'}) }}
@@ -37,6 +19,23 @@
                 </button>
             </div>
             {{ form_close() }}
+        </div>
+    </div>
+
+    <div class="row">
+        <ul class="nav nav-tabs">
+            {% for item in tabs.roots() %}
+                <li {{ forms.attr(item.attr) }}>
+                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="well well-sm empty-result">
+            <p>
+                Nie znaleźliśmy postów, które spełniają Twoje kryteria.<br>
+                <a href="{{ route('forum.home') }}">Zobacz wszystkie posty</a>, a być może znajdziesz pasującą dla Ciebie!
+            </p>
         </div>
     </div>
 {% endblock %}

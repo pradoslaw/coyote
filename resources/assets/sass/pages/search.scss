@@ -4,3 +4,7 @@
 @import "../vendor/font-awesome/variables";
 @import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
 @import "../components/search";
+
+.well.empty-result {
+  margin-top: 20px;
+}

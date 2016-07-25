@@ -54,3 +54,24 @@
     @include text-overflow();
   }
 }
+
+// Element wyswietlany w wyszukiwarce w przypadku braku wynikow.
+// ---------------------------------------------------------------
+
+.empty-result {
+  // selektory sa tutaj rozbite specjalnie
+  background-image: url("/img/sad-face.png");
+  background-repeat: no-repeat;
+  background-position: top left;
+  padding-left: 70px;
+
+  p {
+    margin-top: 9px;
+    font-size: 14px;
+    text-align: center;
+
+    a {
+      text-decoration: underline;
+    }
+  }
+}
