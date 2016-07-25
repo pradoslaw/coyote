@@ -130,7 +130,8 @@ elixir(function (mix) {
         .sass('pages/job.scss')
         .sass('pages/errors.scss')
         .sass('pages/adm.scss')
-        .sass('pages/pastebin.scss');
+        .sass('pages/pastebin.scss')
+        .sass('pages/search.scss');
 
     mix.copy('resources/assets/bower/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css', 'public/css/datepicker.css');
 
@@ -164,7 +165,8 @@ elixir(function (mix) {
         'css/errors.css',
         'css/pastebin.css',
         'css/adm.css',
-        'css/help.css'
+        'css/help.css',
+        'css/search.css'
     ]);
 });
 

@@ -11,11 +11,14 @@
 |
 */
 
-Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
+/** @var $this \Illuminate\Routing\Router */
+$this->get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 
-Route::get('Flag', ['uses' => 'FlagController@index', 'as' => 'flag', 'middleware' => 'auth']);
-Route::post('Flag', ['uses' => 'FlagController@save', 'middleware' => 'auth']);
-Route::post('Flag/Delete/{id}', ['uses' => 'FlagController@delete', 'middleware' => 'auth', 'as' => 'flag.delete']);
-Route::get('Flag/Delete/{id}', ['uses' => 'FlagController@modal', 'middleware' => 'auth', 'as' => 'flag.modal']);
+$this->get('Flag', ['uses' => 'FlagController@index', 'as' => 'flag', 'middleware' => 'auth']);
+$this->post('Flag', ['uses' => 'FlagController@save', 'middleware' => 'auth']);
+$this->post('Flag/Delete/{id}', ['uses' => 'FlagController@delete', 'middleware' => 'auth', 'as' => 'flag.delete']);
+$this->get('Flag/Delete/{id}', ['uses' => 'FlagController@modal', 'middleware' => 'auth', 'as' => 'flag.modal']);
 
-Route::get('sitemap/{sitemap?}', ['uses' => 'SitemapController@index', 'as' => 'sitemap']);
+$this->get('sitemap/{sitemap?}', ['uses' => 'SitemapController@index', 'as' => 'sitemap']);
+
+$this->get('Search', ['uses' => 'SearchController@index', 'as' => 'search']);

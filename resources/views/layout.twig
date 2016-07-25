@@ -43,7 +43,7 @@
 
                     <div class="collapse navbar-collapse" id="navbar-main">
                         <ul id="main-menu" class="nav navbar-nav">
-                            {% import 'components/forms.twig' as forms %}
+                            {% import 'components.forms' as forms %}
 
                             {% for item in menu.roots() %}
                                 <li {{ forms.attr(item.attr) }}>
@@ -62,7 +62,7 @@
                             {% endfor %}
                         </ul>
 
-                        <form id="navbar-header-search" action="{{ search_url }}" class="navbar-form navbar-right" role="search">
+                        <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right" role="search">
                             <div class="form-group">
                                 <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}">
                             </div>

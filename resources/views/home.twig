@@ -1,8 +1,8 @@
-{% extends 'layout.twig' %}
+{% extends 'layout' %}
 {% block title %}Strona główna{{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
-{% import 'components/modals.twig' as modal %}
+{% import 'components.forms' as forms %}
+{% import 'components.modals' as modal %}
 
 {% block container %}
     <div class="row" style="margin-top: 20px">
@@ -107,7 +107,7 @@
                 <h4><i class="fa fa-comments-o fa-fw"></i> <a href="{{ route('microblog.home') }}">Popularne wpisy na mikroblogu</a></h4>
 
                 {% for microblog in microblogs %}
-                    {% include "microblog/microblog.twig" %}
+                    {% include "microblog.microblog" %}
                 {% endfor %}
             </section>
         </main>
@@ -165,9 +165,7 @@
                         <div class="panel-body">
                             <h4><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h4>
 
-                            {#<h6>12 września 2015, Katowice</h6>#}
                             <div class="patronage-content">
-                                <!--							<a href="--><!--?//= url('Patronat'); ?--><!--"><img src="--><!--?//= Url::site(); ?--><!--template/img/apple-touch.png" width="65" /></a>-->
                                 <a href="{{ url(patronage.path) }}">{{ patronage.excerpt }}</a>
                             </div>
 

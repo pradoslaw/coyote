@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
 #box-search {
+  float: none;
+  margin: 0 auto 24px auto;
+  overflow: hidden;
+
   > form {
     width: 100%;
     white-space: nowrap;
