@@ -125,6 +125,7 @@
 {% block body %}
     {{ parent() }}
 
+    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
     <script type="text/javascript">
         $(function () {
             $('#upload').click(function() {
