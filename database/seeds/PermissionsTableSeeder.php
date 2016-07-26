@@ -77,6 +77,30 @@ class PermissionsTableSeeder extends Seeder
             'default'        => false
         ]);
 
+        \DB::table('permissions')->insert([
+            'name' => 'job-update',
+            'description' => 'Edycja ofert pracy',
+            'default' => false
+        ]);
+
+        \DB::table('permissions')->insert([
+            'name' => 'job-delete',
+            'description' => 'Usuwanie ofert pracy',
+            'default' => false
+        ]);
+
+        \DB::table('permissions')->insert([
+            'name' => 'firm-update',
+            'description' => 'Edycja firm',
+            'default' => false
+        ]);
+
+        \DB::table('permissions')->insert([
+            'name' => 'firm-delete',
+            'description' => 'Usuwanie firm',
+            'default' => false
+        ]);
+
         $group = \Coyote\Group::where('name', 'Administrator')->first();
         \DB::table('group_permissions')->where('group_id', '=', $group->id)->update(['value' => true]);
     }
