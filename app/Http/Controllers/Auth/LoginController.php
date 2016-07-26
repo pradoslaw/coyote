@@ -10,6 +10,8 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Logout as Stream_Logout;
+use Coyote\Services\Stream\Activities\Throttle as Stream_Throttle;
+use Coyote\Services\Stream\Actor;
 
 class LoginController extends Controller
 {
@@ -80,6 +82,9 @@ class LoginController extends Controller
             // to login and redirect the user back to the login form. Of course, when this
             // user surpasses their maximum number of attempts they will get locked out.
             $this->incrementLoginAttempts($form->getRequest());
+
+            // put failed action to activity stream
+            stream((new Stream_Throttle(new Actor(auth()->user())))->setLogin($user->name));
         }
 
         return back()->withInput()->withErrors(['password' => 'Podane hasło jest nieprawidłowe.']);

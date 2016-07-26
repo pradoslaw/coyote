@@ -33,17 +33,18 @@ return [
     'person' => 'profil',
 
     'headline' => [
-        'microblog'     => ':actor :verb :object na mikroblogu',
-        'comment'       => ':actor :verb :object w :target',
-        'topic'         => ':actor :verb wątek :object',
-        'post'          => ':actor :verb :object w :target',
-        'accept'        => ':actor :verb :object w :target',
-        'topic:move'    => ':actor :verb :object z :source do :target',
-        'job'           => ':actor :verb :object o pracę: :offer',
-        'flag'          => ':actor :verb :object',
-        'wiki'          => ':actor :verb :object :title',
-        'person'        => ':actor :verb :object',
-        'firewall'      => ':actor :verb :object',
-        'object'        => ':actor :verb'
+        'microblog'         => ':actor :verb :object na mikroblogu',
+        'comment'           => ':actor :verb :object w :target',
+        'topic'             => ':actor :verb wątek :object',
+        'post'              => ':actor :verb :object w :target',
+        'accept'            => ':actor :verb :object w :target',
+        'topic:move'        => ':actor :verb :object z :source do :target',
+        'job'               => ':actor :verb :object o pracę: :offer',
+        'flag'              => ':actor :verb :object',
+        'wiki'              => ':actor :verb :object :title',
+        'person'            => ':actor :verb :object',
+        'firewall'          => ':actor :verb :object',
+        'object'            => ':actor :verb',
+        'object:throttle'   => 'Nieudane logowanie na konto :login'
     ]
 ];
