@@ -113,7 +113,7 @@ class Migrate extends Command
     }
 
     /**
-     * @todo ip_invalid zapisac do mongo
+     * 100%
      */
     private function migrateUsers()
     {
@@ -128,7 +128,7 @@ class Migrate extends Command
             foreach ($sql as $row) {
                 $row = $this->skipPrefix('user_', $row);
 
-                unset($row['permission'], $row['ip_invalid'], $row['submit_enter']);
+                unset($row['permission'], $row['ip_invalid'], $row['submit_enter'], $row['flood']);
                 $this->rename($row, 'regdate', 'created_at');
                 $this->rename($row, 'dateformat', 'date_format');
                 $this->rename($row, 'lastvisit', 'visited_at');
@@ -236,7 +236,7 @@ class Migrate extends Command
     /**
      * 100%
      *
-     * @todo dodac uprawnienia firm-update oraz firm-delete
+     * @todo dodac uprawnienia firm-update oraz firm-delete (nie trzeba ich migrowac bo nie ma ich w bazie mysql)
      */
     private function migratePermissions()
     {
@@ -323,7 +323,7 @@ class Migrate extends Command
     }
 
     /**
-     * @todo Slowa zawieraja niewspierane znaczniki <ort> Trzeba to usunac z tekstu
+     * 100%
      */
     private function migrateWords()
     {
@@ -339,6 +339,8 @@ class Migrate extends Command
                 $row = $this->skipPrefix('censore_', $row);
 
                 $this->rename($row, 'text', 'word');
+
+                $row['replacement'] = str_replace(['<ort>', '</ort>'], ['<span style="color: red">', '</span>'], $row['replacement']);
                 DB::table('words')->insert($row);
 
                 $bar->advance();
@@ -360,8 +362,7 @@ class Migrate extends Command
 
     /**
      * Wymaga uzupelnienia tabeli alert_types
-     *
-     * @todo Co z subdomena forum? Jezeli nie zapisujemy hostow trzeba prowadic do prawidlowego aresu url
+     * 100%
      */
     private function migrateAlerts()
     {
@@ -467,8 +468,7 @@ class Migrate extends Command
     }
 
     /**
-     * 90% (oprocz samej tresci wiadomosci - zmiana parsera)
-     * W poprzedniej wersji nie bylo grupowania po polu "root"? :/
+     * 100%
      */
     private function migratePm()
     {
@@ -566,18 +566,18 @@ class Migrate extends Command
     {
         $this->info('Reputations...');
 
+        $sql = DB::connection('mysql')
+            ->table('reputation_activity')
+            ->select(['reputation_activity.*', 'module_name AS activity_module_name'])
+            ->leftJoin('page', 'page_id', '=', 'activity_page')
+            ->leftJoin('module', 'module_id', '=', 'page_module')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($sql));
+
         DB::beginTransaction();
 
         try {
-            $sql = DB::connection('mysql')
-                    ->table('reputation_activity')
-                    ->select(['reputation_activity.*', 'module_name AS activity_module_name'])
-                    ->leftJoin('page', 'page_id', '=', 'activity_page')
-                    ->leftJoin('module', 'module_id', '=', 'page_module')
-                    ->get();
-
-            $bar = $this->output->createProgressBar(count($sql));
-
             foreach ($sql as $row) {
                 $row = $this->skipPrefix('activity_', (array) $row);
 
@@ -624,6 +624,9 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    /**
+     * 100%
+     */
     private function migrateForum()
     {
         $this->info('Forum...');
@@ -653,6 +656,7 @@ class Migrate extends Command
 
                 $this->rename($row, 'lock', 'is_locked');
                 $this->rename($row, 'prune', 'prune_days');
+                $this->rename($row, 'path', 'slug');
 
                 if ($row['depth'] == 1) {
                     $parentId = $row['id'];
@@ -716,7 +720,20 @@ class Migrate extends Command
                 DB::table('forum_reasons')->insert($row);
             }
 
-            $this->fixSequence(['forums', 'forum_permissions', 'forum_track', 'forum_reasons']);
+            $sql = DB::connection('mysql')->table('forum_order')->get();
+
+            foreach ($sql as $row) {
+                $row = $this->skipPrefix('order_', (array) $row);
+
+                $this->rename($row, 'forum', 'forum_id');
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'hidden', 'is_hidden');
+                $this->rename($row, 'value', 'order');
+
+                DB::table('forum_orders')->insert($row);
+            }
+
+            $this->fixSequence(['forums', 'forum_permissions', 'forum_track', 'forum_reasons', 'forum_orders']);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -768,6 +785,7 @@ class Migrate extends Command
                         $this->rename($row, 'poll', 'poll_id');
                         $this->rename($row, 'moved_id', 'prev_forum_id');
                         $this->rename($row, 'last_post_time', 'last_post_created_at');
+                        $this->rename($row, 'path', 'slug');
 
                         $this->timestampToDatetime($row['last_post_created_at']);
                         $this->timestampToDatetime($row['created_at']);
@@ -782,7 +800,7 @@ class Migrate extends Command
                         unset($row['solved'], $row['page'], $row['delete']);
 
                         $row['subject'] = htmlspecialchars_decode($row['subject']);
-                        $row['path'] = explode('-', $row['path'])[1];
+                        $row['slug'] = explode('-', $row['slug'])[1];
 
                         DB::table('topics')->insert($row);
                         $bar->advance();
@@ -844,7 +862,7 @@ class Migrate extends Command
                     foreach ($sql as $row) {
                         $row = (array) $row;
 
-                        DB::table('topics_tags')->insert($row);
+                        DB::table('topic_tags')->insert($row);
                     }
                 });
 
@@ -1065,7 +1083,7 @@ class Migrate extends Command
     }
 
     /**
-     * @todo edit_user przeniesc do mongo
+     * 100%
      */
     public function migrateMicroblogs()
     {
@@ -1565,23 +1583,23 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-        $this->migrateUsers();
-        $this->migrateTags();
+//        $this->migrateUsers();
+//        $this->migrateTags();
         /* musi byc przed dodawaniem grup */
-        $this->migratePermissions();
-        $this->migrateGroups();
-        $this->migrateSkills();
-        $this->migrateWords();
-        $this->migrateAlerts();
-        $this->migratePm();
-        $this->migrateReputation();
-        $this->migrateForum();
+//        $this->migratePermissions();
+//        $this->migrateGroups();
+//        $this->migrateSkills();
+//        $this->migrateWords();
+//        $this->migrateAlerts();
+//        $this->migratePm();
+//        $this->migrateReputation();
+//        $this->migrateForum();
         $this->migrateTopic();
-        $this->migratePost();
-        $this->migrateMicroblogs();
-        $this->migrateTopicVisits();
-        $this->migrateFirms();
-        $this->migrateJobs();
+//        $this->migratePost();
+//        $this->migrateMicroblogs();
+//        $this->migrateTopicVisits();
+//        $this->migrateFirms();
+//        $this->migrateJobs();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }
