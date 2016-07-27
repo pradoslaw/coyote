@@ -7,7 +7,7 @@ use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 class SessionRepository extends Repository implements SessionRepositoryInterface
 {
     /**
-     * @return \Coyote\Session
+     * @return string
      */
     public function model()
     {

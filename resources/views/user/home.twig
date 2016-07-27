@@ -84,8 +84,8 @@
                     {{ session.updated_at|format_date }}
                 </div>
                 <div class="col-xs-3">
-                    <i class="fa fa-{{ session.browser|lower }}"></i>
-                    {{ session.browser }}
+                    <i class="fa fa-{{ session.agent.browser|lower }}"></i>
+                    {{ session.agent.browser }}
                 </div>
             </div>
         {% endfor %}

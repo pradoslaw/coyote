@@ -3,46 +3,33 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
-use Coyote\Session;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Request;
+use Jenssegers\Agent\Agent;
 
 class HomeController extends BaseController
 {
     use HomeTrait, MediaFactory;
 
     /**
-     * @param User $user
+     * @param UserRepository $user
+     * @param SessionRepository $session
      * @return \Illuminate\View\View
      */
-    public function index(User $user)
+    public function index(UserRepository $user, SessionRepository $session)
     {
-        $sessions = Session::where('user_id', auth()->user()->id)->get();
-
-        $browsers = [
-            'OPR' => 'Opera',
-            'Firefox' => 'Firefox',
-            'MSIE' => 'MSIE',
-            'Trident' => 'MSIE',
-            'Opera' => 'Opera',
-            'Chrome' => 'Chrome'
-        ];
+        $sessions = $session->where('user_id', $this->userId)->get();
 
         foreach ($sessions as &$row) {
-            $browser = 'unknown';
+            $agent = new Agent();
+            $agent->setUserAgent($row['browser']);
 
-            foreach ($browsers as $item => $name) {
-                if (stripos($row['browser'], $item) !== false) {
-                    $browser = $name;
-                    break;
-                }
-            }
-
-            $row['browser'] = $browser;
+            $row['agent'] = $agent;
         }
 
         return $this->view('user.home', [
-            'rank'                  => $user->rank(auth()->user()->id),
+            'rank'                  => $user->rank($this->userId),
             'total_users'           => $user->countUsersWithReputation(),
             'ip'                    => request()->ip(),
             'sessions'              => $sessions
@@ -53,10 +40,10 @@ class HomeController extends BaseController
      * Upload zdjecia na serwer
      *
      * @param Request $request
-     * @param User $user
+     * @param UserRepository $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function upload(Request $request, User $user)
+    public function upload(Request $request, UserRepository $user)
     {
         $this->validate($request, [
             'photo'             => 'required|image'
@@ -73,10 +60,10 @@ class HomeController extends BaseController
     /**
      * Usuniecie zdjecia z serwera
      *
-     * @param User $user
+     * @param UserRepository $user
      */
-    public function delete(User $user)
+    public function delete(UserRepository $user)
     {
-        $user->update(['photo' => null], auth()->user()->id);
+        $user->update(['photo' => null], $this->userId);
     }
 }
