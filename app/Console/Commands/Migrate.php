@@ -626,6 +626,7 @@ class Migrate extends Command
 
     /**
      * 100%
+     * @todo przeniesc tabele forum_order
      */
     private function migrateForum()
     {
@@ -882,8 +883,7 @@ class Migrate extends Command
     }
 
     /**
-     * @todo Usuniecie posta trzeba przepisac do mongo
-     * Poza tym jest ok
+     * 100%
      */
     public function migratePost()
     {
@@ -995,7 +995,11 @@ class Migrate extends Command
                     $this->rename($row, 'user', 'user_id');
                     $this->rename($row, 'time', 'created_at');
 
-                    $this->timestampToDatetime($row['created_at']);
+                    if (empty($row['created_at'])) {
+                        $row['created_at'] = null;
+                    } else {
+                        $this->timestampToDatetime($row['created_at']);
+                    }
 
                     DB::table('post_accepts')->insert($row);
                     $bar->advance();
@@ -1120,7 +1124,7 @@ class Migrate extends Command
                     }
                 });
 
-            DB::connection('mysql')->table('microblog_discuss')->chunk(100000, function ($sql) use ($bar) {
+            DB::connection('mysql')->table('microblog_discuss')->distinct()->chunk(100000, function ($sql) use ($bar) {
                 foreach ($sql as $row) {
                     $row = (array) $row;
 
@@ -1240,6 +1244,9 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    /**
+     * @todo usunac zduplikowane firmy
+     */
     public function migrateFirms()
     {
         $this->info('Firms...');
@@ -1348,6 +1355,10 @@ class Migrate extends Command
 
         DB::beginTransaction();
 
+        $stripPar = function($text) {
+            return str_replace(['<p>', '</p>'], ['', '<br><br>'], $text);
+        };
+
         try {
             foreach ($jobs as $row) {
                 $row = $this->skipPrefix('job_', (array) $row);
@@ -1362,8 +1373,9 @@ class Migrate extends Command
                 $this->rename($row, 'apply', 'enable_apply');
                 $this->rename($row, 'deadline', 'deadline_at');
                 $this->rename($row, 'order', 'rank');
+                $this->rename($row, 'visits', 'views');
 
-                $row['path'] = str_slug($row['title']);
+                $row['slug'] = str_slug($row['title']);
 
                 $this->timestampToDatetime($row['created_at']);
                 $this->timestampToDatetime($row['updated_at']);
@@ -1376,6 +1388,13 @@ class Migrate extends Command
 
                 unset($row['incognito'], $row['page'], $row['searchable']);
                 $row['title'] = htmlspecialchars_decode($row['title']);
+
+                if (!empty($row['requirements'])) {
+                    $row['description'] .= "\n\n<h2>Wymagania</h2>\n\n" . $row['requirements'];
+                }
+
+                $row['description'] = $stripPar($row['description']);
+                $row['recruitment'] = $stripPar($row['recruitment']);
 
                 DB::table('jobs')->insert($row);
                 $bar->advance();
@@ -1484,14 +1503,14 @@ class Migrate extends Command
                 $this->setNullIfEmpty($row['user_id']);
                 unset($row['ip']);
 
-                DB::table('job_candidates')->insert((array) $row);
+                DB::table('job_applications')->insert((array) $row);
                 $bar->advance();
             }
 
             $bar->finish();
             DB::commit();
 
-            $this->fixSequence('job_candidates');
+            $this->fixSequence('job_applications');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1576,6 +1595,184 @@ class Migrate extends Command
     }
 
     /**
+     * 100%
+     */
+    public function migratePastebin()
+    {
+        $pastebin = DB::connection('mysql')
+            ->table('pastebin')
+            ->select(['pastebin.*', 'user_name AS pastebin_user_name'])
+            ->leftJoin('user', 'user_id', '=', 'pastebin_user')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($pastebin));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($pastebin as $row) {
+                $row = $this->skipPrefix('pastebin_', (array) $row);
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'time', 'created_at');
+                $this->rename($row, 'expire', 'expires');
+                $this->rename($row, 'content', 'text');
+                $this->rename($row, 'syntax', 'mode');
+
+                $row['title'] = $row['user_id'] > 0 ? $row['user_name'] : $row['username'];
+
+                $this->setNullIfEmpty($row['expires']);
+                if (!empty($row['expires'])) {
+                    $row['expires'] = round(($row['expires'] - $row['created_at']) / 60 / 60);
+                }
+
+                $this->timestampToDatetime($row['created_at']);
+                $this->setNullIfEmpty($row['user_id']);
+
+                if (empty($row['title'])) {
+                    $row['title'] = 'Anonim';
+                }
+
+                unset($row['username'], $row['cache'], $row['prev'], $row['user_name']);
+
+                DB::table('pastebin')->insert((array) $row);
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+
+            $this->fixSequence('pastebin');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->info('Done');
+    }
+
+    public function migratePoll()
+    {
+        $polls = DB::connection('mysql')
+            ->table('poll')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($polls));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($polls as $row) {
+                $row = $this->skipPrefix('poll_', (array) $row);
+                $this->rename($row, 'start', 'created_at');
+                $this->rename($row, 'max_item', 'max_items');
+
+                $this->timestampToDatetime($row['created_at']);
+                $row['updated_at'] = $row['created_at'];
+
+                unset($row['user'], $row['votes'], $row['enable']);
+
+                DB::table('polls')->insert((array) $row);
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Poll items...');
+
+        $items = DB::connection('mysql')
+            ->table('poll_item')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($items));
+        $idMappings = [];
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($items as $row) {
+                $row = $this->skipPrefix('item_', (array) $row);
+                $this->rename($row, 'poll', 'poll_id');
+
+                if (!isset($idMappings[$row['poll_id']])) {
+                    $idMappings[$row['poll_id']] = [];
+                }
+
+                $oldId = $row['id'];
+                unset($row['id']);
+
+                $id = DB::table('poll_items')->insertGetId((array) $row);
+                $idMappings[$row['poll_id']][$oldId] = $id;
+
+                $bar->advance();
+            }
+
+            $bar->finish();
+            DB::commit();
+
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Poll votes...');
+
+        $items = DB::connection('mysql')
+            ->table('poll_vote')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($items));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($items as $row) {
+                $row = $this->skipPrefix('vote_', (array) $row);
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'item', 'item_id');
+                $this->rename($row, 'poll', 'poll_id');
+
+                $this->setNullIfEmpty($row['user_id']);
+
+                if (!empty($idMappings[$row['poll_id']][$row['item_id']])) {
+                    $row['item_id'] = $idMappings[$row['poll_id']][$row['item_id']];
+
+                    DB::table('poll_votes')->insert((array)$row);
+                }
+                $bar->advance();
+            }
+
+            $bar->finish();
+
+            DB::table('poll_votes')->update(['created_at' => null]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+
+        $this->fixSequence(['polls', 'poll_items', 'poll_votes']);
+
+        $this->info('Done');
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -1583,23 +1780,25 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-//        $this->migrateUsers();
-//        $this->migrateTags();
+        $this->migrateUsers();
+        $this->migrateTags();
         /* musi byc przed dodawaniem grup */
-//        $this->migratePermissions();
-//        $this->migrateGroups();
-//        $this->migrateSkills();
-//        $this->migrateWords();
-//        $this->migrateAlerts();
-//        $this->migratePm();
-//        $this->migrateReputation();
-//        $this->migrateForum();
+        $this->migratePermissions();
+        $this->migrateGroups();
+        $this->migrateSkills();
+        $this->migrateWords();
+        $this->migrateAlerts();
+        $this->migratePm();
+        $this->migrateReputation();
+        $this->migrateForum();
         $this->migrateTopic();
-//        $this->migratePost();
-//        $this->migrateMicroblogs();
-//        $this->migrateTopicVisits();
-//        $this->migrateFirms();
-//        $this->migrateJobs();
+        $this->migratePost();
+        $this->migrateMicroblogs();
+        $this->migrateTopicVisits();
+        $this->migrateFirms();
+        $this->migrateJobs();
+        $this->migratePastebin();
+        $this->migratePoll();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }
