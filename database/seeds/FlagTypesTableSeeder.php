@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class FlagTypesSeeder extends Seeder
+class FlagTypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

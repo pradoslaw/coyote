@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MicroblogsTableSeeder::class);
         $this->call(AlertTypesTableSeeder::class);
         $this->call(ForumsTableSeeder::class);
-        $this->call(FlagTypesSeeder::class);
+        $this->call(FlagTypesTableSeeder::class);
         $this->call(ForumReasonsTableSeeder::class);
         $this->call(CurrenciesTableSeeder::class);
         $this->call(CountriesTableSeeder::class);

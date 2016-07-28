@@ -13,8 +13,8 @@ class CreatePollVotesTable extends Migration
     public function up()
     {
         Schema::create('poll_votes', function (Blueprint $table) {
-            $table->smallInteger('id', true);
-            $table->integer('user_id');
+            $table->integer('id', true);
+            $table->integer('user_id')->nullable(); // dla kompatybilnosci wstecznej
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->smallInteger('poll_id');
             $table->smallInteger('item_id');
