@@ -9,10 +9,13 @@ use Coyote\Topic;
 use DB;
 use Illuminate\Http\Request;
 
+/**
+ * @method $this withTrashed()
+ */
 class PostRepository extends Repository implements PostRepositoryInterface
 {
     /**
-     * @return \Coyote\Topic
+     * @return string
      */
     public function model()
     {

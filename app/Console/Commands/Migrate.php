@@ -884,6 +884,7 @@ class Migrate extends Command
 
     /**
      * 100%
+     * @todo usunac duplikaty z post_votes
      */
     public function migratePost()
     {

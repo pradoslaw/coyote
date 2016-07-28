@@ -21,7 +21,7 @@ class CreatePostVotesTable extends Migration
             $table->string('ip', 45)->nullable();
 
             $table->index('forum_id');
-            $table->index('post_id');
+            $table->unique(['post_id', 'user_id']);
 
             $table->foreign('forum_id')->references('id')->on('forums')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

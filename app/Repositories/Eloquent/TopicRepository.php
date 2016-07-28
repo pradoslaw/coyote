@@ -5,7 +5,6 @@ namespace Coyote\Repositories\Eloquent;
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
-use Coyote\Topic;
 
 /**
  * @method $this withTrashed()
@@ -13,7 +12,7 @@ use Coyote\Topic;
 class TopicRepository extends Repository implements TopicRepositoryInterface, SubscribableInterface
 {
     /**
-     * @return \Coyote\Topic
+     * @return string
      */
     public function model()
     {
