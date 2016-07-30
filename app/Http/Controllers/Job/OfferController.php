@@ -88,8 +88,10 @@ class OfferController extends Controller
         $build = $builder->build();
         debugbar()->debug($build);
 
-        // search related topics
-        $mlt = $this->job->search($build)->getSource();
+        $mlt = debugbar()->measure('More like this', function () use ($build) {
+            // search related topics
+            return $this->job->search($build)->getSource();
+        });
 
         return $this->view('job.offer', [
             'ratesList'         => Job::getRatesList(),
