@@ -1772,6 +1772,183 @@ class Migrate extends Command
     }
 
     /**
+     * @todo przeniesc tabele page_attachment
+     */
+    public function migrateWiki()
+    {
+        $wiki = DB::connection('mysql')
+            ->table('page')
+            ->select(['page.*', 'page_text.text_content AS page_content', 'location_text AS page_location'])
+            ->leftJoin('page_text', 'text_id', '=', 'page_text')
+            ->join('location', 'location_page', '=', 'page_id')
+            ->where('page_module', '=', 3)
+            ->orderBy('page_order')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($wiki));
+
+        DB::beginTransaction();
+        $mapping = [];
+
+        try {
+            foreach ($wiki as $row) {
+                $row = (array) $row;
+
+                if (is_null($row['page_text']) || !isset($mapping[$row['page_text']])) {
+                    $mapping[$row['page_text']] = $row['page_id'];
+
+                    $row = $this->skipPrefix('page_', $row);
+                    $this->rename($row, 'title', 'long_title');
+                    $this->rename($row, 'subject', 'title');
+                    $this->rename($row, 'path', 'slug');
+                    $this->rename($row, 'time', 'created_at');
+                    $this->rename($row, 'edit_time', 'updated_at');
+                    $this->rename($row, 'content', 'text');
+
+                    $this->timestampToDatetime($row['created_at']);
+                    $this->timestampToDatetime($row['updated_at']);
+
+                    if ($row['delete']) {
+                        $row['deleted_at'] = $row['updated_at'];
+                    }
+
+                    $parentId = $row['parent'];
+                    $path = $row['location'];
+
+                    $row['template'] = str_replace(['wikiView.php', 'wikiCategory.php', 'help.php', 'helpView.php', 'documentView.php', 'wikiEmpty.php'], ['show', 'category', 'help.home', 'help.show', 'show', 'show'], $row['template']);
+
+                    unset($row['parent'], $row['location'], $row['module'], $row['connector'], $row['depth'], $row['order'], $row['matrix'], $row['content'], $row['publish'], $row['published'], $row['unpublished'], $row['richtext'], $row['cache'], $row['tags'], $row['delete']);
+                    DB::table('wiki_pages')->insert((array)$row);
+
+                    DB::table('wiki_paths')->insert(['path_id' => $row['id'], 'wiki_id' => $row['id'], 'parent_id' => $parentId, 'path' => $path]);
+
+                    $texts = DB::connection('mysql')
+                        ->table('page_version')
+                        ->select(['page_text.*'])
+                        ->join('page_text', 'page_text.text_id', '=', 'page_version.text_id')
+                        ->where('page_version.page_id', $row['id'])
+                        ->orderBy('text_id')
+                        ->get();
+
+                    foreach ($texts as $text) {
+                        $text = $this->skipPrefix('text_', (array) $text);
+                        $this->rename($text, 'content', 'text');
+                        $this->rename($text, 'time', 'created_at');
+                        $this->rename($text, 'log', 'comment');
+                        $this->rename($text, 'user', 'user_id');
+                        $this->rename($text, 'restored', 'is_restored');
+
+                        $this->timestampToDatetime($text['created_at']);
+
+                        $text['wiki_id'] = $row['id'];
+                        $text['title'] = $row['title'];
+
+                        unset($text['id']);
+                        DB::table('wiki_log')->insert($text);
+                    }
+                } else {
+                    DB::table('wiki_paths')->insert(['path_id' => $row['page_id'], 'wiki_id' => $mapping[$row['page_text']], 'parent_id' => $row['page_parent'], 'path' => $row['page_location']]);
+                }
+
+                $bar->advance();
+            }
+
+            $bar->finish();
+
+            $this->line('');
+            $this->line('Links');
+
+            $accessor = DB::connection('mysql')
+                ->table('accessor')
+                ->get();
+
+            foreach ($accessor as $row) {
+                $row = (array) $row;
+                DB::table('wiki_links')->insert(['path_id' => $row['accessor_from'], 'ref_id' => $row['accessor_to']]);
+            }
+
+            $broken = DB::connection('mysql')
+                ->table('broken')
+                ->get();
+
+            foreach ($broken as $row) {
+                $row = (array) $row;
+                DB::table('wiki_links')->insert(['path_id' => $row['broken_from'], 'path'=> $row['broken_path']]);
+            }
+
+            $this->line('');
+            $this->line('Authors');
+
+            $author = DB::connection('mysql')
+                ->table('page_author')
+                ->get();
+
+            foreach ($author as $row) {
+                $row = $this->skipPrefix('author_', (array) $row);
+                $this->rename($row, 'page', 'wiki_id');
+                $this->rename($row, 'user', 'user_id');
+
+                DB::table('wiki_authors')->insert($row);
+            }
+
+            $this->line('');
+            $this->line('Rates');
+
+            $rates = DB::connection('mysql')
+                ->table('page_rate')
+                ->get();
+
+            foreach ($rates as $row) {
+                $row = $this->skipPrefix('rate_', (array) $row);
+                $this->rename($row, 'page', 'wiki_id');
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'time', 'created_at');
+
+                $this->timestampToDatetime($row['created_at']);
+
+                DB::table('wiki_rates')->insert($row);
+            }
+
+            $this->line('');
+            $this->line('Subsribers');
+
+            $sql = DB::connection('mysql')
+                ->table('watch')
+                ->select(['page_id', 'user_id', 'watch_time'])
+                ->where('watch_module', 3)
+                ->groupBy(['page_id', 'user_id'])
+                ->get();
+
+            foreach ($sql as $row) {
+                $row = (array) $row;
+
+                $this->rename($row, 'watch_time', 'created_at');
+                $this->rename($row, 'page_id', 'wiki_id');
+
+                if ($row['created_at']) {
+                    $this->timestampToDatetime($row['created_at']);
+                } else {
+                    $row['created_at'] = null;
+                }
+
+                DB::table('wiki_subscribers')->insert($row);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->fixSequence(['wiki_pages', 'wiki_log', 'wiki_rates', 'wiki_subscribers', 'wiki_authors', 'wiki_links']);
+        DB::unprepared("SELECT setval('wiki_paths_path_id_seq', (SELECT MAX(path_id) FROM wiki_paths))");
+
+        $this->info('Done');
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -1779,25 +1956,27 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-        $this->migrateUsers();
-        $this->migrateTags();
+//        $this->migrateUsers();
+//        $this->migrateTags();
         /* musi byc przed dodawaniem grup */
-        $this->migratePermissions();
-        $this->migrateGroups();
-        $this->migrateSkills();
-        $this->migrateWords();
-        $this->migrateAlerts();
-        $this->migratePm();
-        $this->migrateReputation();
-        $this->migrateForum();
-        $this->migrateTopic();
-        $this->migratePost();
-        $this->migrateMicroblogs();
-        $this->migrateTopicVisits();
-        $this->migrateFirms();
-        $this->migrateJobs();
-        $this->migratePastebin();
-        $this->migratePoll();
+//        $this->migratePermissions();
+//        $this->migrateGroups();
+//        $this->migrateSkills();
+//        $this->migrateWords();
+//        $this->migrateAlerts();
+//        $this->migratePm();
+//        $this->migrateReputation();
+//        $this->migrateForum();
+//        $this->migrateTopic();
+//        $this->migratePost();
+//        $this->migrateMicroblogs();
+//        $this->migrateTopicVisits();
+//        $this->migrateFirms();
+//        $this->migrateJobs();
+//        $this->migratePastebin();
+//        $this->migratePoll();
+
+        $this->migrateWiki();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }

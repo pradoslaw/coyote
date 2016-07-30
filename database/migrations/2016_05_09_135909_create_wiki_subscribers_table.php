@@ -16,7 +16,8 @@ class CreateWikiSubscribersTable extends Migration
             $table->increments('id');
             $table->integer('wiki_id');
             $table->mediumInteger('user_id');
-            $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
+            // moze byc NULL (kompatybilnosc wsteczna)
+            $table->timestampTz('created_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP(0)'));
 
             $table->unique(['wiki_id', 'user_id']);
 
