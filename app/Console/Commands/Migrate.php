@@ -1653,6 +1653,9 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    /**
+     * 100%
+     */
     public function migratePoll()
     {
         $polls = DB::connection('mysql')
@@ -1948,6 +1951,41 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    public function fillPagesTable()
+    {
+        $sql = DB::table('wiki')->get();
+        $bar = $this->output->createProgressBar(count($sql));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($sql as $row) {
+                $row = (array) $row;
+
+                DB::table('pages')->insert([
+                    'created_at' => $row['created_at'],
+                    'updated_at' => $row['updated_at'],
+                    'title' => $row['title'],
+                    'path' => '/' . $row['path'], // @todo "/" na poczatku?
+                    'content_id' => $row['id'],
+                    'content_type' => 'Coyote\Wiki',
+                    'allow_sitemap' => 1
+                ]);
+
+                $bar->advance();
+            }
+
+            DB::commit();
+            $bar->finish();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+    }
+
+
     /**
      * Execute the console command.
      *
@@ -1976,7 +2014,8 @@ class Migrate extends Command
 //        $this->migratePastebin();
 //        $this->migratePoll();
 
-        $this->migrateWiki();
+//        $this->migrateWiki();
+        $this->fillPagesTable();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }
