@@ -1356,7 +1356,7 @@ class Migrate extends Command
 
         DB::beginTransaction();
 
-        $stripPar = function($text) {
+        $stripPar = function ($text) {
             return str_replace(['<p>', '</p>'], ['', '<br><br>'], $text);
         };
 
