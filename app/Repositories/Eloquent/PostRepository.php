@@ -50,7 +50,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
     public function takeForTopic($topicId, $postId, $page = 0, $perPage = 10)
     {
         $first = $this->takeFirst($postId);
-//        $this->applyCriteria();
 
         $sql = $this
             ->build(function ($builder) use ($topicId, $postId, $page, $perPage) {
@@ -69,7 +68,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
         }]);
         $sql->load('attachments');
 
-//        $this->resetCriteria();
         return $sql;
     }
 
