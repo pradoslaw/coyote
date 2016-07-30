@@ -62,13 +62,21 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
+     * @throws \Exception
+     */
+    public function resetModel()
+    {
+        $this->makeModel();
+    }
+
+    /**
      * @return $this
      */
     public function resetCriteria()
     {
         if (!empty($this->criteria)) {
             $this->criteria = [];
-            $this->makeModel();
+            $this->resetModel();
         }
         return $this;
     }
@@ -121,9 +129,10 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
+     * @param callable|null $callable
      * @return $this
      */
-    public function applyCriteria()
+    public function applyCriteria(callable $callable = null)
     {
         if ($this->skipCriteria === true) {
             return $this;
@@ -134,6 +143,14 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
                 $this->model = $criteria->apply($this->model, $this);
             }
         }
+
+        if (!is_null($callable)) {
+            $result = $callable();
+            $this->resetModel();
+
+            return $result;
+        }
+
         return $this;
     }
 

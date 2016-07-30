@@ -9,6 +9,7 @@ use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\StreamFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Repositories\Criteria\Post\ObtainSubscribers;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Services\Elasticsearch\Factories\Forum\MoreLikeThisFactory;
 use Coyote\Services\Elasticsearch\Response\TopHits;
@@ -78,9 +79,11 @@ class TopicController extends BaseController
 
         stop_measure('More like this');
 
+        $this->post->pushCriteria(new ObtainSubscribers($this->userId));
+
         // magic happens here. get posts for given topic
         /* @var \Illuminate\Support\Collection $posts */
-        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $this->userId, $page, $perPage);
+        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $page, $perPage);
         $paginate = new LengthAwarePaginator($posts, $replies, $perPage, $page, ['path' => ' ']);
 
         start_measure('Parsing...');

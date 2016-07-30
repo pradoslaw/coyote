@@ -6,10 +6,11 @@ use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Topic;
-use DB;
 use Illuminate\Http\Request;
 
 /**
+ * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
+ * @method void setResponse(string $response)
  * @method $this withTrashed()
  */
 class PostRepository extends Repository implements PostRepositoryInterface
@@ -26,14 +27,15 @@ class PostRepository extends Repository implements PostRepositoryInterface
      * Take first post in thread
      *
      * @param int $postId
-     * @param int $userId
      * @return mixed
      */
-    public function takeFirst($postId, $userId)
+    public function takeFirst($postId)
     {
-        return $this->prepare($userId)
-                    ->where('posts.id', $postId)
-                    ->first();
+        return $this
+            ->build(function ($sql) use ($postId) {
+                return $sql->where('posts.id', $postId);
+            })
+            ->first();
     }
 
     /**
@@ -41,22 +43,24 @@ class PostRepository extends Repository implements PostRepositoryInterface
      *
      * @param int $topicId
      * @param int $postId   First post ID (in thread)
-     * @param int $userId
      * @param int $page
      * @param int $perPage
      * @return mixed
      */
-    public function takeForTopic($topicId, $postId, $userId, $page = 0, $perPage = 10)
+    public function takeForTopic($topicId, $postId, $page = 0, $perPage = 10)
     {
-        $first = $this->takeFirst($postId, $userId);
+        $first = $this->takeFirst($postId);
+//        $this->applyCriteria();
 
-        $this->applyCriteria();
-        $sql = $this->prepare($userId)
+        $sql = $this
+            ->build(function ($builder) use ($topicId, $postId, $page, $perPage) {
+                return $builder
                     ->where('posts.topic_id', $topicId)
                     ->where('posts.id', '<>', $postId)
-                    ->forPage($page, $perPage)
-                    ->get()
-                    ->prepend($first);
+                    ->forPage($page, $perPage);
+            })
+            ->get()
+            ->prepend($first);
 
         $sql->load(['comments' => function ($sub) {
             $sub->select([
@@ -65,6 +69,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         }]);
         $sql->load('attachments');
 
+//        $this->resetCriteria();
         return $sql;
     }
 
@@ -89,12 +94,13 @@ class PostRepository extends Repository implements PostRepositoryInterface
      */
     public function getFirstUnreadPostId($topicId, $markTime)
     {
-        return $this->model
-                    ->select(['id'])
-                    ->where('topic_id', $topicId)
-                        ->where('created_at', '>', $markTime)
-                    ->limit(1)
-                    ->value('id');
+        return $this
+            ->model
+            ->select(['id'])
+            ->where('topic_id', $topicId)
+                ->where('created_at', '>', $markTime)
+            ->limit(1)
+            ->value('id');
     }
 
     /**
@@ -106,12 +112,13 @@ class PostRepository extends Repository implements PostRepositoryInterface
      */
     public function findPosts(array $postsId, $topicId)
     {
-        return $this->model
-                ->select(['posts.*', 'users.name'])
-                ->leftJoin('users', 'users.id', '=', 'posts.user_id')
-                ->whereIn('posts.id', $postsId)
-                ->where('topic_id', $topicId) // <-- this condition for extra security
-                ->get();
+        return $this
+            ->model
+            ->select(['posts.*', 'users.name'])
+            ->leftJoin('users', 'users.id', '=', 'posts.user_id')
+            ->whereIn('posts.id', $postsId)
+            ->where('topic_id', $topicId) // <-- this condition for extra security
+            ->get();
     }
 
     /**
@@ -269,52 +276,65 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
-     * @param int $userId
+     * @param $callback $callback
      * @return mixed
      */
-    private function prepare($userId)
+    private function build(callable $callback)
     {
-        $sql = $this->model
-            ->selectRaw(
-                'DISTINCT ON(posts.id)
-                        posts.*,
-                        author.name AS author_name,
-                        author.photo,
-                        author.is_active,
-                        author.is_blocked,
-                        author.sig,
-                        author.location,
-                        author.posts AS author_posts,
-                        author.allow_sig,
-                        author.allow_smilies,
-                        author.allow_count,
-                        author.created_at AS author_created_at,
-                        author.visited_at AS author_visited_at,
-                        editor.name AS editor_name,
-                        editor.name AS editor_is_active,
-                        editor.name AS editor_is_blocked,
-                        groups.name AS group_name,
-                        sessions.updated_at AS session_updated_at,
-                        pa.user_id AS accept_on'
-            )
-            ->leftJoin('sessions', 'sessions.user_id', '=', 'posts.user_id')
+        $subQuery = $callback($this->buildSubquery());
+        $sub = $subQuery->toSql();
+
+        foreach ($subQuery->getBindings() as $binding) {
+            $sub = preg_replace('/\?/', $binding, $sub, 1);
+        }
+
+        $this->applyCriteria();
+
+        $sql = $this
+            ->model
+            ->addSelect([ // addSelect() instead of select() to retrieve extra columns in criteria
+                'posts.*',
+                'author.name AS author_name',
+                'author.photo',
+                'author.is_active',
+                'author.is_blocked',
+                'author.sig',
+                'author.location',
+                'author.posts AS author_posts',
+                'author.allow_sig',
+                'author.allow_smilies',
+                'author.allow_count',
+                'author.created_at AS author_created_at',
+                'author.visited_at AS author_visited_at',
+                'editor.name AS editor_name',
+                'editor.name AS editor_is_active',
+                'editor.name AS editor_is_blocked',
+                'groups.name AS group_name',
+                'pa.user_id AS accept_on'
+            ])
+            ->from($this->raw("($sub) AS posts"))
             ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
             ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
             ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
-            ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')
-            ->orderBy('posts.id');
+            ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id');
 
-        if ($userId) {
-            // pobieramy wartosc "id" a nie "created_at" poniewaz kiedys created_at nie bylo zapisywane
-            $sql = $sql->addSelect(['pv.id AS vote_on', 'ps.id AS subscribe_on'])
-                ->leftJoin('post_votes AS pv', function ($join) use ($userId) {
-                    $join->on('pv.post_id', '=', 'posts.id')->on('pv.user_id', '=', DB::raw($userId));
-                })
-                ->leftJoin('post_subscribers AS ps', function ($join) use ($userId) {
-                    $join->on('ps.post_id', '=', 'posts.id')->on('ps.user_id', '=', DB::raw($userId));
-                });
-        }
+        $this->resetModel();
 
         return $sql;
+    }
+
+    /**
+     * Subquery for better performance.
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    private function buildSubquery()
+    {
+        $sql = clone $this->model;
+
+        return $sql
+            ->selectRaw('DISTINCT ON(posts.id) posts.*, sessions.updated_at AS session_updated_at')
+            ->leftJoin('sessions', 'sessions.user_id', '=', 'posts.user_id')
+            ->orderBy('posts.id');
     }
 }

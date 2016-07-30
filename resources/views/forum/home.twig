@@ -32,12 +32,7 @@
 
     {% embed 'forum.partials.sidebar' %}
         {% block side_menu %}
-            {% if topics.total() %}
-                <div id="box-count" class="box">
-                    <strong>{{ topics.total()|number_format(0, '', ' ') }}</strong>
-                    <span>{{ declination(topics.total(), ['wątek', 'wątki', 'wątków'], true) }}</span>
-                </div>
-            {% endif %}
+            {% include 'forum.partials.post_count' %}
 
             <div class="box">
                 <ul class="side-menu">

@@ -33,6 +33,8 @@
 
     {% embed "forum.partials.sidebar.twig" %}
         {% block side_menu %}
+            {% include 'forum.partials.post_count' %}
+
             <div class="box">
                 <ul class="side-menu">
                     <li class="btn-mark-read">
