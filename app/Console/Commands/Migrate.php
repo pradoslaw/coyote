@@ -1719,8 +1719,6 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
-
-
         } catch (\Exception $e) {
             DB::rollBack();
 
