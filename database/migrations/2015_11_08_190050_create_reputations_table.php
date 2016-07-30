@@ -24,6 +24,9 @@ class CreateReputationsTable extends Migration
 
             $table->index('type_id');
             $table->index('user_id');
+            // indeks potrzebny po to, aby na glownej stronie wyswietlic ranking reputacji od ostatniego
+            // miesiaca, tygodnia itp. wtedy uzywany jest ten indeks
+            $table->index('created_at');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('reputation_types');
