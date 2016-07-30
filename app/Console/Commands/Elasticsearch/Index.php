@@ -100,18 +100,15 @@ class Index extends Command
         $this->line("Indexing $className ...");
 
         $builder = $model->select();
-        if (method_exists($model, 'getDeletedAtColumn')) {
-            $builder->whereNull($model->getDeletedAtColumn());
-        }
 
         // ugly hack for job offers...
         if (get_class($model) === 'Coyote\Job') {
-            $builder->where('deadline_at', '>=', \DB::raw('NOW()'));
+            $builder = $builder->where('deadline_at', '>=', \DB::raw('NOW()'));
         }
 
-        $bar = $this->output->createProgressBar($model->count());
+        $bar = $this->output->createProgressBar($builder->count());
 
-        $model->chunk(10000, function ($rowset) use ($bar) {
+        $builder->chunk(10000, function ($rowset) use ($bar) {
             foreach ($rowset as $row) {
                 $row->putToIndex();
 
