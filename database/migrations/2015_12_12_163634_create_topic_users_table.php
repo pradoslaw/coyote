@@ -16,7 +16,9 @@ class CreateTopicUsersTable extends Migration
             $table->integer('topic_id');
             $table->integer('user_id');
 
-            $table->index(['topic_id', 'user_id']);
+            $table->unique(['topic_id', 'user_id']);
+            // ten indeks aby szybciej wyszukiwac posty danego usera
+            $table->index('user_id');
 
             $table->foreign('topic_id')->references('id')->on('topics');
             $table->foreign('user_id')->references('id')->on('users');
