@@ -189,7 +189,7 @@ abstract class Controller extends BaseController
     /**
      * @return \Coyote\Services\Grid\GridBuilder
      */
-    protected function getGrid()
+    protected function getGridBuilder()
     {
         return app('grid.builder');
     }

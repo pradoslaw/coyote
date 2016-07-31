@@ -119,7 +119,7 @@ class Grid
 
         $this->makeDefaultOrder();
     }
-    
+
     public function buildGrid()
     {
         //
@@ -260,6 +260,7 @@ class Grid
     public function setEnablePagination($flag)
     {
         $this->enablePagination = (bool) $flag;
+        $this->setPerPage(null);
 
         return $this;
     }
@@ -287,7 +288,7 @@ class Grid
     public function setData($data)
     {
         $this->data = $data;
-        
+
         return $this;
     }
 
@@ -328,7 +329,7 @@ class Grid
 
         return $hasFilters;
     }
-    
+
     /**
      * @return Rows
      */
@@ -342,7 +343,7 @@ class Grid
             return $this->rows;
         }
 
-        if ($this->request->has('column')) {
+        if ($this->request->has('column') && !empty($this->defaultOrder)) {
             $this->order = new Order(
                 $this->request->get('column', $this->defaultOrder['column']),
                 $this->request->get('direction', $this->defaultOrder['direction'])
@@ -372,7 +373,6 @@ class Grid
 
             $row->addCell(new Action($actions, $this->rowActions, $mixed));
 
-            // @todo sprawdzenie, czy call() dziala. niby bladem nie rzuca...
             if ($this->eachCallback) {
                 $this->eachCallback->call($this, $row);
             }

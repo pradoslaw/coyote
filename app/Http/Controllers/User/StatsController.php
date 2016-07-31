@@ -19,7 +19,7 @@ class StatsController extends BaseController
     {
         $post->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
 
-        $grid = $this->getGrid()->createGrid(StatsGrid::class);
+        $grid = $this->getGridBuilder()->createGrid(StatsGrid::class);
         $grid->setSource(new EloquentDataSource($post->takeStatsForUser($this->userId)));
         $grid->setEnablePagination(false);
 

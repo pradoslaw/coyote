@@ -49,9 +49,10 @@ class EloquentDataSource implements SourceInterface
     {
         return $this
             ->source
-            ->orderBy($order->getColumn(), $order->getDirection())
-            ->skip(($currentPage - 1) * $perPage)
-            ->take($perPage)
+            ->when($order->getColumn(), function ($builder) use ($order) {
+                return $builder->orderBy($order->getColumn(), $order->getDirection());
+            })
+            ->forPage($currentPage, $perPage)
             ->get();
     }
 

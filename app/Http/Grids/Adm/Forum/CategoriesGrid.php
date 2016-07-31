@@ -9,6 +9,11 @@ use Coyote\Services\Grid\RowActions\EditButton;
 
 class CategoriesGrid extends Grid
 {
+    /**
+     * @var array
+     */
+    protected $defaultOrder = [];
+
     public function buildGrid()
     {
         $this

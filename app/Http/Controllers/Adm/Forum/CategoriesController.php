@@ -6,7 +6,6 @@ use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Forms\Forum\ForumForm;
 use Coyote\Http\Grids\Adm\Forum\CategoriesGrid;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Repositories\Criteria\Forum\TreeViewOrder;
 use Coyote\Services\Grid\Source\EloquentDataSource;
 use Illuminate\Contracts\Cache\Repository as Cache;
 
@@ -34,17 +33,18 @@ class CategoriesController extends BaseController
     {
         $this->breadcrumb->push('Forum', route('adm.forum.categories'));
 
-        $this->forum->pushCriteria(new TreeViewOrder());
-
-        $grid = $this->getGrid()->createGrid(CategoriesGrid::class);
-        $grid->setSource(new EloquentDataSource($this->forum));
+        $grid = $this
+            ->getGridBuilder()
+            ->createGrid(CategoriesGrid::class)
+            ->setSource(new EloquentDataSource($this->forum))
+            ->setEnablePagination(false);
 
         return $this->view('adm.forum.categories.home')->with('grid', $grid);
     }
 
     /**
      * @param int|null $id
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function edit($id = null)
     {

@@ -40,7 +40,7 @@ class FirewallController extends BaseController
         $this->firewall->pushCriteria(new FirewallList());
         $this->firewall->applyCriteria();
 
-        $grid = $this->getGrid()->createGrid(FirewallGrid::class);
+        $grid = $this->getGridBuilder()->createGrid(FirewallGrid::class);
         $grid->setSource(new EloquentDataSource($this->firewall));
 
         return $this->view('adm.firewall.home', ['grid' => $grid]);
