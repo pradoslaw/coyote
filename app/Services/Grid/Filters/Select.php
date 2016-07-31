@@ -15,6 +15,11 @@ class Select extends Filter
     protected $emptyValue = '--';
 
     /**
+     * @var string
+     */
+    protected $operator = FilterOperator::OPERATOR_EQ;
+
+    /**
      * @param array $options
      */
     public function setOptions(array $options)

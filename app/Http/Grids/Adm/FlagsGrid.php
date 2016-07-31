@@ -5,7 +5,7 @@ namespace Coyote\Http\Grids\Adm;
 use Coyote\Services\Grid\Decorators\DateTimeFormat;
 use Coyote\Services\Grid\Decorators\StrLimit;
 use Coyote\Services\Grid\Decorators\Url;
-use Coyote\Services\Grid\Filters\FilterOperation;
+use Coyote\Services\Grid\Filters\FilterOperator;
 use Coyote\Services\Grid\Filters\Text;
 use Coyote\Services\Grid\Grid;
 use Coyote\Services\Grid\Order;
@@ -31,11 +31,11 @@ class FlagsGrid extends Grid
                 'clickable' => function ($row) {
                     return link_to_route('adm.user.save', $row->user_name, [$row->user_id]);
                 },
-                'filter' => new Text(FilterOperation::OPERATOR_ILIKE)
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])
             ->addColumn('url', [
                 'title' => 'URL',
-                'filter' => new Text(FilterOperation::OPERATOR_ILIKE),
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
                 'decorators' => [new Url()]
             ])
             ->addColumn('created_at', [

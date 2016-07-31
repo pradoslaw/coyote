@@ -3,7 +3,7 @@
 namespace Coyote\Services\Grid\Source;
 
 use Coyote\Services\Grid\Column;
-use Coyote\Services\Grid\Filters\FilterOperation;
+use Coyote\Services\Grid\Filters\FilterOperator;
 use Coyote\Services\Grid\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -44,7 +44,7 @@ class CollectionSource implements SourceInterface
      * @param int $perPage
      * @param int $currentPage
      * @param Order $order
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return Collection
      */
     public function execute($perPage, $currentPage, Order $order)
     {
@@ -55,8 +55,7 @@ class CollectionSource implements SourceInterface
 
         return $this
             ->collection
-            ->splice(($currentPage - 1) * $perPage)
-            ->take($perPage);
+            ->forPage($currentPage, $perPage);
     }
 
     /**
@@ -75,7 +74,7 @@ class CollectionSource implements SourceInterface
      */
     protected function filterValue($key, $value, $operator)
     {
-        if ($operator == FilterOperation::OPERATOR_LIKE || $operator == FilterOperation::OPERATOR_ILIKE) {
+        if ($operator == FilterOperator::OPERATOR_LIKE || $operator == FilterOperator::OPERATOR_ILIKE) {
             $this->collection = $this->collection->whereLoose($key, $value);
         } else {
             $this->collection = $this->collection->where($key, $value);

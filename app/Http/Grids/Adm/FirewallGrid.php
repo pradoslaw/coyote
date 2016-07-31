@@ -4,7 +4,7 @@ namespace Coyote\Http\Grids\Adm;
 
 use Coyote\Services\Grid\Decorators\DateTimeFormat;
 use Coyote\Services\Grid\Decorators\StrLimit;
-use Coyote\Services\Grid\Filters\FilterOperation;
+use Coyote\Services\Grid\Filters\FilterOperator;
 use Coyote\Services\Grid\Filters\Text;
 use Coyote\Services\Grid\Grid;
 use Coyote\Services\Grid\Decorators\Ip;
@@ -32,12 +32,12 @@ class FirewallGrid extends Grid
                 'clickable' => function ($row) {
                     return link_to_route('adm.user.save', $row->user_name, [$row->user_id]);
                 },
-                'filter' => new Text(FilterOperation::OPERATOR_ILIKE)
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])
             ->addColumn('ip', [
                 'title' => 'IP',
                 'decorators' => [new Ip()],
-                'filter' => new Text(FilterOperation::OPERATOR_ILIKE)
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])
             ->addColumn('expire_at', [
                 'title' => 'Data przedawnienia',

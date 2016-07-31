@@ -22,13 +22,10 @@ abstract class Filter implements FilterInterface
     protected $column;
 
     /**
-     * @param string $operator
      * @param array $options
      */
-    public function __construct($operator, array $options = [])
+    public function __construct(array $options = [])
     {
-        $this->operator = $operator;
-
         $this->setDefaultOptions($options);
     }
 
@@ -49,7 +46,18 @@ abstract class Filter implements FilterInterface
     }
 
     /**
-     * @return mixed
+     * @param $operator
+     * @return $this
+     */
+    public function setOperator($operator)
+    {
+        $this->operator = $operator;
+
+        return $this;
+    }
+
+    /**
+     * @return string
      */
     public function getOperator()
     {
