@@ -3,18 +3,12 @@
 namespace Coyote\Http\Validators;
 
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
-use Illuminate\Http\Request;
 use Coyote\Wiki;
 use Illuminate\Routing\Router;
 use Illuminate\Validation\Validator;
 
 class WikiValidator
 {
-    /**
-     * @var Request
-     */
-    protected $request;
-
     /**
      * @var WikiRepository
      */
@@ -26,13 +20,11 @@ class WikiValidator
     protected $router;
 
     /**
-     * @param Request $request
      * @param WikiRepository $wiki
      * @param Router $router
      */
-    public function __construct(Request $request, WikiRepository $wiki, Router $router)
+    public function __construct(WikiRepository $wiki, Router $router)
     {
-        $this->request = $request;
         $this->wiki = $wiki;
         $this->router = $router;
     }
@@ -47,8 +39,10 @@ class WikiValidator
     public function validateUnique($attribute, $value, $parameters, $validator)
     {
         $wikiId = (int) ($parameters[0] ?? null);
+        $parentId = ($parameters[1] ?? null);
+
         $wiki = $this->wiki->findWhere(
-            ['slug' => Wiki::slug($value), 'parent_id' => $this->request->input('parent_id') ?: null],
+            ['slug' => Wiki::slug($value), 'parent_id' => $parentId],
             ['id']
         );
 
@@ -71,8 +65,10 @@ class WikiValidator
         $slug = Wiki::slug($value);
         $path = '/' . $slug;
 
-        if (!empty($this->request->input('parent_id'))) {
-            $wiki = $this->wiki->find($this->request->input('parent_id'), ['path']);
+        $parentId = (int) ($parameters[0] ?? null);
+
+        if ($parentId) {
+            $wiki = $this->wiki->find($parentId, ['path']);
             $path = '/' . $wiki->path . '/' . $slug;
         }
 

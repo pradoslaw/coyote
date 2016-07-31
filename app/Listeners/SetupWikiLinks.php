@@ -35,19 +35,26 @@ class SetupWikiLinks implements ShouldQueue
         // at this point, text is probably in cache, so we need to just read from it.
         $cache = $this->getParser()->parse($event->wiki->text);
 
+        // step 1. grab only internal links
         $links = $this->grabInternalLinks($event->host, $cache);
         $result = [];
 
+        // step 2. get only path from links and build record to insert
         foreach ($this->grabPathFromLink($links) as $path) {
-            $result[] = $this->buildWikiLinkRecord($path, $event->wiki->id);
+            if (!validator(['path' => trim($path, '/')], ['path' => 'wiki_route'])->fails()) {
+                $result[] = $this->buildWikiLinkRecord($path, $event->wiki->id);
+            }
         }
 
+        // step 3. remove all current links
         $event->wiki->links()->delete();
 
+        // step 4. insert the new ones
         foreach ($result as $link) {
             $event->wiki->links()->insert($link);
         }
 
+        // step 5. purge cache from all articles which are connected to this one.
         foreach ($this->wiki->getWikiAssociatedLinksByPath($event->wiki->path) as $row) {
             $this->getParser()->purgeFromCache($row->text);
         }
@@ -99,9 +106,7 @@ class SetupWikiLinks implements ShouldQueue
         $links = collect($helper->filter($html)); // convert array to collection
 
         return $links->filter(function ($url) use ($host) {
-            $host = parse_url($url, PHP_URL_HOST);
-
-            return $host === strtolower($host);
+            return $host === strtolower(parse_url($url, PHP_URL_HOST));
         });
     }
 
@@ -124,17 +129,19 @@ class SetupWikiLinks implements ShouldQueue
     private function buildWikiLinkRecord($path, $pathId)
     {
         $parts = explode('/', $path);
-        $link = ['path_id' => $pathId];
+        $link = ['path_id' => $pathId, 'ref_id' => null];
 
         if ($parts[0] === 'Create') {
             array_shift($parts);
 
             $link['path'] = implode('/', $parts);
         } else {
+            $link['path'] = $path;
             $page = $this->wiki->findByPath($path);
 
-            $link['ref_id'] = $page->id;
-            $link['path'] = $path;
+            if ($page) {
+                $link['ref_id'] = $page->id;
+            }
         }
 
         return $link;

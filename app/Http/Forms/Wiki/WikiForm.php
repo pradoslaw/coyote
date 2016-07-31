@@ -38,9 +38,15 @@ class WikiForm extends Form
 
     public function buildForm()
     {
+        $parentId = $this->request->input('parent_id');
+
         $this
             ->add('title', 'text', [
-                'rules' => 'required|string|min:1|max:200|wiki_route|wiki_unique:' . ($this->data->id ?? null),
+                'rules' => sprintf(
+                    'required|string|min:1|max:200|wiki_route:%d|wiki_unique:' . ($this->data->id ?? null) . ',%d',
+                    $parentId,
+                    $parentId
+                ),
                 'label' => 'Tytuł'
             ])
             ->add('long_title', 'text', [
@@ -89,7 +95,7 @@ class WikiForm extends Form
                 'choices' => $this->getTreeList(),
                 'empty_value' => '--'
             ]);
-            
+
             $this->get('title')->setRules($this->get('title')->getRules() . '|reputation:1');
         } else {
             $this->add('parent_id', 'hidden', [

@@ -29,9 +29,11 @@ class CloneForm extends Form implements ValidatesWhenSubmitted
 
     public function buildForm()
     {
+        $parentId = $this->request->input('parent_id');
+
         $this
             ->add('title', 'text', [
-                'rules' => 'required|wiki_route|wiki_unique:0',
+                'rules' => sprintf('required|wiki_route:%d|wiki_unique:0,%d', $parentId, $parentId),
                 'label' => 'Tytuł',
                 'attr' => [
                     'readonly' => 'readonly'
