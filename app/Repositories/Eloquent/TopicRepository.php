@@ -168,10 +168,8 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      * @param string $sort
      * @return mixed
      */
-    private function getPackage($sort)
+    private function getSubQuery($sort)
     {
-        $this->makeModel();
-
         return $this->model
                 ->select([
                     'id',
@@ -196,16 +194,20 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function newest($limit = 7)
     {
-        $sub = $this->getPackage('id');
+        $sub = $this->getSubQuery('id');
         $this->applyCriteria();
 
-        return $this->model
-                    ->select(['topics.*', 'forums.name', 'forums.slug AS forum_slug'])
-                    ->from($this->raw("($sub) AS topics"))
-                    ->join('forums', 'forums.id', '=', 'forum_id')
-                    ->where('forums.is_locked', 0)
-                    ->limit($limit)
-                    ->get();
+        $result = $this
+            ->model
+            ->select(['topics.*', 'forums.name', 'forums.slug AS forum_slug'])
+            ->from($this->raw("($sub) AS topics"))
+            ->join('forums', 'forums.id', '=', 'forum_id')
+            ->where('forums.is_locked', 0)
+            ->limit($limit)
+            ->get();
+
+        $this->resetModel();
+        return $result;
     }
 
     /**
@@ -214,32 +216,33 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function voted($limit = 7)
     {
-        // ze wzgledu na blad w aplikowaniu kryteriow, zapytanie z metody newset() laczone jest
-        // z tym z metody voted(). nalezy wiec utworzyc nowy obiekt modelu! do poprawy
-        $this->makeModel();
         $this->applyCriteria();
 
-        return $this->model
-                    ->select([
-                        'topics.id',
-                        'forum_id',
-                        'subject',
-                        'topics.slug',
-                        'forums.name',
-                        'forums.slug AS forum_slug',
-                        'last_post_created_at',
-                        'views',
-                        'score',
-                        'deleted_at'
-                    ])
-                    ->join('forums', 'forums.id', '=', 'forum_id')
-                    ->where('last_post_created_at', '>', date('Y-m-d', strtotime('-1 month')))
-                    ->where('forums.is_locked', 0)
-                    ->where('topics.is_locked', 0)
-                    ->orderBy('score', 'DESC')
-                    ->orderBy('views', 'DESC')
-                    ->limit($limit)
-                    ->get();
+        $result = $this
+            ->model
+            ->select([
+                'topics.id',
+                'forum_id',
+                'subject',
+                'topics.slug',
+                'forums.name',
+                'forums.slug AS forum_slug',
+                'last_post_created_at',
+                'views',
+                'score',
+                'deleted_at'
+            ])
+            ->join('forums', 'forums.id', '=', 'forum_id')
+            ->where('last_post_created_at', '>', date('Y-m-d', strtotime('-1 month')))
+            ->where('forums.is_locked', 0)
+            ->where('topics.is_locked', 0)
+            ->orderBy('score', 'DESC')
+            ->orderBy('views', 'DESC')
+            ->limit($limit)
+            ->get();
+
+        $this->resetModel();
+        return $result;
     }
 
     /**
@@ -250,9 +253,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function interesting($userId, $limit = 7)
     {
-        $this->makeModel();
-
-        $sub = $this->getPackage('last_post_created_at');
+        $sub = $this->getSubQuery('last_post_created_at');
         $this->applyCriteria();
 
         $algo = 'LEAST(1000, 200 * topics.score) +
@@ -300,7 +301,10 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                         END';
         }
 
-        return $sql->orderBy($this->raw($algo), 'DESC')->get();
+        $result = $sql->orderBy($this->raw($algo), 'DESC')->get();
+        $this->resetModel();
+
+        return $result;
     }
 
     /**

@@ -1194,58 +1194,6 @@ class Migrate extends Command
     }
 
     /**
-     * @todo tabela topic_visits juz nie istnieje
-     */
-    public function migrateTopicVisits()
-    {
-        $this->info('Topic visits...');
-
-        $count = DB::connection('mysql')->table('page_track')->join('topic', 'topic_page', '=', 'track_page')->count();
-        $bar = $this->output->createProgressBar($count);
-
-        DB::beginTransaction();
-
-        try {
-            DB::connection('mysql')
-                ->table('page_track')
-                ->select(['page_track.*', 'topic_id AS track_topic_id'])
-                ->join('topic', 'topic_page', '=', 'track_page')
-                ->chunk(50000, function ($sql) use ($bar) {
-                    foreach ($sql as $row) {
-                        $row = $this->skipPrefix('track_', (array) $row);
-
-                        $this->rename($row, 'user', 'user_id');
-                        $this->rename($row, 'time', 'created_at');
-                        $this->rename($row, 'last_visit', 'updated_at');
-                        $this->rename($row, 'count', 'visits');
-
-                        $this->timestampToDatetime($row['created_at']);
-                        $this->timestampToDatetime($row['updated_at']);
-
-                        unset($row['page']);
-
-                        DB::table('topic_visits')->insert($row);
-                        $bar->advance();
-                    }
-                });
-
-
-            DB::commit();
-            $bar->finish();
-
-            $this->fixSequence('topic_visits');
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
-            $this->error($e->getTraceAsString());
-        }
-
-        $this->line('');
-        $this->info('Done');
-    }
-
-    /**
      * @todo usunac zduplikowane firmy
      */
     public function migrateFirms()
@@ -1775,7 +1723,7 @@ class Migrate extends Command
     }
 
     /**
-     * @todo przeniesc tabele page_attachment
+     * 100%
      */
     public function migrateWiki()
     {
@@ -1799,6 +1747,7 @@ class Migrate extends Command
 
                 if (is_null($row['page_text']) || !isset($mapping[$row['page_text']])) {
                     $mapping[$row['page_text']] = $row['page_id'];
+                    $textId = $row['page_text'];
 
                     $row = $this->skipPrefix('page_', $row);
                     $this->rename($row, 'title', 'long_title');
@@ -1849,6 +1798,26 @@ class Migrate extends Command
                         unset($text['id']);
                         DB::table('wiki_log')->insert($text);
                     }
+
+                    $attachments = DB::connection('mysql')
+                        ->table('page_attachment')
+                        ->select(['attachment.*'])
+                        ->join('attachment', 'attachment.attachment_id', '=', 'page_attachment.attachment_id')
+                        ->where('text_id', $textId)
+                        ->groupBy(['text_id', 'page_attachment.attachment_id'])
+                        ->get();
+
+                    foreach ($attachments as $attachment) {
+                        $attachment = $this->skipPrefix('attachment_', (array) $attachment);
+                        $this->rename($attachment, 'time', 'created_at');
+
+                        $this->timestampToDatetime($attachment['created_at']);
+
+                        $attachment['wiki_id'] = $row['id'];
+                        unset($attachment['id'], $attachment['user'], $attachment['image'], $attachment['width'], $attachment['height']);
+
+                        DB::table('wiki_attachments')->insert($attachment);
+                    }
                 } else {
                     DB::table('wiki_paths')->insert(['path_id' => $row['page_id'], 'wiki_id' => $mapping[$row['page_text']], 'parent_id' => $row['page_parent'], 'path' => $row['page_location']]);
                 }
@@ -1863,11 +1832,16 @@ class Migrate extends Command
 
             $accessor = DB::connection('mysql')
                 ->table('accessor')
+                ->join('location', 'location_page', '=', 'accessor_to')
                 ->get();
 
             foreach ($accessor as $row) {
                 $row = (array) $row;
-                DB::table('wiki_links')->insert(['path_id' => $row['accessor_from'], 'ref_id' => $row['accessor_to']]);
+                DB::table('wiki_links')->insert([
+                    'path_id' => $row['accessor_from'],
+                    'ref_id' => $row['accessor_to'],
+                    'path' => $row['location_text']
+                ]);
             }
 
             $broken = DB::connection('mysql')
@@ -1945,7 +1919,7 @@ class Migrate extends Command
             $this->error($e->getTraceAsString());
         }
 
-        $this->fixSequence(['wiki_pages', 'wiki_log', 'wiki_rates', 'wiki_subscribers', 'wiki_authors', 'wiki_links']);
+        $this->fixSequence(['wiki_pages', 'wiki_log', 'wiki_rates', 'wiki_subscribers', 'wiki_authors', 'wiki_links', 'wiki_attachments']);
         DB::unprepared("SELECT setval('wiki_paths_path_id_seq', (SELECT MAX(path_id) FROM wiki_paths))");
 
         $this->info('Done');
@@ -1953,7 +1927,49 @@ class Migrate extends Command
 
     public function fillPagesTable()
     {
-        $sql = DB::table('wiki')->get();
+//        $sql = DB::table('wiki')->get();
+//        $bar = $this->output->createProgressBar(count($sql));
+//
+//        $this->line('Wiki pages...');
+//
+//        DB::beginTransaction();
+//
+//        try {
+//            foreach ($sql as $row) {
+//                $row = (array) $row;
+//
+//                DB::table('pages')->insert([
+//                    'created_at' => $row['created_at'],
+//                    'updated_at' => $row['updated_at'],
+//                    'title' => $row['title'],
+//                    'path' => '/' . $row['path'],
+//                    'content_id' => $row['id'],
+//                    'content_type' => 'Coyote\Wiki',
+//                    'allow_sitemap' => 1
+//                ]);
+//
+//                $bar->advance();
+//            }
+//
+//            DB::commit();
+//            $bar->finish();
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//
+//            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+//            $this->error($e->getTraceAsString());
+//        }
+
+        $this->line('');
+        $this->line('Topic pages...');
+
+        $sql = DB::table('topics')
+            ->selectRaw('DISTINCT ON (topics.id) topics.*, forum_access.group_id, f.slug AS f_slug, p.slug AS p_slug')
+            ->leftJoin('forum_access', 'forum_access.forum_id', '=', 'topics.forum_id')
+            ->join('forums AS f', 'f.id', '=', 'topics.forum_id')
+            ->leftJoin('forums AS p', 'p.id', '=', 'f.parent_id')
+            ->get();
+
         $bar = $this->output->createProgressBar(count($sql));
 
         DB::beginTransaction();
@@ -1965,11 +1981,11 @@ class Migrate extends Command
                 DB::table('pages')->insert([
                     'created_at' => $row['created_at'],
                     'updated_at' => $row['updated_at'],
-                    'title' => $row['title'],
-                    'path' => '/' . $row['path'], // @todo "/" na poczatku?
+                    'title' => $row['subject'],
+                    'path' => route('forum.topic', [implode('/', array_filter([$row['p_slug'], $row['f_slug']])), $row['id'], $row['slug']], false),
                     'content_id' => $row['id'],
-                    'content_type' => 'Coyote\Wiki',
-                    'allow_sitemap' => 1
+                    'content_type' => 'Coyote\Topic',
+                    'allow_sitemap' => empty($row['group_id'])
                 ]);
 
                 $bar->advance();
@@ -1983,6 +1999,213 @@ class Migrate extends Command
             $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
             $this->error($e->getTraceAsString());
         }
+
+//        $this->line('');
+//        $this->line('Microblog pages...');
+//
+//        $sql = DB::table('microblogs')
+//            ->whereNull('parent_id')
+//            ->get();
+//
+//        $bar = $this->output->createProgressBar(count($sql));
+//
+//        DB::beginTransaction();
+//
+//        try {
+//            foreach ($sql as $row) {
+//                $row = (array) $row;
+//
+//                $parser = app('parser.microblog');
+//
+//                DB::table('pages')->insert([
+//                    'created_at' => $row['created_at'],
+//                    'updated_at' => $row['updated_at'],
+//                    'title' => excerpt($parser->parse($row['text'])),
+//                    'path' => route('microblog.view', [$row['id']], false),
+//                    'content_id' => $row['id'],
+//                    'content_type' => 'Coyote\Topic',
+//                    'allow_sitemap' => empty($row['group_id'])
+//                ]);
+//
+//                $bar->advance();
+//            }
+//
+//            DB::commit();
+//            $bar->finish();
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//
+//            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+//            $this->error($e->getTraceAsString());
+//        }
+//
+//        $this->line('');
+//        $this->line('Job pages...');
+//
+//        $sql = DB::table('jobs')
+//            ->get();
+//
+//        $bar = $this->output->createProgressBar(count($sql));
+//
+//        DB::beginTransaction();
+//
+//        try {
+//            foreach ($sql as $row) {
+//                $row = (array) $row;
+//
+//                DB::table('pages')->insert([
+//                    'created_at' => $row['created_at'],
+//                    'updated_at' => $row['updated_at'],
+//                    'title' => $row['title'],
+//                    'path' => route('job.offer', [$row['id'], $row['slug']], false),
+//                    'content_id' => $row['id'],
+//                    'content_type' => 'Coyote\Job',
+//                    'allow_sitemap' => 1
+//                ]);
+//
+//                $bar->advance();
+//            }
+//
+//            DB::commit();
+//            $bar->finish();
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//
+//            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+//            $this->error($e->getTraceAsString());
+//        }
+
+        $this->fixSequence(['pages']);
+    }
+
+    /**
+     *
+     */
+    public function migratePageVisits()
+    {
+        $this->info('Page visits...');
+
+        $count = DB::connection('mysql')->table('page_track')->count();
+        $bar = $this->output->createProgressBar($count);
+
+        DB::beginTransaction();
+
+        try {
+//            DB::connection('mysql')
+//                ->table('page_track')
+//                ->select(['page_track.*', 'topic_id AS track_topic_id'])
+//                ->join('topic', 'topic_page', '=', 'track_page')
+//                ->chunk(50000, function ($sql) use ($bar) {
+//                    foreach ($sql as $row) {
+//                        $row = (array) $row;
+//
+//                        $row = $this->skipPrefix('track_', $row);
+//
+//                        $this->rename($row, 'user', 'user_id');
+//                        $this->rename($row, 'time', 'created_at');
+//                        $this->rename($row, 'last_visit', 'updated_at');
+//                        $this->rename($row, 'count', 'visits');
+//
+//                        $this->timestampToDatetime($row['created_at']);
+//                        $this->timestampToDatetime($row['updated_at']);
+//
+//                        $page = DB::table('pages')->where('content_id', $row['topic_id'])->where('content_type', 'Coyote\Topic')->first();
+//
+//                        if (empty($page)) {
+//                            continue;
+//                        }
+//
+//                        unset($row['page'], $row['topic_id']);
+//                        $row['page_id'] = $page->id;
+//
+//                        DB::table('page_visits')->insert($row);
+//                        $bar->advance();
+//                    }
+//                });
+
+
+            /////////////////////////////////////////
+
+            DB::connection('mysql')
+                ->table('page_track')
+                ->select(['page_track.*'])
+                ->join('page', 'page_id', '=', 'track_page')
+                ->where('page_module', 3)
+                ->chunk(50000, function ($sql) use ($bar) {
+                    foreach ($sql as $row) {
+                        $row = (array) $row;
+
+                        $row = $this->skipPrefix('track_', $row);
+
+                        $this->rename($row, 'user', 'user_id');
+                        $this->rename($row, 'time', 'created_at');
+                        $this->rename($row, 'last_visit', 'updated_at');
+                        $this->rename($row, 'count', 'visits');
+
+                        $this->timestampToDatetime($row['created_at']);
+                        $this->timestampToDatetime($row['updated_at']);
+
+                        $page = DB::table('pages')->where('content_id', $row['page'])->where('content_type', 'Coyote\Wiki')->first();
+
+                        if (empty($page)) {
+                            continue;
+                        }
+                        $row['page_id'] = $page->id;
+
+                        unset($row['page']);
+                        DB::table('page_visits')->insert($row);
+                        $bar->advance();
+                    }
+                });
+
+            /////////////////////////////////////////
+
+            DB::connection('mysql')
+                ->table('page_track')
+                ->select(['page_track.*', 'job_id AS track_job_id'])
+                ->join('job', 'job_page', '=', 'track_page')
+                ->join('location', 'location_page', '=', 'track_page')
+                ->chunk(50000, function ($sql) use ($bar) {
+                    foreach ($sql as $row) {
+                        $row = (array) $row;
+
+                        $row = $this->skipPrefix('track_', $row);
+
+                        $this->rename($row, 'user', 'user_id');
+                        $this->rename($row, 'time', 'created_at');
+                        $this->rename($row, 'last_visit', 'updated_at');
+                        $this->rename($row, 'count', 'visits');
+
+                        $this->timestampToDatetime($row['created_at']);
+                        $this->timestampToDatetime($row['updated_at']);
+
+                        $page = DB::table('pages')->where('content_id', $row['job_id'])->where('content_type', 'Coyote\Job')->first();
+
+                        if (empty($page)) {
+                            continue;
+                        }
+                        $row['page_id'] = $page->id;
+
+                        unset($row['page'], $row['job_id']);
+                        DB::table('page_visits')->insert($row);
+                        $bar->advance();
+                    }
+                });
+
+
+            DB::commit();
+            $bar->finish();
+
+            $this->fixSequence('page_visits');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->line('');
+        $this->info('Done');
     }
 
 
@@ -1994,28 +2217,28 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('SET session_replication_role = replica');
-//        $this->migrateUsers();
-//        $this->migrateTags();
+        $this->migrateUsers();
+        $this->migrateTags();
         /* musi byc przed dodawaniem grup */
-//        $this->migratePermissions();
-//        $this->migrateGroups();
-//        $this->migrateSkills();
-//        $this->migrateWords();
-//        $this->migrateAlerts();
-//        $this->migratePm();
-//        $this->migrateReputation();
-//        $this->migrateForum();
-//        $this->migrateTopic();
-//        $this->migratePost();
-//        $this->migrateMicroblogs();
-//        $this->migrateTopicVisits();
-//        $this->migrateFirms();
-//        $this->migrateJobs();
-//        $this->migratePastebin();
-//        $this->migratePoll();
+        $this->migratePermissions();
+        $this->migrateGroups();
+        $this->migrateSkills();
+        $this->migrateWords();
+        $this->migrateAlerts();
+        $this->migratePm();
+        $this->migrateReputation();
+        $this->migrateForum();
+        $this->migrateTopic();
+        $this->migratePost();
+        $this->migrateMicroblogs();
+        $this->migrateFirms();
+        $this->migrateJobs();
+        $this->migratePastebin();
+        $this->migratePoll();
 
-//        $this->migrateWiki();
+        $this->migrateWiki();
         $this->fillPagesTable();
+        $this->migratePageVisits();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }
