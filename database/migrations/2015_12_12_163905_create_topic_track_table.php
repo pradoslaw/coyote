@@ -21,8 +21,8 @@ class CreateTopicTrackTable extends Migration
             $table->string('session_id')->nullable();
 
             $table->index('forum_id');
-            $table->index(['topic_id', 'user_id']);
-            $table->index(['topic_id', 'session_id']);
+            $table->unique(['topic_id', 'user_id']);
+            $table->unique(['topic_id', 'session_id']);
 
             $table->foreign('forum_id')->references('id')->on('forums')->onDelete('cascade');
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');

@@ -145,24 +145,23 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function isUnread($forumId, $markTime, $userId, $sessionId)
     {
-        $sql = $this->model
-                    ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
-                        $join->on('topic_track.topic_id', '=', 'topics.id');
+        return $this
+            ->model
+            ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
+                $join->on('topic_track.topic_id', '=', 'topics.id');
 
-                        if ($userId) {
-                            $join->on('topic_track.user_id', '=', $this->raw($userId));
-                        } else {
-                            $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                        }
-                    })
-                    ->where('topics.forum_id', $forumId)
-                    ->whereNull('topic_track.id');
-
-        if ($markTime) {
-            $sql->where('last_post_created_at', '>', $markTime);
-        }
-
-        return $sql->count();
+                if ($userId) {
+                    $join->on('topic_track.user_id', '=', $this->raw($userId));
+                } else {
+                    $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
+                }
+            })
+            ->when($markTime, function ($builder) use ($markTime) {
+                return $builder->where('last_post_created_at', '>', $markTime);
+            })
+            ->where('topics.forum_id', $forumId)
+            ->whereNull('topic_track.id')
+            ->count();
     }
 
     /**

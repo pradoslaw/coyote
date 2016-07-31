@@ -22,7 +22,6 @@ class CreateWikiAttachmentsTable extends Migration
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
 
             $table->index('wiki_id');
-            $table->unique('file');
 
             $table->foreign('wiki_id')->references('id')->on('wiki_pages')->onDelete('cascade');
         });
