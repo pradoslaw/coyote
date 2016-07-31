@@ -53,6 +53,21 @@ class LinkTest extends \Codeception\TestCase\Test
         $this->parse($url, $title);
     }
 
+    public function testParseInternalLinksWithPolishCharacters()
+    {
+        $host = '4programmers.net';
+        $this->link = new Link($this->repository, $host);
+
+        $title = 'łatwo przyszło, łatwo poszło';
+        $path = '/' . str_slug($title);
+
+        $now = new \DateTime('now');
+        $this->tester->haveRecord('pages', ['title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now]);
+
+        $url = 'http://' . $host . $path;
+        $this->parse($url, $title);
+    }
+
     public function testParseInternalAccessors()
     {
         $host = '4programmers.net';

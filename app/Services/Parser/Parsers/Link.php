@@ -57,7 +57,7 @@ class Link implements ParserInterface
             $link = $matches[$i][2];
             $title = $matches[$i][3];
 
-            if ($title === $link && ($path = $this->getPathFromUrl($link)) !== false) {
+            if (urldecode($title) === urldecode($link) && ($path = $this->getPathFromUrl($link)) !== false) {
                 $page = $this->page->findByPath($path);
                 $html = $matches[$i][0];
 
@@ -136,12 +136,6 @@ class Link implements ParserInterface
                 }
 
                 $path = urldecode($component['path']);
-
-                // jezeli forum na nowym coyote nie bedzie dzialalo pod subdomena, to nie potrzebujemy
-                // pinizszego kodu
-//                if (count($parts) > 2) {
-//                    $path = ucfirst(array_shift($parts)) . '/' . $path;
-//                }
             }
         }
 

@@ -128,6 +128,8 @@ class SetupWikiLinks implements ShouldQueue
      */
     private function buildWikiLinkRecord($path, $pathId)
     {
+        $path = urldecode($path);
+
         $parts = explode('/', $path);
         $link = ['path_id' => $pathId, 'ref_id' => null];
 
