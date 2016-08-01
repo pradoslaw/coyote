@@ -2,7 +2,6 @@
 
 namespace Coyote\Providers;
 
-use Coyote\Services\Grid\Grid;
 use Coyote\Services\Grid\GridBuilder;
 use Illuminate\Support\ServiceProvider;
 
