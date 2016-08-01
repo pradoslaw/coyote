@@ -6,6 +6,8 @@ use Coyote\Actkey;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Services\Stream\Activities\Confirm as Stream_Confirm;
+use Coyote\Services\Stream\Objects\Person as Stream_Person;
 use Illuminate\Http\Request;
 
 class ConfirmController extends Controller
@@ -112,6 +114,8 @@ class ConfirmController extends Controller
 
         $user->save();
         $actkey->delete();
+
+        stream(Stream_Confirm::class, new Stream_Person($user->toArray()));
 
         return redirect()->route('home')->with('success', 'Adres e-mail został pozytywnie potwierdzony.');
     }
