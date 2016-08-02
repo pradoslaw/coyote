@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Session;
 
+use Illuminate\Database\Query\Expression;
 use Illuminate\Session\DatabaseSessionHandler;
 
 class Handler extends DatabaseSessionHandler
@@ -11,20 +12,23 @@ class Handler extends DatabaseSessionHandler
      */
     public function write($sessionId, $data)
     {
-        $userId  = auth()->check() ? auth()->user()->id : null;
-        $url     = request()->fullUrl();
-        $ip      = request()->ip();
+        $request = $this->container->make('request');
+        $auth    = $this->container->make('auth');
+
+        $userId  = $auth->check() ? $auth->user()->id : null;
+        $url     = $request->fullUrl();
+        $ip      = $request->ip();
         $browser = '';
 
         // nie korzystamy ze standardowej klasy Request. Testy funkcjonalne "nie widza"
         // metody browser() z klasy CostomRequest
-        if (method_exists(request(), 'browser')) {
-            $browser = request()->browser();
+        if (method_exists($request, 'browser')) {
+            $browser = $request->browser();
         }
 
         $data = [
             'payload'       => base64_encode($data),
-            'updated_at'    => \DB::raw('NOW()'),
+            'updated_at'    => new Expression('NOW()'),
             'user_id'       => $userId,
             'url'           => $url,
             'ip'            => $ip,
@@ -45,6 +49,6 @@ class Handler extends DatabaseSessionHandler
      */
     public function gc($lifetime)
     {
-        $this->getQuery()->where('updated_at', '<=', \DB::raw("NOW() - INTERVAL '$lifetime seconds'"))->delete();
+        $this->getQuery()->where('updated_at', '<=', new Expression("NOW() - INTERVAL '$lifetime seconds'"))->delete();
     }
 }
