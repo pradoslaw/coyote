@@ -2,11 +2,11 @@
 
 namespace Boduch\Grid;
 
-use Coyote\Services\Grid\Decorators\DecoratorInterface;
-use Coyote\Services\Grid\Decorators\Link;
-use Coyote\Services\Grid\Decorators\Html;
-use Coyote\Services\Grid\Decorators\Placeholder;
-use Coyote\Services\Grid\Filters\FilterInterface;
+use Boduch\Grid\Decorators\DecoratorInterface;
+use Boduch\Grid\Decorators\Link;
+use Boduch\Grid\Decorators\Html;
+use Boduch\Grid\Decorators\Placeholder;
+use Boduch\Grid\Filters\FilterInterface;
 
 class Column
 {
@@ -177,7 +177,7 @@ class Column
     }
 
     /**
-     * @return \Coyote\Services\Grid\Decorators\DecoratorInterface[]
+     * @return DecoratorInterface[]
      */
     public function getDecorators()
     {

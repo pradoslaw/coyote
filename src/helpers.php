@@ -70,7 +70,7 @@ if (!function_exists('grid_row')) {
     {
         $cells = '';
         foreach ($row as $cell) {
-            $cells .= $this->cell($cell);
+            $cells .= grid_cell($cell);
         }
 
         return $row->getGrid()->getHtmlBuilder()->tag('tr', $cells, $row->getAttributes());
@@ -82,7 +82,7 @@ if (!function_exists('grid_cell')) {
      * @param Grid\CellInterface $cell
      * @return string
      */
-    function cell(Grid\CellInterface $cell)
+    function grid_cell(Grid\CellInterface $cell)
     {
         return $cell->getColumn()->getGrid()->getHtmlBuilder()->tag('td', (string)$cell->getValue());
     }

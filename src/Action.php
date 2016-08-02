@@ -5,7 +5,7 @@ namespace Boduch\Grid;
 class Action implements CellInterface
 {
     /**
-     * @var \Coyote\Services\Grid\RowActions\RowAction[]
+     * @var RowActions\RowAction[]
      */
     protected $rowActions;
 
@@ -21,7 +21,7 @@ class Action implements CellInterface
 
     /**
      * @param Column $column
-     * @param \Coyote\Services\Grid\RowActions\RowAction[]$rowActions
+     * @param RowActions\RowAction[] $rowActions
      * @param mixed $data
      */
     public function __construct(Column $column, $rowActions, $data)

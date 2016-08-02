@@ -13,7 +13,7 @@ use Illuminate\Pagination\Paginator;
 
 class Grid
 {
-    const DEFAULT_TEMPLATE = 'grid.grid';
+    const DEFAULT_TEMPLATE = 'laravel-grid::grid';
 
     /**
      * @var Request
@@ -488,6 +488,6 @@ class Grid
      */
     public function __toString()
     {
-        return $this->render();
+        return (string) $this->render();
     }
 }
