@@ -40,6 +40,14 @@ class Action implements CellInterface
     }
 
     /**
+     * @param mixed $value
+     */
+    public function setValue($value)
+    {
+        throw new \InvalidArgumentException('Can\'t set action value.');
+    }
+
+    /**
      * @return string
      */
     public function getValue()
