@@ -2,7 +2,7 @@
 
 namespace Boduch\Grid\Filters;
 
-use Coyote\Services\Grid\Column;
+use Boduch\Grid\Column;
 
 abstract class Filter implements FilterInterface
 {
