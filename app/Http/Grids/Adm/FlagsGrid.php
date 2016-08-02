@@ -38,10 +38,6 @@ class FlagsGrid extends Grid
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
                 'decorators' => [new Url()]
             ])
-            ->addColumn('created_at', [
-                'title' => 'Data dodania',
-                'decorators' => [new DateTimeFormat('Y-m-d')]
-            ])
             ->addColumn('text', [
                 'title' => 'Opis',
                 'decorators' => [new StrLimit()]

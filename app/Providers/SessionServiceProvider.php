@@ -31,7 +31,7 @@ class SessionServiceProvider extends ServiceProvider
 
             $table = $databaseConnection->getTablePrefix() . $app['config']->get('session.table');
 
-            return new Handler($databaseConnection, $table, $lifetime);
+            return new Handler($databaseConnection, $table, $lifetime, $app);
         });
 
         $this->app->bind('session.viewers', function ($app) {

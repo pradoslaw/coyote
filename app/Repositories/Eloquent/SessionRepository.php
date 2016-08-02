@@ -22,16 +22,15 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
      */
     public function viewers($path = null)
     {
-        $sql = $this->model
-                ->select(['user_id', 'url', 'sessions.id', 'robot', 'users.name AS name', 'groups.name AS group'])
-                ->leftJoin('users', 'users.id', '=', \DB::raw('user_id'))
-                ->leftJoin('groups', 'groups.id', '=', \DB::raw('group_id'));
-
-        if ($path) {
-            $sql->where('url', 'LIKE', '%' . $path . '%');
-        }
-
-        return $sql->get();
+        return $this
+            ->model
+            ->select(['user_id', 'url', 'sessions.id', 'robot', 'users.name AS name', 'groups.name AS group'])
+            ->leftJoin('users', 'users.id', '=', $this->raw('user_id'))
+            ->leftJoin('groups', 'groups.id', '=', $this->raw('group_id'))
+            ->when($path, function ($builder) use ($path) {
+                return $builder->where('url', 'LIKE', '%' . $path . '%');
+            })
+            ->get();
     }
 
     /**

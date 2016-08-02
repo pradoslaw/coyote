@@ -77,5 +77,7 @@ $this->group(
             'middleware' => 'can:adm-group',
             'as' => 'groups.delete'
         ]);
+
+        $this->get('Sessions', ['uses' => 'SessionsController@index'])->name('sessions');
     }
 );
