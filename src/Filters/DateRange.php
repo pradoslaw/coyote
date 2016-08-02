@@ -1,0 +1,80 @@
+<?php
+
+namespace Boduch\Grid\Filters;
+
+class DateRange extends Filter
+{
+    /**
+     * @var string
+     */
+    protected $template = 'grid.filters.date_range';
+
+    /**
+     * @var string
+     */
+    protected $separator = ' - ';
+
+    /**
+     * @return string
+     */
+    public function render()
+    {
+        return view($this->template, [
+            'name' => $this->getColumn()->getName(),
+            'input' => $this->getInput(),
+            'separator' => $this->separator
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate(): string
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param string $template
+     * @return $this
+     */
+    public function setTemplate(string $template)
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeparator(): string
+    {
+        return $this->separator;
+    }
+
+    /**
+     * @param string $separator
+     * @return $this
+     */
+    public function setSeparator(string $separator)
+    {
+        $this->separator = $separator;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOperator()
+    {
+        if (!empty($this->getInput()[0]) && !empty($this->getInput()[1])) {
+            return FilterOperator::OPERATOR_BETWEEN;
+        } elseif (empty($this->getInput()[1])) {
+            return FilterOperator::OPERATOR_GTE;
+        } else {
+            return FilterOperator::OPERATOR_LTE;
+        }
+    }
+}

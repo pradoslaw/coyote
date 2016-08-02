@@ -1,0 +1,33 @@
+{
+    "name": "adam-boduch/laravel-grid",
+    "description": "Laravel grid package",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adam Boduch",
+            "email": "adam@boduch.net"
+        }
+    ],
+    "require": {
+        "nesbot/carbon": "^1.21",
+        "illuminate/http": "^5.2",
+        "illuminate/support": "^5.2",
+        "illuminate/view": "^5.2",
+        "illuminate/pagination": "^5.2",
+        "illuminate/validation": "^5.2",
+        "laravelcollective/html": "5.2.*"
+    },
+    "require-dev": {
+      "phpunit/phpunit": "~4.0",
+      "orchestra/testbench": "~3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Boduch\\Grid\\": "src"
+        },
+        "files": [
+          "src/helpers.php"
+        ]
+    }
+}
