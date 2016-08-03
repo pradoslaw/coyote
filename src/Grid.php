@@ -53,7 +53,7 @@ class Grid
     /**
      * @var string
      */
-    protected $noDataMessage = 'Brak danych do wyświetlenia.';
+    protected $emptyMessage = 'Brak danych do wyświetlenia.';
 
     /**
      * @var Rows
@@ -228,17 +228,17 @@ class Grid
     /**
      * @return string
      */
-    public function getNoDataMessage()
+    public function getEmptyMessage()
     {
-        return $this->noDataMessage;
+        return $this->emptyMessage;
     }
 
     /**
-     * @param string $noDataMessage
+     * @param string $emptyMessage
      */
-    public function setNoDataMessage($noDataMessage)
+    public function setEmptyMessage($emptyMessage)
     {
-        $this->noDataMessage = $noDataMessage;
+        $this->emptyMessage = $emptyMessage;
     }
 
     /**

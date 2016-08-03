@@ -97,7 +97,7 @@ if (!function_exists('grid_empty')) {
     {
         return $grid->getHtmlBuilder()->tag(
             'td',
-            (string)$grid->getNoDataMessage(),
+            (string) $grid->getEmptyMessage(),
             ['colspan' => count($grid->getColumns()), 'style' => 'text-align: center']
         );
     }
