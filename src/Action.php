@@ -2,8 +2,15 @@
 
 namespace Boduch\Grid;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+
 class Action implements CellInterface
 {
+    /**
+     * @var ParameterBag
+     */
+    public $attributes;
+
     /**
      * @var RowActions\RowAction[]
      */
@@ -26,6 +33,7 @@ class Action implements CellInterface
      */
     public function __construct(Column $column, $rowActions, $data)
     {
+        $this->attributes = new ParameterBag();
         $this->column = $column;
         $this->rowActions = $rowActions;
         $this->data = $data;
@@ -44,7 +52,7 @@ class Action implements CellInterface
      */
     public function setValue($value)
     {
-        throw new \InvalidArgumentException('Can\'t set action value.');
+        throw new \InvalidArgumentException('Can\'t set action value in action column.');
     }
 
     /**

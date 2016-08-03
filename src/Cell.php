@@ -2,8 +2,15 @@
 
 namespace Boduch\Grid;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+
 class Cell implements CellInterface
 {
+    /**
+     * @var ParameterBag
+     */
+    public $attributes;
+
     /**
      * @var Column
      */
@@ -21,10 +28,11 @@ class Cell implements CellInterface
 
     /**
      * @param Column $column
-     * @param mixed $data
+     * @param mixed $data       Raw row data (array or object)
      */
     public function __construct(Column $column, $data)
     {
+        $this->attributes = new ParameterBag();
         $this->column = $column;
         $this->data = $data;
 

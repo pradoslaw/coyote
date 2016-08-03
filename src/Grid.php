@@ -13,7 +13,7 @@ use Illuminate\Pagination\Paginator;
 
 class Grid
 {
-    const DEFAULT_TEMPLATE = 'laravel-grid::grid';
+    protected $template = 'laravel-grid::grid';
 
     /**
      * @var Request
@@ -298,25 +298,27 @@ class Grid
     public function render()
     {
         $rows = $this->getRows();
-        $paginator = null;
+        $pagination = null;
 
         if ($this->enablePagination) {
-            $paginator = $this->getPaginator($rows)->appends($this->request->except('page'))->render();
+            $pagination = $this->getPaginator($rows)->appends($this->request->except('page'))->render();
         }
 
-        return view(self::DEFAULT_TEMPLATE, [
+        return view($this->template, [
             'columns'       => $this->columns,
             'rows'          => $rows,
-            'pagination'    => $paginator,
+            'pagination'    => $pagination,
             'grid'          => $this,
-            'has_filters'   => $this->hasFilters()
+            'is_filterable' => $this->isFilterable()
         ], $this->data);
     }
 
     /**
+     * Is table filterable?
+     *
      * @return bool
      */
-    public function hasFilters()
+    public function isFilterable()
     {
         $hasFilters = false;
 

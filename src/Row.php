@@ -2,12 +2,19 @@
 
 namespace Boduch\Grid;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+
 /**
  * @property string $class
  * @property string $style
  */
 class Row implements \IteratorAggregate
 {
+    /**
+     * @var ParameterBag
+     */
+    public $attributes;
+
     /**
      * @var Grid
      */
@@ -24,15 +31,11 @@ class Row implements \IteratorAggregate
     protected $cells = [];
 
     /**
-     * @var array
-     */
-    protected $attributes = [];
-
-    /**
      * @param mixed|null $raw
      */
     public function __construct($raw = null)
     {
+        $this->attributes = new ParameterBag();
         $this->raw = $raw;
     }
 
@@ -108,7 +111,7 @@ class Row implements \IteratorAggregate
     }
 
     /**
-     * @return array
+     * @return ParameterBag
      */
     public function getAttributes()
     {

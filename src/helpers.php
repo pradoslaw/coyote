@@ -84,7 +84,11 @@ if (!function_exists('grid_cell')) {
      */
     function grid_cell(Grid\CellInterface $cell)
     {
-        return $cell->getColumn()->getGrid()->getHtmlBuilder()->tag('td', (string)$cell->getValue());
+        return $cell->getColumn()->getGrid()->getHtmlBuilder()->tag(
+            'td',
+            (string) $cell->getValue(),
+            (array) $cell->attributes->all()
+        );
     }
 }
 
