@@ -27,7 +27,16 @@ class DateTimeFormat extends Decorator
     public function decorate(Cell $cell)
     {
         if ($cell->getValue()) {
-            $cell->setValue(Carbon::parse($cell->getValue())->format($this->format));
+            $cell->setValue($this->formatDateTime($cell->getValue()));
         }
+    }
+
+    /**
+     * @param $dateTime
+     * @return string
+     */
+    protected function formatDateTime($dateTime)
+    {
+        return Carbon::parse($dateTime)->format($this->format);
     }
 }
