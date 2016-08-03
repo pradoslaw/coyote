@@ -2,8 +2,15 @@
 
 namespace Boduch\Grid;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+
 interface CellInterface
 {
+    /**
+     * @return ParameterBag
+     */
+    public function attributes();
+
     /**
      * @return Column
      */

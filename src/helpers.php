@@ -73,7 +73,7 @@ if (!function_exists('grid_row')) {
             $cells .= grid_cell($cell);
         }
 
-        return $row->getGrid()->getHtmlBuilder()->tag('tr', $cells, $row->getAttributes());
+        return $row->getGrid()->getHtmlBuilder()->tag('tr', $cells, (array) $row->attributes()->all());
     }
 }
 
@@ -87,7 +87,7 @@ if (!function_exists('grid_cell')) {
         return $cell->getColumn()->getGrid()->getHtmlBuilder()->tag(
             'td',
             (string) $cell->getValue(),
-            (array) $cell->attributes->all()
+            (array) $cell->attributes()->all()
         );
     }
 }

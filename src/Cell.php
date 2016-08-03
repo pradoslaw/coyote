@@ -6,10 +6,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class Cell implements CellInterface
 {
-    /**
-     * @var ParameterBag
-     */
-    public $attributes;
+    use AttributesTrait;
 
     /**
      * @var Column

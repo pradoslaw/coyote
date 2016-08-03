@@ -10,10 +10,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  */
 class Row implements \IteratorAggregate
 {
-    /**
-     * @var ParameterBag
-     */
-    public $attributes;
+    use AttributesTrait;
 
     /**
      * @var Grid
@@ -108,31 +105,5 @@ class Row implements \IteratorAggregate
     public function getValue($name)
     {
         return $this->cells[$name]->getValue();
-    }
-
-    /**
-     * @return ParameterBag
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param string $name
-     * @param string $value
-     */
-    public function __set($name, $value)
-    {
-        $this->attributes[$name] = $value;
-    }
-
-    /**
-     * @param $name
-     * @return string|null
-     */
-    public function __get($name)
-    {
-        return $this->attributes[$name] ?? null;
     }
 }
