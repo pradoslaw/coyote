@@ -2208,6 +2208,406 @@ class Migrate extends Command
         $this->info('Done');
     }
 
+    public function migrateBan()
+    {
+        $sql = DB::connection('mysql')->table('ban')
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($sql));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($sql as $row) {
+                $row = (array) $row;
+
+                $row = $this->skipPrefix('ban_', $row);
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'expire', 'expire_at');
+                $this->rename($row, 'creator', 'moderator_id');
+
+                if ($row['expire_at']) {
+                    $this->timestampToDatetime($row['expire_at']);
+                } else {
+                    $row['expire_at'] = null;
+                }
+
+                $this->setNullIfEmpty($row['user_id']);
+
+                unset($row['flood']);
+
+                DB::table('firewall')->insert($row);
+                $bar->advance();
+            }
+
+            DB::commit();
+            $bar->finish();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->fixSequence(['firewall']);
+    }
+
+    public function migrateRedirect()
+    {
+        $sql = DB::connection('mysql')->table('redirect')
+            ->select(['redirect.*'])
+            ->join('page', 'page_id', '=', 'redirect_page')
+            ->where('page_module', 3)
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($sql));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($sql as $row) {
+                DB::table('wiki_redirects')->insert(['path_id' => $row->redirect_page, 'path' => $row->redirect_path]);
+                $bar->advance();
+            }
+
+            DB::commit();
+            $bar->finish();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->fixSequence(['wiki_redirects']);
+    }
+
+    public function migrateLogs()
+    {
+        $count = DB::connection('mysql')->table('log')->count();
+        $mongo = DB::connection('mongodb')->collection('stream');
+
+        $bar = $this->output->createProgressBar($count);
+
+        $parseJson = function ($row) {
+            $object = ['objectType' => 'topic', 'id' => $row['topic_id']];
+
+            if (!empty($row['location_text'])) {
+                $object = array_merge($object, [
+                    'url' => '/' . str_replace('@forum', 'Forum', $row['location_text']),
+                    'displayName' => htmlspecialchars_decode($row['page_subject'])
+                ]);
+            } elseif (!empty($row['meta'])) {
+                $json = json_decode($row['meta'], true);
+
+                $link = $json['subject'];
+
+                if (empty($link)) {
+                    return $object;
+                }
+                $dom = new \DOMDocument();
+                $dom->loadHTML($link);
+                $nodes = $dom->getElementsByTagName('a');
+
+                foreach ($nodes as $node) {
+                    $object['displayName'] = $node->nodeValue;
+                    $object['url'] = '/Forum' . parse_url($node->getAttribute('href'), PHP_URL_PATH);
+                }
+            } else {
+                $object['displayName'] = $row['message'];
+            }
+
+            return $object;
+        };
+
+        DB::connection('mysql')->table('log')
+            ->select(['log.*', 'page_module AS log_page_module', 'page_subject AS log_page_subject', 'page_path AS log_page_path', 'location_text AS log_location_text', 'user_id AS log_user_id', 'user_name AS log_user_name', 'user_photo AS log_user_photo', 'topic_id AS log_topic_id'])
+            ->join('user', 'user_id', '=', 'log_user')
+            ->leftJoin('page', 'page_id', '=', 'log_page')
+            ->leftJoin('location', 'location_page', '=', 'log_page')
+            ->leftJoin('topic', 'topic_page', '=', 'log_page')
+            ->where('log_type', 'Edycja postu')
+            ->orderBy('log_id')
+            ->chunk(10000, function ($result) use ($mongo, $bar, $parseJson) {
+                foreach ($result as $row) {
+                    $row = (array) $row;
+
+                    $row = $this->skipPrefix('log_', $row);
+                    $this->timestampToDatetime($row['time']);
+
+                    $json = ['ip' => $row['ip'], 'created_at' => $row['time']];
+
+                    if ($row['user_id']) {
+                        $json['actor'] = [
+                            'id' => $row['user_id'],
+                            'url' => '/Profile/' . $row['user_id'],
+                            'displayName' => $row['user_name'],
+                            'objectType' => 'actor',
+                            'image' => $row['user_photo']
+                        ];
+                    }
+
+                    switch ($row['type']) {
+                        // logowanie
+                        case 65534:
+                            $json['verb'] = 'login';
+                            break;
+
+                        case 65533: // nieudane logowanie
+                            if (!empty($row['message'])) {
+                                $json['verb'] = 'throttle';
+                                $json['login'] = $row['message'];
+                            }
+
+                            break;
+
+                        case 65532: // logowanie do pa
+                            break;
+
+                        case 65531: // nieudane logowanie do pa
+                            break;
+
+                        case 65530: // rejestracja
+                            $json['verb'] = 'create';
+                            $json['object'] = ['objectType' => 'person', 'displayName' => $row['message']];
+                            break;
+
+                        case 65529: // potwierdzenie konta
+                            $json['verb'] = 'confirm';
+                            $json['object'] = ['objectType' => 'person', 'displayName' => $row['message']];
+                            break;
+
+                        case 65520: // uaktualnienie konta
+                            preg_match('~\#(\d+)~', $row['message'], $match);
+                            $userId = (int) $match[1];
+
+                            preg_match('~\(.*?\)~', $row['message'], $match);
+                            $userName = '';
+
+                            if (!empty($match[1])) {
+                                $userName = $match[1];
+                            }
+
+                            $json['verb'] = 'update';
+                            $json['object'] = ['objectType' => 'person', 'displayName' => $userName, 'id' => $userId, 'url' => '/Profile/' . $userId];
+                            break;
+
+                        case 65519: // uaktualnienie bana
+                            $object = ['objectType' => 'firewall'];
+
+                            if ($row['message'] == 'Dodano nową blokadę') {
+                                $json['verb'] = 'create';
+                            } else {
+                                $json['verb'] = 'update';
+                            }
+
+                            $json['object'] = $object;
+                            break;
+
+                        case 65528: // dodanie strony
+                            if ($row['page_module'] == 3 || $row['page_module'] == 11) {
+
+                                if ($row['page_module'] == 3) {
+                                    $json['verb'] = 'create';
+                                    $object = [
+                                        'objectType' => 'wiki',
+                                        'id' => $row['page'],
+                                        'url' => route('wiki.show', [$row['location_text']], false),
+                                        'displayName' => $row['message']
+                                    ];
+
+                                    $json['object'] = $object;
+                                } else {
+                                    $job = DB::connection('mysql')->table('job')->where('job_page', $row['page'])->first();
+
+                                    if (!empty($job)) {
+                                        $json['verb'] = 'create';
+                                        $object = [
+                                            'objectType' => 'job',
+                                            'id' => $job->job_id,
+                                            'url' => route('job.offer', [$job->job_id, $row['page_path']], false),
+                                            'displayName' => excerpt($job->job_description)
+                                        ];
+
+                                        $json['object'] = $object;
+                                    }
+                                }
+                            }
+
+                            break;
+
+                        case 65527: // usuniecie strony
+                            if ($row['page_module'] == 3) {
+                                $json['verb'] = 'delete';
+                                $object = [
+                                    'objectType' => 'wiki',
+                                    'id' => $row['page'],
+                                    'url' => route('wiki.show', [$row['location_text']], false),
+                                    'displayName' => $row['message']
+                                ];
+
+                                $json['object'] = $object;
+                            } elseif ($row['page_module'] == 11) {
+                                $job = DB::connection('mysql')->table('job')->where('job_page', $row['page'])->first();
+
+                                if (!empty($job)) {
+                                    $json['verb'] = 'delete';
+                                    $object = [
+                                        'objectType' => 'job',
+                                        'id' => $job->job_id,
+                                        'url' => route('job.offer', [$job->job_id, $row['page_path']], false),
+                                        'displayName' => excerpt($job->job_description)
+                                    ];
+
+                                    $json['object'] = $object;
+                                }
+                            }
+
+                            break;
+
+                        case 'Utworzenie nowego wpisu mikroblogu':
+                            preg_match('~\#(\d+)~', $row['message'], $match);
+                            $microblogId = (int) $match[1];
+
+                            $json['verb'] = 'create';
+                            $json['object'] = [
+                                'objectType' => 'microblog',
+                                'id' => $microblogId,
+                                'url' => route('microblog.view', [$microblogId], false)
+                            ];
+
+                            break;
+
+                        case 'Edycja wpisu na mikroblogu':
+                            preg_match('~\#(\d+)~', $row['message'], $match);
+                            $microblogId = (int) $match[1];
+
+                            $json['verb'] = 'update';
+                            $json['object'] = [
+                                'objectType' => 'microblog',
+                                'id' => $microblogId,
+                                'url' => route('microblog.view', [$microblogId], false)
+                            ];
+
+                            break;
+
+                        case 'Usunięcie wpisu z mikroblogu':
+                            preg_match('~\#(\d+)~', $row['message'], $match);
+                            $microblogId = (int) $match[1];
+
+                            $json['verb'] = 'delete';
+                            $json['object'] = [
+                                'objectType' => 'microblog',
+                                'id' => $microblogId,
+                                'url' => route('microblog.view', [$microblogId], false)
+                            ];
+
+                            break;
+
+                        case 'Utworzenie nowego wątku':
+                            $json['verb'] = 'create';
+                            $object = $parseJson($row);
+
+                            $json['object'] = $object;
+                            break;
+
+                        case 'Zablokowanie wątku':
+                            $json['verb'] = 'lock';
+                            $json['object'] = $parseJson($row);
+                            break;
+
+                        case 'Odblokowanie wątku':
+                            $json['verb'] = 'unlock';
+                            $json['object'] = $parseJson($row);
+                            break;
+
+                        case 'Przeniesienie wątku':
+                            if (!empty($row['meta'])) {
+                                $json['verb'] = 'move';
+
+                                $meta = json_decode($row['meta'], true);
+
+                                $dom = new \DOMDocument();
+                                $dom->loadHTML($meta['subject']);
+                                $nodes = $dom->getElementsByTagName('a');
+
+                                $object = ['objectType' => 'topic', 'id' => $row['topic_id']];
+
+                                foreach ($nodes as $node) {
+                                    $object['displayName'] = $node->nodeValue;
+                                    $object['url'] = '/Forum' . parse_url($node->getAttribute('href'), PHP_URL_PATH);
+                                }
+
+                                $json['object'] = $object;
+                                $json['object']['reasonName'] = $meta['reason'];
+
+                                $target = [];
+                                $dom = new \DOMDocument();
+                                $dom->loadHTML($meta['path']);
+                                $nodes = $dom->getElementsByTagName('a');
+
+                                foreach ($nodes as $node) {
+                                    $target['displayName'] = $node->nodeValue;
+                                    $target['url'] = '/Forum' . parse_url($node->getAttribute('href'), PHP_URL_PATH);
+                                }
+
+                                $json['target'] = $target;
+                            }
+
+                            break;
+
+                        case 'Edycja postu':
+                            $json['verb'] = 'update';
+
+                            $object = ['objectType' => 'post'];
+                            $target = [
+                                'objectType' => 'topic',
+                                'id' => $row['topic_id']
+                            ];
+
+                            if (empty($row['meta'])) {
+                                preg_match('~\#(\d+)~', $row['message'], $match);
+                                $postId = $match[1];
+
+                                $object['id'] = (int) $postId;
+
+                                if (!empty($row['location_text'])) {
+                                    $object['url'] = '/' . str_replace('@forum', 'Forum', $row['location_text']) . '?p=' . $postId . '#id' . $postId;
+                                    $target['url'] = '/' . str_replace('@forum', 'Forum', $row['location_text']);
+                                }
+                            } else {
+                                $postId = $row['index'];
+                                $meta = json_decode($row['meta'], true);
+
+                                $object['id'] = (int) $postId;
+
+                                $dom = new \DOMDocument();
+                                $dom->loadHTML($meta['subject']);
+                                $nodes = $dom->getElementsByTagName('a');
+
+                                foreach ($nodes as $node) {
+                                    $target['displayName'] = $node->nodeValue;
+                                    $parseUrl = parse_url($node->getAttribute('href'));
+                                    $object['url'] = '/Forum' . $parseUrl['path'] . '?' . $parseUrl['query'] . '#' . $parseUrl['fragment'];
+                                    $target['url'] = '/Forum' . $parseUrl['path'];
+                                }
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+                    }
+
+                    if (!empty($json['verb'])) {
+                        $mongo->insert($json);
+                    }
+
+                    $bar->advance();
+                }
+            });
+
+        $bar->finish();
+    }
+
 
     /**
      * Execute the console command.
@@ -2235,10 +2635,13 @@ class Migrate extends Command
         $this->migrateJobs();
         $this->migratePastebin();
         $this->migratePoll();
+        $this->migrateBan();
+        $this->migrateRedirect();
 
         $this->migrateWiki();
         $this->fillPagesTable();
         $this->migratePageVisits();
+        $this->migrateLogs();
 
         DB::statement('SET session_replication_role = DEFAULT');
     }
