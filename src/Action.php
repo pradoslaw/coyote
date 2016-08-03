@@ -2,47 +2,12 @@
 
 namespace Boduch\Grid;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
-
-class Action implements CellInterface
+class Action extends Cell
 {
-    use AttributesTrait;
-
     /**
-     * @var RowActions\RowAction[]
+     * @var Components\RowAction[]
      */
     protected $rowActions;
-
-    /**
-     * @var mixed
-     */
-    protected $data;
-
-    /**
-     * @var Column
-     */
-    protected $column;
-
-    /**
-     * @param Column $column
-     * @param RowActions\RowAction[] $rowActions
-     * @param mixed $data
-     */
-    public function __construct(Column $column, $rowActions, $data)
-    {
-        $this->attributes = new ParameterBag();
-        $this->column = $column;
-        $this->rowActions = $rowActions;
-        $this->data = $data;
-    }
-
-    /**
-     * @return Column
-     */
-    public function getColumn()
-    {
-        return $this->column;
-    }
 
     /**
      * @param mixed $value
@@ -50,6 +15,25 @@ class Action implements CellInterface
     public function setValue($value)
     {
         throw new \InvalidArgumentException('Can\'t set action value in action column.');
+    }
+
+    /**
+     * @return Components\RowAction[]
+     */
+    public function getRowActions(): array
+    {
+        return $this->rowActions;
+    }
+
+    /**
+     * @param Components\RowAction[] $rowActions
+     * @return $this
+     */
+    public function setRowActions(array $rowActions)
+    {
+        $this->rowActions = $rowActions;
+
+        return $this;
     }
 
     /**
@@ -64,5 +48,15 @@ class Action implements CellInterface
         }
 
         return $html;
+    }
+
+    protected function decorate()
+    {
+        return null;
+    }
+
+    protected function setupValue()
+    {
+        //
     }
 }

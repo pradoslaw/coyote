@@ -4,7 +4,7 @@ namespace Boduch\Grid;
 
 use Collective\Html\HtmlBuilder;
 use Collective\Html\FormBuilder;
-use Boduch\Grid\RowActions\RowAction;
+use Boduch\Grid\Components\RowAction;
 use Boduch\Grid\Source\SourceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
@@ -373,7 +373,7 @@ class Grid
                 $row->addCell(new Cell($column, $mixed));
             }
 
-            $row->addCell(new Action($actions, $this->rowActions, $mixed));
+            $row->addCell((new Action($actions, $mixed))->setRowActions($this->rowActions));
 
             if ($this->eachCallback) {
                 $this->eachCallback->call($this, $row);

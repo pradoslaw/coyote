@@ -1,6 +1,6 @@
 <?php
 
-namespace Boduch\Grid\RowActions;
+namespace Boduch\Grid\Components;
 
 class EditButton extends RowAction
 {

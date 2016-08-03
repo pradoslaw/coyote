@@ -1,6 +1,6 @@
 <?php
 
-namespace Boduch\Grid\RowActions;
+namespace Boduch\Grid\Components;
 
 use Boduch\Grid\Grid;
 
