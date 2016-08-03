@@ -23,16 +23,13 @@ if (!function_exists('grid_column')) {
         if ($column->isSortable()) {
             $order = $column->getGrid()->getOrder();
 
-            $parameters = array_merge(
-                $column->getGrid()->getRequest()->all(),
-                [
-                    'column' => $column->getName(),
-                    'direction' => $order->getDirection() == 'desc' ? 'asc' : 'desc'
-                ]
-            );
+            $parameters = array_merge($column->getGrid()->getGridHelper()->getRequest()->all(), [
+                'column' => $column->getName(),
+                'direction' => $order->getDirection() == 'desc' ? 'asc' : 'desc'
+            ]);
 
             $text = link_to(
-                $column->getGrid()->getRequest()->path() . '?' . http_build_query($parameters),
+                $column->getGrid()->getGridHelper()->getRequest()->path() . '?' . http_build_query($parameters),
                 $column->getTitle(),
                 ['class' => 'sort ' . ($order->getColumn() == $column->getName() ? strtolower($order->getDirection()) : '')]
             );
@@ -40,7 +37,7 @@ if (!function_exists('grid_column')) {
             $text = $column->getTitle();
         }
 
-        return $column->getGrid()->getHtmlBuilder()->tag('th', (string)$text);
+        return $column->getGrid()->getGridHelper()->tag('th', (string) $text);
     }
 }
 
@@ -54,10 +51,10 @@ if (!function_exists('grid_filter')) {
         $filter = '';
 
         if ($column->isFilterable()) {
-            $filter = (string)$column->getFilter()->render();
+            $filter = (string) $column->getFilter()->render();
         }
 
-        return $column->getGrid()->getHtmlBuilder()->tag('th', (string)$filter);
+        return $column->getGrid()->getGridHelper()->tag('th', (string) $filter);
     }
 }
 
@@ -73,7 +70,7 @@ if (!function_exists('grid_row')) {
             $cells .= grid_cell($cell);
         }
 
-        return $row->getGrid()->getHtmlBuilder()->tag('tr', $cells, (array) $row->attributes()->all());
+        return $row->getGrid()->getGridHelper()->tag('tr', $cells, (array) $row->attributes()->all());
     }
 }
 
@@ -84,7 +81,7 @@ if (!function_exists('grid_cell')) {
      */
     function grid_cell(Grid\CellInterface $cell)
     {
-        return $cell->getColumn()->getGrid()->getHtmlBuilder()->tag(
+        return $cell->getColumn()->getGrid()->getGridHelper()->tag(
             'td',
             (string) $cell->getValue(),
             (array) $cell->attributes()->all()
@@ -99,7 +96,7 @@ if (!function_exists('grid_empty')) {
      */
     function grid_empty(Grid\Grid $grid)
     {
-        return $grid->getHtmlBuilder()->tag(
+        return $grid->getGridHelper()->tag(
             'td',
             (string) $grid->getEmptyMessage(),
             ['colspan' => count($grid->getColumns()), 'style' => 'text-align: center']

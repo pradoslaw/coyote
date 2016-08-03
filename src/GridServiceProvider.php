@@ -31,7 +31,7 @@ class GridServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('grid.builder', function ($app) {
+        $this->app->singleton('grid.builder', function ($app) {
             return new GridBuilder($app);
         });
     }

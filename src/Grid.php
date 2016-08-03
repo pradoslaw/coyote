@@ -2,38 +2,22 @@
 
 namespace Boduch\Grid;
 
-use Collective\Html\HtmlBuilder;
-use Collective\Html\FormBuilder;
 use Boduch\Grid\Components\RowAction;
 use Boduch\Grid\Source\SourceInterface;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
 class Grid
 {
+    /**
+     * @var string
+     */
     protected $template = 'laravel-grid::grid';
 
     /**
-     * @var Request
+     * @var GridHelper
      */
-    protected $request;
-
-    /**
-     * @var ValidationFactory
-     */
-    protected $validator;
-
-    /**
-     * @var HtmlBuilder
-     */
-    protected $htmlBuilder;
-
-    /**
-     * @var FormBuilder
-     */
-    protected $formBuilder;
+    protected $gridHelper;
 
     /**
      * @var SourceInterface
@@ -101,21 +85,11 @@ class Grid
     protected $data = [];
 
     /**
-     * @param Request $request
-     * @param ValidationFactory $validator
-     * @param HtmlBuilder $htmlBuilder
-     * @param FormBuilder $formBuilder
+     * @param GridHelper $gridHelper
      */
-    public function __construct(
-        Request $request,
-        ValidationFactory $validator,
-        HtmlBuilder $htmlBuilder,
-        FormBuilder $formBuilder
-    ) {
-        $this->request = $request;
-        $this->validator = $validator;
-        $this->htmlBuilder = $htmlBuilder;
-        $this->formBuilder = $formBuilder;
+    public function __construct(GridHelper $gridHelper)
+    {
+        $this->gridHelper = $gridHelper;
 
         $this->makeDefaultOrder();
     }
@@ -126,27 +100,11 @@ class Grid
     }
 
     /**
-     * @return Request
+     * @return GridHelper
      */
-    public function getRequest()
+    public function getGridHelper()
     {
-        return $this->request;
-    }
-
-    /**
-     * @return HtmlBuilder
-     */
-    public function getHtmlBuilder()
-    {
-        return $this->htmlBuilder;
-    }
-
-    /**
-     * @return FormBuilder
-     */
-    public function getFormBuilder()
-    {
-        return $this->formBuilder;
+        return $this->gridHelper;
     }
 
     /**
@@ -293,7 +251,7 @@ class Grid
     }
 
     /**
-     * @return string
+     * @return \Illuminate\View\View;
      */
     public function render()
     {
@@ -301,10 +259,10 @@ class Grid
         $pagination = null;
 
         if ($this->enablePagination) {
-            $pagination = $this->getPaginator($rows)->appends($this->request->except('page'))->render();
+            $pagination = $this->getPaginator($rows)->appends($this->gridHelper->getRequest()->except('page'));
         }
 
-        return view($this->template, [
+        return $this->gridHelper->getView()->make($this->template, [
             'columns'       => $this->columns,
             'rows'          => $rows,
             'pagination'    => $pagination,
@@ -345,13 +303,13 @@ class Grid
             return $this->rows;
         }
 
-        if ($this->request->has('column') && !empty($this->defaultOrder)) {
+        if ($this->gridHelper->getRequest()->has('column') && !empty($this->defaultOrder)) {
             $this->order = new Order(
-                $this->request->get('column', $this->defaultOrder['column']),
-                $this->request->get('direction', $this->defaultOrder['direction'])
+                $this->gridHelper->getRequest()->get('column', $this->defaultOrder['column']),
+                $this->gridHelper->getRequest()->get('direction', $this->defaultOrder['direction'])
             );
 
-            $validator = $this->getValidatorInstance();
+            $validator = $this->gridHelper->getValidatorInstance($this->getValidatorRules());
 
             if ($validator->fails()) {
                 $this->makeDefaultOrder();
@@ -402,7 +360,7 @@ class Grid
      */
     protected function execute()
     {
-        $this->source->applyFilters($this->columns, $this->request);
+        $this->source->applyFilters($this->columns, $this->gridHelper->getRequest());
 
         if ($this->enablePagination) {
             $this->total = $this->source->total();
@@ -425,14 +383,6 @@ class Grid
     protected function resolveCurrentPath()
     {
         return Paginator::resolveCurrentPath();
-    }
-
-    /**
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function getValidatorInstance()
-    {
-        return $this->validator->make($this->request->all(), $this->getValidatorRules());
     }
 
     /**

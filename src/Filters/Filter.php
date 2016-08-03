@@ -85,7 +85,7 @@ abstract class Filter implements FilterInterface
      */
     protected function getHtmlBuilder()
     {
-        return $this->column->getGrid()->getHtmlBuilder();
+        return $this->column->getGrid()->getGridHelper()->getHtmlBuilder();
     }
 
     /**
@@ -93,7 +93,7 @@ abstract class Filter implements FilterInterface
      */
     protected function getFormBuilder()
     {
-        return $this->column->getGrid()->getFormBuilder();
+        return $this->column->getGrid()->getGridHelper()->getFormBuilder();
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class Filter implements FilterInterface
      */
     protected function getRequest()
     {
-        return $this->column->getGrid()->getRequest();
+        return $this->column->getGrid()->getGridHelper()->getRequest();
     }
 
     /**
