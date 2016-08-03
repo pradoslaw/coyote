@@ -6,10 +6,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class Action implements CellInterface
 {
-    /**
-     * @var ParameterBag
-     */
-    public $attributes;
+    use AttributesTrait;
 
     /**
      * @var RowActions\RowAction[]
