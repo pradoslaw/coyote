@@ -94,7 +94,7 @@ abstract class Filter implements FilterInterface
     }
 
     /**
-     * @return array|string
+     * @return string|string[]
      */
     public function getInput()
     {
