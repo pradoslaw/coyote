@@ -79,8 +79,6 @@ class Cell implements CellInterface
 
     protected function setupValue()
     {
-        $value = null;
-
         if (is_array($this->data) || $this->data instanceof \ArrayAccess) {
             $this->value = array_get($this->data, $this->column->getName());
         } elseif (is_object($this->data)) {
