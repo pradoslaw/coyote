@@ -76,7 +76,6 @@ class Row implements \IteratorAggregate
 
     /**
      * Get cell object by name.
-
      * @param string $name  Column name
      * @return CellInterface|null
      */

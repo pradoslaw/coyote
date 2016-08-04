@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Contracts\Container\Container;
 use Orchestra\Testbench\TestCase;
 use Collective\Html\HtmlBuilder;
 use Collective\Html\FormBuilder;

@@ -96,7 +96,7 @@ class EloquentDataSource implements SourceInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param Request $request
      * @return bool
      */

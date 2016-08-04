@@ -109,7 +109,7 @@ class GridHelper
      * Generate an html tag.
      *
      * @param string $tag
-     * @param mixed $content
+     * @param string $content
      * @param array  $attributes
      *
      * @return \Illuminate\Support\HtmlString
