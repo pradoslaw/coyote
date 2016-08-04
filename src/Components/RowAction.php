@@ -80,6 +80,6 @@ abstract class RowAction
      */
     protected function tag($tag, $content, array $attributes = [])
     {
-        return $this->grid->getHtmlBuilder()->tag($tag, $content, $attributes);
+        return $this->grid->getGridHelper()->getHtmlBuilder()->tag($tag, $content, $attributes);
     }
 }
