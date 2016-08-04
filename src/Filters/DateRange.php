@@ -69,9 +69,11 @@ class DateRange extends Filter
      */
     public function getOperator()
     {
-        if (!empty($this->getInput()[0]) && !empty($this->getInput()[1])) {
+        $keys = array_keys($this->getInput());
+
+        if (!empty($this->getInput()[$keys[0]]) && !empty($this->getInput()[$keys[1]])) {
             return FilterOperator::OPERATOR_BETWEEN;
-        } elseif (empty($this->getInput()[1])) {
+        } elseif (empty($this->getInput()[$keys[1]])) {
             return FilterOperator::OPERATOR_GTE;
         } else {
             return FilterOperator::OPERATOR_LTE;
