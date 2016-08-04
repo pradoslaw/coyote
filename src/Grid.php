@@ -194,10 +194,13 @@ class Grid
 
     /**
      * @param string $emptyMessage
+     * @return $this
      */
     public function setEmptyMessage($emptyMessage)
     {
         $this->emptyMessage = $emptyMessage;
+
+        return $this;
     }
 
     /**
