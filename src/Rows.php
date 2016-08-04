@@ -43,7 +43,7 @@ class Rows implements \IteratorAggregate, \Countable
      */
     public function count()
     {
-        return $this->rows->count();
+        return count($this->rows);
     }
 
     /**
