@@ -13,6 +13,8 @@ class Url extends Decorator
     public function decorate(Cell $cell)
     {
         $url = (string) $cell->getValue();
-        $cell->setValue($cell->getColumn()->getGrid()->getHtmlBuilder()->tag('a', $url, ['href' => $url]));
+        $cell->setValue(
+            $cell->getColumn()->getGrid()->getGridHelper()->getHtmlBuilder()->tag('a', $url, ['href' => $url])
+        );
     }
 }
