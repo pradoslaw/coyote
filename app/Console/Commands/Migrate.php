@@ -2406,7 +2406,6 @@ class Migrate extends Command
 
                         case 65528: // dodanie strony
                             if ($row['page_module'] == 3 || $row['page_module'] == 11) {
-
                                 if ($row['page_module'] == 3) {
                                     $json['verb'] = 'create';
                                     $object = [
