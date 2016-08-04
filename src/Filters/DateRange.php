@@ -7,7 +7,7 @@ class DateRange extends Filter
     /**
      * @var string
      */
-    protected $template = 'grid.filters.date_range';
+    protected $template = 'laravel-grid::filters.date_range';
 
     /**
      * @var string
