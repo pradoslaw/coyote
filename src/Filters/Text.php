@@ -14,7 +14,7 @@ class Text extends Filter
      */
     public function render()
     {
-        return $this->getFormBuilder()->input('text', $this->column->getName(), $this->getInput(), [
+        return $this->getFormBuilder()->input('text', $this->getName(), $this->getInput(), [
             'class' => 'form-control input-sm'
         ]);
     }

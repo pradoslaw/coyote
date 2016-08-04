@@ -376,7 +376,7 @@ class Grid
      */
     protected function execute()
     {
-        $this->source->applyFilters($this->columns, $this->gridHelper->getRequest());
+        $this->source->applyFilters($this->columns);
 
         if ($this->enablePagination) {
             $this->total = $this->source->total();

@@ -61,7 +61,7 @@ class Select extends Filter
      */
     public function render()
     {
-        return $this->getFormBuilder()->select($this->column->getName(), $this->options, $this->getInput(), [
+        return $this->getFormBuilder()->select($this->getName(), $this->options, $this->getInput(), [
             'class' => 'form-control input-sm',
             'onchange' => $this->autoSubmit ? 'this.form.submit()' : ''
         ]);

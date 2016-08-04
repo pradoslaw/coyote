@@ -5,7 +5,6 @@ namespace Boduch\Grid\Source;
 use Boduch\Grid\Column;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Order;
-use Illuminate\Http\Request;
 
 class EloquentDataSource implements SourceInterface
 {
@@ -24,13 +23,13 @@ class EloquentDataSource implements SourceInterface
 
     /**
      * @param Column[] $columns
-     * @param Request $request
      */
-    public function applyFilters($columns, Request $request)
+    public function applyFilters($columns)
     {
         foreach ($columns as $column) {
-            if ($column->isFilterable() && !$this->isEmpty($column->getName(), $request)) {
-                $this->buildQuery($column, $request);
+            /** @var \Boduch\Grid\Column $column */
+            if ($column->isFilterable() && !$column->getFilter()->isEmpty()) {
+                $this->buildQuery($column);
             }
         }
     }
@@ -62,17 +61,19 @@ class EloquentDataSource implements SourceInterface
 
     /**
      * @param Column $column
-     * @param Request $request
      */
-    protected function buildQuery(Column $column, Request $request)
+    protected function buildQuery(Column $column)
     {
+        $name = $column->getFilter()->getName();
+        $input = $column->getFilter()->getInput();
+
         if ($column->getFilter()->getOperator() == FilterOperator::OPERATOR_BETWEEN) {
-            $this->source->whereBetween($column->getName(), $request->input($column->getName()));
+            $this->source->whereBetween($name, $input);
         } else {
             $this->source->where(
-                $column->getName(),
+                $name,
                 $column->getFilter()->getOperator(),
-                $this->normalizeValue($request->input($column->getName()), $column->getFilter()->getOperator())
+                $this->normalizeValue($input, $column->getFilter()->getOperator())
             );
         }
     }
@@ -93,19 +94,5 @@ class EloquentDataSource implements SourceInterface
         }
 
         return $value;
-    }
-
-    /**
-     * @param string $name
-     * @param Request $request
-     * @return bool
-     */
-    protected function isEmpty($name, Request $request)
-    {
-        if (is_array($request->input($name))) {
-            return empty(array_filter($request->input($name)));
-        } else {
-            return !$request->has($name);
-        }
     }
 }

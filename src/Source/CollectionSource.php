@@ -5,7 +5,6 @@ namespace Boduch\Grid\Source;
 use Boduch\Grid\Column;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Order;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 class CollectionSource implements SourceInterface
@@ -25,15 +24,15 @@ class CollectionSource implements SourceInterface
 
     /**
      * @param Column[] $columns
-     * @param Request $request
      */
-    public function applyFilters($columns, Request $request)
+    public function applyFilters($columns)
     {
         foreach ($columns as $column) {
-            if ($column->isFilterable() && $request->has($column->getName())) {
+            /** @var \Boduch\Grid\Column $column */
+            if ($column->isFilterable() && $column->getFilter()->isEmpty()) {
                 $this->filterValue(
-                    $column->getName(),
-                    $request->input($column->getName()),
+                    $column->getFilter()->getName(),
+                    $column->getFilter()->getInput(),
                     $column->getFilter()->getOperator()
                 );
             }

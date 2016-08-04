@@ -30,7 +30,7 @@ abstract class Filter implements FilterInterface
     }
 
     /**
-     * @return Column
+     * @inheritdoc
      */
     public function getColumn()
     {
@@ -38,7 +38,7 @@ abstract class Filter implements FilterInterface
     }
 
     /**
-     * @param Column $column
+     * @inheritdoc
      */
     public function setColumn(Column $column)
     {
@@ -46,8 +46,7 @@ abstract class Filter implements FilterInterface
     }
 
     /**
-     * @param $operator
-     * @return $this
+     * @inheritdoc
      */
     public function setOperator($operator)
     {
@@ -57,11 +56,49 @@ abstract class Filter implements FilterInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getOperator()
     {
         return $this->operator;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->name ?: $this->column->getName();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isEmpty()
+    {
+        if (is_array($this->getInput())) {
+            return empty(array_filter($this->getInput()));
+        } else {
+            return !$this->hasInput();
+        }
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getInput()
+    {
+        return $this->getRequest()->input($this->normalizeName($this->getName()));
     }
 
     abstract public function render();
@@ -105,10 +142,21 @@ abstract class Filter implements FilterInterface
     }
 
     /**
-     * @return array|string
+     * @return bool
      */
-    protected function getInput()
+    protected function hasInput()
     {
-        return $this->getRequest()->input($this->column->getName());
+        return $this->getRequest()->has($this->normalizeName($this->getName()));
+    }
+
+    /**
+     * HTTP POST or HTTP GET can't have dots in name.
+     *
+     * @param string $name
+     * @return string
+     */
+    protected function normalizeName($name)
+    {
+        return str_replace('.', '_', $name);
     }
 }

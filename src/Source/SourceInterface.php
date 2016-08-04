@@ -3,16 +3,14 @@
 namespace Boduch\Grid\Source;
 
 use Boduch\Grid\Order;
-use Illuminate\Http\Request;
 use Boduch\Grid\Column;
 
 interface SourceInterface
 {
     /**
      * @param Column[] $columns
-     * @param Request $request
      */
-    public function applyFilters($columns, Request $request);
+    public function applyFilters($columns);
 
     /**
      * @param int $perPage

@@ -19,8 +19,8 @@ class DateRange extends Filter
      */
     public function render()
     {
-        return view($this->template, [
-            'name' => $this->getColumn()->getName(),
+        return $this->column->getGrid()->getGridHelper()->getView()->make($this->template, [
+            'name' => $this->getName(),
             'input' => $this->getInput(),
             'separator' => $this->separator
         ]);
