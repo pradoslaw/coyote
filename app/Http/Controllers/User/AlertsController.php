@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Request;
 use Carbon;
 
@@ -16,24 +15,17 @@ class AlertsController extends BaseController
     }
 
     /**
-     * @var UserRepository
-     */
-    private $user;
-
-    /**
      * @var AlertRepository
      */
     private $alert;
 
     /**
-     * @param UserRepository $user
      * @param AlertRepository $alert
      */
-    public function __construct(UserRepository $user, AlertRepository $alert)
+    public function __construct(AlertRepository $alert)
     {
         parent::__construct();
 
-        $this->user = $user;
         $this->alert = $alert;
     }
 
@@ -51,7 +43,7 @@ class AlertsController extends BaseController
 
     /**
      * @param SessionRepository $session
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function index(SessionRepository $session)
     {

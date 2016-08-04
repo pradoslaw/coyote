@@ -2,7 +2,6 @@
 
 namespace Coyote\Services\Alert\Providers\Post;
 
-use Coyote\Alert;
 use Coyote\Services\Alert\Providers\Provider;
 use Coyote\Services\Alert\Providers\ProviderInterface;
 

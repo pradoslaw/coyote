@@ -17,7 +17,6 @@ use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Services\Alert\Container;
 use Coyote\Post\Log;
-use Coyote\User;
 
 class SubmitController extends BaseController
 {

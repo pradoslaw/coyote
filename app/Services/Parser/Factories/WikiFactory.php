@@ -4,9 +4,7 @@ namespace Coyote\Services\Parser\Factories;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Container;
-use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Geshi;
 use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;

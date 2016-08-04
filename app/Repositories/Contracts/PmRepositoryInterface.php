@@ -2,8 +2,6 @@
 
 namespace Coyote\Repositories\Contracts;
 
-use Illuminate\Http\Request;
-
 interface PmRepositoryInterface extends RepositoryInterface
 {
     /**

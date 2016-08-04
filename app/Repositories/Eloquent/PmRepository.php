@@ -3,7 +3,6 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\PmRepositoryInterface;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Pm;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
@@ -15,7 +14,7 @@ use Carbon\Carbon;
 class PmRepository extends Repository implements PmRepositoryInterface
 {
     /**
-     * @return \Coyote\Pm
+     * @return string
      */
     public function model()
     {
@@ -96,7 +95,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                     'is_blocked',
                     'photo'
                 ])
-                ->from(\DB::raw("($sub) AS pm"))
+                ->from($this->raw("($sub) AS pm"))
                 ->join('pm_text', 'pm_text.id', '=', 'text_id')
                 ->leftJoin('users', 'users.id', '=', 'host_id')
                 ->orderBy('pm.id', 'DESC')

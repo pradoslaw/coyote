@@ -2,11 +2,7 @@
 
 namespace Coyote\Http\Forms\Forum;
 
-use Coyote\User;
-use Coyote\Forum;
-use Coyote\Post;
 use Coyote\Services\FormBuilder\Form;
-use Coyote\Topic;
 
 class AttachmentForm extends Form
 {
