@@ -36,7 +36,7 @@ class Button extends Component
      */
     public function render()
     {
-        return $this->tag('button', $this->text, $this->attributes);
+        return $this->tag('a', $this->text, $this->attributes);
     }
 
     /**
@@ -44,6 +44,6 @@ class Button extends Component
      */
     protected function setDefaultAttributes(array $attributes = [])
     {
-        $this->attributes = array_merge(['class' => 'btn btn-default'], $attributes);
+        $this->attributes = array_merge(['class' => 'btn btn-default', 'href' => $this->url], $attributes);
     }
 }
