@@ -99,7 +99,7 @@ class Viewers
             }
         }
 
-        return view('components/viewers', compact('groups', 'total', 'guests', 'people', 'robots'));
+        return view('components.viewers', compact('groups', 'total', 'guests', 'people', 'robots'));
     }
 
     private function makeProfileLink($userId, $userName)

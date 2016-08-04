@@ -19,13 +19,12 @@ class SessionsGrid extends Grid
             ->addColumn('name', [
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
-                'clickable' => function ($row) {
-                    if ($row->user_id) {
-                        return link_to_route('adm.user.save', $row->name, [$row->user_id]);
+                'clickable' => function ($session) {
+                    /** @var \Coyote\Session $session */
+                    if ($session->user_id) {
+                        return link_to_route('adm.user.save', $session->name, [$session->user_id]);
                     } else {
-                        $agent = new Agent();
-
-                        return $agent->isRobot($row->browser) ? $agent->robot() : '--';
+                        return $session->robot ?: '--';
                     }
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])

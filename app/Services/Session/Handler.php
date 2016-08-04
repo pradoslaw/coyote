@@ -4,6 +4,7 @@ namespace Coyote\Services\Session;
 
 use Illuminate\Database\Query\Expression;
 use Illuminate\Session\DatabaseSessionHandler;
+use Jenssegers\Agent\Agent;
 
 class Handler extends DatabaseSessionHandler
 {
@@ -38,6 +39,13 @@ class Handler extends DatabaseSessionHandler
         if ($this->exists) {
             $this->getQuery()->where('id', $sessionId)->update($data);
         } else {
+            $agent = new Agent();
+            $agent->setUserAgent($browser);
+
+            if ($agent->isRobot()) {
+                $data['robot'] = $agent->robot();
+            }
+
             $this->getQuery()->insert(['id' => $sessionId] + $data);
         }
 
