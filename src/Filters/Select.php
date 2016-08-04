@@ -20,6 +20,11 @@ class Select extends Filter
     protected $operator = FilterOperator::OPERATOR_EQ;
 
     /**
+     * @var bool
+     */
+    protected $autoSubmit = true;
+
+    /**
      * @param array $options
      */
     public function setOptions(array $options)
@@ -36,13 +41,29 @@ class Select extends Filter
     }
 
     /**
+     * @return boolean
+     */
+    public function isAutoSubmit(): bool
+    {
+        return $this->autoSubmit;
+    }
+
+    /**
+     * @param boolean $flag
+     */
+    public function setAutoSubmit(bool $flag)
+    {
+        $this->autoSubmit = $flag;
+    }
+
+    /**
      * @return \Illuminate\Support\HtmlString
      */
     public function render()
     {
         return $this->getFormBuilder()->select($this->column->getName(), $this->options, $this->getInput(), [
             'class' => 'form-control input-sm',
-            'onchange' => 'this.form.submit()'
+            'onchange' => $this->autoSubmit ? 'this.form.submit()' : ''
         ]);
     }
 }
