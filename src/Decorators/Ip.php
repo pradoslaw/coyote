@@ -12,6 +12,8 @@ class Ip extends Decorator
      */
     public function decorate(Cell $cell)
     {
-        $cell->setValue($cell->getColumn()->getGrid()->getHtmlBuilder()->tag('abbr', (string) $cell->getValue()));
+        $cell->setValue(
+            $cell->getColumn()->getGrid()->getGridHelper()->getHtmlBuilder()->tag('abbr', (string) $cell->getValue())
+        );
     }
 }
