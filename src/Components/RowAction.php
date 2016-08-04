@@ -2,19 +2,17 @@
 
 namespace Boduch\Grid\Components;
 
-use Boduch\Grid\Grid;
-
-abstract class RowAction
+abstract class RowAction extends Component
 {
-    /**
-     * @var Grid
-     */
-    protected $grid;
-
     /**
      * @var \Closure
      */
-    protected $url;
+    protected $closure;
+
+    /**
+     * @var mixed
+     */
+    protected $data;
 
     /**
      * RowAction constructor.
@@ -22,64 +20,50 @@ abstract class RowAction
      */
     public function __construct(\Closure $url)
     {
-        $this->setUrl($url);
-    }
-
-    /**
-     * @return Grid
-     */
-    public function getGrid()
-    {
-        return $this->grid;
-    }
-
-    /**
-     * @param Grid $grid
-     */
-    public function setGrid(Grid $grid)
-    {
-        $this->grid = $grid;
+        $this->setClosure($url);
     }
 
     /**
      * @return string
      */
-    public function getUrl()
+    public function getClosure()
     {
-        return $this->url;
+        return $this->closure;
     }
 
     /**
-     * @param \Closure $url
+     * @param \Closure $closure
      */
-    public function setUrl(\Closure $url)
+    public function setClosure(\Closure $closure)
     {
-        $this->url = $url;
+        $this->closure = $closure;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param mixed $data
+     * @return $this
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
     }
 
     /**
      * @param $data
      * @return mixed
      */
-    abstract public function render($data);
-
-    /**
-     * @param $data
-     * @return mixed
-     */
-    protected function getActionUrl($data)
+    protected function buildActionUrl($data)
     {
-        return $this->url->call($this, $data);
-    }
-
-    /**
-     * @param string $tag
-     * @param string $content
-     * @param array $attributes
-     * @return \Illuminate\Support\HtmlString
-     */
-    protected function tag($tag, $content, array $attributes = [])
-    {
-        return $this->grid->getGridHelper()->getHtmlBuilder()->tag($tag, $content, $attributes);
+        return $this->closure->call($this, $data);
     }
 }

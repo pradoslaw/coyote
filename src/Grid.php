@@ -2,6 +2,7 @@
 
 namespace Boduch\Grid;
 
+use Boduch\Grid\Components\Component;
 use Boduch\Grid\Components\RowAction;
 use Boduch\Grid\Source\SourceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -82,7 +83,7 @@ class Grid
     /**
      * @var array
      */
-    protected $data = [];
+    protected $viewData = [];
 
     /**
      * @param GridHelper $gridHelper
@@ -240,12 +241,24 @@ class Grid
     }
 
     /**
-     * @param array $data
+     * @param Component $component
      * @return $this
      */
-    public function setData($data)
+    public function addComponent(Component $component)
     {
-        $this->data = $data;
+        $component->setGrid($this);
+        $this->viewData[$component->getName()] = $component->render();
+
+        return $this;
+    }
+
+    /**
+     * @param array $viewData
+     * @return $this
+     */
+    public function setViewData($viewData)
+    {
+        $this->viewData = $viewData;
 
         return $this;
     }
@@ -268,7 +281,7 @@ class Grid
             'pagination'    => $pagination,
             'grid'          => $this,
             'is_filterable' => $this->isFilterable()
-        ], $this->data);
+        ], $this->viewData);
     }
 
     /**
