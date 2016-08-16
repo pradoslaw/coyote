@@ -79,5 +79,8 @@ $this->group(
         ]);
 
         $this->get('Sessions', ['uses' => 'SessionsController@index'])->name('sessions');
+
+        $this->get('Words', ['uses' => 'WordsController@index'])->name('words');
+        $this->post('Words', ['uses' => 'WordsController@save'])->name('words.save');
     }
 );
