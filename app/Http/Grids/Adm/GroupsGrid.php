@@ -2,10 +2,11 @@
 
 namespace Coyote\Http\Grids\Adm;
 
-use Coyote\Services\Grid\Decorators\DateTimeFormat;
+use Boduch\Grid\Decorators\DateTimeFormat;
+use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\Order;
-use Coyote\Services\Grid\RowActions\EditButton;
+use Boduch\Grid\Order;
+use Boduch\Grid\Components\EditButton;
 
 class GroupsGrid extends Grid
 {
@@ -38,9 +39,11 @@ class GroupsGrid extends Grid
             ->addRowAction(new EditButton(function ($group) {
                 return route('adm.groups.save', [$group->id]);
             }))
-            ->setData([
-                'add_url' => route('adm.groups.save'),
-                'add_label' => 'Nowa grupa'
-            ]);
+            ->addComponent(
+                new CreateButton(
+                    route('adm.groups.save'),
+                    'Nowa grupa'
+                )
+            );
     }
 }

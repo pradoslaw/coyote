@@ -107,7 +107,7 @@ return [
             'Coyote\Services\TwigBridge\Extensions\Elasticsearch',
             'Coyote\Services\TwigBridge\Extensions\Block',
             'Coyote\Services\TwigBridge\Extensions\FormBuilder',
-            'Coyote\Services\TwigBridge\Extensions\Grid',
+//            'Coyote\Services\TwigBridge\Extensions\Grid',
             'Coyote\Services\TwigBridge\Extensions\Media'
         ],
         /*
@@ -178,7 +178,13 @@ return [
             'route',
             'url',
             'asset',
-            'keywords'
+            'keywords',
+            'grid' => ['is_safe' => ['html']],
+            'grid_column' => ['is_safe' => ['html']],
+            'grid_row' => ['is_safe' => ['html']],
+            'grid_cell' => ['is_safe' => ['html']],
+            'grid_filter' => ['is_safe' => ['html']],
+            'grid_empty' => ['is_safe' => ['html']]
         ],
         /*
         |--------------------------------------------------------------------------

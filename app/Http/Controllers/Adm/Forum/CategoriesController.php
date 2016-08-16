@@ -6,7 +6,7 @@ use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Forms\Forum\ForumForm;
 use Coyote\Http\Grids\Adm\Forum\CategoriesGrid;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Services\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentDataSource;
 use Illuminate\Contracts\Cache\Repository as Cache;
 
 class CategoriesController extends BaseController

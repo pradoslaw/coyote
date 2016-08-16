@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Adm;
 use Coyote\Http\Forms\Group\GroupForm;
 use Coyote\Http\Grids\Adm\GroupsGrid;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
-use Coyote\Services\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentDataSource;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Group as Stream_Group;

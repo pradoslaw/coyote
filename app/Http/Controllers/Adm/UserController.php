@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Adm;
 use Coyote\Http\Forms\User\AdminForm;
 use Coyote\Http\Grids\Adm\UsersGrid;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Services\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentDataSource;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\Events\UserWasSaved;

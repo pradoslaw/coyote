@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Grids\Adm\SessionsGrid;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
-use Coyote\Services\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentDataSource;
 
 class SessionsController extends BaseController
 {

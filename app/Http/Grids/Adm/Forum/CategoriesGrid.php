@@ -2,10 +2,11 @@
 
 namespace Coyote\Http\Grids\Adm\Forum;
 
-use Coyote\Services\Grid\Decorators\Boolean;
-use Coyote\Services\Grid\Decorators\StrLimit;
+use Boduch\Grid\Decorators\Boolean;
+use Boduch\Grid\Decorators\StrLimit;
+use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\RowActions\EditButton;
+use Boduch\Grid\Components\EditButton;
 
 class CategoriesGrid extends Grid
 {
@@ -51,9 +52,11 @@ class CategoriesGrid extends Grid
                 /** @var \Coyote\Forum $forum */
                 return route('adm.forum.categories.save', [$forum->id]);
             }))
-            ->setData([
-                'add_url' => route('adm.forum.categories.save'),
-                'add_label' => 'Nowa kategoria'
-            ]);
+            ->addComponent(
+                new CreateButton(
+                    route('adm.forum.categories.save'),
+                    'Nowa kategoria'
+                )
+            );
     }
 }

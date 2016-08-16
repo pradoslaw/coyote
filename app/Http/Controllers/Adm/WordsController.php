@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Grids\Adm\WordsGrid;
 use Coyote\Repositories\Contracts\WordRepositoryInterface as WordRepository;
-use Coyote\Services\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentDataSource;
 use Illuminate\Http\Request;
 
 class WordsController extends BaseController

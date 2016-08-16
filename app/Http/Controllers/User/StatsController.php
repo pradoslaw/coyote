@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\User;
 use Coyote\Http\Grids\User\StatsGrid;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Coyote\Services\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentDataSource;
 
 class StatsController extends BaseController
 {

@@ -2,13 +2,13 @@
 
 namespace Coyote\Http\Grids\Adm;
 
-use Coyote\Services\Grid\Decorators\DateTimeFormat;
-use Coyote\Services\Grid\Decorators\StrLimit;
-use Coyote\Services\Grid\Decorators\Url;
-use Coyote\Services\Grid\Filters\FilterOperator;
-use Coyote\Services\Grid\Filters\Text;
+use Boduch\Grid\Decorators\StrLimit;
+use Boduch\Grid\Decorators\Url;
+use Boduch\Grid\Filters\FilterOperator;
+use Boduch\Grid\Filters\Text;
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\Order;
+use Boduch\Grid\Order;
+use Boduch\Grid\Row;
 
 class FlagsGrid extends Grid
 {
@@ -52,8 +52,7 @@ class FlagsGrid extends Grid
                 },
                 'placeholder' => '--'
             ])
-            ->each(function ($row) {
-                /** @var $row \Coyote\Services\Grid\Row */
+            ->each(function (Row $row) {
                 if (!empty($row->raw('deleted_at'))) {
                     $row->class = 'strikeout';
                 }

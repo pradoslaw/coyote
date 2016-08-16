@@ -27,7 +27,7 @@ class PermissionsGrid extends Grid
 
     public function buildGrid()
     {
-        $form = $this->getFormBuilder();
+        $form = $this->getGridHelper()->getFormBuilder();
 
         $this
             ->addColumn('name', [

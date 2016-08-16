@@ -187,7 +187,7 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * @return \Coyote\Services\Grid\GridBuilder
+     * @return \Boduch\Grid\GridBuilder
      */
     protected function getGridBuilder()
     {

@@ -2,14 +2,15 @@
 
 namespace Coyote\Http\Grids\Adm;
 
-use Coyote\Services\Grid\Decorators\DateTimeFormat;
-use Coyote\Services\Grid\Decorators\StrLimit;
-use Coyote\Services\Grid\Filters\FilterOperator;
-use Coyote\Services\Grid\Filters\Text;
+use Boduch\Grid\Decorators\DateTimeFormat;
+use Boduch\Grid\Decorators\StrLimit;
+use Boduch\Grid\Filters\FilterOperator;
+use Boduch\Grid\Filters\Text;
+use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\Decorators\Ip;
-use Coyote\Services\Grid\Order;
-use Coyote\Services\Grid\RowActions\EditButton;
+use Boduch\Grid\Decorators\Ip;
+use Boduch\Grid\Order;
+use Boduch\Grid\Components\EditButton;
 
 class FirewallGrid extends Grid
 {
@@ -59,8 +60,11 @@ class FirewallGrid extends Grid
             ->addRowAction(new EditButton(function ($data) {
                 return route('adm.firewall.save', [$data->id]);
             }))
-            ->setData([
-                'add_url' => route('adm.firewall.save')
-            ]);
+            ->addComponent(
+                new CreateButton(
+                    route('adm.firewall.save'),
+                    'Nowy'
+                )
+            );
     }
 }

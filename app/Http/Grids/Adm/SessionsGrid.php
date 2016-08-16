@@ -2,12 +2,13 @@
 
 namespace Coyote\Http\Grids\Adm;
 
-use Coyote\Services\Grid\Decorators\Ip;
-use Coyote\Services\Grid\Decorators\StrLimit;
-use Coyote\Services\Grid\Filters\FilterOperator;
-use Coyote\Services\Grid\Filters\Text;
+use Boduch\Grid\Decorators\Ip;
+use Boduch\Grid\Decorators\StrLimit;
+use Boduch\Grid\Filters\FilterOperator;
+use Boduch\Grid\Filters\Text;
+use Boduch\Grid\Row;
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\Order;
+use Boduch\Grid\Order;
 use Jenssegers\Agent\Agent;
 
 class SessionsGrid extends Grid
@@ -57,8 +58,7 @@ class SessionsGrid extends Grid
                 'title' => 'User-agent',
                 'decorator' => [new StrLimit(65)]
             ])
-            ->each(function ($row) {
-                /** @var $row \Coyote\Services\Grid\Row */
+            ->each(function (Row $row) {
                 $agent = new Agent();
                 $agent->setUserAgent($row->raw('browser'));
 

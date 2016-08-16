@@ -2,7 +2,8 @@
 
 namespace Coyote\Services\Grid\Decorators;
 
-use Coyote\Services\Grid\Cell;
+use Boduch\Grid\Cell;
+use Boduch\Grid\Decorators\Decorator;
 
 class InputText extends Decorator
 {
@@ -12,8 +13,10 @@ class InputText extends Decorator
      */
     public function decorate(Cell $cell)
     {
-        $form = $cell->getColumn()->getGrid()->getFormBuilder();
+        $form = $cell->getColumn()->getGrid()->getGridHelper()->getFormBuilder();
 
-        $cell->setValue($form->text($cell->getColumn()->getName() . '[]', $cell->getValue(), ['class' => 'form-control']));
+        $cell->setValue(
+            $form->text($cell->getColumn()->getName() . '[]', $cell->getValue(), ['class' => 'form-control'])
+        );
     }
 }

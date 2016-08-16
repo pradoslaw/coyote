@@ -195,8 +195,6 @@ return [
         Coyote\Providers\LogViewerProvider::class,
         // Generowanie mapy strony
         Coyote\Providers\SitemapProvider::class,
-        // Generowanie tabel
-        Coyote\Providers\GridServiceProvider::class,
 
         // Klasa wspierajaca budowanie znacznikow HTML
         Collective\Html\HtmlServiceProvider::class,
@@ -210,6 +208,8 @@ return [
         Lavary\Menu\ServiceProvider::class,
         // Parsowanie user agent
         Jenssegers\Agent\AgentServiceProvider::class,
+        // Pakiet Laravel Grid do budowania tabel oraz filtrowania i sortowania
+        \Boduch\Grid\GridServiceProvider::class
     ],
     /*
     |--------------------------------------------------------------------------

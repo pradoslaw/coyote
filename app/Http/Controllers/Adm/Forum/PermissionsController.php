@@ -7,7 +7,7 @@ use Coyote\Http\Grids\Adm\Forum\PermissionsGrid;
 use Coyote\Permission;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
-use Coyote\Services\Grid\Source\CollectionSource;
+use Boduch\Grid\Source\CollectionSource;
 use Illuminate\Http\Request;
 
 class PermissionsController extends BaseController

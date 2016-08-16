@@ -8,7 +8,7 @@ use Coyote\Http\Forms\FirewallForm;
 use Coyote\Http\Grids\Adm\FirewallGrid;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface as FirewallRepository;
 use Coyote\Repositories\Criteria\FirewallList;
-use Coyote\Services\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentDataSource;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;

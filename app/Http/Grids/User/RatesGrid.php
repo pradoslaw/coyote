@@ -2,9 +2,9 @@
 
 namespace Coyote\Http\Grids\User;
 
-use Coyote\Services\Grid\Decorators\DateTimeFormat;
+use Boduch\Grid\Decorators\DateTimeFormat;
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\Order;
+use Boduch\Grid\Order;
 
 class RatesGrid extends Grid
 {

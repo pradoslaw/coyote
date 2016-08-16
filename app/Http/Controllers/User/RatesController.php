@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Grids\User\RatesGrid;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
-use Coyote\Services\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentDataSource;
 
 class RatesController extends BaseController
 {

@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Adm;
 use Coyote\Http\Grids\Adm\FlagsGrid;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
 use Coyote\Repositories\Criteria\FlagList;
-use Coyote\Services\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentDataSource;
 
 class FlagController extends BaseController
 {

@@ -1,14 +1,8 @@
 <div class="grid">
 
     {% block header %}
-        {% if add_url %}
-            <div class="pull-left">
-                <a class="btn btn-default btn-add" href="{{ add_url }}">
-                    <i class="fa fa-plus"></i>
-                    {{ add_label|default('Nowy') }}
-                </a>
-            </div>
-
+        {% if create_button %}
+            <div class="pull-left">{{ create_button|raw }}</div>
             <div class="pull-right">{{ pagination|raw }}</div>
         {% else %}
             {{ pagination|raw }}
@@ -16,7 +10,7 @@
     {% endblock %}
 
     {% block table %}
-        <form method="get" id="filter-form">
+        {{ form_open({id: 'filter-form', method: 'get'}) }}
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -37,14 +31,14 @@
                         {{ grid_row(row) }}
                     {% else %}
                         <tr>
-                            {{ grid_no_data(grid) }}
+                            {{ grid_empty(grid) }}
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
 
             <input type="submit" style="visibility: hidden; height: 1px" />
-        </form>
+        {{ form_close() }}
     {% endblock %}
 
     {% block footer %}

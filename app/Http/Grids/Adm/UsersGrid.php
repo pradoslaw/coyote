@@ -2,15 +2,14 @@
 
 namespace Coyote\Http\Grids\Adm;
 
-use Coyote\Services\Grid\Filters\DateRange;
-use Coyote\Services\Grid\Filters\FilterOperator;
-use Coyote\Services\Grid\Filters\Select;
-use Coyote\Services\Grid\Filters\Text;
+use Boduch\Grid\Filters\FilterOperator;
+use Boduch\Grid\Filters\Select;
+use Boduch\Grid\Filters\Text;
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\Decorators\Boolean;
-use Coyote\Services\Grid\Decorators\Ip;
-use Coyote\Services\Grid\Order;
-use Coyote\Services\Grid\RowActions\EditButton;
+use Boduch\Grid\Decorators\Boolean;
+use Boduch\Grid\Decorators\Ip;
+use Boduch\Grid\Order;
+use Boduch\Grid\Components\EditButton;
 
 class UsersGrid extends Grid
 {

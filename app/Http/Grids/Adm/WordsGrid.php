@@ -2,10 +2,11 @@
 
 namespace Coyote\Http\Grids\Adm;
 
+use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Decorators\InputText;
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\Order;
-use Coyote\Services\Grid\RowActions\DeleteButton;
+use Boduch\Grid\Order;
+use Boduch\Grid\Components\DeleteButton;
 
 class WordsGrid extends Grid
 {
@@ -25,6 +26,13 @@ class WordsGrid extends Grid
                 'title' => 'Fraza do zastąpienia',
                 'decorators' => [new InputText()]
             ])
+            ->addComponent(
+                new CreateButton(
+                    '',
+                    'Dodaj nowy',
+                    ['title' => 'Dodaj wyraz do bazy danych']
+                )
+            )
             ->addRowAction(new DeleteButton(function () {
                 return '#confirm';
             }));

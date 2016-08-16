@@ -3,7 +3,7 @@
 namespace Coyote\Http\Grids\User;
 
 use Coyote\Services\Grid\Grid;
-use Coyote\Services\Grid\Order;
+use Boduch\Grid\Order;
 
 class StatsGrid extends Grid
 {
