@@ -1,8 +1,12 @@
 <div class="grid">
 
     {% block header %}
-        {% if create_button %}
-            <div class="pull-left">{{ create_button|raw }}</div>
+        {% if create_button or button %}
+            <div class="pull-left">
+                {{ create_button|raw }}
+                {{ button|raw }}
+            </div>
+
             <div class="pull-right">{{ pagination|raw }}</div>
         {% else %}
             {{ pagination|raw }}
@@ -42,7 +46,7 @@
     {% endblock %}
 
     {% block footer %}
-        {% if add_url %}
+        {% if create_button or button %}
             <div class="pull-right">{{ pagination|raw }}</div>
         {% else %}
             {{ pagination|raw }}
