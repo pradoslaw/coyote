@@ -3,12 +3,11 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
-use Cache;
 
 class WordRepository extends Repository implements WordRepositoryInterface
 {
     /**
-     * @return \Coyote\Word
+     * @return string
      */
     public function model()
     {
@@ -21,7 +20,7 @@ class WordRepository extends Repository implements WordRepositoryInterface
      */
     public function all($columns = ['*'])
     {
-        return Cache::rememberForever('words', function () use ($columns) {
+        return $this->app['cache']->rememberForever('words', function () use ($columns) {
             return $this->model->get($columns);
         });
     }

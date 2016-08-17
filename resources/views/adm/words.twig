@@ -2,5 +2,61 @@
 {% block title %}Cenzura {{ parent() }}{% endblock %}
 
 {% block panel %}
-    {{ grid(grid) }}
+    {{ form_open({url: route('adm.words.save'), method: 'post', id: 'app'}) }}
+        <p>
+            <button class="btn btn-default" @click.prevent="addRow">
+                <i class="fa fa-plus"></i>
+                Dodaj nowy
+            </button>
+
+            <input type="submit" value="Zapisz" class="btn btn-primary" data-submit-state="Zapisywanie...">
+        </p>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Faza do odszukania</th>
+                    <th>Faza do zastąpienia</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in rows">
+                    <td>${ row.id }</td>
+                    <td><input type="text" v-model="row.word" class="form-control" name="word[]"></td>
+                    <td><input type="text" v-model="row.replacement" class="form-control" name="replacement[]"></td>
+                    <td>
+                        <button class="btn btn-xs btn-danger" @click.prevent="removeRow(row)">
+                            <i class="fa fa-fw fa-trash-o"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    {{ form_close() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+
+    <script>
+        Vue.config.delimiters = ['${', '}'];
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                rows: {{ words|json_encode|raw }}
+            },
+            methods: {
+                addRow: function() {
+                    this.rows.unshift({word: "", replacement: ""});
+                },
+                removeRow: function(row) {
+                    this.rows.$remove(row);
+                }
+            }
+        });
+    </script>
 {% endblock %}
