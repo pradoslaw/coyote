@@ -15,6 +15,10 @@
 
     small.text-muted {
       font-size: 85%;
+
+      a {
+        color: inherit;
+      }
     }
 
     .media-body {

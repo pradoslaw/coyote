@@ -25,13 +25,18 @@
 
                             <div class="media-body">
                                 <i class="fa fa-laptop pull-right bubble" title="{{ activity.ip }}"></i>
-                                <i class="fa fa-globe pull-right bubble" title="{{ activity.browser }}"></i>
+
+                                {% if activity.browser %}
+                                    <i class="fa fa-globe pull-right bubble" title="{{ activity.browser }}"></i>
+                                {% endif %}
 
                                 <p title="{{ activity.headline|striptags }}">{{ activity.headline|raw }}</p>
                                 <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
+                                <small class="text-muted" title="{{ activity.ip }}">&bullet; <a href="{{ route('adm.stream', {ip: activity.ip}) }}">{{ activity.ip }}</a></small>
 
-                                <small class="text-muted" title="{{ activity.ip }}">&bullet; {{ activity.ip }}</small>
-                                <small class="text-muted" title="{{ activity.browser }}">&bullet; {{ activity.agent.browser }}, {{ activity.agent.platform }}</small>
+                                {% if activity.browser %}
+                                    <small class="text-muted" title="{{ activity.browser }}">&bullet; {{ activity.agent.browser }}, {{ activity.agent.platform }}</small>
+                                {% endif %}
 
                                 {% if activity.excerpt %}
                                     <div class="well well-sm">{{ activity.excerpt|raw }}</div>
