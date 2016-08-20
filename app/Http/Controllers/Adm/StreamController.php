@@ -35,6 +35,8 @@ class StreamController extends BaseController
         $paginator = $this->stream->filter($form);
         $this->getStreamFactory()->decorate($paginator->items());
 
+        $paginator->appends($form->getRequest()->except('page'));
+
         return $this->view('adm.stream', [
             'form' => $form,
             'paginator' => $paginator
