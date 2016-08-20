@@ -27,12 +27,11 @@ class StreamController extends BaseController
     }
 
     /**
-     * @inheritdoc
+     * @param StreamFilterForm $form
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(StreamFilterForm $form)
     {
-        $form = $this->getForm();
-
         $paginator = $this->stream->filter($form);
         $this->getStreamFactory()->decorate($paginator->items());
 

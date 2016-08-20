@@ -123,7 +123,7 @@ abstract class FormRequest
      * Set the Redirector instance.
      *
      * @param  \Illuminate\Routing\Redirector  $redirector
-     * @return Form
+     * @return $this
      */
     public function setRedirector(Redirector $redirector)
     {

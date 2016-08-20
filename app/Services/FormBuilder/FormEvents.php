@@ -21,6 +21,9 @@ class FormEvents
      */
     protected $listeners = [];
 
+    /**
+     * @param FormInterface $form
+     */
     public function __construct(FormInterface $form)
     {
         $this->form = $form;
@@ -29,7 +32,6 @@ class FormEvents
     /**
      * @param string $event
      * @param \Closure $listener
-     * @return $this
      */
     public function addListener($event, \Closure $listener)
     {

@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Forms;
 
-use Coyote\Http\Forms\EventsTrait;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;

@@ -304,16 +304,6 @@ abstract class Form extends FormRequest implements FormInterface
 
     /**
      * @param $name
-     * @param $arguments
-     * @return mixed|null
-     */
-//    public function __call($name, $arguments)
-//    {
-//        return $this->getField($name);
-//    }
-
-    /**
-     * @param $name
      * @return bool
      */
     public function __isset($name)
