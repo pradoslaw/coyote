@@ -27,7 +27,7 @@ class MoreLikeThisFactory
         $builder->addMoreLikeThis($mlt);
         $builder->addFilter(new NotTerm('id', $job->id));
 
-        $builder->setSize(0, 10);
+        $builder->setSize(0, 5);
 
         return $builder;
     }
