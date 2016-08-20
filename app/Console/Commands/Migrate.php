@@ -2285,7 +2285,7 @@ class Migrate extends Command
     public function migrateLogs()
     {
         $count = DB::connection('mysql')->table('log')->count();
-        $mongo = DB::connection('mongodb')->collection('stream');
+        $mongo = DB::connection('mongodb')->collection('streams');
 
         $bar = $this->output->createProgressBar($count);
 
@@ -2305,7 +2305,10 @@ class Migrate extends Command
                 if (empty($link)) {
                     return $object;
                 }
-                $dom = new \DOMDocument();
+
+                $link = mb_convert_encoding($link, 'HTML-ENTITIES', "UTF-8");
+
+                $dom = new \DOMDocument('1.0', 'UTF-8');
                 $dom->loadHTML($link);
                 $nodes = $dom->getElementsByTagName('a');
 
@@ -2322,11 +2325,10 @@ class Migrate extends Command
 
         DB::connection('mysql')->table('log')
             ->select(['log.*', 'page_module AS log_page_module', 'page_subject AS log_page_subject', 'page_path AS log_page_path', 'location_text AS log_location_text', 'user_id AS log_user_id', 'user_name AS log_user_name', 'user_photo AS log_user_photo', 'topic_id AS log_topic_id'])
-            ->join('user', 'user_id', '=', 'log_user')
+            ->leftJoin('user', 'user_id', '=', 'log_user')
             ->leftJoin('page', 'page_id', '=', 'log_page')
             ->leftJoin('location', 'location_page', '=', 'log_page')
             ->leftJoin('topic', 'topic_page', '=', 'log_page')
-            ->where('log_type', 'Edycja postu')
             ->orderBy('log_id')
             ->chunk(10000, function ($result) use ($mongo, $bar, $parseJson) {
                 foreach ($result as $row) {
@@ -2379,6 +2381,9 @@ class Migrate extends Command
 
                         case 65520: // uaktualnienie konta
                             preg_match('~\#(\d+)~', $row['message'], $match);
+                            if (empty($match[1])) {
+                                continue;
+                            }
                             $userId = (int) $match[1];
 
                             preg_match('~\(.*?\)~', $row['message'], $match);
@@ -2407,7 +2412,19 @@ class Migrate extends Command
                         case 65528: // dodanie strony
                             if ($row['page_module'] == 3 || $row['page_module'] == 11) {
                                 if ($row['page_module'] == 3) {
-                                    $json['verb'] = 'create';
+                                    $first = DB::connection('mysql')->table('page_version')
+                                        ->select(['text_user'])
+                                        ->join('page_text', 'page_text.text_id', '=', 'page_version.text_id')
+                                        ->where('page_version.page_id', $row['page'])
+                                        ->orderBy('page_version.text_id')
+                                        ->first();
+
+                                    if (empty($first)) {
+                                        $json['verb'] = 'create';
+                                    } else {
+                                        $json['verb'] = $first->text_user == $row['user_id'] ? 'create' : 'update';
+                                    }
+
                                     $object = [
                                         'objectType' => 'wiki',
                                         'id' => $row['page'],
@@ -2420,7 +2437,7 @@ class Migrate extends Command
                                     $job = DB::connection('mysql')->table('job')->where('job_page', $row['page'])->first();
 
                                     if (!empty($job)) {
-                                        $json['verb'] = 'create';
+                                        $json['verb'] = $job->job_user == $row['user_id'] ? 'create' : 'update';
                                         $object = [
                                             'objectType' => 'job',
                                             'id' => $job->job_id,
@@ -2526,7 +2543,9 @@ class Migrate extends Command
 
                                 $meta = json_decode($row['meta'], true);
 
-                                $dom = new \DOMDocument();
+                                $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                                $dom = new \DOMDocument('1.0', 'UTF-8');
                                 $dom->loadHTML($meta['subject']);
                                 $nodes = $dom->getElementsByTagName('a');
 
@@ -2540,8 +2559,10 @@ class Migrate extends Command
                                 $json['object'] = $object;
                                 $json['object']['reasonName'] = $meta['reason'];
 
+                                $meta['path'] = mb_convert_encoding($meta['path'], 'HTML-ENTITIES', "UTF-8");
+
                                 $target = [];
-                                $dom = new \DOMDocument();
+                                $dom = new \DOMDocument('1.0', 'UTF-8');
                                 $dom->loadHTML($meta['path']);
                                 $nodes = $dom->getElementsByTagName('a');
 
@@ -2580,7 +2601,9 @@ class Migrate extends Command
 
                                 $object['id'] = (int) $postId;
 
-                                $dom = new \DOMDocument();
+                                $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                                $dom = new \DOMDocument('1.0', 'UTF-8');
                                 $dom->loadHTML($meta['subject']);
                                 $nodes = $dom->getElementsByTagName('a');
 
@@ -2594,6 +2617,411 @@ class Migrate extends Command
 
                             $json['object'] = $object;
                             $json['target'] = $target;
+
+                            break;
+
+                        case 'Usunięcie postu':
+                            $json['verb'] = 'delete';
+
+                            $object = ['objectType' => 'post'];
+
+                            if (!empty($row['topic_id'])) {
+                                $target = [
+                                    'objectType' => 'topic',
+                                    'id' => $row['topic_id']
+                                ];
+                            }
+
+                            if (empty($row['meta'])) {
+                                preg_match('~\#(\d+)~', $row['message'], $match);
+                                if (empty($match[1])) {
+                                    continue;
+                                }
+
+                                $postId = $match[1];
+
+                                $object['id'] = (int) $postId;
+
+                                preg_match('~Powód: (.*)~', $row['message'], $match);
+                                if (!empty($match[1])) {
+                                    $object['reasonName'] = $match[1];
+                                }
+
+                                if (!empty($row['location_text'])) {
+                                    $object['url'] = '/' . str_replace('@forum', 'Forum', $row['location_text']) . '?p=' . $postId . '#id' . $postId;
+                                    $target['url'] = '/' . str_replace('@forum', 'Forum', $row['location_text']);
+                                }
+                            } else {
+                                $postId = $row['index'];
+                                $meta = json_decode($row['meta'], true);
+
+                                if (empty($meta['subject'])) {
+                                    continue;
+                                }
+
+                                $object['id'] = (int) $postId;
+                                $object['reasonName'] = $meta['reason'];
+
+                                $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                                $dom = new \DOMDocument('1.0', 'UTF-8');
+
+                                try {
+                                    $dom->loadHTML(str_replace('&', '&amp;', $meta['subject']));
+                                } catch (\Exception $e) {
+                                    exit($meta['subject']);
+                                }
+                                $nodes = $dom->getElementsByTagName('a');
+
+                                foreach ($nodes as $node) {
+                                    $target['displayName'] = $node->nodeValue;
+                                    $parseUrl = parse_url($node->getAttribute('href'));
+                                    $target['url'] = '/Forum' . $parseUrl['path'];
+                                }
+
+                                if (!empty($meta['id'])) {
+                                    $meta['id'] = mb_convert_encoding($meta['id'], 'HTML-ENTITIES', "UTF-8");
+                                    $dom = new \DOMDocument('1.0', 'UTF-8');
+                                    $dom->loadHTML($meta['id']);
+
+                                    $nodes = $dom->getElementsByTagName('a');
+
+                                    foreach ($nodes as $node) {
+                                        $parseUrl = parse_url($node->getAttribute('href'));
+                                        $object['url'] = '/Forum' . $parseUrl['path'];
+
+                                        if (!empty($parseUrl['query'])) {
+                                            $object['url'] .= '?' . $parseUrl['query'];
+                                        }
+
+                                        if (!empty($parseUrl['fragment'])) {
+                                            $object['url'] .= '#' . $parseUrl['fragment'];
+                                        }
+                                    }
+                                }
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+
+                            break;
+
+                        case 'Przywrócenie postu':
+                            $json['verb'] = 'rollback';
+
+                            $object = ['objectType' => 'post'];
+                            $target = [
+                                'objectType' => 'topic',
+                                'id' => $row['topic_id']
+                            ];
+
+                            $postId = $row['index'];
+                            $meta = json_decode($row['meta'], true);
+
+                            $object['id'] = (int) $postId;
+
+                            $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                            $dom = new \DOMDocument('1.0', 'UTF-8');
+                            $dom->loadHTML($meta['subject']);
+                            $nodes = $dom->getElementsByTagName('a');
+
+                            foreach ($nodes as $node) {
+                                $target['displayName'] = $node->nodeValue;
+                                $parseUrl = parse_url($node->getAttribute('href'));
+                                $target['url'] = '/Forum' . $parseUrl['path'];
+                            }
+
+                            $meta['id'] = mb_convert_encoding($meta['id'], 'HTML-ENTITIES', "UTF-8");
+
+                            $dom = new \DOMDocument('1.0', 'UTF-8');
+                            $dom->loadHTML($meta['id']);
+
+                            $nodes = $dom->getElementsByTagName('a');
+
+                            foreach ($nodes as $node) {
+                                $parseUrl = parse_url($node->getAttribute('href'));
+                                $object['url'] = '/Forum' . $parseUrl['path'];
+
+                                if (!empty($parseUrl['query'])) {
+                                    $object['url'] .= '?' . $parseUrl['query'];
+                                }
+
+                                if (!empty($parseUrl['fragment'])) {
+                                    $object['url'] .= '#' . $parseUrl['fragment'];
+                                }
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+
+                            break;
+
+                        case 'Napisano odpowiedź w temacie':
+                            $json['verb'] = 'create';
+
+                            $object = ['objectType' => 'post'];
+                            $target = [
+                                'objectType' => 'topic',
+                                'id' => $row['topic_id']
+                            ];
+
+                            if (empty($row['meta'])) {
+                                preg_match('~\#(\d+)~', $row['message'], $match);
+                                if (empty($match[1])) {
+                                    continue;
+                                }
+
+                                $postId = $match[1];
+                                $object['id'] = (int) $postId;
+
+                                if (!empty($row['location_text'])) {
+                                    $object['url'] = '/' . str_replace('@forum', 'Forum', $row['location_text']) . '?p=' . $postId . '#id' . $postId;
+                                    $target['url'] = '/' . str_replace('@forum', 'Forum', $row['location_text']);
+                                }
+                            } else {
+                                $postId = $row['index'];
+                                $meta = json_decode($row['meta'], true);
+
+                                if (empty($meta['subject'])) {
+                                    continue;
+                                }
+
+                                $object['id'] = (int) $postId;
+
+                                $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+                                $dom = new \DOMDocument('1.0', 'UTF-8');
+
+                                try {
+                                    $dom->loadHTML(str_replace('&', '&amp;', $meta['subject']));
+                                } catch (\Exception $e) {
+                                    exit($meta['subject']);
+                                }
+                                $nodes = $dom->getElementsByTagName('a');
+
+                                foreach ($nodes as $node) {
+                                    $target['displayName'] = $node->nodeValue;
+                                    $parseUrl = parse_url($node->getAttribute('href'));
+                                    $object['url'] = '/Forum' . $parseUrl['path'] . '?p=' . $postId . '#id' . $postId;
+                                    $target['url'] = '/Forum' . $parseUrl['path'];
+                                }
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+
+                            break;
+
+                        case 'Zmiana tytułu wątku':
+                            if (empty($row['meta']) || empty($row['topic_id'])) {
+                                continue;
+                            }
+
+                            $json['verb'] = 'update';
+
+                            $object = ['objectType' => 'post'];
+                            $target = [
+                                'objectType' => 'topic',
+                                'id' => $row['topic_id']
+                            ];
+
+                            $postId = DB::connection('mysql')->table('topic')->select(['topic_first_post_id'])->where('topic_id', $row['topic_id'])->first()->topic_first_post_id;
+                            $object['id'] = $postId;
+
+                            $meta = json_decode($row['meta'], true);
+
+                            $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                            $dom = new \DOMDocument('1.0', 'UTF-8');
+                            $dom->loadHTML($meta['subject']);
+                            $nodes = $dom->getElementsByTagName('a');
+
+                            foreach ($nodes as $node) {
+                                $target['displayName'] = $node->nodeValue;
+                                $parseUrl = parse_url($node->getAttribute('href'));
+                                $target['url'] = '/Forum' . $parseUrl['path'];
+                                $object['url'] = '/Forum' . $parseUrl['path'] . '?p=' . $postId . '#id' . $postId;
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+
+                            break;
+
+                        case 'Akceptacja odpowiedzi':
+                            if (empty($row['index'])) {
+                                continue;
+                            }
+                            $json['verb'] = 'accept';
+
+                            $object = ['objectType' => 'post', 'id' => $postId = $row['index']];
+                            $target = [
+                                'objectType' => 'topic',
+                                'id' => $row['topic_id']
+                            ];
+
+                            $meta = json_decode($row['meta'], true);
+
+                            $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                            $dom = new \DOMDocument('1.0', 'UTF-8');
+                            $dom->loadHTML($meta['subject']);
+                            $nodes = $dom->getElementsByTagName('a');
+
+                            foreach ($nodes as $node) {
+                                $target['displayName'] = $node->nodeValue;
+                                $parseUrl = parse_url($node->getAttribute('href'));
+                                $target['url'] = '/Forum' . $parseUrl['path'];
+                                $object['url'] = '/Forum' . $parseUrl['path'] . '?p=' . $postId . '#id' . $postId;
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+
+                            break;
+
+                        case 'Ocena posta':
+                            $json['verb'] = 'vote';
+
+                            $object = ['objectType' => 'post', 'id' => $postId = $row['index']];
+                            $target = [
+                                'objectType' => 'topic',
+                                'id' => $row['topic_id']
+                            ];
+
+                            $meta = json_decode($row['meta'], true);
+
+                            $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                            $dom = new \DOMDocument('1.0', 'UTF-8');
+                            $dom->loadHTML($meta['subject']);
+                            $nodes = $dom->getElementsByTagName('a');
+
+                            foreach ($nodes as $node) {
+                                $target['displayName'] = $node->nodeValue;
+                                $parseUrl = parse_url($node->getAttribute('href'));
+                                $target['url'] = '/Forum' . $parseUrl['path'];
+                                $object['url'] = '/Forum' . $parseUrl['path'] . '?p=' . $postId . '#id' . $postId;
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+
+                            break;
+
+                        case 'Dodanie komentarza':
+                            $json['verb'] = 'create';
+
+                            $object = ['objectType' => 'comment'];
+                            $target = [
+                                'objectType' => 'topic',
+                                'id' => $row['topic_id']
+                            ];
+
+                            $meta = json_decode($row['meta'], true);
+
+                            $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                            $dom = new \DOMDocument('1.0', 'UTF-8');
+                            $dom->loadHTML($meta['subject']);
+                            $nodes = $dom->getElementsByTagName('a');
+
+                            foreach ($nodes as $node) {
+                                $target['displayName'] = $node->nodeValue;
+
+                                $parseUrl = parse_url($node->getAttribute('href'));
+                                $target['url'] = '/Forum' . $parseUrl['path'];
+                                $object['url'] = '/Forum' . $parseUrl['path'] . '?' . $parseUrl['query'] . '#' . $parseUrl['fragment'];
+
+                                preg_match('~comment\-(\d+)~', $parseUrl['fragment'], $match);
+                                $object['id'] = (int) $match[1];
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+
+                            break;
+
+                        case 'Edycja komentarza':
+                            $json['verb'] = 'update';
+
+                            $object = ['objectType' => 'comment'];
+                            $target = [
+                                'objectType' => 'topic',
+                                'id' => $row['topic_id']
+                            ];
+
+                            $meta = json_decode($row['meta'], true);
+
+                            $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                            $dom = new \DOMDocument('1.0', 'UTF-8');
+                            $dom->loadHTML($meta['subject']);
+                            $nodes = $dom->getElementsByTagName('a');
+
+                            foreach ($nodes as $node) {
+                                $target['displayName'] = $node->nodeValue;
+
+                                $parseUrl = parse_url($node->getAttribute('href'));
+                                $target['url'] = '/Forum' . $parseUrl['path'];
+                                $object['url'] = '/Forum' . $parseUrl['path'] . '?' . $parseUrl['query'] . '#' . $parseUrl['fragment'];
+
+                                preg_match('~comment\-(\d+)~', $parseUrl['fragment'], $match);
+                                $object['id'] = (int) $match[1];
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+
+                            break;
+
+                        case 'Usunięcie komentarza':
+                            $json['verb'] = 'delete';
+
+                            $object = ['objectType' => 'comment'];
+                            $target = [
+                                'objectType' => 'topic',
+                                'id' => $row['topic_id']
+                            ];
+
+                            $meta = json_decode($row['meta'], true);
+
+                            $meta['subject'] = mb_convert_encoding($meta['subject'], 'HTML-ENTITIES', "UTF-8");
+
+                            $dom = new \DOMDocument('1.0', 'UTF-8');
+                            $dom->loadHTML($meta['subject']);
+                            $nodes = $dom->getElementsByTagName('a');
+
+                            foreach ($nodes as $node) {
+                                $target['displayName'] = $node->nodeValue;
+
+                                $parseUrl = parse_url($node->getAttribute('href'));
+                                $target['url'] = '/Forum' . $parseUrl['path'];
+                                $object['url'] = '/Forum' . $parseUrl['path'] . '?' . $parseUrl['query'] . '#' . $parseUrl['fragment'];
+
+                                preg_match('~comment\-(\d+)~', $parseUrl['fragment'], $match);
+                                if (empty($match[1])) {
+                                    continue;
+                                }
+                                $object['id'] = (int) $match[1];
+                            }
+
+                            $json['object'] = $object;
+                            $json['target'] = $target;
+
+                            break;
+
+                        case 'Dodanie wpisu do Pastebin':
+                            $json['verb'] = 'create';
+
+                            $object = ['objectType' => 'pastebin'];
+
+                            preg_match('~\#(\d+)~', $row['message'], $match);
+                            $object['id'] = (int) $match[1];
+                            $object['url'] = route('pastebin.show', [$object['id']], false);
+
+                            $json['object'] = $object;
+                            break;
                     }
 
                     if (!empty($json['verb'])) {
@@ -2607,6 +3035,46 @@ class Migrate extends Command
         $bar->finish();
     }
 
+    public function migrateComments()
+    {
+        $sql = DB::connection('mysql')->table('comment')
+            ->where('comment_module', 3)
+            ->where('comment_user', '>', 0)
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($sql));
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($sql as $row) {
+                $row = $this->skipPrefix('comment_', (array) $row);
+                $this->rename($row, 'user', 'user_id');
+                $this->rename($row, 'time', 'created_at');
+                $this->rename($row, 'content', 'text');
+                $this->rename($row, 'page', 'wiki_id');
+
+                $row['created_at'] = $this->timestampToDatetime($row['created_at']);
+
+                unset($row['username'], $row['module']);
+                $row['updated_at'] = $row['created_at'];
+
+                DB::table('wiki_comments')->insert($row);
+                $bar->advance();
+            }
+
+            DB::commit();
+            $bar->finish();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->fixSequence(['wiki_comments']);
+    }
+
 
     /**
      * Execute the console command.
@@ -2615,33 +3083,68 @@ class Migrate extends Command
      */
     public function handle()
     {
+        DB::statement('ALTER TABLE post_votes DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE alerts DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE alert_types DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE forums DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE groups DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE permissions DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE pm DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE posts DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE reputations DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE topics DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE users DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE forums DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE sessions DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE user_skills DISABLE TRIGGER ALL');
+
         DB::statement('SET session_replication_role = replica');
-        $this->migrateUsers();
-        $this->migrateTags();
-        /* musi byc przed dodawaniem grup */
-        $this->migratePermissions();
-        $this->migrateGroups();
-        $this->migrateSkills();
-        $this->migrateWords();
-        $this->migrateAlerts();
-        $this->migratePm();
-        $this->migrateReputation();
-        $this->migrateForum();
-        $this->migrateTopic();
-        $this->migratePost();
-        $this->migrateMicroblogs();
-        $this->migrateFirms();
-        $this->migrateJobs();
-        $this->migratePastebin();
-        $this->migratePoll();
-        $this->migrateBan();
-        $this->migrateRedirect();
 
-        $this->migrateWiki();
-        $this->fillPagesTable();
-        $this->migratePageVisits();
-        $this->migrateLogs();
+        try {
+            $this->migrateUsers();
+            $this->migrateTags();
+            /* musi byc przed dodawaniem grup */
+            $this->migratePermissions();
+            $this->migrateGroups();
+            $this->migrateSkills();
+            $this->migrateWords();
+            $this->migrateAlerts();
+            $this->migratePm();
+            $this->migrateReputation();
+            $this->migrateForum();
+            $this->migrateTopic();
+            $this->migratePost();
+            $this->migrateMicroblogs();
+            $this->migrateFirms();
+            $this->migrateJobs();
+            $this->migratePastebin();
+            $this->migratePoll();
+            $this->migrateBan();
+            $this->migrateRedirect();
 
-        DB::statement('SET session_replication_role = DEFAULT');
+            $this->migrateWiki();
+            $this->fillPagesTable();
+            $this->migratePageVisits();
+            $this->migrateLogs();
+            $this->migrateComments();
+
+        } finally {
+            DB::statement('ALTER TABLE post_votes ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE alerts ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE alert_types ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE forums ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE groups ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE permissions ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE pm ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE posts ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE reputations ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE topics ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE users ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE forums ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE sessions ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE user_skills ENABLE TRIGGER ALL');
+
+            DB::statement('SET session_replication_role = DEFAULT');
+        }
     }
 }
