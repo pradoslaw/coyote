@@ -40,14 +40,4 @@ class StreamController extends BaseController
             'paginator' => $paginator
         ]);
     }
-
-    /**
-     * @return \Coyote\Http\Forms\StreamFilterForm
-     */
-    private function getForm()
-    {
-        return $this->createForm(StreamFilterForm::class, null, [
-            'url' => route('adm.stream')
-        ]);
-    }
 }
