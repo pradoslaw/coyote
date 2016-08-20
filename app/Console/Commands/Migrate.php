@@ -3127,7 +3127,6 @@ class Migrate extends Command
             $this->migratePageVisits();
             $this->migrateLogs();
             $this->migrateComments();
-
         } finally {
             DB::statement('ALTER TABLE post_votes ENABLE TRIGGER ALL');
             DB::statement('ALTER TABLE alerts ENABLE TRIGGER ALL');
