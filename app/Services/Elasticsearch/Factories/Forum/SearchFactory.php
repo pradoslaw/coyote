@@ -72,6 +72,8 @@ class SearchFactory
             $builder->addQuery(new Query($parser->getFilteredQuery(), ['text', 'topic.subject', 'tags']));
         }
 
+        $builder->setSize($request->input('page', 1) * 10, 10);
+
         return $builder;
     }
 }

@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Services\Elasticsearch\Factories\Forum\SearchFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SearchController extends BaseController
 {
@@ -40,7 +41,10 @@ class SearchController extends BaseController
             $build = $builder->build();
             debugbar()->debug($build);
 
+            start_measure('Elasticsearch');
             $response = $this->post->search($build);
+            stop_measure('Elasticsearch');
+
             $highlights = $response->getHighlights();
 
             if ($response->totalHits() > 0) {
@@ -49,8 +53,11 @@ class SearchController extends BaseController
             }
 
             $this->breadcrumb->push('Wyniki wyszukiwania', $request->fullUrl());
+
+            $pagination = new LengthAwarePaginator($response, $response->totalHits(), 10, null, ['path' => ' ']);
+            $pagination->appends($request->except('page'));
         }
 
-        return $this->view('forum.search')->with(compact('forumList', 'users', 'response', 'highlights'));
+        return $this->view('forum.search')->with(compact('forumList', 'users', 'response', 'highlights', 'pagination'));
     }
 }

@@ -38,93 +38,97 @@
         </div>
 
         {% if response %}
+            {{ pagination|raw }}
+
             <section id="box-search-results" class="panel panel-wrapper">
-            <div class="panel-body">
-                <ul id="sort" class="hidden-xs">
-                    <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
-                    <li>{{ sortable('id', 'Data utworzenia', ['_score', 'desc']) }}</li>
-                </ul>
+                <div class="panel-body">
+                    <ul id="sort" class="hidden-xs">
+                        <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
+                        <li>{{ sortable('id', 'Data utworzenia', ['_score', 'desc']) }}</li>
+                    </ul>
 
-                <div class="clearfix"></div>
+                    <div class="clearfix"></div>
 
-                {% for post in response %}
-                    <div class="post">
-                        <div class="post-body">
-                            <div class="row">
-                                <div class="col-xs-2 col-user">
-                                    <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
-                                        {% if post.user_id %}
-                                            {{ link_to_profile(users[post.user_id]) }}
-                                        {% else %}
-                                            {{ post.user_name }}
-                                        {% endif %}
-                                    </h5>
-                                </div>
-
-                                <div class="col-xs-10 col-subject">
-                                     <h5><a href="{{ route('forum.topic', [post.forum.slug, post.topic_id, post.topic.slug]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(highlights[post.id]['topic.subject'], post.topic.subject) }}</a></h5>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-2 col-user hidden-xss">
-                                    <p class="hidden-xs">
-                                        <strong>Data:</strong>
-                                        <small>{{ post.created_at|format_date }}</small>
-                                    </p>
-
-                                    <p class="hidden-xs">
-                                        <strong>Kategoria:</strong>
-                                        <small>{{ link_to_route('forum.category', post.forum.name, [post.forum.slug]) }}</small>
-                                    </p>
-
-                                    {% if can('forum-update') %}
-                                        <p class="hidden-xs">
-                                            <strong>IP:</strong>
-                                            <small>{{ post.ip }}</small>
-                                        </p>
-
-                                        <p class="hidden-xs">
-                                            <strong>Host:</strong>
-                                            <small title="{{ post.host }}">{{ post.host }}</small>
-                                        </p>
-
-                                        <p class="hidden-xs">
-                                            <strong>Przeglądarka:</strong>
-                                            <small title="{{ post.browser }}">{{ post.browser }}</small>
-                                        </p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="col-xs-10 col-body">
-                                    <div class="post-content">
-                                        {{ elastic_highlight(highlights[post.id]['text'], post.text) }}
+                    {% for post in response %}
+                        <div class="post">
+                            <div class="post-body">
+                                <div class="row">
+                                    <div class="col-xs-2 col-user">
+                                        <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
+                                            {% if post.user_id %}
+                                                {{ link_to_profile(users[post.user_id]) }}
+                                            {% else %}
+                                                {{ post.user_name }}
+                                            {% endif %}
+                                        </h5>
                                     </div>
 
-                                    {% if post.tags %}
-                                        <ul class="tag-clouds">
-                                            {% for tag in post.tags %}
-                                                <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
+                                    <div class="col-xs-10 col-subject">
+                                         <h5><a href="{{ route('forum.topic', [post.forum.slug, post.topic_id, post.topic.slug]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(highlights[post.id]['topic.subject'], post.topic.subject) }}</a></h5>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-2 col-user hidden-xss">
+                                        <p class="hidden-xs">
+                                            <strong>Data:</strong>
+                                            <small>{{ post.created_at|format_date }}</small>
+                                        </p>
+
+                                        <p class="hidden-xs">
+                                            <strong>Kategoria:</strong>
+                                            <small>{{ link_to_route('forum.category', post.forum.name, [post.forum.slug]) }}</small>
+                                        </p>
+
+                                        {% if can('forum-update') %}
+                                            <p class="hidden-xs">
+                                                <strong>IP:</strong>
+                                                <small>{{ post.ip }}</small>
+                                            </p>
+
+                                            <p class="hidden-xs">
+                                                <strong>Host:</strong>
+                                                <small title="{{ post.host }}">{{ post.host }}</small>
+                                            </p>
+
+                                            <p class="hidden-xs">
+                                                <strong>Przeglądarka:</strong>
+                                                <small title="{{ post.browser }}">{{ post.browser }}</small>
+                                            </p>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="col-xs-10 col-body">
+                                        <div class="post-content">
+                                            {{ elastic_highlight(highlights[post.id]['text'], post.text) }}
+                                        </div>
+
+                                        {% if post.tags %}
+                                            <ul class="tag-clouds">
+                                                {% for tag in post.tags %}
+                                                    <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-2 col-bottom"></div>
+                                    <div class="col-xs-10 col-bottom"></div>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col-xs-2 col-bottom"></div>
-                                <div class="col-xs-10 col-bottom"></div>
-                            </div>
                         </div>
-                    </div>
-                {% else %}
-                    <div class="post">
-                        <p style="text-align: center; margin-top: 9px">Brak wątków spełniających kryteria.</p>
-                    </div>
-                {% endfor %}
+                    {% else %}
+                        <div class="post">
+                            <p style="text-align: center; margin-top: 9px">Brak wątków spełniających kryteria.</p>
+                        </div>
+                    {% endfor %}
 
-            </div>
-        </section>
+                </div>
+            </section>
+
+            {{ pagination|raw }}
         {% endif %}
 
         {{ viewers|raw }}
