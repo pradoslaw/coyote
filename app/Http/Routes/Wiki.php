@@ -2,6 +2,7 @@
 
 /** @var $this \Illuminate\Routing\Router */
 $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function () {
+    /** @var $this \Illuminate\Routing\Router */
     $this->get('Edit/{wiki?}', [
         'as' => 'submit',
         'uses' => 'SubmitController@index',
@@ -94,8 +95,9 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
         'as' => 'subscribe',
         'middleware' => 'auth'
     ]);
-    
+
     $this->get('History/{wiki}', ['uses' => 'HistoryController@index', 'as' => 'history']);
+    $this->get('Blog', ['uses' => 'BlogController@index', 'as' => 'blog']);
 
     // deleted pages are visible only for users with privilege
     $this->get('{path}', [

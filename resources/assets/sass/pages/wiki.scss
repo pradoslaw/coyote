@@ -322,3 +322,28 @@ article > header {
     margin: 0 5px;
   }
 }
+
+// Wyswietlanie listy wpisow bloga 4programmers.net
+// -------------------------------------------------
+
+#blog {
+  margin-top: 20px;
+
+  .media-heading {
+    font-size: 160%;
+  }
+
+  .blog-text {
+    font-size: 110%;
+  }
+}
+
+#blog-sidebar {
+  h4 {
+    color: $gray;
+  }
+
+  .btn-primary {
+    margin-top: 10px;
+  }
+}
