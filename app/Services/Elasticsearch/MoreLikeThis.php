@@ -44,7 +44,7 @@ class MoreLikeThis implements DslInterface
             'docs' => [],
             'min_term_freq' => 1,
             'min_doc_freq' => 1,
-            'max_query_terms' => 12
+            'max_query_terms' => 5
         ];
 
         foreach ($this->docs as $doc) {

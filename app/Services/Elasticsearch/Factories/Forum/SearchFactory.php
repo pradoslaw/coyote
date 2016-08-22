@@ -69,7 +69,7 @@ class SearchFactory
 
         // specify query string and fields
         if ($parser->getFilteredQuery()) {
-            $builder->addQuery(new Query($parser->getFilteredQuery(), ['text', 'topic.subject', 'tags']));
+            $builder->addQuery(new Query($parser->getFilteredQuery(), ['text^2', 'topic.subject', 'tags^4']));
         }
 
         $builder->setSize($request->input('page', 1) * 10, 10);
