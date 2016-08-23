@@ -5,7 +5,6 @@ namespace Coyote\Http\Controllers\Profile;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Controllers\User\UserMenuTrait;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as Reputation;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 
 class HomeController extends Controller
@@ -18,11 +17,6 @@ class HomeController extends Controller
     private $user;
 
     /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @var Reputation
      */
     private $reputation;
@@ -31,15 +25,14 @@ class HomeController extends Controller
      * HomeController constructor.
      *
      * @param User $user
-     * @param Session $session
+
      * @param Reputation $reputation
      */
-    public function __construct(User $user, Session $session, Reputation $reputation)
+    public function __construct(User $user, Reputation $reputation)
     {
         parent::__construct();
 
         $this->user = $user;
-        $this->session = $session;
         $this->reputation = $reputation;
     }
 
