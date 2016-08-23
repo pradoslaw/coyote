@@ -92,6 +92,7 @@ abstract class Controller extends BaseController
             $menu->add('Mikroblogi', ['route' => 'microblog.home'])->active('Mikroblogi/*');
             $menu->add('Praca', ['route' => 'job.home'])->append($badge)->active('Praca/*');
             $menu->add('Pastebin', ['route' => 'pastebin.show'])->active('Pastebin/*');
+            $menu->add('Kompendium', ['url' => 'Kategorie']);
         });
 
         // cache user customized menu for 7 days
