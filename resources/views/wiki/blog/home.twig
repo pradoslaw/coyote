@@ -3,42 +3,48 @@
 {% block container %}
     <div class="row">
         <div id="blog" class="col-sm-9">
-            {% for child in children %}
-                <div class="media">
-                    <div class="media-body">
-                        <h4 class="media-heading"><a href="{{ url(child.path) }}">{{ child.title }}</a></h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% for child in children %}
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="{{ url(child.path) }}">{{ child.title }}</a></h4>
 
-                        <ul class="metadata list-inline">
-                            <li title="Data opublikowania" class="date" itemprop="datePublished" content="{{ child.created_at|iso_8601 }}">
-                                <i class="fa fa-calendar"></i>
-                                {{ child.created_at }}
-                            </li>
-                            <li class="comment">
-                                <a href="{{ url(child.path) }}#box-comment" title="Zobacz komentarze" itemprop="interactionCount" value="UserComments:{{ child.comments }}">
-                                    <i class="fa fa-comments"></i>
-                                    {{ declination(child.comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}
-                                </a>
-                            </li>
-                            <li class="counter" itemprop="interactionCount" value="UserPageVisits:{{ child.views }}">
-                                <i class="fa fa-eye"></i>
-                                {{ declination(child.views, ['odsłona', 'odsłony', 'odsłon']) }}
-                            </li>
-                        </ul>
+                                <ul class="metadata list-inline">
+                                    <li title="Data opublikowania" class="date" itemprop="datePublished" content="{{ child.created_at|iso_8601 }}">
+                                        <i class="fa fa-calendar"></i>
+                                        {{ child.created_at }}
+                                    </li>
+                                    <li class="comment">
+                                        <a href="{{ url(child.path) }}#box-comment" title="Zobacz komentarze" itemprop="interactionCount" value="UserComments:{{ child.comments }}">
+                                            <i class="fa fa-comments"></i>
+                                            {{ declination(child.comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}
+                                        </a>
+                                    </li>
+                                    <li class="counter" itemprop="interactionCount" value="UserPageVisits:{{ child.views }}">
+                                        <i class="fa fa-eye"></i>
+                                        {{ declination(child.views, ['odsłona', 'odsłony', 'odsłon']) }}
+                                    </li>
+                                </ul>
 
-                        <div class="blog-text">{{ child.text|raw }}</div>
-                    </div>
+                                <div class="blog-text">{{ child.text|raw }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <nav class="text-center">
+                        {{ children|raw }}
+                    </nav>
                 </div>
-            {% endfor %}
-
-            <nav class="text-center">
-                {{ children|raw }}
-            </nav>
+            </div>
         </div>
 
         <aside id="blog-sidebar" class="col-sm-3">
             <h4>Blog 4programmers.net</h4>
 
             <a href="{{ url('Kontakt') }}" class="btn btn-primary">Kontakt z nami</a>
+
+            {{ render_block('blog_sidebar') }}
         </aside>
     </div>
 {% endblock %}

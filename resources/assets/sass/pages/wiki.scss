@@ -339,11 +339,17 @@ article > header {
 }
 
 #blog-sidebar {
-  h4 {
-    color: $gray;
+  padding-top: 10px;
+
+  h4, strong {
+    color: $gray-light;
   }
 
   .btn-primary {
     margin-top: 10px;
+  }
+
+  p {
+    margin-top: 30px;
   }
 }

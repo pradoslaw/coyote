@@ -95,5 +95,22 @@ EOF;
             'name' => 'footer',
             'content' => $content
         ]);
+
+        $content = <<<EOF
+<p>
+    <strong>Błędy, uwagi ogólne</strong><br>
+    <a href="mailto:support@4programmers.net">support@4programmers.net</a>
+</p>
+
+<p>
+    <strong>Patronat nad wydarzeniami</strong><br>
+    <a href="mailto:patronat@4programmers.net">patronat@4programmers.net</a>
+</p>
+EOF;
+
+        \Coyote\Block::create([
+            'name' => 'blog_sidebar',
+            'content' => $content
+        ]);
     }
 }
