@@ -37,7 +37,6 @@ class CreateUsersTable extends Migration
             $table->string('ip', 45)->nullable();
             $table->string('browser')->nullable();
             $table->string('access_ip')->nullable();
-//            $table->string('ip_failure')->nullable();
             $table->tinyInteger('alert_login')->default(0);
             $table->tinyInteger('alert_failure')->default(1);
             $table->mediumInteger('reputation')->default(0)->index();
