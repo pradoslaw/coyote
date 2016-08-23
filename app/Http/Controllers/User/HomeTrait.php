@@ -56,7 +56,7 @@ trait HomeTrait
                 $menu->add($row['label'], ['route' => $row['route'], 'id' => $row['id']])
                         ->prepend('<i class="fa fa-fw ' . $row['icon'] . '"></i>');
             }
-            
+
             $menu->find('btn-pm')->append(' <small>(' . auth()->user()->pm_unread . '/' . auth()->user()->pm . ')</small>');
         });
     }
