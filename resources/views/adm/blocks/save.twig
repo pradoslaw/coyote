@@ -1,0 +1,30 @@
+{% extends 'adm.base' %}
+{% block title %}Edycja bloku {{ parent() }}{% endblock %}
+
+{% block panel %}
+    {{ form(form) }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
+
+    <script>
+        $(function() {
+            var textarea = $('#code');
+            $('<div id="editor" style="height: 300px" />').insertAfter(textarea);
+
+            textarea.hide();
+
+            var editor = ace.edit("editor");
+
+            editor.getSession().setValue(textarea.val());
+            editor.getSession().on('change', function() {
+                textarea.val(editor.getSession().getValue());
+            });
+
+            editor.getSession().setMode("ace/mode/html");
+        });
+    </script>
+{% endblock %}

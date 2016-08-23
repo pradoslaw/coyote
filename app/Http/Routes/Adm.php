@@ -14,6 +14,7 @@ $this->match(['get', 'post'], 'Adm', [
 $this->group(
     ['namespace' => 'Adm', 'middleware' => ['auth', 'can:adm-access', 'adm:1'], 'prefix' => 'Adm', 'as' => 'adm.'],
     function () {
+        /** @var $this \Illuminate\Routing\Router */
         $this->get('Dashboard', 'DashboardController@index')->name('dashboard');
 
         $this->get('Forum/Categories', 'Forum\CategoriesController@index')->name('forum.categories');
@@ -82,5 +83,10 @@ $this->group(
 
         $this->get('Words', ['uses' => 'WordsController@index'])->name('words');
         $this->post('Words', ['uses' => 'WordsController@save'])->name('words.save');
+
+        $this->get('Block', ['uses' => 'BlocksController@index'])->name('blocks');
+        $this->get('Blocks/Save/{block?}', 'BlocksController@edit')->name('blocks.save');
+        $this->post('Blocks/Save/{block?}', 'BlocksController@save');
+        $this->post('Blocks/Delete/{block}', 'BlocksController@delete')->name('blocks.delete');
     }
 );

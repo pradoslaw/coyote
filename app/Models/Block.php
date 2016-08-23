@@ -4,6 +4,13 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property bool $is_enabled
+ * @property bool $enable_cache
+ * @property string $content
+ */
 class Block extends Model
 {
     /**
@@ -12,6 +19,11 @@ class Block extends Model
      * @var array
      */
     protected $fillable = ['name', 'is_enabled', 'enable_cache', 'content'];
+
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
      * @var array

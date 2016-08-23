@@ -31,6 +31,7 @@ return [
     'flag' => 'raport',
     'firewall' => 'ban',
     'person' => 'profil',
+    'block' => 'blok',
 
     'headline' => [
         'microblog'         => ':actor :verb :object na mikroblogu',
@@ -45,6 +46,7 @@ return [
         'person'            => ':actor :verb :object',
         'firewall'          => ':actor :verb :object',
         'object'            => ':actor :verb',
-        'object:throttle'   => 'Nieudane logowanie na konto :login'
+        'object:throttle'   => 'Nieudane logowanie na konto :login',
+        'block'             => ':actor :verb :object'
     ]
 ];
