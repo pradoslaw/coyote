@@ -9,7 +9,6 @@ use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as Microblog;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -26,11 +25,6 @@ class SubmitController extends Controller
     use FilesystemFactory, MediaFactory;
 
     /**
-     * @var Microblog
-     */
-    private $microblog;
-
-    /**
      * @var User
      */
     private $user;
@@ -38,12 +32,10 @@ class SubmitController extends Controller
     /**
      * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
      *
-     * @param Microblog $microblog
      * @param User $user
      */
-    public function __construct(Microblog $microblog, User $user)
+    public function __construct(User $user)
     {
-        $this->microblog = $microblog;
         $this->user = $user;
     }
 
