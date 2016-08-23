@@ -103,7 +103,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         $result = [null => '--'];
 
-        for ($i = 1950; $i <= date('Y'); $i++) {
+        for ($i = 1950, $year = date('Y'); $i <= $year; $i++) {
             $result[$i] = $i;
         }
 

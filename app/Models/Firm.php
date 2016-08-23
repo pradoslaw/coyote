@@ -78,7 +78,7 @@ class Firm extends Model
     {
         $result = [];
 
-        for ($i = 1900; $i <= date('Y'); $i++) {
+        for ($i = 1900, $year = date('Y'); $i <= $year; $i++) {
             $result[$i] = $i;
         }
 
