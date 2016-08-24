@@ -25,7 +25,7 @@ trait AttributesTrait
      */
     public function __set($name, $value)
     {
-        $this->attributes[$name] = $value;
+        $this->attributes->set($name, $value);
     }
 
     /**
@@ -34,6 +34,6 @@ trait AttributesTrait
      */
     public function __get($name)
     {
-        return $this->attributes[$name] ?? null;
+        return $this->attributes->get($name);
     }
 }
