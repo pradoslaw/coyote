@@ -7,6 +7,11 @@ use Coyote\Block as Model;
 class Block extends Object
 {
     /**
+     * @var string
+     */
+    public $content;
+
+    /**
      * @param Model $block
      * @return $this
      */
