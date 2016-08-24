@@ -8,11 +8,7 @@ use Coyote\Http\Forms\BlockForm;
 use Coyote\Http\Grids\Adm\BlockGrid;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface as BlockRepository;
 use Coyote\Services\Stream\Objects\Block as Stream_Block;
-use Coyote\Services\Stream\Activities\{
-    Create as Stream_Create,
-    Update as Stream_Update,
-    Delete as Stream_Delete
-};
+use Coyote\Services\Stream\Activities\{Create as Stream_Create, Update as Stream_Update, Delete as Stream_Delete};
 
 class BlocksController extends BaseController
 {
