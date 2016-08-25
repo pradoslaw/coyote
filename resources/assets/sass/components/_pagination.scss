@@ -2,7 +2,8 @@
   font-size: ceil(($font-size-base * 0.78));
 }
 
-.pagination > li > a, .pagination > li > span, .pagination > .disabled > span {
+.pagination > li > a, .pagination > li > span, .pagination > .disabled > span,
+.pager > li > a, .pager > li > span, .pager > .disabled > span {
   background-color: #ddd;
   color: $text-color;
   border: none;
