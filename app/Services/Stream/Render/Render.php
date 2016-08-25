@@ -30,7 +30,7 @@ abstract class Render
     {
         $agent = new Agent();
         $agent->setUserAgent($this->stream['browser']);
-        
+
         $translator = trans();
         $id = 'stream.headline.' . $this->stream['object.objectType'];
 
@@ -39,7 +39,7 @@ abstract class Render
         }
 
         $message = $translator->get($id);
-        $parameters = $this->makeParameters($message);
+        $parameters = $this->bindParameters($message);
 
         $this->stream['headline'] = $translator->trans($id, $parameters);
         $this->stream['excerpt'] = $this->excerpt();
@@ -52,7 +52,7 @@ abstract class Render
      * @param string $message
      * @return array
      */
-    protected function makeParameters($message)
+    protected function bindParameters($message)
     {
         $parameters = [];
         $offset = 0;
