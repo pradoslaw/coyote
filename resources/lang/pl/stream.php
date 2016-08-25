@@ -19,6 +19,7 @@ return [
     'logout' => 'wylogował się',
     'unlink' => 'usunął kopie',
     'merge' => 'połączył',
+    'confirm' => 'potwierdził',
 
     // objects
     'microblog' => 'wpis',
@@ -47,6 +48,6 @@ return [
         'firewall'          => ':actor :verb :object',
         'object'            => ':actor :verb',
         'object:throttle'   => 'Nieudane logowanie na konto :login',
-        'block'             => ':actor :verb :object'
+        'block'             => ':actor :verb :object',
     ]
 ];

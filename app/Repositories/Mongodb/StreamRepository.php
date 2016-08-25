@@ -117,7 +117,7 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
             }
         }
 
-        return $sql->orderBy('_id', 'DESC')->paginate();
+        return $sql->orderBy('_id', 'DESC')->simplePaginate();
     }
 
     /**
