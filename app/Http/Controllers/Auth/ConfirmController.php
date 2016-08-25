@@ -7,6 +7,7 @@ use Coyote\Http\Factories\MailFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Services\Stream\Activities\Confirm as Stream_Confirm;
+use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
 use Illuminate\Http\Request;
 
@@ -87,7 +88,7 @@ class ConfirmController extends Controller
         $url = Actkey::createLink($userId);
         $email = $request->email;
 
-        $this->getMailFactory()->queue('emails.email', ['url' => $url], function ($message) use ($email) {
+        $this->getMailFactory()->queue('emails.user.change_email', ['url' => $url], function ($message) use ($email) {
             $message->to($email);
             $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
         });
@@ -115,7 +116,9 @@ class ConfirmController extends Controller
         $user->save();
         $actkey->delete();
 
-        stream(Stream_Confirm::class, new Stream_Person($user->toArray()));
+        // potwierdzajac adres email, uzytkownik moze nie byc zalogowany. przekazujemy wiec model User
+        // jako aktora aby zapisal sie w bazie danych.
+        stream(new Stream_Confirm(new Stream_Actor($user), new Stream_Person($user->toArray())));
 
         return redirect()->route('home')->with('success', 'Adres e-mail został pozytywnie potwierdzony.');
     }
