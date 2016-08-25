@@ -2377,6 +2377,20 @@ class Migrate extends Command
                         case 65529: // potwierdzenie konta
                             $json['verb'] = 'confirm';
                             $json['object'] = ['objectType' => 'person', 'displayName' => $row['message']];
+
+                            if (empty($row['user_id'])) {
+                                $u = DB::connection('mysql')->table('user')->where('user_name', $row['message'])->first();
+
+                                $json['actor'] = [
+                                    'displayName' => $row['message'],
+                                    'objectType' => 'actor'
+                                ];
+
+                                if ($u) {
+                                    $json['actor']['id'] = $u->user_id;
+                                    $json['actor']['url'] = '/Profile/' . $u->user_id;
+                                }
+                            }
                             break;
 
                         case 65520: // uaktualnienie konta
@@ -2804,6 +2818,10 @@ class Migrate extends Command
                                     $parseUrl = parse_url($node->getAttribute('href'));
                                     $object['url'] = '/Forum' . $parseUrl['path'] . '?p=' . $postId . '#id' . $postId;
                                     $target['url'] = '/Forum' . $parseUrl['path'];
+                                }
+
+                                if (isset($meta['username'])) {
+                                    $json['actor'] = ['displayName' => $meta['username'], 'objectType' => 'actor'];
                                 }
                             }
 
