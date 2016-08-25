@@ -2,8 +2,7 @@
 
 namespace Coyote\Services\GeoIp;
 
-use Guzzle\Http\Client as HttpClient;
-use Guzzle\Http\Exception\ClientErrorResponseException;
+use GuzzleHttp\Client as HttpClient;
 
 class GeoIp
 {
@@ -36,8 +35,6 @@ class GeoIp
         $this->client = $client;
         $this->host = $host;
         $this->port = $port;
-
-        $this->client->setBaseUrl($this->getBaseUrl());
     }
 
     /**
@@ -70,34 +67,9 @@ class GeoIp
      */
     protected function request($path)
     {
-        try {
-            $request = $this->client->get($path);
-            $response = $request->send();
+        $response = $this->client->request('GET', $path, ['base_uri' => $this->getBaseUrl(), 'http_errors' => true]);
 
-            return $response->json();
-        } catch (ClientErrorResponseException $e) {
-            $statusCode = $e->getResponse()->getStatusCode();
-
-            if (method_exists($this, "handle${statusCode}Error")) {
-                $this->{"handle${statusCode}Error"}($e);
-            } else {
-                throw $e;
-            }
-        }
-    }
-
-    /**
-     * @param ClientErrorResponseException $e
-     */
-    protected function handle404Error(ClientErrorResponseException $e)
-    {
-        $message = $e->getMessage();
-        $response = $e->getResponse()->json();
-
-        if (!empty($response['error']['message'])) {
-            $message = $response['error']['message'];
-        }
-        throw new ClientErrorResponseException($message);
+        return json_decode((string) $response->getBody(), true);
     }
 
     /**

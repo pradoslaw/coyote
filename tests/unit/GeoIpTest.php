@@ -1,7 +1,5 @@
 <?php
 
-use Coyote\User;
-
 class GeoIpTest extends \Codeception\TestCase\Test
 {
     /**
@@ -73,7 +71,7 @@ class GeoIpTest extends \Codeception\TestCase\Test
 
     public function testGeocodeNonExistingCityAndThrowException()
     {
-        $this->expectException('Guzzle\Http\Exception\ClientErrorResponseException');
+        $this->expectException('GuzzleHttp\Exception\ClientException');
         $this->geoIp->city('zyc123');
     }
 

@@ -3,7 +3,7 @@
 namespace Coyote\Providers;
 
 use Coyote\Services\GeoIp\GeoIp;
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
 class GeoIpServiceProvider extends ServiceProvider
