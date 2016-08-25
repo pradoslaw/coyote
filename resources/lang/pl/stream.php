@@ -45,6 +45,7 @@ return [
         'flag'              => ':actor :verb :object',
         'wiki'              => ':actor :verb :object :title',
         'person'            => ':actor :verb :object',
+        'person:confirm'    => ':actor potwierdził adres e-mail',
         'firewall'          => ':actor :verb :object',
         'object'            => ':actor :verb',
         'object:throttle'   => 'Nieudane logowanie na konto :login',
