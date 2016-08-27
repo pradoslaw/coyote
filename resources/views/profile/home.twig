@@ -1,5 +1,5 @@
 {% extends 'layout' %}
-{% block title %}Profil {{ parent() }}{% endblock %}
+{% block title %}{{ user.name }} - Profil {{ parent() }}{% endblock %}
 
 {% block container %}
     {% if user.id == user('id') %}
@@ -134,6 +134,28 @@
                 </div>
             </section>
 
+        </div>
+        <div class="col-md-3">
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ route('user.pm.submit', {to: user.name}) }}"><i class="fa fa-fw fa-envelope"></i> Wyślij wiadomość</a>
+                </li>
+
+                <li>
+                    <a href="{{ route('forum.user', [user.id]) }}"><i class="fa fa-fw fa-search"></i> Znajdź posty użytkownika</a>
+                </li>
+
+                {% if can('adm-access') %}
+                    <li>
+                        <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fa fa-ban fa-fw"></i> Zablokuj tego użytkownika</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('adm.user.save', [user.id]) }}"><i class="fa fa-cogs fa-fw"></i> Przejdź do panelu administracyjnego</a>
+                    </li>
+                {% endif %}
+            </ul>
+
+            {{ render_block('job_ads') }}
         </div>
     </div>
 {% endblock %}
