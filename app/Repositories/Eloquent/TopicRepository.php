@@ -25,15 +25,17 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      * @param string $order
      * @param string $direction
      * @param int $perPage
-     * @return false|LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function paginate($userId, $sessionId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
     {
         $this->applyCriteria();
 
-        $pagination = $this->model->select(['topics.id'])
-                    ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
-                    ->paginate($perPage);
+        $pagination = $this
+            ->model
+            ->select(['topics.id'])
+            ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
+            ->paginate($perPage);
 
         $values = [];
         $pagination->lists('id')->each(function ($item, $key) use (&$values) {
@@ -41,16 +43,19 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
         });
 
         if (empty($values)) {
-            return false;
+            return new LengthAwarePaginator([], 0, $perPage);
         }
 
-        $from = \DB::table('topics AS t')
-                    ->select(['t.*', 'x.ordering'])
-                    ->join($this->raw('(VALUES ' . implode(',', $values) . ') AS x (id, ordering)'), 't.id', '=', 'x.id')
-                    ->orderBy('x.ordering')
-                    ->toSql();
+        $from = $this->app['db']
+            ->table('topics AS t')
+            ->select(['t.*', 'x.ordering'])
+            ->join($this->raw('(VALUES ' . implode(',', $values) . ') AS x (id, ordering)'), 't.id', '=', 'x.id')
+            ->orderBy('x.ordering')
+            ->toSql();
 
-        $sql = $this->makeModel()
+        $this->resetModel();
+
+        $sql = $this->model
                     ->withTrashed()
                     ->select([
                         'topics.*',
@@ -248,8 +253,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
     /**
      * @param int $userId
      * @param int $limit
-     *
-     * @todo sprawdzic na bazie produkcyjnej czy takie zapytanie nie jest zbyt wolne
      */
     public function interesting($userId, $limit = 7)
     {

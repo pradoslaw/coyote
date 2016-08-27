@@ -14,7 +14,7 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @param string $order
      * @param string $direction
      * @param int $perPage
-     * @return mixed
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function paginate($userId, $sessionId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20);
 

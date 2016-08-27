@@ -113,13 +113,13 @@ class HomeController extends BaseController
 
     /**
      * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $topics
-     * @return \Illuminate\Contracts\View\View
+     * @return \Illuminate\View\View
      */
     private function render($topics)
     {
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
-        if (!empty($topics) && $this->getGateFactory()->allows('forum-delete')) {
+        if ($topics->total() && $this->getGateFactory()->allows('forum-delete')) {
             $flags = $this->getFlagFactory()->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
@@ -129,7 +129,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return \Illuminate\Contracts\View\View
+     * @return \Illuminate\View\View
      */
     private function loadAndRender()
     {
@@ -170,9 +170,11 @@ class HomeController extends BaseController
         $this->topic->pushCriteria(new OnlyMine($userId));
         $topics = $this->load();
 
-        $topics->load(['posts' => function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        }]);
+        if ($topics->total() > 0) {
+            $topics->load(['posts' => function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            }]);
+        }
 
         return $this->render($topics)->with('user_id', $userId);
     }
