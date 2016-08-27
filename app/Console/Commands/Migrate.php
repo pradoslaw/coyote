@@ -2240,6 +2240,8 @@ class Migrate extends Command
                 $bar->advance();
             }
 
+            DB::statement('UPDATE users SET is_blocked = 1 WHERE id IN(SELECT user_id FROM firewall WHERE user_id IS NOT NULL GROUP BY user_id)');
+
             DB::commit();
             $bar->finish();
         } catch (\Exception $e) {
