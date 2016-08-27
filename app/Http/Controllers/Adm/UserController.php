@@ -41,7 +41,7 @@ class UserController extends BaseController
 
     /**
      * @param \Coyote\User $user
-     * @return \Coyote\Services\FormBuilder\Form
+     * @return \Illuminate\View\View
      */
     public function edit($user)
     {
@@ -83,6 +83,9 @@ class UserController extends BaseController
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
     }
 
+    /**
+     * @param \Coyote\User $user
+     */
     protected function getForm($user)
     {
         return $this->createForm(AdminForm::class, $user, [

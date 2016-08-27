@@ -50,6 +50,7 @@ class SearchController extends Controller
 
     /**
      * @param string$type
+     * @param string $type
      * @return string
      */
     private function route($type)

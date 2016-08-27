@@ -9,7 +9,7 @@ class FirewallRepository extends Repository implements FirewallRepositoryInterfa
     const CACHE_KEY = 'firewall';
 
     /**
-     * @return \Coyote\Firewall
+     * @return string
      */
     public function model()
     {

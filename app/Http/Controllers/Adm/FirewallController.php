@@ -61,7 +61,7 @@ class FirewallController extends BaseController
     /**
      * @param \Coyote\Firewall $firewall
      * @param FirewallForm $form
-     * @return mixed
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function save($firewall, FirewallForm $form)
     {
@@ -86,7 +86,7 @@ class FirewallController extends BaseController
 
     /**
      * @param \Coyote\Firewall $firewall
-     * @return mixed
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function delete($firewall)
     {
