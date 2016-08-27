@@ -7,6 +7,10 @@ use Coyote\Services\FormBuilder\Form;
 
 trait EventsTrait
 {
+    /**
+     * @param string $from
+     * @param string $to
+     */
     protected function transformUserNameToId($from, $to = 'user_id')
     {
         $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) use ($from, $to) {

@@ -35,12 +35,13 @@ class Index extends Command
      */
     protected $post;
 
+    /**
+     * @var App
+     */
     protected $app;
 
     /**
-     * Mapping constructor.
-     * @param PostRepositoryInterface $post
-     * @param JobRepositoryInterface $job
+     * @param App $app
      */
     public function __construct(App $app)
     {
