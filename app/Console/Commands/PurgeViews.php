@@ -87,7 +87,7 @@ class PurgeViews extends Command
     private function store($page, $hits)
     {
         foreach ($hits as $hit) {
-            list($userId,) = explode(';', $hit);
+            list($userId, ) = explode(';', $hit);
 
             if (is_numeric($userId)) {
                 /** @var \Coyote\Page\Visit $visits */
