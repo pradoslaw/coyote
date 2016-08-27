@@ -68,7 +68,7 @@
                             {% if skills %}
                                 <ul class="tag-clouds">
                                     {% for skill in skills %}
-                                        <li><a href="javascript:">{{ skill.name }}</a></li>
+                                        <li><a href="{{ route('job.tag', [skill.name|url_encode]) }}">{{ skill.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
