@@ -6,7 +6,7 @@ class HistoryController extends BaseController
 {
     /**
      * @param \Coyote\Wiki $wiki
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\View\View
      */
     public function index($wiki)
     {

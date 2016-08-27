@@ -53,7 +53,7 @@ class GroupsController extends BaseController
 
     /**
      * @param \Coyote\Group $group
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function save($group)
     {

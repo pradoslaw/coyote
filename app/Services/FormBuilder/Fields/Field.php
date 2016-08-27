@@ -120,7 +120,7 @@ abstract class Field
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getValue()
     {
@@ -180,7 +180,7 @@ abstract class Field
     }
 
     /**
-     * @param mixed $label
+     * @param string $label
      */
     public function setLabel($label)
     {
@@ -188,7 +188,7 @@ abstract class Field
     }
 
     /**
-     * @param $rules
+     * @param string $rules
      * @return $this
      */
     public function setRules($rules)
@@ -434,8 +434,8 @@ abstract class Field
     }
 
     /**
-     * @param $key
-     * @return mixed
+     * @param string $key
+     * @return string
      */
     protected function getOldInput($key)
     {

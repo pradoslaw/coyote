@@ -290,7 +290,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
         $sql = $this
             ->model
-            ->addSelect([ // addSelect() instead of select() to retrieve extra columns in criteria
+            ->addSelect([// addSelect() instead of select() to retrieve extra columns in criteria
                 'posts.*',
                 'author.name AS author_name',
                 'author.photo',
