@@ -28,6 +28,7 @@ class PostListener implements ShouldQueue
     public function onPostSave(PostWasSaved $event)
     {
         $event->post->putToIndex();
+        $event->post->topic->putToIndex();
     }
 
     /**
@@ -35,7 +36,11 @@ class PostListener implements ShouldQueue
      */
     public function onPostDelete(PostWasDeleted $event)
     {
-        $this->post->withTrashed()->find($event->post['id'])->deleteFromIndex();
+        /** @var \Coyote\Post $post */
+        $post = $this->post->withTrashed()->find($event->post['id']);
+
+        $post->deleteFromIndex();
+        $post->topic->deleteFromIndex();
     }
 
     /**

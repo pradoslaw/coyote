@@ -25,6 +25,9 @@ use Coyote\Models\Scopes\Sortable;
 class Topic extends Model
 {
     use SoftDeletes, Sortable, Taggable;
+    use Searchable{
+        getIndexBody as parentGetIndexBody;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +40,30 @@ class Topic extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * Elasticsearch type mapping
+     *
+     * @var array
+     */
+    protected $mapping = [
+//        "posts" => [
+//            "type" => "multi_field",
+//            "fields" => [
+//                "text" => [
+//                    "type" => "string"
+//                ]
+//            ]
+//        ],
+        "created_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
+        "updated_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
+    ];
 
     /**
      * Scope used in topic filtering.
@@ -217,5 +244,28 @@ class Topic extends Model
     {
         $this->is_locked = !$this->is_locked;
         $this->save();
+    }
+
+    /**
+     * Return data to index in elasticsearch
+     *
+     * @return array
+     */
+    protected function getIndexBody()
+    {
+        $body = $this->parentGetIndexBody();
+
+        // we need to index every field from topics except:
+        $body = array_except($body, ['deleted_at', 'first_post_id', 'last_post_id', 'is_sticky', 'is_announcement', 'poll_id', 'prev_forum_id']);
+        $posts = [];
+
+        foreach ($this->posts()->get(['text']) as $post) {
+            $posts[] = ['text' => $post->text];
+        }
+
+        return array_merge($body, [
+            'posts' => $posts,
+            'forum' => $this->forum()->first(['name', 'slug'])
+        ]);
     }
 }

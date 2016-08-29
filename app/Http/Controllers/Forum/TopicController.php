@@ -67,10 +67,8 @@ class TopicController extends BaseController
             $build = $builder->build();
             debugbar()->debug($build);
 
-            // set custom response class
-            $this->post->setResponse(TopHits::class);
             // search related topics
-            $mlt = $this->post->search($build);
+            $mlt = $this->topic->search($build);
 
             // it's important to reset criteria for the further queries
             $this->forum->resetCriteria();

@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 
 /**
  * @method $this withTrashed()
+ * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
  */
 class TopicRepository extends Repository implements TopicRepositoryInterface, SubscribableInterface
 {

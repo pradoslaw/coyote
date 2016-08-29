@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Contracts;
 /**
  * @package Coyote\Repositories\Contracts
  * @method $this withTrashed()
+ * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
  */
 interface TopicRepositoryInterface extends RepositoryInterface
 {

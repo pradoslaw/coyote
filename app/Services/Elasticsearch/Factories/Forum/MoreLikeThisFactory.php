@@ -20,19 +20,19 @@ class MoreLikeThisFactory
     {
         $builder = new QueryBuilder();
 
-        $mlt = new MoreLikeThis(['subject', 'text']);
+        $mlt = new MoreLikeThis(['subject', 'post.text']);
         $mlt->addDoc([
             '_index' => config('elasticsearch.default_index'),
-            '_type' => 'posts',
-            '_id' => $topic->first_post_id
+            '_type' => 'topics',
+            '_id' => $topic->id
         ]);
 
         $builder->addMoreLikeThis($mlt);
-        $builder->addAggs(new Topic());
+//        $builder->addAggs(new Topic());
 
         $builder->addFilter(new Forum($forumId));
-        $builder->addFilter(new NotTerm('topic_id', $topic->id));
-        
+        $builder->addFilter(new NotTerm('id', $topic->id));
+
         return $builder;
     }
 }

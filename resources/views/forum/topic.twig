@@ -205,8 +205,8 @@
                         <ul>
                             {% for page in mlt %}
                                 <li>
-                                    <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.slug, page.topic.id, page.topic.slug]) }}" title="{{ page.topic.subject }}">
-                                        <strong>{{ page.topic.subject }}</strong>
+                                    <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.slug, page.id, page.slug]) }}" title="{{ page.subject }}">
+                                        <strong>{{ page.subject }}</strong>
                                         <small>{{ page.updated_at|format_date }}</small>
                                     </a>
                                 </li>

@@ -31,6 +31,8 @@ class TopicListener implements ShouldQueue
             /** @var \Coyote\Post $post */
             $post->putToIndex();
         });
+
+        $event->topic->putToIndex();
     }
 
     /**
@@ -38,7 +40,10 @@ class TopicListener implements ShouldQueue
      */
     public function onTopicDelete(TopicWasDeleted $event)
     {
-        $this->topic->withTrashed()->find($event->topic['id'])->posts()->withTrashed()->get()->each(function ($post) {
+        $topic = $this->topic->withTrashed()->find($event->topic['id']);
+
+        $topic->deleteFromIndex();
+        $topic->posts()->withTrashed()->get()->each(function ($post) {
             /** @var \Coyote\Post $post */
             $post->deleteFromIndex();
         });
