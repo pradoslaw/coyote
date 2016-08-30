@@ -5,6 +5,7 @@ namespace Coyote\Http\Middleware;
 use Closure;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface as FirewallRepository;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\Request;
 
 class FirewallBlacklist
 {
@@ -31,11 +32,11 @@ class FirewallBlacklist
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      * @param  \Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $this->handleFirewallRules($request);
 
@@ -48,9 +49,9 @@ class FirewallBlacklist
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      */
-    protected function handleFirewallRules($request)
+    protected function handleFirewallRules(Request $request)
     {
         $response = $this->firewall->filter($this->auth->id(), $request->ip());
 
