@@ -42,7 +42,7 @@ class AdController extends Controller
     }
 
     /**
-     * @param string $location
+     * @param array $location
      * @return string
      */
     private function load($location)
