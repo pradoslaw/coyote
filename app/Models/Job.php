@@ -114,7 +114,7 @@ class Job extends Model
             "properties" => [
                 "name" => [
                     "type" => "string",
-                    "analyzer" => "analyzer_keyword"
+                    "analyzer" => "keyword_analyzer"
                 ]
             ]
         ],

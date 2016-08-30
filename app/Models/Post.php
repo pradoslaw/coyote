@@ -67,7 +67,7 @@ class Post extends Model
         "user_name" => [
             "type" => "string",
             // ability to search case insensitive
-            "analyzer" => "analyzer_keyword"
+            "analyzer" => "keyword_analyzer"
         ],
         "ip" => [
             "type" => "string",
@@ -213,7 +213,7 @@ class Post extends Model
     protected function getIndexBody()
     {
         $body = $this->parentGetIndexBody();
-        
+
         // additionally index few fields from topics table...
         $topic = $this->topic()->first(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
         // we need to index every field from posts except:
