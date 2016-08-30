@@ -2,7 +2,6 @@
 
 namespace Coyote\Services\Elasticsearch\Factories\Forum;
 
-use Coyote\Services\Elasticsearch\Aggs\Forum\Topic;
 use Coyote\Services\Elasticsearch\Filters\NotTerm;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
@@ -20,7 +19,7 @@ class MoreLikeThisFactory
     {
         $builder = new QueryBuilder();
 
-        $mlt = new MoreLikeThis(['subject', 'post.text']);
+        $mlt = new MoreLikeThis(['subject', 'posts.text']);
         $mlt->addDoc([
             '_index' => config('elasticsearch.default_index'),
             '_type' => 'topics',
@@ -28,7 +27,6 @@ class MoreLikeThisFactory
         ]);
 
         $builder->addMoreLikeThis($mlt);
-//        $builder->addAggs(new Topic());
 
         $builder->addFilter(new Forum($forumId));
         $builder->addFilter(new NotTerm('id', $topic->id));
