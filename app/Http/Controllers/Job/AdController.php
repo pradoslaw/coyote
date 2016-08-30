@@ -29,7 +29,7 @@ class AdController extends Controller
 
     /**
      * @param Request $request
-     * @return string
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index(Request $request)
     {
