@@ -47,14 +47,14 @@ class Topic extends Model
      * @var array
      */
     protected $mapping = [
-//        "posts" => [
-//            "type" => "multi_field",
-//            "fields" => [
-//                "text" => [
-//                    "type" => "string"
-//                ]
-//            ]
-//        ],
+        "posts" => [
+            "properties" => [
+                "text" => [
+                    "type" => "string",
+                    "analyzer" => "stopwords_analyzer"
+                ]
+            ]
+        ],
         "created_at" => [
             "type" => "date",
             "format" => "yyyy-MM-dd HH:mm:ss"

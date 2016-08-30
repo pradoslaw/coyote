@@ -48,9 +48,13 @@ class Create extends Command
                         "index" => [
                             "analysis" => [
                                 "analyzer" => [
-                                    "analyzer_keyword" => [
+                                    "keyword_analyzer" => [
                                         "tokenizer" => "keyword",
                                         "filter" => "lowercase"
+                                    ],
+                                    "stopwords_analyzer" => [
+                                        "type" => "standard",
+                                        "stopwords" => config('elasticsearch.stopwords')
                                     ]
                                 ]
                             ]
