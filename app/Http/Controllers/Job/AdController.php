@@ -28,7 +28,7 @@ class AdController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|bool
      */
     public function index(Request $request)
     {
@@ -38,8 +38,13 @@ class AdController extends Controller
         $builder->setSize(0, 4);
         $builder->addSort(new Geodistance($location['latitude'], $location['longitude']));
 
+        $result = $this->job->search($builder->build());
+        if (!$result->totalHits()) {
+            return false;
+        }
+
         // search jobs that might be close to your location
-        return view('job.ad', ['jobs' => $this->job->search($builder->build())->getSource(), 'location' => $location]);
+        return view('job.ad', ['jobs' => $result->getSource(), 'location' => $location]);
     }
 
     /**
