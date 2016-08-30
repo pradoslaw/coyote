@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Services\Elasticsearch\Geodistance;
@@ -28,33 +29,43 @@ class AdController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|bool
+     * @return string
      */
     public function index(Request $request)
     {
-        $location = $this->getLocation($request->ip());
+        $output = $this->getCacheFactory()->remember('ad:' . $request->ip(), 60, function () use ($request) {
+            return $this->load($this->getLocation($request->ip()));
+        });
 
+        // cache output response for 1h
+        return response($output)->setMaxAge(3600)->setExpires(new Carbon('+1 hour'));
+    }
+
+    /**
+     * @param string $location
+     * @return string
+     */
+    private function load($location)
+    {
         $builder = new QueryBuilder();
         $builder->setSize(0, 4);
         $builder->addSort(new Geodistance($location['latitude'], $location['longitude']));
 
         $result = $this->job->search($builder->build());
         if (!$result->totalHits()) {
-            return false;
+            return '';
         }
 
         // search jobs that might be close to your location
-        return view('job.ad', ['jobs' => $result->getSource(), 'location' => $location]);
+        return (string) view('job.ad', ['jobs' => $result->getSource(), 'location' => $location]);
     }
 
     /**
      * @param string $ip
      * @return array
      */
-    protected function getLocation($ip)
+    private function getLocation($ip)
     {
-        return $this->getCacheFactory()->remember('ip:' . $ip, 60, function () use ($ip) {
-            return app('geo-ip')->ip($ip);
-        });
+        return app('geo-ip')->ip($ip);
     }
 }
