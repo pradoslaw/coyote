@@ -168,7 +168,7 @@ trait Searchable
     {
         $body = $this->toArray();
 
-        foreach (['created_at', 'updated_at', 'deadline_at'] as $column) {
+        foreach (['created_at', 'updated_at', 'deadline_at', 'last_post_created_at'] as $column) {
             if (!empty($body[$column])) {
                 $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
             }
