@@ -23,11 +23,9 @@ class PostSubmitResponse
     }
 
     /**
-     * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @param Closure $next
+     * @return \Illuminate\Http\RedirectResponse|Response
      */
     public function handle(Request $request, Closure $next)
     {
@@ -50,8 +48,7 @@ class PostSubmitResponse
                 }
             }
 
-            $view = (string) view('forum.partials.text', $data)->render();
-            return response($view);
+            return response()->view('forum.partials.text', $data);
         } elseif ($request->attributes->has('url')) {
             return redirect()->to($request->attributes->get('url'));
         } else {
