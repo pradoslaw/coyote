@@ -182,7 +182,7 @@ class LogViewer
     {
         return array_combine(
             array_keys($this->init()),
-            [$matches[1], $matches[2], $matches[3], @$matches[5], @$matches[6], []]
+            [$matches[1], $matches[2], $matches[3], $matches[5] ?? '', $matches[6] ?? '', []]
         );
     }
 }
