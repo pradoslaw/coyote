@@ -4,6 +4,7 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\TopicWasMoved;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -27,8 +28,7 @@ class TopicListener implements ShouldQueue
      */
     public function onTopicMove(TopicWasMoved $event)
     {
-        $event->topic->posts()->get()->each(function ($post) {
-            /** @var \Coyote\Post $post */
+        $event->topic->posts()->get()->each(function (Post $post) {
             $post->putToIndex();
         });
 
@@ -43,8 +43,7 @@ class TopicListener implements ShouldQueue
         $topic = $this->topic->withTrashed()->find($event->topic['id']);
 
         $topic->deleteFromIndex();
-        $topic->posts()->withTrashed()->get()->each(function ($post) {
-            /** @var \Coyote\Post $post */
+        $topic->posts()->withTrashed()->get()->each(function (Post $post) {
             $post->deleteFromIndex();
         });
     }

@@ -2,19 +2,21 @@
 
 namespace Coyote\Models\Scopes;
 
+use Illuminate\Database\Eloquent\Builder;
+
 trait Sortable
 {
     /**
      * Filter order/direction values an apply it to the query
      *
-     * @param $query
+     * @param Builder $builder
      * @param $sort
      * @param $order
      * @param array|null $accept
      * @param array $alias
      * @return mixed
      */
-    public function scopeSortable($query, $sort, $order, array $accept = null, array $alias = [])
+    public function scopeSortable(Builder $builder, $sort, $order, array $accept = null, array $alias = [])
     {
         if (request()->has('sort') && request()->has('order')) {
             $order = request('order') == 'asc' ? 'ASC' : 'DESC';
@@ -38,6 +40,6 @@ trait Sortable
             }
         }
 
-        return $query->orderBy($sort, $order);
+        return $builder->orderBy($sort, $order);
     }
 }

@@ -6,14 +6,15 @@ use Coyote\Services\Elasticsearch\Filters\NotTerm;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
+use Coyote\Wiki;
 
 class MoreLikeThisFactory
 {
     /**
-     * @param \Coyote\Wiki $wiki
+     * @param Wiki $wiki
      * @return QueryBuilderInterface
      */
-    public function build($wiki) : QueryBuilderInterface
+    public function build(Wiki $wiki) : QueryBuilderInterface
     {
         $builder = new QueryBuilder();
 

@@ -7,15 +7,16 @@ use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\Filters\Post\Forum;
+use Coyote\Topic;
 
 class MoreLikeThisFactory
 {
     /**
-     * @param \Coyote\Topic $topic
+     * @param Topic $topic
      * @param int|array $forumId
      * @return QueryBuilderInterface
      */
-    public function build($topic, $forumId) : QueryBuilderInterface
+    public function build(Topic $topic, $forumId) : QueryBuilderInterface
     {
         $builder = new QueryBuilder();
 

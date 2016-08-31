@@ -3,9 +3,11 @@
 namespace Coyote\Listeners;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 
 class SendLockoutEmail
 {
@@ -51,16 +53,16 @@ class SendLockoutEmail
     }
 
     /**
-     * @param \Coyote\User $user
+     * @param User $user
      */
-    protected function sendLockoutEmail($user)
+    protected function sendLockoutEmail(User $user)
     {
         $data = array_merge(
             $user->toArray(),
             ['ip' => $this->request->ip(), 'host' => gethostbyaddr($this->request->ip())]
         );
 
-        $this->mailer->send('emails.auth.lockout', $data, function ($message) use ($user) {
+        $this->mailer->send('emails.auth.lockout', $data, function (Message $message) use ($user) {
             $message->to($user->email);
             $message->subject('Powiadomienie o nieudanym logowaniu na Twoje konto');
         });

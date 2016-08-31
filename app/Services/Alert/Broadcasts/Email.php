@@ -4,6 +4,7 @@ namespace Coyote\Services\Alert\Broadcasts;
 
 use Coyote\Services\Alert\Providers\ProviderInterface;
 use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Mail\Message;
 
 /**
  * Class Email
@@ -40,7 +41,7 @@ class Email extends Broadcast
 
         $email = $user['user_email'];
 
-        $this->mailer->queue($alert->emailTemplate(), $data, function ($message) use ($email, $data) {
+        $this->mailer->queue($alert->emailTemplate(), $data, function (Message $message) use ($email, $data) {
             $message->subject($data['headline']);
             $message->to($email);
             $message->from('no-reply@4programmers.net', $data['sender_name']);

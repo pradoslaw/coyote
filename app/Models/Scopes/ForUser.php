@@ -2,17 +2,19 @@
 
 namespace Coyote\Models\Scopes;
 
+use Illuminate\Database\Eloquent\Builder;
+
 trait ForUser
 {
     /**
      * Scope a query to only given user id.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $builder
      * @param int $userId
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
-    public function scopeForUser($query, $userId)
+    public function scopeForUser(Builder $builder, $userId)
     {
-        return $query->where('user_id', $userId);
+        return $builder->where('user_id', $userId);
     }
 }

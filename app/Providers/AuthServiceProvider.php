@@ -16,6 +16,7 @@ use Coyote\Policies\FirmPolicy;
 use Coyote\Policies\PostCommentPolicy;
 use Coyote\Policies\WikiCommentPolicy;
 use Coyote\Post;
+use Coyote\User;
 use Coyote\Wiki;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -64,7 +65,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies($gate);
 
         foreach ($this->permissions as $ability) {
-            $gate->define($ability, function ($user) use ($ability) {
+            $gate->define($ability, function (User $user) use ($ability) {
                 return $user->ability($ability);
             });
         }
