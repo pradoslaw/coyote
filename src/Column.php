@@ -131,18 +131,24 @@ class Column
 
     /**
      * @param \Closure $closure
+     * @return $this
      */
     public function setClickable(\Closure $closure)
     {
         $this->addDecorator((new Link())->render($closure));
+
+        return $this;
     }
 
     /**
      * @param \Closure $closure
+     * @return $this
      */
     public function setRender(\Closure $closure)
     {
         $this->addDecorator((new Html())->render($closure));
+
+        return $this;
     }
 
     /**
@@ -152,6 +158,8 @@ class Column
     public function setPlaceholder($placeholder)
     {
         $this->addDecorator(new Placeholder($placeholder));
+
+        return $this;
     }
 
     /**
@@ -214,9 +222,6 @@ class Column
 
     /**
      * @param array $options
-     *
-     * @todo Jezeli podczas budowania tabeli, uzyjemy metody setClickable(), a nastepnie setDecorators() to
-     * ten pierwszy deokrator zostnie usuniety
      */
     protected function setDefaultOptions(array $options)
     {
@@ -239,6 +244,11 @@ class Column
             $methodName = 'set' . ucfirst(camel_case($key));
 
             if (method_exists($this, $methodName)) {
+                // setDecorators() method can overwrite previously set decorators. we don't want that to happen
+                // because user could set other decorators via setRender() or setClickable() method.
+                if ($methodName === 'setDecorators') {
+                    $values = array_merge($this->decorators, $values);
+                }
                 $this->$methodName($values);
             }
         }
