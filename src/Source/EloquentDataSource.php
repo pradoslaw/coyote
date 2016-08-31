@@ -5,6 +5,7 @@ namespace Boduch\Grid\Source;
 use Boduch\Grid\Column;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Order;
+use Illuminate\Database\Eloquent\Builder;
 
 class EloquentDataSource implements SourceInterface
 {
@@ -44,7 +45,7 @@ class EloquentDataSource implements SourceInterface
     {
         return $this
             ->source
-            ->when($order->getColumn(), function ($builder) use ($order) {
+            ->when($order->getColumn(), function (Builder $builder) use ($order) {
                 return $builder->orderBy($order->getColumn(), $order->getDirection());
             })
             ->forPage($currentPage, $perPage)
