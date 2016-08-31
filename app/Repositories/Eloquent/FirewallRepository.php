@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
+use Coyote\Firewall;
 
 class FirewallRepository extends Repository implements FirewallRepositoryInterface
 {
@@ -13,33 +14,33 @@ class FirewallRepository extends Repository implements FirewallRepositoryInterfa
      */
     public function model()
     {
-        return 'Coyote\Firewall';
+        return Firewall::class;
     }
 
     /**
      * @param $userId
      * @param $ip
-     * @return bool
+     * @return \Coyote\Firewall|null
      */
     public function filter($userId, $ip)
     {
-        $result = [];
+        $model = null;
 
-        foreach ($this->load() as $row) {
-            if ($row['ip']) {
-                if (preg_match('/^' . str_replace('\*', '\d+', preg_quote($row['ip'])) . '$/', $ip)) {
-                    $result = $row;
+        foreach ($this->getRules() as $rule) {
+            if ($rule['ip']) {
+                if (preg_match('/^' . str_replace('\*', '\d+', preg_quote($rule['ip'])) . '$/', $ip)) {
+                    $model = $this->toModel($rule);
                     break;
                 }
             }
 
-            if ($row['user_id'] && $userId == $row['user_id']) {
-                $result = $row;
+            if ($rule['user_id'] && $userId == $rule['user_id']) {
+                $model = $this->toModel($rule);
                 break;
             }
         }
 
-        return $result;
+        return $model;
     }
 
     /**
@@ -50,15 +51,27 @@ class FirewallRepository extends Repository implements FirewallRepositoryInterfa
         $this->model->whereNotNull('expire_at')->where('expire_at', '<=', $this->raw('NOW()'))->delete();
     }
 
-    private function load()
+    /**
+     * @return array
+     */
+    private function getRules()
     {
         if ($this->app['cache']->has(self::CACHE_KEY)) {
-            $result = json_decode($this->app['cache']->get(self::CACHE_KEY), true);
+            $result = unserialize($this->app['cache']->get(self::CACHE_KEY));
         } else {
             $result = $this->all()->toArray();
-            $this->app['cache']->forever(self::CACHE_KEY, json_encode($result));
+            $this->app['cache']->forever(self::CACHE_KEY, serialize($result));
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $firewall
+     * @return Firewall
+     */
+    private function toModel(array $firewall)
+    {
+        return new Firewall($firewall);
     }
 }

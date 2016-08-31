@@ -22,6 +22,7 @@ class Handler extends ExceptionHandler
         HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
+        ForbiddenException::class
     ];
 
     /**
@@ -34,7 +35,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        return parent::report($e);
+        parent::report($e);
     }
 
     /**
@@ -75,7 +76,20 @@ class Handler extends ExceptionHandler
             return response()->json($response, $statusCode);
         }
 
+        if ($e instanceof ForbiddenException) {
+            return $this->renderForbiddenException($e);
+        }
+
         return parent::render($request, $e);
+    }
+
+    /**
+     * @param ForbiddenException $e
+     * @return \Illuminate\Http\Response
+     */
+    protected function renderForbiddenException(ForbiddenException $e)
+    {
+        return response()->view('errors.forbidden', $e->firewall->toArray(), 401);
     }
 
     /**

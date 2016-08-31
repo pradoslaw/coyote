@@ -3,6 +3,7 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
+use Coyote\Exceptions\ForbiddenException;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface as FirewallRepository;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -53,13 +54,10 @@ class FirewallBlacklist
      */
     protected function handleFirewallRules(Request $request)
     {
-        $response = $this->firewall->filter($this->auth->id(), $request->ip());
+        $firewall = $this->firewall->filter($this->auth->id(), $request->ip());
 
-        if ($response) {
-            // show ban message and exit the program. I don't know how to stop application. return false didn't work :(
-            // @todo maybe throw ForbiddenException ?
-            echo view('errors.forbidden', $response);
-            exit;
+        if ($firewall !== null) {
+            throw new ForbiddenException($firewall);
         }
     }
 
@@ -74,9 +72,9 @@ class FirewallBlacklist
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      */
-    protected function handleIpAccess($request)
+    protected function handleIpAccess(Request $request)
     {
         if (!empty($this->getUser()->access_ip)) {
             if (!$this->getUser()->hasAccessByIp($request->ip())) {

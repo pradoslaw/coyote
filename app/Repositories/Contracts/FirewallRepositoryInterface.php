@@ -7,7 +7,7 @@ interface FirewallRepositoryInterface extends RepositoryInterface
     /**
      * @param $userId
      * @param $ip
-     * @return bool
+     * @return \Coyote\Firewall|null
      */
     public function filter($userId, $ip);
 
