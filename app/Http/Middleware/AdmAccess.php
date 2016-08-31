@@ -4,6 +4,7 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Coyote\Http\Factories\GateFactory;
+use Illuminate\Http\Request;
 
 class AdmAccess
 {
@@ -12,12 +13,12 @@ class AdmAccess
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param   Request  $request
+     * @param   Closure  $next
      * @param   bool    $isLogged
      * @return mixed
      */
-    public function handle($request, Closure $next, $isLogged)
+    public function handle(Request $request, Closure $next, $isLogged)
     {
         if ($this->getGateFactory()->denies('adm-access')) {
             abort(401);

@@ -3,12 +3,14 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
+use Coyote\Post\Comment;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\Post\CommentRepositoryInterface as CommentRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\Request;
 
 class CommentAccess
 {
@@ -74,11 +76,11 @@ class CommentAccess
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $this->request = $request;
         $commentId = $request->route('id');
@@ -98,10 +100,10 @@ class CommentAccess
     }
 
     /**
-     * @param $comment \Coyote\Post\Comment
-     * @return array
+     * @param Comment $comment
+     * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    private function checkAbility($comment)
+    private function checkAbility(Comment $comment)
     {
         $post = $this->post->findOrFail($comment->post_id, ['id', 'topic_id', 'forum_id']);
         $forum = $this->forum->findOrFail($post->forum_id);

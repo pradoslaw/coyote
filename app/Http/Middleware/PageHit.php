@@ -4,6 +4,7 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Http\Request;
 
 class PageHit
 {
@@ -23,11 +24,11 @@ class PageHit
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $result = $next($request);
 

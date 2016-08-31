@@ -6,6 +6,7 @@ use Closure;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\Wiki\WithTrashed;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Http\Request;
 
 class WikiAccess extends AbstractMiddleware
 {
@@ -32,12 +33,12 @@ class WikiAccess extends AbstractMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param   string  $ability
+     * @param  Request  $request
+     * @param  Closure  $next
+     * @param  string  $ability
      * @return mixed
      */
-    public function handle($request, Closure $next, $ability = '')
+    public function handle(Request $request, Closure $next, $ability = '')
     {
         if ($this->gate->allows($ability)) {
             $this->wiki->pushCriteria(new WithTrashed());

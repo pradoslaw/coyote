@@ -6,6 +6,7 @@ use Boduch\Grid\Decorators\DateTimeFormat;
 use Boduch\Grid\Decorators\StrLimit;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Text;
+use Coyote\Firewall;
 use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Decorators\Ip;
@@ -21,8 +22,7 @@ class FirewallGrid extends Grid
             ->addColumn('id', [
                 'title' => 'ID',
                 'sortable' => true,
-                'clickable' => function ($row) {
-                    /** @var \Coyote\Firewall $row */
+                'clickable' => function (Firewall $row) {
                     return link_to_route('adm.firewall.save', $row->id, [$row->id]);
                 }
             ])
@@ -30,7 +30,7 @@ class FirewallGrid extends Grid
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
                 'placeholder' => '--',
-                'clickable' => function ($row) {
+                'clickable' => function (Firewall $row) {
                     return link_to_route('adm.user.save', $row->user_name, [$row->user_id]);
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
@@ -53,12 +53,12 @@ class FirewallGrid extends Grid
             ])
             ->addColumn('moderator_name', [
                 'title' => 'Założony przez',
-                'clickable' => function ($row) {
+                'clickable' => function (Firewall $row) {
                     return link_to_route('adm.user.save', $row->moderator_name, [$row->moderator_id]);
                 }
             ])
-            ->addRowAction(new EditButton(function ($data) {
-                return route('adm.firewall.save', [$data->id]);
+            ->addRowAction(new EditButton(function (Firewall $row) {
+                return route('adm.firewall.save', [$row->id]);
             }))
             ->addComponent(
                 new CreateButton(

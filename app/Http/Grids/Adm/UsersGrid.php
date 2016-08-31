@@ -10,6 +10,7 @@ use Boduch\Grid\Decorators\Boolean;
 use Boduch\Grid\Decorators\Ip;
 use Boduch\Grid\Order;
 use Boduch\Grid\Components\EditButton;
+use Coyote\User;
 
 class UsersGrid extends Grid
 {
@@ -29,8 +30,7 @@ class UsersGrid extends Grid
             ->addColumn('name', [
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
-                'clickable' => function ($user) {
-                    /** @var \Coyote\User $user */
+                'clickable' => function (User $user) {
                     return link_to_route('adm.user.save', $user->name, [$user->id]);
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
@@ -61,8 +61,7 @@ class UsersGrid extends Grid
                 'decorators' => [new Ip()],
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])
-            ->addRowAction(new EditButton(function ($user) {
-                /** @var \Coyote\User $user */
+            ->addRowAction(new EditButton(function (User $user) {
                 return route('adm.user.save', [$user->id]);
             }));
     }

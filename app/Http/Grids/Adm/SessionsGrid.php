@@ -9,6 +9,7 @@ use Boduch\Grid\Filters\Text;
 use Boduch\Grid\Row;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Order;
+use Coyote\Session;
 use Jenssegers\Agent\Agent;
 
 class SessionsGrid extends Grid
@@ -20,8 +21,7 @@ class SessionsGrid extends Grid
             ->addColumn('name', [
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
-                'clickable' => function ($session) {
-                    /** @var \Coyote\Session $session */
+                'clickable' => function (Session $session) {
                     if ($session->user_id) {
                         return link_to_route('adm.user.save', $session->name, [$session->user_id]);
                     } else {

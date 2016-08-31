@@ -34,7 +34,7 @@ class FirewallBlacklist
      * Handle an incoming request.
      *
      * @param  Request $request
-     * @param  \Closure $next
+     * @param  Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -51,6 +51,7 @@ class FirewallBlacklist
 
     /**
      * @param Request $request
+     * @throws ForbiddenException
      */
     protected function handleFirewallRules(Request $request)
     {

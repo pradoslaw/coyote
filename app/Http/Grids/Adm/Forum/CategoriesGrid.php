@@ -4,6 +4,7 @@ namespace Coyote\Http\Grids\Adm\Forum;
 
 use Boduch\Grid\Decorators\Boolean;
 use Boduch\Grid\Decorators\StrLimit;
+use Coyote\Forum;
 use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Components\EditButton;
@@ -23,8 +24,7 @@ class CategoriesGrid extends Grid
             ])
             ->addColumn('name', [
                 'title' => 'Nazwa',
-                'render' => function ($forum) {
-                    /** @var \Coyote\Forum $forum */
+                'render' => function (Forum $forum) {
                     if ($forum->parent_id) {
                         $forum->name = '—— ' . $forum->name;
                     }
@@ -48,8 +48,7 @@ class CategoriesGrid extends Grid
                 'title' => 'Zapis dla anonimów',
                 'decorators' => [new Boolean()]
             ])
-            ->addRowAction(new EditButton(function ($forum) {
-                /** @var \Coyote\Forum $forum */
+            ->addRowAction(new EditButton(function (Forum $forum) {
                 return route('adm.forum.categories.save', [$forum->id]);
             }))
             ->addComponent(

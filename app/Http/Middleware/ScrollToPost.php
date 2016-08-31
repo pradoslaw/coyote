@@ -6,6 +6,7 @@ use Closure;
 use Coyote\Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Topic;
+use Illuminate\Http\Request;
 
 class ScrollToPost
 {
@@ -25,11 +26,11 @@ class ScrollToPost
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         /* @var \Coyote\Forum */
         $forum = $request->route('forum');

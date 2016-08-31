@@ -4,6 +4,7 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Http\Request;
 
 class ForumWrite extends AbstractMiddleware
 {
@@ -23,11 +24,11 @@ class ForumWrite extends AbstractMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $forum = $request->route('forum');
 

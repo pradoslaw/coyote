@@ -5,6 +5,7 @@ namespace Coyote\Http\Middleware;
 use Closure;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 class PostSubmitResponse
 {
@@ -24,11 +25,11 @@ class PostSubmitResponse
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         /** @var \Illuminate\Http\Response $response */
         $response = $next($request);

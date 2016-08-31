@@ -3,6 +3,7 @@
 namespace Coyote\Http\Grids\Adm;
 
 use Boduch\Grid\Decorators\DateTimeFormat;
+use Coyote\Group;
 use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Order;
@@ -20,8 +21,7 @@ class GroupsGrid extends Grid
             ])
             ->addColumn('name', [
                 'title' => 'Nazwa',
-                'clickable' => function ($group) {
-                    /** @var \Coyote\Group $group */
+                'clickable' => function (Group $group) {
                     return link_to_route('adm.groups.save', $group->name, [$group->id]);
                 }
             ])
@@ -36,7 +36,7 @@ class GroupsGrid extends Grid
                 'title' => 'Data aktualizacji',
                 'decorators' => [new DateTimeFormat('Y-m-d')]
             ])
-            ->addRowAction(new EditButton(function ($group) {
+            ->addRowAction(new EditButton(function (Group $group) {
                 return route('adm.groups.save', [$group->id]);
             }))
             ->addComponent(

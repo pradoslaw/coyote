@@ -2,13 +2,15 @@
 
 namespace Coyote\Http\Middleware;
 
+use Illuminate\Http\Request;
+
 abstract class AbstractMiddleware
 {
     /**
-     * @param \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return mixed
      */
-    protected function unauthorized($request)
+    protected function unauthorized(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
             return response('Unauthorized.', 401);
@@ -18,10 +20,10 @@ abstract class AbstractMiddleware
     }
 
     /**
-     * @param \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return mixed
      */
-    protected function login($request)
+    protected function login(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
             return response('Unauthorized.', 401);

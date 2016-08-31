@@ -6,6 +6,7 @@ use Boduch\Grid\Decorators\StrLimit;
 use Boduch\Grid\Decorators\Url;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Text;
+use Coyote\Flag;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Order;
 use Boduch\Grid\Row;
@@ -28,7 +29,7 @@ class FlagsGrid extends Grid
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
                 'placeholder' => '--',
-                'clickable' => function ($row) {
+                'clickable' => function (Flag $row) {
                     return link_to_route('adm.user.save', $row->user_name, [$row->user_id]);
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
@@ -47,7 +48,7 @@ class FlagsGrid extends Grid
             ])
             ->addColumn('moderator_name', [
                 'title' => 'Zamknięty przez',
-                'clickable' => function ($row) {
+                'clickable' => function (Flag $row) {
                     return link_to_route('adm.user.save', $row->moderator_name, [$row->moderator_id]);
                 },
                 'placeholder' => '--'
