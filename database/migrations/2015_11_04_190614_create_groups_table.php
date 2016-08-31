@@ -24,9 +24,9 @@ class CreateGroupsTable extends Migration
             $table->foreign('leader_id')->references('id')->on('users')->onDelete('set null');
         });
 
-//        Schema::table('users', function (Blueprint $table) {
-//            $table->foreign('group_id')->references('id')->on('groups');
-//        });
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
+        });
     }
 
     /**
@@ -36,9 +36,9 @@ class CreateGroupsTable extends Migration
      */
     public function down()
     {
-        //        Schema::table('users', function (Blueprint $table) {
-//            $table->dropForeign(['group_id']);
-//        });
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['group_id']);
+        });
 
         Schema::drop('groups');
     }
