@@ -27,6 +27,7 @@ elixir(function (mix) {
         'components/vcard.js',
         'components/popover.js',
         'components/flag.js',
+        'components/breadcrumb.js',
         'main.js'
     ];
 
