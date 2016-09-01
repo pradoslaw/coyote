@@ -36,7 +36,16 @@ class Button extends Component
      */
     public function render()
     {
-        return $this->tag('a', $this->text, $this->attributes);
+        return $this->tag('a', $this->wrapSpan($this->text), $this->attributes);
+    }
+
+    /**
+     * @param string $text
+     * @return \Illuminate\Support\HtmlString
+     */
+    protected function wrapSpan($text)
+    {
+        return $this->tag('span', $text);
     }
 
     /**
