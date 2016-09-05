@@ -58,6 +58,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                     ->where('posts.id', '<>', $postId)
                     ->forPage($page, $perPage);
             })
+            ->orderBy('posts.id')
             ->get()
             ->prepend($first);
 
