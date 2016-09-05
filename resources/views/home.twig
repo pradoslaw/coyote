@@ -139,7 +139,7 @@
                                         <h4 class="media-heading"><a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}">{{ item.name }}</a></h4>
 
                                         <div class="progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="{{ item.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ item.percentage }}%;">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="{{ item.percentage|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ item.percentage|round }}%;">
 
                                             </div>
 
