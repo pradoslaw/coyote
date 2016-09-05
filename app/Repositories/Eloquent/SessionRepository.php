@@ -46,6 +46,6 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
                 ->select('updated_at')
                 ->where('user_id', $userId)
                 ->orderBy('updated_at', 'DESC')
-                ->pluck('updated_at');
+                ->value('updated_at');
     }
 }
