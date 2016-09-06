@@ -12,7 +12,6 @@ use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\ObtainSubscribers;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Services\Elasticsearch\Factories\Forum\MoreLikeThisFactory;
-use Coyote\Services\Elasticsearch\Response\TopHits;
 use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
