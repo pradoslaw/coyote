@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Microblog extends Model
 {
     use SoftDeletes, Taggable;
+    use Searchable{
+        getIndexBody as parentGetIndexBody;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -50,6 +53,22 @@ class Microblog extends Model
      * @var array
      */
     protected $attributes = ['votes' => 0];
+
+    /**
+     * Elasticsearch type mapping
+     *
+     * @var array
+     */
+    protected $mapping = [
+        "created_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
+        "updated_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
+    ];
 
     public static function boot()
     {
@@ -167,5 +186,18 @@ class Microblog extends Model
     protected function getMediaFactory()
     {
         return app('media.attachment');
+    }
+
+    /**
+     * Return data to index in elasticsearch
+     *
+     * @return array
+     */
+    protected function getIndexBody()
+    {
+        $body = $this->parentGetIndexBody();
+
+        // we need to index every field from topics except:
+        return array_only($body, ['id', 'created_at', 'updated_at', 'text']);
     }
 }

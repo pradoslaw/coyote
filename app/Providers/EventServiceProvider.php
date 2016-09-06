@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Coyote\Providers;
 
@@ -8,6 +8,7 @@ use Coyote\Events\UserWasSaved;
 use Coyote\Listeners\BindRouteDefaultModel;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
+use Coyote\Listeners\MicroblogListener;
 use Coyote\Listeners\SendLockoutEmail;
 use Coyote\Listeners\SetupWikiLinks;
 use Coyote\Listeners\WikiListener;
@@ -45,6 +46,7 @@ class EventServiceProvider extends ServiceProvider
         PostListener::class,
         TopicListener::class,
         JobListener::class,
+        MicroblogListener::class,
         WikiListener::class,
         SetupWikiLinks::class
     ];
