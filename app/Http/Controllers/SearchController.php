@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers;
 
+use Coyote\Services\Elasticsearch\Factories\GeneralFactory;
 use Illuminate\Http\Request;
 use Lavary\Menu\Menu;
 
@@ -30,9 +31,38 @@ class SearchController extends Controller
     {
         $this->breadcrumb->push('Szukaj', route('search'));
 
-        return $this->view('search', [
-            'tabs' => $this->tabs()
-        ]);
+        return $this->view('search', $this->result())->with('tabs', $this->tabs());
+    }
+
+    private function result()
+    {
+        if (!$this->request->exists('q')) {
+            return [];
+        }
+
+        $builder = (new GeneralFactory())->build($this->request);
+        $body = $builder->build();
+
+        $params = [
+            'index'     => config('elasticsearch.default_index'),
+            'type'      => 'topics,microblogs,wiki,jobs',
+            'body'      => $body
+        ];
+
+        debugbar()->debug(json_encode($body));
+        $response = $this->getClient()->search($params);
+
+        dd($response, array_get($response, 'hits.total'));
+    }
+
+    /**
+     * Get client instance
+     *
+     * @return mixed
+     */
+    protected function getClient()
+    {
+        return app('elasticsearch');
     }
 
     /**
