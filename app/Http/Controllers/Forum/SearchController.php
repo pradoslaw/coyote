@@ -47,14 +47,14 @@ class SearchController extends BaseController
 
             $highlights = $response->getHighlights();
 
-            if ($response->totalHits() > 0) {
+            if ($response->total() > 0) {
                 $usersId = $response->keyBy('_source.user_id')->keys();
                 $users = $user->whereIn('id', array_map('intval', $usersId->toArray()))->get()->keyBy('id');
             }
 
             $this->breadcrumb->push('Wyniki wyszukiwania', $request->fullUrl());
 
-            $pagination = new LengthAwarePaginator($response, $response->totalHits(), 10, null, ['path' => ' ']);
+            $pagination = new LengthAwarePaginator($response, $response->total(), 10, null, ['path' => ' ']);
             $pagination->appends($request->except('page'));
         }
 

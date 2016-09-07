@@ -249,7 +249,7 @@ class HomeController extends Controller
 
         $pagination = new LengthAwarePaginator(
             $jobs,
-            $response->totalHits(),
+            $response->total(),
             self::PER_PAGE,
             LengthAwarePaginator::resolveCurrentPage(),
             ['path' => LengthAwarePaginator::resolveCurrentPath()]

@@ -9,7 +9,7 @@ use Coyote\Topic;
 use Illuminate\Http\Request;
 
 /**
- * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
+ * @method string search(array $body)
  * @method void setResponse(string $response)
  * @method $this withTrashed()
  */

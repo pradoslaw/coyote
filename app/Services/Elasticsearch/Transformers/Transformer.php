@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch;
+namespace Coyote\Services\Elasticsearch\Transformers;
 
 use ArrayIterator;
 
-class Response implements \Countable, \IteratorAggregate, ResponseInterface
+class Transformer implements \Countable, \IteratorAggregate
 {
     /**
      * @var array|\Illuminate\Support\Collection
@@ -19,7 +19,7 @@ class Response implements \Countable, \IteratorAggregate, ResponseInterface
     /**
      * @var int
      */
-    protected $totalHits = 0;
+    protected $total = 0;
 
     /**
      * Response constructor.
@@ -29,7 +29,7 @@ class Response implements \Countable, \IteratorAggregate, ResponseInterface
     {
         if (isset($response['hits'])) {
             $this->hits = $this->collect($response['hits']['hits']);
-            $this->totalHits = $response['hits']['total'];
+            $this->total = $response['hits']['total'];
 
             if (isset($response['aggregations'])) {
                 $this->aggregations = ($response['aggregations']);
@@ -61,9 +61,9 @@ class Response implements \Countable, \IteratorAggregate, ResponseInterface
      *
      * @return int
      */
-    public function totalHits()
+    public function total()
     {
-        return $this->totalHits;
+        return $this->total;
     }
 
     /**
@@ -86,7 +86,7 @@ class Response implements \Countable, \IteratorAggregate, ResponseInterface
      */
     public function getSource()
     {
-        if (!$this->totalHits) {
+        if (!$this->total) {
             return [];
         }
 

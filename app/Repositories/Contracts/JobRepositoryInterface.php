@@ -3,7 +3,7 @@
 namespace Coyote\Repositories\Contracts;
 
 /**
- * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
+ * @method mixed search(array $body)
  * @method $this withTrashed()
  */
 interface JobRepositoryInterface extends RepositoryInterface
@@ -40,7 +40,7 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getTagsWeight(array $tagsId);
-    
+
     /**
      * @param int $userId
      * @return mixed

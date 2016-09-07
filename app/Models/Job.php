@@ -355,12 +355,4 @@ class Job extends Model
 
         return $body;
     }
-
-    /**
-     * @return string
-     */
-    public function getResponse()
-    {
-        return \Coyote\Services\Elasticsearch\Response\Job::class;
-    }
 }

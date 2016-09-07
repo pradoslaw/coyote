@@ -24,22 +24,39 @@ class DateTime extends Twig_Extension
     {
         return [
             /**
-             * Diff in months helper. We use it to calculate the age of the topic.
+             * Diff in months helper. We use it to calculate age of the topic.
              */
-            new Twig_SimpleFunction(
-                'diff_in_months',
-                function ($dateTime, $now = null) {
-                    $dateTime = $this->toCarbon($dateTime);
+            new Twig_SimpleFunction('diff_in_months', [&$this, 'diffInMonths']),
 
-                    if (!$now) {
-                        $now = Carbon::now();
-                    } else {
-                        $now = $this->toCarbon($now);
-                    }
-                    return $now->diffInMonths($dateTime);
-                }
-            )
+            /**
+             * Diff in days helper. We use it to calculate age of the job offer.
+             */
+            new Twig_SimpleFunction('diff_in_days', [&$this, 'diffInDays'])
         ];
+    }
+
+    /**
+     * @param $dateTime
+     * @param null|mixed $now
+     * @return int
+     */
+    public function diffInMonths($dateTime, $now = null)
+    {
+        $dateTime = $this->toCarbon($dateTime);
+
+        return $this->toCarbon($now)->diffInMonths($dateTime);
+    }
+
+    /**
+     * @param $dateTime
+     * @param null|mixed $now
+     * @return int
+     */
+    public function diffInDays($dateTime, $now = null)
+    {
+        $dateTime = $this->toCarbon($dateTime);
+
+        return $this->toCarbon($now)->diffInDays($dateTime);
     }
 
     /**
@@ -72,16 +89,22 @@ class DateTime extends Twig_Extension
             new Twig_SimpleFilter('timestamp', function ($dateTime) {
                 return $this->toCarbon($dateTime)->getTimestamp();
             }),
-            
+
             new Twig_SimpleFilter('iso_8601', function ($dateTime) {
                 return $this->toCarbon($dateTime)->format(Carbon::ISO8601);
             })
         ];
     }
 
+    /**
+     * @param $dateTime
+     * @return Carbon
+     */
     private function toCarbon($dateTime)
     {
-        if (!$dateTime instanceof Carbon) {
+        if (is_null($dateTime)) {
+            $dateTime = new Carbon();
+        } elseif (!$dateTime instanceof Carbon) {
             $dateTime = new Carbon($dateTime);
         }
 

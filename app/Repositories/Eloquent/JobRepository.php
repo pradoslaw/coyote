@@ -7,13 +7,13 @@ use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
 
 /**
- * @method \Coyote\Services\Elasticsearch\ResponseInterface search(array $body)
+ * @method mixed search(array $body)
  * @method $this withTrashed()
  */
 class JobRepository extends Repository implements JobRepositoryInterface, SubscribableInterface
 {
     /**
-     * @return \Coyote\Job
+     * @return string
      */
     public function model()
     {

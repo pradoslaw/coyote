@@ -2,13 +2,12 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\Response;
-use Coyote\Services\Elasticsearch\ResponseInterface;
+use Coyote\Services\Elasticsearch\Transformers\Transformer;
 use Illuminate\Contracts\Support\Arrayable;
 
 trait Searchable
 {
-    protected $response = Response::class;
+    protected $transformer = Transformer::class;
 
     /**
      * Index data in elasticsearch
@@ -35,14 +34,14 @@ trait Searchable
 
     /**
      * @param array $body
-     * @return ResponseInterface
+     * @return mixed
      */
     public function search($body)
     {
         $params = $this->getParams();
         $params['body'] = $body;
 
-        return $this->buildResponse($this->getClient()->search($params));
+        return $this->transform($this->getClient()->search($params));
     }
 
     /**
@@ -76,11 +75,11 @@ trait Searchable
 
     /**
      * @param $response
-     * @return ResponseInterface
+     * @return mixed
      */
-    protected function buildResponse($response)
+    protected function transform($response)
     {
-        return app($this->getResponse(), [$response]);
+        return app($this->getTransformer(), [$response]);
     }
 
     /**
@@ -144,19 +143,19 @@ trait Searchable
     }
 
     /**
-     * @param string $response
+     * @param string $transformer
      */
-    public function setResponse($response)
+    public function setTransformer($transformer)
     {
-        $this->response = $response;
+        $this->transformer = $transformer;
     }
 
     /**
      * @return string
      */
-    public function getResponse()
+    public function getTransformer()
     {
-        return $this->response;
+        return $this->transformer;
     }
 
     /**

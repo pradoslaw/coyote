@@ -52,7 +52,7 @@ class AdController extends Controller
         $builder->addSort(new Geodistance($location['latitude'], $location['longitude']));
 
         $result = $this->job->search($builder->build());
-        if (!$result->totalHits()) {
+        if (!$result->total()) {
             return '';
         }
 
