@@ -3,7 +3,9 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Services\Elasticsearch\Factories\GeneralFactory;
+use Coyote\Services\Elasticsearch\Transformers\GeneralTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Lavary\Menu\Menu;
 
 class SearchController extends Controller
@@ -31,15 +33,19 @@ class SearchController extends Controller
     {
         $this->breadcrumb->push('Szukaj', route('search'));
 
-        return $this->view('search', $this->result())->with('tabs', $this->tabs());
+        return $this->view('search', $this->search())->with('tabs', $this->tabs());
     }
 
-    private function result()
+    /**
+     * @return array
+     */
+    private function search()
     {
         if (!$this->request->exists('q')) {
             return [];
         }
 
+        // build elasticsearch request
         $builder = (new GeneralFactory())->build($this->request);
         $body = $builder->build();
 
@@ -50,9 +56,18 @@ class SearchController extends Controller
         ];
 
         debugbar()->debug(json_encode($body));
-        $response = $this->getClient()->search($params);
+        // do the search and transform results
+        $hits = new GeneralTransformer($this->getClient()->search($params));
 
-        dd($response, array_get($response, 'hits.total'));
+        $pagination = new LengthAwarePaginator($hits, $hits->total(), 10, null, ['path' => ' ']);
+        $pagination->appends($this->request->except('page'));
+
+        return [
+            'hits' => $hits,
+            'took' => $hits->took(),
+            'total' => $hits->total(),
+            'pagination' => $pagination
+        ];
     }
 
     /**

@@ -20,7 +20,7 @@ class GeneralFactory
         $builder = new QueryBuilder();
         $builder->addQuery(new Query($request->input('q'), []));
         $builder->addSort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
-        $builder->addHighlight(new Highlight(['subject', 'text', 'title']));
+        $builder->addHighlight(new Highlight(['subject', 'text', 'title', 'excerpt', 'description', 'requirements']));
 
         $builder->setSize(($request->input('page', 1) - 1) * 10, 10);
 

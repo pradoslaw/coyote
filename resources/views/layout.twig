@@ -64,7 +64,7 @@
 
                         <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right" role="search">
                             <div class="form-group">
-                                <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}">
+                                <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
                             </div>
                         </form>
 

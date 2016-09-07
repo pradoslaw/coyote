@@ -8,3 +8,24 @@
 .well.empty-result {
   margin-top: 20px;
 }
+
+#search-results {
+  h2 {
+    font-size: $font-size-large;
+    text-decoration: underline;
+
+    a {
+      color: $link-color-darker;
+    }
+  }
+
+  small {
+    color: $gray-light;
+    font-size: 11px;
+  }
+
+  .highlight {
+    font-weight: bold;
+    font-style: normal;
+  }
+}

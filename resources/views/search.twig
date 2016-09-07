@@ -1,6 +1,9 @@
 {% extends 'layout' %}
 
-{% block title %}Szukaj{{ parent() }}{% endblock %}
+{% block title %}
+    {{ input_get('q') ? input_get('q') ~ ' :: ' }} Szukaj
+    {{ parent() }}
+{% endblock %}
 
 {% block container %}
     <div class="row">
@@ -23,19 +26,48 @@
     </div>
 
     <div class="row">
-        <ul class="nav nav-tabs">
-            {% for item in tabs.roots() %}
-                <li {{ forms.attr(item.attr) }}>
-                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="col-xs-12">
+            {% if input_get('q') and total == 0 %}
+                <div class="well well-sm empty-result">
+                    <p>
+                        Nie znaleźliśmy stron, które spełniają Twoje kryteria wyszukiwania.<br>
+                        <a href="{{ route('home') }}">Wejdź na naszą stronę główną</a>, a być może znajdziesz coś dla Ciebie!
+                    </p>
+                </div>
+            {% elseif total > 0 %}
+                <ul class="nav nav-tabs">
+                    {% for item in tabs.roots() %}
+                        <li {{ forms.attr(item.attr) }}>
+                            <a href="{{ item.url }}">{{ item.title|raw }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
 
-        <div class="well well-sm empty-result">
-            <p>
-                Nie znaleźliśmy postów, które spełniają Twoje kryteria.<br>
-                <a href="{{ route('forum.home') }}">Zobacz wszystkie posty</a>, a być może znajdziesz pasującą dla Ciebie!
-            </p>
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        Wyniki <strong>{{ pagination.firstItem() }} - {{ pagination.lastItem() }}</strong> z <strong>{{ total }}</strong> znalezione w czasie <strong>{{ took }} ms.</strong>
+                    </div>
+                </div>
+
+                <nav class="text-center">
+                    {{ pagination|raw }}
+                </nav>
+
+                <ul id="search-results" class="list-unstyled">
+                    <li>
+                        {% for hit in hits %}
+                            <h2><a href="{{ hit.url }}">{{ hit.title|raw }}</a></h2>
+                            <p>{{ hit.excerpt|raw }}</p>
+
+                            <a href="{{ hit.url }}">{{ hit.url }} <small>[{{ hit.updated_at|format_date }}]</small></a>
+                        {% endfor %}
+                    </li>
+                </ul>
+
+                <nav class="text-center">
+                    {{ pagination|raw }}
+                </nav>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
