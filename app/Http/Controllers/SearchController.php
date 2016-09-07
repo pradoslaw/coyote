@@ -2,8 +2,8 @@
 
 namespace Coyote\Http\Controllers;
 
-use Coyote\Services\Elasticsearch\Factories\GeneralFactory;
-use Coyote\Services\Elasticsearch\Transformers\GeneralTransformer;
+use Coyote\Services\Elasticsearch\Factories\MixedFactory;
+use Coyote\Services\Elasticsearch\Transformers\MixedTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Lavary\Menu\Menu;
@@ -46,7 +46,7 @@ class SearchController extends Controller
         }
 
         // build elasticsearch request
-        $builder = (new GeneralFactory())->build($this->request);
+        $builder = (new MixedFactory())->build($this->request);
         $body = $builder->build();
 
         $params = [
@@ -57,7 +57,7 @@ class SearchController extends Controller
 
         debugbar()->debug(json_encode($body));
         // do the search and transform results
-        $hits = new GeneralTransformer($this->getClient()->search($params));
+        $hits = new MixedTransformer($this->getClient()->search($params));
 
         $pagination = new LengthAwarePaginator($hits, $hits->total(), 10, null, ['path' => ' ']);
         $pagination->appends($this->request->except('page'));

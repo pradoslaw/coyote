@@ -25,6 +25,6 @@ class Wiki extends Normalizer
      */
     public function excerpt()
     {
-        return $this->getHighlight('text') ?: $this->getHighlight('excerpt');
+        return isset($this->hit['highlight']['excerpt']) ? $this->getHighlight('excerpt') : $this->getHighlight('text');
     }
 }

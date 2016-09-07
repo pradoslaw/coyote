@@ -9,8 +9,10 @@ use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Services\Elasticsearch\Highlight;
 use Illuminate\Http\Request;
 
-class GeneralFactory
+class MixedFactory
 {
+    const PER_PAGE = 10;
+
     /**
      * @param Request $request
      * @return QueryBuilderInterface
@@ -22,7 +24,7 @@ class GeneralFactory
         $builder->addSort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
         $builder->addHighlight(new Highlight(['subject', 'text', 'title', 'excerpt', 'description', 'requirements']));
 
-        $builder->setSize(($request->input('page', 1) - 1) * 10, 10);
+        $builder->setSize(($request->input('page', 1) - 1) * self::PER_PAGE, self::PER_PAGE);
 
         return $builder;
     }

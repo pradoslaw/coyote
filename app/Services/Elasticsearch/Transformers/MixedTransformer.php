@@ -2,7 +2,10 @@
 
 namespace Coyote\Services\Elasticsearch\Transformers;
 
-class GeneralTransformer implements \IteratorAggregate
+/**
+ * Transform results of different types to one, normalized form.
+ */
+class MixedTransformer implements \IteratorAggregate
 {
     /**
      * @var int
