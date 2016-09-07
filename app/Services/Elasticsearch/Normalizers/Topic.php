@@ -27,6 +27,6 @@ class Topic extends Normalizer
     {
         return isset($this->hit['highlight']['text'])
             ? $this->hit['highlight']['text'][0]
-            : str_limit($this->source['text'][0], 160);
+            : (isset($this->source['posts'][0]) ? str_limit($this->source['posts'][0]['text'], 160) : '');
     }
 }
