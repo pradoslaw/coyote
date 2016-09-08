@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Services\Elasticsearch\Analyzers\JobAnalyzer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -97,6 +98,18 @@ class Job extends Model
                     "type" => "geo_point"
                 ]
             ]
+        ],
+        "title" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
+        ],
+        "description" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
+        ],
+        "requirements" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
         ],
         "tags" => [
             "type" => "multi_field",
@@ -309,6 +322,7 @@ class Job extends Model
      */
     protected function getIndexBody()
     {
+        $this->setAnalyzer(JobAnalyzer::class);
         $body = $this->parentGetIndexBody();
 
         // maximum offered salary

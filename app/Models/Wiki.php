@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Services\Elasticsearch\Analyzers\WikiAnalyzer;
 use Coyote\Wiki\Page as Wiki_Page;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -51,6 +52,22 @@ class Wiki extends Model
      * @var array
      */
     protected $mapping = [
+        "title" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
+        ],
+        "long_title" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
+        ],
+        "text" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
+        ],
+        "excerpt" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
+        ],
         "created_at" => [
             "type" => "date",
             "format" => "yyyy-MM-dd HH:mm:ss"
@@ -188,6 +205,7 @@ class Wiki extends Model
      */
     protected function getIndexBody()
     {
+        $this->setAnalyzer(WikiAnalyzer::class);
         $body = $this->parentGetIndexBody();
 
         return array_except($body, ['is_locked', 'templates', 'views']);

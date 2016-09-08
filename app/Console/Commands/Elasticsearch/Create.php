@@ -64,9 +64,6 @@ class Create extends Command
                                         "filter" => [
                                             "lowercase",
                                             "common_words_filter"
-                                        ],
-                                        "char_filter" => [
-                                            "html_strip"
                                         ]
                                     ],
                                     "default_analyzer" => [
@@ -74,9 +71,6 @@ class Create extends Command
                                         "tokenizer" => "whitespace",
                                         "filter" => [
                                             "lowercase"
-                                        ],
-                                        "char_filter" => [
-                                            "html_strip"
                                         ]
                                     ]
                                 ]

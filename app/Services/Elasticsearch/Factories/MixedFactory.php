@@ -19,12 +19,24 @@ class MixedFactory
      */
     public function build(Request $request) : QueryBuilderInterface
     {
-        $fields = ['subject', 'text', 'title', 'excerpt', 'description', 'requirements'];
+        $fields = [
+            'topics.subject',
+            'topics.text',
+            'microblogs.text',
+            'wiki.title',
+            'wiki.long_title',
+            'wiki.text',
+            'wiki.excerpt',
+            'jobs.title',
+            'jobs.description',
+            'jobs.requirements',
+            'jobs.recruitment'
+        ];
 
         $builder = new QueryBuilder();
         $builder->addQuery(new Query($request->input('q'), $fields));
         $builder->addSort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
-        $builder->addHighlight(new Highlight($fields));
+        $builder->addHighlight(new Highlight(['subject', 'text', 'title', 'long_title', 'excerpt', 'description', 'requirements']));
 
         $builder->setSize(($request->input('page', 1) - 1) * self::PER_PAGE, self::PER_PAGE);
 

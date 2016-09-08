@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Services\Elasticsearch\Analyzers\TopicAnalyzer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Coyote\Models\Scopes\Sortable;
@@ -54,6 +55,10 @@ class Topic extends Model
                     "analyzer" => "stopwords_analyzer"
                 ]
             ]
+        ],
+        "subject" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
         ],
         "created_at" => [
             "type" => "date",
@@ -253,6 +258,7 @@ class Topic extends Model
      */
     protected function getIndexBody()
     {
+        $this->setAnalyzer(TopicAnalyzer::class);
         $body = $this->parentGetIndexBody();
 
         // we need to index every field from topics except:

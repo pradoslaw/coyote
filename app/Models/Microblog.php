@@ -56,11 +56,6 @@ class Microblog extends Model
     protected $attributes = ['votes' => 0];
 
     /**
-     * @var string
-     */
-//    protected $analyzer = MicroblogAnalyzer::class;
-
-    /**
      * Elasticsearch type mapping
      *
      * @var array

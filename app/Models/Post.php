@@ -64,6 +64,10 @@ class Post extends Model
                 ]
             ]
         ],
+        "text" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
+        ],
         "user_name" => [
             "type" => "string",
             // ability to search case insensitive

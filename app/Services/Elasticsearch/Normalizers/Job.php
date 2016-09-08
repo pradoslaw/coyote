@@ -25,6 +25,6 @@ class Job extends Normalizer
      */
     public function excerpt()
     {
-        return $this->getHighlight('description') ?: $this->getHighlight('requirements');
+        return $this->getHighlight('description') ?: $this->getHighlight('recruitment');
     }
 }

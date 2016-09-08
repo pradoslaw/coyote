@@ -17,7 +17,9 @@ class Wiki extends Normalizer
      */
     public function title()
     {
-        return $this->getHighlight('title');
+        return isset($this->hit['highlight']['long_title'])
+            ? $this->getHighlight('long_title')
+            : $this->getHighlight('title');
     }
 
     /**

@@ -1287,7 +1287,7 @@ class Migrate extends Command
     }
 
     /**
-     * @todo usunac z tekstu <p> oraz </p> otaczajace tekst bo inaczej markdown nie dziala
+     * @todo zamienic <br> oraz <br /> na <br> (lub <br />) i \n
      */
     public function migrateJobs()
     {
@@ -1348,7 +1348,7 @@ class Migrate extends Command
                 }
 
                 $row['description'] = $stripPar($row['description']);
-                $row['recruitment'] = $stripPar($row['recruitment']);
+                $row['recruitment'] = null;
 
                 DB::table('jobs')->insert($row);
                 $bar->advance();

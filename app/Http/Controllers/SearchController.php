@@ -89,10 +89,11 @@ class SearchController extends Controller
     private function tabs()
     {
         return app(Menu::class)->make('tabs', function ($menu) {
-            $menu->add('Posty na forum', $this->route('posts'));
-            $menu->add('Oferty pracy', $this->route('offers'));
+            $menu->add('Wszystko', route('search', ['q' => $this->request->input('q')]));
+            $menu->add('Forum', $this->route('topics'));
+            $menu->add('Praca', $this->route('jobs'));
             $menu->add('Mikroblogi', $this->route('microblogs'));
-            $menu->add('Artykuły', $this->route('wiki'));
+            $menu->add('Kompendium', $this->route('wiki'));
         });
     }
 
