@@ -44,7 +44,7 @@ trait Searchable
 
     /**
      * @param array $body
-     * @return mixed
+     * @return TransformerInterface
      */
     public function search($body)
     {
