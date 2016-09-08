@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Services\Elasticsearch\Analyzers\MicroblogAnalyzer;
 use Coyote\Services\Media\Factories\AbstractFactory;
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -55,6 +56,11 @@ class Microblog extends Model
     protected $attributes = ['votes' => 0];
 
     /**
+     * @var string
+     */
+//    protected $analyzer = MicroblogAnalyzer::class;
+
+    /**
      * Elasticsearch type mapping
      *
      * @var array
@@ -68,6 +74,10 @@ class Microblog extends Model
             "type" => "date",
             "format" => "yyyy-MM-dd HH:mm:ss"
         ],
+        "text" => [
+            "type" => "string",
+            "analyzer" => "default_analyzer"
+        ]
     ];
 
     public static function boot()
@@ -195,6 +205,7 @@ class Microblog extends Model
      */
     protected function getIndexBody()
     {
+        $this->setAnalyzer(MicroblogAnalyzer::class);
         $body = $this->parentGetIndexBody();
 
         // we need to index every field from topics except:

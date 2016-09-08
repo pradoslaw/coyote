@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Services\Elasticsearch\Factories\MixedFactory;
-use Coyote\Services\Elasticsearch\Transformers\MixedTransformer;
+use Coyote\Services\Elasticsearch\Transformers\MixedTypesTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Lavary\Menu\Menu;
@@ -56,8 +56,11 @@ class SearchController extends Controller
         ];
 
         debugbar()->debug(json_encode($body));
+        debugbar()->startMeasure('elasticsearch');
+
         // do the search and transform results
-        $hits = new MixedTransformer($this->getClient()->search($params));
+        $hits = new MixedTypesTransformer($this->getClient()->search($params));
+        debugbar()->stopMeasure('elasticsearch');
 
         $pagination = new LengthAwarePaginator($hits, $hits->total(), 10, null, ['path' => ' ']);
         $pagination->appends($this->request->except('page'));

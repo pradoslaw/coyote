@@ -101,10 +101,13 @@ class Index extends Command
         $this->line("Indexing $className ...");
 
         $builder = $model->select();
+        $objectName = get_class($model);
 
         // ugly hack for job offers...
-        if (get_class($model) === 'Coyote\Job') {
+        if ($objectName === 'Coyote\Job') {
             $builder = $builder->where('deadline_at', '>=', \DB::raw('NOW()'));
+        } elseif ($objectName === 'Coyote\Microblog') {
+            $builder = $builder->whereNull('parent_id');
         }
 
         $bar = $this->output->createProgressBar($builder->count());

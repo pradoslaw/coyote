@@ -5,7 +5,7 @@ namespace Coyote\Services\Elasticsearch\Transformers;
 /**
  * Transform results of different types to one, normalized form.
  */
-class MixedTransformer implements \IteratorAggregate
+class MixedTypesTransformer implements TransformerInterface
 {
     /**
      * @var int
@@ -65,6 +65,14 @@ class MixedTransformer implements \IteratorAggregate
                 $this->hits[] = new $className($hit);
             }
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return $this->took();
     }
 
     /**

@@ -2,12 +2,22 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\Transformers\Transformer;
+use Coyote\Services\Elasticsearch\Analyzers\AnalyzerInterface;
+use Coyote\Services\Elasticsearch\Transformers\CommonTransformer;
+use Coyote\Services\Elasticsearch\Transformers\TransformerInterface;
 use Illuminate\Contracts\Support\Arrayable;
 
 trait Searchable
 {
-    protected $transformer = Transformer::class;
+    /**
+     * @var string
+     */
+    protected $transformer = CommonTransformer::class;
+
+    /**
+     * @var string
+     */
+    protected $analyzer;
 
     /**
      * Index data in elasticsearch
@@ -17,7 +27,7 @@ trait Searchable
     public function putToIndex()
     {
         $params = $this->getParams();
-        $params['body'] = $this->buildArray($this->getIndexBody());
+        $params['body'] = $this->analyze($this->getIndexBody());
 
         return $this->getClient()->index($params);
     }
@@ -41,7 +51,7 @@ trait Searchable
         $params = $this->getParams();
         $params['body'] = $body;
 
-        return $this->transform($this->getClient()->search($params));
+        return $this->getTransformer($this->getClient()->search($params));
     }
 
     /**
@@ -60,6 +70,40 @@ trait Searchable
     }
 
     /**
+     * @param string $transformer
+     */
+    public function setTransformer(string $transformer)
+    {
+        $this->transformer = $transformer;
+    }
+
+    /**
+     * @param string $analyzer
+     */
+    public function setAnalyzer(string $analyzer)
+    {
+        $this->analyzer = $analyzer;
+    }
+
+    /**
+     * Default data to index in elasticsearch
+     *
+     * @return mixed
+     */
+    protected function getIndexBody()
+    {
+        $body = $this->toArray();
+
+        foreach (['created_at', 'updated_at', 'deadline_at', 'last_post_created_at'] as $column) {
+            if (!empty($body[$column])) {
+                $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
+            }
+        }
+
+        return $body;
+    }
+
+    /**
      * Get model's mapping
      *
      * @return array
@@ -71,15 +115,6 @@ trait Searchable
                 'properties' => $this->mapping
             ]
         ];
-    }
-
-    /**
-     * @param $response
-     * @return mixed
-     */
-    protected function transform($response)
-    {
-        return app($this->getTransformer(), [$response]);
     }
 
     /**
@@ -104,22 +139,26 @@ trait Searchable
     /**
      * Convert model to array
      *
-     * @param $collection
-     * @return mixed
+     * @param mixed $data
+     * @return array
      */
-    protected function buildArray($collection)
+    protected function analyze($data)
     {
-        if (is_object($collection) && $collection instanceof Arrayable) {
-            $collection = $collection->toArray();
+        if ($data instanceof Arrayable) {
+            $data = $data->toArray();
         }
 
-        foreach ($collection as &$value) {
-            if (is_object($value) && $collection instanceof Arrayable) {
-                $value = $this->buildArray($value);
+        foreach ($data as &$value) {
+            if (is_object($value) && $data instanceof Arrayable) {
+                $value = $this->analyze($value);
             }
         }
 
-        return $collection;
+        if ($this->analyzer) {
+            $data = $this->getAnalyzer()->analyze($data);
+        }
+
+        return $data;
     }
 
     /**
@@ -133,6 +172,23 @@ trait Searchable
     }
 
     /**
+     * @return AnalyzerInterface
+     */
+    protected function getAnalyzer(): AnalyzerInterface
+    {
+        return app($this->analyzer);
+    }
+
+    /**
+     * @param array $response
+     * @return TransformerInterface
+     */
+    protected function getTransformer(array $response): TransformerInterface
+    {
+        return app($this->transformer, [$response]);
+    }
+
+    /**
      * Get default index name from config
      *
      * @return mixed
@@ -140,39 +196,5 @@ trait Searchable
     protected function getIndexName()
     {
         return config('elasticsearch.default_index');
-    }
-
-    /**
-     * @param string $transformer
-     */
-    public function setTransformer($transformer)
-    {
-        $this->transformer = $transformer;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTransformer()
-    {
-        return $this->transformer;
-    }
-
-    /**
-     * Default data to index in elasticsearch
-     *
-     * @return mixed
-     */
-    protected function getIndexBody()
-    {
-        $body = $this->toArray();
-
-        foreach (['created_at', 'updated_at', 'deadline_at', 'last_post_created_at'] as $column) {
-            if (!empty($body[$column])) {
-                $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
-            }
-        }
-
-        return $body;
     }
 }

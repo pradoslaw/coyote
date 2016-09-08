@@ -47,14 +47,37 @@ class Create extends Command
                     'settings' => [
                         "index" => [
                             "analysis" => [
+                                "filter" => [
+                                    "common_words_filter" => [
+                                        "type" => "stop",
+                                        "stopwords" => config('elasticsearch.stopwords')
+                                    ]
+                                ],
                                 "analyzer" => [
                                     "keyword_analyzer" => [
                                         "tokenizer" => "keyword",
                                         "filter" => "lowercase"
                                     ],
                                     "stopwords_analyzer" => [
-                                        "type" => "standard",
-                                        "stopwords" => config('elasticsearch.stopwords')
+                                        "type" => "custom",
+                                        "tokenizer" => "whitespace",
+                                        "filter" => [
+                                            "lowercase",
+                                            "common_words_filter"
+                                        ],
+                                        "char_filter" => [
+                                            "html_strip"
+                                        ]
+                                    ],
+                                    "default_analyzer" => [
+                                        "type" => "custom",
+                                        "tokenizer" => "whitespace",
+                                        "filter" => [
+                                            "lowercase"
+                                        ],
+                                        "char_filter" => [
+                                            "html_strip"
+                                        ]
                                     ]
                                 ]
                             ]

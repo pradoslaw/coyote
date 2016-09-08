@@ -44,14 +44,10 @@
                 </ul>
 
                 <div class="row">
-                    <div class="col-xs-12 text-right">
+                    <div class="col-xs-12 text-muted" style="margin-top: 10px">
                         Wyniki <strong>{{ pagination.firstItem() }} - {{ pagination.lastItem() }}</strong> z <strong>{{ total }}</strong> znalezione w czasie <strong>{{ took }} ms.</strong>
                     </div>
                 </div>
-
-                <nav class="text-center">
-                    {{ pagination|raw }}
-                </nav>
 
                 <ul id="search-results" class="list-unstyled">
                     <li>

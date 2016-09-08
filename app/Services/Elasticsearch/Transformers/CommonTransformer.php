@@ -2,9 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch\Transformers;
 
-use ArrayIterator;
-
-class Transformer implements \Countable, \IteratorAggregate
+class CommonTransformer implements TransformerInterface
 {
     /**
      * @var array|\Illuminate\Support\Collection
@@ -140,6 +138,6 @@ class Transformer implements \Countable, \IteratorAggregate
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->hits->pluck('_source')->toArray());
+        return new \ArrayIterator($this->hits->pluck('_source')->toArray());
     }
 }
