@@ -10,6 +10,7 @@ use Coyote\Services\Stream\Activities\Confirm as Stream_Confirm;
 use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 
 class ConfirmController extends Controller
 {
@@ -79,7 +80,7 @@ class ConfirmController extends Controller
                 return back()
                     ->withInput()
                     ->withErrors('email', 'Ten e-mail przypisany jest do dwóch kont. Wybierz, które z nich ma zostać potwierdzone')
-                    ->with('users', $result->lists('name', 'name')->toArray());
+                    ->with('users', $result->pluck('name', 'name')->toArray());
             }
 
             $userId = $result->first()->id;
@@ -88,7 +89,7 @@ class ConfirmController extends Controller
         $url = Actkey::createLink($userId);
         $email = $request->email;
 
-        $this->getMailFactory()->queue('emails.user.change_email', ['url' => $url], function ($message) use ($email) {
+        $this->getMailFactory()->queue('emails.user.change_email', ['url' => $url], function (Message $message) use ($email) {
             $message->to($email);
             $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
         });
@@ -114,7 +115,7 @@ class ConfirmController extends Controller
         }
 
         $user->save();
-        $actkey->delete();
+        Actkey::where('user_id', $user->id)->delete();
 
         // potwierdzajac adres email, uzytkownik moze nie byc zalogowany. przekazujemy wiec model User
         // jako aktora aby zapisal sie w bazie danych.
