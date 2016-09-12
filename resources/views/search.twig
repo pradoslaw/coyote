@@ -27,6 +27,10 @@
 
     <div class="row">
         <div class="col-xs-12">
+            {% if input_get('q') %}
+                {{ tabs.asUl({class: 'nav nav-tabs'})|raw }}
+            {% endif %}
+
             {% if input_get('q') and total == 0 %}
                 <div class="well well-sm empty-result">
                     <p>
@@ -35,13 +39,6 @@
                     </p>
                 </div>
             {% elseif total > 0 %}
-                <ul class="nav nav-tabs">
-                    {% for item in tabs.roots() %}
-                        <li {{ forms.attr(item.attr) }}>
-                            <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
 
                 <div class="row">
                     <div class="col-xs-12 text-muted" style="margin-top: 10px">

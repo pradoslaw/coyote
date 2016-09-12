@@ -6,6 +6,8 @@ use Coyote\Services\Elasticsearch\Factories\MixedFactory;
 use Coyote\Services\Elasticsearch\Transformers\MixedTypesTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Lavary\Menu\Builder;
+use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
 
 class SearchController extends Controller
@@ -45,13 +47,26 @@ class SearchController extends Controller
             return [];
         }
 
+        $types = 'topics,microblogs,wiki,jobs';
+
+        if ($this->request->has('type')) {
+            $validator = $this->getValidationFactory()->make(
+                $this->request->toArray(),
+                ['type' => 'sometimes|in:' . $types]
+            );
+
+            if (!$validator->fails()) {
+                $types = $this->request->input('type');
+            }
+        }
+
         // build elasticsearch request
         $builder = (new MixedFactory())->build($this->request);
         $body = $builder->build();
 
         $params = [
             'index'     => config('elasticsearch.default_index'),
-            'type'      => 'topics,microblogs,wiki,jobs',
+            'type'      => $types,
             'body'      => $body
         ];
 
@@ -88,12 +103,19 @@ class SearchController extends Controller
      */
     private function tabs()
     {
-        return app(Menu::class)->make('tabs', function ($menu) {
+        return app(Menu::class)->make('tabs', function (Builder $menu) {
             $menu->add('Wszystko', route('search', ['q' => $this->request->input('q')]));
-            $menu->add('Forum', $this->route('topics'));
-            $menu->add('Praca', $this->route('jobs'));
-            $menu->add('Mikroblogi', $this->route('microblogs'));
-            $menu->add('Kompendium', $this->route('wiki'));
+
+            foreach (['Forum' => 'topics', 'Praca' => 'jobs', 'Mikroblog' => 'microblogs', 'Kompendium' => 'wiki'] as $label => $type) {
+                $menu->add($label, $this->route($type))->data('type', $type);
+            }
+        })
+        ->filter(function (Item $item) {
+            if ($this->request->input('type') === $item->data('type')) {
+                $item->active();
+            }
+
+            return true;
         });
     }
 
