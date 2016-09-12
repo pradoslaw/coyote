@@ -43,7 +43,7 @@ class OnlyThoseWithAccess extends Criteria
      */
     protected function subQuery($model, Repository $repository, $column)
     {
-        return $model->whereNested(function (Builder $sub) use ($model, $repository, $column) {
+        return $model->whereNested(function (Builder $sub) use ($repository, $column) {
             $sub->whereNotExists(function (Builder $sub) use ($repository, $column) {
                 return $sub->select('forum_id')
                     ->from('forum_access')
