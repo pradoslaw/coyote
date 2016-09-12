@@ -6,6 +6,7 @@ use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Contracts\RepositoryInterface;
 use Coyote\Repositories\Criteria\Criteria;
 use Coyote\User;
+use Illuminate\Database\Query\Builder;
 
 class OnlyThoseWithAccess extends Criteria
 {
@@ -35,22 +36,22 @@ class OnlyThoseWithAccess extends Criteria
     }
 
     /**
-     * @param $model
+     * @param Builder $model
      * @param RepositoryInterface $repository
      * @param string $column
      * @return mixed
      */
     protected function subQuery($model, Repository $repository, $column)
     {
-        return $model->whereNested(function ($sub) use ($model, $repository, $column) {
-            $sub->whereNotExists(function ($sub) use ($repository, $column) {
+        return $model->whereNested(function (Builder $sub) use ($model, $repository, $column) {
+            $sub->whereNotExists(function (Builder $sub) use ($repository, $column) {
                 return $sub->select('forum_id')
                     ->from('forum_access')
                     ->where('forum_access.forum_id', '=', $repository->raw($column));
             });
 
             if (!empty($this->groupsId)) {
-                $sub->orWhereExists(function ($sub) use ($repository, $column) {
+                $sub->orWhereExists(function (Builder $sub) use ($repository, $column) {
                     return $sub->select('forum_id')
                         ->from('forum_access')
                         ->whereIn('group_id', $this->groupsId)
