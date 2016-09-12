@@ -31,19 +31,30 @@ class OnlyThoseWithAccess extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->whereNested(function ($sub) use ($model, $repository) {
-            $sub->whereNotExists(function ($sub) use ($repository) {
+        return $this->subQuery($model, $repository, 'forums.id');
+    }
+
+    /**
+     * @param $model
+     * @param RepositoryInterface $repository
+     * @param string $column
+     * @return mixed
+     */
+    protected function subQuery($model, Repository $repository, $column)
+    {
+        return $model->whereNested(function ($sub) use ($model, $repository, $column) {
+            $sub->whereNotExists(function ($sub) use ($repository, $column) {
                 return $sub->select('forum_id')
                     ->from('forum_access')
-                    ->where('forum_access.forum_id', '=', $repository->raw('forums.id'));
+                    ->where('forum_access.forum_id', '=', $repository->raw($column));
             });
 
             if (!empty($this->groupsId)) {
-                $sub->orWhereExists(function ($sub) use ($repository) {
+                $sub->orWhereExists(function ($sub) use ($repository, $column) {
                     return $sub->select('forum_id')
                         ->from('forum_access')
                         ->whereIn('group_id', $this->groupsId)
-                        ->where('forum_access.forum_id', '=', $repository->raw('forums.id'));
+                        ->where('forum_access.forum_id', '=', $repository->raw($column));
                 });
             }
         });
