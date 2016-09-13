@@ -1329,7 +1329,7 @@ class Migrate extends Command
                 $this->rename($row, 'order', 'rank');
                 $this->rename($row, 'visits', 'views');
 
-                $row['slug'] = str_slug($row['title']);
+                $row['slug'] = str_slug($row['title'], '_');
 
                 $this->timestampToDatetime($row['created_at']);
                 $this->timestampToDatetime($row['updated_at']);
