@@ -1287,7 +1287,7 @@ class Migrate extends Command
     }
 
     /**
-     * @todo zamienic <br> oraz <br /> na <br> (lub <br />) i \n
+     * 100%
      */
     public function migrateJobs()
     {
