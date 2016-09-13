@@ -98,7 +98,7 @@
             {% if job.description %}
                 <h2>Opis oferty</h2>
 
-                <div>
+                <div class="text">
                     {{ job.description|raw }}
                 </div>
             {% endif %}
@@ -116,7 +116,7 @@
             {% if firm.name and (firm.headline or firm.description) %}
                 <h2>{{ firm.name }}</h2>
 
-                <div>
+                <div class="text">
                     {% if firm.headline %}
                         <blockquote>{{ firm.headline }}</blockquote>
                     {% endif %}
@@ -128,7 +128,7 @@
             {% if not job.enable_apply %}
                 <h2>Informacje o rekrutacji</h2>
 
-                <div>
+                <div class="text">
                     {{ job.recruitment|raw }}
                 </div>
             {% else %}

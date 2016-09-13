@@ -9,7 +9,7 @@ function initTinymce() {
             "autoresize"
         ],
 
-        toolbar1: "bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | cut copy paste | bullist numlist | undo redo | outdent indent",
+        toolbar1: "bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | cut copy paste | bullist numlist | undo redo | outdent indent | code",
 
         menubar: false,
         toolbar_items_size: 'small',
