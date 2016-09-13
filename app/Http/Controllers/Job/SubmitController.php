@@ -160,7 +160,7 @@ class SubmitController extends Controller
 
     /**
      * @param Request $request
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function getFirm(Request $request)
     {
