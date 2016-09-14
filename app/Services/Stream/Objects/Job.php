@@ -14,7 +14,7 @@ class Job extends Object
     {
         $this->id = $job->id;
         $this->url = route('job.offer', [$job->id, $job->slug], false);
-        $this->displayName = excerpt($job->description);
+        $this->displayName = $job->title;
 
         return $this;
     }
