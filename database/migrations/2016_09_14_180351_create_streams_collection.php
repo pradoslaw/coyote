@@ -25,8 +25,6 @@ class CreateStreamsCollection extends Migration
             $collection->background(['object.objectType', 'object.id', 'verb']);
             $collection->background(['object.objectType', 'object.id']);
             $collection->background(['target.objectType', 'target.id']);
-
-            $collection->unique('email');
         });
     }
 
