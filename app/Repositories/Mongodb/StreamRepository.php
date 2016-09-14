@@ -88,7 +88,7 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
                     ->where('object.id', $topicId);
             }, 'or')
             ->orderBy('_id', 'DESC')
-            ->paginate();
+            ->simplePaginate();
     }
 
     /**
