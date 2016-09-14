@@ -19,4 +19,12 @@ class Wiki extends Render
     {
         return $this->objectName();
     }
+
+    /**
+     * @return mixed|null
+     */
+    protected function excerpt()
+    {
+        return $this->stream['object.excerpt'] ?? null;
+    }
 }

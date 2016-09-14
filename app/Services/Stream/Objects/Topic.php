@@ -7,7 +7,15 @@ use Coyote\Forum;
 
 class Topic extends Object
 {
+    /**
+     * @var array
+     */
     public $forum;
+
+    /**
+     * @var string|null
+     */
+    public $excerpt;
 
     /**
      * @param Model $topic

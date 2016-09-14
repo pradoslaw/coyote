@@ -7,6 +7,11 @@ use Coyote\Wiki as Model;
 class Wiki extends Object
 {
     /**
+     * @var string|null
+     */
+    public $excerpt;
+
+    /**
      * @param Model $wiki
      * @return $this
      */
@@ -14,7 +19,11 @@ class Wiki extends Object
     {
         $this->id = $wiki->id;
         $this->url = route('wiki.show', [$wiki->path], false);
-        $this->displayName = excerpt($wiki->text);
+        $this->displayName = $wiki->title;
+
+        if ($wiki->excerpt) {
+            $this->excerpt = $wiki->excerpt;
+        }
 
         return $this;
     }
