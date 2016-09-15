@@ -39,6 +39,6 @@ class StreamController extends BaseController
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug]));
         $this->breadcrumb->push('Dziennik zdarzeń', route('forum.stream', [$topic->id]));
 
-        return $this->view('forum.stream')->with(compact('topic', 'forum', 'activities', 'decorate', 'visits'));
+        return $this->view('forum.stream')->with(compact('topic', 'activities', 'decorate', 'visits'));
     }
 }
