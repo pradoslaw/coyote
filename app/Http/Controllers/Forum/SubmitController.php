@@ -91,7 +91,8 @@ class SubmitController extends BaseController
             $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false) . '?p=' . $post->id . '#id' . $post->id;
 
             // parsing text and store it in cache
-            // it's important. don't remove below line so that text in activity can be saved without markdown
+            // it's important. don't remove below line so that text in activity can be saved without markdown.
+            // also we can parse html code and grab links to users profile.
             $post->text = app('parser.post')->parse($request->text);
 
             if ($post->wasRecentlyCreated) {

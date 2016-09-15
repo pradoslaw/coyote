@@ -40,6 +40,8 @@ class AcceptController extends BaseController
 
             // build url to post
             $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
+
+            $post->text = app('parser.post')->parse($post->text);
             // excerpt of post text. used in reputation and alert
             $excerpt = excerpt($post->text);
 
@@ -55,7 +57,7 @@ class AcceptController extends BaseController
                 $reputation->setExcerpt($excerpt);
 
                 // add into activity stream
-                stream(Stream_Reject::class, (new Stream_Post(['url' => $reputation->getUrl()]))->map($old), $target);
+                stream(Stream_Reject::class, (new Stream_Post(['url' => $reputation->getUrl()]))->markdown($old), $target);
 
                 // reverse reputation points
                 if ($forum->enable_reputation) {

@@ -74,7 +74,7 @@ class VoteController extends BaseController
             }
 
             // add into activity stream
-            stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->map($post), (new Stream_Topic())->map($topic, $forum));
+            stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->markdown($post), (new Stream_Topic())->map($topic, $forum));
         });
 
         return response()->json(['count' => $post->score]);
