@@ -22,7 +22,7 @@ class Wiki extends Object
         $this->displayName = $wiki->title;
 
         if ($wiki->excerpt) {
-            $this->excerpt = $wiki->excerpt;
+            $this->excerpt = htmlspecialchars($wiki->excerpt);
         }
 
         return $this;

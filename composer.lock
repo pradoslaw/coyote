@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-boduch/geshi.git",
-                "reference": "57e6a6c1957b4e21a744b3aec580c77803a85dcb"
+                "reference": "a803da59391e2bb1da98a849a31d9f373ff2f83d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/geshi/zipball/57e6a6c1957b4e21a744b3aec580c77803a85dcb",
-                "reference": "57e6a6c1957b4e21a744b3aec580c77803a85dcb",
+                "url": "https://api.github.com/repos/adam-boduch/geshi/zipball/a803da59391e2bb1da98a849a31d9f373ff2f83d",
+                "reference": "a803da59391e2bb1da98a849a31d9f373ff2f83d",
                 "shasum": ""
             },
             "require": {
@@ -38,7 +38,7 @@
                 "source": "https://github.com/adam-boduch/geshi/tree/master",
                 "issues": "https://github.com/adam-boduch/geshi/issues"
             },
-            "time": "2016-04-15 15:47:02"
+            "time": "2016-09-15 15:19:18"
         },
         {
             "name": "adam-boduch/laravel-grid",
@@ -515,21 +515,21 @@
         },
         {
             "name": "folklore/image",
-            "version": "v0.3.10",
+            "version": "v0.3.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Folkloreatelier/laravel-image.git",
-                "reference": "c5781f34bb445e06f07021bde248f854b96ccc03"
+                "reference": "07105607243c2d4f44ebd7bc7a52bd98e8581636"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Folkloreatelier/laravel-image/zipball/c5781f34bb445e06f07021bde248f854b96ccc03",
-                "reference": "c5781f34bb445e06f07021bde248f854b96ccc03",
+                "url": "https://api.github.com/repos/Folkloreatelier/laravel-image/zipball/07105607243c2d4f44ebd7bc7a52bd98e8581636",
+                "reference": "07105607243c2d4f44ebd7bc7a52bd98e8581636",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "5.3|~6.0",
-                "illuminate/support": ">=5.1",
+                "illuminate/support": "~5.1",
                 "imagine/imagine": "0.6.*",
                 "php": ">=5.4.0"
             },
@@ -575,7 +575,7 @@
                 "thumbnail",
                 "watermark"
             ],
-            "time": "2016-05-30 16:02:53"
+            "time": "2016-09-12 19:57:24"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -3698,16 +3698,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.5.2",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "da8529775f14f4fdae33f916eb0cf65f6afbddbc"
+                "reference": "94e5ca3e90aa5b34663780393e10914f7438f991"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/da8529775f14f4fdae33f916eb0cf65f6afbddbc",
-                "reference": "da8529775f14f4fdae33f916eb0cf65f6afbddbc",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/94e5ca3e90aa5b34663780393e10914f7438f991",
+                "reference": "94e5ca3e90aa5b34663780393e10914f7438f991",
                 "shasum": ""
             },
             "require": {
@@ -3736,7 +3736,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2016-09-06 16:07:05"
+            "time": "2016-09-07 15:34:10"
         },
         {
             "name": "pdepend/pdepend",
