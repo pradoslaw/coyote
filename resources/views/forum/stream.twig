@@ -30,7 +30,7 @@
                                 <i class="fa fa-laptop pull-right bubble" title="{{ activity.ip }}"></i>
                                 <i class="fa fa-globe pull-right bubble" title="{{ activity.browser }}"></i>
 
-                                <p title="{{ activity.headline|striptags }}">{{ activity.headline|raw }}</p>
+                                <p>{{ activity.headline|raw }}</p>
                                 <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
 
                                 {% if activity.excerpt %}

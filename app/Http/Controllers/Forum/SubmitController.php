@@ -122,7 +122,7 @@ class SubmitController extends BaseController
                 $alert->notify();
             }
 
-            if ($post->id === $topic->first_post_id) {
+            if ($topic->wasRecentlyCreated || $post->id === $topic->first_post_id) {
                 $object = (new Stream_Topic)->map($topic, $forum, $post->text);
                 $target = (new Stream_Forum)->map($forum);
             } else {
@@ -172,7 +172,7 @@ class SubmitController extends BaseController
      * @param $forum
      * @param $topic
      * @param $post
-     * @return $this
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($forum, $topic, $post)
     {
@@ -200,7 +200,8 @@ class SubmitController extends BaseController
         $url = $this->transaction(function () use ($request, $forum, $topic) {
             $topic->fill(['subject' => $request->get('subject')]);
 
-            $post = $this->post->find($topic->first_post_id);
+            /** @var \Coyote\Post $post */
+            $post = $topic->firstPost()->first();
             $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
 
             if ($topic->isDirty()) {
@@ -237,11 +238,14 @@ class SubmitController extends BaseController
                 event(new PostWasSaved($post));
             }
 
+            // get text from cache to put excerpt in stream activity
+            $post->text = app('parser.post')->parse($post->text);
+
             // put action into activity stream
             stream(
                 Stream_Update::class,
-                (new Stream_Post(['url' => $url]))->map($post),
-                (new Stream_Topic())->map($topic, $forum)
+                (new Stream_Topic)->map($topic, $forum, $post->text),
+                (new Stream_Forum)->map($forum)
             );
 
             return $url;
