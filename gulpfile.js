@@ -136,38 +136,38 @@ elixir(function (mix) {
 
     mix.copy('resources/assets/bower/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css', 'public/css/datepicker.css');
 
-    mix.version([
-        'js/main.js',
-        'js/microblog.js',
-        'js/forum.js',
-        'js/job.js',
-        'js/job-submit.js',
-        'js/job-tinymce.js',
-        'js/posting.js',
-        'js/wikieditor.js',
-        'js/auto-complete.js',
-        'js/tags.js',
-        'js/tab.js',
-        'js/modal.js',
-        'js/perfect-scrollbar.js',
-        'js/animate-colors.js',
-        'js/jquery-ui.js',
-        'js/wiki.js',
+    // versioning only on production server
+    if (elixir.config.production) {
+        mix.version([
+            'js/main.js',
+            'js/microblog.js',
+            'js/forum.js',
+            'js/job.js',
+            'js/job-submit.js',
+            'js/job-tinymce.js',
+            'js/posting.js',
+            'js/wikieditor.js',
+            'js/auto-complete.js',
+            'js/tags.js',
+            'js/tab.js',
+            'js/modal.js',
+            'js/wiki.js',
 
-        'css/main.css',
-        'css/auth.css',
-        'css/homepage.css',
-        'css/microblog.css',
-        'css/forum.css',
-        'css/wiki.css',
-        'css/user.css',
-        'css/profile.css',
-        'css/job.css',
-        'css/errors.css',
-        'css/pastebin.css',
-        'css/adm.css',
-        'css/help.css',
-        'css/search.css'
-    ]);
+            'css/main.css',
+            'css/auth.css',
+            'css/homepage.css',
+            'css/microblog.css',
+            'css/forum.css',
+            'css/wiki.css',
+            'css/user.css',
+            'css/profile.css',
+            'css/job.css',
+            'css/errors.css',
+            'css/pastebin.css',
+            'css/adm.css',
+            'css/help.css',
+            'css/search.css'
+        ]);
+    }
 });
 

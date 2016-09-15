@@ -1,7 +1,7 @@
 $(function () {
     'use strict';
 
-    var scrollHandler = function () {
+    var handler = function () {
         if ($(window).scrollTop() > 150) {
             var breadcrumb = $('#breadcrumb-fixed');
 
@@ -35,14 +35,12 @@ $(function () {
 
     var isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
-    if (!isMobile) {
+    if (!isMobile && $('#front-end').length === 1) {
         if (window.location.hash.length) {
-            setTimeout(function () {
-                $(window).scroll(scrollHandler);
-            }, 1000);
+            setTimeout(() => $(window).scroll(handler), 1000);
         }
         else {
-            $(window).scroll(scrollHandler).trigger('scroll');
+            $(window).scroll(handler).trigger('scroll');
         }
     }
 });
