@@ -42,8 +42,9 @@ class LogController extends BaseController
      */
     public function log(Request $request, $post)
     {
+        /** @var \Coyote\Topic $topic */
         $topic = $this->topic->find($post->topic_id);
-        $forum = $this->forum->find($post->forum_id);
+        $forum = $topic->forum;
 
         $this->authorize('update', $forum);
 
@@ -52,7 +53,10 @@ class LogController extends BaseController
         $this->breadcrumb->push('Historia postu', route('forum.post.log', [$post->id]));
 
         $logs = $this->log->takeForPost($post->id);
+
+        /** @var \Coyote\Services\Parser\Factories\DiffFactory $parser */
         $parser = app('parser.' . ($request->has('diff') ? 'diff' : 'post'));
+        $parser->setEnableCache(false);
 
         foreach ($logs as $index => &$log) {
             if ($request->has('diff')) {
