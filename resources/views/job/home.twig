@@ -198,13 +198,13 @@
                                 {{ form_open({'url': route('job.home'), 'class': 'form-inline outline', 'method': 'get'}) }}
                                     <div class="form-group input-keywords col-sm-5 col-xs-5">
                                         <div class="col-content">
-                                            {{ form_text('q', request('q'), {'class': 'form-control', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
+                                            {{ form_input('search', 'q', request('q'), {'class': 'form-control', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
                                         </div>
                                     </div>
 
                                     <div class="form-group input-location col-sm-5 col-xs-5">
                                         <div class="col-content">
-                                            {{ form_text('city', request('city')|join(', '), {'class': 'form-control', 'placeholder': 'Nazwa miejscowości'}) }}
+                                            {{ form_input('search', 'city', request('city')|join(', '), {'class': 'form-control', 'placeholder': 'Nazwa miejscowości'}) }}
                                         </div>
                                     </div>
 
