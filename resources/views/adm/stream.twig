@@ -30,7 +30,7 @@
                                     <i class="fa fa-globe pull-right bubble" title="{{ activity.browser }}"></i>
                                 {% endif %}
 
-                                <p title="{{ activity.headline|striptags }}">{{ activity.headline|raw }}</p>
+                                <p>{{ activity.headline|raw }}</p>
                                 <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
                                 <small class="text-muted" title="{{ activity.ip }}">&bullet; <a href="{{ route('adm.stream', {ip: activity.ip}) }}">{{ activity.ip }}</a></small>
 
