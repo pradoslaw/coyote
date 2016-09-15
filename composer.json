@@ -76,12 +76,15 @@
         ]
     },
     "scripts": {
+        "post-root-package-install": [
+            "php -r \"file_exists('.env') || copy('.env.default', '.env');\""
+        ],
         "post-install-cmd": [
-            "php artisan clear-compiled",
+            "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan optimize"
         ],
         "post-update-cmd": [
-            "php artisan clear-compiled",
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
         ],
         "post-create-project-cmd": [
