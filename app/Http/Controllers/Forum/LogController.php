@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
 use Coyote\Repositories\Contracts\Post\LogRepositoryInterface as LogRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
@@ -96,7 +97,7 @@ class LogController extends BaseController
             if ($post->id === $topic->first_post_id) {
                 $topic->fill(['subject' => $log->subject]);
                 // assign tags to topic
-                $topic->tags()->sync(app('TagRepository')->multiInsert($log->tags));
+                $topic->tags()->sync(app(TagRepositoryInterface::class)->multiInsert($log->tags));
 
                 $topic->save();
             }
