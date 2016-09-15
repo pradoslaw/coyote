@@ -1,4 +1,6 @@
-<?php namespace Coyote\Providers;
+<?php
+
+namespace Coyote\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Carbon\Carbon;
@@ -16,7 +18,7 @@ class ConfigServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        setlocale(LC_ALL, array('pl_PL.UTF-8', 'polish_pol'));
+        setlocale(LC_ALL, ['pl_PL.UTF-8', 'polish_pol']);
         Carbon::setLocale(config('app.locale'));
 
         config([
