@@ -16,7 +16,7 @@ update-repo:
 	git pull origin master
 
 dependency-install:
-	composer update
+	composer install
 
 file-permission:
 	chmod -R 777 storage/
@@ -34,7 +34,7 @@ install-gulp:
 	npm install
 
 install-assets:
-	bower update --allow-root
+	bower install --allow-root
 
 assets-production:
 	gulp --production
@@ -47,4 +47,5 @@ dump-autoload:
 
 cache-config:
 	php artisan config:cache
+	php artisan route:cache
 	php artisan optimize
