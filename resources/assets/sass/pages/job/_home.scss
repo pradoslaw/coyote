@@ -180,6 +180,8 @@ $header-footer-border: #c7c7c7;
       border-bottom: 1px solid $border-color;
     }
 
+    // Offer logo
+    // ---------------------------------------------
     .col-logo {
       width: 70px;
 
@@ -196,6 +198,8 @@ $header-footer-border: #c7c7c7;
       }
     }
 
+    // Offer content (tags, location, company name)
+    // -----------------------------------------------
     .col-body {
       padding: 7px 1% 7px 0;
 
@@ -205,6 +209,10 @@ $header-footer-border: #c7c7c7;
 
         a {
           color: darken($brand-primary, 10%);
+        }
+
+        @media screen and (max-width: $screen-xs) {
+          font-size: 14px;
         }
       }
 
@@ -232,6 +240,10 @@ $header-footer-border: #c7c7c7;
           a {
             font-size: 12px;
             padding: 1px 6px;
+
+            @media screen and (max-width: $screen-xs) {
+              font-size: 11px;
+            }
           }
         }
       }
@@ -241,6 +253,8 @@ $header-footer-border: #c7c7c7;
       }
     }
 
+    // Salary column (hidden on mobile devices)
+    // -----------------------------------------------
     .col-salary {
       width: 15%;
 

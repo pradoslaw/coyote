@@ -46,7 +46,7 @@
                             </p>
 
                             {% if job.tags %}
-                                <ul class="tag-clouds hidden-sm hidden-xs">
+                                <ul class="tag-clouds">
                                     {% for tag in job.tags[0:5] %}
                                         <li><a data-category="job-tag" data-action="offer" data-value="{{ tag }}" title="Znajdź oferty z technologii: {{ tag }}" href="{{ route('job.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
                                     {% endfor %}
