@@ -3,11 +3,19 @@
 #job-offer {
   .media-body {
     padding: 0 20px;
+
+    @media screen and (max-width: $screen-sm) {
+      padding: 0 5px;
+    }
   }
 
   h1 {
     font-size: 22px;
     margin-bottom: 10px;
+
+    @media screen and (max-width: $screen-sm) {
+      font-size: $font-size-large;
+    }
   }
 
   .employer {
@@ -85,9 +93,14 @@
     }
   }
 
-  // tresc oferty (lub opis firmy)
+  // Offer description (or company description)
+  // ----------------------------------------------------
   .text {
     font-size: 14px;
+
+    @media screen and (max-width: $screen-sm) {
+      font-size: $font-size-small;
+    }
   }
 }
 
