@@ -37,7 +37,9 @@ $(function () {
 
     if (!isMobile && $('#front-end').length === 1) {
         if (window.location.hash.length) {
-            setTimeout(() => $(window).scroll(handler), 1000);
+            setTimeout(function() {
+                $(window).scroll(handler);
+            }, 1000);
         }
         else {
             $(window).scroll(handler).trigger('scroll');
