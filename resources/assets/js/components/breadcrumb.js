@@ -6,7 +6,7 @@ $(function () {
             var breadcrumb = $('#breadcrumb-fixed');
 
             if (!breadcrumb.length) {
-                breadcrumb = $('.breadcrumb:first').clone();
+                breadcrumb = $('.breadcrumb:first:visible').clone();
 
                 if ($.trim(breadcrumb.text()).length > 0) {
                     breadcrumb.attr({id: 'breadcrumb-fixed'}).hide().appendTo('body');
