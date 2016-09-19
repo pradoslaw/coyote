@@ -44,7 +44,7 @@
 // Glowne menu aplikacji. Po naprowadzeniu kursora myszy nad pozycja pokazujemy liste podmenu
 // ---------------------------------------------------------------------------------------
 
-#main-menu > li:hover {
+#desktop-menu > li:hover {
   .dropdown-menu {
     display: block;
     top: 100%;
