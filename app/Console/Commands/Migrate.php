@@ -1375,7 +1375,7 @@ class Migrate extends Command
         $bar = $this->output->createProgressBar(count($locations));
 
         DB::beginTransaction();
-        $replace = ['Warsaw' => 'Warszawa', 'Krakow' => 'Kraków', 'Wroclaw' => 'Wrocław', 'Lodz' => 'Łódź', 'Warszawa (ścisłe centrum)' => 'Warszawa'];
+        $replace = ['Warsaw' => 'Warszawa', 'Krakow' => 'Kraków', 'Wroclaw' => 'Wrocław', 'Lodz' => 'Łódź', 'Warszawa (ścisłe centrum)' => 'Warszawa', 'Waraszawa' => 'Warszawa'];
 
         try {
             foreach ($locations as $row) {
