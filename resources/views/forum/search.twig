@@ -3,7 +3,7 @@
 
 {% block title %}
     {% if response %}
-        {{ declination(response.totalHits(), declination) }} dla frazy {{ input_get('q') }}
+        {{ declination(response.total(), declination) }} dla frazy {{ input_get('q') }}
     {% else %}
         Szukaj na forum {{ parent() }}
     {% endif %}
@@ -18,7 +18,7 @@
                 {{ form_open({'method': 'GET', 'role': 'form', 'url': route('forum.search'), 'class': 'form-inline outline', 'id': 'box-search'}) }}
                     <div class="form-group input-keywords col-sm-5 col-xs-5">
                         <div class="col-content">
-                            {{ form_text('q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
+                            {{ form_input('search', 'q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
                         </div>
                     </div>
 

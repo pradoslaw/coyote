@@ -9,6 +9,10 @@
   margin-top: 20px;
 }
 
+#box-search {
+  margin-top: 10px;
+}
+
 #search-results {
   h2 {
     font-size: $font-size-large;
@@ -27,5 +31,11 @@
   .highlight {
     font-weight: bold;
     font-style: normal;
+  }
+
+  // make url shorter (specially for mobile devices)
+  li > a {
+    @include text-overflow;
+    display: block;
   }
 }

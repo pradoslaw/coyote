@@ -2,7 +2,7 @@
 
 #box-search {
   float: none;
-  margin: 0 auto 24px auto;
+  margin: 0 auto 10px auto;
   overflow: hidden;
 
   > form {
@@ -59,19 +59,26 @@
 // ---------------------------------------------------------------
 
 .empty-result {
-  // selektory sa tutaj rozbite specjalnie
-  background-image: url("/img/sad-face.png");
-  background-repeat: no-repeat;
-  background-position: top left;
-  padding-left: 70px;
+
 
   p {
-    margin-top: 9px;
-    font-size: 14px;
     text-align: center;
 
     a {
       text-decoration: underline;
+    }
+  }
+
+  @media screen and (min-width: $screen-xs) {
+    // selektory sa tutaj rozbite specjalnie
+    background-image: url("/img/sad-face.png");
+    background-repeat: no-repeat;
+    background-position: top left;
+    padding-left: 70px;
+
+    p {
+      margin-top: 9px;
+      font-size: 14px;
     }
   }
 }
