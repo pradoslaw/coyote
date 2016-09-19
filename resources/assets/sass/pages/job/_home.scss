@@ -233,18 +233,12 @@ $header-footer-border: #c7c7c7;
         }
       }
 
+      // we don't have much space to do the padding on job listing...
       .tag-clouds {
         padding: 0;
 
-        li {
-          a {
-            font-size: $font-size-small;
-            padding: 1px 6px;
-
-            @media screen and (max-width: $screen-xs) {
-              font-size: $font-size-small - 1px;
-            }
-          }
+        li a {
+          padding: 1px 6px;
         }
       }
 

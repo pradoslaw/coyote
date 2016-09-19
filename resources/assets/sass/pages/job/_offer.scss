@@ -118,8 +118,15 @@
 .tag-clouds {
   padding: 5px 0;
 
-  li a {
-    font-size: $font-size-small;
+  li {
+    a {
+      font-size: $font-size-small; // 12px
+
+      @media screen and (max-width: $screen-xs) {
+        font-size: $font-size-small - 1px;
+        padding: 1px 6px;
+      }
+    }
   }
 }
 
