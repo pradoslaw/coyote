@@ -1,8 +1,8 @@
 <article id="entry-{{ microblog.id }}" class="microblog">
-    <div class="panel panel-default panel-microblog">
+    <div class="panel panel-default">
         <div class="panel-body">
             <div class="media">
-                <div class="media-left" style="padding-right: 15px">
+                <div class="media-left hidden-xs" style="padding-right: 15px">
                     <a href="{{ route('profile', [microblog.user_id]) }}">
                         <img class="media-object img-thumbnail" src="{{ user_photo(microblog.photo) }}" style="width: 50px; height: 50px;" alt="">
                     </a>

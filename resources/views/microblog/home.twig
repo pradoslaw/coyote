@@ -1,8 +1,8 @@
 {% extends 'layout.twig' %}
 {% block title %}Mikroblogi{{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
-{% import 'components/modals.twig' as modal %}
+{% import 'components.forms' as forms %}
+{% import 'components.modals' as modal %}
 
 {% block container %}
     <div id="microblog" class="row">
@@ -20,7 +20,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="media">
-                                <div class="media-left" style="padding-right: 15px">
+                                <div class="media-left hidden-xs" style="padding-right: 15px">
                                     <a href="{{ route('profile', [user('id')]) }}">
                                         <img class="media-object img-thumbnail" src="{{ user_photo(user('photo')) }}" style="width: 50px; height: 50px;" alt="">
                                     </a>
@@ -39,7 +39,7 @@
             </nav>
 
             {% for microblog in microblogs %}
-                {% include "microblog/microblog.twig" %}
+                {% include "microblog.microblog" %}
             {% endfor %}
 
             <div class="text-center">
