@@ -34,3 +34,25 @@
 .pagination-xs {
   @include pagination-size($padding-small-vertical, $padding-small-horizontal, ceil(($font-size-base * 0.78)), $line-height-small, $border-radius-small);
 }
+
+@media screen and (max-width: $screen-sm) {
+  .pagination {
+    font-size: $font-size-small;
+
+    > li > a, > li > span, > .disabled > span {
+      padding: 4px 7px;
+      font-size: 11px;
+    }
+
+    // pagination for mobile devices and small resolutions
+    @media screen and (max-width: $screen-sm) {
+      > li {
+        display: none;
+      }
+
+      > li:first-child, > li:last-child, > li.disabled, > li:nth-child(2), > li:nth-last-child(2), > li.active {
+        display: inline;
+      }
+    }
+  }
+}
