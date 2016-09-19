@@ -45,6 +45,12 @@
                                 </small>
                             </p>
 
+                            {% if job.salary_from or job.salary_to %}
+                                <p class="text-primary visible-xs">
+                                    {% include 'job.partials.salary' with {rate_label: true} %}
+                                </p>
+                            {% endif %}
+
                             {% if job.tags %}
                                 <ul class="tag-clouds">
                                     {% for tag in job.tags[0:5] %}

@@ -196,19 +196,19 @@
                         <div class="row">
                             <div id="box-search" class="col-md-8 col-sm-12 col-xs-12">
                                 {{ form_open({'url': route('job.home'), 'class': 'form-inline outline', 'method': 'get'}) }}
-                                    <div class="form-group input-keywords col-sm-5 col-xs-5">
+                                    <div class="form-group input-keywords col-sm-5 col-xs-6">
                                         <div class="col-content">
                                             {{ form_input('search', 'q', request('q'), {'class': 'form-control', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
                                         </div>
                                     </div>
 
-                                    <div class="form-group input-location col-sm-5 col-xs-5">
+                                    <div class="form-group input-location col-sm-5 col-xs-6">
                                         <div class="col-content">
                                             {{ form_input('search', 'city', request('city')|join(', '), {'class': 'form-control', 'placeholder': 'Nazwa miejscowości'}) }}
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-sm-2 col-xs-2">
+                                    <div class="form-group col-sm-2 hidden-xs">
                                         <button class="btn btn-primary btn-search" type="submit">
                                             <i class="fa fa-search"></i> <span class="hidden-xxs">{{ declination(count, declinationOffers) }}</span>
                                         </button>
@@ -283,5 +283,5 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/tags.js') }}"></script>
+    <script src="{{ cdn('js/tags.js') }}"></script>
 {% endblock %}

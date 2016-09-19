@@ -104,9 +104,15 @@
   }
 }
 
+// Job location. On mobile devices we need to remove bottom margin.
+// -----------------------------------------------------------------
+
 .metadata.location {
-  display: inline;
   border-top: 0;
+
+  @media screen and (min-width: $screen-sm) {
+    display: inline;
+  }
 }
 
 .tag-clouds {
