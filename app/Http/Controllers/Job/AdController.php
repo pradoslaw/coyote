@@ -34,7 +34,7 @@ class AdController extends Controller
     public function index(Request $request)
     {
         $output = $this->getCacheFactory()->remember('ad:' . $request->ip(), 60, function () use ($request) {
-            return $this->load($this->getLocation($request->ip()));
+            return $this->load($this->lookupLocation());
         });
 
         // cache output response for 1h
@@ -61,11 +61,47 @@ class AdController extends Controller
     }
 
     /**
+     * @return array|mixed
+     */
+    private function lookupLocation()
+    {
+        if (auth()->check() && auth()->user()->location) {
+            // get by city if available...
+            $result = $this->getByCity(auth()->user()->location);
+
+            // only first result please...
+            if ($result) {
+                return $result[0];
+            }
+        }
+
+        // ... otherwise lookup by ip
+        return $this->getByIp(request()->ip());
+    }
+
+    /**
      * @param string $ip
      * @return array
      */
-    private function getLocation($ip)
+    private function getByIp($ip)
     {
-        return app('geo-ip')->ip($ip);
+        return $this->getGeoIp()->ip($ip);
+    }
+
+    /**
+     * @param string $city
+     * @return array
+     */
+    private function getByCity($city)
+    {
+        return $this->getGeoIp()->city($city);
+    }
+
+    /**
+     * @return \Coyote\Services\GeoIp\GeoIp
+     */
+    private function getGeoIp()
+    {
+        return app('geo-ip');
     }
 }
