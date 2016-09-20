@@ -33,10 +33,9 @@ class TagValidator
      * @param mixed $attribute
      * @param mixed $value
      * @param array $parameters
-     * @param \Illuminate\Validation\Validator $validator
      * @return bool
      */
-    public function validateTag($attribute, $value, $parameters, $validator)
+    public function validateTag($attribute, $value)
     {
         return (bool) preg_match('/' . self::REGEXP . '/', trim($value));
     }
@@ -45,10 +44,9 @@ class TagValidator
      * @param mixed $attribute
      * @param mixed $value
      * @param array $parameters
-     * @param \Illuminate\Validation\Validator $validator
      * @return bool
      */
-    public function validateTagCreation($attribute, $value, $parameters, $validator)
+    public function validateTagCreation($attribute, $value, $parameters)
     {
         $requiredReputation = $parameters[0]; // required reputation points
         $userReputation = $this->auth->guest() ? 0 : $this->auth->user()->reputation;

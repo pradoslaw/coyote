@@ -13,7 +13,7 @@ class UserValidator
      * @var UserRepository
      */
     protected $user;
-    
+
     /**
      * @param UserRepository $user
      */
@@ -28,11 +28,9 @@ class UserValidator
      *
      * @param $attribute
      * @param $value
-     * @param $parameters
-     * @param $validator
      * @return int
      */
-    public function validateName($attribute, $value, $parameters, $validator)
+    public function validateName($attribute, $value)
     {
         return preg_match('/^[0-9a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ._ -]+$/', $value);
     }
@@ -43,10 +41,9 @@ class UserValidator
      * @param $attribute
      * @param $value
      * @param $parameters
-     * @param $validator
      * @return bool TRUE if user name is not taken (FALSE otherwise)
      */
-    public function validateUnique($attribute, $value, $parameters, $validator)
+    public function validateUnique($attribute, $value, $parameters)
     {
         $userId = (int) ($parameters[0] ?? null);
         $user = $this->user->findByName(mb_strtolower($value));
@@ -63,11 +60,9 @@ class UserValidator
      *
      * @param $attribute
      * @param $value
-     * @param $parameters
-     * @param $validator
      * @return bool
      */
-    public function validateExist($attribute, $value, $parameters, $validator)
+    public function validateExist($attribute, $value)
     {
         return $this->user->findByName(mb_strtolower($value)) !== null;
     }

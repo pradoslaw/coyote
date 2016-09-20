@@ -5,7 +5,6 @@ namespace Coyote\Http\Validators;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Wiki;
 use Illuminate\Routing\Router;
-use Illuminate\Validation\Validator;
 
 class WikiValidator
 {
@@ -33,10 +32,9 @@ class WikiValidator
      * @param mixed $attribute
      * @param mixed $value
      * @param array $parameters
-     * @param Validator $validator
      * @return bool
      */
-    public function validateUnique($attribute, $value, $parameters, $validator)
+    public function validateUnique($attribute, $value, $parameters)
     {
         $wikiId = (int) ($parameters[0] ?? null);
         $parentId = ($parameters[1] ?? null);
@@ -57,10 +55,9 @@ class WikiValidator
      * @param mixed $attribute
      * @param mixed $value
      * @param array $parameters
-     * @param Validator $validator
      * @return bool
      */
-    public function validateRoute($attribute, $value, $parameters, $validator)
+    public function validateRoute($attribute, $value, $parameters)
     {
         $slug = Wiki::slug($value);
         $path = '/' . $slug;
