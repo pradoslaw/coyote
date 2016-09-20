@@ -25,7 +25,7 @@ install:
   - sudo npm -g install npm@next
 
 before_script:
-  - make install-gulp
+  - sudo make install-gulp
   - psql -c 'create database coyote_test;' -U postgres
   - mongo coyote_test --eval 'db.addUser("travis", "test");'
   - cp .env.testing .env
