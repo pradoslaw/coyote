@@ -33,7 +33,7 @@ class AdController extends Controller
      */
     public function index(Request $request)
     {
-        $output = $this->getCacheFactory()->remember('ad:' . $request->ip(), 60, function () use ($request) {
+        $output = $this->getCacheFactory()->remember('ad:' . $request->ip(), 60, function () {
             return $this->load($this->lookupLocation());
         });
 
