@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Coyote\Post\Attachment;
+use Coyote\Services\Elasticsearch\Analyzers\PostAnalyzer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -216,6 +217,7 @@ class Post extends Model
      */
     protected function getIndexBody()
     {
+        $this->setAnalyzer(PostAnalyzer::class);
         $body = $this->parentGetIndexBody();
 
         // additionally index few fields from topics table...
