@@ -32,7 +32,6 @@ class TagValidator
     /**
      * @param mixed $attribute
      * @param mixed $value
-     * @param array $parameters
      * @return bool
      */
     public function validateTag($attribute, $value)
