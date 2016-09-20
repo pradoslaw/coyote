@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 class ForumRepository extends Repository implements ForumRepositoryInterface
 {
     /**
-     * @return \Coyote\Forum
+     * @return string
      */
     public function model()
     {
@@ -30,43 +30,44 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     {
         $this->applyCriteria();
 
-        $sql = $this->model
-                    ->select([
-                        'forums.*',
-                        'forum_track.marked_at AS forum_marked_at',
-                        'topic_track.marked_at AS topic_marked_at',
-                        'subject',
-                        'topics.id AS topic_id',
-                        'topics.slug AS topic_slug',
-                        'posts.user_id',
-                        'posts.created_at',
-                        'posts.user_name AS anonymous_name',
-                        'users.name AS user_name',
-                        'users.photo',
-                        'is_active',
-                        'is_confirm'
-                    ])
-                    ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
-                        $join->on('forum_track.forum_id', '=', 'forums.id');
+        $sql = $this
+            ->model
+            ->select([
+                'forums.*',
+                'forum_track.marked_at AS forum_marked_at',
+                'topic_track.marked_at AS topic_marked_at',
+                'subject',
+                'topics.id AS topic_id',
+                'topics.slug AS topic_slug',
+                'posts.user_id',
+                'posts.created_at',
+                'posts.user_name AS anonymous_name',
+                'users.name AS user_name',
+                'users.photo',
+                'is_active',
+                'is_confirm'
+            ])
+            ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
+                $join->on('forum_track.forum_id', '=', 'forums.id');
 
-                        if ($userId) {
-                            $join->on('forum_track.user_id', '=', $this->raw($userId));
-                        } else {
-                            $join->on('forum_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                        }
-                    })
-                    ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
-                    ->leftJoin('users', 'users.id', '=', 'posts.user_id')
-                    ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
-                    ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
-                        $join->on('topic_track.topic_id', '=', 'topics.id');
+                if ($userId) {
+                    $join->on('forum_track.user_id', '=', $this->raw($userId));
+                } else {
+                    $join->on('forum_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
+                }
+            })
+            ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
+            ->leftJoin('users', 'users.id', '=', 'posts.user_id')
+            ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
+            ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
+                $join->on('topic_track.topic_id', '=', 'topics.id');
 
-                        if ($userId) {
-                            $join->on('topic_track.user_id', '=', $this->raw($userId));
-                        } else {
-                            $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                        }
-                    });
+                if ($userId) {
+                    $join->on('topic_track.user_id', '=', $this->raw($userId));
+                } else {
+                    $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
+                }
+            });
 
         if ($parentId) {
             $sql->where('parent_id', $parentId);
@@ -122,18 +123,19 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     {
         $this->applyCriteria();
 
-        $sql = $this->model
-                    ->select([
-                        'forums.*',
-                        'forum_orders.is_hidden',
-                        $this->raw('CASE WHEN forum_orders.section IS NOT NULL THEN forum_orders.section ELSE forums.section END')
-                    ])
-                    ->leftJoin('forum_orders', function ($join) use ($userId) {
-                        $join->on('forum_orders.forum_id', '=', 'forums.id')
-                                ->on('forum_orders.user_id', '=', $this->raw($userId));
-                    })
-                    ->whereNull('parent_id')
-                    ->orderByRaw('(CASE WHEN forum_orders.order IS NOT NULL THEN forum_orders.order ELSE forums.order END)');
+        $sql = $this
+            ->model
+            ->select([
+                'forums.*',
+                'forum_orders.is_hidden',
+                $this->raw('CASE WHEN forum_orders.section IS NOT NULL THEN forum_orders.section ELSE forums.section END')
+            ])
+            ->leftJoin('forum_orders', function ($join) use ($userId) {
+                $join->on('forum_orders.forum_id', '=', 'forums.id')
+                        ->on('forum_orders.user_id', '=', $this->raw($userId));
+            })
+            ->whereNull('parent_id')
+            ->orderByRaw('(CASE WHEN forum_orders.order IS NOT NULL THEN forum_orders.order ELSE forums.order END)');
 
         $parents = $sql->get();
 
@@ -216,12 +218,13 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function getTagClouds()
     {
-        return $this->tagModel()
-                ->orderBy($this->raw('COUNT(*)'), 'DESC')
-                ->limit(10)
-                ->get()
-                ->lists('count', 'name')
-                ->toArray();
+        return $this
+            ->tagModel()
+            ->orderBy($this->raw('COUNT(*)'), 'DESC')
+            ->limit(10)
+            ->get()
+            ->lists('count', 'name')
+            ->toArray();
     }
 
     /**
@@ -230,11 +233,13 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function getTagsWeight(array $tags)
     {
-        return $this->tagModel()
-                    ->whereIn('tags.name', $tags)
-                    ->get()
-                    ->lists('count', 'name')
-                    ->toArray();
+        return $this
+            ->tagModel()
+            ->whereIn('tags.name', $tags)
+            ->orderBy($this->raw('COUNT(*)'), 'DESC')
+            ->get()
+            ->lists('count', 'name')
+            ->toArray();
     }
 
     /**
@@ -242,13 +247,15 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     private function tagModel()
     {
-        return $this->app->make(Topic\Tag::class)
-                ->select(['name', $this->raw('COUNT(*) AS count')])
-                ->join('tags', 'tags.id', '=', 'tag_id')
-                ->join('topics', 'topics.id', '=', 'topic_id')
-                    ->whereNull('topics.deleted_at')
-                    ->whereNull('tags.deleted_at')
-                ->groupBy('name');
+        return $this
+            ->app
+            ->make(Topic\Tag::class)
+            ->select(['name', $this->raw('COUNT(*) AS count')])
+            ->join('tags', 'tags.id', '=', 'tag_id')
+            ->join('topics', 'topics.id', '=', 'topic_id')
+                ->whereNull('topics.deleted_at')
+                ->whereNull('tags.deleted_at')
+            ->groupBy('name');
     }
 
     /**

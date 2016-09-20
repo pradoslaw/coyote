@@ -7,7 +7,7 @@ use Coyote\Repositories\Contracts\TagRepositoryInterface;
 class TagRepository extends Repository implements TagRepositoryInterface
 {
     /**
-     * @return \Coyote\Tag
+     * @return string
      */
     public function model()
     {
@@ -20,10 +20,11 @@ class TagRepository extends Repository implements TagRepositoryInterface
      */
     public function lookupName($name)
     {
-        return $this->model->select(['tags.id', 'name'])
-                            ->where('name', 'ILIKE', $name . '%')
-                            ->groupBy('tags.id')
-                            ->get();
+        return $this
+            ->model
+            ->select(['tags.id', 'name'])
+            ->where('name', 'ILIKE', $name . '%')
+            ->get();
     }
 
     /**

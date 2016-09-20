@@ -12,7 +12,7 @@ class TagController extends BaseController
      * Save user's custom tags
      *
      * @param Request $request
-     * @return $this
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function save(Request $request)
     {
@@ -28,7 +28,7 @@ class TagController extends BaseController
      * @param Request $request
      * @param Tag $tag
      * @param Forum $forum
-     * @return $this
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function prompt(Request $request, Tag $tag, Forum $forum)
     {
