@@ -138,8 +138,8 @@
         {% block side_menu %}
             {% if response %}
                 <div id="box-count" class="box">
-                    <strong>{{ response.totalHits()|number_format(0, '', ' ') }}</strong>
-                    <span>{{ declination(response.totalHits(), declination, true) }}</span>
+                    <strong>{{ response.total()|number_format(0, '', ' ') }}</strong>
+                    <span>{{ declination(response.total(), declination, true) }}</span>
                 </div>
             {% endif %}
 
