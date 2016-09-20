@@ -68,7 +68,7 @@
                             {% if skills %}
                                 <ul class="tag-clouds">
                                     {% for skill in skills %}
-                                        <li><a href="{{ route('job.tag', [skill.name|url_encode]) }}">{{ skill.name }}</a></li>
+                                        <li><a href="{{ route('job.tag', [skill.name|url_encode]) }}" title="Szukaj pracy w technologii: {{ skill.name }}">{{ skill.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
@@ -94,7 +94,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;">
 
@@ -108,21 +108,19 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-8">
+                            <div class="col-sm-6">
                                 <div id="wrap">
                                     <div id="overview">
                                         {% for item in reputation %}
-                                            <div class="row reputation-item">
-                                                <div class="col-xs-1 point">
-                                                    <p class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}">{{ item.value }} pkt</p>
+                                            <div class="reputation-item">
+                                                <div>
+                                                    <strong class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}"><i class="fa fa-level-{{ item.value > 0 ? 'up' : 'down' }}"></i> {{ item.value }} pkt</strong> za
+                                                    <strong><a class="headline" href="{{ url(item.url) }}">{{ item.name }}</a></strong>
                                                 </div>
 
-                                                <div class="col-xs-7 content">
-                                                    <strong><a href="{{ url(item.url) }}">{{ item.name }}</a></strong>
-                                                    <small>{{ item.created_at|format_date }}</small>
+                                                <small class="text-muted">{{ item.created_at|format_date }}</small>
 
-                                                    <p class="text-muted">{{ item.excerpt }}</p>
-                                                </div>
+                                                <p class="well well-sm">{{ item.excerpt }}</p>
                                             </div>
                                         {% endfor %}
                                     </div>

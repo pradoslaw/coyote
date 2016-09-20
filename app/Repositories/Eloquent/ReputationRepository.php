@@ -6,12 +6,11 @@ use Coyote\User;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface;
 use Coyote\Reputation\Type;
 
-/**
- * Class ReputationRepository
- * @package Coyote\Repositories\Eloquent
- */
 class ReputationRepository extends Repository implements ReputationRepositoryInterface
 {
+    /**
+     * @return string
+     */
     public function model()
     {
         return 'Coyote\Reputation';
@@ -31,10 +30,10 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
      * @param int $limit
      * @return mixed
      */
-    public function takeForUser($userId, $offset = 0, $limit = 100)
+    public function takeForUser($userId, $offset = 0, $limit = 10)
     {
         return $this->model->select()
-                    ->join('reputation_types', 'reputation_types.id', '=', \DB::raw('reputations.type_id'))
+                    ->join('reputation_types', 'reputation_types.id', '=', $this->raw('reputations.type_id'))
                     ->where('user_id', $userId)
                     ->orderBy('reputations.id', 'DESC')
                     ->skip($offset)
@@ -49,7 +48,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
      */
     private function getReputation($dateTime, $limit)
     {
-        $result = $this->model->select(['users.id', 'name', 'photo', \DB::raw('SUM(value) AS reputation')])
+        $result = $this->model->select(['users.id', 'name', 'photo', $this->raw('SUM(value) AS reputation')])
                 ->take($limit)
                 ->join('users', 'users.id', '=', 'user_id')
                 ->where('reputations.created_at', '>=', $dateTime)

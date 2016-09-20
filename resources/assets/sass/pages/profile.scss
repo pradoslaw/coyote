@@ -79,38 +79,25 @@
   margin-top: 22px;
 
   .reputation-item {
-    padding: 10px 0;
+    padding-top: 10px;
     border-bottom: 1px solid $border-color;
+    font-size: 12px;
 
-    .point {
-      padding-top: 4px;
-      display: table-cell;
-      vertical-align: middle;
-      text-align: center;
-
-      p {
-        margin: auto;
-        font-size: 18px;
-      }
+    small {
+      display: block;
     }
 
-    .content {
-      font-size: 12px;
+    .well {
+      margin-top: 10px;
+    }
 
-      strong {
-        font-weight: normal;
-      }
+    .headline {
+      font-weight: normal;
+      color: $link-color-darker;
+    }
 
-      small {
-        display: block;
-      }
-
-      p {
-        font-weight: normal;
-        padding: 0;
-        margin: 7px 0 0 1px;
-        font-family: "Open Sans",sans-serif;
-      }
+    &:last-child {
+      border-bottom: none;
     }
   }
 }
