@@ -28,11 +28,12 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     {
         $this->applyCriteria();
 
-        return $this->model
-                    ->select(['jobs.*', 'countries.name AS country_name', 'currencies.name AS currency_name'])
-                    ->leftJoin('countries', 'countries.id', '=', 'country_id')
-                    ->leftJoin('currencies', 'currencies.id', '=', 'currency_id')
-                    ->findOrFail($id);
+        return $this
+            ->model
+            ->select(['jobs.*', 'countries.name AS country_name', 'currencies.name AS currency_name'])
+            ->leftJoin('countries', 'countries.id', '=', 'country_id')
+            ->leftJoin('currencies', 'currencies.id', '=', 'currency_id')
+            ->findOrFail($id);
     }
 
     /**
@@ -52,15 +53,16 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
      */
     public function subscribes($userId)
     {
-        return $this->model
-                    ->select(['jobs.*', 'firms.name AS firm.name', 'firms.logo AS firm.logo', 'currencies.name AS currency_name'])
-                    ->join('job_subscribers', function ($join) use ($userId) {
-                        $join->on('job_id', '=', 'jobs.id')->on('job_subscribers.user_id', '=', $this->raw($userId));
-                    })
-                    ->leftJoin('firms', 'firms.id', '=', 'firm_id')
-                    ->join('currencies', 'currencies.id', '=', 'currency_id')
-                    ->with('locations')
-                    ->get();
+        return $this
+            ->model
+            ->select(['jobs.*', 'firms.name AS firm.name', 'firms.logo AS firm.logo', 'currencies.name AS currency_name'])
+            ->join('job_subscribers', function ($join) use ($userId) {
+                $join->on('job_id', '=', 'jobs.id')->on('job_subscribers.user_id', '=', $this->raw($userId));
+            })
+            ->leftJoin('firms', 'firms.id', '=', 'firm_id')
+            ->join('currencies', 'currencies.id', '=', 'currency_id')
+            ->with('locations')
+            ->get();
     }
 
     /**
@@ -70,11 +72,11 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     public function getPopularTags($limit = 1000)
     {
         return $this
-                ->prepareTags()
-                ->orderBy($this->raw('COUNT(*)'), 'DESC')
-                ->limit($limit)
-                ->get()
-                ->lists('count', 'name');
+            ->getQuery()
+            ->orderBy($this->raw('COUNT(*)'), 'DESC')
+            ->limit($limit)
+            ->get()
+            ->lists('count', 'name');
     }
 
     /**
@@ -88,25 +90,27 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
         $this->applyCriteria();
 
         return $this
-                ->prepareTags()
-                ->whereIn('job_tags.tag_id', $tagsId)
-                ->get()
-                ->lists('count', 'name');
+            ->getQuery()
+            ->whereIn('job_tags.tag_id', $tagsId)
+            ->get()
+            ->lists('count', 'name');
     }
 
     /**
      * @return mixed
      */
-    private function prepareTags()
+    private function getQuery()
     {
         return $this
-                ->app->make('Coyote\Job\Tag')
-                ->select(['name', $this->raw('COUNT(*) AS count')])
-                ->join('tags', 'tags.id', '=', 'tag_id')
-                ->join('jobs', 'jobs.id', '=', 'job_id')
-                    ->whereNull('jobs.deleted_at')
-                    ->whereNull('tags.deleted_at')
-                ->groupBy('name');
+            ->app
+            ->make(Job\Tag::class)
+            ->select(['name', $this->raw('COUNT(*) AS count')])
+            ->join('tags', 'tags.id', '=', 'tag_id')
+            ->join('jobs', 'jobs.id', '=', 'job_id')
+                ->whereNull('jobs.deleted_at')
+                ->whereNull('tags.deleted_at')
+                ->where('deadline_at', '>', $this->raw('NOW()'))
+            ->groupBy('name');
     }
 
     /**
