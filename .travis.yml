@@ -22,7 +22,7 @@ before_install:
 
 install:
   - composer install
-  - npm -g install npm@next
+  - sudo npm -g install npm@next
 
 before_script:
   - make install-gulp
