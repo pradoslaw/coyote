@@ -49,6 +49,7 @@ class HomeController extends Controller
             'rank'          => $this->user->rank($user->id),
             'total_users'   => $this->user->countUsersWithReputation(),
             'reputation'    => $this->reputation->takeForUser($user->id),
+            'chart'         => $this->reputation->chart($user->id),
             'skills'        => $user->skills()->orderBy('order')->get()
         ]);
     }

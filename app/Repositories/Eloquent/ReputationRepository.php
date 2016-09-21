@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Carbon\Carbon;
 use Coyote\User;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface;
 use Coyote\Reputation\Type;
@@ -42,38 +43,57 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
     }
 
     /**
-     * @param string $dateTime
-     * @param integer $limit
-     * @return mixed
-     */
-    private function getReputation($dateTime, $limit)
-    {
-        $result = $this->model->select(['users.id', 'name', 'photo', $this->raw('SUM(value) AS reputation')])
-                ->take($limit)
-                ->join('users', 'users.id', '=', 'user_id')
-                ->where('reputations.created_at', '>=', $dateTime)
-                ->groupBy(['user_id', 'users.id'])
-                ->orderBy('reputation', 'DESC')
-                ->get();
-
-        return $this->percentage($result);
-    }
-
-    /**
-     * Calculates percentage value of user ranking
+     * Get usr reputation for chart.
      *
-     * @param $result
-     * @return mixed
+     * @param int $userId
+     * @return array
      */
-    private function percentage($result)
+    public function chart($userId)
     {
-        $max = $result->count() > 0 ? $result->first()->reputation : 0;
+        $dt = new Carbon('-1 year');
+        $interval = $dt->diffInMonths(new Carbon());
 
-        foreach ($result as $row) {
-            $row->percentage = $max > 0 ? ($row->reputation * 1.0 / $max) * 100 : 0;
+        $sub = $this
+            ->model
+            ->select(['created_at', 'value'])
+            ->whereRaw("user_id = $userId")
+            ->whereRaw("created_at >= '$dt'")
+            ->orderBy('id')
+            ->toSql();
+
+        $sql = $this
+            ->model
+            ->selectRaw(
+                'extract(MONTH FROM created_at) AS month, extract(YEAR FROM created_at) AS year, SUM(value) AS value'
+            )
+            ->from($this->raw("($sub) AS t"))
+            ->groupBy('year')
+            ->groupBy('month')
+            ->orderBy('year')
+            ->orderBy('month')
+            ->get();
+
+        $result = [];
+        foreach ($sql as $row) {
+            $result[sprintf('%d-%02d', $row['year'], $row['month'])] = $row->toArray();
         }
 
-        return $result;
+        $rowset = [];
+
+        for ($i = 0; $i <= $interval; $i++) {
+            $key = $dt->format('Y-m');
+            $label = $dt->formatLocalized('%B %Y');
+
+            if (!isset($result[$key])) {
+                $rowset[] = ['value' => 0, 'year' => $dt->format('Y'), 'month' => $dt->format('n'), 'label' => $label];
+            } else {
+                $rowset[] = array_merge($result[$key], ['label' => $label]);
+            }
+
+            $dt->addMonth(1);
+        }
+
+        return $rowset;
     }
 
     /**
@@ -107,5 +127,42 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
     public function yearly($limit = 3)
     {
         return $this->getReputation(date('Y-1-1 00:00:00'), $limit);
+    }
+
+    /**
+     * @param string $dateTime
+     * @param integer $limit
+     * @return mixed
+     */
+    private function getReputation($dateTime, $limit)
+    {
+        $result = $this
+            ->model
+            ->select(['users.id', 'name', 'photo', $this->raw('SUM(value) AS reputation')])
+            ->take($limit)
+            ->join('users', 'users.id', '=', 'user_id')
+            ->where('reputations.created_at', '>=', $dateTime)
+            ->groupBy(['user_id', 'users.id'])
+            ->orderBy('reputation', 'DESC')
+            ->get();
+
+        return $this->percentage($result);
+    }
+
+    /**
+     * Calculates percentage value of user ranking
+     *
+     * @param $result
+     * @return mixed
+     */
+    private function percentage($result)
+    {
+        $max = $result->count() > 0 ? $result->first()->reputation : 0;
+
+        foreach ($result as $row) {
+            $row->percentage = $max > 0 ? ($row->reputation * 1.0 / $max) * 100 : 0;
+        }
+
+        return $result;
     }
 }

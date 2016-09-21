@@ -7,6 +7,7 @@
 @import "../components/metadata";
 @import "../components/sidemenu";
 @import "../components/job-offers";
+@import "../components/search";
 
 #user-nav-tabs {
   margin: 20px 0;
@@ -78,6 +79,12 @@
 #box-reputation {
   margin-top: 22px;
 
+  .chart-bar {
+    border-top: 1px solid $border-color;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+
   .reputation-item {
     padding-top: 10px;
     border-bottom: 1px solid $border-color;
@@ -104,6 +111,6 @@
 
 #wrap {
   position: relative;
-  max-height: 200px;
+  max-height: 280px;
   overflow: hidden;
 }
