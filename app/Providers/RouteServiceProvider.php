@@ -83,12 +83,13 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router->group([
             'namespace' => $this->namespace, 'middleware' => 'web',
-        ], function ($router) {
+        ], function () {
             require app_path('Http/Routes/Misc.php');
             require app_path('Http/Routes/Forum.php');
             require app_path('Http/Routes/Job.php');
             require app_path('Http/Routes/Microblog.php');
             require app_path('Http/Routes/User.php');
+            require app_path('Http/Routes/Profile.php');
             require app_path('Http/Routes/Pastebin.php');
             require app_path('Http/Routes/Adm.php');
             require app_path('Http/Routes/Wiki.php'); // must be at the end

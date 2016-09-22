@@ -76,9 +76,11 @@
   }
 }
 
-#box-reputation {
+#box-reputation, #box-post {
   margin-top: 22px;
+}
 
+#box-reputation {
   .chart-bar {
     border-top: 1px solid $border-color;
     margin-top: 10px;

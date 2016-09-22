@@ -84,68 +84,13 @@
             </div>
 
             <ul class="nav nav-pills">
-                <li role="presentation" class="active"><a title="Zobacz najciekawsze wątki na forum" href="#interesting" role="tab" data-toggle="tab">Reputacja</a></li>
-                <li role="presentation"><a title="Zobacz najwyżej oceniane wątki w ostatnim miesiącu" href="#rated" role="tab" data-toggle="tab">Posty na forum</a></li>
+                <li role="presentation" {{ tab == 'reputation' ? 'class="active"' }}><a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}" role="tab" data-toggle="tab">Reputacja</a></li>
+                <li role="presentation" {{ tab == 'posts' ? 'class="active"' }}><a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}" role="tab" data-toggle="tab">Posty na forum</a></li>
             </ul>
 
-            <section id="box-reputation" class="box">
+            <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
 
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="row">
-                            {% if user.reputation > 0 %}
-                                <div class="col-sm-6">
-                                    <canvas id="chart"></canvas>
-
-                                    <div class="chart-bar">
-                                        <div class="progress">
-
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;">
-
-                                            </div>
-
-                                            <span class="rep"><strong>{{ user.reputation }}</strong> <small>punktów</small></span>
-
-                                            {% if total_users > 0 %}
-                                                <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div id="wrap">
-                                        <div id="overview">
-                                            {% for item in reputation %}
-                                                <div class="reputation-item">
-                                                    <div>
-                                                        <strong class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}"><i class="fa fa-level-{{ item.value > 0 ? 'up' : 'down' }}"></i> {{ item.value }} pkt</strong> za
-                                                        <strong><a class="headline" href="{{ url(item.url) }}">{{ item.name }}</a></strong>
-                                                    </div>
-
-                                                    <small class="text-muted">{{ item.created_at|format_date }}</small>
-
-                                                    <p class="well well-sm">{{ item.excerpt }}</p>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="col-xs-12">
-                                    <div class="well well-sm empty-result" style="margin-bottom: 0">
-                                        <p>
-                                            Użytkownik nie posiada ani jednego punktu reputacji.<br>
-                                            Zobacz, <a href="/Pomoc/Moje_konto/Reputacja">czym jest reputacja</a> i jak mozna ją zdobyć.
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-
-                    </div>
-                </div>
-            </section>
+            {{ module|raw }}
 
         </div>
         <div class="col-md-3">
@@ -182,49 +127,10 @@
 {% block body %}
     {{ parent() }}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
-    <script type="text/javascript" src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
-    <script type="text/javascript">
+    <script src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
+    <script>
         $(function() {
-            var wrap = $('#wrap');
-            var overview = $('#overview');
-
-            wrap.perfectScrollbar();
+            $('#wrap').perfectScrollbar();
         });
-
-        {% if user.reputation > 0 %}
-            new Chart(document.getElementById("chart"), {
-                type: 'line',
-                data: {
-                    labels: [
-                        {% for item in chart %}
-                        '{{ item.label }}',
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        label: 'Reputacja z ostatnich 12 miesięcy',
-                        data: [
-                            {% for item in chart %}
-                            {{ item.value }},
-                            {% endfor %}
-                        ],
-                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                        borderColor: 'rgba(255, 159, 64, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-//                    maintainAspectRatio: false,
-                    scales: {
-                        xAxes: [{
-                            ticks: {
-                                display: false
-                            }
-                        }]
-                    }
-                }
-            });
-        {% endif %}
     </script>
 {% endblock %}

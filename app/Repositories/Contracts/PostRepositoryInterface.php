@@ -89,4 +89,10 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function takeStatsForUser($userId);
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function pieChart($userId);
 }

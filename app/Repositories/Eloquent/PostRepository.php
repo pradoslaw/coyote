@@ -275,6 +275,34 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function pieChart($userId)
+    {
+        $this->applyCriteria();
+
+        $result = $this
+            ->model
+            ->select(['forums.name', $this->raw('COUNT(*)')])
+            ->where('user_id', $userId)
+            ->join('forums', 'forums.id', '=', 'posts.forum_id')
+            ->groupBy(['forum_id', 'forums.name'])
+            ->orderBy($this->raw('COUNT(*)'), 'DESC')
+            ->get()
+            ->pluck('count', 'name');
+
+        $this->resetModel();
+
+        if (count($result) > 10) {
+            $others = $result->splice(10);
+            $result['Pozostałe'] = $others->sum();
+        }
+
+        return $result;
+    }
+
+    /**
      * @param $callback $callback
      * @return mixed
      */
