@@ -90,6 +90,10 @@
     border-bottom: 1px solid $border-color;
     font-size: 12px;
 
+    > div {
+      padding-left: 3px;
+    }
+
     small {
       display: block;
     }

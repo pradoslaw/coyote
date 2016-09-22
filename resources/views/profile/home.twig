@@ -36,7 +36,7 @@
 
                                 {% if user.location %}
                                     <li class="location">
-                                        <i class="fa fa-map-marker"></i>
+                                        <i class="fa fa-map-marker fa-fw"></i>
                                         {{ user.location }}
                                     </li>
                                 {% endif %}
@@ -215,8 +215,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
-                    beginAtZero: true,
+//                    maintainAspectRatio: false,
                     scales: {
                         xAxes: [{
                             ticks: {
