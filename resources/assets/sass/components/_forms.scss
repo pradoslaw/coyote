@@ -1,0 +1,11 @@
+@media screen and (max-width: $screen-sm) {
+  .form-control, .control-label, .checkbox {
+    font-size: $font-size-small;
+  }
+}
+
+@media screen and (max-width: $screen-xs) {
+  .help-block {
+    display: none;
+  }
+}
