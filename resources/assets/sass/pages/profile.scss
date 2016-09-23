@@ -26,10 +26,19 @@
       margin-top: 20px;
       display: block;
     }
+
+    @media screen and (max-width: $screen-sm) {
+      display: none;
+    }
   }
 
   h1 {
     margin-top: 0;
+    padding-left: 4px;
+
+    @media screen and (max-width: $screen-sm) {
+      font-size: $font-size-large;
+    }
   }
 
   .position {
