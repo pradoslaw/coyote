@@ -133,6 +133,12 @@
         background-color: $unread-bg-hover;
       }
     }
+
+    @media screen and (max-width: $screen-sm) {
+      .media-left {
+        display: none;
+      }
+    }
   }
 
   header {
@@ -203,6 +209,12 @@
 
   p.excerpt {
     margin-right: 15px !important;
+  }
+
+  @media screen and (max-width: $screen-xs) {
+    .pm-text, .excerpt {
+      font-size: $font-size-small;
+    }
   }
 }
 

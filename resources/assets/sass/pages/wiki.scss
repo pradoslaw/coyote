@@ -117,6 +117,10 @@
 article > header {
   h1 {
     margin-top: 0;
+
+    @media screen and (max-width: $screen-sm) {
+      font-size: 120%;
+    }
   }
 
   h5 {
@@ -335,6 +339,16 @@ article > header {
 
   .blog-text {
     font-size: 110%;
+  }
+
+  @media screen and (max-width: $screen-sm) {
+    .media-heading {
+      font-size: 110%;
+    }
+
+    .blog-text {
+      font-size: $font-size-small;
+    }
   }
 }
 

@@ -13,4 +13,10 @@
     top: 0;
     right: 65px;
   }
+
+  @media screen and (max-width: $screen-xs) {
+    > div {
+      display: none;
+    }
+  }
 }
