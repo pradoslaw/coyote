@@ -76,7 +76,7 @@
   }
 }
 
-#box-reputation, #box-post {
+#box-reputation, #box-posts {
   margin-top: 22px;
 }
 
@@ -111,6 +111,21 @@
 
     &:last-child {
       border-bottom: none;
+    }
+  }
+}
+
+#box-stats {
+  margin: 0 auto 10px auto;
+  font-size: $font-size-small;
+
+  li {
+    text-align: right;
+    border: none;
+
+    strong {
+      display: inline-block;
+      width: 20%;
     }
   }
 }

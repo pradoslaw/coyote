@@ -1,4 +1,6 @@
-<?php namespace Coyote;
+<?php
+
+namespace Coyote;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;

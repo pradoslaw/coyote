@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
@@ -275,8 +276,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
-     * @param int $userId
-     * @return mixed
+     * @inheritdoc
      */
     public function pieChart($userId)
     {
@@ -299,11 +299,91 @@ class PostRepository extends Repository implements PostRepositoryInterface
             $result['Pozostałe'] = $others->sum();
         }
 
-        return $result;
+        return $result->toArray();
     }
 
     /**
-     * @param $callback $callback
+     * @inheritdoc
+     */
+    public function lineChart($userId)
+    {
+        $dt = new Carbon('-6 months');
+        $interval = $dt->diffInMonths(new Carbon());
+
+        $sql = $this
+            ->model
+            ->selectRaw(
+                'extract(MONTH FROM created_at) AS month, extract(YEAR FROM created_at) AS year, COUNT(*) AS count'
+            )
+            ->whereRaw("user_id = $userId")
+            ->whereRaw("created_at >= '$dt'")
+            ->groupBy('year')
+            ->groupBy('month')
+            ->orderBy('year')
+            ->orderBy('month')
+            ->get();
+
+        $result = [];
+        foreach ($sql as $row) {
+            $result[sprintf('%d-%02d', $row['year'], $row['month'])] = $row->toArray();
+        }
+
+        $rowset = [];
+
+        for ($i = 0; $i <= $interval; $i++) {
+            $key = $dt->format('Y-m');
+            $label = $dt->formatLocalized('%B %Y');
+
+            if (!isset($result[$key])) {
+                $rowset[] = ['count' => 0, 'year' => $dt->format('Y'), 'month' => $dt->format('n'), 'label' => $label];
+            } else {
+                $rowset[] = array_merge($result[$key], ['label' => $label]);
+            }
+
+            $dt->addMonth(1);
+        }
+
+        return $rowset;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function countComments($userId)
+    {
+        return $this
+            ->app
+            ->make(Post\Comment::class)
+            ->where('user_id', $userId)
+            ->count();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function countReceivedVotes($userId)
+    {
+        return $this
+            ->model
+            ->selectRaw('SUM(score) AS votes')
+            ->where('user_id', $userId)
+            ->value('votes');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function countGivenVotes($userId)
+    {
+        return $this
+            ->app
+            ->make(Post\Vote::class)
+            ->where('user_id', $userId)
+            ->count();
+    }
+
+    /**
+     * @param callable $callback
      * @return mixed
      */
     private function build(callable $callback)

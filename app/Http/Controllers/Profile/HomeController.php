@@ -7,6 +7,7 @@ use Coyote\Http\Controllers\User\UserMenuTrait;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\User;
 
 class HomeController extends Controller
@@ -53,8 +54,12 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
 
+        $menu = $this->getUserMenu();
+        // activate "Profile" tab no matter what.
+        $menu->get('profile')->activate();
+
         return $this->view('profile.home')->with([
-            'top_menu'      => $this->getUserMenu(),
+            'top_menu'      => $menu,
             'user'          => $user,
             'skills'        => $user->skills()->orderBy('order')->get(),
             'tab'           => strtolower($tab),
@@ -85,9 +90,15 @@ class HomeController extends Controller
      */
     private function post(User $user)
     {
+        $this->post->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
+
         return view('profile.partials.posts', [
-            'user' => $user,
-            'pie' => $this->post->pieChart($user->id)
+            'user'          => $user,
+            'pie'           => $this->post->pieChart($user->id),
+            'line'          => $this->post->lineChart($user->id),
+            'comments'      => $this->post->countComments($user->id),
+            'given_votes'   => $this->post->countGivenVotes($user->id),
+            'received_votes'=> $this->post->countReceivedVotes($user->id),
         ]);
     }
 }

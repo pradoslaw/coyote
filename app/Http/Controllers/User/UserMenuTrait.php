@@ -18,7 +18,7 @@ trait UserMenuTrait
             if (auth()->check()) {
                 $menu->add('Moje konto', ['route' => 'user.home'])->nickname('user.home');
                 $menu->add('Ustawienia', ['route' => 'user.settings'])->nickname('user.settings');
-                $menu->add('Profil', ['route' => ['profile', auth()->user()->id]]);
+                $menu->add('Profil', ['route' => ['profile', auth()->user()->id]])->nickname('profile');
             }
         });
     }

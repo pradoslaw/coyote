@@ -92,7 +92,31 @@ interface PostRepositoryInterface extends RepositoryInterface
 
     /**
      * @param int $userId
-     * @return mixed
+     * @return array
      */
     public function pieChart($userId);
+
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public function lineChart($userId);
+
+    /**
+     * @param int $userId
+     * @return int
+     */
+    public function countComments($userId);
+
+    /**
+     * @param int $userId
+     * @return int
+     */
+    public function countReceivedVotes($userId);
+
+    /**
+     * @param int $userId
+     * @return int mixed
+     */
+    public function countGivenVotes($userId);
 }
