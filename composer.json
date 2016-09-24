@@ -7,11 +7,11 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/wouter2203/php-diff"
+            "url": "https://github.com/adam-boduch/laravel-grid"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/adam-boduch/laravel-grid"
+            "url": "https://github.com/chrisboulton/php-diff"
         }
     ],
     "description": "4programmers.net",
@@ -45,9 +45,9 @@
         "elasticsearch/elasticsearch": "~2.0",
         "guzzlehttp/guzzle": "^6.2",
         "adam-boduch/geshi": "dev-master",
-        "chrisboulton/php-diff": "dev-master",
         "jenssegers/agent": "^2.3",
-        "adam-boduch/laravel-grid": "dev-master"
+        "adam-boduch/laravel-grid": "dev-master",
+        "chrisboulton/php-diff": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",

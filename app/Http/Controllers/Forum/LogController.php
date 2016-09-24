@@ -11,7 +11,6 @@ use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Activities\Rollback as Stream_Rollback;
 use Coyote\Post\Log;
-use Illuminate\Http\Request;
 
 class LogController extends BaseController
 {
@@ -37,11 +36,10 @@ class LogController extends BaseController
     /**
      * Show post history
      *
-     * @param Request $request
      * @param \Coyote\Post $post
      * @return mixed
      */
-    public function log(Request $request, $post)
+    public function log($post)
     {
         /** @var \Coyote\Topic $topic */
         $topic = $this->topic->find($post->topic_id);
@@ -50,28 +48,24 @@ class LogController extends BaseController
         $this->authorize('update', $forum);
 
         $this->breadcrumb($forum);
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
-        $this->breadcrumb->push('Historia postu', route('forum.post.log', [$post->id]));
+        $this->breadcrumb->push([
+            $topic->subject => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
+            'Historia postu' => route('forum.post.log', [$post->id])
+        ]);
 
         $logs = $this->log->takeForPost($post->id);
 
-        /** @var \Coyote\Services\Parser\Factories\DiffFactory $parser */
-        $parser = app('parser.' . ($request->has('diff') ? 'diff' : 'post'));
+        $raw = $logs->pluck('text')->toJson();
+
+        /** @var \Coyote\Services\Parser\Factories\AbstractFactory $parser */
+        $parser = app('parser.post');
         $parser->setEnableCache(false);
 
-        foreach ($logs as $index => &$log) {
-            if ($request->has('diff')) {
-                if (isset($logs[$index + 1])) {
-                    $parser->setContext($logs[$index + 1]->text);
-                } else {
-                    $parser->setContext(null);
-                }
-            }
-
+        foreach ($logs as &$log) {
             $log->text = $parser->parse($log->text);
         }
 
-        return $this->view('forum.log')->with(compact('logs', 'post', 'forum', 'topic'));
+        return $this->view('forum.log')->with(compact('logs', 'post', 'forum', 'topic', 'raw'));
     }
 
     /**
@@ -115,6 +109,8 @@ class LogController extends BaseController
             );
         });
 
-        return redirect()->route('forum.topic', [$forum->slug, $topic->id, $topic->slug])->with('success', 'Post został przywrócony.');
+        return redirect()
+            ->route('forum.topic', [$forum->slug, $topic->id, $topic->slug])
+            ->with('success', 'Post został przywrócony.');
     }
 }

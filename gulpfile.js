@@ -117,7 +117,8 @@ elixir(function (mix) {
             '../bower/jquery-ui/ui/minified/sortable.min.js'
         ], 'public/js/jquery-ui.js')
 
-        .scripts(['../bower/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'], 'public/js/datepicker.js');
+        .scripts(['../bower/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'], 'public/js/datepicker.js')
+        .scripts(['../bower/pretty-text-diff/jquery.pretty-text-diff.js'], 'public/js/diff.js');
 
     mix.sass('main.scss')
         .sass('pages/auth.scss')

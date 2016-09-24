@@ -58,7 +58,7 @@
                                     </p>
                                 </div>
 
-                                <div class="col-xs-10 col-body">
+                                <div class="col-xs-10 col-body diff">
                                     <div class="post-content">
                                         {{ log.text|raw }}
                                     </div>
@@ -96,11 +96,7 @@
             <div class="box">
                 <ul class="side-menu">
                     <li class="btn-diff">
-                        {% if request().has('diff') %}
-                            <a title="Ukryj różnice w postach" href="{{ url }}">Ukryj różnice</a>
-                        {% else %}
-                            <a title="Pokaż różnice w postach" href="{{ url }}?diff=1">Pokaż różnice</a>
-                        {% endif %}
+                        <a title="Pokaż różnice w postach" href="javascript:">Pokaż różnice</a>
                     </li>
                 </ul>
             </div>
@@ -112,4 +108,41 @@
     {{ modal.confirm('Treść postu zostanie zastąpiona. Czy chcesz kontynuować?', 'Potwierdź operację', 'confirm', 'Tak, cofnij') }}
     {{ form_close() }}
 
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"></script>
+    <script src="{{ cdn('js/diff.js') }}"></script>
+
+    <script>
+        var raw = {{ raw|raw }};
+        var parsed = [];
+
+        $(function() {
+            $('.btn-diff a').click(function() {
+                if (!parsed.length) {
+                    $('.diff').each(function (index) {
+                        parsed.push($(this).find('.post-content').html());
+
+                        if (index < raw.length - 1) {
+                            $(this).prettyTextDiff({
+                                originalContent: raw[index],
+                                changedContent: raw[index + 1],
+                                diffContainer: '.post-content'
+                            });
+                        }
+                    });
+                }
+                else {
+                    $('.post-content').each(function(index) {
+                        $(this).html(parsed[index]);
+                    });
+
+                    parsed = [];
+                }
+            });
+        });
+    </script>
 {% endblock %}
