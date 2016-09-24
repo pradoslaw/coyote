@@ -167,6 +167,10 @@
   height: 100%;
   position: absolute;
   right: 0;
+
+  @media screen and (max-width: $screen-sm) {
+    width: 40px;
+  }
 }
 
 #col-toggle {
@@ -310,7 +314,6 @@
 }
 
 .vote-up, .vote-accept {
-  font-size: 18px;
   opacity: .8;
 
   &:hover {
@@ -319,7 +322,6 @@
 }
 
 .vote-count {
-  font-size: 22px;
   margin: 5px 0 15px 0;
   line-height: 120%;
 }
@@ -342,9 +344,13 @@
   }
 }
 
+.vote-up, .vote-count {
+  font-size: $font-size-large;
+}
+
 .vote-accept {
   margin-top: 10px;
-  font-size: 25px;
+  font-size: $font-size-large + 5px;
 }
 
 .vote-accept.on {
@@ -353,6 +359,16 @@
 
 div.tooltip-inner {
   font-size: 11px;
+}
+
+@media screen and (max-width: $screen-sm) {
+  .vote-up, .vote-count {
+    font-size: $font-size-base;
+  }
+
+  .vote-accept {
+    font-size: $font-size-base + 3px;
+  }
 }
 
 // Komentarze na forum

@@ -96,17 +96,17 @@
 
                     {% if not post.deleted_at %}
                         <a class="vote-up {{ post.vote_on ? 'on' }}" href="{{ route('forum.post.vote', [post.id]) }}" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
-                            <i class="fa fa-thumbs-o-up"></i>
-                            <i class="fa fa-thumbs-up"></i>
+                            <i class="fa fa-thumbs-o-up fa-fw"></i>
+                            <i class="fa fa-thumbs-up fa-fw"></i>
                         </a>
 
                         {% if (auth_check() and user('id') == posts[0].user_id or can('update', forum)) and index > 0 %}
                             <a class="vote-accept {{ post.accept_on ? 'on' }}" href="{{ route('forum.post.accept', [post.id]) }}" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
-                                <i class="fa fa-check-circle-o"></i>
+                                <i class="fa fa-check-circle-o fa-fw"></i>
                             </a>
                         {% elseif post.accept_on %}
                             <a class="vote-accept on">
-                                <i class="fa fa-check-circle-o"></i>
+                                <i class="fa fa-check-circle-o fa-fw"></i>
                             </a>
                         {% endif %}
                     {% endif %}
