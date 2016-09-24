@@ -18,6 +18,7 @@ elixir(function (mix) {
         '../bower/bootstrap/js/tooltip.js',
         '../bower/bootstrap/js/dropdown.js',// menu jest na kazdej stronie (dla uzytkownikow zalogowanych)
         '../bower/bootstrap/js/collapse.js', // to musi sie znajdowac na kazdej podstronie (zwijanie menu dla urzadzen mobilnych)
+        'components/breadcrumb.js',
         'components/realtime.js',
         'components/state.js',
         'components/declination.js',
@@ -27,7 +28,6 @@ elixir(function (mix) {
         'components/vcard.js',
         'components/popover.js',
         'components/flag.js',
-        'components/breadcrumb.js',
         'main.js'
     ];
 

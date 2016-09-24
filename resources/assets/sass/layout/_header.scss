@@ -1,9 +1,11 @@
 @charset "UTF-8";
 @import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/nav-divider";
 
+$header-height: 56px;
+
 // odstep potrzebny z uwagi na klase .navbar-fixed-top ktora powoduje iz menu jest przyklejone do gornej krawedzi
 body.fixed-top {
-  padding-top: 56px;
+  padding-top: $header-height;
 }
 
 // Gorny, zielony pasek wyswietlany na samej gorze ekranu

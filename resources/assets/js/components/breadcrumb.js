@@ -33,13 +33,35 @@ $(function () {
         }
     };
 
+    // if navbar class navbar-fixed-top class, we must scroll to appropriate page element according to
+    // window.location.hash.
+    if ('onhashchange' in window) {
+        var header = $('header.navbar-default.navbar-fixed-top');
+
+        if (header.length) {
+            $(window).bind('hashchange', function() {
+                var target = $(window.location.hash);
+
+                if (target.length) {
+                    $('html, body').animate({ scrollTop: target.offset().top - header.height() }, 0);
+                }
+            });
+        }
+
+        $(window).load(function() {
+            if (window.location.hash !== '') {
+                $(window).trigger('hashchange');
+            }
+        });
+    }
+
     var isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
     if (!isMobile && $('#front-end').length === 1) {
         if (window.location.hash.length) {
             setTimeout(function() {
                 $(window).scroll(handler);
-            }, 1000);
+            }, 2000);
         }
         else {
             $(window).scroll(handler).trigger('scroll');
