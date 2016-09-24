@@ -20,7 +20,7 @@ class PostPolicy
      */
     private function check($ability, User $user, Post $post, Forum $forum)
     {
-        return $user->id === $post->user_id || $forum->ability($ability, $user->id) || $user->ability($ability);
+        return $user->id === $post->user_id || $forum->ability($ability, $user->id) || $user->can($ability);
     }
 
     /**

@@ -17,7 +17,7 @@ class JobPolicy
      */
     public function update(User $user, Job $job)
     {
-        return $user->id === $job->user_id || $user->ability('job-update');
+        return $user->id === $job->user_id || $user->can('job-update');
     }
 
     /**
@@ -27,6 +27,6 @@ class JobPolicy
      */
     public function delete(User $user, Job $job)
     {
-        return $user->id === $job->user_id || $user->ability('job-delete');
+        return $user->id === $job->user_id || $user->can('job-delete');
     }
 }

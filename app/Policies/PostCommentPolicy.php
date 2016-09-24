@@ -20,7 +20,7 @@ class PostCommentPolicy
      */
     private function check($ability, User $user, Comment $comment, Forum $forum)
     {
-        return $user->id === $comment->user_id || $forum->ability($ability, $user->id) || $user->ability($ability);
+        return $user->id === $comment->user_id || $forum->ability($ability, $user->id) || $user->can($ability);
     }
 
     /**

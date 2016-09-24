@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * @property int $id
@@ -186,7 +185,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @return mixed
      */
-    private function getPermissions()
+    public function getPermissions()
     {
         return $this
             ->permissions()
@@ -195,27 +194,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             ->select(['name', 'value'])
             ->get()
             ->lists('value', 'name');
-    }
-
-    /**
-     * Sprawdza uprawnienie danego usera (w bazie danych) do wykonania danej czynnosci. Sprawdzane
-     * sa wszystkie grupy uzytkownika do ktorych jest przypisany
-     *
-     * @param string $ability
-     * @return bool
-     */
-    public function ability($ability)
-    {
-        // @todo nie powinnismy uzywac cache w modelu
-        if (config('cache.default') !== 'file') {
-            $permissions = Cache::tags(['permissions'])->rememberForever('permission:' . $this->id, function () {
-                return $this->getPermissions();
-            });
-        } else {
-            $permissions = $this->getPermissions();
-        }
-
-        return isset($permissions[$ability]) ? $permissions[$ability] : false;
     }
 
     /**

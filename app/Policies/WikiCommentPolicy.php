@@ -17,7 +17,7 @@ class WikiCommentPolicy
      */
     private function check(User $user, Comment $comment)
     {
-        return $user->id === $comment->user_id || $user->ability('wiki-admin');
+        return $user->id === $comment->user_id || $user->can('wiki-admin');
     }
 
     /**

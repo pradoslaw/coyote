@@ -18,7 +18,7 @@ class ForumPolicy
      */
     private function check($ability, User $user, Forum $forum)
     {
-        return $forum->ability($ability, $user->id) || $user->ability($ability);
+        return $forum->ability($ability, $user->id) || $user->can($ability);
     }
 
     /**

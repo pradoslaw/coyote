@@ -17,7 +17,7 @@ class FirmPolicy
      */
     public function update(User $user, Firm $firm)
     {
-        return $user->id === $firm->user_id || $user->ability('firm-update');
+        return $user->id === $firm->user_id || $user->can('firm-update');
     }
 
     /**
@@ -27,6 +27,6 @@ class FirmPolicy
      */
     public function delete(User $user, Firm $firm)
     {
-        return $user->id === $firm->user_id || $user->ability('firm-delete');
+        return $user->id === $firm->user_id || $user->can('firm-delete');
     }
 }

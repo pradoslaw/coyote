@@ -17,7 +17,7 @@ class MicroblogPolicy
      */
     public function update(User $user, Microblog $microblog)
     {
-        return $user->id === $microblog->user_id || $user->ability('microblog-update');
+        return $user->id === $microblog->user_id || $user->can('microblog-update');
     }
 
     /**
@@ -27,6 +27,6 @@ class MicroblogPolicy
      */
     public function delete(User $user, Microblog $microblog)
     {
-        return $user->id === $microblog->user_id || $user->ability('microblog-delete');
+        return $user->id === $microblog->user_id || $user->can('microblog-delete');
     }
 }
