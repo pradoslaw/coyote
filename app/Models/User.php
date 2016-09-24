@@ -219,32 +219,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * @param $group
-     */
-    public function attachGroup($group)
-    {
-        if (is_object($group)) {
-            $group = $group->getKey();
-        }
-
-        $this->groups()->attach($group);
-        Cache::tags('permission:' . $this->id)->flush();
-    }
-
-    /**
-     * @param $group
-     */
-    public function detachGroup($group)
-    {
-        if (is_object($group)) {
-            $group = $group->getKey();
-        }
-
-        $this->groups()->detach($group);
-        Cache::tags('permission:' . $this->id)->flush();
-    }
-
-    /**
      * @param string $ip
      * @return bool
      */
