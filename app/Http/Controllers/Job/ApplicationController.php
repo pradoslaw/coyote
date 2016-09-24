@@ -7,6 +7,7 @@ use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
+use Illuminate\Mail\Message;
 
 class ApplicationController extends Controller
 {
@@ -14,7 +15,7 @@ class ApplicationController extends Controller
 
     /**
      * @param Job $job
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function submit(Job $job)
     {
@@ -29,7 +30,7 @@ class ApplicationController extends Controller
         if ($this->userId) {
             $form->email->setValue(auth()->user()->email);
             // set default message
-            $form->message->setValue(view('job.partials.application', compact('job')));
+            $form->text->setValue(view('job.partials.application', compact('job')));
         }
 
         return $this->view('job.application', compact('job', 'form'))->with(
@@ -61,25 +62,23 @@ class ApplicationController extends Controller
             $job->applications()->create($data);
             $job = $job->toArray();
 
-            $this->getMailFactory()->send([], [], function ($mailer) use ($data, $job, $attachment) {
-                if (!empty($data['phone'])) {
-                    // @todo do zmiany, nie mozemy konstrulowac tagow html w tekscie
-                    $data['message'] .= '<br>Nr tel.: ' . $data['phone'];
-                }
+            $this->getMailFactory()->send(
+                'emails.job.application',
+                $data,
+                function (Message $message) use ($data, $job, $attachment) {
+                    $message->to($job['email']);
+                    $message->replyTo($data['email'], $data['name']);
+                    $message->subject(sprintf('[%s] %s', $data['name'], $job['title']));
 
-                $mailer->to($job['email']);
-                $mailer->replyTo($data['email'], $data['name']);
-                $mailer->subject(sprintf('[%s] %s', $data['name'], $job['title']));
-                $mailer->setBody($data['message'], 'text/html');
+                    if (!empty($attachment)) {
+                        $message->attachData($attachment['content'], $attachment['name']);
+                    }
 
-                if (!empty($attachment)) {
-                    $mailer->attachData($attachment['content'], $attachment['name']);
+                    if (!empty($data['cc'])) {
+                        $message->cc($data['email']);
+                    }
                 }
-
-                if (!empty($data['cc'])) {
-                    $mailer->cc($data['email']);
-                }
-            });
+            );
         });
 
         return redirect()

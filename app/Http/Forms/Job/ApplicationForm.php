@@ -48,7 +48,7 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                     'placeholder' => 'Kliknij, aby dodać załącznik'
                 ]
             ])
-            ->add('message', 'textarea', [
+            ->add('text', 'textarea', [
                 'rules' => 'string|required|max:5000',
                 'label' => 'Wiadomość dla pracodawcy/zleceniodawcy',
                 'help' => 'Taką wiadomość otrzyma osoba, która wystawiła ogłoszenie'
