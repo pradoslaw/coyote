@@ -101,6 +101,7 @@ class AuthServiceProvider extends ServiceProvider
             return $this->permissions[$user->id];
         }
 
+        // file cache driver does not support tagging.
         if (config('cache.default') !== 'file') {
             $cache = $this->app[CacheManager::class];
 
