@@ -53,7 +53,7 @@
                         <div class="post">
                             <div class="post-body">
                                 <div class="row">
-                                    <div class="col-xs-2 col-user">
+                                    <div class="col-sm-2 col-xs-12 col-user">
                                         <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
                                             {% if post.user_id %}
                                                 {{ link_to_profile(users[post.user_id]) }}
@@ -63,13 +63,13 @@
                                         </h5>
                                     </div>
 
-                                    <div class="col-xs-10 col-subject">
+                                    <div class="col-sm-10 col-xs-12 col-subject">
                                          <h5><a href="{{ route('forum.topic', [post.forum.slug, post.topic_id, post.topic.slug]) }}?p={{ post.id }}#id{{ post.id }}">{{ elastic_highlight(highlights[post.id]['topic.subject'], post.topic.subject) }}</a></h5>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-2 col-user hidden-xss">
+                                    <div class="col-xs-2 col-user hidden-xs">
                                         <p class="hidden-xs">
                                             <strong>Data:</strong>
                                             <small>{{ post.created_at|format_date }}</small>
