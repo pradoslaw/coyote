@@ -1,5 +1,11 @@
 {% import 'components.modals' as modals %}
 
+<div class="box-apply">
+    <span class="outline">
+        <a class="btn btn-primary" href="{{ route('job.candidate', [job.id]) }}">Aplikuj na to stanowisko</a>
+    </span>
+</div>
+
 <ul class="side-menu">
     <li>
         {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}

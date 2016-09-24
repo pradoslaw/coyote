@@ -24,13 +24,6 @@ $header-footer-border: #c7c7c7;
       }
     }
   }
-
-  .outline {
-    border-radius: $border-radius-large;
-    background-color: darken($gray-lighter, 4%);
-    padding: 5px;
-    display: inline-block;
-  }
 }
 
 // Formularz wyszukiwania oferty
