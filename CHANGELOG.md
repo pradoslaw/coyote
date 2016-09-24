@@ -6,7 +6,8 @@
 - Obsługa markdown w całym miejscu serwisu (wiadomości prywatne, forum, mikroblogi, praca)
 - Możliwość logowania/rejestrowania poprzez OAuth Github, Facebook oraz Google
 - Drobne poprawki graficzne w stosunku do wersji 1.x
-- Powiadomienia w czasie rzeczywistym dzięki użyciu WebSockets
+- Powiadomienia w czasie rzeczywistym dzięki użyciu HTML5 WebSockets
+- Tzw. "sticky header" domyślnie dla wszystkich (bez możliwości wyłączenia)
 
 **Mikroblogi**:
 - Możliwość obserwowania/zaptrzestania obserwacji konkretnego wpisu
@@ -37,6 +38,7 @@
 - Algorytm korygowania nazw miejscowości. Np. Warsaw => Warszawa, Poznan => Poznań itp
 - Lepsze geokodowanie nazw miejscowości
 - Możliwość zgłaszania nieprawidłowych ofert pracy (czyli takich gdzie potrzebna jest interwencja moderatora)
+- Dodatkowe pole na podanie minimalnego wynagrodzenia przy aplikowaniu o pracę
 
 **Pastebin**:
 - Możliwośc nadawania tytułów wpisów

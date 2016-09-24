@@ -7,6 +7,25 @@ use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 
 class ApplicationForm extends Form implements ValidatesWhenSubmitted
 {
+    /**
+     * @var array
+     */
+    private $salaryChoices = [
+        'od 1000 zl m-c',
+        'od 2000 zl m-c',
+        'od 3000 zl m-c',
+        'od 4000 zl m-c',
+        'od 5000 zl m-c',
+        'od 6000 zl m-c',
+        'od 7000 zl m-c',
+        'od 8000 zl m-c',
+        'od 9000 zl m-c',
+        'od 10000 zl m-c',
+    ];
+
+    /**
+     * @var string
+     */
     protected $theme = self::THEME_INLINE;
 
     /**
@@ -47,6 +66,11 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                 'attr' => [
                     'placeholder' => 'Kliknij, aby dodać załącznik'
                 ]
+            ])
+            ->add('salary', 'select', [
+                'label' => 'Minimalne oczekiwania wynagrodzenie',
+                'empty_value' => 'Do negocjacji',
+                'choices' => array_combine($this->salaryChoices, $this->salaryChoices)
             ])
             ->add('text', 'textarea', [
                 'rules' => 'string|required|max:5000',

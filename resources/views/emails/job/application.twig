@@ -2,8 +2,12 @@
 
 <br><br>
 <hr>
-Imię i nazwisko: {{ name }}<br>
+Imię i nazwisko: <b>{{ name }}</b><br>
 
 {% if phone %}
-Numer telefonu: {{ phone }}
+Numer telefonu: <b>{{ phone }}</b><br>
+{% endif %}
+
+{% if salary %}
+Minimalne oczekiwane wynagrodzenie: <b>{{ salary }}</b><br>
 {% endif %}
