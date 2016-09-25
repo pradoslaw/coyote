@@ -15,6 +15,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
+use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
 
 abstract class Controller extends BaseController
@@ -84,16 +85,21 @@ abstract class Controller extends BaseController
      */
     protected function buildMenu()
     {
-        $menu = app(Menu::class)->make('main', function ($menu) {
-            // @todo tymczasowo wyswietlana ikona "Nowosc" przy ofertach pracy.
-            $badge = app('html')->tag('span', 'Nowość', ['class' => 'badge new']);
+        $menu = app(Menu::class)->make('main', function (Builder $menu) {
+            foreach (config('laravel-menu.master') as $title => $data) {
+                $children = array_pull($data, 'children');
+                $item = $menu->add($title, $data);
 
-            $menu->add('Forum', ['route' => 'forum.home', 'as' => 'forum'])->active('Forum/*');
-            $menu->add('Mikroblogi', ['route' => 'microblog.home'])->active('Mikroblogi/*');
-            $menu->add('Praca', ['route' => 'job.home'])->append($badge)->active('Praca/*');
-            $menu->add('Pastebin', ['route' => 'pastebin.show'])->active('Pastebin/*');
-            $menu->add('Kompendium', ['url' => 'Kategorie']);
+                foreach ((array) $children as $key => $child) {
+                    /** @var \Lavary\Menu\Item $item */
+                    $item->add($key, $child);
+                }
+            }
         });
+
+        // tymczasowo wyswietlana ikona "Nowosc" przy ofertach pracy.
+        $badge = app('html')->tag('span', 'Nowość', ['class' => 'badge new']);
+        $menu->get('praca')->append($badge);
 
         // cache user customized menu for 7 days
         $categories = $this->getCacheFactory()->tags(['menu-for-user'])->remember('menu-for-user:' . $this->userId, 60 * 24 * 7, function () {
@@ -123,14 +129,14 @@ abstract class Controller extends BaseController
      */
     protected function view($view = null, $data = [])
     {
-        // public JS variables
-        $data['public'] = json_encode($this->public);
-
-        if (count($this->breadcrumb)) {
-            $data['breadcrumb'] = $this->breadcrumb->render();
-        }
-
         if (!request()->ajax()) {
+            // public JS variables
+            $data['public'] = json_encode($this->public);
+
+            if (count($this->breadcrumb)) {
+                $data['breadcrumb'] = $this->breadcrumb->render();
+            }
+
             $data['menu'] = $this->buildMenu();
         }
 

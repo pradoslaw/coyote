@@ -46,21 +46,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-boduch/laravel-grid.git",
-                "reference": "e12c91b49cf49385afbd0bdfd7c7cf579d830aba"
+                "reference": "c85cd580e5c7a6a0c0a1bc58350bf9058ae7fa1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/e12c91b49cf49385afbd0bdfd7c7cf579d830aba",
-                "reference": "e12c91b49cf49385afbd0bdfd7c7cf579d830aba",
+                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/c85cd580e5c7a6a0c0a1bc58350bf9058ae7fa1a",
+                "reference": "c85cd580e5c7a6a0c0a1bc58350bf9058ae7fa1a",
                 "shasum": ""
             },
             "require": {
-                "illuminate/http": "^5.2",
-                "illuminate/pagination": "^5.2",
-                "illuminate/support": "^5.2",
-                "illuminate/validation": "^5.2",
-                "illuminate/view": "^5.2",
-                "laravelcollective/html": "5.2.*",
+                "illuminate/http": "5.2.*|5.3.*",
+                "illuminate/pagination": "5.2.*|5.3.*",
+                "illuminate/support": "5.2.*|5.3.*",
+                "illuminate/validation": "5.2.*|5.3.*",
+                "illuminate/view": "5.2.*|5.3.*",
+                "laravelcollective/html": "5.2.*|5.3.*",
                 "nesbot/carbon": "^1.21"
             },
             "require-dev": {
@@ -90,7 +90,7 @@
                 "source": "https://github.com/adam-boduch/laravel-grid/tree/master",
                 "issues": "https://github.com/adam-boduch/laravel-grid/issues"
             },
-            "time": "2016-09-01 08:44:03"
+            "time": "2016-09-25 07:31:19"
         },
         {
             "name": "barryvdh/laravel-debugbar",
