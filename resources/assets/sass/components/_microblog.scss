@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import "../helpers/variables";
+@import "../helpers/mixins";
 @import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
 
 .microblog {
@@ -15,10 +16,6 @@
   .media {
     overflow: visible;
   }
-
-  //> .media-left {
-  //  padding-right: 15px;
-  //}
 }
 
 // zmienia kolor daty rowniez w rubryce "najpopularniejsze"
@@ -33,6 +30,8 @@
   padding: 10px 0;
   overflow: hidden;
   position: relative;
+
+  @include break-word;
 
   > .thumbnails {
     margin-top: 20px;
@@ -133,6 +132,8 @@
     .media-content {
       font-size: 12px;
       display: inline;
+
+      @include break-word;
 
       // markdown moze "produkowac" <p> w tresci komentarza
       p {
