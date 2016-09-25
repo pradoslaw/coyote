@@ -51,6 +51,13 @@ class Create extends Command
                                     "common_words_filter" => [
                                         "type" => "stop",
                                         "stopwords" => config('elasticsearch.stopwords')
+                                    ],
+                                    "keep_symbols_filter" => [
+                                        "type" => "word_delimiter",
+                                        "type_table" => [
+                                            "# => ALPHANUM",
+                                            "+ => ALPHANUM"
+                                        ]
                                     ]
                                 ],
                                 "analyzer" => [
@@ -59,18 +66,18 @@ class Create extends Command
                                         "filter" => "lowercase"
                                     ],
                                     "stopwords_analyzer" => [
-                                        "type" => "custom",
                                         "tokenizer" => "whitespace",
                                         "filter" => [
                                             "lowercase",
-                                            "common_words_filter"
+                                            "common_words_filter",
+                                            "keep_symbols_filter"
                                         ]
                                     ],
                                     "default_analyzer" => [
-                                        "type" => "custom",
                                         "tokenizer" => "whitespace",
                                         "filter" => [
-                                            "lowercase"
+                                            "lowercase",
+                                            "keep_symbols_filter"
                                         ]
                                     ]
                                 ]
