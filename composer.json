@@ -11,12 +11,12 @@
     ],
     "require": {
         "nesbot/carbon": "^1.21",
-        "illuminate/http": "^5.2",
-        "illuminate/support": "^5.2",
-        "illuminate/view": "^5.2",
-        "illuminate/pagination": "^5.2",
-        "illuminate/validation": "^5.2",
-        "laravelcollective/html": "5.2.*"
+        "illuminate/http": "5.2.*|5.3.*",
+        "illuminate/support": "5.2.*|5.3.*",
+        "illuminate/view": "5.2.*|5.3.*",
+        "illuminate/pagination": "5.2.*|5.3.*",
+        "illuminate/validation": "5.2.*|5.3.*",
+        "laravelcollective/html": "5.2.*|5.3.*"
     },
     "require-dev": {
       "phpunit/phpunit": "~4.0",
