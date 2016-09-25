@@ -65,8 +65,8 @@ class AuthServiceProvider extends ServiceProvider
     ];
 
     /**
-     * Users permissions.
-     * A little cache so we don't have to request db/cache every time.
+     * Users' permissions.
+     * A little cache so we don't have to request db/redis every time.
      *
      * @var array
      */
