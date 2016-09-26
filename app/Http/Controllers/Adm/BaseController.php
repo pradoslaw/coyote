@@ -12,6 +12,13 @@ use Illuminate\Contracts\Cache\Repository as Cache;
  */
 class BaseController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->breadcrumb->push('Panel administracyjny', route('adm.home'));
+    }
+
     /**
      * @return \Lavary\Menu\Builder
      */
@@ -81,6 +88,9 @@ class BaseController extends Controller
         return app('log-viewer');
     }
 
+    /**
+     * Clear users cache permission after updating groups etc.
+     */
     protected function flushPermission()
     {
         app(Cache::class)->tags('permissions')->flush();
