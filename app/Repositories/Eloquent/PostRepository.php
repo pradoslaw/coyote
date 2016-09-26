@@ -265,9 +265,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 'forums.slug',
                 'forums.name',
                 $this->raw('COUNT(posts.id) AS posts_count'),
-                $this->raw('COUNT(post_votes.id) AS votes_count')
+                $this->raw('SUM(score) AS votes_count')
             ])
-            ->leftJoin('post_votes', 'post_votes.post_id', '=', 'posts.id')
             ->join('forums', 'forums.id', '=', 'posts.forum_id')
             ->where('posts.user_id', $userId)
             ->groupBy('posts.forum_id')
