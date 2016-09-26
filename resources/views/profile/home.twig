@@ -83,10 +83,12 @@
                 </div>
             </div>
 
-            <ul class="nav nav-pills">
-                <li role="presentation" {{ tab == 'reputation' ? 'class="active"' }}><a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}" role="tab" data-toggle="tab">Reputacja</a></li>
-                <li role="presentation" {{ tab == 'post' ? 'class="active"' }}><a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}" role="tab" data-toggle="tab">Posty na forum</a></li>
-            </ul>
+            {% if user.posts > 0 %}
+                <ul class="nav nav-pills">
+                    <li role="presentation" {{ tab == 'reputation' ? 'class="active"' }}><a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}" role="tab" data-toggle="tab">Reputacja</a></li>
+                    <li role="presentation" {{ tab == 'post' ? 'class="active"' }}><a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}" role="tab" data-toggle="tab">Posty na forum</a></li>
+                </ul>
+            {% endif %}
 
             <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
 

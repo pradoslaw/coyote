@@ -1,29 +1,30 @@
-<div id="box-posts" class="box">
+{% if user.posts > 0 %}
+    <div id="box-posts" class="box">
 
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-sm-6">
-                    <canvas id="pie-chart"></canvas>
-                </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <canvas id="pie-chart"></canvas>
+                    </div>
 
-                <div class="col-sm-6">
-                    <ul id="box-stats" class="list-group row">
-                        <li class="list-group-item col-sm-6">Postów: <strong>{{ user.posts }}</strong></li>
-                        <li class="list-group-item col-sm-6">Komentarzy: <strong>{{ comments }}</strong></li>
-                        <li class="list-group-item col-sm-6">Głosów oddanych: <strong>{{ given_votes }}</strong></li>
-                        <li class="list-group-item col-sm-6">Głosów otrzymanych: <strong>{{ received_votes }}</strong></li>
-                    </ul>
+                    <div class="col-sm-6">
+                        <ul id="box-stats" class="list-group row">
+                            <li class="list-group-item col-sm-6">Postów: <strong>{{ user.posts }}</strong></li>
+                            <li class="list-group-item col-sm-6">Komentarzy: <strong>{{ comments }}</strong></li>
+                            <li class="list-group-item col-sm-6">Głosów oddanych: <strong>{{ given_votes }}</strong></li>
+                            <li class="list-group-item col-sm-6">Głosów otrzymanych: <strong>{{ received_votes }}</strong></li>
+                        </ul>
 
-                    <canvas id="line-chart"></canvas>
+                        <canvas id="line-chart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    {% if user.posts > 0 %}
+    <script>
+
         new Chart(document.getElementById("pie-chart"), {
             type: 'pie',
             data: {
@@ -78,5 +79,6 @@
                 }]
             }
         });
-    {% endif %}
-</script>
+
+    </script>
+{% endif %}
