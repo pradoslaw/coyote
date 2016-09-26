@@ -76,10 +76,6 @@
     margin: 0;
     @include text-overflow();
     line-height: 116%;
-
-    a {
-      color: darken($brand-primary, 10%);
-    }
   }
 
   .topic-pagination {

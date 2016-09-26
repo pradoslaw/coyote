@@ -107,3 +107,14 @@ $arrow-size: 8px;
   border-width: $arrow-size + 3px;
   margin-left: -($arrow-size + 3px);
 }
+
+// naglowek dla popover. np. na forum w opcji "udostepnij" (skrocony link do posta)
+.popover-title {
+  color: $gray;
+  font-size: 12px;
+}
+
+// potrzebne aby wlasciwie dopasowac szerokosc popover w przypadku gdy w srodku np. jest <input>
+.popover {
+  max-width: 100%;
+}

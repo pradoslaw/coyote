@@ -119,10 +119,6 @@
     @include text-overflow();
   }
 
-  a {
-    color: darken($brand-primary, 10%);
-  }
-
   .btn-view {
     margin-top: 4px;
   }
