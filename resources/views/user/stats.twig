@@ -22,7 +22,7 @@
                 var totalPosts = 0, totalVotes = 0;
 
                 $('.switcher:checked').each(function() {
-                    var parent = $(this).parent().parent();
+                    var parent = $(this).parents('tr');
 
                     totalPosts += parseInt(parent.children('td:eq(1)').text()) || 0;
                     totalVotes += parseInt(parent.children('td:eq(2)').text()) || 0;
