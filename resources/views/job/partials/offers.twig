@@ -32,6 +32,10 @@
                         <td class="col-body">
                             <h2><a href="{{ url }}" title="{{ job.title }}">{{ job.title }}</a></h2>
 
+                            {% if job.score >= 150 %}
+                                <img src="/img/medal.png" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy">
+                            {% endif %}
+
                             <p>
                                 {% if job.firm %}
                                     <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a>

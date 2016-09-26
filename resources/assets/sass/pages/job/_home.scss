@@ -199,6 +199,7 @@ $header-footer-border: #c7c7c7;
       h2 {
         font-size: 15px;
         margin: 0 0 5px 0;
+        float: left;
 
         a {
           color: darken($brand-primary, 10%);
@@ -309,4 +310,8 @@ $header-footer-border: #c7c7c7;
     margin-top: 0;
     margin-bottom: 25px;
   }
+}
+
+.medal {
+  margin-left: 8px;
 }
