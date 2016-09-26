@@ -55,8 +55,11 @@ class HomeController extends Controller
         $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
 
         $menu = $this->getUserMenu();
-        // activate "Profile" tab no matter what.
-        $menu->get('profile')->activate();
+
+        if ($menu->get('profile')) {
+            // activate "Profile" tab no matter what.
+            $menu->get('profile')->activate();
+        }
 
         return $this->view('profile.home')->with([
             'top_menu'      => $menu,
