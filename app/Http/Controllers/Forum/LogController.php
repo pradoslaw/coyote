@@ -11,6 +11,7 @@ use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Activities\Rollback as Stream_Rollback;
 use Coyote\Post\Log;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 
 class LogController extends BaseController
 {
@@ -41,8 +42,7 @@ class LogController extends BaseController
      */
     public function log($post)
     {
-        /** @var \Coyote\Topic $topic */
-        $topic = $this->topic->find($post->topic_id);
+        $topic = $post->topic;
         $forum = $topic->forum;
 
         $this->authorize('update', $forum);
@@ -77,10 +77,10 @@ class LogController extends BaseController
      */
     public function rollback($post, $logId)
     {
-        $forum = $this->forum->find($post->forum_id);
+        $forum = $post->forum;
         $this->authorize('update', $forum);
 
-        $topic = $this->topic->find($post->topic_id);
+        $topic = $post->topic;
         $log = $this->log->findWhere(['id' => $logId, 'post_id' => $post->id])->first();
 
         $post->fill(['text' => $log->text, 'edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId]);
@@ -100,17 +100,17 @@ class LogController extends BaseController
             $log->user_id = $this->userId;
             $log->save();
 
-            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
+            $url = UrlBuilder::post($post);
 
             stream(
                 Stream_Rollback::class,
-                (new Stream_Post(['url' => $url . '?p=' . $post->id . '#id' . $post->id]))->map($post),
-                (new Stream_Topic())->map($topic, $forum)
+                (new Stream_Post(['url' => $url]))->map($post),
+                (new Stream_Topic())->map($topic)
             );
         });
 
         return redirect()
-            ->route('forum.topic', [$forum->slug, $topic->id, $topic->slug])
+            ->to(UrlBuilder::topic($topic))
             ->with('success', 'Post został przywrócony.');
     }
 }

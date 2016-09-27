@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -88,12 +89,12 @@ class SubmitController extends BaseController
             $this->post->save($request, auth()->user(), $forum, $topic, $post, $poll);
 
             // url to the post
-            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false) . '?p=' . $post->id . '#id' . $post->id;
+            $url = UrlBuilder::post($post);
 
             // parsing text and store it in cache
             // it's important. don't remove below line so that text in activity can be saved without markdown.
             // also we can parse html code and grab links to users profile.
-            $post->text = app('parser.post')->parse($request->text);
+//            $post->text = app('parser.post')->parse($request->text);
 
             if ($post->wasRecentlyCreated) {
                 $alert = new Container();
@@ -101,7 +102,7 @@ class SubmitController extends BaseController
                     'sender_id' => $this->userId,
                     'sender_name' => $request->get('user_name', $this->userId ? auth()->user()->name : ''),
                     'subject' => excerpt($topic->subject),
-                    'excerpt' => excerpt($post->text),
+                    'excerpt' => excerpt($post->html),
                     'url' => $url
                 ];
 
@@ -114,7 +115,7 @@ class SubmitController extends BaseController
                 }
 
                 // get id of users that were mentioned in the text
-                $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($post->text));
+                $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($post->html));
                 if ($subscribersId) {
                     $alert->attach(app('alert.post.login')->with($notification)->setUsersId($subscribersId));
                 }
@@ -123,11 +124,11 @@ class SubmitController extends BaseController
             }
 
             if ($topic->wasRecentlyCreated || $post->id === $topic->first_post_id) {
-                $object = (new Stream_Topic)->map($topic, $forum, $post->text);
+                $object = (new Stream_Topic)->map($topic, $post->html);
                 $target = (new Stream_Forum)->map($forum);
             } else {
                 $object = (new Stream_Post(['url' => $url]))->map($post);
-                $target = (new Stream_Topic())->map($topic, $forum);
+                $target = (new Stream_Topic())->map($topic);
             }
 
             stream($activity, $object, $target);
@@ -244,7 +245,7 @@ class SubmitController extends BaseController
             // put action into activity stream
             stream(
                 Stream_Update::class,
-                (new Stream_Topic)->map($topic, $forum, $post->text),
+                (new Stream_Topic)->map($topic, $post->text),
                 (new Stream_Forum)->map($forum)
             );
 

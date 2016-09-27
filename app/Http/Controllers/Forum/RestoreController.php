@@ -8,6 +8,7 @@ use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 
 class RestoreController extends BaseController
 {
@@ -28,7 +29,8 @@ class RestoreController extends BaseController
 
         return $this->transaction(function () use ($post) {
             // build url to post
-            $url = route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug], false);
+//            $url = route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug], false);
+            $url = UrlBuilder::topic($post->topic);
 
             if ($post->id === $post->topic->first_post_id) {
                 $post->topic->restore();
@@ -45,7 +47,7 @@ class RestoreController extends BaseController
                 event(new PostWasSaved($post));
 
                 $object = (new Stream_Post(['url' => $url]))->map($post);
-                $target = (new Stream_Topic())->map($post->topic, $post->forum);
+                $target = (new Stream_Topic())->map($post->topic);
             }
 
             stream(Stream_Restore::class, $object, $target);

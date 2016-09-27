@@ -7,6 +7,7 @@ use Coyote\Services\Stream\Activities\Move as Stream_Move;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Forum\Reason;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 
 class MoveController extends BaseController
@@ -26,7 +27,7 @@ class MoveController extends BaseController
         }
         $this->validate($request, $rules);
 
-        $old = $topic->forum()->first(); // old category
+        $old = $topic->forum; // old category
 
         $this->authorize('move', $old);
         $forum = $this->forum->findBy('slug', $request->get('slug'));
@@ -35,7 +36,7 @@ class MoveController extends BaseController
             abort(401);
         }
 
-        $this->transaction(function () use ($topic, $forum, $old, $request) {
+        $this->transaction(function () use ($topic, $forum, $request) {
             $reason = null;
 
             $notification = [
@@ -55,11 +56,13 @@ class MoveController extends BaseController
                 ]);
             }
 
+            // first, create object. we will save it in mongodb.
+            $object = (new Stream_Topic())->map($topic);
+
+            // then, set a new forum id
             $topic->forum_id = $forum->id;
             // magic happens here. database trigger will do the work
             $topic->save();
-
-            $object = (new Stream_Topic())->map($topic, $old);
 
             if (!empty($reason)) {
                 $object->reasonName = $reason->name;
@@ -71,7 +74,7 @@ class MoveController extends BaseController
             if ($recipientsId) {
                 app('alert.topic.move')
                     ->with($notification)
-                    ->setUrl(route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false))
+                    ->setUrl(UrlBuilder::topic($topic))
                     ->setUsersId($recipientsId)
                     ->notify();
             }
@@ -81,6 +84,6 @@ class MoveController extends BaseController
             stream(Stream_Move::class, $object, (new Stream_Forum())->map($forum));
         });
 
-        return redirect()->route('forum.topic', [$forum->slug, $topic->id, $topic->slug])->with('success', 'Wątek został przeniesiony');
+        return redirect()->to(UrlBuilder::topic($topic))->with('success', 'Wątek został przeniesiony');
     }
 }

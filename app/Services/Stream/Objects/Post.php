@@ -17,18 +17,4 @@ class Post extends Object
 
         return $this;
     }
-
-    /**
-     * Parse text and then - pass object through map() method. We don't want to save raw markdown
-     * into mongodb.
-     *
-     * @param Model $post
-     * @return Post
-     */
-    public function markdown(Model $post)
-    {
-        $post->text = app('parser.post')->parse($post->text);
-
-        return $this->map($post);
-    }
 }

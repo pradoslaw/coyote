@@ -441,6 +441,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         return $sql
             ->selectRaw('DISTINCT ON(posts.id) posts.*, sessions.updated_at AS session_updated_at')
             ->leftJoin('sessions', 'sessions.user_id', '=', 'posts.user_id')
+            ->withTrashed()
             ->orderBy('posts.id');
     }
 }

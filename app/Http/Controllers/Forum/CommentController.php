@@ -60,7 +60,7 @@ class CommentController extends Controller
             'post_id'       => 'required|integer|exists:posts,id'
         ]);
 
-        $target = (new Stream_Topic())->map($this->topic, $this->forum);
+        $target = (new Stream_Topic())->map($this->topic);
 
         if ($id === null) {
             $user = auth()->user();
@@ -163,7 +163,7 @@ class CommentController extends Controller
     {
         $this->authorize('delete', [$this->comment, $this->forum]);
 
-        $target = (new Stream_Topic())->map($this->topic, $this->forum);
+        $target = (new Stream_Topic())->map($this->topic);
         $object = (new Stream_Comment())->map($this->post, $this->comment, $this->forum, $this->topic);
 
         $this->transaction(function () use ($object, $target) {

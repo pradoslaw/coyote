@@ -105,15 +105,15 @@ class CommentAccess
      */
     private function checkAbility(Comment $comment)
     {
+        /** @var \Coyote\Post $post */
         $post = $this->post->findOrFail($comment->post_id, ['id', 'topic_id', 'forum_id']);
-        $forum = $this->forum->findOrFail($post->forum_id);
+        $topic = $post->topic;
+        $forum = $topic->forum;
 
         // Maybe user does not have an access to this category?
         if (!$forum->userCanAccess($this->auth->id())) {
             return response('Unauthorized.', 401);
         }
-
-        $topic = $this->topic->findOrFail($post->topic_id, ['id', 'forum_id', 'slug', 'subject', 'is_locked']);
 
         // Only moderators can delete this post if topic (or forum) was locked
         if ($this->gate->denies('delete', $forum)) {
@@ -123,10 +123,10 @@ class CommentAccess
         }
 
         $this->request->attributes->add([
-            'post' => $post,
-            'topic' => $topic,
-            'forum' => $forum,
-            'comment' => $comment
+            'post'      => $post,
+            'topic'     => $topic,
+            'forum'     => $forum,
+            'comment'   => $comment
         ]);
 
         return true;

@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 
 class VoteController extends BaseController
 {
@@ -22,27 +23,26 @@ class VoteController extends BaseController
             return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
         }
 
-        $forum = $post->forum;
-        if ($forum->is_locked) {
-            return response()->json(['error' => 'Forum jest zablokowane.'], 500);
-        }
-
         $topic = $post->topic;
         if ($topic->is_locked) {
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
         }
 
+        $forum = $topic->forum;
+        if ($forum->is_locked) {
+            return response()->json(['error' => 'Forum jest zablokowane.'], 500);
+        }
+
         $this->transaction(function () use ($post, $topic, $forum) {
-            $result = $post->votes()->forUser($this->userId)->first();
+            $vote = $post->votes()->forUser($this->userId)->first();
 
             // build url to post
-            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false) . '?p=' . $post->id . '#id' . $post->id;
-            $post->text = app('parser.post')->parse($post->text);
+            $url = UrlBuilder::post($post);
             // excerpt of post text. used in reputation and alert
-            $excerpt = excerpt($post->text);
+            $excerpt = excerpt($post->html);
 
-            if ($result) {
-                $result->delete();
+            if ($vote) {
+                $vote->delete();
                 $post->score--;
             } else {
                 $post->votes()->create([
@@ -67,7 +67,7 @@ class VoteController extends BaseController
                 // add or subtract reputation points
                 app('reputation.post.vote')
                     ->setUserId($post->user_id)
-                    ->setIsPositive(!count($result))
+                    ->setIsPositive(!count($vote))
                     ->setUrl($url)
                     ->setPostId($post->id)
                     ->setExcerpt($excerpt)
@@ -75,7 +75,7 @@ class VoteController extends BaseController
             }
 
             // add into activity stream
-            stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->map($post), (new Stream_Topic())->map($topic, $forum));
+            stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->map($post), (new Stream_Topic())->map($topic));
         });
 
         return response()->json(['count' => $post->score]);

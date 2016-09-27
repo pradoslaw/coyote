@@ -10,6 +10,7 @@ use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 
 class DeleteController extends BaseController
@@ -48,8 +49,7 @@ class DeleteController extends BaseController
         }
 
         $url = $this->transaction(function () use ($post, $topic, $forum, $request) {
-            // build url to post
-            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
+            $url = UrlBuilder::topic($topic);
 
             $notification = [
                 'sender_id'   => $this->userId,
@@ -93,7 +93,7 @@ class DeleteController extends BaseController
                 // fire the event. it can be used to delete row from "pages" table or from search index
                 event(new TopicWasDeleted($topic));
 
-                $object = (new Stream_Topic())->map($topic, $forum);
+                $object = (new Stream_Topic())->map($topic);
                 $target = (new Stream_Forum())->map($forum);
             } else {
                 $url .= '?p=' . $post->id . '#id' . $post->id;
@@ -121,7 +121,7 @@ class DeleteController extends BaseController
                 event(new PostWasDeleted($post));
 
                 $object = (new Stream_Post(['url' => $url]))->map($post);
-                $target = (new Stream_Topic())->map($topic, $forum);
+                $target = (new Stream_Topic())->map($topic);
             }
 
             if (!empty($reason)) {

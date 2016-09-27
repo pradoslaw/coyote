@@ -37,7 +37,7 @@ class PostSubmitResponse
         // if there is an error, $response will be instance of JsonResponse.
         if ($request->ajax() && $response instanceof Response) {
             $post = $response->getOriginalContent();
-            $data = ['post' => ['text' => $post->text, 'attachments' => $post->attachments()->get()]];
+            $data = ['post' => ['text' => $post->html, 'attachments' => $post->attachments()->get()]];
 
             if ($request->user()->allow_sig && $post->user_id) {
                 $parser = app('parser.sig');

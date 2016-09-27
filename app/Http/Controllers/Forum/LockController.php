@@ -13,15 +13,14 @@ class LockController extends BaseController
      */
     public function index($topic)
     {
-        $forum = $topic->forum()->first();
-        $this->authorize('lock', $forum);
+        $this->authorize('lock', $topic->forum);
 
-        $this->transaction(function () use ($topic, $forum) {
+        $this->transaction(function () use ($topic) {
             $topic->lock();
 
             stream(
                 $topic->is_locked ? Stream_Lock::class : Stream_Unlock::class,
-                (new Stream_Topic())->map($topic, $forum)
+                (new Stream_Topic())->map($topic)
             );
         });
     }

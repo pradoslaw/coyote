@@ -27,7 +27,7 @@ class AcceptController extends BaseController
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
         }
 
-        $forum = $post->forum;
+        $forum = $topic->forum;
         if ($forum->is_locked) {
             return response()->json(['error' => 'Forum jest zablokowane.'], 500);
         }
@@ -48,7 +48,7 @@ class AcceptController extends BaseController
 
             // add or subtract reputation points
             $reputation = app('reputation.post.accept');
-            $target = (new Stream_Topic())->map($topic, $forum);
+            $target = (new Stream_Topic())->map($topic);
 
             // user might change his mind and accept different post (or he can uncheck solved post)
             if ($accepted) {
