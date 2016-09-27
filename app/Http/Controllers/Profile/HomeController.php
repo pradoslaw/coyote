@@ -9,6 +9,7 @@ use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRep
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\User;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -30,8 +31,6 @@ class HomeController extends Controller
     private $post;
 
     /**
-     * HomeController constructor.
-     *
      * @param UserRepository $user
      * @param ReputationRepository $reputation
      * @param PostRepository $post
@@ -53,6 +52,7 @@ class HomeController extends Controller
     public function index($user, $tab = 'reputation')
     {
         $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
+        $this->public['profile_history'] = route('profile.history', [$user->id]);
 
         $menu = $this->getUserMenu();
 
@@ -71,6 +71,18 @@ class HomeController extends Controller
     }
 
     /**
+     * @param $user
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function history($user, Request $request)
+    {
+        return view('profile.partials.reputation_list', [
+            'reputation' => $this->reputation->history($user->id, $request->input('offset'))
+        ]);
+    }
+
+    /**
      * @param User $user
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -80,7 +92,7 @@ class HomeController extends Controller
             'user'          => $user,
             'rank'          => $this->user->rank($user->id),
             'total_users'   => $this->user->countUsersWithReputation(),
-            'reputation'    => $this->reputation->takeForUser($user->id),
+            'reputation'    => $this->reputation->history($user->id),
             'chart'         => $this->reputation->chart($user->id),
         ]);
     }

@@ -132,7 +132,21 @@
     <script src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
     <script>
         $(function() {
-            $('#wrap').perfectScrollbar();
+            var isReady = true;
+
+            $('#wrap').perfectScrollbar().on('ps-y-reach-end', function() {
+                if (!isReady) {
+                    return;
+                }
+
+                var offset = $('#reputation').find('.reputation-item').length;
+                isReady = false;
+
+                $.get(_config.profile_history, {offset: offset}, function(html) {
+                    $('#reputation').append(html);
+                    isReady = true;
+                });
+            });
         });
     </script>
 {% endblock %}

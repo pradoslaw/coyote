@@ -31,7 +31,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
      * @param int $limit
      * @return mixed
      */
-    public function takeForUser($userId, $offset = 0, $limit = 10)
+    public function history($userId, $offset = 0, $limit = 10)
     {
         return $this->model->select()
                     ->join('reputation_types', 'reputation_types.id', '=', $this->raw('reputations.type_id'))

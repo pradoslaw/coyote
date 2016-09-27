@@ -18,7 +18,7 @@ interface ReputationRepositoryInterface extends RepositoryInterface
      * @param int $limit
      * @return mixed
      */
-    public function takeForUser($userId, $offset = 0, $limit = 100);
+    public function history($userId, $offset = 0, $limit = 10);
 
     /**
      * Get usr reputation for chart.
