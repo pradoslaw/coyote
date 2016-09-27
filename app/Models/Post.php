@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $updated_at
  * @property string $user_name
  * @property string $text
+ * @property string $html
  * @property string $ip
  * @property string $browser
  * @property string $host
@@ -91,6 +92,13 @@ class Post extends Model
             "format" => "yyyy-MM-dd HH:mm:ss"
         ],
     ];
+
+    /**
+     * Html version of the post.
+     *
+     * @var null|string
+     */
+    private $html = null;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -194,6 +202,18 @@ class Post extends Model
         }
 
         $this->attachments()->saveMany($rows);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlAttribute()
+    {
+        if ($this->html !== null) {
+            return $this->html;
+        }
+
+        return $this->html = app('parser.post')->parse($this->text);
     }
 
     /**

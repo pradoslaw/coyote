@@ -13,7 +13,7 @@ class Post extends Object
     public function map(Model $post)
     {
         $this->id = $post->id;
-        $this->displayName = excerpt($post->text);
+        $this->displayName = excerpt($post->html);
 
         return $this;
     }

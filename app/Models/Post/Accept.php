@@ -4,9 +4,14 @@ namespace Coyote\Post;
 
 use Coyote\Models\Scopes\ForUser;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use DB;
 
+/**
+ * @property int $post_id
+ * @property int $user_id
+ * @property int $topic_id
+ * @property string $ip
+ * @property \Coyote\Post $post
+ */
 class Accept extends Model
 {
     use ForUser;
@@ -34,4 +39,12 @@ class Accept extends Model
      * @var array
      */
     public $timestamps = false;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function post()
+    {
+        return $this->belongsTo('Coyote\Post');
+    }
 }

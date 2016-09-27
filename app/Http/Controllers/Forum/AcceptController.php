@@ -42,9 +42,8 @@ class AcceptController extends BaseController
             // build url to post
             $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
 
-            $post->text = app('parser.post')->parse($post->text);
             // excerpt of post text. used in reputation and alert
-            $excerpt = excerpt($post->text);
+            $excerpt = excerpt($post->html);
 
             // add or subtract reputation points
             $reputation = app('reputation.post.accept');
@@ -52,23 +51,21 @@ class AcceptController extends BaseController
 
             // user might change his mind and accept different post (or he can uncheck solved post)
             if ($accepted) {
-                $old = $this->post->find($accepted->post_id, ['user_id', 'text']);
-
                 $reputation->setUrl($url . '?p=' . $accepted->post_id . '#id' . $accepted->post_id);
                 $reputation->setExcerpt($excerpt);
 
                 // add into activity stream
-                stream(Stream_Reject::class, (new Stream_Post(['url' => $reputation->getUrl()]))->markdown($old), $target);
+                stream(Stream_Reject::class, (new Stream_Post(['url' => $reputation->getUrl()]))->map($accepted->post), $target);
 
                 // reverse reputation points
                 if ($forum->enable_reputation) {
                     $reputation->setIsPositive(false)->setPostId($accepted->post_id);
 
                     if ($accepted->post_id !== $post->id) {
-                        $reputation->setExcerpt(excerpt($old->text));
+                        $reputation->setExcerpt(excerpt($accepted->post->text));
 
-                        if ($old->user_id !== $accepted->user_id) {
-                            $reputation->setUserId($old->user_id)->save();
+                        if ($accepted->post->user_id !== $accepted->user_id) {
+                            $reputation->setUserId($accepted->post->user_id)->save();
                         }
                     } elseif ($accepted->user_id !== $post->user_id) {
                         // reverse reputation points for post author
