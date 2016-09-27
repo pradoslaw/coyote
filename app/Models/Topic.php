@@ -22,6 +22,7 @@ use Coyote\Models\Scopes\Sortable;
  * @property int $poll_id
  * @property string $subject
  * @property \Coyote\Forum $forum
+ * @property \Coyote\Post\Accept $accept
  */
 class Topic extends Model
 {

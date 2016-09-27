@@ -20,13 +20,13 @@ class AcceptController extends BaseController
         }
 
         // post belongs to this topic:
-        $topic = $this->topic->find($post->topic_id, ['id', 'slug', 'subject', 'first_post_id', 'is_locked']);
+        $topic = $post->topic;
 
         if ($topic->is_locked) {
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
         }
 
-        $forum = $this->forum->find($post->forum_id);
+        $forum = $post->forum;
         if ($forum->is_locked) {
             return response()->json(['error' => 'Forum jest zablokowane.'], 500);
         }
@@ -36,7 +36,8 @@ class AcceptController extends BaseController
         }
 
         $this->transaction(function () use ($topic, $post, $forum) {
-            $result = $topic->accept()->where('topic_id', $topic->id)->first();
+            // currently accepted post (if any)
+            $accepted = $topic->accept;
 
             // build url to post
             $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
@@ -50,10 +51,10 @@ class AcceptController extends BaseController
             $target = (new Stream_Topic())->map($topic, $forum);
 
             // user might change his mind and accept different post (or he can uncheck solved post)
-            if ($result) {
-                $old = $this->post->find($result->post_id, ['user_id', 'text']);
+            if ($accepted) {
+                $old = $this->post->find($accepted->post_id, ['user_id', 'text']);
 
-                $reputation->setUrl($url . '?p=' . $result->post_id . '#id' . $result->post_id);
+                $reputation->setUrl($url . '?p=' . $accepted->post_id . '#id' . $accepted->post_id);
                 $reputation->setExcerpt($excerpt);
 
                 // add into activity stream
@@ -61,27 +62,27 @@ class AcceptController extends BaseController
 
                 // reverse reputation points
                 if ($forum->enable_reputation) {
-                    $reputation->setIsPositive(false)->setPostId($result->post_id);
+                    $reputation->setIsPositive(false)->setPostId($accepted->post_id);
 
-                    if ($result->post_id !== $post->id) {
+                    if ($accepted->post_id !== $post->id) {
                         $reputation->setExcerpt(excerpt($old->text));
 
-                        if ($old->user_id !== $result->user_id) {
+                        if ($old->user_id !== $accepted->user_id) {
                             $reputation->setUserId($old->user_id)->save();
                         }
-                    } elseif ($result->user_id !== $post->user_id) {
+                    } elseif ($accepted->user_id !== $post->user_id) {
                         // reverse reputation points for post author
                         $reputation->setUserId($post->user_id)->save(); // <-- don't change this. ($post->user_id)
                     }
                 }
 
-                $result->delete();
+                $accepted->delete();
             }
 
             $reputation->setExcerpt($excerpt);
             $url .= '?p=' . $post->id . '#id' . $post->id;
 
-            if (!$result || $post->id !== $result->post_id) {
+            if (!$accepted || $post->id !== $accepted->post_id) {
                 $reputation->setUrl($url);
 
                 if ($post->user_id) {

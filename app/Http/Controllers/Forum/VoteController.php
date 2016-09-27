@@ -22,12 +22,12 @@ class VoteController extends BaseController
             return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
         }
 
-        $forum = $this->forum->find($post->forum_id);
+        $forum = $post->forum;
         if ($forum->is_locked) {
             return response()->json(['error' => 'Forum jest zablokowane.'], 500);
         }
 
-        $topic = $this->topic->find($post->topic_id, ['id', 'slug', 'subject', 'is_locked']);
+        $topic = $post->topic;
         if ($topic->is_locked) {
             return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
         }
@@ -37,6 +37,7 @@ class VoteController extends BaseController
 
             // build url to post
             $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false) . '?p=' . $post->id . '#id' . $post->id;
+            $post->text = app('parser.post')->parse($post->text);
             // excerpt of post text. used in reputation and alert
             $excerpt = excerpt($post->text);
 
@@ -74,7 +75,7 @@ class VoteController extends BaseController
             }
 
             // add into activity stream
-            stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->markdown($post), (new Stream_Topic())->map($topic, $forum));
+            stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->map($post), (new Stream_Topic())->map($topic, $forum));
         });
 
         return response()->json(['count' => $post->score]);
