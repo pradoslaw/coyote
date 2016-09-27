@@ -6,6 +6,7 @@ use Coyote\Services\Stream\Activities\Accept as Stream_Accept;
 use Coyote\Services\Stream\Activities\Reject as Stream_Reject;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 
 class AcceptController extends BaseController
 {
@@ -40,7 +41,7 @@ class AcceptController extends BaseController
             $accepted = $topic->accept;
 
             // build url to post
-            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
+            $url = UrlBuilder::topic($topic);
 
             // excerpt of post text. used in reputation and alert
             $excerpt = excerpt($post->html);
@@ -62,7 +63,7 @@ class AcceptController extends BaseController
                     $reputation->setIsPositive(false)->setPostId($accepted->post_id);
 
                     if ($accepted->post_id !== $post->id) {
-                        $reputation->setExcerpt(excerpt($accepted->post->text));
+                        $reputation->setExcerpt(excerpt($accepted->post->html));
 
                         if ($accepted->post->user_id !== $accepted->user_id) {
                             $reputation->setUserId($accepted->post->user_id)->save();
