@@ -30,7 +30,7 @@
                 </ul>
 
                 <p class="comment-content">
-                    {{ comment.text|raw }}
+                    {{ comment.html|raw }}
                 </p>
 
                 {% if can('wiki-admin') or comment.user_id == user('id') %}
@@ -38,7 +38,7 @@
                     {{ form_hidden('comment_id', comment.id) }}
 
                     <div class="form-group">
-                        {{ form_widget(form.text, {value: comment.original_text}) }}
+                        {{ form_widget(form.text, {value: comment.text}) }}
                     </div>
                     <div class="form-group">
                         {{ form_widget(form.submit) }}

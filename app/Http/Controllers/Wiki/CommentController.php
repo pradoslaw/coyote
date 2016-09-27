@@ -10,6 +10,7 @@ use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 
 class CommentController extends Controller
 {
@@ -39,11 +40,6 @@ class CommentController extends Controller
                 && !$comment->exists && !$comment->wasUserInvolved($wiki->id, $this->userId);
             $comment->save();
 
-            $parser = app('parser.comment');
-
-            $comment->original_text = $comment->text;
-            $comment->text = $parser->parse($comment->text);
-
             if ($comment->wasRecentlyCreated) {
                 $subscribersId = $wiki->subscribers()->lists('user_id')->toArray();
                 $container = new Container();
@@ -53,10 +49,10 @@ class CommentController extends Controller
                         ->with([
                             'subject' => $wiki->title,
                             'users_id' => $subscribersId,
-                            'url' => route('wiki.show', [$wiki->path], false) . '#comment-' . $comment->id,
+                            'url' => UrlBuilder::wikiComment($wiki, $comment->id),
                             'sender_id' => $this->userId,
                             'sender_name' => auth()->user()->name,
-                            'excerpt' => excerpt($comment->text)
+                            'excerpt' => excerpt($comment->html)
                         ])
                 );
 

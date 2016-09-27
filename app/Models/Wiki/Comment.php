@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $user_id
  * @property string $text
  * @property string $ip
+ * @property string $html
  */
 class Comment extends Model
 {
@@ -37,6 +38,11 @@ class Comment extends Model
     protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
+     * @var null|string
+     */
+    private $html = null;
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
@@ -52,5 +58,17 @@ class Comment extends Model
     public function wasUserInvolved($wikiId, $userId)
     {
         return $this->where('wiki_id', $wikiId)->forUser($userId)->exists();
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlAttribute()
+    {
+        if ($this->html !== null) {
+            return $this->html;
+        }
+
+        return $this->html = app('parser.comment')->parse($this->text);
     }
 }

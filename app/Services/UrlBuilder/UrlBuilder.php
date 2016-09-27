@@ -37,6 +37,16 @@ class UrlBuilder
     }
 
     /**
+     * @param Wiki $wiki
+     * @param int $commentId
+     * @return string
+     */
+    public static function wikiComment(Wiki $wiki, int $commentId)
+    {
+        return route('wiki.show', [$wiki->path], false) . '#comment-' . $commentId;
+    }
+
+    /**
      * @param Microblog $microblog
      * @return string
      */
@@ -45,6 +55,11 @@ class UrlBuilder
         return route('microblog.view', [$microblog->id], false);
     }
 
+    /**
+     * @param Microblog $parent
+     * @param int $commentId
+     * @return string
+     */
     public static function microblogComment(Microblog $parent, int $commentId)
     {
         return route('microblog.view', [$parent->id], false) . '#comment-' . $commentId;

@@ -55,7 +55,7 @@ class Comment extends Object
     private function wiki($wiki, $comment)
     {
         $this->id = $comment->id;
-        $this->displayName = excerpt($comment->text);
-        $this->url = url($wiki->path) . '#comment-' . $comment->id;
+        $this->displayName = excerpt($comment->html);
+        $this->url = UrlBuilder::wikiComment($wiki, $comment->id);
     }
 }
