@@ -5,6 +5,7 @@ namespace Coyote\Services\Reputation\Microblog;
 use Coyote\Services\Reputation\Reputation;
 use Coyote\Services\Reputation\ReputationInterface;
 use Coyote\Microblog as Model;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 
 /**
  * Class Microblog
@@ -28,9 +29,9 @@ abstract class Microblog extends Reputation implements ReputationInterface
     public function map(Model $microblog)
     {
         $this->setMicroblogId($microblog->id);
-        $this->setUrl(route('microblog.view', [$microblog->id], false));
+        $this->setUrl(UrlBuilder::microblog($microblog));
         $this->setUserId($microblog->user_id);
-        $this->setExcerpt(excerpt($microblog->text));
+        $this->setExcerpt(excerpt($microblog->html));
 
         return $this;
     }

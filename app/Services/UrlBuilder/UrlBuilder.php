@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\UrlBuilder;
 
+use Coyote\Microblog;
 use Coyote\Post;
 use Coyote\Topic;
 use Coyote\Wiki;
@@ -33,5 +34,19 @@ class UrlBuilder
     public static function wiki(Wiki $wiki)
     {
         return route('wiki.show', [$wiki->path], false);
+    }
+
+    /**
+     * @param Microblog $microblog
+     * @return string
+     */
+    public static function microblog(Microblog $microblog)
+    {
+        return route('microblog.view', [$microblog->id], false);
+    }
+
+    public static function microblogComment(Microblog $parent, int $commentId)
+    {
+        return route('microblog.view', [$parent->id], false) . '#comment-' . $commentId;
     }
 }

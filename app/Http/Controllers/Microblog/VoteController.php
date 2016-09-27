@@ -3,9 +3,11 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
+use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 
 /**
  * Ocena glosow na dany wpis na mikro (lub wyswietlanie loginow ktorzy oddali ow glos)
@@ -46,22 +48,25 @@ class VoteController extends Controller
             }
 
             $microblog->score = $microblog->getScore();
+            $target = null;
 
             // reputacje przypisujemy tylko za ocene wpisu a nie komentarza!!
             if (!$microblog->parent_id) {
-                $url = route('microblog.view', [$microblog->id], false) . '#entry-' . $microblog->id;
-                // need to parse text before adding excerpt to the db 'cause we don't want to save markdown but raw text
-                $microblog->text = app('parser.microblog')->parse($microblog->text);
+                $url = UrlBuilder::microblog($microblog);
+                $object = (new Stream_Microblog())->map($microblog);
 
                 app('reputation.microblog.vote')->map($microblog)->setUrl($url)->setIsPositive(!$vote)->save();
             } else {
-                $url = route('microblog.view', [$microblog->parent_id], false) . '#comment-' . $microblog->id;
+                $url = UrlBuilder::microblogComment($microblog->parent, $microblog->id);
+
+                $object = (new Stream_Comment())->map($microblog);
+                $target = (new Stream_Microblog())->map($microblog->parent);
             }
 
             $microblog->save();
 
             // put this to activity stream
-            stream(Stream_Vote::class, (new Stream_Microblog())->map($microblog));
+            stream(Stream_Vote::class, $object, $target);
 
             if (!$vote) {
                 app('alert.microblog.vote')

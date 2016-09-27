@@ -10,11 +10,13 @@ class ViewController extends Controller
     /**
      * @param $id
      * @param Microblog $repository
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function index($id, Microblog $repository)
     {
+        /** @var \Coyote\Microblog $microblog */
         $microblog = $repository->findOrFail($id);
+        abort_if(!is_null($microblog->parent_id), 404);
 
         $microblog->text = app('parser.microblog')->parse($microblog->text);
         $parser = app('parser.microblog.comment');

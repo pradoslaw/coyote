@@ -13,6 +13,7 @@ use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -53,7 +54,7 @@ class CommentController extends Controller
             'text'          => 'required|string|max:5000|throttle:' . $microblog->id
         ]);
 
-        if (empty($microblog->id)) {
+        if (!$microblog->exists) {
             $user = auth()->user();
             $data = $request->only(['text', 'parent_id']) + ['user_id' => $user->id];
         } else {
@@ -70,13 +71,7 @@ class CommentController extends Controller
             $microblog->save();
 
             // we need to get parent entry only for notification
-            /** @var \Coyote\Microblog $parent */
-            $parent = $microblog->parent()->first();
-
-            // we need to parse text first (and store it in cache)
-            $microblog->text = app('parser.microblog.comment')->parse($microblog->text);
-            // get parsed content from cache
-            $parent->text = app('parser.microblog')->parse($parent->text);
+            $parent = $microblog->parent;
 
             if ($microblog->wasRecentlyCreated) {
                 $subscribers = $parent->subscribers()->lists('user_id')->toArray();
@@ -85,12 +80,12 @@ class CommentController extends Controller
                 // we need to send alerts AFTER saving comment to database because we need ID of comment
                 $alertData = [
                     'microblog_id'=> $microblog->parent_id, // <-- parent_id NOT id (to generate currect alerts object_id)
-                    'content'     => $microblog->text,
-                    'excerpt'     => excerpt($microblog->text),
+                    'content'     => $microblog->html,
+                    'excerpt'     => excerpt($microblog->html),
                     'sender_id'   => $user->id,
                     'sender_name' => $user->name,
-                    'subject'     => excerpt($parent->text), // original exerpt of parent entry
-                    'url'         => route('microblog.view', [$parent->id], false) . '#comment-' . $microblog->id
+                    'subject'     => excerpt($parent->html), // original exerpt of parent entry
+                    'url'         => UrlBuilder::microblogComment($parent, $microblog->id)
                 ];
 
                 if ($subscribers) {
@@ -102,7 +97,7 @@ class CommentController extends Controller
 
                 $helper = new LoginHelper();
                 // get id of users that were mentioned in the text
-                $usersId = $helper->grab($microblog->text);
+                $usersId = $helper->grab($microblog->html);
 
                 if (!empty($usersId)) {
                     $alert->attach(app('alert.microblog.login')->with($alertData)->setUsersId($usersId));
@@ -144,6 +139,7 @@ class CommentController extends Controller
             $microblog->$key = $user->$key;
         }
 
+        $microblog->text = $microblog->html;
         $view = view('microblog.comment', ['comment' => $microblog, 'microblog' => ['id' => $microblog->parent_id]]);
 
         return response()->json([

@@ -2,6 +2,8 @@
 
 namespace Coyote\Services\Stream\Objects;
 
+use Coyote\Services\UrlBuilder\UrlBuilder;
+
 class Comment extends Object
 {
     /**
@@ -29,8 +31,8 @@ class Comment extends Object
     private function microblog($microblog)
     {
         $this->id = $microblog->id;
-        $this->url = route('microblog.view', [$microblog->parent_id], false) . '#comment-' . $microblog->id;
-        $this->displayName = excerpt($microblog->text);
+        $this->url = UrlBuilder::microblogComment($microblog->parent, $microblog->id);
+        $this->displayName = excerpt($microblog->html);
     }
 
     /**

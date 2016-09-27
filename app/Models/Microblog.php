@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $updated_at
  * @property string $deleted_at
  * @property string $text
+ * @property string $html
+ * @property Microblog $parent
  */
 class Microblog extends Model
 {
@@ -74,6 +76,13 @@ class Microblog extends Model
             "analyzer" => "default_analyzer"
         ]
     ];
+
+    /**
+     * Html version of the entry.
+     *
+     * @var null|string
+     */
+    private $html = null;
 
     public static function boot()
     {
@@ -136,6 +145,18 @@ class Microblog extends Model
         }
 
         $this->attributes['media'] = $media;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getHtmlAttribute()
+    {
+        if ($this->html !== null) {
+            return $this->html;
+        }
+
+        return $this->html = app('parser.microblog' . ($this->parent_id ? '.comment' : ''))->parse($this->text);
     }
 
     /**

@@ -14,6 +14,7 @@ use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 
 /**
@@ -54,7 +55,7 @@ class SubmitController extends Controller
 
         $data = $request->only(['text']);
 
-        if (empty($microblog->id)) {
+        if (!$microblog->exists) {
             $user = auth()->user();
             $data['user_id'] = $user->id;
         } else {
@@ -74,18 +75,13 @@ class SubmitController extends Controller
             $microblog->media = $request->get('thumbnail');
         }
 
-        $isExist = $microblog->exists;
         $microblog->fill($data);
 
-        $this->transaction(function () use (&$microblog, $user, $isExist) {
+        $this->transaction(function () use (&$microblog, $user) {
             $microblog->save();
-
-            // parsing text and store it in cache
-            $microblog->text = app('parser.microblog')->parse($microblog->text);
-
             $object = (new Stream_Microblog())->map($microblog);
 
-            if (!$isExist) {
+            if ($microblog->wasRecentlyCreated) {
                 // increase reputation points
                 app('reputation.microblog.create')->map($microblog)->save();
 
@@ -94,15 +90,15 @@ class SubmitController extends Controller
 
                 $helper = new LoginHelper();
                 // get id of users that were mentioned in the text
-                $usersId = $helper->grab($microblog->text);
+                $usersId = $helper->grab($microblog->html);
 
                 if (!empty($usersId)) {
                     app('alert.microblog.login')->with([
                         'users_id'    => $usersId,
                         'sender_id'   => $user->id,
                         'sender_name' => $user->name,
-                        'subject'     => excerpt($microblog->text),
-                        'url'         => route('microblog.view', [$microblog->id], false)
+                        'subject'     => excerpt($microblog->html),
+                        'url'         => UrlBuilder::microblog($microblog)
                     ])->notify();
                 }
 
@@ -116,7 +112,7 @@ class SubmitController extends Controller
             }
 
             $helper = new HashHelper();
-            $microblog->setTags($helper->grab($microblog->text));
+            $microblog->setTags($helper->grab($microblog->html));
 
             event(new MicroblogWasSaved($microblog));
         });
@@ -126,7 +122,10 @@ class SubmitController extends Controller
             $microblog->$key = $user->$key;
         }
 
-        return view($isExist ? 'microblog.text' : 'microblog.microblog')->with('microblog', $microblog);
+        // passing html version of the entry...
+        $microblog->text = $microblog->html;
+
+        return view(!$microblog->wasRecentlyCreated ? 'microblog.text' : 'microblog.microblog')->with('microblog', $microblog);
     }
 
     /**
