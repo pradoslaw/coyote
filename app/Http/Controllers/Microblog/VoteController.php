@@ -50,6 +50,8 @@ class VoteController extends Controller
             // reputacje przypisujemy tylko za ocene wpisu a nie komentarza!!
             if (!$microblog->parent_id) {
                 $url = route('microblog.view', [$microblog->id], false) . '#entry-' . $microblog->id;
+                // need to parse text before adding excerpt to the db 'cause we don't want to save markdown but raw text
+                $microblog->text = app('parser.microblog')->parse($microblog->text);
 
                 app('reputation.microblog.vote')->map($microblog)->setUrl($url)->setIsPositive(!$vote)->save();
             } else {

@@ -79,12 +79,13 @@ class Microblog extends Model
     {
         parent::boot();
 
-        /**
-         * @var $this $model
-         */
-        static::creating(function ($model) {
+        static::creating(function (Microblog $model) {
             // nadajemy domyslna wartosc sortowania przy dodawaniu elementu
             $model->score = $model->getScore();
+        });
+
+        static::deleted(function (Microblog $model) {
+            $model->media = null; // MUST remove closure before serializing object
         });
     }
 

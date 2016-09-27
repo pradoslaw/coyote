@@ -165,7 +165,6 @@ class SubmitController extends Controller
             $microblog->delete();
             // cofniecie pkt reputacji
             app('reputation.microblog.create')->undo($microblog->id);
-            $microblog->media = null; // MUST remove closure before serializing object
 
             event(new MicroblogWasDeleted($microblog));
             // put this to activity stream
