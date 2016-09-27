@@ -4,6 +4,7 @@ namespace Coyote\Services\UrlBuilder;
 
 use Coyote\Post;
 use Coyote\Topic;
+use Coyote\Wiki;
 
 class UrlBuilder
 {
@@ -23,5 +24,14 @@ class UrlBuilder
     public static function post(Post $post)
     {
         return route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug], false) . '?p=' . $post->id . '#id' . $post->id;
+    }
+
+    /**
+     * @param Wiki $wiki
+     * @return string
+     */
+    public static function wiki(Wiki $wiki)
+    {
+        return route('wiki.show', [$wiki->path], false);
     }
 }

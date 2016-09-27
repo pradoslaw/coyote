@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Stream\Objects;
 
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Wiki as Model;
 
 class Wiki extends Object
@@ -18,7 +19,7 @@ class Wiki extends Object
     public function map(Model $wiki)
     {
         $this->id = $wiki->id;
-        $this->url = route('wiki.show', [$wiki->path], false);
+        $this->url = UrlBuilder::wiki($wiki);
         $this->displayName = $wiki->title;
 
         if ($wiki->excerpt) {

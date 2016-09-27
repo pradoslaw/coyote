@@ -7,6 +7,7 @@ use Coyote\Http\Forms\Wiki\WikiForm;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 
@@ -78,10 +79,10 @@ class SubmitController extends BaseController
                 ->with([
                     'subject' => $wiki->title,
                     'users_id' => $subscribersId,
-                    'url' => route('wiki.show', [$wiki->path], false),
+                    'url' => UrlBuilder::wiki($wiki),
                     'sender_id' => $this->userId,
                     'sender_name' => auth()->user()->name,
-                    'excerpt' => excerpt($wiki->text)
+                    'excerpt' => excerpt($wiki->excerpt)
                 ])
                 ->notify();
 
