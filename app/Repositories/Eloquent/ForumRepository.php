@@ -243,7 +243,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     /**
      * @return array
      */
-    public function getTagClouds()
+    public function getTagsCloud()
     {
         return $this
             ->tags()

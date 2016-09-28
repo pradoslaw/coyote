@@ -37,7 +37,7 @@ interface ForumRepositoryInterface extends RepositoryInterface
     /**
      * @return array
      */
-    public function getTagClouds();
+    public function getTagsCloud();
 
     /**
      * @param array $tags
