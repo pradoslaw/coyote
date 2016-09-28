@@ -82,12 +82,12 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         }
 
         // execute query and fetch all forum categories
-        $parents = $this->buildTree($result, $parentId);
+        $parents = $this->buildNested($result, $parentId);
         $parents = $this->fillUpSectionNames($parents);
 
         foreach ($parents as &$parent) {
-            if (isset($parent->subs)) {
-                foreach ($parent->subs as $child) {
+            if (isset($parent->children)) {
+                foreach ($parent->children as $child) {
                     $parent->topics += $child->topics;
                     $parent->posts += $child->posts;
 
@@ -166,7 +166,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      * @param int $parentId
      * @return Collection
      */
-    private function buildTree($rowset, $parentId = null)
+    private function buildNested($rowset, $parentId = null)
     {
         // extract only main categories
         $parents = $rowset->where('parent_id', $parentId)->keyBy('id');
@@ -179,7 +179,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         // we merge children with parent element
         foreach ($children as $parentId => $child) {
             if (!empty($parents[$parentId])) {
-                $parents[$parentId]->subs = $child;
+                $parents[$parentId]->children = $child;
             }
         }
 
@@ -197,20 +197,47 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         $this->applyCriteria();
 
         $choices = [];
-        $result = $this->model->select(['forums.id', 'name', 'slug', 'parent_id'])->orderBy('order')->get();
-        $tree = $this->buildTree($result);
+        $result = $this->model->select(['forums.id', 'name', 'slug', 'parent_id'])->orderBy('forums.order')->get();
+        $tree = $this->buildNested($result);
 
         foreach ($tree as $parent) {
             $choices[$parent->$key] = $parent->name;
 
-            if (isset($parent->subs)) {
-                foreach ($parent->subs as $child) {
+            if (isset($parent->children)) {
+                foreach ($parent->children as $child) {
                     $choices[$child->$key] = str_repeat('&nbsp;', 4) . $child->name;
                 }
             }
         }
 
+        $this->resetModel();
+
         return $choices;
+    }
+
+    /**
+     * Forum categories as flatten array od models.
+     *
+     * @return \Coyote\Forum[]
+     */
+    public function flatten()
+    {
+        $result = $this->model->select()->orderBy('order')->get();
+        $nested = $this->buildNested($result);
+
+        $flatten = [];
+
+        foreach ($nested as $parent) {
+            $flatten[] = $parent;
+
+            if (isset($parent->children)) {
+                foreach ($parent->children as $child) {
+                    $flatten[] = $child;
+                }
+            }
+        }
+
+        return $flatten;
     }
 
     /**
@@ -219,7 +246,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function getTagClouds()
     {
         return $this
-            ->tagModel()
+            ->tags()
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->limit(10)
             ->get()
@@ -234,7 +261,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function getTagsWeight(array $tags)
     {
         return $this
-            ->tagModel()
+            ->tags()
             ->whereIn('tags.name', $tags)
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->get()
@@ -245,7 +272,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     /**
      * @return mixed
      */
-    private function tagModel()
+    private function tags()
     {
         return $this
             ->app

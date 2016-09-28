@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Adm\Forum;
 
+use Boduch\Grid\Source\CollectionSource;
 use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Forms\Forum\ForumForm;
 use Coyote\Http\Grids\Adm\Forum\CategoriesGrid;
@@ -36,7 +37,7 @@ class CategoriesController extends BaseController
         $grid = $this
             ->gridBuilder()
             ->createGrid(CategoriesGrid::class)
-            ->setSource(new EloquentDataSource($this->forum))
+            ->setSource(new CollectionSource(collect($this->forum->flatten())))
             ->setEnablePagination(false);
 
         return $this->view('adm.forum.categories.home')->with('grid', $grid);

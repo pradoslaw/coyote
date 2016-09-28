@@ -28,6 +28,13 @@ interface ForumRepositoryInterface extends RepositoryInterface
     public function choices($key = 'slug');
 
     /**
+     * Forum categories as flatten array od models.
+     *
+     * @return \Coyote\Forum[]
+     */
+    public function flatten();
+
+    /**
      * @return array
      */
     public function getTagClouds();

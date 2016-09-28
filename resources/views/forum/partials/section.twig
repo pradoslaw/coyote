@@ -30,11 +30,11 @@
 
                             <p>{{ forum.description }}</p>
 
-                            {% if forum.subs %}
+                            {% if forum.children %}
                                 <ul class="list-unstyled">
-                                    {% for sub in forum.subs %}
-                                        <li {{ sub.forum_unread ? 'class="sub-unread"' }}>
-                                            <a href="{{ route('forum.category', [sub.slug]) }}">{{ sub.name }}</a>
+                                    {% for child in forum.children %}
+                                        <li {{ child.forum_unread ? 'class="sub-unread"' }}>
+                                            <a href="{{ route('forum.category', [child.slug]) }}">{{ child.name }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
