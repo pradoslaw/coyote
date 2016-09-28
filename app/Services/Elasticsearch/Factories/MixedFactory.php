@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch\Factories;
 
+use Coyote\Services\Elasticsearch\Filters\Post\Forum;
 use Coyote\Services\Elasticsearch\Query;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
@@ -37,6 +38,7 @@ class MixedFactory
         $builder->addQuery(new Query($request->input('q'), $fields));
         $builder->addSort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
         $builder->addHighlight(new Highlight(['subject', 'text', 'title', 'long_title', 'excerpt', 'description', 'requirements']));
+        $builder->addFilter(new Forum($request->attributes->get('forum_id')));
 
         $builder->setSize(($request->input('page', 1) - 1) * self::PER_PAGE, self::PER_PAGE);
 

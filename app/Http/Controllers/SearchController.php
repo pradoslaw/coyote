@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Controllers;
 
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Factories\MixedFactory;
 use Coyote\Services\Elasticsearch\Transformers\MixedTypesTransformer;
 use Illuminate\Http\Request;
@@ -18,14 +20,20 @@ class SearchController extends Controller
     private $request;
 
     /**
-     * SearchController constructor.
-     * @param Request $request
+     * @var ForumRepository
      */
-    public function __construct(Request $request)
+    private $forum;
+
+    /**
+     * @param Request $request
+     * @param ForumRepository $forum
+     */
+    public function __construct(Request $request, ForumRepository $forum)
     {
         parent::__construct();
 
         $this->request = $request;
+        $this->forum = $forum;
     }
 
     /**
@@ -59,6 +67,10 @@ class SearchController extends Controller
                 $types = $this->request->input('type');
             }
         }
+
+        // search only in allowed forum categories
+        $this->forum->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
+        $this->request->attributes->set('forum_id', $this->forum->lists('id'));
 
         // build elasticsearch request
         $builder = (new MixedFactory())->build($this->request);
