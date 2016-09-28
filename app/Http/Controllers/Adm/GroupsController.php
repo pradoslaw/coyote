@@ -45,7 +45,7 @@ class GroupsController extends BaseController
      */
     public function edit($group)
     {
-        $this->breadcrumb->push($group->name);
+        $this->breadcrumb->push($group->name ?? 'Dodaj nową');
         $form = $this->getForm($group);
 
         return $this->view('adm.groups.save')->with('form', $form);

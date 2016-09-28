@@ -50,9 +50,12 @@ class PermissionsController extends BaseController
      */
     public function edit(Request $request)
     {
+        /** @var \Coyote\Forum $forum */
         $forum = $this->forum->findOrFail((int) $request->input('id'));
         $permissions = $forum->permissions()->get();
         $groups = $this->group->all();
+
+        $this->breadcrumb->push($forum->name);
 
         $data = collect();
 
@@ -93,6 +96,7 @@ class PermissionsController extends BaseController
      */
     public function save(Request $request)
     {
+        /** @var \Coyote\Forum $forum */
         $forum = $this->forum->findOrFail($request->input('id'));
 
         $this->transaction(function () use ($forum, $request) {
