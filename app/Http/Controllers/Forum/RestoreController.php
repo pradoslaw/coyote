@@ -28,8 +28,6 @@ class RestoreController extends BaseController
         $post->forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
 
         return $this->transaction(function () use ($post) {
-            // build url to post
-//            $url = route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug], false);
             $url = UrlBuilder::topic($post->topic);
 
             if ($post->id === $post->topic->first_post_id) {
