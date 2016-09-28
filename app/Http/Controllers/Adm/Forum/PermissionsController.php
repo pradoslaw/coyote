@@ -76,7 +76,7 @@ class PermissionsController extends BaseController
         }
 
         $grid = $this
-            ->getGridBuilder()
+            ->gridBuilder()
             ->createGrid(PermissionsGrid::class)
             ->setEnablePagination(false)
             ->setSource(new CollectionSource($data));

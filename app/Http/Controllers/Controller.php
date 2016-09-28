@@ -196,7 +196,7 @@ abstract class Controller extends BaseController
     /**
      * @return \Boduch\Grid\GridBuilder
      */
-    protected function getGridBuilder()
+    protected function gridBuilder()
     {
         return app('grid.builder');
     }

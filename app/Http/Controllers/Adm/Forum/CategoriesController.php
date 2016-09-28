@@ -34,7 +34,7 @@ class CategoriesController extends BaseController
         $this->breadcrumb->push('Forum', route('adm.forum.categories'));
 
         $grid = $this
-            ->getGridBuilder()
+            ->gridBuilder()
             ->createGrid(CategoriesGrid::class)
             ->setSource(new EloquentDataSource($this->forum))
             ->setEnablePagination(false);

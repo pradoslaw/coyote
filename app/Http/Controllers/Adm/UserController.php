@@ -33,7 +33,7 @@ class UserController extends BaseController
      */
     public function index()
     {
-        $grid = $this->getGridBuilder()->createGrid(UsersGrid::class);
+        $grid = $this->gridBuilder()->createGrid(UsersGrid::class);
         $grid->setSource(new EloquentDataSource($this->user->newQuery()));
 
         return $this->view('adm.user.home', ['grid' => $grid]);

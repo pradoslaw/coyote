@@ -33,7 +33,7 @@ class GroupsController extends BaseController
      */
     public function index()
     {
-        $grid = $this->getGridBuilder()->createGrid(GroupsGrid::class);
+        $grid = $this->gridBuilder()->createGrid(GroupsGrid::class);
         $grid->setSource(new EloquentDataSource($this->group));
 
         return $this->view('adm.groups.home')->with('grid', $grid);

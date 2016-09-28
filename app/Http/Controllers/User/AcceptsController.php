@@ -16,7 +16,7 @@ class AcceptsController extends BaseController
      */
     public function index(PostRepository $post)
     {
-        $grid = $this->getGridBuilder()->createGrid(AcceptsGrid::class);
+        $grid = $this->gridBuilder()->createGrid(AcceptsGrid::class);
         $grid->setSource(new EloquentDataSource($post->takeAcceptsForUser($this->userId)));
 
         return $this->view('user.accepts')->with('grid', $grid);

@@ -37,7 +37,7 @@ class BlocksController extends BaseController
      */
     public function index()
     {
-        $grid = $this->getGridBuilder()->createGrid(BlockGrid::class)->setSource(new EloquentDataSource($this->block));
+        $grid = $this->gridBuilder()->createGrid(BlockGrid::class)->setSource(new EloquentDataSource($this->block));
 
         return $this->view('adm.blocks.home')->with('grid', $grid);
     }

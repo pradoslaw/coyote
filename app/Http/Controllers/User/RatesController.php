@@ -16,7 +16,7 @@ class RatesController extends BaseController
      */
     public function index(PostRepository $post)
     {
-        $grid = $this->getGridBuilder()->createGrid(RatesGrid::class);
+        $grid = $this->gridBuilder()->createGrid(RatesGrid::class);
         $grid->setSource(new EloquentDataSource($post->takeRatesForUser($this->userId)));
 
         return $this->view('user.rates')->with('grid', $grid);

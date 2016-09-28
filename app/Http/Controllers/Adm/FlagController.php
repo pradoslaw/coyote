@@ -33,7 +33,7 @@ class FlagController extends BaseController
         $this->flag->pushCriteria(new FlagList());
         $this->flag->applyCriteria();
 
-        $grid = $this->getGridBuilder()->createGrid(FlagsGrid::class);
+        $grid = $this->gridBuilder()->createGrid(FlagsGrid::class);
         $grid->setSource(new EloquentDataSource($this->flag));
 
         return $this->view('adm.flag')->with('grid', $grid);

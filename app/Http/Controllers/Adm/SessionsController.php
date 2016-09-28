@@ -16,7 +16,7 @@ class SessionsController extends BaseController
         $this->breadcrumb->push('Kto jest online');
 
         $builder = $session->select(['sessions.*', 'users.name'])->leftJoin('users', 'users.id', '=', 'user_id');
-        $grid = $this->getGridBuilder()->createGrid(SessionsGrid::class)->setSource(new EloquentDataSource($builder));
+        $grid = $this->gridBuilder()->createGrid(SessionsGrid::class)->setSource(new EloquentDataSource($builder));
 
         return $this->view('adm.sessions')->with('grid', $grid);
     }
