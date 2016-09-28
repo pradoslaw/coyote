@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $description
  * @property string $section
  * @property string $url
+ * @property Forum $parent
  */
 class Forum extends Model
 {
@@ -54,9 +55,11 @@ class Forum extends Model
     {
         parent::boot();
 
-        static::saving(function ($model) {
+        static::saving(function (Forum $model) {
             if (empty($model->parent_id)) {
                 $model->parent_id = null;
+            } else {
+                $model->slug = $model->parent->slug . '/' . $model->slug;
             }
         });
     }
@@ -99,6 +102,14 @@ class Forum extends Model
     public function order()
     {
         return $this->hasMany('Coyote\Forum\Order');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function parent()
+    {
+        return $this->hasOne('Coyote\Forum', 'id', 'parent_id');
     }
 
     /**
