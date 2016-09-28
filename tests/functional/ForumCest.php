@@ -1,12 +1,20 @@
 <?php
 
-use Faker\Factory;
-
 class ForumCest
 {
+    public function testCreateForum(FunctionalTester $I)
+    {
+        $I->logInAsAdmin();
+        $forum = $I->createForum();
+
+        $I->amOnRoute('forum.home');
+        $I->see($forum->name, 'a');
+        $I->click($forum->name, 'a');
+        $I->seeResponseCodeIs(200);
+    }
+
     public function testTryToCreateNewTopicInLockedForumAndSeeErrorMessage(FunctionalTester $I)
     {
-        
         $forum = $I->createForum(['is_locked' => 1]);
 
         $I->amOnRoute('forum.home');
