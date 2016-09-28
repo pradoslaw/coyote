@@ -80,7 +80,7 @@ class ForumForm extends Form
      */
     private function getParentList()
     {
-        return $this->forum->whereNull('parent_id')->lists('name', 'id')->toArray();
+        return $this->forum->whereNull('parent_id')->orderBy('order')->lists('name', 'id')->toArray();
     }
 
     /**

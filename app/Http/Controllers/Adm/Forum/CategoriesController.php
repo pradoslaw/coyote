@@ -7,7 +7,6 @@ use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Forms\Forum\ForumForm;
 use Coyote\Http\Grids\Adm\Forum\CategoriesGrid;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Boduch\Grid\Source\EloquentDataSource;
 use Illuminate\Contracts\Cache\Repository as Cache;
 
 class CategoriesController extends BaseController
@@ -25,6 +24,7 @@ class CategoriesController extends BaseController
         parent::__construct();
 
         $this->forum = $forum;
+        $this->breadcrumb->push('Forum', route('adm.forum.categories'));
     }
 
     /**
@@ -32,8 +32,6 @@ class CategoriesController extends BaseController
      */
     public function index()
     {
-        $this->breadcrumb->push('Forum', route('adm.forum.categories'));
-
         $grid = $this
             ->gridBuilder()
             ->createGrid(CategoriesGrid::class)
@@ -50,9 +48,7 @@ class CategoriesController extends BaseController
     public function edit($id = null)
     {
         $forum = $this->forum->findOrNew($id);
-
-        $this->breadcrumb->push('Forum', route('adm.forum.categories'));
-        $this->breadcrumb->push($forum->name);
+        $this->breadcrumb->push($forum->name ?? 'Dodaj nową');
 
         return $this->view('adm.forum.categories.save')->with('form', $this->getForm($forum));
     }
