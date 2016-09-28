@@ -631,7 +631,6 @@ class Migrate extends Command
 
     /**
      * 100%
-     * @todo przeniesc tabele forum_order
      */
     private function migrateForum()
     {
