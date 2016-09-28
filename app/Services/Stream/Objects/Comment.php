@@ -38,14 +38,13 @@ class Comment extends Object
     /**
      * @param \Coyote\Post $post
      * @param \Coyote\Post\Comment $comment
-     * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
      */
-    private function post($post, $comment, $forum, $topic)
+    private function post($post, $comment, $topic)
     {
         $this->id = $comment->id;
-        $this->displayName = excerpt($comment->text);
-        $this->url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false) . '?p=' . $post->id . '#comment-' . $comment->id;
+        $this->displayName = excerpt($comment->html);
+        $this->url = UrlBuilder::topic($topic) . '?p=' . $post->id . '#comment-' . $comment->id;
     }
 
     /**

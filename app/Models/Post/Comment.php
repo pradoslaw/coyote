@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $text
+ * @property string $html
  * @property int $post_id
  * @property int $user_id
  * @property int $id
@@ -33,4 +34,21 @@ class Comment extends Model
      * @var string
      */
     protected $table = 'post_comments';
+
+    /**
+     * @var null|string
+     */
+    private $html = null;
+
+    /**
+     * @return null|string
+     */
+    public function getHtmlAttribute()
+    {
+        if ($this->html !== null) {
+            return $this->html;
+        }
+
+        return $this->html = app('parser.comment')->setUserId($this->user_id)->parse($this->text);
+    }
 }

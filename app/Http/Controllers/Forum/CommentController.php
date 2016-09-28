@@ -84,14 +84,9 @@ class CommentController extends Controller
         $this->transaction(function () use ($id, $activity, $target) {
             $this->comment->save();
 
-            // we need to parse text first (and store it in cache)
-            /** @var \Coyote\Services\Parser\Parsers\ParserInterface $parser */
-            $parser = app('parser.comment')->setUserId($this->userId);
-            $this->comment->text = $parser->parse($this->comment->text);
-
             // it is IMPORTANT to parse text first, and then put information to activity stream.
             // so that we will save plan text (without markdown)
-            $object = (new Stream_Comment())->map($this->post, $this->comment, $this->forum, $this->topic);
+            $object = (new Stream_Comment())->map($this->post, $this->comment, $this->topic);
             stream($activity, $object, $target);
 
             if (!$id) {
@@ -100,7 +95,7 @@ class CommentController extends Controller
                     'sender_id'   => $this->userId,
                     'sender_name' => auth()->user()->name,
                     'subject'     => excerpt($this->topic->subject),
-                    'excerpt'     => excerpt($this->comment->text),
+                    'excerpt'     => excerpt($this->comment->html),
                     'url'         => $object->url
                 ];
 
@@ -135,11 +130,14 @@ class CommentController extends Controller
             $this->comment->$key = $user->$key;
         }
 
+        // pass html version of comment to  twig
+        $this->comment->text = $this->comment->html;
+
         // we need to pass is_writeable variable to let know that we are able to edit/delete this comment
         return view('forum.partials.comment', [
-            'is_writeable' => true,
-            'comment' => $this->comment,
-            'forum' => $this->forum
+            'is_writeable'  => true,
+            'comment'       => $this->comment,
+            'forum'         => $this->forum
         ]);
     }
 
@@ -151,8 +149,8 @@ class CommentController extends Controller
         $this->authorize('update', [$this->comment, $this->forum]);
 
         return view('forum.partials.form', [
-            'post' => ['id' => $this->comment->post_id],
-            'comment' => $this->comment
+            'post'      => ['id' => $this->comment->post_id],
+            'comment'   => $this->comment
         ]);
     }
 
@@ -164,7 +162,7 @@ class CommentController extends Controller
         $this->authorize('delete', [$this->comment, $this->forum]);
 
         $target = (new Stream_Topic())->map($this->topic);
-        $object = (new Stream_Comment())->map($this->post, $this->comment, $this->forum, $this->topic);
+        $object = (new Stream_Comment())->map($this->post, $this->comment, $this->topic);
 
         $this->transaction(function () use ($object, $target) {
             $this->comment->delete();
