@@ -25,7 +25,7 @@ class SearchController extends BaseController
 
         // create forum list for current user (according to user's privileges)
         $this->pushForumCriteria();
-        $forumList = $this->forum->forumList('id'); // forum id as key
+        $forumList = $this->forum->choices('id'); // forum id as key
 
         $users = [];
         $response = $highlights = null;

@@ -132,7 +132,7 @@ class TopicController extends BaseController
 
         // create forum list for current user (according to user's privileges)
         $this->pushForumCriteria();
-        $forumList = $this->forum->forumList();
+        $forumList = $this->forum->choices();
 
         $form = $this->getForm($forum, $topic);
 

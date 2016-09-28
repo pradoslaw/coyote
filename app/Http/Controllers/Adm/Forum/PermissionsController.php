@@ -40,7 +40,7 @@ class PermissionsController extends BaseController
      */
     public function index()
     {
-        $categoriesList = $this->forum->forumList('id');
+        $categoriesList = $this->forum->choices('id');
         return $this->view('adm.forum.permissions.home')->with('categoriesList', $categoriesList);
     }
 
@@ -83,7 +83,7 @@ class PermissionsController extends BaseController
 
         return $this->view('adm.forum.permissions.home', [
             'grid' => $grid,
-            'categoriesList' => $this->forum->forumList('id')
+            'categoriesList' => $this->forum->choices('id')
         ]);
     }
 

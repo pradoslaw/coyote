@@ -143,8 +143,8 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * @param array $parents
-     * @return array
+     * @param Collection $parents
+     * @return Collection
      */
     private function fillUpSectionNames($parents)
     {
@@ -192,25 +192,25 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      * @param string $key
      * @return array
      */
-    public function forumList($key = 'slug')
+    public function choices($key = 'slug')
     {
         $this->applyCriteria();
 
-        $list = [];
-        $result = $this->model->select(['forums.id', 'name', 'slug', 'parent_id'])->get();
+        $choices = [];
+        $result = $this->model->select(['forums.id', 'name', 'slug', 'parent_id'])->orderBy('order')->get();
         $tree = $this->buildTree($result);
 
         foreach ($tree as $parent) {
-            $list[$parent->$key] = $parent->name;
+            $choices[$parent->$key] = $parent->name;
 
             if (isset($parent->subs)) {
                 foreach ($parent->subs as $child) {
-                    $list[$child->$key] = str_repeat('&nbsp;', 4) . $child->name;
+                    $choices[$child->$key] = str_repeat('&nbsp;', 4) . $child->name;
                 }
             }
         }
 
-        return $list;
+        return $choices;
     }
 
     /**

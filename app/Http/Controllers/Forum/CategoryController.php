@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class CategoryController extends BaseController
 {
     use FlagFactory;
-    
+
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
@@ -22,7 +22,7 @@ class CategoryController extends BaseController
         $this->breadcrumb($forum);
 
         $this->pushForumCriteria();
-        $forumList = $this->forum->forumList();
+        $forumList = $this->forum->choices();
 
         $this->forum->skipCriteria(true);
         // execute query: get all subcategories that user can has access to
