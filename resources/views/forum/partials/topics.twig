@@ -112,7 +112,7 @@
                         </td>
 
                         {% if forum is not defined %}
-                            <td class="col-category">
+                            <td class="col-category hidden-xs">
                                 {{ link_to_route('forum.category', topic.forum_name, [topic.forum_slug]) }}
                             </td>
                         {% endif %}
