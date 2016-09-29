@@ -5,6 +5,9 @@ namespace Coyote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $is_agency
+ */
 class Firm extends Model
 {
     use SoftDeletes;

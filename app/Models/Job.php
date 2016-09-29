@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $user_id
  * @property int $firm_id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @property int $salary_from
  * @property int $salary_to
  * @property int $country_id
@@ -29,6 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $requirements
  * @property string $email
  * @property \Coyote\User $user
+ * @property \Coyote\Firm $firm
  */
 class Job extends Model
 {
@@ -41,6 +44,14 @@ class Job extends Model
     const YEAR            = 2;
     const WEEK            = 3;
     const HOUR            = 4;
+
+    /**
+     * Filling each field adds points to job offer score.
+     */
+    const SCORE_CONFIG = [
+        'job' => ['description' => 10, 'requirements' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15],
+        'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -161,17 +172,18 @@ class Job extends Model
     {
         parent::boot();
 
-        static::saving(function ($model) {
+        static::saving(function (Job $model) {
+            // nullable column
             foreach (['firm_id', 'salary_from', 'salary_to'] as $column) {
-                if (empty($model->$column)) {
-                    $model->$column = null;
+                if (empty($model->{$column})) {
+                    $model->{$column} = null;
                 }
             }
 
             $model->score = 0;
 
-            foreach (['description' => 10, 'requirements' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15] as $column => $point) {
-                if (!empty($model->$column)) {
+            foreach (self::SCORE_CONFIG['job'] as $column => $point) {
+                if (!empty($model->{$column})) {
                     $model->score += $point;
                 }
             }
@@ -179,10 +191,10 @@ class Job extends Model
             $model->score += (count($model->tags()->get()) * 10);
 
             if ($model->firm_id) {
-                $firm = $model->firm()->first();
+                $firm = $model->firm;
 
-                foreach (['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5] as $column => $point) {
-                    if (!empty($firm->$column)) {
+                foreach (self::SCORE_CONFIG['firm'] as $column => $point) {
+                    if (!empty($firm->{$column})) {
                         $model->score += $point;
                     }
                 }
@@ -216,7 +228,7 @@ class Job extends Model
     /**
      * Scope for currently active job offers
      *
-     * @param $query
+     * @param \Illuminate\Database\Query\Builder $query
      * @return mixed
      */
     public function scopePriorDeadline($query)

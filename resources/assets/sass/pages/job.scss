@@ -27,6 +27,13 @@
   display: inline-block;
 }
 
+// Do not wrap line in tooltip. We show tooltip over the "settings preferences" button
+// ---------------------------------
+
+.tooltip {
+  white-space: nowrap;
+}
+
 // Logo container
 // ---------------------------------
 

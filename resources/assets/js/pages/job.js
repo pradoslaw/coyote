@@ -60,7 +60,7 @@ $(() => {
         return false;
     });
 
-    $('#btn-editor').click((e) => {
+    $('#btn-editor').tooltip({html: true, trigger: 'hover', placement: 'right'}).click(() => {
         $('#editor').modal('show');
 
         return false;

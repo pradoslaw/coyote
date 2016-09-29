@@ -293,7 +293,7 @@ class HomeController extends Controller
     protected function getMenu()
     {
         return app('menu')->make('job.home', function ($menu) {
-            $html = app('html')->tag('i', '', ['id' => 'btn-editor', 'class' => 'fa fa-cog']);
+            $html = app('html')->tag('i', '', ['id' => 'btn-editor', 'class' => 'fa fa-cog', 'title' => 'Ustaw swoje preferencje']);
 
             $menu->add('Wszystkie', ['route' => ['job.home', 'tab' => 'all'], 'nickname' => 'all']);
             $menu->add('Wybrane dla mnie', [
