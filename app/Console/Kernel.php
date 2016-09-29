@@ -1,4 +1,6 @@
-<?php namespace Coyote\Console;
+<?php
+
+namespace Coyote\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -14,6 +16,7 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\PurgeViews',
         'Coyote\Console\Commands\PurgePastebin',
         'Coyote\Console\Commands\PurgeFirewall',
+        'Coyote\Console\Commands\CreateSitemap',
         'Coyote\Console\Commands\Migrate',
         'Coyote\Console\Commands\Elasticsearch\Mapping',
         'Coyote\Console\Commands\Elasticsearch\Create',
@@ -33,5 +36,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('es:purge')->hourly();
         $schedule->command('pastebin:purge')->hourly();
         $schedule->command('firewall:purge')->hourly();
+        $schedule->command('sitemap:create')->dailyAt('03:00:00');
     }
 }

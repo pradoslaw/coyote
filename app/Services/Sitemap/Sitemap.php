@@ -3,27 +3,18 @@
 namespace Coyote\Services\Sitemap;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Closure;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class Sitemap
 {
+    const ROOT = 'sitemap';
+
     /**
      * @var Filesystem
      */
     protected $filesystem;
-
-    /**
-     * @var string
-     */
-    protected $root;
-
-    /**
-     * @var string
-     */
-    protected $filename;
 
     /**
      * @var array
@@ -32,41 +23,27 @@ class Sitemap
 
     /**
      * @param Filesystem $filesystem
-     * @param Request $request
      */
-    public function __construct(Filesystem $filesystem, Request $request)
+    public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
-
-        $this->root = $request->path();
-        $this->filename = 'sitemapindex.xml';
-
-        if (strpos($request->path(), '/') !== false) {
-            list($this->root, $this->filename) = explode('/', $request->path());
-        }
 
         $this->createDirectory();
     }
 
     /**
-     * @param int $minutes
-     * @param Closure $closure
+     * @param Request $request
      * @return Response
      */
-    public function remember($minutes, Closure $closure)
+    public function response(Request $request)
     {
-        if ($this->hasCacheExpired($minutes)) {
-            $closure($this);
-            $this->create();
-        }
-
-        return (new Response($this->read(), 200))->header('Content-type', 'application/xml');
+        return (new Response($this->read($request), 200))->header('Content-type', 'application/xml');
     }
 
     /**
      * Magic happens here: let's create sitemap.
      */
-    protected function create()
+    public function save()
     {
         $index = new \SimpleXMLElement('<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
 
@@ -88,7 +65,7 @@ class Sitemap
             $this->filesystem->put($this->path($filename), $urlset->asXML());
 
             $sitemap = $index->addChild('sitemap');
-            $sitemap->addChild('loc', url($this->root . '/' . $filename));
+            $sitemap->addChild('loc', url(self::ROOT . '/' . $filename));
             $sitemap->addChild('lastmod', Carbon::now()->toIso8601String());
         }
 
@@ -97,11 +74,18 @@ class Sitemap
     }
 
     /**
+     * @param Request $request
      * @return string
      */
-    public function read()
+    public function read(Request $request)
     {
-        return $this->filesystem->get($this->root . '/' . $this->filename);
+        $filename = 'sitemapindex.xml';
+
+        if (strpos($request->path(), '/') !== false) {
+            list(, $filename) = explode('/', $request->path());
+        }
+
+        return $this->filesystem->get(self::ROOT . '/' . $filename);
     }
 
     /**
@@ -126,9 +110,9 @@ class Sitemap
      */
     protected function createDirectory()
     {
-        if (!$this->filesystem->exists($this->root)) {
-            if (!$this->filesystem->makeDirectory($this->root)) {
-                throw new \Exception(sprintf('Cannot create storage %s directory.', $this->root));
+        if (!$this->filesystem->exists(self::ROOT)) {
+            if (!$this->filesystem->makeDirectory(self::ROOT)) {
+                throw new \Exception(sprintf('Cannot create storage %s directory.', self::ROOT));
             }
         }
     }
@@ -139,19 +123,6 @@ class Sitemap
      */
     protected function path($filename)
     {
-        return $this->root . '/' . $filename;
-    }
-
-    /**
-     * @param int $minutes
-     * @return bool
-     */
-    protected function hasCacheExpired($minutes)
-    {
-        $path = $this->path($this->filename);
-
-        return $this->filesystem->exists($path)
-            ? (time() - $this->filesystem->lastModified($path)) / 60 > $minutes
-            : true;
+        return self::ROOT . '/' . $filename;
     }
 }

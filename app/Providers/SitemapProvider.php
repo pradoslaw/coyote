@@ -15,16 +15,6 @@ class SitemapProvider extends ServiceProvider
     protected $defer = true;
 
     /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
-    /**
      * Register the application services.
      *
      * @return void
@@ -32,7 +22,7 @@ class SitemapProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('sitemap', function ($app) {
-            return new Sitemap($app['filesystem']->disk('local'), $app['request']);
+            return new Sitemap($app['filesystem']->disk('local'));
         });
     }
 
