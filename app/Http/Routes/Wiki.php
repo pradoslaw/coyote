@@ -98,6 +98,7 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
 
     $this->get('History/{wiki}', ['uses' => 'HistoryController@index', 'as' => 'history']);
     $this->get('Blog', ['uses' => 'BlogController@index', 'as' => 'blog']);
+    $this->get('Kategorie', ['uses' => 'HomeController@index', 'as' => 'home']);
 
     // deleted pages are visible only for users with privilege
     $this->get('{path}', [
