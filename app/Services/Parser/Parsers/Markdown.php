@@ -20,6 +20,11 @@ class Markdown extends \Parsedown implements ParserInterface
     private $enableHashParser = false;
 
     /**
+     * @var bool
+     */
+    private $enableUserTagParser = true;
+
+    /**
      * @var string
      */
     private $hashRoute = 'microblog.tag';
@@ -43,9 +48,21 @@ class Markdown extends \Parsedown implements ParserInterface
      * @param bool $flag
      * @return Markdown
      */
-    public function setEnableHashParser($flag)
+    public function setEnableHashParser(bool $flag)
     {
-        $this->enableHashParser = (bool) $flag;
+        $this->enableHashParser = $flag;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $flag
+     * @return Markdown
+     */
+    public function setEnableUserTagParser(bool $flag)
+    {
+        $this->enableUserTagParser = $flag;
+
         return $this;
     }
 
@@ -118,10 +135,14 @@ class Markdown extends \Parsedown implements ParserInterface
      * Parse users login
      *
      * @param array $excerpt
-     * @return array
+     * @return array|void
      */
     protected function inlineUserTag($excerpt)
     {
+        if (!$this->enableUserTagParser) {
+            return null;
+        }
+
         $text = &$excerpt['text'];
         $start = strpos($text, '@');
 

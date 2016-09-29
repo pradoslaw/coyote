@@ -35,7 +35,7 @@ class WikiFactory extends AbstractFactory
                 $allowedTags[] = 'div[class]';
                 $allowedTags[] = 'ul[class]';
 
-                $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));
+                $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true)->setEnableUserTagParser(false));
                 $parser->attach((new Purifier())->set('HTML.Allowed', implode(',', $allowedTags)));
                 $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                 $parser->attach(new Geshi());
