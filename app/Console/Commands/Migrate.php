@@ -70,6 +70,9 @@ class Migrate extends Command
 
     private function skipHost($url)
     {
+        if ($url[0] === '@') {
+            return '/' . str_replace('@forum', 'Forum', $url);
+        }
         $parsed = parse_url($url);
 
         $url = trim($parsed['path'], '/');
@@ -83,7 +86,7 @@ class Migrate extends Command
             $url = 'Forum/' . $url;
         }
 
-        return $url;
+        return '/' . $url;
     }
 
     private function count($tables)
