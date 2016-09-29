@@ -20,7 +20,7 @@ class CreateTopicUsersTable extends Migration
             // ten indeks aby szybciej wyszukiwac posty danego usera
             $table->index('user_id');
 
-            $table->foreign('topic_id')->references('id')->on('topics');
+            $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

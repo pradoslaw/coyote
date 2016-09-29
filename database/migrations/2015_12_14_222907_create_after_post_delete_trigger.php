@@ -35,8 +35,8 @@ BEGIN
 	IF OLD.user_id IS NOT NULL THEN
 		UPDATE users SET posts = posts - 1 WHERE "id" = OLD.user_id;
 
-		if !(SELECT COUNT("id") FROM posts WHERE topic_id = OLD.topic_id AND user_id = OLD.user_id AND deleted_at IS NULL) THEN
-				DELETE FROM topic_users WHERE "id" = OLD.topic_id AND user_id = OLD.user_id;
+		IF (SELECT COUNT(*) FROM posts WHERE topic_id = OLD.topic_id AND user_id = OLD.user_id AND deleted_at IS NULL) = 0 THEN
+				DELETE FROM topic_users WHERE topic_id = OLD.topic_id AND user_id = OLD.user_id;
 
 		END IF;
  	END IF;
