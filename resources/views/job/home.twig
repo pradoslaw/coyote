@@ -221,7 +221,7 @@
                 </div>
 
                 <ul class="nav nav-tabs">
-                    {% for item in nav.roots() %}
+                    {% for item in tabs.roots() %}
                         <li {{ forms.attr(item.attr) }}>
                             <a href="{{ item.url }}">{{ item.title|raw }}</a>
                         </li>
