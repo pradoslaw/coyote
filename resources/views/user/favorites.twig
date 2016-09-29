@@ -8,7 +8,7 @@
 
     <ul class="nav nav-panel">
         {% for tab in tabs.roots() %}
-            <li {{ forms.attr(tab.link.attr) }}>
+            <li {{ forms.attr(tab.attr) }}>
                 <a href="{{ tab.url }}">{{ tab.title|raw }}</a>
             </li>
         {% endfor %}

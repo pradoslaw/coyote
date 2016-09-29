@@ -107,7 +107,7 @@ class FavoritesController extends BaseController
             ];
 
             foreach ($tabs as $route => $label) {
-                $menu->add($label, ['route' => $route])->active(ltrim(route($route, [], false)));
+                $menu->add($label, ['route' => $route]);
             }
         });
     }
