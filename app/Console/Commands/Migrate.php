@@ -863,7 +863,7 @@ class Migrate extends Command
                 ->select(['topic_id', 'tag_id'])
                 ->join('page', 'page.page_id', '=', 'page_tag.page_id')
                 ->join('topic', 'topic_page', '=', 'page.page_id')
-                ->chunk(10000, function ($sql) {
+                ->chunk(50000, function ($sql) {
                     foreach ($sql as $row) {
                         $row = (array) $row;
 
@@ -2336,7 +2336,7 @@ class Migrate extends Command
             ->leftJoin('location', 'location_page', '=', 'log_page')
             ->leftJoin('topic', 'topic_page', '=', 'log_page')
             ->orderBy('log_id')
-            ->chunk(10000, function ($result) use ($mongo, $bar, $parseJson) {
+            ->chunk(50000, function ($result) use ($mongo, $bar, $parseJson) {
                 foreach ($result as $row) {
                     $row = (array) $row;
 
