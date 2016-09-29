@@ -936,10 +936,10 @@ class Migrate extends Command
 
                         DB::table('posts')->insert($row);
                         $bar->advance();
-
-                        $this->fixSequence('posts');
                     }
                 });
+
+            $this->fixSequence('posts');
 
             DB::connection('mysql')->table('post_comment')->chunk(100000, function ($sql) use ($bar) {
                 foreach ($sql as $row) {
@@ -955,19 +955,19 @@ class Migrate extends Command
 
                     DB::table('post_comments')->insert($row);
                     $bar->advance();
-
-                    $this->fixSequence('post_comments');
                 }
             });
+
+            $this->fixSequence('post_comments');
 
             DB::connection('mysql')->table('post_subscribe')->chunk(100000, function ($sql) use ($bar) {
                 foreach ($sql as $row) {
                     DB::table('post_subscribers')->insert((array) $row);
                     $bar->advance();
-
-                    $this->fixSequence('post_subscribers');
                 }
             });
+
+            $this->fixSequence('post_subscribers');
 
             DB::connection('mysql')->table('post_vote')->chunk(100000, function ($sql) use ($bar) {
                 foreach ($sql as $row) {
@@ -986,10 +986,10 @@ class Migrate extends Command
 
                     DB::table('post_votes')->insert($row);
                     $bar->advance();
-
-                    $this->fixSequence('post_votes');
                 }
             });
+
+            $this->fixSequence('post_votes');
 
             DB::connection('mysql')->table('post_accept')->chunk(100000, function ($sql) use ($bar) {
                 foreach ($sql as $row) {
@@ -1008,10 +1008,10 @@ class Migrate extends Command
 
                     DB::table('post_accepts')->insert($row);
                     $bar->advance();
-
-                    $this->fixSequence('post_accepts');
                 }
             });
+
+            $this->fixSequence('post_accepts');
 
             DB::connection('mysql')->table('post_attachment')->chunk(100000, function ($sql) use ($bar) {
                 foreach ($sql as $row) {
@@ -1027,10 +1027,10 @@ class Migrate extends Command
 
                     DB::table('post_attachments')->insert($row);
                     $bar->advance();
-
-                    $this->fixSequence('post_attachments');
                 }
             });
+
+            $this->fixSequence('post_attachments');
 
             DB::connection('mysql')->table('post_text')->chunk(100000, function ($sql) use ($bar) {
                 foreach ($sql as $row) {
@@ -1045,10 +1045,10 @@ class Migrate extends Command
 
                     DB::table('post_log')->insert($row);
                     $bar->advance();
-
-                    $this->fixSequence('post_log');
                 }
             });
+
+            $this->fixSequence('post_log');
 
             $bar->finish();
             DB::commit();
