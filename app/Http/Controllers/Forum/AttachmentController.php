@@ -4,42 +4,38 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Forms\Forum\AttachmentForm;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as Attachment;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as AttachmentRepository;
+use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Illuminate\Http\Request;
-use Guzzle\Http\Mimetypes;
 use Coyote\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
-/**
- * Class AttachmentController
- * @package Coyote\Http\Controllers\Forum
- */
 class AttachmentController extends Controller
 {
     use MediaFactory;
 
     /**
-     * @var Attachment
+     * @var AttachmentRepository
      */
     private $attachment;
 
     /**
-     * @var Forum
+     * @var ForumRepository
      */
     private $forum;
 
     /**
-     * @var Post
+     * @var PostRepository
      */
     private $post;
 
     /**
-     * @param Attachment $attachment
-     * @param Post $post
-     * @param Forum $forum
+     * @param AttachmentRepository $attachment
+     * @param PostRepository $post
+     * @param ForumRepository $forum
      */
-    public function __construct(Attachment $attachment, Post $post, Forum $forum)
+    public function __construct(AttachmentRepository $attachment, PostRepository $post, ForumRepository $forum)
     {
         parent::__construct();
 
@@ -56,22 +52,20 @@ class AttachmentController extends Controller
      */
     public function upload(Request $request)
     {
-        $this->validate($request, [
-            'attachment'  => sprintf(
-                'required|max:%s|mimes:%s',
-                config('filesystems.upload_max_size') * 1024,
-                config('filesystems.upload_mimes')
-            )
-        ]);
+        $this->validate($request, ['attachment' => sprintf(
+            'required|max:%s|mimes:%s',
+            config('filesystems.upload_max_size') * 1024,
+            config('filesystems.upload_mimes')
+        )]);
 
         $media = $this->getMediaFactory('attachment')->upload($request->file('attachment'));
-        $mime = new Mimetypes();
+        $mime = MimeTypeGuesser::getInstance();
 
         $data = [
             'size' => $media->size(),
             'file' => $media->getFilename(),
             'name' => $media->getName(),
-            'mime' => $mime->fromFilename($media->path())
+            'mime' => $mime->guess($media->path())
         ];
 
         $attachment = $this->attachment->create($data);
@@ -95,11 +89,11 @@ class AttachmentController extends Controller
         $this->validateWith($validator);
 
         $media = $this->getMediaFactory('attachment')->put(file_get_contents('data://' . substr($input, 7)));
-        $mime = new Mimetypes();
+        $mime = MimeTypeGuesser::getInstance();
 
         $data = [
             'size' => $media->size(),
-            'mime' => $mime->fromFilename($media->path()),
+            'mime' => $mime->guess($media->path()),
             'file' => $media->getFilename(),
             'name' => $media->getName()
         ];
@@ -118,6 +112,7 @@ class AttachmentController extends Controller
     {
         /** @var \Coyote\Post\Attachment $attachment */
         $attachment = $this->attachment->findOrFail($id);
+
         $post = $this->post->findOrNew($attachment->post_id, ['id', 'forum_id']);
         $forum = $this->forum->find($post->forum_id);
 
