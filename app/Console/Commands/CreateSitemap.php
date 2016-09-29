@@ -59,7 +59,7 @@ class CreateSitemap extends Command
         $this->info("\nSaving. Please wait...");
         $sitemap->save();
 
-        $this->info("\nDone.");
+        $this->info("Done.");
     }
 
     /**
