@@ -24,7 +24,7 @@
                             {{ grid_column(column) }}
                         {% endfor %}
                     </tr>
-                    {% if has_filters %}
+                    {% if is_filterable %}
                         <tr>
                             {% for column in columns %}
                                 {{ grid_filter(column) }}
