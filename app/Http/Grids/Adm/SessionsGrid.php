@@ -55,8 +55,7 @@ class SessionsGrid extends Grid
                 'title' => 'System operacyjny'
             ])
             ->addColumn('user_agent', [
-                'title' => 'User-agent',
-                'decorator' => [new StrLimit(65)]
+                'title' => 'User-agent'
             ])
             ->each(function (Row $row) {
                 $agent = new Agent();
@@ -64,7 +63,7 @@ class SessionsGrid extends Grid
 
                 $row->get('platform')->setValue($agent->platform());
                 $row->get('browser')->setValue($agent->browser());
-                $row->get('user_agent')->setValue(str_limit($row->raw('browser'), 65));
+                $row->get('user_agent')->setValue($row->raw('browser'));
             });
     }
 }
