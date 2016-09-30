@@ -1061,6 +1061,9 @@ class Migrate extends Command
             $this->error($e->getTraceAsString());
         }
 
+        DB::update('posts')->where('user_id', 0)->update(['user_id' => null]);
+        DB::update('post_log')->where('user_id', 0)->update(['user_id' => null]);
+
         $this->line('');
         $this->info('Done');
     }
