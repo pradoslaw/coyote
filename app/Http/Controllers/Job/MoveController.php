@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Events\JobWasDeleted;
+use Coyote\Events\JobDeleting;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Http\Controllers\Controller;
@@ -11,6 +11,7 @@ use Coyote\Repositories\Contracts\PollRepositoryInterface as PollRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Job;
 use Coyote\Services\Stream\Activities\Move as Stream_Move;
@@ -36,17 +37,20 @@ class MoveController extends Controller
 
     /**
      * @param Job $job
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function index(Job $job)
     {
         $forum = app(ForumRepository::class);
 
-        $this->breadcrumb->push($job->title, route('job.offer', [$job->id, $job->slug]));
-        $this->breadcrumb->push('Przenieś ofertę pracy');
+        $this->breadcrumb->push([
+            'Praca' => route('job.home'),
+            $job->title => route('job.offer', [$job->id, $job->slug]),
+            'Przenieś ofertę pracy' => ''
+        ]);
 
         return $this->view('job.move')->with([
-            'forumList'         => $forum->forumList('id'),
+            'forumList'         => $forum->choices('id'),
             'preferred'         => $forum->findBy('name', 'Ogłoszenia drobne', ['id']),
             'job'               => $job,
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
@@ -91,8 +95,9 @@ class MoveController extends Controller
             $post->update($ip);
             $post->logs()->first()->update($ip);
 
+            event(new JobDeleting($job));
+
             $job->delete();
-            event(new JobWasDeleted($job));
 
             // fire the event. it can be used to index a content and/or add page path to "pages" table
             event(new TopicWasSaved($topic));
@@ -103,7 +108,7 @@ class MoveController extends Controller
         });
 
         return redirect()
-            ->route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug])
+            ->to(UrlBuilder::post($post))
             ->with('success', 'Ogłoszenie zostało przeniesione.');
     }
 }

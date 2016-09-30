@@ -22,7 +22,7 @@ class CreatePostLogTable extends Migration
             $table->json('tags')->nullable();
             $table->string('comment')->nullable();
             $table->string('ip');
-            $table->string('browser');
+            $table->string('browser')->nullable();
             $table->string('host');
 
             $table->index('post_id');

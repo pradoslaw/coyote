@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Illuminate\Queue\SerializesModels;
 use Coyote\Job;
 
-class JobWasDeleted extends Event
+class JobDeleting extends Event
 {
     use SerializesModels;
 
@@ -21,6 +21,6 @@ class JobWasDeleted extends Event
      */
     public function __construct(Job $job)
     {
-        $this->job = $job->toArray();
+        $this->job = $job;
     }
 }

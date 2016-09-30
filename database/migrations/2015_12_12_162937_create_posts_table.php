@@ -25,7 +25,7 @@ class CreatePostsTable extends Migration
             $table->smallInteger('score')->default(0);
             $table->text('text');
             $table->string('ip');
-            $table->string('browser');
+            $table->string('browser')->nullable(); // wsteczna kompatybilnosc
             $table->string('host');
 
             $table->index('forum_id');

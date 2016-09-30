@@ -2,7 +2,7 @@
 
 namespace Coyote\Listeners;
 
-use Coyote\Events\JobWasDeleted;
+use Coyote\Events\JobDeleting;
 use Coyote\Events\JobWasSaved;
 use Coyote\Jobs\UpdateJobOffers;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
@@ -38,11 +38,11 @@ class JobListener
     }
 
     /**
-     * @param JobWasDeleted $event
+     * @param JobDeleting $event
      */
-    public function onJobDelete(JobWasDeleted $event)
+    public function onJobDeleting(JobDeleting $event)
     {
-        $this->job->withTrashed()->find($event->job['id'])->deleteFromIndex();
+        $event->job->deleteFromIndex();
     }
 
     /**
@@ -59,7 +59,7 @@ class JobListener
 
         $events->listen(
             'Coyote\Events\JobWasDeleted',
-            'Coyote\Listeners\JobListener@onJobDelete'
+            'Coyote\Listeners\JobListener@onJobDeleting'
         );
     }
 }

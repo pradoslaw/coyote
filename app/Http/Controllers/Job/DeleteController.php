@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Events\JobWasDeleted;
+use Coyote\Events\JobDeleting;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Job;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
@@ -18,8 +18,8 @@ class DeleteController extends Controller
     public function index(Job $job)
     {
         $this->transaction(function () use ($job) {
+            event(new JobDeleting($job));
             $job->delete();
-            event(new JobWasDeleted($job));
 
             stream(Stream_Delete::class, (new Stream_Job)->map($job));
         });

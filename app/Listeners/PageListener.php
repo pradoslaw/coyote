@@ -10,7 +10,7 @@ use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\ForumWasSaved;
 use Coyote\Events\ForumWasDeleted;
 use Coyote\Events\JobWasSaved;
-use Coyote\Events\JobWasDeleted;
+use Coyote\Events\JobDeleting;
 use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Microblog;
@@ -146,9 +146,9 @@ class PageListener implements ShouldQueue
     }
 
     /**
-     * @param JobWasDeleted $event
+     * @param JobDeleting $event
      */
-    public function onJobDelete(JobWasDeleted $event)
+    public function onJobDelete(JobDeleting $event)
     {
         $this->page->findByContent($event->job['id'], Job::class)->delete();
     }
