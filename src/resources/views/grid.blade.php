@@ -24,7 +24,7 @@
                             {{ grid_column($column) }}
                         @endforeach
                     </tr>
-                    @if($has_filters)
+                    @if($is_filterable)
                         <tr>
                             @foreach($columns as $column)
                                 {{ grid_filter($column) }}
