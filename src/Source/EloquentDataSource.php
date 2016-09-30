@@ -15,7 +15,7 @@ class EloquentDataSource implements SourceInterface
     protected $source;
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder $source
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model $source
      */
     public function __construct($source)
     {
