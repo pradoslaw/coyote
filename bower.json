@@ -8,6 +8,7 @@
     "ekko-lightbox": "^4.0.1",
     "jquery-color-animation": "color-animation#^1.6.0",
     "jquery-ui": "1.11.*",
-    "pretty-text-diff": "^1.0.4"
+    "pretty-text-diff": "^1.0.4",
+    "bootstrap-datepicker": "^1.6.4"
   }
 }
