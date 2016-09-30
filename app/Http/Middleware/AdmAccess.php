@@ -30,7 +30,7 @@ class AdmAccess
         // can re-enter his password
         if ($isLogged && !$request->session()->has('admin')) {
             if (!$request->session()->has('url.intended')) {
-                $request->session()->put('url.intended', url()->current());
+                $request->session()->put('url.intended', $request->fullUrl());
             }
 
             return redirect()->route('adm.home');
