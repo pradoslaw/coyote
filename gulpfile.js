@@ -156,6 +156,7 @@ elixir(function (mix) {
             'js/animate-colors.js',
             'js/jquery-ui.js',
             'js/wiki.js',
+            'js/diff.js',
 
             'css/main.css',
             'css/auth.css',
