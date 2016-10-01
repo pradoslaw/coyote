@@ -6,6 +6,7 @@ use Coyote\Services\Elasticsearch\Analyzers\TopicAnalyzer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Coyote\Models\Scopes\Sortable;
+use Illuminate\Database\Query\Builder;
 
 /**
  * @property int $id
@@ -16,6 +17,7 @@ use Coyote\Models\Scopes\Sortable;
  * @property int $last_post_id
  * @property int $first_post_id
  * @property int $is_locked
+ * @property int $is_sticky
  * @property int $views
  * @property int $forum_id
  * @property int $prev_forum_id
@@ -74,13 +76,13 @@ class Topic extends Model
     /**
      * Scope used in topic filtering.
      *
-     * @param $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
      * @param $userId
      * @return mixed
      */
     public function scopeForUser($query, $userId)
     {
-        return $query->whereIn('topics.id', function ($sub) use ($userId) {
+        return $query->whereIn('topics.id', function (Builder $sub) use ($userId) {
             return $sub->select('topic_id')
                 ->from('topic_users')
                 ->where('user_id', $userId);
@@ -96,7 +98,7 @@ class Topic extends Model
      */
     public function scopeSubscribes($query, $userId)
     {
-        return $query->whereIn('topics.id', function ($sub) use ($userId) {
+        return $query->whereIn('topics.id', function (Builder $sub) use ($userId) {
             return $sub->select('topic_id')
                 ->from('topic_subscribers')
                 ->where('user_id', $userId);

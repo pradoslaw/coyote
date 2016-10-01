@@ -35,13 +35,10 @@ class SubmitController extends BaseController
         $this->breadcrumb($forum);
 
         if (!empty($topic->id)) {
-            $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
-
-            if ($post === null) {
-                $this->breadcrumb->push('Odpowiedz', url($request->path()));
-            } else {
-                $this->breadcrumb->push('Edycja', url($request->path()));
-            }
+            $this->breadcrumb->push([
+                $topic->subject => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
+                $post === null ? 'Odpowiedz' : 'Edycja' => url($request->path())
+            ]);
         } else {
             $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->slug]));
         }

@@ -111,7 +111,7 @@ class PostForm extends Form
         if (is_array($data)) {
             foreach ($data as $key => $value) {
                 if (!empty($value)) {
-                    $this->$key = $value;
+                    $this->{$key} = $value;
                 }
             }
         }
@@ -184,7 +184,8 @@ class PostForm extends Form
             if ($this->userId !== null && $this->user->can('sticky', $this->forum)) { // can sticky
                 $this->add('is_sticky', 'checkbox', [
                     'rules' => self::RULE_STICKY,
-                    'label' => 'Przyklejony'
+                    'label' => 'Przyklejony',
+                    'value' => $this->topic->is_sticky
                 ]);
             }
         }
