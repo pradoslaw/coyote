@@ -38,9 +38,9 @@ before_script:
   - phantomjs --webdriver=4444 2>&1 >/dev/null &
   - sleep 5
   - php -S 127.0.0.1:8000 -t public/ 2>&1 >/dev/null &
-  - sleep 5
   - php artisan es:create --force
   - php artisan es:mapping --force
+  - sleep 5
 
 script: php vendor/bin/codecept run
 
