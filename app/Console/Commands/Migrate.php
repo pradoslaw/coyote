@@ -1352,7 +1352,8 @@ class Migrate extends Command
                 }
 
                 $row['description'] = $stripPar($row['description']);
-                $row['recruitment'] = null;
+                $row['requirements'] = null;
+                $this->setNullIfEmpty($row['recruitment']);
 
                 DB::table('jobs')->insert($row);
                 $bar->advance();
