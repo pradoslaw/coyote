@@ -8,6 +8,7 @@ use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Topic;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @method string search(array $body)
@@ -53,7 +54,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $first = $this->takeFirst($postId);
 
         $sql = $this
-            ->build(function ($builder) use ($topicId, $postId, $page, $perPage) {
+            ->build(function (Builder $builder) use ($topicId, $postId, $page, $perPage) {
                 return $builder
                     ->where('posts.topic_id', $topicId)
                     ->where('posts.id', '<>', $postId)
@@ -99,6 +100,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->select(['id'])
             ->where('topic_id', $topicId)
                 ->where('created_at', '>', $markTime)
+            ->orderBy('id')
             ->limit(1)
             ->value('id');
     }
@@ -432,7 +434,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
     /**
      * Subquery for better performance.
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     private function buildSubquery()
     {
