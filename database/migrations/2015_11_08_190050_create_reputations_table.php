@@ -22,7 +22,6 @@ class CreateReputationsTable extends Migration
             $table->string('url')->nullable();
             $table->json('metadata')->nullable();
 
-            $table->index('type_id');
             $table->index('user_id');
             // indeks potrzebny po to, aby na glownej stronie wyswietlic ranking reputacji od ostatniego
             // miesiaca, tygodnia itp. wtedy uzywany jest ten indeks
