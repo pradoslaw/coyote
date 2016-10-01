@@ -5,6 +5,7 @@ namespace Coyote;
 use Coyote\Services\Elasticsearch\Analyzers\AnalyzerInterface;
 use Coyote\Services\Elasticsearch\Transformers\CommonTransformer;
 use Coyote\Services\Elasticsearch\Transformers\TransformerInterface;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Illuminate\Contracts\Support\Arrayable;
 
 trait Searchable
@@ -35,11 +36,23 @@ trait Searchable
     /**
      * Delete document from index
      *
+     * @throws Missing404Exception,
+     * @throws \Exception
      * @return mixed
      */
     public function deleteFromIndex()
     {
-        return $this->getClient()->delete($this->getParams());
+        $result = false;
+
+        try {
+            $result = $this->getClient()->delete($this->getParams());
+        } catch (Missing404Exception $e) {
+            // ignore 404 errors...
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $result;
     }
 
     /**
@@ -164,7 +177,7 @@ trait Searchable
     /**
      * Get client instance
      *
-     * @return \Illuminate\Foundation\Application|mixed
+     * @return \Elasticsearch\Client
      */
     protected function getClient()
     {

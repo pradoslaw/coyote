@@ -40,7 +40,8 @@ class PostListener implements ShouldQueue
         $post = $this->post->withTrashed()->find($event->post['id']);
 
         $post->deleteFromIndex();
-        $post->topic->deleteFromIndex();
+        // reindex whole topic
+        $post->topic->putToIndex();
     }
 
     /**

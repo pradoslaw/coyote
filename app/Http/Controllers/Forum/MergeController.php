@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Events\PostWasSaved;
 use Coyote\Services\Stream\Activities\Merge as Stream_Merge;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\UrlBuilder\UrlBuilder;
@@ -30,6 +31,7 @@ class MergeController extends BaseController
                 array_merge($post->toArray(), ['text' => $text, 'subject' => $post->topic->subject, 'tags' => []])
             );
 
+            $url = UrlBuilder::topic($post->topic);
             $post->delete();
 
             // add post to elasticsearch
@@ -37,13 +39,13 @@ class MergeController extends BaseController
             // remove from elasticsearch
             event(new PostWasDeleted($post));
 
-            stream(
-                Stream_Merge::class,
-                (new Stream_Post())->map($post),
-                (new Stream_Topic())->map($post->topic)
-            );
+            $object = (new Stream_Post(['url' => $url]))->map($post);
+            $target = (new Stream_Topic())->map($post->topic);
 
-            return UrlBuilder::topic($post->topic) . '?p=' . $previous->id . '#id' . $previous->id;
+            stream(Stream_Merge::class, $object, $target);
+            stream(Stream_Delete::class, $object, $target);
+
+            return $url . '?p=' . $previous->id . '#id' . $previous->id;
         });
 
         return redirect()->to($url)->with('success', 'Posty zostały połączone.');
