@@ -77,30 +77,37 @@ class Topic extends Model
      * Scope used in topic filtering.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param $userId
+     * @param int $userId
      * @return mixed
      */
     public function scopeForUser($query, $userId)
     {
-        return $query->whereIn('topics.id', function (Builder $sub) use ($userId) {
-            return $sub->select('topic_id')
-                ->from('topic_users')
-                ->where('user_id', $userId);
-        });
+        return $this->buildWhereIn($query, $userId, 'topic_users');
     }
 
     /**
      * Scope used in topic filtering.
      *
-     * @param $query
-     * @param $userId
+     * @param \Illuminate\Database\Eloquent\Builder$query
+     * @param int $userId
      * @return mixed
      */
     public function scopeSubscribes($query, $userId)
     {
-        return $query->whereIn('topics.id', function (Builder $sub) use ($userId) {
+        return $this->buildWhereIn($query, $userId, 'topic_subscribers');
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $userId
+     * @param string $table
+     * @return mixed
+     */
+    private function buildWhereIn($query, $userId, $table)
+    {
+        return $query->whereIn('topics.id', function (Builder $sub) use ($userId, $table) {
             return $sub->select('topic_id')
-                ->from('topic_subscribers')
+                ->from($table)
                 ->where('user_id', $userId);
         });
     }
