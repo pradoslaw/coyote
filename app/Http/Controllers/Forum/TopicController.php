@@ -40,11 +40,6 @@ class TopicController extends BaseController
         // number of posts per one page
         $perPage = $this->postsPerPage($request);
 
-        // user wants to show certain post. we need to calculate page number based on post id.
-        if ($request->has('p')) {
-            $page = $this->post->getPage($request->get('p'), $topic->id, $perPage);
-        }
-
         $gate = $this->getGateFactory();
 
         // user with forum-update ability WILL see every post
@@ -52,6 +47,11 @@ class TopicController extends BaseController
             $this->post->pushCriteria(new WithTrashed());
             // user is able to see real number of posts in this topic
             $replies = $topic->replies_real;
+        }
+
+        // user wants to show certain post. we need to calculate page number based on post id.
+        if ($request->has('p')) {
+            $page = $this->post->getPage($request->get('p'), $topic->id, $perPage);
         }
 
         start_measure('More like this');
