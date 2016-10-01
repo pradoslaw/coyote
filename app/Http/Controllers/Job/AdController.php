@@ -33,7 +33,7 @@ class AdController extends Controller
      */
     public function index(Request $request)
     {
-        $output = $this->getCacheFactory()->remember('ad:' . $request->ip(), 60, function () {
+        $output = $this->getCacheFactory()->remember('ad:' . md5($request->session()->getId()), 60, function () {
             return $this->load($this->lookupLocation());
         });
 
@@ -67,11 +67,15 @@ class AdController extends Controller
     {
         if (auth()->check() && auth()->user()->location) {
             // get by city if available...
-            $result = $this->getByCity(auth()->user()->location);
+            try {
+                $result = $this->getByCity(auth()->user()->location);
 
-            // only first result please...
-            if ($result) {
-                return $result[0];
+                // only first result please...
+                if ($result) {
+                    return $result[0];
+                }
+            } catch (\Exception $e) {
+                // ignore exception
             }
         }
 
