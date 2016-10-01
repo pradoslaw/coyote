@@ -19,7 +19,6 @@ class CreateAlertSettingsTable extends Migration
             $table->tinyInteger('profile');
             $table->tinyInteger('email');
 
-            $table->index('type_id');
             $table->index('user_id');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
