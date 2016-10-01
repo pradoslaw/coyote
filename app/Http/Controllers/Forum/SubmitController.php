@@ -88,11 +88,6 @@ class SubmitController extends BaseController
             // url to the post
             $url = UrlBuilder::post($post);
 
-            // parsing text and store it in cache
-            // it's important. don't remove below line so that text in activity can be saved without markdown.
-            // also we can parse html code and grab links to users profile.
-//            $post->text = app('parser.post')->parse($request->text);
-
             if ($post->wasRecentlyCreated) {
                 $alert = new Container();
                 $notification = [
