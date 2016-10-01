@@ -30,7 +30,8 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'SubmitController@index',
         'as' => 'topic.submit',
         'middleware' => [
-            'forum.access', 'forum.write']
+            'forum.access', 'forum.write'
+        ]
     ]);
 
     $this->post('{forum}/Submit/{topic?}', [

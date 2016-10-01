@@ -81,6 +81,8 @@ class FunctionalTester extends \Codeception\Actor
             'slug' => str_slug($name)
         ];
 
+        \Coyote\Topic::unguard();
+
         return $this->haveRecord('Coyote\Topic', array_merge($data, $attributes));
     }
 
@@ -95,6 +97,8 @@ class FunctionalTester extends \Codeception\Actor
             'host' => $fake->domainName,
             'user_id' => null
         ];
+
+        \Coyote\Post::unguard();
 
         return $this->haveRecord('Coyote\Post', array_merge($data, $attributes));
     }
