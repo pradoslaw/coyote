@@ -7,23 +7,13 @@ use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Forms\ForumReasonsForm;
 use Coyote\Http\Grids\Adm\Forum\ReasonsGrid;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 
 class ReasonsController extends BaseController
 {
-    /**
-     * @var ForumRepository
-     */
-    private $forum;
-
-    /**
-     * @param ForumRepository $forum
-     */
-    public function __construct(ForumRepository $forum)
+    public function __construct()
     {
         parent::__construct();
 
-        $this->forum = $forum;
         $this->breadcrumb->push([
             'Forum' => route('adm.forum.categories'),
             'Powody moderacji' => route('adm.forum.reasons')
