@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "12220f9ae6ddc13d4f52cbefaaa11f45",
-    "content-hash": "c2ec0def5734bc8d344aabdeec47cea9",
+    "hash": "2bd5174a5b008787c94d3016a84403c8",
+    "content-hash": "78d1be5b9a9d09cd94c0b70d486eda44",
     "packages": [
         {
             "name": "adam-boduch/geshi",

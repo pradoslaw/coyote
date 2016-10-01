@@ -317,6 +317,7 @@ class SubmitController extends Controller
     {
         $data = $request->session()->get('job');
 
+        /** @var \Coyote\Job $job */
         $job = $this->job->findOrNew((int) $data['id']);
         $job->setDefaultUserId($this->userId);
 

@@ -1,6 +1,5 @@
 <?php
 
-use Coyote\User;
 use Faker\Factory;
 
 class JobPostingCest
@@ -11,6 +10,8 @@ class JobPostingCest
     {
         $this->user = $I->createUser();
         $I->amLoggedAs($this->user);
+
+        \Coyote\Job::reguard();
     }
 
     public function _after(FunctionalTester $I)

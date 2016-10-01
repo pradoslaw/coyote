@@ -51,7 +51,7 @@
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
-        "codeception/codeception": "*",
+        "codeception/codeception": "2.2.*",
         "squizlabs/php_codesniffer": "2.*",
         "phpmd/phpmd" : "@stable",
         "symfony/css-selector": "2.8.*|3.0.*",
