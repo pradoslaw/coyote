@@ -49,12 +49,12 @@ class FunctionalTester extends \Codeception\Actor
 
         return $user;
     }
-    
+
     public function logInAsAdmin()
     {
         $user = User::where('name', 'admin')->first();
         $this->amLoggedAs($user);
-        
+
         return $user;
     }
 
@@ -67,8 +67,35 @@ class FunctionalTester extends \Codeception\Actor
             'slug' => str_slug($name),
             'description' => $fake->text
         ];
-        
+
         $id = $this->haveRecord('forums', array_merge($data, $attributes));
         return $this->grabRecord('Coyote\Forum', ['id' => $id]);
+    }
+
+    public function createTopic($attributes)
+    {
+        $fake = Factory::create();
+
+        $data = [
+            'subject' => $name = $fake->name,
+            'slug' => str_slug($name)
+        ];
+
+        return $this->haveRecord('Coyote\Topic', array_merge($data, $attributes));
+    }
+
+    public function createPost($attributes)
+    {
+        $fake = Factory::create();
+
+        $data = [
+            'text' => $fake->text,
+            'ip' => $fake->ipv4,
+            'browser' => $fake->userAgent,
+            'host' => $fake->domainName,
+            'user_id' => null
+        ];
+
+        return $this->haveRecord('Coyote\Post', array_merge($data, $attributes));
     }
 }

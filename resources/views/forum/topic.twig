@@ -4,11 +4,10 @@
 {% import 'components.forms' as forms %}
 {% import 'components.modals' as modals %}
 
-{% set is_writeable = can('update', forum) ? true : (not (forum.is_locked or topic.is_locked)) %}
+{% set is_writeable = forum.is_locked ? false : (can('update', forum) ? true : not topic.is_locked) %}
 {% set too_old = diff_in_months(topic.last_post_created_at) >= 6 %}
 
 {% block content %}
-
     {% if warnings.lock %}
         <p class="alert alert-warning">
             Wątek zablokowany {{ warnings.lock.created_at|format_date }} przez <a href="{{ url(warnings.lock.actor.url) }}">{{ warnings.lock.actor.displayName }}</a>.
@@ -55,7 +54,7 @@
                     <div class="clearfix"></div>
 
                     {% for post in posts %}
-                        {{ include('forum.partials.post', {index: loop.index0}) }}
+                        {%  include 'forum.partials.post' with {index: loop.index0} %}
                     {% endfor %}
 
                     <div class="post" id="last-post">
