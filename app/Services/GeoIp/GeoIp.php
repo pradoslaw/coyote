@@ -45,6 +45,10 @@ class GeoIp
      */
     public function ip($ip)
     {
+        if (!$this->isValidIp($ip)) {
+            return false;
+        }
+
         return $this->request('ip/' . $ip);
     }
 
@@ -80,5 +84,14 @@ class GeoIp
         return 'http://' . $this->host .
             ($this->port != '' && $this->port != 80 ? (':' . $this->port) : '') .
                 '/' . self::VERSION . '/';
+    }
+
+    /**
+     * @param string $ip
+     * @return bool
+     */
+    protected function isValidIp($ip)
+    {
+        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false;
     }
 }

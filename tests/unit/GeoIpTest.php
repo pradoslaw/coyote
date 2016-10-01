@@ -79,5 +79,12 @@ class GeoIpTest extends \Codeception\TestCase\Test
     {
         $result = $this->geoIp->ip('104.16.34.249');
         $this->assertEquals('US', $result['country_code']);
+
+        $this->assertFalse($this->geoIp->ip('192.168.0.1'));
+    }
+
+    public function testGeocodeIpv6Ip()
+    {
+        $this->assertFalse($this->geoIp->ip('2a03:1280:0000:0252:68af:97ac:749c:b439'));
     }
 }
