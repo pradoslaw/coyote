@@ -46,6 +46,7 @@ class BaseController extends Controller
 
             $forum->add('Kategorie', ['route' => 'adm.forum.categories']);
             $forum->add('Uprawnienia', ['route' => 'adm.forum.permissions'])->data('permission', 'adm-group');
+            $forum->add('Powody moderacji', ['route' => 'adm.forum.reasons']);
 
             $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper-o fa-fw'));
             $menu->add('Raporty', ['route' => 'adm.flag'])->prepend($fa('fa-flag fa-fw'));

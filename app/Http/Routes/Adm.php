@@ -43,6 +43,26 @@ $this->group(
             'middleware' => 'can:adm-group'
         ]);
 
+        /*
+         * Forum reasons
+         */
+
+        $this->get('Forum/Reasons', 'Forum\ReasonsController@index')->name('forum.reasons');
+
+        $this->get('Forum/Reasons/Save/{id?}', [
+            'uses' => 'Forum\ReasonsController@edit',
+            'as' => 'forum.reasons.save'
+        ]);
+
+        $this->post('Forum/Reasons/Save/{id?}', ['uses' => 'Forum\ReasonsController@save']);
+        $this->post('Forum/Reasons/Delete/{id}', [
+            'as' => 'forum.reasons.delete',
+            'uses' => 'Forum\ReasonsController@delete'
+        ]);
+
+        ////////////////////////////////////////////////////////////////////////////////////
+
+
         $this->get('User', 'UserController@index')->name('user');
         $this->get('User/Save/{user}', 'UserController@edit')->name('user.save');
         $this->post('User/Save/{user}', 'UserController@save');

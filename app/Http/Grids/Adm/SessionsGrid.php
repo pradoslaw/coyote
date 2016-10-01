@@ -3,7 +3,6 @@
 namespace Coyote\Http\Grids\Adm;
 
 use Boduch\Grid\Decorators\Ip;
-use Boduch\Grid\Decorators\StrLimit;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Text;
 use Boduch\Grid\Row;
