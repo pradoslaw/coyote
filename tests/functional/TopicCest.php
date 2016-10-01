@@ -1,6 +1,6 @@
 <?php
 
-class ForumCest
+class TopicCest
 {
     private $forum;
 
