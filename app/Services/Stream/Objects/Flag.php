@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Stream\Objects;
 
-class Flag extends Object
+class Flag extends ObjectAbstract
 {
     //
 }

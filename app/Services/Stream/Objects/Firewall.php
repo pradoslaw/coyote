@@ -4,7 +4,7 @@ namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Firewall as Model;
 
-class Firewall extends Object
+class Firewall extends ObjectAbstract
 {
     /**
      * @param Model $firewall

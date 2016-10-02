@@ -4,7 +4,7 @@ namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Group as Model;
 
-class Group extends Object
+class Group extends ObjectAbstract
 {
     /**
      * @param Model $group

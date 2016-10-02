@@ -2,10 +2,10 @@
 
 namespace Coyote\Services\Stream;
 
-use Coyote\Services\Stream\Objects\Object;
+use Coyote\Services\Stream\Objects\ObjectAbstract;
 use Coyote\User;
 
-class Actor extends Object
+class Actor extends ObjectAbstract
 {
     /**
      * @param User $user

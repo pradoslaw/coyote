@@ -4,10 +4,7 @@ namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Services\Stream\Builder;
 
-/**
- * Class Object
- */
-abstract class Object implements ObjectInterface
+abstract class ObjectAbstract implements ObjectInterface
 {
     use Builder;
 
@@ -37,7 +34,7 @@ abstract class Object implements ObjectInterface
     public function __construct(array $data = [])
     {
         foreach ($data as $field => $value) {
-            $this->$field = $value;
+            $this->{$field} = $value;
         }
 
         if (empty($this->objectType)) {

@@ -4,7 +4,7 @@ namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Pastebin as Model;
 
-class Pastebin extends Object
+class Pastebin extends ObjectAbstract
 {
     /**
      * @param Model $pastebin

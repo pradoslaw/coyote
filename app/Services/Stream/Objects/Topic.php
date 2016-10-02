@@ -5,7 +5,7 @@ namespace Coyote\Services\Stream\Objects;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic as Model;
 
-class Topic extends Object
+class Topic extends ObjectAbstract
 {
     /**
      * @var array

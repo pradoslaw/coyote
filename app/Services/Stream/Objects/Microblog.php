@@ -5,7 +5,7 @@ namespace Coyote\Services\Stream\Objects;
 use Coyote\Microblog as Model;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 
-class Microblog extends Object
+class Microblog extends ObjectAbstract
 {
     public function map(Model $microblog)
     {

@@ -4,7 +4,7 @@ namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Forum as Model;
 
-class Forum extends Object
+class Forum extends ObjectAbstract
 {
     /**
      * @param Model $forum

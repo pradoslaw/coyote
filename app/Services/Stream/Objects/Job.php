@@ -4,7 +4,7 @@ namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Job as Model;
 
-class Job extends Object
+class Job extends ObjectAbstract
 {
     /**
      * @param Model $job

@@ -4,7 +4,7 @@ namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Services\UrlBuilder\UrlBuilder;
 
-class Comment extends Object
+class Comment extends ObjectAbstract
 {
     /**
      * @param array ...$args

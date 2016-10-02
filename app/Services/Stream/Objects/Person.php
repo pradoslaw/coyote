@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Stream\Objects;
 
-class Person extends Object
+class Person extends ObjectAbstract
 {
     /**
      * @param array $data

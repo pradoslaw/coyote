@@ -4,7 +4,7 @@ namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Block as Model;
 
-class Block extends Object
+class Block extends ObjectAbstract
 {
     /**
      * @var string

@@ -4,7 +4,7 @@ namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Post as Model;
 
-class Post extends Object
+class Post extends ObjectAbstract
 {
     /**
      * @param Model $post
