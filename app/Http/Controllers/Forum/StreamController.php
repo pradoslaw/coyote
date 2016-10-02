@@ -2,14 +2,13 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Http\Factories\StreamFactory;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
+use Coyote\Services\Stream\Decorator;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 
 class StreamController extends BaseController
 {
-    use StreamFactory;
-
     /**
      * @param \Coyote\Topic $topic
      * @param StreamRepository $stream
@@ -31,13 +30,15 @@ class StreamController extends BaseController
             $item['actor'] = (array) $item['actor'];
         }
 
-        $decorate = $this->getStreamFactory()->decorate($collection);
+        $decorate = (new Decorator($collection))->decorate();
 
         $visits = $page->visits($topic->page()->getResults()->id);
 
         $this->breadcrumb($topic->forum);
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug]));
-        $this->breadcrumb->push('Dziennik zdarzeń', route('forum.stream', [$topic->id]));
+        $this->breadcrumb->push([
+            $topic->subject => UrlBuilder::topic($topic),
+            'Dziennik zdarzeń' => route('forum.stream', [$topic->id])
+        ]);
 
         return $this->view('forum.stream')->with(compact('topic', 'activities', 'decorate', 'visits'));
     }

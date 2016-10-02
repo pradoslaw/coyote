@@ -6,7 +6,7 @@ use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
-use Coyote\Http\Factories\StreamFactory;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\ObtainSubscribers;
@@ -19,7 +19,7 @@ use Coyote\Topic;
 
 class TopicController extends BaseController
 {
-    use StreamFactory, CacheFactory, FlagFactory;
+    use CacheFactory, FlagFactory;
 
     /**
      * @param Request $request
@@ -294,6 +294,6 @@ class TopicController extends BaseController
      */
     protected function findByObject($object, $id, $verb)
     {
-        return $this->getStreamFactory()->findByObject($object, $id, $verb);
+        return app(StreamRepository::class)->findByObject($object, $id, $verb);
     }
 }

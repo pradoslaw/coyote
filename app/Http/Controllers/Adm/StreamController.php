@@ -2,14 +2,12 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
-use Coyote\Http\Factories\StreamFactory;
 use Coyote\Http\Forms\StreamFilterForm;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
+use Coyote\Services\Stream\Decorator;
 
 class StreamController extends BaseController
 {
-    use StreamFactory;
-
     /**
      * @var StreamRepository
      */
@@ -33,7 +31,7 @@ class StreamController extends BaseController
     public function index(StreamFilterForm $form)
     {
         $paginator = $this->stream->filter($form);
-        $this->getStreamFactory()->decorate($paginator->items());
+        (new Decorator($paginator->items()))->decorate();
 
         $paginator->appends($form->getRequest()->except('page'));
 

@@ -68,10 +68,6 @@ class AppServiceProvider extends ServiceProvider
             return new $app[SettingRepositoryInterface::class]($app);
         });
 
-        $this->app->bind('stream', function ($app) {
-            return new Stream($app[StreamRepositoryInterface::class]);
-        });
-
         $this->app->singleton('form.builder', function ($app) {
             return new FormBuilder($app);
         });

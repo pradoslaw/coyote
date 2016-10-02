@@ -7,14 +7,14 @@ use Illuminate\Support\Collection;
 class Decorator
 {
     /**
-     * @var Collection
+     * @var Collection|array
      */
     protected $collection;
 
     /**
-     * @param Collection $collection
+     * @param Collection|array $collection
      */
-    public function __construct(Collection $collection)
+    public function __construct($collection)
     {
         $this->collection = $collection;
     }
