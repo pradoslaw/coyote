@@ -79,18 +79,17 @@ function keywords($text, $limit = 10)
  * @param \Coyote\Services\Stream\Activities\Activity|null $activity
  * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $object
  * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $target
- * @return \Coyote\Services\Stream\Stream
  */
 function stream($activity = null, $object = null, $target = null)
 {
-    $stream = app('stream');
+    $stream = app(\Coyote\Repositories\Contracts\StreamRepositoryInterface::class);
 
     if ($activity) {
         if (is_string($activity)) {
             $actor = new Coyote\Services\Stream\Actor(auth()->user());
 
             $class = 'Coyote\\Services\\Stream\\Activities\\' . ucfirst(camel_case(class_basename($activity)));
-            $stream->add(new $class($actor, $object, $target));
+            $stream->create(new $class($actor, $object, $target));
         } else {
             if ($object !== null) {
                 $activity->setObject($object);
@@ -102,8 +101,6 @@ function stream($activity = null, $object = null, $target = null)
             $stream->add($activity);
         }
     }
-
-    return $stream;
 }
 
 /**
