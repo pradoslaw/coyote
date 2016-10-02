@@ -16,61 +16,61 @@ class AlertTypesTableSeeder extends Seeder
         Type::unguard();
 
         Type::create(['id'       => Alert::PM,
-                      'name'     => 'Powiadamiaj o nowej wiadomości prywatnej',
+                      'name'     => '...nowej wiadomości prywatnej',
                       'headline' => 'Nowa wiadomość od: {sender}',
                       'profile'  => false,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::TOPIC_SUBSCRIBER,
-                      'name'     => 'Powiadamiaj o nowych postach w obserwowanych wątkach',
+                      'name'     => '...nowych postach w obserwowanych wątkach',
                       'headline' => '{sender} dodał odpowiedź w wątku',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::TOPIC_MOVE,
-                      'name'     => 'Powiadamiaj o przeniesieniu Twojego wątku',
+                      'name'     => '...przeniesieniu Twojego wątku',
                       'headline' => 'Wątek został przeniesiony',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::TOPIC_DELETE,
-                      'name'     => 'Powiadamiaj o usunięciu Twojego wątku',
+                      'name'     => '...usunięciu Twojego wątku',
                       'headline' => 'Wątek został usunięty przez {sender}',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::POST_DELETE,
-                      'name'     => 'Powiadamiaj o usunięciu Twojego postu',
+                      'name'     => '...usunięciu Twojego postu',
                       'headline' => 'Post został usunięty przez {sender}',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::POST_SUBSCRIBER,
-                      'name'     => 'Powiadamiaj o nowym komentarzu w Twoim poście',
+                      'name'     => '...nowym komentarzu w Twoim poście',
                       'headline' => '{sender} dodał komentarz do postu',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::WIKI_SUBSCRIBER,
-                      'name'     => 'Powiadamiaj o zmianie w obserwowanym tekście',
+                      'name'     => '...zmianie w obserwowanym tekście',
                       'headline' => 'Modyfikacja strony',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::WIKI_COMMENT,
-                      'name'     => 'Powiadamiaj o komentarzach w obserwowanych artykułach',
+                      'name'     => '...komentarzach w obserwowanych artykułach',
                       'headline' => '{sender} dodał komentarz',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::POST_EDIT,
-                      'name'     => 'Powiadamiaj o modyfikacji Twojego postu (lub postu, który obserwujesz)',
+                      'name'     => '...modyfikacji Twojego postu (lub postu, który obserwujesz)',
                       'headline' => '{sender} zmodyfikował post',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::TOPIC_SUBJECT,
-                      'name'     => 'Powiadamiaj o zmianie tytułu wątku na forum',
+                      'name'     => '...zmianie tytułu wątku na forum',
                       'headline' => 'Tytuł wątku został zmieniony',
                       'profile'  => true,
                       'email'    => false
@@ -88,37 +88,37 @@ class AlertTypesTableSeeder extends Seeder
                       'email'    => false
         ]);
         Type::create(['id'       => Alert::POST_LOGIN,
-                      'name'     => 'Powiadamiaj o wystąpieniu Twojego loginu w postach na forum',
+                      'name'     => '...wystąpieniu Twojego loginu w postach na forum',
                       'headline' => '{sender} wspomniał o Tobie w poście na forum',
                       'profile'  => true,
                       'email'    => false
         ]);
         Type::create(['id'       => Alert::MICROBLOG,
-                      'name'     => 'Powiadamiaj o odpowiedzi na wpis na mikroblogu',
+                      'name'     => '...odpowiedzi na wpis na mikroblogu',
                       'headline' => '{sender} odpisał na Twój wpis na mikroblogu',
                       'profile'  => true,
                       'email'    => true
         ]);
         Type::create(['id'       => Alert::MICROBLOG_LOGIN,
-                      'name'     => 'Powiadamiaj o wystąpieniu Twojego loginu w wiadomościach na mikroblogu',
+                      'name'     => '...wystąpieniu Twojego loginu w wiadomościach na mikroblogu',
                       'headline' => '{sender} wspomniał o Tobie we wpisie mikroblogu',
                       'profile'  => true,
                       'email'    => false
         ]);
         Type::create(['id'       => Alert::POST_VOTE,
-                      'name'     => 'Powiadamiaj o ocenie Twojego postu na forum',
+                      'name'     => '...ocenie Twojego postu na forum',
                       'headline' => '{sender} docenił Twój post',
                       'profile'  => true,
                       'email'    => false
         ]);
         Type::create(['id'       => Alert::MICROBLOG_VOTE,
-                      'name'     => 'Powiadamiaj o ocenie Twojego wpisu na mikroblogu',
+                      'name'     => '...ocenie Twojego wpisu na mikroblogu',
                       'headline' => '{sender} docenił Twój wpis na mikroblogu',
                       'profile'  => true,
                       'email'    => false
         ]);
         Type::create(['id'       => Alert::MICROBLOG_SUBSCRIBER,
-                      'name'     => 'Powiadamiaj o nowym komentarzu do wpisu, który doceniłeś',
+                      'name'     => '...nowym komentarzu do wpisu, który doceniłeś',
                       'headline' => '{sender} dodał komentarz do wpisu, który doceniłeś',
                       'profile'  => true,
                       'email'    => false
