@@ -85,11 +85,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         parent::boot();
 
-        static::saving(function ($model) {
+        static::saving(function (User $model) {
             // jezeli nie wypelniono tych kolumn - ustawiamy na null
             foreach (['group_id', 'birthyear', 'website', 'location', 'sig', 'bio'] as $column) {
-                if (empty($model->$column)) {
-                    $model->$column = null;
+                if (empty($model->{$column})) {
+                    $model->{$column} = null;
                 }
             }
         });
@@ -209,7 +209,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $access = false;
         $ipParts = explode('.', $this->access_ip);
 
-        for ($i = 0; $i < count($ipParts); $i += 4) {
+        for ($i = 0, $count = count($ipParts); $i < $count; $i += 4) {
             $regexp = str_replace('*', '.*', str_replace('.', '\.', implode('.', array_slice($ipParts, $i, 4))));
 
             if (preg_match('#^' . $regexp . '$#', $ip)) {

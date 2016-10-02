@@ -86,7 +86,7 @@ class QueryParser
     {
         if (is_array($query)) {
             $key = key($query);
-            
+
             if (!empty($query[$key])) {
                 $this->filteredQuery .= ' ' . $key . ':"' . $query[$key] . '"';
             }
@@ -119,7 +119,7 @@ class QueryParser
                     $unset[] = $index;
 
                     if ($value{0} === '"' && substr($value, -1) !== '"') {
-                        for ($i = $index + 1; $i <= count($segments); $i++) {
+                        for ($i = $index + 1, $count = count($segments); $i <= $count; $i++) {
                             $value .= ' ' . $segments[$i];
                             $unset[] = $i;
 

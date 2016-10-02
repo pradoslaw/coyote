@@ -23,7 +23,7 @@ class Geshi implements ParserInterface
         /* tekst bedzie zawarty w	znaczniku <pre>	*/
         $geshi->set_header_type(GESHI_HEADER_NONE);
 
-        for ($i = 0; $i < count($matches[1]); $i++) {
+        for ($i = 0, $count = count($matches[1]); $i < $count; $i++) {
             $language = substr($matches[1][$i], 9);
 
             if (isset($alias[$language])) {
