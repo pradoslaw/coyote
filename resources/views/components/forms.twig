@@ -64,7 +64,7 @@
 
         <div class="col-md-6 col-md-offset-4">
             <div class="checkbox">
-                {{ form_checkbox(name, value, checked, attr, help) }}
+                {{ form_checkbox(name, value, checked, attr|merge({class: 'styled'}), help) }}
 
                 <label for="{{ attr.id }}">
                     {{ label }}

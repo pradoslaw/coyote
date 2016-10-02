@@ -38,7 +38,7 @@
 
                         <div class="checkbox">
                             {% set random = 'id' ~ random() %}
-                            {{ form_checkbox('settings[' ~ setting.id ~ '][profile]', 1, setting.profile, {'id': random}) }}
+                            {{ form_checkbox('settings[' ~ setting.id ~ '][profile]', 1, setting.profile, {id: random, class: 'styled'}) }}
 
                             <label for="{{ random }}">
 
@@ -50,7 +50,7 @@
 
                         <div class="checkbox">
                             {% set random = 'id' ~ random() %}
-                            {{ form_checkbox('settings[' ~ setting.id ~ '][email]', 1, setting.email, {'id': random}) }}
+                            {{ form_checkbox('settings[' ~ setting.id ~ '][email]', 1, setting.email, {id: random, class: 'styled'}) }}
 
                             <label for="{{ random }}">
 
