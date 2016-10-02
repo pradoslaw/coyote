@@ -89,7 +89,7 @@ function stream($activity = null, $object = null, $target = null)
             $actor = new Coyote\Services\Stream\Actor(auth()->user());
 
             $class = 'Coyote\\Services\\Stream\\Activities\\' . ucfirst(camel_case(class_basename($activity)));
-            $stream->create(new $class($actor, $object, $target));
+            $stream->create((new $class($actor, $object, $target))->build());
         } else {
             if ($object !== null) {
                 $activity->setObject($object);
@@ -98,7 +98,7 @@ function stream($activity = null, $object = null, $target = null)
                 $activity->setTarget($target);
             }
 
-            $stream->add($activity);
+            $stream->create($activity->build());
         }
     }
 }
