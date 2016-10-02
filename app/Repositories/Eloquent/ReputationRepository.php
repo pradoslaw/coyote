@@ -136,14 +136,20 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
      */
     private function getReputation($dateTime, $limit)
     {
+        $from = $this
+            ->model
+            ->selectRaw('user_id, SUM(value) AS reputation')
+            ->whereRaw("reputations.created_at >= '$dateTime'")
+            ->orderBy('reputation', 'DESC')
+            ->limit($limit)
+            ->groupBy('user_id')
+            ->toSql();
+
         $result = $this
             ->model
-            ->select(['users.id', 'name', 'photo', $this->raw('SUM(value) AS reputation')])
-            ->take($limit)
+            ->select(['users.id', 'name', 'photo'])
+            ->from($this->raw("($from) AS t"))
             ->join('users', 'users.id', '=', 'user_id')
-            ->where('reputations.created_at', '>=', $dateTime)
-            ->groupBy(['user_id', 'users.id'])
-            ->orderBy('reputation', 'DESC')
             ->get();
 
         return $this->percentage($result);
