@@ -27,7 +27,7 @@ class CreateMicroblogsTable extends Migration
 
             $table->index(['parent_id', 'deleted_at']);
             $table->index('user_id');
-            $table->index('score');
+            $table->index(['score', 'is_sponsored']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('microblogs');

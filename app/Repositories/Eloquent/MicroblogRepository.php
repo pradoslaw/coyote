@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\SubscribableInterface;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class MicroblogRepository
@@ -58,14 +59,16 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function take($limit)
     {
-        $result = $this->prepare()
-                ->whereNull('parent_id')
-                ->where('votes', '>=', 2)
-                    ->orWhere('bonus', '>', 0)
-                ->orderBy('microblogs.is_sponsored', 'DESC')
-                ->orderBy('microblogs.score', 'DESC')
-                ->take($limit)
-                ->get();
+        $result = $this
+            ->prepare()
+            ->whereNull('parent_id')
+            ->where(function (Builder $builder) {
+                return $builder->where('votes', '>=', 2)->orWhere('bonus', '>', 0);
+            })
+            ->orderBy('microblogs.is_sponsored', 'DESC')
+            ->orderBy('microblogs.score', 'DESC')
+            ->take($limit)
+            ->get();
 
         // zostawiamy jedynie 2 ostatnie komentarze
         $result = $this->slice($result);
@@ -129,7 +132,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         $columnThumb = 'mv.id AS thumbs_on';
         $columnWatch = 'mw.user_id AS subscribe_on';
 
-        $userId = $this->app['auth']->id() ? \DB::raw($this->app['auth']->id()) : null;
+        $userId = $this->app['auth']->id() ? $this->raw($this->app['auth']->id()) : null;
         $with = [];
 
         if ($withComments) {
@@ -193,13 +196,13 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function getTags()
     {
         return (new Microblog\Tag())
-                ->select(['name', \DB::raw('COUNT(*) AS count')])
+                ->select(['name', $this->raw('COUNT(*) AS count')])
                 ->join('tags', 'tags.id', '=', 'tag_id')
                 ->join('microblogs', 'microblogs.id', '=', 'microblog_id')
                     ->whereNull('microblogs.deleted_at')
                     ->whereNull('microblogs.parent_id')
                 ->groupBy('name')
-                ->orderBy(\DB::raw('COUNT(*)'), 'DESC')
+                ->orderBy($this->raw('COUNT(*)'), 'DESC')
                 ->limit(30)
                 ->get()
                 ->lists('count', 'name')
