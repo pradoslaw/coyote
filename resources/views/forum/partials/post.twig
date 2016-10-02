@@ -133,7 +133,7 @@
                                 <i class="fa fa-external-link"></i>
                             </a>
 
-                            {{ post.edit_count }}x, ostatnio: {{ link_to_profile(post.editor_id, post.editor_name, post.editor_is_active, post.editor_is_blocked) }},
+                            edytowany {{ post.edit_count }}x, ostatnio: {{ link_to_profile(post.editor_id, post.editor_name, post.editor_is_active, post.editor_is_blocked) }},
                         </strong>
                         <span class="timestamp" title="{{ post.updated_at|format_date(false) }}" data-timestamp="{{ post.updated_at|timestamp }}">{{ post.updated_at|format_date }}</span>
                     </div>
