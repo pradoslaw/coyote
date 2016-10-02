@@ -60,8 +60,8 @@
                         </ul>
 
                         <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-                            <img id="logo" src="{{ cdn('img/logo.png') }}">
-                            <img id="logo-mobile" src="{{ cdn('img/logo-mobile.png') }}">
+                            <img id="logo" src="{{ cdn('img/logo.png') }}" class="hidden-md hidden-sm hidden-xs">
+                            <img id="logo-mobile" src="{{ cdn('img/logo-mobile.png') }}" class="visible-md visible-sm visible-xs">
                         </a>
                     </div>
 
@@ -122,7 +122,7 @@
                             {% endfor %}
                         </ul>
 
-                        <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right" role="search">
+                        <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right hidden-sm" role="search">
                             <div class="form-group">
                                 <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
                             </div>
