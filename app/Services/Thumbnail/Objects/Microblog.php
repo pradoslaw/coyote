@@ -5,7 +5,7 @@ namespace Coyote\Services\Thumbnail\Objects;
 /**
  * @package Coyote\Services\Thumbnail\Objects
  */
-class Microblog extends Object implements ObjectInterface
+class Microblog extends ObjectAbstract implements ObjectInterface
 {
     /**
      * @var int

@@ -8,7 +8,7 @@ use Imagine\Image;
  * Class Object
  * @package Coyote\Services\Thumbnail\Objects
  */
-abstract class Object implements ObjectInterface
+abstract class ObjectAbstract implements ObjectInterface
 {
     /**
      * @var int

@@ -6,7 +6,7 @@ namespace Coyote\Services\Thumbnail\Objects;
  * Class Photo
  * @package Coyote\Services\Thumbnail\Objects
  */
-class Photo extends Object implements ObjectInterface
+class Photo extends ObjectAbstract implements ObjectInterface
 {
     /**
      * @var int

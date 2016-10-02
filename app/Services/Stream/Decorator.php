@@ -28,7 +28,7 @@ class Decorator
 
         foreach ($this->collection as $index => $row) {
             if (empty($row['object.objectType'])) {
-                $row['object.objectType'] = 'object';
+                $row['object.objectType'] = 'unknown';
             }
 
             $class = __NAMESPACE__ . '\\Render\\' . ucfirst(camel_case($row['object.objectType']));

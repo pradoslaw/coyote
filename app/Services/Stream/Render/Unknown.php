@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Stream\Render;
 
-class Object extends Render
+class Unknown extends Render
 {
     /**
      * @return string
