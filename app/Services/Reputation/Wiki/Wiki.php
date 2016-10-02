@@ -40,7 +40,7 @@ abstract class Wiki extends Reputation
             ->get();
 
         foreach ($result as $row) {
-            $this->setIsPositive(false);
+            $this->setPositive(false);
 
             $this->save($row->toArray());
         }

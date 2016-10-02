@@ -55,7 +55,7 @@ class VoteController extends Controller
                 $url = UrlBuilder::microblog($microblog);
                 $object = (new Stream_Microblog())->map($microblog);
 
-                app('reputation.microblog.vote')->map($microblog)->setUrl($url)->setIsPositive(!$vote)->save();
+                app('reputation.microblog.vote')->map($microblog)->setUrl($url)->setPositive(!$vote)->save();
             } else {
                 $url = UrlBuilder::microblogComment($microblog->parent, $microblog->id);
 

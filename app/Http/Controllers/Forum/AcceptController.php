@@ -60,7 +60,7 @@ class AcceptController extends BaseController
 
                 // reverse reputation points
                 if ($forum->enable_reputation) {
-                    $reputation->setIsPositive(false)->setPostId($accepted->post_id);
+                    $reputation->setPositive(false)->setPostId($accepted->post_id);
 
                     if ($accepted->post_id !== $post->id) {
                         $reputation->setExcerpt(excerpt($accepted->post->html));
@@ -88,7 +88,7 @@ class AcceptController extends BaseController
                     if ($post->user_id !== $this->userId) {
                         if ($forum->enable_reputation) {
                             // increase reputation points for author
-                            $reputation->setIsPositive(true)->setPostId($post->id)->setUserId($post->user_id)->save();
+                            $reputation->setPositive(true)->setPostId($post->id)->setUserId($post->user_id)->save();
                         }
 
                         // send notification to the user

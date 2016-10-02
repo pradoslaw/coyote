@@ -105,9 +105,9 @@ abstract class Reputation implements ReputationInterface
      * @param bool $flag
      * @return $this
      */
-    public function setIsPositive($flag)
+    public function setPositive(bool $flag)
     {
-        $this->isPositive = (bool) $flag;
+        $this->isPositive = $flag;
         return $this;
     }
 

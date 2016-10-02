@@ -55,7 +55,7 @@ interface ReputationInterface
      * @param bool $flag
      * @return mixed
      */
-    public function setIsPositive($flag);
+    public function setPositive(bool $flag);
 
     /**
      * @return bool

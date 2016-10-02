@@ -24,7 +24,7 @@ class Create extends Microblog implements ReputationInterface
                 ->first();
 
         if ($result) {
-            $this->setIsPositive(false);
+            $this->setPositive(false);
 
             $this->save($result->toArray());
         }
