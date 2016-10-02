@@ -7,7 +7,7 @@ use Coyote\Forum\Track as Forum_Track;
 use Coyote\Topic\Track as Topic_Track;
 use Coyote\Topic;
 use Coyote\Forum;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
@@ -49,7 +49,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 'is_active',
                 'is_confirm'
             ])
-            ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
+            ->leftJoin('forum_track', function (JoinClause $join) use ($userId, $sessionId) {
                 $join->on('forum_track.forum_id', '=', 'forums.id');
 
                 if ($userId) {
@@ -61,7 +61,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
             ->leftJoin('users', 'users.id', '=', 'posts.user_id')
             ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
-            ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
+            ->leftJoin('topic_track', function (JoinClause $join) use ($userId, $sessionId) {
                 $join->on('topic_track.topic_id', '=', 'topics.id');
 
                 if ($userId) {
@@ -132,7 +132,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 'forum_orders.is_hidden',
                 $this->raw('CASE WHEN forum_orders.section IS NOT NULL THEN forum_orders.section ELSE forums.section END')
             ])
-            ->leftJoin('forum_orders', function ($join) use ($userId) {
+            ->leftJoin('forum_orders', function (JoinClause $join) use ($userId) {
                 $join->on('forum_orders.forum_id', '=', 'forums.id')
                         ->on('forum_orders.user_id', '=', $this->raw($userId));
             })

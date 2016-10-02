@@ -1,11 +1,9 @@
 <?php namespace Coyote\Providers;
 
 use Coyote\Repositories\Contracts\SettingRepositoryInterface;
-use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
-use Coyote\Services\Stream\Stream;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
