@@ -46,6 +46,24 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
     }
 
     /**
+     * @param int[] $forumIds
+     * @return mixed
+     */
+    public function forumFeeds(array $forumIds)
+    {
+        return $this
+            ->model
+            ->whereIn('object.objectType', ['topic', 'post', 'comment'])
+            ->whereIn('verb', ['create', 'update'])
+            ->whereIn('target.objectType', ['forum', 'post', 'topic'])
+            ->whereNotIn('object.forum.id', $forumIds)
+            ->whereNotIn('target.forum.id', $forumIds)
+            ->orderBy('_id', 'DESC')
+            ->limit(20)
+            ->get();
+    }
+
+    /**
      * Find activities by object, id and actions (verbs)
      *
      * @param $objects

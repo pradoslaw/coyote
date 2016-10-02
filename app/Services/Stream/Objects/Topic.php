@@ -27,7 +27,7 @@ class Topic extends ObjectAbstract
         $this->id = $topic->id;
         $this->url = UrlBuilder::topic($topic);
         $this->displayName = $topic->subject;
-        $this->forum = ['name' => $topic->forum->name, 'slug' => $topic->forum->slug];
+        $this->forum = ['id' => $topic->forum->id, 'name' => $topic->forum->name, 'slug' => $topic->forum->slug];
 
         if ($text) {
             $this->excerpt = excerpt($text);

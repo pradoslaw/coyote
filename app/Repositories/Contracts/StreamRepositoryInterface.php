@@ -19,6 +19,12 @@ interface StreamRepositoryInterface extends RepositoryInterface
     public function take($limit, $offset = 0, $objects = [], $verbs = [], $targets = []);
 
     /**
+     * @param int[] $forumIds
+     * @return mixed
+     */
+    public function forumFeeds(array $forumIds);
+
+    /**
      * Find activities by object, id and actions (verbs)
      *
      * @param $objects

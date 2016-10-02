@@ -21,6 +21,13 @@ interface ForumRepositoryInterface extends RepositoryInterface
     public function getOrderForUser($userId);
 
     /**
+     * Get restricted access forums.
+     *
+     * @return int[]
+     */
+    public function getRestricted();
+
+    /**
      * Builds up a category list that can be shown in a <select>
      *
      * @return array

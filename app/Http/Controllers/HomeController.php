@@ -2,13 +2,15 @@
 
 namespace Coyote\Http\Controllers;
 
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Services\Session\Viewers;
-use Coyote\Services\Stream\Stream;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
+use Coyote\Services\Stream\Decorator;
 
 class HomeController extends Controller
 {
@@ -23,7 +25,7 @@ class HomeController extends Controller
     protected $reputation;
 
     /**
-     * @var Stream
+     * @var StreamRepository
      */
     protected $stream;
 
@@ -38,18 +40,25 @@ class HomeController extends Controller
     protected $wiki;
 
     /**
+     * @var ForumRepository
+     */
+    protected $forum;
+
+    /**
      * @param MicroblogRepository $microblog
      * @param ReputationRepository $reputation
-     * @param Stream $stream
+     * @param StreamRepository $stream
      * @param TopicRepository $topic
      * @param WikiRepository $wiki
+     * @param ForumRepository $forum
      */
     public function __construct(
         MicroblogRepository $microblog,
         ReputationRepository $reputation,
-        Stream $stream,
+        StreamRepository $stream,
         TopicRepository $topic,
-        WikiRepository $wiki
+        WikiRepository $wiki,
+        ForumRepository $forum
     ) {
         parent::__construct();
 
@@ -58,6 +67,7 @@ class HomeController extends Controller
         $this->stream = $stream;
         $this->topic = $topic;
         $this->wiki = $wiki;
+        $this->forum = $forum;
     }
 
     /**
@@ -168,13 +178,7 @@ class HomeController extends Controller
     private function getActivities()
     {
         // take last stream activity for forum
-        return $this->stream->take(
-            10, // limit
-            0,
-            ['Topic', 'Post', 'Comment'], // objects
-            ['Create', 'Update'], // actions
-            ['Forum', 'Post', 'Topic'] // targets
-        );
+        return (new Decorator($this->stream->forumFeeds($this->forum->getRestricted())))->decorate();
     }
 
     /**

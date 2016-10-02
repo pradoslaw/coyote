@@ -6,6 +6,8 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Forum\Track as Forum_Track;
 use Coyote\Topic\Track as Topic_Track;
 use Coyote\Topic;
+use Coyote\Forum;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
@@ -143,6 +145,16 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
+     * Get restricted access forums.
+     *
+     * @return int[]
+     */
+    public function getRestricted()
+    {
+        return (new Forum\Access)->groupBy('forum_id')->get(['forum_id'])->pluck('forum_id')->toArray();
+    }
+
+    /**
      * @param Collection $parents
      * @return Collection
      */
@@ -256,7 +268,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
     /**
      * @param array $tags
-     * @return mixed
+     * @return array
      */
     public function getTagsWeight(array $tags)
     {
