@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Factories\Forum;
+namespace Coyote\Services\Elasticsearch\Builders\Forum;
 
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
@@ -14,7 +14,7 @@ use Coyote\Services\Elasticsearch\Highlight;
 use Coyote\Services\Elasticsearch\Filters\Term;
 use Illuminate\Http\Request;
 
-class SearchFactory
+class SearchBuilder
 {
     const FIELD_IP          = 'ip';
     const FIELD_USER        = 'user';

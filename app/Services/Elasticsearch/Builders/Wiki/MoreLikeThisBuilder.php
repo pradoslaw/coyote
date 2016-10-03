@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Factories\Wiki;
+namespace Coyote\Services\Elasticsearch\Builders\Wiki;
 
 use Coyote\Services\Elasticsearch\Filters\NotTerm;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
@@ -8,7 +8,7 @@ use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Wiki;
 
-class MoreLikeThisFactory
+class MoreLikeThisBuilder
 {
     /**
      * @param Wiki $wiki

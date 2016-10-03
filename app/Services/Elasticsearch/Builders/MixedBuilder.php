@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Factories;
+namespace Coyote\Services\Elasticsearch\Builders;
 
 use Coyote\Services\Elasticsearch\Filters\Post\Forum;
 use Coyote\Services\Elasticsearch\Query;
@@ -10,7 +10,7 @@ use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Services\Elasticsearch\Highlight;
 use Illuminate\Http\Request;
 
-class MixedFactory
+class MixedBuilder
 {
     const PER_PAGE = 10;
 

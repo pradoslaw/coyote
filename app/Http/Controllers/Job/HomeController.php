@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Services\Elasticsearch\Factories\Job\SearchFactory;
+use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
@@ -36,7 +36,7 @@ class HomeController extends Controller
     private $preferences = [];
 
     /**
-     * @var SearchFactory
+     * @var SearchBuilder
      */
     private $builder;
 
@@ -49,7 +49,7 @@ class HomeController extends Controller
         parent::__construct();
 
         $this->job = $job;
-        $this->builder = new SearchFactory($request);
+        $this->builder = new SearchBuilder($request);
 
         $this->public['promptUrl'] = route('job.tag.prompt');
     }
@@ -163,7 +163,7 @@ class HomeController extends Controller
         $pagination = new LengthAwarePaginator(
             $jobs,
             $response->total(),
-            SearchFactory::PER_PAGE,
+            SearchBuilder::PER_PAGE,
             LengthAwarePaginator::resolveCurrentPage(),
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );

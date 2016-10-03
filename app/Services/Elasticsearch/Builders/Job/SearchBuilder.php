@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Factories\Job;
+namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Services\Elasticsearch\Aggs;
 use Coyote\Services\Elasticsearch\Query;
@@ -11,7 +11,7 @@ use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Services\Parser\Helpers\City;
 use Illuminate\Http\Request;
 
-class SearchFactory
+class SearchBuilder
 {
     const PER_PAGE = 15;
     const DEFAULT_SORT = '_score';
@@ -70,6 +70,32 @@ class SearchFactory
     }
 
     /**
+     * Apply remote job filter
+     */
+    public function addRemoteFilter()
+    {
+        $this->queryBuilder->addFilter(new Filters\Job\Remote());
+    }
+
+    /**
+     * @param int $salary
+     * @param int $currencyId
+     */
+    public function addSalaryFilter($salary, $currencyId)
+    {
+        $this->queryBuilder->addFilter(new Filters\Range('salary', ['gte' => $salary]));
+        $this->queryBuilder->addFilter(new Filters\Job\Currency($currencyId));
+    }
+
+    /**
+     * @param string $name
+     */
+    public function addFirmFilter($name)
+    {
+        $this->queryBuilder->addFilter(new Filters\Job\Firm($name));
+    }
+
+    /**
      * @return QueryBuilderInterface
      */
     public function build() : QueryBuilderInterface
@@ -119,32 +145,6 @@ class SearchFactory
         $this->queryBuilder->setSize(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
 
         return $this->queryBuilder;
-    }
-
-    /**
-     * Apply remote job filter
-     */
-    public function addRemoteFilter()
-    {
-        $this->queryBuilder->addFilter(new Filters\Job\Remote());
-    }
-
-    /**
-     * @param int $salary
-     * @param int $currencyId
-     */
-    public function addSalaryFilter($salary, $currencyId)
-    {
-        $this->queryBuilder->addFilter(new Filters\Range('salary', ['gte' => $salary]));
-        $this->queryBuilder->addFilter(new Filters\Job\Currency($currencyId));
-    }
-
-    /**
-     * @param string $name
-     */
-    public function addFirmFilter($name)
-    {
-        $this->queryBuilder->addFilter(new Filters\Job\Firm($name));
     }
 
     /**

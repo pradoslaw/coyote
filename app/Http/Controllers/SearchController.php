@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Coyote\Services\Elasticsearch\Factories\MixedFactory;
+use Coyote\Services\Elasticsearch\Builders\MixedBuilder;
 use Coyote\Services\Elasticsearch\Transformers\MixedTypesTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -73,7 +73,7 @@ class SearchController extends Controller
         $this->request->attributes->set('forum_id', $this->forum->lists('id'));
 
         // build elasticsearch request
-        $builder = (new MixedFactory())->build($this->request);
+        $builder = (new MixedBuilder())->build($this->request);
         $body = $builder->build();
 
         $params = [

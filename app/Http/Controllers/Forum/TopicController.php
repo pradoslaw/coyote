@@ -11,7 +11,7 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\ObtainSubscribers;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
-use Coyote\Services\Elasticsearch\Factories\Forum\MoreLikeThisFactory;
+use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -61,7 +61,7 @@ class TopicController extends BaseController
         $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, 60 * 24, function () use ($topic) {
             $this->forum->pushCriteria(new OnlyThoseWithAccess());
 
-            $builder = (new MoreLikeThisFactory())->build($topic, $this->forum->lists('id'));
+            $builder = (new MoreLikeThisBuilder())->build($topic, $this->forum->lists('id'));
 
             $build = $builder->build();
             debugbar()->debug($build);

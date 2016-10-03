@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Factories\Forum;
+namespace Coyote\Services\Elasticsearch\Builders\Forum;
 
 use Coyote\Services\Elasticsearch\Filters\NotTerm;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
@@ -9,7 +9,7 @@ use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\Filters\Post\Forum;
 use Coyote\Topic;
 
-class MoreLikeThisFactory
+class MoreLikeThisBuilder
 {
     /**
      * @param Topic $topic

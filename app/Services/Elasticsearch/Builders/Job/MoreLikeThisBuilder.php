@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Factories\Job;
+namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Job;
 use Coyote\Services\Elasticsearch\Filters\NotTerm;
@@ -8,7 +8,7 @@ use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 
-class MoreLikeThisFactory
+class MoreLikeThisBuilder
 {
     /**
      * @param Job $job

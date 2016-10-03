@@ -5,7 +5,7 @@ namespace Coyote\Services\TwigBridge\Extensions;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
-use Coyote\Services\Elasticsearch\Factories\Wiki\MoreLikeThisFactory;
+use Coyote\Services\Elasticsearch\Builders\Wiki\MoreLikeThisBuilder;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -105,7 +105,7 @@ class Block extends Twig_Extension
      */
     public function renderWikiMlt($wiki)
     {
-        $builder = (new MoreLikeThisFactory())->build($wiki);
+        $builder = (new MoreLikeThisBuilder())->build($wiki);
         $build = $builder->build();
 
         return view('wiki.partials.mlt', ['mlt' => $this->getWikiRepository()->search($build)->getSource()]);

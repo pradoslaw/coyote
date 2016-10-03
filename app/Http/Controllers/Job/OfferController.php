@@ -9,7 +9,7 @@ use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Firm;
 use Coyote\Job;
-use Coyote\Services\Elasticsearch\Factories\Job\MoreLikeThisFactory;
+use Coyote\Services\Elasticsearch\Builders\Job\MoreLikeThisBuilder;
 
 class OfferController extends Controller
 {
@@ -83,7 +83,7 @@ class OfferController extends Controller
             $flag = $this->getFlagFactory()->takeForJob($job->id);
         }
 
-        $builder = (new MoreLikeThisFactory())->build($job);
+        $builder = (new MoreLikeThisBuilder())->build($job);
 
         $build = $builder->build();
         debugbar()->debug(json_encode($build));

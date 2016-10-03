@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Services\Elasticsearch\Factories\Forum\SearchFactory;
+use Coyote\Services\Elasticsearch\Builders\Forum\SearchBuilder;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -36,7 +36,7 @@ class SearchController extends BaseController
             $this->validate($request, ['f' => 'sometimes|int|in:' . implode(',', $forumsId)]);
 
             // we need to limit results to given categories...
-            $builder = (new SearchFactory())->build($request, $request->has('f') ? $request->get('f') : $forumsId);
+            $builder = (new SearchBuilder())->build($request, $request->has('f') ? $request->get('f') : $forumsId);
 
             $build = $builder->build();
             debugbar()->debug($build);
