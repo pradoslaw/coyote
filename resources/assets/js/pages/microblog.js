@@ -151,7 +151,7 @@ $(function () {
         })
         .on('focus', '.comment-submit input', function() {
             if (typeof $(this).data('prompt') === 'undefined') {
-                $(this).prompt().data('prompt', 'yes');
+                $(this).prompt().fastSubmit().data('prompt', 'yes');
             }
         })
         .on('submit', '.comment-submit', function() {
@@ -198,7 +198,7 @@ $(function () {
                         })
                         .appendTo($form);
 
-                    $form.submit(function() {
+                    $form.fastSubmit().submit(function() {
                         var data = $form.serialize();
                         $input.attr('disabled', 'disabled');
 
