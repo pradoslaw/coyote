@@ -1,22 +1,56 @@
 (function ($) {
     'use strict';
 
+    var languages = {
+        'java': 'Java',
+        'javascript': 'JavaScript',
+        'cpp': 'C++',
+        'c': 'C',
+        'csharp': 'C#',
+        'php': 'PHP',
+        'python': 'Python',
+        'ruby': 'Ruby',
+        'html': 'HTML',
+        'css': 'CSS',
+        'sql': 'SQL',
+        'delphi': 'Delphi',
+        'pascal': 'Pascal',
+        'bash': 'Bash',
+        'asm': 'Asm'
+    };
+
     $.fn.wikiEditor = function () {
         return this.each(function () {
-            var textarea = $(this);
-            var toolbar = $('#wiki-toolbar');
+            var textarea    = $(this);
+            var toolbar     = $('#wiki-toolbar');
+            var select      = $('.select-menu-wrapper', toolbar).find('ul');
 
-            $('.btn-group button', toolbar).click(function() {
+            $.each(languages, function(key, value) {
+                select.append('<li><a data-open="<br>```' + key + '" data-close="<br>```" title="Kod źródłowy: ' + value + '">' + value + '</a></li>');
+            });
+
+            $('a[data-open], button[data-open]', toolbar).click(function() {
                 textarea.insertAtCaret($(this).data('open').replace(/<br>/g, "\n"), $(this).data('close').replace(/<br>/g, "\n"), ' ');
             });
 
-            //$(textarea).bind($.browser.opera ? 'keypress' : 'keydown', function(e)
-            $(textarea).bind('keydown', function (e) {
+            $(textarea).bind('keydown', function(e) {
                 if ((e.which === 9 || e.keyCode === 9) && e.shiftKey) {
                     textarea.insertAtCaret("\t", '', "");
 
                     return false;
                 }
+            });
+
+            $('.select-menu-search input', toolbar).keyup(function(e) {
+                var searchText = $.trim($(this).val().toLowerCase());
+
+                $('li', select).each(function() {
+                    $(this).toggle($(this).text().toLowerCase().startsWith(searchText));
+                });
+            });
+
+            $('#select-menu', toolbar).on('shown.bs.dropdown', function() {
+                $('.select-menu-search input').focus();
             });
         });
     };

@@ -1,3 +1,9 @@
+{% include 'components.forms' %}
+
+<script>
+
+</script>
+
 <div id="wiki-toolbar" class="row">
     <div class="col-md-12">
         <div class="btn-group" role="group" aria-label="...">
@@ -18,7 +24,23 @@
             <button type="button" class="btn btn-sm btn-default" data-open="![title" data-close="](http://)" title="Obraz"><i class="fa fa-image fa-fw"></i></button>
             <button type="button" class="btn btn-sm btn-default" data-open="<http://" data-close=">" title="Link"><i class="fa fa-link fa-fw"></i></button>
             <button type="button" class="btn btn-sm btn-default" data-open="<br>Nagłówek 1 | Nagłówek 2<br>---------------- | -------------------<br>Kolumna1 | Kolumna 2<br>" data-close="" title="Tabela"><i class="fa fa-table fa-fw"></i></button>
-            <button type="button" class="btn btn-sm btn-default" data-open="<br>```" data-close="<br>```" title="Kod źródłowy"><i class="fa fa-code fa-fw"></i></button>
+
+            <div id="select-menu" class="btn-group">
+                <button type="button" class="btn btn-sm btn-default" data-open="<br>```" data-close="<br>```" title="Kod źródłowy"><i class="fa fa-code fa-fw"></i></button>
+                <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu select-menu">
+                    <div class="select-menu-search">
+                        {{ form_text('q', '', {class: 'form-control input-sm', placeholder: 'Filtruj...', autocomplete: 'off'}) }}
+                    </div>
+                    <div class="select-menu-wrapper">
+                        <ul class="list-unstyled">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="alert alert-warning alert-popover bottom hidden-xs hidden-sm" data-id="markdown">
