@@ -16,7 +16,14 @@ class SearchFactory
     const PER_PAGE = 15;
     const DEFAULT_SORT = '_score';
 
+    /**
+     * @var Request
+     */
     private $request;
+
+    /**
+     * @var QueryBuilder
+     */
     private $queryBuilder;
 
     /**
@@ -29,6 +36,9 @@ class SearchFactory
      */
     public $tag;
 
+    /**
+     * @param Request $request
+     */
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -37,6 +47,9 @@ class SearchFactory
         $this->tag = new Filters\Job\Tag();
     }
 
+    /**
+     * @param mixed $preferences
+     */
     public function setPreferences($preferences)
     {
         if (!empty($preferences->city)) {
@@ -83,23 +96,8 @@ class SearchFactory
             $this->addRemoteFilter();
         }
 
-        $validator = validator(
-            $this->request->all(),
-            [
-                'sort' => 'sometimes|in:id,_score,salary',
-                'order' => 'sometimes|in:asc,desc'
-            ]
-        );
-
-        $sort = $this->request->get('sort', '_score');
-        $order = $this->request->get('order', 'desc');
-
-        if ($validator->fails()) {
-            $sort = self::DEFAULT_SORT;
-            $order = 'desc';
-        }
-
-        $this->queryBuilder->addSort(new Sort($sort, $order));
+        $sort = $this->getSort();
+        $this->queryBuilder->addSort(new Sort($sort, $this->getOrder()));
 
         // @todo jezeli sortujemy po "trafnosci" w sytuacji gdy uzytkownik chce wyswietlic wszystkie wyniki
         // mozemy dodac sortowanie po "jakosci" ogloszenia. w ten sposob te lepsze ogloszenia beda na liscie
@@ -132,8 +130,8 @@ class SearchFactory
     }
 
     /**
-     * @param $salary
-     * @param $currencyId
+     * @param int $salary
+     * @param int $currencyId
      */
     public function addSalaryFilter($salary, $currencyId)
     {
@@ -141,8 +139,31 @@ class SearchFactory
         $this->queryBuilder->addFilter(new Filters\Job\Currency($currencyId));
     }
 
+    /**
+     * @param string $name
+     */
     public function addFirmFilter($name)
     {
         $this->queryBuilder->addFilter(new Filters\Job\Firm($name));
+    }
+
+    /**
+     * @return string
+     */
+    private function getSort()
+    {
+        $sort = $this->request->get('sort', '_score');
+
+        return in_array($sort, ['id', '_score', 'salary']) ? $sort : self::DEFAULT_SORT;
+    }
+
+    /**
+     * @return string
+     */
+    private function getOrder()
+    {
+        $order = $this->request->get('order', 'desc');
+
+        return in_array($order, ['asc', 'desc']) ? $order : 'desc';
     }
 }
