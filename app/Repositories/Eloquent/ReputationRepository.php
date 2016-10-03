@@ -147,7 +147,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
 
         $result = $this
             ->model
-            ->select(['users.id', 'name', 'photo'])
+            ->select(['users.id', 'name', 'photo', 't.reputation'])
             ->from($this->raw("($from) AS t"))
             ->join('users', 'users.id', '=', 'user_id')
             ->get();
