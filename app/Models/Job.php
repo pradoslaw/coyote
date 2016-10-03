@@ -158,7 +158,7 @@ class Job extends Model
             "type" => "float"
         ],
         "score" => [
-            "type" => "integer"
+            "type" => "long"
         ],
         "rank" => [
             "type" => "float"
@@ -369,6 +369,8 @@ class Job extends Model
 
             $locations[] = $nested;
         }
+
+        $body['score'] = intval($body['score']);
 
         $body = array_merge($body, [
             'locations'         => $locations,
