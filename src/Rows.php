@@ -2,7 +2,7 @@
 
 namespace Boduch\Grid;
 
-class Rows implements \IteratorAggregate, \Countable
+class Rows implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     /**
      * @var Row[]
@@ -54,5 +54,40 @@ class Rows implements \IteratorAggregate, \Countable
     public function toArray()
     {
         return iterator_to_array($this->getIterator(), true);
+    }
+
+    /**
+     * @param int $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->rows[$offset]);
+    }
+
+    /**
+     * @param int $offset
+     * @return Row|mixed|null
+     */
+    public function offsetGet($offset)
+    {
+        return $this->rows[$offset] ?? null;
+    }
+
+    /**
+     * @param int $offset
+     * @param Row $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new \InvalidArgumentException('offsetSet() currently not implemented.');
+    }
+
+    /**
+     * @param int $offset
+     */
+    public function offsetUnset($offset)
+    {
+        throw new \InvalidArgumentException('offsetUnset() currently not implemented.');
     }
 }
