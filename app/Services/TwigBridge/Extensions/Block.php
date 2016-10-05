@@ -74,7 +74,7 @@ class Block extends Twig_Extension
         /** @var \Coyote\Block $block */
         $block = $this->blocks->where('name', $name)->first();
 
-        if (!$block->is_enabled) {
+        if (!$block || !$block->is_enabled) {
             return '';
         }
 
