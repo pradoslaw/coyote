@@ -43,10 +43,6 @@ class BlockGrid extends Grid
                 'title' => 'Włączony',
                 'decorators' => [new Boolean()]
             ])
-            ->addColumn('enable_cache', [
-                'title' => 'Włączony cache',
-                'decorators' => [new Boolean()]
-            ])
             ->addRowAction(new EditButton(function (Block $row) {
                 return route('adm.blocks.save', [$row->id]);
             }))
