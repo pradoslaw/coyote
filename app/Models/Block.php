@@ -30,8 +30,7 @@ class Block extends Model
      * @var array
      */
     protected $attributes = [
-        'is_enabled' => true,
-        'enable_cache' => true
+        'is_enabled' => true
     ];
 
     public static function boot()

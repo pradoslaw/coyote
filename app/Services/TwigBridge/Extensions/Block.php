@@ -57,11 +57,11 @@ class Block extends Twig_Extension
         /** @var \Coyote\Block $block */
         $blocks = $this->blocks->where('region', $name);
         $html = '';
-//dd($blocks);
+
         foreach ($blocks as $block) {
             $html .= $this->renderBlock($block->name);
         }
-//dd($html);
+
         return $html;
     }
 

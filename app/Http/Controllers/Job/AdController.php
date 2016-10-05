@@ -47,6 +47,10 @@ class AdController extends Controller
      */
     private function load($location)
     {
+        if (!$location) {
+            return '';
+        }
+
         $builder = new QueryBuilder();
         $builder->setSize(0, 4);
         $builder->addSort(new Geodistance($location['latitude'], $location['longitude']));
