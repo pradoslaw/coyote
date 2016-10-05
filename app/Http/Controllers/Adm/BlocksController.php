@@ -72,7 +72,7 @@ class BlocksController extends BaseController
                 $block->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
                 (new Stream_Block())->map($block)
             );
-            $this->getCacheFactory()->forget('block:' . $block->name);
+            $this->flushCache();
         });
 
         return redirect()->route('adm.blocks')->with('success', 'Zmiany w bloku zostały zapisane.');
@@ -88,7 +88,7 @@ class BlocksController extends BaseController
             $block->delete();
 
             stream(Stream_Delete::class, (new Stream_Block())->map($block));
-            $this->getCacheFactory()->forget('block:' . $block->name);
+            $this->flushCache();
         });
 
         return redirect()->route('adm.blocks')->with('success', 'Block został prawidłowo usunięty.');
@@ -101,5 +101,13 @@ class BlocksController extends BaseController
     private function getForm($block)
     {
         return $this->createForm(BlockForm::class, $block);
+    }
+
+    /**
+     * Clear users cache permission after updating groups etc.
+     */
+    protected function flushCache()
+    {
+        $this->getCacheFactory()->forget('blocks');
     }
 }

@@ -14,6 +14,16 @@ class Block extends Twig_Extension
     use CacheFactory;
 
     /**
+     * @var \Illuminate\Support\Collection
+     */
+    private $blocks;
+
+    public function __construct()
+    {
+        $this->blocks = $this->getBlocks();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getName()
@@ -30,6 +40,7 @@ class Block extends Twig_Extension
             /**
              * Read the block content from database (or cache)
              */
+            new Twig_SimpleFunction('render_region', [&$this, 'renderRegion'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('render_block', [&$this, 'renderBlock'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('render_help_context', [&$this, 'renderHelpContext'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('render_wiki_mlt', [&$this, 'renderWikiMlt'], ['is_safe' => ['html']]),
@@ -39,29 +50,39 @@ class Block extends Twig_Extension
 
     /**
      * @param string $name
-     * @return mixed|string
+     * @return string
+     */
+    public function renderRegion($name)
+    {
+        /** @var \Coyote\Block $block */
+        $blocks = $this->blocks->where('region', $name);
+        $html = '';
+//dd($blocks);
+        foreach ($blocks as $block) {
+            $html .= $this->renderBlock($block->name);
+        }
+//dd($html);
+        return $html;
+    }
+
+    /**
+     * @param string $name
+     * @return string
      */
     public function renderBlock($name)
     {
-        $cache = $this->getCacheFactory();
-        $content = $cache->get('block:' . $name);
+        /** @var \Coyote\Block $block */
+        $block = $this->blocks->where('name', $name)->first();
 
-        if ($content) {
-            return $content;
-        }
-
-        $block = $this->getBlockRepository()->findBy('name', $name);
-        if (!$block) {
+        if (!$block->is_enabled) {
             return '';
         }
 
-        if ($block->is_enabled) {
-            if ($block->enable_cache) {
-                $cache->forever('block:' . $name, $block->content);
-            }
-
-            return $block->content;
+        if ($block->max_reputation && auth()->check() && auth()->user()->reputation > $block->max_reputation) {
+            return '';
         }
+
+        return $block->content;
     }
 
     /**
@@ -134,5 +155,15 @@ class Block extends Twig_Extension
     private function getWikiRepository()
     {
         return app(WikiRepositoryInterface::class);
+    }
+
+    /**
+     * @return \Coyote\Block[]
+     */
+    private function getBlocks()
+    {
+        return $this->getCacheFactory()->rememberForever('blocks', function () {
+            return $this->getBlockRepository()->all(['name', 'is_enabled', 'content', 'region', 'max_reputation']);
+        });
     }
 }

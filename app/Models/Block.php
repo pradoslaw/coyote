@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property string $name
+ * @property string $region
  * @property bool $is_enabled
- * @property bool $enable_cache
  * @property string $content
+ * @property int $max_reputation
  */
 class Block extends Model
 {
@@ -18,7 +19,7 @@ class Block extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'is_enabled', 'enable_cache', 'content'];
+    protected $fillable = ['name', 'region', 'is_enabled', 'content', 'max_reputation'];
 
     /**
      * @var string
@@ -32,4 +33,13 @@ class Block extends Model
         'is_enabled' => true,
         'enable_cache' => true
     ];
+
+    public static function boot()
+    {
+        static::saving(function (Block $model) {
+            if (!$model->max_reputation) {
+                $model->max_reputation = null;
+            }
+        });
+    }
 }

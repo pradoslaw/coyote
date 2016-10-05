@@ -485,7 +485,7 @@ abstract class Field
             $snakeCase = snake_case($name);
             $prefix = substr($snakeCase, 0, strpos($snakeCase, '_'));
 
-            if (in_array($prefix, ['get', 'is']) && $method->getNumberOfParameters() === 0 && !$method->isPrivate()) {
+            if (in_array($prefix, ['get', 'is']) && $method->getNumberOfParameters() === 0 && !$method->isPrivate() && $name !== 'getParent') {
                 $withoutPrefix = $snakeCase;
 
                 if ($prefix === 'get') {
