@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
         'comment.access' => Middleware\CommentAccess::class,
         'wiki.access'   => Middleware\WikiAccess::class,
         'wiki.lock'     => Middleware\WikiLock::class,
-        'page.hit'      => Middleware\PageHit::class
+        'page.hit'      => Middleware\PageHit::class,
+        'cache'         => Middleware\CacheController::class
     ];
 }

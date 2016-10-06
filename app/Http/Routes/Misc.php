@@ -12,7 +12,7 @@
 */
 
 /** @var $this \Illuminate\Routing\Router */
-$this->get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
+$this->get('/', ['as' => 'home', 'uses' => 'HomeController@index', 'middleware' => 'cache:15']);
 
 $this->get('Flag', ['uses' => 'FlagController@index', 'as' => 'flag', 'middleware' => 'auth']);
 $this->post('Flag', ['uses' => 'FlagController@save', 'middleware' => 'auth']);
