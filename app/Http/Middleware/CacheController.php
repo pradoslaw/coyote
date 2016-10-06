@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 class CacheController
 {
@@ -32,12 +33,12 @@ class CacheController
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param   int      $ttl
+     * @param  Request  $request
+     * @param  Closure  $next
+     * @param  int      $ttl
      * @return mixed
      */
-    public function handle($request, Closure $next, $ttl = null)
+    public function handle(Request $request, Closure $next, $ttl = null)
     {
         if ($this->auth->check()
             || $request->getQueryString()
