@@ -4,11 +4,13 @@ namespace Coyote\Services\Parser\Factories;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Services\Parser\Container;
 use Coyote\Services\Parser\Parsers\Geshi;
 use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\Services\Parser\Parsers\Purifier;
+use Coyote\Services\Parser\Parsers\Template;
 
 class WikiFactory extends AbstractFactory
 {
@@ -35,6 +37,7 @@ class WikiFactory extends AbstractFactory
                 $allowedTags[] = 'div[class]';
                 $allowedTags[] = 'ul[class]';
 
+                $parser->attach(new Template($this->app[WikiRepositoryInterface::class]));
                 $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true)->setEnableUserTagParser(false));
                 $parser->attach((new Purifier())->set('HTML.Allowed', implode(',', $allowedTags)));
                 $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));

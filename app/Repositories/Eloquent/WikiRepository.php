@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class WikiRepository extends Repository implements WikiRepositoryInterface, SubscribableInterface
 {
     /**
-     * @return \Coyote\Wiki
+     * @return string
      */
     public function model()
     {
