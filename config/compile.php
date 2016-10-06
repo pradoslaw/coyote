@@ -20,9 +20,9 @@ return [
         realpath(__DIR__ . '/../app/Providers/EventServiceProvider.php'),
         realpath(__DIR__ . '/../app/Providers/RouteServiceProvider.php'),
         realpath(__DIR__ . '/../app/Providers/SessionServiceProvider.php'),
-        realpath(__DIR__ . '/../app/Http/Middleware/EncryptCookies.php'),
-        realpath(__DIR__ . '/../app/Http/Middleware/FirewallBlacklist.php'),
-        realpath(__DIR__ . '/../app/Http/Middleware/VerifyCsrfToken.php.php'),
+//        realpath(__DIR__ . '/../app/Http/Middleware/EncryptCookies.php'),
+//        realpath(__DIR__ . '/../app/Http/Middleware/FirewallBlacklist.php'),
+//        realpath(__DIR__ . '/../app/Http/Middleware/VerifyCsrfToken.php.php'),
 
     ],
     /*
