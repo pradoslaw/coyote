@@ -44,6 +44,7 @@ class CacheController
             || $request->getQueryString()
             || $request->getMethod() !== 'GET'
             || $this->hasSettings($request->session()->getId())
+            || $this->hasSessionData($request->session()->all())
         ) {
             return $next($request);
         }
@@ -67,5 +68,31 @@ class CacheController
     private function hasSettings($sessionId)
     {
         return (bool) count(app('setting')->getAll(null, $sessionId));
+    }
+
+    /**
+     * @param array $session
+     * @return bool
+     */
+    private function hasSessionData($session)
+    {
+        unset($session['_token'], $session['_previous'], $session['PHPDEBUGBAR_STACK_DATA']);
+        $emptyFlash = true;
+
+        if (isset($session['flash'])) {
+            if (is_array($session['flash']['old']) && (count($session['flash']['old']) > 0)) {
+                $emptyFlash = false;
+            }
+
+            if (is_array($session['flash']['new']) && (count($session['flash']['new']) > 0)) {
+                $emptyFlash = false;
+            }
+        }
+
+        if ($emptyFlash) {
+            unset($session['flash']);
+        }
+
+        return (bool) count($session) >= 1;
     }
 }
