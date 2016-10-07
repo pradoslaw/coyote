@@ -47,8 +47,8 @@ return [
         'person'            => ':actor :verb :object',
         'person:confirm'    => ':actor potwierdził adres e-mail',
         'firewall'          => ':actor :verb :object',
-        'object'            => ':actor :verb',
-        'object:throttle'   => 'Nieudane logowanie na konto :login',
+        'unknown'           => ':actor :verb',
+        'unknown:throttle'  => 'Nieudane logowanie na konto :login',
         'block'             => ':actor :verb :object',
     ]
 ];
