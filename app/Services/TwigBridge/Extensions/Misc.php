@@ -38,6 +38,10 @@ class Misc extends Twig_Extension
             new Twig_SimpleFilter('encrypt', function ($data) {
                 return app('encrypter')->encrypt($data);
             }),
+            // uzywane w szablonie home.twig do poprawnego wyswietlania title w sekcji "ostatnie zmiany na forum"
+            new Twig_SimpleFilter('unescape', function ($value) {
+                return html_entity_decode($value, ENT_QUOTES, 'UTF-8');
+            })
         ];
     }
 

@@ -71,7 +71,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
                             <div id="stream-wrapper" class="col-lg-6">
@@ -79,7 +78,7 @@
                                     <div class="overview">
                                         {% for activity in activities %}
                                             <div class="media">
-                                                <span class="{{ activity.object.objectType }} hidden-xs" title="{{ activity.headline|striptags }}"></span>
+                                                <span class="{{ activity.object.objectType }} hidden-xs" title="{{ activity.headline|striptags|unescape }}"></span>
 
                                                 <div class="media-left hidden-xs">
                                                     <a href="{{ activity.actor.url }}">
