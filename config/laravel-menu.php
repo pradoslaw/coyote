@@ -13,7 +13,7 @@ return [
         ]
     ],
     'master' => [
-        'Forum' => ['route' => 'forum.home', 'as' => 'forum'],
+        'Forum' => ['route' => 'forum.home'],
         'Mikroblogi' => ['route' => 'microblog.home'],
         'Praca' => ['route' => 'job.home'],
         'Pastebin' => ['route' => 'pastebin.show'],
