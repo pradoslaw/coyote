@@ -40,12 +40,7 @@ class CacheController
      */
     public function handle(Request $request, Closure $next, $ttl = null)
     {
-        if ($this->auth->check()
-            || $request->getQueryString()
-            || $request->getMethod() !== 'GET'
-            || $this->hasSettings($request->session()->getId())
-            || $this->hasSessionData($request->session()->all())
-        ) {
+        if ($this->shouldNotCache($request)) {
             return $next($request);
         }
 
@@ -59,6 +54,20 @@ class CacheController
         $this->cache->put($key, $response->getContent(), $ttl);
 
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    private function shouldNotCache(Request $request)
+    {
+        return app()->environment() === 'testing'
+            || $this->auth->check()
+            || $request->getQueryString()
+            || $request->getMethod() !== 'GET'
+            || $this->hasSettings($request->session()->getId())
+            || $this->hasSessionData($request->session()->all());
     }
 
     /**
