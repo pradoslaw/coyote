@@ -42,9 +42,9 @@ class Template implements ParserInterface
                 foreach ($args as $key => $value) {
                     $wiki->text = str_replace('{{' . ($key + 1) . '}}', $value, $wiki->text);
                 }
-            }
 
-            $text = str_replace($matches[0][$i], $wiki->text, $text);
+                $text = str_replace($matches[0][$i], $wiki->text, $text);
+            }
         }
 
         return $text;
