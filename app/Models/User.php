@@ -40,6 +40,8 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @property string $browser
  * @property string $website
  * @property string $location
+ * @property float $latitude
+ * @property float $longitude
  * @property string $firm
  * @property string $position
  * @property string $access_ip

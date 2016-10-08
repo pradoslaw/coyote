@@ -33,6 +33,11 @@ abstract class Controller extends BaseController
     protected $userId;
 
     /**
+     * @var \Coyote\User
+     */
+    protected $auth;
+
+    /**
      * @var string
      */
     protected $sessionId;
@@ -59,6 +64,7 @@ abstract class Controller extends BaseController
         $this->breadcrumb = new Breadcrumb();
         $this->userId = auth()->check() ? auth()->user()->id : null;
         $this->sessionId = request()->session()->getId();
+        $this->auth = auth()->user();
 
         $this->buildPublic();
     }

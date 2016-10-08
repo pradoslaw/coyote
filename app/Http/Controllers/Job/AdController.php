@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Services\Elasticsearch\Geodistance;
+use Coyote\Services\Geocoder\Location;
 use Illuminate\Http\Request;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 
@@ -33,8 +34,8 @@ class AdController extends Controller
      */
     public function index(Request $request)
     {
-        $output = $this->getCacheFactory()->remember('ad:' . md5($request->session()->getId()), 60, function () {
-            return $this->load($this->lookupLocation());
+        $output = $this->getCacheFactory()->remember('ad:' . md5($request->session()->getId()), 60, function () use ($request) {
+            return $this->load($this->lookupLocation($request));
         });
 
         // cache output response for 1h
@@ -42,18 +43,18 @@ class AdController extends Controller
     }
 
     /**
-     * @param array $location
+     * @param Location $location
      * @return string
      */
-    private function load($location)
+    private function load(Location $location)
     {
-        if (!$location) {
+        if ($location->longitude === null || $location->latitude === null) {
             return '';
         }
 
         $builder = new QueryBuilder();
         $builder->setSize(0, 4);
-        $builder->addSort(new Geodistance($location['latitude'], $location['longitude']));
+        $builder->addSort(new Geodistance($location->latitude, $location->longitude));
 
         $result = $this->job->search($builder->build());
         if (!$result->total()) {
@@ -65,26 +66,17 @@ class AdController extends Controller
     }
 
     /**
-     * @return array|mixed
+     * @param Request $request
+     * @return Location
      */
-    private function lookupLocation()
+    private function lookupLocation(Request $request)
     {
-        if (auth()->check() && auth()->user()->location) {
-            // get by city if available...
-            try {
-                $result = $this->getByCity(auth()->user()->location);
-
-                // only first result please...
-                if ($result) {
-                    return $result[0];
-                }
-            } catch (\Exception $e) {
-                // ignore exception
-            }
+        if ($this->userId !== null && $this->auth->latitude !== null && $this->auth->longitude !== null) {
+            return new Location(['latitude' => $this->auth->latitude, 'longitude' => $this->auth->longitude]);
         }
 
         // ... otherwise lookup by ip
-        return $this->getByIp(request()->ip());
+        return new Location($this->getByIp($request->ip()) ?: []);
     }
 
     /**
@@ -94,15 +86,6 @@ class AdController extends Controller
     private function getByIp($ip)
     {
         return $this->getGeoIp()->ip($ip);
-    }
-
-    /**
-     * @param string $city
-     * @return array
-     */
-    private function getByCity($city)
-    {
-        return $this->getGeoIp()->city($city);
     }
 
     /**

@@ -36,7 +36,8 @@ class Geocoder implements GeocoderInterface
         $result = $this->request(['address' => $address]);
 
         if ($result['status'] === 'OK') {
-            return new Location($result['results'][0]['geometry']['location']);
+            $latlng = $result['results'][0]['geometry']['location'];
+            return new Location(['latitude' => $latlng['latitude'], 'longitude' => $latlng['longitude']]);
         }
 
         return new Location();

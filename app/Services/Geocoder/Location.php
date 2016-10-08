@@ -16,13 +16,14 @@ class Location
 
     /**
      * Location constructor.
-     * @param array $location
+     * @param array $attributes
      */
-    public function __construct(array $location = [])
+    public function __construct(array $attributes = [])
     {
-        if ($location) {
-            $this->latitude = $location['lat'];
-            $this->longitude = $location['lng'];
+        foreach ($attributes as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->{$key} = $value;
+            }
         }
     }
 }
