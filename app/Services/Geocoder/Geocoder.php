@@ -37,7 +37,7 @@ class Geocoder implements GeocoderInterface
 
         if ($result['status'] === 'OK') {
             $latlng = $result['results'][0]['geometry']['location'];
-            return new Location(['latitude' => $latlng['latitude'], 'longitude' => $latlng['longitude']]);
+            return new Location(['latitude' => $latlng['lat'], 'longitude' => $latlng['lng']]);
         }
 
         return new Location();
