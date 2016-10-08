@@ -9,6 +9,7 @@ use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\Actkey;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 
 class SettingsController extends BaseController
 {
@@ -50,7 +51,7 @@ class SettingsController extends BaseController
 
         $request = $form->getRequest();
 
-        $this->transaction(function () use ($request) {
+        $this->transaction(function () use ($form, $request) {
             /**
              * @var \Coyote\User $user
              */
@@ -67,7 +68,7 @@ class SettingsController extends BaseController
                 $this->getMailFactory()->queue(
                     'emails.user.change_email',
                     ['url' => $url],
-                    function ($message) use ($email) {
+                    function (Message $message) use ($email) {
                         $message->to($email);
                         $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
                     }
@@ -78,7 +79,7 @@ class SettingsController extends BaseController
                 }
             }
 
-            $user->fill($request->all())->save();
+            $user->fill($form->all())->save();
             stream(Update::class, new Person());
 
             event(new UserWasSaved($user->id));

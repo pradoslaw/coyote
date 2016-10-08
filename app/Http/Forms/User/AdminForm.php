@@ -3,6 +3,7 @@
 namespace Coyote\Http\Forms\User;
 
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
+use Coyote\Services\Geocoder\GeocoderInterface;
 use Illuminate\Contracts\Auth\Access\Gate;
 
 class AdminForm extends SettingsForm
@@ -18,12 +19,13 @@ class AdminForm extends SettingsForm
     protected $gate;
 
     /**
+     * @param GeocoderInterface $geocoder
      * @param GroupRepository $group
      * @param Gate $gate
      */
-    public function __construct(GroupRepository $group, Gate $gate)
+    public function __construct(GeocoderInterface $geocoder, GroupRepository $group, Gate $gate)
     {
-        parent::__construct();
+        parent::__construct($geocoder);
 
         $this->group = $group;
         $this->gate = $gate;

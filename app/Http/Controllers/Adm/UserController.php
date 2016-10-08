@@ -85,6 +85,7 @@ class UserController extends BaseController
 
     /**
      * @param \Coyote\User $user
+     * @return \Coyote\Services\FormBuilder\Form
      */
     protected function getForm($user)
     {

@@ -188,6 +188,8 @@ return [
         Coyote\Providers\ElasticsearchServiceProvider::class,
         // Geokodowanie przy pomocy uslugi geo-ip.pl
         Coyote\Providers\GeoIpServiceProvider::class,
+        // Google maps geocoder
+        Coyote\Providers\GeocoderServiceProvider::class,
         // Serwis do tworzenia miniatur (logo, zdjecie)
         Coyote\Providers\ThumbnailServiceProvider::class,
         // Uploadowanie zalacznikow, zdjec oraz generowanie URL do tychze plikow

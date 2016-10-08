@@ -50,6 +50,8 @@ class CreateUsersTable extends Migration
             $table->string('bio', 500)->nullable();
             $table->string('website')->nullable();
             $table->string('location')->nullable();
+            $table->float('latitude')->nullable();
+            $table->float('longitude')->nullable();
             $table->mediumInteger('birthyear')->nullable();
             $table->string('firm', 100)->nullable();
             $table->string('position', 100)->nullable();

@@ -3,10 +3,28 @@
 namespace Coyote\Http\Forms\User;
 
 use Coyote\Services\FormBuilder\Form;
+use Coyote\Services\FormBuilder\FormEvents;
+use Coyote\Services\Geocoder\GeocoderInterface;
 use Coyote\User;
 
 class SettingsForm extends Form
 {
+    /**
+     * @var GeocoderInterface
+     */
+    protected $geocoder;
+
+    /**
+     * @param GeocoderInterface $geocoder
+     */
+    public function __construct(GeocoderInterface $geocoder)
+    {
+        parent::__construct();
+
+        $this->geocoder = $geocoder;
+        $this->bindFormEvents();
+    }
+
     public function buildForm()
     {
         /** @var \Coyote\User $user */
@@ -105,5 +123,20 @@ class SettingsForm extends Form
                     'data-submit-state' => 'Wysyłanie...'
                 ]
             ]);
+    }
+
+    protected function bindFormEvents()
+    {
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
+            $form->add('latitude', 'hidden', ['value' => null]);
+            $form->add('longitude', 'hidden', ['value' => null]);
+
+            if ($form->get('location')->getValue()) {
+                $location = $this->geocoder->geocode($form->get('location')->getValue());
+
+                $form->get('latitude')->setValue($location->latitude);
+                $form->get('longitude')->setValue($location->longitude);
+            }
+        });
     }
 }
