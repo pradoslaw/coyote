@@ -6,6 +6,8 @@ use Coyote\Services\FormBuilder\Form;
 
 class SkillsForm extends Form
 {
+    const RATE_LABELS = ['Słabo', 'Podstawy', 'Przeciętnie', 'Dobrze', 'Bardzo dobrze', 'Ekspert'];
+
     public function buildForm()
     {
         $this->setAttr(['id' => 'rate-form']);

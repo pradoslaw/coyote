@@ -1,8 +1,8 @@
 {% extends 'user.base' %}
 {% block title %}Umiejętności {{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
-{% import 'components/modals.twig' as modals %}
+{% import 'components.forms' as forms %}
+{% import 'components.modals' as modals %}
 
 {% block content %}
     <h2>Umiejętności</h2>
@@ -39,12 +39,9 @@
 
             <div class="form-group">
                 <div class="rate-container col-xs-12">
-                    <a class="rate rate-large" title="Słabo"></a>
-                    <a class="rate rate-large" title="Podstawy"></a>
-                    <a class="rate rate-large" title="Przeciętnie"></a>
-                    <a class="rate rate-large" title="Dobrze"></a>
-                    <a class="rate rate-large" title="Bardzo dobrze"></a>
-                    <a class="rate rate-large" title="Ekspert"></a>
+                    {% for label in rate_labels %}
+                        <a class="rate rate-large" title="{{ label }}"></a>
+                    {% endfor %}
                 </div>
             </div>
 

@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Forms\User\SkillsForm;
-use Coyote\User;
 use Illuminate\Http\Request;
 
 class SkillsController extends BaseController
@@ -17,14 +16,18 @@ class SkillsController extends BaseController
     {
         $this->breadcrumb->push('Umiejętności', route('user.skills'));
 
-        $skills = auth()->user()->skills()->get();
+        $skills = $this->auth->skills()->get();
 
-        return $this->view('user.skills.home')->with(['skills' => $skills, 'form' => $this->getForm()]);
+        return $this->view('user.skills.home')->with([
+            'skills' => $skills,
+            'form' => $this->getForm(),
+            'rate_labels' => SkillsForm::RATE_LABELS
+        ]);
     }
 
     /**
      * @param Request $request
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function save(Request $request)
     {
@@ -32,7 +35,7 @@ class SkillsController extends BaseController
         $skill = null;
 
         if ($form->isValid()) {
-            $skill = auth()->user()->skills()->create($request->all());
+            $skill = $this->auth->skills()->create($request->all());
         }
 
         return view('user.skills.list')->with('item', $skill);
@@ -43,7 +46,7 @@ class SkillsController extends BaseController
      */
     public function delete($id)
     {
-        $skill = auth()->user()->skills()->findOrFail($id, ['id', 'user_id']);
+        $skill = $this->auth->skills()->findOrFail($id, ['id', 'user_id']);
         $skill->delete();
     }
 
@@ -56,7 +59,7 @@ class SkillsController extends BaseController
     {
         $this->transaction(function () use ($request) {
             foreach ($request->get('order') as $id => $order) {
-                auth()->user()->skills()->where('id', $id)->update(['order' => intval($order) + 1]);
+                $this->auth->skills()->where('id', $id)->update(['order' => intval($order) + 1]);
             }
         });
     }
@@ -66,7 +69,7 @@ class SkillsController extends BaseController
      */
     protected function getForm()
     {
-        return $this->createForm(SkillsForm::class, (object) array_only(auth()->user()->toArray(), ['id']), [
+        return $this->createForm(SkillsForm::class, (object) array_only($this->auth->toArray(), ['id']), [
             'url' => route('user.skills')
         ]);
     }

@@ -68,7 +68,7 @@
                             {% if skills %}
                                 <ul class="tag-clouds">
                                     {% for skill in skills %}
-                                        <li><a href="{{ route('job.tag', [skill.name|url_encode]) }}" title="Szukaj pracy w technologii: {{ skill.name }}">{{ skill.name }}</a></li>
+                                        <li><a href="{{ route('job.tag', [skill.name|url_encode]) }}" title="Ocena umiejętności: {{ rate_labels[skill.rate - 1] }}">{{ skill.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
