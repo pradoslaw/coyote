@@ -32,7 +32,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
         // one can be deleted but we have to retrieve the newest one.
         return $this
             ->model
-            ->where('path', $path)
+            ->whereRaw('LOWER(path) = ?', [mb_strtolower($path)])
             ->orderBy('wiki_id', 'DESC') // <-- DO NOT remove this line
             ->first();
     }

@@ -33,7 +33,7 @@ class Template implements ParserInterface
         }
 
         for ($i = 0, $count = count($matches[0]); $i < $count; $i++) {
-            $path = $matches[1][$i];
+            $path = str_replace(' ', '_', $matches[1][$i]);
             $args = $matches[3][$i] ? explode('|', $matches[3][$i]) : [];
 
             $wiki = $this->wiki->findByPath($path);
