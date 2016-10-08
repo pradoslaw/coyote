@@ -15,6 +15,11 @@ class Location
     public $longitude;
 
     /**
+     * @var string
+     */
+    public $city;
+
+    /**
      * Location constructor.
      * @param array $attributes
      */

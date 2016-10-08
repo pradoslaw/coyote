@@ -20,6 +20,12 @@ interface JobRepositoryInterface extends RepositoryInterface
     public function count();
 
     /**
+     * @param string $city
+     * @return int
+     */
+    public function countOffersInCity(string $city);
+
+    /**
      * Get subscribed job offers for given user id
      *
      * @param int $userId

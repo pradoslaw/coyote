@@ -62,7 +62,11 @@ class AdController extends Controller
         }
 
         // search jobs that might be close to your location
-        return (string) view('job.ad', ['jobs' => $result->getSource(), 'location' => $location]);
+        return (string) view('job.ad', [
+            'jobs'          => $result->getSource(),
+            'location'      => $location,
+            'offers_count'  => $this->job->countOffersInCity($location->city)
+        ]);
     }
 
     /**
@@ -72,7 +76,11 @@ class AdController extends Controller
     private function lookupLocation(Request $request)
     {
         if ($this->userId !== null && $this->auth->latitude !== null && $this->auth->longitude !== null) {
-            return new Location(['latitude' => $this->auth->latitude, 'longitude' => $this->auth->longitude]);
+            return new Location([
+                'latitude' => $this->auth->latitude,
+                'longitude' => $this->auth->longitude,
+                'city' => $this->auth->location
+            ]);
         }
 
         // ... otherwise lookup by ip

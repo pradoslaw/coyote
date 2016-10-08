@@ -46,6 +46,20 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     }
 
     /**
+     * @param string $city
+     * @return int
+     */
+    public function countOffersInCity(string $city)
+    {
+        return $this
+            ->model
+            ->join('job_locations', 'jobs.id', '=', 'job_locations.job_id')
+            ->where('city', $city)
+            ->where('deadline_at', '>', $this->raw('NOW()'))
+            ->count();
+    }
+
+    /**
      * Get subscribed job offers for given user id
      *
      * @param int $userId
