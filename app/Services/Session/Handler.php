@@ -46,6 +46,8 @@ class Handler extends DatabaseSessionHandler
                 $data['robot'] = $agent->robot();
             }
 
+            // tutaj moze byc blad z zapisem sesji w przypadku zapytan ajax
+            // @see https://github.com/laravel/framework/issues/9251
             $this->getQuery()->insert(['id' => $sessionId] + $data);
         }
 
