@@ -16,7 +16,7 @@
                 } %}
 
                 {% if job.salary_from or job.salary_to %}
-                    • {% include 'job.partials.salary' %}
+                    <strong class="text-primary">• {% include 'job.partials.salary' %}</strong>
                 {% endif %}
             </p>
         </div>

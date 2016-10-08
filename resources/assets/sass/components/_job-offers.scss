@@ -68,7 +68,7 @@
 
   p.bottom {
     color: $gray-light;
-    font-size: 10px;
+    font-size: $font-size-small - 1px;
     display: inline;
 
     a {
