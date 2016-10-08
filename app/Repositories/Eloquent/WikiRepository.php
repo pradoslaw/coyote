@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Eloquent;
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Wiki;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 
 /**
@@ -87,7 +88,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
                 'users.id AS user_id',
                 $this->raw("($comments) AS comments")
             ])
-            ->join('users', function ($join) {
+            ->join('users', function (JoinClause $join) {
                 $sub = $this
                         ->app
                         ->make(Wiki\Log::class)

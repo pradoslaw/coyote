@@ -39,10 +39,11 @@ class WikiValidator
         $wikiId = (int) ($parameters[0] ?? null);
         $parentId = ($parameters[1] ?? null);
 
-        $wiki = $this->wiki->findWhere(
-            ['slug' => Wiki::slug($value), 'parent_id' => $parentId],
-            ['id']
-        );
+        $wiki = $this
+            ->wiki
+            ->whereRaw('LOWER(slug) = ?', [mb_strtolower(Wiki::slug($value))])
+            ->where('parent_id', $parentId)
+            ->get(['id']);
 
         if ($wiki->count() > 0 && $wiki->first()->id !== $wikiId) {
             return false;
