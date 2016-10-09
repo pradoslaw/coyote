@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Grids\User;
 
-use Boduch\Grid\Decorators\DateTimeFormat;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Order;
 
@@ -32,7 +31,7 @@ class AcceptsGrid extends Grid
             ])
             ->addColumn('accepted_at', [
                 'title' => 'Data akceptacji postu',
-                'decorators' => [new DateTimeFormat('Y-m-d H:i:s')]
+                'decorators' => [$this->getDateTimeDecorator()]
             ]);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Grids\Wiki;
 
-use Boduch\Grid\Decorators\DateTimeFormat;
 use Boduch\Grid\Order;
 use Coyote\Services\Grid\Decorators\TextSize;
 use Coyote\Services\Grid\Decorators\WikiLogHeadline;
@@ -30,7 +29,7 @@ class LogGrid extends Grid
             ])
             ->addColumn('created_at', [
                 'Data modyfikacji',
-                'decorators' => [new DateTimeFormat('Y-m-d H:i:s')]
+                'decorators' => [$this->getDateTimeDecorator()]
             ]);
     }
 }
