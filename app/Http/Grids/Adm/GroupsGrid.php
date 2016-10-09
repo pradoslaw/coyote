@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Grids\Adm;
 
-use Boduch\Grid\Decorators\DateTimeFormat;
+use Boduch\Grid\Decorators\DateTime;
 use Coyote\Group;
 use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
@@ -30,11 +30,11 @@ class GroupsGrid extends Grid
             ])
             ->addColumn('created_at', [
                 'title' => 'Data dodania',
-                'decorators' => [new DateTimeFormat('Y-m-d')]
+                'decorators' => [new DateTime('Y-m-d')]
             ])
             ->addColumn('updated_at', [
                 'title' => 'Data aktualizacji',
-                'decorators' => [new DateTimeFormat('Y-m-d')]
+                'decorators' => [new DateTime('Y-m-d')]
             ])
             ->addRowAction(new EditButton(function (Group $group) {
                 return route('adm.groups.save', [$group->id]);

@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Grids\Adm;
 
-use Boduch\Grid\Decorators\DateTimeFormat;
+use Boduch\Grid\Decorators\DateTime;
 use Boduch\Grid\Decorators\StrLimit;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Text;
@@ -42,7 +42,7 @@ class FirewallGrid extends Grid
             ])
             ->addColumn('expire_at', [
                 'title' => 'Data przedawnienia',
-                'decorators' => [new DateTimeFormat('Y-m-d')]
+                'decorators' => [new DateTime('Y-m-d')]
             ])
             ->addColumn('reason', [
                 'title' => 'Powód',
