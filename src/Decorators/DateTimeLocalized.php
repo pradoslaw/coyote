@@ -4,7 +4,7 @@ namespace Boduch\Grid\Decorators;
 
 use Carbon\Carbon;
 
-class DateTimeLocalized extends DateTimeFormat
+class DateTimeLocalized extends DateTime
 {
     /**
      * @param $dateTime

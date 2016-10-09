@@ -5,7 +5,7 @@ namespace Boduch\Grid\Decorators;
 use Carbon\Carbon;
 use Boduch\Grid\Cell;
 
-class DateTimeFormat extends Decorator
+class DateTime extends Decorator
 {
     /**
      * @var string
