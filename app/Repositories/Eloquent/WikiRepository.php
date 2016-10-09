@@ -363,6 +363,30 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
     }
 
     /**
+     * @return Wiki\Log[]
+     */
+    public function getLogQuery()
+    {
+        $this->applyCriteria();
+
+        return $this
+            ->app
+            ->make(Wiki\Log::class)
+            ->select([
+                'wiki_log.title',
+                'wiki_log.created_at',
+                'wiki_log.comment',
+                'wiki_log.diff',
+                'users.name AS user_name',
+                'path'
+            ])
+            ->join('users', 'users.id', '=', 'user_id')
+            ->join('wiki_pages', 'wiki_pages.id', '=', 'wiki_log.wiki_id')
+            ->join('wiki_paths', 'wiki_paths.wiki_id', '=', 'wiki_log.wiki_id')
+            ->whereNull('wiki_pages.deleted_at');
+    }
+
+    /**
      * @param int $pathId
      * @return \Coyote\Wiki\Path
      */

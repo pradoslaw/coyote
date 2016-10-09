@@ -124,4 +124,9 @@ interface WikiRepositoryInterface extends RepositoryInterface
      * @param string $path
      */
     public function dissociateLink($path);
+
+    /**
+     * @return \Coyote\Wiki\Log[]
+     */
+    public function getLogQuery();
 }

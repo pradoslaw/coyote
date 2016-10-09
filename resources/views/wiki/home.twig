@@ -2,5 +2,27 @@
 {% block title %}Kompendium wiedzy{{ parent() }}{% endblock %}
 
 {% block container %}
+    <div class="row">
+        <div class="col-sm-3">
 
+        </div>
+
+        <div class="col-sm-9">
+            <div class="box">
+                <h4><i class="fa fa-calendar-o"></i> Ostatnie zmiany w tekstach</h4>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-body wiki-log">
+                    {{ grid|raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ cdn('css/wiki.css') }}">
 {% endblock %}
