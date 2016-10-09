@@ -386,3 +386,25 @@ article > header {
     vertical-align: middle;
   }
 }
+
+.root-map {
+  margin-top: 20px;
+  padding: 0;
+  font-size: $font-size-small;
+
+  a {
+    color: $gray;
+  }
+
+  li {
+    padding: 3px 0;
+  }
+
+  .depth-1 {
+    font-weight: bold;
+  }
+
+  .depth-2 {
+    margin-left: 20px;
+  }
+}

@@ -3,11 +3,17 @@
 
 {% block container %}
     <div class="row">
-        <div class="col-sm-3">
-
+        <div class="col-sm-2">
+            <ul class="root-map">
+                {% for category in categories %}
+                    <li class="list-unstyled depth-{{ category.depth }}">
+                        <a href="{{ url(category.path) }}">{{ category.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
 
-        <div class="col-sm-9">
+        <div class="col-sm-10">
             <div class="box">
                 <h4><i class="fa fa-calendar-o"></i> Ostatnie zmiany w tekstach</h4>
             </div>
