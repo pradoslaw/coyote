@@ -31,7 +31,7 @@ class JobPostingCest
 
         $I->fillField('input[name=title]', $title = $fake->text(50));
         $I->fillField('input[name=city]', $city = $fake->city);
-        $I->fillField('input[name=salary_from]', $salaryFrom = $fake->numberBetween(0, 1000));
+        $I->fillField('input[name=salary_from]', $salaryFrom = $fake->numberBetween(0, 999));
         $I->fillField('input[name=salary_to]', $salaryTo = $fake->numberBetween(1000, 2000));
 
         $I->fillField('textarea[name=description]', $fake->text);
