@@ -61,6 +61,14 @@ class Comment extends Model
     }
 
     /**
+     * @param string $html
+     */
+    public function setHtmlAttribute($html)
+    {
+        $this->html = $html;
+    }
+
+    /**
      * @return string
      */
     public function getHtmlAttribute()

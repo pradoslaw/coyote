@@ -36,7 +36,7 @@ class CommentController extends Controller
 
         $this->transaction(function () use ($wiki, $comment) {
             // before creating new record we decide whether to add user to subscribers list or not.
-            $subscribe = auth()->user()->allow_subscribe
+            $subscribe = $this->auth->allow_subscribe
                 && !$comment->exists && !$comment->wasUserInvolved($wiki->id, $this->userId);
             $comment->save();
 
@@ -51,7 +51,7 @@ class CommentController extends Controller
                             'users_id' => $subscribersId,
                             'url' => UrlBuilder::wikiComment($wiki, $comment->id),
                             'sender_id' => $this->userId,
-                            'sender_name' => auth()->user()->name,
+                            'sender_name' => $this->auth->name,
                             'excerpt' => excerpt($comment->html)
                         ])
                 );
