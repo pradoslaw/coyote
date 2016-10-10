@@ -24,6 +24,9 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 
 class AuthServiceProvider extends ServiceProvider
 {
+    // cache permission for 1 month
+    const CACHE_TTL = 60 * 24 * 30;
+
     /**
      * The policy mappings for the application.
      *
@@ -105,7 +108,7 @@ class AuthServiceProvider extends ServiceProvider
         if (config('cache.default') !== 'file') {
             $cache = $this->app[CacheManager::class];
 
-            $result = $cache->tags(['permissions'])->rememberForever('permission:' . $user->id, function () use ($user) {
+            $result = $cache->tags('permissions')->remember('permission:' . $user->id, self::CACHE_TTL, function () use ($user) {
                 return $user->getPermissions();
             });
         } else {
