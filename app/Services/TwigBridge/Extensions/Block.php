@@ -5,7 +5,6 @@ namespace Coyote\Services\TwigBridge\Extensions;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
-use Coyote\Services\Elasticsearch\Builders\Wiki\MoreLikeThisBuilder;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -42,9 +41,7 @@ class Block extends Twig_Extension
              */
             new Twig_SimpleFunction('render_region', [&$this, 'renderRegion'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('render_block', [&$this, 'renderBlock'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('render_help_context', [&$this, 'renderHelpContext'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('render_wiki_mlt', [&$this, 'renderWikiMlt'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('render_wiki_related', [&$this, 'renderWikiRelated'], ['is_safe' => ['html']])
+            new Twig_SimpleFunction('render_help_context', [&$this, 'renderHelpContext'], ['is_safe' => ['html']])
         ];
     }
 
@@ -118,27 +115,6 @@ class Block extends Twig_Extension
         $html .= '</ul>';
 
         return $html;
-    }
-
-    /**
-     * @param \Coyote\Wiki $wiki
-     * @return \Illuminate\View\View
-     */
-    public function renderWikiMlt($wiki)
-    {
-        $builder = (new MoreLikeThisBuilder())->build($wiki);
-        $build = $builder->build();
-
-        return view('wiki.partials.mlt', ['mlt' => $this->getWikiRepository()->search($build)->getSource()]);
-    }
-
-    /**
-     * @param int $wikiId
-     * @return \Illuminate\View\View
-     */
-    public function renderWikiRelated($wikiId)
-    {
-        return view('wiki.partials.related', ['related' => $this->getWikiRepository()->getRelatedPages($wikiId)]);
     }
 
     /**

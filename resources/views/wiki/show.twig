@@ -93,8 +93,41 @@
                 <div class="clearfix"></div>
             {% endif %}
 
-            {{ render_wiki_mlt(wiki) }}
-            {{ render_wiki_related(wiki.id) }}
+            {% if mlt|length > 0 %}
+                <section class="box related">
+                    <h4 class="border"><i class="fa fa-eye fa-fw"></i> Zobacz też</h4>
+
+                    <ul>
+                        {% for item in mlt %}
+                            <li>
+                                <a href="{{ url(item.path) }}" title="{{ item.title }}">
+                                    <strong>{{ item.title }}</strong>
+                                    <small>{{ item.updated_at|format_date }}</small>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <div class="clearfix"></div>
+            {% endif %}
+
+            {% if related|length > 0 %}
+                <section class="related box">
+                    <h4 class="border"><i class="fa fa-thumb-tack fa-fw"></i> Strony powiązane</h4>
+
+                    <ul>
+                        {% for item in related %}
+                            <li>
+                                <a href="{{ url(item.path) }}" title="{{ item.title }}">
+                                    <strong>{{ item.title }}</strong>
+                                    <small>{{ item.updated_at|format_date }}</small>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
 
         </aside>
     </div>
