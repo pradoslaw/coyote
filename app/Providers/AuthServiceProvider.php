@@ -109,10 +109,10 @@ class AuthServiceProvider extends ServiceProvider
             $cache = $this->app[CacheManager::class];
 
             $result = $cache->tags('permissions')->remember('permission:' . $user->id, self::CACHE_TTL, function () use ($user) {
-                return $user->getPermissions();
+                return $user->getPermissions()->toArray();
             });
         } else {
-            $result = $user->getPermissions();
+            $result = $user->getPermissions()->toArray();
         }
 
         return $this->permissions[$user->id] = $result;
