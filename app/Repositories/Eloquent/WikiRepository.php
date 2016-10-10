@@ -207,7 +207,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
     {
         return $this
             ->model
-            ->select(['wiki.path', 'title', 'updated_at'])
+            ->selectRaw('DISTINCT ON(wiki_id) wiki.path, title, long_title, updated_at')
             ->join('wiki_links', 'wiki_links.path_id', '=', 'wiki.id')
             ->where('wiki_links.ref_id', $pathId)
             ->limit(10)
