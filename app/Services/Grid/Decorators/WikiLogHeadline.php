@@ -16,7 +16,7 @@ class WikiLogHeadline extends Decorator
 
         $cell->setValue(
             $html->tag('strong', (string) $html->link($cell->getData()->path, $cell->getData()->title))  .
-            $html->tag('p', (string) $cell->getValue(), ['class' => 'text-muted'])
+            $html->tag('p', (string) htmlspecialchars($cell->getValue()), ['class' => 'text-muted'])
         );
     }
 }

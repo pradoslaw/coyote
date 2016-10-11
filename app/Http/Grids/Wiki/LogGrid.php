@@ -23,6 +23,10 @@ class LogGrid extends Grid
                 'title' => 'Komentarz',
                 'decorators' => [new WikiLogHeadline()]
             ])
+            ->addColumn('length', [
+                'title' => 'Rozmiar',
+                'decorators' => [new TextSize()]
+            ])
             ->addColumn('diff', [
                 'title' => 'Różnica',
                 'decorators' => [new TextSize()]

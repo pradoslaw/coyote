@@ -68,6 +68,10 @@ class WikiForm extends Form
                     'data-paste-url' => ''
                 ]
             ])
+            ->add('comment', 'text', [
+                'rules' => 'string|max:255',
+                'label' => 'Opis zmian'
+            ])
             ->add('submit', 'submit', [
                 'label' => 'Zapisz',
                 'attr' => [

@@ -182,7 +182,8 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
                 'host'      => gethostbyaddr($request->ip()),
                 'browser'   => $request->browser(),
                 'length'    => $length,
-                'diff'      => $diff
+                'diff'      => $diff,
+                'comment'   => $request->input('comment')
             ]);
 
             $this->calculateAuthorsShare($page->id);
@@ -376,6 +377,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
                 'wiki_log.title',
                 'wiki_log.created_at',
                 'wiki_log.comment',
+                'wiki_log.length',
                 'wiki_log.diff',
                 'users.name AS user_name',
                 'path'
