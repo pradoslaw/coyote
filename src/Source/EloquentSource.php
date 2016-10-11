@@ -7,10 +7,10 @@ use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Order;
 use Illuminate\Database\Eloquent\Builder;
 
-class EloquentDataSource implements SourceInterface
+class EloquentSource implements SourceInterface
 {
     /**
-     * @var \Illuminate\Database\Eloquent\Builder
+     * @var \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
      */
     protected $source;
 
