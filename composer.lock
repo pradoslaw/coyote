@@ -46,12 +46,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-boduch/laravel-grid.git",
-                "reference": "dec13a3e2b89236e80ee451e35fb46437f463a28"
+                "reference": "141805561de1a5bd4209994f1bd1cc8ac71ffb62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/dec13a3e2b89236e80ee451e35fb46437f463a28",
-                "reference": "dec13a3e2b89236e80ee451e35fb46437f463a28",
+                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/141805561de1a5bd4209994f1bd1cc8ac71ffb62",
+                "reference": "141805561de1a5bd4209994f1bd1cc8ac71ffb62",
                 "shasum": ""
             },
             "require": {
@@ -90,7 +90,7 @@
                 "source": "https://github.com/adam-boduch/laravel-grid/tree/master",
                 "issues": "https://github.com/adam-boduch/laravel-grid/issues"
             },
-            "time": "2016-10-09 08:09:48"
+            "time": "2016-10-11 16:35:53"
         },
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2189,16 +2189,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
                 "shasum": ""
             },
             "require": {
@@ -2232,7 +2232,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-09-19 16:02:08"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "psy/psysh",

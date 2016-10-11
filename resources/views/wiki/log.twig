@@ -1,0 +1,20 @@
+{% extends 'wiki.base' %}
+{% block title %}
+    Historia zmian strony {{ wiki.title }}{{ parent() }}
+{% endblock %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="box">
+                <h4><i class="fa fa-calendar-o"></i> Ostatnie zmiany w {{ wiki.title }}</h4>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-body wiki-log">
+                    {{ grid(grid) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

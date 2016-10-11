@@ -126,7 +126,7 @@ interface WikiRepositoryInterface extends RepositoryInterface
     public function dissociateLink($path);
 
     /**
-     * @return \Coyote\Wiki\Log[]
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function getLogQuery();
+    public function getLogBuilder();
 }

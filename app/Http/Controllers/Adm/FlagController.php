@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Adm;
 use Coyote\Http\Grids\Adm\FlagsGrid;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
 use Coyote\Repositories\Criteria\FlagList;
-use Boduch\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentSource;
 
 class FlagController extends BaseController
 {
@@ -33,8 +33,7 @@ class FlagController extends BaseController
         $this->flag->pushCriteria(new FlagList());
         $this->flag->applyCriteria();
 
-        $grid = $this->gridBuilder()->createGrid(FlagsGrid::class);
-        $grid->setSource(new EloquentDataSource($this->flag));
+        $grid = $this->gridBuilder()->createGrid(FlagsGrid::class)->setSource(new EloquentSource($this->flag));
 
         return $this->view('adm.flag')->with('grid', $grid);
     }

@@ -363,9 +363,9 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
     }
 
     /**
-     * @return Wiki\Log[]
+     * @inheritdoc
      */
-    public function getLogQuery()
+    public function getLogBuilder()
     {
         $this->applyCriteria();
 

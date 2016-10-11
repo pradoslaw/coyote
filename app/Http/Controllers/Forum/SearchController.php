@@ -39,7 +39,7 @@ class SearchController extends BaseController
             $builder = (new SearchBuilder())->build($request, $request->has('f') ? $request->get('f') : $forumsId);
 
             $build = $builder->build();
-            debugbar()->debug($build);
+            debugbar()->debug(json_encode($build));
 
             start_measure('Elasticsearch');
             $response = $this->post->search($build);

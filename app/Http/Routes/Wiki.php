@@ -96,7 +96,7 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
         'middleware' => 'auth'
     ]);
 
-    $this->get('History/{wiki}', ['uses' => 'HistoryController@index', 'as' => 'history']);
+    $this->get('Log/{wiki}', ['uses' => 'LogController@index', 'as' => 'log']);
     $this->get('Blog', ['uses' => 'BlogController@index', 'as' => 'blog']);
     $this->get('Kategorie', ['uses' => 'HomeController@index', 'as' => 'home']);
 

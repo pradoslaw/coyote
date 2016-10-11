@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
-use Boduch\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentSource;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Forms\BlockForm;
 use Coyote\Http\Grids\Adm\BlockGrid;
@@ -37,7 +37,7 @@ class BlocksController extends BaseController
      */
     public function index()
     {
-        $grid = $this->gridBuilder()->createGrid(BlockGrid::class)->setSource(new EloquentDataSource($this->block));
+        $grid = $this->gridBuilder()->createGrid(BlockGrid::class)->setSource(new EloquentSource($this->block));
 
         return $this->view('adm.blocks.home')->with('grid', $grid);
     }

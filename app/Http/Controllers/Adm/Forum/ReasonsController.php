@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Adm\Forum;
 
-use Boduch\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentSource;
 use Coyote\Forum\Reason;
 use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Forms\ForumReasonsForm;
@@ -28,7 +28,7 @@ class ReasonsController extends BaseController
         $grid = $this
             ->gridBuilder()
             ->createGrid(ReasonsGrid::class)
-            ->setSource(new EloquentDataSource(new Reason()))
+            ->setSource(new EloquentSource(new Reason()))
             ->setEnablePagination(false);
 
         return $this->view('adm.forum.reasons.home')->with('grid', $grid);

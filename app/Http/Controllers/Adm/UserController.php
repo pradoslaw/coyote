@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Adm;
 use Coyote\Http\Forms\User\AdminForm;
 use Coyote\Http\Grids\Adm\UsersGrid;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Boduch\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentSource;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\Events\UserWasSaved;
@@ -34,7 +34,7 @@ class UserController extends BaseController
     public function index()
     {
         $grid = $this->gridBuilder()->createGrid(UsersGrid::class);
-        $grid->setSource(new EloquentDataSource($this->user->newQuery()));
+        $grid->setSource(new EloquentSource($this->user->newQuery()));
 
         return $this->view('adm.user.home', ['grid' => $grid]);
     }

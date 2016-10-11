@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
-use Boduch\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentSource;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Grids\Wiki\LogGrid;
 use Coyote\Repositories\Criteria\Wiki\BelowDepth;
@@ -48,7 +48,7 @@ class HomeController extends BaseController
         return (string) $this
             ->gridBuilder()
             ->createGrid(LogGrid::class)
-            ->setSource(new EloquentDataSource($this->wiki->getLogQuery()))
+            ->setSource(new EloquentSource($this->wiki->getLogBuilder()))
             ->render();
     }
 }

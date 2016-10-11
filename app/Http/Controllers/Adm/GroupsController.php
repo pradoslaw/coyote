@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Adm;
 use Coyote\Http\Forms\Group\GroupForm;
 use Coyote\Http\Grids\Adm\GroupsGrid;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
-use Boduch\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentSource;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Group as Stream_Group;
@@ -34,7 +34,7 @@ class GroupsController extends BaseController
     public function index()
     {
         $grid = $this->gridBuilder()->createGrid(GroupsGrid::class);
-        $grid->setSource(new EloquentDataSource($this->group));
+        $grid->setSource(new EloquentSource($this->group));
 
         return $this->view('adm.groups.home')->with('grid', $grid);
     }

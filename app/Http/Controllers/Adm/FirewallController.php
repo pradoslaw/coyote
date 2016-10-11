@@ -8,7 +8,7 @@ use Coyote\Http\Forms\FirewallForm;
 use Coyote\Http\Grids\Adm\FirewallGrid;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface as FirewallRepository;
 use Coyote\Repositories\Criteria\FirewallList;
-use Boduch\Grid\Source\EloquentDataSource;
+use Boduch\Grid\Source\EloquentSource;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
@@ -41,7 +41,7 @@ class FirewallController extends BaseController
         $this->firewall->applyCriteria();
 
         $grid = $this->gridBuilder()->createGrid(FirewallGrid::class);
-        $grid->setSource(new EloquentDataSource($this->firewall));
+        $grid->setSource(new EloquentSource($this->firewall));
 
         return $this->view('adm.firewall.home', ['grid' => $grid]);
     }
