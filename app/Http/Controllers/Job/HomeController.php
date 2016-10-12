@@ -77,7 +77,7 @@ class HomeController extends Controller
         }
 
         // if user want to filter job offers, we MUST select "all" tab
-        if ($this->inputNotEmpty($request, ['q', 'city', 'remote', 'tag'])) {
+        if ($this->notEmpty($request, ['q', 'city', 'remote', 'tag'])) {
             $this->tab = self::TAB_ALL;
         }
 
@@ -142,9 +142,10 @@ class HomeController extends Controller
     private function load(Request $request)
     {
         start_measure('search', 'Elasticsearch');
+
         $build = $this->builder->build()->build();
         // show build query in laravel's debugbar
-        debugbar()->debug($build);
+        debugbar()->debug(json_encode($build));
 
         $response = $this->job->search($build);
         stop_measure('search');
@@ -155,9 +156,9 @@ class HomeController extends Controller
 
         $context = !$request->has('q') ? 'global.' : '';
         $aggregations = [
-            'cities' => $response->getAggregations("${context}locations.city_original"),
-            'tags' => $response->getAggregations("${context}tags"),
-            'remote' => $response->getAggregations("${context}remote")
+            'cities'        => $response->getAggregations("${context}locations.city_original"),
+            'tags'          => $response->getAggregations("${context}tags"),
+            'remote'        => $response->getAggregations("${context}remote")
         ];
 
         $pagination = new LengthAwarePaginator(
@@ -221,7 +222,7 @@ class HomeController extends Controller
      * @param string[] $keys
      * @return bool
      */
-    protected function inputNotEmpty(Request $request, array $keys)
+    protected function notEmpty(Request $request, array $keys)
     {
         foreach ($keys as $key) {
             if ($request->has($key)) {

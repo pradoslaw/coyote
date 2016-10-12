@@ -18,6 +18,11 @@ class Decay extends FunctionScore
     protected $scale;
 
     /**
+     * @var float
+     */
+    protected $decay;
+
+    /**
      * @var string
      */
     protected $decayFunction = 'gauss';
@@ -25,11 +30,13 @@ class Decay extends FunctionScore
     /**
      * @param string $field
      * @param string $scale
+     * @param float $decay
      */
-    public function __construct($field, $scale)
+    public function __construct($field, $scale, $decay = 0.5)
     {
         $this->field = $field;
         $this->scale = $scale;
+        $this->decay = $decay;
     }
 
     /**
@@ -43,7 +50,8 @@ class Decay extends FunctionScore
         $body['query']['function_score']['functions'][] = [
             $this->decayFunction => [
                 $this->field => [
-                    'scale' => $this->scale
+                    'scale' => $this->scale,
+                    'decay' => $this->decay
                 ]
             ]
         ];

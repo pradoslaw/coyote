@@ -3,6 +3,8 @@
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Services\Elasticsearch\Aggs;
+use Coyote\Services\Elasticsearch\Functions\Decay;
+use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
 use Coyote\Services\Elasticsearch\Query;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
@@ -129,14 +131,19 @@ class SearchBuilder
         // mozemy dodac sortowanie po "jakosci" ogloszenia. w ten sposob te lepsze ogloszenia beda na liscie
         // nieco wyzej niz te gorsze. w ten sposob ogloszenia nie beda posortowane po dacie. nalezy sie zastanowic
         // czy takie dzialanie jest pozadane?
-        if ($sort === '_score') {
-            $this->queryBuilder->addSort(new Sort('rank', 'desc'));
-        }
+//        if ($sort === '_score') {
+//            $this->queryBuilder->addSort(new Sort('rank', 'desc'));
+//        }
 
         // it's really important. we MUST show only active offers
         $this->queryBuilder->addFilter(new Filters\Range('deadline_at', ['gte' => 'now']));
         $this->queryBuilder->addFilter($this->city);
         $this->queryBuilder->addFilter($this->tag);
+
+        // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 2)
+        $this->queryBuilder->addFunction(new FieldValueFactor('score', 'log', 2));
+        // strsze ogloszenia traca na waznosci
+        $this->queryBuilder->addFunction(new Decay('created_at', '14d', 0.5));
 
         // facet search
         $this->queryBuilder->addAggs(new Aggs\Job\Location());
