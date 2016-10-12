@@ -6,8 +6,8 @@
     <div id="box-jobs" class="panel-body">
         <ul id="sort" class="hidden-xs">
             <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
-            <li>{{ sortable('id', 'Data dodania', ['_score', 'desc']) }}</li>
-            <li>{{ sortable('salary', 'Wynagrodzenie', ['_score', 'desc']) }}</li>
+            <li>{{ sortable('id', 'Data dodania', ['_score', 'asc']) }}</li>
+            <li>{{ sortable('salary', 'Wynagrodzenie', ['_score', 'asc']) }}</li>
         </ul>
 
         <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary btn-sm pull-right visible-xs visible-sm" style="margin-top: 6px; margin-bottom: 10px" title="Dodaj ofertę pracy zupełnie za darmo!">Dodaj ofertę pracy</a>
