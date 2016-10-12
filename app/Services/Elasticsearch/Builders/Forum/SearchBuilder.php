@@ -5,6 +5,7 @@ namespace Coyote\Services\Elasticsearch\Builders\Forum;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Elasticsearch\Filters\Post\Forum;
+use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\QueryParser;
@@ -72,6 +73,7 @@ class SearchBuilder
             $builder->addQuery(new Query($parser->getFilteredQuery(), ['text^2', 'topic.subject', 'tags^4']));
         }
 
+        $builder->addFunction(new Decay('created_at', '180d'));
         $builder->setSize(($request->input('page', 1) - 1) * 10, 10);
 
         return $builder;

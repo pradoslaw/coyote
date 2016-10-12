@@ -27,10 +27,23 @@ abstract class Filter implements DslInterface
 
     /**
      * @param QueryBuilderInterface $queryBuilder
+     * @return mixed
+     */
+    public function apply(QueryBuilderInterface $queryBuilder)
+    {
+        if (empty($this->value)) {
+            return $queryBuilder->getBody();
+        }
+
+        return $this->addFilter($queryBuilder, [static::FILTER_NAME => [$this->field => $this->value]]);
+    }
+
+    /**
+     * @param QueryBuilderInterface $queryBuilder
      * @param $filter
      * @return mixed
      */
-    public function addFilter(QueryBuilderInterface $queryBuilder, $filter)
+    protected function addFilter(QueryBuilderInterface $queryBuilder, $filter)
     {
         $filters = array_get($queryBuilder->getBody(), 'query.filtered.filter.and.filters');
         $filters[] = $filter;
@@ -48,7 +61,7 @@ abstract class Filter implements DslInterface
      *
      * @todo potrzebny refaktoring poniewaz kod tej metody dubluje sie z poprzednim (DRY!)
      */
-    public function addOrFilter(QueryBuilderInterface $queryBuilder, $filter)
+    protected function addOrFilter(QueryBuilderInterface $queryBuilder, $filter)
     {
         $filters = array_get($queryBuilder->getBody(), 'query.filtered.filter.and.filters.0.or.filters');
         $filters[] = $filter;
@@ -57,18 +70,5 @@ abstract class Filter implements DslInterface
         $body['query']['filtered']['filter']['and']['filters'][0]['or']['filters'] = $filters;
 
         return $body;
-    }
-
-    /**
-     * @param QueryBuilderInterface $queryBuilder
-     * @return mixed
-     */
-    public function apply(QueryBuilderInterface $queryBuilder)
-    {
-        if (empty($this->value)) {
-            return $queryBuilder->getBody();
-        }
-
-        return $this->addFilter($queryBuilder, [static::FILTER_NAME => [$this->field => $this->value]]);
     }
 }

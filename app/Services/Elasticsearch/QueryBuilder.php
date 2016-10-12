@@ -115,6 +115,11 @@ class QueryBuilder implements QueryBuilderInterface
         $this->body['size'] = $size;
     }
 
+    public function addFunction(DslInterface $function)
+    {
+        return $this->addToStock($function);
+    }
+
     /**
      * @return array
      */
@@ -134,6 +139,7 @@ class QueryBuilder implements QueryBuilderInterface
     protected function addToStock(DslInterface $stock)
     {
         $this->stock[] = $stock;
+
         return $this;
     }
 }
