@@ -166,6 +166,13 @@
   .img-thumbnail {
     float: left;
     margin-right: 5px;
+    width: 30px;
+    height: 30px;
+
+    @media  screen and (min-width: $screen-lg)  {
+      width: 35px;
+      height: 35px;
+    }
   }
 
   .btn-watch-sm {
