@@ -23,11 +23,13 @@ class LogController extends BaseController
                 ->where('wiki_paths.path_id', $wiki->id)
         );
 
+        /** @var LogGrid $grid */
         $grid = $this
             ->gridBuilder()
             ->createGrid(LogGrid::class)
             ->setSource($source)
-            ->setEnablePagination(false);
+            ->setEnablePagination(false)
+            ->addComparisionButtons();
 
         return $this->view('wiki.log')->with(compact('grid', 'wiki'));
     }

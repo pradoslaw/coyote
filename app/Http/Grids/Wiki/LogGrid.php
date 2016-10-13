@@ -2,9 +2,10 @@
 
 namespace Coyote\Http\Grids\Wiki;
 
+use Boduch\Grid\Cell;
 use Boduch\Grid\Order;
+use Boduch\Grid\Row;
 use Coyote\Services\Grid\Decorators\TextSize;
-use Coyote\Services\Grid\Decorators\WikiLogHeadline;
 use Coyote\Services\Grid\Grid;
 
 class LogGrid extends Grid
@@ -21,7 +22,17 @@ class LogGrid extends Grid
             ])
             ->addColumn('comment', [
                 'title' => 'Komentarz',
-                'decorators' => [new WikiLogHeadline()]
+                'render' => function () {
+                    /** @var Cell $this */
+                    $html = $this->getColumn()->getGrid()->getGridHelper()->getHtmlBuilder();
+
+                    $this->setValue(
+                        $html->tag('strong', (string) $html->link($this->getData()->path, $this->getData()->title)) .
+                        $html->tag('p', (string) htmlspecialchars($this->getValue()), ['class' => 'text-muted'])
+                    );
+
+                    return $this->getValue();
+                }
             ])
             ->addColumn('length', [
                 'title' => 'Rozmiar',
@@ -35,5 +46,43 @@ class LogGrid extends Grid
                 'Data modyfikacji',
                 'decorators' => [$this->getDateTimeDecorator()]
             ]);
+    }
+
+    public function addComparisionButtons()
+    {
+        $form = $this->getGridHelper()->getFormBuilder();
+        $original = $this->columns;
+
+        $this->columns = [];
+
+        $this
+            ->addColumn('r1', [
+                'render' => function ($row) use ($form) {
+                    return $form->radio('r1', $row->id);
+                }
+            ])
+            ->addColumn('r2', [
+                'render' => function ($row) use ($form) {
+                    return $form->radio('r2', $row->id);
+                }
+            ])
+            ->each(function (Row $row) {
+                static $index = 0;
+
+                $index++;
+                if ($index === 1) {
+                    $row->get('r2')->setValue('');
+                }
+
+                if ($index === count($this->rows)) {
+                    $row->get('r1')->setValue('');
+                }
+            });
+
+        foreach ($original as $column) {
+            $this->columns[] = $column;
+        }
+
+        return $this;
     }
 }
