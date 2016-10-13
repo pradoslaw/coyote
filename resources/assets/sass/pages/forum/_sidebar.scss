@@ -15,6 +15,10 @@
     box-shadow: 5px 5px 6px #AAA;
     width: 45%; // na urzadzeniach mobilnych rozszerzamy to okno aby cokolwiek bylo tam widac
   }
+
+  @media screen and (max-width: $screen-xs) {
+    width: 65%;
+  }
 }
 
 // Przycisk do ukrywania menu bocznego

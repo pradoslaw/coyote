@@ -1,6 +1,6 @@
 {% for job in jobs %}
     <div class="media">
-        <div class="media-left">
+        <div class="media-left hidden-xs">
             <a href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title }}">
                 <img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
             </a>
