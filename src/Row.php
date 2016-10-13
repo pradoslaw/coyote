@@ -37,6 +37,8 @@ class Row implements \IteratorAggregate
     }
 
     /**
+     * Grid can be accessed from helper functions.
+     *
      * @param Grid $grid
      * @return $this
      */

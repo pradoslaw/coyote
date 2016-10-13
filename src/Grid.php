@@ -348,14 +348,17 @@ class Grid
             }
 
             $row->addCell((new Action($actions, $mixed))->setRowActions($this->rowActions));
-
-            if ($this->eachCallback) {
-                $this->eachCallback->call($this, $row);
-            }
             $this->rows->addRow($row);
         }
 
         $this->columns[] = $actions;
+
+        // finally call callback on every row so we can modify rows, cells, attributes etc...
+        if ($this->eachCallback) {
+            foreach ($this->rows as $row) {
+                $this->eachCallback->call($this, $row);
+            }
+        }
 
         return $this->rows;
     }
@@ -376,8 +379,10 @@ class Grid
      */
     protected function execute()
     {
+        // apply filters first
         $this->source->applyFilters($this->columns);
 
+        // calculate total rows to build pagination
         if ($this->enablePagination) {
             $this->total = $this->source->total();
         }
