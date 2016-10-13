@@ -61,6 +61,10 @@ class UsersGrid extends Grid
                 'decorators' => [new Ip()],
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])
+            ->addColumn('reputation', [
+                'title' => 'Reputacja',
+                'sortable' => true
+            ])
             ->addRowAction(new EditButton(function (User $user) {
                 return route('adm.user.save', [$user->id]);
             }));
