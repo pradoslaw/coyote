@@ -46,12 +46,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-boduch/laravel-grid.git",
-                "reference": "141805561de1a5bd4209994f1bd1cc8ac71ffb62"
+                "reference": "6a84320626c3e53108df9022854421e1726eda15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/141805561de1a5bd4209994f1bd1cc8ac71ffb62",
-                "reference": "141805561de1a5bd4209994f1bd1cc8ac71ffb62",
+                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/6a84320626c3e53108df9022854421e1726eda15",
+                "reference": "6a84320626c3e53108df9022854421e1726eda15",
                 "shasum": ""
             },
             "require": {
@@ -90,7 +90,7 @@
                 "source": "https://github.com/adam-boduch/laravel-grid/tree/master",
                 "issues": "https://github.com/adam-boduch/laravel-grid/issues"
             },
-            "time": "2016-10-11 16:35:53"
+            "time": "2016-10-13 19:23:09"
         },
         {
             "name": "barryvdh/laravel-debugbar",

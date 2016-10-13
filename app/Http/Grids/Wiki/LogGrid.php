@@ -22,12 +22,12 @@ class LogGrid extends Grid
             ])
             ->addColumn('comment', [
                 'title' => 'Komentarz',
-                'render' => function () {
+                'render' => function ($row) {
                     /** @var Cell $this */
                     $html = $this->getColumn()->getGrid()->getGridHelper()->getHtmlBuilder();
 
                     $this->setValue(
-                        $html->tag('strong', (string) $html->link($this->getData()->path, $this->getData()->title)) .
+                        $html->tag('strong', (string) $html->link($row->path, $row->title)) .
                         $html->tag('p', (string) htmlspecialchars($this->getValue()), ['class' => 'text-muted'])
                     );
 
