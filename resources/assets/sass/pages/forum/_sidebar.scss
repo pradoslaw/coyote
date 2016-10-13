@@ -3,18 +3,29 @@
   width: 23%;
   margin-right: -25%;
 
-  @media screen and (max-width: $sidebar-media-max-width) {
-    display:                  none;
-    position:                 absolute;
-    z-index:                  101;
-    font-size:                .9em;
-    right:                    25%;
-    background:               #F3F5F0;
-    border:                   2px solid $border-color;
-    padding:                  6px 10px;
-    box-shadow:               5px 5px 6px #AAA;
-    width:                    45%; // na urzadzeniach mobilnych rozszerzamy to okno aby cokolwiek bylo tam widac
+  @media screen and (max-width: $screen-lg) {
+    display: none;
+    position: absolute;
+    z-index: 101;
+    font-size: .9em;
+    right: 25%;
+    background: #F3F5F0;
+    border: 2px solid $border-color;
+    padding: 6px 10px;
+    box-shadow: 5px 5px 6px #AAA;
+    width: 45%; // na urzadzeniach mobilnych rozszerzamy to okno aby cokolwiek bylo tam widac
   }
+}
+
+// Przycisk do ukrywania menu bocznego
+// -------------------------------------------------------------------------------------------
+
+#btn-toggle-sidebar {
+  position: absolute;
+  bottom: 5px;
+  font-size: 18px;
+  right: 0;
+  color: $gray;
 }
 
 .side-menu {
@@ -100,49 +111,8 @@
   color: $gray-light;
 }
 
-// Ikony wyswietlane po prawej stronie nad tabelka - np. z lista watkow. M.in. przycisk do ukrywania menu bocznego
-// -------------------------------------------------------------------------------------------
-
-//.btn-mark-read-xs, .btn-atom-xs,
-#btn-toggle-sidebar {
-  position: absolute;
-  bottom: 5px;
-  font-size: 18px;
-  right: 0;
-
-  i {
-    color: $gray;
-  }
-
-  i.fa-close {
-    display: inline-block;
-
-    font-size: 10px;
-    padding: 2px;
-    border-radius: 3px;
-    -webkit-transition: all .4s ease-in-out;
-    -moz-transition: all .4s ease-in-out;
-
-    &:hover {
-      opacity: 1;
-      background-color: $border-color;
-    }
-  }
-
-  i.fa-bars {
-    display: none;
-  }
-}
-
-.sidebar-hidden {
-  i.fa-close {
-    display: none !important;
-  }
-
-  i.fa-bars {
-    display: inline-block !important;
-  }
-}
+// Licznik watkow w danym dziale
+// ----------------------------------
 
 #box-count {
   color: lighten($gray-light, 10%);

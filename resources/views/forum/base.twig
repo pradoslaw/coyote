@@ -11,11 +11,11 @@
 {% block body %}
     {{ parent() }}
 
-    <script src="{{ cdn('js/forum.js') }}" type="text/javascript"></script>
+    <script src="{{ cdn('js/forum.js') }}"></script>
 {% endblock %}
 
 {% block container %}
-    <div id="index" class="{{ sidebar ? 'sidebar' }}">
+    <div id="index">
         {% block content %}{% endblock %}
     </div>
 {% endblock %}
