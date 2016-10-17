@@ -35,7 +35,11 @@ class MicroblogFactory extends AbstractFactory
 
             if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true)->setEnableHashParser(true));
+                    $parser->attach(
+                        (new Markdown($this->app[UserRepositoryInterface::class]))
+                            ->setBreaksEnabled(true)
+                            ->setEnableHashParser(true)
+                    );
                     $parser->attach(new Purifier());
                     $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));

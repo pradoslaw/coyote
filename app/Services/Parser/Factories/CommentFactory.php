@@ -26,6 +26,11 @@ class CommentFactory extends AbstractFactory
     protected $enableHashParser = false;
 
     /**
+     * @var bool
+     */
+    protected $enableLineBreaks = false;
+
+    /**
      * @var int
      */
     protected $userId;
@@ -65,8 +70,15 @@ class CommentFactory extends AbstractFactory
 
             if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach((new SimpleMarkdown($this->app[UserRepositoryInterface::class]))->setEnableHashParser($this->enableHashParser));
-                    $parser->attach((new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id|class],code'));
+                    $parser->attach(
+                        (new SimpleMarkdown($this->app[UserRepositoryInterface::class]))
+                            ->setEnableHashParser($this->enableHashParser)
+                            ->setBreaksEnabled($this->enableLineBreaks)
+                    );
+
+                    $parser->attach(
+                        (new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id|class],code,br')
+                    );
                     $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 

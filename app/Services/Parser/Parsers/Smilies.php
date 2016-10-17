@@ -42,7 +42,7 @@ class Smilies extends Parser implements ParserInterface
 
         foreach ($this->smilies as $var => $value) {
             $patterns[] = '#(?<=^|[\n ]|\.)' . preg_quote($var, '#') . '#';
-            $replacements[] = '<img class="img-smile" alt="' . $var . '" title="' . $var . '" src="' . cdn('img/smilies/' . $value) . '" />';
+            $replacements[] = '<img class="img-smile" alt="' . $var . '" title="' . $var . '" src="' . cdn('img/smilies/' . $value) . '">';
         }
         reset($this->smilies);
 
