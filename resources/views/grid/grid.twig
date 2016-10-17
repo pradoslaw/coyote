@@ -43,7 +43,8 @@
                 </tbody>
             </table>
 
-            <input type="submit" style="visibility: hidden; height: 1px" />
+            {{ submit_button|raw }}
+            <input type="submit" style="visibility: hidden; height: 1px; width: 1px" />
         {{ form_close() }}
     {% endblock %}
 

@@ -5,6 +5,7 @@ namespace Coyote\Http\Grids\Wiki;
 use Boduch\Grid\Cell;
 use Boduch\Grid\Order;
 use Boduch\Grid\Row;
+use Coyote\Services\Grid\Components\SubmitButton;
 use Coyote\Services\Grid\Decorators\TextSize;
 use Coyote\Services\Grid\Grid;
 
@@ -45,7 +46,8 @@ class LogGrid extends Grid
             ->addColumn('created_at', [
                 'Data modyfikacji',
                 'decorators' => [$this->getDateTimeDecorator()]
-            ]);
+            ])
+            ->addComponent(new SubmitButton('', 'Porównaj wersje'));
     }
 
     public function addComparisionButtons()
