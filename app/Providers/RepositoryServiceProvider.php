@@ -44,7 +44,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
+        $this->app->singleton(
             array_pull($this->provides, array_search(StreamRepositoryInterface::class, $this->provides)),
             'Coyote\\Repositories\\Mongodb\\StreamRepository'
         );
@@ -53,7 +53,7 @@ class RepositoryServiceProvider extends ServiceProvider
             $segments = explode('\\', $interface);
             $repository = substr((string) array_pop($segments), 0, -9);
 
-            $this->app->bind(
+            $this->app->singleton(
                 $interface,
                 implode('\\', array_merge(array_set($segments, 2, 'Eloquent'), [$repository]))
             );

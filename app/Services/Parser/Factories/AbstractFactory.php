@@ -9,7 +9,7 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 
 abstract class AbstractFactory
 {
-    const CACHE_EXPIRATION = 60 * 24 * 30; // 30d
+    const CACHE_TTL = 60 * 24 * 30; // 30d
 
     /**
      * @var App
@@ -118,7 +118,7 @@ abstract class AbstractFactory
         $text = $parser->parse($text);
 
         if ($this->enableCache) {
-            $this->cache->put($key, $text, self::CACHE_EXPIRATION);
+            $this->cache->put($key, $text, self::CACHE_TTL);
         }
 
         $parser->detach();

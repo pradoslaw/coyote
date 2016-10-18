@@ -21,6 +21,11 @@ class CommentFactory extends AbstractFactory
     const PERMISSION = 'forum-update';
 
     /**
+     * @var array
+     */
+    protected $htmlTags = ['b', 'strong', 'i', 'em', 'a[href|title|data-user-id|class]', 'code'];
+
+    /**
      * @var bool
      */
     protected $enableHashParser = false;
@@ -77,7 +82,7 @@ class CommentFactory extends AbstractFactory
                     );
 
                     $parser->attach(
-                        (new Purifier())->set('HTML.Allowed', 'b,strong,i,em,a[href|title|data-user-id|class],code,br')
+                        (new Purifier())->set('HTML.Allowed', $this->getHtmlTags())
                     );
                     $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
@@ -103,5 +108,10 @@ class CommentFactory extends AbstractFactory
         stop_measure('parsing');
 
         return $text;
+    }
+
+    protected function getHtmlTags(): string
+    {
+        return implode(',', $this->enableLineBreaks ? array_merge($this->htmlTags, ['br']) : $this->htmlTags);
     }
 }
