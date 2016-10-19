@@ -32,7 +32,6 @@ class TopicAcceptanceCest
         $I->see('Proszę wpisać nazwę użytkownika.');
     }
 
-    // tests
     public function createTopic(AcceptanceTester $I)
     {
         $I->wantTo('Create new topic');
@@ -82,6 +81,15 @@ class TopicAcceptanceCest
         $I->wait(1);
         $I->canSee($text);
         $I->seeInTitle($subject);
+
+        $I->click('Szybka edycja');
+        $I->wait(1);
+
+        $I->seeInField('textarea[name=text]', $text);
+        $I->fillField('.post-content textarea', 'edit');
+        $I->click('Zapisz');
+
+        $I->waitForText('edit', 10, '.post-content');
     }
 
     private function submit(AcceptanceTester $I, $subject, $text, $username = null)
