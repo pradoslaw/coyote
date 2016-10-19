@@ -24,7 +24,7 @@ class AttachmentForm extends Form
     /**
      * @var array
      *
-     * @todo ustawiamy formularz jako HTTP GET przez co nie bedzie walidowany podczas dodawania zalacznikow.
+     * @todo ustawiamy formularz jako HTTP PUT przez co nie bedzie walidowany podczas dodawania zalacznikow.
      * to jest bug i nie powinno byc to konieczne. do poprawy!
      */
     public $attr = ['method' => 'PUT'];

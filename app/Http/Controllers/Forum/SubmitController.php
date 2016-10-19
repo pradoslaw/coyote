@@ -171,7 +171,7 @@ class SubmitController extends BaseController
     {
         $form = $this->getForm($forum, $topic, $post);
 
-        return view('forum.partials.edit')->with(compact('post', 'forum', 'topic', 'form'));
+        return view('forum.partials.edit')->with('form', $form);
     }
 
     /**
