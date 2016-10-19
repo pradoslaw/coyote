@@ -27,15 +27,15 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
      */
     public function findByPath($path)
     {
-        $this->applyCriteria();
-
-        // we need to get page by path. there can be more than one page of giving location.
-        // one can be deleted but we have to retrieve the newest one.
-        return $this
-            ->model
-            ->whereRaw('LOWER(path) = ?', [mb_strtolower($path)])
-            ->orderBy('wiki_id', 'DESC') // <-- DO NOT remove this line
-            ->first();
+        return $this->applyCriteria(function () use ($path) {
+            // we need to get page by path. there can be more than one page of giving location.
+            // one can be deleted but we have to retrieve the newest one.
+            return $this
+                ->model
+                ->whereRaw('LOWER(path) = ?', [mb_strtolower($path)])
+                ->orderBy('wiki_id', 'DESC') // <-- DO NOT remove this line
+                ->first();
+        });
     }
 
     /**
