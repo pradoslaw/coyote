@@ -14,7 +14,12 @@ interface RepositoryInterface
      * @throws \Exception
      */
     public function makeModel();
-    
+
+    /**
+     * @throws \Exception
+     */
+    public function resetModel();
+
     /**
      * @return $this
      */

@@ -114,7 +114,10 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         }
 
         // finally... group by sections
-        return $parents->groupBy('section');
+        $sections = $parents->groupBy('section');
+        $this->resetModel();
+
+        return $sections;
     }
 
     /**
@@ -141,7 +144,10 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
         $parents = $sql->get();
 
-        return $this->fillUpSectionNames($parents)->groupBy('section');
+        $result = $this->fillUpSectionNames($parents)->groupBy('section');
+        $this->resetModel();
+
+        return $result;
     }
 
     /**

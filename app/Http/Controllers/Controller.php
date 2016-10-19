@@ -111,6 +111,8 @@ abstract class Controller extends BaseController
         $categories = $this->getCacheFactory()->tags(['menu-for-user'])->remember('menu-for-user:' . $this->userId, 60 * 24 * 7, function () {
             /** @var ForumRepositoryInterface $repository */
             $repository = app(ForumRepositoryInterface::class);
+            // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
+            $repository->resetCriteria();
 
             $repository->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
             $repository->pushCriteria(new AccordingToUserOrder($this->userId));
