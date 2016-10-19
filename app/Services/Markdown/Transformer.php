@@ -6,29 +6,41 @@ use Coyote\Services\Parser\Parsers\Parser;
 
 class Transformer extends Parser
 {
+    public $mapping = [];
+
     public function transform($text)
     {
         // na poczatek zmiana adresow, wszedzie, w calym tekscie
         $text = $this->url($text);
         // pozbywamy sie starych linkow, rowniez wszedzie
         $text = $this->links($text);
+        // zastapienie {{Image}} oraz {{File}}. teraz juz tego nie uzywamy
+        $text = $this->inlineImages($text);
 
-        // znaczniki <plain> nie maja racji bytu
+        // w linkach nic nie zmieniamy
+        $text = $this->hashBlock($text, ['a', 'img']);
+
+        // znaczniki <plain> nie maja racji bytu. zamieniamy <plain> na <code>
         $text = $this->removePlain($text);
-        // poprawa tagow <code>
+        // poprawa tagow <code> (dodanie atrybutu class)
         $text = $this->fixCodeTag($text);
 
         // w <code> nie beda dokonywane dalsze konwersje
         $text = $this->hashBlock($text, 'code');
 
-        $text = $this->fixDeprecatedApostrophes($text);
+        $text = $this->fixDoubleApostrophes($text);
+        // usuniecie backtick z tekstu
+        $text = $this->hashBacktick($text);
+
+        $text = $this->removeTtTag($text);
+        $text = $this->hashBacktick($text);
 
         // @todo usunac znacznik <div> (tylko poza <code>!) albo zezwolic na jego korzystanie
         // @todo usunac z tekstu `<code="język"></code>` na \```jezyl\```
-        // @todo usunac <tt>
 
         $text = $this->unhash($text);
 
+        // zamianiana <code> na markdown
         $text = $this->removeCodeTag($text);
 
         return $text;
@@ -82,11 +94,43 @@ class Transformer extends Parser
         return $text;
     }
 
+    private function inlineImages(string $text): string
+    {
+        preg_match_all("#{{(Image|File):(.*?)(\|(.*))*}}#i", $text, $matches);
+        if (!$matches[0]) {
+            return $text;
+        }
+
+        for ($i = 0, $limit = sizeof($matches[0]); $i < $limit; $i++) {
+            $name = $file = $matches[2][$i];
+
+            if (isset($this->mapping[$name])) {
+                $file = $this->mapping[$name];
+            }
+
+            if ($matches[1][$i] === 'Image') {
+                @list(, $width) = explode('|', $matches[4][$i]);
+                if ($width) {
+                    $pathinfo = pathinfo($file);
+                    $file = $pathinfo['filename'] . '-image(' . $width . 'x' . $width . ').' . $pathinfo['extension'];
+                }
+
+                $replacement = '![' . $name . '](//cdn.4programmers.net/uploads/attachment/' . $file . ')';
+            } else {
+                $replacement = '<a href="//cdn.4programmers.net/uploads/attachment/' . $file . '">' . $name . '</a>';
+            }
+
+            $text = str_replace($matches[0][$i], $replacement, $text);
+        }
+
+        return $text;
+    }
+
     private function removePlain($text)
     {
         // <plain> zamieniamy na <code>. stare znaczniki (np. '') ktore znajduja sie w <plain>, nie beda
         // zamienione na markdown
-        return str_replace(['<plain>', '</plain>'], ['<code>', '</code>'], $text);
+        return str_replace(['<plain>`</plain>', "<plain>''</plain>", '<plain>', '</plain>'], ['\`', '\`', '<code>', '</code>'], $text);
     }
 
     private function fixCodeTag($text)
@@ -119,7 +163,7 @@ class Transformer extends Parser
         return $text;
     }
 
-    private function fixDeprecatedApostrophes(string $text): string
+    private function fixDoubleApostrophes(string $text): string
     {
         $lines = $this->splitLineBreaks($text);
 
@@ -138,6 +182,54 @@ class Transformer extends Parser
             }
 
 //            $line = str_replace(["`''`", "''`", '``'], ['`', '`', '`'], $line);
+        }
+
+        return $this->joinLineBreaks($lines);
+    }
+
+    private function removeTtTag(string $text): string
+    {
+        $text = $this->replaceTagWithBacktick($text, 'tt');
+        $text = $this->replaceTagWithBacktick($text, 'kbd');
+
+        return $text;
+    }
+
+    private function replaceTagWithBacktick(string $text, string $tag): string
+    {
+        $lines = $this->splitLineBreaks($text);
+
+        foreach ($lines as &$line) {
+            while (($start = strpos($line, "<$tag>")) !== false) {
+                $end = strpos($line, "</$tag>", $start + 1);
+
+                if ($end === false) {
+                    break;
+                } else {
+                    $len = strlen("<$tag>");
+
+                    $line = substr_replace($line, '`', $start, $len);
+                    $line = substr_replace($line, '`', $end - $len + 1, strlen("</$tag>"));
+                }
+            }
+        }
+
+        return $this->joinLineBreaks($lines);
+    }
+
+    private function hashBacktick(string $text)
+    {
+        $searchFor = "`";
+
+        $lines = $this->splitLineBreaks($text);
+
+        foreach ($lines as &$line) {
+            while (($start = strpos($line, $searchFor)) !== false) {
+                $end = strpos($line, $searchFor, $start + 1);
+                ++$end;
+
+                $line = $this->hashPart($line, $start, $end);
+            }
         }
 
         return $this->joinLineBreaks($lines);

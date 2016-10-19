@@ -30,17 +30,20 @@ abstract class Parser
     }
 
     /**
+     * Reverse hash (keep the right order).
+     *
      * @param string $text
      * @return string
      */
     protected function unhash($text)
     {
         if (!empty($this->hash)) {
-            foreach ($this->hash as $uniqId => $data) {
-                $text = str_replace($uniqId, $data, $text);
-            }
+            while (count($this->hash) > 0) {
+                end($this->hash); // set pointer to the last element
 
-            $this->hash = [];
+                $uniqId = key($this->hash); // key of the assoc array
+                $text = str_replace($uniqId, array_pop($this->hash), $text);
+            }
         }
 
         return $text;
@@ -86,7 +89,7 @@ abstract class Parser
      * @param int $end
      * @return string
      */
-    private function hashPart($text, $start, $end)
+    protected function hashPart($text, $start, $end)
     {
         $uniqId = uniqid('', true);
         $length = $end - $start;

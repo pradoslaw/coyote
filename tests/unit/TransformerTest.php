@@ -21,7 +21,6 @@ class TransformerTest extends \Codeception\TestCase\Test
     {
     }
 
-    // tests
     public function testParserLinks()
     {
         $this->assertEquals(
@@ -81,6 +80,21 @@ class TransformerTest extends \Codeception\TestCase\Test
         $this->assertEquals(
             '`<code>``<code>`',
             $this->transformer->transform('<plain><code></plain><plain><code></plain>')
+        );
+
+        $this->assertEquals(
+            "`<tt>`",
+            $this->transformer->transform("<plain><tt></plain>")
+        );
+
+        $this->assertEquals(
+            "`<kbd>`",
+            $this->transformer->transform("<plain><kbd></plain>")
+        );
+
+        $this->assertEquals(
+            "postaci \` oraz \`.",
+            $this->transformer->transform("postaci <plain>`</plain> oraz <plain>''</plain>.")
         );
     }
 
@@ -157,6 +171,52 @@ class TransformerTest extends \Codeception\TestCase\Test
         $this->assertEquals(
             "znacznikach `''<kod html>''` czy ``<kod html>``,",
             $this->transformer->transform("znacznikach <plain>''<kod html>''</plain> czy <plain>`<kod html>`</plain>,")
+        );
+    }
+
+    public function testRemoveInlineImage()
+    {
+        $this->assertEquals(
+            "![abc.jpg](//cdn.4programmers.net/uploads/attachment/abc.jpg)",
+            $this->transformer->transform("{{Image:abc.jpg}}")
+        );
+
+        $this->assertEquals(
+            "![abc.jpg](//cdn.4programmers.net/uploads/attachment/abc-image(180x180).jpg)",
+            $this->transformer->transform("{{Image:abc.jpg|test|180}}")
+        );
+
+        $this->assertEquals(
+            '<a href="//cdn.4programmers.net/uploads/attachment/abc.zip">abc.zip</a>',
+            $this->transformer->transform("{{File:abc.zip}}")
+        );
+
+        $this->assertEquals(
+            "{{Image:abc.jpg\n}}",
+            $this->transformer->transform("{{Image:abc.jpg\n}}")
+        );
+    }
+
+    public function testRemoveTtTag()
+    {
+        $this->assertEquals(
+            '`test``test2`',
+            $this->transformer->transform('<tt>test</tt><tt>test2</tt>')
+        );
+
+        $this->assertEquals(
+            "`<kbd>[[C/new]]</kbd>`.",
+            $this->transformer->transform("`<kbd>[[C/new]]</kbd>`.")
+        );
+
+        $this->assertEquals(
+            "Daj wszystkie `<script>` pod koniec `<body>`, nie `<head>`",
+            $this->transformer->transform('Daj wszystkie <kbd><script></kbd> pod koniec <kbd><body></kbd>, nie <kbd><head></kbd>')
+        );
+
+        $this->assertEquals(
+            "`<kbd>`",
+            $this->transformer->transform("''<kbd>''")
         );
     }
 }
