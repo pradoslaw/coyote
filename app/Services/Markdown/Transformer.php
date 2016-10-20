@@ -36,6 +36,8 @@ class Transformer extends Parser
         $text = $this->hashBacktick($text);
 
         $text = $this->makeList($text);
+        $text = $this->style($text);
+        $text = $this->headline($text);
 
         // @todo usunac znacznik <div> (tylko poza <code>!) albo zezwolic na jego korzystanie
         // @todo usunac z tekstu `<code="język"></code>` na \```jezyl\```
@@ -222,6 +224,7 @@ class Transformer extends Parser
     private function makeList(string $text): string
     {
         $lines = $this->splitLineBreaks($text);
+        $count = [];
 
         foreach ($lines as &$line) {
             $char = isset($line{0}) ? $line{0} : '';
@@ -232,8 +235,90 @@ class Transformer extends Parser
                     continue;
                 }
 
-                if ($indent > 1) {
+                if ($indent > 1 && $char == '*') {
                     $line = substr_replace($line, str_repeat(' ', $indent - 1) . $char, 0, $indent);
+                }
+
+                if ($char == '#') {
+                    unset($count[$indent + 1]);
+
+                    if (!isset($count[$indent])) {
+                        $count[$indent] = 0;
+                    }
+
+                    $line = substr_replace($line, str_repeat(' ', $indent - 1) . ++$count[$indent] . '.', 0, $indent);
+                }
+            } else {
+                $count = [];
+            }
+        }
+
+        return $this->joinLineBreaks($lines);
+    }
+
+    const ITALIC = '//';
+    const SUB = ',,';
+    const SUP = '^';
+
+    private function style(string $text): string
+    {
+        $lines = $this->splitLineBreaks($text);
+
+        foreach ($lines as &$line) {
+            $arr = preg_split("/( |http:|www\.|\/\/|,,|\^+)/", $line, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+            if (isset($arr[1])) {
+                $replacement = [self::ITALIC => '*', self::SUB => 'sub', self::SUP => 'sup'];
+                $open = [self::ITALIC => false, self::SUB => false, self::SUP => false];
+
+                $count = array_count_values($arr);
+                $inUrl = false;
+
+                foreach ($arr as $index => $element) {
+                    if ($element == 'www.' || preg_match('#^[\w]+?:#i', $element)) {
+                        $inUrl = true;
+                    } elseif ($element == ' ') {
+                        $inUrl = false;
+                    }
+
+                    if (isset($replacement[$element])) {
+                        if (!$open[$element] && $count[$element] > 1 && !$inUrl) {
+                            if (isset($arr[$index + 1]) && $arr[$index + 1] != $element) {
+                                $arr[$index] = $replacement[$element] !== '*' ? '<' . $replacement[$element] . '>' : '*';
+                                $open[$element] = true;
+                            }
+                        } elseif ($open[$element]) {
+                            $arr[$index] = $replacement[$element] !== '*' ? '</' . $replacement[$element] . '>' : '*';
+                            $open[$element] = false;
+                        }
+
+                        $count[$element]--;
+                    }
+                }
+
+                $line = implode('', $arr);
+            }
+        }
+
+        return $this->joinLineBreaks($lines);
+    }
+
+    private function headline(string $text): string
+    {
+        $text = preg_replace_callback('#^(={1,6}) (.*?) \1(?=\s|$)#m', function ($matches) {
+            $depth = strlen($matches[1]);
+            $title = trim($matches[2]);
+
+            return str_repeat('#', $depth) . ' ' . $title;
+        }, $text);
+
+        $lines = $this->splitLineBreaks($text);
+
+        foreach ($lines as $index => &$line) {
+            if (preg_match('#^\~{1,}$#', $line, $matches)) {
+                if (isset($lines[$index - 1])) {
+                    $lines[$index - 1] = '### ' . $lines[$index - 1];
+                    $line = '';
                 }
             }
         }

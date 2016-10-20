@@ -231,5 +231,86 @@ class TransformerTest extends \Codeception\TestCase\Test
             "* one\n * two\n * three\n  * four",
             $this->transformer->transform("* one\n** two\n** three\n*** four")
         );
+
+        $this->assertEquals(
+            "#one\n#two\n#three",
+            $this->transformer->transform("#one\n#two\n#three")
+        );
+
+        $this->assertEquals(
+            "1. one\n2. two\n3. three",
+            $this->transformer->transform("# one\n# two\n# three")
+        );
+
+        $this->assertEquals(
+            "1. one\n2. two\n 1. three\n 2. four\n  1. five\n 3. six\n  1. seven",
+            $this->transformer->transform("# one\n# two\n## three\n## four\n### five\n## six\n### seven")
+        );
+
+        $this->assertEquals(
+            "1. one\n2. two\n3. three\n\n1. one",
+            $this->transformer->transform("# one\n# two\n# three\n\n# one")
+        );
+    }
+
+    public function testStyle()
+    {
+        $this->assertEquals(
+            'italic *italic*',
+            $this->transformer->transform('italic //italic//')
+        );
+
+        $this->assertEquals(
+            'italic *italic**italic*',
+            $this->transformer->transform('italic //italic////italic//')
+        );
+
+        $this->assertEquals(
+            'italic http://italic.com//test www.//yyy// www*yyyy*',
+            $this->transformer->transform('italic http://italic.com//test www.//yyy// www//yyyy//')
+        );
+
+        $this->assertEquals(
+            'm<sup>2</sup> m^2 m<sub>2</sub>',
+            $this->transformer->transform('m^2^ m^2 m,,2,,')
+        );
+    }
+
+    public function testHeadline()
+    {
+        $this->assertEquals(
+            '# Header1',
+            $this->transformer->transform('= Header1 =')
+        );
+
+        $this->assertEquals(
+            ' # Header1 #',
+            $this->transformer->transform(' # Header1 #')
+        );
+
+        $this->assertEquals(
+            '## Header1',
+            $this->transformer->transform('== Header1 ==')
+        );
+
+        $this->assertEquals(
+            '### Header1',
+            $this->transformer->transform('=== Header1 ===')
+        );
+
+        $this->assertEquals(
+            "### Headline\n",
+            $this->transformer->transform("Headline\n~~~~~~~")
+        );
+
+        $this->assertEquals(
+            'Znowu Zimny Kaczor? ~~~@ShookTea',
+            $this->transformer->transform('Znowu Zimny Kaczor? ~~~@ShookTea')
+        );
+
+        $this->assertEquals(
+            "Znowu Zimny Kaczor?\n~~~@ShookTea",
+            $this->transformer->transform("Znowu Zimny Kaczor?\n~~~@ShookTea")
+        );
     }
 }
