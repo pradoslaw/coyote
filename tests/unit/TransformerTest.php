@@ -219,4 +219,17 @@ class TransformerTest extends \Codeception\TestCase\Test
             $this->transformer->transform("''<kbd>''")
         );
     }
+
+    public function testBulletList()
+    {
+        $this->assertEquals(
+            "* one\n* two\n* three",
+            $this->transformer->transform("* one\n* two\n* three")
+        );
+
+        $this->assertEquals(
+            "* one\n * two\n * three\n  * four",
+            $this->transformer->transform("* one\n** two\n** three\n*** four")
+        );
+    }
 }

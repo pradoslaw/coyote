@@ -35,6 +35,8 @@ class Transformer extends Parser
         $text = $this->removeTtTag($text);
         $text = $this->hashBacktick($text);
 
+        $text = $this->makeList($text);
+
         // @todo usunac znacznik <div> (tylko poza <code>!) albo zezwolic na jego korzystanie
         // @todo usunac z tekstu `<code="język"></code>` na \```jezyl\```
 
@@ -210,6 +212,28 @@ class Transformer extends Parser
 
                     $line = substr_replace($line, '`', $start, $len);
                     $line = substr_replace($line, '`', $end - $len + 1, strlen("</$tag>"));
+                }
+            }
+        }
+
+        return $this->joinLineBreaks($lines);
+    }
+
+    private function makeList(string $text): string
+    {
+        $lines = $this->splitLineBreaks($text);
+
+        foreach ($lines as &$line) {
+            $char = isset($line{0}) ? $line{0} : '';
+            $indent = strspn($line, '#*');
+
+            if ($char == '#' || $char == '*') {
+                if (!isset($line[$indent]) || $line[$indent] !== ' ') {
+                    continue;
+                }
+
+                if ($indent > 1) {
+                    $line = substr_replace($line, str_repeat(' ', $indent - 1) . $char, 0, $indent);
                 }
             }
         }
