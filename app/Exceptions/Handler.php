@@ -5,6 +5,7 @@ namespace Coyote\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -78,6 +79,12 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof ForbiddenException) {
             return $this->renderForbiddenException($e);
+        }
+
+        if ($e instanceof TokenMismatchException) {
+            return redirect($request->fullUrl())
+                ->withInput()
+                ->with('error', 'Wygląda na to, że nie wysłałeś tego formularza przez dłuższy czas. Spróbuj ponownie!');
         }
 
         return parent::render($request, $e);

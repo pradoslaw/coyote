@@ -227,7 +227,18 @@
                                         {{ session_get('success') }}
                                     </div>
                                 </div>
+                            </div>
+                        {% endif %}
 
+                        {% if session_has('error') %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="alert alert-error" style="margin-top: 18px">
+                                        <i class="fa fa-exclamation-triangle"></i>
+
+                                        {{ session_get('error') }}
+                                    </div>
+                                </div>
                             </div>
                         {% endif %}
 
