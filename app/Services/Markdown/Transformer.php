@@ -351,8 +351,14 @@ class Transformer extends Parser
         $lines = $this->splitLineBreaks($text);
 
         foreach ($lines as &$line) {
-            while (($start = strpos($line, $searchFor)) !== false) {
+            $start = 0;
+
+            while (($start = strpos($line, $searchFor, $start)) !== false) {
                 $end = strpos($line, $searchFor, $start + 1);
+
+                if ($end === false) {
+                    continue 2;
+                }
                 ++$end;
 
                 $line = $this->hashPart($line, $start, $end);
@@ -375,7 +381,7 @@ class Transformer extends Parser
 
             $offset = 0;
             // jezeli <code> i </code> znajduja sie w tej samej linii...
-            while (($start = strpos($line, '<code>', $offset)) !== false && ($end = strrpos($line, '</code>', $offset)) !== false) {
+            while (($start = strpos($line, '<code>', min($offset, strlen($line)))) !== false && ($end = strrpos($line, '</code>', $offset)) !== false) {
                 // jezeli sa backticki na poczaktu lub na koncu - nie robimy nic
                 $len = strlen('<code>');
                 $offset = min(strlen($line), $offset + $start + 1);
@@ -414,7 +420,7 @@ class Transformer extends Parser
 
     private function splitLineBreaks(string $text): array
     {
-        return explode("\n", $text);
+        return explode("\n", str_replace("\r\n", "\n", $text));
     }
 
     private function joinLineBreaks(array $lines): string
