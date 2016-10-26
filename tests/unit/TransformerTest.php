@@ -313,4 +313,27 @@ class TransformerTest extends \Codeception\TestCase\Test
             $this->transformer->transform("Znowu Zimny Kaczor?\n~~~@ShookTea")
         );
     }
+
+    public function testQuote()
+    {
+        $this->assertEquals(
+            "\n> Line 1\n> Line 2",
+            $this->transformer->transform("<quote>Line 1\nLine 2</quote>")
+        );
+
+        $this->assertEquals(
+            "> \n> Line 1\n> > Line2",
+            $this->transformer->transform("> <quote>Line 1\n> Line2</quote>")
+        );
+
+        $this->assertEquals(
+            "`<quote>Line 1Line 2</quote>`",
+            $this->transformer->transform("''<quote>Line 1Line 2</quote>''")
+        );
+
+        $this->assertEquals(
+            "\n>> Line 1\n>> Line 2",
+            $this->transformer->transform("<quote><quote>Line 1\nLine 2</quote></quote>")
+        );
+    }
 }

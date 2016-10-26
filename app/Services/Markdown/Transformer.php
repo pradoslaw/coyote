@@ -38,6 +38,7 @@ class Transformer extends Parser
         $text = $this->makeList($text);
         $text = $this->style($text);
         $text = $this->headline($text);
+        $text = $this->quote($text);
 
         // @todo usunac znacznik <div> (tylko poza <code>!) albo zezwolic na jego korzystanie
         // @todo usunac z tekstu `<code="język"></code>` na \```jezyl\```
@@ -324,6 +325,23 @@ class Transformer extends Parser
         }
 
         return $this->joinLineBreaks($lines);
+    }
+
+    private function quote(string $text): string
+    {
+        $regexp = "~<quote>(.*?)<\/quote>~is";
+
+        while (preg_match($regexp, $text) > 0) {
+            $text = preg_replace_callback(
+                $regexp,
+                function ($matches) {
+                    return str_replace($matches[0], "\n> " . str_replace("\n", "\n> ", $matches[1]), $matches[0]);
+                },
+                $text
+            );
+        }
+
+        return $text;
     }
 
     private function hashBacktick(string $text)
