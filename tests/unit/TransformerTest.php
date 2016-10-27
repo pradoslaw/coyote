@@ -265,8 +265,13 @@ class TransformerTest extends \Codeception\TestCase\Test
         );
 
         $this->assertEquals(
-            "1. one\n2. two\n3. three\n\n1. one",
+            "1. one\n2. two\n3. three\n\n# one",
             $this->transformer->transform("# one\n# two\n# three\n\n# one")
+        );
+
+        $this->assertEquals(
+            "# 11 odcinek\nto juz",
+            $this->transformer->transform("# 11 odcinek\nto juz")
         );
     }
 
@@ -334,12 +339,62 @@ class TransformerTest extends \Codeception\TestCase\Test
     public function testQuote()
     {
         $this->assertEquals(
-            "\n> Line 1\n> Line 2",
+            "\n> Input\ntest",
+            $this->transformer->transform("<quote>Input</quote>test")
+        );
+
+        $this->assertEquals(
+            "\n> Input\n",
+            $this->transformer->transform("<quote>\nInput\n</quote>")
+        );
+
+        $this->assertEquals(
+            "\n> One\n> Two\n",
+            $this->transformer->transform("<quote>\nOne\nTwo</quote>")
+        );
+
+        $this->assertEquals(
+            "Plain\n\n> One\n> Two\n\nSecond",
+            $this->transformer->transform("Plain\n<quote>\nOne\nTwo</quote>\nSecond")
+        );
+
+        $this->assertEquals(
+            "\n> one \n> > two\n",
+            $this->transformer->transform("<quote>one \n> two</quote>")
+        );
+
+        $this->assertEquals(
+            "\n> one\n> > two\n",
+            $this->transformer->transform("<quote>one<quote>two</quote></quote>")
+        );
+
+        $this->assertEquals(
+            "\n> one\n> > two\n> still one\n",
+            $this->transformer->transform("<quote>one<quote>two</quote>still one</quote>")
+        );
+
+        $this->assertEquals(
+            "\n> one\n> > two\n> > still two\n> still one\n",
+            $this->transformer->transform("<quote>one<quote>two\nstill two</quote>still one</quote>")
+        );
+
+        $this->assertEquals(
+            "\n> \n",
+            $this->transformer->transform("<quote></quote>")
+        );
+
+        $this->assertEquals(
+            "<quote>\n> \n",
+            $this->transformer->transform("<quote><quote></quote>")
+        );
+
+        $this->assertEquals(
+            "\n> Line 1\n> Line 2\n",
             $this->transformer->transform("<quote>Line 1\nLine 2</quote>")
         );
 
         $this->assertEquals(
-            "> \n> Line 1\n> > Line2",
+            "> \n> Line 1\n> > Line2\n",
             $this->transformer->transform("> <quote>Line 1\n> Line2</quote>")
         );
 
@@ -348,9 +403,9 @@ class TransformerTest extends \Codeception\TestCase\Test
             $this->transformer->transform("''<quote>Line 1Line 2</quote>''")
         );
 
-//        $this->assertEquals(
-//            "\n>> Line 1\n>> Line 2",
-//            $this->transformer->transform("<quote><quote>Line 1\nLine 2</quote></quote>")
-//        );
+        $this->assertEquals(
+            "\n> > Line 1\n> > Line 2\n",
+            $this->transformer->transform("<quote><quote>Line 1\nLine 2</quote></quote>")
+        );
     }
 }

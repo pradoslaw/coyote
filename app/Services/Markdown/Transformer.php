@@ -226,7 +226,9 @@ class Transformer extends Parser
         $lines = $this->splitLineBreaks($text);
         $count = [];
 
-        foreach ($lines as &$line) {
+        $start = false;
+
+        foreach ($lines as $index => &$line) {
             $char = isset($line{0}) ? $line{0} : '';
             $indent = strspn($line, '#*');
 
@@ -240,6 +242,14 @@ class Transformer extends Parser
                 }
 
                 if ($char == '#') {
+                    if ($start == false) {
+                        //dd($lines[$index + 1][0]);
+                        if (!isset($lines[$index + 1]) || $lines[$index + 1][0] != '#') {
+
+                            continue;
+                        }
+                    }
+
                     unset($count[$indent + 1]);
 
                     if (!isset($count[$indent])) {
@@ -248,8 +258,11 @@ class Transformer extends Parser
 
                     $line = substr_replace($line, str_repeat(' ', $indent - 1) . ++$count[$indent] . '.', 0, $indent);
                 }
+
+                $start = true;
             } else {
                 $count = [];
+                $start = false;
             }
         }
 
@@ -328,19 +341,81 @@ class Transformer extends Parser
 
     private function quote(string $text): string
     {
-        $regexp = "~<quote>(.*?)<\/quote>~is";
+        while (($start = $this->findNested($text, 'quote')) !== false) {
+            $end = mb_strpos($text, '</quote>', $start);
 
-        while (preg_match($regexp, $text) > 0) {
-            $text = preg_replace_callback(
-                $regexp,
-                function ($matches) {
-                    return str_replace($matches[0], "\n> " . str_replace("\n", "\n> ", $matches[1]), $matches[0]);
-                },
-                $text
-            );
+            if ($end === false) {
+                break;
+            }
+
+            $begin = mb_strpos($text, '>', $start) + 1;
+
+            $after = mb_substr($text, $end + mb_strlen('</quote>'));
+            $before = mb_substr($text, 0, $start);
+            $input = "\n> " . str_replace("\n", "\n> ", trim(mb_substr($text, $begin, $end - $begin))) . "\n";
+
+            $text = $before . $input . $after;
         }
 
         return $text;
+    }
+
+    private function findNested($text, $tag)
+    {
+        $offset = mb_strpos($text, "<$tag");
+        if ($offset === false) {
+            return false;
+        }
+
+        $matches = $this->splitTags($text, $tag);
+
+        foreach ($matches as $match) {
+            $value = $match[0];
+            $index = $match[1];
+
+            if ($index > $offset) {
+                if ($value === "</$tag>") {
+                    break;
+                } elseif ($value === "<$tag") {
+                    $offset = $index;
+                }
+            }
+        }
+
+        return $offset;
+    }
+
+    private function findClosingTag($text, $tag, $offset)
+    {
+        $matches = $this->splitTags($text, $tag);
+
+        $opening = 1;
+        $result = false;
+
+        foreach ($matches as $match) {
+            $value = $match[0];
+            $index = $match[1];
+
+            if ($index > $offset) {
+                if ($value === "</$tag>") {
+                    --$opening;
+                    $result = $index;
+
+                    if ($opening === 0) {
+                        break;
+                    }
+                } elseif ($value === "<$tag") {
+                    ++$opening;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    private function splitTags($text, $tag)
+    {
+        return preg_split("~(<$tag(.*?)|<\/$tag>)~", $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_OFFSET_CAPTURE);
     }
 
     private function hashBacktick(string $text)
