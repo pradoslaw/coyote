@@ -113,8 +113,8 @@ class TransformerTest extends \Codeception\TestCase\Test
         );
 
         $this->assertEquals(
-            "<code class=\"php\">kod</code>",
-            $this->transformer->transform("<code=php>kod</code>")
+            "```php\nkod\n```",
+            $this->transformer->transform("<code=php>kod\n</code>")
         );
 
         $this->assertEquals(
@@ -145,6 +145,11 @@ class TransformerTest extends \Codeception\TestCase\Test
         $this->assertEquals(
             "```\nOBW LOG: Preload undefined\nObwUtils.js:452 OBW LOG: Czy systemowa = WSZYSTKIE undefined\n2ObwUtils.js:452 OBW LOG: Preload undefined\nObwUtils.js:452 OBW LOG:  Object\n```",
             $this->transformer->transform("<code>\nOBW LOG: Preload undefined\nObwUtils.js:452 OBW LOG: Czy systemowa = WSZYSTKIE undefined\n2ObwUtils.js:452 OBW LOG: Preload undefined\nObwUtils.js:452 OBW LOG:  Object\n</code>")
+        );
+
+        $this->assertEquals(
+            "```java\nclass VersionRange(override val start: Version, override val endInclusive: Version) : ClosedRange<Version>, Iterable<Version> {\n\n```",
+            $this->transformer->transform("<code=java>class VersionRange(override val start: Version, override val endInclusive: Version) : ClosedRange<Version>, Iterable<Version> {\n\n</code>")
         );
     }
 

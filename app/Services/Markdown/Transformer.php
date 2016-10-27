@@ -40,7 +40,6 @@ class Transformer extends Parser
         $text = $this->headline($text);
         $text = $this->quote($text);
 
-        // @todo usunac znacznik <div> (tylko poza <code>!) albo zezwolic na jego korzystanie
         // @todo usunac z tekstu `<code="język"></code>` na \```jezyl\```
 
         $text = $this->unhash($text);
@@ -405,12 +404,17 @@ class Transformer extends Parser
                 $found = $match[0][0];
                 $lang  = $match[1][0];
 
-                if ($start > 1) {
+                // tag <code... jest pierwszym w linii. czesto moze byc uzyty taki zapis `<code ... ktorego
+                // nie chcemy parsowac z uwagi na backtick
+                if ($start >= 1) {
                     continue;
                 }
 
-                if ('' === substr($line, strlen($found))) {
-                    $line = '```' . $lang;
+                $rest = substr($line, strlen($found));
+                $line = '```' . $lang;
+
+                if ('' !== $rest) {
+                    $line .= "\n" . $rest;
                 }
             }
         }
