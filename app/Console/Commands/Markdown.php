@@ -6,6 +6,8 @@ use Coyote\Services\Markdown\Transformer;
 use Illuminate\Console\Command;
 use DB;
 
+ini_set('memory_limit', '1G');
+
 class Markdown extends Command
 {
     /**
@@ -59,6 +61,39 @@ class Markdown extends Command
 
             $bar->advance();
         }
+
+        $bar->finish();
+    }
+
+    private function post($id = null)
+    {
+        $count = DB::connection('mysql')->table('post')->count();
+        $bar = $this->output->createProgressBar($count);
+
+        $sql = DB::connection('mysql')
+            ->table('post')
+            ->select(['post.post_id', 'text_content AS post_content'])
+            ->join('post_text', 'text_id', '=', 'post_text');
+
+        if ($id) {
+            $sql->where('post_id', $id);
+        }
+
+        $this->transformer->quote = DB::connection('mysql')
+            ->table('post')
+            ->select(DB::raw('post_id, IFNULL(post_username, user_name) AS name'))
+            ->leftJoin('user', 'user_id', '=', 'post_user')
+            ->lists('name', 'id');
+
+        $sql->chunk(50000, function ($sql) use ($bar) {
+            foreach ($sql as $row) {
+                DB::table('posts')
+                    ->where('id', $row->post_id)
+                    ->update(['text' => $this->transformer->transform($row->post_content)]);
+
+                $bar->advance();
+            }
+        });
 
         $bar->finish();
     }

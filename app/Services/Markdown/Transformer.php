@@ -4,6 +4,14 @@ namespace Coyote\Services\Markdown;
 
 use Coyote\Services\Parser\Parsers\Parser;
 
+function mb_substr_replace($string, $replacement, $start, $length = 0)
+{
+    $before = mb_substr($string, 0, $start, "UTF-8");
+    $after = mb_substr($string, $start + $length, mb_strlen($string), "UTF-8");
+
+    return $before . $replacement . $after;
+}
+
 class Transformer extends Parser
 {
     public $mapping = [];
@@ -175,14 +183,14 @@ class Transformer extends Parser
         foreach ($lines as &$line) {
             $searchFor = "''";
 
-            while (($start = strpos($line, $searchFor)) !== false) {
-                $end = strpos($line, $searchFor, $start + 1);
+            while (($start = mb_strpos($line, $searchFor)) !== false) {
+                $end = mb_strpos($line, $searchFor, $start + 1);
 
                 if ($end === false) {
                     break;
                 } else {
-                    $line = substr_replace($line, '`', $start, 2);
-                    $line = substr_replace($line, '`', $end - 1, 2);
+                    $line = mb_substr_replace($line, '`', $start, 2);
+                    $line = mb_substr_replace($line, '`', $end - 1, 2);
                 }
             }
 
@@ -205,16 +213,16 @@ class Transformer extends Parser
         $lines = $this->splitLineBreaks($text);
 
         foreach ($lines as &$line) {
-            while (($start = strpos($line, "<$tag>")) !== false) {
-                $end = strpos($line, "</$tag>", $start + 1);
+            while (($start = mb_strpos($line, "<$tag>")) !== false) {
+                $end = mb_strpos($line, "</$tag>", $start + 1);
 
                 if ($end === false) {
                     break;
                 } else {
                     $len = strlen("<$tag>");
 
-                    $line = substr_replace($line, '`', $start, $len);
-                    $line = substr_replace($line, '`', $end - $len + 1, strlen("</$tag>"));
+                    $line = mb_substr_replace($line, '`', $start, $len);
+                    $line = mb_substr_replace($line, '`', $end - $len + 1, strlen("</$tag>"));
                 }
             }
         }
@@ -239,14 +247,12 @@ class Transformer extends Parser
                 }
 
                 if ($indent > 1 && $char == '*') {
-                    $line = substr_replace($line, str_repeat(' ', $indent - 1) . $char, 0, $indent);
+                    $line = mb_substr_replace($line, str_repeat(' ', $indent - 1) . $char, 0, $indent);
                 }
 
                 if ($char == '#') {
                     if ($start == false) {
-                        //dd($lines[$index + 1][0]);
                         if (!isset($lines[$index + 1]) || $lines[$index + 1][0] != '#') {
-
                             continue;
                         }
                     }
@@ -257,7 +263,7 @@ class Transformer extends Parser
                         $count[$indent] = 0;
                     }
 
-                    $line = substr_replace($line, str_repeat(' ', $indent - 1) . ++$count[$indent] . '.', 0, $indent);
+                    $line = mb_substr_replace($line, str_repeat(' ', $indent - 1) . ++$count[$indent] . '.', 0, $indent);
                 }
 
                 $start = true;
@@ -320,7 +326,7 @@ class Transformer extends Parser
     private function headline(string $text): string
     {
         $text = preg_replace_callback('#^(={1,6}) (.*?) \1(?=\s|$)#m', function ($matches) {
-            $depth = strlen($matches[1]);
+            $depth = mb_strlen($matches[1]);
             $title = trim($matches[2]);
 
             return str_repeat('#', $depth) . ' ' . $title;
@@ -342,6 +348,8 @@ class Transformer extends Parser
 
     private function quote(string $text): string
     {
+        $text = str_replace("\r\n", "\n", $text);
+
         while (($start = $this->findNested($text, 'quote')) !== false) {
             $end = mb_strpos($text, '</quote>', $start);
 
@@ -352,8 +360,8 @@ class Transformer extends Parser
             $attr = null;
 
             $begin = mb_strpos($text, '>', $start) + 1;
-            if (substr($text, $start + 6, 1) === '=') {
-                $attr = trim(substr($text, $start + 7, $begin - $start - 8), '"');
+            if (mb_substr($text, $start + 6, 1) === '=') {
+                $attr = trim(mb_substr($text, $start + 7, $begin - $start - 8), '"');
             }
 
             $after = mb_substr($text, $end + mb_strlen('</quote>'));
@@ -400,37 +408,68 @@ class Transformer extends Parser
         return $offset;
     }
 
-    private function findClosingTag($text, $tag, $offset)
-    {
-        $matches = $this->splitTags($text, $tag);
-
-        $opening = 1;
-        $result = false;
-
-        foreach ($matches as $match) {
-            $value = $match[0];
-            $index = $match[1];
-
-            if ($index > $offset) {
-                if ($value === "</$tag>") {
-                    --$opening;
-                    $result = $index;
-
-                    if ($opening === 0) {
-                        break;
-                    }
-                } elseif ($value === "<$tag") {
-                    ++$opening;
-                }
-            }
-        }
-
-        return $result;
-    }
+//    private function findClosingTag($text, $tag, $offset)
+//    {
+//        $matches = $this->splitTags($text, $tag);
+//
+//        $opening = 1;
+//        $result = false;
+//
+//        foreach ($matches as $match) {
+//            $value = $match[0];
+//            $index = $match[1];
+//
+//            if ($index > $offset) {
+//                if ($value === "</$tag>") {
+//                    --$opening;
+//                    $result = $index;
+//
+//                    if ($opening === 0) {
+//                        break;
+//                    }
+//                } elseif ($value === "<$tag") {
+//                    ++$opening;
+//                }
+//            }
+//        }
+//
+//        return $result;
+//    }
 
     private function splitTags($text, $tag)
     {
-        return preg_split("~(<$tag(.*?)|<\/$tag>)~", $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_OFFSET_CAPTURE);
+        $result = [];
+        $offset = 0;
+
+        while (($offset = mb_strpos($text, "<$tag", $offset)) !== false) {
+            $result[] = [
+                "<$tag",
+                $offset
+            ];
+
+            $offset++;
+        }
+
+        $offset = 0;
+
+        while (($offset = mb_strpos($text, "</$tag>", $offset)) !== false) {
+            $result[] = [
+                "</$tag>",
+                $offset
+            ];
+
+            $offset++;
+        }
+
+        if (count($result) > 0) {
+            foreach ($result as $key => $row) {
+                $volume[$key]  = $row[1];
+            }
+
+            array_multisort($volume, SORT_ASC, $result);
+        }
+
+        return $result;
     }
 
     private function hashBacktick(string $text)
@@ -442,8 +481,8 @@ class Transformer extends Parser
         foreach ($lines as &$line) {
             $start = 0;
 
-            while (($start = strpos($line, $searchFor, $start)) !== false) {
-                $end = strpos($line, $searchFor, $start + 1);
+            while (($start = mb_strpos($line, $searchFor, $start)) !== false) {
+                $end = mb_strpos($line, $searchFor, $start + 1);
 
                 if ($end === false) {
                     continue 2;
@@ -470,10 +509,10 @@ class Transformer extends Parser
 
             $offset = 0;
             // jezeli <code> i </code> znajduja sie w tej samej linii...
-            while (($start = strpos($line, '<code>', min($offset, strlen($line)))) !== false && ($end = strrpos($line, '</code>', $offset)) !== false) {
+            while (($start = mb_strpos($line, '<code>', min($offset, mb_strlen($line)))) !== false && ($end = mb_strrpos($line, '</code>', $offset)) !== false) {
                 // jezeli sa backticki na poczaktu lub na koncu - nie robimy nic
                 $len = strlen('<code>');
-                $offset = min(strlen($line), $offset + $start + 1);
+                $offset = min(mb_strlen($line), $offset + $start + 1);
 
                 if ($start > 0 && $line[$start - 1] === '`' && $line[$start + $len] === '`') {
                     continue;
@@ -481,12 +520,12 @@ class Transformer extends Parser
 
                 // jezeli pomeidzy <code> a </code> znajduje sie jeszcze jeden zancznik <code ...
                 // brzydki hack...
-                if ((strpos($line, '<code>', $start + 1) !== false) && ($firstOccur = strpos($line, '</code>', $offset)) !== false) {
+                if ((mb_strpos($line, '<code>', $start + 1) !== false) && ($firstOccur = mb_strpos($line, '</code>', $offset)) !== false) {
                     $end = min($end, $firstOccur);
                 }
 
-                $line = substr_replace($line, '`', $start, $len);
-                $line = substr_replace($line, '`', $end - $len + 1, $len + 1);
+                $line = mb_substr_replace($line, '`', $start, $len);
+                $line = mb_substr_replace($line, '`', $end - $len + 1, $len + 1);
             }
 
             if (($start = preg_match('|<code class="([a-z\+]+)">|i', $line, $match, PREG_OFFSET_CAPTURE)) === 1) {
@@ -500,7 +539,7 @@ class Transformer extends Parser
                     continue;
                 }
 
-                $rest = substr($line, strlen($found));
+                $rest = mb_substr($line, mb_strlen($found));
                 $line = '```' . $lang;
 
                 if ('' !== $rest) {

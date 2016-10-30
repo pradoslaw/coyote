@@ -189,6 +189,21 @@ class TransformerTest extends \Codeception\TestCase\Test
             "znacznikach `''<kod html>''` czy ``<kod html>``,",
             $this->transformer->transform("znacznikach <plain>''<kod html>''</plain> czy <plain>`<kod html>`</plain>,")
         );
+
+        $this->assertEquals(
+            "żółty `łyżeczka` łódź",
+            $this->transformer->transform("żółty ''łyżeczka'' łódź")
+        );
+
+        $this->assertEquals(
+            "łółąóśłąśą `łóąśłą` łółąóśąs",
+            $this->transformer->transform("łółąóśłąśą ''łóąśłą'' łółąóśąs")
+        );
+
+        $this->assertEquals(
+            "łółąóśłąśźć ''ół ó",
+            $this->transformer->transform("łółąóśłąśźć ''ół ó")
+        );
     }
 
     public function testRemoveInlineImage()
@@ -423,6 +438,16 @@ class TransformerTest extends \Codeception\TestCase\Test
         $this->assertEquals(
             "\n > ##### [adam napisał(a)](" . route('forum.share', [1]) . "):\n> test\n",
             $this->transformer->transform('<quote="1">test</quote>')
+        );
+
+        $this->assertEquals(
+            "Przyznaję się bez bicia\n> uzależnienie\n",
+            $this->transformer->transform("Przyznaję się bez bicia<quote>uzależnienie</quote>")
+        );
+
+        $this->assertEquals(
+            "Przyznaję się bez bicia: Jestem uzależniony.\n\n> Hmmmmm naszly mnie mysli, ze to uzaleznienie jest calkiem przyjemne, ale pod kiilkoma warunkami :)\n> \n> 1. Trzeba sie wietrzyc ! :)\n\nChodzi ci o inny nałóg?",
+            $this->transformer->transform("Przyznaję się bez bicia: Jestem uzależniony.\r\n<quote>Hmmmmm naszly mnie mysli, ze to uzaleznienie jest calkiem przyjemne, ale pod kiilkoma warunkami :)\r\n\r\n1. Trzeba sie wietrzyc ! :)</quote>\r\nChodzi ci o inny nałóg?")
         );
     }
 }
