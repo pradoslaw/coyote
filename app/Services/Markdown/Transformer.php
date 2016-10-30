@@ -7,6 +7,7 @@ use Coyote\Services\Parser\Parsers\Parser;
 class Transformer extends Parser
 {
     public $mapping = [];
+    public $quote = [];
 
     public function transform($text)
     {
@@ -348,11 +349,25 @@ class Transformer extends Parser
                 break;
             }
 
+            $attr = null;
+
             $begin = mb_strpos($text, '>', $start) + 1;
+            if (substr($text, $start + 6, 1) === '=') {
+                $attr = trim(substr($text, $start + 7, $begin - $start - 8), '"');
+            }
 
             $after = mb_substr($text, $end + mb_strlen('</quote>'));
             $before = mb_substr($text, 0, $start);
             $input = "\n> " . str_replace("\n", "\n> ", trim(mb_substr($text, $begin, $end - $begin))) . "\n";
+
+            if ($attr) {
+                if (is_numeric($attr)) {
+                    $attr = "\n > ##### [" . $this->quote[$attr] . " napisał(a)](" . route('forum.share', $attr) . "):";
+                } else {
+                    $attr = "\n > ##### " . $attr . " napisał(a)";
+                }
+                $input = $attr . $input;
+            }
 
             $text = $before . $input . $after;
         }

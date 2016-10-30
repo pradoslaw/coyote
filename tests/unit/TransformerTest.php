@@ -407,5 +407,22 @@ class TransformerTest extends \Codeception\TestCase\Test
             "\n> > Line 1\n> > Line 2\n",
             $this->transformer->transform("<quote><quote>Line 1\nLine 2</quote></quote>")
         );
+
+        $this->assertEquals(
+            "\n > ##### adam napisał(a)\n> test\n",
+            $this->transformer->transform("<quote=adam>test</quote>")
+        );
+
+        $this->transformer->quote[1] = 'adam';
+
+        $this->assertEquals(
+            "\n > ##### [adam napisał(a)](" . route('forum.share', [1]) . "):\n> test\n",
+            $this->transformer->transform("<quote=1>test</quote>")
+        );
+
+        $this->assertEquals(
+            "\n > ##### [adam napisał(a)](" . route('forum.share', [1]) . "):\n> test\n",
+            $this->transformer->transform('<quote="1">test</quote>')
+        );
     }
 }
