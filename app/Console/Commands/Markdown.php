@@ -75,23 +75,33 @@ class Markdown extends Command
             ->select(['post.post_id', 'text_content AS post_content'])
             ->join('post_text', 'text_id', '=', 'post_text')
             ->orderBy('post_id', 'DESC')
+            ->offset(7863)
             ->when($id, function ($builder) use ($id) {
                 return $builder->where('post_id', $id);
             });
 
+        $bar->advance(7863);
+
         $this->transformer->quote = DB::connection('mysql')
             ->table('post')
-            ->select(DB::raw('post_id, IFNULL(post_username, user_name) AS name'))
+            ->select(DB::raw('post_id, IF(user_id > 1, user_name, post_username) AS name'))
             ->leftJoin('user', 'user_id', '=', 'post_user')
             ->lists('name', 'post_id');
 
         $sql->chunk(50000, function ($sql) use ($bar) {
             foreach ($sql as $row) {
-                DB::table('posts')
-                    ->where('id', $row->post_id)
-                    ->update(['text' => $this->transformer->transform($row->post_content)]);
+                try {
+                    DB::table('posts')
+                        ->where('id', $row->post_id)
+                        ->update(['text' => $this->transformer->transform($row->post_content)]);
 
-                $bar->advance();
+                    $bar->advance();
+                } catch (\Exception $e) {
+                    var_dump($row->post_content);
+                    var_dump($row->post_id);
+
+                    throw $e;
+                }
             }
         });
 

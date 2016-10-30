@@ -505,7 +505,8 @@ class Transformer extends Parser
 
             $offset = 0;
             // jezeli <code> i </code> znajduja sie w tej samej linii...
-            while (($start = mb_strpos($line, '<code>', min($offset, mb_strlen($line)))) !== false && ($end = mb_strrpos($line, '</code>', $offset)) !== false) {
+            while (($start = mb_strpos($line, '<code>', min($offset, mb_strlen($line)))) !== false
+                && ($end = mb_strrpos($line, '</code>', $offset)) !== false) {
                 // jezeli sa backticki na poczaktu lub na koncu - nie robimy nic
                 $len = strlen('<code>');
                 $offset = min(mb_strlen($line), $offset + $start + 1);
@@ -543,6 +544,7 @@ class Transformer extends Parser
                 }
             }
 
+            $line = preg_replace('~^<code>~', "```\n", $line);
             $line = preg_replace('~<\/code>$~', "\n```", $line);
 //            $line = preg_replace('~<\/code>~', "\n```\n", $line);
         }

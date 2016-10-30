@@ -156,6 +156,11 @@ class TransformerTest extends \Codeception\TestCase\Test
             "```delphi\nForceDirectories('/mnt/sdcard/auta/auto1');\n```",
             $this->transformer->transform("<code=delphi>ForceDirectories('/mnt/sdcard/auta/auto1');</code>")
         );
+
+        $this->assertEquals(
+            "```\n\$stmt->bindValue(':offset', (int)\$offset, PDO::PARAM_INT);\n\$stmt->bindValue(':limit', (int)\$limit, PDO::PARAM_INT); \n```",
+            $this->transformer->transform("<code>\$stmt->bindValue(':offset', (int)\$offset, PDO::PARAM_INT);\n\$stmt->bindValue(':limit', (int)\$limit, PDO::PARAM_INT); </code>")
+        );
     }
 
     public function testFixDoubleApostrophe()

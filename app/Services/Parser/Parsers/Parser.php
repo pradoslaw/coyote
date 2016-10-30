@@ -69,7 +69,7 @@ abstract class Parser
 
                 if (!$inline) {
                     // w przypadku elementow blokowych wyznaczamy miejsce zakonczenia, tj. tag zamykajacy
-                    if (($close = mb_strpos($text, "</$element>")) !== false) {
+                    if (($close = mb_strpos($text, "</$element>", $start)) !== false) {
                         $end = $close + mb_strlen("</$element>");
                     }
                 } else {
