@@ -4,14 +4,6 @@ namespace Coyote\Services\Markdown;
 
 use Coyote\Services\Parser\Parsers\Parser;
 
-function mb_substr_replace($string, $replacement, $start, $length = 0)
-{
-    $before = mb_substr($string, 0, $start, "UTF-8");
-    $after = mb_substr($string, $start + $length, mb_strlen($string), "UTF-8");
-
-    return $before . $replacement . $after;
-}
-
 class Transformer extends Parser
 {
     public $mapping = [];
@@ -189,8 +181,8 @@ class Transformer extends Parser
                 if ($end === false) {
                     break;
                 } else {
-                    $line = mb_substr_replace($line, '`', $start, 2);
-                    $line = mb_substr_replace($line, '`', $end - 1, 2);
+                    $line = $this->replace($line, '`', $start, 2);
+                    $line = $this->replace($line, '`', $end - 1, 2);
                 }
             }
 
@@ -221,8 +213,8 @@ class Transformer extends Parser
                 } else {
                     $len = strlen("<$tag>");
 
-                    $line = mb_substr_replace($line, '`', $start, $len);
-                    $line = mb_substr_replace($line, '`', $end - $len + 1, strlen("</$tag>"));
+                    $line = $this->replace($line, '`', $start, $len);
+                    $line = $this->replace($line, '`', $end - $len + 1, strlen("</$tag>"));
                 }
             }
         }
@@ -247,12 +239,12 @@ class Transformer extends Parser
                 }
 
                 if ($indent > 1 && $char == '*') {
-                    $line = mb_substr_replace($line, str_repeat(' ', $indent - 1) . $char, 0, $indent);
+                    $line = $this->replace($line, str_repeat(' ', $indent - 1) . $char, 0, $indent);
                 }
 
                 if ($char == '#') {
                     if ($start == false) {
-                        if (!isset($lines[$index + 1]) || $lines[$index + 1][0] != '#') {
+                        if (!isset($lines[$index + 1]) || trim($lines[$index + 1], '#') === '' || $lines[$index + 1][0] != '#') {
                             continue;
                         }
                     }
@@ -263,7 +255,7 @@ class Transformer extends Parser
                         $count[$indent] = 0;
                     }
 
-                    $line = mb_substr_replace($line, str_repeat(' ', $indent - 1) . ++$count[$indent] . '.', 0, $indent);
+                    $line = $this->replace($line, str_repeat(' ', $indent - 1) . ++$count[$indent] . '.', 0, $indent);
                 }
 
                 $start = true;
@@ -370,7 +362,11 @@ class Transformer extends Parser
 
             if ($attr) {
                 if (is_numeric($attr)) {
-                    $attr = "\n > ##### [" . $this->quote[$attr] . " napisał(a)](" . route('forum.share', $attr) . "):";
+                    if (isset($this->quote[$attr])) {
+                        $attr = "\n > ##### [" . $this->quote[$attr] . " napisał(a)](" . route('forum.share', $attr) . "):";
+                    } else {
+                        $attr = '';
+                    }
                 } else {
                     $attr = "\n > ##### " . $attr . " napisał(a)";
                 }
@@ -524,8 +520,8 @@ class Transformer extends Parser
                     $end = min($end, $firstOccur);
                 }
 
-                $line = mb_substr_replace($line, '`', $start, $len);
-                $line = mb_substr_replace($line, '`', $end - $len + 1, $len + 1);
+                $line = $this->replace($line, '`', $start, $len);
+                $line = $this->replace($line, '`', $end - $len + 1, $len + 1);
             }
 
             if (($start = preg_match('|<code class="([a-z\+]+)">|i', $line, $match, PREG_OFFSET_CAPTURE)) === 1) {
@@ -546,6 +542,9 @@ class Transformer extends Parser
                     $line .= "\n" . $rest;
                 }
             }
+
+            $line = preg_replace('~<\/code>$~', "\n```", $line);
+//            $line = preg_replace('~<\/code>~', "\n```\n", $line);
         }
 
         return $this->joinLineBreaks($lines);

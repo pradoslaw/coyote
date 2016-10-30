@@ -62,15 +62,15 @@ abstract class Parser
                 $text = $this->hashElement($text, $name, $inline);
             }
         } else {
-            while (($start = strpos($text, "<$element")) !== false) {
+            while (($start = mb_strpos($text, "<$element")) !== false) {
                 // wyznaczamy pozycje zakonczenia znacznika. na pewno bedzie to znak > poniewaz inne
                 // niedozwolone uzycie tego znaku zostanie zastapione przez &gt; przez purifier
-                $end = strpos($text, '>', $start);
+                $end = mb_strpos($text, '>', $start);
 
                 if (!$inline) {
                     // w przypadku elementow blokowych wyznaczamy miejsce zakonczenia, tj. tag zamykajacy
-                    if (($close = strpos($text, "</$element>")) !== false) {
-                        $end = $close + strlen("</$element>");
+                    if (($close = mb_strpos($text, "</$element>")) !== false) {
+                        $end = $close + mb_strlen("</$element>");
                     }
                 } else {
                     ++$end;
@@ -93,11 +93,26 @@ abstract class Parser
     {
         $uniqId = uniqid('', true);
         $length = $end - $start;
-        $match = substr($text, $start, $length);
+        $match = mb_substr($text, $start, $length);
 
-        $text = substr_replace($text, $uniqId, $start, $length);
+        $text = $this->replace($text, $uniqId, $start, $length);
         $this->hash[$uniqId] = $match;
 
         return $text;
+    }
+
+    /**
+     * @param string $string
+     * @param string $replacement
+     * @param int $start
+     * @param int $length
+     * @return string
+     */
+    protected function replace($string, $replacement, $start, $length = 0)
+    {
+        $before = mb_substr($string, 0, $start);
+        $after = mb_substr($string, $start + $length, mb_strlen($string));
+
+        return $before . $replacement . $after;
     }
 }

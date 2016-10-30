@@ -73,17 +73,17 @@ class Markdown extends Command
         $sql = DB::connection('mysql')
             ->table('post')
             ->select(['post.post_id', 'text_content AS post_content'])
-            ->join('post_text', 'text_id', '=', 'post_text');
-
-        if ($id) {
-            $sql->where('post_id', $id);
-        }
+            ->join('post_text', 'text_id', '=', 'post_text')
+            ->orderBy('post_id', 'DESC')
+            ->when($id, function ($builder) use ($id) {
+                return $builder->where('post_id', $id);
+            });
 
         $this->transformer->quote = DB::connection('mysql')
             ->table('post')
             ->select(DB::raw('post_id, IFNULL(post_username, user_name) AS name'))
             ->leftJoin('user', 'user_id', '=', 'post_user')
-            ->lists('name', 'id');
+            ->lists('name', 'post_id');
 
         $sql->chunk(50000, function ($sql) use ($bar) {
             foreach ($sql as $row) {

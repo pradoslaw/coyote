@@ -151,6 +151,11 @@ class TransformerTest extends \Codeception\TestCase\Test
             "```java\nclass VersionRange(override val start: Version, override val endInclusive: Version) : ClosedRange<Version>, Iterable<Version> {\n\n```",
             $this->transformer->transform("<code=java>class VersionRange(override val start: Version, override val endInclusive: Version) : ClosedRange<Version>, Iterable<Version> {\n\n</code>")
         );
+
+        $this->assertEquals(
+            "```delphi\nForceDirectories('/mnt/sdcard/auta/auto1');\n```",
+            $this->transformer->transform("<code=delphi>ForceDirectories('/mnt/sdcard/auta/auto1');</code>")
+        );
     }
 
     public function testFixDoubleApostrophe()
@@ -287,6 +292,11 @@ class TransformerTest extends \Codeception\TestCase\Test
         $this->assertEquals(
             "# 11 odcinek\nto juz",
             $this->transformer->transform("# 11 odcinek\nto juz")
+        );
+
+        $this->assertEquals(
+            "Oto moja propozycja (btw: ustalilismy, ze nie bedzie juz w bazie pol typu datetime, tylko int):\n\n#\n# Struktura tabeli dla  `coyote_forum`\n#",
+            $this->transformer->transform("Oto moja propozycja (btw: ustalilismy, ze nie bedzie juz w bazie pol typu datetime, tylko int):\n\n#\n# Struktura tabeli dla  `coyote_forum`\n#")
         );
     }
 
