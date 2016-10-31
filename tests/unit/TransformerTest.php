@@ -465,4 +465,22 @@ class TransformerTest extends \Codeception\TestCase\Test
             $this->transformer->transform("Przyznaję się bez bicia: Jestem uzależniony.\r\n<quote>Hmmmmm naszly mnie mysli, ze to uzaleznienie jest calkiem przyjemne, ale pod kiilkoma warunkami :)\r\n\r\n1. Trzeba sie wietrzyc ! :)</quote>\r\nChodzi ci o inny nałóg?")
         );
     }
+
+    public function testTable()
+    {
+        $this->assertEquals(
+            "Nagłówek 1 | Nagłówek 2\n---------------- | ----------------\nKolumna 1 | Kolumna 2",
+            $this->transformer->transform("||=Nagłówek 1||Nagłówek 2\n||Kolumna 1||Kolumna 2")
+        );
+
+        $this->assertEquals(
+            "Nagłówek 1 | Nagłówek 2\n---------------- | ----------------\nKolumna 1 | Kolumna 2",
+            $this->transformer->transform("||=Nagłówek 1||Nagłówek 2||\n||Kolumna 1||Kolumna 2")
+        );
+
+        $this->assertEquals(
+            "Nagłówek 1 | Nagłówek 2 | Nagłówek 3\n---------------- | ---------------- | ----------------\nKolumna 1 | Kolumna 2 | Kolumna 3",
+            $this->transformer->transform("||=Nagłówek 1||Nagłówek 2||Nagłówek 3\n||Kolumna 1||Kolumna 2||Kolumna 3")
+        );
+    }
 }

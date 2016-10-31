@@ -40,6 +40,7 @@ class Transformer extends Parser
         $text = $this->style($text);
         $text = $this->headline($text);
         $text = $this->quote($text);
+        $text = $this->table($text);
 
         // @todo usunac z tekstu `<code="język"></code>` na \```jezyl\```
 
@@ -377,6 +378,28 @@ class Transformer extends Parser
         }
 
         return $text;
+    }
+
+    private function table(string $text): string
+    {
+        $lines = $this->splitLineBreaks($text);
+
+        foreach ($lines as &$line) {
+            if (strspn($line, '||', 0, 2) == 2) {
+                $line = substr($line, 2);
+                $line = rtrim($line, '||');
+
+                $columns = substr_count($line, '||') + 1;
+                $line = str_replace('||', ' | ', $line);
+
+                if (strlen($line) > 0 && $line[0] == '=') {
+                    $line = substr($line, 1);
+                    $line .= "\n" . join(' | ', array_fill(0, $columns, '----------------'));
+                }
+            }
+        }
+
+        return $this->joinLineBreaks($lines);
     }
 
     private function findNested($text, $tag)
