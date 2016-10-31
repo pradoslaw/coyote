@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Wiki;
 
+use Coyote\Http\Forms\Forum\AttachmentForm;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Services\FormBuilder\Form;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -12,6 +13,9 @@ class WikiForm extends Form
 
     const RULE_PARENT_ID = 'sometimes|int|exists:wiki_paths,path_id';
 
+    /**
+     * @var string
+     */
     protected $theme = self::THEME_INLINE;
 
     /**
@@ -62,15 +66,28 @@ class WikiForm extends Form
                     'rows' => 3
                 ]
             ])
-            ->add('text', 'markdown', [
+            ->add('text', 'textarea', [
                 'rules' => 'string',
+                'template' => 'textarea',
                 'attr' => [
                     'data-paste-url' => ''
+                ],
+                'row_attr' => [
+                    'role' => 'tabpanel',
+                    'class' => 'tab-pane active',
+                    'id' => 'body'
                 ]
             ])
             ->add('comment', 'text', [
                 'rules' => 'string|max:255',
                 'label' => 'Opis zmian'
+            ])
+            ->add('attachments', 'collection', [
+                'template' => 'attachments',
+                'child_attr' => [
+                    'type' => 'child_form',
+                    'class' => AttachmentForm::class,
+                ]
             ])
             ->add('submit', 'submit', [
                 'label' => 'Zapisz',

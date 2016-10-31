@@ -29,7 +29,36 @@
                     Zarządzanie stroną
                 </div>
                 <div class="panel-body">
-                    {{ form(form) }}
+                    {{ form_start(form) }}
+
+
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.long_title) }}
+                    {{ form_row(form.excerpt) }}
+                    {{ form_row(form.is_locked) }}
+
+                    <div class="row form-group">
+                        <div class="col-xs-12">
+                            <ul class="nav nav-tabs">
+                                <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
+                                <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Załączniki</a></li>
+                                <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab">Podgląd</a></li>
+                            </ul>
+
+                            <div class="tab-content">
+                                {{ form_row(form.text) }}
+                                {{ form_row(form.attachments) }}
+
+                                <div role="tabpanel" class="tab-pane" id="preview"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_row(form.template) }}
+                    {{ form_row(form.comment) }}
+                    {{ form_row(form.submit) }}
+
+                    {{ form_end() }}
                 </div>
             </div>
         </div>
@@ -42,9 +71,9 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/tab.js') }}"></script>
+    <script src="{{ cdn('js/posting.js') }}"></script>
+    <script src="{{ cdn('js/wikieditor.js') }}"></script>
+    <script src="{{ cdn('js/tab.js') }}"></script>
 
     <script>
         $(function() {

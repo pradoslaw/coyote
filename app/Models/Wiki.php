@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $is_locked
  * @property string $template
  * @property Wiki\Comment[] $comments
+ * @property Wiki\Attachment[] $attachments
  */
 class Wiki extends Model
 {
@@ -172,6 +173,14 @@ class Wiki extends Model
     public function links()
     {
         return $this->hasMany('Coyote\Wiki\Link', 'path_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function attachments()
+    {
+        return $this->hasMany('Coyote\Wiki\Attachment');
     }
 
     /**
