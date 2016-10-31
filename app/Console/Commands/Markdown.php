@@ -45,11 +45,11 @@ class Markdown extends Command
 
     private function microblog($id = null)
     {
-        $result = DB::connection('mysql')->table('microblog');
-
-        if ($id) {
-            $result = $result->where('microblog_id', $id);
-        }
+        $result = DB::connection('mysql')
+            ->table('microblog')
+            ->when($id, function ($builder) use ($id) {
+                return $builder->where('microblog_id', $id);
+            });
 
         $result = $result->get(['microblog_id', 'microblog_text']);
         $bar = $this->output->createProgressBar(count($result));
@@ -75,12 +75,9 @@ class Markdown extends Command
             ->select(['post.post_id', 'text_content AS post_content'])
             ->join('post_text', 'text_id', '=', 'post_text')
             ->orderBy('post_id', 'DESC')
-            ->offset(7863)
             ->when($id, function ($builder) use ($id) {
                 return $builder->where('post_id', $id);
             });
-
-        $bar->advance(7863);
 
         $this->transformer->quote = DB::connection('mysql')
             ->table('post')
@@ -90,20 +87,41 @@ class Markdown extends Command
 
         $sql->chunk(50000, function ($sql) use ($bar) {
             foreach ($sql as $row) {
-                try {
-                    DB::table('posts')
-                        ->where('id', $row->post_id)
-                        ->update(['text' => $this->transformer->transform($row->post_content)]);
+                DB::table('posts')
+                    ->where('id', $row->post_id)
+                    ->update(['text' => $this->transformer->transform($row->post_content)]);
 
-                    $bar->advance();
-                } catch (\Exception $e) {
-                    var_dump($row->post_content);
-                    var_dump($row->post_id);
-
-                    throw $e;
-                }
+                $bar->advance();
             }
         });
+
+        $bar->finish();
+    }
+
+    private function postComment($id)
+    {
+        $count = DB::connection('mysql')->table('post_comment')->count();
+        $bar = $this->output->createProgressBar($count);
+
+        DB::connection('mysql')
+            ->table('post_comment')
+            ->select(['comment_id', 'comment_text'])
+            ->when($id, function ($builder) use ($id) {
+                return $builder->where('comment_id', $id);
+            })
+            ->orderBy('comment_id', 'DESC')
+            ->chunk(
+                100000,
+                function ($sql) use ($bar) {
+                    foreach ($sql as $row) {
+                        DB::table('post_comments')
+                            ->where('id', $row->comment_id)
+                            ->update(['text' => $this->transformer->transform($row->comment_text)]);
+
+                        $bar->advance();
+                    }
+                }
+            );
 
         $bar->finish();
     }

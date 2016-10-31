@@ -95,7 +95,8 @@ abstract class Parser
         $length = $end - $start;
         $match = mb_substr($text, $start, $length);
 
-        $text = $this->replace($text, $uniqId, $start, $length);
+//        $text = $this->replace($text, $uniqId, $start, $length);
+        $text = str_replace($match, $uniqId, $text);
         $this->hash[$uniqId] = $match;
 
         return $text;
