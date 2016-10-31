@@ -127,14 +127,6 @@ class SearchBuilder
         $sort = $this->getSort();
         $this->queryBuilder->addSort(new Sort($sort, $this->getOrder()));
 
-        // @todo jezeli sortujemy po "trafnosci" w sytuacji gdy uzytkownik chce wyswietlic wszystkie wyniki
-        // mozemy dodac sortowanie po "jakosci" ogloszenia. w ten sposob te lepsze ogloszenia beda na liscie
-        // nieco wyzej niz te gorsze. w ten sposob ogloszenia nie beda posortowane po dacie. nalezy sie zastanowic
-        // czy takie dzialanie jest pozadane?
-//        if ($sort === '_score') {
-//            $this->queryBuilder->addSort(new Sort('rank', 'desc'));
-//        }
-
         // it's really important. we MUST show only active offers
         $this->queryBuilder->addFilter(new Filters\Range('deadline_at', ['gte' => 'now']));
         $this->queryBuilder->addFilter($this->city);
@@ -142,7 +134,7 @@ class SearchBuilder
 
         // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 2)
         $this->queryBuilder->addFunction(new FieldValueFactor('score', 'log', 2));
-        // strsze ogloszenia traca na waznosci
+        // strsze ogloszenia traca na waznosci, glownie po 14d
         $this->queryBuilder->addFunction(new Decay('created_at', '14d', 0.5));
 
         // facet search
