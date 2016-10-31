@@ -70,30 +70,32 @@ class Markdown extends Command
         $count = DB::connection('mysql')->table('post')->count();
         $bar = $this->output->createProgressBar($count);
 
-        $sql = DB::connection('mysql')
-            ->table('post')
-            ->select(['post.post_id', 'text_content AS post_content'])
-            ->join('post_text', 'text_id', '=', 'post_text')
-            ->orderBy('post_id', 'DESC')
-            ->when($id, function ($builder) use ($id) {
-                return $builder->where('post_id', $id);
-            });
-
         $this->transformer->quote = DB::connection('mysql')
             ->table('post')
             ->select(DB::raw('post_id, IF(user_id > 1, user_name, post_username) AS name'))
             ->leftJoin('user', 'user_id', '=', 'post_user')
             ->lists('name', 'post_id');
 
-        $sql->chunk(50000, function ($sql) use ($bar) {
-            foreach ($sql as $row) {
-                DB::table('posts')
-                    ->where('id', $row->post_id)
-                    ->update(['text' => $this->transformer->transform($row->post_content)]);
+        DB::connection('mysql')
+            ->table('post')
+            ->select(['post.post_id', 'text_content AS post_content'])
+            ->join('post_text', 'text_id', '=', 'post_text')
+            ->orderBy('post_id', 'DESC')
+            ->when($id, function ($builder) use ($id) {
+                return $builder->where('post_id', $id);
+            })
+            ->chunk(
+                50000,
+                function ($sql) use ($bar) {
+                    foreach ($sql as $row) {
+                        DB::table('posts')
+                            ->where('id', $row->post_id)
+                            ->update(['text' => $this->transformer->transform($row->post_content)]);
 
-                $bar->advance();
-            }
-        });
+                        $bar->advance();
+                    }
+                }
+            );
 
         $bar->finish();
     }
