@@ -98,6 +98,13 @@ class TransformerTest extends \Codeception\TestCase\Test
         );
     }
 
+    public function testHashImg()
+    {
+        $input = "wbonline.oleobject.document.write('<img src=\"C:\szajs.gif');";
+
+        $this->assertEquals($input, $this->transformer->transform($input));
+    }
+
     public function testDoNotParseInBacktick()
     {
         $input = '`//kursywa//` oraz `*bold*`';

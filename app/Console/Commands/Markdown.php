@@ -127,4 +127,31 @@ class Markdown extends Command
 
         $bar->finish();
     }
+
+    private function wikiComment($id)
+    {
+        $this->transformer = new Transformer();
+
+        $sql = DB::connection('mysql')->table('comment')
+            ->select(['comment_id', 'comment_content'])
+            ->where('comment_module', 3)
+            ->where('comment_user', '>', 0)
+            ->when($id, function ($builder) use ($id) {
+                return $builder->where('comment_id', $id);
+            })
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($sql));
+
+        foreach ($sql as $row) {
+            $this->info($row->comment_id);
+            DB::table('wiki_comments')
+                ->where('id', $row->comment_id)
+                ->update(['text' => $this->transformer->transform($row->comment_content)]);
+
+            $bar->advance();
+        }
+
+        $bar->finish();
+    }
 }

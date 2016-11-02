@@ -584,4 +584,19 @@ class Transformer extends Parser
     {
         return implode("\n", $lines);
     }
+
+    /**
+     * @param string $string
+     * @param string $replacement
+     * @param int $start
+     * @param int $length
+     * @return string
+     */
+    protected function replace($string, $replacement, $start, $length = 0)
+    {
+        $before = mb_substr($string, 0, $start);
+        $after = mb_substr($string, $start + $length, mb_strlen($string));
+
+        return $before . $replacement . $after;
+    }
 }
