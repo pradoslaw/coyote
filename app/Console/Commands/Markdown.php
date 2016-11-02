@@ -144,10 +144,37 @@ class Markdown extends Command
         $bar = $this->output->createProgressBar(count($sql));
 
         foreach ($sql as $row) {
-            $this->info($row->comment_id);
             DB::table('wiki_comments')
                 ->where('id', $row->comment_id)
                 ->update(['text' => $this->transformer->transform($row->comment_content)]);
+
+            $bar->advance();
+        }
+
+        $bar->finish();
+    }
+
+    public function job($id)
+    {
+        $jobs = DB::table('jobs')
+            ->select(['id', 'description', 'recruitment'])
+            ->when($id, function ($builder) use ($id) {
+                return $builder->where('id', $id);
+            })
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($jobs));
+
+        foreach ($jobs as $job) {
+            $data = ['description' => $this->transformer->transform($job->description)];
+
+            if (!empty($job->recruitment)) {
+                $data['recruitment'] = $this->transformer->transform($job->recruitment);
+            }
+
+            DB::table('jobs')
+                ->where('id', $job->id)
+                ->update($data);
 
             $bar->advance();
         }

@@ -104,7 +104,7 @@ class PostForm extends Form
     /**
      * @param array|mixed $data
      * @param bool $rebuildForm
-     * @return $this
+     * @return \Coyote\Services\FormBuilder\Form
      */
     public function setData($data, $rebuildForm = true)
     {
