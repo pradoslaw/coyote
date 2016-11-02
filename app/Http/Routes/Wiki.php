@@ -16,6 +16,11 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
     $this->post('Edit/{wiki?}', ['uses' => 'SubmitController@save', 'middleware' => ['auth', 'wiki.lock']]);
     $this->post('Edit/Preview', ['as' => 'preview', 'uses' => 'SubmitController@preview', 'middleware' => 'auth']);
 
+    // dodawanie zalacznika do posta
+    $this->post('Upload', ['uses' => 'AttachmentController@upload', 'as' => 'upload']);
+    // wklejanie zdjec przy pomocy Ctrl+V w textarea
+    $this->post('Paste', ['uses' => 'AttachmentController@paste', 'as' => 'paste']);
+
     $this->get('Purge/{wiki}', [
         'as' => 'purge',
         'uses' => 'PurgeController@index',

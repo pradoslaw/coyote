@@ -31,6 +31,7 @@ class SubmitController extends BaseController
     public function index($wiki, Request $request)
     {
         $form = $this->getForm($wiki);
+        $this->public['upload_url'] = route('wiki.upload');
 
         if (!$wiki->exists) {
             $form->get('parent_id')->setValue($request->input('parentId'));

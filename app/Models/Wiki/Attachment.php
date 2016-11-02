@@ -33,6 +33,19 @@ class Attachment extends Model
     protected $table = 'wiki_attachments';
 
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function wiki()
+    {
+        return $this->belongsTo('Coyote\Wiki\Page');
+    }
+
+    /**
      * @return \Coyote\Services\Media\MediaInterface
      */
     public function getFileAttribute()

@@ -1,10 +1,6 @@
 <tr>
     <td>
-        {% if form.file.value.isImage %}
-            <a href="javascript:" class="btn-append" data-url="{{ form.file.value.url }}">{{ form.name.value }}</a>
-        {% else %}
-            {{ form.name.value }}
-        {% endif %}
+        <a href="javascript:" class="btn-append" data-url="{{ form.file.value.url }}">{{ form.name.value }}</a>
     </td>
     <td>{{ form.mime.value }}</td>
     <td>{{ form.created_at.value|format_date }}</td>

@@ -52,4 +52,66 @@ $(() => {
     .on('focus', 'textarea:not(.clicked)', e => {
         $(e.currentTarget).addClass('clicked').autogrow().prompt().fastSubmit();
     });
+
+    /**
+     * Upload attachment
+     */
+    $('#btn-upload').click(function() {
+        $('.input-file').click();
+    });
+
+    $('.input-file').change(function() {
+        var $form = $('#submit-form');
+        var formData = new FormData($form[0]);
+
+        $.ajax({
+            url: _config.upload_url,
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $('#btn-upload').attr('disabled', 'disabled').text('Wysyłanie...');
+            },
+            success: function (html) {
+                $('#attachments .text-center').remove();
+                $('#attachments tbody').append(html);
+            },
+            error: function (err) {
+                $('#alert').modal('show');
+
+                if (typeof err.responseJSON !== 'undefined') {
+                    $('.modal-body').text(err.responseJSON.attachment[0]);
+                }
+            },
+            complete: function() {
+                $('#btn-upload').removeAttr('disabled').text('Dodaj załącznik');
+            }
+        }, 'json');
+
+        return false;
+    });
+
+    $('#attachments')
+        .on('click', '.btn-del', function() {
+            $(this).parents('tr').remove();
+        })
+        .on('click', '.btn-append', function() {
+            var $form = $(this).parents('form');
+
+            var parent = $(this).parents('tr');
+            var file = $(':hidden', parent).val();
+            var suffix = file.split('.').pop().toLowerCase();
+            var markdown = '';
+
+            if (suffix === 'png' || suffix === 'jpg' || suffix === 'jpeg' || suffix === 'gif') {
+                markdown = '![' + $(this).text() + '](' + $(this).data('url') + ')';
+            } else {
+                markdown = '[' + $(this).text() + '](' + $(this).data('url') + ')';
+            }
+
+            $('textarea[name="text"]', $form).insertAtCaret("\n", "\n", markdown);
+            $('.nav-tabs a:first').tab('show');
+        });
 });

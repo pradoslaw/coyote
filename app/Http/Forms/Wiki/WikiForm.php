@@ -29,6 +29,16 @@ class WikiForm extends Form
     protected $gate;
 
     /**
+     * It's public so we can use use attr from twig
+     *
+     * @var array
+     */
+    public $attr = [
+        'method' => self::POST,
+        'id' => 'submit-form'
+    ];
+
+    /**
      * @param WikiRepository $wiki
      * @param Gate $gate
      */
