@@ -2,12 +2,12 @@
 
 namespace Coyote\Http\Forms\Wiki;
 
-use Coyote\Http\Forms\Forum\AttachmentForm;
+use Coyote\Http\Forms\AttachmentForm;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Services\FormBuilder\Form;
 use Illuminate\Contracts\Auth\Access\Gate;
 
-class WikiForm extends Form
+class SubmitForm extends Form
 {
     use TreeListTrait;
 

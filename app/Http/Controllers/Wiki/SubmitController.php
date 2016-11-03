@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Wiki;
 
 use Coyote\Events\WikiWasSaved;
-use Coyote\Http\Forms\Wiki\WikiForm;
+use Coyote\Http\Forms\Wiki\SubmitForm;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -124,7 +124,7 @@ class SubmitController extends BaseController
      */
     protected function getForm($wiki)
     {
-        return $this->createForm(WikiForm::class, $wiki, [
+        return $this->createForm(SubmitForm::class, $wiki, [
             'url' => route('wiki.submit', [$wiki->id])
         ]);
     }

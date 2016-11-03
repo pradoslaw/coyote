@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Forum;
 
+use Coyote\Http\Forms\AttachmentForm;
 use Coyote\Poll;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
 use Coyote\Services\FormBuilder\FormEvents;
@@ -73,7 +74,7 @@ class PostForm extends Form
                 $oldInput = $session->getOldInput('attachments');
                 array_pluck($oldInput, 'file');
 
-                $form->get('attachments')->setValue($repository->findByFile($oldInput));
+                $form->get('attachments')->setValue($repository->findMany($oldInput));
             }
 
             if ($form->get('poll') !== null) {

@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $host
  * @property \Coyote\Forum $forum
  * @property \Coyote\Topic $topic
+ * @property \Coyote\Post\Attachment[] $attachments
  */
 class Post extends Model
 {
@@ -185,23 +186,6 @@ class Post extends Model
         } else {
             $this->subscribers()->firstOrCreate(['post_id' => $this->id, 'user_id' => $userId]);
         }
-    }
-
-    /**
-     * Assign attachments to the post
-     *
-     * @param array $attachments
-     */
-    public function setAttachments(array $attachments)
-    {
-        $this->attachments()->update(['post_id' => null]);
-        $rows = [];
-
-        foreach ($attachments as $attachment) {
-            $rows[] = Attachment::where('file', $attachment['file'])->first();
-        }
-
-        $this->attachments()->saveMany($rows);
     }
 
     /**

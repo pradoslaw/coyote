@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Forms\Forum;
+namespace Coyote\Http\Forms;
 
 use Coyote\Services\FormBuilder\Form;
 
@@ -9,7 +9,7 @@ class AttachmentForm extends Form
     /**
      * @var string
      */
-    protected $theme = 'forum.forms';
+    protected $theme = self::THEME_INLINE;
 
     /**
      * @var string

@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Wiki;
 
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Http\Forms\Forum\AttachmentForm;
+use Coyote\Http\Forms\AttachmentForm;
 use Coyote\Wiki\Attachment;
 use Illuminate\Http\Request;
 use Coyote\Http\Controllers\Controller;
@@ -37,7 +37,6 @@ class AttachmentController extends Controller
             'mime' => $mime->guess($media->path())
         ]);
 
-        $attachment->save();
         return $this->renderForm($attachment);
     }
 
@@ -71,7 +70,7 @@ class AttachmentController extends Controller
     }
 
     /**
-     * @param $data
+     * @param Attachment $data
      * @return string
      */
     protected function renderForm($data)
