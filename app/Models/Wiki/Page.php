@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $text
  * @property string $template
  * @property bool $is_locked
+ * @property Attachment[] $attachments
  */
 class Page extends Model
 {
@@ -75,6 +76,14 @@ class Page extends Model
     public function comments()
     {
         return $this->hasMany('Coyote\Wiki\Comment', 'wiki_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function attachments()
+    {
+        return $this->hasMany('Coyote\Wiki\Attachment', 'wiki_id', 'id');
     }
 
     /**
