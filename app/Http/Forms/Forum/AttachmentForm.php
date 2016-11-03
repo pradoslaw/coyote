@@ -32,9 +32,8 @@ class AttachmentForm extends Form
     public function buildForm()
     {
         $this
-            ->add('file', 'hidden', [
-                'template' => 'attachment'
-            ])
+            ->add('id', 'hidden')
+            ->add('file', 'hidden')
             ->add('name', 'control')
             ->add('mime', 'control')
             ->add('created_at', 'control')

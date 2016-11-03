@@ -78,7 +78,7 @@ class AttachmentController extends Controller
     {
         $form = $this->createForm(AttachmentForm::class, $data);
         // we're changing field name because front end expect this field to be an array
-        $form->get('file')->setName('attachments[][file]');
+        $form->get('id')->setName('attachments[][id]');
 
         return $form->render();
     }

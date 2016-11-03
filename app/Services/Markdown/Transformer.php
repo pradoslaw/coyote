@@ -123,7 +123,7 @@ class Transformer extends Parser
 
                 $replacement = '![' . $name . '](//cdn.4programmers.net/uploads/attachment/' . $file . ')';
             } else {
-                $replacement = '<a href="//cdn.4programmers.net/uploads/attachment/' . $file . '">' . $name . '</a>';
+                $replacement = '[' . $name . '](//cdn.4programmers.net/uploads/attachment/' . $file . ')';
             }
 
             $text = str_replace($matches[0][$i], $replacement, $text);

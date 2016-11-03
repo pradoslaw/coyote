@@ -194,7 +194,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
         }
 
         foreach ($request->get('attachments', []) as $attachment) {
-            Wiki\Attachment::where('file', $attachment['file'])->first()->wiki()->associate($page)->save();
+            Wiki\Attachment::find($attachment['id'])->wiki()->associate($page)->save();
         }
 
         if ($page->wasRecentlyCreated) {

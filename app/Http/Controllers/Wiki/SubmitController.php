@@ -26,6 +26,7 @@ class SubmitController extends BaseController
 
     /**
      * @param \Coyote\Wiki $wiki
+     * @param Request $request
      * @return \Illuminate\View\View
      */
     public function index($wiki, Request $request)
