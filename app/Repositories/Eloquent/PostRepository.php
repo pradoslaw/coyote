@@ -188,13 +188,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             $post->logs()->save($log);
         }
 
-        foreach ($post->attachments as $attachment) {
-            $attachment->post()->dissociate()->save();
-        }
-
-        foreach ($request->get('attachments', []) as $attachment) {
-            Post\Attachment::find($attachment['id'])->post()->associate($post)->save();
-        }
+        $post->syncAttachments(array_pluck($request->get('attachments', []), 'id'));
 
         if ($user) {
             if (empty($postId)) {

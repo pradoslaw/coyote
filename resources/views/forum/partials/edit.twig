@@ -3,7 +3,7 @@
     {{ form_hidden('human', 1) }}
 
     {% for attachment in form.attachments.children %}
-        {{ form_widget(attachment.get('file')) }}
+        {{ form_widget(attachment.get('id')) }}
     {% endfor %}
 
     {% for tag in form.tags.children %}

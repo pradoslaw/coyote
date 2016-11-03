@@ -201,6 +201,20 @@ class Post extends Model
     }
 
     /**
+     * @param array $ids
+     */
+    public function syncAttachments($ids)
+    {
+        foreach ($this->attachments as $attachment) {
+            $attachment->post()->dissociate()->save();
+        }
+
+        foreach ($ids as $id) {
+            Post\Attachment::find($id)->post()->associate($this)->save();
+        }
+    }
+
+    /**
      * Get previous post. We use it in merge controller.
      *
      * @return mixed

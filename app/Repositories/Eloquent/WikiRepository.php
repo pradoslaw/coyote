@@ -189,13 +189,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
             $this->calculateAuthorsShare($page->id);
         }
 
-        foreach ($page->attachments as $attachment) {
-            $attachment->wiki()->dissociate()->save();
-        }
-
-        foreach ($request->get('attachments', []) as $attachment) {
-            Wiki\Attachment::find($attachment['id'])->wiki()->associate($page)->save();
-        }
+        $page->syncAttachments(array_pluck($request->get('attachments', []), 'id'));
 
         if ($page->wasRecentlyCreated) {
             $parent = $this->app->make(Wiki\Path::class)->findOrNew((int) $request->input('parent_id'));

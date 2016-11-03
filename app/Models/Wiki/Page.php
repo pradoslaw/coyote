@@ -138,4 +138,18 @@ class Page extends Model
             return $parentPath . '/' . $slug;
         }
     }
+
+    /**
+     * @param array $ids
+     */
+    public function syncAttachments($ids)
+    {
+        foreach ($this->attachments as $attachment) {
+            $attachment->wiki()->dissociate()->save();
+        }
+
+        foreach ($ids as $id) {
+            Attachment::find($id)->wiki()->associate($this)->save();
+        }
+    }
 }
