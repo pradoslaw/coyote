@@ -236,7 +236,7 @@ class TransformerTest extends \Codeception\TestCase\Test
         );
 
         $this->assertEquals(
-            '<a href="//cdn.4programmers.net/uploads/attachment/abc.zip">abc.zip</a>',
+            '[abc.zip](//cdn.4programmers.net/uploads/attachment/abc.zip)',
             $this->transformer->transform("{{File:abc.zip}}")
         );
 
