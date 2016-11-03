@@ -33,10 +33,7 @@ class AttachmentController extends BaseAttachmentController
     {
         /** @var \Coyote\Post\Attachment $attachment */
         $attachment = $this->attachment->findOrFail($id);
-
-        if (!$attachment->post->forum->userCanAccess($this->userId)) {
-            abort(401, 'Unauthorized');
-        }
+        $attachment->post->forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
 
         set_time_limit(0);
 
@@ -55,19 +52,15 @@ class AttachmentController extends BaseAttachmentController
             'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT'
         ];
 
-        if ($isImage) {
-            return response()->make(
-                $attachment->file->get(),
-                200,
-                $headers
-            );
-        } else {
-            return response()->download(
-                $attachment->file->path(),
-                $attachment->name,
-                $headers
-            );
-        }
+        return $isImage ? response()->make(
+            $attachment->file->get(),
+            200,
+            $headers
+        ) : response()->download(
+            $attachment->file->path(),
+            $attachment->name,
+            $headers
+        );
     }
 
     /**
