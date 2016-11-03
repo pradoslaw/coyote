@@ -69,7 +69,7 @@ class SearchController extends Controller
         }
 
         // search only in allowed forum categories
-        $this->forum->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
+        $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
         $this->request->attributes->set('forum_id', $this->forum->lists('id'));
 
         // build elasticsearch request

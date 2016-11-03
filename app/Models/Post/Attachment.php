@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $count
  * @property int $post_id
  * @property \Coyote\Services\Media\MediaInterface $file
+ * @property \Coyote\Post $post
  */
 class Attachment extends Model
 {

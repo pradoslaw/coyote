@@ -523,7 +523,7 @@ $(function () {
             markdown = '![' + $(this).text() + '](' + $(this).data('url') + ')';
         }
 
-        $('textarea', $form).insertAtCaret("\n", "\n", markdown);
+        $('textarea[name="text"]', $form).insertAtCaret("\n", "\n", markdown);
         $('.nav-tabs a:first').tab('show');
     });
 
