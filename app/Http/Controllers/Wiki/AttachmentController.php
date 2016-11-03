@@ -2,14 +2,11 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
-use Coyote\Http\Factories\MediaFactory;
 use Coyote\Wiki\Attachment;
-use Coyote\Http\Controllers\AttachmentController as BaseController;
+use Coyote\Http\Controllers\AttachmentController as BaseAttachmentController;
 
-class AttachmentController extends BaseController
+class AttachmentController extends BaseAttachmentController
 {
-    use MediaFactory;
-
     /**
      * @param array $attributes
      * @return Attachment

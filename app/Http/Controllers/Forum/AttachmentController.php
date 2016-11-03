@@ -4,9 +4,9 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Post\Attachment;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as AttachmentRepository;
-use Coyote\Http\Controllers\AttachmentController as BaseController;
+use Coyote\Http\Controllers\AttachmentController as BaseAttachmentController;
 
-class AttachmentController extends BaseController
+class AttachmentController extends BaseAttachmentController
 {
     /**
      * @var AttachmentRepository
