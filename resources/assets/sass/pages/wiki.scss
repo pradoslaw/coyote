@@ -4,6 +4,7 @@
 @import "../vendor/bootstrap/variables";
 @import "../vendor/font-awesome/variables";
 @import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
+@import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 @import "../components/related";
 @import "../components/sidemenu";
 @import "../components/metadata";
@@ -150,6 +151,30 @@ article > header {
   }
 }
 
+
+// Zajawka artykulu
+// --------------------
+
+.text-excerpt {
+  margin-bottom: 0;
+
+  strong {
+    font-size: 20px;
+  }
+}
+
+// Tresc artykulu
+// --------------------
+
+.text-body {
+  img:not(.img-smile) {
+    @include img-responsive();
+  }
+}
+
+// Przyciski edycji tekstu oraz dodawania nowego artykulu
+// -----------------------------------------------------
+
 #box-maintain {
   margin: 13px 0 20px 0;
 }
@@ -157,14 +182,6 @@ article > header {
 .side-menu {
   li a {
     padding-left: 2px;
-  }
-}
-
-.text-excerpt {
-  margin-bottom: 0;
-
-  strong {
-    font-size: 20px;
   }
 }
 
@@ -194,6 +211,7 @@ article > header {
 
 // Wyswietlanie informacji o wspolautorach danej strony
 // -----------------------------------------------------
+
 #box-authors {
   margin: 40px 0 20px 0;
 

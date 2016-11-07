@@ -2,6 +2,7 @@
 @import "../helpers/variables";
 @import "../helpers/mixins";
 @import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
+@import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 
 .microblog {
   .media-heading {
@@ -33,14 +34,12 @@
 
   @include break-word;
 
-  > .thumbnails {
-    margin-top: 20px;
+  img:not(.img-smile) {
+    @include img-responsive();
   }
 
-  img:not(.img-smile) {
-    display: block;
-    max-width: 100%;
-    height: auto;
+  > .thumbnails {
+    margin-top: 20px;
   }
 }
 

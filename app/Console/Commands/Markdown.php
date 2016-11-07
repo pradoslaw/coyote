@@ -181,4 +181,27 @@ class Markdown extends Command
 
         $bar->finish();
     }
+
+    public function user($id)
+    {
+        $users = DB::table('users')
+            ->select(['id', 'sig'])
+            ->whereNotNull('sig')
+            ->when($id, function ($builder) use ($id) {
+                return $builder->where('id', $id);
+            })
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($users));
+
+        foreach ($users as $user) {
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update(['sig' => $this->transformer->transform($user->sig)]);
+
+            $bar->advance();
+        }
+
+        $bar->finish();
+    }
 }
