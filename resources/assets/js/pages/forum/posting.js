@@ -514,13 +514,14 @@ $(function () {
     .on('click', '.btn-append', function() {
         var $form = $(this).parents('form');
 
-        var parent = $(this).parents('tr');
-        var file = $(':hidden', parent).val();
+        var file = $(this).data('url');
         var suffix = file.split('.').pop().toLowerCase();
         var markdown = '';
 
         if (suffix === 'png' || suffix === 'jpg' || suffix === 'jpeg' || suffix === 'gif') {
             markdown = '![' + $(this).text() + '](' + $(this).data('url') + ')';
+        } else {
+            markdown = '[' + $(this).text() + '](' + $(this).data('url') + ')';
         }
 
         $('textarea[name="text"]', $form).insertAtCaret("\n", "\n", markdown);
