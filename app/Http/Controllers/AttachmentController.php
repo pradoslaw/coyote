@@ -85,4 +85,24 @@ abstract class AttachmentController extends Controller
 
         return $form->render();
     }
+
+    /**
+     * @param string $name
+     * @param string $mime
+     * @param bool $image
+     * @param int $size
+     * @return array
+     */
+    protected function getHeaders(string $name, string $mime, bool $image, int $size)
+    {
+        return [
+            'Content-Type' => $mime,
+            'Content-Disposition' => (!$image ? 'attachment' : 'inline') . '; filename="' . $name . '"',
+            'Content-Transfer-Encoding' => 'binary',
+            'Content-Length' => $size,
+            'Cache-control' => 'private',
+            'Pragma' => 'private',
+            'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT'
+        ];
+    }
 }

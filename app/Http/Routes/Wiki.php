@@ -102,6 +102,7 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
     ]);
 
     $this->get('Log/{wiki}', ['uses' => 'LogController@index', 'as' => 'log']);
+    $this->get('Download/{wiki}/{id}', ['uses' => 'AttachmentController@download', 'as' => 'download']);
     $this->get('Blog', ['uses' => 'BlogController@index', 'as' => 'blog']);
     $this->get('Kategorie', ['uses' => 'HomeController@index', 'as' => 'home']);
 

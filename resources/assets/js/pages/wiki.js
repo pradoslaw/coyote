@@ -1,4 +1,6 @@
 $(() => {
+    'use strict';
+
     $('#box-comment').on('submit', 'form.comment-form', e => {
         let form = $(e.currentTarget);
 
@@ -98,12 +100,11 @@ $(() => {
             $(this).parents('tr').remove();
         })
         .on('click', '.btn-append', function() {
-            var $form = $(this).parents('form');
+            let $form = $(this).parents('form');
 
-            var parent = $(this).parents('tr');
-            var file = $(':hidden', parent).val();
-            var suffix = file.split('.').pop().toLowerCase();
-            var markdown = '';
+            let file = $(this).data('url');
+            let suffix = file.split('.').pop().toLowerCase();
+            let markdown = '';
 
             if (suffix === 'png' || suffix === 'jpg' || suffix === 'jpeg' || suffix === 'gif') {
                 markdown = '![' + $(this).text() + '](' + $(this).data('url') + ')';

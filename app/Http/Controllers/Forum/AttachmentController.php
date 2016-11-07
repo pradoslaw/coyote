@@ -41,16 +41,7 @@ class AttachmentController extends BaseAttachmentController
         $attachment->save();
 
         $isImage = $attachment->file->isImage();
-
-        $headers = [
-            'Content-Type' => $attachment->mime,
-            'Content-Disposition' => (!$isImage ? 'attachment' : 'inline') . '; filename="' . $attachment->name . '"',
-            'Content-Transfer-Encoding' => 'binary',
-            'Content-Length' => $attachment->size,
-            'Cache-control' => 'private',
-            'Pragma' => 'private',
-            'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT'
-        ];
+        $headers = $this->getHeaders($attachment->name, $attachment->mime, $isImage, $attachment->size);
 
         return $isImage ? response()->make(
             $attachment->file->get(),

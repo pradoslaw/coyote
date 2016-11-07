@@ -5,6 +5,7 @@ namespace Coyote\Wiki;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $id
  * @property string $name
  * @property string $mim
  * @property int $size
@@ -52,7 +53,8 @@ class Attachment extends Model
     {
         return app('media.attachment')->make([
             'file_name' => $this->attributes['file'],
-            'name' => $this->attributes['name']
+            'name' => $this->attributes['name'],
+            'download_url' => route('wiki.download', [$this->wiki_id, $this->id])
         ]);
     }
 }

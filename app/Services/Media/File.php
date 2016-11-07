@@ -22,6 +22,11 @@ abstract class File implements MediaInterface
     protected $filename;
 
     /**
+     * @var string
+     */
+    protected $downloadUrl;
+
+    /**
      * @var MediaFactory
      */
     protected $factory;
@@ -81,8 +86,31 @@ abstract class File implements MediaInterface
     /**
      * @return string
      */
+    public function getDownloadUrl()
+    {
+        return $this->downloadUrl;
+    }
+
+    /**
+     * @param string $downloadUrl
+     * @return $this
+     */
+    public function setDownloadUrl($downloadUrl)
+    {
+        $this->downloadUrl = $downloadUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function url()
     {
+        if ($this->downloadUrl && !$this->isImage()) {
+            return $this->downloadUrl;
+        }
+
         $public = implode('/', array_diff(explode('/', $this->root()), explode('/', public_path())));
 
         return cdn($public . '/' . $this->relative());

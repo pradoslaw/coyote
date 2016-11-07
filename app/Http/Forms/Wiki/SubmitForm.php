@@ -97,6 +97,7 @@ class SubmitForm extends Form
                 'child_attr' => [
                     'type' => 'child_form',
                     'class' => AttachmentForm::class,
+                    'download_route' => '/download/' . $this->data->id . '/'
                 ]
             ])
             ->add('submit', 'submit', [

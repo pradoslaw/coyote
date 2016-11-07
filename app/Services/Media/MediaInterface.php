@@ -10,7 +10,7 @@ interface MediaInterface
      * @return MediaFactory
      */
     public function getFactory();
-    
+
     /**
      * @return string
      */
@@ -30,6 +30,17 @@ interface MediaInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * @return string
+     */
+    public function getDownloadUrl();
+
+    /**
+     * @param string $downloadUrl
+     * @return $this
+     */
+    public function setDownloadUrl($downloadUrl);
 
     /**
      * @return string
