@@ -44,8 +44,6 @@ class Transformer extends Parser
 
         $text = $this->removeHtmlTags($text);
 
-        // @todo usunac z tekstu `<code="język"></code>` na \```jezyl\```
-
         $text = $this->unhash($text);
 
         // zamianiana <code> na markdown
@@ -559,10 +557,16 @@ class Transformer extends Parser
                 $line = $this->replace($line, '`', $end - $len + 1, $len + 1);
             }
 
-            if (($start = preg_match('|<code class="([a-z\+]+)">|i', $line, $match, PREG_OFFSET_CAPTURE)) === 1) {
+            // poprzednia petla moze "wyprodukowac" backticki. hasujemy...
+            $line = $this->hashBacktick($line);
+
+            if (($start = preg_match('|<code class="([a-z\+]+)">|iu', $line, $match, PREG_OFFSET_CAPTURE)) === 1) {
                 $start = $match[0][1];
                 $found = $match[0][0];
                 $lang  = $match[1][0];
+
+                // php nie radzi sobie dobrze z utf...
+                $start = mb_strlen(substr($line, 0, $start));
 
                 $before = mb_substr($line, 0, $start);
                 $after = mb_substr($line, $start + mb_strlen($found));

@@ -178,6 +178,11 @@ class TransformerTest extends \Codeception\TestCase\Test
             "before \n```html\n<a...\n```\n after",
             $this->transformer->transform("before <code=html><a...</code> after")
         );
+
+        $this->assertEquals(
+            "łółłóąłśąźćź \n```html\n<a...\n```\n after",
+            $this->transformer->transform("łółłóąłśąźćź <code=html><a...</code> after")
+        );
     }
 
     public function testFixDoubleApostrophe()
@@ -382,6 +387,11 @@ class TransformerTest extends \Codeception\TestCase\Test
         $this->assertEquals(
             "Znowu Zimny Kaczor?\n~~~@ShookTea",
             $this->transformer->transform("Znowu Zimny Kaczor?\n~~~@ShookTea")
+        );
+
+        $this->assertEquals(
+            "\n### Tworzenie linków\n",
+            $this->transformer->transform("\nTworzenie linków\n~~~~~~~~~~~")
         );
     }
 
