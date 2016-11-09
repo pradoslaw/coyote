@@ -535,6 +535,8 @@ class Transformer extends Parser
                 continue;
             }
 
+            $line = $this->hashBacktick($line);
+
             $offset = 0;
             // jezeli <code> i </code> znajduja sie w tej samej linii...
             while (($start = mb_strpos($line, '<code>', min($offset, mb_strlen($line)))) !== false
@@ -562,23 +564,20 @@ class Transformer extends Parser
                 $found = $match[0][0];
                 $lang  = $match[1][0];
 
-                // tag <code... jest pierwszym w linii. czesto moze byc uzyty taki zapis `<code ... ktorego
-                // nie chcemy parsowac z uwagi na backtick
-                if ($start >= 1) {
-                    continue;
-                }
+                $before = mb_substr($line, 0, $start);
+                $after = mb_substr($line, $start + mb_strlen($found));
+                $line = ($before ? ($before . "\n") : '') . '```' . $lang;
 
-                $rest = mb_substr($line, mb_strlen($found));
-                $line = '```' . $lang;
-
-                if ('' !== $rest) {
-                    $line .= "\n" . $rest;
+                if ('' !== $after) {
+                    $line .= "\n" . $after;
                 }
             }
 
             $line = preg_replace('~^<code>~', "```\n", $line);
             $line = preg_replace('~<\/code>$~', "\n```", $line);
-//            $line = preg_replace('~<\/code>~', "\n```\n", $line);
+            $line = preg_replace('~<\/code>~', "\n```\n", $line);
+
+            $line = $this->unhash($line);
         }
 
         return $this->joinLineBreaks($lines);

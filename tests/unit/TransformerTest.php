@@ -168,6 +168,16 @@ class TransformerTest extends \Codeception\TestCase\Test
             "```\n\$stmt->bindValue(':offset', (int)\$offset, PDO::PARAM_INT);\n\$stmt->bindValue(':limit', (int)\$limit, PDO::PARAM_INT); \n```",
             $this->transformer->transform("<code>\$stmt->bindValue(':offset', (int)\$offset, PDO::PARAM_INT);\n\$stmt->bindValue(':limit', (int)\$limit, PDO::PARAM_INT); </code>")
         );
+
+        $this->assertEquals(
+            "```html\n<html>\n</html>\n```",
+            $this->transformer->transform("<code=html><html>\n</html></code>")
+        );
+
+        $this->assertEquals(
+            "before \n```html\n<a...\n```\n after",
+            $this->transformer->transform("before <code=html><a...</code> after")
+        );
     }
 
     public function testFixDoubleApostrophe()
@@ -235,8 +245,10 @@ class TransformerTest extends \Codeception\TestCase\Test
             $this->transformer->transform("{{Image:abc.jpg|test|180}}")
         );
 
+        $this->transformer->mapping = ['abc.zip' => '1/2'];
+
         $this->assertEquals(
-            '[abc.zip](//cdn.4programmers.net/uploads/attachment/abc.zip)',
+            '[abc.zip](//4programmers.net/Download/1/2)',
             $this->transformer->transform("{{File:abc.zip}}")
         );
 
@@ -470,6 +482,11 @@ class TransformerTest extends \Codeception\TestCase\Test
         $this->assertEquals(
             "Przyznaję się bez bicia: Jestem uzależniony.\n\n> Hmmmmm naszly mnie mysli, ze to uzaleznienie jest calkiem przyjemne, ale pod kiilkoma warunkami :)\n> \n> 1. Trzeba sie wietrzyc ! :)\n\nChodzi ci o inny nałóg?",
             $this->transformer->transform("Przyznaję się bez bicia: Jestem uzależniony.\r\n<quote>Hmmmmm naszly mnie mysli, ze to uzaleznienie jest calkiem przyjemne, ale pod kiilkoma warunkami :)\r\n\r\n1. Trzeba sie wietrzyc ! :)</quote>\r\nChodzi ci o inny nałóg?")
+        );
+
+        $this->assertEquals(
+            "\n> \n```html\ntest\n```\n",
+            $this->transformer->transform("<quote><code=html>test</code></quote>")
         );
     }
 
