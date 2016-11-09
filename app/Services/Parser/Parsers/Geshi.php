@@ -24,16 +24,23 @@ class Geshi implements ParserInterface
         $geshi->set_header_type(GESHI_HEADER_NONE);
 
         for ($i = 0, $count = count($matches[1]); $i < $count; $i++) {
-            $language = substr($matches[1][$i], 9);
+            $language = $matches[1][$i];
+
+            // class may have prefix "language". omit it.
+            if (substr($language, 0, 8) === 'language') {
+                $language = substr($language, 9);
+            }
 
             if (isset($alias[$language])) {
                 $language = $alias[$language];
             }
 
-            $geshi->set_source(htmlspecialchars_decode($matches[2][$i]));
-            /* nadaj jezyk kolorowania skladnii */
-            $geshi->set_language($language, true);
+            if ($language) {
+                /* nadaj jezyk kolorowania skladnii */
+                $geshi->set_language($language, true);
+            }
 
+            $geshi->set_source(htmlspecialchars_decode($matches[2][$i]));
             $text = str_replace($matches[2][$i], $geshi->parse_code(), $text);
         }
 
