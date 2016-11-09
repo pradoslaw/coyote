@@ -6,7 +6,7 @@
 
 Coyote to nazwa systemu obslugujacego serwis 4programmers.net. Obecnie w obludze jest wersja 1.x ktora mamy nadzieje zastapic wersja 2.0 ktora jest w trakcie pisania i bedzie dostepna na githubie jako open source.
 
-Uwaga! To repozytorium zawiera wersje 2.0-dev ktora absolutnie nie jest wersja koncowa i stabilna.
+Uwaga! To repozytorium zawiera wersje 2.0-beta ktora absolutnie nie jest wersja koncowa i stabilna.
 
 ## Wymagania
 
