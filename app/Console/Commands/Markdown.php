@@ -204,4 +204,39 @@ class Markdown extends Command
 
         $bar->finish();
     }
+
+    public function wiki($id)
+    {
+        $wiki = DB::connection('mysql')
+            ->table('page')
+            ->select(['page.page_id', 'page_text.text_content AS page_content'])
+            ->join('page_text', 'text_id', '=', 'page_text')
+            ->where('page_module', '=', 3)
+            ->when($id, function ($builder) use ($id) {
+                return $builder->where('page_id', $id);
+            })
+            ->get();
+
+        $bar = $this->output->createProgressBar(count($wiki));
+
+        $result = DB::table('wiki_attachments')->get();
+        $attachments = [];
+
+        foreach ($result as $row) {
+            if (in_array(pathinfo($row->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'gif', 'png'])) {
+                $attachments[$row->name] = $row->file;
+            } else {
+                $attachments[$row->name] = $row->wiki_id . '/' . $row->id;
+            }
+        }
+
+        $this->transformer->mapping = $attachments;
+
+        foreach ($wiki as $row) {
+            DB::table('wiki_pages')->where('id', $row->page_id)->update(['text' => $this->transformer->transform($row->page_content)]);
+            $bar->advance();
+        }
+
+        $bar->finish();
+    }
 }

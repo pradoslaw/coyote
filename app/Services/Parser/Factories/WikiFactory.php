@@ -35,8 +35,10 @@ class WikiFactory extends AbstractFactory
                 $allowedTags = explode(',', config('purifier')['HTML.Allowed']);
                 unset($allowedTags['ul']);
 
+                // we add those tags for backward compatibility
                 $allowedTags[] = 'div[class]';
                 $allowedTags[] = 'ul[class]';
+                $allowedTags[] = 'h1';
 
                 $parser->attach(new Template($this->app[WikiRepositoryInterface::class]));
                 $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true)->setEnableUserTagParser(false));

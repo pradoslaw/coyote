@@ -42,6 +42,8 @@ class Transformer extends Parser
         $text = $this->quote($text);
         $text = $this->table($text);
 
+        $text = $this->removeHtmlTags($text);
+
         // @todo usunac z tekstu `<code="język"></code>` na \```jezyl\```
 
         $text = $this->unhash($text);
@@ -116,14 +118,14 @@ class Transformer extends Parser
 
             if ($matches[1][$i] === 'Image') {
                 @list(, $width) = explode('|', $matches[4][$i]);
-                if ($width) {
+                if ($width && is_numeric($width)) {
                     $pathinfo = pathinfo($file);
                     $file = $pathinfo['filename'] . '-image(' . $width . 'x' . $width . ').' . $pathinfo['extension'];
                 }
 
                 $replacement = '![' . $name . '](//cdn.4programmers.net/uploads/attachment/' . $file . ')';
             } else {
-                $replacement = '[' . $name . '](//cdn.4programmers.net/uploads/attachment/' . $file . ')';
+                $replacement = '[' . $name . '](//4programmers.net/Download/' . $file . ')';
             }
 
             $text = str_replace($matches[0][$i], $replacement, $text);
@@ -400,6 +402,13 @@ class Transformer extends Parser
         }
 
         return $this->joinLineBreaks($lines);
+    }
+
+    private function removeHtmlTags($text)
+    {
+        $text = str_replace(['<center>', '</center>'], ['<span style="text-align: center;">', '</span>'], $text);
+
+        return $text;
     }
 
     private function findNested($text, $tag)
