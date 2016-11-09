@@ -33,6 +33,7 @@ return [
     'firewall' => 'ban',
     'person' => 'profil',
     'block' => 'blok',
+    'group' => 'grupę',
 
     'headline' => [
         'microblog'         => ':actor :verb :object na mikroblogu',
@@ -50,5 +51,7 @@ return [
         'unknown'           => ':actor :verb',
         'unknown:throttle'  => 'Nieudane logowanie na konto :login',
         'block'             => ':actor :verb :object',
+        'pastebin'          => ':actor :verb :object',
+        'group'             => ':actor :verb :object :name'
     ]
 ];
