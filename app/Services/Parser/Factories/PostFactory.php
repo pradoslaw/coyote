@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Container;
 use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Geshi;
+use Coyote\Services\Parser\Parsers\Latex;
 use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\Services\Parser\Parsers\Purifier;
@@ -36,6 +37,7 @@ class PostFactory extends AbstractFactory
             if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {
                     $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));
+                    $parser->attach(new Latex());
                     $parser->attach(new Purifier());
                     $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
