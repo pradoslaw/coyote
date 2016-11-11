@@ -36,6 +36,7 @@ class CreateTopicsTable extends Migration
             $table->index(['forum_id', 'is_sticky', 'last_post_id']);
             // inny tryb sortowania wymagac bedzie uzycia tego indeksu.
             $table->index('forum_id');
+            // strona glowna: wyswietlanie polecanych watkow na forum
             $table->index('last_post_id');
             // sprawdzanie czy sa jeszcze jakies nieprzeczytane watki w danym dziale
             $table->index(['forum_id', 'deleted_at', 'last_post_created_at']);

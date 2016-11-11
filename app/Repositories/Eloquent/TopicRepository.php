@@ -199,6 +199,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                     'deleted_at',
                     'first_post_id'])
                 ->orderBy($sort, 'DESC')
+                ->whereRaw('is_locked = 0')
                 ->limit(3000)
                 ->toSql();
     }
@@ -266,7 +267,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function interesting($userId, $limit = 7)
     {
-        $sub = $this->getSubQuery('last_post_created_at');
+        $sub = $this->getSubQuery('last_post_id');
         $this->applyCriteria();
 
         $algo = 'LEAST(1000, 200 * topics.score) +
@@ -293,7 +294,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                     ->join('forums', 'forums.id', '=', 'forum_id')
                     ->join('posts', 'posts.id', '=', 'first_post_id')
                     ->where('forums.is_locked', 0)
-                    ->where('topics.is_locked', 0)
                     ->limit($limit);
 
         if ($userId) {

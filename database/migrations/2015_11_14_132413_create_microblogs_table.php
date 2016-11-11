@@ -25,9 +25,11 @@ class CreateMicroblogsTable extends Migration
             $table->smallInteger('bonus')->nullable();
             $table->json('media')->nullable();
 
-            $table->index(['parent_id', 'deleted_at']);
+            // wyswietlenie listy mikroblogow
+            $table->index(['is_sponsored', 'id', 'parent_id', 'deleted_at']);
             $table->index('user_id');
-            $table->index(['score', 'is_sponsored']);
+            // strona glowna - wyswietlenie popularnych wpisow
+            $table->index(['parent_id', 'deleted_at', 'votes', 'bonus']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('microblogs');
