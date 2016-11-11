@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\SubscribableInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 
@@ -151,8 +152,19 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function isUnread($forumId, $markTime, $userId, $sessionId)
     {
+        $sql = $this->toSql(
+            $this
+                ->model
+                ->select(['id'])
+                ->where('topics.forum_id', $forumId)
+                ->when($markTime, function (Builder $builder) use ($markTime) {
+                    return $builder->where('last_post_created_at', '>', $markTime);
+                })
+        );
+
         return $this
             ->model
+            ->from($this->raw("($sql) AS topics"))
             ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
                 $join->on('topic_track.topic_id', '=', 'topics.id');
 
@@ -162,10 +174,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                     $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
                 }
             })
-            ->when($markTime, function ($builder) use ($markTime) {
-                return $builder->where('last_post_created_at', '>', $markTime);
-            })
-            ->where('topics.forum_id', $forumId)
+            ->withTrashed()
             ->whereNull('topic_track.id')
             ->count();
     }

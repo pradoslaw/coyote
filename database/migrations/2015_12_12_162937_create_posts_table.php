@@ -32,7 +32,6 @@ class CreatePostsTable extends Migration
             $table->index('topic_id');
             $table->index('user_id');
             $table->index('created_at');
-            $table->index('deleted_at');
 
             $table->foreign('forum_id')->references('id')->on('forums');
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');

@@ -34,7 +34,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
     public function takeFirst($postId)
     {
         return $this
-            ->build(function ($sql) use ($postId) {
+            ->build(function (Builder $sql) use ($postId) {
                 return $sql->where('posts.id', $postId);
             })
             ->first();
@@ -391,12 +391,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
      */
     private function build(callable $callback)
     {
-        $subQuery = $callback($this->buildSubquery());
-        $sub = $subQuery->toSql();
-
-        foreach ($subQuery->getBindings() as $binding) {
-            $sub = preg_replace('/\?/', $binding, $sub, 1);
-        }
+        $sub = $this->toSql($callback($this->buildSubquery()));
 
         $this->applyCriteria();
 

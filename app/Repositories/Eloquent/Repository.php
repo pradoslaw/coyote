@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Eloquent;
 use Coyote\Repositories\Contracts\CriteriaInterface;
 use Coyote\Repositories\Contracts\RepositoryInterface;
 use Coyote\Repositories\Criteria\Criteria;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
 use Illuminate\Database\Query\Expression;
@@ -313,5 +314,20 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     public function raw($value)
     {
         return new Expression($value);
+    }
+
+    /**
+     * @param Builder $builder
+     * @return string
+     */
+    protected function toSql(Builder $builder)
+    {
+        $sql = $builder->toSql();
+
+        foreach ($builder->getBindings() as $binding) {
+            $sql = preg_replace('/\?/', "'$binding'", $sql, 1);
+        }
+
+        return $sql;
     }
 }

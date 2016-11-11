@@ -32,14 +32,13 @@ class CreateTopicsTable extends Migration
             $table->integer('last_post_id')->nullable();
             $table->timestampTz('last_post_created_at')->nullable();
 
-            // czy potrzeba nam tego indeksu?
+            // domyslny widok forum to sortowanie po is_sticky oraz last_post_id.
+            $table->index(['forum_id', 'is_sticky', 'last_post_id']);
+            // inny tryb sortowania wymagac bedzie uzycia tego indeksu.
             $table->index('forum_id');
-            // obliczenie ilosci watkow na forum, wyswietlanie watkow na forum
-            $table->index(['forum_id', 'deleted_at']);
             $table->index('last_post_id');
-            $table->index('last_post_created_at');
-            // sortowanie po ilosci wyswietlen
-            $table->index('views');
+            // sprawdzanie czy sa jeszcze jakies nieprzeczytane watki w danym dziale
+            $table->index(['forum_id', 'deleted_at', 'last_post_created_at']);
 
             $table->foreign('forum_id')->references('id')->on('forums');
         });
