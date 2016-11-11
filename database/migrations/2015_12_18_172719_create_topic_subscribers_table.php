@@ -19,6 +19,7 @@ class CreateTopicSubscribersTable extends Migration
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
 
             $table->unique(['topic_id', 'user_id']);
+            $table->index('topic_id'); // pobranie listy obserwatorow danego watku
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');

@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\PurgeViews',
         'Coyote\Console\Commands\PurgePastebin',
         'Coyote\Console\Commands\PurgeFirewall',
+        'Coyote\Console\Commands\PurgeSessions',
         'Coyote\Console\Commands\CreateSitemap',
         'Coyote\Console\Commands\Migrate',
         'Coyote\Console\Commands\Markdown',
@@ -35,6 +36,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('coyote:counter')->everyFiveMinutes();
         $schedule->command('es:purge')->hourly();
+        $schedule->command('session:purge')->everyFiveMinutes();
         $schedule->command('pastebin:purge')->hourly();
         $schedule->command('firewall:purge')->hourly();
         $schedule->command('sitemap:create')->dailyAt('03:00:00');
