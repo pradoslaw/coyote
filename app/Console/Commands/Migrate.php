@@ -810,6 +810,8 @@ class Migrate extends Command
                         $row['subject'] = htmlspecialchars_decode($row['subject']);
                         $row['slug'] = explode('-', $row['slug'])[1];
 
+                        $this->setNullIfEmpty($row['poll_id']);
+
                         DB::table('topics')->insert($row);
                         $bar->advance();
                     }
