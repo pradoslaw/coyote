@@ -236,6 +236,16 @@ class TransformerTest extends \Codeception\TestCase\Test
             "łółąóśłąśźć ''ół ó",
             $this->transformer->transform("łółąóśłąśźć ''ół ó")
         );
+
+        $this->assertEquals(
+            "znaczników `<a>`. Np.:",
+            $this->transformer->transform("znaczników ''<a>''. Np.:")
+        );
+
+        $this->assertEquals(
+            "ze znaczników `<a>`. Np.:\n\n`<a href=\"http://4programmers.net/Forum/Coyote/152813-linki_wewnetrzne_-_formatowanie\">kliknij tutaj</a>`",
+            $this->transformer->transform("ze znaczników ''<a>''. Np.:\n\n''<a href=\"http://forum.4programmers.net/Coyote/152813-linki_wewnetrzne_-_formatowanie\">kliknij tutaj</a>''")
+        );
     }
 
     public function testRemoveInlineImage()

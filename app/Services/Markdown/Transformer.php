@@ -18,8 +18,7 @@ class Transformer extends Parser
         // zastapienie {{Image}} oraz {{File}}. teraz juz tego nie uzywamy
         $text = $this->inlineImages($text);
 
-        // w linkach nic nie zmieniamy
-        $text = $this->hashBlock($text, ['a', 'img']);
+
 
         // znaczniki <plain> nie maja racji bytu. zamieniamy <plain> na <code>
         $text = $this->removePlain($text);
@@ -32,6 +31,9 @@ class Transformer extends Parser
         $text = $this->fixDoubleApostrophes($text);
         // usuniecie backtick z tekstu
         $text = $this->hashBacktick($text);
+
+        // w linkach nic nie zmieniamy
+        $text = $this->hashBlock($text, ['a', 'img']);
 
         $text = $this->removeTtTag($text);
         $text = $this->hashBacktick($text);

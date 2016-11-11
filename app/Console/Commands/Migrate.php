@@ -1333,6 +1333,7 @@ class Migrate extends Command
                 $this->rename($row, 'order', 'rank');
                 $this->rename($row, 'visits', 'views');
 
+                $row['title'] = htmlspecialchars_decode($row['title']);
                 $row['slug'] = str_slug($row['title'], '_');
 
                 $this->timestampToDatetime($row['created_at']);
@@ -1345,7 +1346,6 @@ class Migrate extends Command
                 }
 
                 unset($row['incognito'], $row['page'], $row['searchable']);
-                $row['title'] = htmlspecialchars_decode($row['title']);
 
                 if (!empty($row['requirements'])) {
                     $row['description'] .= "\n\n<h2>Wymagania</h2>\n\n" . $row['requirements'];
@@ -1778,6 +1778,9 @@ class Migrate extends Command
                     $path = $row['location'];
 
                     $row['template'] = str_replace(['wikiView.php', 'wikiCategory.php', 'help.php', 'helpView.php', 'documentView.php', 'wikiEmpty.php'], ['show', 'category', 'help.home', 'help.show', 'show', 'show'], $row['template']);
+
+                    $row['title'] = htmlspecialchars_decode($row['title']);
+                    $row['long_title'] = htmlspecialchars_decode($row['long_title']);
 
                     unset($row['parent'], $row['location'], $row['module'], $row['connector'], $row['depth'], $row['order'], $row['matrix'], $row['content'], $row['publish'], $row['published'], $row['unpublished'], $row['richtext'], $row['cache'], $row['tags'], $row['delete']);
                     DB::table('wiki_pages')->insert((array)$row);
