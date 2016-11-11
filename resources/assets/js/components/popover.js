@@ -17,11 +17,18 @@ $(function() {
 
                 if ($(this).hasClass('bottom')) {
                    css.top = p.top - $(this).outerHeight() - 15;
-                } else if ($(this).hasClass('top')) {
+                }
+                else if ($(this).hasClass('top')) {
                     css.top = p.top + $(this).outerHeight() + 15;
                 }
+                else if ($(this).hasClass('right')) {
+                    css.left = p.left - $(this).outerWidth() - 15;
+                    css.top = p.top;
+                }
+
                 $(this).css(css);
             }
+
             $(this).fadeIn(400);
         }
     }).on('click', '.close', function() {
