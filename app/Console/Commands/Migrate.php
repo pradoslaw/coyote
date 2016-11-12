@@ -880,6 +880,8 @@ class Migrate extends Command
 
             $bar->finish();
             DB::commit();
+
+            DB::statement('update topics set rank = LEAST(1000, 200 * topics.score) + LEAST(1000, 100 * topics.replies) + LEAST(1000, 15 * topics.views) - (extract(epoch from now()) - extract(epoch from topics.last_post_created_at)) / 4500 - (extract(epoch from now()) - extract(epoch from topics.created_at)) / 1000');
         } catch (\Exception $e) {
             DB::rollBack();
 

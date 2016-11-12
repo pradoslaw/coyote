@@ -18,7 +18,7 @@ class MoreLikeThisBuilder
     {
         $builder = new QueryBuilder();
 
-        $mlt = new MoreLikeThis(['title', 'text', 'excerpt']);
+        $mlt = new MoreLikeThis(['title', 'excerpt']);
         $mlt->addDoc([
             '_index' => config('elasticsearch.default_index'),
             '_type' => 'wiki',
