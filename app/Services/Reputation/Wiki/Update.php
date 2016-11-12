@@ -21,7 +21,7 @@ class Update extends Wiki
         $logs = $model->logs()->orderBy('id', 'DESC')->limit(2)->get();
 
         $this->setUserId($logs[0]->user_id);
-        $this->setExcerpt(excerpt($logs[0]->text));
+        $this->setExcerpt(excerpt($this->parse($logs[0]->text)));
 
         $length = $logs[0]->length;
         $diff = $logs[0]->diff;
@@ -68,5 +68,14 @@ class Update extends Wiki
 
             return $diffHours > 1 || ($logs[0]->user_id != $logs[1]->user_id);
         }
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    private function parse($text)
+    {
+        return app('parser.wiki')->parse($text);
     }
 }

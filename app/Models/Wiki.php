@@ -80,6 +80,13 @@ class Wiki extends Model
     ];
 
     /**
+     * Html version of the post.
+     *
+     * @var null|string
+     */
+    private $html = null;
+
+    /**
      * Make slug. This function maintains compatibility to older 4programmers.net version.
      *
      * @param $title
@@ -196,7 +203,7 @@ class Wiki extends Model
      * @param string $column
      * @param int $amount
      * @param array $extra
-     * @return mixed
+     * @return int
      */
     public function increment($column, $amount = 1, array $extra = [])
     {
@@ -204,7 +211,19 @@ class Wiki extends Model
         $page = new Wiki_Page();
         $page->timestamps = false;
 
-        $page->where('id', $this->wiki_id)->update([$column => $this->views + $amount]);
+        return $page->where('id', $this->wiki_id)->update([$column => $this->views + $amount]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlAttribute()
+    {
+        if ($this->html !== null) {
+            return $this->html;
+        }
+
+        return $this->html = app('parser.wiki')->parse($this->text);
     }
 
     /**

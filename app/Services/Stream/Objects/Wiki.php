@@ -23,7 +23,7 @@ class Wiki extends ObjectAbstract
         $this->displayName = $wiki->title;
 
         if ($wiki->excerpt) {
-            $this->excerpt = htmlspecialchars($wiki->excerpt);
+            $this->excerpt = $wiki->excerpt;
         }
 
         return $this;

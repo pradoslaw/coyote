@@ -90,7 +90,7 @@ class TopicController extends BaseController
             // parse post or get it from cache
             $post->text = $parser['post']->parse($post->text);
 
-            if ((auth()->guest() || (auth()->check() && auth()->user()->allow_sig)) && $post->sig) {
+            if ((auth()->guest() || (auth()->check() && $this->auth->allow_sig)) && $post->sig) {
                 $post->sig = $parser['sig']->parse($post->sig);
             }
 
