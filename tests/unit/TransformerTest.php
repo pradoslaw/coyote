@@ -527,4 +527,22 @@ class TransformerTest extends \Codeception\TestCase\Test
             $this->transformer->transform("||=Nagłówek 1||Nagłówek 2||Nagłówek 3\n||Kolumna 1||Kolumna 2||Kolumna 3")
         );
     }
+
+    public function testRemoveOldTags()
+    {
+        $this->assertEquals(
+            '<span style="color: #648017">@Traffic Racer</span>',
+            $this->transformer->transform('<font color="#648017">@Traffic Racer</font>')
+        );
+
+        $this->assertEquals(
+            '`<font color="#648017">@Traffic Racer</font>`',
+            $this->transformer->transform('<plain><font color="#648017">@Traffic Racer</font></plain>')
+        );
+
+        $this->assertEquals(
+            '<span style="color: gray"><i>...</i> - @{furious programming}</span>',
+            $this->transformer->transform('<font color="gray"><i>...</i> - @{furious programming}</font>')
+        );
+    }
 }
