@@ -4,7 +4,6 @@ namespace Coyote\Console\Commands;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
 
 class PurgeViews extends Command
 {

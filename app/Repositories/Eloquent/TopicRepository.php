@@ -264,6 +264,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
 
     /**
      * @param int $limit
+     * @return mixed
      */
     public function interesting($limit = 7)
     {
@@ -288,6 +289,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->withTrashed()
             ->join('forums', 'forums.id', '=', 'forum_id')
             ->where('forums.is_locked', 0)
+            ->where('replies', '>', 0)
             ->limit($limit)
             ->orderBy('rank', 'DESC')
             ->get();
