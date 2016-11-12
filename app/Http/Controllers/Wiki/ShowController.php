@@ -45,7 +45,8 @@ class ShowController extends BaseController
             'flag' => $this->getGateFactory()->allows('wiki-admin') ? $this->getFlagFactory()->takeForWiki($wiki->id) : '',
             'form' => $this->createForm(CommentForm::class, [], [
                 'url' => route('wiki.comment.save', [$wiki->id])
-            ])
+            ]),
+            'children' => $this->getCatalog($wiki->id)
         ]);
 
         if (method_exists($this, $wiki->template)) {
@@ -74,8 +75,7 @@ class ShowController extends BaseController
     public function category(Wiki $wiki)
     {
         return [
-            'folders' => $this->getFolders($wiki->id),
-            'children' => $this->getCatalog($wiki->id)
+            'folders' => $this->getFolders($wiki->id)
         ];
     }
 
