@@ -115,6 +115,10 @@ class QueryBuilder implements QueryBuilderInterface
         $this->body['size'] = $size;
     }
 
+    /**
+     * @param DslInterface $function
+     * @return QueryBuilder
+     */
     public function addFunction(DslInterface $function)
     {
         return $this->addToStock($function);

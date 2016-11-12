@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch\Builders;
 
+use Coyote\Services\Elasticsearch\Filters\Missing;
 use Coyote\Services\Elasticsearch\Filters\Post\Forum;
 use Coyote\Services\Elasticsearch\Query;
 use Coyote\Services\Elasticsearch\QueryBuilder;
@@ -39,6 +40,7 @@ class MixedBuilder
         $builder->addSort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
         $builder->addHighlight(new Highlight(['subject', 'text', 'title', 'long_title', 'excerpt', 'description', 'requirements']));
         $builder->addFilter(new Forum($request->attributes->get('forum_id')));
+        $builder->addFilter(new Missing('forum_id'));
 
         $builder->setSize(($request->input('page', 1) - 1) * self::PER_PAGE, self::PER_PAGE);
 
