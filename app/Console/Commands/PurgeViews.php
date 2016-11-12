@@ -57,16 +57,10 @@ class PurgeViews extends Command
             if (!empty($page->id)) {
                 $content = $page->content();
 
-                // we need to run additional query only if page is instance of Coyote\Wiki model.
-                // this is because we need to run increment() method form model class - not Builder class.
-                if ($page->content_type == 'Coyote\Wiki') {
-                    $content = $content->first();
-                }
-
-                /** @var Model $content */
                 if ($content) {
                     $hits = $redis->smembers($key);
 
+                    $content = $content->getResults();
                     $content->timestamps = false;
                     $content->increment('views', count($hits));
 

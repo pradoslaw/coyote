@@ -197,7 +197,8 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                     'score',
                     'replies',
                     'deleted_at',
-                    'first_post_id'])
+                    'first_post_id',
+                    'rank'])
                 ->orderBy($sort, 'DESC')
                 ->whereRaw('is_locked = 0')
                 ->limit(3000)
@@ -262,59 +263,35 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
     }
 
     /**
-     * @param int $userId
      * @param int $limit
      */
-    public function interesting($userId, $limit = 7)
+    public function interesting($limit = 7)
     {
         $sub = $this->getSubQuery('last_post_id');
         $this->applyCriteria();
 
-        $algo = 'LEAST(1000, 200 * topics.score) +
-                    LEAST(1000, 100 * topics.replies) +
-                    LEAST(1000, 15 * topics.views) -
-                    (extract(epoch from now()) - extract(epoch from topics.last_post_created_at)) / 4500 -
-                (extract(epoch from now()) - extract(epoch from posts.created_at)) / 1000';
+        $result = $this
+            ->model
+            ->select([
+                'topics.id',
+                'topics.forum_id',
+                'topics.subject',
+                'topics.slug',
+                'forums.name',
+                'forums.slug AS forum_slug',
+                'last_post_created_at',
+                'views',
+                'topics.score',
+                'topics.deleted_at'
+            ])
+            ->from($this->raw("($sub) AS topics"))
+            ->withTrashed()
+            ->join('forums', 'forums.id', '=', 'forum_id')
+            ->where('forums.is_locked', 0)
+            ->limit($limit)
+            ->orderBy('rank', 'DESC')
+            ->get();
 
-        $sql = $this->model
-                    ->select([
-                        'topics.id',
-                        'topics.forum_id',
-                        'topics.subject',
-                        'topics.slug',
-                        'forums.name',
-                        'forums.slug AS forum_slug',
-                        'last_post_created_at',
-                        'views',
-                        'topics.score',
-                        'topics.deleted_at'
-                    ])
-                    ->from($this->raw("($sub) AS topics"))
-                    ->withTrashed()
-                    ->join('forums', 'forums.id', '=', 'forum_id')
-                    ->join('posts', 'posts.id', '=', 'first_post_id')
-                    ->where('forums.is_locked', 0)
-                    ->limit($limit);
-
-        if ($userId) {
-            $sql->leftJoin('pages', function ($join) {
-                $join
-                    ->on('pages.content_id', '=', $this->raw('topics.id'))
-                    ->on('pages.content_type', '=', $this->raw('?'));
-            })
-            ->leftJoin('page_visits AS pv', function ($join) use ($userId) {
-                $join->on('pv.page_id', '=', 'pages.id')->on('pv.user_id', '=', $this->raw($userId));
-            })
-            ->addBinding($this->model(), 'join');
-
-            $algo .= ' - CASE
-                            WHEN pv.updated_at IS NOT NULL AND pv.updated_at > last_post_created_at
-                            THEN (extract(epoch from pv.updated_at) - extract(epoch from last_post_created_at)) / 450
-                            ELSE 0
-                        END';
-        }
-
-        $result = $sql->orderBy($this->raw($algo), 'DESC')->get();
         $this->resetModel();
 
         return $result;

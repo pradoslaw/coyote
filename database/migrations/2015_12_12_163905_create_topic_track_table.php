@@ -21,6 +21,8 @@ class CreateTopicTrackTable extends Migration
             $table->string('session_id')->nullable();
 
             $table->index('forum_id');
+            // ten indeks potrzebny bedzie w przypadku zapytan uzytkownikow anonimowych
+            $table->index('session_id');
             $table->unique(['topic_id', 'user_id']);
             $table->unique(['topic_id', 'session_id']);
 

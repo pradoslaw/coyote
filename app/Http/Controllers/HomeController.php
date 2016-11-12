@@ -89,7 +89,7 @@ class HomeController extends Controller
             if (substr($snake, 0, 3) === 'get') {
                 $name = substr($snake, 4);
 
-                if (in_array($name, ['reputation', 'newest', 'voted', 'blog', 'patronage'])) {
+                if (in_array($name, ['reputation', 'newest', 'voted', 'interesting', 'blog', 'patronage'])) {
                     $result[$name] = $cache->remember('homepage:' . $name, 30, function () use ($method) {
                         return $this->$method();
                     });
@@ -169,7 +169,7 @@ class HomeController extends Controller
      */
     private function getInteresting()
     {
-        return $this->topic->interesting($this->userId);
+        return $this->topic->interesting();
     }
 
     /**

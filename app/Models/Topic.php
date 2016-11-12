@@ -13,7 +13,7 @@ use Illuminate\Database\Query\Builder;
  * @property string $slug
  * @property int $replies
  * @property int $replies_real
- * @property string $last_post_created_at
+ * @property \Carbon\Carbon $last_post_created_at
  * @property int $last_post_id
  * @property int $first_post_id
  * @property int $is_locked
@@ -22,9 +22,13 @@ use Illuminate\Database\Query\Builder;
  * @property int $forum_id
  * @property int $prev_forum_id
  * @property int $poll_id
+ * @property int $score
+ * @property float $rank
  * @property string $subject
  * @property \Coyote\Forum $forum
  * @property \Coyote\Post\Accept $accept
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  */
 class Topic extends Model
 {
@@ -72,6 +76,17 @@ class Topic extends Model
             "format" => "yyyy-MM-dd HH:mm:ss"
         ],
     ];
+
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at'];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (Topic $model) {
+            $model->rank = $model->getRank();
+        });
+    }
 
     /**
      * Scope used in topic filtering.
@@ -223,15 +238,7 @@ class Topic extends Model
      */
     public function markTime($userId, $sessionId)
     {
-        $sql = $this->tracks()->select('marked_at');
-
-        if ($userId) {
-            $sql->where('user_id', $userId);
-        } else {
-            $sql->where('session_id', $sessionId);
-        }
-
-        return $sql->value('marked_at');
+        return $this->tracks()->select('marked_at')->where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)->value('marked_at');
     }
 
     /**
@@ -259,6 +266,29 @@ class Topic extends Model
     {
         $this->is_locked = !$this->is_locked;
         $this->save();
+    }
+
+    /**
+     * @return float
+     */
+    public function getRank()
+    {
+        return min(1000, 200 * $this->score)
+            + min(1000, 100 * $this->replies_real)
+                + min(1000, 15 * $this->views)
+                    - ((time() - $this->last_post_created_at->timestamp) / 4500)
+                        - ((time() - $this->created_at->timestamp) / 1000);
+    }
+
+    /**
+     * @param string $column
+     * @param int $amount
+     * @param array $extra
+     * @return bool|int
+     */
+    public function increment($column, $amount = 1, array $extra = [])
+    {
+        return $this->forceFill(['rank' => $this->getRank(), 'views' => $this->views + $amount])->save();
     }
 
     /**

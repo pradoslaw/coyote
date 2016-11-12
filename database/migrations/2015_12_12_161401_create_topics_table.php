@@ -28,6 +28,7 @@ class CreateTopicsTable extends Migration
             $table->tinyInteger('is_locked')->default(0);
             $table->smallInteger('poll_id')->nullable();
             $table->smallInteger('prev_forum_id')->nullable();
+            $table->float('rank')->nullable();
             $table->integer('first_post_id')->nullable();
             $table->integer('last_post_id')->nullable();
             $table->timestampTz('last_post_created_at')->nullable();
