@@ -343,7 +343,11 @@ class Migrate extends Command
 
                 $this->rename($row, 'text', 'word');
 
-                $row['replacement'] = str_replace(['<ort>', '</ort>'], ['<span style="color: red">', '</span>'], $row['replacement']);
+                $row['replacement'] = str_replace(
+                    ['<ort>', '</ort>', '</font>', '<font color="green">', '<font color=green>', '<font color=blue>', '<b><url=http://pajacyk.pl>JESTEM GLUPIM SPAMEREM</url></b>'],
+                    ['<span style="color: red">', '</span>', '</span>', '<span style="color: green;">', '<span style="color: green;">', '<span style="color: blue;">', '<b><a href="http://pajacyk.pl">JESTEM GLUPIM SPAMEREM</a></b>'],
+                    $row['replacement']
+                );
                 DB::table('words')->insert($row);
 
                 $bar->advance();
