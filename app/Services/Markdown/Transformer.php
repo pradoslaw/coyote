@@ -406,7 +406,11 @@ class Transformer extends Parser
 
     private function removeHtmlTags($text)
     {
-        $text = str_replace(['<center>', '</center>'], ['<span style="text-align: center;">', '</span>'], $text);
+        $text = str_replace(
+            ['<center>', '</center>', '<nobr>', '</nobr>'],
+            ['<span style="text-align: center;">', '</span>', '', ''],
+            $text
+        );
 
         return $text;
     }
