@@ -5,6 +5,17 @@ namespace Coyote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property int $type_id
+ * @property int $user_id
+ * @property int $moderator_id
+ * @property string $url
+ * @property string $metadata
+ * @property string $text
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class Flag extends Model
 {
     use SoftDeletes;

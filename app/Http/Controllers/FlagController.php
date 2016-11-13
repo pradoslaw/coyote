@@ -69,7 +69,7 @@ class FlagController extends Controller
             $data['metadata'] = $this->decrypt($data['metadata']);
 
             $flag = $this->flag->create($data);
-            $object = new Stream_Flag(['id' => $flag->id, 'displayName' => excerpt($request->text)]);
+            $object = (new Stream_Flag())->map($flag);
 
             stream(Stream_Create::class, $object);
         });
