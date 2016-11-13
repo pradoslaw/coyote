@@ -4,11 +4,12 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmWasSent;
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Repositories\Contracts\AlertRepositoryInterface as Alert;
-use Coyote\Repositories\Contracts\PmRepositoryInterface as Pm;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
+use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Illuminate\Validation\Validator;
 use Illuminate\Http\Request;
-use Guzzle\Http\Mimetypes;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
 /**
  * Class PmController
@@ -19,26 +20,26 @@ class PmController extends BaseController
     use HomeTrait, MediaFactory;
 
     /**
-     * @var User
+     * @var UserRepository
      */
     private $user;
 
     /**
-     * @var Alert
+     * @var AlertRepository
      */
     private $alert;
 
     /**
-     * @var Pm
+     * @var PmRepository
      */
     private $pm;
 
     /**
-     * @param User $user
-     * @param Alert $alert
-     * @param Pm $pm
+     * @param UserRepository $user
+     * @param AlertRepository $alert
+     * @param PmRepository $pm
      */
-    public function __construct(User $user, Alert $alert, Pm $pm)
+    public function __construct(UserRepository $user, AlertRepository $alert, PmRepository $pm)
     {
         parent::__construct();
 
@@ -55,7 +56,7 @@ class PmController extends BaseController
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
         $pm = $this->pm->paginate($this->userId);
-        $parser = app('parser.pm');
+        $parser = $this->getParser();
 
         foreach ($pm as &$row) {
             $row->text = $parser->parse($row->text);
@@ -79,7 +80,7 @@ class PmController extends BaseController
         $this->authorize('show', $pm);
 
         $talk = $this->pm->talk($this->userId, $pm->root_id, 10, (int) $request->query('offset', 0));
-        $parser = app('parser.pm');
+        $parser = $this->getParser();
 
         foreach ($talk as &$row) {
             $row['text'] = $parser->parse($row['text']);
@@ -90,7 +91,7 @@ class PmController extends BaseController
             }
 
             // IF we have unread alert that is connected with that message... then we also have to mark it as read
-            if (auth()->user()->alerts_unread) {
+            if ($this->auth->alerts_unread) {
                 $this->alert->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
             }
         }
@@ -110,7 +111,7 @@ class PmController extends BaseController
      */
     public function ajax()
     {
-        $parser = app('parser.pm');
+        $parser = $this->getParser();
 
         $pm = $this->pm->takeForUser($this->userId);
         foreach ($pm as &$row) {
@@ -137,8 +138,7 @@ class PmController extends BaseController
      */
     public function preview(Request $request)
     {
-        $parser = app('parser.pm');
-        return response($parser->parse($request->get('text')));
+        return response($this->getParser()->parse($request->get('text')));
     }
 
     /**
@@ -153,8 +153,8 @@ class PmController extends BaseController
             'root_id'            => 'sometimes|exists:pm'
         ]);
 
-        $validator->after(function ($validator) use ($request) {
-            if (mb_strtolower($request->get('recipient')) === mb_strtolower(auth()->user()->name)) {
+        $validator->after(function (Validator $validator) use ($request) {
+            if (mb_strtolower($request->get('recipient')) === mb_strtolower($this->auth->name)) {
                 $validator->errors()->add('recipient', trans('validation.custom.recipient.different'));
             }
         });
@@ -164,22 +164,21 @@ class PmController extends BaseController
         return $this->transaction(function () use ($request) {
             $recipient = $this->user->findByName($request->get('recipient'));
 
-            $user = auth()->user();
-            $pm = $this->pm->submit($user, $request->all() + ['author_id' => $recipient->id]);
+            $pm = $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
 
-            $excerpt = excerpt($request->get('text'));
+            $excerpt = excerpt($this->getParser()->parse($request->get('text')));
 
             // we need to send notification to recipient
             app('alert.pm')->with([
                 'user_id'     => $pm->author_id,
-                'sender_id'   => $user->id,
-                'sender_name' => $user->name,
+                'sender_id'   => $this->auth->id,
+                'sender_name' => $this->auth->name,
                 'subject'     => $excerpt,
                 'url'         => route('user.pm.show', [$pm->id - 1], false)
             ])->notify();
 
             // broadcast event: we can use it to show message in real time
-            event(new PmWasSent($pm->author_id, $user->id, $user->name, $excerpt));
+            event(new PmWasSent($pm->author_id, $this->auth->id, $this->auth->name, $excerpt));
 
             // redirect to sent message...
             return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
@@ -214,15 +213,23 @@ class PmController extends BaseController
         $this->validateWith($validator);
 
         $media = $this->getMediaFactory('screenshot')->put(file_get_contents('data://' . substr($input, 7)));
-        $mime = new Mimetypes();
+        $mime = MimeTypeGuesser::getInstance();
 
         return response()->json([
-            'size' => $media->size(),
-            'suffix' => 'png',
-            'name' => $media->getName(),
-            'file' => $media->getFilename(),
-            'mime'  => $mime->fromFilename($media->path()),
-            'url' => $media->url()
+            'size'      => $media->size(),
+            'suffix'    => 'png',
+            'name'      => $media->getName(),
+            'file'      => $media->getFilename(),
+            'mime'      => $mime->guess($media->path()),
+            'url'       => $media->url()
         ]);
+    }
+
+    /**
+     * @return \Coyote\Services\Parser\Factories\PmFactory
+     */
+    private function getParser()
+    {
+        return app('parser.pm');
     }
 }

@@ -7,7 +7,7 @@
 
     {% for item in pm %}
         {% include 'user.pm.message' with {
-            content: '<p class="excerpt"><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255)|default('(kliknij, aby przeczytać)') ~ '</a></p>',
+            content: '<p class="excerpt"><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255)|default('(kliknij, aby przeczytać)')|e ~ '</a></p>',
             link_to_profile: false
         } %}
     {% else %}
