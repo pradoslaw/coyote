@@ -50,7 +50,7 @@ class Column
      *
      * @var bool
      */
-    protected $escape = true;
+    protected $autoescape = true;
 
     /**
      * @param array $options
@@ -230,18 +230,18 @@ class Column
     /**
      * @return boolean
      */
-    public function isEscape(): bool
+    public function isAutoescape(): bool
     {
-        return $this->escape;
+        return $this->autoescape;
     }
 
     /**
      * @param boolean $flag
      * @return $this
      */
-    public function setEscape(bool $flag)
+    public function setAutoescape(bool $flag)
     {
-        $this->escape = $flag;
+        $this->autoescape = $flag;
 
         return $this;
     }

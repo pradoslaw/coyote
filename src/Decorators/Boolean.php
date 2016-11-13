@@ -131,7 +131,7 @@ class Boolean extends Decorator
     {
         $class = [0 => $this->falseIcon, 1 => $this->trueIcon][$cell->getUnescapedValue()];
         // disable auto escape so we can display <a> html tag in cell
-        $cell->getColumn()->setEscape(false);
+        $cell->getColumn()->setAutoescape(false);
 
         $cell->setValue(
             $cell->getColumn()->getGrid()->getGridHelper()->getHtmlBuilder()->tag('i', '', ['class' => "fa $class"])

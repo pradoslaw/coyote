@@ -14,7 +14,7 @@ class Url extends Decorator
     {
         $url = (string) $cell->getUnescapedValue();
         // disable auto escape so we can display <a> html tag in cell
-        $cell->getColumn()->setEscape(false);
+        $cell->getColumn()->setAutoescape(false);
 
         $cell->setValue(
             $cell->getColumn()->getGrid()->getGridHelper()->getHtmlBuilder()->tag('a', $url, ['href' => $url])

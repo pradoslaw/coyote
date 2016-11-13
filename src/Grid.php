@@ -139,6 +139,15 @@ class Grid
     }
 
     /**
+     * @param string $name
+     * @return Column|null
+     */
+    public function getColumn($name)
+    {
+        return $this->columns[$name] ?? null;
+    }
+
+    /**
      * @return Column[]
      */
     public function getColumns()

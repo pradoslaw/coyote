@@ -118,8 +118,27 @@ class GridTest extends GridBuilderTestCase
         $this->assertEquals('&lt;xss&gt;', (string) $rows[0]->getValue('xss'));
     }
 
-    private function getSampleGrid()
+    public function testDisableAutoescape()
     {
+        $grid = $this->getSampleGrid(collect([
+            ['id' => 1, 'name' => '<b>1</b>', 'website' => 'http://4programmers.net']
+        ]));
+
+        $grid->getColumn('name')->setAutoescape(false);
+
+        $rows = $grid->getRows();
+
+        $this->assertEquals('<b>1</b>', (string) $rows[0]->getValue('name'));
+    }
+
+    private function getSampleGrid($collection = null)
+    {
+        if (empty($collection)) {
+            $collection = collect([
+                ['id' => 1, 'website' => 'http://4programmers.net']
+            ]);
+        }
+
         $grid = new Grid($this->gridHelper);
         $grid->addColumn('website', [
             'title' => 'Website',
@@ -127,15 +146,14 @@ class GridTest extends GridBuilderTestCase
                 new \Boduch\Grid\Decorators\Url()
             ]
         ]);
+        $grid->addColumn('name', [
+            'title' => 'Name'
+        ]);
         $grid->addColumn('id', [
             'title' => 'ID',
             'clickable' => function ($row) {
                 return '<a href="http://4programmers.net">' . $row['id'] . '</a>';
             }
-        ]);
-
-        $collection = collect([
-            ['id' => 1, 'website' => 'http://4programmers.net']
         ]);
 
         $source = new \Boduch\Grid\Source\CollectionSource($collection);
