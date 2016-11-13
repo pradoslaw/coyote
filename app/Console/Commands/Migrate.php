@@ -2479,7 +2479,7 @@ class Migrate extends Command
                                             'objectType' => 'job',
                                             'id' => $job->job_id,
                                             'url' => route('job.offer', [$job->job_id, $row['page_path']], false),
-                                            'displayName' => excerpt($job->job_description)
+                                            'displayName' => htmlspecialchars_decode($row['page_subject'])
                                         ];
 
                                         $json['object'] = $object;
@@ -2496,7 +2496,7 @@ class Migrate extends Command
                                     'objectType' => 'wiki',
                                     'id' => $row['page'],
                                     'url' => route('wiki.show', [$row['location_text']], false),
-                                    'displayName' => $row['message']
+                                    'displayName' => htmlspecialchars_decode($row['page_subject'])
                                 ];
 
                                 $json['object'] = $object;
@@ -2509,7 +2509,7 @@ class Migrate extends Command
                                         'objectType' => 'job',
                                         'id' => $job->job_id,
                                         'url' => route('job.offer', [$job->job_id, $row['page_path']], false),
-                                        'displayName' => excerpt($job->job_description)
+                                        'displayName' => htmlspecialchars_decode($row['page_subject'])
                                     ];
 
                                     $json['object'] = $object;
