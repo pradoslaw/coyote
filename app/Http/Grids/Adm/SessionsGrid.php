@@ -56,7 +56,7 @@ class SessionsGrid extends Grid
             ->addColumn('user_agent', [
                 'title' => 'User-agent'
             ])
-            ->each(function (Row $row) {
+            ->after(function (Row $row) {
                 $agent = new Agent();
                 $agent->setUserAgent($row->raw('browser'));
 

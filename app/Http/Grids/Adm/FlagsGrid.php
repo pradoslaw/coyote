@@ -53,7 +53,7 @@ class FlagsGrid extends Grid
                 },
                 'placeholder' => '--'
             ])
-            ->each(function (Row $row) {
+            ->after(function (Row $row) {
                 if (!empty($row->raw('deleted_at'))) {
                     $row->class = 'strikeout';
                 }

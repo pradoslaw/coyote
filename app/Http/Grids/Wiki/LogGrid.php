@@ -68,7 +68,7 @@ class LogGrid extends Grid
                     return $form->radio('r2', $row->id);
                 }
             ])
-            ->each(function (Row $row) {
+            ->after(function (Row $row) {
                 static $index = 0;
 
                 $index++;
