@@ -98,12 +98,13 @@ class Markdown extends \ParsedownExtra implements ParserInterface
      * We don't want <h1> in our text
      *
      * @param $line
-     * @return array|null|void
+     * @return array|void
      */
     protected function blockHeader($line)
     {
         $block = parent::blockHeader($line);
-        if ($block && isset($block['element'])) {
+
+        if (isset($block['element'])) {
             if ($block['element']['name'] == 'h1') {
                 return null;
             }
