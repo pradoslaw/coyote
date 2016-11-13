@@ -4,13 +4,8 @@ namespace Coyote\Services\Elasticsearch\Analyzers;
 
 use Coyote\Services\Parser\Factories\MicroblogFactory as Parser;
 
-class MicroblogAnalyzer implements AnalyzerInterface
+class MicroblogAnalyzer extends AbstractAnalyzer
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
     /**
      * @param Parser $parser
      */
@@ -25,7 +20,7 @@ class MicroblogAnalyzer implements AnalyzerInterface
      */
     public function analyze(array $data): array
     {
-        $data['text'] = strip_tags($this->parser->parse($data['text']));
+        $data['text'] = $this->stripHtml($data['text']);
 
         return $data;
     }

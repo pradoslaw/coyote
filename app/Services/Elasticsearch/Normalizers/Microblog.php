@@ -17,7 +17,7 @@ class Microblog extends Normalizer
      */
     public function title()
     {
-        return excerpt($this->source['text']);
+        return str_limit($this->source['text']);
     }
 
     /**
