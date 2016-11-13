@@ -2,7 +2,7 @@
     <div class="reputation-item">
         <div>
             <strong class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}"><i class="fa fa-level-{{ item.value > 0 ? 'up' : 'down' }}"></i> {{ item.value }} pkt</strong> za
-            <strong><a class="headline" href="{{ url(item.url) }}">{{ item.name }}</a></strong>
+            <strong>{{ (item.url ? link_to(item.url, item.name, {class: 'headline'}) : item.name)|raw }}</strong>
         </div>
 
         <small class="text-muted">{{ item.created_at|format_date }}</small>
