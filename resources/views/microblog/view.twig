@@ -1,5 +1,7 @@
 {% extends 'layout' %}
 {% block title %}{{ excerpt }}{{ parent() }}{% endblock %}
+{% block description %}{{ excerpt }}{% endblock %}
+{% block keywords %}{{ keywords(microblog.text)|join(',') }}{% endblock %}
 
 {% import 'components.forms' as forms %}
 {% import 'components.modals' as modal %}
