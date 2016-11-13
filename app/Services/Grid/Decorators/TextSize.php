@@ -14,12 +14,13 @@ class TextSize extends Decorator
     public function decorate(Cell $cell)
     {
         $html = $cell->getColumn()->getGrid()->getGridHelper()->getHtmlBuilder();
+        $cell->getColumn()->setAutoescape(false);
 
         $cell->setValue(
             $html->tag(
                 'span',
-                $this->size($cell->getValue()),
-                ['class' => ($cell->getValue() >= 0 ? 'text-primary' : 'text-danger')]
+                $this->size($cell->getUnescapedValue()),
+                ['class' => ($cell->getUnescapedValue() >= 0 ? 'text-primary' : 'text-danger')]
             )
         );
     }

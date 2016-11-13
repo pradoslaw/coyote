@@ -7,15 +7,11 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/adam-boduch/laravel-grid"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/chrisboulton/php-diff"
         }
     ],
     "description": "4programmers.net",
-    "version": "2.0-dev",
+    "version": "2.0-beta",
     "homepage": "http://4programmers.net",
     "license": "MIT",
     "type": "project",

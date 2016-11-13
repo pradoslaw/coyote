@@ -14,9 +14,10 @@ class InputText extends Decorator
     public function decorate(Cell $cell)
     {
         $form = $cell->getColumn()->getGrid()->getGridHelper()->getFormBuilder();
+        $cell->getColumn()->setAutoescape(false);
 
         $cell->setValue(
-            $form->text($cell->getColumn()->getName() . '[]', $cell->getValue(), ['class' => 'form-control'])
+            $form->text($cell->getColumn()->getName() . '[]', $cell->getUnescapedValue(), ['class' => 'form-control'])
         );
     }
 }
