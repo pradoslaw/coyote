@@ -63,7 +63,7 @@ class CommentController extends Controller
         $target = (new Stream_Topic())->map($this->topic);
 
         if ($id === null) {
-            $user = auth()->user();
+            $user = $this->auth;
             $data = $request->only(['text']) + ['user_id' => $user->id, 'post_id' => $request->input('post_id')];
 
             $activity = Stream_Create::class;
@@ -94,7 +94,7 @@ class CommentController extends Controller
                 $notification = [
                     'sender_id'   => $this->userId,
                     'sender_name' => auth()->user()->name,
-                    'subject'     => excerpt($this->topic->subject),
+                    'subject'     => str_limit($this->topic->subject, 84),
                     'excerpt'     => excerpt($this->comment->html),
                     'url'         => $object->url
                 ];
@@ -127,7 +127,7 @@ class CommentController extends Controller
         });
 
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
-            $this->comment->$key = $user->$key;
+            $this->comment->{$key} = $user->{$key};
         }
 
         // pass html version of comment to  twig

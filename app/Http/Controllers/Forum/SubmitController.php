@@ -93,7 +93,7 @@ class SubmitController extends BaseController
                 $notification = [
                     'sender_id' => $this->userId,
                     'sender_name' => $request->get('user_name', $this->userId ? auth()->user()->name : ''),
-                    'subject' => excerpt($topic->subject),
+                    'subject' => str_limit($topic->subject, 84),
                     'excerpt' => excerpt($post->html),
                     'url' => $url
                 ];
@@ -218,9 +218,9 @@ class SubmitController extends BaseController
                     app('alert.topic.subject')->with([
                         'users_id'    => $forum->onlyUsersWithAccess([$post->user_id]),
                         'sender_id'   => $this->userId,
-                        'sender_name' => auth()->user()->name,
-                        'subject'     => excerpt($original['subject']),
-                        'excerpt'     => excerpt($topic->subject),
+                        'sender_name' => $this->auth->name,
+                        'subject'     => str_limit($original['subject'], 84),
+                        'excerpt'     => str_limit($topic->subject, 84),
                         'url'         => $url
                     ])->notify();
                 }

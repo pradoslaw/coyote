@@ -14,7 +14,7 @@ class Firewall extends ObjectAbstract
     {
         $this->id = $firewall->id;
         $this->url = route('adm.firewall.save', [$firewall->id], false);
-        $this->displayName = excerpt($firewall->reason);
+        $this->displayName = str_limit($firewall->reason);
 
         return $this;
     }

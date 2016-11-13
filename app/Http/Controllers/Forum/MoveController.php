@@ -42,7 +42,7 @@ class MoveController extends BaseController
             $notification = [
                 'sender_id'   => $this->userId,
                 'sender_name' => auth()->user()->name,
-                'subject'     => excerpt($topic->subject),
+                'subject'     => str_limit($topic->subject, 84),
                 'forum'       => $forum->name
             ];
 

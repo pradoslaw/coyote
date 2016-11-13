@@ -54,7 +54,7 @@ class VoteController extends BaseController
                 app('alert.post.vote')
                     ->setPostId($post->id)
                     ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
-                    ->setSubject(excerpt($topic->subject))
+                    ->setSubject(str_limit($topic->subject, 84))
                     ->setExcerpt($excerpt)
                     ->setSenderId($this->userId)
                     ->setSenderName(auth()->user()->name)

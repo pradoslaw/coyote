@@ -14,7 +14,7 @@ class Pastebin extends ObjectAbstract
     {
         $this->id = $pastebin->id;
         $this->url = route('pastebin.show', [$pastebin->id], false);
-        $this->displayName = excerpt($pastebin->text);
+        $this->displayName = excerpt(htmlspecialchars($pastebin->text));
 
         return $this;
     }

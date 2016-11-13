@@ -53,8 +53,8 @@ class DeleteController extends BaseController
 
             $notification = [
                 'sender_id'   => $this->userId,
-                'sender_name' => auth()->user()->name,
-                'subject'     => excerpt($topic->subject, 48)
+                'sender_name' => $this->auth->name,
+                'subject'     => str_limit($topic->subject, 84)
             ];
 
             $reason = null;
