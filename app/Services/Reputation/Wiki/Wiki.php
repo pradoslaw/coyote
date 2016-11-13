@@ -45,4 +45,13 @@ abstract class Wiki extends Reputation
             $this->save($row->toArray());
         }
     }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    protected function parse($text)
+    {
+        return app('parser.wiki')->parse($text);
+    }
 }
