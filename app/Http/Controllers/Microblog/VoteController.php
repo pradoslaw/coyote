@@ -29,21 +29,20 @@ class VoteController extends Controller
             return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
         }
 
+        /** @var \Coyote\Microblog\Vote $vote */
         $vote = $microblog->voters()->forUser($this->userId)->first();
 
         if (!config('app.debug') && $this->userId === $microblog->user_id) {
             return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
         }
 
-        \DB::beginTransaction();
-
-        try {
+        $this->transaction(function () use ($vote, $microblog, $request) {
             if ($vote) {
                 $vote->delete();
 
                 $microblog->votes--;
             } else {
-                $microblog->voters()->create(['user_id' => $this->userId, 'ip' => $request->getClientIp()]);
+                $microblog->voters()->create(['user_id' => $this->userId, 'ip' => $request->ip()]);
                 $microblog->votes++;
             }
 
@@ -72,19 +71,13 @@ class VoteController extends Controller
                 app('alert.microblog.vote')
                     ->setMicroblogId($microblog->id)
                     ->addUserId($microblog->user_id)
-                    ->setSubject(excerpt($microblog->text))
+                    ->setSubject(excerpt($microblog->html))
                     ->setSenderId($this->userId)
-                    ->setSenderName(auth()->user()->name)
+                    ->setSenderName($this->auth->name)
                     ->setUrl($url)
                     ->notify();
             }
-
-            \DB::commit();
-        } catch (\Exception $e) {
-            \DB::rollBack();
-
-            throw $e;
-        }
+        });
 
         return response()->json(['count' => $microblog->voters()->count()]);
     }

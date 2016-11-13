@@ -7,6 +7,10 @@ use Coyote\Services\UrlBuilder\UrlBuilder;
 
 class Microblog extends ObjectAbstract
 {
+    /**
+     * @param Model $microblog
+     * @return $this
+     */
     public function map(Model $microblog)
     {
         $this->id = $microblog->id;

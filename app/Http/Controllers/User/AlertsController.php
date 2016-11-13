@@ -109,7 +109,7 @@ class AlertsController extends BaseController
      */
     public function ajax(SessionRepository $session, Request $request)
     {
-        $unread = auth()->user()->alerts_unread;
+        $unread = $this->auth->alerts_unread;
 
         $alerts = $this->alert->takeForUser($this->userId, max(10, $unread), $request->query('offset', 0));
         $unread -= $this->mark($alerts);
