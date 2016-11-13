@@ -27,6 +27,7 @@ class Placeholder extends Decorator
     {
         if (empty($cell->getValue())) {
             $cell->setValue($this->placeholder);
+
             return false;
         }
 

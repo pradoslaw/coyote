@@ -78,7 +78,7 @@ class Grid
     /**
      * @var callable
      */
-    protected $eachCallback;
+    protected $afterCallback;
 
     /**
      * @var array
@@ -237,10 +237,22 @@ class Grid
 
     /**
      * @param callable $callback
+     * @deprecated
      */
     public function each(callable $callback)
     {
-        $this->eachCallback = $callback;
+        $this->after($callback);
+    }
+
+    /**
+     * @param callable $callback
+     * @return $this
+     */
+    public function after(callable $callback)
+    {
+        $this->afterCallback = $callback;
+
+        return $this;
     }
 
     /**
@@ -354,9 +366,9 @@ class Grid
         $this->columns[] = $actions;
 
         // finally call callback on every row so we can modify rows, cells, attributes etc...
-        if ($this->eachCallback) {
+        if ($this->afterCallback) {
             foreach ($this->rows as $row) {
-                $this->eachCallback->call($this, $row);
+                $this->afterCallback->call($this, $row);
             }
         }
 
