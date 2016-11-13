@@ -25,6 +25,6 @@ class StrLimit extends Decorator
      */
     public function decorate(Cell $cell)
     {
-        $cell->setValue(str_limit($cell->getValue(), $this->limit));
+        $cell->setValue(str_limit($cell->getUnescapedValue(), $this->limit));
     }
 }

@@ -12,7 +12,7 @@ class Url extends Decorator
      */
     public function decorate(Cell $cell)
     {
-        $url = (string) $cell->getValue();
+        $url = (string) $cell->getUnescapedValue();
         // disable auto escape so we can display <a> html tag in cell
         $cell->getColumn()->setEscape(false);
 

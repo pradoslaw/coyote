@@ -77,6 +77,14 @@ class Cell implements CellInterface
         return $this->column->isEscape() ? htmlspecialchars($this->value) : $this->value;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUnescapedValue()
+    {
+        return $this->value;
+    }
+
     protected function setupValue()
     {
         if (is_array($this->data) || $this->data instanceof \ArrayAccess) {

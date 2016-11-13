@@ -129,7 +129,10 @@ class Boolean extends Decorator
      */
     protected function renderGraphical(Cell $cell)
     {
-        $class = [0 => $this->falseIcon, 1 => $this->trueIcon][$cell->getValue()];
+        $class = [0 => $this->falseIcon, 1 => $this->trueIcon][$cell->getUnescapedValue()];
+        // disable auto escape so we can display <a> html tag in cell
+        $cell->getColumn()->setEscape(false);
+
         $cell->setValue(
             $cell->getColumn()->getGrid()->getGridHelper()->getHtmlBuilder()->tag('i', '', ['class' => "fa $class"])
         );
@@ -140,6 +143,6 @@ class Boolean extends Decorator
      */
     protected function renderTextual(Cell $cell)
     {
-        $cell->setValue([0 => $this->falseLabel, 1 => $this->trueLabel][$cell->getValue()]);
+        $cell->setValue([0 => $this->falseLabel, 1 => $this->trueLabel][$cell->getUnescapedValue()]);
     }
 }

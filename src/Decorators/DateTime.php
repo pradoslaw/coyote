@@ -26,8 +26,8 @@ class DateTime extends Decorator
      */
     public function decorate(Cell $cell)
     {
-        if ($cell->getValue()) {
-            $cell->setValue($this->formatDateTime($cell->getValue()));
+        if ($cell->getUnescapedValue()) {
+            $cell->setValue($this->formatDateTime($cell->getUnescapedValue()));
         }
     }
 

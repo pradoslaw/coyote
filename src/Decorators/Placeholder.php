@@ -25,7 +25,7 @@ class Placeholder extends Decorator
      */
     public function decorate(Cell $cell)
     {
-        if (empty($cell->getValue())) {
+        if (empty($cell->getUnescapedValue())) {
             $cell->setValue($this->placeholder);
 
             return false;

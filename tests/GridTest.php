@@ -79,7 +79,7 @@ class GridTest extends GridBuilderTestCase
         $this->assertEquals('foo', (string) $rows[0]->class);
     }
 
-    public function tesAutoescapeCellOutput()
+    public function testAutoescapeCellOutput()
     {
         $grid = new Grid($this->gridHelper);
         $grid->addColumn('xss', [
@@ -95,7 +95,27 @@ class GridTest extends GridBuilderTestCase
 
         $rows = $grid->getRows();
 
-        $this->assertEquals('&lt;xss&gt;', (string) $rows[0]->xss);
+        $this->assertEquals('&lt;xss&gt;', (string) $rows[0]->getValue('xss'));
+    }
+
+    public function testAutoescapeCellOutputWithStrLimitDecorator()
+    {
+        $grid = new Grid($this->gridHelper);
+        $grid->addColumn('xss', [
+            'title' => 'xss',
+            'decorators' => [new \Boduch\Grid\Decorators\StrLimit()]
+        ]);
+
+        $collection = collect([
+            ['xss' => '<xss>']
+        ]);
+
+        $source = new \Boduch\Grid\Source\CollectionSource($collection);
+        $grid->setSource($source);
+
+        $rows = $grid->getRows();
+
+        $this->assertEquals('&lt;xss&gt;', (string) $rows[0]->getValue('xss'));
     }
 
     private function getSampleGrid()
