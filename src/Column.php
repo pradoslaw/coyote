@@ -46,6 +46,13 @@ class Column
     protected $placeholder;
 
     /**
+     * Escape value to prevent XSS.
+     *
+     * @var bool
+     */
+    protected $escape = true;
+
+    /**
      * @param array $options
      */
     public function __construct(array $options = [])
@@ -218,6 +225,25 @@ class Column
     public function isFilterable()
     {
         return $this->filter !== null;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEscape(): bool
+    {
+        return $this->escape;
+    }
+
+    /**
+     * @param boolean $flag
+     * @return $this
+     */
+    public function setEscape(bool $flag)
+    {
+        $this->escape = $flag;
+
+        return $this;
     }
 
     /**

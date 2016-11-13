@@ -28,6 +28,9 @@ class Link extends Decorator
      */
     public function decorate(Cell $cell)
     {
+        // disable auto escape so we can display <a> html tag in cell
+        $cell->getColumn()->setEscape(false);
+
         $cell->setValue($this->closure->call($cell, $cell->getData()));
     }
 }

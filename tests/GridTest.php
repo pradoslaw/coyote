@@ -58,7 +58,7 @@ class GridTest extends GridBuilderTestCase
     public function testBuildGridWithEachCallbackAndModifyColumnValue()
     {
         $grid = $this->getSampleGrid();
-        $grid->each(function (\Boduch\Grid\Row $row) {
+        $grid->after(function (\Boduch\Grid\Row $row) {
             $row->get('website')->setValue('');
         });
 
@@ -70,13 +70,32 @@ class GridTest extends GridBuilderTestCase
     public function testBuildGridAndAddRowClass()
     {
         $grid = $this->getSampleGrid();
-        $grid->each(function (\Boduch\Grid\Row $row) {
+        $grid->after(function (\Boduch\Grid\Row $row) {
             $row->class = 'foo';
         });
 
         $rows = $grid->getRows();
 
         $this->assertEquals('foo', (string) $rows[0]->class);
+    }
+
+    public function tesAutoescapeCellOutput()
+    {
+        $grid = new Grid($this->gridHelper);
+        $grid->addColumn('xss', [
+            'title' => 'xss'
+        ]);
+
+        $collection = collect([
+            ['xss' => '<xss>']
+        ]);
+
+        $source = new \Boduch\Grid\Source\CollectionSource($collection);
+        $grid->setSource($source);
+
+        $rows = $grid->getRows();
+
+        $this->assertEquals('&lt;xss&gt;', (string) $rows[0]->xss);
     }
 
     private function getSampleGrid()
