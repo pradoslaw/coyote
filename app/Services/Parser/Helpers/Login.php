@@ -13,6 +13,9 @@ class Login
         if (!$html) {
             return [];
         }
+        // ignore html errors
+        libxml_use_internal_errors(true);
+
         $dom = new \DOMDocument;
         $dom->loadHTML($html);
 

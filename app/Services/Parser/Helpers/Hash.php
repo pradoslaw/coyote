@@ -16,6 +16,9 @@ class Hash
 
         $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
 
+        // ignore html errors
+        libxml_use_internal_errors(true);
+
         $dom = new \DOMDocument;
         $dom->loadHTML($html);
 

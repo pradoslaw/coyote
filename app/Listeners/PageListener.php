@@ -15,6 +15,7 @@ use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Microblog;
 use Coyote\Job;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
 use Coyote\Forum;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
@@ -72,7 +73,7 @@ class PageListener implements ShouldQueue
             'content_type' => Topic::class
         ], [
             'title' => $topic->subject,
-            'path' => route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug], false),
+            'path' => UrlBuilder::topic($topic),
             'allow_sitemap' => !$topic->forum->access()->exists()
         ]);
     }
@@ -95,7 +96,7 @@ class PageListener implements ShouldQueue
             'content_type' => Forum::class
         ], [
             'title' => $event->forum->name,
-            'path' => route('forum.category', [$event->forum->slug], false)
+            'path' => UrlBuilder::forum($event->forum)
         ]);
     }
 
@@ -116,8 +117,8 @@ class PageListener implements ShouldQueue
             'content_id'    => $event->microblog->id,
             'content_type'  => Microblog::class,
         ], [
-            'title' => excerpt($event->microblog->text, 28),
-            'path' => route('microblog.view', [$event->microblog->id], false)
+            'title' => excerpt($event->microblog->html, 28),
+            'path' => UrlBuilder::microblog($event->microblog)
         ]);
     }
 
@@ -141,7 +142,7 @@ class PageListener implements ShouldQueue
             'content_type'  => Job::class,
         ], [
             'title' => $event->job->title,
-            'path' => route('job.offer', [$event->job->id, $event->job->slug], false)
+            'path' => UrlBuilder::job($event->job)
         ]);
     }
 
@@ -165,7 +166,7 @@ class PageListener implements ShouldQueue
             'content_type'  => Wiki::class,
         ], [
             'title' => $event->wiki->title,
-            'path' => '/' . $event->wiki->path
+            'path' => UrlBuilder::wiki($event->wiki)
         ]);
     }
 

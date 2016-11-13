@@ -48,4 +48,12 @@ class GrabTest extends \Codeception\TestCase\Test
         $this->assertEquals('Wrocław', $cities[0]);
         $this->assertEquals('Warszawa', $cities[1]);
     }
+
+    public function testTryToGrabLoginAndReturnNoError()
+    {
+        $helper = new \Coyote\Services\Parser\Helpers\Login();
+
+        $input = '"test" A < B <b>test</b> <bald>';
+        $this->assertEquals([], $helper->grab($input));
+    }
 }

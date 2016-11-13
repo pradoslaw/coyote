@@ -2,6 +2,8 @@
 
 namespace Coyote\Services\UrlBuilder;
 
+use Coyote\Forum;
+use Coyote\Job;
 use Coyote\Microblog;
 use Coyote\Post;
 use Coyote\Topic;
@@ -16,6 +18,15 @@ class UrlBuilder
     public static function topic(Topic $topic)
     {
         return route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug], false);
+    }
+
+    /**
+     * @param Forum $forum
+     * @return string
+     */
+    public static function forum(Forum $forum)
+    {
+        return route('forum.category', [$forum->slug], false);
     }
 
     /**
@@ -34,6 +45,15 @@ class UrlBuilder
     public static function wiki(Wiki $wiki)
     {
         return route('wiki.show', [$wiki->path], false);
+    }
+
+    /**
+     * @param Job $job
+     * @return string
+     */
+    public static function job(Job $job)
+    {
+        return route('job.offer', [$job->id, $job->slug], false);
     }
 
     /**
