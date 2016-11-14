@@ -35,8 +35,13 @@ $(function () {
      * Restore deleted post
      */
     $('.btn-res').click(function() {
-        var form = $('<form>', {'method': 'POST', 'action': $(this).attr('href')});
-        form.append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">').submit();
+        var form = $('<form>', {'method': 'POST', 'action': $(this).attr('href')})
+            .append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">')
+            .append('<input type="submit">'); // firefox requires submit button
+
+        $('body').append(form);
+
+        form.submit();
 
         return false;
     });
