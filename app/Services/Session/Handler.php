@@ -46,9 +46,15 @@ class Handler extends DatabaseSessionHandler
                 $data['robot'] = $agent->robot();
             }
 
-            // tutaj moze byc blad z zapisem sesji w przypadku zapytan ajax
-            // @see https://github.com/laravel/framework/issues/9251
-            $this->getQuery()->insert(['id' => $sessionId] + $data);
+            try {
+                $this->getQuery()->insert(['id' => $sessionId] + $data);
+            } catch (\PDOException $e) {
+                // tutaj moze byc blad z zapisem sesji w przypadku zapytan ajax
+                // @see https://github.com/laravel/framework/issues/9251
+                // docelowo implementacja bedzie zastapiona na redis
+            } catch (\Exception $e) {
+                throw $e;
+            }
         }
 
         $this->exists = true;
