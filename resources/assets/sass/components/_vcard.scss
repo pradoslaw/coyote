@@ -1,6 +1,8 @@
+@import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
+
 #vcard {
   padding: 5px;
-  width: 400px;
+  width: 450px;
   position: absolute;
   box-shadow: 0 3px 9px #444;
   z-index: 3;
@@ -27,6 +29,7 @@
     width: 100%;
     display: inline-block;
     margin-top: 12px;
+    white-space: normal; // zawijaj wiersze
   }
 
   .list-inline, .box-reputation {
@@ -37,8 +40,11 @@
   .list-inline {
     color: $gray-light;
     font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
+
+    li {
+      @include text-overflow;
+      max-width: 160px;
+    }
   }
 
   h6 {
@@ -53,7 +59,6 @@
   .img-thumbnail {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    width: 76px;
   }
 
   .status {
