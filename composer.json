@@ -43,7 +43,9 @@
         "adam-boduch/geshi": "dev-master",
         "jenssegers/agent": "^2.3",
         "adam-boduch/laravel-grid": "dev-master",
-        "chrisboulton/php-diff": "dev-master"
+        "chrisboulton/php-diff": "dev-master",
+        "sentry/sentry": "^1.5",
+        "sentry/sentry-laravel": "^0.4.1"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",

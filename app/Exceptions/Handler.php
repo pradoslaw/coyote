@@ -37,7 +37,10 @@ class Handler extends ExceptionHandler
     public function report(Exception $e)
     {
         if ($this->shouldReport($e)) {
+            // log input data and url for further analyse
             $this->log->debug($e->getMessage(), ['url' => request()->url(), 'input' => request()->all()]);
+            // send report to sentry
+            app('sentry')->captureException($e);
         }
 
         parent::report($e);
