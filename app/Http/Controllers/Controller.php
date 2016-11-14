@@ -108,7 +108,7 @@ abstract class Controller extends BaseController
         $menu->get('praca')->append($badge);
 
         // cache user customized menu for 7 days
-        $categories = $this->getCacheFactory()->tags(['menu-for-user'])->remember('menu-for-user:' . $this->userId, 60 * 24 * 7, function () {
+        $categories = $this->getCacheFactory()->tags('menu-for-user')->remember('menu-for-user:' . $this->userId, 60 * 24 * 7, function () {
             /** @var ForumRepositoryInterface $repository */
             $repository = app(ForumRepositoryInterface::class);
             // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
