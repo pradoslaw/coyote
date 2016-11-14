@@ -10,12 +10,12 @@ $(function () {
 
                 if ($.trim(breadcrumb.text()).length > 0) {
                     breadcrumb.attr({id: 'breadcrumb-fixed'}).hide().appendTo('body');
-                    breadcrumb.css({left: $('#logo').position().left}).slideDown('slow', function () {
+                    breadcrumb.slideDown('slow', function () {
                         $(this).animate({opacity: 0.0}, 5000);
                     });
 
                     breadcrumb.hover(function () {
-                        $(this).stop().css('opacity', 1.0);
+                        $(this).stop().css({left: $('#logo').position().left, opacity: 1.0});
                     },
                     function () {
                         $(this).animate({opacity: 0.0}, 800);
