@@ -36,6 +36,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+        if ($this->shouldReport($e)) {
+            $this->log->debug($e->getMessage(), ['url' => request()->url(), 'input' => request()->all()]);
+        }
+
         parent::report($e);
     }
 
