@@ -50,7 +50,6 @@ class ForumController extends BaseController
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function save(Request $request)
     {
@@ -71,7 +70,7 @@ class ForumController extends BaseController
     {
         $this->order->deleteForUser($this->userId);
         event(new UserWasSaved($this->userId));
-        
+
         return back();
     }
 }

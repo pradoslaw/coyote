@@ -28,7 +28,7 @@ class FlushUserCache
      */
     public function handle(UserWasSaved $event)
     {
-        $this->cache->forget('menu-for-user:' . $event->userId);
+        $this->cache->tags('menu-for-user')->forget('menu-for-user:' . $event->userId);
         $this->cache->tags('permissions')->forget('permission:' . $event->userId);
     }
 }
