@@ -59,8 +59,10 @@ class ForumController extends BaseController
             'forum.*.section'         => 'string|max:50'
         ]);
 
-        $this->order->saveForUser($this->userId, $request->input('forum'));
-        event(new UserWasSaved($this->userId));
+        $this->transaction(function () use ($request) {
+            $this->order->saveForUser($this->userId, $request->input('forum'));
+            event(new UserWasSaved($this->userId));
+        });
     }
 
     /**
@@ -68,8 +70,10 @@ class ForumController extends BaseController
      */
     public function restore()
     {
-        $this->order->deleteForUser($this->userId);
-        event(new UserWasSaved($this->userId));
+        $this->transaction(function () {
+            $this->order->deleteForUser($this->userId);
+            event(new UserWasSaved($this->userId));
+        });
 
         return back();
     }
