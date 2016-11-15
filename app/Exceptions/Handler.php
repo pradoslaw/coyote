@@ -23,7 +23,8 @@ class Handler extends ExceptionHandler
         HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
-        ForbiddenException::class
+        ForbiddenException::class,
+        TokenMismatchException::class
     ];
 
     /**
