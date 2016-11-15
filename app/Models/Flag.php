@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $user_id
  * @property int $moderator_id
  * @property string $url
- * @property string $metadata
+ * @property mixed $metadata
  * @property string $text
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at

@@ -3,7 +3,8 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Flag\Type;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface as Flag;
+use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Objects\Flag as Stream_Flag;
@@ -13,18 +14,25 @@ use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 class FlagController extends Controller
 {
     /**
-     * @var Flag
+     * @var FlagRepository
      */
     private $flag;
 
     /**
-     * FlagController constructor.
-     * @param Flag $flag
+     * @var ForumRepository
      */
-    public function __construct(Flag $flag)
+    private $forum;
+
+    /**
+     * @param FlagRepository $flag
+     * @param ForumRepository $forum
+     */
+    public function __construct(FlagRepository $flag, ForumRepository $forum)
     {
         parent::__construct();
+
         $this->flag = $flag;
+        $this->forum = $forum;
     }
 
     /**
@@ -84,9 +92,7 @@ class FlagController extends Controller
         $flag = $this->flag->findOrFail($id);
         $object = new Stream_Flag(['id' => $flag->id]);
 
-        // @todo Jezeli raportowany jest post na forum to sprawdzane jest globalne uprawnienie danego
-        // uzytkownika. Oznacza to, ze lokalni moderatorzy nie beda mogli czytac raportow
-        if (!empty($flag->metadata->permission) && $this->getGateFactory()->denies($flag->metadata->permission)) {
+        if (!$this->isAuthorized($flag)) {
             return response('Unauthorized.', 401);
         }
 
@@ -120,5 +126,24 @@ class FlagController extends Controller
     protected function decrypt($metadata)
     {
         return $this->getCryptFactory()->decrypt($metadata);
+    }
+
+    /**
+     * @param \Coyote\Flag $flag
+     * @return bool
+     */
+    private function isAuthorized($flag)
+    {
+        $gate = $this->getGateFactory();
+
+        if (isset($flag->metadata->forum_id)) {
+            $forum = $this->forum->findOrFail($flag->metadata->forum_id);
+
+            return $gate->allows($flag->metadata->permission, $forum);
+        } elseif (isset($flag->metadata->permission)) {
+            return $gate->allows($flag->metadata->permission);
+        } else {
+            return false;
+        }
     }
 }

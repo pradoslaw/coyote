@@ -22,6 +22,11 @@ class TopicController extends BaseController
     use CacheFactory, FlagFactory;
 
     /**
+     * @var \Illuminate\Contracts\Auth\Access\Gate
+     */
+    private $gate;
+
+    /**
      * @param Request $request
      * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
@@ -33,6 +38,8 @@ class TopicController extends BaseController
         // @see \Coyote\Http\Middleware\ScrollToPost
         $markTime = $request->attributes->get('mark_time');
 
+        $this->gate = $this->getGateFactory();
+
         // current page...
         $page = $request->get('page');
         // number of answers
@@ -40,10 +47,8 @@ class TopicController extends BaseController
         // number of posts per one page
         $perPage = $this->postsPerPage($request);
 
-        $gate = $this->getGateFactory();
-
         // user with forum-update ability WILL see every post
-        if ($gate->allows('delete', $forum)) {
+        if ($this->gate->allows('delete', $forum)) {
             $this->post->pushCriteria(new WithTrashed());
             // user is able to see real number of posts in this topic
             $replies = $topic->replies_real;
@@ -123,8 +128,16 @@ class TopicController extends BaseController
             }
         }
 
-        if ($gate->allows('delete', $forum) || $gate->allows('move', $forum)) {
+        $flags = $warnings = $activities = [];
+
+        if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
             $reasonList = Reason::lists('name', 'id')->toArray();
+
+            if ($this->gate->allows('delete', $forum)) {
+                $flags = $this->getFlags($postsId);
+                $warnings = $this->getWarnings($topic);
+                $activities = $this->getActivities($postsId);
+            }
         }
 
         $this->breadcrumb($forum);
@@ -138,13 +151,10 @@ class TopicController extends BaseController
 
         return $this->view(
             'forum.topic',
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'reasonList', 'form', 'mlt')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'reasonList', 'form', 'mlt', 'flags', 'warnings', 'activities')
         )->with([
             'markTime'      => $markTime[Topic::class] ? $markTime[Topic::class] : $markTime[Forum::class],
-            'flags'         => $this->getFlags($postsId),
-            'warnings'      => $this->getWarnings($topic),
-            'subscribers'   => auth()->check() ? $topic->subscribers()->lists('topic_id', 'user_id') : [],
-            'activities'    => $this->getActivities($forum, $postsId)
+            'subscribers'   => $this->userId ? $topic->subscribers()->lists('topic_id', 'user_id') : []
         ]);
     }
 
@@ -166,38 +176,23 @@ class TopicController extends BaseController
      */
     private function getFlags($postsId)
     {
-        $gate = $this->getGateFactory();
-        $flags = [];
-
-        // @todo Jezeli raportowany jest post na forum to sprawdzane jest globalne uprawnienie danego
-        // uzytkownika. Oznacza to, ze lokalni moderatorzy nie beda mogli czytac raportow
-        if ($gate->allows('forum-delete')) {
-            $flags = $this->getFlagFactory()->takeForPosts($postsId);
-        }
-
-        return $flags;
+        return $this->getFlagFactory()->takeForPosts($postsId);
     }
 
     /**
-     * @param \Coyote\Forum $forum
      * @param int[] $postsId
      * @return array
      */
-    private function getActivities($forum, $postsId)
+    private function getActivities($postsId)
     {
-        $gate = $this->getGateFactory();
         $activities = [];
 
-        if ($gate->allows('delete', $forum)) {
-            $activities = [];
+        // here we go. if user has delete ability, for sure he/she would like to know
+        // why posts were deleted and by whom
+        $collection = $this->findByObject('Post', $postsId, 'Delete');
 
-            // here we go. if user has delete ability, for sure he/she would like to know
-            // why posts were deleted and by whom
-            $collection = $this->findByObject('Post', $postsId, 'Delete');
-
-            foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
-                $activities[$row->first()['object.id']] = $row->first();
-            }
+        foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
+            $activities[$row->first()['object.id']] = $row->first();
         }
 
         return $activities;
