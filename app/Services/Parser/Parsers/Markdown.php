@@ -4,10 +4,9 @@ namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 
-/**
- * Class Markdown
- */
-class Markdown extends \ParsedownExtra implements ParserInterface
+// dziedziczymy po Parsedown a nie Parsedown Extra z uwagi na buga. Parsedown Extra wycina reszte linii jezeli
+// w danej linii znajdzie sie tag. np. <ort>ktory</ort> w ogle => <ort>ktory</ort>
+class Markdown extends \Parsedown implements ParserInterface
 {
     /**
      * @var User
@@ -35,8 +34,6 @@ class Markdown extends \ParsedownExtra implements ParserInterface
      */
     public function __construct(User $user)
     {
-        parent::__construct();
-
         $this->InlineTypes['@'][] = 'UserTag';
         $this->inlineMarkerList .= '@';
 
