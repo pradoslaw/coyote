@@ -8,7 +8,6 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
-use Illuminate\Http\Response;
 
 class OAuthController extends Controller
 {
@@ -33,7 +32,7 @@ class OAuthController extends Controller
      * Redirect the user to the GitHub authentication page.
      *
      * @param string $provider
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function login($provider)
     {
@@ -66,7 +65,7 @@ class OAuthController extends Controller
 
             $user = $this->user->findByEmail($oauth->getEmail());
 
-            if ($user && $user->is_confirm) {
+            if ($user !== null) {
                 // komunikatu bledu nie mozemy przekazac w sesji poniewaz z jakiegos powodu
                 // jest ona gubiona
                 return redirect()->route('register', [

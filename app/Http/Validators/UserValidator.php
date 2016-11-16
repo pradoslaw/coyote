@@ -45,14 +45,7 @@ class UserValidator
      */
     public function validateUnique($attribute, $value, $parameters)
     {
-        $userId = (int) ($parameters[0] ?? null);
-        $user = $this->user->findByName(mb_strtolower($value));
-
-        if ($user && $userId !== $user->id) {
-            return false;
-        }
-
-        return true;
+        return $this->validateBy('name', $value, (int) ($parameters[0] ?? null));
     }
 
     /**
@@ -65,5 +58,22 @@ class UserValidator
     public function validateExist($attribute, $value)
     {
         return $this->user->findByName(mb_strtolower($value)) !== null;
+    }
+
+    /**
+     * @param string $column
+     * @param string $value
+     * @param null|int $userId
+     * @return bool
+     */
+    protected function validateBy($column, $value, $userId = null)
+    {
+        $user = $this->user->{'findBy' . ucfirst($column)}(mb_strtolower($value));
+
+        if ($user !== null && $userId !== $user->id) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -64,6 +64,7 @@ class CreateUsersTable extends Migration
         });
 
         DB::unprepared('CREATE INDEX "users_name_index" ON "users" USING btree (LOWER(name))');
+        DB::unprepared('CREATE INDEX "users_email_index" ON "users" USING btree (LOWER(email))');
     }
 
     /**

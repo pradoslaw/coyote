@@ -35,7 +35,7 @@ class SettingsForm extends Form
         $groupList = $user->groups()->lists('name', 'id')->toArray();
 
         $this->add('email', 'email', [
-            'rules' => 'required|email|unique:users,email,' . $userId . ',id,is_confirm,1',
+            'rules' => 'required|email|email_unique:' . $userId,
             'label' => 'E-mail',
             'help' => 'Jeżeli chcesz zmienić adres e-mail, na nową skrzynkę zostanie wygenerowany klucz aktywacyjny.',
             'row_attr' => [

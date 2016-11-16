@@ -30,7 +30,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Hasło (powtórnie)'
             ])
             ->add('email', 'text', [
-                'rules' => 'required|email|max:255|unique:users,email,NULL,id,is_confirm,1',
+                'rules' => 'required|email|max:255|email_unique',
                 'label' => 'E-mail',
                 'help' => 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.'
             ])

@@ -89,6 +89,7 @@ return [
     'city'                 => '":value" nie jest prawidłową nazwą miejscowości.',
     'wiki_unique'          => 'Uuups. Strona o tym tytule już istnieje w tej kategorii. Proszę wpisać inny tytuł.',
     'wiki_route'           => 'Nie można dodać strony o tym tytule ponieważ koliduje z już istniejącą.',
+    'email_unique'         => 'Podany adres e-mail przypisany jest do innego użytkownika.',
 
     /*
     |--------------------------------------------------------------------------
