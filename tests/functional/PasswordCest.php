@@ -1,8 +1,5 @@
 <?php
 
-use Coyote\User;
-use Faker\Factory;
-
 class PasswordCest
 {
     private $user;

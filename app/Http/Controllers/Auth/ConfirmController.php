@@ -53,6 +53,7 @@ class ConfirmController extends Controller
     public function generateLink(Request $request)
     {
         $this->validate($request, [
+            // case sensitive
             'email' => 'required|email|max:255|exists:users|unique:users,email,NULL,id,is_confirm,1',
             'name'  => 'sometimes|username|exists:users'
         ], [
