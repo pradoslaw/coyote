@@ -61,9 +61,7 @@ class PasswordController extends Controller
      */
     public function getReset($token = null)
     {
-        if (is_null($token)) {
-            abort(404);
-        }
+        abort_if(is_null($token), 404);
 
         $this->breadcrumb->push('Odzyskiwanie hasła', url('Password/reset'));
 

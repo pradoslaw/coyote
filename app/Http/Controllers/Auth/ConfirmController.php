@@ -53,17 +53,13 @@ class ConfirmController extends Controller
     public function generateLink(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email|max:255|unique:users,email,NULL,id,is_confirm,1',
+            'email' => 'required|email|max:255|exists:users|unique:users,email,NULL,id,is_confirm,1',
             'name'  => 'sometimes|username|exists:users'
         ], [
             'email.unique' => 'Ten adres e-mail jest już zweryfikowany.'
         ]);
 
         if ($this->userId) {
-            if ($request->user()->is_confirm) {
-                return redirect()->route('user.home')->with('success', 'Adres e-mail jest już potwierdzony.');
-            }
-
             // perhaps user decided to change his email, so we need to save new one in database
             if ($request->email !== $request->user()->email) {
                 $request->user()->fill(['email' => $request->email])->save();
@@ -71,7 +67,7 @@ class ConfirmController extends Controller
 
             $userId = $this->userId;
         } else {
-            $result = $this->user->findWhere($request->only(['name', 'email']) + ['is_confirm' => 0]);
+            $result = $this->user->findWhere($request->intersect(['name', 'email']) + ['is_confirm' => 0]);
 
             // taka sytuacja nie bedzie miala miejsce w 99% przypadkow
             // warunek zostanie spelniony tylko wowczas gdy np. 2 lub wiecej uzytkownikow zostalo
@@ -115,7 +111,7 @@ class ConfirmController extends Controller
         }
 
         $user->save();
-        Actkey::where('user_id', $user->id)->delete();
+        $user->actkey()->delete();
 
         // potwierdzajac adres email, uzytkownik moze nie byc zalogowany. przekazujemy wiec model User
         // jako aktora aby zapisal sie w bazie danych.

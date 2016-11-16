@@ -22,7 +22,7 @@ class SettingsController extends BaseController
     {
         $this->breadcrumb->push('Ustawienia', route('user.settings'));
 
-        $email = auth()->user()->actkey()->value('email');
+        $email = $this->auth->actkey()->value('email');
         $form = $this->getForm();
 
         return $this->view('user.settings', [
@@ -36,7 +36,7 @@ class SettingsController extends BaseController
      */
     protected function getForm()
     {
-        return $this->createForm(Forms\SettingsForm::class, auth()->user(), [
+        return $this->createForm(Forms\SettingsForm::class, $this->auth, [
             'url' => route('user.settings')
         ]);
     }
@@ -52,18 +52,13 @@ class SettingsController extends BaseController
         $request = $form->getRequest();
 
         $this->transaction(function () use ($form, $request) {
-            /**
-             * @var \Coyote\User $user
-             */
-            $user = auth()->user();
-
-            if ($user->email !== $request->get('email')) {
+            if ($this->auth->email !== $request->get('email')) {
                 $email = $request->get('email');
 
                 // kasujemy poprzednie rekordu zwiazane z tym userem
-                $user->actkey()->delete();
+                $this->auth->actkey()->delete();
                 // przed zmiana e-maila trzeba wyslac link potwierdzajacy
-                $url = Actkey::createLink($user->id, $email);
+                $url = Actkey::createLink($this->auth->id, $email);
 
                 $this->getMailFactory()->queue(
                     'emails.user.change_email',
@@ -74,15 +69,15 @@ class SettingsController extends BaseController
                     }
                 );
 
-                if ($user->is_confirm) {
-                    $request['email'] = $user->email;
+                if ($this->auth->is_confirm) {
+                    $request['email'] = $this->auth->email;
                 }
             }
 
-            $user->fill($form->all())->save();
+            $this->auth->fill($form->all())->save();
             stream(Update::class, new Person());
 
-            event(new UserWasSaved($user->id));
+            event(new UserWasSaved($this->auth->id));
         });
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
