@@ -30,7 +30,10 @@ Uwaga! To repozytorium zawiera wersje 2.0-beta ktora absolutnie nie jest wersja 
 ## Instalacja
 
 * `sudo apt-get install php7.0-gd`
+* `sudo apt-get install php-pear`
 * `sudo pecl install mongodb`
+* `sudo apt-get install php-pgsql`
+* `echo "extension=mongodb.so" >> \`php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"\``
 * `git clone https://github.com/adam-boduch/coyote.git .`
 * `psql -c 'create database coyote;' -U postgres`
 * `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
@@ -45,6 +48,14 @@ Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php7.0-fpm rest
 #### Use of undefined constant MCRYPT_RIJNDAEL_128 - assumed 'MCRYPT_RIJNDAEL_128'
 
 Czy biblioteka mcrypt jest zainstalowana? Jeżeli nie to `apt-get install php7.0-mcrypt`. Jeżeli tak to `service php7.0-fpm restart`.
+
+#### sh: 1: phpize: not found
+
+`sudo apt-get install php7.0-dev`
+
+#### php error: Cannot find OpenSSL's libraries
+
+`sudo apt-get install pkg-config libssl-dev`
 
 ## Uruchomienie
 
