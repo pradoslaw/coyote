@@ -25,12 +25,13 @@ class PasswordController extends Controller
      * Formularz powoduje wyslanie linku umozliwiajacego zmiane hasla
      *
      * @param Request $request
-     * @return $this|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postIndex(Request $request)
     {
         $this->validate($request, [
-            'email'                     => 'required|email|exists:users'
+            // check if email exists (case sensitive) because sendResetLink() is also case sensitive
+            'email'                     => 'required|email|exists:users|email_confirmed'
         ]);
 
         // aby wygenerowac link konto musi byc aktywne oraz e-mail musi byc wczesniej potwierdzony
@@ -47,7 +48,7 @@ class PasswordController extends Controller
             case Password::INVALID_USER:
                 return back()->withErrors([
                     'email' => sprintf(
-                        'Ten adres e-mail nie został zweryfikowany. %s aby go potwierdzić', link_to('Confirm', 'Kliknij')
+                        'Ten użytkownik nie istnieje lub został usunięty.'
                     )
                 ]);
         }
