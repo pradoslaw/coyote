@@ -233,7 +233,8 @@ class Markdown extends Command
         $this->transformer->mapping = $attachments;
 
         foreach ($wiki as $row) {
-            DB::table('wiki_pages')->where('id', $row->page_id)->update(['text' => $this->transformer->transform($row->page_content)]);
+            $wikiId = DB::table('wiki_paths')->where('path_id', $row->page_id)->value('wiki_id');
+            DB::table('wiki_pages')->where('id', $wikiId)->update(['text' => $this->transformer->transform($row->page_content)]);
             $bar->advance();
         }
 
