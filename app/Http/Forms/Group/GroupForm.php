@@ -9,6 +9,8 @@ class GroupForm extends Form
 {
     public function buildForm()
     {
+        $users = $this->getUsers();
+
         $this
             ->add('name', 'text', [
                 'rules' => 'required|string|max:99',
@@ -26,6 +28,11 @@ class GroupForm extends Form
                 'label' => 'Uprawnienia grupy',
                 'choices' => $this->getPermissions(),
                 'value' => $this->getEnabledPermissions()
+            ])
+            ->add('users', 'choice', [
+                'label' => 'Członkowie grupy',
+                'choices' => $users,
+                'value' => array_keys($users)
             ])
             ->add('submit', 'submit_with_delete', [
                 'label' => 'Zapisz',
@@ -46,11 +53,19 @@ class GroupForm extends Form
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     private function getPermissions()
     {
         return Permission::pluck('name', 'permissions.id')->toArray();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getUsers()
+    {
+        return $this->data->users()->lists('name', 'id')->toArray();
     }
 
     /**

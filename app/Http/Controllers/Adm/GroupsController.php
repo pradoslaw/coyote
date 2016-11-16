@@ -72,6 +72,8 @@ class GroupsController extends BaseController
                 );
             }
 
+            $group->users()->sync((array) $form->users->getValue()); // array can be empty
+
             $this->flushPermission();
             stream(Stream_Update::class, (new Stream_Group())->map($group));
         });
