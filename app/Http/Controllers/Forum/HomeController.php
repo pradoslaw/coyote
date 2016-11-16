@@ -54,6 +54,8 @@ class HomeController extends BaseController
 
         if ($route == 'forum.user') {
             $user = app(UserRepositoryInterface::class)->find($request->route('id'));
+            abort_if(is_null($user), 404);
+
             $tabs->add('Posty: ' . $user->name, [
                 'route' => [
                     'forum.user', $request->route('id')
