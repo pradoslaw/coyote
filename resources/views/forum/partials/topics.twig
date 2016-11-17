@@ -79,7 +79,7 @@
                                 <a title="{{ topic.subject }}" href="{{ url }}">{{ topic.subject }}</a>
 
                                 {% if topic.score %}
-                                    <span class="badge score" title="Ilość głosów oddanych na ten wątek">
+                                    <span class="badge score hidden-xs" title="Ilość głosów oddanych na ten wątek">
                                         <i class="fa fa-fire"></i>
                                         {{ topic.score }}
                                     </span>
@@ -93,7 +93,7 @@
                             </h5>
 
                             {% if topic.tags %}
-                                <ul class="tag-clouds pull-right hidden-sm hidden-xs">
+                                <ul class="tag-clouds pull-right hidden-xxs">
                                     {% for tag in topic.tags %}
                                         <li><a href="{{ route('forum.tag', [tag.name|url_encode]) }}" data-tag="{{ tag.name }}">{{ tag.name }}</a></li>
                                     {% endfor %}
