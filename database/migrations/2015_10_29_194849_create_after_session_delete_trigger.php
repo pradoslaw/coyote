@@ -14,6 +14,8 @@ class CreateAfterSessionDeleteTrigger extends Migration
     {
         DB::unprepared('
 CREATE FUNCTION before_session_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+DECLARE
+	affected INTEGER;
 BEGIN
 	IF OLD.user_id IS NOT NULL THEN
 	    UPDATE users SET ip = OLD.ip, browser = OLD.browser, visited_at = CURRENT_TIMESTAMP(0), visits = visits + 1 WHERE "id" = OLD.user_id;
