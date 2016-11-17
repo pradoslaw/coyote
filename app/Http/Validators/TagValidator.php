@@ -54,11 +54,6 @@ class TagValidator
             return true;
         }
 
-        $tag = $this->tag->where('name', $value)->value('id');
-        if (!is_null($tag)) {
-            return true;
-        }
-
-        return false;
+        return $this->tag->where('name', $value)->value('id') !== null;
     }
 }
