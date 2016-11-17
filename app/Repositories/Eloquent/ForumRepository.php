@@ -47,7 +47,8 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 'users.name AS user_name',
                 'users.photo',
                 'is_active',
-                'is_confirm'
+                'is_confirm',
+                'session_log.updated_at AS seen_at'
             ])
             ->leftJoin('forum_track', function (JoinClause $join) use ($userId, $sessionId) {
                 $join->on('forum_track.forum_id', '=', 'forums.id');
@@ -69,6 +70,13 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 } else {
                     $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
                 }
+            })
+            ->leftJoin('session_log', function (JoinClause $join) use ($userId, $sessionId) {
+                if ($userId) {
+                    $join->on('session_log.user_id', '=', $this->raw($userId));
+                } else {
+                    $join->on('session_log.id', '=', $this->raw("'" . $sessionId . "'"));
+                }
             });
 
         if ($parentId) {
@@ -78,6 +86,10 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         $result = $sql->get();
 
         foreach ($result as &$row) {
+            if (empty($row->forum_marked_at)) {
+                $row->forum_marked_at = $row->seen_at ?: time();
+            }
+
             $row->forum_unread = $row->created_at > $row->forum_marked_at;
             $row->topic_unread = $row->created_at > $row->topic_marked_at && $row->created_at > $row->forum_marked_at;
             $row->route = route('forum.topic', [$row->slug, $row->topic_id, $row->topic_slug]);
