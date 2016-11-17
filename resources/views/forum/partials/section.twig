@@ -28,10 +28,17 @@
                         <td class="col-forum-description">
                             <h3><a title="{{ forum.name }}" data-category="Forum-Name" href="{{ route('forum.category', [forum.slug]) }}">{{ forum.name }}</a></h3>
 
-                            <p>{{ forum.description }}</p>
+                            <p class="hidden-xs">{{ forum.description }}</p>
+
+                            {% if not forum.url %}
+                                <ul class="list-stats list-inline visible-xs visible-sm">
+                                    <li>Wątków: <strong>{{ forum.topics|number_format(0, ',', ' ') }}</strong></li>
+                                    <li>Postów: <strong>{{ forum.posts|number_format(0, ',', ' ') }}</strong></li>
+                                </ul>
+                            {% endif %}
 
                             {% if forum.children %}
-                                <ul class="list-unstyled">
+                                <ul class="list-sub list-unstyled">
                                     {% for child in forum.children %}
                                         <li {{ child.forum_unread ? 'class="sub-unread"' }}>
                                             <a href="{{ route('forum.category', [child.slug]) }}">{{ child.name }}</a>
@@ -40,7 +47,7 @@
                                 </ul>
                             {% endif %}
                         </td>
-                        <td class="col-stats hidden-md hidden-sm hidden-xs">
+                        <td class="col-stats hidden-sm hidden-xs">
                             {% if not forum.url %}
                                 <p title="Ilość wątków"><strong>{{ forum.topics|number_format(0, ',', ' ') }}</strong> <small>{{ declination(forum.topics, ['wątek', 'wątki', 'wątków'], true) }}</small></p>
                                 <p title="Ilość postów"><strong>{{ forum.posts|number_format(0, ',', ' ') }}</strong> <small>{{ declination(forum.posts, ['post', 'posty', 'postów'], true) }}</small></p>
@@ -59,7 +66,7 @@
                                 {% endif %}
                             {% endif %}
                         </td>
-                        <td class="col-post-preview hidden-sm hidden-xs">
+                        <td class="col-post-preview">
                             {% if forum.url %}
                                 <p class="text-center">Ilość przekierowań: {{ forum.topics }}</p>
                             {% else %}
@@ -71,6 +78,7 @@
                                     </p>
                                     <p>
                                         <span class="timestamp" data-timestamp="{{ forum.created_at|timestamp }}" title="{{ forum.created_at|format_date(false) }}">{{ forum.created_at|format_date }},</span>
+
                                         {% if forum.user_id %}
                                             {{ link_to_profile(forum.user_id, forum.user_name, forum.is_active, forum.is_blocked) }}
                                         {% else %}
