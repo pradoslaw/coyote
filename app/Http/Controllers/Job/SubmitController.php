@@ -13,6 +13,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Services\Parser\Helpers\City;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
@@ -382,7 +383,7 @@ class SubmitController extends Controller
             stream($activity, (new Stream_Job)->map($job));
         });
 
-        return redirect()->route('job.offer', [$job->id, $job->slug])->with('success', 'Oferta została prawidłowo dodana.');
+        return redirect()->to(UrlBuilder::job($job))->with('success', 'Oferta została prawidłowo dodana.');
     }
 
     /**
@@ -409,7 +410,7 @@ class SubmitController extends Controller
                 'city' => $result['name']
             ]);
         } catch (\Exception $e) {
-            app('log')->error($e->getMessage());
+            logger()->error($e->getMessage());
         }
 
         return $location;

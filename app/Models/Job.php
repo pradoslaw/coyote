@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $firm_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon $deleted_at
+ * @property \Carbon\Carbon $deadline_at
  * @property int $salary_from
  * @property int $salary_to
  * @property int $country_id
