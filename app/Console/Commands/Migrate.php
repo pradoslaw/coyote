@@ -3,6 +3,7 @@
 namespace Coyote\Console\Commands;
 
 use Coyote\Pm;
+use Coyote\Post;
 use Illuminate\Console\Command;
 use DB;
 
@@ -1069,8 +1070,8 @@ class Migrate extends Command
             $this->error($e->getTraceAsString());
         }
 
-        DB::update('posts')->where('user_id', 0)->update(['user_id' => null]);
-        DB::update('post_log')->where('user_id', 0)->update(['user_id' => null]);
+        Post::where('user_id', 0)->update(['user_id' => null]);
+        Post\Log::where('user_id', 0)->update(['user_id' => null]);
 
         $this->line('');
         $this->info('Done');
