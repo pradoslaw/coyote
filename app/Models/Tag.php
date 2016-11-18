@@ -15,6 +15,14 @@ class Tag extends Model
      * @var array
      */
     protected $fillable = ['name'];
+
+    /**
+     * @var array
+     */
     protected $dates = ['created_at', 'deleted_at'];
+
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 }
