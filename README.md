@@ -5,9 +5,51 @@
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/c0df3ba9-4c1f-4063-8347-8b51eca079fe/mini.png)](https://insight.sensiolabs.com/projects/c0df3ba9-4c1f-4063-8347-8b51eca079fe)
 [![StyleCI](https://styleci.io/repos/64660184/shield?branch=master)](https://styleci.io/repos/64660184)
 
-Grid generator for Laravel.
+**Laravel Grid** is a package that helps you display table data. I could not find
+package that would satisfy my needs so I decided to write one. Now I've been successfully using it in my two projects
+so I hope you will enjoy it.
 
-## Requirements
+Example:
+
+```php
+namespace App\Http\Controllers;
+
+use Boduch\Grid\Order;
+use Boduch\Grid\Source\EloquentSource;
+
+class UsersController extends Controller
+{
+    public function index()
+    {
+        $grid = app('grid.builder')
+            ->createBuilder()
+            ->setDefaultOrder(new Order('id', 'desc'))
+            ->addColumn('id', [
+                'sortable' => true
+            ])
+            ->addColumn('name')
+            ->addColumn('email')
+            ->addColumn('created_at')
+            ->setSource(new EloquentSource(new \App\Models\User());
+            
+        return view('users')->with('grid', $grid);
+    }
+    
+}
+````
+
+**Features**
+
+* Pagination
+* Filtering
+* Highly customizable
+* Simple usage
+* Different data source (Eloquent model, collection, array)
+
+
+## Installation
+
+### Requirements
 
 * PHP >= 7.0
 * Laravel >= 5.2
