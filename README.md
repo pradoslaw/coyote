@@ -30,16 +30,16 @@ Uwaga! To repozytorium zawiera wersje 2.0-beta ktora absolutnie nie jest wersja 
 
 ## Instalacja
 
-* `sudo apt-get install php-gd`
-* `sudo apt-get install php-pear`
-* `sudo pecl install mongodb`
-* `sudo apt-get install php-pgsql`
-* `echo "extension=mongodb.so" >> \`php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"\``
-* `git clone https://github.com/adam-boduch/coyote.git .`
-* `psql -c 'create database coyote;' -U postgres`
-* `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
-* `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
-* `php artisan key:generate` (generowanie unikalnego klucza, który posłuży do szyfrowania danych)
+1. `sudo apt-get install php-gd`
+2. `sudo apt-get install php-pear`
+3. `sudo pecl install mongodb`
+4. `sudo apt-get install php-pgsql`
+5. `echo "extension=mongodb.so" >> \`php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"\``
+6. `git clone https://github.com/adam-boduch/coyote.git .`
+7. `psql -c 'create database coyote;' -U postgres`
+8. `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
+9. `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
+10. `php artisan key:generate` (generowanie unikalnego klucza, który posłuży do szyfrowania danych)
 
 ### Problemy podczas instalacji
 #### Class 'MongoClient' not found
@@ -98,6 +98,14 @@ pewne czynności cykliczne.
 
 1. W konsoli wpisz `crontab -e`
 2. Dodaj linię: `* * * * * php /var/www/path-to-app/artisan schedule:run >> /dev/null 2>&1`
+
+
+### Konfiguracja Elasticearch
+
+Po instalacji Elasticsearch, konieczne jest utworzenie indeksu oraz typów. Wykonaj poniższe polecenia:
+
+1. `php artisan es:create`
+2. `php artisan es:mapping`
 
 ## Jak mozesz pomoc?
 
