@@ -3117,6 +3117,40 @@ class Migrate extends Command
         $this->fixSequence(['wiki_comments']);
     }
 
+    public function migrateUserTags()
+    {
+        $sql = DB::connection('mysql')->table('setting')->where('setting_name', 'forum.setting')->get();
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($sql as $row) {
+                try {
+                    $unserialize = unserialize($row->setting_value);
+
+                    if (!empty($unserialize['userTags'])) {
+                        $tags = array_map('trim', explode(',', $unserialize['userTags']));
+
+                        DB::table('settings')->insert([
+                            'created_at' => $row->setting_date,
+                            'user_id' => $row->setting_user,
+                            'session_id' => $row->setting_session_id,
+                            'name' => 'forum.tags',
+                            'value' => json_encode($tags)
+                        ]);
+                    }
+                } catch (\Exception $e) {}
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+
+        $this->fixSequence(['settings']);
+    }
 
     /**
      * Execute the console command.
@@ -3169,6 +3203,7 @@ class Migrate extends Command
             $this->migratePageVisits();
             $this->migrateLogs();
             $this->migrateComments();
+            $this->migrateUserTags();
         } finally {
             DB::statement('ALTER TABLE post_votes ENABLE TRIGGER ALL');
             DB::statement('ALTER TABLE alerts ENABLE TRIGGER ALL');
