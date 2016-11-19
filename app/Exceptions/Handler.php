@@ -40,8 +40,11 @@ class Handler extends ExceptionHandler
         if ($this->shouldReport($e)) {
             // log input data and url for further analyse
             $this->log->error('+', ['url' => request()->url(), 'input' => request()->all(), 'ip' => request()->ip()]);
-            // send report to sentry
-            app('sentry')->captureException($e);
+
+            if (app()->environment('production')) {
+                // send report to sentry
+                app('sentry')->captureException($e);
+            }
         }
 
         parent::report($e);
