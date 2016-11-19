@@ -240,4 +240,15 @@ class Markdown extends Command
 
         $bar->finish();
     }
+
+    public function pm($id)
+    {
+        $sql = DB::table('pm_text')
+            ->select(['id', 'text'])
+            ->get();
+
+        foreach ($sql as $row) {
+            DB::table('pm_text')->where('id', $row->id)->update(['text' => $this->transformer->transform($row->text)]);
+        }
+    }
 }
