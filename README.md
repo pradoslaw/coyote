@@ -11,9 +11,10 @@ Uwaga! To repozytorium zawiera wersje 2.0-beta ktora absolutnie nie jest wersja 
 ## Wymagania
 
 * PHP 7
-    * Moduł GD
-    * Moduł mongodb
-    * Moduł mcrypt
+    * php-gd
+    * php-mongodb
+    * php-mcrypt
+    * php-curl
 * PostgreSQL >= 9.3
 * MongoDB >= 2.7
 * composer
@@ -29,7 +30,7 @@ Uwaga! To repozytorium zawiera wersje 2.0-beta ktora absolutnie nie jest wersja 
 
 ## Instalacja
 
-* `sudo apt-get install php7.0-gd`
+* `sudo apt-get install php-gd`
 * `sudo apt-get install php-pear`
 * `sudo pecl install mongodb`
 * `sudo apt-get install php-pgsql`
@@ -47,7 +48,7 @@ Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php7.0-fpm rest
 
 #### Use of undefined constant MCRYPT_RIJNDAEL_128 - assumed 'MCRYPT_RIJNDAEL_128'
 
-Czy biblioteka mcrypt jest zainstalowana? Jeżeli nie to `apt-get install php7.0-mcrypt`. Jeżeli tak to `service php7.0-fpm restart`.
+Czy biblioteka mcrypt jest zainstalowana? Jeżeli nie to `apt-get install php-mcrypt`. Jeżeli tak to `service php7.0-fpm restart`.
 
 #### sh: 1: phpize: not found
 
