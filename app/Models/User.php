@@ -45,6 +45,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @property string $firm
  * @property string $position
  * @property string $access_ip
+ * @property string $photo
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {

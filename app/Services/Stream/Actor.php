@@ -8,10 +8,10 @@ use Coyote\User;
 class Actor extends ObjectAbstract
 {
     /**
-     * @param User $user
+     * @param User|null $user
      * @param array $data
      */
-    public function __construct($user, array $data = [])
+    public function __construct($user = null, array $data = [])
     {
         if ($user && $user instanceof User) {
             $data = array_merge([

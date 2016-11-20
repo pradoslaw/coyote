@@ -68,6 +68,7 @@ class LoginController extends Controller
         if (auth()->attempt(['name' => $user->name, 'password' => $form->password->getValue()], true)) {
             // put information into the activity stream...
             stream(Stream_Login::class);
+
             return redirect()->intended(route('home'));
         }
 
@@ -84,7 +85,7 @@ class LoginController extends Controller
             $this->incrementLoginAttempts($form->getRequest());
 
             // put failed action to activity stream
-            stream((new Stream_Throttle(new Actor(auth()->user())))->setLogin($user->name));
+            stream((new Stream_Throttle(new Actor()))->setLogin($user->name));
         }
 
         return back()->withInput()->withErrors(['password' => 'Podane hasło jest nieprawidłowe.']);
@@ -100,10 +101,10 @@ class LoginController extends Controller
     {
         $user = $this->user->findOrFail($this->userId);
 
-        $user->ip = request()->ip();
+        $user->ip = $request->ip();
         $user->browser = $request->browser(); // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $user->visited_at = Carbon::now();
-        $user->visits = auth()->user()->visits + 1;
+        $user->visits = $this->auth->visits + 1;
         $user->save();
 
         stream(Stream_Logout::class);
