@@ -73,14 +73,16 @@ class LogViewer
             if ($this->isStackMessage($line)) {
                 $stack[] = $line;
                 unset($current);
-            } elseif ($this->isBeginningOfMessage($line)) {
-                $message = $this->findEndOfMessage($i, $lines);
+            } elseif ($this->isBeginningOfMessage($line, $header)) {
+                $i += 1; // skip the first line
+                $message = $this->grabMessage($i, $lines); // grab error message
 
                 $result[] = $this->init($message);
                 $current = &$result[count($result) - 1];
 
                 if ($this->parseMessage($message, $matches)) {
                     $current = $this->compile($matches);
+                    $current = array_merge($current, json_decode($header[3], true));
                 }
 
                 $stack = &$result[count($result) - 1]['stack'];
@@ -109,9 +111,13 @@ class LogViewer
      * @param string $line
      * @return bool
      */
-    protected function isBeginningOfMessage($line)
+    protected function isBeginningOfMessage($line, &$header = null)
     {
-        return trim($line) === '' || preg_match('/^' . self::REGEXP_DATE . '.*/', $line);
+        return preg_match(
+            sprintf('/^%s [a-z]+\.(%s): \+ (.*)$/', self::REGEXP_DATE, implode('|', $this->levels)),
+            $line,
+            $header
+        );
     }
 
     /**
@@ -119,7 +125,7 @@ class LogViewer
      * @param array $lines
      * @return string
      */
-    protected function findEndOfMessage(&$pointer, &$lines)
+    protected function grabMessage(&$pointer, &$lines)
     {
         $message = $lines[$pointer];
 
