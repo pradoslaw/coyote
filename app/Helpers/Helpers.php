@@ -55,31 +55,15 @@ function keywords($text, $limit = 10)
 }
 
 /**
- * @param \Coyote\Services\Stream\Activities\Activity|string|null $activity
+ * @param \Coyote\Services\Stream\Activities\Activity|string $activity
  * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $object
  * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $target
  */
-function stream($activity = null, $object = null, $target = null)
+function stream($activity, $object = null, $target = null)
 {
-    $stream = app(\Coyote\Repositories\Contracts\StreamRepositoryInterface::class);
+    $manager = app(\Coyote\Services\Stream\StreamManager::class);
 
-    if ($activity) {
-        if (is_string($activity)) {
-            $actor = new Coyote\Services\Stream\Actor(auth()->user());
-
-            $class = 'Coyote\\Services\\Stream\\Activities\\' . ucfirst(camel_case(class_basename($activity)));
-            $stream->create((new $class($actor, $object, $target))->toArray());
-        } else {
-            if ($object !== null) {
-                $activity->setObject($object);
-            }
-            if ($target !== null) {
-                $activity->setTarget($target);
-            }
-
-            $stream->create($activity->toArray());
-        }
-    }
+    return $manager->save($activity, $object, $target);
 }
 
 /**
