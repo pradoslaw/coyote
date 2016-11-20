@@ -22,6 +22,7 @@ class CreateStreamsCollection extends Migration
         Schema::connection($this->connection)->create('streams', function (Blueprint $collection) {
             $collection->background('actor.id');
             $collection->background('ip');
+            $collection->background('fingerprint');
             $collection->background(['object.objectType', 'object.id', 'verb']);
             $collection->background(['object.objectType', 'object.id']);
             $collection->background(['target.objectType', 'target.id']);

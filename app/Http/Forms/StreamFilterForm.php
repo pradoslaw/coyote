@@ -57,6 +57,9 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
                     'autocomplete' => 'off'
                 ]
             ])
+            ->add('fingerprint', 'text', [
+                'label' => 'Fingerprint'
+            ])
             ->add('created_at', 'select', [
                 'label' => 'Data i czas',
                 'empty_value' => 'Wszystkie wpisy',

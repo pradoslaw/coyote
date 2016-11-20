@@ -127,6 +127,8 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
             if (!empty($value)) {
                 if ('created_at' == $field->getName()) {
                     $sql = $sql->where('created_at', '>=', new \DateTime('-' . $value . ' seconds'));
+                } elseif ('fingerprint' == $field->getName()) {
+                    $sql = $sql->whereIn('fingerprint', (array) $value);
                 } elseif (is_string($value)) {
                     $sql = $sql->where($field->getName(), 'like', str_replace('*', '%', $value));
                 } else {
