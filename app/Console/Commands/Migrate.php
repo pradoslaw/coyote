@@ -3139,7 +3139,9 @@ class Migrate extends Command
                             'value' => json_encode($tags)
                         ]);
                     }
-                } catch (\Exception $e) {}
+                } catch (\Exception $e) {
+                    //
+                }
             }
             DB::commit();
         } catch (\Exception $e) {
