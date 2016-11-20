@@ -20,24 +20,7 @@
 
                 <div class="stream">
                     {% for activity in decorate %}
-                        <div class="media">
-                            <div class="media-left hidden-xs">
-                                <a href="{{ activity.actor.url }}">
-                                    <img class="media-object img-thumbnail" src="{{ user_photo(activity.actor.image) }}" style="width: 38px; height: 38px;" alt="">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <i class="fa fa-laptop pull-right bubble" title="{{ activity.ip }}"></i>
-                                <i class="fa fa-globe pull-right bubble" title="{{ activity.browser }}"></i>
-
-                                <p>{{ activity.headline|raw }}</p>
-                                <small class="text-muted" title="{{ activity.created_at }}">{{ activity.created_at|format_date }}</small>
-
-                                {% if activity.excerpt %}
-                                    <div class="well well-sm">{{ activity.excerpt }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
+                        {% include 'components.stream' %}
                     {% endfor %}
                 </div>
 
