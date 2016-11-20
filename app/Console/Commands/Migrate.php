@@ -371,11 +371,6 @@ class Migrate extends Command
     /**
      * Wymaga uzupelnienia tabeli alert_types
      * 100%
-     *
-     * @todo usuniecie duplikatow
-     * DELETE FROM alert_settings USING alert_settings alias
-    WHERE alert_settings.type_id = alias.type_id AND alert_settings.user_id = alias.user_id AND
-    alert_settings."id" < alias."id"
      */
     private function migrateAlerts()
     {
@@ -475,6 +470,8 @@ class Migrate extends Command
             $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
             $this->error($e->getTraceAsString());
         }
+
+        DB::statement('DELETE FROM alert_settings USING alert_settings alias WHERE alert_settings.type_id = alias.type_id AND alert_settings.user_id = alias.user_id AND alert_settings."id" < alias."id"');
 
         $this->line('');
         $this->info('Done');

@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Stream\Activities;
 
-use Coyote\Services\Stream\Builder;
+use Coyote\Services\Stream\ToArray;
 use Coyote\Services\Stream\Objects\ObjectInterface;
 
 /**
@@ -10,7 +10,9 @@ use Coyote\Services\Stream\Objects\ObjectInterface;
  */
 abstract class Activity implements ObjectInterface
 {
-    use Builder;
+    use ToArray{
+        toArray as parentToArray;
+    }
 
     /**
      * @var ObjectInterface
@@ -70,6 +72,7 @@ abstract class Activity implements ObjectInterface
     public function setObject(ObjectInterface $object)
     {
         $this->object = $object;
+
         return $this;
     }
 
@@ -80,22 +83,23 @@ abstract class Activity implements ObjectInterface
     public function setTarget(ObjectInterface $target)
     {
         $this->target = $target;
+
         return $this;
     }
 
     /**
      * @return array
      */
-    public function build()
+    public function toArray()
     {
-        $result = $this->toArray($this);
+        $array = $this->parentToArray();
 
         foreach (['actor', 'object', 'target'] as $field) {
-            if (is_object($this->$field)) {
-                $result[$field] = $this->toArray($this->$field);
+            if (is_object($this->{$field}) && $this->{$field} instanceof ObjectInterface) {
+                $array[$field] = $this->{$field}->toArray();
             }
         }
 
-        return $result;
+        return $array;
     }
 }

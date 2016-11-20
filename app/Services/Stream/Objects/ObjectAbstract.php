@@ -2,11 +2,11 @@
 
 namespace Coyote\Services\Stream\Objects;
 
-use Coyote\Services\Stream\Builder;
+use Coyote\Services\Stream\ToArray;
 
 abstract class ObjectAbstract implements ObjectInterface
 {
-    use Builder;
+    use ToArray;
 
     /**
      * @var int

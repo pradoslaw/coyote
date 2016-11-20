@@ -55,7 +55,7 @@ function keywords($text, $limit = 10)
 }
 
 /**
- * @param \Coyote\Services\Stream\Activities\Activity|null $activity
+ * @param \Coyote\Services\Stream\Activities\Activity|string|null $activity
  * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $object
  * @param \Coyote\Services\Stream\Objects\ObjectInterface|null $target
  */
@@ -68,7 +68,7 @@ function stream($activity = null, $object = null, $target = null)
             $actor = new Coyote\Services\Stream\Actor(auth()->user());
 
             $class = 'Coyote\\Services\\Stream\\Activities\\' . ucfirst(camel_case(class_basename($activity)));
-            $stream->create((new $class($actor, $object, $target))->build());
+            $stream->create((new $class($actor, $object, $target))->toArray());
         } else {
             if ($object !== null) {
                 $activity->setObject($object);
@@ -77,7 +77,7 @@ function stream($activity = null, $object = null, $target = null)
                 $activity->setTarget($target);
             }
 
-            $stream->create($activity->build());
+            $stream->create($activity->toArray());
         }
     }
 }

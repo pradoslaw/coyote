@@ -2,7 +2,9 @@
 
 namespace Coyote\Services\Stream\Objects;
 
-interface ObjectInterface
+use Illuminate\Contracts\Support\Arrayable;
+
+interface ObjectInterface extends Arrayable
 {
-    public function build();
+    //
 }
