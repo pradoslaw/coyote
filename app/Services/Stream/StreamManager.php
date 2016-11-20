@@ -55,7 +55,7 @@ class StreamManager
             $activity->setTarget($target);
         }
 
-        $this->events->fire(StreamSaving::class, $activity);
+        $this->events->fire(new StreamSaving($activity));
 
         return $this->stream->create($activity->toArray());
     }

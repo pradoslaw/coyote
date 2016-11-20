@@ -17,8 +17,6 @@ class ServiceProvider extends EventServiceProvider
      */
     public function boot(DispatcherContract $events)
     {
-        parent::boot($events);
-
         // W starej wersji 4programmers.net hasla byly hashowane przy pomocy sha256 + sol. Jezeli w bazie
         // danych jest stary hash, to zmieniamy hasha i zapisujemy do bazy danych
         $events->listen(Attempting::class, function (Attempting $attempting) {
