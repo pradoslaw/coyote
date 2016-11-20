@@ -404,12 +404,10 @@
                                         </tbody>
                                     </table>
                                     <div class="header-content">
-                                        {% if auth_check() %}
-                                            <span class="hide" style="color: #ffffff">&nbsp;&nbsp;|&nbsp; <a
+                                            <span class="hide" style="color: #ffffff">&nbsp;<a
                                                         style="color: #FFFFFF; text-decoration: none; font-weight: bold;"
                                                         href="{{ route('user.alerts.settings') }}">Ustawienia
                                                     powiadomień</a></span>
-                                        {% endif %}
                                     </div>
                                     <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
                                         <tbody>
@@ -536,12 +534,11 @@
 									<span class="hide"><p id="permission-reminder" align="left"
                                                           class="footer-content-left"><span></span></p></span>
 
-                                    {% if auth_check() %}
+
                                         <p align="left" class="footer-content-left"><a
                                                     style="color: #969696; text-decoration: none; font-weight: bold"
                                                     href="{{ route('user.alerts.settings') }}">Ustawienia
                                                 powiadomień</a></p>
-                                    {% endif %}
                                 </td>
                                 <td class="hide w0" width="60"></td>
                                 <td class="hide w0" width="160" valign="top">
