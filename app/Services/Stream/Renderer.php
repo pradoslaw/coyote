@@ -4,7 +4,7 @@ namespace Coyote\Services\Stream;
 
 use Illuminate\Support\Collection;
 
-class Decorator
+class Renderer
 {
     /**
      * @var Collection|array
@@ -22,7 +22,7 @@ class Decorator
     /**
      * @return array
      */
-    public function decorate()
+    public function render()
     {
         $result = [];
 

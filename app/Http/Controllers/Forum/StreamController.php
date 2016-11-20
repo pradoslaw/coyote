@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
-use Coyote\Services\Stream\Decorator;
+use Coyote\Services\Stream\Renderer;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 
 class StreamController extends BaseController
@@ -30,7 +30,7 @@ class StreamController extends BaseController
             $item['actor'] = (array) $item['actor'];
         }
 
-        $decorate = (new Decorator($collection))->decorate();
+        $decorate = (new Renderer($collection))->render();
 
         $visits = $page->visits($topic->page()->getResults()->id);
 

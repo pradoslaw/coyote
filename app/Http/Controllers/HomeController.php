@@ -10,7 +10,7 @@ use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Services\Session\Viewers;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
-use Coyote\Services\Stream\Decorator;
+use Coyote\Services\Stream\Renderer;
 
 class HomeController extends Controller
 {
@@ -178,7 +178,7 @@ class HomeController extends Controller
     private function getActivities()
     {
         // take last stream activity for forum
-        return (new Decorator($this->stream->forumFeeds($this->forum->getRestricted())))->decorate();
+        return (new Renderer($this->stream->forumFeeds($this->forum->getRestricted())))->render();
     }
 
     /**
