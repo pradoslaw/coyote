@@ -1360,6 +1360,8 @@ class Migrate extends Command
                 $row['description'] = $stripPar($row['description']);
                 $row['requirements'] = null;
                 $this->setNullIfEmpty($row['recruitment']);
+                $this->setNullIfEmpty($row['salary_from']);
+                $this->setNullIfEmpty($row['salary_to']);
 
                 DB::table('jobs')->insert($row);
                 $bar->advance();
