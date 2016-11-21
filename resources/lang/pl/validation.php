@@ -74,7 +74,7 @@ return [
     'string'               => 'The :attribute must be a string.',
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => 'The :attribute has already been taken.',
-    'url'                  => 'The :attribute format is invalid.',
+    'url'                  => 'Pole musi zawierać prawidłowy link.',
 
     'username'             => 'Nazwa użytkownika może zawierać litery, cyfry oraz znaki ._ -',
     'user_exist'           => 'Użytkownik o podanej nazwie nie istnieje.',

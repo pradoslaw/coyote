@@ -101,6 +101,8 @@
     @media screen and (max-width: $screen-sm) {
       font-size: $font-size-small;
     }
+
+    @include adjust-list-padding;
   }
 }
 

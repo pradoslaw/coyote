@@ -281,10 +281,7 @@
     @include img-responsive();
   }
 
-  // default padding is too big
-  ul, ol {
-    padding-left: 16px;
-  }
+  @include adjust-list-padding;
 }
 
 .list-attachments {
