@@ -45,7 +45,7 @@
         <section class="panel panel-wrapper">
             <div class="panel-body">
 
-                <div id="box-post" class="table-forum">
+                <div class="table-forum margin-xs-top">
                     {% if is_writeable %}
                         <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                         <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>

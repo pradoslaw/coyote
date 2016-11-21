@@ -1,10 +1,6 @@
 @charset "UTF-8";
 @import "../../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 
-#box-post {
-  margin-top: 5px;
-}
-
 // "Kontener" dla posta
 // --------------------------------------------------
 
@@ -280,8 +276,14 @@
     margin-bottom: 5px;
   }
 
+  // emoticons are NOT responsive
   img:not(.img-smile) {
     @include img-responsive();
+  }
+
+  // default padding is too big
+  ul, ol {
+    padding-left: 16px;
   }
 }
 

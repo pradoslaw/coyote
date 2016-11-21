@@ -34,8 +34,14 @@
 
   @include break-word;
 
+  // emoticons are NOT responsive
   img:not(.img-smile) {
     @include img-responsive();
+  }
+
+  // default padding is too big
+  ul, ol {
+    padding-left: 16px;
   }
 
   > .thumbnails {
