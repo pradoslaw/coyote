@@ -22,7 +22,8 @@ function initTinymce() {
         // relative_urls: false,
         convert_urls: false,
 
-        content_style: "body, * {font-size: 14px !important; font-family: Arial, sans-serif !important;} ul, ol {padding-left: 16px;}",
+        indentation : '16px',
+        content_style: "body, * {font-size: 14px !important; font-family: Arial, sans-serif !important;}",
 
         setup: function (ed) {
             ed.on('init', function (args) {
