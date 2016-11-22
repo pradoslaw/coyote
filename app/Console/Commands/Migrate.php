@@ -3153,6 +3153,32 @@ class Migrate extends Command
         $this->fixSequence(['settings']);
     }
 
+    private function removeDuplicatedFirms()
+    {
+        $sql = DB::select('select name, user_id,  count(*) from firms group by name, user_id having count(*) > 1');
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($sql as $row) {
+                $firms = DB::table('firms')->where('name', $row->name)->where('user_id', $row->user_id)->orderBy('id')->get();
+                $original = array_shift($firms);
+
+                foreach ($firms as $firm) {
+                    DB::table('jobs')->where('firm_id', $firm->id)->update(['firm_id' => $original->id]);
+                    DB::table('firms')->where('id', $firm->id)->delete();
+                }
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $this->error($e->getFile() . ' [' . $e->getLine() . ']: ' . $e->getMessage());
+            $this->error($e->getTraceAsString());
+        }
+    }
+
     /**
      * Execute the console command.
      *
@@ -3223,5 +3249,7 @@ class Migrate extends Command
 
             DB::statement('SET session_replication_role = DEFAULT');
         }
+
+        $this->removeDuplicatedFirms();
     }
 }
