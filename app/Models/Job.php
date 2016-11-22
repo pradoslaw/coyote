@@ -188,33 +188,42 @@ class Job extends Model
                 }
             }
 
-            $model->score = 0;
-
-            foreach (self::SCORE_CONFIG['job'] as $column => $point) {
-                if (!empty($model->{$column})) {
-                    $model->score += $point;
-                }
-            }
-
-            $model->score += (count($model->tags()->get()) * 10);
-
-            if ($model->firm_id) {
-                $firm = $model->firm;
-
-                foreach (self::SCORE_CONFIG['firm'] as $column => $point) {
-                    if (!empty($firm->{$column})) {
-                        $model->score += $point;
-                    }
-                }
-
-                $model->score -= ($firm->is_agency * 10);
-            }
-
+            $model->score = $model->getScore();
             $timestamp = $model->created_at ? strtotime($model->created_at) : time();
 
             $seconds = ($timestamp - 1380585600) / 35000;
             $model->rank = number_format($model->score + $seconds, 6, '.', '');
         });
+    }
+
+    /**
+     * @return int
+     */
+    public function getScore()
+    {
+        $score = 0;
+
+        foreach (self::SCORE_CONFIG['job'] as $column => $point) {
+            if (!empty($this->{$column})) {
+                $score += $point;
+            }
+        }
+
+        $score += (count($this->tags()->get()) * 10);
+
+        if ($this->firm_id) {
+            $firm = $this->firm;
+
+            foreach (self::SCORE_CONFIG['firm'] as $column => $point) {
+                if (!empty($firm->{$column})) {
+                    $score += $point;
+                }
+            }
+
+            $score -= ($firm->is_agency * 10);
+        }
+
+        return $score;
     }
 
     /**
