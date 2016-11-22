@@ -104,7 +104,7 @@ class SearchBuilder
     {
         if ($this->request->has('q')) {
             $this->queryBuilder->addQuery(
-                new Query($this->request->get('q'), ['title', 'description', 'requirements', 'recruitment', 'tags'])
+                new Query($this->request->get('q'), ['title', 'description', 'requirements', 'recruitment', 'tags', 'firm.name'])
             );
         }
 

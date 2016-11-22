@@ -137,10 +137,16 @@ class Job extends Model
             ]
         ],
         "firm" => [
+            "type" => "object",
             "properties" => [
                 "name" => [
-                    "type" => "string",
-                    "analyzer" => "keyword_analyzer"
+                    "type" => "multi_field",
+                    "fields" => [
+                        // mozliwosc szukania po nazwie firmy
+                        "name" => ["type" => "string", "analyzer" => "default_analyzer"],
+                        // filtrujemy firmy po tym polu
+                        "name_original" => ["type" => "string", "analyzer" => "keyword_analyzer"]
+                    ]
                 ]
             ]
         ],
