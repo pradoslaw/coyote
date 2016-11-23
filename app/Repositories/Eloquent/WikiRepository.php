@@ -381,6 +381,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
                 'wiki_log.comment',
                 'wiki_log.length',
                 'wiki_log.diff',
+                'wiki_log.user_id',
                 'users.name AS user_name',
                 'path'
             ])
