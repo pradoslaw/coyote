@@ -376,6 +376,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
             ->app
             ->make(Wiki\Log::class)
             ->select([
+                'wiki_log.id',
                 'wiki_log.title',
                 'wiki_log.created_at',
                 'wiki_log.comment',

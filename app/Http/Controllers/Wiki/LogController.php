@@ -4,16 +4,18 @@ namespace Coyote\Http\Controllers\Wiki;
 
 use Boduch\Grid\Source\EloquentSource;
 use Coyote\Http\Grids\Wiki\LogGrid;
+use Illuminate\Http\Request;
 
 class LogController extends BaseController
 {
     /**
      * @param \Coyote\Wiki $wiki
+     * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function index($wiki)
+    public function index($wiki, Request $request)
     {
-        $this->breadcrumb->push('Historia zmian');
+        $this->breadcrumb->push('Historia zmian', route('wiki.log', [$wiki->id]));
 
         $source = new EloquentSource(
             $this
@@ -31,6 +33,25 @@ class LogController extends BaseController
             ->setEnablePagination(false)
             ->addComparisionButtons();
 
-        return $this->view('wiki.log')->with(compact('grid', 'wiki'));
+        $diff = $this->diff($wiki, $request);
+
+        return $this->view('wiki.log')->with(compact('grid', 'wiki', 'diff'));
+    }
+
+    /**
+     * @param \Coyote\Wiki $wiki
+     * @param Request $request
+     * @return array
+     */
+    private function diff($wiki, Request $request)
+    {
+        if (!$request->has('r1') || !$request->has('r2')) {
+            return [];
+        }
+
+        return [
+            'before' => $wiki->logs->find($request->get('r1'), ['text'])->text,
+            'after' => $wiki->logs->find($request->get('r2'), ['text'])->text
+        ];
     }
 }

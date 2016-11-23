@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $template
  * @property Wiki\Comment[] $comments
  * @property Wiki\Attachment[] $attachments
+ * @property Wiki\Log[] $logs
  */
 class Wiki extends Model
 {

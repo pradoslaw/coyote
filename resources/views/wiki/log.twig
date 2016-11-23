@@ -15,6 +15,35 @@
                     {{ grid(grid) }}
                 </div>
             </div>
+
+            {% if diff %}
+                <div class="box">
+                    <h4><i class="fa fa-calendar-o"></i> Różnica wersji</h4>
+                </div>
+
+                <pre><code id="diff"></code></pre>
+            {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    {% if diff %}
+        <script src="//cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"></script>
+        <script src="{{ cdn('js/diff.js') }}"></script>
+
+        <script>
+            var diff = {{ diff|json_encode|raw }};
+
+            $(function() {
+                $('body').prettyTextDiff({
+                    originalContent: diff['before'],
+                    changedContent: diff['after'],
+                    diffContainer: '#diff'
+                });
+            });
+        </script>
+    {% endif %}
 {% endblock %}
