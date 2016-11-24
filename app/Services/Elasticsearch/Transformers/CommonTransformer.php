@@ -110,7 +110,7 @@ class CommonTransformer implements TransformerInterface
     }
 
     /**
-     * @return static
+     * @return \Illuminate\Support\Collection
      */
     public function getHighlights()
     {
