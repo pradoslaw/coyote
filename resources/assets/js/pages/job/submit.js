@@ -27,48 +27,48 @@ class Tags {
         this.onItemClick();
         this.onRemove();
 
-        let self = this;
+        // let self = this;
 
-        $(document).bind('click', (e) => {
+        $(document).bind('click', e => {
             let $target = $(e.target);
 
-            if (!$target.is(self.input)) {
-                self.hideDropdown();
+            if (!$target.is(this.input)) {
+                this.hideDropdown();
             }
         });
     }
 
     onKeyUp() {
-        let self = this;
+        // let self = this;
 
-        this.input.on('keyup', (e) => {
+        this.input.on('keyup', e => {
             let keyCode = e.keyCode || window.event.keyCode;
 
             if (keyCode === 13) {
-                if ($('li.hover', self.dropdown).find('span').text() !== '') {
-                    self.addTag($('li.hover', self.dropdown).find('span').text());
+                if ($('li.hover', this.dropdown).find('span').text() !== '') {
+                    this.addTag($('li.hover', this.dropdown).find('span').text());
                 }
-                else if (self.input.val() !== '') {
-                    self.addTag(self.input.val());
+                else if (this.input.val() !== '') {
+                    this.addTag(this.input.val());
                 }
 
-                self.hideDropdown();
-                self.input.val('');
+                this.hideDropdown();
+                this.input.val('');
 
                 e.preventDefault();
             }
             else if (keyCode === 40) { // down
-                self.select(self.selectedIndex + 1);
+                this.select(this.selectedIndex + 1);
             }
             else if (keyCode === 38) { // up
-                self.select(self.selectedIndex - 1);
+                this.select(this.selectedIndex - 1);
             }
             else {
-                let searchText = self.input.val().toLowerCase();
+                let searchText = this.input.val().toLowerCase();
                 let hits = 0;
 
-                $('li', self.dropdown).each((index) => {
-                    let item = $('li:eq(' + index + ')', self.dropdown);
+                $('li', this.dropdown).each(index => {
+                    let item = $('li:eq(' + index + ')', this.dropdown);
                     let text = item.find('span').text();
 
                     if (text.toLowerCase().indexOf(searchText) === -1) {
@@ -80,20 +80,18 @@ class Tags {
                     }
                 });
 
-                self.dropdown.toggle(hits > 0);
+                this.dropdown.toggle(hits > 0);
             }
         });
     }
 
     onKeyDown() {
-        let self = this;
-
-        this.input.on('keydown', (e) => {
+        this.input.on('keydown', e => {
             let keyCode = e.keyCode || window.event.keyCode;
 
             if (keyCode === 27) {
-                self.input.val('');
-                self.dropdown.hide();
+                this.input.val('');
+                this.dropdown.hide();
             }
             else if (keyCode === 13) {
                 e.preventDefault();
@@ -102,36 +100,31 @@ class Tags {
     }
 
     onHover() {
-        $('li', this.dropdown).hover((e) => {
-                $(e.currentTarget).addClass('hover');
-            },
-            (e) => {
-                $(e.currentTarget).removeClass('hover');
-            });
+        $('li', this.dropdown).hover(e => $(e.currentTarget).addClass('hover'), e => $(e.currentTarget).removeClass('hover'));
     }
 
     onItemClick() {
-        let self = this;
+        // let self = this;
 
-        this.dropdown.on('click', 'li', (e) => {
-            self.addTag($(e.currentTarget).find('span').text());
-            self.hideDropdown();
+        this.dropdown.on('click', 'li', e => {
+            this.addTag($(e.currentTarget).find('span').text());
+            this.hideDropdown();
 
-            self.input.val('').focus();
+            this.input.val('').focus();
         });
     }
 
     onRemove() {
-        this.container.on('click', this.setup.remove, (e) => {
+        this.container.on('click', this.setup.remove, e => {
             $(e.currentTarget).parents('.tag-item').remove();
         });
     }
 
     onFocus() {
-        let self = this;
+        // let self = this;
 
         this.input.on('focus click', () => {
-            self.dropdown.show();
+            this.dropdown.show();
         });
     }
 
@@ -172,10 +165,10 @@ class Tags {
             .toLowerCase()
             .replace(/ /g, '-');
 
-        let self = this;
+        // let self = this;
 
-        $.post(this.input.data('post-url'), {name: value}, (html) => {
-            self.container.append(html);
+        $.post(this.input.data('post-url'), {name: value}, html => {
+            this.container.append(html);
         }).fail(() => {
             $('#alert').modal('show');
         });
@@ -199,13 +192,12 @@ $(() => {
     let navigation = $('#form-navigation');
     let fixed = $('#form-navbar-fixed');
 
-    $('#form-navigation-container').html(navigation.html()).on('click', ':submit', () => {
-        $('#job-posting').submit();
-    }).on('click', 'button[data-submit-state]', (e) => {
-        $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state'));
-    });
+    $('#form-navigation-container')
+        .html(navigation.html())
+        .on('click', ':submit', () => $('#job-posting').submit())
+        .on('click', 'button[data-submit-state]', e => $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state')));
 
-    $(window).scroll(e => {
+    $(window).scroll(() => {
         let bottom = $(window).scrollTop() + $(window).height();
 
         if (bottom > navigation.offset().top) {
@@ -294,7 +286,7 @@ $(() => {
         $('input[name="is_agency"]:checked').trigger('change');
     }
 
-    $('.benefits').on('keyup focus blur', 'input[type="text"]', (e) => {
+    $('.benefits').on('keyup focus blur', 'input[type="text"]', e => {
         let $this = $(e.currentTarget);
         let nextItem = $this.parent().next('li');
 
@@ -311,18 +303,16 @@ $(() => {
                 nextItem.remove();
             }
         }
-    }).on('click', 'li.clickable', (e) => {
+    }).on('click', 'li.clickable', e => {
         let checkbox = $(e.currentTarget).children(':checkbox');
 
         checkbox.prop('checked', !checkbox.is(':checked'));
         $(e.currentTarget).toggleClass('checked');
     });
 
-    $('#upload').click(() => {
-        $('#input-file').click();
-    });
+    $('#upload').click(() => $('#input-file').click());
 
-    $('#input-file').change((e) => {
+    $('#input-file').change(e => {
         let file = e.currentTarget.files[0];
 
         if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
@@ -374,6 +364,15 @@ $(() => {
         return false;
     });
 
+    $('#btn-add-firm').click(() => {
+        $.get(_config.firm_partial, {}, (html) => {
+            $('#box-edit-firm').replaceWith(html);
+
+            $('#modal-firm').modal('hide');
+            initialize();
+        });
+    });
+
     /**
      * Ability to create new firm and assign it to the offer
      */
@@ -383,12 +382,7 @@ $(() => {
         }
 
         $('#modal-firm').modal('show').find('.btn-primary').one('click', () => {
-            $.get(_config.firm_partial, {}, (html) => {
-                $('#box-edit-firm').replaceWith(html);
-
-                $('#modal-firm').modal('hide');
-                initialize();
-            });
+            $('#btn-add-firm').click();
 
             return false;
         });
@@ -397,7 +391,7 @@ $(() => {
     /**
      * Ability to assign different firm to this job offer
      */
-    $('.btn-firm').click((e) => {
+    $('.btn-firm').click(e => {
         let self = $(e.currentTarget);
 
         $.get(self.attr('href'), (html) => {

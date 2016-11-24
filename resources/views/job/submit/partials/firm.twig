@@ -11,7 +11,14 @@
         {{ theme.group_open('name', 'form-group-border') }}
             <label class="control-label">Nazwa firmy <em class="text-danger">*</em></label>
 
-            {{ form_text('name', input_old('name', firm.name), {'class': 'form-control'}) }}
+            <div class="input-group">
+                {{ form_text('name', input_old('name', firm.name), {'class': 'form-control'}) }}
+
+                <div class="input-group-addon">
+                    <a href="javascript:" id="btn-add-firm" title="Dodaj nową firmę"><i class="fa fa-plus"></i></a>
+                </div>
+            </div>
+
             {{ theme.error('name', 'Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.') }}
         {{ theme.group_close() }}
 
