@@ -307,7 +307,7 @@ $(function () {
 
         $.post($form.attr('action'), $form.serialize(), function(html) {
             if ($form.hasClass('collapse')) {
-                $('textarea', $form).val('');
+                $('textarea', $form).val('').keyup();
                 $form.collapse('hide');
 
                 $(html).insertBefore($form);
