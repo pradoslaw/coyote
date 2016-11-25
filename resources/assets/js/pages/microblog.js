@@ -121,9 +121,9 @@ $(function () {
                             entryText.html(html);
                             delete entries[$this.data('id')];
                         })
-                            .always(function() {
-                                $(':input', $form).removeAttr('disabled');
-                            });
+                        .always(function() {
+                            $(':input', $form).removeAttr('disabled');
+                        });
 
                         return false;
                     });
@@ -163,7 +163,7 @@ $(function () {
 
             $.post($form.attr('action'), data, function(json) {
                 $(json.html).insertBefore($form);
-                $input.val('');
+                $input.val('').keyup();
 
                 if (json.subscribe) {
                     $('#entry-' + $('input[name="parent_id"]', $form).val()).find('.btn-subscribe').addClass('subscribe-on');
