@@ -125,7 +125,7 @@ class SubmitController extends Controller
         // passing html version of the entry...
         $microblog->text = $microblog->html;
 
-        return view(!$microblog->wasRecentlyCreated ? 'microblog.text' : 'microblog.microblog')->with('microblog', $microblog);
+        return view(!$microblog->wasRecentlyCreated ? 'microblog.partials.text' : 'microblog.partials.microblog')->with('microblog', $microblog);
     }
 
     /**
@@ -138,7 +138,7 @@ class SubmitController extends Controller
     {
         $this->authorize('update', $microblog);
 
-        return view('microblog.edit')->with('microblog', $microblog);
+        return view('microblog.partials.edit')->with('microblog', $microblog);
     }
 
     /**
@@ -148,7 +148,7 @@ class SubmitController extends Controller
      */
     public function thumbnail()
     {
-        return view('microblog.thumbnail');
+        return view('microblog.partials.thumbnail');
     }
 
     /**
