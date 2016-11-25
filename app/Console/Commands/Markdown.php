@@ -70,11 +70,7 @@ class Markdown extends Command
         $count = DB::connection('mysql')->table('post')->count();
         $bar = $this->output->createProgressBar($count);
 
-        $this->transformer->quote = DB::connection('mysql')
-            ->table('post')
-            ->select(DB::raw('post_id, IF(user_id > 1, user_name, post_username) AS name'))
-            ->leftJoin('user', 'user_id', '=', 'post_user')
-            ->lists('name', 'post_id');
+        $this->transformer->quote = $this->getQuotes();
 
         DB::connection('mysql')
             ->table('post')
@@ -85,11 +81,50 @@ class Markdown extends Command
                 return $builder->where('post_id', $id);
             })
             ->chunk(
-                50000,
+                100000,
                 function ($sql) use ($bar) {
                     foreach ($sql as $row) {
                         DB::table('posts')
                             ->where('id', $row->post_id)
+                            ->update(['text' => $this->transformer->transform($row->post_content)]);
+
+                        $bar->advance();
+                    }
+                }
+            );
+
+        $bar->finish();
+    }
+
+    private function getQuotes()
+    {
+        return DB::connection('mysql')
+            ->table('post')
+            ->select(DB::raw('post_id, IF(user_id > 1, user_name, post_username) AS name'))
+            ->leftJoin('user', 'user_id', '=', 'post_user')
+            ->lists('name', 'post_id');
+    }
+
+    private function postLog($id = null)
+    {
+        $count = DB::connection('mysql')->table('post_text')->count();
+        $bar = $this->output->createProgressBar($count);
+
+        $this->transformer->quote = $this->getQuotes();
+
+        DB::connection('mysql')
+            ->table('post_text')
+            ->select(['text_id', 'text_content AS post_content'])
+            ->orderBy('text_id', 'DESC')
+            ->when($id, function ($builder) use ($id) {
+                return $builder->where('text_id', $id);
+            })
+            ->chunk(
+                100000,
+                function ($sql) use ($bar) {
+                    foreach ($sql as $row) {
+                        DB::table('post_log')
+                            ->where('id', $row->text_id)
                             ->update(['text' => $this->transformer->transform($row->post_content)]);
 
                         $bar->advance();
