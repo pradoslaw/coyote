@@ -17,6 +17,11 @@
   .media {
     overflow: visible;
   }
+
+  textarea {
+    min-height: 32px;
+    resize: none;
+  }
 }
 
 // zmienia kolor daty rowniez w rubryce "najpopularniejsze"
@@ -180,12 +185,12 @@
       color: $link-color-darker;
       text-decoration: underline;
     }
-  }
 
-  .media.form {
-    background-color: darken($body-bg, 4%);
-    border-top: none;
-    border-radius: $border-radius-small;
+    &.form {
+      background-color: darken($body-bg, 4%);
+      border-top: none;
+      border-radius: $border-radius-small;
+    }
   }
 
   .inline-edit {

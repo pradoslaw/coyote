@@ -140,7 +140,7 @@ class CommentController extends Controller
         }
 
         $microblog->text = $microblog->html;
-        $view = view('microblog.comment', ['comment' => $microblog, 'microblog' => ['id' => $microblog->parent_id]]);
+        $view = view('microblog.partials.comment', ['comment' => $microblog, 'microblog' => ['id' => $microblog->parent_id]]);
 
         return response()->json([
             'html' => $view->render(),
@@ -195,6 +195,6 @@ class CommentController extends Controller
         foreach ($comments as &$comment) {
             $comment->text = $parser->parse($comment->text);
         }
-        return view('microblog.comments', ['id' => $id, 'comments' => $comments]);
+        return view('microblog.partials.comments', ['id' => $id, 'comments' => $comments]);
     }
 }

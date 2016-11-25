@@ -149,20 +149,20 @@ $(function () {
 
             return false;
         })
-        .on('focus', '.comment-submit input', function() {
+        .on('focus', '.comment-submit textarea', function() {
             if (typeof $(this).data('prompt') === 'undefined') {
-                $(this).prompt().fastSubmit().data('prompt', 'yes');
+                $(this).prompt().fastSubmit().autogrow().data('prompt', 'yes');
             }
         })
         .on('submit', '.comment-submit', function() {
             var $form = $(this);
-            var $input = $('input[type="text"]', $form);
+            var $input = $('textarea', $form);
             var data = $form.serialize();
 
             $input.attr('disabled', 'disabled');
 
             $.post($form.attr('action'), data, function(json) {
-                $(json.html).hide().insertBefore($form).fadeIn(800);
+                $(json.html).insertBefore($form);
                 $input.val('');
 
                 if (json.subscribe) {
@@ -190,12 +190,13 @@ $(function () {
                     commentText.html('');
 
                     var $form = $('<form>');
-                    var $input = $('<input>', {'value': text, 'class': 'form-control', 'name': 'text', 'autocomplete': 'off', 'data-prompt-url': commentText.data('prompt-url')})
+                    var $input = $('<textarea>', {'class': 'form-control', 'name': 'text', 'data-prompt-url': commentText.data('prompt-url')})
                         .keydown(function(e) {
                             if (e.keyCode === 27) {
                                 cancel();
                             }
                         })
+                        .val(text)
                         .appendTo($form);
 
                     $form.fastSubmit().submit(function() {
@@ -206,15 +207,15 @@ $(function () {
                             $('#comment-' + $this.data('id')).replaceWith(json.html);
                             delete comments[$this.data('id')];
                         })
-                            .always(function() {
-                                $input.removeAttr('disabled');
-                            });
+                        .always(function() {
+                            $input.removeAttr('disabled');
+                        });
 
                         return false;
                     });
 
                     $form.appendTo(commentText);
-                    $input.inputFocus().prompt();
+                    $input.autogrow().inputFocus().prompt();
                 });
             } else {
                 cancel();

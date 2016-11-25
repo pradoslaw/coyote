@@ -69,7 +69,7 @@ class Cache
      */
     public function put(&$text)
     {
-        $this->repository->put($this->cacheKey($text), $text, self::CACHE_TTL);
+        $this->repository->put($this->key($text), $text, self::CACHE_TTL);
     }
 
     /**
@@ -78,7 +78,7 @@ class Cache
      */
     public function has(&$text)
     {
-        return $this->enable && $this->repository->has($this->cacheKey($text));
+        return $this->enable && $this->repository->has($this->key($text));
     }
 
     /**
@@ -87,7 +87,7 @@ class Cache
      */
     public function get(&$text)
     {
-        return $this->repository->get($this->cacheKey($text));
+        return $this->repository->get($this->key($text));
     }
 
     /**
@@ -95,14 +95,14 @@ class Cache
      */
     public function forget(&$text)
     {
-        $this->repository->forget($this->cacheKey($text));
+        $this->repository->forget($this->key($text));
     }
 
     /**
      * @param $text
      * @return string
      */
-    protected function cacheKey(&$text)
+    protected function key(&$text)
     {
         return 'text:' . md5($text) . $this->id;
     }

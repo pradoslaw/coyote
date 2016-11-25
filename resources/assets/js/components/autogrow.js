@@ -7,7 +7,7 @@
          */
         return this.each(function () {
             var $this = $(this),
-                minHeight = $this.height(),
+                minHeight = $this.outerHeight(),
                 maxHeight = 300,
                 lineHeight = $this.css('lineHeight'),
                 currentWidth = 0,
@@ -22,6 +22,8 @@
                 fontSize: $this.css('fontSize'),
                 fontFamily: $this.css('fontFamily'),
                 lineHeight: $this.css('lineHeight'),
+                paddingTop: $this.css('paddingTop'),
+                paddingBottom: $this.css('paddingBottom'),
                 resize: 'none'
             }).appendTo(document.body);
 
@@ -42,22 +44,24 @@
 
                 shadow.html(val);
 
-                $(this).css('height', Math.max(Math.min(shadow.height() + 17, maxHeight), minHeight));
+                $(this).css('height', Math.max(Math.min(shadow.outerHeight() + 2, maxHeight), minHeight));
+
+                currentWidth = $this.outerWidth();
+                currentHeight = $this.outerHeight();
             };
 
             $this.change(update).keyup(update).keydown(update);
             update.apply(this);
 
+            // unbind events if textarea is being resized
             $this.mousedown(function () {
-                currentWidth = $this.width();
-                currentHeight = $this.height();
+                currentWidth = $this.outerWidth();
+                currentHeight = $this.outerHeight();
             })
             .mouseup(function () {
-                if ($this.width() != currentWidth || $this.height() != currentHeight) {
+                if ($this.outerWidth() !== currentWidth || $this.outerHeight() !== currentHeight) {
                     $this.unbind('keyup', update).unbind('keydown', update).unbind('change', update);
                 }
-
-                currentWidth = currentHeight = 0;
             });
         });
     };
