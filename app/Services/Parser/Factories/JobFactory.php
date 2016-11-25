@@ -21,9 +21,9 @@ class JobFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing job data...');
 
-        $isInCache = $this->isInCache($text);
+        $isInCache = $this->cache->has($text);
         if ($isInCache) {
-            $text = $this->getFromCache($text);
+            $text = $this->cache->get($text);
         } else {
             $parser = new Container();
 

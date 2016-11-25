@@ -25,9 +25,9 @@ class MicroblogFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing microblog...');
 
-        $isInCache = $this->isInCache($text);
+        $isInCache = $this->cache->has($text);
         if ($isInCache) {
-            $text = $this->getFromCache($text);
+            $text = $this->cache->get($text);
         }
 
         if (!$isInCache || $this->isSmiliesAllowed()) {

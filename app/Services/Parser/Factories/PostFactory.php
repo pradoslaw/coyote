@@ -26,9 +26,9 @@ class PostFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing post...');
 
-        $isInCache = $this->isInCache($text);
+        $isInCache = $this->cache->has($text);
         if ($isInCache) {
-            $text = $this->getFromCache($text);
+            $text = $this->cache->get($text);
         }
 
         if (!$isInCache || $this->isSmiliesAllowed()) {

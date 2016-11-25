@@ -63,11 +63,11 @@ class CommentFactory extends AbstractFactory
     {
         start_measure('parsing', get_class($this));
 
-        $this->setCacheId($this->userId);
+        $this->cache->setId(class_basename($this) . $this->userId);
 
-        $isInCache = $this->isInCache($text);
+        $isInCache = $this->cache->has($text);
         if ($isInCache) {
-            $text = $this->getFromCache($text);
+            $text = $this->cache->get($text);
         }
 
         if (!$isInCache || $this->isSmiliesAllowed()) {
