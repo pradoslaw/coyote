@@ -93,7 +93,9 @@ class HomeController extends BaseController
      */
     public function preview(Request $request)
     {
-        $parser = app('parser.post')->setEnableCache(false);
+        $parser = app('parser.post');
+        $parser->cache->setEnable(false);
+
         return response($parser->parse($request->get('text')));
     }
 

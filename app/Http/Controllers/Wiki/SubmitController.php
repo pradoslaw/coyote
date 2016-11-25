@@ -115,7 +115,10 @@ class SubmitController extends BaseController
      */
     public function preview(Request $request)
     {
-        return response($this->getParser()->setEnableCache(false)->parse((string) $request->input('text')));
+        $parser = $this->getParser();
+        $parser->cache->setEnable(false);
+
+        return response($parser->parse((string) $request->input('text')));
     }
 
     /**

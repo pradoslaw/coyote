@@ -106,7 +106,7 @@
                 <h4><i class="fa fa-comments-o fa-fw"></i> <a href="{{ route('microblog.home') }}">Popularne wpisy na mikroblogu</a></h4>
 
                 {% for microblog in microblogs %}
-                    {% include "microblog.microblog" %}
+                    {% include "microblog.partials.microblog" %}
                 {% endfor %}
             </section>
         </main>

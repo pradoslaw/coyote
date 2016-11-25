@@ -59,7 +59,7 @@ class LogController extends BaseController
 
         /** @var \Coyote\Services\Parser\Factories\AbstractFactory $parser */
         $parser = app('parser.post');
-        $parser->setEnableCache(false);
+        $parser->cache->setEnable(false);
 
         foreach ($logs as &$log) {
             $log->text = $parser->parse($log->text);
