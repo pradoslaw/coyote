@@ -125,7 +125,7 @@ class SubmitController extends Controller
             'rateList'          => Job::getRatesList(),
             'popularTags'       => $this->job->getPopularTags()
         ])->with(
-            compact('job')
+            compact('job', 'firm')
         );
     }
 

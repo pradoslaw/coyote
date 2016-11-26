@@ -165,7 +165,7 @@
                             <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Informacje o firmie <i class="fa fa-angle-right"></i></button>
 
                             {% if job.firm_id %}
-                                <button type="submit" class="btn btn-danger pull-right btn-save" data-submit-state="Proszę czekać..."><i class="fa fa-save"></i> Zapisz i zakończ</button>
+                                <button type="submit" class="btn btn-danger pull-right btn-save" data-submit-state="Proszę czekać..." title="Zapisz tę ofertę"><i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}</button>
                             {% endif %}
                         </div>
                     </div>
