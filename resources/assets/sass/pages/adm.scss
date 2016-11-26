@@ -29,6 +29,11 @@ body.fixed-top {
   }
 }
 
+abbr {
+  cursor: help;
+  border-bottom: 1px dotted $abbr-border-color;
+}
+
 // Login forum
 // --------------------
 

@@ -4,3 +4,9 @@
 {% block panel %}
     {{ grid(grid) }}
 {% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    {% include 'adm.partials.geo-ip' %}
+{% endblock %}

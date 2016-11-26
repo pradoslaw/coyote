@@ -34,7 +34,8 @@ elixir(function (mix) {
     mix.babel(['pages/job/submit.js'], 'public/js/job-submit.js')
         .babel(['pages/job/tinymce.js'], 'public/js/job-tinymce.js')
         .babel(['pages/job.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js'], 'public/js/job.js')
-        .babel(['pages/wiki.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js'], 'public/js/wiki.js');
+        .babel(['pages/wiki.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js'], 'public/js/wiki.js')
+        .babel(['components/geo-ip.js'], 'public/js/geo-ip.js');
 
     mix.scripts(base, 'public/js/main.js')
         /*
@@ -157,6 +158,7 @@ elixir(function (mix) {
             'js/jquery-ui.js',
             'js/wiki.js',
             'js/diff.js',
+            'js/geo-ip.js',
 
             'css/main.css',
             'css/auth.css',
