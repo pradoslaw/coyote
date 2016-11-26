@@ -80,8 +80,10 @@ class PurgeJobs extends Command
         foreach ($result as $hit) {
             $user = $this->user->find($hit['user_id'], ['name', 'email']);
 
-            $this->sendEmail($user, $hit);
-            $this->info(sprintf('Sending e-mail about ending offer: %s.', $hit['title']));
+            if ($user->email) {
+                $this->sendEmail($user, $hit);
+                $this->info(sprintf('Sending e-mail about ending offer: %s.', $hit['title']));
+            }
         }
 
         $this->elasticsearch->deleteByQuery($this->params);
