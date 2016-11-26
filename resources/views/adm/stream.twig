@@ -2,46 +2,9 @@
 {% block title %}Dziennik zdarzeń {{ parent() }}{% endblock %}
 
 {% block container %}
-
-
-
-
-    {#<div class="panel panel-default">#}
-        {#<div class="panel-heading">Formularz wyszukiwania</div>#}
-        {#<div class="panel-body">#}
-            {#{{ form(form) }}#}
-        {#</div>#}
-    {#</div>#}
-
     {% if paginator.items() > 0 %}
         <div class="panel panel-default margin-md-top">
             <div class="panel-heading">
-                {#{{ form_start(form) }}#}
-
-                {#<div class="btn-group">#}
-                    {#<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-                        {#{{ form.ip.label }}#}
-                        {#<span class="caret"></span>#}
-                    {#</button>#}
-
-                    {#<div class="dropdown-menu">#}
-                        {#{{ form_widget(form.ip) }}#}
-                    {#</div>#}
-                {#</div>#}
-
-                {#<div class="btn-group">#}
-                    {#<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-                        {#{{ form.browser.label }}#}
-                        {#<span class="caret"></span>#}
-                    {#</button>#}
-
-                    {#<div class="dropdown-menu">#}
-                        {#{{ form_widget(form.browser) }}#}
-                        {#{{ form_error(form.browser) }}#}
-                    {#</div>#}
-
-                {#</div>#}
-                {#{{ form_end(form) }}#}
                 {{ form(form) }}
             </div>
 
@@ -65,14 +28,22 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/auto-complete.js') }}"></script>
-    <script type="text/javascript">
+    <script src="{{ cdn('js/auto-complete.js') }}"></script>
+    <script>
         $(function () {
-            $('input[name="user_name"]').autocomplete({
-                url: '{{ route('user.prompt') }}'
+            $('input[name="user_name"]').focus(function() {
+                $(this).autocomplete({
+                    url: '{{ route('user.prompt') }}'
+                });
+
+                $(this).unbind('focus');
             });
 
             $('a[class~="bubble"],i[class~="bubble"]').tooltip();
+
+            $(document).on('click', '#stream-filter-form .dropdown-menu', function (e) {
+                e.stopPropagation();
+            });
         });
     </script>
 {% endblock %}

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class FirewallForm extends Form implements ValidatesWhenSubmitted
 {
-    use EventsTrait;
+    use UsernameTransformerTrait;
 
     /**
      * @var UserRepository

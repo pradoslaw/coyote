@@ -5,7 +5,7 @@ namespace Coyote\Http\Forms;
 use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\FormBuilder\Form;
 
-trait EventsTrait
+trait UsernameTransformerTrait
 {
     /**
      * @param string $from

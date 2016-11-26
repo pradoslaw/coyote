@@ -8,7 +8,7 @@ use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 
 class StreamFilterForm extends Form implements ValidatesWhenSubmitted
 {
-    use EventsTrait;
+    use UsernameTransformerTrait;
 
     /**
      * @var array
@@ -41,6 +41,7 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
     public function buildForm()
     {
         $this
+            ->setAttr(['id' => 'stream-filter-form'])
             ->add('ip', 'text', [
                 'label' => 'Adres IP'
             ])
