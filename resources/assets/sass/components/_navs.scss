@@ -20,7 +20,7 @@
   margin: 0;
   padding: 0;
   line-height: 24px;
-  height: 26px;
+  height: 25px;
   overflow: hidden;
   font-family: 'Open Sans', Arial, sans-serif;
 
@@ -116,12 +116,13 @@
     color: $gray-light;
   }
 
-  > li.active > a,
-  > li.active > a:hover,
-  > li.active > a:focus,
-  > li.active > a:active {
-    //border-top: 2px solid $brand-primary;
-    border-top: 2px solid $alt-link-hover-color;
+  > li.active > a {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      border-top: 2px solid $alt-link-hover-color;
+    }
   }
 }
 
@@ -137,14 +138,16 @@
     }
   }
 
-  > li.active > a,
-  > li.active > a:hover,
-  > li.active > a:focus,
-  > li.active > a:active {
-    background: transparent;
-    color: $brand-primary;
-    border-bottom: 2px solid $brand-primary;
-    border-radius: 0;
-    margin-bottom: -2px;
+  > li.active > a {
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+      background: transparent;
+      color: $brand-primary;
+      border-bottom: 2px solid $brand-primary;
+      border-radius: 0;
+      margin-bottom: -2px;
+    }
   }
 }
