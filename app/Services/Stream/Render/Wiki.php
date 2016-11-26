@@ -9,7 +9,7 @@ class Wiki extends Render
      */
     public function object()
     {
-        return trans('stream.' . $this->stream['object.objectType']);
+        return trans('stream.nouns.' . $this->stream['object.objectType']);
     }
 
     /**

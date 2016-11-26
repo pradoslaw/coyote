@@ -60,6 +60,10 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
             ->add('fingerprint', 'text', [
                 'label' => 'Fingerprint'
             ])
+            ->add('object.objectType', 'choice', [
+                'label' => 'Obiekt',
+                'choices' => array_map('ucfirst', trans()->get('stream.nouns'))
+            ])
             ->add('created_at', 'select', [
                 'label' => 'Data i czas',
                 'empty_value' => 'Wszystkie wpisy',

@@ -99,7 +99,7 @@ abstract class Render
      */
     protected function verb()
     {
-        return trans('stream.' . $this->stream['verb']);
+        return trans('stream.verbs.' . $this->stream['verb']);
     }
 
     /**
@@ -109,7 +109,7 @@ abstract class Render
     {
         return link_to(
             $this->stream['object.url'],
-            trans('stream.' . $this->stream['object.objectType'])
+            trans('stream.nouns.' . $this->stream['object.objectType'])
         );
     }
 
