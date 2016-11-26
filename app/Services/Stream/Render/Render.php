@@ -109,7 +109,7 @@ abstract class Render
     {
         return link_to(
             $this->stream['object.url'],
-            trans('stream.nouns.' . $this->stream['object.objectType'])
+            (string) trans('stream.nouns.' . $this->stream['object.objectType'])
         );
     }
 

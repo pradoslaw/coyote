@@ -5,11 +5,11 @@ namespace Coyote\Services\Stream\Render;
 class Wiki extends Render
 {
     /**
-     * @return string|\Symfony\Component\Translation\TranslatorInterface
+     * @return string
      */
     public function object()
     {
-        return trans('stream.nouns.' . $this->stream['object.objectType']);
+        return (string) trans('stream.nouns.' . $this->stream['object.objectType']);
     }
 
     /**
