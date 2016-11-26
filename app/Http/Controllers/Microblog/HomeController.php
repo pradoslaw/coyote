@@ -33,7 +33,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        /** @var \Coyote\Microblog[] $microblogs */
         $microblogs = $this->microblog->paginate(10);
         $this->microblog->resetCriteria();
 
