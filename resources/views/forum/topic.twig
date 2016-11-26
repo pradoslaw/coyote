@@ -1,5 +1,7 @@
 {% extends 'forum.base' %}
-{% block title %}{{ topic.subject }}{{ parent() }}{% endblock %}
+
+{% block title %}{{ topic.subject ~ (paginate.currentPage() > 1 ? (' - Strona ' ~ paginate.currentPage())) }}{{ parent() }}{% endblock %}
+{% block description %}{{ excerpt(posts[0].text, 55) }}{% endblock %}
 
 {% import 'components.forms' as forms %}
 {% import 'components.modals' as modals %}
