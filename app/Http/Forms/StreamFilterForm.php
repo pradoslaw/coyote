@@ -10,20 +10,17 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
 {
     use EventsTrait;
 
-    const HOUR          = 60 * 60;
-    const DAY           = self::HOUR * 24;
-    const WEEK          = self::DAY * 7;
-    const TWO_WEEKS     = self::WEEK * 2;
-    const MONTH         = self::WEEK * 4;
-    const HALF_YEAR     = self::MONTH * 6;
-    const YEAR          = self::MONTH * 12;
-
     /**
      * @var array
      */
     public $attr = [
         'method' => self::GET
     ];
+
+    /**
+     * @var string
+     */
+    protected $theme = 'forms.themes.filter';
 
     /**
      * @var UserRepository
@@ -64,18 +61,9 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Obiekt',
                 'choices' => array_map('ucfirst', trans()->get('stream.nouns'))
             ])
-            ->add('created_at', 'select', [
-                'label' => 'Data i czas',
-                'empty_value' => 'Wszystkie wpisy',
-                'choices' => [
-                    self::HOUR => 'Ostatnia godzina',
-                    self::DAY => 'Ostatnie 24 godz.',
-                    self::WEEK => 'Ostatni tydzień',
-                    self::TWO_WEEKS => 'Ostatnie 2 tyg.',
-                    self::MONTH => 'Ostatnie 4 tyg.',
-                    self::HALF_YEAR => 'Ostatnie 6 miesięcy',
-                    self::YEAR => 'Ostatni rok'
-                ]
+            ->add('object.id', 'text', [
+                'label' => 'ID',
+                'help' => 'ID użytkownika, wątku, postu itd.'
             ])
             ->add('submit', 'submit', [
                 'label' => 'Szukaj',

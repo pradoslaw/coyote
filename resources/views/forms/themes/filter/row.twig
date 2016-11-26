@@ -1,0 +1,14 @@
+{% import 'components.forms' as forms %}
+
+<div {{ forms.attr(row_attr|merge({class: (row_attr.class|default('') ~ ' btn-group ' ~ (error ? ' has-error'))|trim})) }}>
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ label }}
+
+        <span class="caret"></span>
+    </button>
+
+    <div class="dropdown-menu padding-sm">
+        {{ include(widget_path) }}
+        {{ include('forms.themes.inline.error') }}
+    </div>
+</div>

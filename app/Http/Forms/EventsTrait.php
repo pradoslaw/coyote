@@ -15,7 +15,7 @@ trait EventsTrait
     {
         $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) use ($from, $to) {
             $username = $form->get($from)->getValue();
-            $form->add($to, 'hidden');
+            $form->add($to, 'hidden', ['template' => 'hidden']);
 
             if ($username) {
                 /** @var \Coyote\User $user */

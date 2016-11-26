@@ -2,15 +2,49 @@
 {% block title %}Dziennik zdarzeń {{ parent() }}{% endblock %}
 
 {% block container %}
-    <div class="panel panel-default">
-        <div class="panel-heading">Formularz wyszukiwania</div>
-        <div class="panel-body">
-            {{ form(form) }}
-        </div>
-    </div>
+
+
+
+
+    {#<div class="panel panel-default">#}
+        {#<div class="panel-heading">Formularz wyszukiwania</div>#}
+        {#<div class="panel-body">#}
+            {#{{ form(form) }}#}
+        {#</div>#}
+    {#</div>#}
 
     {% if paginator.items() > 0 %}
-        <div class="panel panel-default">
+        <div class="panel panel-default margin-md-top">
+            <div class="panel-heading">
+                {#{{ form_start(form) }}#}
+
+                {#<div class="btn-group">#}
+                    {#<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+                        {#{{ form.ip.label }}#}
+                        {#<span class="caret"></span>#}
+                    {#</button>#}
+
+                    {#<div class="dropdown-menu">#}
+                        {#{{ form_widget(form.ip) }}#}
+                    {#</div>#}
+                {#</div>#}
+
+                {#<div class="btn-group">#}
+                    {#<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+                        {#{{ form.browser.label }}#}
+                        {#<span class="caret"></span>#}
+                    {#</button>#}
+
+                    {#<div class="dropdown-menu">#}
+                        {#{{ form_widget(form.browser) }}#}
+                        {#{{ form_error(form.browser) }}#}
+                    {#</div>#}
+
+                {#</div>#}
+                {#{{ form_end(form) }}#}
+                {{ form(form) }}
+            </div>
+
             <div class="panel-body">
                 {{ paginator.render()|raw }}
 
