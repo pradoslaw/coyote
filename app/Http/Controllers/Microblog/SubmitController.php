@@ -31,12 +31,12 @@ class SubmitController extends Controller
     private $user;
 
     /**
-     * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
-     *
      * @param User $user
      */
     public function __construct(User $user)
     {
+        parent::__construct();
+
         $this->user = $user;
     }
 

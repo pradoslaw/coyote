@@ -29,13 +29,13 @@ class CommentController extends Controller
     private $user;
 
     /**
-     * Nie musze tutaj wywolywac konstruktora klasy macierzystej. Nie potrzeba...
-     *
      * @param MicroblogRepository $microblog
      * @param UserRepository $user
      */
     public function __construct(MicroblogRepository $microblog, UserRepository $user)
     {
+        parent::__construct();
+
         $this->microblog = $microblog;
         $this->user = $user;
     }
@@ -55,7 +55,7 @@ class CommentController extends Controller
         ]);
 
         if (!$microblog->exists) {
-            $user = auth()->user();
+            $user = $this->auth;
             $data = $request->only(['text', 'parent_id']) + ['user_id' => $user->id];
         } else {
             $this->authorize('update', $microblog);
@@ -79,7 +79,7 @@ class CommentController extends Controller
 
                 // we need to send alerts AFTER saving comment to database because we need ID of comment
                 $alertData = [
-                    'microblog_id'=> $microblog->parent_id, // <-- parent_id NOT id (to generate currect alerts object_id)
+                    'microblog_id'=> $microblog->parent_id, // <-- parent_id NOT id (to generate current alert's object_id)
                     'content'     => $microblog->html,
                     'excerpt'     => excerpt($microblog->html),
                     'sender_id'   => $user->id,
