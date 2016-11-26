@@ -1,7 +1,7 @@
 #adm-menu {
   background: url('/img/background.png') repeat;
   border-right: 1px solid lighten($border-color, 2%);
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 5px;
   height: 100%;

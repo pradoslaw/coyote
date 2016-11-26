@@ -3,9 +3,18 @@
 @import "../vendor/font-awesome/variables";
 @import "../helpers/variables";
 
+html {
+  // relative is required to contain the absolute sidebar
+  min-height: 100%;
+  // minimum height make sure that if the content is below 100% of viewport, it will still allow the sidebar to be at 100%,
+  // and if the content is greater than 100% of viewport, it will allow stretching
+  position: relative;
+}
+
 body.fixed-top {
   padding-top: 0;
 }
+
 
 // override class from main.scss
 .max-width {
