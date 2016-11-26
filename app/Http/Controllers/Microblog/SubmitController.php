@@ -56,7 +56,7 @@ class SubmitController extends Controller
         $data = $request->only(['text']);
 
         if (!$microblog->exists) {
-            $user = auth()->user();
+            $user = $this->auth;
             $data['user_id'] = $user->id;
         } else {
             $this->authorize('update', $microblog);
@@ -102,7 +102,7 @@ class SubmitController extends Controller
                     ])->notify();
                 }
 
-                if (auth()->user()->allow_subscribe) {
+                if ($this->auth->allow_subscribe) {
                     // enable subscribe button
                     $microblog->subscribe_on = true;
                     $microblog->subscribers()->create(['user_id' => $user->id]);
@@ -119,7 +119,7 @@ class SubmitController extends Controller
 
         // do przekazania do widoku...
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
-            $microblog->$key = $user->$key;
+            $microblog->{$key} = $user->{$key};
         }
 
         // passing html version of the entry...

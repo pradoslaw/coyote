@@ -10,8 +10,8 @@ class PurgeController extends BaseController
      */
     public function index($wiki)
     {
-        $this->getParser()->purgeFromCache($wiki->text);
-        
+        $this->getParser()->cache->forget($wiki->text);
+
         return back()->with('success', 'Strona została usunięta z cache.');
     }
 }

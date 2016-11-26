@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $text
  * @property string $html
  * @property Microblog $parent
+ * @property Microblog[] $comments
  */
 class Microblog extends Model
 {
@@ -145,6 +146,11 @@ class Microblog extends Model
         }
 
         $this->attributes['media'] = $media;
+    }
+
+    public function setHtmlAttribute($value)
+    {
+        $this->html = $value;
     }
 
     /**

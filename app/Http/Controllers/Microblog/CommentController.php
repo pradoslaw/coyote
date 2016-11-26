@@ -136,29 +136,15 @@ class CommentController extends Controller
         });
 
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
-            $microblog->$key = $user->$key;
+            $microblog->{$key} = $user->{$key};
         }
 
-        $microblog->text = $microblog->html;
         $view = view('microblog.partials.comment', ['comment' => $microblog, 'microblog' => ['id' => $microblog->parent_id]]);
 
         return response()->json([
             'html' => $view->render(),
             'subscribe' => (int) $isSubscribed
         ]);
-    }
-
-    /**
-     * Edycja komentarza na mikroblogu.
-     *
-     * @param \Coyote\Microblog
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function edit($microblog)
-    {
-        $this->authorize('update', $microblog);
-
-        return response($microblog->text);
     }
 
     /**

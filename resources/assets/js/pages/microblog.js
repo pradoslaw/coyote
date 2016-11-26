@@ -18,10 +18,8 @@ $(function () {
     // zawartosc tresci wpisow
     // dane do tego obiektu zapisywane sa w momencie klikniecia przycisku "Edytuj"
     var entries = {};
-    // zawartosc komentarzy
-    // dane do tego boiektu zapisywane sa w momencie edycji komentarza. jezeli user zrezygnuje z edycji
-    // to przywracamy HTML-a z tego obiektu
-    var comments = {};
+    // id komentarzy, ktore poddawane sa edycji
+    var comments = [];
     var timeoutId;
 
     var Thumbs =
@@ -149,12 +147,12 @@ $(function () {
 
             return false;
         })
-        .on('focus', '.comment-submit textarea', function() {
+        .on('focus', '.comment-form textarea', function() {
             if (typeof $(this).data('prompt') === 'undefined') {
                 $(this).prompt().fastSubmit().autogrow().data('prompt', 'yes');
             }
         })
-        .on('submit', '.comment-submit', function() {
+        .on('submit', '.comment-form', function() {
             var $form = $(this);
             var $input = $('textarea', $form);
             var data = $form.serialize();
@@ -176,52 +174,41 @@ $(function () {
             return false;
         })
         .on('click', '.btn-sm-edit', function(e) {
-            var $this = $(this);
-            var commentText = $('#comment-' + $this.data('id')).find('.inline-edit');
+            var id = $(this).data('id');
+            var comment = $('#comment-' + id);
 
-            var cancel = function() {
-                commentText.html(comments[$this.data('id')]);
-                delete comments[$this.data('id')];
-            };
+            var form = comment.find('.write-content');
+            var body = comment.find('.comment-body');
 
-            if (typeof comments[$this.data('id')] === 'undefined') {
-                $.get($this.attr('href'), function(text) {
-                    comments[$this.data('id')] = commentText.html();
-                    commentText.html('');
+            form.toggle();
+            body.toggle();
 
-                    var $form = $('<form>');
-                    var $input = $('<textarea>', {'class': 'form-control', 'name': 'text', 'data-prompt-url': commentText.data('prompt-url')})
-                        .keydown(function(e) {
-                            if (e.keyCode === 27) {
-                                cancel();
-                            }
-                        })
-                        .val(text)
-                        .appendTo($form);
+            if (!form.hasClass('js-editable')) {
+                form.addClass('js-editable');
 
-                    $form.fastSubmit().submit(function() {
-                        var data = $form.serialize();
-                        $input.attr('disabled', 'disabled');
+                var textarea = $('textarea', form);
+                textarea.autogrow().inputFocus().prompt().keydown(function(e) {
+                    if (e.keyCode === 27) {
+                        body.show();
+                        form.hide();
+                    }
+                });
 
-                        $.post($this.attr('href'), data, function(json) {
-                            $('#comment-' + $this.data('id')).replaceWith(json.html);
-                            delete comments[$this.data('id')];
-                        })
-                        .always(function() {
-                            $input.removeAttr('disabled');
-                        });
+                form.fastSubmit().submit(function() {
+                    var data = form.serialize();
 
-                        return false;
+                    textarea.attr('disabled', 'disabled');
+
+                    $.post($(this).attr('action'), data, function(json) {
+                        comment.replaceWith(json.html);
+                    })
+                    .always(function() {
+                        textarea.removeAttr('disabled');
                     });
 
-                    $form.appendTo(commentText);
-                    $input.autogrow().inputFocus().prompt();
+                    return false;
                 });
-            } else {
-                cancel();
             }
-
-            e.preventDefault();
         })
         .on('click', '.btn-sm-remove', function() {
             var $this = $(this);

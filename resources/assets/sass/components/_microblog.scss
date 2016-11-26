@@ -18,6 +18,8 @@
     overflow: visible;
   }
 
+  // Minimum height is 32px just like in <input> fields. Bootstrap sets height: auto to the textarea
+  // We need to set minimum height for autogrow plugin.
   textarea {
     min-height: 32px;
     resize: none;
@@ -116,13 +118,24 @@
   content: $fa-var-bell;
 }
 
-.microblog-comments {
-  margin-top: 15px;
+// Comments block
+// -------------------------
 
+.microblog-comments {
+  // One comment
   .media {
     border-top: 1px solid lighten($border-color, 5%);
     padding: 10px 5px 6px 5px;
     margin-top: 5px;
+
+    // Media form for microblog's comment
+    // ------------------------------------
+
+    &.media-darker {
+      background-color: darken($body-bg, 4%);
+      border-top: none;
+      border-radius: $border-radius-small;
+    }
 
     .dropdown button {
       border: none;
@@ -134,6 +147,9 @@
       background-color: #fff;
       padding: 4px;
     }
+
+    // Comment text
+    // ----------------
 
     .media-content {
       font-size: 12px;
@@ -148,6 +164,7 @@
       }
     }
 
+    // set visible for dropdown in media-body
     .media-body {
       overflow: visible;
     }
@@ -185,16 +202,22 @@
       color: $link-color-darker;
       text-decoration: underline;
     }
-
-    &.form {
-      background-color: darken($body-bg, 4%);
-      border-top: none;
-      border-radius: $border-radius-small;
-    }
   }
 
-  .inline-edit {
-    margin-right: 20px;
+  // Submit button and textarea within .write-content class
+  // -------------------------------------------------------
+
+  .write-content {
+    position: relative;
+
+    > .btn-submit {
+      color: $gray;
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: none;
+      font-size: 15px;
+    }
   }
 
   .show-all {

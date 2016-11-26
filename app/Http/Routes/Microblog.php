@@ -18,7 +18,6 @@ $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
 
     // edycja/publikacja komentarza oraz jego usuniecie
     $this->post('Comment/{microblog?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);
-    $this->get('Comment/{microblog}', ['uses' => 'CommentController@edit', 'middleware' => 'auth']);
     $this->post('Comment/Delete/{microblog}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
     // pokaz reszte komentarzy...
     $this->get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);

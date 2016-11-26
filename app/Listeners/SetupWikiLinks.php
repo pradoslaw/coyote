@@ -56,7 +56,7 @@ class SetupWikiLinks implements ShouldQueue
 
         // step 5. purge cache from all articles which are connected to this one.
         foreach ($this->wiki->getWikiAssociatedLinksByPath($event->wiki->path) as $row) {
-            $this->getParser()->purgeFromCache($row->text);
+            $this->getParser()->cache->forget($row->text);
         }
 
         $this->wiki->associateLink($event->wiki->path, $event->wiki->id);
@@ -67,13 +67,13 @@ class SetupWikiLinks implements ShouldQueue
      */
     public function onWikiDelete(WikiWasDeleted $event)
     {
-        $this->getParser()->purgeFromCache($event->wiki['text']);
+        $this->getParser()->cache->forget($event->wiki['text']);
         $links = $this->wiki->getWikiAssociatedLinksByPath($event->wiki['path']);
 
         $this->wiki->dissociateLink($event->wiki['path']);
 
         foreach ($links as $row) {
-            $this->getParser()->purgeFromCache($row['text']);
+            $this->getParser()->cache->forget($row['text']);
         }
     }
 

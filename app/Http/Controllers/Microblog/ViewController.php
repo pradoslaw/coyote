@@ -22,7 +22,7 @@ class ViewController extends Controller
         $parser = app('parser.microblog.comment');
 
         foreach ($microblog->comments as &$comment) {
-            $comment->text = $parser->parse($comment->text);
+            $comment->html = $parser->parse($comment->text);
         }
 
         $excerpt = excerpt($microblog->text);

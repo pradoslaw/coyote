@@ -11,12 +11,15 @@ use Coyote\Repositories\Criteria\Microblog\WithTag;
 class HomeController extends Controller
 {
     use CacheFactory;
-    
+
     /**
      * @var MicroblogRepository
      */
     private $microblog;
 
+    /**
+     * @param MicroblogRepository $microblog
+     */
     public function __construct(MicroblogRepository $microblog)
     {
         parent::__construct();
@@ -30,6 +33,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        /** @var \Coyote\Microblog[] $microblogs */
         $microblogs = $this->microblog->paginate(10);
         $this->microblog->resetCriteria();
 
@@ -47,7 +51,7 @@ class HomeController extends Controller
             $microblog->text = $parser['main']->parse($microblog->text);
 
             foreach ($microblog->comments as &$comment) {
-                $comment->text = $parser['comment']->parse($comment->text);
+                $comment->html = $parser['comment']->parse($comment->text);
             }
         }
 
