@@ -132,7 +132,7 @@ class SubmitController extends Controller
      * Edycja wpisu na mikroblogu. Odeslanie formularza zawierajacego tresc + zalaczniki
      *
      * @param \Coyote\Microblog $microblog
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function edit($microblog)
     {
@@ -144,7 +144,7 @@ class SubmitController extends Controller
     /**
      * Return small piece of code (thumbnail container)
      *
-     * @return \Illuminate\Contracts\View\Factory
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function thumbnail()
     {
