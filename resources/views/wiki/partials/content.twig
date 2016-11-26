@@ -18,7 +18,9 @@
             <header>
                 <h1 itemprop="name"><a href="{{ url(wiki.path) }}">{{ wiki.long_title ?: wiki.title }}</a></h1>
                 {% block author %}
-                    <h5>{{ link_to_profile(author) }}</h5>
+                    {% if author %}
+                        <h5>{{ link_to_profile(author) }}</h5>
+                    {% endif %}
                 {% endblock %}
 
                 {% block metadata %}

@@ -24,7 +24,7 @@ class ShowController extends BaseController
         /** @var \Coyote\Wiki $wiki */
         $wiki = $request->wiki;
 
-        $author = $wiki->logs()->orderBy('id')->first()->user;
+        $author = $wiki->logs()->exists() ? $wiki->logs()->orderBy('id')->first()->user : null;
         $wiki->text = $this->getParser()->parse((string) $wiki->text);
 
         $parser = app('parser.comment');
