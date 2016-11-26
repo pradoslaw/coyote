@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Forms\StreamFilterForm;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
+use Coyote\Repositories\Criteria\Stream\FilterTransformer;
 use Coyote\Services\Stream\Renderer;
 
 class StreamController extends BaseController
@@ -30,7 +31,9 @@ class StreamController extends BaseController
      */
     public function index(StreamFilterForm $form)
     {
-        $paginator = $this->stream->filter($form);
+        $this->stream->pushCriteria(new FilterTransformer($form));
+
+        $paginator = $this->stream->simplePaginate();
         (new Renderer($paginator->items()))->render();
 
         $paginator->appends($form->getRequest()->except('page'));

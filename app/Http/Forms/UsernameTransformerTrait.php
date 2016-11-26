@@ -11,7 +11,7 @@ trait UsernameTransformerTrait
      * @param string $from
      * @param string $to
      */
-    protected function transformUserNameToId($from, $to = 'user_id')
+    protected function transformUsernameToId($from, $to = 'user_id')
     {
         $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) use ($from, $to) {
             $username = $form->get($from)->getValue();

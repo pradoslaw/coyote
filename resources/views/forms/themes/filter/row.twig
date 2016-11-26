@@ -2,7 +2,7 @@
 
 <div {{ forms.attr(row_attr|merge({class: (row_attr.class|default('') ~ ' btn-group ' ~ (error ? ' has-error'))|trim})) }}>
     <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{ label }}
+        {{ value ? (value is iterable ? value|join(', ') : value) : label }}
 
         <span class="caret"></span>
     </button>

@@ -2,12 +2,14 @@
 
 namespace Coyote\Repositories\Mongodb;
 
-use Coyote\Http\Forms\StreamFilterForm;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Repositories\Eloquent\Repository;
 
 class StreamRepository extends Repository implements StreamRepositoryInterface
 {
+    /**
+     * @return string
+     */
     public function model()
     {
         return 'Coyote\Stream';
@@ -110,37 +112,6 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
     }
 
     /**
-     * @param StreamFilterForm $form
-     * @return mixed
-     */
-    public function filter(StreamFilterForm $form)
-    {
-        $sql = $this->model;
-
-        foreach ($form->getFields() as $field) {
-            $value = $field->getValue();
-
-            if ($field->getName() == 'user_name') { // I know - it sucks
-                continue;
-            }
-
-            if (!empty($value)) {
-                if ('created_at' == $field->getName()) {
-                    $sql = $sql->where('created_at', '>=', new \DateTime('-' . $value . ' seconds'));
-                } elseif ('fingerprint' == $field->getName()) {
-                    $sql = $sql->whereIn('fingerprint', (array) $value);
-                } elseif (is_string($value)) {
-                    $sql = $sql->where($field->getName(), 'like', str_replace('*', '%', $value));
-                } else {
-                    $sql = $sql->where($field->getName(), $value);
-                }
-            }
-        }
-
-        return $sql->orderBy('_id', 'DESC')->simplePaginate();
-    }
-
-    /**
      * Transform string to array and converts to lower case
      *
      * @param $object
@@ -152,8 +123,11 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
             $object = [$object];
         }
 
-        return array_map(function ($item) {
-            return strtolower(class_basename($item));
-        }, $object);
+        return array_map(
+            function ($item) {
+                return strtolower(class_basename($item));
+            },
+            $object
+        );
     }
 }

@@ -132,6 +132,17 @@ interface RepositoryInterface
     public function findWhere($where, $columns = ['*']);
 
     /**
+     * Paginate the given query into a simple paginator.
+     *
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int|null $page
+     * @return \Illuminate\Contracts\Pagination\Paginator
+     */
+    public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
+
+    /**
      * Get a new raw query expression.
      *
      * @param  mixed  $value

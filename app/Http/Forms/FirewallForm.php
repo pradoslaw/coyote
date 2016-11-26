@@ -27,7 +27,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
         parent::__construct();
         $this->repository = $repository;
 
-        $this->transformUserNameToId('name');
+        $this->transformUsernameToId('name');
 
         $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) use ($request) {
             $userId = $this->data->user_id ?? $request->input('user');

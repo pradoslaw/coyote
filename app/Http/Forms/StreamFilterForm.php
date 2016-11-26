@@ -35,7 +35,7 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
         parent::__construct();
 
         $this->repository = $repository;
-        $this->transformUserNameToId('user_name', 'actor.id');
+        $this->transformUsernameToId('user_name', 'actor_id');
     }
 
     public function buildForm()
@@ -58,11 +58,11 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
             ->add('fingerprint', 'text', [
                 'label' => 'Fingerprint'
             ])
-            ->add('object.objectType', 'choice', [
+            ->add('object_objectType', 'choice', [
                 'label' => 'Obiekt',
                 'choices' => array_map('ucfirst', trans()->get('stream.nouns'))
             ])
-            ->add('object.id', 'text', [
+            ->add('object_id', 'text', [
                 'label' => 'ID',
                 'help' => 'ID użytkownika, wątku, postu itd.'
             ])
