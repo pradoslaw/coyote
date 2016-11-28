@@ -10,6 +10,7 @@ use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
 use Coyote\Listeners\MicroblogListener;
 use Coyote\Listeners\SendLockoutEmail;
+use Coyote\Listeners\SendSuccessfulLoginEmail;
 use Coyote\Listeners\SetupWikiLinks;
 use Coyote\Listeners\WikiListener;
 use Coyote\Listeners\PageListener;
@@ -17,6 +18,7 @@ use Coyote\Listeners\PostListener;
 use Coyote\Listeners\TopicListener;
 use Coyote\Listeners\JobListener;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
@@ -33,7 +35,8 @@ class EventServiceProvider extends ServiceProvider
         UserWasSaved::class => [FlushUserCache::class],
         Lockout::class => [SendLockoutEmail::class],
         FirewallWasSaved::class => [FlushFirewallCache::class],
-        FirewallWasDeleted::class => [FlushFirewallCache::class]
+        FirewallWasDeleted::class => [FlushFirewallCache::class],
+        Login::class => [SendSuccessfulLoginEmail::class]
     ];
 
     /**

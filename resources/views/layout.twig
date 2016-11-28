@@ -221,7 +221,7 @@
                         {% if session_has('success') %}
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <div class="alert alert-success" style="margin-top: 18px">
+                                    <div class="alert alert-success margin-md-top">
                                         <i class="fa fa-check"></i>
 
                                         {{ session_get('success') }}
@@ -233,7 +233,7 @@
                         {% if session_has('error') %}
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <div class="alert alert-error" style="margin-top: 18px">
+                                    <div class="alert alert-danger margin-md-top">
                                         <i class="fa fa-exclamation-triangle"></i>
 
                                         {{ session_get('error') }}

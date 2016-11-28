@@ -1,0 +1,14 @@
+{% extends 'emails.layout' %}
+
+{% block content %}
+    Informujemy o udanym logowaniu na konto <b>{{ name }}</b> z następującego urządzenia:<br><br>
+
+    System operacyjny: <b>{{ platform }}</b><br>
+    Przeglądarka: <b>{{ browser }}</b><br>
+    IP: <b>{{ ip }}</b><br>
+    Host: <b>{{ host }}</b><br>
+    Data i czas: <b>{{ "now"|format_date(false) }}</b><br><br>
+
+    Możesz wyłączyć powiadomienia tego typu w zakładce {{ link_to_route('user.security', 'Bezpieczeństwo') }} w swoim
+    panelu użytkownika.
+{% endblock %}
