@@ -286,7 +286,8 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
         $model = $this->model;
 
         foreach ($where as $field => $value) {
-            $model = $model->where($field, $value);
+            $method = is_array($value) ? 'whereIn' : 'where';
+            $model = $model->$method($field, $value);
         }
 
         $result = $model->get($columns);

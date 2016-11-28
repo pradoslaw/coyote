@@ -189,7 +189,7 @@ class TopicController extends BaseController
 
         // here we go. if user has delete ability, for sure he/she would like to know
         // why posts were deleted and by whom
-        $collection = $this->findByObject('Post', $postsId, 'Delete');
+        $collection = $this->findByObject('post', $postsId, 'delete');
 
         foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
             $activities[$row->first()['object.id']] = $row->first();
@@ -208,11 +208,11 @@ class TopicController extends BaseController
 
         // if topic is locked we need to fetch information when and by whom
         if ($topic->is_locked) {
-            $warnings['lock'] = $this->findByObject('Topic', $topic->id, 'Lock')->last();
+            $warnings['lock'] = $this->findByObject('topic', $topic->id, 'lock')->last();
         }
 
         if ($topic->prev_forum_id) {
-            $warnings['move'] = $this->findByObject('Topic', $topic->id, 'Move')->last();
+            $warnings['move'] = $this->findByObject('topic', $topic->id, 'move')->last();
         }
 
         return $warnings;
@@ -289,6 +289,8 @@ class TopicController extends BaseController
      */
     protected function findByObject($object, $id, $verb)
     {
-        return app(StreamRepository::class)->findByObject($object, $id, $verb);
+        return app(StreamRepository::class)->findWhere(
+            ['object.objectType' => $object, 'object.id' => $id, 'verb' => $verb]
+        );
     }
 }

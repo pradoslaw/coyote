@@ -23,16 +23,6 @@ interface StreamRepositoryInterface extends RepositoryInterface
     public function forumFeeds(array $forumIds);
 
     /**
-     * Find activities by object, id and actions (verbs)
-     *
-     * @param $objects
-     * @param array $id
-     * @param array $verbs
-     * @return mixed
-     */
-    public function findByObject($objects, $id = [], $verbs = []);
-
-    /**
      * @param int $topicId
      * @return mixed
      */

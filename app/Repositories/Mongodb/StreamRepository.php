@@ -66,32 +66,6 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
     }
 
     /**
-     * Find activities by object, id and actions (verbs)
-     *
-     * @param $objects
-     * @param array $id
-     * @param array $verbs
-     * @return mixed
-     */
-    public function findByObject($objects, $id = [], $verbs = [])
-    {
-        $result = $this->model->whereIn('object.objectType', $this->toArray($objects));
-
-        if (!empty($id)) {
-            if (!is_array($id)) {
-                $id = [$id];
-            }
-            $result->whereIn('object.id', $id);
-        }
-
-        if (!empty($verbs)) {
-            $result->whereIn('verb', $this->toArray($verbs));
-        }
-
-        return $result->get();
-    }
-
-    /**
      * @param int $topicId
      * @return mixed
      */
