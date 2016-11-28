@@ -94,7 +94,7 @@ class Cache
     /**
      * @param string $text
      */
-    public function forget(&$text)
+    public function forget($text)
     {
         $this->repository->forget($this->key($text));
     }
