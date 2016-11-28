@@ -179,7 +179,7 @@ class CommentController extends Controller
         $comments = $this->microblog->getComments([$id])->slice(0, -2);
 
         foreach ($comments as &$comment) {
-            $comment->text = $parser->parse($comment->text);
+            $comment->html = $parser->parse($comment->text);
         }
         return view('microblog.partials.comments', ['id' => $id, 'comments' => $comments]);
     }

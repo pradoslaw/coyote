@@ -47,6 +47,7 @@ class HomeController extends Controller
         $parser = ['main' => app('parser.microblog'), 'comment' => app('parser.microblog.comment')];
 
         foreach ($microblogs->items() as &$microblog) {
+            /** @var \Coyote\Microblog $microblog */
             $microblog->text = $parser['main']->parse($microblog->text);
 
             foreach ($microblog->comments as &$comment) {
