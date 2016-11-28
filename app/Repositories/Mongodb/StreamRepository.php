@@ -16,38 +16,6 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
     }
 
     /**
-     * Take X last activities
-     *
-     * @param $limit
-     * @param int $offset
-     * @param array $objects
-     * @param array $verbs
-     * @param array $targets
-     * @return mixed
-     */
-    public function take($limit, $offset = 0, $objects = [], $verbs = [], $targets = [])
-    {
-        $result = $this->model
-                ->orderBy('_id', 'DESC')
-                ->offset($offset)
-                ->take($limit);
-
-        if (!empty($objects)) {
-            $result->whereIn('object.objectType', $this->toArray($objects));
-        }
-
-        if (!empty($verbs)) {
-            $result->whereIn('verb', $this->toArray($verbs));
-        }
-
-        if (!empty($targets)) {
-            $result->whereIn('target.objectType', $this->toArray($targets));
-        }
-
-        return $result->get();
-    }
-
-    /**
      * @param int[] $forumIds
      * @return mixed
      */
@@ -83,25 +51,5 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
             }, 'or')
             ->orderBy('_id', 'DESC')
             ->simplePaginate();
-    }
-
-    /**
-     * Transform string to array and converts to lower case
-     *
-     * @param $object
-     * @return array
-     */
-    private function toArray($object)
-    {
-        if (!is_array($object)) {
-            $object = [$object];
-        }
-
-        return array_map(
-            function ($item) {
-                return strtolower(class_basename($item));
-            },
-            $object
-        );
     }
 }
