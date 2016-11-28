@@ -65,11 +65,12 @@ class Cache
     }
 
     /**
-     * @param $text
+     * @param string $key
+     * @param string $text
      */
-    public function put(&$text)
+    public function put($key, &$text)
     {
-        $this->repository->put($this->key($text), $text, self::CACHE_TTL);
+        $this->repository->put($key, $text, self::CACHE_TTL);
     }
 
     /**
@@ -102,7 +103,7 @@ class Cache
      * @param $text
      * @return string
      */
-    protected function key(&$text)
+    public function key(&$text)
     {
         return 'text:' . md5($text) . $this->id;
     }

@@ -68,10 +68,12 @@ abstract class AbstractFactory
     {
         /** @var \Coyote\Services\Parser\Container $parser */
         $parser = $closure();
+
+        $key = $this->cache->key($text);
         $text = $parser->parse($text);
 
         if ($this->cache->isEnabled()) {
-            $this->cache->put($text);
+            $this->cache->put($key, $text);
         }
 
         $parser->detach();
