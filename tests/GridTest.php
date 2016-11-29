@@ -23,6 +23,16 @@ class GridTest extends GridBuilderTestCase
         $this->assertTrue($grid->getColumns()['sex']->isSortable());
     }
 
+    public function testAddColumnWithoutTitle()
+    {
+        $grid = new Grid($this->gridHelper);
+        $grid->addColumn('first_name');
+        $grid->addColumn('sex');
+
+        $this->assertEquals('First Name', $grid->getColumns()['first_name']->getTitle());
+        $this->assertEquals('Sex', $grid->getColumns()['sex']->getTitle());
+    }
+
     public function testAddColumnWithDecorators()
     {
         $grid = new Grid($this->gridHelper);
@@ -58,7 +68,7 @@ class GridTest extends GridBuilderTestCase
     public function testBuildGridWithEachCallbackAndModifyColumnValue()
     {
         $grid = $this->getSampleGrid();
-        $grid->after(function (\Boduch\Grid\Row $row) {
+        $grid->after(function (Boduch\Grid\Row $row) {
             $row->get('website')->setValue('');
         });
 
@@ -70,7 +80,7 @@ class GridTest extends GridBuilderTestCase
     public function testBuildGridAndAddRowClass()
     {
         $grid = $this->getSampleGrid();
-        $grid->after(function (\Boduch\Grid\Row $row) {
+        $grid->after(function (Boduch\Grid\Row $row) {
             $row->class = 'foo';
         });
 
@@ -156,7 +166,7 @@ class GridTest extends GridBuilderTestCase
             }
         ]);
 
-        $source = new \Boduch\Grid\Source\CollectionSource($collection);
+        $source = new Boduch\Grid\Source\CollectionSource($collection);
         $grid->setSource($source);
 
         return $grid;

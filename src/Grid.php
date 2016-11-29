@@ -462,6 +462,10 @@ class Grid
     {
         $options = $this->setupColumnOptions($name, $options);
 
+        if (empty($options['title'])) {
+            $options['title'] = title_case(str_replace('_', ' ', $name));
+        }
+
         return new Column($options);
     }
 
