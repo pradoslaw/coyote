@@ -9,12 +9,12 @@ class Boolean extends Decorator
     /**
      * @var string
      */
-    protected $trueLabel = 'Tak';
+    protected $trueLabel = 'Yes';
 
     /**
      * @var string
      */
-    protected $falseLabel = 'Nie';
+    protected $falseLabel = 'No';
 
     /**
      * @var string
