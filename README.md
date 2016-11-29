@@ -6,8 +6,8 @@
 [![StyleCI](https://styleci.io/repos/64660184/shield?branch=master)](https://styleci.io/repos/64660184)
 
 **Laravel Grid** is a package that helps you display table data. I could not find
-package that would satisfy my needs so I decided to write one. Now I've been successfully using it in my two projects
-so I hope you will enjoy it.
+package that would satisfy my needs so I decided to write one. Now I've been successfully using it in my two projects.
+I hope you will enjoy it.
 
 Example:
 
@@ -49,10 +49,16 @@ class UsersController extends Controller
 
 ## Installation
 
-### Requirements
+**Requirements**
 
 * PHP >= 7.0
 * Laravel >= 5.2
+
+**Installation steps**
+
+1. run `composer require boduch/laravel-grid`
+2. open file `config/app.php`
+3. add `Boduch\Grid\GridServiceProvider::class` into `providers` array
 
 ## Cookbook
 
