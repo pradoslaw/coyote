@@ -212,7 +212,7 @@ return [
         // Parsowanie user agent
         Jenssegers\Agent\AgentServiceProvider::class,
         // Pakiet Laravel Grid do budowania tabel oraz filtrowania i sortowania
-        \Boduch\Grid\GridServiceProvider::class,
+        Boduch\Grid\GridServiceProvider::class,
         // sentry, raportowanie bugow
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class
     ],
