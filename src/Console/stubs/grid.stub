@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use Boduch\Grid\Grid;
+
+class DummyClass extends Grid
+{
+    public function buildGrid()
+    {
+        //
+    }
+}

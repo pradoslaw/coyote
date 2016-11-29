@@ -2,6 +2,7 @@
 
 namespace Boduch\Grid;
 
+use Boduch\Grid\Console\GridMakeCommand;
 use Boduch\Grid\GridBuilder;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,6 +32,8 @@ class GridServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->commands(GridMakeCommand::class);
+
         $this->app->singleton('grid.builder', function ($app) {
             return new GridBuilder($app);
         });
@@ -43,6 +46,6 @@ class GridServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['grid.builder'];
+        return ['grid.builder', GridBuilder::class];
     }
 }
