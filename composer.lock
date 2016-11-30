@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-boduch/geshi.git",
-                "reference": "a803da59391e2bb1da98a849a31d9f373ff2f83d"
+                "reference": "7267e0a824135e18319f075a09011c4db8e8a5d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/geshi/zipball/a803da59391e2bb1da98a849a31d9f373ff2f83d",
-                "reference": "a803da59391e2bb1da98a849a31d9f373ff2f83d",
+                "url": "https://api.github.com/repos/adam-boduch/geshi/zipball/7267e0a824135e18319f075a09011c4db8e8a5d3",
+                "reference": "7267e0a824135e18319f075a09011c4db8e8a5d3",
                 "shasum": ""
             },
             "require": {
@@ -38,7 +38,7 @@
                 "source": "https://github.com/adam-boduch/geshi/tree/master",
                 "issues": "https://github.com/adam-boduch/geshi/issues"
             },
-            "time": "2016-09-15 15:19:18"
+            "time": "2016-11-30 16:33:37"
         },
         {
             "name": "adam-boduch/laravel-grid",
@@ -46,12 +46,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-boduch/laravel-grid.git",
-                "reference": "3a7bb37774753d26b7cf6b4b0d450ace8f2d1960"
+                "reference": "ab60408491bd3b3404fda8f90aca041524d047dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/3a7bb37774753d26b7cf6b4b0d450ace8f2d1960",
-                "reference": "3a7bb37774753d26b7cf6b4b0d450ace8f2d1960",
+                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/ab60408491bd3b3404fda8f90aca041524d047dc",
+                "reference": "ab60408491bd3b3404fda8f90aca041524d047dc",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                 }
             ],
             "description": "Laravel grid package",
-            "time": "2016-11-29 17:56:52"
+            "time": "2016-11-30 05:52:43"
         },
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2699,16 +2699,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v3.1.7",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "28b0832b2553ffb80cabef6a7a812ff1e670c0bc"
+                "reference": "e8f47a327c2f0fd5aa04fa60af2b693006ed7283"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/28b0832b2553ffb80cabef6a7a812ff1e670c0bc",
-                "reference": "28b0832b2553ffb80cabef6a7a812ff1e670c0bc",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/e8f47a327c2f0fd5aa04fa60af2b693006ed7283",
+                "reference": "e8f47a327c2f0fd5aa04fa60af2b693006ed7283",
                 "shasum": ""
             },
             "require": {
@@ -2728,7 +2728,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -2755,7 +2755,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2016-10-13 06:28:43"
+            "time": "2016-10-13 06:29:04"
         },
         {
             "name": "symfony/finder",
@@ -5079,16 +5079,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.7.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "571e27b6348e5b3a637b2abc82ac0d01e6d7bbed"
+                "reference": "9b324f3a1132459a7274a0ace2e1b766ba80930f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/571e27b6348e5b3a637b2abc82ac0d01e6d7bbed",
-                "reference": "571e27b6348e5b3a637b2abc82ac0d01e6d7bbed",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9b324f3a1132459a7274a0ace2e1b766ba80930f",
+                "reference": "9b324f3a1132459a7274a0ace2e1b766ba80930f",
                 "shasum": ""
             },
             "require": {
@@ -5153,20 +5153,20 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-09-01 23:53:02"
+            "time": "2016-11-30 04:02:31"
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v3.1.7",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "901319a31c9b3cee7857b4aeeb81b5d64dfa34fc"
+                "reference": "34348c2691ce6254e8e008026f4c5e72c22bb318"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/901319a31c9b3cee7857b4aeeb81b5d64dfa34fc",
-                "reference": "901319a31c9b3cee7857b4aeeb81b5d64dfa34fc",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/34348c2691ce6254e8e008026f4c5e72c22bb318",
+                "reference": "34348c2691ce6254e8e008026f4c5e72c22bb318",
                 "shasum": ""
             },
             "require": {
@@ -5183,7 +5183,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -5210,25 +5210,28 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-06 11:02:40"
+            "time": "2016-10-13 13:35:11"
         },
         {
             "name": "symfony/config",
-            "version": "v3.1.7",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "ab4fa32ffe6e625f9b7444e5e8d4702a0bc3ad7a"
+                "reference": "4a68f8953180bf77ea65f585020f4db0b18600b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/ab4fa32ffe6e625f9b7444e5e8d4702a0bc3ad7a",
-                "reference": "ab4fa32ffe6e625f9b7444e5e8d4702a0bc3ad7a",
+                "url": "https://api.github.com/repos/symfony/config/zipball/4a68f8953180bf77ea65f585020f4db0b18600b4",
+                "reference": "4a68f8953180bf77ea65f585020f4db0b18600b4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
                 "symfony/filesystem": "~2.8|~3.0"
+            },
+            "require-dev": {
+                "symfony/yaml": "~3.0"
             },
             "suggest": {
                 "symfony/yaml": "To use the yaml reference dumper"
@@ -5236,7 +5239,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -5263,7 +5266,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-03 08:04:31"
+            "time": "2016-11-29 11:12:32"
         },
         {
             "name": "symfony/css-selector",
@@ -5320,25 +5323,28 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v3.1.7",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "87598e21bb9020bd9ccd6df6936b9c369c72775d"
+                "reference": "f5419adad083c90e0dfd8588ef83683d7dbcc20d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/87598e21bb9020bd9ccd6df6936b9c369c72775d",
-                "reference": "87598e21bb9020bd9ccd6df6936b9c369c72775d",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/f5419adad083c90e0dfd8588ef83683d7dbcc20d",
+                "reference": "f5419adad083c90e0dfd8588ef83683d7dbcc20d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9"
             },
+            "conflict": {
+                "symfony/yaml": "<3.2"
+            },
             "require-dev": {
                 "symfony/config": "~2.8|~3.0",
                 "symfony/expression-language": "~2.8|~3.0",
-                "symfony/yaml": "~2.8.7|~3.0.7|~3.1.1|~3.2"
+                "symfony/yaml": "~3.2"
             },
             "suggest": {
                 "symfony/config": "",
@@ -5349,7 +5355,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -5376,7 +5382,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-18 21:15:08"
+            "time": "2016-11-25 12:32:42"
         },
         {
             "name": "symfony/dom-crawler",
@@ -5436,16 +5442,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.1.7",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "0565b61bf098cb4dc09f4f103f033138ae4f42c6"
+                "reference": "8d4cf7561a5b17e5eb7a02b80d0b8f014a3796d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/0565b61bf098cb4dc09f4f103f033138ae4f42c6",
-                "reference": "0565b61bf098cb4dc09f4f103f033138ae4f42c6",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/8d4cf7561a5b17e5eb7a02b80d0b8f014a3796d4",
+                "reference": "8d4cf7561a5b17e5eb7a02b80d0b8f014a3796d4",
                 "shasum": ""
             },
             "require": {
@@ -5454,7 +5460,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -5481,29 +5487,35 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2016-10-18 04:30:12"
+            "time": "2016-11-24 00:46:43"
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.1.7",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "9da375317228e54f4ea1b013b30fa47417e84943"
+                "reference": "f2300ba8fbb002c028710b92e1906e7457410693"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/9da375317228e54f4ea1b013b30fa47417e84943",
-                "reference": "9da375317228e54f4ea1b013b30fa47417e84943",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/f2300ba8fbb002c028710b92e1906e7457410693",
+                "reference": "f2300ba8fbb002c028710b92e1906e7457410693",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9"
             },
+            "require-dev": {
+                "symfony/console": "~2.8|~3.0"
+            },
+            "suggest": {
+                "symfony/console": "For validating YAML files using the lint command"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -5530,7 +5542,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-18 21:05:29"
+            "time": "2016-11-18 21:17:59"
         },
         {
             "name": "webmozart/assert",
