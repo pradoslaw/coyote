@@ -113,6 +113,35 @@ class LinkTest extends \Codeception\TestCase\Test
         $this->tester->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
     }
 
+    public function testAutolink()
+    {
+        $parser = new \Coyote\Services\Parser\Parsers\Autolink();
+
+        $input = $parser->parse('http://4programmers.net');
+        $this->tester->assertEquals('<a href="http://4programmers.net">http://4programmers.net</a>', $input);
+
+        $input = $parser->parse('to: http://4programmers.net.');
+        $this->tester->assertEquals('to: <a href="http://4programmers.net">http://4programmers.net</a>.', $input);
+
+        $input = $parser->parse('to:http://4programmers.net.');
+        $this->tester->assertEquals('to:<a href="http://4programmers.net">http://4programmers.net</a>.', $input);
+
+        $input = $parser->parse('<http://4programmers.net>');
+        $this->tester->assertEquals('<<a href="http://4programmers.net">http://4programmers.net</a>>', $input);
+
+        $input = $parser->parse('<a href="http://4programmers.net">http://4programmers.net</a>');
+        $this->tester->assertEquals('<a href="http://4programmers.net">http://4programmers.net</a>', $input);
+
+        $input = $parser->parse('www.4programmers.net');
+        $this->tester->assertEquals('<a href="http://www.4programmers.net">www.4programmers.net</a>', $input);
+
+        $input = $parser->parse('foo@bar.com');
+        $this->tester->assertEquals('<a href="mailto:foo@bar.com">foo@bar.com</a>', $input);
+
+        $input = $parser->parse('<foo@bar.com>');
+        $this->tester->assertEquals('<<a href="mailto:foo@bar.com">foo@bar.com</a>>', $input);
+    }
+
     private function createPage($title, $path)
     {
         $now = new \DateTime('now');
