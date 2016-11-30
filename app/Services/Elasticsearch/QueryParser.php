@@ -118,7 +118,7 @@ class QueryParser
                 if (in_array($name, $this->allowedKeywords)) {
                     $unset[] = $index;
 
-                    if ($value{0} === '"' && substr($value, -1) !== '"') {
+                    if (strlen($value) >= 1 && $value{0} === '"' && substr($value, -1) !== '"') {
                         for ($i = $index + 1, $count = count($segments); $i <= $count; $i++) {
                             $value .= ' ' . $segments[$i];
                             $unset[] = $i;
