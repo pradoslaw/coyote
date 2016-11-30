@@ -19,12 +19,6 @@
 
             {% include 'job.submit.partials.indicator' with {'current': 1} %}
 
-            {% if session_has('error') %}
-                <p class="alert alert-danger">
-                    {{ session_get('error') }}
-                </p>
-            {% endif %}
-
             {% if errors.any %}
                 <p class="alert alert-danger">
                     Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.

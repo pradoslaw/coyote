@@ -51,17 +51,19 @@
                     {% set logo = input_old('logo', firm.logo) %}
                     {{ form_hidden('logo', logo) }}
 
-                    <a href="javascript:" id="logo" class="img-thumbnail">
+                    <div class="img-placeholder img-thumbnail" style="{{ logo ? 'display: none' }}">
+                        <img src="{{ cdn('img/logo-gray.png') }}">
+                    </div>
+
+                    <div class="img-container img-thumbnail" style="{{ not logo ? 'display: none' }}">
                         <img src="{{ logo(logo) }}">
 
-                        {% if input_old('logo', firm.logo) %}
-                            <div class="btn-flush">
-                                <i class="fa fa-remove fa-2x"></i>
-                            </div>
-                        {% endif %}
-                    </a>
+                        <div id="btn-delete-photo" class="btn-flush">
+                            <i class="fa fa-remove fa-2x"></i>
+                        </div>
+                    </div>
 
-                    <a id="upload" href="javascript:" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
+                    <a id="btn-change-photo" href="{{ route('firm.logo') }}" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
                 </div>
             </div>
         </div>

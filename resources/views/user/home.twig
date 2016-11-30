@@ -11,24 +11,22 @@
 
             <div class="media">
                 <div class="media-left hidden-xs">
-                    <div id="photo" class="img-thumbnail">
-                        <img src="{{ user_photo(user('photo')) }}">
-
-                        {% if user('photo') %}
-                            <a href="{{ route('user.photo.delete') }}" id="btn-delete-photo">
-                                <i class="fa fa-remove fa-2x"></i>
-                            </a>
-                        {% endif %}
+                    <div class="img-placeholder img-thumbnail" style="{{ user('photo') ? 'display: none' }}">
+                        <img src="{{ cdn('img/avatar.png') }}">
                     </div>
 
-                    <a id="upload" href="javascript:" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
+                    <div class="img-container img-thumbnail" style="{{ not user('photo') ? 'display: none' }}">
+                        <img src="{{ user_photo(user('photo')) }}">
+
+                        <a href="{{ route('user.photo.delete') }}" id="btn-delete-photo">
+                            <i class="fa fa-remove fa-2x"></i>
+                        </a>
+                    </div>
+
+                    <a id="btn-change-photo" href="{{ route('user.photo.upload') }}" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
                 </div>
 
                 <div class="media-body">
-                    <form id="upload-form" action="{{ route('user.photo.upload') }}">
-                        <input type="file" id="input-file" name="photo" style="visibility: hidden; height: 0">
-                    </form>
-
                     <div class="col-sm-11" style="padding-left: 20px">
                         <ul class="metadata list-inline">
                             <li title="Ostatnia wizyta">
@@ -125,64 +123,14 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
-    <script type="text/javascript">
+    <script src="{{ cdn('js/modal.js') }}"></script>
+    <script src="{{ cdn('js/uploader.js') }}"></script>
+    <script>
         $(function () {
-            $('#upload').click(function() {
-                $('#input-file').click();
-            });
-
-            $('#input-file').change(function() {
-                var file = this.files[0];
-
-                if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
-                    $('#alert').modal('show');
-                    $('.modal-body').text('Format pliku jest nieprawidłowy. Załącznik musi być zdjęciem JPG, PNG lub GIF');
+            $.uploader({
+                onChanged: function(data) {
+                    $('.avatar img').attr('src', data.url);
                 }
-                else {
-                    var $form = $('#upload-form');
-                    var formData = new FormData($form[0]);
-                    var uploadIcon = $('#upload i');
-
-                    $.ajax({
-                        url: $form.attr('action'),
-                        type: 'POST',
-                        data: formData,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        beforeSend: function () {
-                            uploadIcon.removeClass('fa-upload').addClass('fa-spinner fa-spin');
-                        },
-                        success: function (data) {
-                            $('#photo img, .avatar img').attr('src', data.url);
-                            var deleteUrl = '{{ route('user.photo.delete') }}';
-
-                            if (!$('#btn-delete-photo').length) {
-                                $('<a href="' + deleteUrl + '" id="btn-delete-photo"><i class="fa fa-remove fa-2x"></i></a>').appendTo('#photo');
-                            }
-                        },
-                        complete: function() {
-                            uploadIcon.removeClass('fa-spinner fa-spin').addClass('fa-upload');
-                        },
-                        error: function (err) {
-                            $('#alert').modal('show');
-
-                            if (typeof err.responseJSON !== 'undefined') {
-                                $('.modal-body').text(err.responseJSON.photo[0]);
-                            }
-                        }
-                    }, 'json');
-                }
-            });
-
-            $('#btn-delete-photo').on('click', function() {
-                $.post($(this).attr('href'), function() {
-                    $('#photo img, .avatar img').attr('src', '{{ cdn('img/avatar.png') }}');
-                    $('#btn-delete-photo').remove();
-                });
-
-                return false;
             });
         });
     </script>

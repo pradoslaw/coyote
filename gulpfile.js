@@ -33,7 +33,7 @@ elixir(function (mix) {
 
     mix.babel(['pages/job/submit.js'], 'public/js/job-submit.js')
         .babel(['pages/job/tinymce.js'], 'public/js/job-tinymce.js')
-        .babel(['pages/job.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js'], 'public/js/job.js')
+        .babel(['pages/job.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js', 'components/uploader.js'], 'public/js/job.js')
         .babel(['pages/wiki.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js'], 'public/js/wiki.js')
         .babel(['components/geo-ip.js'], 'public/js/geo-ip.js');
 
@@ -119,7 +119,8 @@ elixir(function (mix) {
         ], 'public/js/jquery-ui.js')
 
         .scripts(['../bower/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'], 'public/js/datepicker.js')
-        .scripts(['../bower/pretty-text-diff/jquery.pretty-text-diff.js'], 'public/js/diff.js');
+        .scripts(['../bower/pretty-text-diff/jquery.pretty-text-diff.js'], 'public/js/diff.js')
+        .scripts(['components/uploader.js'], 'public/js/uploader.js');
 
     mix.sass('main.scss')
         .sass('pages/auth.scss')

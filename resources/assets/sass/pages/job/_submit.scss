@@ -208,12 +208,16 @@ $font-size-control-label: 15px;
   }
 }
 
-#logo {
+.img-container, .img-placeholder {
   position: relative;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   text-align: center;
   width: 100%;
+
+  > img {
+    max-width: 100%;
+  }
 
   &:hover {
     .btn-flush {
@@ -248,6 +252,7 @@ $font-size-control-label: 15px;
   background-color: #000;
   opacity: .5;
   color: #fff;
+  cursor: pointer;
 
   &:hover {
     text-decoration: none;
