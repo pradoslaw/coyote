@@ -7,7 +7,7 @@ use Coyote\Repositories\Contracts\SettingRepositoryInterface;
 class SettingRepository extends Repository implements SettingRepositoryInterface
 {
     /**
-     * @return \Coyote\Setting
+     * @return string
      */
     public function model()
     {
@@ -73,7 +73,7 @@ class SettingRepository extends Repository implements SettingRepositoryInterface
     public function getAll($userId, $sessionId)
     {
         return $this->findWhere($this->build(['user_id' => $userId, 'session_id' => $sessionId]))
-                    ->lists('value', 'name')
+                    ->pluck('value', 'name')
                     ->toArray();
     }
 }
