@@ -35,7 +35,19 @@ class SkillsController extends BaseController
         $skill = null;
 
         if ($form->isValid()) {
-            $skill = $this->auth->skills()->create($request->all());
+            $skill = $this->transaction(function () use ($request) {
+                $skill = $this->auth->skills()->create($request->all());
+
+                $preferences = json_decode($this->getSetting('job.preferences', '{}'), true);
+                if (!isset($preferences['tags'])) {
+                    $preferences['tags'] = [];
+                }
+
+                array_push($preferences['tags'], $skill->name);
+                $this->setSetting('job.preferences', json_encode($preferences));
+
+                return $skill;
+            });
         }
 
         return view('user.skills.list')->with('item', $skill);
