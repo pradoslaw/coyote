@@ -99,7 +99,10 @@ class SettingsForm extends Form
             ])
             ->add('location', 'text', [
                 'rules' => 'string|max:50',
-                'label' => 'Miejsce zamieszkania'
+                'label' => 'Miejsce zamieszkania',
+                'attr' => [
+                    'placeholder' => 'Nazwa miejscowości'
+                ]
             ])
             ->add('allow_count', 'checkbox', [
                 'rules' => 'boolean',

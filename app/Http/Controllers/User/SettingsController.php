@@ -70,13 +70,20 @@ class SettingsController extends BaseController
                 );
 
                 if ($this->auth->is_confirm) {
+                    // user changed email. first, user has to confirm email before we save it.
                     $request['email'] = $this->auth->email;
                 }
             }
 
             $this->auth->fill($form->all())->save();
-            stream(Update::class, new Person());
+            $preferences = json_decode($this->getSetting('job.preferences', '{}'), true);
 
+            if (empty($preferences['city'])) {
+                $preferences['city'] = $this->auth->location;
+                $this->setSetting('job.preferences', json_encode($preferences));
+            }
+
+            stream(Update::class, new Person());
             event(new UserWasSaved($this->auth->id));
         });
 
