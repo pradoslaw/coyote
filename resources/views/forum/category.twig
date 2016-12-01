@@ -1,5 +1,7 @@
 {% extends 'forum.base' %}
 {% block title %}{{ forum.title|default(forum.name) }} :: Forum {{ parent() }}{% endblock %}
+{% block description %}{{ excerpt(forum.description, 150) }}{% endblock %}
+{% block keywords %}{% endblock %}
 
 {% import 'components.forms' as forms %}
 
