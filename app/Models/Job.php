@@ -2,7 +2,7 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\Analyzers\JobAnalyzer;
+use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -197,6 +197,22 @@ class Job extends Model
     }
 
     /**
+     * @return string[]
+     */
+    public static function getRatesList()
+    {
+        return [self::MONTH => 'miesięcznie', self::YEAR => 'rocznie', self::WEEK => 'tygodniowo', self::HOUR => 'godzinowo'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getEmploymentList()
+    {
+        return [1 => 'Umowa o pracę', 2 => 'Umowa zlecenie', 3 => 'Umowa o dzieło', 4 => 'Kontrakt'];
+    }
+
+    /**
      * @return int
      */
     public function getScore()
@@ -224,22 +240,6 @@ class Job extends Model
         }
 
         return $score;
-    }
-
-    /**
-     * @return string[]
-     */
-    public static function getRatesList()
-    {
-        return [self::MONTH => 'miesięcznie', self::YEAR => 'rocznie', self::WEEK => 'tygodniowo', self::HOUR => 'godzinowo'];
-    }
-
-    /**
-     * @return string[]
-     */
-    public static function getEmploymentList()
-    {
-        return [1 => 'Umowa o pracę', 2 => 'Umowa zlecenie', 3 => 'Umowa o dzieło', 4 => 'Kontrakt'];
     }
 
     /**
@@ -351,7 +351,7 @@ class Job extends Model
      */
     protected function getIndexBody()
     {
-        $this->setAnalyzer(JobAnalyzer::class);
+        $this->setCharFilter(JobFilter::class);
         $body = $this->parentGetIndexBody();
 
         // maximum offered salary

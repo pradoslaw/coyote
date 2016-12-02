@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Analyzers;
+namespace Coyote\Services\Elasticsearch\CharFilters;
 
-use Coyote\Services\Parser\Factories\PostFactory as Parser;
+use Coyote\Services\Parser\Factories\MicroblogFactory as Parser;
 
-class PostAnalyzer extends AbstractAnalyzer
+class MicroblogFilter extends CharFilter
 {
     /**
      * @param Parser $parser
@@ -18,9 +18,8 @@ class PostAnalyzer extends AbstractAnalyzer
      * @param array $data
      * @return array
      */
-    public function analyze(array $data): array
+    public function filter(array $data): array
     {
-        $data['topic']['subject'] = htmlspecialchars($data['topic']['subject']);
         $data['text'] = $this->stripHtml($data['text']);
 
         return $data;

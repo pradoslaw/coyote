@@ -3,7 +3,7 @@
 namespace Coyote;
 
 use Carbon\Carbon;
-use Coyote\Services\Elasticsearch\Analyzers\TopicAnalyzer;
+use Coyote\Services\Elasticsearch\CharFilters\TopicFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Coyote\Models\Scopes\Sortable;
@@ -303,7 +303,7 @@ class Topic extends Model
      */
     protected function getIndexBody()
     {
-        $this->setAnalyzer(TopicAnalyzer::class);
+        $this->setCharFilter(TopicFilter::class);
         $body = $this->parentGetIndexBody();
 
         // we need to index every field from topics except:

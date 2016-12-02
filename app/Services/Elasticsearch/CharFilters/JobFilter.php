@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Analyzers;
+namespace Coyote\Services\Elasticsearch\CharFilters;
 
 use Coyote\Services\Parser\Factories\JobFactory as Parser;
 
-class JobAnalyzer extends AbstractAnalyzer
+class JobFilter extends CharFilter
 {
     /**
      * @param Parser $parser
@@ -18,7 +18,7 @@ class JobAnalyzer extends AbstractAnalyzer
      * @param array $data
      * @return array
      */
-    public function analyze(array $data): array
+    public function filter(array $data): array
     {
         $data['title'] = htmlspecialchars($data['title']);
         $data['description'] = $this->stripHtml($data['description']);

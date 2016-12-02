@@ -3,7 +3,7 @@
 namespace Coyote;
 
 use Coyote\Post\Attachment;
-use Coyote\Services\Elasticsearch\Analyzers\PostAnalyzer;
+use Coyote\Services\Elasticsearch\CharFilters\PostFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -235,7 +235,7 @@ class Post extends Model
      */
     protected function getIndexBody()
     {
-        $this->setAnalyzer(PostAnalyzer::class);
+        $this->setCharFilter(PostFilter::class);
         $body = $this->parentGetIndexBody();
 
         // additionally index few fields from topics table...

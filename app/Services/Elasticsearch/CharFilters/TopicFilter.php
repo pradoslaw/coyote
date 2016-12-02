@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Analyzers;
+namespace Coyote\Services\Elasticsearch\CharFilters;
 
 use Coyote\Services\Parser\Factories\PostFactory as Parser;
 
-class TopicAnalyzer extends AbstractAnalyzer
+class TopicFilter extends CharFilter
 {
     /**
      * @param Parser $parser
@@ -18,7 +18,7 @@ class TopicAnalyzer extends AbstractAnalyzer
      * @param array $data
      * @return array
      */
-    public function analyze(array $data): array
+    public function filter(array $data): array
     {
         $data['subject'] = htmlspecialchars($data['subject']);
 

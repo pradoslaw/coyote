@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Analyzers;
+namespace Coyote\Services\Elasticsearch\CharFilters;
 
 use Coyote\Services\Parser\Factories\AbstractFactory as Parser;
 
-abstract class AbstractAnalyzer implements AnalyzerInterface
+abstract class CharFilter implements CharFilterInteface
 {
     /**
      * @var Parser

@@ -2,7 +2,7 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\Analyzers\WikiAnalyzer;
+use Coyote\Services\Elasticsearch\CharFilters\WikiFilter;
 use Coyote\Wiki\Page as Wiki_Page;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -234,7 +234,7 @@ class Wiki extends Model
      */
     protected function getIndexBody()
     {
-        $this->setAnalyzer(WikiAnalyzer::class);
+        $this->setCharFilter(WikiFilter::class);
         $body = $this->parentGetIndexBody();
 
         return array_except($body, ['is_locked', 'templates', 'views']);

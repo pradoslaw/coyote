@@ -2,7 +2,7 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\Analyzers\AnalyzerInterface;
+use Coyote\Services\Elasticsearch\CharFilters\CharFilterInteface;
 use Coyote\Services\Elasticsearch\Transformers\CommonTransformer;
 use Coyote\Services\Elasticsearch\Transformers\TransformerInterface;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
@@ -91,11 +91,11 @@ trait Searchable
     }
 
     /**
-     * @param string $analyzer
+     * @param string $filter
      */
-    public function setAnalyzer(string $analyzer)
+    public function setCharFilter(string $filter)
     {
-        $this->analyzer = $analyzer;
+        $this->analyzer = $filter;
     }
 
     /**
@@ -168,7 +168,7 @@ trait Searchable
         }
 
         if ($this->analyzer) {
-            $data = $this->getAnalyzer()->analyze($data);
+            $data = $this->getCharFilter()->filter($data);
         }
 
         return $data;
@@ -185,9 +185,9 @@ trait Searchable
     }
 
     /**
-     * @return AnalyzerInterface
+     * @return CharFilterInteface
      */
-    protected function getAnalyzer(): AnalyzerInterface
+    protected function getCharFilter(): CharFilterInteface
     {
         return app($this->analyzer);
     }

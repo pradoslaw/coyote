@@ -2,7 +2,7 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\Analyzers\MicroblogAnalyzer;
+use Coyote\Services\Elasticsearch\CharFilters\MicroblogFilter;
 use Coyote\Services\Media\Factories\AbstractFactory;
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -228,7 +228,7 @@ class Microblog extends Model
      */
     protected function getIndexBody()
     {
-        $this->setAnalyzer(MicroblogAnalyzer::class);
+        $this->setCharFilter(MicroblogFilter::class);
         $body = $this->parentGetIndexBody();
 
         // we need to index every field from topics except:
