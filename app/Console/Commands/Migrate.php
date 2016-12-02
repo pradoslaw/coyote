@@ -4,6 +4,7 @@ namespace Coyote\Console\Commands;
 
 use Coyote\Pm;
 use Coyote\Post;
+use Coyote\Services\Geocoder\GeocoderInterface;
 use Illuminate\Console\Command;
 use DB;
 
@@ -3179,6 +3180,34 @@ class Migrate extends Command
         }
     }
 
+    private function geocodeLocation()
+    {
+        $this->info('Geocoding locations...');
+
+        $setting = app('setting');
+        $geocoder = app('Coyote\Services\Geocoder\GeocoderInterface');
+
+        $users = \Coyote\User::whereNotNull('location')->where('location', '!=', '')->get();
+
+        foreach ($users as $user) {
+            $result = $geocoder->geocode($user->location);
+
+            if ($result->latitude) {
+                $user->latitude = $result->latitude;
+                $user->longitude = $result->longitude;
+
+                $user->save();
+                $preferences = [
+                    'location' => [
+                        ['name' => $user->location, 'latitude' => $result->latitude, 'longitude' => $result->longitude]
+                    ]
+                ];
+
+                $setting->setItem('job.preferences', json_encode($preferences), $user->id, null);
+            }
+        }
+    }
+
     /**
      * Execute the console command.
      *
@@ -3251,5 +3280,6 @@ class Migrate extends Command
         }
 
         $this->removeDuplicatedFirms();
+        $this->geocodeLocation();
     }
 }
