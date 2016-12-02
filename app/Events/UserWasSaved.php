@@ -8,15 +8,15 @@ class UserWasSaved extends Event
 {
     use SerializesModels;
 
-    public $userId;
+    public $user;
 
     /**
      * Create a new event instance.
      *
-     * @param int $userId
+     * @param \Coyote\User $user
      */
-    public function __construct($userId)
+    public function __construct($user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
     }
 }

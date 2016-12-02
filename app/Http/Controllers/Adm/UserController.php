@@ -77,7 +77,7 @@ class UserController extends BaseController
             $user->groups()->sync((array) $data['groups']);
 
             stream(Update::class, new Person());
-            event(new UserWasSaved($user->id));
+            event(new UserWasSaved($user));
         });
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');

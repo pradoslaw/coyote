@@ -61,7 +61,7 @@ class ForumController extends BaseController
 
         $this->transaction(function () use ($request) {
             $this->order->saveForUser($this->userId, $request->input('forum'));
-            event(new UserWasSaved($this->userId));
+            event(new UserWasSaved($this->auth));
         });
     }
 
@@ -72,7 +72,7 @@ class ForumController extends BaseController
     {
         $this->transaction(function () {
             $this->order->deleteForUser($this->userId);
-            event(new UserWasSaved($this->userId));
+            event(new UserWasSaved($this->auth));
         });
 
         return back();

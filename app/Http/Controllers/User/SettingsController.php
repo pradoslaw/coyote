@@ -68,7 +68,7 @@ class SettingsController extends BaseController
             $this->auth->save();
 
             stream(Update::class, new Person());
-            event(new UserWasSaved($this->auth->id));
+            event(new UserWasSaved($this->auth));
         });
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');
