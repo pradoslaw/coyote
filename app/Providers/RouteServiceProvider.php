@@ -36,6 +36,15 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router->pattern('id', '[0-9]+');
         $router->pattern('wiki', '[0-9]+');
+        $router->pattern('block', '[0-9]+');
+        $router->pattern('group', '[0-9]+');
+        $router->pattern('firewall', '[0-9]+');
+        $router->pattern('pastebin', '[0-9]+');
+        $router->pattern('microblog', '[0-9]+');
+        $router->pattern('topic', '[0-9]+');
+        $router->pattern('user', '[0-9]+');
+        $router->pattern('post', '[0-9]+');
+
         $router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
         $router->pattern('tag', '([a-ząęśżźćółń0-9\-\.\#\+])+');
         $router->pattern('slug', '.*');

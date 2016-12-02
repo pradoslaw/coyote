@@ -41,7 +41,7 @@ class TopicController extends BaseController
         $this->gate = $this->getGateFactory();
 
         // current page...
-        $page = $request->get('page');
+        $page = (int) $request->get('page');
         // number of answers
         $replies = $topic->replies;
         // number of posts per one page
@@ -56,7 +56,7 @@ class TopicController extends BaseController
 
         // user wants to show certain post. we need to calculate page number based on post id.
         if ($request->has('p')) {
-            $page = $this->post->getPage($request->get('p'), $topic->id, $perPage);
+            $page = $this->post->getPage((int) $request->get('p'), $topic->id, $perPage);
         }
 
         start_measure('More like this');
