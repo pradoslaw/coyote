@@ -28,6 +28,12 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function findByEmail($email);
 
     /**
+     * @param array $data
+     * @return \Coyote\User
+     */
+    public function newUser(array $data);
+
+    /**
      * Pobiera reputacje usera w procentach (jak i rowniez pozycje usera w rankingu)
      *
      * @param $userId

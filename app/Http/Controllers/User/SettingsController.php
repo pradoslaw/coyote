@@ -50,38 +50,22 @@ class SettingsController extends BaseController
         $form->validate();
 
         $request = $form->getRequest();
+        // we use forceFill() to fill fields that are NOT in $fillable model's array.
+        // we can do that because $form->all() returns only fields in form. $request->all() returns
+        // all fields in HTTP POST so it's not secure.
+        $this->auth->forceFill($form->all());
 
         $this->transaction(function () use ($form, $request) {
-            if ($this->auth->email !== $request->get('email')) {
-                $email = $request->get('email');
+            if ($this->auth->isDirty('email')) {
+                $this->sendConfirmationEmail($request->get('email'));
 
-                // kasujemy poprzednie rekordu zwiazane z tym userem
-                $this->auth->actkey()->delete();
-                // przed zmiana e-maila trzeba wyslac link potwierdzajacy
-                $url = Actkey::createLink($this->auth->id, $email);
-
-                $this->getMailFactory()->queue(
-                    'emails.user.change_email',
-                    ['url' => $url],
-                    function (Message $message) use ($email) {
-                        $message->to($email);
-                        $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
-                    }
-                );
-
+                // user changed email. first, user has to confirm email before we save it.
                 if ($this->auth->is_confirm) {
-                    // user changed email. first, user has to confirm email before we save it.
-                    $request['email'] = $this->auth->email;
+                    $this->auth->email = $this->auth->getOriginal('email');
                 }
             }
 
-            $this->auth->fill($form->all())->save();
-            $preferences = json_decode($this->getSetting('job.preferences', '{}'), true);
-
-            if (empty($preferences['city'])) {
-                $preferences['city'] = $this->auth->location;
-                $this->setSetting('job.preferences', json_encode($preferences));
-            }
+            $this->auth->save();
 
             stream(Update::class, new Person());
             event(new UserWasSaved($this->auth->id));
@@ -103,5 +87,25 @@ class SettingsController extends BaseController
 
             $this->setSetting(str_replace('_', '.', $name), $value);
         }
+    }
+
+    /**
+     * @param string $email
+     */
+    private function sendConfirmationEmail(string $email)
+    {
+        // kasujemy poprzednie rekordu zwiazane z tym userem
+        $this->auth->actkey()->delete();
+        // przed zmiana e-maila trzeba wyslac link potwierdzajacy
+        $url = Actkey::createLink($this->auth->id, $email);
+
+        $this->getMailFactory()->queue(
+            'emails.user.change_email',
+            ['url' => $url],
+            function (Message $message) use ($email) {
+                $message->to($email);
+                $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
+            }
+        );
     }
 }

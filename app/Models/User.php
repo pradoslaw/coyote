@@ -60,12 +60,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     /**
      * The attributes that are mass assignable.
-     * group_id (default group id) can be in fillable list because controller must validate if user really
-     * has access to this group.
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'group_id', 'is_active', 'is_confirm', 'provider', 'provider_id', 'photo', 'date_format', 'location', 'latitude', 'longitude', 'website', 'bio', 'sig', 'firm', 'position', 'birthyear', 'allow_count', 'allow_smilies', 'allow_sig', 'allow_subscribe'];
+    protected $fillable = ['provider', 'provider_id', 'photo', 'date_format', 'location', 'latitude', 'longitude', 'website', 'bio', 'sig', 'firm', 'position', 'birthyear', 'allow_count', 'allow_smilies', 'allow_sig', 'allow_subscribe'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -83,6 +81,18 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $dates = ['created_at', 'updated_at', 'visited_at'];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'allow_smilies' => 'int',
+        'allow_sig' => 'int',
+        'allow_count' => 'int',
+        'allow_subscribe' => 'int',
+        'is_confirm' => 'int',
+        'is_active' => 'int'
+    ];
 
     public static function boot()
     {

@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\User;
 
 class UserRepository extends Repository implements UserRepositoryInterface
 {
@@ -47,6 +48,15 @@ class UserRepository extends Repository implements UserRepositoryInterface
     public function findByEmail($email)
     {
         return $this->getQueryBuilder('email', $email)->where('is_confirm', 1)->first();
+    }
+
+    /**
+     * @param array $data
+     * @return User
+     */
+    public function newUser(array $data)
+    {
+        return User::forceCreate($data);
     }
 
     /**

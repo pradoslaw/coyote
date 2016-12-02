@@ -85,7 +85,7 @@ class OAuthController extends Controller
                 $filename = $media->getFilename();
             }
 
-            $user = $this->user->create([
+            $user = $this->user->newUser([
                 'name' => $name,
                 'email' => $oauth->getEmail(),
                 'photo' => $filename,

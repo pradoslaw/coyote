@@ -56,6 +56,35 @@ class ConfirmCest
 
         $I->seeFormErrorMessage('email', 'Ten adres e-mail jest już zweryfikowany.');
     }
+
+    public function changeUserEmailWhenCurrentEmailIsConfirmed(FunctionalTester $I)
+    {
+        $user = $I->createUser(['is_confirm' => 1, 'allow_smilies' => 1]);
+        $I->amLoggedAs($user);
+
+        $I->amOnRoute('user.settings');
+
+        $newEmail = 'fooooo@baaaaar.com';
+        $I->fillField('email', $newEmail);
+        $I->click('button[type=submit]');
+
+        $I->seeInField('email', $user->email);
+        $I->see('Na adres ' . $newEmail . ' wysłaliśmy link umożliwiający zmianę adresu e-mail.');
+    }
+
+    public function changeUserEmailWhenCurrentEmailIsNotConfirmed(FunctionalTester $I)
+    {
+        $user = $I->createUser(['is_confirm' => 0, 'allow_smilies' => 1]);
+        $I->amLoggedAs($user);
+
+        $I->amOnRoute('user.settings');
+
+        $newEmail = 'fooooo@baaaaar.com';
+        $I->fillField('email', $newEmail);
+        $I->click('Zapisz');
+
+        $I->seeInField('email', $newEmail);
+    }
 }
 
 

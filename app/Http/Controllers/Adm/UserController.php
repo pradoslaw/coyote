@@ -65,7 +65,7 @@ class UserController extends BaseController
         $data = $form->all();
 
         $this->transaction(function () use ($user, $data) {
-            $user->fill($data)->save();
+            $user->forceFill($data)->save();
             $user->skills()->delete();
 
             if (!empty($data['skills'])) {

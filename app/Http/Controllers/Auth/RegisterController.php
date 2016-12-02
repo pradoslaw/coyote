@@ -9,6 +9,7 @@ use Coyote\Http\Forms\Auth\RegisterForm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
+use Illuminate\Mail\Message;
 
 class RegisterController extends Controller
 {
@@ -37,7 +38,7 @@ class RegisterController extends Controller
     public function index()
     {
         $this->breadcrumb->push('Rejestracja', route('register'));
-        
+
         $form = $this->createForm(RegisterForm::class, null, [
             'url' => route('register')
         ]);
@@ -58,7 +59,7 @@ class RegisterController extends Controller
         $this->transaction(function () use ($request) {
             $email = $request->input('email');
 
-            $user = $this->user->create([
+            $user = $this->user->newUser([
                 'name'     => $request->input('name'),
                 'email'    => $email,
                 'password' => bcrypt($request->input('password'))
@@ -66,7 +67,7 @@ class RegisterController extends Controller
 
             $url = Actkey::createLink($user->id);
 
-            $this->getMailFactory()->queue('emails.auth.register', ['url' => $url], function ($message) use ($email) {
+            $this->getMailFactory()->queue('emails.auth.register', ['url' => $url], function (Message $message) use ($email) {
                 $message->to($email);
                 $message->subject('Dziękujemy za rejestrację. Potwierdź autentyczność swojego adresu e-mail');
             });
