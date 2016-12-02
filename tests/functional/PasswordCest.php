@@ -6,7 +6,12 @@ class PasswordCest
 
     public function _before(FunctionalTester $I)
     {
-        $this->user = $I->createUser();
+        $this->user = $I->createUser([
+            'name'       => 'Joe Doe',
+            'email'      => 'joe@doe.com',
+            'password'   => '123',
+            'is_confirm' => 0
+        ]);
     }
 
     public function _after(FunctionalTester $I)

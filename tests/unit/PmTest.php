@@ -20,7 +20,7 @@ class PmTest extends \Codeception\TestCase\Test
         $fake = Factory::create();
         $password = bcrypt('password');
 
-        $this->author = User::create(['name' => $fake->userName, 'email' => $fake->email, 'password' => $password]);
+        $this->author = User::forceCreate(['name' => $fake->userName, 'email' => $fake->email, 'password' => $password]);
     }
 
     protected function _after()
