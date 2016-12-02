@@ -53,7 +53,7 @@ class SettingsController extends BaseController
         // we use forceFill() to fill fields that are NOT in $fillable model's array.
         // we can do that because $form->all() returns only fields in form. $request->all() returns
         // all fields in HTTP POST so it's not secure.
-        $this->auth->forceFill($form->all());
+        $this->auth->forceFill(array_except($form->all(), ['submit']));
 
         $this->transaction(function () use ($form, $request) {
             if ($this->auth->isDirty('email')) {

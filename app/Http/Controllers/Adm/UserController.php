@@ -65,7 +65,7 @@ class UserController extends BaseController
         $data = $form->all();
 
         $this->transaction(function () use ($user, $data) {
-            $user->forceFill($data)->save();
+            $user->forceFill(array_except($data, ['submit', 'skills', 'groups']))->save();
             $user->skills()->delete();
 
             if (!empty($data['skills'])) {

@@ -19,6 +19,8 @@ class TopicTest extends \Codeception\TestCase\Test
     {
         $fake = Factory::create();
         $this->forum = Forum::create(['name' => $fake->name, 'slug' => $fake->name, 'description' => 'Lorem ipsum']);
+
+        User::unguard();
         $this->user = User::create(['name' => $fake->name, 'email' => $fake->email, 'password' => $fake->password]);
     }
 

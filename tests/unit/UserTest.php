@@ -24,7 +24,7 @@ class UserTest extends \Codeception\TestCase\Test
         $email = 'johndoe@example.com';
         $password = bcrypt('password');
 
-        User::create(['name' => $name, 'email' => $email, 'password' => $password]);
+        User::forceCreate(['name' => $name, 'email' => $email, 'password' => $password]);
 
         $this->tester->seeRecord('users', ['name' => $name, 'email' => $email, 'password' => $password]);
     }

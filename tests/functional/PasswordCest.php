@@ -6,14 +6,7 @@ class PasswordCest
 
     public function _before(FunctionalTester $I)
     {
-        $this->user = $I->haveRecord('Coyote\User', [
-            'name'       => 'Joe Doe',
-            'email'      => 'joe@doe.com',
-            'password'   => bcrypt('123'),
-            'created_at' => new DateTime(),
-            'updated_at' => new DateTime(),
-            'is_confirm' => 0
-        ]);
+        $this->user = $I->createUser();
     }
 
     public function _after(FunctionalTester $I)
