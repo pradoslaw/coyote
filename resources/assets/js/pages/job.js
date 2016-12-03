@@ -55,6 +55,8 @@ $(() => {
             Object.keys(errors).forEach((key) => {
                 form.find(`[data-column="${key}"]`).addClass('has-error').find('.help-block').text(errors[key][0]);
             });
+
+            $(':submit', form).enable();
         });
 
         return false;
