@@ -3198,8 +3198,9 @@ class Migrate extends Command
 
                 $user->save();
                 $preferences = [
-                    'location' => [
-                        ['name' => $user->location, 'latitude' => $result->latitude, 'longitude' => $result->longitude]
+                    'city' => $user->location,
+                    'locations' => [
+                        ['lat' => $result->latitude, 'lon' => $result->longitude]
                     ]
                 ];
 
