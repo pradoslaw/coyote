@@ -143,21 +143,21 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group" data-column="city">
-                            <label>Miejscowość</label>
+                            <label>Interesuje mnie praca w miejscowościach...</label>
                             {{ form_text('city', preferences.city, {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}) }}
-                            <span class="help-block"></span>
+                            <span class="help-block">Nazwy miejscowości rozdzielone przecinkiem</span>
 
                             <div class="checkbox">
                                 {{ form_checkbox('is_remote', 1, preferences.is_remote, {'id': 'is-remote'}) }}
 
                                 <label for="is-remote">
-                                    Praca zdalna
+                                    Oferty z możliwą pracą zdalną
                                 </label>
                             </div>
                         </div>
 
                         <div class="form-group" data-column="tags">
-                            <label>Technologie</label>
+                            <label>Interesują mnie technologie</label>
 
                             {{ form_text('tags', preferences.tags|join(', '), {'class': 'form-control', 'placeholder': 'Np. .net, c#', 'id': 'tags'}) }}
                             <span class="help-block"></span>

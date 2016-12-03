@@ -9,6 +9,7 @@ use Coyote\Listeners\BindRouteDefaultModel;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
 use Coyote\Listeners\MicroblogListener;
+use Coyote\Listeners\SaveLocationsInJobPreferences;
 use Coyote\Listeners\SendLockoutEmail;
 use Coyote\Listeners\SendSuccessfulLoginEmail;
 use Coyote\Listeners\SetupWikiLinks;
@@ -32,7 +33,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         RouteMatched::class => [BindRouteDefaultModel::class],
-        UserWasSaved::class => [FlushUserCache::class],
+        UserWasSaved::class => [FlushUserCache::class, SaveLocationsInJobPreferences::class],
         Lockout::class => [SendLockoutEmail::class],
         FirewallWasSaved::class => [FlushFirewallCache::class],
         FirewallWasDeleted::class => [FlushFirewallCache::class],

@@ -16,7 +16,7 @@ class CreateSettingsTable extends Migration
             $table->increments('id');
             $table->timestampTz('created_at')->default(DB::raw('CURRENT_TIMESTAMP(0)'));
             $table->string('name');
-            $table->string('value');
+            $table->text('value');
             $table->integer('user_id')->nullable();
             $table->string('session_id')->nullable();
 
