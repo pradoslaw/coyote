@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Models\Job\Preferences;
+use Coyote\Job\Preferences;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;

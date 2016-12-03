@@ -57,7 +57,7 @@ class SearchBuilder
     }
 
     /**
-     * @param mixed $preferences
+     * @param \Coyote\Job\Preferences $preferences
      */
     public function setPreferences($preferences)
     {

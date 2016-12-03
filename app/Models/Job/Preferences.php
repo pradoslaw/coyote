@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Models\Job;
+namespace Coyote\Job;
 
 use Coyote\Services\Geocoder\GeocoderInterface;
 use Coyote\Services\Parser\Helpers\City;

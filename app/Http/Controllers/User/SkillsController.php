@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Forms\User\SkillsForm;
-use Coyote\Models\Job\Preferences;
+use Coyote\Job\Preferences;
 use Illuminate\Http\Request;
 
 class SkillsController extends BaseController

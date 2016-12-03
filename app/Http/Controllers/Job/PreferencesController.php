@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Models\Job\Preferences;
+use Coyote\Job\Preferences;
 use Illuminate\Http\Request;
 
 class PreferencesController extends Controller
