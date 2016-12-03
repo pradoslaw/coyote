@@ -4,6 +4,11 @@ namespace Coyote\User;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $name
+ * @property int $rate
+ * @property int $order
+ */
 class Skill extends Model
 {
     /**

@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Forms\User\SkillsForm;
+use Coyote\Models\Job\Preferences;
 use Illuminate\Http\Request;
 
 class SkillsController extends BaseController
@@ -36,15 +37,13 @@ class SkillsController extends BaseController
 
         if ($form->isValid()) {
             $skill = $this->transaction(function () use ($request) {
+                /** @var \Coyote\User\Skill $skill */
                 $skill = $this->auth->skills()->create($request->all());
 
-                $preferences = json_decode($this->getSetting('job.preferences', '{}'), true);
-                if (!isset($preferences['tags'])) {
-                    $preferences['tags'] = [];
-                }
+                $preferences = new Preferences($this->getSetting('job.preferences'));
+                $preferences->addTag($skill->name);
 
-                array_push($preferences['tags'], $skill->name);
-                $this->setSetting('job.preferences', json_encode($preferences));
+                $this->setSetting('job.preferences', $preferences);
 
                 return $skill;
             });

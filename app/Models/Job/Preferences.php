@@ -25,7 +25,7 @@ class Preferences
     public function __construct(string $data = null)
     {
         if ($data !== null) {
-            $this->attributes = json_decode($data);
+            $this->attributes = json_decode($data, true);
         }
     }
 
@@ -42,6 +42,18 @@ class Preferences
         }
 
         return $object->geocode();
+    }
+
+    /**
+     * @param string $name
+     */
+    public function addTag($name)
+    {
+        if (!isset($this->attributes['tags'])) {
+            $this->attributes['tags'] = [];
+        }
+
+        array_push($this->attributes['tags'], $name);
     }
 
     /**
