@@ -3,7 +3,7 @@
 namespace Coyote\Listeners;
 
 use Coyote\Events\UserWasSaved;
-use Coyote\Models\Job\Preferences;
+use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\SettingRepositoryInterface as SettingRepository;
 
 class SaveLocationsInJobPreferences
