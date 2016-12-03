@@ -1,8 +1,8 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Transformers;
+namespace Coyote\Services\Elasticsearch;
 
-class CommonTransformer implements TransformerInterface
+class ResultSet implements \Countable, \IteratorAggregate
 {
     /**
      * @var array|\Illuminate\Support\Collection
@@ -20,14 +20,19 @@ class CommonTransformer implements TransformerInterface
     protected $total = 0;
 
     /**
-     * Response constructor.
+     * @var int
+     */
+    protected $took;
+
+    /**
      * @param array $response
      */
     public function __construct($response)
     {
         if (isset($response['hits'])) {
-            $this->hits = $this->collect($response['hits']['hits']);
+            $this->hits = $this->collect($this->map($response['hits']['hits']));
             $this->total = $response['hits']['total'];
+            $this->took = $response['took'];
 
             if (isset($response['aggregations'])) {
                 $this->aggregations = ($response['aggregations']);
@@ -36,22 +41,33 @@ class CommonTransformer implements TransformerInterface
     }
 
     /**
+     * Additional data transformation.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function map(array $data)
+    {
+        return $data;
+    }
+
+    /**
      * Transform results array to laravel's collection
      *
-     * @param array $array
+     * @param mixed $data
      * @return \Illuminate\Support\Collection
      */
-    protected function collect(array $array)
+    protected function collect($data)
     {
-        $array = collect($array);
+        $data = collect($data);
 
-        foreach ($array as $key => $item) {
+        foreach ($data as $key => $item) {
             if (is_array($item)) {
-                $array[$key] = $this->collect($item);
+                $data[$key] = $this->collect($item);
             }
         }
 
-        return $array;
+        return $data;
     }
 
     /**
@@ -62,6 +78,14 @@ class CommonTransformer implements TransformerInterface
     public function total()
     {
         return $this->total;
+    }
+
+    /**
+     * @return int
+     */
+    public function took()
+    {
+        return $this->took;
     }
 
     /**

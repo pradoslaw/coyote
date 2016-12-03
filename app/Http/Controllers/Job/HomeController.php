@@ -148,23 +148,23 @@ class HomeController extends Controller
         // show build query in laravel's debugbar
         debugbar()->debug(json_encode($build));
 
-        $response = $this->job->search($build);
+        $result = $this->job->search($build);
         stop_measure('search');
 
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)
-        $jobs = $response->getSource();
+        $jobs = $result->getSource();
 
         $context = !$request->has('q') ? 'global.' : '';
         $aggregations = [
-            'cities'        => $response->getAggregations("${context}locations.city_original"),
-            'tags'          => $response->getAggregations("${context}tags"),
-            'remote'        => $response->getAggregations("${context}remote")
+            'cities'        => $result->getAggregations("${context}locations.city_original"),
+            'tags'          => $result->getAggregations("${context}tags"),
+            'remote'        => $result->getAggregations("${context}remote")
         ];
 
         $pagination = new LengthAwarePaginator(
             $jobs,
-            $response->total(),
+            $result->total(),
             SearchBuilder::PER_PAGE,
             LengthAwarePaginator::resolveCurrentPage(),
             ['path' => LengthAwarePaginator::resolveCurrentPath()]

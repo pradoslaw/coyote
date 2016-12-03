@@ -3,18 +3,12 @@
 namespace Coyote;
 
 use Coyote\Services\Elasticsearch\CharFilters\CharFilterInteface;
-use Coyote\Services\Elasticsearch\Transformers\CommonTransformer;
-use Coyote\Services\Elasticsearch\Transformers\TransformerInterface;
+use Coyote\Services\Elasticsearch\ResultSet;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Illuminate\Contracts\Support\Arrayable;
 
 trait Searchable
 {
-    /**
-     * @var string
-     */
-    protected $transformer = CommonTransformer::class;
-
     /**
      * @var string
      */
@@ -28,7 +22,7 @@ trait Searchable
     public function putToIndex()
     {
         $params = $this->getParams();
-        $params['body'] = $this->filter($this->getIndexBody());
+        $params['body'] = $this->filterData($this->getIndexBody());
 
         return $this->getClient()->index($params);
     }
@@ -57,14 +51,11 @@ trait Searchable
 
     /**
      * @param array $body
-     * @return TransformerInterface
+     * @return ResultSet
      */
     public function search($body)
     {
-        $params = $this->getParams();
-        $params['body'] = $body;
-
-        return $this->getTransformer($this->getClient()->search($params));
+        return new ResultSet($this->performSearch($body));
     }
 
     /**
@@ -83,19 +74,23 @@ trait Searchable
     }
 
     /**
-     * @param string $transformer
-     */
-    public function setTransformer(string $transformer)
-    {
-        $this->transformer = $transformer;
-    }
-
-    /**
      * @param string $filter
      */
     public function setCharFilter(string $filter)
     {
         $this->charFilter = $filter;
+    }
+
+    /**
+     * @param array $body
+     * @return array
+     */
+    protected function performSearch($body)
+    {
+        $params = $this->getParams();
+        $params['body'] = $body;
+
+        return $this->getClient()->search($params);
     }
 
     /**
@@ -155,7 +150,7 @@ trait Searchable
      * @param mixed $data
      * @return array
      */
-    protected function filter($data)
+    protected function filterData($data)
     {
         if ($data instanceof Arrayable) {
             $data = $data->toArray();
@@ -163,7 +158,7 @@ trait Searchable
 
         foreach ($data as &$value) {
             if (is_object($value) && $data instanceof Arrayable) {
-                $value = $this->filter($value);
+                $value = $this->filterData($value);
             }
         }
 
@@ -190,15 +185,6 @@ trait Searchable
     protected function getCharFilter(): CharFilterInteface
     {
         return app($this->charFilter);
-    }
-
-    /**
-     * @param array $response
-     * @return TransformerInterface
-     */
-    protected function getTransformer(array $response): TransformerInterface
-    {
-        return app($this->transformer, [$response]);
     }
 
     /**

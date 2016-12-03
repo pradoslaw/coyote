@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Builders\MixedBuilder;
+use Coyote\Services\Elasticsearch\MultiResultSet;
 use Coyote\Services\Elasticsearch\Transformers\MixedTypesTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -86,7 +87,7 @@ class SearchController extends Controller
         debugbar()->startMeasure('elasticsearch');
 
         // do the search and transform results
-        $hits = new MixedTypesTransformer($this->getClient()->search($params));
+        $hits = new MultiResultSet($this->getClient()->search($params));
         debugbar()->stopMeasure('elasticsearch');
 
         $pagination = new LengthAwarePaginator($hits, $hits->total(), 10, null, ['path' => ' ']);
