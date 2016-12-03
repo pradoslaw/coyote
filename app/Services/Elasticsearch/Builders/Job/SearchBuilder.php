@@ -140,10 +140,10 @@ class SearchBuilder
         $this->queryBuilder->addFilter($this->tag);
         $this->queryBuilder->addFilter($this->location);
 
-        // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 2)
-        $this->queryBuilder->addFunction(new FieldValueFactor('score', 'log', 2));
-        // strsze ogloszenia traca na waznosci, glownie po 14d
-        $this->queryBuilder->addFunction(new Decay('created_at', '14d', 0.5));
+        // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 1)
+        $this->queryBuilder->addFunction(new FieldValueFactor('score', 'log', 1));
+        // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
+        $this->queryBuilder->addFunction(new Decay('created_at', '14d', 0.1));
 
         // facet search
         $this->queryBuilder->addAggs(new Aggs\Job\Location());
