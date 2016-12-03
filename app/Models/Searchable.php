@@ -18,7 +18,7 @@ trait Searchable
     /**
      * @var string
      */
-    protected $analyzer;
+    protected $charFilter;
 
     /**
      * Index data in elasticsearch
@@ -28,7 +28,7 @@ trait Searchable
     public function putToIndex()
     {
         $params = $this->getParams();
-        $params['body'] = $this->analyze($this->getIndexBody());
+        $params['body'] = $this->filter($this->getIndexBody());
 
         return $this->getClient()->index($params);
     }
@@ -95,7 +95,7 @@ trait Searchable
      */
     public function setCharFilter(string $filter)
     {
-        $this->analyzer = $filter;
+        $this->charFilter = $filter;
     }
 
     /**
@@ -155,7 +155,7 @@ trait Searchable
      * @param mixed $data
      * @return array
      */
-    protected function analyze($data)
+    protected function filter($data)
     {
         if ($data instanceof Arrayable) {
             $data = $data->toArray();
@@ -163,11 +163,11 @@ trait Searchable
 
         foreach ($data as &$value) {
             if (is_object($value) && $data instanceof Arrayable) {
-                $value = $this->analyze($value);
+                $value = $this->filter($value);
             }
         }
 
-        if ($this->analyzer) {
+        if ($this->charFilter) {
             $data = $this->getCharFilter()->filter($data);
         }
 
@@ -189,7 +189,7 @@ trait Searchable
      */
     protected function getCharFilter(): CharFilterInteface
     {
-        return app($this->analyzer);
+        return app($this->charFilter);
     }
 
     /**
