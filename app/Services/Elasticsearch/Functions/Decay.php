@@ -25,7 +25,7 @@ class Decay extends FunctionScore
     /**
      * @var string
      */
-    protected $decayFunction = 'gauss';
+    protected $decayFunction = 'exp';
 
     /**
      * @param string $field
