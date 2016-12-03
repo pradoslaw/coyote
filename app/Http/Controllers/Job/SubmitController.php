@@ -10,9 +10,9 @@ use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\FirmRepositoryInterface;
-use Coyote\Repositories\Contracts\JobRepositoryInterface;
-use Coyote\Repositories\Contracts\TagRepositoryInterface;
+use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
+use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Services\Parser\Helpers\City;
@@ -24,17 +24,17 @@ use Coyote\Services\GeoIp\Normalizers\Locale;
 class SubmitController extends Controller
 {
     /**
-     * @var JobRepositoryInterface
+     * @var JobRepository
      */
     private $job;
 
     /**
-     * @var FirmRepositoryInterface
+     * @var FirmRepository
      */
     private $firm;
 
     /**
-     * @var TagRepositoryInterface
+     * @var TagRepository
      */
     private $tag;
 
@@ -45,11 +45,11 @@ class SubmitController extends Controller
 
     /**
      * SubmitController constructor.
-     * @param JobRepositoryInterface $job
-     * @param FirmRepositoryInterface $firm
-     * @param TagRepositoryInterface $tag
+     * @param JobRepository $job
+     * @param FirmRepository $firm
+     * @param TagRepository $tag
      */
-    public function __construct(JobRepositoryInterface $job, FirmRepositoryInterface $firm, TagRepositoryInterface $tag)
+    public function __construct(JobRepository $job, FirmRepository $firm, TagRepository $tag)
     {
         parent::__construct();
 
