@@ -160,6 +160,7 @@ elixir(function (mix) {
             'js/wiki.js',
             'js/diff.js',
             'js/geo-ip.js',
+            'js/uploader.js',
 
             'css/main.css',
             'css/auth.css',
