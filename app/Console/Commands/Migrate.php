@@ -1384,6 +1384,8 @@ class Migrate extends Command
 
         $locations = DB::connection('mysql')
             ->table('job_location')
+            ->select(['job_location.*', 'job_deadline AS location_deadline'])
+            ->leftJoin('job', 'job_id', '=', 'location_job')
             ->get();
 
         $bar = $this->output->createProgressBar(count($locations));
@@ -1391,12 +1393,25 @@ class Migrate extends Command
         DB::beginTransaction();
         $replace = ['Warsaw' => 'Warszawa', 'Krakow' => 'Kraków', 'Wroclaw' => 'Wrocław', 'Lodz' => 'Łódź', 'Warszawa (ścisłe centrum)' => 'Warszawa', 'Waraszawa' => 'Warszawa'];
 
+        $geocoder = app('Coyote\Services\Geocoder\GeocoderInterface');
+
         try {
             foreach ($locations as $row) {
                 $row = $this->skipPrefix('location_', (array) $row);
                 $this->rename($row, 'job', 'job_id');
 
                 $row['city'] = str_ireplace(array_keys($replace), array_values($replace), $row['city']);
+
+                if (empty($row['latitude']) && $row['deadline'] > time()) {
+                    $coordinates = $geocoder->geocode($row['city']);
+
+                    if ($coordinates) {
+                        $row['latitude'] = $coordinates->latitude;
+                        $row['longitude'] = $coordinates->longitude;
+                    }
+                }
+
+                unset($row['deadline']);
 
                 DB::table('job_locations')->insert($row);
                 $bar->advance();
