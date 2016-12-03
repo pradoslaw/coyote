@@ -71,7 +71,7 @@ class Preferences
             foreach ($input as $name) {
                 $result = $geocoder->geocode($name);
 
-                array_push($locations, ['latitude' => $result->latitude, 'longitude' => $result->longitude]);
+                array_push($locations, ['lat' => $result->latitude, 'lon' => $result->longitude]);
             }
 
             $this->locations = $locations;

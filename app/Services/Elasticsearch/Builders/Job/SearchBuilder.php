@@ -34,6 +34,11 @@ class SearchBuilder
     public $city;
 
     /**
+     * @var Filters\Job\Location
+     */
+    public $location;
+
+    /**
      * @var Filters\Job\Tag
      */
     public $tag;
@@ -44,9 +49,11 @@ class SearchBuilder
     public function __construct(Request $request)
     {
         $this->request = $request;
+
         $this->queryBuilder = new QueryBuilder();
         $this->city = new Filters\Job\City();
         $this->tag = new Filters\Job\Tag();
+        $this->location = new Filters\Job\Location();
     }
 
     /**
@@ -54,8 +61,8 @@ class SearchBuilder
      */
     public function setPreferences($preferences)
     {
-        if (!empty($preferences->city)) {
-            $this->city->setCities((new City())->grab($preferences->city));
+        if (!empty($preferences->locations)) {
+            $this->location->setLocations($preferences->locations);
         }
 
         if (!empty($preferences->tags)) {
@@ -131,6 +138,7 @@ class SearchBuilder
         $this->queryBuilder->addFilter(new Filters\Range('deadline_at', ['gte' => 'now']));
         $this->queryBuilder->addFilter($this->city);
         $this->queryBuilder->addFilter($this->tag);
+        $this->queryBuilder->addFilter($this->location);
 
         // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 2)
         $this->queryBuilder->addFunction(new FieldValueFactor('score', 'log', 2));

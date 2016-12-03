@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Models\Job\Preferences;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
@@ -60,7 +61,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $this->preferences = json_decode($this->getSetting('job.preferences', '{}'));
+        $this->preferences = new Preferences($this->getSetting('job.preferences'));
 
         $this->tab = $request->get('tab', $this->getSetting('job.tab', self::TAB_FILTERED));
         $validator = $this->getValidationFactory()->make(

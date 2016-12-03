@@ -33,10 +33,11 @@ class SaveLocationsInJobPreferences
 
         if (empty($preferences->city)) {
             $preferences->city = $event->user->location;
-            $preferences->locations = [
-                'latitude'  => $event->user->latitude,
-                'longitude' => $event->user->longitude
-            ];
+            $preferences->locations = [[
+                // lat i lon sa uzywane przez elasticsearch
+                'lat'  => $event->user->latitude,
+                'lon' => $event->user->longitude
+            ]];
 
             $this->setting->setItem('job.preferences', $preferences, $event->user->id, null);
         }
