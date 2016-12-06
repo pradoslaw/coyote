@@ -5,6 +5,7 @@ namespace Coyote\Console\Commands;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Elasticsearch\MultiResultSet;
+use Coyote\Services\Elasticsearch\ResultSet;
 use Coyote\User;
 use Elasticsearch\Client;
 use Illuminate\Console\Command;
@@ -75,7 +76,7 @@ class PurgeJobs extends Command
      */
     public function handle()
     {
-        $result = new MultiResultSet($this->elasticsearch->search($this->params));
+        $result = new ResultSet($this->elasticsearch->search($this->params));
 
         foreach ($result as $hit) {
             $user = $this->user->find($hit['user_id'], ['name', 'email']);
