@@ -6,6 +6,7 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container as App;
+use Illuminate\Database\Query\Expression;
 
 class Index extends Command
 {
@@ -105,7 +106,7 @@ class Index extends Command
 
         // ugly hack for job offers...
         if ($objectName === 'Coyote\Job') {
-            $builder = $builder->where('deadline_at', '>=', \DB::raw('NOW()'));
+            $builder = $builder->where('deadline_at', '>=', new Expression('NOW()'));
         } elseif ($objectName === 'Coyote\Microblog') {
             $builder = $builder->whereNull('parent_id');
         }

@@ -88,7 +88,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
                 FROM users u1
                 WHERE id = ?";
 
-        $rowset = \DB::select($sql, [$userId]);
+        $rowset = $this->app['db']->select($sql, [$userId]);
 
         // select() zwraca kolekcje. nas interesuje tylko jeden rekord
         if ($rowset) {
