@@ -7,22 +7,37 @@ use Coyote\User;
 
 class UserRepository extends Repository implements UserRepositoryInterface
 {
+    /**
+     * @return string
+     */
     public function model()
     {
-        return 'Coyote\User';
+        return User::class;
     }
 
     /**
      * @param $name
-     * @param array $orderByUsersId
+     * @param array $userIds
      * @return mixed
      */
-    public function lookupName($name, $orderByUsersId = [])
+    public function lookupName($name, $userIds = [])
     {
         $sql = $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%');
-        if (!empty($orderByUsersId)) {
-            // @todo To moze nie zadzialac na postgresie
-            $sql->orderBy($this->raw('id IN(' . implode(',', $orderByUsersId) . ')'), 'DESC');
+
+        if (!empty($userIds)) {
+            $values = [];
+
+            foreach ($userIds as $index => $userId) {
+                $values[] = "($userId,$index)";
+            }
+
+            $sql->leftJoin(
+                $this->raw('(VALUES ' . implode(',', $values) . ') AS x (user_id, ordering)'),
+                'users.id',
+                '=',
+                'x.user_id'
+            )
+            ->orderBy($this->raw('CASE WHEN x.ordering IS NULL THEN 0 ELSE x.ordering END'), 'DESC');
         }
 
         return $sql->orderBy('visited_at', 'DESC')->limit(5)->get();

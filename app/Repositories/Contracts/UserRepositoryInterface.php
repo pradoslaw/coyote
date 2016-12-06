@@ -6,10 +6,10 @@ interface UserRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param $name
-     * @param array $orderByUsersId
+     * @param array $userIds
      * @return mixed
      */
-    public function lookupName($name, $orderByUsersId = []);
+    public function lookupName($name, $userIds = []);
 
     /**
      * Find by user name (case insensitive)
