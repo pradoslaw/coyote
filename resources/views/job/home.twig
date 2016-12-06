@@ -144,11 +144,11 @@
                     <div class="modal-body">
                         <div class="form-group" data-column="city">
                             <label>Interesuje mnie praca w miejscowościach...</label>
-                            {{ form_text('city', preferences.city, {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}) }}
+                            {{ form_input('search', 'city', preferences.city, {class: 'form-control', placeholder: 'Np. Wrocław, Warszawa'}) }}
                             <span class="help-block">Nazwy miejscowości rozdzielone przecinkiem</span>
 
                             <div class="checkbox">
-                                {{ form_checkbox('is_remote', 1, preferences.is_remote, {'id': 'is-remote'}) }}
+                                {{ form_checkbox('is_remote', 1, preferences.is_remote, {id: 'is-remote'}) }}
 
                                 <label for="is-remote">
                                     Oferty z możliwą pracą zdalną
@@ -159,7 +159,7 @@
                         <div class="form-group" data-column="tags">
                             <label>Interesują mnie technologie</label>
 
-                            {{ form_text('tags', preferences.tags|join(', '), {'class': 'form-control', 'placeholder': 'Np. .net, c#', 'id': 'tags'}) }}
+                            {{ form_text('tags', preferences.tags|join(', '), {class: 'form-control', placeholder: 'Np. .net, c#', id: 'tags'}) }}
                             <span class="help-block"></span>
                         </div>
 
@@ -168,11 +168,11 @@
 
                             <div class="row">
                                 <div class="col-xs-2" style="padding-right: 0">
-                                    {{ form_text('salary', preferences.salary, {'class': 'form-control'}) }}
+                                    {{ form_text('salary', preferences.salary, {class: 'form-control'}) }}
                                 </div>
 
                                 <div class="col-xs-2">
-                                    {{ form_select('currency_id', currencyList, preferences.currency_id, {'class': 'form-control'}) }}
+                                    {{ form_select('currency_id', currencyList, preferences.currency_id, {class: 'form-control'}) }}
                                 </div>
                             </div>
 
