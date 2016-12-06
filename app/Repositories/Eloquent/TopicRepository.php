@@ -57,58 +57,59 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
 
         $this->resetModel();
 
-        $sql = $this->model
-                    ->withTrashed()
-                    ->select([
-                        'topics.*',
-                        'forum_track.marked_at AS forum_marked_at',
-                        'topic_track.marked_at AS topic_marked_at',
-                        'first.created_at AS first_created_at',
-                        'first.user_name AS first_user_name',
-                        'last.created_at AS last_created_at',
-                        'last.user_name AS last_user_name',
-                        'author.id AS author_id',
-                        'author.name AS author_name',
-                        'author.is_active AS author_is_active',
-                        'author.is_blocked AS author_is_blocked',
-                        'poster.id AS poster_id',
-                        'poster.name AS poster_name',
-                        'poster.is_active AS poster_is_active',
-                        'poster.is_blocked AS poster_is_blocked',
-                        'poster.photo AS poster_photo',
-                        'forums.slug AS forum_slug',
-                        'forums.name AS forum_name',
-                        'prev.name AS prev_forum_name',
-                        'pa.post_id AS post_accept_id'
-                    ])
-                    ->from($this->raw("($from) AS topics"))
-                    ->join('forums', 'forums.id', '=', 'topics.forum_id')
-                    ->leftJoin('forums AS prev', 'prev.id', '=', 'prev_forum_id')
-                    ->join('posts AS first', 'first.id', '=', 'topics.first_post_id')
-                    ->join('posts AS last', 'last.id', '=', 'topics.last_post_id')
-                    ->leftJoin('users AS author', 'author.id', '=', 'first.user_id')
-                    ->leftJoin('users AS poster', 'poster.id', '=', 'last.user_id')
-                    ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
-                        $join->on('forum_track.forum_id', '=', 'topics.forum_id');
+        $sql = $this
+            ->model
+            ->withTrashed()
+            ->select([
+                'topics.*',
+                'forum_track.marked_at AS forum_marked_at',
+                'topic_track.marked_at AS topic_marked_at',
+                'first.created_at AS first_created_at',
+                'first.user_name AS first_user_name',
+                'last.created_at AS last_created_at',
+                'last.user_name AS last_user_name',
+                'author.id AS author_id',
+                'author.name AS author_name',
+                'author.is_active AS author_is_active',
+                'author.is_blocked AS author_is_blocked',
+                'poster.id AS poster_id',
+                'poster.name AS poster_name',
+                'poster.is_active AS poster_is_active',
+                'poster.is_blocked AS poster_is_blocked',
+                'poster.photo AS poster_photo',
+                'forums.slug AS forum_slug',
+                'forums.name AS forum_name',
+                'prev.name AS prev_forum_name',
+                'pa.post_id AS post_accept_id'
+            ])
+            ->from($this->raw("($from) AS topics"))
+            ->join('forums', 'forums.id', '=', 'topics.forum_id')
+            ->leftJoin('forums AS prev', 'prev.id', '=', 'prev_forum_id')
+            ->join('posts AS first', 'first.id', '=', 'topics.first_post_id')
+            ->join('posts AS last', 'last.id', '=', 'topics.last_post_id')
+            ->leftJoin('users AS author', 'author.id', '=', 'first.user_id')
+            ->leftJoin('users AS poster', 'poster.id', '=', 'last.user_id')
+            ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
+                $join->on('forum_track.forum_id', '=', 'topics.forum_id');
 
-                        if ($userId) {
-                            $join->on('forum_track.user_id', '=', $this->raw($userId));
-                        } else {
-                            $join->on('forum_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                        }
-                    })
-                    ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
-                        $join->on('topic_track.topic_id', '=', 'topics.id');
+                if ($userId) {
+                    $join->on('forum_track.user_id', '=', $this->raw($userId));
+                } else {
+                    $join->on('forum_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
+                }
+            })
+            ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
+                $join->on('topic_track.topic_id', '=', 'topics.id');
 
-                        if ($userId) {
-                            $join->on('topic_track.user_id', '=', $this->raw($userId));
-                        } else {
-                            $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                        }
-                    })
-                    ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
-                    ->with('tags')
-                    ->orderBy('topics.ordering');
+                if ($userId) {
+                    $join->on('topic_track.user_id', '=', $this->raw($userId));
+                } else {
+                    $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
+                }
+            })
+            ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
+            ->with('tags')
+            ->orderBy('topics.ordering');
 
         if ($userId) {
             $sql = $sql->addSelect(['ts.created_at AS subscribe_on'])
