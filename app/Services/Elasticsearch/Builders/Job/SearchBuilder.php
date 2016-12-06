@@ -10,7 +10,6 @@ use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\Filters;
 use Coyote\Services\Elasticsearch\Sort;
-use Coyote\Services\Parser\Helpers\City;
 use Illuminate\Http\Request;
 
 class SearchBuilder
