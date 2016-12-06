@@ -53,3 +53,12 @@ img[src*="logo-gray"] {
     background-color: transparent;
   }
 }
+
+// Maksymalna wielkosc czcionki klasy .lead wykorzystywana w sekcji "Ustaw swoja lokalizacje"
+// -------------------------------------------------------------------------------------------
+
+.lead {
+  @media (min-width: $screen-sm-min) {
+    font-size: ($font-size-base * 1.15);
+  }
+}
