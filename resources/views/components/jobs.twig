@@ -7,7 +7,7 @@
         </div>
         <div class="media-body">
             <h5 class="media-heading"><a href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title|raw }}">{{ job.title|raw }}</a></h5>
-            <p><a class="employer" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a></p>
+            <p><a class="employer" title="Znajdź oferty pracy w firmie: {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a></p>
 
             <p class="bottom">
                 {% include 'job.partials.location' with {
