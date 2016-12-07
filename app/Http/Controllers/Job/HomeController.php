@@ -22,6 +22,11 @@ class HomeController extends Controller
     const DEFAULT_TAB = self::TAB_FILTERED;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * @var JobRepository
      */
     private $job;
@@ -49,6 +54,9 @@ class HomeController extends Controller
     {
         parent::__construct();
 
+        $this->middleware('geocode');
+
+        $this->request = $request;
         $this->job = $job;
         $this->builder = new SearchBuilder($request);
 
@@ -56,16 +64,15 @@ class HomeController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
         $this->preferences = new Preferences($this->getSetting('job.preferences'));
 
-        $this->tab = $request->get('tab', $this->getSetting('job.tab', self::TAB_FILTERED));
+        $this->tab = $this->request->get('tab', $this->getSetting('job.tab', self::TAB_FILTERED));
         $validator = $this->getValidationFactory()->make(
-            $request->all(),
+            $this->request->all(),
             ['tab' => 'sometimes|in:' . self::TAB_ALL . ',' . self::TAB_FILTERED]
         );
 
@@ -73,12 +80,12 @@ class HomeController extends Controller
             $this->tab = self::TAB_FILTERED;
         }
 
-        if ($request->has('tab')) {
+        if ($this->request->has('tab')) {
             $this->setSetting('job.tab', $this->tab);
         }
 
         // if user want to filter job offers, we MUST select "all" tab
-        if ($this->notEmpty($request, ['q', 'city', 'remote', 'tag'])) {
+        if ($this->notEmpty($this->request, ['q', 'city', 'remote', 'tag'])) {
             $this->tab = self::TAB_ALL;
         }
 
@@ -86,61 +93,56 @@ class HomeController extends Controller
             $this->builder->setPreferences($this->preferences);
         }
 
-        return $this->load($request);
+        return $this->load();
     }
 
     /**
-     * @param Request $request
      * @param $name
      * @return \Illuminate\View\View
      */
-    public function city(Request $request, $name)
+    public function city($name)
     {
         $this->builder->city->addCity($name);
 
-        return $this->load($request);
+        return $this->load();
     }
 
     /**
-     * @param Request $request
      * @param $name
      * @return \Illuminate\View\View
      */
-    public function tag(Request $request, $name)
+    public function tag($name)
     {
         $this->builder->tag->addTag($name);
 
-        return $this->load($request);
+        return $this->load();
     }
 
     /**
-     * @param Request $request
      * @param $name
      * @return \Illuminate\View\View
      */
-    public function firm(Request $request, $name)
+    public function firm($name)
     {
         $this->builder->addFirmFilter($name);
 
-        return $this->load($request);
+        return $this->load();
     }
 
     /**
-     * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function remote(Request $request)
+    public function remote()
     {
         $this->builder->addRemoteFilter();
 
-        return $this->load($request);
+        return $this->load();
     }
 
     /**
-     * @param Request $request
      * @return \Illuminate\View\View
      */
-    private function load(Request $request)
+    private function load()
     {
         start_measure('search', 'Elasticsearch');
 
@@ -155,7 +157,7 @@ class HomeController extends Controller
         // we want to pass collection to the twig (not raw php array)
         $jobs = $result->getSource();
 
-        $context = !$request->has('q') ? 'global.' : '';
+        $context = !$this->request->has('q') ? 'global.' : '';
         $aggregations = [
             'cities'        => $result->getAggregations("${context}locations.city_original"),
             'tags'          => $result->getAggregations("${context}tags"),
@@ -170,7 +172,7 @@ class HomeController extends Controller
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
 
-        $pagination->appends($request->except('page'));
+        $pagination->appends($this->request->except('page'));
 
         // we need to display actual number of active offers so don't remove line below!
         $this->job->pushCriteria(new PriorDeadline());
@@ -187,7 +189,7 @@ class HomeController extends Controller
             $selected = [
                 'tags'          => $this->builder->tag->getTags(),
                 'cities'        => array_map('mb_strtolower', $this->builder->city->getCities()),
-                'remote'        => $request->has('remote') || $this->getRouter()->currentRouteName() === 'job.remote'
+                'remote'        => $this->request->has('remote') || $this->getRouter()->currentRouteName() === 'job.remote'
             ];
         }
 

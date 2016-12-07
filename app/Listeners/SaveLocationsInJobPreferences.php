@@ -29,6 +29,10 @@ class SaveLocationsInJobPreferences
      */
     public function handle(UserWasSaved $event)
     {
+        if (empty($event->user->location)) {
+            return;
+        }
+
         $preferences = new Preferences($this->setting->getItem('job.preferences', $event->user->id, null, '{}'));
 
         if (empty($preferences->city)) {
