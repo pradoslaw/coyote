@@ -4,6 +4,7 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 
@@ -89,7 +90,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->join('posts AS last', 'last.id', '=', 'topics.last_post_id')
             ->leftJoin('users AS author', 'author.id', '=', 'first.user_id')
             ->leftJoin('users AS poster', 'poster.id', '=', 'last.user_id')
-            ->leftJoin('forum_track', function ($join) use ($userId, $sessionId) {
+            ->leftJoin('forum_track', function (JoinClause $join) use ($userId, $sessionId) {
                 $join->on('forum_track.forum_id', '=', 'topics.forum_id');
 
                 if ($userId) {
@@ -98,7 +99,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                     $join->on('forum_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
                 }
             })
-            ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
+            ->leftJoin('topic_track', function (JoinClause $join) use ($userId, $sessionId) {
                 $join->on('topic_track.topic_id', '=', 'topics.id');
 
                 if ($userId) {
@@ -166,7 +167,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
         return $this
             ->model
             ->from($this->raw("($sql) AS topics"))
-            ->leftJoin('topic_track', function ($join) use ($userId, $sessionId) {
+            ->leftJoin('topic_track', function (JoinClause $join) use ($userId, $sessionId) {
                 $join->on('topic_track.topic_id', '=', 'topics.id');
 
                 if ($userId) {
