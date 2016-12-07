@@ -2,9 +2,11 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Services\GeoIp\Cache;
 use Coyote\Services\GeoIp\GeoIp;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Cache\Repository;
 
 class GeoIpServiceProvider extends ServiceProvider
 {
@@ -23,10 +25,13 @@ class GeoIpServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('geo-ip', function ($app) {
-            return new GeoIp(
-                new Client(),
-                $app['config']->get('services.geo-ip.host'),
-                $app['config']->get('services.geo-ip.port')
+            return new Cache(
+                new GeoIp(
+                    new Client(),
+                    $app['config']->get('services.geo-ip.host'),
+                    $app['config']->get('services.geo-ip.port')
+                ),
+                $app[Repository::class]
             );
         });
     }
