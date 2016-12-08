@@ -282,10 +282,7 @@ class Markdown extends Command
             foreach ($texts as $text) {
                 $time = date('Y-m-d H:i:s', $text->text_time);
 
-                $u = DB::table('wiki_log')->where('wiki_id', $wikiId)->where('created_at', $time)->update(['text' => $this->transformer->transform($text->text_content)]);
-                if (!$u) {
-                    $this->line($time . ' ' . $wikiId);
-                }
+                DB::table('wiki_log')->where('wiki_id', $wikiId)->where('created_at', $time)->update(['text' => $this->transformer->transform($text->text_content)]);
             }
 
             $bar->advance();
