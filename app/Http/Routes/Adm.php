@@ -25,6 +25,10 @@ $this->group(
         ]);
 
         $this->post('Forum/Categories/Save/{id?}', ['uses' => 'Forum\CategoriesController@save']);
+        $this->get('Forum/Categories/Move/{id}', [
+            'uses' => 'Forum\CategoriesController@move',
+            'as' => 'forum.categories.move'
+        ]);
 
         $this->get('Forum/Permissions', [
             'as' => 'forum.permissions',

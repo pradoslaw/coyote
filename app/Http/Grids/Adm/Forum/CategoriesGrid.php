@@ -4,6 +4,7 @@ namespace Coyote\Http\Grids\Adm\Forum;
 
 use Boduch\Grid\Decorators\Boolean;
 use Boduch\Grid\Decorators\StrLimit;
+use Boduch\Grid\Row;
 use Coyote\Forum;
 use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
@@ -11,6 +12,9 @@ use Boduch\Grid\Components\EditButton;
 
 class CategoriesGrid extends Grid
 {
+    const UP = 'up';
+    const DOWN = 'down';
+
     /**
      * @var array
      */
@@ -18,6 +22,11 @@ class CategoriesGrid extends Grid
 
     public function buildGrid()
     {
+        $html = $this->getGridHelper()->getHtmlBuilder();
+
+        $up = $html->tag('i', '', ['class' => 'fa fa-arrow-up']);
+        $down = $html->tag('i', '', ['class' => 'fa fa-arrow-down']);
+
         $this
             ->addColumn('id', [
                 'title' => 'ID'
@@ -35,6 +44,9 @@ class CategoriesGrid extends Grid
             ->addColumn('description', [
                 'title' => 'Opis',
                 'decorators' => [new StrLimit()]
+            ])
+            ->addColumn('order', [
+                'title' => 'Położenie'
             ])
             ->addColumn('require_tag', [
                 'title' => 'Wymagaj tagu',
@@ -56,6 +68,25 @@ class CategoriesGrid extends Grid
                     route('adm.forum.categories.save'),
                     'Nowa kategoria'
                 )
-            );
+            )
+            ->after(function (Row $row) use ($up, $down) {
+                $row->get('order')->getColumn()->setAutoescape(false);
+
+                $row->get('order')->setValue(
+                    $this->linkToRoute(self::UP, $row->raw('id'), $up) .
+                    $this->linkToRoute(self::DOWN, $row->raw('id'), $down)
+                );
+            });
+    }
+
+    /**
+     * @param string $mode
+     * @param int $forumId
+     * @param string $title
+     * @return string
+     */
+    protected function linkToRoute($mode, $forumId, $title)
+    {
+        return '<a href="' . route('adm.forum.categories.move', [$forumId]) . '?mode=' . $mode . '">' . $title . '</a>';
     }
 }
