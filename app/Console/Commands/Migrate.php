@@ -1828,6 +1828,7 @@ class Migrate extends Command
                         $this->rename($text, 'restored', 'is_restored');
 
                         $this->timestampToDatetime($text['created_at']);
+                        $row['comment'] = htmlspecialchars_decode($row['comment']);
 
                         $text['wiki_id'] = $row['id'];
                         $text['title'] = $row['title'];
