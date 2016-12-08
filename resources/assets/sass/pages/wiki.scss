@@ -448,3 +448,13 @@ dfn {
     font-size: $font-size-large;
   }
 }
+
+#diff {
+  ins {
+    color: green;
+  }
+
+  del {
+    color: red;
+  }
+}

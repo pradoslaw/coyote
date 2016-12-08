@@ -50,8 +50,8 @@ class LogController extends BaseController
         }
 
         return [
-            'before' => $wiki->logs->find($request->get('r1'), ['text'])->text,
-            'after' => $wiki->logs->find($request->get('r2'), ['text'])->text
+            'before' => htmlspecialchars($wiki->logs->find($request->get('r1'), ['text'])->text),
+            'after' => htmlspecialchars($wiki->logs->find($request->get('r2'), ['text'])->text)
         ];
     }
 }
