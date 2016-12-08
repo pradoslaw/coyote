@@ -270,6 +270,24 @@ class Markdown extends Command
         foreach ($wiki as $row) {
             $wikiId = DB::table('wiki_paths')->where('path_id', $row->page_id)->value('wiki_id');
             DB::table('wiki_pages')->where('id', $wikiId)->update(['text' => $this->transformer->transform($row->page_content)]);
+
+            $texts = DB::connection('mysql')
+                ->table('page_version')
+                ->select(['page_text.*'])
+                ->join('page_text', 'page_text.text_id', '=', 'page_version.text_id')
+                ->where('page_version.page_id', $wikiId)
+                ->orderBy('text_id')
+                ->get();
+
+            foreach ($texts as $text) {
+                $time = date('Y-m-d H:i:s', $text->text_time);
+
+                $u = DB::table('wiki_log')->where('wiki_id', $wikiId)->where('created_at', $time)->update(['text' => $this->transformer->transform($text->text_content)]);
+                if (!$u) {
+                    $this->line($time . ' ' . $wikiId);
+                }
+            }
+
             $bar->advance();
         }
 
