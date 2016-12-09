@@ -300,6 +300,49 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
+     * @param int $id
+     */
+    public function up($id)
+    {
+        $this->changeForumOrder($id, '<');
+    }
+
+    /**
+     * @param int $id
+     */
+    public function down($id)
+    {
+        $this->changeForumOrder($id, '>');
+    }
+
+    /**
+     * @param int $id
+     * @param string $operator
+     */
+    private function changeForumOrder($id, $operator)
+    {
+        /** @var \Coyote\Forum $forum */
+        /** @var \Coyote\Forum $other */
+        $forum = $this->model->findOrFail($id, ['id', 'order', 'parent_id']);
+
+        $other = $this
+            ->model
+            ->select(['id', 'order', 'parent_id'])
+            ->where('parent_id', $forum->parent_id)
+            ->where('order', $operator, $forum->order)
+            ->orderBy('order', $operator == '<' ? 'DESC' : 'ASC')
+            ->first();
+
+        if ($other) {
+            $forum->order = $other->order;
+            $other->order = $forum->getOriginal('order');
+
+            $forum->save();
+            $other->save();
+        }
+    }
+
+    /**
      * @return mixed
      */
     private function tags()

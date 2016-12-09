@@ -8,6 +8,7 @@ use Coyote\Http\Forms\Forum\ForumForm;
 use Coyote\Http\Grids\Adm\Forum\CategoriesGrid;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Http\Request;
 
 class CategoriesController extends BaseController
 {
@@ -79,6 +80,23 @@ class CategoriesController extends BaseController
         });
 
         return redirect()->route('adm.forum.categories')->with('success', 'Zmiany zostały zapisane.');
+    }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function move($id, Request $request)
+    {
+        $this->validate($request, ['mode' => 'required|in:up,down']);
+
+        $mode = $request->get('mode');
+        $this->forum->$mode($id);
+
+        $this->flushCache();
+
+        return redirect()->route('adm.forum.categories')->with('success', 'Pozycja została zmieniona.');
     }
 
     private function flushCache()
