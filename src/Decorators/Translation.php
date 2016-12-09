@@ -16,7 +16,9 @@ class Translation extends Decorator
      */
     public function __construct($domain = '')
     {
-        $this->domain = $domain;
+        if (!empty($domain)) {
+            $this->domain = $domain . '.';
+        }
     }
 
     /**
