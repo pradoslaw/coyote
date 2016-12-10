@@ -34,14 +34,6 @@ class ForumTest extends \Codeception\TestCase\Test
         $forumB = $this->tester->grabRecord('Coyote\Forum', ['name' => 'B']);
 
         $this->assertEquals($forumA->order + 1, $forumB->order);
-
-        $user = $this->tester->createUser();
-        $this->tester->haveRecord('forum_orders', ['user_id' => $user->id, 'forum_id' => $forumA->id, 'order' => 1]);
-
-        Forum::create(['name' => 'C', 'slug' => 'C', 'description' => 'Lorem ipsum']);
-        $forumC = $this->tester->grabRecord('Coyote\Forum', ['name' => 'C']);
-
-        $this->tester->seeRecord('forum_orders', ['forum_id' => $forumC->id, 'user_id' => $user->id]);
     }
 
     public function testForumDelete()
