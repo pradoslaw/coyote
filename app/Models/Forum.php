@@ -36,10 +36,10 @@ class Forum extends Model
     protected $fillable = [
         'parent_id',
         'name',
-        'slug',
         'description',
         'section',
         'url',
+        'order',
         'is_locked',
         'require_tag',
         'enable_reputation',
