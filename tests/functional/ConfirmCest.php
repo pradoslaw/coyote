@@ -62,6 +62,7 @@ class ConfirmCest
         $user = $I->createUser(['is_confirm' => 1, 'allow_smilies' => 1]);
         $I->amLoggedAs($user);
 
+        $I->seeAuthentication();
         $I->amOnRoute('user.settings');
 
         $newEmail = 'fooooo@baaaaar.com';

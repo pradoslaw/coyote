@@ -8,7 +8,6 @@ trait HelperTrait
     public function createUser(array $data = [])
     {
         $fake = Factory::create();
-
         $data = array_merge(
             [
                 'name'       => $fake->name,
@@ -19,8 +18,7 @@ trait HelperTrait
             ],
             $data
         );
-
-        User::unguard();
-        return $this->haveRecord('Coyote\User', array_merge($data, ['password' => bcrypt($data['password'])]));
+        $id = $this->haveRecord('users', array_merge($data, ['password' => bcrypt($data['password'])]));
+        return User::find($id);
     }
 }
