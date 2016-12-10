@@ -26,7 +26,7 @@ class FilterTransformer extends Criteria
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param RepositoryInterface $repository
      * @return mixed
      */

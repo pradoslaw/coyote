@@ -19,7 +19,7 @@ class WithTag extends Criteria
     }
 
     /**
-     * @param $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param Repository $repository
      * @return mixed
      */

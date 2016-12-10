@@ -26,7 +26,7 @@ class OnlyThoseWithAccess extends Criteria
     }
 
     /**
-     * @param $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param RepositoryInterface $repository
      * @return mixed
      */
@@ -36,7 +36,7 @@ class OnlyThoseWithAccess extends Criteria
     }
 
     /**
-     * @param Builder $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param RepositoryInterface $repository
      * @param string $column
      * @return mixed

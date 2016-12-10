@@ -21,7 +21,7 @@ class ObtainSubscribers extends Criteria
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param Repository $repository
      * @return mixed
      */

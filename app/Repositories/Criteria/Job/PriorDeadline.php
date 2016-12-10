@@ -8,7 +8,7 @@ use Coyote\Repositories\Criteria\Criteria;
 class PriorDeadline extends Criteria
 {
     /**
-     * @param \Coyote\Job $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param Repository $repository
      * @return mixed
      */

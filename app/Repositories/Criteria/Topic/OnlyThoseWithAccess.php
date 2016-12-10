@@ -8,7 +8,7 @@ use Coyote\Repositories\Contracts\RepositoryInterface;
 class OnlyThoseWithAccess extends \Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess
 {
     /**
-     * @param $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param RepositoryInterface $repository
      * @return mixed
      */

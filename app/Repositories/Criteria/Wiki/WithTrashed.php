@@ -8,7 +8,7 @@ use Coyote\Repositories\Criteria\Criteria;
 class WithTrashed extends Criteria
 {
     /**
-     * @param \Coyote\Wiki $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param Repository $repository
      * @return mixed
      */

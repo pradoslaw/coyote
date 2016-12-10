@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Criteria\Forum;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Contracts\RepositoryInterface;
 use Coyote\Repositories\Criteria\Criteria;
+use Illuminate\Database\Query\JoinClause;
 
 class AccordingToUserOrder extends Criteria
 {
@@ -22,14 +23,14 @@ class AccordingToUserOrder extends Criteria
     }
 
     /**
-     * @param $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param RepositoryInterface $repository
      * @return mixed
      */
     public function apply($model, Repository $repository)
     {
         if ($this->userId !== null) {
-            $model->leftJoin('forum_orders', function ($join) use ($repository) {
+            $model->leftJoin('forum_orders', function (JoinClause $join) use ($repository) {
                 $join->on('forum_orders.forum_id', '=', 'forums.id')
                         ->on('forum_orders.user_id', '=', $repository->raw($this->userId));
             })->whereNested(function ($query) {

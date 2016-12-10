@@ -7,7 +7,7 @@ use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 class FlagList extends Criteria
 {
     /**
-     * @param \Coyote\Flag $model
+     * @param \Illuminate\Database\Eloquent\Builder $model
      * @param Repository $repository
      * @return mixed
      */
