@@ -29,5 +29,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CurrenciesTableSeeder::class);
         $this->call(CountriesTableSeeder::class);
         $this->call(WikiTableSeeder::class);
+        $this->call(BlocksTableSeeder::class);
     }
 }
