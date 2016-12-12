@@ -93,6 +93,7 @@ EOF;
 
         \Coyote\Block::create([
             'name' => 'footer',
+            'region' => 'footer',
             'content' => $content
         ]);
 
