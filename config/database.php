@@ -67,6 +67,7 @@ return [
             'database' => env('MYSQL_DATABASE', 'coyote'),
             'username' => env('MYSQL_USERNAME', 'root'),
             'password' => env('MYSQL_PASSWORD', '123'),
+            'port'     => env('MYSQL_PORT', 3306),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
