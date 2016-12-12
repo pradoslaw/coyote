@@ -123,11 +123,10 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/tags.js') }}"></script>
+    <script src="{{ cdn('js/wikieditor.js') }}"></script>
+    <script src="{{ cdn('js/tags.js') }}"></script>
 
-    <script type="text/javascript">
+    <script>
         $(function() {
             var toolTipHints = $('#hint-subject, #hint-text, #hint-tags, #hint-user_name');
 

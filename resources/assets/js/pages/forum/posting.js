@@ -533,9 +533,9 @@ $(function () {
         $('.nav-tabs a:first').tab('show');
     });
 
-    if (jQuery.fn.pasteImage) {
-        var $form = $('#submit-form');
+    var $form = $('#submit-form');
 
+    if ($form.length) {
         $form
             .find('textarea[name="text"]')
             .pasteImage(function (textarea, html) {
