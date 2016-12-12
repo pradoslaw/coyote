@@ -2328,6 +2328,8 @@ class Migrate extends Command
 
     public function migrateLogs()
     {
+        $this->info('Logs...');
+
         $count = DB::connection('mysql')->table('log')->count();
         $mongo = DB::connection('mongodb')->collection('streams');
 
