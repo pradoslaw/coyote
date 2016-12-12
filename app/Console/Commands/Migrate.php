@@ -829,7 +829,11 @@ class Migrate extends Command
                     $this->rename($row, 'mark_time', 'marked_at');
                     $this->timestampToDatetime($row['marked_at']);
 
-                    DB::table('topic_track')->insert($row);
+                    try {
+                        DB::table('topic_track')->insert($row);
+                    } catch (\Exception $e) {
+                        $this->error($e->getMessage());
+                    }
                     $bar->advance();
                 }
             });
@@ -903,7 +907,7 @@ class Migrate extends Command
     {
         $this->info('Post...');
 
-        $count = $this->count(['post_text']);
+        $count = $this->count(['post_text', 'post_comment', 'post_vote', 'post_accept', 'post_attachment', 'post_text']);
         $bar = $this->output->createProgressBar($count);
 
         DB::beginTransaction();
@@ -1210,7 +1214,7 @@ class Migrate extends Command
     }
 
     /**
-     * @todo usunac zduplikowane firmy
+     * @100%
      */
     public function migrateFirms()
     {
@@ -1828,7 +1832,7 @@ class Migrate extends Command
                         $this->rename($text, 'restored', 'is_restored');
 
                         $this->timestampToDatetime($text['created_at']);
-                        $row['comment'] = htmlspecialchars_decode($row['comment']);
+                        $text['comment'] = htmlspecialchars_decode($text['comment']);
 
                         $text['wiki_id'] = $row['id'];
                         $text['title'] = $row['title'];
