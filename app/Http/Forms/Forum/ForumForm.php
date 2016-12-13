@@ -37,6 +37,10 @@ class ForumForm extends Form
                 'label' => 'Nazwa',
                 'rules' => 'required|string|max:50'
             ])
+            ->add('slug', 'text', [
+                'label' => 'Ścieżka',
+                'rules' => 'required|string|max:50'
+            ])
             ->add('parent_id', 'select', [
                 'label' => 'Kategoria macierzysta',
                 'choices' => $this->getParentList(),

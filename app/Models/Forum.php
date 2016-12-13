@@ -36,6 +36,7 @@ class Forum extends Model
     protected $fillable = [
         'parent_id',
         'name',
+        'slug',
         'description',
         'section',
         'url',
@@ -58,8 +59,6 @@ class Forum extends Model
         static::saving(function (Forum $model) {
             if (empty($model->parent_id)) {
                 $model->parent_id = null;
-            } else {
-                $model->slug = $model->parent->slug . '/' . $model->slug;
             }
         });
     }
@@ -117,7 +116,6 @@ class Forum extends Model
      */
     public function setNameAttribute($name)
     {
-        $this->attributes['slug'] = str_replace(' ', '_', $name);
         $this->attributes['name'] = $name;
     }
 
