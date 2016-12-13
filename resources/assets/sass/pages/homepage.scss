@@ -289,6 +289,10 @@
     p {
       margin: 0;
       @include text-overflow();
+
+      a {
+        color: $link-color-darker;
+      }
     }
 
     strong {
