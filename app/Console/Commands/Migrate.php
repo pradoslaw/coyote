@@ -3239,6 +3239,7 @@ class Migrate extends Command
     public function handle()
     {
         DB::statement('ALTER TABLE post_votes DISABLE TRIGGER ALL');
+        DB::statement('ALTER TABLE poll_votes DISABLE TRIGGER ALL');
         DB::statement('ALTER TABLE alerts DISABLE TRIGGER ALL');
         DB::statement('ALTER TABLE alert_types DISABLE TRIGGER ALL');
         DB::statement('ALTER TABLE forums DISABLE TRIGGER ALL');
@@ -3285,6 +3286,7 @@ class Migrate extends Command
             $this->migrateUserTags();
         } finally {
             DB::statement('ALTER TABLE post_votes ENABLE TRIGGER ALL');
+            DB::statement('ALTER TABLE poll_votes ENABLE TRIGGER ALL');
             DB::statement('ALTER TABLE alerts ENABLE TRIGGER ALL');
             DB::statement('ALTER TABLE alert_types ENABLE TRIGGER ALL');
             DB::statement('ALTER TABLE forums ENABLE TRIGGER ALL');
