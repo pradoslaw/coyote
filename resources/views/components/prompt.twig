@@ -1,6 +1,6 @@
 {% for user in users %}
 <li>
-    <img src="/img/avatar.png" width="16" height="16">
+    <img src="{{ user_photo(user.photo) }}" width="16" height="16">
     <span>{{ user.name }}</span>
 </li>
 {% endfor %}
