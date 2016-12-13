@@ -123,7 +123,7 @@ class Transformer extends Parser
                     $file = $pathinfo['filename'] . '-image(' . $width . 'x' . $width . ').' . $pathinfo['extension'];
                 }
 
-                $replacement = '![' . $name . '](//cdn.4programmers.net/uploads/attachment/' . $file . ')';
+                $replacement = '![' . $name . '](//static.4programmers.net/uploads/attachment/' . $file . ')';
             } else {
                 $replacement = '[' . $name . '](//4programmers.net/Download/' . $file . ')';
             }
