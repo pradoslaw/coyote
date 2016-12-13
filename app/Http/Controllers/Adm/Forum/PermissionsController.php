@@ -82,7 +82,8 @@ class PermissionsController extends BaseController
             ->gridBuilder()
             ->createGrid(PermissionsGrid::class)
             ->setEnablePagination(false)
-            ->setSource(new CollectionSource($data));
+            ->setSource(new CollectionSource($data))
+            ->setViewData(['http_method' => 'post', 'form_url' => route('adm.forum.permissions.save', ['id' => $forum->id])]);
 
         return $this->view('adm.forum.permissions.home', [
             'grid' => $grid,

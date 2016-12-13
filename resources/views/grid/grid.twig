@@ -16,7 +16,7 @@
     {% endblock %}
 
     {% block table %}
-        {{ form_open({id: 'filter-form', method: http_method|default('get')}) }}
+        {{ form_open({id: 'filter-form', url: form_url, method: http_method|default('get')}) }}
             <table class="table table-striped">
                 <thead>
                     <tr>
