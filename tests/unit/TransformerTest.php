@@ -251,12 +251,12 @@ class TransformerTest extends \Codeception\TestCase\Test
     public function testRemoveInlineImage()
     {
         $this->assertEquals(
-            "![abc.jpg](//cdn.4programmers.net/uploads/attachment/abc.jpg)",
+            "![abc.jpg](//static.4programmers.net/uploads/attachment/abc.jpg)",
             $this->transformer->transform("{{Image:abc.jpg}}")
         );
 
         $this->assertEquals(
-            "![abc.jpg](//cdn.4programmers.net/uploads/attachment/abc-image(180x180).jpg)",
+            "![abc.jpg](//static.4programmers.net/uploads/attachment/abc-image(180x180).jpg)",
             $this->transformer->transform("{{Image:abc.jpg|test|180}}")
         );
 
