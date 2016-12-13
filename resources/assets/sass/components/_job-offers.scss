@@ -58,6 +58,7 @@
     a {
       @include text-overflow;
       font-size: 14px;
+      color: $link-color-darker;
     }
   }
 
