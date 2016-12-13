@@ -44,6 +44,9 @@ $header-footer-border: #c7c7c7;
     background: url('/img/hand-writing-for-employers.png') no-repeat;
     background-size: contain;
     height: 27px;
+
+    animation: wiggle 2.5s infinite;
+    animation-iteration-count: 3;
   }
 
   p {
@@ -56,6 +59,14 @@ $header-footer-border: #c7c7c7;
   .btn-primary {
     font-size: 14px;
   }
+}
+
+@keyframes wiggle {
+  0% { transform: rotate(0deg); }
+  80% { transform: rotate(0deg); }
+  85% { transform: rotate(5deg); }
+  95% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
 }
 
 // Main content begins here...
