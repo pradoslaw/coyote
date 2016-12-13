@@ -102,6 +102,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
             })
             ->where('parent_id', $parentId)
             ->where('children', 0)
+            ->orderBy('created_at', 'DESC')
             ->paginate();
     }
 
