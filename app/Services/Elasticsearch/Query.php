@@ -55,7 +55,7 @@ class Query implements DslInterface
     protected function escape($query)
     {
         $escape = function ($str) {
-            return str_replace('\:', ':', preg_quote($str, '+-!{}[]^"~*?\\'));
+            return str_replace(['/', '\:'], ['\/', ':'], preg_quote($str, '#+-!{}[]^"~*?\\'));
         };
 
         if (strpos($query, '"') !== false) {
