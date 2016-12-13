@@ -44,7 +44,8 @@ class Email extends Broadcast
         $this->mailer->queue($alert->emailTemplate(), $data, function (Message $message) use ($email, $data) {
             $message->subject($data['headline']);
             $message->to($email);
-            $message->from('no-reply@4programmers.net', $data['sender_name']);
+//            $message->from('no-reply@4programmers.net', $data['sender_name']);
+            $message->from('no-reply@4programmers.net', config('app.name'));
         });
 
         return true;
