@@ -240,8 +240,6 @@ class Migrate extends Command
 
     /**
      * 100%
-     *
-     * @todo dodac uprawnienia firm-update oraz firm-delete (nie trzeba ich migrowac bo nie ma ich w bazie mysql)
      */
     private function migratePermissions()
     {
@@ -286,6 +284,11 @@ class Migrate extends Command
 
             $this->error($e->getMessage());
         }
+
+        DB::table('permissions')->insert(['name' => 'firm-update', 'description' => 'Edycja ofet pracy', 'default' => 0]);
+        DB::table('permissions')->insert(['name' => 'firm-delete', 'description' => 'Usuwanie firm', 'default' => 0]);
+        DB::table('permissions')->insert(['name' => 'wiki-admin', 'description' => 'Zarządzanie stronami Wiki', 'default' => 0]);
+        DB::table('permissions')->insert(['name' => 'adm-group', 'description' => 'Administracja grupami', 'default' => 0]);
 
         $this->line('');
         $this->info('Done');
