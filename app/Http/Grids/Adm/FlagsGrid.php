@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Grids\Adm;
 
+use Boduch\Grid\Decorators\DateTimeLocalized;
 use Boduch\Grid\Decorators\StrLimit;
 use Boduch\Grid\Decorators\Url;
 use Boduch\Grid\Filters\FilterOperator;
@@ -44,7 +45,8 @@ class FlagsGrid extends Grid
                 'decorators' => [new StrLimit()]
             ])
             ->addColumn('created_at', [
-                'title' => 'Data utworzenia'
+                'title' => 'Data utworzenia',
+                'decorators' => [new DateTimeLocalized(auth()->user()->date_format)]
             ])
             ->addColumn('moderator_name', [
                 'title' => 'Zamknięty przez',
