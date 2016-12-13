@@ -8,7 +8,7 @@ use Coyote\Services\Geocoder\GeocoderInterface;
 use Illuminate\Console\Command;
 use DB;
 
-ini_set('memory_limit', '1G');
+ini_set('memory_limit', '2G');
 
 class Migrate extends Command
 {
