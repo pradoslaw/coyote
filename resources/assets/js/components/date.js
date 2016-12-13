@@ -34,9 +34,6 @@ var countTime = function () {
                 $(this).text(getDiffSecond(timestamp) + ' ' + declination(getDiffSecond(timestamp), ['sekunda', 'sekundy', 'sekund']) + ' temu');
             }
         }
-        else if (getDiffMinute(timestamp) < 100) {
-            $(this).text('1 godz. temu');
-        }
         else {
             var currDate = new Date((new Date().getTime()));
             var currValue = currDate.asInteger();
