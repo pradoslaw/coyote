@@ -32,6 +32,7 @@ return [
                 '(X)HTML' => ['url' => '(X)HTML'],
                 'CSS' => ['url' => 'CSS']
             ]
-        ]
+        ],
+        'Czat' => ['url' => 'http://chat.4programmers.net/']
     ]
 ];
