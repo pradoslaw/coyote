@@ -198,7 +198,8 @@ class HomeController extends Controller
             'employmentList'    => Job::getEmploymentList(),
             'currencyList'      => Currency::lists('name', 'id'),
             'preferences'       => $this->preferences,
-            'tabs'              => $this->getTabs()
+            'tabs'              => $this->getTabs(),
+            'tab'               => $this->tab
         ])->with(
             compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count', 'selected')
         );
