@@ -40,7 +40,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
             ->orderBy($this->raw('CASE WHEN x.ordering IS NULL THEN 0 ELSE x.ordering END'), 'DESC');
         }
 
-        return $sql->orderBy('visited_at', 'DESC')->limit(5)->get();
+        return $sql->orderByRaw('visited_at DESC NULLS LAST')->limit(5)->get();
     }
 
     /**
