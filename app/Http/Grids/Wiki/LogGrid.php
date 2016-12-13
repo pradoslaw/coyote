@@ -46,8 +46,7 @@ class LogGrid extends Grid
             ->addColumn('created_at', [
                 'Data modyfikacji',
                 'decorators' => [$this->getDateTimeDecorator()]
-            ])
-            ->addComponent(new SubmitButton('', 'Porównaj wersje'));
+            ]);
     }
 
     public function addComparisionButtons()
@@ -79,7 +78,8 @@ class LogGrid extends Grid
                 if ($index === count($this->rows)) {
                     $row->get('r1')->setValue('');
                 }
-            });
+            })
+            ->addComponent(new SubmitButton('', 'Porównaj wersje'));
 
         foreach ($original as $column) {
             $this->columns[] = $column;
