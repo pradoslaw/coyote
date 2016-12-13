@@ -17,6 +17,9 @@
         <li>
             <a href="{{ route('wiki.move', [wiki.id]) }}"><i class="fa fa-fw fa-arrows"></i> Przenieś stronę</a>
         </li>
+        <li>
+            <a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}"><i class="fa fa-fw fa-plus"></i> Utwórz podstronę</a>
+        </li>
     {% else %}
         <li>
             <a href="#modal-restore" data-toggle="modal"><i class="fa fa-fw fa-rotate-left"></i> Przywróć usuniętą wersję</a>
