@@ -49,7 +49,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
             ->make(Wiki\Redirect::class)
             ->select(['wiki_paths.path'])
             ->join('wiki_paths', 'wiki_paths.path_id', '=', $this->raw('wiki_redirects.path_id'))
-            ->where('wiki_redirects.path', $path)
+            ->whereRaw('LOWER(wiki_redirects.path) = ?', [mb_strtolower($path)])
             ->whereNull('wiki_paths.deleted_at')
             ->orderBy('wiki_redirects.id', 'DESC')
             ->first();
