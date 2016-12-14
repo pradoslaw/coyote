@@ -55,8 +55,6 @@ $(function () {
          * @param value
          */
         set: function(value) {
-            Session.setItem('alerts', value);
-
             if (value > 0) {
                 if (!$('.badge', this.self).length) {
                     $('> a:first', this.self).prepend('<span class="badge">' + value + '</span>');
@@ -74,6 +72,17 @@ $(function () {
         },
 
         /**
+         * Set alerts counter and save it in local storage.
+         *
+         * @param value
+         */
+        store: function(value) {
+            Session.setItem('alerts', parseInt(value));
+
+            this.set(value);
+        },
+
+        /**
          * Get alerts counter
          *
          * @returns {Number|number}
@@ -87,6 +96,10 @@ $(function () {
          */
         clear: function() {
             $('#dropdown-alerts li').remove();
+
+            if (this.self.hasClass('open')) {
+                $('#dropdown-alerts').dropdown('toggle');
+            }
         }
     };
 
@@ -111,7 +124,7 @@ $(function () {
             $.get(url, function (json) {
                 alerts.html(json.html);
 
-                Alerts.set(json.unread);
+                Alerts.store(json.unread);
 
                 // default max height of alerts area
                 var maxHeight = 390;
@@ -192,7 +205,7 @@ $(function () {
         $('li', Alerts.self).removeClass('unread');
 
         if ($('.badge', Alerts.self).length) {
-            Alerts.set(0);
+            Alerts.store(0);
         }
 
         $.post($(this).attr('href'));
@@ -216,13 +229,14 @@ $(function () {
     });
 
     ws.on('alert', function(data) {
-        Alerts.set(Alerts.get() + 1);
+        Alerts.store(Alerts.get() + 1);
         Alerts.clear();
 
         DesktopNotifications.doNotify(data.headline, data.subject, data.url);
     })
     .on('pm', function(data) {
         DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
+
         var dropdown = $('#messages');
         var value = (parseInt($('.badge', dropdown).text()) || 0) + 1;
 
