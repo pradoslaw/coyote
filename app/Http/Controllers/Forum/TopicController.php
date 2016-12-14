@@ -135,10 +135,12 @@ class TopicController extends BaseController
 
             if ($this->gate->allows('delete', $forum)) {
                 $flags = $this->getFlags($postsId);
-                $warnings = $this->getWarnings($topic);
                 $activities = $this->getActivities($postsId);
             }
         }
+
+        // informacje o powodzie zablokowania watku, przeniesienia itp
+        $warnings = $this->getWarnings($topic);
 
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
