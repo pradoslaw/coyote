@@ -45,7 +45,7 @@ class Data
      */
     public function paginate($perPage = 15)
     {
-        return new LengthAwarePaginator($this->data, $this->count, $perPage);
+        return new LengthAwarePaginator($this->data, $this->count, $perPage, LengthAwarePaginator::resolveCurrentPage(), ['path' => ' ']);
     }
 
     /**

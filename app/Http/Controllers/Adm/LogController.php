@@ -17,7 +17,8 @@ class LogController extends BaseController
             ->getLogViewer()
             ->read($request->input('file', $request->input('file')))
             ->sort($request->input('sort', 'date'), $request->input('order', 'desc'))
-            ->paginate();
+            ->paginate()
+            ->appends($request->except('page'));
 
         return $this->view('adm.log')->with(compact('files', 'logs'));
     }
