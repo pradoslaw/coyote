@@ -6,7 +6,6 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Builders\MixedBuilder;
 use Coyote\Services\Elasticsearch\MultiResultSet;
-use Coyote\Services\Elasticsearch\Transformers\MixedTypesTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Lavary\Menu\Builder;
