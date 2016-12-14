@@ -48,7 +48,8 @@ class CreateSitemap extends Command
             /** @var \Coyote\Page $page */
             foreach ($pages as $page) {
                 $priority = (1.0 - (count(explode('/', trim($page->path, '/'))) / 10));
-                $sitemap->add(url($page->path), $page->updated_at->toIso8601String(), sprintf('%.1f', $priority));
+                $sitemap
+                    ->add(url($page->path, [], true), $page->updated_at->toIso8601String(), sprintf('%.1f', $priority));
 
                 $bar->advance();
             }
