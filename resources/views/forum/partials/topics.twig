@@ -20,10 +20,6 @@
                 {% for topic in topics %}
                     {% set url = route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) %}
 
-                    {% if user_id is defined %}
-                        {% set url = url ~ '?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id %}
-                    {% endif %}
-
                     {% if forum is defined and not topic.is_sticky and previous.is_sticky %}
                         <tr>
                             <td colspan="4" class="sticky"></td>
@@ -78,7 +74,7 @@
                             {% endif %}
 
                             <h5>
-                                <a title="{{ topic.subject }}" href="{{ url }}">{{ topic.subject }}</a>
+                                <a title="{{ topic.subject }}" href="{{ url ~ (user_id is defined ? ('?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id)) }}">{{ topic.subject }}</a>
 
                                 {% if topic.score %}
                                     <span class="badge score hidden-xs" title="Ilość głosów oddanych na ten wątek">
