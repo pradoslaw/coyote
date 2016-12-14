@@ -45,8 +45,10 @@
                             <a {{ topic.unread ? ('href="' ~ route('forum.topic.mark', [topic.id]) ~ '"')|raw }} title="{{ title }}" class="center-block ico {{ class }} {{ topic.unread ? 'new' : 'normal' }}"></a>
                         </td>
                         <td class="col-subject">
-                            {% if topic.replies > postsPerPage %}
-                                {% set pages = ((can('delete', forum) ? topic.replies_real : topic.replies) / postsPerPage)|round(0, 'floor') + 1 %}
+                            {% set replies_real = (can('delete', forum) ? topic.replies_real : topic.replies) %}
+
+                            {% if replies_real > postsPerPage %}
+                                {% set pages = (replies_real / postsPerPage)|round(0, 'floor') + 1 %}
 
                                 <dl class="topic-pagination hidden-xs">
                                     <dd>
