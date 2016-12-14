@@ -54,6 +54,7 @@ class Kernel extends HttpKernel
         'topic.access'  => Middleware\RedirectIfMoved::class,
         'job.session'   => Middleware\VerifyJobSession::class,
         'job.revalidate'=> Middleware\RevalidateJobSession::class,
+        'job.redirect'  => Middleware\PermanentRedirect::class,
         'topic.scroll'  => Middleware\ScrollToPost::class,
         'post.response' => Middleware\PostSubmitResponse::class,
         'comment.access' => Middleware\CommentAccess::class,
@@ -61,6 +62,6 @@ class Kernel extends HttpKernel
         'wiki.lock'     => Middleware\WikiLock::class,
         'page.hit'      => Middleware\PageHit::class,
         'cache'         => Middleware\CacheController::class,
-        'geocode'       => Middleware\GeocodeIp::class
+        'geocode'       => Middleware\GeocodeIp::class,
     ];
 }
