@@ -5,11 +5,6 @@ namespace Coyote\Services\Elasticsearch;
 class Query implements DslInterface
 {
     /**
-     * @var array
-     */
-    private $hash = [];
-
-    /**
      * @var string
      */
     protected $query;
