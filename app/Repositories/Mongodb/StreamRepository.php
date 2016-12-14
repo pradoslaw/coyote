@@ -24,7 +24,7 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
         return $this
             ->model
             ->whereIn('object.objectType', ['topic', 'post', 'comment'])
-            ->whereIn('verb', ['create', 'update'])
+            ->whereIn('verb', ['create'])
             ->whereIn('target.objectType', ['forum', 'post', 'topic'])
             ->whereNotIn('object.forum.id', $forumIds)
             ->whereNotIn('target.forum.id', $forumIds)
