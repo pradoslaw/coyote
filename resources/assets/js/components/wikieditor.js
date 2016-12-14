@@ -59,7 +59,7 @@
             var select      = $('.select-menu-wrapper', toolbar).find('ul');
 
             $.each(languages, function(key, value) {
-                select.append('<li><a data-open="<br>```' + key + '" data-close="<br>```" title="Kod źródłowy: ' + value + '">' + value + '</a></li>');
+                select.append('<li><a data-open="<br>```' + key + '<br>" data-close="<br>```" title="Kod źródłowy: ' + value + '">' + value + '</a></li>');
             });
 
             $('a[data-open], button[data-open]', toolbar).click(function() {
