@@ -1,10 +1,12 @@
 {% import 'components.modals' as modals %}
 
-<div class="box-apply hidden-sm hidden-xs">
-    <span class="outline">
-        <a class="btn btn-primary" href="{{ route('job.candidate', [job.id]) }}">Aplikuj na to stanowisko</a>
-    </span>
-</div>
+{% if job.enable_apply %}
+    <div class="box-apply hidden-sm hidden-xs">
+        <span class="outline">
+            <a class="btn btn-primary" href="{{ route('job.candidate', [job.id]) }}">Aplikuj na to stanowisko</a>
+        </span>
+    </div>
+{% endif %}
 
 <ul class="side-menu">
     <li>
