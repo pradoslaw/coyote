@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
+use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -60,7 +61,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
                     ->where('posts.id', '<>', $postId)
                     ->forPage($page, $perPage);
             })
-            ->orderBy('posts.id')
             ->get()
             ->prepend($first);
 
@@ -437,10 +437,15 @@ class PostRepository extends Repository implements PostRepositoryInterface
     {
         $sql = clone $this->model;
 
+        foreach ($this->getCriteria() as $criteria) {
+            if ($criteria instanceof WithTrashed) {
+                $sql = $criteria->apply($sql, $this);
+            }
+        }
+
         return $sql
             ->selectRaw('DISTINCT ON(posts.id) posts.*, sessions.updated_at AS session_updated_at')
             ->leftJoin('sessions', 'sessions.user_id', '=', 'posts.user_id')
-            ->withTrashed()
             ->orderBy('posts.id');
     }
 }

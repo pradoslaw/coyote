@@ -83,7 +83,7 @@ class TopicController extends BaseController
 
         $this->post->pushCriteria(new ObtainSubscribers($this->userId));
 
-        // magic happens here. get posts for given topic
+        // magic happens here. get posts for given topic (including first post for every page)
         /* @var \Illuminate\Support\Collection $posts */
         $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $page, $perPage);
         $paginate = new LengthAwarePaginator($posts, $replies, $perPage, $page, ['path' => ' ']);
