@@ -143,8 +143,8 @@ class AlertsController extends BaseController
         if ($id) {
             $this->alert->update(['is_marked' => true], $id);
         } else {
-            if (auth()->user()->alerts_unread) {
-                $this->alert->where('user_id', $this->userId)->where('read_at', 'IS', null)->update([
+            if ($this->auth->alerts_unread) {
+                $this->alert->where('user_id', $this->userId)->whereNull('read_at')->update([
                     'read_at' => Carbon\Carbon::now()
                 ]);
             }
