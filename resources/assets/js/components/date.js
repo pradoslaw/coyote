@@ -42,7 +42,7 @@ var countTime = function () {
             var spanValue = spanDate.asInteger();
 
             if (spanValue == currValue) {
-                $(this).text('dzisiaj, ' + spanDate.getHour() + ':' + spanDate.getMinute());
+                $(this).text('dziś, ' + spanDate.getHour() + ':' + spanDate.getMinute());
             }
             else if (spanValue == currValue - 1) {
                 $(this).text('wczoraj, ' + spanDate.getHour() + ':' + spanDate.getMinute());
