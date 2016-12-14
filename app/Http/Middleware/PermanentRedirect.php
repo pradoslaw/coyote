@@ -45,8 +45,8 @@ class PermanentRedirect
 
     /**
      * @param array $array
-     * @param $oldKey
-     * @param $newKey
+     * @param string $oldKey
+     * @param string $newKey
      * @return array
      */
     private function rename(array $array, $oldKey, $newKey)
