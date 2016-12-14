@@ -40,7 +40,7 @@ class PermanentRedirect
             $all['salary'] = $value;
         }
 
-        return redirect()->route('job.home', $all, 301);
+        return redirect()->to($request->path() . '?' . http_build_query($all), 301);
     }
 
     /**
