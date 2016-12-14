@@ -47,15 +47,6 @@ header.navbar-default {
     }
   }
 
-  .alerts > a, .messages > a {
-    padding: 19px 9px 13px 9px;
-    color: $gray-light !important;
-
-    i {
-      font-size: 14px;
-    }
-  }
-
   .badge {
     position: absolute;
     background-color: #FF4A00;
@@ -78,8 +69,15 @@ header.navbar-default {
   .alerts, .messages {
     float: left;
 
-    a {
-      .badge {
+    > a {
+      padding: 19px 9px 13px 9px;
+      color: $gray-light !important;
+
+      i {
+        font-size: 14px;
+      }
+
+      &.badge {
         top: 8px;
         right: -1px;
       }
@@ -87,6 +85,12 @@ header.navbar-default {
       @media screen and (max-width: $screen-sm) {
         display: inline-block;
       }
+    }
+
+    .dropdown-modal {
+      // nim zaladuje sie JS - pretty scrollbar, lista powiadomien wyjezdza poza okno, dlatego
+      // dodalem overflow: hidden
+      overflow: hidden;
     }
   }
 
