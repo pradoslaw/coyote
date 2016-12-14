@@ -46,7 +46,7 @@
                         </td>
                         <td class="col-subject">
                             {% if topic.replies > postsPerPage %}
-                                {% set pages = (topic.replies / postsPerPage)|round(0, 'floor') + 1 %}
+                                {% set pages = ((can('delete', forum) ? topic.replies_real : topic.replies) / postsPerPage)|round(0, 'floor') + 1 %}
 
                                 <dl class="topic-pagination hidden-xs">
                                     <dd>
