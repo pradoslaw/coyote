@@ -128,7 +128,7 @@ class TopicController extends BaseController
             }
         }
 
-        $flags = $warnings = $activities = [];
+        $flags = $activities = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
             $reasonList = Reason::lists('name', 'id')->toArray();
