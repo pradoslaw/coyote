@@ -146,6 +146,8 @@ class SubmitController extends BaseController
             $this->getPollRepository()->delete($pollId);
         } elseif ($request->has('poll.title')) {
             return $this->getPollRepository()->updateOrCreate($pollId, $request->input('poll'));
+        } elseif ($pollId) {
+            return $this->getPollRepository()->find($pollId);
         }
 
         return null;
