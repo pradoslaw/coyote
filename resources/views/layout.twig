@@ -37,27 +37,29 @@
                             <span class="icon-bar"></span>
                         </button>
 
-                        <ul class="visible-xs nav navbar-right pull-right">
-                            <li class="alerts">
-                                <a href="{{ route('user.alerts') }}">
-                                    {% if user('alerts_unread') %}
-                                        <span class="badge">{{ user('alerts_unread') }}</span>
-                                    {% endif %}
+                        {% if auth_check() %}
+                            <ul class="visible-xs nav navbar-right pull-right">
+                                <li class="alerts">
+                                    <a href="{{ route('user.alerts') }}">
+                                        {% if user('alerts_unread') %}
+                                            <span class="badge">{{ user('alerts_unread') }}</span>
+                                        {% endif %}
 
-                                    <i class="fa fa-bell fa-fw"></i>
-                                </a>
-                            </li>
+                                        <i class="fa fa-bell fa-fw"></i>
+                                    </a>
+                                </li>
 
-                            <li class="messages">
-                                <a href="{{ route('user.pm') }}">
-                                    {% if user('pm_unread') %}
-                                        <span class="badge">{{ user('pm_unread') }}</span>
-                                    {% endif %}
+                                <li class="messages">
+                                    <a href="{{ route('user.pm') }}">
+                                        {% if user('pm_unread') %}
+                                            <span class="badge">{{ user('pm_unread') }}</span>
+                                        {% endif %}
 
-                                    <i class="fa fa-envelope fa-fw"></i>
-                                </a>
-                            </li>
-                        </ul>
+                                        <i class="fa fa-envelope fa-fw"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        {% endif %}
 
                         <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
                             <img id="logo" src="{{ cdn('img/logo.png') }}" class="hidden-md hidden-sm hidden-xs">
