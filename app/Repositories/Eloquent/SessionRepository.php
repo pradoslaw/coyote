@@ -3,7 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
-use Coyote\Models\Str;
+use Coyote\Str;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 
 class SessionRepository extends Repository implements SessionRepositoryInterface

@@ -2,7 +2,7 @@
 
 namespace Coyote\Models\Scopes;
 
-use Coyote\Models\Str;
+use Coyote\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\JoinClause;

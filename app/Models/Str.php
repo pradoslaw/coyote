@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Models;
+namespace Coyote;
 
 use Illuminate\Database\Query\Expression;
 
