@@ -5,6 +5,7 @@ namespace Coyote\Http\Middleware;
 use Closure;
 use Coyote\Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 
@@ -51,7 +52,9 @@ class ScrollToPost
             return $next($request);
         }
 
-        $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug]);
+        // associate topic with forum
+        $topic->forum()->associate($forum);
+        $url = UrlBuilder::topic($topic);
 
         if ($markTime[Topic::class] < $topic->last_post_created_at
             && $markTime[Forum::class] < $topic->last_post_created_at) {
