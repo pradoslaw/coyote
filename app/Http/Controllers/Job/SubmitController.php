@@ -330,7 +330,7 @@ class SubmitController extends Controller
                 $model = $this->tag->firstOrCreate(['name' => $tag['name']]);
 
                 $tags[$model->id] = [
-                    'priority' => $tag['priority']
+                    'priority' => $tag['priority'] ?? 0
                 ];
             }
         }
