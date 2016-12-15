@@ -58,13 +58,11 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
 
         $this->resetModel();
 
-        $sql = $this
+        $result = $this
             ->model
             ->withTrashed()
             ->select([
                 'topics.*',
-                'forum_track.marked_at AS forum_marked_at',
-                'topic_track.marked_at AS topic_marked_at',
                 'first.created_at AS first_created_at',
                 'first.user_name AS first_user_name',
                 'last.created_at AS last_created_at',
@@ -90,39 +88,22 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->join('posts AS last', 'last.id', '=', 'topics.last_post_id')
             ->leftJoin('users AS author', 'author.id', '=', 'first.user_id')
             ->leftJoin('users AS poster', 'poster.id', '=', 'last.user_id')
-            ->leftJoin('forum_track', function (JoinClause $join) use ($userId, $sessionId) {
-                $join->on('forum_track.forum_id', '=', 'topics.forum_id');
-
-                if ($userId) {
-                    $join->on('forum_track.user_id', '=', $this->raw($userId));
-                } else {
-                    $join->on('forum_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                }
-            })
-            ->leftJoin('topic_track', function (JoinClause $join) use ($userId, $sessionId) {
-                $join->on('topic_track.topic_id', '=', 'topics.id');
-
-                if ($userId) {
-                    $join->on('topic_track.user_id', '=', $this->raw($userId));
-                } else {
-                    $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                }
-            })
+            ->trackForum($userId, $sessionId)
+            ->trackTopic($userId, $sessionId)
             ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
             ->with('tags')
-            ->orderBy('topics.ordering');
-
-        if ($userId) {
-            $sql = $sql->addSelect(['ts.created_at AS subscribe_on'])
-                        ->leftJoin('topic_subscribers AS ts', function ($join) use ($userId) {
-                            $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
-                        });
-        }
-
-        $result = $sql->get();
+            ->orderBy('topics.ordering')
+            ->when($userId, function (Builder $builder) use ($userId) {
+                return $builder->addSelect(['ts.created_at AS subscribe_on'])
+                    ->leftJoin('topic_subscribers AS ts', function ($join) use ($userId) {
+                        $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
+                    });
+            })
+            ->get();
 
         foreach ($result as $topic) {
             $lastMarked = $topic->forum_marked_at ?: (new \DateTime('last month'))->format('Y-m-d H:i:s');
+//            $lastMarked = $topic->forum_marked_at ?: time();
             /*
              * Jezeli data napisania ostatniego posta jest pozniejsza
              * niz data odznaczenia forum jako przeczytanego...

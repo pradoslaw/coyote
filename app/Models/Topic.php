@@ -3,6 +3,8 @@
 namespace Coyote;
 
 use Carbon\Carbon;
+use Coyote\Models\Scopes\TrackForum;
+use Coyote\Models\Scopes\TrackTopic;
 use Coyote\Services\Elasticsearch\CharFilters\TopicFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,7 +35,7 @@ use Illuminate\Database\Query\Builder;
  */
 class Topic extends Model
 {
-    use SoftDeletes, Sortable, Taggable;
+    use SoftDeletes, Sortable, Taggable, TrackTopic, TrackForum;
     use Searchable{
         getIndexBody as parentGetIndexBody;
     }

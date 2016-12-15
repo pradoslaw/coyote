@@ -7,6 +7,7 @@ use Coyote\Forum\Track as Forum_Track;
 use Coyote\Topic\Track as Topic_Track;
 use Coyote\Topic;
 use Coyote\Forum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
@@ -32,12 +33,10 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     {
         $this->applyCriteria();
 
-        $sql = $this
+        $result = $this
             ->model
             ->select([
                 'forums.*',
-                'forum_track.marked_at AS forum_marked_at',
-                'topic_track.marked_at AS topic_marked_at',
                 'subject',
                 'topics.id AS topic_id',
                 'topics.slug AS topic_slug',
@@ -50,40 +49,22 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 'is_confirm',
                 'session_log.updated_at AS seen_at'
             ])
-            ->leftJoin('forum_track', function (JoinClause $join) use ($userId, $sessionId) {
-                $join->on('forum_track.forum_id', '=', 'forums.id');
-
-                if ($userId) {
-                    $join->on('forum_track.user_id', '=', $this->raw($userId));
-                } else {
-                    $join->on('forum_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                }
-            })
             ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
             ->leftJoin('users', 'users.id', '=', 'posts.user_id')
             ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
-            ->leftJoin('topic_track', function (JoinClause $join) use ($userId, $sessionId) {
-                $join->on('topic_track.topic_id', '=', 'topics.id');
-
-                if ($userId) {
-                    $join->on('topic_track.user_id', '=', $this->raw($userId));
-                } else {
-                    $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                }
-            })
+            ->trackForum($userId, $sessionId)
+            ->trackTopic($userId, $sessionId)
             ->leftJoin('session_log', function (JoinClause $join) use ($userId, $sessionId) {
                 if ($userId) {
                     $join->on('session_log.user_id', '=', $this->raw($userId));
                 } else {
                     $join->on('session_log.id', '=', $this->raw("'" . $sessionId . "'"));
                 }
-            });
-
-        if ($parentId) {
-            $sql->where('parent_id', $parentId);
-        }
-
-        $result = $sql->get();
+            })
+            ->when($parentId, function (Builder $builder) use ($parentId) {
+                return $builder->where('parent_id', $parentId);
+            })
+            ->get();
 
         foreach ($result as &$row) {
             if (empty($row->forum_marked_at)) {

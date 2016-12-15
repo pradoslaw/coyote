@@ -2,6 +2,8 @@
 
 namespace Coyote;
 
+use Coyote\Models\Scopes\TrackForum;
+use Coyote\Models\Scopes\TrackTopic;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -28,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Forum extends Model
 {
+    use TrackTopic, TrackForum;
+
     /**
      * The attributes that are mass assignable.
      *
