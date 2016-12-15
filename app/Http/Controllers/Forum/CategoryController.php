@@ -24,7 +24,6 @@ class CategoryController extends BaseController
         $this->pushForumCriteria();
         $forumList = $this->forum->choices();
 
-        $this->forum->skipCriteria(true);
         // execute query: get all subcategories that user can has access to
         $sections = $this->forum->groupBySections($this->userId, $this->sessionId, $forum->id);
 
