@@ -44,7 +44,7 @@
                             {% set replies_real = (can('delete', forum) ? topic.replies_real : topic.replies) %}
 
                             {% if replies_real > postsPerPage %}
-                                {% set pages = (replies_real / postsPerPage)|round(0, 'floor') + 1 %}
+                                {% set pages = (replies_real / postsPerPage)|round(0, 'ceil') %}
 
                                 <dl class="topic-pagination hidden-xs">
                                     <dd>
