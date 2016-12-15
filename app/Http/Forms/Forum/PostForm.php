@@ -239,7 +239,8 @@ class PostForm extends Form
         $this->add('submit', 'submit', [
             'label' => 'Zapisz',
             'attr' => [
-                'data-submit-state' => 'Zapisywanie...'
+                'data-submit-state' => 'Zapisywanie...',
+                'tabindex' => 4
             ]
         ]);
     }
