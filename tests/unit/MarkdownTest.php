@@ -41,6 +41,12 @@ class MarkdownTest extends \Codeception\TestCase\Test
         $input = $this->markdown->parse('@admin, lorem ipsum');
         $this->tester->assertRegExp('/<a href=".*">@admin<\/a>, lorem ipsum/', $input);
 
+        $input = $this->markdown->parse('@admin. lorem ipsum');
+        $this->tester->assertRegExp('/<a href=".*">@admin<\/a>. lorem ipsum/', $input);
+
+        $input = $this->markdown->parse('@admin\'s. lorem ipsum');
+        $this->tester->assertRegExp('/<a href=".*">@admin<\/a>\'s. lorem ipsum/', $input);
+
         $now = new \DateTime('now');
         $this->tester->haveRecord('users', ['name' => 'admin admiński', 'email' => 'foo@bar.com', 'created_at' => $now, 'updated_at' => $now]);
 
@@ -61,5 +67,13 @@ class MarkdownTest extends \Codeception\TestCase\Test
 
         $input = $this->markdown->parse('@admin-admiński lorem ipsum');
         $this->tester->assertRegExp('/@admin-admiński lorem ipsum/', $input);
+
+        $this->tester->haveRecord('users', ['name' => 'p88.yyy', 'email' => 'foo@bar.com', 'created_at' => $now, 'updated_at' => $now]);
+
+        $input = $this->markdown->parse('@p88.yyy lorem ipsum');
+        $this->tester->assertRegExp('/@p88.yyy lorem ipsum/', $input);
+
+        $input = $this->markdown->parse('@{p88.yyy}: lorem ipsum');
+        $this->tester->assertRegExp('/<a href=".*">@p88.yyy<\/a>: lorem ipsum/', $input);
     }
 }
