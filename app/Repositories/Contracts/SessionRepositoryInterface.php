@@ -19,5 +19,14 @@ interface SessionRepositoryInterface extends RepositoryInterface
      * @param $userId
      * @return \Carbon\Carbon
      */
-    public function userLastActivity($userId);
+    public function updatedAt($userId);
+
+    /**
+     * Get date of user's last visit.
+     *
+     * @param int $userId
+     * @param null|string $sessionId
+     * @return \Carbon\Carbon|null
+     */
+    public function visitedAt($userId, $sessionId = null);
 }

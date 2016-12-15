@@ -13,6 +13,8 @@ use Illuminate\Support\Collection;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
 {
+    use UserTrait;
+
     /**
      * @return string
      */
@@ -46,21 +48,13 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 'users.name AS user_name',
                 'users.photo',
                 'is_active',
-                'is_confirm',
-                'session_log.updated_at AS seen_at'
+                'is_confirm'
             ])
             ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
             ->leftJoin('users', 'users.id', '=', 'posts.user_id')
             ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
             ->trackForum($userId, $sessionId)
             ->trackTopic($userId, $sessionId)
-            ->leftJoin('session_log', function (JoinClause $join) use ($userId, $sessionId) {
-                if ($userId) {
-                    $join->on('session_log.user_id', '=', $this->raw($userId));
-                } else {
-                    $join->on('session_log.id', '=', $this->raw("'" . $sessionId . "'"));
-                }
-            })
             ->when($parentId, function (Builder $builder) use ($parentId) {
                 return $builder->where('parent_id', $parentId);
             })
@@ -68,7 +62,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
         foreach ($result as &$row) {
             if (empty($row->forum_marked_at)) {
-                $row->forum_marked_at = $row->seen_at ?: time();
+                $row->forum_marked_at = $this->getUserLastVisit($userId, $sessionId);
             }
 
             $row->forum_unread = $row->created_at > $row->forum_marked_at;

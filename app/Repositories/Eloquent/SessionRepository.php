@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Coyote\Models\Str;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 
 class SessionRepository extends Repository implements SessionRepositoryInterface
@@ -34,18 +35,33 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
     }
 
     /**
-     * Sprawdza czy dany user jest online. Wykorzystywane np. na stronie profilu uzytkownika Zwracana
-     * jest data ostatniej aktywnosci uzytkownika (jezeli ten jest aktualnie online)
-     *
-     * @param $userId
-     * @return \Carbon\Carbon
+     * @inheritdoc
      */
-    public function userLastActivity($userId)
+    public function updatedAt($userId)
     {
-        return $this->model
-                ->select('updated_at')
-                ->where('user_id', $userId)
-                ->orderBy('updated_at', 'DESC')
-                ->value('updated_at');
+        return $this
+            ->model
+            ->select('updated_at')
+            ->where('user_id', $userId)
+            ->orderBy('updated_at', 'DESC')
+            ->value('updated_at');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function visitedAt($userId, $sessionId = null)
+    {
+        $key = $userId !== null ? 'user_id' : 'id';
+        $value = $userId !== null ? $userId : $sessionId;
+
+        $session = $this
+            ->model
+            ->select(['sessions.created_at', 'session_log.updated_at'])
+            ->where("sessions.$key", $value)
+            ->leftJoin('session_log', "session_log.$key", '=', new Str($value))
+            ->first();
+
+        return $session->updated_at ?: $session->created_at;
     }
 }

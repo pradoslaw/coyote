@@ -2,6 +2,7 @@
 
 namespace Coyote\Models\Scopes;
 
+use Coyote\Models\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\JoinClause;
@@ -26,7 +27,7 @@ trait TrackTopic
                 if ($userId) {
                     $join->on('topic_track.user_id', '=', new Expression($userId));
                 } else {
-                    $join->on('topic_track.session_id', '=', new Expression("'" . $sessionId . "'"));
+                    $join->on('topic_track.session_id', '=', new Str($sessionId));
                 }
             });
     }

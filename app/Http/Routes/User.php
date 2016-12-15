@@ -90,7 +90,7 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
 });
 
 // wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera
-$this->get('User/Vcard/{id}', ['uses' => 'User\VcardController@index', 'as' => 'user.vcard']);
+$this->get('User/Vcard/{user}', ['uses' => 'User\VcardController@index', 'as' => 'user.vcard']);
 // zadanie AJAX z lista loginow (podpowiedzi)
 $this->get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'user.prompt']);
 // zapis ustawien do tabeli settings. moga to byc np. niestandardowe ustawienia takie jak

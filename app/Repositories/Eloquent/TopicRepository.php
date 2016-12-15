@@ -4,7 +4,6 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 
@@ -14,6 +13,8 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface;
  */
 class TopicRepository extends Repository implements TopicRepositoryInterface, SubscribableInterface
 {
+    use UserTrait;
+
     /**
      * @return string
      */
@@ -102,8 +103,10 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->get();
 
         foreach ($result as $topic) {
-            $lastMarked = $topic->forum_marked_at ?: (new \DateTime('last month'))->format('Y-m-d H:i:s');
-//            $lastMarked = $topic->forum_marked_at ?: time();
+            if (empty($topic->forum_marked_at)) {
+                $topic->forum_marked_at = $this->getUserLastVisit($userId, $sessionId);
+            }
+
             /*
              * Jezeli data napisania ostatniego posta jest pozniejsza
              * niz data odznaczenia forum jako przeczytanego...
@@ -112,7 +115,8 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
              * ostatniego "czytania" tematu...
              * ODZNACZ JAKO NOWY
              */
-            $topic->unread = $topic->last_created_at > $lastMarked && $topic->last_created_at > $topic->topic_marked_at;
+            $topic->unread = $topic->last_created_at > $topic->forum_marked_at
+                && $topic->last_created_at > $topic->topic_marked_at;
         }
 
         return new LengthAwarePaginator(
@@ -135,10 +139,14 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function isUnread($forumId, $markTime, $userId, $sessionId)
     {
+        if (empty($markTime)) {
+            $markTime = $this->getUserLastVisit($userId, $sessionId);
+        }
+
         $sql = $this->toSql(
             $this
                 ->model
-                ->select(['id'])
+                ->select(['topics.id'])
                 ->where('topics.forum_id', $forumId)
                 ->when($markTime, function (Builder $builder) use ($markTime) {
                     return $builder->where('last_post_created_at', '>', $markTime);
@@ -148,15 +156,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
         return $this
             ->model
             ->from($this->raw("($sql) AS topics"))
-            ->leftJoin('topic_track', function (JoinClause $join) use ($userId, $sessionId) {
-                $join->on('topic_track.topic_id', '=', 'topics.id');
-
-                if ($userId) {
-                    $join->on('topic_track.user_id', '=', $this->raw($userId));
-                } else {
-                    $join->on('topic_track.session_id', '=', $this->raw("'" . $sessionId . "'"));
-                }
-            })
+            ->trackTopic($userId, $sessionId)
             ->withTrashed()
             ->whereNull('topic_track.id')
             ->count();
