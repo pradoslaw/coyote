@@ -60,6 +60,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             })
             ->get();
 
+        // loop for each category (even subcategories)
         foreach ($result as &$row) {
             if (empty($row->forum_marked_at)) {
                 $row->forum_marked_at = $this->getUserLastVisit($userId, $sessionId);
@@ -80,12 +81,14 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                     $parent->topics += $child->topics;
                     $parent->posts += $child->posts;
 
+                    // created_at contains last post's created date.
                     if ($child->created_at > $parent->created_at) {
                         if ($child->forum_unread) {
                             $parent->forum_unread = true;
                         }
 
                         $parent->last_post_id = $child->last_post_id;
+                        $parent->topic_unread = $child->topic_unread;
                         $parent->created_at = $child->created_at;
                         $parent->user_id = $child->user_id;
                         $parent->photo = $child->photo;
