@@ -64,8 +64,8 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
             "
         );
 
-        if (empty($result)) {
-            return Carbon::now();
+        if (empty($result->least)) {
+            return Carbon::now()->toDateTimeString();
         }
 
         return $result->least;

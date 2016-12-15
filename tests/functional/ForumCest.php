@@ -2,6 +2,35 @@
 
 class ForumCest
 {
+    public function visitForumForTheFirstTime(FunctionalTester $I)
+    {
+        $forum = $I->createForum();
+        $topic = $I->createTopic(['forum_id' => $forum->id]);
+
+        $I->createPost(['forum_id' => $forum->id, 'topic_id' => $topic->id]);
+
+        sleep(1);
+        $I->amOnRoute('forum.home');
+
+        $sessionId = $I->getApplication()['request']->session()->getId();
+        $I->seeRecord('sessions', ['id' => $sessionId]);
+        $I->dontSeeRecord('session_log', ['id' => $sessionId]);
+
+        $I->seeElement('//tr[@id=\'forum-' . $forum->id . '\']/td/span[@title=\'Brak nowych postów\']');
+
+        $I->createPost(['forum_id' => $forum->id, 'topic_id' => $topic->id]);
+
+        $I->amOnRoute('forum.home');
+        $I->seeElement('//tr[@id=\'forum-' . $forum->id . '\']/td/a[@title=\'Kliknij, aby oznaczyć jako przeczytane\']');
+
+        $I->amOnRoute('forum.topic', [$forum->slug, $topic->id, $topic->slug]);
+        $I->see($topic->subject);
+
+//        $I->amOnRoute('forum.home');
+//
+//        $I->seeElement('//tr[@id=\'forum-' . $forum->id . '\']/td/span[@title=\'Brak nowych postów\']');
+    }
+
     public function testCreateForum(FunctionalTester $I)
     {
         $I->logInAsAdmin();
