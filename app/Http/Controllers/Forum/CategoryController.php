@@ -32,13 +32,16 @@ class CategoryController extends BaseController
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
         $this->topic->pushCriteria(new StickyGoesFirst());
         // get topics according to given criteria
-        $topics = $this->topic->paginate(
-            $this->userId,
-            $this->sessionId,
-            'topics.last_post_id',
-            'DESC',
-            $this->topicsPerPage($request)
-        );
+        $topics = $this
+            ->topic
+            ->paginate(
+                $this->userId,
+                $this->sessionId,
+                'topics.last_post_id',
+                'DESC',
+                $this->topicsPerPage($request)
+            )
+            ->appends($request->except('page'));
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.

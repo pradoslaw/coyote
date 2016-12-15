@@ -106,13 +106,16 @@ class HomeController extends BaseController
     {
         $this->topic->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
 
-        return $this->topic->paginate(
-            $this->userId,
-            $this->sessionId,
-            'topics.last_post_id',
-            'DESC',
-            $this->topicsPerPage($this->getRouter()->getCurrentRequest())
-        );
+        return $this
+            ->topic
+            ->paginate(
+                $this->userId,
+                $this->sessionId,
+                'topics.last_post_id',
+                'DESC',
+                $this->topicsPerPage($this->getRouter()->getCurrentRequest())
+            )
+            ->appends(request()->except('page'));
     }
 
     /**
