@@ -51,6 +51,8 @@ class ScrollToPost
             return $next($request);
         }
 
+        $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug]);
+
         if ($markTime[Topic::class] < $topic->last_post_created_at
             && $markTime[Forum::class] < $topic->last_post_created_at) {
             $max = max($markTime[Topic::class], $markTime[Forum::class]);
@@ -59,10 +61,11 @@ class ScrollToPost
                 $postId = $this->post->getFirstUnreadPostId($topic->id, $max);
 
                 if ($postId && $postId !== $topic->first_post_id) {
-                    $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug]);
                     return redirect()->to($url . '?p=' . $postId . '#id' . $postId);
                 }
             }
+        } else {
+            return redirect()->to($url . '?p=' . $topic->last_post_id . '#id' . $topic->last_post_id);
         }
 
         return $next($request);
