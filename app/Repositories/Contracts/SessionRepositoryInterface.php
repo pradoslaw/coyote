@@ -2,6 +2,8 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Carbon\Carbon;
+
 interface SessionRepositoryInterface extends RepositoryInterface
 {
     /**
@@ -22,11 +24,11 @@ interface SessionRepositoryInterface extends RepositoryInterface
     public function updatedAt($userId);
 
     /**
-     * Get date of user's last visit.
+     * Find first user's visit ever. This method is helpful to show unreaded posts/categories since last visit.
      *
      * @param int $userId
      * @param null|string $sessionId
-     * @return \Carbon\Carbon|null
+     * @return string|Carbon
      */
-    public function visitedAt($userId, $sessionId = null);
+    public function findFirstVisit($userId, $sessionId = null);
 }

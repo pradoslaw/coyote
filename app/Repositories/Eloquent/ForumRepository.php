@@ -63,11 +63,12 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         // loop for each category (even subcategories)
         foreach ($result as &$row) {
             if (empty($row->forum_marked_at)) {
-                $row->forum_marked_at = $this->getUserLastVisit($userId, $sessionId);
+                $row->forum_marked_at = $this->firstVisit($userId, $sessionId);
             }
 
+            // are there any new posts (since I last marked category as read)?
             $row->forum_unread = $row->created_at > $row->forum_marked_at;
-            $row->topic_unread = $row->created_at > $row->topic_marked_at && $row->created_at > $row->forum_marked_at;
+            $row->topic_unread = $row->created_at > $row->topic_marked_at && $row->forum_unread;
             $row->route = route('forum.topic', [$row->slug, $row->topic_id, $row->topic_slug]);
         }
 

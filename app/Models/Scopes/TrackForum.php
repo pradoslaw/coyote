@@ -22,7 +22,7 @@ trait TrackForum
         return $builder
             ->addSelect(['forum_track.marked_at AS forum_marked_at'])
             ->leftJoin('forum_track', function (JoinClause $join) use ($userId, $sessionId) {
-                $join->on('forum_track.forum_id', '=', 'topics.forum_id');
+                $join->on('forum_track.forum_id', '=', 'forums.id');
 
                 if ($userId) {
                     $join->on('forum_track.user_id', '=', new Expression($userId));

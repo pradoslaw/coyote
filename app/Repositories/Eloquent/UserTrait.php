@@ -13,7 +13,7 @@ trait UserTrait
      * @param string $sessionId
      * @return string
      */
-    protected function getUserLastVisit($userId, $sessionId)
+    public function firstVisit($userId, $sessionId)
     {
         static $date;
 
@@ -21,7 +21,6 @@ trait UserTrait
             return $date;
         }
 
-        $date = $this->app[SessionRepositoryInterface::class]->visitedAt($userId, $sessionId);
-        return $date;
+        return $date = $this->app[SessionRepositoryInterface::class]->findFirstVisit($userId, $sessionId);
     }
 }

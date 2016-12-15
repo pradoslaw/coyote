@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Carbon\Carbon;
 use Coyote\Models\Str;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 
@@ -50,18 +51,23 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function visitedAt($userId, $sessionId = null)
+    public function findFirstVisit($userId, $sessionId = null)
     {
         $key = $userId !== null ? 'user_id' : 'id';
-        $value = $userId !== null ? $userId : $sessionId;
+        $value = $userId !== null ? $userId : new Str($sessionId);
 
-        $session = $this
-            ->model
-            ->select(['sessions.created_at', 'session_log.updated_at'])
-            ->where("sessions.$key", $value)
-            ->leftJoin('session_log', "session_log.$key", '=', new Str($value))
-            ->first();
+        $result = $this->app['db']->selectOne(
+            "SELECT LEAST(
+                (SELECT created_at FROM sessions WHERE $key = $value), 
+                (SELECT created_at FROM session_log WHERE $key = $value)
+              )
+            "
+        );
 
-        return $session->updated_at ?: $session->created_at;
+        if (empty($result)) {
+            return Carbon::now();
+        }
+
+        return $result->least;
     }
 }

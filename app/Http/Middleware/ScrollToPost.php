@@ -5,6 +5,7 @@ namespace Coyote\Http\Middleware;
 use Closure;
 use Coyote\Forum;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
@@ -17,11 +18,18 @@ class ScrollToPost
     protected $post;
 
     /**
-     * @param PostRepository $post
+     * @var SessionRepository
      */
-    public function __construct(PostRepository $post)
+    protected $session;
+
+    /**
+     * @param PostRepository $post
+     * @param SessionRepository $session
+     */
+    public function __construct(PostRepository $post, SessionRepository $session)
     {
         $this->post = $post;
+        $this->session = $session;
     }
 
     /**
@@ -45,6 +53,10 @@ class ScrollToPost
             Topic::class => $topic->markTime($userId, $sessionId),
             Forum::class => $forum->markTime($userId, $sessionId)
         ];
+
+        if (empty($markTime[Forum::class])) {
+            $markTime[Forum::class] = $this->session->findFirstVisit($userId, $sessionId);
+        }
 
         $request->attributes->set('mark_time', $markTime);
 

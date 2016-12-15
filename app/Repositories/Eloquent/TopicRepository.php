@@ -104,7 +104,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
 
         foreach ($result as $topic) {
             if (empty($topic->forum_marked_at)) {
-                $topic->forum_marked_at = $this->getUserLastVisit($userId, $sessionId);
+                $topic->forum_marked_at = $this->firstVisit($userId, $sessionId);
             }
 
             /*
@@ -139,10 +139,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function isUnread($forumId, $markTime, $userId, $sessionId)
     {
-        if (empty($markTime)) {
-            $markTime = $this->getUserLastVisit($userId, $sessionId);
-        }
-
         $sql = $this->toSql(
             $this
                 ->model

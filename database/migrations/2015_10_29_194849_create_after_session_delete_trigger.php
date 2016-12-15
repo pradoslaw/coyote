@@ -24,14 +24,14 @@ BEGIN
 	    SELECT COUNT(*) INTO affected FROM rows;
 			
 		IF affected = 0 THEN
-		    INSERT INTO session_log (user_id, ip, url, browser, robot) VALUES(OLD.user_id, OLD.ip, OLD.url, OLD.browser, OLD.robot);
+		    INSERT INTO session_log (user_id, created_at, updated_at, ip, url, browser, robot) VALUES(OLD.user_id, OLD.created_at, OLD.updated_at, OLD.ip, OLD.url, OLD.browser, OLD.robot);
 		END IF;
 	ELSE
 	    WITH rows AS (UPDATE session_log SET updated_at = CURRENT_TIMESTAMP(0), ip = OLD.ip, url = OLD.url, browser = OLD.browser, robot = OLD.robot WHERE id = OLD.id RETURNING 1)
 		SELECT COUNT(*) INTO affected FROM rows;
 			
 		IF affected = 0  THEN
-			INSERT INTO session_log (id, ip, url, browser, robot) VALUES(OLD.id, OLD.ip, OLD.url, OLD.browser, OLD.robot);
+			INSERT INTO session_log (id, created_at, updated_at, ip, url, browser, robot) VALUES(OLD.id, OLD.created_at, OLD.updated_at, OLD.ip, OLD.url, OLD.browser, OLD.robot);
 		END IF;
 	END IF;
 
