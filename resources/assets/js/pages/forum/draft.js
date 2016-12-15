@@ -80,7 +80,13 @@
                         'Nadziany',
                         'Bogaty',
                         'Uczynny',
-                        'Chory'
+                        'Chory',
+                        'Szalony',
+                        'Błękitny',
+                        'Brunatny',
+                        'Smutny',
+                        'Wesoły',
+                        'Nieposkromiony'
                     ];
 
                     var nouns = [
@@ -103,7 +109,9 @@
                         'Ogórek',
                         'Programista',
                         'Szewc',
-                        'Polityk'
+                        'Polityk',
+                        'Rycerz',
+                        'Ogrodnik'
                     ];
 
                     $username.val(adjectives[parseInt(Math.random() * adjectives.length)] + ' ' + nouns[parseInt(Math.random() * nouns.length)]).trigger('keyup');
