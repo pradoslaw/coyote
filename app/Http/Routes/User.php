@@ -97,4 +97,5 @@ $this->get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'use
 // np. domyslna zakladka na stronie glownej
 $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
 
-
+// podtrzymanie sesji
+$this->get('User/Ping', ['uses' => 'User\PingController@index', 'as' => 'user.ping']);

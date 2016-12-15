@@ -246,4 +246,8 @@ $(function () {
             $('.badge', dropdown).text(value);
         }
     });
+
+    setInterval(function() {
+        $.get('/User/Ping');
+    }, 250000);
 });
