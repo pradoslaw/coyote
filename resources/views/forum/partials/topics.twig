@@ -116,7 +116,7 @@
                         {% endif %}
 
                         <td class="col-views hidden-xs">
-                            <p title="Ilość odpowiedzi">
+                            <p title="Liczba odpowiedzi">
                                 <strong>{{ topic.replies|number_format(0, '', ' ') }}</strong>
 
                                 {% if topic.replies != topic.replies_real and can('delete', forum) %}
@@ -124,7 +124,7 @@
                                 {% endif %}
                                 <small>{{ declination(topic.replies, ['odpowiedź', 'odpowiedzi', 'odpowiedzi'], true) }}</small>
                             </p>
-                            <p title="Ilość wyświetleń">
+                            <p title="Liczba wyświetleń">
                                 <strong>{{ topic.views|number_format(0, '', ' ') }}</strong>
                                 <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
                             </p>

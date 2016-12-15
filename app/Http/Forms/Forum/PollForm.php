@@ -7,7 +7,7 @@ use Coyote\Services\FormBuilder\Form;
 class PollForm extends Form
 {
     const RULE_TITLE           = 'string|max:100';
-    // @todo dodac walidator sprawdzajacy ilosc (oraz dlugosc) linii
+    // @todo dodac walidator sprawdzajacy liczbe (oraz dlugosc) linii
     // @todo musimy pisac "poll.title" jezeli ten formularz jest dzieckiem. reguly powinny byc zmieniane
     // przez klase Form
     const RULE_ITEMS           = 'required_with:poll.title';
@@ -27,7 +27,7 @@ class PollForm extends Form
             ])
             ->add('max_items', 'text', [
                 'rules' => self::RULE_MAX_ITEMS,
-                'label' => 'Ilość możliwych odpowiedzi',
+                'label' => 'Liczba możliwych odpowiedzi',
                 'help' => 'Minimalnie jedna możliwa odpowiedź w ankiecie.'
             ])
             ->add('length', 'text', [

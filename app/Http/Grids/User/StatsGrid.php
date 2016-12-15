@@ -24,7 +24,7 @@ class StatsGrid extends Grid
                 },
             ])
             ->addColumn('posts_count', [
-                'title' => 'Ilość postów'
+                'title' => 'Liczba postów'
             ])
             ->addColumn('votes_count', [
                 'title' => 'Oceny'
