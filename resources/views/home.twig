@@ -230,12 +230,12 @@
 
             $('#forum-tabs a').click(function() {
                 var index = $('#forum-tabs a').index(this);
-                $.post('{{ route('user.settings.ajax') }}', {'homepage_mode': index});
+                $.post('{{ route('user.settings.ajax', [], false) }}', {'homepage_mode': index});
             });
 
             $('#reputation-tabs a').click(function() {
                 var index = $('#reputation-tabs a').index(this);
-                $.post('{{ route('user.settings.ajax') }}', {'homepage_reputation': index});
+                $.post('{{ route('user.settings.ajax', [], false) }}', {'homepage_reputation': index});
             });
         });
     </script>
