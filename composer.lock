@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-boduch/geshi.git",
-                "reference": "ec69eb1b1ce4c1f91850301f33992cd3682e1053"
+                "reference": "90069231cc737a1e88b5723bd7c1abe8c5b70875"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/geshi/zipball/ec69eb1b1ce4c1f91850301f33992cd3682e1053",
-                "reference": "ec69eb1b1ce4c1f91850301f33992cd3682e1053",
+                "url": "https://api.github.com/repos/adam-boduch/geshi/zipball/90069231cc737a1e88b5723bd7c1abe8c5b70875",
+                "reference": "90069231cc737a1e88b5723bd7c1abe8c5b70875",
                 "shasum": ""
             },
             "require": {
@@ -38,7 +38,7 @@
                 "source": "https://github.com/adam-boduch/geshi/tree/master",
                 "issues": "https://github.com/adam-boduch/geshi/issues"
             },
-            "time": "2016-12-15 08:30:18"
+            "time": "2016-12-15 11:37:38"
         },
         {
             "name": "adam-boduch/laravel-grid",
