@@ -21,7 +21,7 @@ class GeocodeIp
             $result = $geoIp->ip($request->ip());
 
             if (is_array($result)) {
-                $request->attributes->add($result);
+                $request->attributes->add(['geocode' => $result]);
             }
         }
 

@@ -130,13 +130,13 @@
                 </section>
             {% endif %}
 
-            {% if auth_check() and not user('location') and not preferenecs.city and request().get('city') %}
+            {% if auth_check() and not user('location') and not preferenecs.city and request().get('geocode').city %}
                 <section class="box">
                     <h4><i class="fa fa-map-marker fa-fw"></i> Ustaw lokalizację</h4>
 
                     <div class="panel panel-warning alert-warning">
                         <div class="panel-body text-center">
-                            <p class="lead">Czy pochodzisz z: <strong>{{ request().get('city') }}</strong>?</p>
+                            <p class="lead">Czy pochodzisz z: <strong>{{ request().get('geocode').city }}</strong>?</p>
 
                             <p class="margin-md-bottom text-justify">Ustaw swoją lokalizację w panelu użytkownika, abyśmy mogli wyświetlać oferty pracy dopasowane do Twojego regionu.</p>
 
