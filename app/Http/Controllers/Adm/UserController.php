@@ -65,6 +65,9 @@ class UserController extends BaseController
         $data = $form->all();
 
         $this->transaction(function () use ($user, $data) {
+            // we use forceFill() to fill fields that are NOT in $fillable model's array.
+            // we can do that because $form->all() returns only fields in form. $request->all() returns
+            // all fields in HTTP POST so it's not secure.
             $user->forceFill(array_except($data, ['submit', 'skills', 'groups']))->save();
             $user->skills()->delete();
 

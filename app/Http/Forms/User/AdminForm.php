@@ -33,6 +33,11 @@ class AdminForm extends SettingsForm
 
     public function buildForm()
     {
+        $this->add('name', 'text', [
+            'label' => 'Nazwa użytkownika',
+            'rules' => 'required|min:2|max:28|username|user_unique:' . $this->getData()->id,
+        ]);
+
         parent::buildForm();
 
         $this->add('skills', 'collection', [
