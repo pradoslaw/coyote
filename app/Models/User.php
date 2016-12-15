@@ -31,9 +31,9 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @property string $email
  * @property string $password
  * @property string $provider
- * @property string $created_at
- * @property string $updated_at
- * @property string $visited_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon $visited_at
  * @property string $date_format
  * @property string $timezone
  * @property string $ip

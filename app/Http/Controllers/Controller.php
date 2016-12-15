@@ -103,9 +103,11 @@ abstract class Controller extends BaseController
             }
         });
 
-        // tymczasowo wyswietlana ikona "Nowosc" przy ofertach pracy.
-        $badge = app('html')->tag('span', 'Nowość', ['class' => 'badge new']);
-        $menu->get('praca')->append($badge);
+        if (!$this->userId || ($this->userId && $this->auth->created_at->diffInDays() <= 7)) {
+            // tymczasowo wyswietlana ikona "Nowosc" przy ofertach pracy.
+            $badge = app('html')->tag('span', 'Nowość', ['class' => 'badge new']);
+            $menu->get('praca')->append($badge);
+        }
 
         // cache user customized menu for 7 days
         $categories = $this->getCacheFactory()->tags('menu-for-user')->remember('menu-for-user:' . $this->userId, 60 * 24 * 7, function () {
