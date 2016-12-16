@@ -22,7 +22,6 @@ return [
     'Cache.SerializerPath'     => storage_path('app/purifier'),
     // zakomentowalem te linie poniewaz przez nia usuwana byla zawartosc znacznika <blockquote>
 //    'HTML.Doctype'             => 'XHTML 1.0 Strict',
-    'HTML.Doctype'             => 'HTML',
     'HTML.Allowed'             => 'b,strong,i,em,a[href|title|data-user-id|class],p,br,ul,ol,li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h2,h3,h4,h5,h6,blockquote,del,table[summary],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var',
     'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,text-align',
     'AutoFormat.AutoParagraph' => false,
