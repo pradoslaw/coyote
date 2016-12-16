@@ -38,7 +38,7 @@
 
                         <span class="rep"><strong>{{ user.reputation|number_format(0, '', ' ') }}</strong> <small>punktów</small></span>
 
-                        {% if total_users > 0 %}
+                        {% if user.reputation > 0 and total_users > 0 %}
                             <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
                         {% endif %}
                     </div>
