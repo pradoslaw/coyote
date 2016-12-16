@@ -53,8 +53,7 @@ class FunctionalTester extends \Codeception\Actor
             'description' => $fake->text
         ];
 
-        $id = $this->haveRecord('forums', array_merge($data, $attributes));
-        return $this->grabRecord('Coyote\Forum', ['id' => $id]);
+        return \Coyote\Forum::forceCreate(array_merge($data, $attributes));
     }
 
     public function createTopic($attributes)
@@ -66,9 +65,7 @@ class FunctionalTester extends \Codeception\Actor
             'slug' => str_slug($name)
         ];
 
-        \Coyote\Topic::unguard();
-
-        return $this->haveRecord('Coyote\Topic', array_merge($data, $attributes));
+        return \Coyote\Topic::forceCreate(array_merge($data, $attributes));
     }
 
     public function createPost($attributes)
@@ -83,8 +80,6 @@ class FunctionalTester extends \Codeception\Actor
             'user_id' => null
         ];
 
-        \Coyote\Post::unguard();
-
-        return $this->haveRecord('Coyote\Post', array_merge($data, $attributes));
+        return \Coyote\Post::forceCreate(array_merge($data, $attributes));
     }
 }
