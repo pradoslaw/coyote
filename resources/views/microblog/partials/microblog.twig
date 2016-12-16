@@ -40,7 +40,7 @@
 
                         {% if auth_check() %}
                             <a href="{{ route('microblog.subscribe', [microblog.id]) }}" class="btn btn-subscribe {{ microblog.subscribe_on ? 'subscribe-on' }}">Obserwuj</a>
-                            <a href="javascript:" class="btn btn-reply">Komentuj</a>
+                            <a href="javascript:" class="btn btn-reply" data-login="{{ microblog.name }}">Komentuj</a>
                         {% endif %}
                     </div>
 

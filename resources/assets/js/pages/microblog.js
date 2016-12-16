@@ -86,7 +86,14 @@ $(function () {
 
     $('#microblog')
         .on('click', '.btn-reply', function () {
-            $(this).parent().next('.microblog-comments').find('input').focus();
+            var login = $(this).data('login');
+            var input = $(this).parent().next('.microblog-comments').find('.comment-form textarea');
+
+            if (login.indexOf(' ') > -1 || login.indexOf('.') > -1) {
+                login = '{' + login + '}';
+            }
+
+            input.val(input.val() + '@' + login + ': ').focus();
         })
         .on('click', '.btn-subscribe', function () {
             var $this = $(this);
