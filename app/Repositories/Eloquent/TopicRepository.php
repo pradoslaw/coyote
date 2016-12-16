@@ -4,6 +4,7 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 
@@ -96,7 +97,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->orderBy('topics.ordering')
             ->when($userId, function (Builder $builder) use ($userId) {
                 return $builder->addSelect(['ts.created_at AS subscribe_on'])
-                    ->leftJoin('topic_subscribers AS ts', function ($join) use ($userId) {
+                    ->leftJoin('topic_subscribers AS ts', function (JoinClause $join) use ($userId) {
                         $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
                     });
             })
