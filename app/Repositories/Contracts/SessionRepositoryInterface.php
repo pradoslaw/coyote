@@ -7,6 +7,13 @@ use Carbon\Carbon;
 interface SessionRepositoryInterface extends RepositoryInterface
 {
     /**
+     * Set updated_at with current timestamp.
+     *
+     * @param string $sessionId
+     */
+    public function extend($sessionId);
+
+    /**
      * Pobiera liste sesji uzytkownikow ktorzy odwiedzaja dana strone
      *
      * @param null $path

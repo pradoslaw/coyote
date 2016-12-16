@@ -37,7 +37,7 @@ class Handler extends DatabaseSessionHandler
         ];
 
         if ($this->exists) {
-            $this->getQuery()->where('id', $sessionId)->update($data);
+            $this->getQuery()->where('id', $sessionId)->update($this->filterUrl($data));
         } else {
             $agent = new Agent();
             $agent->setUserAgent($browser);
@@ -46,18 +46,27 @@ class Handler extends DatabaseSessionHandler
                 $data['robot'] = $agent->robot();
             }
 
-            try {
-                $this->getQuery()->insert(['id' => $sessionId] + $data);
-            } catch (\PDOException $e) {
-                // tutaj moze byc blad z zapisem sesji w przypadku zapytan ajax
-                // @see https://github.com/laravel/framework/issues/9251
-                // docelowo implementacja bedzie zastapiona na redis
-            } catch (\Exception $e) {
-                throw $e;
-            }
+            $this->insert(['id' => $sessionId] + $data);
         }
 
         $this->exists = true;
+    }
+
+    /**
+     * @param array $data
+     * @throws \Exception
+     */
+    private function insert($data)
+    {
+        try {
+            $this->getQuery()->insert($data);
+        } catch (\PDOException $e) {
+            // tutaj moze byc blad z zapisem sesji w przypadku zapytan ajax
+            // @see https://github.com/laravel/framework/issues/9251
+            // docelowo implementacja bedzie zastapiona na redis
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     /**
@@ -66,5 +75,20 @@ class Handler extends DatabaseSessionHandler
     public function gc($lifetime)
     {
         $this->getQuery()->where('updated_at', '<=', new Expression("NOW() - INTERVAL '$lifetime seconds'"))->delete();
+    }
+
+    /**
+     * Filter url from data. We don't need to save /User/Ping URL. We would like to know real user's path.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function filterUrl($data)
+    {
+        if (preg_match('~/User/Ping$~', $data['url'])) {
+            unset($data['url']);
+        }
+
+        return $data;
     }
 }

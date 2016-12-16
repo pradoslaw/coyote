@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Eloquent;
 use Carbon\Carbon;
 use Coyote\Str;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 
 class SessionRepository extends Repository implements SessionRepositoryInterface
 {
@@ -14,6 +15,14 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
     public function model()
     {
         return 'Coyote\Session';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function extend($sessionId)
+    {
+        $this->update(['updated_at' => $this->raw('NOW()')], $sessionId);
     }
 
     /**
@@ -29,7 +38,7 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
             ->select(['user_id', 'url', 'sessions.id', 'robot', 'users.name AS name', 'groups.name AS group'])
             ->leftJoin('users', 'users.id', '=', $this->raw('user_id'))
             ->leftJoin('groups', 'groups.id', '=', $this->raw('group_id'))
-            ->when($path, function ($builder) use ($path) {
+            ->when($path, function (Builder $builder) use ($path) {
                 return $builder->where('url', 'LIKE', '%' . $path . '%');
             })
             ->get();

@@ -252,6 +252,6 @@ $(function () {
     });
 
     setInterval(function() {
-        $.get('/User/Ping');
-    }, 250000);
+        $.get('/ping');
+    }, 350000);
 });

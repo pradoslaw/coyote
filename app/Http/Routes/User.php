@@ -98,4 +98,6 @@ $this->get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'use
 $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
 
 // podtrzymanie sesji
-$this->get('User/Ping', ['uses' => 'User\PingController@index', 'as' => 'user.ping']);
+// @deprecated
+$this->get('User/Ping', ['uses' => 'User\PingController@index']);
+$this->get('ping', ['uses' => 'User\PingController@index']);
