@@ -326,10 +326,7 @@ abstract class Field
                     $currentValue = $this->$getter();
 
                     if (is_array($currentValue)) {
-                        // @todo bug w ponownym ustawieniu atrybutow dla elementu. przykladowo: jezeli w wczesniej
-                        // ustawimy attr[class => 'klasa CSS'] i chcemy zmienic klase CSS juz w szablonie twig
-                        // to ponizszy kod spowoduje utworzenie tablicy z elementem "class" ktory zawiera 2 elementy
-                        $values = array_merge_recursive($currentValue, $values);
+                        $values = $this->arrayMerge($currentValue, $values);
                     }
                 }
                 $this->$setter($values);
@@ -337,6 +334,16 @@ abstract class Field
         }
 
         return $this;
+    }
+
+    /**
+     * @param array $old
+     * @param array $new
+     * @return array
+     */
+    protected function arrayMerge($old, $new)
+    {
+        return array_merge($old, $new);
     }
 
     /**

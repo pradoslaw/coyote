@@ -12,8 +12,8 @@
 
     {{ form_widget(form.subject, {type: 'hidden'}) }}
     {{ form_widget(form.subscribe, {type: 'hidden'}) }}
-    {{ form_widget(form.text, {attr: {rows: 3}}) }}
-    {{ form_widget(form.submit, {attr: {title: 'Kliknij, aby wysłać (Ctrl+Enter)', class: 'btn-xs pull-right'}}) }}
+    {{ form_widget(form.text, {attr: {rows: 3, tabindex: 1}}) }}
+    {{ form_widget(form.submit, {attr: {title: 'Kliknij, aby wysłać (Ctrl+Enter)', class: 'btn-xs pull-right', tabindex: 2}}) }}
 
     <button class="btn btn-xs btn-danger pull-right btn-reset" style="margin-right: 10px">Anuluj</button>
     {{ form_end() }}

@@ -519,6 +519,34 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertTrue($validator->errors()->has('description'));
     }
 
+    public function testMergeFieldOptions()
+    {
+        $form = $this->createForm(TestForm::class);
+        $form
+            ->add('description', 'textarea', [
+                'attr' => [
+                    'tabindex' => 3
+                ],
+                'rules' => 'max:10'
+            ])
+            ->add('title', 'text');
+
+        $form->buildForm();
+
+        $field = $form->getField('description');
+        $field->mergeOptions(['attr' => ['tabindex' => 1, 'rows' => 10]]);
+
+        $this->assertEquals(1, $field->getAttr()['tabindex']);
+        $this->assertEquals(10, $field->getAttr()['rows']);
+        $this->assertEquals('max:10', $field->getRules());
+
+        $field = $form->getField('title');
+        $field->mergeOptions(['attr' => ['tabindex' => 1, 'style' => 'color: red']]);
+
+        $this->assertEquals(1, $field->getAttr()['tabindex']);
+        $this->assertEquals('color: red', $field->getAttr()['style']);
+    }
+
     private function fillWithData($data)
     {
         // utworzenie instancji klasy
