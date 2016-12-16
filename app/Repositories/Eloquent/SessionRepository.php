@@ -58,8 +58,8 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
 
         $result = $this->app['db']->selectOne(
             "SELECT LEAST(
-                (SELECT created_at FROM sessions WHERE $key = $value), 
-                (SELECT created_at FROM session_log WHERE $key = $value)
+                (SELECT created_at FROM sessions WHERE $key = $value ORDER BY created_at LIMIT 1), 
+                (SELECT created_at FROM session_log WHERE $key = $value LIMIT 1)
               )
             "
         );
