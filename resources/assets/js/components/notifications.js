@@ -116,7 +116,7 @@ $(function () {
         var wrapper = $('#dropdown-alerts');
         var modal = wrapper.find('.dropdown-modal');
         var alerts = modal.find('ul');
-        var url = $(this).children().attr('href');
+        var url = $(this).children().data('url');
 
         if ($('li', alerts).length <= 1) {
             $('<li><i class="fa fa-spin fa-spinner"></i></li>').appendTo(alerts);
@@ -174,6 +174,8 @@ $(function () {
                 });
             });
         }
+
+        // return false;
     })
     .delegate('.dropdown-modal li a', 'mousedown', function (e) {
         if ($(this).parent().hasClass('unread')) {
@@ -222,10 +224,12 @@ $(function () {
         var messages = $('#dropdown-messages').find('ul');
 
         if ($('li', messages).length <= 1) {
-            $.get($(this).children('a').attr('href'), function (html) {
+            $.get($(this).children('a').data('url'), function (html) {
                 messages.html(html);
             });
         }
+
+        // return false;
     });
 
     ws.on('alert', function(data) {

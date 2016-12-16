@@ -156,7 +156,7 @@
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li id="alerts" class="alerts">
-                                    <a href="{{ route('user.alerts.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <a href="{{ route('user.alerts') }}" data-url="{{ route('user.alerts.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('alerts_unread') %}
                                             <span class="badge">{{ user('alerts_unread') }}</span>
                                         {% endif %}
@@ -181,7 +181,7 @@
                                 </li>
 
                                 <li id="messages" class="messages">
-                                    <a href="{{ route('user.pm.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <a href="{{ route('user.pm') }}" data-url="{{ route('user.pm.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('pm_unread') %}
                                             <span class="badge">{{ user('pm_unread') }}</span>
                                         {% endif %}
