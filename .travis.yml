@@ -46,3 +46,4 @@ script: php vendor/bin/codecept run
 
 after_script:
   - cat $TRAVIS_BUILD_DIR/storage/logs/*.log
+  - cat $TRAVIS_BUILD_DIR/tests/_output/*.html
