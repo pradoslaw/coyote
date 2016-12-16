@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof TokenMismatchException) {
             return redirect($request->fullUrl())
-                ->withInput()
+                ->withInput($request->except('_token'))
                 ->with('error', 'Wygląda na to, że nie wysłałeś tego formularza przez dłuższy czas. Spróbuj ponownie!');
         }
 
