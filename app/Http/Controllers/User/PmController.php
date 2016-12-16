@@ -87,7 +87,9 @@ class PmController extends BaseController
 
             // we have to mark this message as read
             if (!$row['read_at'] && $row['folder'] == \Coyote\Pm::INBOX) {
+                // database trigger will decrease pm counter in "users" table.
                 $this->pm->markAsRead($row['id']);
+                $this->auth->pm_unread--;
             }
 
             // IF we have unread alert that is connected with that message... then we also have to mark it as read
