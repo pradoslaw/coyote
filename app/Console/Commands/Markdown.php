@@ -67,6 +67,8 @@ class Markdown extends Command
 
     private function post($id = null)
     {
+        $attachments = $this->getPostAttachments();
+
         $count = DB::connection('mysql')->table('post')->count();
         $bar = $this->output->createProgressBar($count);
 
@@ -74,7 +76,7 @@ class Markdown extends Command
 
         DB::connection('mysql')
             ->table('post')
-            ->select(['post.post_id', 'text_content AS post_content'])
+            ->select(['post.post_id', 'text_content AS post_content', 'post_time', 'post_edit_time'])
             ->join('post_text', 'text_id', '=', 'post_text')
             ->orderBy('post_id', 'DESC')
             ->when($id, function ($builder) use ($id) {
@@ -82,10 +84,14 @@ class Markdown extends Command
             })
             ->chunk(
                 100000,
-                function ($sql) use ($bar) {
+                function ($sql) use ($bar, $attachments) {
                     foreach ($sql as $row) {
+                        $this->transformer->mapping = $attachments[$row->post_id] ?? [];
+                        $date = date('Y-m-d H:i:s', max($row->post_time, $row->post_edit_time));
+
                         DB::table('posts')
                             ->where('id', $row->post_id)
+                            ->whereRaw("GREATEST(updated_at, '$date') <= '$date'")
                             ->update(['text' => $this->transformer->transform($row->post_content)]);
 
                         $bar->advance();
@@ -103,6 +109,26 @@ class Markdown extends Command
             ->select(DB::raw('post_id, IF(user_id > 1, user_name, post_username) AS name'))
             ->leftJoin('user', 'user_id', '=', 'post_user')
             ->lists('name', 'post_id');
+    }
+
+    private function getPostAttachments()
+    {
+        $result = [];
+
+        $lists = DB::connection('mysql')
+            ->table('post_attachment')
+            ->select('attachment_file', 'attachment_name', 'attachment_post')
+            ->get();
+
+        foreach ($lists as $row) {
+            if (!isset($result[$row->attachment_post])) {
+                $result[$row->attachment_post] = [];
+            }
+
+            $result[$row->attachment_post][$row->attachment_name] = $row->attachment_file;
+        }
+
+        return $result;
     }
 
     private function postLog($id = null)
@@ -123,6 +149,8 @@ class Markdown extends Command
                 100000,
                 function ($sql) use ($bar) {
                     foreach ($sql as $row) {
+                        $this->transformer->mapping = $this->getPostAttachments($row->post_id);
+
                         DB::table('post_log')
                             ->where('id', $row->text_id)
                             ->update(['text' => $this->transformer->transform($row->post_content)]);
