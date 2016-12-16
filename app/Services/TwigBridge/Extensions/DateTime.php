@@ -49,7 +49,7 @@ class DateTime extends Twig_Extension
 
     /**
      * @param $dateTime
-     * @return int
+     * @return bool
      */
     public function isToday($dateTime)
     {
