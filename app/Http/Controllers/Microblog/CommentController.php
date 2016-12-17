@@ -82,6 +82,7 @@ class CommentController extends Controller
                     'microblog_id'=> $microblog->parent_id, // <-- parent_id NOT id (to generate current alert's object_id)
                     'content'     => $microblog->html,
                     'excerpt'     => excerpt($microblog->html),
+                    'text'        => $microblog->html,
                     'sender_id'   => $user->id,
                     'sender_name' => $user->name,
                     'subject'     => excerpt($parent->html), // original exerpt of parent entry

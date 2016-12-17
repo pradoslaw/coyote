@@ -95,7 +95,8 @@ class SubmitController extends BaseController
                     'sender_name' => $request->get('user_name', $this->userId ? auth()->user()->name : ''),
                     'subject' => str_limit($topic->subject, 84),
                     'excerpt' => excerpt($post->html),
-                    'url' => $url
+                    'url' => $url,
+                    'text' => $post->html
                 ];
 
                 // $subscribersId can be int or array. we need to cast to array type

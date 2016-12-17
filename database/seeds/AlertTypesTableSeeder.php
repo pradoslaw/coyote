@@ -119,7 +119,7 @@ class AlertTypesTableSeeder extends Seeder
         ]);
         Type::create(['id'       => Alert::MICROBLOG_SUBSCRIBER,
                       'name'     => '...nowym komentarzu do wpisu, który doceniłeś',
-                      'headline' => '{sender} dodał komentarz do wpisu, który doceniłeś',
+                      'headline' => '{sender} dodał komentarz do wpisu, który obserwujesz',
                       'profile'  => true,
                       'email'    => false
         ]);

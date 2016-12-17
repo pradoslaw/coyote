@@ -2,8 +2,11 @@
 {% extends 'emails.layout' %}
 
 {% block content %}
-    <b>{{ sender_name }}</b> użył Twojego loginu w treści komentarza postu w wątku <b>{{ subject }}</b>.<br>
-    Aby przeczytać ten komentarz, kliknij w poniższy link:<br><br>
+    <b>{{ sender_name }}</b> użył Twojego loginu w treści komentarza postu w wątku <b>{{ subject }}</b>:<br><br>
 
-    Link do wpisu: {{ link_to(url) }}
+    <hr>
+    {{ text|raw }}
+    <hr><br>
+
+    Kliknij, aby zobaczyć: {{ link_to(url) }}
 {% endblock %}

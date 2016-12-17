@@ -1,7 +1,11 @@
 {% extends 'emails.layout' %}
 
 {% block content %}
-    <b>{{ sender }}</b> dodał nowy post w wątku <b>{{ subject }}</b>, który obserwujesz.<br><br>
+    <b>{{ sender }}</b> dodał nowy post w wątku <b>{{ subject }}</b>, który obserwujesz:<br><br>
 
-    Kliknij, aby przeczytać post: {{ link_to(url) }}
+    <hr>
+    {{ text|raw }}
+    <hr><br>
+
+    Kliknij, aby zobaczyć: {{ link_to(url) }}
 {% endblock %}

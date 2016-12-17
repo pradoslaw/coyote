@@ -44,6 +44,11 @@ abstract class Provider implements ProviderInterface
     /**
      * @var string
      */
+    protected $text;
+
+    /**
+     * @var string
+     */
     protected $url;
 
     /**
@@ -198,6 +203,25 @@ abstract class Provider implements ProviderInterface
     public function getExcerpt()
     {
         return $this->excerpt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param string $text
+     * @return $this
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
     }
 
     /**

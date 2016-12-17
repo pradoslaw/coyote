@@ -1,8 +1,13 @@
 {% extends 'emails.layout' %}
 
 {% block content %}
-    <b>{{ sender }}</b> dodał nowy komentarz we wpisie na mikroblogu: <b>{{ subject }}</b>.<br>
+    <b>{{ sender }}</b> dodał nowy komentarz we wpisie na mikroblogu: <b>{{ subject }}</b>:<br><br>
+
+    <hr>
+    {{ text|raw }}
+    <hr><br>
+
     Dostajesz to powiadomienie, ponieważ obserwujesz ten wpis.<br><br>
 
-    Kliknij, aby przeczytać komentarz: {{ link_to(url) }}
+    Kliknij, aby zobaczyć komentarz: {{ link_to(url) }}
 {% endblock %}

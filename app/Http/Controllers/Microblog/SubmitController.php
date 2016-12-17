@@ -98,6 +98,7 @@ class SubmitController extends Controller
                         'sender_id'   => $user->id,
                         'sender_name' => $user->name,
                         'subject'     => excerpt($microblog->html),
+                        'text'        => $microblog->html,
                         'url'         => UrlBuilder::microblog($microblog)
                     ])->notify();
                 }

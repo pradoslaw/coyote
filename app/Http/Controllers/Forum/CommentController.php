@@ -96,6 +96,7 @@ class CommentController extends Controller
                     'sender_name' => auth()->user()->name,
                     'subject'     => str_limit($this->topic->subject, 84),
                     'excerpt'     => excerpt($this->comment->html),
+                    'text'        => $this->comment->html,
                     'url'         => $object->url
                 ];
 
@@ -111,7 +112,7 @@ class CommentController extends Controller
                 }
 
                 // get id of users that were mentioned in the text
-                $subscribersId = $this->forum->onlyUsersWithAccess((new LoginHelper())->grab($this->comment->text));
+                $subscribersId = $this->forum->onlyUsersWithAccess((new LoginHelper())->grab($this->comment->html));
 
                 if ($subscribersId) {
                     $alert->attach(
