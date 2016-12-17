@@ -252,6 +252,9 @@ $(function () {
     });
 
     setInterval(function() {
-        $.get('/ping');
+        $.get('/ping', function(token) {
+            $('meta[name="csrf-token"]').attr('content', token);
+            $(':hidden[name="_token"]').val(token);
+        });
     }, 350000);
 });
