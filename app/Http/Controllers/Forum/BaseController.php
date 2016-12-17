@@ -3,9 +3,9 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as Topic;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as Post;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
+use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Http\Forms\Forum\PostForm;
@@ -14,26 +14,26 @@ use Illuminate\Http\Request;
 abstract class BaseController extends Controller
 {
     /**
-     * @var Forum
+     * @var ForumRepository
      */
     protected $forum;
 
     /**
-     * @var Topic
+     * @var TopicRepository
      */
     protected $topic;
 
     /**
-     * @var Post
+     * @var PostRepository
      */
     protected $post;
 
     /**
-     * @param Forum $forum
-     * @param Topic $topic
-     * @param Post $post
+     * @param ForumRepository $forum
+     * @param TopicRepository $topic
+     * @param PostRepository $post
      */
-    public function __construct(Forum $forum, Topic $topic, Post $post)
+    public function __construct(ForumRepository $forum, TopicRepository $topic, PostRepository $post)
     {
         parent::__construct();
 
@@ -95,7 +95,7 @@ abstract class BaseController extends Controller
     protected function getViewers()
     {
         // create view with online users
-        return app('session.viewers')->render(request()->getRequestUri());
+        return app('session.viewers')->render($this->getRouter()->getCurrentRequest()->getRequestUri());
     }
 
     /**

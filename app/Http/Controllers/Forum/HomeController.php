@@ -4,6 +4,9 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\GateFactory;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
+use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
@@ -12,10 +15,47 @@ use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTag;
 use Illuminate\Http\Request;
 use Lavary\Menu\Menu;
+use Lavary\Menu\Builder;
 
 class HomeController extends BaseController
 {
     use GateFactory, FlagFactory;
+
+    /**
+     * @var Builder
+     */
+    private $tabs;
+
+    /**
+     * @param ForumRepository $forum
+     * @param TopicRepository $topic
+     * @param PostRepository $post
+     */
+    public function __construct(ForumRepository $forum, TopicRepository $topic, PostRepository $post)
+    {
+        parent::__construct($forum, $topic, $post);
+
+        $this->tabs = app(Menu::class)->make('_forum', function (Builder $menu) {
+            foreach (config('laravel-menu._forum') as $title => $row) {
+                $data = array_pull($row, 'data');
+                $menu->add($title, $row)->data($data);
+            }
+        })
+        ->filter(function ($item) {
+            if ($item->data('role') === true) {
+                return $this->userId !== null;
+            }
+
+            return true;
+        });
+
+        // currently selected tab
+        list(, $suffix) = explode('.', $this->getRouter()->currentRouteName());
+
+        if (in_array($suffix, ['categories', 'all', 'unanswered', 'subscribes', 'mine'])) {
+            $this->setSetting('forum.tab', $suffix);
+        }
+    }
 
     /**
      * @param string $view
@@ -24,53 +64,20 @@ class HomeController extends BaseController
      */
     protected function view($view = null, $data = [])
     {
-        $route = $this->getRouter()->currentRouteName();
-        $request = $this->getRouter()->getCurrentRequest();
+        list(, $suffix) = explode('.', $this->getRouter()->currentRouteName());
 
-        $tabs = app(Menu::class)->make('tabs', function ($menu) {
-            $tabs = [
-                'forum.home'            => 'Kategorie',
-                'forum.all'             => 'Wszystkie',
-                'forum.unanswered'      => 'Bez odpowiedzi'
-            ];
+        $currentTab = $suffix == 'home' ? $this->getSetting('forum.tab', 'categories') : $suffix;
+        $title = null;
 
-            if (auth()->check()) {
-                $tabs['forum.subscribes'] = 'Obserwowane';
-                $tabs['forum.mine'] = 'Moje';
-            }
+        foreach ($this->tabs->all() as $tab) {
+            if ("forum.$currentTab" == $tab->link->path['route']) {
+                $tab->activate();
 
-            foreach ($tabs as $route => $label) {
-                $menu->add($label, ['route' => $route]);
-            }
-        });
-
-        if ($route == 'forum.tag') {
-            $tabs->add('Wątki z: ' . $request->route('tag'), [
-                'route' => [
-                    'forum.tag', urlencode($request->route('tag'))
-                ]
-            ]);
-        }
-
-        if ($route == 'forum.user') {
-            $user = app(UserRepositoryInterface::class)->find($request->route('id'));
-            abort_if(is_null($user), 404);
-
-            $tabs->add('Posty: ' . $user->name, [
-                'route' => [
-                    'forum.user', $request->route('id')
-                ]
-            ]);
-        }
-
-        $title = '';
-        foreach ($tabs->all() as $tab) {
-            if ($tab->attr('class') == 'active') {
                 $title = $tab->title;
             }
         }
 
-        return parent::view($view, $data)->with(compact('route', 'tabs', 'title'));
+        return parent::view($view, $data)->with(['tabs' => $this->tabs, 'title' => $title]);
     }
 
     /**
@@ -78,13 +85,9 @@ class HomeController extends BaseController
      */
     public function index()
     {
-        $this->pushForumCriteria();
-        // execute query: get all categories that user can has access
-        $sections = $this->forum->groupBySections($this->userId, $this->sessionId);
-        // get categories collapse
-        $collapse = $this->collapse();
+        $tab = $this->getSetting('forum.tab', 'categories');
 
-        return $this->view('forum.home')->with(compact('sections', 'collapse'));
+        return $this->{$tab}();
     }
 
     /**
@@ -100,47 +103,17 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    private function load()
-    {
-        $this->topic->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
-
-        return $this
-            ->topic
-            ->paginate(
-                $this->userId,
-                $this->sessionId,
-                'topics.last_post_id',
-                'DESC',
-                $this->topicsPerPage($this->getRouter()->getCurrentRequest())
-            )
-            ->appends(request()->except('page'));
-    }
-
-    /**
-     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $topics
      * @return \Illuminate\View\View
      */
-    private function render($topics)
+    public function categories()
     {
-        // we need to get an information about flagged topics. that's how moderators can notice
-        // that's something's wrong with posts.
-        if ($topics->total() && $this->getGateFactory()->allows('forum-delete')) {
-            $flags = $this->getFlagFactory()->takeForTopics($topics->groupBy('id')->keys()->toArray());
-        }
+        $this->pushForumCriteria();
+        // execute query: get all categories that user can has access
+        $sections = $this->forum->groupBySections($this->userId, $this->sessionId);
+        // get categories collapse
+        $collapse = $this->collapse();
 
-        $postsPerPage = $this->postsPerPage($this->getRouter()->getCurrentRequest());
-
-        return $this->view('forum.topics')->with(compact('topics', 'flags', 'postsPerPage'));
-    }
-
-    /**
-     * @return \Illuminate\View\View
-     */
-    private function loadAndRender()
-    {
-        return $this->render($this->load());
+        return $this->view('forum.home')->with(compact('sections', 'collapse'));
     }
 
     /**
@@ -183,6 +156,20 @@ class HomeController extends BaseController
             }]);
         }
 
+        $user = app(UserRepositoryInterface::class)->find($userId);
+        abort_if(is_null($user), 404);
+
+        if ($this->getRouter()->currentRouteName() == 'forum.user') {
+            $this
+                ->tabs
+                ->add('Posty: ' . $user->name, [
+                    'route' => [
+                        'forum.user', $userId
+                    ]
+                ])
+                ->activate();
+        }
+
         return $this->render($topics)->with('user_id', $userId);
     }
 
@@ -201,6 +188,17 @@ class HomeController extends BaseController
      */
     public function tag($name)
     {
+        $request = $this->getRouter()->getCurrentRequest();
+
+        $this
+            ->tabs
+            ->add('Wątki z: ' . $request->route('tag'), [
+                'route' => [
+                    'forum.tag', urlencode($request->route('tag'))
+                ]
+            ])
+            ->activate();
+
         $this->topic->pushCriteria(new WithTag($name));
         return $this->loadAndRender();
     }
@@ -214,5 +212,49 @@ class HomeController extends BaseController
         foreach ($forums as $forum) {
             $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
         }
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    private function load()
+    {
+        $this->topic->pushCriteria(new OnlyThoseWithAccess($this->auth));
+
+        return $this
+            ->topic
+            ->paginate(
+                $this->userId,
+                $this->sessionId,
+                'topics.last_post_id',
+                'DESC',
+                $this->topicsPerPage($this->getRouter()->getCurrentRequest())
+            )
+            ->appends(request()->except('page'));
+    }
+
+    /**
+     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $topics
+     * @return \Illuminate\View\View
+     */
+    private function render($topics)
+    {
+        // we need to get an information about flagged topics. that's how moderators can notice
+        // that's something's wrong with posts.
+        if ($topics->total() && $this->getGateFactory()->allows('forum-delete')) {
+            $flags = $this->getFlagFactory()->takeForTopics($topics->groupBy('id')->keys()->toArray());
+        }
+
+        $postsPerPage = $this->postsPerPage($this->getRouter()->getCurrentRequest());
+
+        return $this->view('forum.topics')->with(compact('topics', 'flags', 'postsPerPage'));
+    }
+
+    /**
+     * @return \Illuminate\View\View
+     */
+    private function loadAndRender()
+    {
+        return $this->render($this->load());
     }
 }

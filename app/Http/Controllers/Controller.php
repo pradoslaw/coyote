@@ -159,13 +159,17 @@ abstract class Controller extends BaseController
      */
     protected function setSetting($name, $value)
     {
-        app('setting')->setItem($name, $value, $this->userId, $this->sessionId);
-
-        if (!is_array($this->settings)) {
-            $this->settings;
+        if ($this->getSetting($name) === $value) {
+            return $value;
         }
 
-        $this->settings[$name] = $value;
+        if (!is_array($this->settings)) {
+            $this->settings = [];
+        }
+
+        app('setting')->setItem($name, $value, $this->userId, $this->sessionId);
+
+        return $this->settings[$name] = $value;
     }
 
     /**
