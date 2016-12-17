@@ -526,6 +526,16 @@ class TransformerTest extends \Codeception\TestCase\Test
             "Nagłówek 1 | Nagłówek 2 | Nagłówek 3\n---------------- | ---------------- | ----------------\nKolumna 1 | Kolumna 2 | Kolumna 3",
             $this->transformer->transform("||=Nagłówek 1||Nagłówek 2||Nagłówek 3\n||Kolumna 1||Kolumna 2||Kolumna 3")
         );
+
+        $this->assertEquals(
+            "To widzę ja | To widzi anonim\nja | on",
+            $this->transformer->transform("||To widzę ja||To widzi anonim\n||ja||on")
+        );
+
+        $this->assertEquals(
+            "To widzę ja | To widzi anonim\n![ja.png](//static.4programmers.net/uploads/attachment/ja.png) | ![on.png](//static.4programmers.net/uploads/attachment/on.png)",
+            $this->transformer->transform("||To widzę ja||To widzi anonim\n||{{Image:ja.png}}||{{Image:on.png}}")
+        );
     }
 
     public function testRemoveOldTags()

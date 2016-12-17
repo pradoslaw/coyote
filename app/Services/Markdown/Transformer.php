@@ -15,8 +15,7 @@ class Transformer extends Parser
         $text = $this->url($text);
         // pozbywamy sie starych linkow, rowniez wszedzie
         $text = $this->links($text);
-        // zastapienie {{Image}} oraz {{File}}. teraz juz tego nie uzywamy
-        $text = $this->inlineImages($text);
+
 
 
 
@@ -40,6 +39,12 @@ class Transformer extends Parser
 
         $text = $this->makeList($text);
         $text = $this->style($text);
+
+        // najpierw zamieniamy stary styl, potem dopiero usuwmy stare {{Image}}, dlatego, ze potem urle
+        // moga zawierac // na poczatku co jest traktowane jako kursywa
+        // zastapienie {{Image}} oraz {{File}}. teraz juz tego nie uzywamy
+        $text = $this->inlineImages($text);
+
         $text = $this->headline($text);
         $text = $this->quote($text);
         $text = $this->table($text);
