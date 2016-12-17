@@ -183,6 +183,11 @@ class TransformerTest extends \Codeception\TestCase\Test
             "łółłóąłśąźćź \n```html\n<a...\n```\n after",
             $this->transformer->transform("łółłóąłśąźćź <code=html><a...</code> after")
         );
+
+        $this->assertEquals(
+            "Wyniki były nieprawdopodobne:\n```\n3  170\n4  639\n...\n16  0\n17  0\n18  0\n```",
+            $this->transformer->transform("Wyniki były nieprawdopodobne:<code>\n3  170\n4  639\n...\n16  0\n17  0\n18  0</code>")
+        );
     }
 
     public function testFixDoubleApostrophe()

@@ -590,6 +590,22 @@ class Transformer extends Parser
                 }
             }
 
+            if (($start = preg_match('|<code>|iu', $line, $match, PREG_OFFSET_CAPTURE)) === 1) {
+                $start = $match[0][1];
+                $found = $match[0][0];
+
+                // php nie radzi sobie dobrze z utf...
+                $start = mb_strlen(substr($line, 0, $start));
+
+                $before = mb_substr($line, 0, $start);
+                $after = mb_substr($line, $start + mb_strlen($found));
+                $line = ($before ? ($before . "\n") : '') . '```';
+
+                if ('' !== $after) {
+                    $line .= "\n" . $after;
+                }
+            }
+
             $line = preg_replace('~^<code>~', "```\n", $line);
             $line = preg_replace('~<\/code>$~', "\n```", $line);
             $line = preg_replace('~<\/code>~', "\n```\n", $line);
