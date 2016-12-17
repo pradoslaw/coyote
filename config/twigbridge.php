@@ -179,6 +179,7 @@ return [
             'url',
             'asset',
             'keywords',
+            'public_path',
             'grid' => ['is_safe' => ['html']],
             'grid_column' => ['is_safe' => ['html']],
             'grid_row' => ['is_safe' => ['html']],

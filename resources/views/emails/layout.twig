@@ -70,9 +70,9 @@
                 <td>
                     <table cellpadding="0" cellspacing="0" style="background-color: #fff; border: 1px solid #ddd; border-radius: 4px; padding: 0;">
                         <tr>
-                            <td style="text-align: left; background: url({{ message.embed('img/background.png') }}) repeat; border-bottom: 1px solid #d5d5d5;">
+                            <td style="text-align: left; background: url({{ message.embed(public_path('img/background.png')) }}) repeat; border-bottom: 1px solid #d5d5d5;">
                                 <a href="{{ route('home') }}">
-                                    <img alt="4programmers.net" width="240" height="32" src="{{ message.embed('img/logo-email.png') }}" border="0" align="top" style="display: inline; margin-top: 15px; margin-bottom: 15px; margin-left: 26px; ">
+                                    <img alt="4programmers.net" width="240" height="32" src="{{ message.embed(public_path('img/logo-email.png')) }}" border="0" align="top" style="display: inline; margin-top: 15px; margin-bottom: 15px; margin-left: 26px; ">
                                 </a>
                             </td>
                         </tr>
