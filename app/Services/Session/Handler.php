@@ -85,7 +85,7 @@ class Handler extends DatabaseSessionHandler
      */
     private function filterUrl($data)
     {
-        if (preg_match('~/User/Ping$~', $data['url'])) {
+        if (preg_match('~/ping$~', $data['url'])) {
             unset($data['url']);
         }
 
