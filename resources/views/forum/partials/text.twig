@@ -1,10 +1,5 @@
 {{ post.text|raw }}
 
-{% if post.sig %}
-    <hr>
-    <footer>{{ post.sig|raw }}</footer>
-{% endif %}
-
 {% if post.attachments|length > 0 %}
     <ul class="list-unstyled list-attachments">
         {% for attachment in post.attachments %}
@@ -16,4 +11,9 @@
             </li>
         {% endfor %}
     </ul>
+{% endif %}
+
+{% if post.sig %}
+    <hr>
+    <footer>{{ post.sig|raw }}</footer>
 {% endif %}
