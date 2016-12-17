@@ -9,6 +9,7 @@
 @import "../components/stream";
 @import "../components/affix";
 @import "../components/search";
+@import "../components/who-is-online";
 
 #index {
   position: relative;
@@ -77,15 +78,6 @@
         display: inline-block;
       }
     }
-  }
-}
-
-#box-who-is-online {
-  margin-top: 20px;
-  color: $gray-light;
-
-  @media screen and (max-width: $screen-sm) {
-    font-size: 90%;
   }
 }
 

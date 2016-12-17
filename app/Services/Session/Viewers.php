@@ -45,7 +45,7 @@ class Viewers
     public function render($path = null)
     {
         $groups = [self::USER => [], self::ROBOT => []];
-        $collection = $this->session->viewers($path);
+        $collection = $this->session->byPath($path);
 
         // zlicza liczbe userow
         $total = $collection->count();
@@ -98,6 +98,8 @@ class Viewers
                 $groups[$groupName] = $this->makeProfileLink($this->request->user()->id, $this->request->user()->name);
             }
         }
+
+        ksort($groups);
 
         return view('components.viewers', compact('groups', 'total', 'guests', 'people', 'robots'));
     }

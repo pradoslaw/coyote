@@ -31,7 +31,7 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
      * @param null $path
      * @return mixed
      */
-    public function viewers($path = null)
+    public function byPath($path = null)
     {
         return $this
             ->model
@@ -39,7 +39,7 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
             ->leftJoin('users', 'users.id', '=', $this->raw('user_id'))
             ->leftJoin('groups', 'groups.id', '=', $this->raw('group_id'))
             ->when($path, function (Builder $builder) use ($path) {
-                return $builder->where('url', 'LIKE', '%' . $path . '%');
+                return $builder->where('url', 'ILIKE', '%' . $path . '%');
             })
             ->get();
     }

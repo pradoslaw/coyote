@@ -19,7 +19,7 @@ interface SessionRepositoryInterface extends RepositoryInterface
      * @param null $path
      * @return mixed
      */
-    public function viewers($path = null);
+    public function byPath($path = null);
 
     /**
      * Sprawdza czy dany user jest online. Wykorzystywane np. na stronie profilu uzytkownika Zwracana
