@@ -48,7 +48,8 @@
 
                         {% if microblog.comments_count > microblog.comments|length %}
                             <div class="show-all">
-                                <a href="{{ route('microblog.comment.show', [microblog.id]) }}">Zobacz pozostałe {{ declination(microblog.comments_count - microblog.comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}</a>
+                                {% set total_comments = microblog.comments_count - microblog.comments|length %}
+                                <a href="{{ route('microblog.comment.show', [microblog.id]) }}">Zobacz {{ declination(total_comments, ['pozostały', 'pozostałe', 'pozostałe'], true) }} {{ declination(total_comments, ['komentarz', 'komentarze', 'komentarzy']) }}</a>
                             </div>
                         {% endif %}
 
