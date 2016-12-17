@@ -85,7 +85,7 @@ abstract class BaseController extends Controller
      */
     protected function pushForumCriteria()
     {
-        $this->forum->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
+        $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
         $this->forum->pushCriteria(new AccordingToUserOrder($this->userId));
     }
 

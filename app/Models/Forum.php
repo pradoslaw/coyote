@@ -4,6 +4,7 @@ namespace Coyote;
 
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -202,6 +203,22 @@ class Forum extends Model
         }
 
         return $sql->value('marked_at');
+    }
+
+    /**
+     * Scope a query to only given user id.
+     *
+     * @param Builder $builder
+     * @param array $columns
+     * @return Builder
+     */
+    public function scopeLateSelect(Builder $builder, $columns)
+    {
+        $builder->withGlobalScope('lateSelect', function (Builder $builder) use ($columns) {
+            return $builder->addSelect($columns);
+        });
+
+        return $builder;
     }
 
     /**
