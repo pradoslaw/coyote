@@ -57,23 +57,17 @@
 
     a {
       @include text-overflow;
-      font-size: 14px;
+      font-size: $font-size-base;
       color: $link-color-darker;
     }
   }
 
   p {
-    font-size: 11px;
-    margin: 0;
-  }
-
-  p.bottom {
-    color: $gray-light;
     font-size: $font-size-small - 1px;
-    display: inline;
+    margin: 3px 0;
 
     a {
-      color: $gray-light;
+      color: inherit;
     }
   }
 

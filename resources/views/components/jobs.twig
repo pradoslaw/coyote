@@ -7,16 +7,21 @@
         </div>
         <div class="media-body">
             <h5 class="media-heading"><a href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title|raw }}">{{ job.title|raw }}</a></h5>
-            <p><a class="employer" title="Znajdź oferty pracy w firmie: {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a></p>
 
-            <p class="bottom">
-                {% include 'job.partials.location' with {
-                    locations: job.locations.lists('city'),
-                    separator: false
-                } %}
+            <p>
+                <a class="employer" title="Znajdź oferty pracy w firmie: {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a>
 
+                <small class="text-muted">
+                    {% include 'job.partials.location' with {
+                        locations: job.locations.lists('city'),
+                        separator: job.firm is not null
+                    } %}
+                </small>
+            </p>
+
+            <p>
                 {% if job.salary_from or job.salary_to %}
-                    <strong class="text-primary">• {% include 'job.partials.salary' %}</strong>
+                    <strong class="text-primary">{% include 'job.partials.salary' %}</strong>
                 {% endif %}
             </p>
         </div>

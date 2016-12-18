@@ -48,13 +48,19 @@ class AdController extends Controller
      */
     private function load(Location $location)
     {
-        if ($location->longitude === null || $location->latitude === null) {
-            return '';
-        }
+        $data = [];
 
         $builder = new QueryBuilder();
         $builder->setSize(0, 4);
-        $builder->addSort(new Geodistance($location->latitude, $location->longitude));
+
+        if ($location->longitude !== null || $location->latitude !== null) {
+            $builder->addSort(new Geodistance($location->latitude, $location->longitude));
+
+            $data = [
+                'location'      => $location,
+                'offers_count'  => $this->job->countOffersInCity($location->city)
+            ];
+        }
 
         $result = $this->job->search($builder->build());
         if (!$result->total()) {
@@ -62,11 +68,7 @@ class AdController extends Controller
         }
 
         // search jobs that might be close to your location
-        return (string) view('job.ad', [
-            'jobs'          => $result->getSource(),
-            'location'      => $location,
-            'offers_count'  => $this->job->countOffersInCity($location->city)
-        ]);
+        return (string) view('job.ad', $data, ['jobs' => $result->getSource()]);
     }
 
     /**
