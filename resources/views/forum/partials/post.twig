@@ -102,7 +102,7 @@
 
                         {% if (auth_check() and user('id') == posts[0].user_id or can('update', forum)) and index > 0 %}
                             <a class="vote-accept {{ post.accept_on ? 'on' }}" href="{{ route('forum.post.accept', [post.id]) }}" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
-                                <i class="fa fa-check-circle-o fa-fw"></i>
+                                <i class="fa fa-check fa-fw"></i>
                             </a>
                         {% elseif post.accept_on %}
                             <a class="vote-accept on">
@@ -163,7 +163,7 @@
                 {% if not post.deleted_at %}
                     {% if auth_check() %}
                         <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" href="{{ route('forum.post.subscribe', [post.id]) }}" data-post-id="{{ post.id }}" class="btn btn-xs btn-sub {{ post.subscribe_on ? 'active' }}">
-                            <i class="fa fa-search-plus"></i>
+                            <i class="fa fa-bell-o"></i>
                             <span class="hidden-xs">Obserwuj</span>
                         </a>
                     {% endif %}
