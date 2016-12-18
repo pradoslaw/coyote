@@ -12,7 +12,7 @@ use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
-use Coyote\Repositories\Criteria\Topic\WithTag;
+use Coyote\Repositories\Criteria\Topic\WithTags;
 use Illuminate\Http\Request;
 use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
@@ -53,7 +53,7 @@ class HomeController extends BaseController
         // currently selected tab
         list(, $suffix) = explode('.', $this->getRouter()->currentRouteName());
 
-        if (in_array($suffix, ['categories', 'all', 'unanswered', 'subscribes', 'mine'])) {
+        if (in_array($suffix, ['categories', 'all', 'unanswered', 'subscribes', 'mine', 'interesting'])) {
             $this->setSetting('forum.tab', $suffix);
         }
     }
@@ -200,7 +200,17 @@ class HomeController extends BaseController
             ])
             ->activate();
 
-        $this->topic->pushCriteria(new WithTag($name));
+        $this->topic->pushCriteria(new WithTags($name));
+        return $this->loadAndRender();
+    }
+
+    /**
+     * @return \Illuminate\View\View
+     */
+    public function interesting()
+    {
+        $this->topic->pushCriteria(new WithTags(json_decode($this->getSetting('forum.tags', '[]'))));
+
         return $this->loadAndRender();
     }
 

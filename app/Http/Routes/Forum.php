@@ -18,6 +18,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine', 'middleware' => 'auth']);
     $this->get('Subscribes', ['uses' => 'HomeController@subscribes', 'as' => 'subscribes', 'middleware' => 'auth']);
     $this->get('User/{id}', ['uses' => 'HomeController@user', 'as' => 'user']);
+    $this->get('Interesting', ['uses' => 'HomeController@interesting', 'as' => 'interesting']);
     $this->post('Mark', ['uses' => 'HomeController@mark', 'as' => 'mark']);
 
     // dodawanie zalacznika do posta
