@@ -16,7 +16,7 @@ use Coyote\Services\Declination\Declination;
 class AlertRepository extends Repository implements AlertRepositoryInterface
 {
     /**
-     * @return \Coyote\Alert
+     * @return string
      */
     public function model()
     {
@@ -31,7 +31,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
     public function paginate($userId, $perPage = 20)
     {
         $alerts = $this->prepare($userId)->paginate($perPage);
-        $alerts = $this->parse($alerts);
+        $alerts = $this->formatHeadline($alerts);
 
         return $alerts;
     }
@@ -45,7 +45,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
     public function takeForUser($userId, $limit = 10, $offset = 0)
     {
         $alerts = $this->prepare($userId)->take($limit)->skip($offset)->get();
-        $alerts = $this->parse($alerts);
+        $alerts = $this->formatHeadline($alerts);
 
         return $alerts;
     }
@@ -80,10 +80,10 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
     /**
      * Format notification's headline
      *
-     * @param $alerts
+     * @param \Illuminate\Support\Collection $alerts
      * @return mixed
      */
-    private function parse($alerts)
+    private function formatHeadline($alerts)
     {
         $alerts->each(function ($alert) {
             $alert->user = $alert->senders->first();
@@ -153,21 +153,21 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
         }
 
         return $this
-                ->app
-                ->make(Setting::class)
-                ->select([
-                    'alert_settings.*',
-                    'alert_types.name',
-                    'users.email AS user_email',
-                    'is_active',
-                    'is_blocked',
-                    'is_confirm'
-                ])
-                ->whereIn('user_id', $userId)
-                ->join('users', 'users.id', '=', 'user_id')
-                ->join('alert_types', 'alert_types.id', '=', 'type_id')
-                ->orderBy('alert_types.id')
-                ->get();
+            ->app
+            ->make(Setting::class)
+            ->select([
+                'alert_settings.*',
+                'alert_types.name',
+                'users.email AS user_email',
+                'is_active',
+                'is_blocked',
+                'is_confirm'
+            ])
+            ->whereIn('user_id', $userId)
+            ->join('users', 'users.id', '=', 'user_id')
+            ->join('alert_types', 'alert_types.id', '=', 'type_id')
+            ->orderBy('alert_types.id')
+            ->get();
     }
 
     /**
