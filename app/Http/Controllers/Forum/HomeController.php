@@ -14,6 +14,7 @@ use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTag;
 use Illuminate\Http\Request;
+use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
 use Lavary\Menu\Builder;
 
@@ -41,7 +42,7 @@ class HomeController extends BaseController
                 $menu->add($title, $row)->data($data);
             }
         })
-        ->filter(function ($item) {
+        ->filter(function (Item $item) {
             if ($item->data('role') === true) {
                 return $this->userId !== null;
             }
