@@ -49,6 +49,6 @@ return [
         'Wszystkie' => ['route' => 'forum.all'],
         'Bez odpowiedzi' => ['route' => 'forum.unanswered'],
         'Obserwowane' => ['route' => 'forum.subscribes', 'data' => ['role' => true]],
-        'Moje' => ['route' => 'forum.mine', 'data' => ['role' => true]]
+        'Moje' => ['route' => 'forum.mine', 'data' => ['role' => true], 'title' => 'Wątki w których brałem udział']
     ]
 ];

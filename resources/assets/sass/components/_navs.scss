@@ -114,6 +114,7 @@
 
   > li > a {
     color: $gray-light;
+    font-size: $font-size-base - 1px;
   }
 
   > li.active > a {
