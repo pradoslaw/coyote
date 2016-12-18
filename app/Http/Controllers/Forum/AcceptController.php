@@ -62,13 +62,14 @@ class AcceptController extends BaseController
                 if ($forum->enable_reputation) {
                     $reputation->setPositive(false)->setPostId($accepted->post_id);
 
+                    // user has chosen different post
                     if ($accepted->post_id !== $post->id) {
                         $reputation->setExcerpt(excerpt($accepted->post->html));
 
-                        if ($accepted->post->user_id !== $accepted->user_id) {
+                        if ($accepted->post->user_id !== null && $accepted->post->user_id !== $accepted->user_id) {
                             $reputation->setUserId($accepted->post->user_id)->save();
                         }
-                    } elseif ($accepted->user_id !== $post->user_id) {
+                    } elseif ($post->user_id !== null && $accepted->user_id !== $post->user_id) {
                         // reverse reputation points for post author
                         $reputation->setUserId($post->user_id)->save(); // <-- don't change this. ($post->user_id)
                     }
@@ -83,25 +84,23 @@ class AcceptController extends BaseController
             if (!$accepted || $post->id !== $accepted->post_id) {
                 $reputation->setUrl($url);
 
-                if ($post->user_id) {
-                    // before we add reputation points we need to be sure that user does not accept his own post
-                    if ($post->user_id !== $this->userId) {
-                        if ($forum->enable_reputation) {
-                            // increase reputation points for author
-                            $reputation->setPositive(true)->setPostId($post->id)->setUserId($post->user_id)->save();
-                        }
-
-                        // send notification to the user
-                        app('alert.post.accept')
-                            ->setPostId($post->id)
-                            ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
-                            ->setSubject(str_limit($topic->subject, 84))
-                            ->setExcerpt($excerpt)
-                            ->setSenderId($this->userId)
-                            ->setSenderName(auth()->user()->name)
-                            ->setUrl($url)
-                            ->notify();
+                // before we add reputation points we need to be sure that user does not accept his own post
+                if ($post->user_id !== null && $post->user_id !== $this->userId) {
+                    if ($forum->enable_reputation) {
+                        // increase reputation points for author
+                        $reputation->setPositive(true)->setPostId($post->id)->setUserId($post->user_id)->save();
                     }
+
+                    // send notification to the user
+                    app('alert.post.accept')
+                        ->setPostId($post->id)
+                        ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
+                        ->setSubject(str_limit($topic->subject, 84))
+                        ->setExcerpt($excerpt)
+                        ->setSenderId($this->userId)
+                        ->setSenderName(auth()->user()->name)
+                        ->setUrl($url)
+                        ->notify();
                 }
 
                 $topic->accept()->create([
