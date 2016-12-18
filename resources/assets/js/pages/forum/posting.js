@@ -106,7 +106,7 @@ $(function () {
      * Edit topic subject
      */
     $('#btn-edit-subject a').click(function() {
-        $('#modal-subject').modal('show');
+        $('#modal-subject').modal('show').find('input').inputFocus();
 
         return false;
     });
