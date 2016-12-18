@@ -82,6 +82,11 @@
                         if ($text.indexOf(' ') > -1 || $text.indexOf('.') > -1) {
                             $text = '{' + $text + '}';
                         }
+
+                        if (startIndex === 1) {
+                            $text += ': ';
+                        }
+
                         $textarea.val($textarea.val().substr(0, startIndex) + $text + $textarea.val().substring(caretPosition)).trigger('change').focus();
                         var caret = startIndex + $text.length;
 
@@ -97,6 +102,7 @@
                             range.select();
                         }
                     }
+
                     $ul.html('').hide();
                 };
 
