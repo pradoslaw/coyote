@@ -86,7 +86,7 @@
         $this.keydown(function (e) {
             var keyCode = e.keyCode || window.event.keyCode;
 
-            if (keyCode === 27) {
+            if (keyCode === 27 || keyCode == 9) {
                 dropdown.hide();
             }
             else if (keyCode === 13) {
