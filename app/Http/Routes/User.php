@@ -50,6 +50,7 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Pm/Submit', ['uses' => 'PmController@submit', 'as' => 'pm.submit']);
     $this->post('Pm/Submit', 'PmController@save');
     $this->post('Pm/Delete/{id}', ['uses' => 'PmController@delete', 'as' => 'pm.delete']);
+    $this->post('Pm/Trash/{root}', ['uses' => 'PmController@trash', 'as' => 'pm.trash']);
     $this->post('Pm/Preview', ['uses' => 'PmController@preview', 'as' => 'pm.preview']);
     $this->get('Pm/Ajax', ['uses' => 'PmController@ajax', 'as' => 'pm.ajax']);
     $this->post('Pm/Paste', ['uses' => 'PmController@paste', 'as' => 'pm.paste']);

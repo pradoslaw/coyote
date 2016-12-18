@@ -147,6 +147,15 @@ class PmRepository extends Repository implements PmRepositoryInterface
     }
 
     /**
+     * @param int $userId
+     * @param string $rootId
+     */
+    public function trash($userId, $rootId)
+    {
+        $this->model->where('user_id', $userId)->where('root_id', $rootId)->delete();
+    }
+
+    /**
      * Prepare statement with subquery
      *
      * @param int $userId
@@ -160,6 +169,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 'm.author_id',
                 'm.folder',
                 'm.read_at',
+                'm.root_id',
                 'pm_text.text',
                 'pm_text.created_at',
                 'name',

@@ -7,6 +7,7 @@
             {% for item in talk %}
                 {% include 'user.pm.message' with {
                     content: '<div class="pm-text">' ~ item.text ~ '</div>',
+                    delete_link: route('user.pm.delete', item.id),
                     link_to_profile: true,
                     show_marked_date: true
                 } %}

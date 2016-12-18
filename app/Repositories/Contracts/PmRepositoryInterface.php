@@ -2,6 +2,8 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+
 interface PmRepositoryInterface extends RepositoryInterface
 {
     /**
@@ -39,6 +41,12 @@ interface PmRepositoryInterface extends RepositoryInterface
      * @throws \Exception
      */
     public function submit(\Coyote\User $user, array $payload);
+
+    /**
+     * @param int $userId
+     * @param string $rootId
+     */
+    public function trash($userId, $rootId);
 
     /**
      * Mark notifications as read

@@ -209,6 +209,20 @@ class PmController extends BaseController
     }
 
     /**
+     * @param string $rootId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function trash($rootId)
+    {
+        $pm = $this->pm->findWhere(['user_id' => $this->userId, 'root_id' => $rootId]);
+        abort_if($pm->count() == 0, 404);
+
+        $this->pm->trash($this->userId, $rootId);
+
+        return redirect()->route('user.pm')->with('success', 'Wątek został bezpowrotnie usunięty.');
+    }
+
+    /**
      * @return \Illuminate\Http\JsonResponse
      */
     public function paste()
