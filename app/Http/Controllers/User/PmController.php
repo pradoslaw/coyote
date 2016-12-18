@@ -196,8 +196,16 @@ class PmController extends BaseController
         $pm = $this->pm->findOrFail($id, ['id', 'user_id', 'root_id']);
         $this->authorize('show', $pm);
 
-        $pm->delete();
-        return back()->with('success', 'Wiadomość poprawnie usunięta');
+        return $this->transaction(function () use ($pm) {
+            $pm->delete();
+
+            $redirect = redirect();
+            $to = $this->pm->findWhere(['root_id' => $pm->root_id, 'user_id' => $this->userId], ['id']);
+
+            $redirect = $to->count() ? $redirect->route('user.pm.show', [$to->first()->id]) : $redirect->route('user.pm');
+
+            return $redirect->with('success', 'Wiadomość poprawnie usunięta');
+        });
     }
 
     /**
