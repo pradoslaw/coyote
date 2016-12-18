@@ -69,6 +69,13 @@
                                     <i class="fa fa-eye fa-fw"></i>
                                     {{ user.visits|number_format(0, ',', ' ') }} wizyt
                                 </li>
+
+                                {% if user.birthyear %}
+                                    <li title="Wiek">
+                                        <i class="fa fa-calendar fa-fw"></i>
+                                        {{ "now"|date("Y") - user.birthyear }} lat
+                                    </li>
+                                {% endif %}
                             </ol>
 
                             {% if skills %}
