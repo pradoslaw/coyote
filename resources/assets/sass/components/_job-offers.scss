@@ -76,13 +76,7 @@
     height: 50px;
 
     @media screen and (max-width: $screen-lg) {
-      width: 35px;
-      height: 35px;
-    }
-
-    @media screen and (max-width: $screen-sm) {
-      width: 25px;
-      height: 25px;
+      display: none;
     }
   }
 
