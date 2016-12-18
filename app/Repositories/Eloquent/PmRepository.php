@@ -139,11 +139,11 @@ class PmRepository extends Repository implements PmRepositoryInterface
     /**
      * Mark notifications as read
      *
-     * @param int $id
+     * @param int $textId
      */
-    public function markAsRead($id)
+    public function markAsRead($textId)
     {
-        $this->model->where('id', $id)->update(['read_at' => Carbon::now()]);
+        $this->model->where('text_id', $textId)->update(['read_at' => Carbon::now()]);
     }
 
     /**

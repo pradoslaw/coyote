@@ -8,7 +8,8 @@
     {% for item in pm %}
         {% include 'user.pm.message' with {
             content: '<p class="excerpt"><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255)|default('(kliknij, aby przeczytać)')|e ~ '</a></p>',
-            link_to_profile: false
+            link_to_profile: false,
+            show_marked_date: false
         } %}
     {% else %}
         <p class="alert alert-warning">Brak wiadomości prywatnych.</p>
