@@ -14,6 +14,9 @@ return [
         '_forum' => [
             'auto_activate'    => false,
             'restful'          => true
+        ],
+        'job_tabs' => [
+            'auto_activate'    => false
         ]
     ],
     'master' => [

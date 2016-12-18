@@ -210,7 +210,7 @@ class HomeController extends Controller
      */
     protected function getTabs()
     {
-        return app(Menu::class)->make('job.home', function (Builder $builder) {
+        return app(Menu::class)->make('job_tabs', function (Builder $builder) {
             $icon = app('html')->tag('i', '', ['id' => 'btn-editor', 'class' => 'fa fa-cog', 'title' => 'Ustaw swoje preferencje']);
 
             $builder->add('Wszystkie', ['route' => ['job.home', 'tab' => 'all'], 'nickname' => 'all']);
