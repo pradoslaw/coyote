@@ -6,17 +6,17 @@ return [
             'auto_activate'    => true,
             'activate_parents' => true,
             'active_class'     => 'active',
-            'restful'          => true,
+            'restful'          => false,
             'cascade_data'     => true,
             'rest_base'        => '',      // string|array
             'active_element'   => 'item',  // item|link
         ],
+        'master' => [
+            'restful'           => true
+        ],
         '_forum' => [
             'auto_activate'    => false,
             'restful'          => true
-        ],
-        'job_tabs' => [
-            'auto_activate'    => false
         ]
     ],
     'master' => [

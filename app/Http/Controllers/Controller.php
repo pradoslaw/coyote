@@ -91,7 +91,7 @@ abstract class Controller extends BaseController
      */
     protected function buildMenu()
     {
-        $menu = app(Menu::class)->make('main', function (Builder $menu) {
+        $menu = app(Menu::class)->make('master', function (Builder $menu) {
             foreach (config('laravel-menu.master') as $title => $data) {
                 $children = array_pull($data, 'children');
                 $item = $menu->add($title, $data);
