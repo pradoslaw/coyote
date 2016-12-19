@@ -19,8 +19,12 @@
 
         <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
         <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
+
+        {{ render_region('head') }}
     </head>
     <body class="fixed-top">
+        {{ render_region('body') }}
+
         {% block body %}
         {% import 'components.forms' as forms %}
 
