@@ -33,7 +33,11 @@ class AttachmentController extends BaseAttachmentController
     {
         /** @var \Coyote\Post\Attachment $attachment */
         $attachment = $this->attachment->findOrFail($id);
-        $attachment->post->forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
+
+        // post_id can be null if saving post was not completed.
+        if ($attachment->post_id) {
+            $attachment->post->forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
+        }
 
         set_time_limit(0);
 
