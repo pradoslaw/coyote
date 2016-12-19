@@ -137,7 +137,7 @@
                 <ul class="side-menu" style="margin-top: 5px">
                     {% if auth_check() %}
                         <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
-                            <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" title="Oznacz kategorie jako przeczytane" data-category="forum-sidebar-buttons">
+                            <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" data-category="forum-sidebar-buttons">
                                 <span>
                                     {% if subscribers[user('id')] is not defined %}
                                         Obserwuj wątek
