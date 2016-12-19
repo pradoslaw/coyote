@@ -4,6 +4,7 @@ namespace Coyote\Services\Session;
 
 use Illuminate\Database\Query\Expression;
 use Illuminate\Session\DatabaseSessionHandler;
+use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 
 class Handler extends DatabaseSessionHandler
@@ -85,7 +86,7 @@ class Handler extends DatabaseSessionHandler
      */
     private function filterUrl($data)
     {
-        if (preg_match('~/ping$~', $data['url'])) {
+        if (Str::endsWith($data['url'], 'ping')) {
             unset($data['url']);
         }
 
