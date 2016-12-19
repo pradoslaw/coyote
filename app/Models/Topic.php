@@ -135,7 +135,7 @@ class Topic extends Model
      */
     public function setSubjectAttribute($subject)
     {
-        $this->attributes['subject'] = $subject;
+        $this->attributes['subject'] = trim($subject);
         $this->attributes['slug'] = str_slug($subject, '_');
     }
 
