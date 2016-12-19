@@ -10,7 +10,6 @@ use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 use Coyote\Services\Declination\Declination;
 
 /**
- * Class AlertRepository
  * @package Coyote\Repositories\Eloquent
  */
 class AlertRepository extends Repository implements AlertRepositoryInterface
@@ -116,14 +115,16 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
                 ->select(['alerts.*', 'alert_types.headline'])
                 ->where('user_id', $userId)
                 ->with(['senders' => function ($sql) {
-                    $sql->select([
-                        'alert_id',
-                        'user_id',
-                        $this->raw('COALESCE(users.name, alert_senders.name) AS name'),
-                        'photo',
-                        'is_blocked',
-                        'is_active'
-                    ]);
+                    $sql
+                        ->select([
+                            'alert_id',
+                            'user_id',
+                            $this->raw('COALESCE(users.name, alert_senders.name) AS name'),
+                            'photo',
+                            'is_blocked',
+                            'is_active'
+                        ])
+                        ->orderBy('alert_senders.id');
                 }])
                 ->join('alert_types', 'alert_types.id', '=', 'type_id')
                 ->orderBy('alerts.id', 'DESC');
