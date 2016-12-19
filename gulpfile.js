@@ -16,8 +16,8 @@ elixir(function (mix) {
     var base = [
         '../bower/jquery/dist/jquery.min.js',
         '../bower/bootstrap/js/tooltip.js',
-        '../bower/bootstrap/js/dropdown.js',// menu jest na kazdej stronie (dla uzytkownikow zalogowanych)
         '../bower/bootstrap/js/collapse.js', // to musi sie znajdowac na kazdej podstronie (zwijanie menu dla urzadzen mobilnych)
+        'components/dropdown.js',
         'components/breadcrumb.js',
         'components/realtime.js',
         'components/state.js',

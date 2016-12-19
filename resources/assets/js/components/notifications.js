@@ -175,7 +175,7 @@ $(function () {
             });
         }
 
-        // return false;
+        return false;
     })
     .delegate('.dropdown-modal li a', 'mousedown', function (e) {
         if ($(this).parent().hasClass('unread')) {
@@ -229,7 +229,7 @@ $(function () {
             });
         }
 
-        // return false;
+        return false;
     });
 
     ws.on('alert', function(data) {

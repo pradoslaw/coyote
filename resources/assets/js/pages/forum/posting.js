@@ -444,7 +444,7 @@ $(function () {
 
         return false;
     })
-    .on('click', '.btn-reset', function() {console.log(1);
+    .on('click', '.btn-reset', function() {
         var $post = $(this).parent().parent();
 
         $post.html(posts[$post.data('post-id')]);
