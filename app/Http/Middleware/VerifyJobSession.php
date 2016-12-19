@@ -16,7 +16,7 @@ class VerifyJobSession
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->session()->has('job')) {
+        if (!$request->session()->has('job.title')) {
             return redirect()
                 ->route('job.submit')
                 ->with('error', 'Przepraszamy, ale Twoja sesja wygasła po conajmniej 15 minutach nieaktywności.');
