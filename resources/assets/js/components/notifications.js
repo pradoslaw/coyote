@@ -98,7 +98,7 @@ $(function () {
             $('#dropdown-alerts li').remove();
 
             if (this.self.hasClass('open')) {
-                $('#dropdown-alerts').dropdown('toggle');
+                this.self.dropdown('toggle');
             }
         }
     };
@@ -110,13 +110,13 @@ $(function () {
         }
     });
 
-    Alerts.self.click(function (e) {
+    $('> a', Alerts.self).click(function () {
         DesktopNotifications.requestPermission();
 
         var wrapper = $('#dropdown-alerts');
         var modal = wrapper.find('.dropdown-modal');
         var alerts = modal.find('ul');
-        var url = $(this).children().data('url');
+        var url = $(this).data('url');
 
         if ($('li', alerts).length <= 1) {
             $('<li><i class="fa fa-spin fa-spinner"></i></li>').appendTo(alerts);
@@ -176,55 +176,57 @@ $(function () {
         }
 
         return false;
-    })
-    .delegate('.dropdown-modal li a', 'mousedown', function (e) {
-        if ($(this).parent().hasClass('unread')) {
-            // klikniecie lewym lub srodkowym przyciskiem myszy
-            if (e.which !== 3) {
-                $(this).parent().removeClass('unread');
-                $.post($(this).data('mark-url'));
+    });
 
-                if (e.which === 1) {
-                    var pos = $(this).attr('href').indexOf('#');
+    $('#dropdown-alerts')
+        .on('mousedown', 'li a', function (e) {
+            if ($(this).parent().hasClass('unread')) {
+                // klikniecie lewym lub srodkowym przyciskiem myszy
+                if (e.which !== 3) {
+                    $(this).parent().removeClass('unread');
+                    $.post($(this).data('mark-url'));
 
-                    if (pos !== -1) {
-                        var hash = $(this).attr('href').substr(pos);
-                        if (!$(hash).length) {
-                            var url = $(this).attr('href').substr(0, pos);
+                    if (e.which === 1) {
+                        var pos = $(this).attr('href').indexOf('#');
 
-                            if (url === window.location.href.split('#')[0]) {
-                                $(this).attr('href', url + (url.indexOf('?') === -1 ? '?' : '&') + '_=' + ((new Date()).getTime()) + hash);
+                        if (pos !== -1) {
+                            var hash = $(this).attr('href').substr(pos);
+                            if (!$(hash).length) {
+                                var url = $(this).attr('href').substr(0, pos);
+
+                                if (url === window.location.href.split('#')[0]) {
+                                    $(this).attr('href', url + (url.indexOf('?') === -1 ? '?' : '&') + '_=' + ((new Date()).getTime()) + hash);
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        return false;
-    })
-    .delegate('#btn-mark-read', 'click', function() {
-        $('li', Alerts.self).removeClass('unread');
+            return false;
+        })
+        .on('click', '#btn-mark-read', function() {
+            $('li', Alerts.self).removeClass('unread');
 
-        if ($('.badge', Alerts.self).length) {
-            Alerts.store(0);
-        }
+            if ($('.badge', Alerts.self).length) {
+                Alerts.store(0);
+            }
 
-        $.post($(this).attr('href'));
-        return false;
-    })
-    .delegate('.btn-delete-alert', 'click', function() {
-        $.post($(this).attr('href'));
-        $(this).parent().fadeOut();
+            $.post($(this).attr('href'));
+            return false;
+        })
+        .on('click', '.btn-delete-alert', function() {
+            $.post($(this).attr('href'));
+            $(this).parent().fadeOut();
 
-        return false;
-    });
+            return false;
+        });
 
-    $('#messages').click(function() {
+    $('#messages > a').click(function() {
         var messages = $('#dropdown-messages').find('ul');
 
         if ($('li', messages).length <= 1) {
-            $.get($(this).children('a').data('url'), function (html) {
+            $.get($(this).data('url'), function (html) {
                 messages.html(html);
             });
         }
