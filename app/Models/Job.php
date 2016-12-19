@@ -225,7 +225,8 @@ class Job extends Model
             }
         }
 
-        $score += (count($this->tags()->get()) * 10);
+        // 30 points maximum...
+        $score += min(30, (count($this->tags()->get()) * 10));
 
         if ($this->firm_id) {
             $firm = $this->firm;
@@ -236,6 +237,7 @@ class Job extends Model
                 }
             }
 
+            $score += min(25, $firm->benefits()->count() * 5);
             $score -= ($firm->is_agency * 10);
         }
 
@@ -318,7 +320,7 @@ class Job extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
