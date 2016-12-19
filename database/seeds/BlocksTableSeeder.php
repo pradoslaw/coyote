@@ -15,6 +15,8 @@ class BlocksTableSeeder extends Seeder
 <div id="job-ad"></div> 
 <script>
     var xhr= new XMLHttpRequest();
+    
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.open('GET', '/Praca/Ad', true);
     
     xhr.onreadystatechange= function() {
