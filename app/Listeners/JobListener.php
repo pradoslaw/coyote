@@ -58,7 +58,7 @@ class JobListener
         );
 
         $events->listen(
-            'Coyote\Events\JobWasDeleted',
+            'Coyote\Events\JobDeleting',
             'Coyote\Listeners\JobListener@onJobDeleting'
         );
     }
