@@ -3,8 +3,8 @@
 namespace Coyote\Services\Session;
 
 use Illuminate\Database\Query\Expression;
+use Illuminate\Http\Request;
 use Illuminate\Session\DatabaseSessionHandler;
-use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 
 class Handler extends DatabaseSessionHandler
@@ -38,7 +38,7 @@ class Handler extends DatabaseSessionHandler
         ];
 
         if ($this->exists) {
-            $this->getQuery()->where('id', $sessionId)->update($this->filterUrl($data));
+            $this->getQuery()->where('id', $sessionId)->update($this->filterUrl($request, $data));
         } else {
             $agent = new Agent();
             $agent->setUserAgent($browser);
@@ -79,14 +79,15 @@ class Handler extends DatabaseSessionHandler
     }
 
     /**
-     * Filter url from data. We don't need to save /User/Ping URL. We would like to know real user's path.
+     * Filter url from data. We don't need to save ajax url.
      *
+     * @param Request $request
      * @param array $data
      * @return array
      */
-    private function filterUrl($data)
+    private function filterUrl(Request $request, $data)
     {
-        if (Str::endsWith($data['url'], 'ping')) {
+        if ($request->ajax()) {
             unset($data['url']);
         }
 
