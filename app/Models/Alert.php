@@ -4,6 +4,9 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $guid
+ */
 class Alert extends Model
 {
     const PM = 1;
@@ -36,6 +39,15 @@ class Alert extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (Alert $model) {
+            $model->guid = str_random(25);
+        });
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

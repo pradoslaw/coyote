@@ -1,7 +1,7 @@
 {% if alerts|length > 0 %}
     {% for alert in alerts %}
         <li class="{{ (alert.read_at and alert.read_at|timestamp < session.created_at|timestamp) or alert.is_marked ? '' : 'unread' }}">
-            <a href="{{ alert.url ? url(alert.url) : '' }}" title="{{ alert.headline }}" data-mark-url="{{ route('user.alerts.mark', [alert.id]) }}">
+            <a href="{{ alert.url ? url(alert.url) : '' }}" title="{{ alert.headline }}" data-url="{{ route('user.alerts.url', [alert.guid]) }}">
                 <img src="{{ user_photo(alert.user.photo) }}">
 
                 <div>

@@ -18,6 +18,8 @@
                     {% set head_date = alert.created_at|date('d F Y') %}
                 {% endif %}
 
+                {% set url = route('user.alerts.url', [alert.guid]) ~ '#' ~ alert.url %}
+
                 <div class="media {{ (alert.read_at and alert.read_at|timestamp < session.created_at|timestamp) or alert.is_marked ? '' : 'unread' }}">
                     <div class="media-left">
                         <a href="{{ route('profile', [alert.user.user_id]) }}">
@@ -26,11 +28,11 @@
                     </div>
                     <div class="media-body">
                         <header>
-                            <h4 class="pull-left"><a href="{{ url(alert.url) }}">{{ alert.headline }}</a></h4>
+                            <h4 class="pull-left"><a href="{{ url }}">{{ alert.headline }}</a></h4>
                             <small class="pull-right">{{ alert.created_at|format_date }}</small>
                         </header>
-                        <h3><a href="{{ url(alert.url) }}">{{ alert.subject|raw }}</a></h3>
-                        <p class="excerpt"><a href="{{ url(alert.url) }}">{{ alert.excerpt|raw }}</a></p>
+                        <h3><a href="{{ url }}">{{ alert.subject|raw }}</a></h3>
+                        <p class="excerpt"><a href="{{ url }}">{{ alert.excerpt|raw }}</a></p>
                     </div>
                 </div>
             {% else %}

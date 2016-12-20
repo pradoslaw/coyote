@@ -42,7 +42,7 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Alerts/Settings', ['uses' => 'AlertsController@settings', 'as' => 'alerts.settings']);
     $this->post('Alerts/Settings', 'AlertsController@save');
     $this->get('Alerts/Ajax', ['uses' => 'AlertsController@ajax', 'as' => 'alerts.ajax']);
-    $this->post('Alerts/Mark/{id?}', ['uses' => 'AlertsController@markAsRead', 'as' => 'alerts.mark']);
+    $this->post('Alerts/Mark', ['uses' => 'AlertsController@markAsRead', 'as' => 'alerts.mark']);
     $this->post('Alerts/Delete/{id}', ['uses' => 'AlertsController@delete', 'as' => 'alerts.delete']);
 
     $this->get('Pm', ['uses' => 'PmController@index', 'as' => 'pm']);
@@ -102,3 +102,5 @@ $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as
 // @deprecated
 $this->get('User/Ping', ['uses' => 'User\PingController@index']);
 $this->get('ping', ['uses' => 'User\PingController@index']);
+
+$this->get('url/{guid}', ['uses' => 'User\AlertsController@url'])->name('user.alerts.url');

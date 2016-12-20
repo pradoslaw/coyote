@@ -179,29 +179,9 @@ $(function () {
     });
 
     $('#dropdown-alerts')
-        .on('mousedown', 'li a', function (e) {
-            if ($(this).parent().hasClass('unread')) {
-                // klikniecie lewym lub srodkowym przyciskiem myszy
-                if (e.which !== 3) {
-                    $(this).parent().removeClass('unread');
-                    $.post($(this).data('mark-url'));
-
-                    if (e.which === 1) {
-                        var pos = $(this).attr('href').indexOf('#');
-
-                        if (pos !== -1) {
-                            var hash = $(this).attr('href').substr(pos);
-                            if (!$(hash).length) {
-                                var url = $(this).attr('href').substr(0, pos);
-
-                                if (url === window.location.href.split('#')[0]) {
-                                    $(this).attr('href', url + (url.indexOf('?') === -1 ? '?' : '&') + '_=' + ((new Date()).getTime()) + hash);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        .on('mousedown', 'li a', function () {
+            $(this).parent().removeClass('unread');
+            $(this).attr('href', $(this).data('url'));
 
             return false;
         })

@@ -61,23 +61,30 @@ class AlertsController extends BaseController
     /**
      * Mark alerts as read and returns number of marked alerts
      *
-     * @param $alerts
+     * @param \Illuminate\Support\Collection $alerts
      * @return int
      */
     private function mark($alerts)
     {
-        $markId = [];
-        foreach ($alerts as $alert) {
-            if (!$alert->read_at) {
-                $markId[] = $alert->id;
-            }
+        $ids = $alerts
+            ->reject(function ($alert) {
+                return $alert->read_at != null;
+            })
+            ->pluck('id')
+            ->all();
+
+//        $markId = [];
+//        foreach ($alerts as $alert) {
+//            if (!$alert->read_at) {
+//                $markId[] = $alert->id;
+//            }
+//        }
+
+        if (!empty($ids)) {
+            $this->alert->markAsRead($ids);
         }
 
-        if (!empty($markId)) {
-            $this->alert->markAsRead($markId);
-        }
-
-        return count($markId);
+        return count($ids);
     }
 
     /**
@@ -134,22 +141,27 @@ class AlertsController extends BaseController
     }
 
     /**
-     * Marks one or more alerts as read
-     *
-     * @param null|int $id
+     * Marks all alerts as read
      */
-    public function markAsRead($id = null)
+    public function markAsRead()
     {
-        if ($id) {
-            $this->alert->update(['is_marked' => true], $id);
-        } else {
-            if ($this->auth->alerts_unread) {
-                $this->alert->where('user_id', $this->userId)->whereNull('read_at')->update([
-                    'read_at' => Carbon\Carbon::now()
-                ]);
-            }
-
-            $this->alert->where('user_id', $this->userId)->update(['is_marked' => true]);
+        if ($this->auth->alerts_unread) {
+            $this->alert->where('user_id', $this->userId)->whereNull('read_at')->update([
+                'read_at' => Carbon\Carbon::now()
+            ]);
         }
+
+        $this->alert->where('user_id', $this->userId)->update(['is_marked' => true]);
+    }
+
+    public function url($guid)
+    {
+        $alert = $this->alert->findBy('guid', $guid, ['id', 'url', 'is_marked']);
+        abort_if($alert === null, 404);
+
+        $alert->is_marked = true;
+        $alert->save();
+
+        return redirect()->to($alert->url);
     }
 }
