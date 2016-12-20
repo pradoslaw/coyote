@@ -1,4 +1,4 @@
-{% extends 'emails.layout' %}
+{% extends 'emails.alerts.base' %}
 
 {% block content %}
     <b>{{ sender }}</b> usunął wątek <b>{{ subject }}</b> z powodu: {{ reason_name }}.<br><br>
@@ -6,7 +6,5 @@
 
     <hr>
     {{ reason_text }}
-    <hr><br>
-
-    Link do wpisu: {{ link_to(url) }}
+    <hr>
 {% endblock %}

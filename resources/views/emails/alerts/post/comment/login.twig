@@ -1,12 +1,10 @@
 {# powiadomienie o wystapieniu logina w komentarzu na forum #}
-{% extends 'emails.layout' %}
+{% extends 'emails.alerts.base' %}
 
 {% block content %}
     <b>{{ sender_name }}</b> użył Twojego loginu w treści komentarza postu w wątku <b>{{ subject }}</b>:<br><br>
 
     <hr>
     {{ text|raw }}
-    <hr><br>
-
-    Kliknij, aby zobaczyć: {{ link_to(url) }}
+    <hr>
 {% endblock %}

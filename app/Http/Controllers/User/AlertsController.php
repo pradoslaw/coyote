@@ -59,35 +59,6 @@ class AlertsController extends BaseController
     }
 
     /**
-     * Mark alerts as read and returns number of marked alerts
-     *
-     * @param \Illuminate\Support\Collection $alerts
-     * @return int
-     */
-    private function mark($alerts)
-    {
-        $ids = $alerts
-            ->reject(function ($alert) {
-                return $alert->read_at != null;
-            })
-            ->pluck('id')
-            ->all();
-
-//        $markId = [];
-//        foreach ($alerts as $alert) {
-//            if (!$alert->read_at) {
-//                $markId[] = $alert->id;
-//            }
-//        }
-
-        if (!empty($ids)) {
-            $this->alert->markAsRead($ids);
-        }
-
-        return count($ids);
-    }
-
-    /**
      * @return \Illuminate\View\View
      */
     public function settings()
@@ -154,14 +125,45 @@ class AlertsController extends BaseController
         $this->alert->where('user_id', $this->userId)->update(['is_marked' => true]);
     }
 
-    public function url($guid)
+    /**
+     * @param string $guid
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function url(string $guid)
     {
-        $alert = $this->alert->findBy('guid', $guid, ['id', 'url', 'is_marked']);
+        /** @var \Coyote\Alert $alert */
+        $alert = $this->alert->findBy('guid', $guid, ['id', 'url', 'read_at', 'is_marked']);
         abort_if($alert === null, 404);
 
-        $alert->is_marked = true;
-        $alert->save();
+        if (!$alert->read_at) {
+            $alert->is_marked = true;
+            $alert->read_at = Carbon\Carbon::now();
+
+            $alert->save();
+        }
 
         return redirect()->to($alert->url);
+    }
+
+    /**
+     * Mark alerts as read and returns number of marked alerts
+     *
+     * @param \Illuminate\Support\Collection $alerts
+     * @return int
+     */
+    private function mark($alerts)
+    {
+        $ids = $alerts
+            ->reject(function ($alert) {
+                return $alert->read_at != null;
+            })
+            ->pluck('id')
+            ->all();
+
+        if (!empty($ids)) {
+            $this->alert->markAsRead($ids);
+        }
+
+        return count($ids);
     }
 }

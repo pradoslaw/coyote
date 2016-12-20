@@ -5,7 +5,14 @@ namespace Coyote;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $type_id
+ * @property int $user_id
+ * @property string $subject
+ * @property string $excerpt
+ * @property string $url
  * @property string $guid
+ * @property \Carbon\Carbon $read_at
+ * @property bool $is_marked
  */
 class Alert extends Model
 {
@@ -33,21 +40,12 @@ class Alert extends Model
      *
      * @var array
      */
-    protected $fillable = ['type_id', 'user_id', 'subject', 'excerpt', 'url', 'object_id'];
+    protected $fillable = ['type_id', 'user_id', 'subject', 'excerpt', 'url', 'object_id', 'guid'];
 
     /**
      * @var bool
      */
     public $timestamps = false;
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function (Alert $model) {
-            $model->guid = str_random(25);
-        });
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

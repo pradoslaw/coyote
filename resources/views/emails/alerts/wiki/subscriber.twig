@@ -1,7 +1,5 @@
-{% extends 'emails.layout' %}
+{% extends 'emails.alerts.base' %}
 
 {% block content %}
-    {{ sender }} wprowadził zmiany na stronie {{ subject }}, którą obserwujesz.<br><br>
-
-    Link do strony: {{ link_to(url) }}
+    {{ sender }} wprowadził zmiany na stronie {{ subject }}, którą obserwujesz.
 {% endblock %}

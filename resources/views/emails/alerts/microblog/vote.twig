@@ -1,7 +1,6 @@
 {# powiadomienie o ocenie wpisu na mikro #}
-{% extends 'emails.layout' %}
+{% extends 'emails.alerts.base' %}
 
 {% block content %}
-    Informujemy, że <b>{{ sender_name }}</b> <b>docenił</b> Twój wpis na mikroblogu.<br><br>
-    Link do wpisu: {{ link_to(url) }}<br>
+    Informujemy, że <b>{{ sender_name }}</b> <b>docenił</b> Twój wpis na mikroblogu.
 {% endblock %}

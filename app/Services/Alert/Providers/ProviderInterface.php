@@ -125,6 +125,17 @@ interface ProviderInterface
     public function getSender();
 
     /**
+     * @return string
+     */
+    public function getGuid();
+
+    /**
+     * @param string $guid
+     * @return $this
+     */
+    public function setGuid(string $guid);
+
+    /**
      * Unikalne ID okreslajace dano powiadomienie. To ID posluzy do grupowania powiadomien tego samego typu
      *
      * @return string

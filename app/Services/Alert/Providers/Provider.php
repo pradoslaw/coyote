@@ -67,6 +67,11 @@ abstract class Provider implements ProviderInterface
     protected $headline;
 
     /**
+     * @var string
+     */
+    protected $guid;
+
+    /**
      * @param AlertRepository $repository
      * @param array $args
      * @throws \Exception
@@ -309,6 +314,25 @@ abstract class Provider implements ProviderInterface
     public function getSender()
     {
         return $this->getSenderName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getGuid()
+    {
+        return $this->guid;
+    }
+
+    /**
+     * @param string $guid
+     * @return $this
+     */
+    public function setGuid(string $guid)
+    {
+        $this->guid = $guid;
+
+        return $this;
     }
 
     /**

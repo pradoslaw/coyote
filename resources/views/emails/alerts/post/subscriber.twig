@@ -1,4 +1,4 @@
-{% extends 'emails.layout' %}
+{% extends 'emails.alerts.base' %}
 
 {% block content %}
     <b>{{ sender }}</b> dodał komentarz do posta w wątku <b>{{ subject }}</b>, który obserwujesz:<br><br>
@@ -8,7 +8,5 @@
     <hr><br>
 
     Jeżeli nie chcesz dostawać tego typu powiadomień, kliknij na przycisk <i>Obserwuj</i> pod postem,
-    aby przestać obserwować dany post.<br><br>
-
-    Kliknij, aby zobaczyć: {{ link_to(url) }}
+    aby przestać obserwować dany post.
 {% endblock %}

@@ -1,5 +1,5 @@
 {# powiadomienie o przeniesieniu watku #}
-{% extends 'emails.layout' %}
+{% extends 'emails.alerts.base' %}
 
 {% block content %}
     <b>{{ sender }}</b> przeniósł wątek <b>{{ subject }}</b> do kategorii <b>{{ forum }}</b> z powodu: {{ reason_name }}.<br><br>
@@ -7,7 +7,5 @@
 
     <hr>
     {{ reason_text }}
-    <hr><br>
-
-    Link do wpisu: <a href="{{ url(url) }}">{{ url(url) }}</a>
+    <hr>
 {% endblock %}

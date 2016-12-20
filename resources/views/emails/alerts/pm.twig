@@ -1,13 +1,6 @@
 {# powiadomienie o wiadomosci prywatnej #}
-{% extends 'emails/layout.twig' %}
+{% extends 'emails.alerts.base' %}
 
-{% block container %}
-    Witaj,<br><br>
-
-    Masz nową wiadomość od użytkownika {{ sender }}.<br>
-    Aby ją przeczytać, kliknij w poniższy link:<br><br>
-
-    Link do wpisu: <a href="{{ url(url) }}">{{ url(url) }}</a><br><br>
-
-    <b>Prosimy nie odpowiadać na tego e-maila. Jest on generowany automatycznie.</b>
+{% block content %}
+    Masz nową wiadomość od użytkownika {{ sender }}.
 {% endblock %}

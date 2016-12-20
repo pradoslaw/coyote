@@ -1,12 +1,10 @@
 {# powiadomienie o wystapieniu logina w poscie na forum #}
-{% extends 'emails.layout' %}
+{% extends 'emails.alerts.base' %}
 
 {% block content %}
     {{ sender_name }} użył Twojego loginu w treści posta w wątku <b>{{ subject }}</b>:<br><br>
 
     <hr>
     {{ text|raw }}
-    <hr><br>
-
-    Kliknij, aby zobaczyć: {{ link_to(url) }}<br><br>
+    <hr>
 {% endblock %}

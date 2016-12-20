@@ -1,0 +1,11 @@
+{% extends 'emails.layout' %}
+
+{% block footer %}
+    {% if url %}
+        <br><br>
+        Kliknij, aby zobaczyć: {{ guid ? link_to_route('user.alerts.url', url(url), [guid]) : link_to(url) }}
+    {% endif %}
+
+    <br><br>
+    <b>Prosimy nie odpowiadać na tego e-maila. Jest on generowany automatycznie.</b>
+{% endblock %}

@@ -36,13 +36,17 @@ class Db extends Broadcast
         $result = $this->repository->findByObjectId($user['user_id'], $alert->objectId(), ['id']);
 
         if (!$result) {
+            $guid = str_random(25);
+            $alert->setGuid($guid);
+
             $object = $this->repository->create([
                 'type_id'           => $alert->getTypeId(),
                 'user_id'           => $user['user_id'],
                 'subject'           => $alert->getSubject(),
                 'excerpt'           => $alert->getExcerpt(),
                 'url'               => $alert->getUrl(),
-                'object_id'         => $alert->objectId()
+                'object_id'         => $alert->objectId(),
+                'guid'              => $guid
             ]);
 
             $data = $alert->toArray();
@@ -57,6 +61,7 @@ class Db extends Broadcast
         }
 
         $this->repository->addSender($alertId, $alert->getSenderId(), $alert->getSenderName());
+
         return true;
     }
 }

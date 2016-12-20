@@ -1,7 +1,5 @@
-{% extends 'emails.layout' %}
+{% extends 'emails.alerts.base' %}
 
 {% block content %}
-    <b>{{ sender }}</b> dodał komentarz do strony, którą obserwujesz.<br><br>
-
-    Link do komentarza: {{ link_to(url) }}
+    <b>{{ sender }}</b> dodał komentarz do strony, którą obserwujesz.
 {% endblock %}
