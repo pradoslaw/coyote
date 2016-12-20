@@ -3,12 +3,10 @@
 namespace Coyote\Listeners;
 
 use Coyote\Events\SuccessfulLogin;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Mail\Message;
-use Illuminate\Queue\InteractsWithQueue;
 use Jenssegers\Agent\Agent;
 
 class SendSuccessfulLoginEmail implements ShouldQueue
