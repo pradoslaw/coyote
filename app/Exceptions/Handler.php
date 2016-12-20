@@ -75,6 +75,12 @@ class Handler extends ExceptionHandler
                 return response()->json($e->validator->errors(), $statusCode);
             }
 
+            if ($e instanceof TokenMismatchException) {
+                return response()->json(
+                    ['error' => 'Twoja sesja wygasła. Proszę odświeżyć stronę i spróbować ponownie.']
+                );
+            }
+
             $response = [
                 'error' => 'Przepraszamy, ale coś poszło nie tak. Prosimy o kontakt z administratorem.'
             ];
