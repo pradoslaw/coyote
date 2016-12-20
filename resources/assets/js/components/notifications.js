@@ -257,6 +257,12 @@ $(function () {
         $.get('/ping', function(token) {
             $('meta[name="csrf-token"]').attr('content', token);
             $(':hidden[name="_token"]').val(token);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': token
+                }
+            });
         });
     }, 350000);
 });
