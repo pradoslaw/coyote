@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
+use Coyote\Events\SuccessfulLogin;
 use Coyote\Events\UserWasSaved;
 use Coyote\Listeners\BindRouteDefaultModel;
 use Coyote\Listeners\FlushFirewallCache;
@@ -19,7 +20,6 @@ use Coyote\Listeners\PostListener;
 use Coyote\Listeners\TopicListener;
 use Coyote\Listeners\JobListener;
 use Illuminate\Auth\Events\Lockout;
-use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
@@ -37,7 +37,7 @@ class EventServiceProvider extends ServiceProvider
         Lockout::class => [SendLockoutEmail::class],
         FirewallWasSaved::class => [FlushFirewallCache::class],
         FirewallWasDeleted::class => [FlushFirewallCache::class],
-        Login::class => [SendSuccessfulLoginEmail::class]
+        SuccessfulLogin::class => [SendSuccessfulLoginEmail::class]
     ];
 
     /**

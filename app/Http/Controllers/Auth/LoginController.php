@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Carbon\Carbon;
+use Coyote\Events\SuccessfulLogin;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\LoginForm;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -68,6 +69,8 @@ class LoginController extends Controller
         if (auth()->attempt(['name' => $user->name, 'password' => $form->password->getValue()], true)) {
             // put information into the activity stream...
             stream(Stream_Login::class);
+            // send notification about new login
+            event(new SuccessfulLogin(auth()->user(), $form->getRequest()->ip(), $form->getRequest()->browser()));
 
             return redirect()->intended(route('home'));
         }

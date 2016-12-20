@@ -52,4 +52,18 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
             ->orderBy('_id', 'DESC')
             ->simplePaginate();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function hasLoggedBefore($userId, $ip, $browser)
+    {
+        return $this
+            ->model
+            ->where('actor.id', $userId)
+            ->whereNested(function ($builder) use ($ip, $browser) {
+                return $builder->where('ip', $ip)->orWhere('browser', $browser);
+            })
+            ->exists();
+    }
 }

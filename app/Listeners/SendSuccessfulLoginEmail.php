@@ -2,21 +2,28 @@
 
 namespace Coyote\Listeners;
 
+use Coyote\Events\SuccessfulLogin;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
-use Coyote\Session;
-use Coyote\User;
-use Illuminate\Auth\Events\Login;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Mail\Message;
+use Illuminate\Queue\InteractsWithQueue;
 use Jenssegers\Agent\Agent;
 
 class SendSuccessfulLoginEmail implements ShouldQueue
 {
+    use InteractsWithQueue;
+
     /**
      * @var SessionRepository
      */
     private $session;
+
+    /**
+     * @var StreamRepository
+     */
+    private $stream;
 
     /**
      * @var Mailer
@@ -29,59 +36,74 @@ class SendSuccessfulLoginEmail implements ShouldQueue
     private $agent;
 
     /**
-     * SendSuccessfulLoginEmail constructor.
      * @param Mailer $mailer
      * @param SessionRepository $session
+     * @param StreamRepository $stream
      * @param Agent $agent
      */
-    public function __construct(Mailer $mailer, SessionRepository $session, Agent $agent)
+    public function __construct(Mailer $mailer, SessionRepository $session, StreamRepository $stream, Agent $agent)
     {
         $this->mailer = $mailer;
         $this->session = $session;
         $this->agent = $agent;
+        $this->stream = $stream;
     }
 
     /**
      * Handle the event.
      *
-     * @param  Login  $event
+     * @param  SuccessfulLogin  $event
      * @return void
      */
-    public function handle(Login $event)
+    public function handle(SuccessfulLogin $event)
     {
         /** @var \Coyote\User $event->user */
         if (!$event->user->alert_login || !$event->user->visits || !$event->user->is_confirm) {
             return;
         }
 
-        $result = $this->session->findBy('user_id', $event->user->id);
-
-        if (!empty($result) && ($result->ip != $event->user->ip)) {
-            $this->sendSuccessfulLoginEmail($result, $event->user);
+        if ($this->shouldSendEmail($event)) {
+            $this->sendSuccessfulLoginEmail($event);
         }
     }
 
     /**
-     * @param Session $session
-     * @param User $user
+     * @param SuccessfulLogin $event
+     * @return bool
      */
-    private function sendSuccessfulLoginEmail(Session $session, User $user)
+    private function shouldSendEmail(SuccessfulLogin $event)
     {
-        $this->agent->setUserAgent($session->browser);
+        // first, check if IP is setup. if not, this means that user logged in for the first time.
+        // second: if current ip is same as previous, skip it.
+        if (empty($event->user->ip) || $event->ip == $event->user->ip) {
+            return false;
+        }
+
+        return ! $this->stream->hasLoggedBefore($event->user->id, $event->ip, $event->browser);
+    }
+
+    /**
+     * @param SuccessfulLogin $event
+     */
+    private function sendSuccessfulLoginEmail(SuccessfulLogin $event)
+    {
+        $this->agent->setUserAgent($event->browser);
 
         $data = array_merge(
-            $user->toArray(),
+            $event->user->toArray(),
             [
-                'ip' => $session->ip,
-                'host' => gethostbyaddr($session->ip),
+                'ip' => $event->ip,
+                'host' => gethostbyaddr($event->ip),
                 'browser' => $this->agent->browser(),
                 'platform' => $this->agent->platform()
             ]
         );
 
+        $user = $event->user;
+
         $this->mailer->send('emails.auth.successful', $data, function (Message $message) use ($user) {
             $message->to($user->email);
-            $message->subject('Powiadomienie o udanym logowaniu na Twoje konto');
+            $message->subject('Powiadomienie o logowaniu z nowego urządzenia');
         });
     }
 }
