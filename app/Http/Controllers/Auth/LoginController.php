@@ -70,7 +70,13 @@ class LoginController extends Controller
             // put information into the activity stream...
             stream(Stream_Login::class);
             // send notification about new login
-            event(new SuccessfulLogin(auth()->user(), $form->getRequest()->ip(), $form->getRequest()->browser()));
+            event(
+                new SuccessfulLogin(
+                    auth()->user(),
+                    $form->getRequest()->ip(),
+                    substr((string) $form->getRequest()->header('User-Agent'), 0, 900)
+                )
+            );
 
             return redirect()->intended(route('home'));
         }
