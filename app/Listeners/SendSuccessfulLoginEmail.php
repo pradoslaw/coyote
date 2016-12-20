@@ -13,13 +13,6 @@ use Jenssegers\Agent\Agent;
 
 class SendSuccessfulLoginEmail implements ShouldQueue
 {
-    use InteractsWithQueue;
-
-    /**
-     * @var SessionRepository
-     */
-    private $session;
-
     /**
      * @var StreamRepository
      */
@@ -37,14 +30,12 @@ class SendSuccessfulLoginEmail implements ShouldQueue
 
     /**
      * @param Mailer $mailer
-     * @param SessionRepository $session
      * @param StreamRepository $stream
      * @param Agent $agent
      */
-    public function __construct(Mailer $mailer, SessionRepository $session, StreamRepository $stream, Agent $agent)
+    public function __construct(Mailer $mailer, StreamRepository $stream, Agent $agent)
     {
         $this->mailer = $mailer;
-        $this->session = $session;
         $this->agent = $agent;
         $this->stream = $stream;
     }
