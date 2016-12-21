@@ -103,4 +103,5 @@ $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as
 $this->get('User/Ping', ['uses' => 'User\PingController@index']);
 $this->get('ping', ['uses' => 'User\PingController@index']);
 
-$this->get('url/{guid}', ['uses' => 'User\AlertsController@url'])->name('user.alerts.url');
+// przekierowanie do wlasciwego alertu po guid.
+$this->get('alert/{guid}', ['uses' => 'User\AlertsController@url'])->name('user.alerts.url');
