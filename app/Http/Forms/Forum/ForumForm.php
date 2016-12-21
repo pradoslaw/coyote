@@ -50,6 +50,11 @@ class ForumForm extends Form
                 'label' => 'Opis',
                 'rules' => 'required|string|max:255'
             ])
+            ->add('url', 'text', [
+                'label' => 'Przekierowanie do strony WWW',
+                'rules' => 'sometimes|url',
+                'help' => 'Jeżeli ustawisz to pole, po wejściu na forum, użytkownik będzie przekierowywane pod ten URL.'
+            ])
             ->add('section', 'text', [
                 'label' => 'Nazwa sekcji',
                 'rules' => 'string|max:50'

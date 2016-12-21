@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $parent_id
  * @property int $topics
  * @property int $posts
+ * @property int $redirects
  * @property int $order
  * @property int $last_post_id
  * @property int $is_locked
@@ -51,6 +52,11 @@ class Forum extends Model
         'enable_reputation',
         'enable_anonymous'
     ];
+
+    /**
+     * @var array
+     */
+    protected $casts = ['redirects' => 'int'];
 
     /**
      * @var bool

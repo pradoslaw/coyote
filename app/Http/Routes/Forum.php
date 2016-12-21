@@ -33,14 +33,14 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'SubmitController@index',
         'as' => 'topic.submit',
         'middleware' => [
-            'forum.access', 'forum.write'
+            'forum.access', 'forum.write', 'forum.url'
         ]
     ]);
 
     $this->post('{forum}/Submit/{topic?}', [
         'uses' => 'SubmitController@save',
         'middleware' => [
-            'forum.access', 'forum.write', 'post.response'
+            'forum.access', 'forum.write', 'forum.url', 'post.response'
         ]
     ]);
 
@@ -103,7 +103,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->get('Stream/{topic}', ['uses' => 'StreamController@index', 'as' => 'stream', 'middleware' => ['auth']]);
 
     // widok kategorii forum
-    $this->get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => 'forum.access']);
+    $this->get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => ['forum.access', 'forum.url']]);
     // widok wyswietlania watku. {topic}
     $this->get('{forum}/{topic}-{slug}', [
         'uses' => 'TopicController@index',
