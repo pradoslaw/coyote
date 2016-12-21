@@ -8,8 +8,11 @@ footer {
   padding: 10px 0;
 
   ul.breadcrumb {
-    background: url('/img/home-white.png') no-repeat 0 3px;
-    padding: 2px 0 2px 22px;
+    @media screen and (min-width: $screen-sm) {
+      background: url('/img/home-white.png') no-repeat 0 3px;
+      padding: 2px 0 2px 22px;
+    }
+
     li {
       display: inline;
       color: #f2f2f2;
