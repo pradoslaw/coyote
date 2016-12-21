@@ -27,7 +27,7 @@ class ShowController extends BaseController
         $author = $wiki->logs()->exists() ? $wiki->logs()->orderBy('id')->first()->user : null;
         $wiki->text = $this->getParser()->parse((string) $wiki->text);
 
-        $parser = app('parser.comment');
+        $parser = app('parser.wiki');
         $wiki->load('comments.user');
 
         foreach ($wiki->comments as &$comment) {

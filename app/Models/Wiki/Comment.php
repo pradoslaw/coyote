@@ -77,6 +77,6 @@ class Comment extends Model
             return $this->html;
         }
 
-        return $this->html = app('parser.comment')->parse($this->text);
+        return $this->html = app('parser.wiki')->parse($this->text);
     }
 }
