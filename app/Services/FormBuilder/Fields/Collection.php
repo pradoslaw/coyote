@@ -41,7 +41,7 @@ class Collection extends ParentType
             $this->createChildren();
         }
     }
-    
+
     /**
      * Get children values as array
      *
@@ -80,6 +80,8 @@ class Collection extends ParentType
             $data = $data->all();
         }
 
+        // data MUST BE an array
+        $data = (array) $data;
         $count = count($data);
 
         // reset array element's index. element could've been deleted in form (like in PRE_RENDER form event)
