@@ -65,7 +65,7 @@ class Sitemap
             $this->filesystem->put($this->path($filename), $urlset->asXML());
 
             $sitemap = $index->addChild('sitemap');
-            $sitemap->addChild('loc', url(self::ROOT . '/' . $filename));
+            $sitemap->addChild('loc', url(self::ROOT . '/' . $filename, [], true));
             $sitemap->addChild('lastmod', Carbon::now()->toIso8601String());
         }
 
