@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Alert;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Illuminate\Http\Request;
@@ -154,8 +155,8 @@ class AlertsController extends BaseController
     private function mark($alerts)
     {
         $ids = $alerts
-            ->reject(function ($alert) {
-                return $alert->read_at != null;
+            ->reject(function (Alert $alert) {
+                return $alert->read_at !== null;
             })
             ->pluck('id')
             ->all();
