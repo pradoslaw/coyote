@@ -26,6 +26,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @property int $allow_subscribe
  * @property int $allow_smilies
  * @property int $allow_sig
+ * @property int $allow_sticky_header
  * @property int $birthyear
  * @property string $name
  * @property string $email
@@ -63,7 +64,26 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    protected $fillable = ['provider', 'provider_id', 'photo', 'date_format', 'location', 'latitude', 'longitude', 'website', 'bio', 'sig', 'firm', 'position', 'birthyear', 'allow_count', 'allow_smilies', 'allow_sig', 'allow_subscribe'];
+    protected $fillable = [
+        'provider',
+        'provider_id',
+        'photo',
+        'date_format',
+        'location',
+        'latitude',
+        'longitude',
+        'website',
+        'bio',
+        'sig',
+        'firm',
+        'position',
+        'birthyear',
+        'allow_count',
+        'allow_smilies',
+        'allow_sig',
+        'allow_subscribe',
+        'allow_sticky_header'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -90,6 +110,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'allow_sig' => 'int',
         'allow_count' => 'int',
         'allow_subscribe' => 'int',
+        'allow_sticky_header' => 'int',
         'is_confirm' => 'int',
         'is_active' => 'int'
     ];

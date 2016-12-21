@@ -71,6 +71,11 @@ class SettingsForm extends Form
                 'rules' => 'boolean',
                 'label' => 'Automatycznie obserwuj wątki oraz wpisy na mikroblogu, w których biorę udział'
             ])
+            ->add('allow_sticky_header', 'checkbox', [
+                'rules' => 'boolean',
+                'label' => 'Przyklejony pasek menu',
+                'help' => 'Pasek menu będzie zawsze widoczny podczas przewijania okna.'
+            ])
             ->add('firm', 'text', [
                 'rules' => 'string|max:100',
                 'label' => 'Nazwa firmy',
@@ -85,7 +90,7 @@ class SettingsForm extends Form
             ->add('bio', 'textarea', [
                 'rules' => 'string|max:500',
                 'label' => 'O sobie',
-                'help' => 'W tym polu możesz zamieścić krótką informację o sobie, czym się zajmujesz, co cię interesuje. Ta informacja zostanie wyświetlona na Twoim profilu',
+                'help' => 'W tym polu możesz zamieścić krótką informację o sobie, czym się zajmujesz, co cię interesuje. Ta informacja zostanie wyświetlona na Twoim profilu.',
                 'attr' => [
                     'rows' => 3
                 ]
@@ -93,7 +98,7 @@ class SettingsForm extends Form
             ->add('birthyear', 'select', [
                 'rules' => 'sometimes|integer|between:1950,' . (date('Y') - 1),
                 'label' => 'Rok urodzenia',
-                'help' => 'Na podstawie roku urodzenia, w Twoim profilu będzie widoczny Twój wiek',
+                'help' => 'Na podstawie roku urodzenia, w Twoim profilu będzie widoczny Twój wiek.',
                 'choices' => User::birthYearList(),
                 'empty_value' => '--'
             ])

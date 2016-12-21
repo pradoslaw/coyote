@@ -22,14 +22,14 @@
 
         {{ render_region('head') }}
     </head>
-    <body class="fixed-top">
+    <body class="{{ auth_guest() or user('allow_sticky_header') ? 'fixed-top' }}">
         {{ render_region('body') }}
 
         {% block body %}
         {% import 'components.forms' as forms %}
 
         <div id="container-fluid">
-            <header class="navbar-default navbar-fixed-top">
+            <header class="nav navbar-default{{ auth_guest() or user('allow_sticky_header') ? ' navbar-fixed-top' }}">
                 <div id="navbar-border-top"></div>
 
                 <div class="max-width">

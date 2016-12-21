@@ -15,7 +15,7 @@ class CreateWikiAttachmentsTable extends Migration
         Schema::create('wiki_attachments', function (Blueprint $table) {
             $table->smallInteger('id', true);
             $table->integer('wiki_id')->nullable();
-            $table->string('name', 100);
+            $table->string('name');
             $table->string('file', 30);
             $table->integer('size');
             $table->string('mime', 50);

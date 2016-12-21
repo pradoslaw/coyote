@@ -15,7 +15,7 @@ class CreatePostAttachmentsTable extends Migration
         Schema::create('post_attachments', function (Blueprint $table) {
             $table->smallInteger('id', true);
             $table->integer('post_id')->nullable();
-            $table->string('name', 100);
+            $table->string('name');
             $table->string('file', 30);
             $table->smallInteger('count')->default(0);
             $table->integer('size');
