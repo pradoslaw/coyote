@@ -51,6 +51,10 @@
   > .thumbnails {
     margin-top: 20px;
   }
+
+  a {
+    color: $link-color-darker;
+  }
 }
 
 .microblog-gradient {
@@ -171,7 +175,10 @@
     }
 
     h6 {
-      color: $brand-primary;
+      > a {
+        color: $link-color-darker;
+      }
+
       font-size: 13px;
       display: inline;
     }
