@@ -43,10 +43,6 @@ class ParserServiceProvider extends ServiceProvider
             return new MicroblogFactory($app);
         });
 
-        $this->app->bind('parser.microblog.comment', function ($app) {
-            return new MicroblogCommentFactory($app);
-        });
-
         $this->app->bind('parser.sig', function ($app) {
             return new SigFactory($app);
         });
@@ -70,7 +66,7 @@ class ParserServiceProvider extends ServiceProvider
         $this->app->bind('parser.wiki', function ($app) {
             return new WikiFactory($app);
         });
-        
+
         $this->app->bind('parser.diff', function ($app) {
             return new DiffFactory($app);
         });
@@ -88,7 +84,6 @@ class ParserServiceProvider extends ServiceProvider
          */
         return [
             'parser.microblog',
-            'parser.microblog.comment',
             'parser.sig',
             'parser.pm',
             'parser.post',

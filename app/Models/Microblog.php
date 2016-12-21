@@ -162,7 +162,7 @@ class Microblog extends Model
             return $this->html;
         }
 
-        return $this->html = app('parser.microblog' . ($this->parent_id ? '.comment' : ''))->parse($this->text);
+        return $this->html = app('parser.microblog')->parse($this->text);
     }
 
     /**
