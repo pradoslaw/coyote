@@ -38,46 +38,43 @@ $(function () {
                     $this.next('.btn-subscribe:not(.subscribe-on)').click(); // po doceneniu wpisu automatycznie go obserwujemy
                 }
 
-                $this.toggleClass('thumbs-on');
+                $this.toggleClass('thumbs-on').tooltip('destroy').removeAttr('data-original-title');
             })
-                .complete(function () {
-                    $this.removeClass('loader');
-                    $this.text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']));
+            .complete(function () {
+                $this.removeClass('loader');
+                $this.text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']));
 
-                    // jezeli wpis jest w sekcji "popularne wpisy" to tam tez nalezy oznaczyc, ze
-                    // wpis jest "lubiany"
-                    $('a[href="' + $this.attr('href') + '"]').not($this).toggleClass('thumbs-on', $this.hasClass('thumbs-on')).text($this.text());
-                });
+                // jezeli wpis jest w sekcji "popularne wpisy" to tam tez nalezy oznaczyc, ze
+                // wpis jest "lubiany"
+                $('a[href="' + $this.attr('href') + '"]').not($this).toggleClass('thumbs-on', $this.hasClass('thumbs-on')).text($this.text());
+            });
 
             return false;
         },
         enter: function () {
             var count = parseInt($(this).data('count'));
+            var $this = $(this);
 
-            if (count > 0) {
-                var $this = $(this);
-
-                if (typeof $this.attr('title') === 'undefined' || $this.attr('title') === '') {
-                    timeoutId = setTimeout(function() {
-                        $.get($this.attr('href'), function(html) {
-                            $this.attr('title', html);
-
-                            if (html.length) {
-                                var count = html.split("\n").length;
-
-                                $this.attr('title', html.replace(/\n/g, '<br />'))
-                                    .data('count', count)
-                                    .text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']))
-                                    .tooltip({html: true, trigger: 'hover'})
-                                    .tooltip('show');
-                            }
-                        });
-
-                    }, 500);
-                }
+            if (count === 0 || typeof $this.attr('data-original-title') !== 'undefined') {
+                return;
             }
 
-            $(this).off('mouseenter');
+            timeoutId = setTimeout(function() {
+                $.get($this.attr('href'), function(html) {
+                    $this.attr('title', html);
+
+                    if (html.length) {
+                        var count = html.split("\n").length;
+
+                        $this.attr('title', html.replace(/\n/g, '<br />'))
+                            .data('count', count)
+                            .text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']))
+                            .tooltip({html: true, trigger: 'hover'})
+                            .tooltip('show');
+                    }
+                });
+
+            }, 500);
         },
         leave: function () {
             clearTimeout(timeoutId);
