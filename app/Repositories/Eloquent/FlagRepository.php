@@ -8,13 +8,13 @@ use Illuminate\Database\Query\Builder;
 class FlagRepository extends Repository implements FlagRepositoryInterface
 {
     /**
-     * @return \Coyote\Flag
+     * @return string
      */
     public function model()
     {
         return 'Coyote\Flag';
     }
-    
+
     /**
      * @param array $topicsId
      * @return mixed
@@ -57,10 +57,17 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     /**
      * @param $key
      * @param $value
+     * @param int|null $userId
      */
-    public function deleteBy($key, $value)
+    public function deleteBy($key, $value, $userId = null)
     {
-        $this->model->whereRaw("metadata->>'$key' = ?", [$value])->delete();
+        $path = "metadata->>'$key' = ?";
+
+        if ($userId !== null) {
+            $this->model->whereRaw($path, [$value])->update(['moderator_id' => $userId]);
+        }
+
+        $this->model->whereRaw($path, [$value])->delete();
     }
 
     /**

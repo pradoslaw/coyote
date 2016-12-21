@@ -80,7 +80,7 @@ class DeleteController extends BaseController
 
                 $topic->delete();
                 // delete topic's flag
-                $this->getFlagFactory()->deleteBy('topic_id', $topic->id);
+                $this->getFlagFactory()->deleteBy('topic_id', $topic->id, $this->userId);
 
                 if ($subscribersId) {
                     app('alert.topic.delete')
@@ -103,7 +103,7 @@ class DeleteController extends BaseController
 
                 $post->delete();
                 // delete post's flags
-                $this->getFlagFactory()->deleteBy('post_id', $post->id);
+                $this->getFlagFactory()->deleteBy('post_id', $post->id, $this->userId);
 
                 if ($subscribersId) {
                     app('alert.post.delete')

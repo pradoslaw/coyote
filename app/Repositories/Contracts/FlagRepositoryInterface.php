@@ -31,6 +31,7 @@ interface FlagRepositoryInterface extends RepositoryInterface
     /**
      * @param $key
      * @param $value
+     * @param int|null $userId
      */
-    public function deleteBy($key, $value);
+    public function deleteBy($key, $value, $userId = null);
 }
