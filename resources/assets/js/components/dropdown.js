@@ -17,8 +17,8 @@
         });
     }
 
-    $('[data-toggle="dropdown"]')
-        .on('click', function(e) {
+    $('body')
+        .on('click', '[data-toggle="dropdown"]', function(e) {
             var $this = $(this);
             var $parent = $this.parent();
             var dropdown = $this.next('.dropdown-menu');
@@ -44,7 +44,7 @@
                     .attr('aria-expanded', 'true');
             }
         })
-        .on('keydown', function(e) {
+        .on('keydown', '[data-toggle="dropdown"]', function(e) {
             if (e.which === 27 && $(this).parent().hasClass('open')) {
                 $(this).trigger('click');
             }
