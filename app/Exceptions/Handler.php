@@ -77,7 +77,8 @@ class Handler extends ExceptionHandler
 
             if ($e instanceof TokenMismatchException) {
                 return response()->json(
-                    ['error' => 'Twoja sesja wygasła. Proszę odświeżyć stronę i spróbować ponownie.']
+                    ['error' => 'Twoja sesja wygasła. Proszę odświeżyć stronę i spróbować ponownie.'],
+                    $statusCode
                 );
             }
 
