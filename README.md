@@ -1,14 +1,10 @@
 # Coyote
 
-[![Join the chat at https://gitter.im/boduch-coyote/Lobby](https://badges.gitter.im/boduch-coyote/Lobby.svg)](https://gitter.im/boduch-coyote/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![StyleCI](https://styleci.io/repos/30256872/shield)](https://styleci.io/repos/30256872)
 [![Build Status](https://travis-ci.org/adam-boduch/coyote.svg?branch=master)](https://travis-ci.org/adam-boduch/coyote)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/adam-boduch/coyote/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/adam-boduch/coyote/?branch=master)
 
-Coyote to nazwa systemu obslugujacego serwis 4programmers.net. Obecnie w obludze jest wersja 1.x ktora mamy nadzieje zastapic wersja 2.0 ktora jest w trakcie pisania i bedzie dostepna na githubie jako open source.
-
-Uwaga! To repozytorium zawiera wersje 2.0-beta ktora absolutnie nie jest wersja koncowa i stabilna.
+Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
 
 ## Wymagania
 
