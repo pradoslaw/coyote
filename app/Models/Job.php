@@ -339,6 +339,22 @@ class Job extends Model
     }
 
     /**
+     * @param string $value
+     */
+    public function setSalaryFromAttribute($value)
+    {
+        $this->attributes['salary_from'] = (int) trim($value);
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setSalaryToAttribute($value)
+    {
+        $this->attributes['salary_to'] = (int) trim($value);
+    }
+
+    /**
      * @param int $userId
      */
     public function setDefaultUserId($userId)
