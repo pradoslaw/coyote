@@ -41,9 +41,10 @@ class MoveController extends BaseController
 
             $notification = [
                 'sender_id'   => $this->userId,
-                'sender_name' => auth()->user()->name,
+                'sender_name' => $this->auth->name,
                 'subject'     => str_limit($topic->subject, 84),
-                'forum'       => $forum->name
+                'forum'       => $forum->name,
+                'topic_id'    => $topic->id
             ];
 
             if ($request->get('reason')) {

@@ -57,7 +57,7 @@ class VoteController extends BaseController
                     ->setSubject(str_limit($topic->subject, 84))
                     ->setExcerpt($excerpt)
                     ->setSenderId($this->userId)
-                    ->setSenderName(auth()->user()->name)
+                    ->setSenderName($this->auth->name)
                     ->setUrl($url)
                     ->notify();
             }

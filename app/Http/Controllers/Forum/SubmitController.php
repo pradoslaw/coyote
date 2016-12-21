@@ -74,7 +74,7 @@ class SubmitController extends BaseController
         $request = $form->getRequest();
 
         return $this->transaction(function () use ($request, $forum, $topic, $post) {
-            $actor = new Stream_Actor(auth()->user());
+            $actor = new Stream_Actor($this->auth);
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
             }
@@ -83,7 +83,7 @@ class SubmitController extends BaseController
 
             $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
             // saving post through repository... we need to pass few object to save relationships
-            $this->post->save($request, auth()->user(), $forum, $topic, $post, $poll);
+            $this->post->save($request, $this->auth, $forum, $topic, $post, $poll);
 
             // url to the post
             $url = UrlBuilder::post($post);
@@ -92,11 +92,13 @@ class SubmitController extends BaseController
                 $alert = new Container();
                 $notification = [
                     'sender_id' => $this->userId,
-                    'sender_name' => $request->get('user_name', $this->userId ? auth()->user()->name : ''),
+                    'sender_name' => $request->get('user_name', $this->userId ? $this->auth->name : ''),
                     'subject' => str_limit($topic->subject, 84),
                     'excerpt' => excerpt($post->html),
                     'url' => $url,
-                    'text' => $post->html
+                    'text' => $post->html,
+                    'topic_id' => $topic->id, // used to create unique notification object id
+                    'post_id' => $post->id // used to create unique notification object id
                 ];
 
                 // $subscribersId can be int or array. we need to cast to array type
@@ -224,7 +226,8 @@ class SubmitController extends BaseController
                         'sender_name' => $this->auth->name,
                         'subject'     => str_limit($original['subject'], 84),
                         'excerpt'     => str_limit($topic->subject, 84),
-                        'url'         => $url
+                        'url'         => $url,
+                        'topic_id'    => $topic->id
                     ])->notify();
                 }
 

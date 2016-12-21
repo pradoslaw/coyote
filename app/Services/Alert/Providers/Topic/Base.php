@@ -73,12 +73,12 @@ abstract class Base extends Provider implements ProviderInterface
     }
 
     /**
-     * Generowanie unikalnego ciagu znakow dla watku
-     *
-     * @return string
+     * @inheritdoc
      */
     public function objectId()
     {
+        // DO NOT use url parameter to build unique string. each notification has unique URL so we can't
+        // use to to build unique notification ID.
         return substr(md5($this->typeId . $this->subject . $this->topicId), 16);
     }
 }

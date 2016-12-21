@@ -93,11 +93,12 @@ class CommentController extends Controller
                 $alert = new Container();
                 $notification = [
                     'sender_id'   => $this->userId,
-                    'sender_name' => auth()->user()->name,
+                    'sender_name' => $this->auth->name,
                     'subject'     => str_limit($this->topic->subject, 84),
                     'excerpt'     => excerpt($this->comment->html),
                     'text'        => $this->comment->html,
-                    'url'         => $object->url
+                    'url'         => $object->url,
+                    'post_id'     => $this->post->id // used to build unique notification object id
                 ];
 
                 $subscribersId = $this->forum->onlyUsersWithAccess(

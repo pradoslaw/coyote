@@ -31,9 +31,7 @@ abstract class Base extends Provider implements ProviderInterface
     }
 
     /**
-     * Generowanie unikalnego ciagu znakow dla wpisu na mikro
-     *
-     * @return string
+     * @inheritdoc
      */
     public function objectId()
     {

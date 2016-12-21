@@ -97,7 +97,11 @@ abstract class Provider implements ProviderInterface
     {
         if (!empty($args)) {
             foreach ($args as $arg => $value) {
-                $this->{'set' . camel_case($arg)}($value);
+                $method = 'set' . camel_case($arg);
+
+                if (method_exists($this, $method)) {
+                    $this->{'set' . camel_case($arg)}($value);
+                }
             }
         }
 
