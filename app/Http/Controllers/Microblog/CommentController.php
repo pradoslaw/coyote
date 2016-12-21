@@ -182,6 +182,6 @@ class CommentController extends Controller
         foreach ($comments as &$comment) {
             $comment->html = $parser->parse($comment->text);
         }
-        return view('microblog.partials.comments', ['id' => $id, 'comments' => $comments]);
+        return view('microblog.partials.comments', ['microblog' => ['id' => $id], 'comments' => $comments]);
     }
 }
