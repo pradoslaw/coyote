@@ -19,7 +19,7 @@ class Page extends Model
      * @var array
      */
     protected $fillable = ['title', 'path', 'allow_sitemap'];
-    
+
     /**
      * @var string
      */
@@ -39,5 +39,13 @@ class Page extends Model
     public function visits()
     {
         return $this->hasMany('Coyote\Page\Visit');
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setPathAttribute($path)
+    {
+        $this->attributes['path'] = urldecode($path);
     }
 }
