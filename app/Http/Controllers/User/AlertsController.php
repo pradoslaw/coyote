@@ -136,12 +136,13 @@ class AlertsController extends BaseController
         $alert = $this->alert->findBy('guid', $guid, ['id', 'url', 'read_at', 'is_marked']);
         abort_if($alert === null, 404);
 
-        if (!$alert->read_at) {
-            $alert->is_marked = true;
-            $alert->read_at = Carbon\Carbon::now();
+        $alert->is_marked = true;
 
-            $alert->save();
+        if (!$alert->read_at) {
+            $alert->read_at = Carbon\Carbon::now();
         }
+
+        $alert->save();
 
         return redirect()->to($alert->url);
     }
