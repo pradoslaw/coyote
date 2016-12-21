@@ -1,8 +1,13 @@
 {# powiadomienie o usunieciu posta #}
-{% extends 'emails.layout' %}
+{% extends 'emails.alerts.base' %}
 
 {% block content %}
-    <b>{{ sender_name }}</b> usunął post w wątku <b>{{ subject }}</b>.<br><br>
+    <b>{{ sender_name }}</b> usunął post w wątku <b>{{ subject }}</b> z powodu {{ reason_name }}.<br><br>
+    Szczegóły:<br><br>
 
-    Otrzymujesz tego e-maila ponieważ obserwowałeś ten post.
+    <hr>
+    {{ reason_text }}
+    <hr><br>
+
+    Otrzymujesz tego e-maila ponieważ obserwowałeś ten post lub jesteś jego autorem.
 {% endblock %}

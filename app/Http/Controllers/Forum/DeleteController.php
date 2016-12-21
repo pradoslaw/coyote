@@ -85,7 +85,6 @@ class DeleteController extends BaseController
                 if ($subscribersId) {
                     app('alert.topic.delete')
                         ->with($notification)
-                        ->setUrl($url)
                         ->setUsersId($subscribersId->toArray())
                         ->notify();
                 }
@@ -96,8 +95,6 @@ class DeleteController extends BaseController
                 $object = (new Stream_Topic())->map($topic);
                 $target = (new Stream_Forum())->map($forum);
             } else {
-                $url .= '?p=' . $post->id . '#id' . $post->id;
-
                 $subscribersId = $post->subscribers()->lists('user_id');
 
                 if ($post->user_id !== null) {
@@ -115,6 +112,8 @@ class DeleteController extends BaseController
                         ->setUsersId($subscribersId->toArray())
                         ->notify();
                 }
+
+                $url .= '?p=' . $post->id . '#id' . $post->id;
 
                 $redirect = back();
                 // fire the event. delete from search index

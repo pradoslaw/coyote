@@ -26,7 +26,7 @@ class Delete extends Provider implements ProviderInterface
      */
     public function getReasonName()
     {
-        return $this->reasonName;
+        return $this->reasonName ?: '(moderator nie podał powodu)';
     }
 
     /**
@@ -42,7 +42,7 @@ class Delete extends Provider implements ProviderInterface
      */
     public function getReasonText()
     {
-        return $this->reasonText;
+        return $this->reasonText ?: '(moderator nie podał powodu)';
     }
 
     /**
