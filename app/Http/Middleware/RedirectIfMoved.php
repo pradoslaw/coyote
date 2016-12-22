@@ -37,7 +37,8 @@ class RedirectIfMoved
             || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug)) {
             $forum = $this->forum->find($topic->forum_id, ['slug']);
 
-            return redirect(route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
+            $parameters = array_merge([$forum->slug, $topic->id, $topic->slug], $request->query());
+            return redirect()->route('forum.topic', $parameters, 301);
         }
 
         return $next($request);
