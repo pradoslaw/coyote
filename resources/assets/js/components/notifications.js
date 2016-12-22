@@ -110,7 +110,7 @@ $(function () {
         }
     });
 
-    $('> a', Alerts.self).click(function () {
+    $('> a[data-toggle="dropdown"]', Alerts.self).click(function (e) {
         DesktopNotifications.requestPermission();
 
         var wrapper = $('#dropdown-alerts');
@@ -175,7 +175,7 @@ $(function () {
             });
         }
 
-        return false;
+        e.preventDefault();
     });
 
     $('#dropdown-alerts')
@@ -202,7 +202,7 @@ $(function () {
             return false;
         });
 
-    $('#messages > a').click(function() {
+    $('#messages > a[data-toggle="dropdown"]').click(function(e) {
         var messages = $('#dropdown-messages').find('ul');
 
         if ($('li', messages).length <= 1) {
@@ -211,7 +211,7 @@ $(function () {
             });
         }
 
-        return false;
+        e.preventDefault();
     });
 
     ws.on('alert', function(data) {
