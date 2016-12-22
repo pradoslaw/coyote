@@ -34,7 +34,7 @@ class PageHit
 
         // on production environment: store hit in redis
         app('redis')->sadd(
-            'hit:' . $request->path(),
+            'hit:' . urldecode($request->path()),
             (empty($request->user()) ? $request->session()->getId() : $request->user()->id) . ';' . round(time() / 300) * 300
         );
 
