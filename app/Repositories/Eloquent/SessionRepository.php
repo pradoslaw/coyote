@@ -41,6 +41,7 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
             ->when($path, function (Builder $builder) use ($path) {
                 return $builder->where('url', 'ILIKE', '%' . $path . '%');
             })
+            ->orderBy('users.name')
             ->get();
     }
 
