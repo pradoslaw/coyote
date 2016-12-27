@@ -95,7 +95,7 @@ class Markdown extends \Parsedown implements ParserInterface
      * We don't want <h1> in our text
      *
      * @param $line
-     * @return array|void
+     * @return array|null
      */
     protected function blockHeader($line)
     {
@@ -146,8 +146,8 @@ class Markdown extends \Parsedown implements ParserInterface
         $text = &$excerpt['text'];
         $start = strpos($text, '@');
 
-        if (isset($text[$start + 1])) {
-            $exitChar = $text[$start + 1] === '{' ? '}' : ':,.\' '; // <-- space at the end
+        if ($this->isNotEmail($excerpt)) {
+            $exitChar = $text[$start + 1] === '{' ? '}' : ":,.\'\n) "; // <-- space at the end
             $end = $this->strpos($text, $exitChar, $start);
 
             if ($end === false) {
@@ -183,6 +183,19 @@ class Markdown extends \Parsedown implements ParserInterface
                 ];
             }
         }
+    }
+
+    private function isNotEmail(&$excerpt)
+    {
+        // the whole text
+        $context = &$excerpt['context'];
+        // "@" position
+        $start = mb_strpos($context, $excerpt['text']);
+        // previous character (before "@")
+        $preceding = mb_substr($context, $start - 1, 1);
+
+        return mb_substr($excerpt['text'], $start + 1, 1) !== false
+            && ($start === 0 || $preceding ===' ' || $preceding === '(');
     }
 
     /**
