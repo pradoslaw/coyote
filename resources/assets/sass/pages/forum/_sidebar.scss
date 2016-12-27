@@ -2,6 +2,7 @@
   float: right;
   width: 23%;
   margin-right: -25%;
+  z-index: 1000;
 
   @media screen and (max-width: $screen-lg) {
     display: none;
