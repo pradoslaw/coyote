@@ -57,7 +57,7 @@ class GroupForm extends Form
      */
     private function getPermissions()
     {
-        return Permission::pluck('name', 'permissions.id')->toArray();
+        return Permission::orderBy('name')->pluck('name', 'permissions.id')->toArray();
     }
 
     /**

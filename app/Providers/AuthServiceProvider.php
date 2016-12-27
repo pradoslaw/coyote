@@ -57,6 +57,7 @@ class AuthServiceProvider extends ServiceProvider
         'forum-move',
         'forum-merge',
         'forum-sticky',
+        'forum-emphasis',
         'job-update',
         'job-delete',
         'firm-update',

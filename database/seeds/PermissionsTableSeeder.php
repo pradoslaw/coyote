@@ -66,6 +66,12 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
         \DB::table('permissions')->insert([
+            'name'           => 'forum-emphasis',
+            'description'    => 'Operatory ! oraz !! w komentarzach na forum',
+            'default'        => false
+        ]);
+
+        \DB::table('permissions')->insert([
             'name'           => 'wiki-admin',
             'description'    => 'Administracja stronami Wiki',
             'default'        => false

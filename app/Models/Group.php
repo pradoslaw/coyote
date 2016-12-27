@@ -25,13 +25,16 @@ class Group extends Model
      */
     protected $dateFormat = 'Y-m-d H:i:se';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function users()
     {
         return $this->belongsToMany(User::class, 'group_users');
     }
 
     /**
-     * @return $this
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function permissions()
     {

@@ -18,7 +18,7 @@ class CommentFactory extends AbstractFactory
     /**
      * permission that is required for comment's author to run Emphasis parser
      */
-    const PERMISSION = 'forum-update';
+    const PERMISSION = 'forum-emphasis';
 
     /**
      * @var array
