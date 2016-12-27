@@ -221,6 +221,7 @@ class HomeController extends BaseController
     public function mark()
     {
         $forums = $this->forum->all(['id']);
+
         foreach ($forums as $forum) {
             $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
         }
@@ -232,7 +233,11 @@ class HomeController extends BaseController
     private function load()
     {
         $this->topic->pushCriteria(new OnlyThoseWithAccess($this->auth));
-        $this->topic->pushCriteria(new BelongsToForum($this->forum->order->findAllVisibleIds($this->userId)));
+
+        // if someone wants to find all user's topics, we can't hide those from our hidden categories.
+        if (strpos($this->getRouter()->currentRouteAction(), '@user') === false) {
+            $this->topic->pushCriteria(new BelongsToForum($this->forum->order->findAllVisibleIds($this->userId)));
+        }
 
         return $this
             ->topic
