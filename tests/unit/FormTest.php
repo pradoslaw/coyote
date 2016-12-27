@@ -519,6 +519,30 @@ class FormTest extends \Codeception\TestCase\Test
         $this->assertTrue($validator->errors()->has('description'));
     }
 
+    public function testRequiredElement()
+    {
+        $this->request['name'] = '';
+
+        $form = $this->createForm(TestForm::class);
+        $form
+            ->setMethod('GET')
+            ->add('name', 'text', [
+                'required' => true,
+                'rules' => 'min:5'
+            ]);
+
+        $this->assertTrue($form->get('name')->isRequired());
+
+        $validator = $form->validate();
+        $this->assertFalse($validator->passes());
+
+        $this->assertTrue($validator->errors()->has('name'));
+        $this->assertEquals(
+            ['name' => 'required|min:5'],
+            $form->rules()
+        );
+    }
+
     public function testMergeFieldOptions()
     {
         $form = $this->createForm(TestForm::class);

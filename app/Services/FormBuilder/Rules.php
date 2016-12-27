@@ -42,6 +42,16 @@ class Rules
         foreach ($fields as $field) {
             $rules = $field->getRules();
 
+            if ($field->isRequired()) {
+                $rules = explode('|', $rules);
+
+                if (!in_array('required', $rules)) {
+                    $rules = array_prepend($rules, 'required');
+                }
+
+                $rules = implode('|', $rules);
+            }
+
             if ($rules) {
                 $result[$this->transformNameToRule($context, $field)] = $rules;
             }
