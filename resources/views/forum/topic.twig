@@ -179,7 +179,7 @@
                             <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
 
                             <ul id="collapse-sub" class="collapse">
-                                {% for slug, name in forumList %}
+                                {% for slug, name in adminForumList %}
                                     {% if slug == forum.slug %}
                                         <li><a style="color: #ccc">{{ name|raw }}</a></li>
                                     {% else %}

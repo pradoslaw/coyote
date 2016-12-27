@@ -128,6 +128,10 @@ class TopicController extends BaseController
             }
         }
 
+        // create forum list for current user (according to user's privileges)
+        $this->pushForumCriteria();
+        $forumList = $this->forum->choices();
+
         $flags = $activities = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
@@ -137,6 +141,9 @@ class TopicController extends BaseController
                 $flags = $this->getFlags($postsId);
                 $activities = $this->getActivities($postsId);
             }
+
+            $this->forum->skipCriteria(true);
+            $adminForumList = $this->forum->choices();
         }
 
         // informacje o powodzie zablokowania watku, przeniesienia itp
@@ -145,15 +152,11 @@ class TopicController extends BaseController
         $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
-        // create forum list for current user (according to user's privileges)
-        $this->pushForumCriteria();
-        $forumList = $this->forum->choices();
-
         $form = $this->getForm($forum, $topic);
 
         return $this->view(
             'forum.topic',
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'reasonList', 'form', 'mlt', 'flags', 'warnings', 'activities')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags', 'warnings', 'activities')
         )->with([
             'markTime'      => $markTime[Topic::class] ? $markTime[Topic::class] : $markTime[Forum::class],
             'subscribers'   => $this->userId ? $topic->subscribers()->lists('topic_id', 'user_id') : []
