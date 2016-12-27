@@ -41,9 +41,24 @@ class Geshi implements ParserInterface
             }
 
             $geshi->set_source(htmlspecialchars_decode($matches[2][$i]));
-            $text = str_replace($matches[2][$i], $geshi->parse_code(), $text);
+
+            $text = str_replace(
+                $this->tag($language, $matches[2][$i]),
+                $this->tag($language, $geshi->parse_code()),
+                $text
+            );
         }
 
         return $text;
+    }
+
+    /**
+     * @param string $language
+     * @param string $code
+     * @return string
+     */
+    private function tag($language, $code)
+    {
+        return sprintf('<pre><code class="language-%s">%s</code></pre>', $language, $code);
     }
 }
