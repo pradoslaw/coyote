@@ -20,3 +20,11 @@ $box-border-color: #c7c7c7;
 $unread-bg: #FFF3CD;
 // :hover dla nowych elementow (powiadomienia, wiadomosci)
 $unread-bg-hover: #FFDCA5;
+
+$screen-xlg-min: 1366px;
+$screen-fhd-min: 1920px;
+
+$screen-xlg: $screen-xlg-min;
+
+$screen-lg-max: ($screen-xlg-min - 1);
+$screen-xlg-max: ($screen-fhd-min - 1);

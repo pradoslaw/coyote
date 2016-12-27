@@ -44,6 +44,10 @@
     .media-left {
       // firm's logo
       vertical-align: middle;
+
+      @media screen and (max-width: $screen-xlg-min) {
+        display: none;
+      }
     }
 
     .media-heading {
