@@ -93,6 +93,10 @@ class DateTime extends Twig_Extension
 
             new Twig_SimpleFilter('diff_for_humans', function ($dateTime) {
                 return $this->toCarbon($dateTime)->diffForHumans();
+            }),
+
+            new Twig_SimpleFilter('date_localized', function ($dateTime, $format) {
+                return $this->toCarbon($dateTime)->formatLocalized($format);
             })
         ];
     }

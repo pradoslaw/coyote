@@ -187,7 +187,7 @@
                         <ul>
                             {% for article in blog %}
                                 <li>
-                                    <small class="hidden-xs">{{ article.created_at|date('d M Y') }}</small>
+                                    <small class="hidden-xs">{{ article.created_at|date_localized('%d %b %y') }}</small>
 
                                     <a href="{{ url(article.path) }}" title="{{ article.long_title|default(article.title) }}">{{ article.title }}</a>
                                 </li>
