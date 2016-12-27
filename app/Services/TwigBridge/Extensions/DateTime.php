@@ -89,6 +89,10 @@ class DateTime extends Twig_Extension
 
             new Twig_SimpleFilter('iso_8601', function ($dateTime) {
                 return $this->toCarbon($dateTime)->format(Carbon::ISO8601);
+            }),
+
+            new Twig_SimpleFilter('diff_for_humans', function ($dateTime) {
+                return $this->toCarbon($dateTime)->diffForHumans();
             })
         ];
     }

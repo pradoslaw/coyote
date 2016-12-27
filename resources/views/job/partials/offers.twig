@@ -75,7 +75,7 @@
                                 <p><span class="label label-new">Nowe</span></p>
                             {% endif %}
 
-                            <small>{{ job.created_at|format_date }}</small>
+                            <small class="text-muted" title="{{ job.created_at|format_date }}">{{ job.created_at|diff_for_humans }}</small>
                         </td>
                         <td class="col-fav">
                             <a class="btn-subscribe {{ subscribes.contains('id', job.id) ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}" title="Dodaj lub usuń tę ofertę do ulubionych">
