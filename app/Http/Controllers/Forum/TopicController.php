@@ -132,6 +132,9 @@ class TopicController extends BaseController
         $this->pushForumCriteria();
         $forumList = $this->forum->choices();
 
+        $this->breadcrumb($forum);
+        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
+
         $flags = $activities = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
@@ -148,9 +151,6 @@ class TopicController extends BaseController
 
         // informacje o powodzie zablokowania watku, przeniesienia itp
         $warnings = $this->getWarnings($topic);
-
-        $this->breadcrumb($forum);
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
         $form = $this->getForm($forum, $topic);
 
