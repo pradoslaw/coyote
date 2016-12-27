@@ -1,29 +1,38 @@
 {% for job in jobs %}
     <div class="media">
-        <div class="media-left hidden-xs">
-            <a href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title|raw }}">
+        <a class="media-link" href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title ~ (job.firm ? " @ #{job.firm.name}" )}}">
+            <div class="media-left">
                 <img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
-            </a>
-        </div>
-        <div class="media-body">
-            <h5 class="media-heading"><a href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title|raw }}">{{ job.title|raw }}</a></h5>
+            </div>
+            <div class="media-body">
+                <h5 class="media-heading">{{ job.title|raw }}</h5>
 
-            <p>
-                <a class="employer" title="Znajdź oferty pracy w firmie: {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a>
+                <p>
+                    <span class="employer">{{ job.firm.name }}</span>
 
-                <small class="text-muted">
-                    {% include 'job.partials.location' with {
-                        locations: job.locations.lists('city'),
-                        separator: job.firm is not null
-                    } %}
-                </small>
-            </p>
+                    <small class="text-muted">
+                        {% include 'job.partials.location' with {
+                            locations: job.locations.lists('city'),
+                            separator: job.firm is not null,
+                            linkable: false
+                        } %}
+                    </small>
+                </p>
 
-            <p>
-                {% if job.salary_from or job.salary_to %}
-                    <strong class="text-primary">{% include 'job.partials.salary' %}</strong>
+                <p>
+                    {% if job.salary_from or job.salary_to %}
+                        <strong class="text-primary">{% include 'job.partials.salary' %}</strong>
+                    {% endif %}
+                </p>
+
+                {% if job.tags %}
+                    <ul class="tag-clouds">
+                        {% for tag in job.tags[0:3] %}
+                            <li><span>{{ tag }}</span></li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
-            </p>
-        </div>
+            </div>
+        </a>
     </div>
 {% endfor %}

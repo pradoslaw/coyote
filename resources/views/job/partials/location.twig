@@ -1,8 +1,9 @@
 {% set data = {} %}
 {% set separator = separator is defined ? separator : true %}
+{% set linkable = linkable is defined ? linkable : true %}
 
 {% for city in locations %}
-    {% set data = data|merge([link_to_route('job.city', city, [city], {'title': 'Znajdź oferty z miasta ' ~ city})]) %}
+    {% set data = data|merge(linkable ? [link_to_route('job.city', city, [city], {'title': 'Znajdź oferty z miasta ' ~ city})] : [city]) %}
 {% endfor %}
 
 {% if separator and (data|length > 0 or job.is_remote) %}
@@ -12,5 +13,9 @@
 {{ data|join(', ')|raw }}
 
 {% if job.is_remote %}
-    <a href="{{ route('job.remote') }}">(praca zdalna)</a>
+    {% if linkable %}
+        <a href="{{ route('job.remote') }}">(praca zdalna)</a>
+    {% else %}
+        (praca zdalna)
+    {% endif %}
 {% endif %}

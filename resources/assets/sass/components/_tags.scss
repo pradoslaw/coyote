@@ -6,12 +6,12 @@
   padding: 13px 0;
   overflow: hidden;
 
-  li {
+  > li {
     display: inline;
     float: left;
     margin-right: 4px;
 
-    a {
+    > a, > span {
       color: $gray-light;
       font-size: 11px;
       display: inline-block;
@@ -21,12 +21,12 @@
       margin: 4px 5px 0 1px;
       border-radius: 5px;
       transition: all .25s linear;
+    }
 
-      &:hover {
-        text-decoration: none;
-        color: #D7661C;
-        background: darken($gray-lighter, 2%);
-      }
+    > a:hover {
+      text-decoration: none;
+      color: #D7661C;
+      background: darken($gray-lighter, 2%);
     }
 
     small {

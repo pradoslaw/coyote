@@ -39,9 +39,12 @@
 
 .sidebar-job-offers {
   .media {
-    border-bottom: 1px solid $border-color;
-    padding-bottom: 7px;
-    margin-top: 7px;
+    margin: 0;
+
+    .media-left {
+      // firm's logo
+      vertical-align: middle;
+    }
 
     .media-heading {
       margin-bottom: 2px;
@@ -52,14 +55,26 @@
     }
   }
 
+  .media-link {
+    display: block;
+    text-decoration: none;
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 7px;
+    padding-top: 7px;
+
+    &:hover {
+      h5 {
+        color: $brand-primary;
+      }
+    }
+  }
+
   h5 {
     padding-bottom: 1px;
+    font-size: $font-size-base;
+    color: $link-color-darker;
 
-    a {
-      @include text-overflow;
-      font-size: $font-size-base;
-      color: $link-color-darker;
-    }
+    @include text-overflow;
   }
 
   p {
@@ -82,5 +97,16 @@
 
   img[src*="logo-gray"] {
     opacity: 0.7;
+  }
+
+  .tag-clouds {
+    padding: 0;
+
+    > li {
+      > span {
+        margin: 0;
+        padding: 2px 4px;
+      }
+    }
   }
 }

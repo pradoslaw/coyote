@@ -8,6 +8,7 @@
 
 @import "helpers/variables";
 @import "helpers/utilities";
+@import "helpers/mixins";
 @import "base/reset";
 @import "components/breadcrumbs";
 @import "components/buttons";
@@ -24,6 +25,7 @@
 @import "components/labels";
 @import "components/forms";
 @import "components/tables";
+@import "components/tags";
 @import "components/job-offers";
 @import "components/code";
 @import "layout/header";
