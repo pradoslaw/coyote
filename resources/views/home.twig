@@ -226,7 +226,7 @@
     <script type="text/javascript" src="{{ cdn('js/microblog.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            $('#stream').perfectScrollbar();
+            $('#stream').perfectScrollbar({suppressScrollX: true});
 
             $('#forum-tabs a').click(function() {
                 var index = $('#forum-tabs a').index(this);
