@@ -2,11 +2,13 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Forum\Track as Forum_Track;
 use Coyote\Topic\Track as Topic_Track;
 use Coyote\Topic;
 use Coyote\Forum;
+use Illuminate\Container\Container as App;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -14,6 +16,21 @@ use Illuminate\Support\Collection;
 class ForumRepository extends Repository implements ForumRepositoryInterface
 {
     use UserTrait;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    public $order;
+
+    /**
+     * @inheritdoc
+     */
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
+
+        $this->order = $this->app[OrderRepositoryInterface::class];
+    }
 
     /**
      * @return string

@@ -8,7 +8,7 @@ use Coyote\Repositories\Eloquent\Repository;
 class OrderRepository extends Repository implements OrderRepositoryInterface
 {
     /**
-     * @return \Coyote\Forum\Order
+     * @return string
      */
     public function model()
     {
@@ -16,23 +16,39 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
     }
 
     /**
-     * @param int $userId
-     * @param array $data
+     * @inheritdoc
      */
     public function saveForUser($userId, array $data)
     {
         $this->deleteForUser($userId);
-        
+
         foreach ($data as $row) {
             $this->model->create($row + ['user_id' => $userId]);
         }
     }
 
     /**
-     * @param int $userId
+     * @inheritdoc
      */
     public function deleteForUser($userId)
     {
         $this->model->where('user_id', $userId)->delete();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findAllVisibleIds($userId)
+    {
+        if ($userId === null) {
+            return [];
+        }
+
+        return $this
+            ->model
+            ->where('user_id', $userId)
+            ->where('is_hidden', 0)
+            ->pluck('forum_id')
+            ->toArray();
     }
 }

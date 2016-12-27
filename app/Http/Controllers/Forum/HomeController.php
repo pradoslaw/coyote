@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
@@ -231,6 +232,7 @@ class HomeController extends BaseController
     private function load()
     {
         $this->topic->pushCriteria(new OnlyThoseWithAccess($this->auth));
+        $this->topic->pushCriteria(new BelongsToForum($this->forum->order->findAllVisibleIds($this->userId)));
 
         return $this
             ->topic

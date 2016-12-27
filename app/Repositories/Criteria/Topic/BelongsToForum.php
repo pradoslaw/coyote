@@ -4,20 +4,21 @@ namespace Coyote\Repositories\Criteria\Topic;
 
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Criteria\Criteria;
+use Illuminate\Database\Eloquent\Builder;
 
 class BelongsToForum extends Criteria
 {
     /**
-     * @var int
+     * @var int[]
      */
-    private $forumId;
+    private $forumsId;
 
     /**
-     * @param int $forumId
+     * @param int|int[] $forumsId
      */
-    public function __construct($forumId)
+    public function __construct($forumsId)
     {
-        $this->forumId = $forumId;
+        $this->forumsId = (array) $forumsId;
     }
 
     /**
@@ -27,6 +28,8 @@ class BelongsToForum extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->where('topics.forum_id', $this->forumId);
+        return $model->when(count($this->forumsId) > 0, function (Builder $builder) {
+            return $builder->whereIn('topics.forum_id', $this->forumsId);
+        });
     }
 }

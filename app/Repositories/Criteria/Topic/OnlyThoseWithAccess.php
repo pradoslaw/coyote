@@ -3,13 +3,12 @@
 namespace Coyote\Repositories\Criteria\Topic;
 
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
-use Coyote\Repositories\Contracts\RepositoryInterface;
 
 class OnlyThoseWithAccess extends \Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess
 {
     /**
      * @param \Illuminate\Database\Eloquent\Builder $model
-     * @param RepositoryInterface $repository
+     * @param Repository $repository
      * @return mixed
      */
     public function apply($model, Repository $repository)

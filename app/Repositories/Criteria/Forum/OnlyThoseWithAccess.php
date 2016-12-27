@@ -3,7 +3,6 @@
 namespace Coyote\Repositories\Criteria\Forum;
 
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
-use Coyote\Repositories\Contracts\RepositoryInterface;
 use Coyote\Repositories\Criteria\Criteria;
 use Coyote\User;
 use Illuminate\Database\Query\Builder;
@@ -27,7 +26,7 @@ class OnlyThoseWithAccess extends Criteria
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $model
-     * @param RepositoryInterface $repository
+     * @param Repository $repository
      * @return mixed
      */
     public function apply($model, Repository $repository)
@@ -37,7 +36,7 @@ class OnlyThoseWithAccess extends Criteria
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $model
-     * @param RepositoryInterface $repository
+     * @param Repository $repository
      * @param string $column
      * @return mixed
      */

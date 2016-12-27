@@ -16,4 +16,10 @@ interface OrderRepositoryInterface extends RepositoryInterface
      * @param int $userId
      */
     public function deleteForUser($userId);
+
+    /**
+     * @param int|null $userId
+     * @return array
+     */
+    public function findAllVisibleIds($userId);
 }
