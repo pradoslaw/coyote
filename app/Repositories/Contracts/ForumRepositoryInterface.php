@@ -2,10 +2,8 @@
 
 namespace Coyote\Repositories\Contracts;
 
-use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface;
-
 /**
- * @property OrderRepositoryInterface $order
+ * @property \Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface $order
  */
 interface ForumRepositoryInterface extends RepositoryInterface
 {
