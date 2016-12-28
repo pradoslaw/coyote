@@ -411,6 +411,19 @@ $(function () {
                 $post.html(html).find('textarea').prompt().fastSubmit().autogrow().inputFocus();
 
                 $this.addClass('active');
+            })
+            .error(function(event) {
+                if (typeof event.responseJSON !== 'undefined') {
+                    if (typeof event.responseJSON.text !== 'undefined') {
+                        error(event.responseJSON.text);
+                    }
+                    else if (typeof event.responseJSON.error !== 'undefined') {
+                        error(event.responseJSON.error);
+                    }
+                }
+                else if (typeof event.responseText !== 'undefined') {
+                    error(event.responseText);
+                }
             });
         } else {
             $post.html(posts[$this.data('post-id')]);

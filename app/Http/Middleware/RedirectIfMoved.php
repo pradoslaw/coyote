@@ -3,20 +3,25 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Illuminate\Http\Request;
 
 class RedirectIfMoved
 {
     /**
-     * @var Forum
+     * @var ForumRepository
      */
     private $forum;
 
     /**
-     * @param Forum $forum
+     * @var Request
      */
-    public function __construct(Forum $forum)
+    private $request;
+
+    /**
+     * @param ForumRepository $forum
+     */
+    public function __construct(ForumRepository $forum)
     {
         $this->forum = $forum;
     }
@@ -30,17 +35,68 @@ class RedirectIfMoved
      */
     public function handle(Request $request, Closure $next)
     {
-        $forum = $request->route('forum');
-        $topic = $request->route('topic');
+        $this->request = $request;
 
-        if ($forum->id !== $topic->forum_id
-            || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug)) {
-            $forum = $this->forum->find($topic->forum_id, ['slug']);
+        if ($this->isUrlIncorrect()) {
+            $topic = $request->route('topic');
+            $forum = $this->forum->find($topic->forum_id);
 
-            $parameters = array_merge([$forum->slug, $topic->id, $topic->slug], $request->query());
-            return redirect()->route('forum.topic', $parameters, 301);
+            $request->route()->setParameter('forum', $forum);
+
+            if ($request->isMethod('get')) {
+                return $this->getRedirector($forum, $topic);
+            }
         }
 
         return $next($request);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isUrlIncorrect()
+    {
+        $forum = $this->request->route('forum');
+        $topic = $this->request->route('topic');
+
+        if ($forum->id !== $topic->forum_id
+            || ($this->request->route('slug') !== null && $this->request->route('slug') !== $topic->slug)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \Coyote\Forum|object $forum
+     * @param \Coyote\Topic|object $topic
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    private function getRedirector($forum, $topic)
+    {
+        switch ($this->request->route()->getName()) {
+            case 'forum.topic':
+                return $this->route('forum.topic', [$forum->slug, $topic->id, $topic->slug]);
+
+            case 'forum.post.submit':
+                return $this->route('forum.post.submit', [$forum->slug, $topic->id, $this->request->route('post')]);
+
+            case 'forum.post.edit':
+                return $this->route('forum.post.edit', [$forum->slug, $topic->id, $this->request->route('post')]);
+
+            default:
+                throw new \Exception('Unknown route in middleware: ' . $this->request->route()->getName());
+        }
+    }
+
+    /**
+     * @param $route
+     * @param array $arguments
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function route($route, array $arguments)
+    {
+        return redirect()->route($route, array_merge($arguments, $this->request->query()), 301);
     }
 }

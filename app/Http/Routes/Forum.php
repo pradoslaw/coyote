@@ -28,7 +28,27 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // wklejanie zdjec przy pomocy Ctrl+V w textarea
     $this->post('Paste', ['uses' => 'AttachmentController@paste', 'as' => 'paste']);
 
-    // formularz dodawania nowego watku na forum
+    // Add or edit topic's post
+    // ----------------------------------------------------
+    $this->get('{forum}/Submit/{topic}/{post?}', [
+        'uses' => 'SubmitController@index',
+        'as' => 'post.submit',
+        'middleware' => [
+            // topic.access must be first
+            'topic.access', 'forum.access', 'forum.write'
+        ]
+    ]);
+
+    $this->post('{forum}/Submit/{topic}/{post?}', [
+        'uses' => 'SubmitController@save',
+        'middleware' => [
+            // topic.access must be first
+            'topic.access', 'forum.access', 'forum.write', 'post.response'
+        ]
+    ]);
+
+    // Add new topic
+    // -------------------------------------------------
     $this->get('{forum}/Submit/{topic?}', [
         'uses' => 'SubmitController@index',
         'as' => 'topic.submit',
@@ -44,22 +64,8 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         ]
     ]);
 
-    // dodawanie lub edycja posta na forum
-    $this->get('{forum}/Submit/{topic}/{post?}', [
-        'uses' => 'SubmitController@index',
-        'as' => 'post.submit',
-        'middleware' => [
-            'topic.access', 'forum.access', 'forum.write'
-        ]
-    ]);
-
-    $this->post('{forum}/Submit/{topic}/{post?}', [
-        'uses' => 'SubmitController@save',
-        'middleware' => [
-            'topic.access', 'forum.access', 'forum.write', 'post.response'
-        ]
-    ]);
-
+    // Fast edit
+    // ------------------------------------------------
     $this->get('{forum}/{topic}/Edit/{post}', [
         'uses' => 'SubmitController@edit',
         'as' => 'post.edit',
@@ -68,7 +74,8 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         ]
     ]);
 
-    // szybka zmiana tytulu watku
+    // Change topic's subject
+    // ----------------------------------------------
     $this->post('Topic/Subject/{topic}', [
         'uses' => 'SubmitController@subject',
         'as' => 'topic.subject',
@@ -103,13 +110,19 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->get('Stream/{topic}', ['uses' => 'StreamController@index', 'as' => 'stream', 'middleware' => ['auth']]);
 
     // widok kategorii forum
-    $this->get('{forum}', ['uses' => 'CategoryController@index', 'as' => 'category', 'middleware' => ['forum.access', 'forum.url']]);
-    // widok wyswietlania watku. {topic}
+    $this->get('{forum}', [
+        'uses' => 'CategoryController@index',
+        'as' => 'category',
+        'middleware' => ['forum.access', 'forum.url']
+    ]);
+
+    // Show topic
+    // -------------------------------------------------------
     $this->get('{forum}/{topic}-{slug}', [
         'uses' => 'TopicController@index',
         'as' => 'topic',
         'middleware' => [
-            'forum.access', 'topic.access', 'topic.scroll', 'page.hit'
+            'topic.access', 'forum.access', 'topic.scroll', 'page.hit'
         ]
     ]);
 
