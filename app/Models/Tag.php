@@ -5,6 +5,9 @@ namespace Coyote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property string $name
+ */
 class Tag extends Model
 {
     use SoftDeletes;
@@ -25,4 +28,9 @@ class Tag extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

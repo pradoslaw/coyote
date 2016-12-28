@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Eloquent;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
+use Illuminate\Database\Query\JoinClause;
 
 /**
  * @method mixed search(array $body)
@@ -70,12 +71,13 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
         return $this
             ->model
             ->select(['jobs.*', 'firms.name AS firm.name', 'firms.logo AS firm.logo', 'currencies.name AS currency_name'])
-            ->join('job_subscribers', function ($join) use ($userId) {
+            ->join('job_subscribers', function (JoinClause $join) use ($userId) {
                 $join->on('job_id', '=', 'jobs.id')->on('job_subscribers.user_id', '=', $this->raw($userId));
             })
             ->leftJoin('firms', 'firms.id', '=', 'firm_id')
             ->join('currencies', 'currencies.id', '=', 'currency_id')
             ->with('locations')
+            ->with('tags')
             ->get();
     }
 

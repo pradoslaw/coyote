@@ -40,6 +40,7 @@
 .sidebar-job-offers {
   .media {
     margin: 0;
+    border-bottom: 1px solid $border-color;
 
     .media-left {
       // firm's logo
@@ -62,7 +63,6 @@
   .media-link {
     display: block;
     text-decoration: none;
-    border-bottom: 1px solid $border-color;
     padding-bottom: 7px;
     padding-top: 7px;
 
