@@ -43,12 +43,14 @@
     border-bottom: 1px solid $border-color;
 
     .media-left {
-      // firm's logo
-      vertical-align: middle;
-
       @media screen and (max-width: $screen-xlg-min) {
         display: none;
       }
+    }
+
+    .media-left, .media-body {
+      // firm's logo
+      vertical-align: middle;
     }
 
     .media-heading {
