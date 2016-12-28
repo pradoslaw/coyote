@@ -3,7 +3,9 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
+use Coyote\Forum;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Topic;
 use Illuminate\Http\Request;
 
 class RedirectIfMoved
@@ -68,12 +70,12 @@ class RedirectIfMoved
     }
 
     /**
-     * @param \Coyote\Forum|object $forum
-     * @param \Coyote\Topic|object $topic
+     * @param Forum|object|string $forum
+     * @param Topic|object|string $topic
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    private function getRedirector($forum, $topic)
+    private function getRedirector(Forum $forum, Topic $topic)
     {
         switch ($this->request->route()->getName()) {
             case 'forum.topic':
@@ -91,7 +93,7 @@ class RedirectIfMoved
     }
 
     /**
-     * @param $route
+     * @param string $route
      * @param array $arguments
      * @return \Illuminate\Http\RedirectResponse
      */
