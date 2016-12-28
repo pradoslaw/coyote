@@ -160,10 +160,19 @@
 
       @include break-word;
 
-      // markdown moze "produkowac" <p> w tresci komentarza
-      p {
+      // markdown moze "produkowac" <p> w tresci komentarza. pierwsza linia komentarza musi byc na rowni
+      // z loginem stad takie dziwne zabiegi majace na celu zachowanie odstepow od paragrafow z jednoczesnym
+      // wyrownaniem pierwszego <p> wzgledem loginu
+      p:first-child {
         display: inline;
-        margin: 0;
+      }
+
+      p:nth-child(2) {
+        margin-top: 9px;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
       }
     }
 
