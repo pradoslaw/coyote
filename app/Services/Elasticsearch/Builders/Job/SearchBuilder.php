@@ -20,12 +20,12 @@ class SearchBuilder
     /**
      * @var Request
      */
-    private $request;
+    protected $request;
 
     /**
      * @var QueryBuilder
      */
-    private $queryBuilder;
+    protected $queryBuilder;
 
     /**
      * @var Filters\Job\City
@@ -133,24 +133,38 @@ class SearchBuilder
         $sort = $this->getSort();
         $this->queryBuilder->addSort(new Sort($sort, $this->getOrder()));
 
+        $this->addFilters();
+        $this->addFunctionScore();
+        // facet search
+        $this->addAggregation();
+
+        $this->queryBuilder->setSize(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
+
+        return $this->queryBuilder;
+    }
+
+    protected function addFilters()
+    {
         // it's really important. we MUST show only active offers
         $this->queryBuilder->addFilter(new Filters\Range('deadline_at', ['gte' => 'now']));
         $this->queryBuilder->addFilter($this->city);
         $this->queryBuilder->addFilter($this->tag);
         $this->queryBuilder->addFilter($this->location);
+    }
 
+    protected function addFunctionScore()
+    {
         // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 1)
         $this->queryBuilder->addFunction(new FieldValueFactor('score', 'log', 1));
         // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
         $this->queryBuilder->addFunction(new Decay('created_at', '14d', 0.1));
+    }
 
-        // facet search
+    protected function addAggregation()
+    {
         $this->queryBuilder->addAggs(new Aggs\Job\Location());
         $this->queryBuilder->addAggs(new Aggs\Job\Remote());
         $this->queryBuilder->addAggs(new Aggs\Job\Tag());
-        $this->queryBuilder->setSize(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
-
-        return $this->queryBuilder;
     }
 
     /**

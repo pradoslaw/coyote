@@ -4,11 +4,12 @@ namespace Coyote\Http\Controllers\Job;
 
 use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
 use Coyote\Services\Elasticsearch\Geodistance;
 use Coyote\Services\Geocoder\Location;
 use Illuminate\Http\Request;
-use Coyote\Services\Elasticsearch\QueryBuilder;
 
 class AdController extends Controller
 {
@@ -35,7 +36,7 @@ class AdController extends Controller
     public function index(Request $request)
     {
         $output = $this->getCacheFactory()->remember('ad:' . md5($request->session()->getId()), 60, function () use ($request) {
-            return $this->load($this->lookupLocation($request));
+            return $this->load();
         });
 
         // cache output response for 1h
@@ -43,26 +44,31 @@ class AdController extends Controller
     }
 
     /**
-     * @param Location $location
      * @return string
      */
-    private function load(Location $location)
+    private function load()
     {
         $data = [];
 
-        $builder = new QueryBuilder();
-        $builder->setSize(0, 4);
+        $builder = new AdBuilder($this->getRouter()->getCurrentRequest());
+        $preferences = $this->getSetting('job.preferences');
 
-        if ($location->longitude !== null || $location->latitude !== null) {
-            $builder->addSort(new Geodistance($location->latitude, $location->longitude));
+        $builder->setPreferences(new Preferences($preferences));
 
-            $data = [
-                'location'      => $location,
-                'offers_count'  => $this->job->countOffersInCity($location->city)
-            ];
+        if ($preferences !== null) {
+            $location = $this->lookupLocation();
+
+            if ($location->longitude !== null || $location->latitude !== null) {
+                $builder->setSort(new Geodistance($location->latitude, $location->longitude));
+
+                $data = [
+                    'location' => $location,
+                    'offers_count' => $this->job->countOffersInCity($location->city)
+                ];
+            }
         }
 
-        $result = $this->job->search($builder->build());
+        $result = $this->job->search($builder->build()->build());
         if (!$result->total()) {
             return '';
         }
@@ -72,21 +78,20 @@ class AdController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Location
      */
-    private function lookupLocation(Request $request)
+    private function lookupLocation()
     {
         if ($this->userId !== null && $this->auth->latitude !== null && $this->auth->longitude !== null) {
             return new Location([
-                'latitude' => $this->auth->latitude,
+                'latitude'  => $this->auth->latitude,
                 'longitude' => $this->auth->longitude,
-                'city' => $this->auth->location
+                'city'      => $this->auth->location
             ]);
         }
 
         // ... otherwise lookup by ip
-        return new Location($this->getByIp($request->ip()) ?: []);
+        return new Location($this->getByIp($this->getRouter()->getCurrentRequest()->ip()) ?: []);
     }
 
     /**
