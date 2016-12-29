@@ -13,7 +13,7 @@
 // ----------------------------------------------
 
 .link-broken {
-  color: $alt-link-hover-color;
+  color: $alt-link-hover-color !important;
   border-bottom: 1px dotted $alt-link-hover-color;
 
   &:hover {
