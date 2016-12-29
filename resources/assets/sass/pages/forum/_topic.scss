@@ -103,11 +103,8 @@
       font-weight: normal;
     }
 
-    a {
-      color: $link-color-darker;
-    }
-
-    @include text-overflow();
+    @include link-color-darker;
+    @include text-overflow;
   }
 
   h5.offline {
@@ -256,9 +253,7 @@
   overflow: hidden;
   padding-right: 50px;
 
-  a {
-    color: $link-color-darker;
-  }
+  @include link-color-darker;
 
   hr {
     margin: 15px 0 5px 0;
@@ -379,9 +374,7 @@ div.tooltip-inner {
   font-size: 11px;
   padding-right: 50px;
 
-  a {
-    color: $link-color-darker;
-  }
+  @include link-color-darker;
 
   .btn-comment-edit, .btn-comment-del {
     padding: 0 5px;

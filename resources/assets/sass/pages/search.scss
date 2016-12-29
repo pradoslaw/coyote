@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import "../helpers/variables";
+@import "../helpers/mixins";
 @import "../vendor/bootstrap/variables";
 @import "../vendor/font-awesome/variables";
 @import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
@@ -18,9 +19,7 @@
     font-size: $font-size-large;
     text-decoration: underline;
 
-    a {
-      color: $link-color-darker;
-    }
+    @include link-color-darker;
   }
 
   small {

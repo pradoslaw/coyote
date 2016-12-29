@@ -40,6 +40,7 @@
 
   @include break-word;
   @include adjust-list-padding;
+  @include link-color-darker;
 
   // emoticons are NOT responsive
   img:not(.img-smile) {
@@ -48,10 +49,6 @@
 
   > .thumbnails {
     margin-top: 20px;
-  }
-
-  a {
-    color: $link-color-darker;
   }
 }
 
@@ -159,6 +156,7 @@
       display: inline;
 
       @include break-word;
+      @include link-color-darker;
 
       // markdown moze "produkowac" <p> w tresci komentarza. pierwsza linia komentarza musi byc na rowni
       // z loginem stad takie dziwne zabiegi majace na celu zachowanie odstepow od paragrafow z jednoczesnym
@@ -182,9 +180,7 @@
     }
 
     h6 {
-      > a {
-        color: $link-color-darker;
-      }
+      @include link-color-darker;
 
       font-size: 13px;
       display: inline;
@@ -211,11 +207,6 @@
       li:last-child:after {
         content: "\00a0 ";
       }
-    }
-
-    .login {
-      color: $link-color-darker;
-      text-decoration: underline;
     }
   }
 

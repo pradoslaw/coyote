@@ -3,6 +3,6 @@
 // Darker links in table
 // ------------------------------------
 
-table a {
-  color: $link-color-darker;
+table {
+  @include link-color-darker;
 }

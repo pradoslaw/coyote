@@ -30,3 +30,9 @@
     padding-left: 16px;
   }
 }
+
+@mixin link-color-darker() {
+  a {
+    color: $link-color-darker;
+  }
+}

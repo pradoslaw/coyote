@@ -103,6 +103,7 @@
     }
 
     @include adjust-list-padding;
+    @include link-color-darker;
   }
 }
 
