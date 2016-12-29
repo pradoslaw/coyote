@@ -4,7 +4,6 @@ namespace Coyote\Console\Commands;
 
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Services\Elasticsearch\MultiResultSet;
 use Coyote\Services\Elasticsearch\ResultSet;
 use Coyote\User;
 use Elasticsearch\Client;
