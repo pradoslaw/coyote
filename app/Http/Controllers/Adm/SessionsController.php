@@ -13,7 +13,7 @@ class SessionsController extends BaseController
      */
     public function index(SessionRepository $session)
     {
-        $this->breadcrumb->push('Kto jest online');
+        $this->breadcrumb->push('Kto jest online', route('adm.sessions'));
 
         $builder = $session->select(['sessions.*', 'users.name'])->leftJoin('users', 'users.id', '=', 'user_id');
         $grid = $this->gridBuilder()->createGrid(SessionsGrid::class)->setSource(new EloquentSource($builder));

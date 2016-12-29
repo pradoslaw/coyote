@@ -40,7 +40,7 @@ class SessionsGrid extends Grid
             ->addColumn('ip', [
                 'title' => 'IP',
                 'decorators' => [new Ip()],
-                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'sessions.ip'])
             ])
             ->addColumn('url', [
                 'title' => 'Strona',
@@ -50,16 +50,14 @@ class SessionsGrid extends Grid
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])
             ->addColumn('browser', [
-                'title' => 'Przeglądarka',
-                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
+                'title' => 'Przeglądarka'
             ])
             ->addColumn('platform', [
-                'title' => 'System operacyjny',
-                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
+                'title' => 'System operacyjny'
             ])
             ->addColumn('user_agent', [
                 'title' => 'User-agent',
-                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'sessions.browser'])
             ])
             ->after(function (Row $row) {
                 $agent = new Agent();
