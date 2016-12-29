@@ -22,6 +22,9 @@
     min-height: 32px;
     height: 32px; // for firefox
     resize: none;
+
+    // we need padding-right because of submit button next to textarea comment form
+    padding-right: 32px;
   }
 }
 
