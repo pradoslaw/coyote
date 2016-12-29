@@ -168,7 +168,7 @@ class PmController extends BaseController
 
             $pm = $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
 
-            $excerpt = excerpt($this->getParser()->parse($request->get('text')));
+            $excerpt = excerpt($text = $this->getParser()->parse($request->get('text')));
 
             // we need to send notification to recipient
             app('alert.pm')->with([
@@ -176,6 +176,7 @@ class PmController extends BaseController
                 'sender_id'   => $this->auth->id,
                 'sender_name' => $this->auth->name,
                 'subject'     => $excerpt,
+                'text'        => $text,
                 'url'         => route('user.pm.show', [$pm->id - 1], false)
             ])->notify();
 

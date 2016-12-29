@@ -2,5 +2,9 @@
 {% extends 'emails.alerts.base' %}
 
 {% block content %}
-    Masz nową wiadomość od użytkownika {{ sender }}.
+    Masz nową wiadomość od użytkownika {{ sender }}:<br><br>
+
+    <hr>
+    {{ text|raw }}
+    <hr>
 {% endblock %}
