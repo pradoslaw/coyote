@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Coyote\Models\Scopes\Sortable;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\QueryException;
 
 /**
  * @property int $id
@@ -256,10 +257,17 @@ class Topic extends Model
         // builds data to update
         $attributes = ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
         // execute a query...
-        $this->tracks()->updateOrCreate($attributes, $attributes + [
-            'marked_at' => $markTime,
-            'forum_id' => $this->forum_id
-        ]);
+
+        try {
+            $this->tracks()->updateOrCreate(
+                $attributes,
+                array_merge($attributes, ['marked_at' => $markTime, 'forum_id' => $this->forum_id])
+            );
+        } catch (QueryException $e) {
+            // bardzo rzadko zdarza sie, ze wystapi tutaj wyjatek duplicated entry. uzytkownik moze otworzyc
+            // dana strone 2x i zostanie wygenerowane 2x zapytanie INSERT
+            logger()->debug($e);
+        }
     }
 
     /**
