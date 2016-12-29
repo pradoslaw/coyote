@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Adm\Forum;
 
+use Coyote\Events\ForumWasSaved;
 use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Grids\Adm\Forum\PermissionsGrid;
 use Coyote\Permission;
@@ -114,6 +115,7 @@ class PermissionsController extends BaseController
             }
 
             $this->flushPermission();
+            event(new ForumWasSaved($forum));
         });
 
         return redirect()->route('adm.forum.permissions')->with('success', 'Zmiany uprawnień zostały zapisane.');
