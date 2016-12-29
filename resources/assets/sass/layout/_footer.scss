@@ -142,3 +142,24 @@ footer {
     display: inline-block;
   }
 }
+
+#back-to-top {
+  display: none;
+  width: 60px;
+  height: 60px;
+  text-indent: -9999px;
+  position: fixed;
+  z-index: 999;
+  right: 15px;
+  bottom: 40px;
+  background: #000 url("/img/up-arrow.png") no-repeat center 43%;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  opacity: 0.3;
+
+  &:hover {
+    opacity: 0.5;
+    background-color: #000;
+  }
+}
