@@ -44,6 +44,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->pattern('topic', '[0-9]+');
         $router->pattern('user', '[0-9]+');
         $router->pattern('post', '[0-9]+');
+        $router->pattern('job', '[0-9]+');
 
         $router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
         $router->pattern('tag', '([a-ząęśżźćółń0-9\-\.\#\+])+');
