@@ -89,8 +89,6 @@ EOF;
                 <li><a title="Skontaktuj się poprzez email" href="https://www.facebook.com/4programmers.net"><i class="fa fa-facebook fa-fw"></i> Odwiedź nas na Facebooku</a></li>
             </ol>
         </div>
-        
-        <a id="back-to-top" href="#top" title="Powrót na górę">Powrót na górę</a>
     </div>
 </div>
 EOF;
