@@ -18,6 +18,6 @@ class ChangeImageUrlTest extends \Codeception\TestCase\Test
         $listener = new \Coyote\Listeners\ChangeImageUrl();
         $listener->handle($event);
 
-        $this->tester->assertEquals('<img src="https://static.4programmers.net/img/smilies/sad.gif">', $message->getBody());
+        $this->tester->assertRegExp('~<img src="https://static.4programmers.net/img/smilies/sad.gif">~', $message->getBody());
     }
 }
