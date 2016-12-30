@@ -1,6 +1,5 @@
 <?php
 
-use Coyote\Services\Parser\Parsers\Markdown;
 
 class CensoreParserTest extends \Codeception\TestCase\Test
 {

@@ -84,7 +84,7 @@ function cdn($path, $secure = null)
         $path = elixir($path);
     }
 
-    return '//' . config('app.cdn') . ($path[0] !== '/' ? ('/' . $path) : $path);
+    return ($secure ? 'https:' : '') . '//' . config('app.cdn') . ($path[0] !== '/' ? ('/' . $path) : $path);
 }
 
 /**
