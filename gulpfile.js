@@ -18,6 +18,7 @@ elixir(function (mix) {
         '../bower/bootstrap/js/tooltip.js',
         '../bower/bootstrap/js/collapse.js', // to musi sie znajdowac na kazdej podstronie (zwijanie menu dla urzadzen mobilnych)
         'components/dropdown.js',
+        'components/scrolltop.js',
         'components/breadcrumb.js',
         'components/realtime.js',
         'components/state.js',

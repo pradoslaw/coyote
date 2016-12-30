@@ -122,6 +122,30 @@ footer {
 
     }
   }
+
+  .back-to-top {
+    display: none;
+    color: #fff;
+    font-size: 54px;
+    width: 60px;
+    height: 60px;
+    line-height: 1em;
+    position: fixed;
+    z-index: 999;
+    right: 15px;
+    bottom: 40px;
+    background: #000 no-repeat center 43%;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    text-align: center;
+    opacity: 0.3;
+
+    &:hover {
+      opacity: 0.5;
+      background-color: #000;
+    }
+  }
 }
 
 #footer-copyright {

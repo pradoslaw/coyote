@@ -80,7 +80,7 @@ EOF;
         </ul>
     </div>
 
-    <div class=" col-sm-4">
+    <div class="col-sm-4">
         <div class="footer-bubble">
             <h6>Skontaktuj się z nami</h6>
 
