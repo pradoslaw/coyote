@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\CreateSitemap',
         'Coyote\Console\Commands\Migrate',
         'Coyote\Console\Commands\Markdown',
+        'Coyote\Console\Commands\FlushCache',
         'Coyote\Console\Commands\Elasticsearch\Mapping',
         'Coyote\Console\Commands\Elasticsearch\Create',
         'Coyote\Console\Commands\Elasticsearch\Index'

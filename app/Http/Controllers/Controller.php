@@ -115,8 +115,9 @@ abstract class Controller extends BaseController
             $repository = app(ForumRepositoryInterface::class);
             // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
             $repository->resetCriteria();
+            $repository->resetModel();
 
-            $repository->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
+            $repository->pushCriteria(new OnlyThoseWithAccess($this->auth));
             $repository->pushCriteria(new AccordingToUserOrder($this->userId));
             $repository->applyCriteria();
 
