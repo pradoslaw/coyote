@@ -123,6 +123,7 @@ class SubmitController extends Controller
             'currencyList'      => Currency::lists('name', 'id'),
             'employmentList'    => Job::getEmploymentList(),
             'rateList'          => Job::getRatesList(),
+            'remote_range_list' => Job::getRemoteRangeList(),
             'popularTags'       => $this->job->getPopularTags()
         ])->with(
             compact('job', 'firm')

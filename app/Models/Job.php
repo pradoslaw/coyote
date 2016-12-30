@@ -68,6 +68,7 @@ class Job extends Model
         'requirements',
         'recruitment',
         'is_remote',
+        'remote_range',
         'country_id',
         'salary_from',
         'salary_to',
@@ -182,7 +183,7 @@ class Job extends Model
 
         static::saving(function (Job $model) {
             // nullable column
-            foreach (['firm_id', 'salary_from', 'salary_to'] as $column) {
+            foreach (['firm_id', 'salary_from', 'salary_to', 'remote_range'] as $column) {
                 if (empty($model->{$column})) {
                     $model->{$column} = null;
                 }
@@ -210,6 +211,20 @@ class Job extends Model
     public static function getEmploymentList()
     {
         return [1 => 'Umowa o pracę', 2 => 'Umowa zlecenie', 3 => 'Umowa o dzieło', 4 => 'Kontrakt'];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getRemoteRangeList()
+    {
+        $list = [];
+
+        for ($i = 100; $i >= 0; $i -= 10) {
+            $list[$i] = "$i%";
+        }
+
+        return $list;
     }
 
     /**
