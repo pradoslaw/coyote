@@ -8,6 +8,9 @@ use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
 use Illuminate\Mail\Message;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Objects\Job as Stream_Job;
+use Coyote\Services\Stream\Objects\Application as Stream_Application;
 
 class ApplicationController extends Controller
 {
@@ -30,10 +33,11 @@ class ApplicationController extends Controller
         $form = $this->createForm(ApplicationForm::class);
 
         if ($this->userId) {
-            $form->email->setValue(auth()->user()->email);
-            // set default message
-            $form->text->setValue(view('job.partials.application', compact('job')));
+            $form->email->setValue($this->auth->email);
         }
+
+        // set default message
+        $form->text->setValue(view('job.partials.application', compact('job')));
 
         return $this->view('job.application', compact('job', 'form'))->with(
             'subscribed',
@@ -61,6 +65,8 @@ class ApplicationController extends Controller
         }
 
         $this->transaction(function () use ($job, $data, $attachment) {
+            $target = (new Stream_Job)->map($job);
+
             $job->applications()->create($data);
             $job = $job->toArray();
 
@@ -81,6 +87,8 @@ class ApplicationController extends Controller
                     }
                 }
             );
+
+            stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
         });
 
         return redirect()
