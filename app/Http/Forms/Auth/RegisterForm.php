@@ -34,16 +34,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'E-mail',
                 'help' => 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.'
             ])
-            ->add('email_confirmation', 'text', [
-                'rules' => 'max:0',
-                'label' => 'Email (ponownie)',
-                'attr' => [
-                    'placeholder' => 'Pozostaw to pole puste!'
-                ],
-                'row_attr' => [
-                    'style' => 'display: none'
-                ]
-            ])
+            ->add('email_confirmation', 'bot_hidden')
             ->add('submit', 'submit', [
                 'label' => 'Utwórz konto',
                 'attr' => [

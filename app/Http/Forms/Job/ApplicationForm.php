@@ -50,6 +50,7 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                     'placeholder' => 'Np. jan@kowalski.pl'
                 ]
             ])
+            ->add('email_confirmation', 'bot_hidden')
             ->add('name', 'text', [
                 'rules' => 'required|string|max:50',
                 'label' => 'Imię i nazwisko'
