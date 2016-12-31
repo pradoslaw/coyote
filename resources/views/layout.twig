@@ -130,7 +130,14 @@
 
                         <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right hidden-sm" role="search">
                             <div class="form-group">
-                                <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+                                <div class="input-group">
+                                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-link">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                         </form>
 
