@@ -34,7 +34,7 @@
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.0",
         "erusev/parsedown-extra": "^0.7.0",
-        "jenssegers/mongodb": "3.1.1",
+        "jenssegers/mongodb": "^3.1",
         "folklore/image": "0.3.*",
         "ezyang/htmlpurifier": "^4.7",
         "lavary/laravel-menu": "dev-master",
