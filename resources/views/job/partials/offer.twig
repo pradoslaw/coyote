@@ -34,7 +34,7 @@
                     <i class="fa fa-map-marker"></i>
                     {{ job.country_name }}
 
-                    {% include 'job.partials.location' with {'locations': job.locations.lists('city')} %}
+                    {% include 'job.partials.location' with {'locations': job.locations.pluck('city')} %}
                 </li>
             </ul>
 
