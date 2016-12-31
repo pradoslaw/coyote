@@ -2,10 +2,13 @@
 
 namespace Coyote\Job;
 
+use Coyote\Models\Scopes\ForUser;
 use Illuminate\Database\Eloquent\Model;
 
 class Application extends Model
 {
+    use ForUser;
+
     /**
      * The database table used by the model.
      *

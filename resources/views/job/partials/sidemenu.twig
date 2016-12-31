@@ -3,7 +3,7 @@
 {% if job.enable_apply %}
     <div class="box-apply hidden-sm hidden-xs">
         <span class="outline">
-            <a class="btn btn-primary" href="{{ route('job.candidate', [job.id]) }}">Aplikuj na to stanowisko</a>
+            <a class="btn btn-primary" href="{{ route('job.candidate', [job.id]) }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
         </span>
     </div>
 {% endif %}

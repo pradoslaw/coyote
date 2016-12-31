@@ -365,6 +365,22 @@ class Job extends Model
     }
 
     /**
+     * @param string $url
+     */
+    public function addReferer($url)
+    {
+        if ($url && mb_strlen($url) < 200) {
+            $referer = $this->referers()->firstOrNew(['url' => $url]);
+
+            if (!$referer->id) {
+                $referer->save();
+            } else {
+                $referer->increment('count');
+            }
+        }
+    }
+
+    /**
      * @return array
      */
     protected function getIndexBody()

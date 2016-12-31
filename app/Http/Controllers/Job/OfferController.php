@@ -45,6 +45,7 @@ class OfferController extends Controller
     public function index($id)
     {
         // call method from repository to fetch job data and country name and currency
+        /** @var \Coyote\Job $job */
         $job = $this->job->findById($id);
 
         $this->breadcrumb->push('Praca', route('job.home'));
@@ -67,17 +68,7 @@ class OfferController extends Controller
         }
 
         $job->increment('views');
-        $previous = url()->previous();
-
-        if ($previous && mb_strlen($previous) < 200) {
-            $referer = $job->referers()->firstOrNew(['url' => $previous]);
-
-            if (!$referer->id) {
-                $referer->save();
-            } else {
-                $referer->increment('count');
-            }
-        }
+        $job->addReferer(url()->previous());
 
         if ($this->getGateFactory()->allows('job-delete')) {
             $flag = $this->getFlagFactory()->takeForJob($job->id);
@@ -98,9 +89,23 @@ class OfferController extends Controller
             'employmentList'    => Job::getEmploymentList(),
             'employeesList'     => Firm::getEmployeesList(),
             'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days,
-            'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
+            'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
+            'applied'           => $this->hasApplied($job)
         ])->with(
             compact('job', 'firm', 'tags', 'flag', 'mlt')
         );
+    }
+
+    /**
+     * @param \Coyote\Job $job
+     * @return bool
+     */
+    private function hasApplied($job)
+    {
+        if ($this->userId) {
+            return $job->applications()->forUser($this->userId)->exists();
+        }
+
+        return $job->applications()->where('session_id', $this->sessionId)->exists();
     }
 }
