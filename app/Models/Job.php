@@ -248,7 +248,7 @@ class Job extends Model
      * Scope for currently active job offers
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @return mixed
+     * @return \Illuminate\Database\Query\Builder
      */
     public function scopePriorDeadline($query)
     {
@@ -385,7 +385,7 @@ class Job extends Model
      *
      * @param int|null $userId
      * @param string $sessionId
-     * @return mixed
+     * @return boolean
      */
     public function hasApplied($userId, $sessionId)
     {
