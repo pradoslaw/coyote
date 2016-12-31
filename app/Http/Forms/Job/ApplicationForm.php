@@ -26,6 +26,18 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
     /**
      * @var string
      */
+    private $dismissalPeriodChoices = [
+        'Brak',
+        '3 dni robocze',
+        '1 tydzień',
+        '2 tygodnie',
+        '1 miesiąc',
+        '3 miesiące'
+    ];
+
+    /**
+     * @var string
+     */
     protected $theme = self::THEME_INLINE;
 
     /**
@@ -72,6 +84,11 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Minimalne oczekiwania wynagrodzenie',
                 'empty_value' => 'Do negocjacji',
                 'choices' => array_combine($this->salaryChoices, $this->salaryChoices)
+            ])
+            ->add('dismissal_period', 'select', [
+                'label' => 'Obecny okres wypowiedzenia',
+                'empty_value' => 'Nie określono',
+                'choices' => array_combine($this->dismissalPeriodChoices, $this->dismissalPeriodChoices)
             ])
             ->add('text', 'textarea', [
                 'rules' => 'string|required|max:5000',
