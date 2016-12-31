@@ -11,6 +11,7 @@ use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
+use Illuminate\Http\Request;
 
 class DefaultBindings
 {
@@ -45,11 +46,11 @@ class DefaultBindings
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      * @param  \Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $route = $request->route();
         $optional = $this->getOptionalParameters($route->getUri());
