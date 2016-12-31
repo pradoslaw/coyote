@@ -61,8 +61,10 @@
                                         {{ form_checkbox('is_remote', 1, input_old('remote', job.is_remote), {'id': 'remote'}) }}
 
                                         <label for="remote">
-                                            Możliwa praca zdalna
+                                            Możliwa praca zdalna w zakresie
                                         </label>
+
+                                        {{ form_select('remote_range', remote_range_list, input_old('remote_range', job.id ? job.remote_range : 100), {placeholder: '--', class: 'form-control input-sm input-inline', style: 'width: 100px'}) }}
                                     </div>
 
                                     {{ theme.error('city') }}

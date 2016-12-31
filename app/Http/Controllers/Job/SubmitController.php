@@ -123,6 +123,7 @@ class SubmitController extends Controller
             'currencyList'      => Currency::lists('name', 'id'),
             'employmentList'    => Job::getEmploymentList(),
             'rateList'          => Job::getRatesList(),
+            'remote_range_list' => Job::getRemoteRangeList(),
             'popularTags'       => $this->job->getPopularTags()
         ])->with(
             compact('job', 'firm')
@@ -140,6 +141,8 @@ class SubmitController extends Controller
             'country_id'        => 'required|integer',
             'currency_id'       => 'required|integer',
             'rate_id'           => 'required|integer',
+            'is_remote'         => 'bool',
+            'remote_range'      => 'integer|min:10|max:100',
             'employment_id'     => 'required|integer',
             'city'              => 'string|city',
             'salary_from'       => 'integer',
