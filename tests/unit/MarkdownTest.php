@@ -93,4 +93,19 @@ class MarkdownTest extends \Codeception\TestCase\Test
         $input = $this->markdown->parse('(@somedomain) lorem ipsum');
         $this->tester->assertRegExp('/\(<a href=".*">@somedomain<\/a>\) lorem ipsum/', $input);
     }
+
+    public function testParseLinks()
+    {
+        $input = '<a href="http://www.google.pl/">http://www.google.pl/</a>';
+        $this->tester->assertEquals("<p>$input</p>", $this->markdown->parse($input));
+
+        $input = 'http://google.pl';
+        $this->tester->assertEquals("<p>$input</p>", $this->markdown->parse($input));
+
+        $input = $this->markdown->parse('[http://www.google.pl/](http://www.google.pl/)');
+        $this->tester->assertEquals('<p><a href="http://www.google.pl/">http://www.google.pl/</a></p>', $input);
+
+        $input = $this->markdown->parse('[test](http://www.google.pl/)');
+        $this->tester->assertEquals('<p><a href="http://www.google.pl/">test</a></p>', $input);
+    }
 }

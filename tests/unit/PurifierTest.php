@@ -2,7 +2,7 @@
 
 use Coyote\Services\Parser\Parsers\Purifier;
 
-class LinkTest extends \Codeception\TestCase\Test
+class PurifierTest extends \Codeception\TestCase\Test
 {
     /**
      * @var \UnitTester

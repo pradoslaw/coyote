@@ -6,6 +6,7 @@ use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Container;
+use Coyote\Services\Parser\Parsers\Autolink;
 use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Emphasis;
 use Coyote\Services\Parser\Parsers\Link;
@@ -80,6 +81,8 @@ class CommentFactory extends AbstractFactory
                             ->setEnableHashParser($this->enableHashParser)
                             ->setBreaksEnabled($this->enableLineBreaks)
                     );
+
+                    $parser->attach(new Autolink());
 
                     $parser->attach(
                         (new Purifier())->set('HTML.Allowed', $this->getHtmlTags())

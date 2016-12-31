@@ -66,6 +66,20 @@ class Markdown extends \Parsedown implements ParserInterface
     }
 
     /**
+     * @param string $text
+     * @return string
+     */
+    public function parse($text)
+    {
+        // @see https://github.com/erusev/parsedown/issues/432
+        // trzeba wylaczyc zamiane linkow na URL poniewaz nie dziala to prawidlowo (bug parsera)
+        // robimy to osobno, w parserze Autolink
+        $this->setUrlsLinked(false);
+
+        return $this->text($text);
+    }
+
+    /**
      * @param array $excerpt
      * @return array|void
      */
@@ -111,31 +125,10 @@ class Markdown extends \Parsedown implements ParserInterface
     }
 
     /**
-     * Find the position of the first occurrence of a character in a string
-     *
-     * @param $haystack
-     * @param string $needle
-     * @param int $offset
-     * @return bool|mixed
-     */
-    private function strpos($haystack, $needle, $offset = 0)
-    {
-        $result = [];
-
-        foreach (str_split($needle) as $char) {
-            if (($pos = strpos($haystack, $char, $offset)) !== false) {
-                $result[] = $pos;
-            }
-        }
-
-        return $result ? min($result) : false;
-    }
-
-    /**
      * Parse users login
      *
      * @param array $excerpt
-     * @return array|void
+     * @return array|null
      */
     protected function inlineUserTag($excerpt)
     {
@@ -185,6 +178,10 @@ class Markdown extends \Parsedown implements ParserInterface
         }
     }
 
+    /**
+     * @param array $excerpt
+     * @return bool
+     */
     private function isNotEmail(&$excerpt)
     {
         // the whole text
@@ -198,12 +195,25 @@ class Markdown extends \Parsedown implements ParserInterface
             && ($start === 0 || $preceding === ' ' || $preceding === '(');
     }
 
+
     /**
-     * @param string $text
-     * @return string
+     * Find the position of the first occurrence of a character in a string
+     *
+     * @param $haystack
+     * @param string $needle
+     * @param int $offset
+     * @return bool|mixed
      */
-    public function parse($text)
+    private function strpos($haystack, $needle, $offset = 0)
     {
-        return $this->text($text);
+        $result = [];
+
+        foreach (str_split($needle) as $char) {
+            if (($pos = strpos($haystack, $char, $offset)) !== false) {
+                $result[] = $pos;
+            }
+        }
+
+        return $result ? min($result) : false;
     }
 }
