@@ -64,7 +64,7 @@
                                             Możliwa praca zdalna w zakresie
                                         </label>
 
-                                        {{ form_select('remote_range', remote_range_list, input_old('remote_range', job.remote_range ?: 100), {placeholder: '--', class: 'form-control input-sm input-inline', style: 'width: 100px'}) }}
+                                        {{ form_select('remote_range', remote_range_list, input_old('remote_range', job.id ? job.remote_range : 100), {placeholder: '--', class: 'form-control input-sm input-inline', style: 'width: 100px'}) }}
                                     </div>
 
                                     {{ theme.error('city') }}

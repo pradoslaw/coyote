@@ -13,9 +13,11 @@
 {{ data|join(', ')|raw }}
 
 {% if job.is_remote %}
+    {% set label = job.remote_range ? "(#{job.remote_range}% pracy zdalnej)" : '(praca zdalna)' %}
+
     {% if linkable %}
-        <a href="{{ route('job.remote') }}">(praca zdalna)</a>
+        <a href="{{ route('job.remote') }}">{{ label }}</a>
     {% else %}
-        (praca zdalna)
+        {{ label }}
     {% endif %}
 {% endif %}

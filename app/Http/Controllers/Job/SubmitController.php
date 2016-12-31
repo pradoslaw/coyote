@@ -141,6 +141,8 @@ class SubmitController extends Controller
             'country_id'        => 'required|integer',
             'currency_id'       => 'required|integer',
             'rate_id'           => 'required|integer',
+            'is_remote'         => 'bool',
+            'remote_range'      => 'integer|min:10|max:100',
             'employment_id'     => 'required|integer',
             'city'              => 'string|city',
             'salary_from'       => 'integer',
