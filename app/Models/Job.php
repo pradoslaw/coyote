@@ -381,6 +381,22 @@ class Job extends Model
     }
 
     /**
+     * Check if user has applied for this job offer.
+     *
+     * @param int|null $userId
+     * @param string $sessionId
+     * @return mixed
+     */
+    public function hasApplied($userId, $sessionId)
+    {
+        if ($userId) {
+            return $this->applications()->forUser($userId)->exists();
+        }
+
+        return $this->applications()->where('session_id', $sessionId)->exists();
+    }
+
+    /**
      * @return array
      */
     protected function getIndexBody()

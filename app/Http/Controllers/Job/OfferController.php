@@ -90,22 +90,9 @@ class OfferController extends Controller
             'employeesList'     => Firm::getEmployeesList(),
             'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days,
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
-            'applied'           => $this->hasApplied($job)
+            'applied'           => $job->hasApplied($this->userId, $this->sessionId)
         ])->with(
             compact('job', 'firm', 'tags', 'flag', 'mlt')
         );
-    }
-
-    /**
-     * @param \Coyote\Job $job
-     * @return bool
-     */
-    private function hasApplied($job)
-    {
-        if ($this->userId) {
-            return $job->applications()->forUser($this->userId)->exists();
-        }
-
-        return $job->applications()->where('session_id', $this->sessionId)->exists();
     }
 }

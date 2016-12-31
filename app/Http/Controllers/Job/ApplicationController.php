@@ -16,6 +16,15 @@ class ApplicationController extends Controller
 {
     use FilesystemFactory, MailFactory;
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        /** @var \Coyote\Job $job */
+        $job = $this->getRouter()->getCurrentRequest()->route('job');
+        abort_if($job->hasApplied($this->userId, $this->sessionId), 404);
+    }
+
     /**
      * @param Job $job
      * @return \Illuminate\View\View
