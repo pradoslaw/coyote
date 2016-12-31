@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $html
  * @property Microblog $parent
  * @property Microblog[] $comments
+ * @property Tag[] $tags
  */
 class Microblog extends Model
 {

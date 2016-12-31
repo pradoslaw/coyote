@@ -29,10 +29,11 @@ use Illuminate\Database\QueryException;
  * @property int $score
  * @property float $rank
  * @property string $subject
- * @property \Coyote\Forum $forum
- * @property \Coyote\Post\Accept $accept
+ * @property Forum $forum
+ * @property Post\Accept $accept
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property Tag[] $tags
  */
 class Topic extends Model
 {

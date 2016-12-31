@@ -32,8 +32,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $recruitment
  * @property string $requirements
  * @property string $email
- * @property \Coyote\User $user
- * @property \Coyote\Firm $firm
+ * @property User $user
+ * @property Firm $firm
+ * @property Tag[] $tags
  */
 class Job extends Model
 {

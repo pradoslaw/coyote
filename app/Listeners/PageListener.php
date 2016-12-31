@@ -69,12 +69,13 @@ class PageListener implements ShouldQueue
         $this->purgePageViews();
 
         $topic->page()->updateOrCreate([
-            'content_id' => $topic->id,
-            'content_type' => Topic::class
+            'content_id'     => $topic->id,
+            'content_type'   => Topic::class
         ], [
-            'title' => $topic->subject,
-            'path' => UrlBuilder::topic($topic),
-            'allow_sitemap' => !$topic->forum->access()->exists()
+            'title'          => $topic->subject,
+            'tags'           => $topic->tags->pluck('name'),
+            'path'           => UrlBuilder::topic($topic),
+            'allow_sitemap'  => !$topic->forum->access()->exists()
         ]);
     }
 
@@ -92,11 +93,11 @@ class PageListener implements ShouldQueue
     public function onForumSave(ForumWasSaved $event)
     {
         $event->forum->page()->updateOrCreate([
-            'content_id' => $event->forum->id,
-            'content_type' => Forum::class
+            'content_id'    => $event->forum->id,
+            'content_type'  => Forum::class
         ], [
-            'title' => $event->forum->name,
-            'path' => UrlBuilder::forum($event->forum)
+            'title'         => $event->forum->name,
+            'path'          => UrlBuilder::forum($event->forum)
         ]);
     }
 
@@ -117,8 +118,9 @@ class PageListener implements ShouldQueue
             'content_id'    => $event->microblog->id,
             'content_type'  => Microblog::class,
         ], [
-            'title' => excerpt($event->microblog->html, 28),
-            'path' => UrlBuilder::microblog($event->microblog)
+            'title'         => excerpt($event->microblog->html, 28),
+            'path'          => UrlBuilder::microblog($event->microblog),
+            'tags'          => $event->microblog->tags->pluck('name')
         ]);
     }
 
@@ -141,8 +143,9 @@ class PageListener implements ShouldQueue
             'content_id'    => $event->job->id,
             'content_type'  => Job::class,
         ], [
-            'title' => $event->job->title,
-            'path' => UrlBuilder::job($event->job)
+            'title'         => $event->job->title,
+            'tags'          => $event->job->tags->pluck('name'),
+            'path'          => UrlBuilder::job($event->job)
         ]);
     }
 
@@ -165,8 +168,8 @@ class PageListener implements ShouldQueue
             'content_id'    => $event->wiki->id,
             'content_type'  => Wiki::class,
         ], [
-            'title' => $event->wiki->title,
-            'path' => UrlBuilder::wiki($event->wiki)
+            'title'         => $event->wiki->title,
+            'path'          => UrlBuilder::wiki($event->wiki)
         ]);
     }
 

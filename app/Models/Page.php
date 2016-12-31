@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $path
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property mixed $tags
  */
 class Page extends Model
 {
@@ -18,12 +19,17 @@ class Page extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'path', 'allow_sitemap'];
+    protected $fillable = ['title', 'path', 'allow_sitemap', 'tags'];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    protected $casts = ['tags' => 'json'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
