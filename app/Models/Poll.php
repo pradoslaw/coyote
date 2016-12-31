@@ -75,6 +75,6 @@ class Poll extends Model
      */
     public function userVotedItems($userId)
     {
-        return $this->votes()->forUser($userId)->lists('item_id')->toArray();
+        return $this->votes()->forUser($userId)->pluck('item_id')->toArray();
     }
 }

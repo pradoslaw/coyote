@@ -75,7 +75,7 @@ class SubmitController extends BaseController
             $subscribe = auth()->user()->allow_subscribe && !$wiki->wasUserInvolved($this->userId);
             $this->wiki->save($wiki, $request);
 
-            $subscribersId = $wiki->subscribers()->lists('user_id')->toArray();
+            $subscribersId = $wiki->subscribers()->pluck('user_id')->toArray();
 
             app('alert.wiki.subscriber')
                 ->with([

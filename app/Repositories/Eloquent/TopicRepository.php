@@ -43,7 +43,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->paginate($perPage);
 
         $values = [];
-        $pagination->lists('id')->each(function ($item, $key) use (&$values) {
+        $pagination->pluck('id')->each(function ($item, $key) use (&$values) {
             $values[] = "($item,$key)";
         });
 

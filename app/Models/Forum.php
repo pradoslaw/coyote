@@ -148,7 +148,7 @@ class Forum extends Model
                         ->where('ug.user_id', $userId)
                         ->orderBy('value')
                         ->select(['name', 'value'])
-                        ->lists('value', 'name');
+                        ->pluck('value', 'name');
         }
 
         return isset($acl[$name]) ? $acl[$name] : false;
@@ -238,7 +238,7 @@ class Forum extends Model
             $usersId = $this->access()
                             ->select('user_id')
                             ->join('group_users', 'group_users.group_id', '=', 'forum_access.group_id')
-                            ->lists('user_id')
+                            ->pluck('user_id')
                             ->toArray();
         }
 

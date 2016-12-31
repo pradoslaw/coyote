@@ -27,58 +27,73 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace = 'Coyote\Http\Controllers';
 
     /**
+     * @var Router
+     */
+    protected $router;
+
+    /**
      * Define your route model bindings, pattern filters, etc.
      *
-     * @param  \Illuminate\Routing\Router $router
      * @return void
      */
-    public function boot(Router $router)
+    public function boot()
     {
-        $router->pattern('id', '[0-9]+');
-        $router->pattern('wiki', '[0-9]+');
-        $router->pattern('block', '[0-9]+');
-        $router->pattern('group', '[0-9]+');
-        $router->pattern('firewall', '[0-9]+');
-        $router->pattern('pastebin', '[0-9]+');
-        $router->pattern('microblog', '[0-9]+');
-        $router->pattern('topic', '[0-9]+');
-        $router->pattern('user', '[0-9]+');
-        $router->pattern('post', '[0-9]+');
-        $router->pattern('job', '[0-9]+');
+        $this->router->pattern('id', '[0-9]+');
+        $this->router->pattern('wiki', '[0-9]+');
+        $this->router->pattern('block', '[0-9]+');
+        $this->router->pattern('group', '[0-9]+');
+        $this->router->pattern('firewall', '[0-9]+');
+        $this->router->pattern('pastebin', '[0-9]+');
+        $this->router->pattern('microblog', '[0-9]+');
+        $this->router->pattern('topic', '[0-9]+');
+        $this->router->pattern('user', '[0-9]+');
+        $this->router->pattern('post', '[0-9]+');
+        $this->router->pattern('job', '[0-9]+');
 
-        $router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
-        $router->pattern('tag', '([a-ząęśżźćółń0-9\-\.\#\+])+');
-        $router->pattern('slug', '.*');
-        $router->pattern('path', '.*'); // being used on wiki routes
+        $this->router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
+        $this->router->pattern('tag', '([a-ząęśżźćółń0-9\-\.\#\+])+');
+        $this->router->pattern('slug', '.*');
+        $this->router->pattern('path', '.*'); // being used on wiki routes
 
-        $router->model('user', UserRepositoryInterface::class);
-        $router->model('post', PostRepositoryInterface::class);
-        $router->model('topic', TopicRepositoryInterface::class);
-        $router->model('pastebin', PastebinRepositoryInterface::class);
-        $router->model('microblog', MicroblogRepositoryInterface::class);
-        $router->model('wiki', WikiRepositoryInterface::class);
-        $router->model('pastebin', PastebinRepositoryInterface::class);
-        $router->model('firewall', FirewallRepositoryInterface::class);
-        $router->model('group', GroupRepositoryInterface::class);
-        $router->model('block', BlockRepositoryInterface::class);
+        $this->router->model('user', UserRepositoryInterface::class);
+        $this->router->model('post', PostRepositoryInterface::class);
+        $this->router->model('topic', TopicRepositoryInterface::class);
+        $this->router->model('pastebin', PastebinRepositoryInterface::class);
+        $this->router->model('microblog', MicroblogRepositoryInterface::class);
+        $this->router->model('wiki', WikiRepositoryInterface::class);
+        $this->router->model('pastebin', PastebinRepositoryInterface::class);
+        $this->router->model('firewall', FirewallRepositoryInterface::class);
+        $this->router->model('group', GroupRepositoryInterface::class);
+        $this->router->model('block', BlockRepositoryInterface::class);
 
-        $router->bind('forum', function ($slug) {
+        $this->router->bind('forum', function ($slug) {
             return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();
         });
 
-        parent::boot($router);
+        parent::boot();
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        parent::register();
+
+        $this->router = $this->app->make(Router::class);
     }
 
     /**
      * Define the routes for the application.
      *
-     * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    public function map(Router $router)
+    public function map()
     {
-        $this->mapWebRoutes($router);
-        //
+        $this->mapWebRoutes();
+        $this->mapApiRoutes();
     }
 
     /**
@@ -86,23 +101,35 @@ class RouteServiceProvider extends ServiceProvider
      *
      * These routes all receive session state, CSRF protection, etc.
      *
-     * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    protected function mapWebRoutes(Router $router)
+    protected function mapWebRoutes()
     {
-        $router->group([
+        $this->router->group([
             'namespace' => $this->namespace, 'middleware' => 'web',
         ], function () {
-            require app_path('Http/Routes/Misc.php');
-            require app_path('Http/Routes/Forum.php');
-            require app_path('Http/Routes/Job.php');
-            require app_path('Http/Routes/Microblog.php');
-            require app_path('Http/Routes/User.php');
-            require app_path('Http/Routes/Profile.php');
-            require app_path('Http/Routes/Pastebin.php');
-            require app_path('Http/Routes/Adm.php');
-            require app_path('Http/Routes/Wiki.php'); // must be at the end
+            require base_path('routes/auth.php');
+            require base_path('routes/misc.php');
+            require base_path('routes/forum.php');
+            require base_path('routes/job.php');
+            require base_path('routes/microblog.php');
+            require base_path('routes/user.php');
+            require base_path('routes/profile.php');
+            require base_path('routes/pastebin.php');
+            require base_path('routes/adm.php');
+            require base_path('routes/wiki.php'); // must be at the end
         });
+    }
+
+    /**
+     * Define the "api" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiRoutes()
+    {
+        //
     }
 }

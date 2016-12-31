@@ -25,7 +25,7 @@ class PollRepository extends Repository implements PollRepositoryInterface
         $poll = $this->model->findOrNew($id);
         $poll->fill($data)->save();
 
-        $current = $poll->items()->lists('text');
+        $current = $poll->items()->pluck('text');
         $next = $this->collect($data['items']);
 
         // to remove...

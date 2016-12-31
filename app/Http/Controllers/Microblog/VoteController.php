@@ -92,7 +92,7 @@ class VoteController extends Controller
             $microblog->voters()
                 ->join('users', 'users.id', '=', 'user_id')
                 ->get(['users.name'])
-                ->lists('name')
+                ->pluck('name')
                 ->implode("\n")
         );
     }

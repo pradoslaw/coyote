@@ -86,7 +86,7 @@ class FavoritesController extends BaseController
             'user.favorites',
             [
                 'tabs' => $this->getTabs(),
-                'partial' => $this->getRouter()->currentRouteName(),
+                'partial' => $this->request->route()->getName(),
                 'subscribed' => $subscribed,
                 'paginate' => $subscribed->links()
             ]

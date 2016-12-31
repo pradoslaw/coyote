@@ -66,7 +66,7 @@ class TopicController extends BaseController
         $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, 60 * 24, function () use ($topic) {
             $this->forum->pushCriteria(new OnlyThoseWithAccess());
 
-            $builder = (new MoreLikeThisBuilder())->build($topic, $this->forum->lists('id'));
+            $builder = (new MoreLikeThisBuilder())->build($topic, $this->forum->pluck('id'));
 
             $build = $builder->build();
             debugbar()->debug($build);
@@ -138,7 +138,7 @@ class TopicController extends BaseController
         $flags = $activities = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
-            $reasonList = Reason::lists('name', 'id')->toArray();
+            $reasonList = Reason::pluck('name', 'id')->toArray();
 
             if ($this->gate->allows('delete', $forum)) {
                 $flags = $this->getFlags($postsId);
@@ -159,7 +159,7 @@ class TopicController extends BaseController
             compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags', 'warnings', 'activities')
         )->with([
             'markTime'      => $markTime[Topic::class] ? $markTime[Topic::class] : $markTime[Forum::class],
-            'subscribers'   => $this->userId ? $topic->subscribers()->lists('topic_id', 'user_id') : []
+            'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : []
         ]);
     }
 

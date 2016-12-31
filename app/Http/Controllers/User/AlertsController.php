@@ -35,7 +35,7 @@ class AlertsController extends BaseController
      */
     public function getSideMenu()
     {
-        if ($this->getRouter()->currentRouteName() == 'user.alerts') {
+        if ($this->request->route()->getName() == 'user.alerts') {
             return $this->homeSideMenu();
         } else {
             return $this->settingsSideMenu();

@@ -31,10 +31,13 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Coyote\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            Middleware\DefaultBindings::class,
             \Coyote\Http\Middleware\FirewallBlacklist::class
         ],
         'api' => [
             'throttle:60,1',
+            'bindings'
         ],
     ];
 
@@ -46,7 +49,9 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth'          => Middleware\Authenticate::class,
         'auth.basic'    => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'can'           => \Illuminate\Foundation\Http\Middleware\Authorize::class,
+        'bindings'      => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+//        'bindings.default'  => Middleware\DefaultBindings::class,
+        'can'           => \Illuminate\Auth\Middleware\Authorize::class,
         'guest'         => Middleware\RedirectIfAuthenticated::class,
         'adm'           => Middleware\AdmAccess::class,
         'forum.access'  => Middleware\ForumAccess::class,

@@ -1,28 +1,6 @@
 <?php
 
-// logowanie uzytkownika
 /** @var $this \Illuminate\Routing\Router */
-$this->get('Login', ['uses' => 'Auth\LoginController@index', 'as' => 'login']);
-$this->post('Login', 'Auth\LoginController@signin');
-// wylogowanie
-$this->get('Logout', ['uses' => 'Auth\LoginController@signout', 'as' => 'logout']);
-
-// rejestracja uzytkownika
-$this->get('Register', ['uses' => 'Auth\RegisterController@index', 'as' => 'register']);
-$this->post('Register', 'Auth\RegisterController@signup');
-
-// przypominanie hasla
-// @todo do zmiany metoda controller() na post() oraz get()
-$this->controller('Password', 'Auth\PasswordController');
-
-// potwierdzenie adresu e-mail
-$this->get('Confirm', 'Auth\ConfirmController@index')->name('confirm');
-$this->post('Confirm', 'Auth\ConfirmController@generateLink');
-$this->get('Confirm/Email', 'Auth\ConfirmController@email');
-
-$this->get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login', 'as' => 'oauth']);
-$this->get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');
-
 $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth', 'as' => 'user.'], function () {
     /** @var $this \Illuminate\Routing\Router */
     // strona glowna panelu uzytkownika

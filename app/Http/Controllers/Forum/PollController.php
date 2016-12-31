@@ -17,14 +17,14 @@ class PollController extends BaseController
     {
         /** @var \Coyote\Poll $poll */
         $poll = $this->getPollRepository()->findOrFail($pollId);
-        $items = $poll->items()->lists('id');
+        $items = $poll->items()->pluck('id');
 
         $this->validate($request, [
             'items' => 'required|array|max:' . $poll->max_items,
             'items.*' => 'required|integer|in:' . $items->implode(',')
         ]);
 
-        if ($poll->votes()->lists('user_id')->contains($this->userId)) {
+        if ($poll->votes()->pluck('user_id')->contains($this->userId)) {
             abort(500);
         }
 

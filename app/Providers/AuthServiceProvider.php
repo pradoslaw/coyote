@@ -19,7 +19,7 @@ use Coyote\Post;
 use Coyote\User;
 use Coyote\Wiki;
 use Illuminate\Cache\CacheManager;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -79,11 +79,13 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any application authentication / authorization services.
      *
-     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
      * @return void
      */
-    public function boot(GateContract $gate)
+    public function boot()
     {
+        $this->registerPolicies();
+        $gate = $this->app[Gate::class];
+
         foreach ($this->abilities as $ability) {
             $gate->define($ability, function (User $user) use ($ability) {
                 $permissions = $this->getUserPermissions($user);
@@ -91,8 +93,6 @@ class AuthServiceProvider extends ServiceProvider
                 return $permissions[$ability] ?? false;
             });
         }
-
-        $this->registerPolicies($gate);
     }
 
     /**

@@ -102,7 +102,7 @@ class SubmitController extends BaseController
                 ];
 
                 // $subscribersId can be int or array. we need to cast to array type
-                $subscribersId = $forum->onlyUsersWithAccess($topic->subscribers()->lists('user_id')->toArray());
+                $subscribersId = $forum->onlyUsersWithAccess($topic->subscribers()->pluck('user_id')->toArray());
                 if ($subscribersId) {
                     $alert->attach(
                         app('alert.topic.subscriber')->with($notification)->setUsersId($subscribersId)

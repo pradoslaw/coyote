@@ -73,7 +73,7 @@ class DeleteController extends BaseController
             if ($post->id === $topic->first_post_id) {
                 $redirect = redirect()->route('forum.category', [$forum->slug]);
 
-                $subscribersId = $topic->subscribers()->lists('user_id');
+                $subscribersId = $topic->subscribers()->pluck('user_id');
                 if ($post->user_id !== null) {
                     $subscribersId[] = $post->user_id;
                 }
@@ -95,7 +95,7 @@ class DeleteController extends BaseController
                 $object = (new Stream_Topic())->map($topic);
                 $target = (new Stream_Forum())->map($forum);
             } else {
-                $subscribersId = $post->subscribers()->lists('user_id');
+                $subscribersId = $post->subscribers()->pluck('user_id');
 
                 if ($post->user_id !== null) {
                     $subscribersId[] = $post->user_id;

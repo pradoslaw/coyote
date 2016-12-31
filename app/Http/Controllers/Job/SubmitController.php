@@ -112,7 +112,7 @@ class SubmitController extends Controller
         $request->session()->put('job', $job->toArray());
 
         $this->breadcrumb($job);
-        $countryList = Country::lists('name', 'id');
+        $countryList = Country::pluck('name', 'id');
 
         // @todo Uzyc mechanizmu geolokalizacji
         $defaultCountryId = array_search('Polska', $countryList->toArray());
@@ -120,7 +120,7 @@ class SubmitController extends Controller
         return $this->view('job.submit.home', [
             'countryList'       => $countryList,
             'defaultCountryId'  => $defaultCountryId,
-            'currencyList'      => Currency::lists('name', 'id'),
+            'currencyList'      => Currency::pluck('name', 'id'),
             'employmentList'    => Job::getEmploymentList(),
             'rateList'          => Job::getRatesList(),
             'remote_range_list' => Job::getRemoteRangeList(),
@@ -475,7 +475,7 @@ class SubmitController extends Controller
     private function loadFirm($firmId)
     {
         $firm = $this->firm->findOrNew((int) $firmId);
-        $firm->benefits = $firm->benefits()->lists('name')->toArray();
+        $firm->benefits = $firm->benefits()->pluck('name')->toArray();
 
         return $firm;
     }
@@ -494,7 +494,7 @@ class SubmitController extends Controller
             $firm = $firms->first();
         }
 
-        $firm->benefits = $firm->benefits()->lists('name')->toArray();
+        $firm->benefits = $firm->benefits()->pluck('name')->toArray();
         return $firm;
     }
 }

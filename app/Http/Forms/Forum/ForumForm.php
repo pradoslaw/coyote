@@ -89,7 +89,7 @@ class ForumForm extends Form
      */
     private function getParentList()
     {
-        return $this->forum->whereNull('parent_id')->orderBy('order')->lists('name', 'id')->toArray();
+        return $this->forum->whereNull('parent_id')->orderBy('order')->pluck('name', 'id')->toArray();
     }
 
     /**
@@ -97,6 +97,6 @@ class ForumForm extends Form
      */
     private function getGroupsList()
     {
-        return $this->group->lists('name', 'id');
+        return $this->group->pluck('name', 'id');
     }
 }

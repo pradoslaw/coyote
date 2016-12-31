@@ -11,16 +11,16 @@ use Coyote\Services\Breadcrumb\Breadcrumb;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\Connection;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
 
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests, GateFactory, CacheFactory;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, GateFactory, CacheFactory;
 
     /**
      * @var Breadcrumb
@@ -57,14 +57,26 @@ abstract class Controller extends BaseController
     protected $public = [];
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * Controller constructor.
      */
     public function __construct()
     {
         $this->breadcrumb = new Breadcrumb();
-        $this->userId = auth()->check() ? auth()->user()->id : null;
-        $this->sessionId = request()->session()->getId();
-        $this->auth = auth()->user();
+
+        $this->middleware(function (Request $request, $next) {
+            $this->auth = $request->user();
+            $this->userId = $request->user() ? $this->auth->id : null;
+            $this->sessionId = $request->session()->getId();
+
+            $this->request = $request;
+
+            return $next($request);
+        });
 
         $this->buildPublic();
     }

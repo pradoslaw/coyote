@@ -14,7 +14,7 @@ class PasswordController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getIndex()
+    public function showLinkRequestForm()
     {
         $this->breadcrumb->push('Odzyskiwanie hasła', url('Password'));
 
@@ -27,7 +27,7 @@ class PasswordController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postIndex(Request $request)
+    public function sendResetLinkEmail(Request $request)
     {
         $this->validate($request, [
             // check if email exists (case sensitive) because sendResetLink() is also case sensitive
@@ -60,7 +60,7 @@ class PasswordController extends Controller
      * @param  string $token
      * @return \Illuminate\View\View
      */
-    public function getReset($token = null)
+    public function showResetForm($token = null)
     {
         abort_if(is_null($token), 404);
 
@@ -75,7 +75,7 @@ class PasswordController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postReset(Request $request)
+    public function reset(Request $request)
     {
         $this->validate($request, [
             'token'    => 'required',
