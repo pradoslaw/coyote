@@ -24,8 +24,11 @@ class ApplicationController extends Controller
     {
         abort_if(!$job->enable_apply, 404);
 
-        $this->breadcrumb->push($job->title, route('job.offer', [$job->id, $job->slug]));
-        $this->breadcrumb->push('Aplikuj na to stanowisko pracy');
+        $this->breadcrumb->push([
+            'Praca'                             => route('job.home'),
+            $job->title                         => route('job.offer', [$job->id, $job->slug]),
+            'Aplikuj na to stanowisko pracy'    => null
+        ]);
 
         /**
          * @var ApplicationForm $form
