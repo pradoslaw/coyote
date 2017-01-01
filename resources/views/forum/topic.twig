@@ -18,7 +18,7 @@
 
     {% if warnings.move %}
         <p class="alert alert-warning">
-            Wątek przeniesiony {{ warnings.move.created_at|format_date }} z {{ warnings.move.object.forum.name }} przez <a class="alert-link" href="{{ url(warnings.move.actor.url) }}">{{ warnings.move.actor.displayName }}</a>.
+            Wątek przeniesiony {{ warnings.move.created_at|format_date }} z <a href="{{ route('forum.category', [warnings.move.object.forum.slug]) }}">{{ warnings.move.object.forum.name }}</a> przez <a class="alert-link" href="{{ url(warnings.move.actor.url) }}">{{ warnings.move.actor.displayName }}</a>.
 
             {% if warnings.move.object.reasonName %}
                 Powód: <strong>{{ warnings.move.object.reasonName }}</strong>
