@@ -80,6 +80,8 @@
                 $('li', select).each(function() {
                     $(this).toggle($(this).text().toLowerCase().startsWith(searchText));
                 });
+            }).on('click mousedown', function(e) {
+                e.stopPropagation();
             });
 
             $('#select-menu', toolbar).on('shown.bs.dropdown', function() {
