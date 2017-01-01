@@ -50,52 +50,50 @@ class OAuthController extends Controller
         $oauth = $this->getSocialiteFactory()->driver($provider)->user();
         $user = $this->user->findWhere(['provider' => $provider, 'provider_id' => $oauth->getId()])->first();
 
-        // if record does not exist, we must create new user in database
         if (!$user) {
-            $name = $oauth->getName() ?: $oauth->getNickName();
-
-            // it's important to check login name using case insensitive...
-            if ($this->user->findByName($name)) {
-                // komunikatu bledu nie mozemy przekazac w sesji poniewaz z jakiegos powodu
-                // jest ona gubiona
-                return redirect()->route('register', [
-                    'error' => sprintf('Uuups. Niestety login %s jest już zajęty.', $name)
-                ]);
-            }
-
             $user = $this->user->findByEmail($oauth->getEmail());
 
             if ($user !== null) {
-                // komunikatu bledu nie mozemy przekazac w sesji poniewaz z jakiegos powodu
-                // jest ona gubiona
-                return redirect()->route('register', [
-                    'error' => sprintf(
-                        'Adres e-mail %s jest już przypisany do użytkownika %s',
-                        $oauth->getEmail(),
-                        $user->name
-                    )
+                // merge with existing user account
+                $user->provider = $provider;
+                $user->provider_id = $oauth->getId();
+                $user->save();
+
+                stream(Stream_Login::class);
+            }
+            else {
+                $name = $oauth->getName() ?: $oauth->getNickName();
+
+                // it's important to check login name using case insensitive...
+                if ($this->user->findByName($name)) {
+                    // komunikatu bledu nie mozemy przekazac w sesji poniewaz z jakiegos powodu
+                    // jest ona gubiona
+                    return redirect()->route('register', [
+                        'error' => sprintf('Uuups. Niestety login %s jest już zajęty.', $name)
+                    ]);
+                }
+
+                // create new user in database
+                $photoUrl = isset($oauth->avatar_original) ? $oauth->avatar_original : $oauth->getAvatar();
+                $filename = null;
+
+                if ($photoUrl) {
+                    $media = $this->getMediaFactory('user_photo')->put(file_get_contents($photoUrl));
+                    $filename = $media->getFilename();
+                }
+
+                $user = $this->user->newUser([
+                    'name' => $name,
+                    'email' => $oauth->getEmail(),
+                    'photo' => $filename,
+                    'is_active' => 1,
+                    'is_confirm' => 1,
+                    'provider' => $provider,
+                    'provider_id' => $oauth->getId()
                 ]);
+
+                stream(Stream_Create::class, new Stream_Person($user->toArray()));
             }
-
-            $photoUrl = isset($oauth->avatar_original) ? $oauth->avatar_original : $oauth->getAvatar();
-            $filename = null;
-
-            if ($photoUrl) {
-                $media = $this->getMediaFactory('user_photo')->put(file_get_contents($photoUrl));
-                $filename = $media->getFilename();
-            }
-
-            $user = $this->user->newUser([
-                'name' => $name,
-                'email' => $oauth->getEmail(),
-                'photo' => $filename,
-                'is_active' => 1,
-                'is_confirm' => 1,
-                'provider' => $provider,
-                'provider_id' => $oauth->getId()
-            ]);
-
-            stream(Stream_Create::class, new Stream_Person($user->toArray()));
         } else {
             // put information into the activity stream...
             stream(Stream_Login::class);
