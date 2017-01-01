@@ -60,8 +60,7 @@ class OAuthController extends Controller
                 $user->save();
 
                 stream(Stream_Login::class);
-            }
-            else {
+            } else {
                 $name = $oauth->getName() ?: $oauth->getNickName();
 
                 // it's important to check login name using case insensitive...
