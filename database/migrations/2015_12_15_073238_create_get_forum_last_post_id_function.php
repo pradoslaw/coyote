@@ -17,7 +17,8 @@ RETURNS INTEGER AS $BODY$
 BEGIN
 	RETURN (SELECT MAX("id") FROM posts WHERE forum_id = _forum_id AND deleted_at IS NULL);
 END
-$BODY$"');
+$BODY$
+  LANGUAGE \'plpgsql\' VOLATILE COST 100;');
     }
 
     /**
