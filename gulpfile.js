@@ -1,4 +1,5 @@
 var elixir = require('laravel-elixir');
+var path = require('path');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,12 +12,15 @@ var elixir = require('laravel-elixir');
  |
  */
 
+function node_module(filename) {
+    return path.join('../../../node_modules/', filename);
+}
+
 elixir(function (mix) {
 
     var base = [
-        '../bower/jquery/dist/jquery.min.js',
-        '../bower/bootstrap/js/tooltip.js',
-        '../bower/bootstrap/js/collapse.js', // to musi sie znajdowac na kazdej podstronie (zwijanie menu dla urzadzen mobilnych)
+        node_module('bootstrap-sass/assets/javascripts/bootstrap/tooltip.js'),
+        node_module('bootstrap-sass/assets/javascripts/bootstrap/collapse.js'), // to musi sie znajdowac na kazdej podstronie (zwijanie menu dla urzadzen mobilnych)
         'components/dropdown.js',
         'components/scrolltop.js',
         'components/breadcrumb.js',
@@ -34,8 +38,8 @@ elixir(function (mix) {
 
     mix.babel(['pages/job/submit.js'], 'public/js/job-submit.js')
         .babel(['pages/job/tinymce.js'], 'public/js/job-tinymce.js')
-        .babel(['pages/job.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js', 'components/uploader.js'], 'public/js/job.js')
-        .babel(['pages/wiki.js', '../bower/bootstrap/js/modal.js', 'components/subscribe.js'], 'public/js/wiki.js')
+        .babel(['pages/job.js', node_module('bootstrap-sass/js/modal.js'), 'components/subscribe.js', 'components/uploader.js'], 'public/js/job.js')
+        .babel(['pages/wiki.js', node_module('bootstrap-sass/js/modal.js'), 'components/subscribe.js'], 'public/js/wiki.js')
         .babel(['components/geo-ip.js'], 'public/js/geo-ip.js');
 
     mix.scripts(base, 'public/js/main.js')
@@ -43,10 +47,10 @@ elixir(function (mix) {
          | Forum (popover jest na forum potrzebne do pokazywania okna z ktorego mozna skopiowac skrocony link do postu)
          */
         .scripts([
-            '../bower/jquery-color-animation/jquery.animate-colors-min.js',
-            '../bower/bootstrap/js/modal.js',
-            '../bower/bootstrap/js/tab.js',
-            '../bower/bootstrap/js/popover.js',
+            node_module('jquery-color-animation/jquery.animate-colors-min.js'),
+            node_module('bootstrap-sass/assets/javascripts/bootstrap/modal.js'),
+            node_module('bootstrap-sass/assets/javascripts/bootstrap/tab.js'),
+            node_module('bootstrap-sass/assets/javascripts/bootstrap/popover.js'),
             'pages/forum/draft.js',
             'pages/forum/tags.js',
             'pages/forum/sidebar.js',
@@ -57,8 +61,8 @@ elixir(function (mix) {
          | Mikroblogu
          */
         .scripts([
-            '../bower/jquery-color-animation/jquery.animate-colors-min.js',
-            '../bower/ekko-lightbox/dist/ekko-lightbox.min.js',
+            node_module('jquery-color-animation/jquery.animate-colors-min.js'),
+            node_module('ekko-lightbox/dist/ekko-lightbox.min.js'),
             'pages/microblog.js'
         ], 'public/js/microblog.js')
 
@@ -86,23 +90,23 @@ elixir(function (mix) {
         /*
          | Uzywane na niewielu stronach. tam gdzie trzeba przelaczac sie miedzy zakladkami
          */
-        .scripts(['../bower/bootstrap/js/tab.js'], 'public/js/tab.js')
+        .scripts([node_module('bootstrap-sass/assets/javascripts/bootstrap/tab.js')], 'public/js/tab.js')
 
         /*
          | Okna modalne, tj. wyswietlanie komunikatow - np. zapytanie czy na pewno usunac post
          */
-        .scripts(['../bower/bootstrap/js/modal.js'], 'public/js/modal.js')
+        .scripts([node_module('bootstrap-sass/assets/javascripts/bootstrap/modal.js')], 'public/js/modal.js')
 
         /*
          | Scrollbar uzywany m.in w oknie powiadomien, wiadomosci prywatnych czy tez na stronie glownej
          | gdzie wyswietlane sa ostatnie aktywnosci z forum
          */
-        .scripts(['../bower/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js'], 'public/js/perfect-scrollbar.js')
+        .scripts([node_module('perfect-scrollbar/index.js')], 'public/js/perfect-scrollbar.js')
 
         /*
          | Plugin animujacy tlo danego elementu strony (mikroblog, post) dla usprawnienia ubsability
          */
-        .scripts(['../bower/jquery-color-animation/jquery.animate-colors-min.js'], 'public/js/animate-colors.js')
+        .scripts([node_module('jquery-color-animation/jquery.animate-colors-min.js')], 'public/js/animate-colors.js')
 
         /*
          | jQuery Ui w okrojonej wersji.
@@ -112,15 +116,15 @@ elixir(function (mix) {
          | a takze ich przesuwania wzgledem siebie (za pomoca drag'n'drop)
          */
         .scripts([
-            '../bower/jquery-ui/ui/minified/core.min.js',
-            '../bower/jquery-ui/ui/minified/widget.min.js',
-            '../bower/jquery-ui/ui/minified/mouse.min.js',
-            '../bower/jquery-ui/ui/minified/resizable.min.js',
-            '../bower/jquery-ui/ui/minified/sortable.min.js'
+            node_module('jquery-ui.1.11.1/ui/core.js'),
+            node_module('jquery-ui.1.11.1/ui/widget.js'),
+            node_module('jquery-ui.1.11.1/ui/mouse.js'),
+            node_module('jquery-ui.1.11.1/ui/resizable.js'),
+            node_module('jquery-ui.1.11.1/ui/sortable.js')
         ], 'public/js/jquery-ui.js')
 
-        .scripts(['../bower/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'], 'public/js/datepicker.js')
-        .scripts(['../bower/pretty-text-diff/jquery.pretty-text-diff.js'], 'public/js/diff.js')
+        .scripts([node_module('bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')], 'public/js/datepicker.js')
+        .scripts([node_module('jquery-prettytextdiff/jquery.pretty-text-diff.js')], 'public/js/diff.js')
         .scripts(['components/uploader.js'], 'public/js/uploader.js');
 
     mix.sass('main.scss')
@@ -138,7 +142,7 @@ elixir(function (mix) {
         .sass('pages/pastebin.scss')
         .sass('pages/search.scss');
 
-    mix.copy('resources/assets/bower/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css', 'public/css/datepicker.css');
+    mix.copy(node_module('bootstrap-datepicker/dist/css/bootstrap-datepicker3.css'), 'public/css/datepicker.css');
 
     // versioning only on production server
     if (elixir.config.production) {
