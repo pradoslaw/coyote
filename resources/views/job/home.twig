@@ -43,7 +43,7 @@
                                     <li class="list-group-item">
                                         {{ form_checkbox('tag[]', tag, tag in selected.tags) }}
 
-                                        <a href="{{ route('job.tag', [tag]) }}">
+                                        <a href="{{ route('job.tag', [tag|url_encode]) }}">
                                             <span>{{ tag }}</span>
                                             <small>({{ declination(count, declinationOffers) }})</small>
                                         </a>

@@ -13,6 +13,9 @@ Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
     * php-mongodb
     * php-mcrypt
     * php-curl
+    * php-mbstring
+    * php-pgsql
+    * php-mongodb
 * PostgreSQL >= 9.3
 * MongoDB >= 2.7
 * composer
@@ -29,10 +32,12 @@ Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
 ## Instalacja
 
 1. `sudo apt-get install php-gd`
+2. `sudo apt-get install php-mbstring`
+2. `sudo apt-get install php-mcrypt`
 2. `sudo apt-get install php-pear`
-3. `sudo pecl install mongodb`
+2. `sudo apt-get install php-curl`
+3. `sudo apt-get install pph-mongodb`
 4. `sudo apt-get install php-pgsql`
-5. `echo "extension=mongodb.so" >> \`php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"\``
 6. `git clone https://github.com/adam-boduch/coyote.git .`
 7. `psql -c 'create database coyote;' -U postgres`
 8. `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
@@ -42,7 +47,7 @@ Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
 ### Problemy podczas instalacji
 #### Class 'MongoClient' not found
 
-Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php7.0-fpm restart` (zakładając, że używasz PHP5 a nie PHP7)
+Czy biblioteka mongo jest zainstalowana? Jeżeli tak to `service php7.0-fpm restart`
 
 #### Use of undefined constant MCRYPT_RIJNDAEL_128 - assumed 'MCRYPT_RIJNDAEL_128'
 
