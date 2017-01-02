@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
+use Laravel\Socialite\Contracts\Factory as Socialite;
 
 class OAuthController extends Controller
 {
@@ -53,7 +54,7 @@ class OAuthController extends Controller
         if (!$user) {
             $user = $this->user->findByEmail($oauth->getEmail());
 
-            if ($user !== null) {
+            if ($user !== null && $user->provider === null) {
                 // merge with existing user account
                 $user->provider = $provider;
                 $user->provider_id = $oauth->getId();
@@ -103,10 +104,10 @@ class OAuthController extends Controller
     }
 
     /**
-     * @return \Laravel\Socialite\Contracts\Factory
+     * @return Socialite
      */
     public function getSocialiteFactory()
     {
-        return app(\Laravel\Socialite\Contracts\Factory::class);
+        return app(Socialite::class);
     }
 }
