@@ -29,6 +29,7 @@ module.exports = {
     entry: {
         app: assets('app.js'),
         microblog: assets('pages/microblog.js'),
+        forum: assets('pages/forum.js')
     },
     devtool: 'source-map',
     plugins: [
@@ -37,11 +38,6 @@ module.exports = {
         //         warnings: false
         //     }
         // })
-        new webpack.optimize.CommonsChunkPlugin({name: "app", chunks: ["microblog"]}),
-        // new webpack.ProvidePlugin({
-        //     "$":"jquery",
-        //     "jQuery":"jquery",
-        //     "window.jQuery":"jquery"
-        // })
+        new webpack.optimize.CommonsChunkPlugin({name: "app", chunks: ["microblog", "forum"]}),
     ]
 };

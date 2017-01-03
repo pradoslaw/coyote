@@ -18,24 +18,6 @@ function node_module(filename) {
 
 elixir(function (mix) {
 
-    // var base = [
-    //     node_module('bootstrap-sass/assets/javascripts/bootstrap/tooltip.js'),
-    //     node_module('bootstrap-sass/assets/javascripts/bootstrap/collapse.js'), // to musi sie znajdowac na kazdej podstronie (zwijanie menu dla urzadzen mobilnych)
-    //     'components/dropdown.js',
-    //     'components/scrolltop.js',
-    //     'components/breadcrumb.js',
-    //     'components/realtime.js',
-    //     'components/state.js',
-    //     'components/declination.js',
-    //     'components/date.js',
-    //     'components/notifications.js',
-    //     'components/session.js',
-    //     'components/vcard.js',
-    //     'components/popover.js',
-    //     'components/flag.js',
-    //     'main.js'
-    // ];
-
     mix
     /*
      | jQuery Ui w okrojonej wersji.
@@ -50,7 +32,18 @@ elixir(function (mix) {
             node_module('jquery-ui.1.11.1/ui/mouse.js'),
             node_module('jquery-ui.1.11.1/ui/resizable.js'),
             node_module('jquery-ui.1.11.1/ui/sortable.js')
-        ], 'public/js/jquery-ui.js');
+        ], 'public/js/jquery-ui.js')
+
+    /*
+     | Komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
+     | rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
+     */
+    .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js', 'components/upload.js', 'components/input-focus.js'], 'public/js/posting.js')
+
+    /*
+     | JS do prostego edytora markdown
+     */
+    .scripts(['components/wikieditor.js'], 'public/js/wikieditor.js');
 
     mix.webpack('app.js');
 
@@ -60,40 +53,10 @@ elixir(function (mix) {
     //     .babel(['pages/wiki.js', node_module('bootstrap-sass/js/modal.js'), 'components/subscribe.js'], 'public/js/wiki.js')
     //     .babel(['components/geo-ip.js'], 'public/js/geo-ip.js');
 
-    // mix//.scripts(base, 'public/js/main.js')
-    //     /*
-    //      | Forum (popover jest na forum potrzebne do pokazywania okna z ktorego mozna skopiowac skrocony link do postu)
-    //      */
-    //     .scripts([
-    //         node_module('jquery-color-animation/jquery.animate-colors-min.js'),
-    //         node_module('bootstrap-sass/assets/javascripts/bootstrap/modal.js'),
-    //         node_module('bootstrap-sass/assets/javascripts/bootstrap/tab.js'),
-    //         node_module('bootstrap-sass/assets/javascripts/bootstrap/popover.js'),
-    //         'pages/forum/draft.js',
-    //         'pages/forum/tags.js',
-    //         'pages/forum/sidebar.js',
-    //         'pages/forum/posting.js'
-    //     ], 'public/js/forum.js')
+
     //
-    //     /*
-    //      | Mikroblogu
-    //      */
-    //     // .scripts([
-    //     //     node_module('jquery-color-animation/jquery.animate-colors-min.js'),
-    //     //     node_module('ekko-lightbox/dist/ekko-lightbox.min.js'),
-    //     //     'pages/microblog.js'
-    //     // ], 'public/js/microblog.js')
-    //
-    //     /*
-    //      | Komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
-    //      | rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
-    //      */
-    //     .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js', 'components/upload.js', 'components/input-focus.js'], 'public/js/posting.js')
-    //
-    //     /*
-    //      | JS do prostego edytora markdown
-    //      */
-    //     .scripts(['components/wikieditor.js'], 'public/js/wikieditor.js')
+
+
     //
     //     /*
     //      | auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
@@ -105,30 +68,11 @@ elixir(function (mix) {
     //      */
     //     .scripts(['components/tags.js'], 'public/js/tags.js')
     //
-    //     /*
-    //      | Uzywane na niewielu stronach. tam gdzie trzeba przelaczac sie miedzy zakladkami
-    //      */
-    //     .scripts([node_module('bootstrap-sass/assets/javascripts/bootstrap/tab.js')], 'public/js/tab.js')
-    //
-    //     /*
-    //      | Okna modalne, tj. wyswietlanie komunikatow - np. zapytanie czy na pewno usunac post
-    //      */
-    //     .scripts([node_module('bootstrap-sass/assets/javascripts/bootstrap/modal.js')], 'public/js/modal.js')
-    //
-    //     /*
-    //      | Scrollbar uzywany m.in w oknie powiadomien, wiadomosci prywatnych czy tez na stronie glownej
-    //      | gdzie wyswietlane sa ostatnie aktywnosci z forum
-    //      */
-    //     .scripts([node_module('perfect-scrollbar/index.js')], 'public/js/perfect-scrollbar.js')
-    //
-    //     /*
-    //      | Plugin animujacy tlo danego elementu strony (mikroblog, post) dla usprawnienia ubsability
-    //      */
-    //     .scripts([node_module('jquery-color-animation/jquery.animate-colors-min.js')], 'public/js/animate-colors.js')
+
 
         //
         // .scripts([node_module('bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')], 'public/js/datepicker.js')
-        // .scripts([node_module('jquery-prettytextdiff/jquery.pretty-text-diff.js')], 'public/js/diff.js')
+
         // .scripts(['components/uploader.js'], 'public/js/uploader.js');
 
     mix.sass('main.scss')

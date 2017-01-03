@@ -1,3 +1,6 @@
+import declination from '../components/declination';
+import 'jquery-color-animation/jquery.animate-colors';
+
 $(function () {
     'use strict';
 
@@ -240,7 +243,12 @@ $(function () {
         })
         .on('click', 'a[data-toggle="lightbox"]', function(e) {
             e.preventDefault();
-            $(this).ekkoLightbox();
+
+            require.ensure(['ekko-lightbox/ekko-lightbox'], () => {
+                require('ekko-lightbox/ekko-lightbox')($);
+
+                $(this).ekkoLightbox();
+            });
         })
         .on('click', '.read-more', function()
         {

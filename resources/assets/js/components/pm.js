@@ -27,6 +27,12 @@ class Pm
         this._setBadge(value);
     }
 
+    /**
+     * Update counter badge.
+     *
+     * @param value
+     * @private
+     */
     _setBadge(value) {
         let badge = $('.badge', this._self);
 

@@ -15,7 +15,7 @@ class Session
     }
 
     static getItem(key, _default = null) {
-        var value = null;
+        let value = null;
 
         if (this.isSupported()) {
             try {

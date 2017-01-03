@@ -5,7 +5,7 @@
     "dev": "gulp watch"
   },
   "devDependencies": {
-    "awesome-bootstrap-checkbox": "^1.0.0-alpha.4",
+    "awesome-bootstrap-checkbox": "0.3.7",
     "babel-plugin-add-module-exports": "^0.2.1",
     "bootstrap-datepicker": "^1.6.4",
     "bootstrap-sass": "^3.3.7",

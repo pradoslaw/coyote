@@ -1,3 +1,5 @@
+import declination from '../../components/declination';
+
 $(function () {
     'use strict';
 
