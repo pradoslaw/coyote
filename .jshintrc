@@ -1,0 +1,8 @@
+{
+  "esversion": 6,
+  "globals" : {
+    "require": false,
+    "_config": false,
+    "Session": true
+  }
+}

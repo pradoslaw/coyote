@@ -1,7 +1,9 @@
+import Session from '../libs/session';
+
 $(function() {
     'use strict';
 
-    var popover = Session.getItem('popover');
+    let popover = Session.getItem('popover');
 
     if (popover === null) {
         popover = [];
@@ -12,8 +14,8 @@ $(function() {
     $('.alert-popover').each(function() {
         if ($.inArray($(this).data('id'), popover) === -1) {
             if ($(this).data('containment')) {
-                var p = $($(this).data('containment')).offset();
-                var css = {'left': p.left};
+                let p = $($(this).data('containment')).offset();
+                let css = {'left': p.left};
 
                 if ($(this).hasClass('bottom')) {
                    css.top = p.top - $(this).outerHeight() - 15;

@@ -1,240 +1,263 @@
-var DesktopNotifications =
-{
-    isSupported: function () {
-        return ('Notification' in window && window['Notification'] !== null);
-    },
+import DesktopNotifications from '../libs/notifications';
+import Session from '../libs/session';
 
-    requestPermission: function () {
-        if (this.isSupported() && Notification.permission !== 'granted') {
-            Notification.requestPermission(function (status) {
-                if (Notification.permission !== status) {
-                    Notification.permission = status;
+/**
+ * Manager alerts counter (set, get or clear)
+ */
+class Notifications
+{
+    constructor() {
+        this._self = $('#alerts');
+        this._dropdown = $('#dropdown-alerts');
+        this._modal = this._dropdown.find('.dropdown-modal');
+
+        // original page title
+        this._pageTitle = $('head title').text();
+
+        this._self.find('a[data-toggle="dropdown"]').click(this._onDropdownClick.bind(this));
+        this._dropdown.on('mousedown', 'li a', this._onItemClick.bind(this)).on('click', '#btn-mark-read', this._onMarkClick.bind(this)).on('click', '.btn-delete-alert', this._onDeleteClick.bind(this));
+    }
+
+    /**
+     * Set alerts counter
+     *
+     * @param value
+     */
+    set(value) {
+        if (value > 0) {
+            this._setTitle('(' + (value) + ') ' + this._pageTitle);
+            this._setIcon(_config.cdn + '/img/xicon/favicon' + Math.min(value, 6) + '.png');
+        } else {
+            this._setTitle(this._pageTitle);
+            this._setIcon(_config.cdn + '/img/favicon.png');
+        }
+
+        this._setBadge(value);
+    }
+
+    /**
+     * Set alerts counter and save it in local storage.
+     *
+     * @param value
+     */
+    store(value) {
+        Session.setItem('alerts', parseInt(value));
+
+        this.set(value);
+    }
+
+    /**
+     * Get alerts counter
+     *
+     * @returns {Number|number}
+     */
+    get() {
+        return parseInt(this._self.find('.badge').text()) || 0;
+    }
+
+    /**
+     * Remove alerts list
+     */
+    clear() {
+        $('li', this._dropdown).remove();
+
+        if (this._self.hasClass('open')) {
+            this._self.dropdown('toggle');
+        }
+    }
+
+    /**
+     * Set unread notification's counter.
+     *
+     * @param value
+     * @private
+     */
+    _setBadge(value) {
+        let badge = $('.badge', this._self);
+
+        if (value === 0) {
+            badge.remove();
+        }
+        else {
+            if (!badge) {
+                $('> a:first', this._self).prepend('<span class="badge">' + value + '</span>');
+            } else {
+                badge.text(value);
+            }
+        }
+    }
+
+    /**
+     * Set <title> tag.
+     *
+     * @param title
+     * @private
+     */
+    _setTitle(title) {
+        $('head title').text(title);
+    }
+
+    /**
+     * Set favicon with number of unread notifications.
+     *
+     * @param url
+     * @private
+     */
+    _setIcon(url) {
+        $('head link[rel=icon]').attr('href', url);
+    }
+
+    _onDropdownClick(e) {
+        DesktopNotifications.requestPermission();
+
+        let items = this._modal.find('ul');
+
+        let url = $(e.currentTarget).data('url');
+
+        if ($('li', items).length <= 1) {
+            $('<li><i class="fa fa-spin fa-spinner"></i></li>').appendTo(items);
+
+            $.get(url, (json) => {
+                items.html(json.html);
+                this.store(json.unread);
+
+                // default max height of alerts area
+                let maxHeight = 390;
+                let margin = this._dropdown.find('.dropdown-header').outerHeight() + 7;
+
+                if (parseInt(Session.getItem('box-notify-h'))) {
+                    maxHeight = Math.min(items.height(), Math.max(190, parseInt(Session.getItem('box-notify-h'))));
                 }
+
+                this._modal.css('max-height', maxHeight); // max wysokosc obszaru powiadomien
+
+                if (parseInt(Session.getItem('box-notify-w'))) {
+                    this._dropdown.width(parseInt(Session.getItem('box-notify-w')));
+                }
+
+                // require.ensure(['perfect-scrollbar/jquery', 'jquery-ui/ui/core', 'jquery-ui/ui/widget', 'jquery-ui/ui/widgets/mouse', 'jquery-ui/ui/widgets/resizable', 'jquery-ui/ui/widgets/sortable'], () => {
+                // require.ensure(['perfect-scrollbar/jquery', 'jquery-ui.1.11.1/ui/core', 'jquery-ui.1.11.1/ui/widget', 'jquery-ui.1.11.1/ui/mouse', 'jquery-ui.1.11.1/ui/resizable', 'jquery-ui.1.11.1/ui/sortable'], () => {
+                require.ensure(['perfect-scrollbar/jquery'], () => {
+                    require('perfect-scrollbar/jquery')($);
+
+                    this._modal.perfectScrollbar({suppressScrollX: true}).on('ps-y-reach-end', {url: url}, this._onScroll);
+
+                    // this._dropdown.resizable({
+                    //     maxHeight: items.height(), // max rozmiar obszaru powiadomien odpowiada ilosci znajdujacych sie tam powiadomien
+                    //     minHeight: 190,
+                    //     minWidth: 362,
+                    //     resize: function(e, ui) {
+                    //         modal.css('max-height', (ui.size.height - margin));
+                    //     },
+                    //     stop: function(e, ui) {
+                    //         Session.setItem('box-notify-w', ui.size.width);
+                    //         Session.setItem('box-notify-h', ui.size.height - margin);
+                    //
+                    //         maxHeight = ui.size.height;
+                    //     }
+                    // });
+                });
             });
         }
-    },
 
-    isAllowed: function () {
-        return this.isSupported() && Notification.permission === "granted";
-    },
+        e.preventDefault();
+        // return false;
+    }
 
-    doNotify: function (title, body, url) {
-        if (this.isAllowed()) {
-            var notification = new Notification(title, {body: body, tag: url, icon: _config.cdn + '/img/favicon.png'});
+    _onItemClick(e) {
+        let $this = $(e.currentTarget);
 
-            notification.onshow = function () {
-                setTimeout(function () {
-                    notification.close();
-                }, 5000);
-            };
+        $this.parent().removeClass('unread');
+        $this.attr('href', $this.data('url'));
 
-            return true;
-        }
         return false;
     }
-};
+
+    _onMarkClick(e) {
+        $('li', this._self).removeClass('unread');
+        this.store(0);
+
+        $.post($(e.currentTarget).attr('href'));
+
+        return false;
+    }
+
+    _onDeleteClick(e) {
+        let $this = $(e.currentTarget);
+
+        $.post($this.attr('href'));
+        $this.parent().fadeOut();
+
+        return false;
+    }
+
+    _onScroll(e) {
+        let items = $(e.currentTarget).find('ul');
+
+        $.get(e.data.url + '?offset=' + $('li', items).length, json => {
+            items.append(json.html);
+
+            if ($('li', json.html).length < 10) {
+                $(e.currentTarget).off('ps-y-reach-end');
+            }
+        });
+    }
+}
 
 $(function () {
     'use strict';
 
-    // original page title
-    var pageTitle = $('head title').text();
-
-    /**
-     * Manager alerts counter (set, get or clear)
-     *
-     * @type {{self: (jQuery|HTMLElement), set: Alerts.set, get: Alerts.get, clear: Alerts.clear}}
-     */
-    var Alerts =
-    {
-        self: $('#alerts'),
-
-        /**
-         * Set alerts counter
-         *
-         * @param value
-         */
-        set: function(value) {
-            if (value > 0) {
-                if (!$('.badge', this.self).length) {
-                    $('> a:first', this.self).prepend('<span class="badge">' + value + '</span>');
-                } else {
-                    $('.badge', this.self).text(value);
-                }
-
-                $('head title').text('(' + (value) + ') ' + pageTitle);
-                $('head link[rel=icon]').attr('href', _config.cdn + '/img/xicon/favicon' + Math.min(value, 6) + '.png');
-            } else {
-                $('.badge', this.self).remove();
-                $('head title').text(pageTitle);
-                $('head link[rel=icon]').attr('href', _config.cdn + '/img/favicon.png');
-            }
-        },
-
-        /**
-         * Set alerts counter and save it in local storage.
-         *
-         * @param value
-         */
-        store: function(value) {
-            Session.setItem('alerts', parseInt(value));
-
-            this.set(value);
-        },
-
-        /**
-         * Get alerts counter
-         *
-         * @returns {Number|number}
-         */
-        get: function() {
-            return parseInt(this.self.find('.badge').text()) || 0;
-        },
-
-        /**
-         * Remove alerts list
-         */
-        clear: function() {
-            $('#dropdown-alerts li').remove();
-
-            if (this.self.hasClass('open')) {
-                this.self.dropdown('toggle');
-            }
-        }
-    };
+    let notifications = new Notifications();
 
     Session.addListener(function (e) {
         if (e.key === 'alerts' && e.newValue !== e.oldValue) {
-            Alerts.set(e.newValue);
-            Alerts.clear();
+            notifications.set(e.newValue);
+            notifications.clear();
         }
     });
 
-    $('> a[data-toggle="dropdown"]', Alerts.self).click(function (e) {
-        DesktopNotifications.requestPermission();
-
-        var wrapper = $('#dropdown-alerts');
-        var modal = wrapper.find('.dropdown-modal');
-        var alerts = modal.find('ul');
-        var url = $(this).data('url');
-
-        if ($('li', alerts).length <= 1) {
-            $('<li><i class="fa fa-spin fa-spinner"></i></li>').appendTo(alerts);
-
-            $.get(url, function (json) {
-                alerts.html(json.html);
-
-                Alerts.store(json.unread);
-
-                // default max height of alerts area
-                var maxHeight = 390;
-                var margin = wrapper.find('.dropdown-header').outerHeight() + 7;
-
-                if (parseInt(Session.getItem('box-notify-h'))) {
-                    maxHeight = Math.min(alerts.height(), Math.max(190, parseInt(Session.getItem('box-notify-h'))));
-                }
-
-                modal.css('max-height', maxHeight); // max wysokosc obszaru powiadomien
-
-                if (parseInt(Session.getItem('box-notify-w'))) {
-                    wrapper.width(parseInt(Session.getItem('box-notify-w')));
-                }
-
-                $.getScript(_config.cdn + '/js/jquery-ui.js', function() {
-                    wrapper.resizable({
-                        maxHeight: alerts.height(), // max rozmiar obszaru powiadomien odpowiada ilosci znajdujacych sie tam powiadomien
-                        minHeight: 190,
-                        minWidth: 362,
-                        resize: function(e, ui) {
-                            modal.css('max-height', (ui.size.height - margin));
-                        },
-                        stop: function(e, ui) {
-                            Session.setItem('box-notify-w', ui.size.width);
-                            Session.setItem('box-notify-h', ui.size.height - margin);
-
-                            maxHeight = ui.size.height;
-                        }
-                    });
-                });
-
-                if (typeof modal.perfectScrollbar !== 'undefined') {
-                    modal.perfectScrollbar('update');
-                }
-
-                $.getScript(_config.cdn + '/js/perfect-scrollbar.js', function() {
-                    modal.perfectScrollbar({suppressScrollX: true}).on('ps-y-reach-end', function() {
-                        $.get(url + '?offset=' + $('li', alerts).length, function(json) {
-                            alerts.append(json.html);
-
-                            if ($('li', json.html).length < 10) {
-                                modal.off('ps-y-reach-end');
-                            }
-                        });
-                    });
-                });
-            });
-        }
-
-        e.preventDefault();
-    });
-
-    $('#dropdown-alerts')
-        .on('mousedown', 'li a', function () {
-            $(this).parent().removeClass('unread');
-            $(this).attr('href', $(this).data('url'));
-
-            return false;
-        })
-        .on('click', '#btn-mark-read', function() {
-            $('li', Alerts.self).removeClass('unread');
-
-            if ($('.badge', Alerts.self).length) {
-                Alerts.store(0);
-            }
-
-            $.post($(this).attr('href'));
-            return false;
-        })
-        .on('click', '.btn-delete-alert', function() {
-            $.post($(this).attr('href'));
-            $(this).parent().fadeOut();
-
-            return false;
-        });
-
-    $('#messages > a[data-toggle="dropdown"]').click(function(e) {
-        var messages = $('#dropdown-messages').find('ul');
-
-        if ($('li', messages).length <= 1) {
-            $.get($(this).data('url'), function (html) {
-                messages.html(html);
-            });
-        }
-
-        e.preventDefault();
-    });
-
-    ws.on('alert', function(data) {
-        Alerts.store(Alerts.get() + 1);
-        Alerts.clear();
+    ws.on('alert', data => {
+        notifications.store(notifications.get() + 1);
+        notifications.clear();
 
         DesktopNotifications.doNotify(data.headline, data.subject, data.url);
-    })
-    .on('pm', function(data) {
-        DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
-
-        var dropdown = $('#messages');
-        var value = (parseInt($('.badge', dropdown).text()) || 0) + 1;
-
-        if (value === 1) {
-            $('> a:first', dropdown).prepend('<span class="badge">' + value + '</span>');
-        } else {
-            $('.badge', dropdown).text(value);
-        }
     });
 
-    setInterval(function() {
-        $.get('/ping', function(token) {
+
+    //
+    // $('#messages > a[data-toggle="dropdown"]').click(function(e) {
+    //     var messages = $('#dropdown-messages').find('ul');
+    //
+    //     if ($('li', messages).length <= 1) {
+    //         $.get($(this).data('url'), function (html) {
+    //             messages.html(html);
+    //         });
+    //     }
+    //
+    //     e.preventDefault();
+    // });
+    //
+    // ws.on('alert', function(data) {
+    //     Alerts.store(Alerts.get() + 1);
+    //     Alerts.clear();
+    //
+    //     DesktopNotifications.doNotify(data.headline, data.subject, data.url);
+    // })
+    // .on('pm', function(data) {
+    //     DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
+    //
+    //     var dropdown = $('#messages');
+    //     var value = (parseInt($('.badge', dropdown).text()) || 0) + 1;
+    //
+    //     if (value === 1) {
+    //         $('> a:first', dropdown).prepend('<span class="badge">' + value + '</span>');
+    //     } else {
+    //         $('.badge', dropdown).text(value);
+    //     }
+    // });
+
+    setInterval(() => {
+        $.get('/ping', token => {
             $('meta[name="csrf-token"]').attr('content', token);
             $(':hidden[name="_token"]').val(token);
 

@@ -1,10 +1,10 @@
-var Session =
+class Session
 {
-    isSupported: function () {
-        return ('localStorage' in window && window.localStorage !== null);
-    },
+    static isSupported() {
+        return ('localStorage' in window && window['localStorage'] !== null);
+    }
 
-    setItem: function (key, value) {
+    static setItem(key, value) {
         if (this.isSupported()) {
             try {
                 localStorage.setItem(key, value);
@@ -12,9 +12,9 @@ var Session =
             catch (e) {
             }
         }
-    },
+    }
 
-    getItem: function (key) {
+    static getItem(key, _default = null) {
         var value = null;
 
         if (this.isSupported()) {
@@ -25,16 +25,16 @@ var Session =
             }
         }
 
-        return value;
-    },
+        return value === null ? _default : value;
+    }
 
-    removeItem: function (key) {
+    static removeItem(key) {
         if (this.isSupported()) {
             localStorage.removeItem(key);
         }
-    },
+    }
 
-    addListener: function (callback) {
+    static addListener(callback) {
         if (this.isSupported()) {
             try {
                 window.addEventListener('storage', callback, true);
@@ -43,4 +43,6 @@ var Session =
             }
         }
     }
-};
+}
+
+module.exports = Session;

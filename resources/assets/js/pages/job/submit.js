@@ -27,7 +27,7 @@ class Tags {
         this.onItemClick();
         this.onRemove();
 
-        // let self = this;
+        // let _self = this;
 
         $(document).bind('click', e => {
             let $target = $(e.target);
@@ -39,7 +39,7 @@ class Tags {
     }
 
     onKeyUp() {
-        // let self = this;
+        // let _self = this;
 
         this.input.on('keyup', e => {
             let keyCode = e.keyCode || window.event.keyCode;
@@ -104,7 +104,7 @@ class Tags {
     }
 
     onItemClick() {
-        // let self = this;
+        // let _self = this;
 
         this.dropdown.on('click', 'li', e => {
             this.addTag($(e.currentTarget).find('span').text());
@@ -121,7 +121,7 @@ class Tags {
     }
 
     onFocus() {
-        // let self = this;
+        // let _self = this;
 
         this.input.on('focus click', () => {
             this.dropdown.show();
@@ -165,7 +165,7 @@ class Tags {
             .toLowerCase()
             .replace(/ /g, '-');
 
-        // let self = this;
+        // let _self = this;
 
         $.post(this.input.data('post-url'), {name: value}, html => {
             this.container.append(html);

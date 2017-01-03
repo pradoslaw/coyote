@@ -3,7 +3,7 @@
 @import "../helpers/mixins";
 @import "../vendor/bootstrap/variables";
 @import "../vendor/font-awesome/variables";
-@import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
+@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
 @import "../components/search";
 
 .well.empty-result {

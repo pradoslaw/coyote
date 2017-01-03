@@ -14,7 +14,9 @@
         <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
 
         <script type="text/javascript">var _config = {{ public|default('{}')|raw }};</script>
-        <script src="{{ cdn('js/main.js') }}"></script>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="{{ cdn('js/app.js') }}"></script>
     </head>
     <body>
         <div id="container">
