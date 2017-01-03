@@ -10,13 +10,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-//        \Coyote\Http\Middleware\EncryptCookies::class,
-//        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-//        \Illuminate\Session\Middleware\StartSession::class,
-//        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-//        \Coyote\Http\Middleware\VerifyCsrfToken::class,
-//        \Coyote\Http\Middleware\FirewallBlacklist::class
+        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class
     ];
 
     /**
@@ -30,7 +24,8 @@ class Kernel extends HttpKernel
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Coyote\Http\Middleware\VerifyCsrfToken::class,
+            // todo: nieprawidlowe dzialanie middleware, tymczasowo zakomentowane
+            //\Coyote\Http\Middleware\VerifyCsrfToken::class,
             \Coyote\Http\Middleware\FirewallBlacklist::class
         ],
         'api' => [
