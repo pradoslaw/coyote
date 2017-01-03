@@ -2,14 +2,17 @@ require('perfect-scrollbar/jquery')($);
 
 $(function () {
     $('#stream').perfectScrollbar({suppressScrollX: true});
+    let tabs = {'forum': $('#forum-tabs').find('a'), 'reputation': $('#reputation-tabs').find('a')};
 
-    $('#forum-tabs a').click(function() {
-        let index = $('#forum-tabs a').index(this);
+    tabs.forum.click(function() {
+        let index = tabs.forum.index(this);
+
         $.post(_config.settings_url, {'homepage_mode': index});
     });
 
-    $('#reputation-tabs a').click(function() {
-        let index = $('#reputation-tabs a').index(this);
+    tabs.reputation.click(function() {
+        let index = tabs.reputation.index(this);
+
         $.post(_config.settings_url, {'homepage_reputation': index});
     });
 });
