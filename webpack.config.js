@@ -29,7 +29,11 @@ module.exports = {
     entry: {
         app: assets('app.js'),
         microblog: assets('pages/microblog.js'),
-        forum: assets('pages/forum.js')
+        forum: assets('pages/forum.js'),
+        wiki: assets('pages/wiki.js'),
+        job: assets('pages/job.js'),
+        homepage: assets('pages/homepage.js'),
+        'job-submit': assets('pages/job/submit.js'),
     },
     devtool: 'source-map',
     plugins: [
@@ -38,6 +42,6 @@ module.exports = {
         //         warnings: false
         //     }
         // })
-        new webpack.optimize.CommonsChunkPlugin({name: "app", chunks: ["microblog", "forum"]}),
+        new webpack.optimize.CommonsChunkPlugin({name: "app", chunks: ["microblog", "forum", 'wiki', 'job']}),
     ]
 };

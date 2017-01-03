@@ -5,11 +5,13 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="{{ cdn('css/job.css') }}">
+
 {% endblock %}
 
 {% block body %}
     {% import 'components.modals' as modals %}
+
+    <link rel="stylesheet" href="{{ cdn('css/job.css') }}">
 
     {{ parent() }}
 
