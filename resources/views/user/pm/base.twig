@@ -2,7 +2,7 @@
 {% set page_name = page_name|default('Wiadomości prywatne') %}
 {% block title %}{{ page_name }} {{ parent() }}{% endblock %}
 
-{% import 'components/modals.twig' as modal %}
+{% import 'components.modals' as modal %}
 
 {% block content %}
     <h2>{{ page_name }}</h2>
@@ -25,8 +25,7 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
-    <script type="text/javascript">
+    <script>
         $(function() {
             $('.btn-delete-pm').click(function() {
                 var $this = $(this);

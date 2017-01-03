@@ -56,9 +56,8 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/jquery-ui.js') }}"></script>
-    <script type="text/javascript">
+    <script src="{{ cdn('js/jquery-ui.js') }}"></script>
+    <script>
         $(function() {
             var container = $('.rate-container');
             var rates = $('.rate', container);
