@@ -69,12 +69,12 @@ class Realtime {
 }
 
 export function RealtimeFactory() {
-    window.ws = new Realtime();
+    let realtime = new Realtime();
 
     // response to the heartbeat event
-    ws.on('hb', function(data, handler) {
+    realtime.on('hb', function(data, handler) {
         handler.send(data);
     });
 
-    return window.ws;
+    return realtime;
 }

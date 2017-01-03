@@ -47,7 +47,7 @@ class Notifications
     }
 
     /**
-     * Get alerts counter
+     * Get notifications counter
      *
      * @returns {Number|number}
      */
@@ -161,7 +161,6 @@ class Notifications
         }
 
         e.preventDefault();
-        // return false;
     }
 
     _onItemClick(e) {
@@ -222,39 +221,6 @@ $(function () {
 
         DesktopNotifications.doNotify(data.headline, data.subject, data.url);
     });
-
-
-    //
-    // $('#messages > a[data-toggle="dropdown"]').click(function(e) {
-    //     var messages = $('#dropdown-messages').find('ul');
-    //
-    //     if ($('li', messages).length <= 1) {
-    //         $.get($(this).data('url'), function (html) {
-    //             messages.html(html);
-    //         });
-    //     }
-    //
-    //     e.preventDefault();
-    // });
-    //
-    // ws.on('alert', function(data) {
-    //     Alerts.store(Alerts.get() + 1);
-    //     Alerts.clear();
-    //
-    //     DesktopNotifications.doNotify(data.headline, data.subject, data.url);
-    // })
-    // .on('pm', function(data) {
-    //     DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
-    //
-    //     var dropdown = $('#messages');
-    //     var value = (parseInt($('.badge', dropdown).text()) || 0) + 1;
-    //
-    //     if (value === 1) {
-    //         $('> a:first', dropdown).prepend('<span class="badge">' + value + '</span>');
-    //     } else {
-    //         $('.badge', dropdown).text(value);
-    //     }
-    // });
 
     setInterval(() => {
         $.get('/ping', token => {

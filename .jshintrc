@@ -3,6 +3,7 @@
   "globals" : {
     "require": false,
     "_config": false,
-    "Session": true
+    "Session": true,
+    "ws": false
   }
 }
