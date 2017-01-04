@@ -1,3 +1,6 @@
+import 'core-js/fn/promise';
+import 'core-js/modules/es6.function.bind';
+
 import {RealtimeFactory} from './libs/realtime.js';
 import './components/dropdown.js';
 import './components/scrolltop.js';
