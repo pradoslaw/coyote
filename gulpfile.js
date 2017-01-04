@@ -74,23 +74,16 @@ elixir(function (mix) {
     // versioning only on production server
     if (elixir.config.production) {
         mix.version([
-            'js/main.js',
+            'js/app.js',
             'js/microblog.js',
             'js/forum.js',
             'js/job.js',
             'js/job-submit.js',
-            'js/job-tinymce.js',
             'js/posting.js',
             'js/wikieditor.js',
             'js/auto-complete.js',
-            'js/tags.js',
-            'js/tab.js',
-            'js/modal.js',
-            'js/perfect-scrollbar.js',
-            'js/animate-colors.js',
             'js/jquery-ui.js',
             'js/wiki.js',
-            'js/diff.js',
             'js/geo-ip.js',
             'js/uploader.js',
 
