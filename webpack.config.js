@@ -35,13 +35,24 @@ module.exports = {
         homepage: assets('pages/homepage.js'),
         'job-submit': assets('pages/job/submit.js'),
     },
-    devtool: 'source-map',
     plugins: [
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false
-        //     }
-        // })
-        new webpack.optimize.CommonsChunkPlugin({name: "app", chunks: ["microblog", "forum", 'wiki', 'job']}),
+        new webpack.optimize.CommonsChunkPlugin({name: "app", minChunks: 2, chunks: ["microblog", "forum", 'wiki', 'job', 'homepage', 'job-submit']}),
     ]
 };
+
+if (process.env.NODE_ENV === 'production') {
+    // module.exports.plugins = [
+    //     new webpack.DefinePlugin({
+    //         'process.env': {
+    //             NODE_ENV: '"production"'
+    //         }
+    //     }),
+    //     new webpack.optimize.UglifyJsPlugin({
+    //         compress: {
+    //             warnings: false
+    //         }
+    //     })
+    // ]
+} else {
+    module.exports.devtool = '#source-map';
+}

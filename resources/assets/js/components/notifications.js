@@ -136,9 +136,14 @@ class Notifications
                 }
 
                 // require.ensure(['perfect-scrollbar/jquery', 'jquery-ui/ui/core', 'jquery-ui/ui/widget', 'jquery-ui/ui/widgets/mouse', 'jquery-ui/ui/widgets/resizable', 'jquery-ui/ui/widgets/sortable'], () => {
-                // require.ensure(['perfect-scrollbar/jquery', 'jquery-ui.1.11.1/ui/core', 'jquery-ui.1.11.1/ui/widget', 'jquery-ui.1.11.1/ui/mouse', 'jquery-ui.1.11.1/ui/resizable', 'jquery-ui.1.11.1/ui/sortable'], () => {
-                require.ensure(['perfect-scrollbar/jquery'], () => {
-                    require('perfect-scrollbar/jquery')($);
+                require.ensure(['perfect-scrollbar/jquery', 'jquery-ui.1.11.1/ui/core', 'jquery-ui.1.11.1/ui/widget', 'jquery-ui.1.11.1/ui/mouse', 'jquery-ui.1.11.1/ui/resizable', 'jquery-ui.1.11.1/ui/sortable'], () => {
+                // require.ensure(['perfect-scrollbar/jquery'], () => {
+                    require('perfect-scrollbar/jquery')();
+                    require('jquery-ui.1.11.1/ui/core')();
+                    require('jquery-ui.1.11.1/ui/widget')();
+                    require('jquery-ui.1.11.1/ui/mouse')();
+                    require('jquery-ui.1.11.1/ui/resizable')();
+                    require('jquery-ui.1.11.1/ui/sortable')();
 
                     this._modal.perfectScrollbar({suppressScrollX: true}).on('ps-y-reach-end', {url: url}, this._onScroll);
 
