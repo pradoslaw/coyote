@@ -53,7 +53,7 @@ class HomeController extends Controller
     public function index($user, $tab = 'reputation')
     {
         $this->validateWith(
-            $this->getValidationFactory()->make(['tab' => $tab], ['tab' => 'in:history,reputation,post'])
+            $this->getValidationFactory()->make(['tab' => strtolower($tab)], ['tab' => 'in:history,reputation,post'])
         );
 
         $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
