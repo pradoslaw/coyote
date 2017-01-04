@@ -79,7 +79,7 @@ class HomeController extends Controller
     /**
      * Run the validation routine against the given validator.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator|array  $validator
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @param  \Illuminate\Http\Request|null  $request
      * @return void
      */
