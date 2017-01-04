@@ -52,7 +52,9 @@ class HomeController extends Controller
      */
     public function index($user, $tab = 'reputation')
     {
-        abort_if(!method_exists($this, $tab), 404);
+        $this->validateWith(
+            $this->getValidationFactory()->make(['tab' => $tab], ['tab' => 'in:history,reputation,post'])
+        );
 
         $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
         $this->public['profile_history'] = route('profile.history', [$user->id]);
@@ -72,6 +74,20 @@ class HomeController extends Controller
             'tab'           => strtolower($tab),
             'module'        => $this->$tab($user)
         ]);
+    }
+
+    /**
+     * Run the validation routine against the given validator.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator|array  $validator
+     * @param  \Illuminate\Http\Request|null  $request
+     * @return void
+     */
+    public function validateWith($validator, Request $request = null)
+    {
+        if ($validator->fails()) {
+            abort(404);
+        }
     }
 
     /**
