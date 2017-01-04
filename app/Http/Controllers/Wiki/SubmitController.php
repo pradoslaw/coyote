@@ -14,12 +14,11 @@ use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 class SubmitController extends BaseController
 {
     /**
-     * @param Request $request
      * @param WikiRepository $wiki
      */
-    public function __construct(Request $request, WikiRepository $wiki)
+    public function __construct(WikiRepository $wiki)
     {
-        parent::__construct($request, $wiki);
+        parent::__construct($wiki);
 
         $this->breadcrumb->push('Edycja strony');
     }

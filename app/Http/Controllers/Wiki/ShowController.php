@@ -22,7 +22,7 @@ class ShowController extends BaseController
     public function index(Request $request)
     {
         /** @var \Coyote\Wiki $wiki */
-        $wiki = $request->wiki;
+        $wiki = $request->attributes->get('wiki');
 
         $author = $wiki->logs()->exists() ? $wiki->logs()->orderBy('id')->first()->user : null;
         $wiki->text = $this->getParser()->parse((string) $wiki->text);

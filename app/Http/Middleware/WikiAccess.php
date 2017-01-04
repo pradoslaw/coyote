@@ -58,7 +58,7 @@ class WikiAccess extends AbstractMiddleware
             abort(404);
         }
 
-        $request->wiki = $result;
+        $request->attributes->set('wiki', $result);
         $this->wiki->resetCriteria();
 
         return $next($request);
