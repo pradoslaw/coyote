@@ -4,7 +4,7 @@ namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
 
-class Link implements ParserInterface
+class Link extends Parser implements ParserInterface
 {
     const LINK_TAG_REGEXP = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
     const LINK_INTERNAL_REGEXP = '\[\[(.*?)(\|(.*?))*\]\]';
@@ -37,8 +37,13 @@ class Link implements ParserInterface
      */
     public function parse($text)
     {
+        $text = $this->hashBlock($text, 'code');
+        $text = $this->hashInline($text, 'img');
+
         $text = $this->parseInternalLinks($text);
         $text = $this->parseInternalAccessors($text);
+
+        $text = $this->unhash($text);
 
         return $text;
     }
@@ -78,6 +83,8 @@ class Link implements ParserInterface
      */
     protected function parseInternalAccessors($text)
     {
+        $text = $this->hashBlock($text, 'a');
+
         if (!preg_match_all('/' . self::LINK_INTERNAL_REGEXP . '/i', $text, $matches, PREG_SET_ORDER)) {
             return $text;
         }
@@ -107,6 +114,8 @@ class Link implements ParserInterface
 
             $text = str_replace($origin, link_to($path . ($hash ? '#' . $hash : ''), $title, $attr), $text);
         }
+
+        $text = $this->unhash($text);
 
         return $text;
     }

@@ -111,6 +111,12 @@ class LinkTest extends \Codeception\TestCase\Test
 
         $input = $this->link->parse('[[Kim jesteśmy?]]');
         $this->tester->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
+
+        $input = $this->link->parse('<code>[[Kim jesteśmy?]]</code>');
+        $this->tester->assertContains("<code>[[Kim jesteśmy?]]</code>", $input);
+
+        $input = $this->link->parse('<pre><code>[[Kim jesteśmy?]]</code></pre>');
+        $this->tester->assertContains("<pre><code>[[Kim jesteśmy?]]</code></pre>", $input);
     }
 
     public function testAutolink()
