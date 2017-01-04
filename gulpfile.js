@@ -38,18 +38,18 @@ elixir(function (mix) {
      | Komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
      | rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
      */
-    .scripts(['components/prompt.js', 'components/autogrow.js', 'components/fast-submit.js', 'components/upload.js', 'components/input-focus.js'], 'public/js/posting.js')
+    .scripts(['plugins/prompt.js', 'plugins/autogrow.js', 'plugins/fast-submit.js', 'plugins/upload.js', 'plugins/input-focus.js'], 'public/js/posting.js')
 
     /*
      | JS do prostego edytora markdown
      */
-    .scripts(['components/wikieditor.js'], 'public/js/wikieditor.js')
-    .scripts(['components/geo-ip.js'], 'public/js/geo-ip.js')
+    .scripts(['plugins/wikieditor.js'], 'public/js/wikieditor.js')
+    .scripts(['plugins/geo-ip.js'], 'public/js/geo-ip.js')
     /*
      | auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
      */
-    .scripts(['components/auto-complete.js'], 'public/js/auto-complete.js')
-    .scripts(['components/uploader.js'], 'public/js/uploader.js')
+    .scripts(['plugins/auto-complete.js'], 'public/js/auto-complete.js')
+    .scripts(['plugins/uploader.js'], 'public/js/uploader.js')
     .scripts([node_module('bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')], 'public/js/datepicker.js');
 
     mix.webpack('app.js');
@@ -69,7 +69,7 @@ elixir(function (mix) {
         .sass('pages/pastebin.scss')
         .sass('pages/search.scss');
 
-    mix.copy(node_module('bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css'), 'public/css/datepicker.css');
+    mix.copy('node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css', 'public/css/datepicker.css');
 
     // versioning only on production server
     if (elixir.config.production) {

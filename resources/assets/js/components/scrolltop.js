@@ -1,9 +1,9 @@
 $(function() {
     'use strict';
 
-    var AMOUNT_SCROLLED = 300;
+    const AMOUNT_SCROLLED = 300;
 
-    $(window).scroll(function () {
+    $(window).scroll(() => {
         if ($(window).scrollTop() > AMOUNT_SCROLLED) {
             $('.back-to-top').fadeIn('slow');
         } else {
@@ -11,7 +11,7 @@ $(function() {
         }
     });
 
-    $(".back-to-top").click(function () {
+    $(".back-to-top").click(() => {
         $("html, body").animate({scrollTop: 0}, "fast");
 
         return false;

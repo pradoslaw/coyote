@@ -1,4 +1,4 @@
-import '../../components/uploader';
+import '../../plugins/uploader';
 import '../job/tinymce';
 
 class Tags {

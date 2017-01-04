@@ -1,6 +1,6 @@
 import 'jquery-color-animation/jquery.animate-colors';
 import 'jquery-prettytextdiff/jquery.pretty-text-diff';
-import '../components/tags';
+import '../plugins/tags';
 import '../pages/forum/draft';
 import '../pages/forum/posting';
 import '../pages/forum/sidebar';
