@@ -25,30 +25,5 @@
 {% block body %}
     {{ parent() }}
 
-    <script>
-        $(function() {
-            $('.btn-delete-pm').click(function() {
-                var $this = $(this);
-
-                $('#confirm').modal('show').one('click', '.danger', function() {
-                    $('<form>', {'method': 'POST', 'action': $this.attr('href')})
-                            .append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">')
-                            .appendTo('body')
-                            .submit();
-                });
-
-                return false;
-            });
-
-            $('#box-pm a[data-toggle="tab"]').click(function(e) {
-                if ($(e.target).attr('aria-controls') == 'preview') {
-                    $('#preview').html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
-
-                    $.post('{{ route('user.pm.preview') }}', {'text': $('textarea[name="text"]').val()}, function(html) {
-                        $('#preview').html(html);
-                    });
-                }
-            });
-        });
-    </script>
+    <script src="{{ cdn('js/pm.js') }}"></script>
 {% endblock %}

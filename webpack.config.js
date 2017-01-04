@@ -33,6 +33,7 @@ module.exports = {
         wiki: assets('pages/wiki.js'),
         job: assets('pages/job.js'),
         homepage: assets('pages/homepage.js'),
+        pm: assets('pages/pm.js'),
         'job-submit': assets('pages/job/submit.js'),
     },
     plugins: [

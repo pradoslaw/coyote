@@ -135,13 +135,9 @@
     </div>
 {% endblock %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/profile.css') }}">
-{% endblock %}
-
 {% block body %}
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/profile.css') }}">
+
     {{ parent() }}
 
     <script src="{{ cdn('js/perfect-scrollbar.js') }}"></script>

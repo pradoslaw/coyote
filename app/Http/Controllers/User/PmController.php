@@ -46,6 +46,8 @@ class PmController extends BaseController
         $this->user = $user;
         $this->alert = $alert;
         $this->pm = $pm;
+
+        $this->public['preview_url'] = route('user.pm.preview');
     }
 
     /**
@@ -101,6 +103,8 @@ class PmController extends BaseController
         if ($request->ajax()) {
             return view('user.pm.infinite')->with('talk', $talk);
         }
+
+        $this->public['infinity_url'] = route('user.pm.show', [$id]);
 
         $recipient = $this->user->find($pm->author_id, ['name']);
         return $this->view('user.pm.show')->with(compact('pm', 'talk', 'recipient'));

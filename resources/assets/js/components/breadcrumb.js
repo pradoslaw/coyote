@@ -13,8 +13,8 @@ $(function () {
                 if ($.trim(breadcrumb.text()).length > 0) {
                     breadcrumb.attr({id: 'breadcrumb-fixed'}).css(css).hide().appendTo('body');
 
-                    breadcrumb.slideDown('slow', (e) => $(e.currentTarget).animate({opacity: 0.0}, 5000));
-                    breadcrumb.hover((e) => $(e.currentTarget).stop().css(css), (e) => $(e.currentTarget).animate({opacity: 0.0}, 800));
+                    breadcrumb.slideDown('slow', (e) => breadcrumb.animate({opacity: 0.0}, 5000));
+                    breadcrumb.hover((e) => breadcrumb.stop().css(css), (e) => breadcrumb.animate({opacity: 0.0}, 800));
                 }
             }
             else {

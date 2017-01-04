@@ -51,36 +51,6 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/animate-colors.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
-    <script type="text/javascript">
-        $(function () {
-            var wrap = $('#wrap');
-            var overview = $('#overview');
-
-            wrap.perfectScrollbar();
-            wrap.scrollTop(overview.outerHeight());
-
-            $('textarea[name="text"]').wikiEditor().prompt().fastSubmit().autogrow().pasteImage().focus();
-
-            wrap.on('mouseenter', '.unread', function() {
-                $(this).off('mouseenter');
-                $(this).animate({backgroundColor: '#fff'});
-            })
-            .on('ps-y-reach-start', function() {
-                var self = $(this);
-
-                $.get('{{ route('user.pm.show', [pm.id]) }}', {'offset': $('.media', overview).length}, function(html) {
-                    overview.prepend(html);
-
-                    // jezeli nie ma wiecej wiadomosci, to ajax nie bedzie kolejny raz wyslany
-                    if ($.trim(html) === '') {
-                        self.off('ps-y-reach-start');
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="{{ cdn('js/posting.js') }}"></script>
+    <script src="{{ cdn('js/wikieditor.js') }}"></script>
 {% endblock %}
