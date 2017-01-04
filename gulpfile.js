@@ -49,8 +49,7 @@ elixir(function (mix) {
      | auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
      */
     .scripts(['plugins/auto-complete.js'], 'public/js/auto-complete.js')
-    .scripts(['plugins/uploader.js'], 'public/js/uploader.js')
-    .scripts([node_module('bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')], 'public/js/datepicker.js');
+    .scripts(['plugins/uploader.js'], 'public/js/uploader.js');
 
     mix.webpack('app.js');
 
@@ -69,6 +68,7 @@ elixir(function (mix) {
         .sass('pages/pastebin.scss')
         .sass('pages/search.scss');
 
+    mix.copy('node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 'public/js/datepicker.js');
     mix.copy('node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css', 'public/css/datepicker.css');
 
     // versioning only on production server
