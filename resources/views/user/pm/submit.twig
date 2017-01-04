@@ -25,6 +25,7 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="body">
                     {% include 'components.toolbar' %}
+
                     <textarea name="text" class="form-control" rows="5" data-paste-url="{{ route('user.pm.paste') }}" data-prompt-url="{{ route('user.prompt') }}" tabindex="2">{{ input_old('text') }}</textarea>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="preview"></div>

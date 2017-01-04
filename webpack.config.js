@@ -34,6 +34,7 @@ module.exports = {
         job: assets('pages/job.js'),
         homepage: assets('pages/homepage.js'),
         pm: assets('pages/pm.js'),
+        profile: assets('pages/profile.js'),
         'job-submit': assets('pages/job/submit.js'),
     },
     plugins: [
