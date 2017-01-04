@@ -86,7 +86,8 @@ abstract class Controller extends BaseController
         // URL to main page and CDN
         $this->public = [
             'public' => url()->route('home'),
-            'cdn' => config('app.cdn') ? ('//' . config('app.cdn')) : url()->route('home')
+            'cdn' => config('app.cdn') ? ('//' . config('app.cdn')) : url()->route('home'),
+            'ping' => route('ping', [], false)
         ];
 
         if ($this->userId && config('services.ws.host')) {

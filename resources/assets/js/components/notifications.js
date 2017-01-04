@@ -107,12 +107,17 @@ class Notifications
         $('head link[rel=icon]').attr('href', url);
     }
 
+    /**
+     * Bind onclick on notification element.
+     *
+     * @param e
+     * @private
+     */
     _onDropdownClick(e) {
         DesktopNotifications.requestPermission();
 
         let items = this._modal.find('ul');
-
-        let url = $(e.currentTarget).data('url');
+        const url = $(e.currentTarget).data('url');
 
         if ($('li', items).length <= 1) {
             $('<li><i class="fa fa-spin fa-spinner"></i></li>').appendTo(items);
@@ -122,8 +127,7 @@ class Notifications
                 this.store(json.unread);
 
                 // default max height of alerts area
-                let maxHeight = 390;
-                let margin = this._dropdown.find('.dropdown-header').outerHeight() + 7;
+                let maxHeight = 420;
 
                 if (parseInt(Session.getItem('box-notify-h'))) {
                     maxHeight = Math.min(items.height(), Math.max(190, parseInt(Session.getItem('box-notify-h'))));
@@ -135,32 +139,10 @@ class Notifications
                     this._dropdown.width(parseInt(Session.getItem('box-notify-w')));
                 }
 
-                // require.ensure(['perfect-scrollbar/jquery', 'jquery-ui/ui/core', 'jquery-ui/ui/widget', 'jquery-ui/ui/widgets/mouse', 'jquery-ui/ui/widgets/resizable', 'jquery-ui/ui/widgets/sortable'], () => {
-                require.ensure(['perfect-scrollbar/jquery', 'jquery-ui.1.11.1/ui/core', 'jquery-ui.1.11.1/ui/widget', 'jquery-ui.1.11.1/ui/mouse', 'jquery-ui.1.11.1/ui/resizable', 'jquery-ui.1.11.1/ui/sortable'], () => {
-                // require.ensure(['perfect-scrollbar/jquery'], () => {
-                    require('perfect-scrollbar/jquery')();
-                    require('jquery-ui.1.11.1/ui/core')();
-                    require('jquery-ui.1.11.1/ui/widget')();
-                    require('jquery-ui.1.11.1/ui/mouse')();
-                    require('jquery-ui.1.11.1/ui/resizable')();
-                    require('jquery-ui.1.11.1/ui/sortable')();
+                require.ensure([], (require) => {
+                    require('perfect-scrollbar/jquery')($);
 
                     this._modal.perfectScrollbar({suppressScrollX: true}).on('ps-y-reach-end', {url: url}, this._onScroll);
-
-                    // this._dropdown.resizable({
-                    //     maxHeight: items.height(), // max rozmiar obszaru powiadomien odpowiada ilosci znajdujacych sie tam powiadomien
-                    //     minHeight: 190,
-                    //     minWidth: 362,
-                    //     resize: function(e, ui) {
-                    //         modal.css('max-height', (ui.size.height - margin));
-                    //     },
-                    //     stop: function(e, ui) {
-                    //         Session.setItem('box-notify-w', ui.size.width);
-                    //         Session.setItem('box-notify-h', ui.size.height - margin);
-                    //
-                    //         maxHeight = ui.size.height;
-                    //     }
-                    // });
                 });
             });
         }
@@ -168,6 +150,13 @@ class Notifications
         e.preventDefault();
     }
 
+    /**
+     * Blick on notification.
+     *
+     * @param e
+     * @return {boolean}
+     * @private
+     */
     _onItemClick(e) {
         let $this = $(e.currentTarget);
 
@@ -177,6 +166,13 @@ class Notifications
         return false;
     }
 
+    /**
+     * Mark notification as read.
+     *
+     * @param e
+     * @return {boolean}
+     * @private
+     */
     _onMarkClick(e) {
         $('li', this._self).removeClass('unread');
         this.store(0);
@@ -186,6 +182,13 @@ class Notifications
         return false;
     }
 
+    /**
+     * Delete notification.
+     *
+     * @param e
+     * @return {boolean}
+     * @private
+     */
     _onDeleteClick(e) {
         let $this = $(e.currentTarget);
 
@@ -195,6 +198,12 @@ class Notifications
         return false;
     }
 
+    /**
+     * Infinity scroll.
+     *
+     * @param e
+     * @private
+     */
     _onScroll(e) {
         let items = $(e.currentTarget).find('ul');
 
@@ -228,7 +237,7 @@ $(function () {
     });
 
     setInterval(() => {
-        $.get('/ping', token => {
+        $.get(_config.ping, token => {
             $('meta[name="csrf-token"]').attr('content', token);
             $(':hidden[name="_token"]').val(token);
 

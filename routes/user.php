@@ -76,10 +76,5 @@ $this->get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'use
 // np. domyslna zakladka na stronie glownej
 $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
 
-// podtrzymanie sesji
-// @deprecated
-$this->get('User/Ping', ['uses' => 'User\PingController@index']);
-$this->get('ping', ['uses' => 'User\PingController@index']);
-
 // przekierowanie do wlasciwego alertu po guid.
 $this->get('alert/{guid}', ['uses' => 'User\AlertsController@url'])->name('user.alerts.url');
