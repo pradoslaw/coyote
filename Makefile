@@ -30,7 +30,6 @@ seed:
 	php artisan db:seed
 
 install-gulp:
-	npm install --g gulp
 	npm install
 
 assets-production:
