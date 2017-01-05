@@ -341,6 +341,12 @@ class SubmitController extends Controller
         $locations = (new City())->grab($data['city']);
         $job->fill($data);
 
+        // quickfix: ta linia kodu wywolywana jest juz wczesniej. jakims sposobem czasami tablica $data
+        // nie zawiera user_id. nie potrafie poki co odwzorowac tego bledu. dlatego na wszelki wypadek
+        // ponownie ustawiam user_id jezeli jest puste. w preeciwnym wypadeku generowany byl wyjatek o pustym
+        // user_id
+        $job->setDefaultUserId($this->userId);
+
         $job->deadline_at = Carbon::now()->addDay($data['deadline']);
 
         $this->transaction(function () use (&$job, $request, $locations, $tags) {
