@@ -6,8 +6,6 @@
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
 
-const COYOTE_VERSION = '2.1';
-
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
