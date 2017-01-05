@@ -160,9 +160,6 @@ class HomeController extends Controller
         ]);
     }
 
-    /**
-     * @return  \Coyote\Microblog[]
-     */
     private function getMicroblogs(User $user)
     {
         // @todo podobny kod (w 99%) znajduje sie w kontrolerze Microblog\HomeController@index
