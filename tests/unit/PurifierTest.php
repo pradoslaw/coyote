@@ -25,4 +25,12 @@ class PurifierTest extends \Codeception\TestCase\Test
         $input = '<blockquote>lorem ipsum<blockquote>lorem ipsum</blockquote></blockquote>';
         $this->tester->assertEquals($input, $parser->parse($input));
     }
+
+    public function testParseUnderscore()
+    {
+        $parser = new Purifier();
+
+        $input = '<u>foo</u>';
+        $this->tester->assertEquals($input, $parser->parse($input));
+    }
 }
