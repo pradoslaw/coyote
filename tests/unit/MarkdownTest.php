@@ -26,6 +26,9 @@ class MarkdownTest extends \Codeception\TestCase\Test
     // tests
     public function testParseUserName()
     {
+        $input = $this->markdown->parse('@');
+        $this->tester->assertEquals('<p>@</p>', $input);
+
         $input = $this->markdown->parse('@admin lorem ipsum');
         $this->tester->assertRegExp('/<a href=".*">@admin<\/a> lorem ipsum/', $input);
 

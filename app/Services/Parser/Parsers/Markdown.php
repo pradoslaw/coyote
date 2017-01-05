@@ -140,6 +140,10 @@ class Markdown extends \Parsedown implements ParserInterface
         $start = strpos($text, '@');
 
         if ($this->isNotEmail($excerpt)) {
+            if (!isset($text[$start + 1])) {
+                return null;
+            }
+
             $exitChar = $text[$start + 1] === '{' ? '}' : ":,.\'\n) "; // <-- space at the end
             $end = $this->strpos($text, $exitChar, $start);
 
