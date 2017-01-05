@@ -15,8 +15,8 @@ class SmiliesTest extends \Codeception\TestCase\Test
         $parser = new Smilies;
 
         $this->tester->assertRegExp('/<img class="img-smile" alt="\:\)" title="\:\)" src=".*">/', $parser->parse(':)'));
-        $this->tester->assertRegExp('/<p><img class="img-smile" alt="\:\)" title="\:\)" src=".*"></p>/', $parser->parse('<p>:)</p>'));
-        $this->tester->assertRegExp('/\(<img class="img-smile" alt="\:\)" title="\:\)" src=".*">\)/', $parser->parse('(:))'));
+        $this->tester->assertRegExp('/<p><img class="img-smile" alt="\:\)" title="\:\)" src=".*"><\/p>/', $parser->parse('<p>:)</p>'));
+        $this->tester->assertRegExp('/\(\:\)\)/', $parser->parse('(:))'));
         $this->tester->assertEquals('admin:)', $parser->parse('admin:)'));
     }
 }
