@@ -1,3 +1,9 @@
+## 2.1
+
+- Upgrade do Laravel 5.3
+- Usunięcie bowera na rzecz npm
+- Webpack + babel zamiast samego babela
+
 ## 2.0
 
 **Ogólne**:
