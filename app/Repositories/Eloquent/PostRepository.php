@@ -144,7 +144,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $topic->save();
         $tags = $request->get('tags', []);
 
-        if ($topic->wasRecentlyCreated || $postId == $topic->first_post_id) {
+        if (is_array($tags) && ($topic->wasRecentlyCreated || $postId == $topic->first_post_id)) {
             // assign tags to topic
             $topic->setTags($tags);
         }
