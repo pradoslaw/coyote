@@ -3,6 +3,8 @@
 - Upgrade do Laravel 5.3
 - Usunięcie bowera na rzecz npm
 - Webpack + babel zamiast samego babela
+- Grupowanie wiadomości po nazwie użytkownika (jeden użytkownik = jedna konwersacja)
+- Znacznik `<u>` jest ponownie dozwolony przez parser 
 
 ## 2.0
 
