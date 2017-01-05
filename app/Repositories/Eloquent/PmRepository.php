@@ -43,7 +43,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
         $count = $this->model
                 ->selectRaw('COUNT(*)')
                 ->where('user_id', $userId)
-                ->groupBy('root_id')
+                ->groupBy('author_id')
                 ->get()
                 ->count();
 
@@ -62,28 +62,28 @@ class PmRepository extends Repository implements PmRepositoryInterface
     }
 
     /**
-     * Gets conversation
+     * Get conversation
      *
      * @param int $userId
-     * @param string $rootId
+     * @param int $authorId
      * @param int $limit
      * @param int $offset
      * @return mixed
      */
-    public function talk($userId, $rootId, $limit = 10, $offset = 0)
+    public function talk($userId, $authorId, $limit = 10, $offset = 0)
     {
-        $sub = $this->model->select([
-                    'pm.*',
-                    $this->raw(
-                        sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS host_id', Pm::SENTBOX)
-                    )
-                ])
-                ->whereRaw("user_id = $userId")
-                ->whereRaw("root_id = '$rootId'")
-                ->take($limit)
-                ->skip($offset)
-                ->orderBy('pm.id', 'DESC')
-                ->toSql();
+        $builder = $this
+            ->model->select([
+                'pm.*',
+                $this->raw(
+                    sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS host_id', Pm::SENTBOX)
+                )
+            ])
+            ->where('user_id', $userId)
+            ->where('author_id', $authorId)
+            ->take($limit)
+            ->skip($offset)
+            ->orderBy('pm.id', 'DESC');
 
         $result = $this->model->select([
                     'pm.*',
@@ -95,7 +95,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                     'is_blocked',
                     'photo'
                 ])
-                ->from($this->raw("($sub) AS pm"))
+                ->from($this->raw('(' . $this->toSql($builder) . ') AS pm'))
                 ->join('pm_text', 'pm_text.id', '=', 'text_id')
                 ->leftJoin('users', 'users.id', '=', 'host_id')
                 ->orderBy('pm.id', 'DESC')
@@ -148,11 +148,11 @@ class PmRepository extends Repository implements PmRepositoryInterface
 
     /**
      * @param int $userId
-     * @param string $rootId
+     * @param int $authorId
      */
-    public function trash($userId, $rootId)
+    public function trash($userId, $authorId)
     {
-        $this->model->where('user_id', $userId)->where('root_id', $rootId)->delete();
+        $this->model->where('user_id', $userId)->where('author_id', $authorId)->delete();
     }
 
     /**
@@ -163,13 +163,13 @@ class PmRepository extends Repository implements PmRepositoryInterface
      */
     private function prepare($userId)
     {
-        return \DB::table($this->raw('(' . $this->subSql($userId)->toSql() . ') AS m'))
+        return $this
+            ->model
             ->select([
                 'm.id',
                 'm.author_id',
                 'm.folder',
                 'm.read_at',
-                'm.root_id',
                 'pm_text.text',
                 'pm_text.created_at',
                 'name',
@@ -177,6 +177,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 'is_blocked',
                 'photo'
             ])
+            ->from($this->raw('(' . $this->toSql($this->subSql($userId)) . ') AS m'))
             ->join('pm_text', 'pm_text.id', '=', 'text_id')
             ->join('users', 'users.id', '=', 'author_id')
             ->orderBy('m.id', 'DESC');
@@ -186,15 +187,15 @@ class PmRepository extends Repository implements PmRepositoryInterface
      * Returns subquery
      *
      * @param int $userId
-     * @return \Coyote\Pm
+     * @return mixed
      */
     private function subSql($userId)
     {
         return $this
             ->model
-            ->select([$this->raw('DISTINCT ON (root_id) pm.*')])
-            ->whereRaw("user_id = $userId")
-            ->orderBy('root_id')
+            ->select([$this->raw('DISTINCT ON (author_id) pm.*')])
+            ->where("user_id", $userId)
+            ->orderBy('author_id')
             ->orderBy('pm.id', 'DESC');
     }
 }

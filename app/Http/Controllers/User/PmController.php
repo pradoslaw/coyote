@@ -81,7 +81,7 @@ class PmController extends BaseController
         $pm = $this->pm->findOrFail($id, ['user_id', 'author_id', 'root_id', 'id']);
         $this->authorize('show', $pm);
 
-        $talk = $this->pm->talk($this->userId, $pm->root_id, 10, (int) $request->query('offset', 0));
+        $talk = $this->pm->talk($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
         $parser = $this->getParser();
 
         foreach ($talk as &$row) {
@@ -198,14 +198,14 @@ class PmController extends BaseController
      */
     public function delete($id)
     {
-        $pm = $this->pm->findOrFail($id, ['id', 'user_id', 'root_id']);
+        $pm = $this->pm->findOrFail($id, ['id', 'user_id', 'author_id']);
         $this->authorize('show', $pm);
 
         return $this->transaction(function () use ($pm) {
             $pm->delete();
 
             $redirect = redirect();
-            $to = $this->pm->findWhere(['root_id' => $pm->root_id, 'user_id' => $this->userId], ['id']);
+            $to = $this->pm->findWhere(['author_id' => $pm->author_id, 'user_id' => $this->userId], ['id']);
 
             $redirect = $to->count() ? $redirect->route('user.pm.show', [$to->first()->id]) : $redirect->route('user.pm');
 
@@ -214,15 +214,15 @@ class PmController extends BaseController
     }
 
     /**
-     * @param string $rootId
+     * @param int $authorId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function trash($rootId)
+    public function trash($authorId)
     {
-        $pm = $this->pm->findWhere(['user_id' => $this->userId, 'root_id' => $rootId]);
+        $pm = $this->pm->findWhere(['user_id' => $this->userId, 'author_id' => $authorId]);
         abort_if($pm->count() == 0, 404);
 
-        $this->pm->trash($this->userId, $rootId);
+        $this->pm->trash($this->userId, $authorId);
 
         return redirect()->route('user.pm')->with('success', 'Wątek został bezpowrotnie usunięty.');
     }
