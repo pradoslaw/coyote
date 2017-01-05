@@ -33,7 +33,6 @@
         "laravel/socialite": "^2.0",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.0",
-        "erusev/parsedown-extra": "^0.7.0",
         "jenssegers/mongodb": "^3.1",
         "folklore/image": "0.3.*",
         "ezyang/htmlpurifier": "^4.7",
@@ -45,7 +44,8 @@
         "adam-boduch/laravel-grid": "dev-master",
         "chrisboulton/php-diff": "dev-master",
         "sentry/sentry": "^1.5",
-        "sentry/sentry-laravel": "^0.4.1"
+        "sentry/sentry-laravel": "^0.4.1",
+        "erusev/parsedown": "^1.6"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
