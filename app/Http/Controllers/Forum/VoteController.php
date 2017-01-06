@@ -46,7 +46,7 @@ class VoteController extends BaseController
                 $post->score--;
             } else {
                 $post->votes()->create([
-                    'user_id' => $this->userId, 'forum_id' => $forum->id, 'ip' => request()->ip()
+                    'user_id' => $this->userId, 'forum_id' => $forum->id, 'ip' => $this->request->ip()
                 ]);
                 $post->score++;
 
