@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -121,18 +122,17 @@ class Handler extends ExceptionHandler
     /**
      * Get the html response content.
      *
-     * @param  string  $content
-     * @param  string  $css
-     * @return string
+     * @param  \Exception  $e
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function decorate($content, $css)
+    protected function convertExceptionToResponse(Exception $e)
     {
         if (config('app.debug')) {
-            return parent::decorate($content, $css);
+            return parent::convertExceptionToResponse($e);
         }
 
         // on production site, we MUST render "nice" error page
-        return view('errors.500')->render();
+        return SymfonyResponse::create(view('errors.500')->render(), 500);
     }
 
     /**
