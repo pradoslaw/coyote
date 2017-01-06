@@ -10,6 +10,7 @@ use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
+use Coyote\Repositories\Criteria\Topic\SkipLockedCategories;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
@@ -127,6 +128,8 @@ class HomeController extends BaseController
      */
     public function all()
     {
+        $this->topic->pushCriteria(new SkipLockedCategories());
+
         return $this->loadAndRender();
     }
 
