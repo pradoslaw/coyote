@@ -56,7 +56,7 @@ class TopicController extends BaseController
 
         // user wants to show certain post. we need to calculate page number based on post id.
         if ($request->has('p')) {
-            $page = $this->post->getPage((int) $request->get('p'), $topic->id, $perPage);
+            $page = $this->post->getPage(min(2147483647, (int) $request->get('p')), $topic->id, $perPage);
         }
 
         start_measure('More like this');
