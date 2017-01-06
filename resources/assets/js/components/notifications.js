@@ -7,7 +7,7 @@ import Session from '../libs/session';
 class Notifications
 {
     constructor() {
-        this._self = $('#alerts');
+        this._self = $('#btn-alerts');
         this._dropdown = $('#dropdown-alerts');
         this._modal = this._dropdown.find('.dropdown-modal');
 

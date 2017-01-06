@@ -104,7 +104,7 @@
                             </div>
 
                             <ul class="nav navbar-nav pull-right">
-                                <li id="alerts" class="alerts">
+                                <li id="btn-alerts" class="btn-alerts">
                                     <a href="{{ route('user.alerts') }}" data-url="{{ route('user.alerts.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('alerts_unread') %}
                                             <span class="badge">{{ user('alerts_unread') }}</span>
@@ -129,7 +129,7 @@
                                     </div>
                                 </li>
 
-                                <li id="messages" class="messages">
+                                <li id="btn-messages" class="btn-messages">
                                     <a href="{{ route('user.pm') }}" data-url="{{ route('user.pm.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('pm_unread') %}
                                             <span class="badge">{{ user('pm_unread') }}</span>

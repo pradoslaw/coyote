@@ -3,7 +3,7 @@ import DesktopNotifications from '../libs/notifications';
 class Pm
 {
     constructor() {
-        this._self = $('#messages');
+        this._self = $('#btn-messages');
         this._dropdown = $('#dropdown-messages');
 
         this._self.find('a[data-toggle="dropdown"]').click(this._onDropdownClick.bind(this));
