@@ -136,7 +136,8 @@ class Notifications
 
                 this._modal.css('max-height', maxHeight); // max wysokosc obszaru powiadomien
 
-                if (parseInt(Session.getItem('box-notify-w'))) {
+                // on mobile devices width must be set on 100%
+                if (parseInt(Session.getItem('box-notify-w'))  && $(window).width() > 768) {
                     this._dropdown.width(parseInt(Session.getItem('box-notify-w')));
                 }
 
