@@ -61,9 +61,6 @@ class Viewers
         })
         ->count();
 
-        // liczba rzeczywistych osob z pominieciem botow
-//        $people = $total - $robots;
-
         foreach ($collection->groupBy('group') as $name => $rowset) {
             if ($name == '') {
                 $name = self::USER;
@@ -88,7 +85,6 @@ class Viewers
         // nie zostala jeszcze zaktualizowana. w takim przypadku bedziemy musieli dodac "recznie"
         // uzytkownika ktory aktualnie dokonal tego zadania
         if (!$collection->contains('id', $this->request->session()->getId())) {
-//            $people++;
             $total++;
 
             if ($this->request->user()) {
