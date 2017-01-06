@@ -130,6 +130,7 @@ class Notifications
                 let maxHeight = 420;
 
                 if (parseInt(Session.getItem('box-notify-h'))) {
+                    // min height is 190px. max height is (one item height * number of items)
                     maxHeight = Math.min(items.height(), Math.max(190, parseInt(Session.getItem('box-notify-h'))));
                 }
 
