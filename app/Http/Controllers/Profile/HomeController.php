@@ -44,8 +44,12 @@ class HomeController extends Controller
      * @param PostRepository $post
      * @param MicroblogRepository $microblog
      */
-    public function __construct(UserRepository $user, ReputationRepository $reputation, PostRepository $post, MicroblogRepository $microblog)
-    {
+    public function __construct(
+        UserRepository $user,
+        ReputationRepository $reputation,
+        PostRepository $post,
+        MicroblogRepository $microblog
+    ) {
         parent::__construct();
 
         $this->user = $user;
@@ -137,12 +141,16 @@ class HomeController extends Controller
         $microblogs = $this->getMicroblogs($user);
 
         return view('profile.partials.microblog', [
-            'user' => $user,
-            'microblogs' => $microblogs->items(),
-            'pagination' => $microblogs->render()
+            'user'          => $user,
+            'microblogs'    => $microblogs->items(),
+            'pagination'    => $microblogs->render()
         ]);
     }
 
+    /**
+     * @param User $user
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
     private function getMicroblogs(User $user)
     {
         // @todo podobny kod (w 99%) znajduje sie w kontrolerze Microblog\HomeController@index

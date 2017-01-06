@@ -81,9 +81,12 @@ class City extends Filter implements DslInterface
                         ],
                         'filter' => [
                             'terms' => [
-                                'city' => array_map(function ($city) use ($transliterator) {
-                                    return $transliterator->transliterate(mb_strtolower($city));
-                                }, $this->cities)
+                                'city' => array_map(
+                                    function ($city) use ($transliterator) {
+                                        return $transliterator->transliterate(mb_strtolower($city));
+                                    },
+                                    $this->cities
+                                )
                             ]
                         ]
                     ]
