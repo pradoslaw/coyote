@@ -180,10 +180,10 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
      * @param  string $key
      * @return array
      */
-    public function lists($value, $key = null)
+    public function pluck($value, $key = null)
     {
         $this->applyCriteria();
-        $lists = $this->model->lists($value, $key);
+        $lists = $this->model->pluck($value, $key);
 
         if (!is_array($lists)) {
             $lists = $lists->all();

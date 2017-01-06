@@ -49,7 +49,7 @@ class TopicAcceptanceCest
 
         $I->amOnPage('/Forum/Newbie');
         $I->canSee($subject);
-        $I->click($subject, '.col-subject');
+        $I->click($subject);
     }
 
     public function createTopicAndGetError(AcceptanceTester $I)

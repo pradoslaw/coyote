@@ -65,7 +65,7 @@ class GroupForm extends Form
      */
     private function getUsers()
     {
-        return $this->data->users()->lists('name', 'id')->toArray();
+        return $this->data->users()->pluck('name', 'id')->toArray();
     }
 
     /**

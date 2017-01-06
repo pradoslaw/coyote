@@ -17,6 +17,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Version
+    |--------------------------------------------------------------------------
+    |
+    */
+    'version' => '2.1',
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
     |
@@ -100,8 +108,9 @@ return [
     |
     */
 
-    'key'             => env('APP_KEY', 'SomeRandomString'),
-    'cipher'          => MCRYPT_RIJNDAEL_128,
+    'key'             => env('APP_KEY', 'base64:OQUTZfp+RR6GX5fYVUJyASDSAeZPSK3kbEifXRC5CMCY='),
+//    'cipher'          => MCRYPT_RIJNDAEL_128,
+    'cipher'          => 'AES-256-CBC',
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration
@@ -144,6 +153,7 @@ return [
         Illuminate\Foundation\Providers\FoundationServiceProvider::class,
         Illuminate\Hashing\HashServiceProvider::class,
         Illuminate\Mail\MailServiceProvider::class,
+        Illuminate\Notifications\NotificationServiceProvider::class,
         Illuminate\Pagination\PaginationServiceProvider::class,
         Illuminate\Pipeline\PipelineServiceProvider::class,
         Illuminate\Queue\QueueServiceProvider::class,
@@ -174,6 +184,7 @@ return [
         Coyote\Providers\EventServiceProvider::class,
         Coyote\Providers\RouteServiceProvider::class,
         Coyote\Providers\AuthServiceProvider::class,
+        Coyote\Providers\BroadcastServiceProvider::class,
         // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
         Coyote\Providers\SessionServiceProvider::class,
         // mozliwosc wczytania gotowych "scenariuszy" parsowania elementow strony, takich jak

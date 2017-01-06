@@ -14,17 +14,14 @@
             {% endif %}
         </h3>
 
-        <a class="btn-delete-pm pull-right text-danger" href="{{ delete_link }}" title="Usuń">
+        <a class="btn-delete-pm pull-right text-danger" href="{{ delete_link }}" title="Usuń" data-confirm="{{ confirm_message }}">
             <i class="fa fa-remove"></i>
         </a>
 
         {{ content|raw }}
 
         {% if show_marked_date and loop.last and item.folder == constant('Coyote\\Pm::SENTBOX') and item.read_at %}
-            <small class="text-muted">
-                <i class="fa fa-check"></i>
-                Przeczytano, {{ item.read_at|format_date }}
-            </small>
+            <small class="text-muted"><i class="fa fa-check"></i>Przeczytano, {{ item.read_at|format_date }}</small>
         {% endif %}
     </div>
 </div>

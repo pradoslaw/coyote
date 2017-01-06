@@ -276,7 +276,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->limit(10)
             ->get()
-            ->lists('count', 'name')
+            ->pluck('count', 'name')
             ->toArray();
     }
 
@@ -291,7 +291,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             ->whereIn('tags.name', $tags)
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->get()
-            ->lists('count', 'name')
+            ->pluck('count', 'name')
             ->toArray();
     }
 

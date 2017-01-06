@@ -127,7 +127,7 @@ class LoginController extends Controller
      *
      * @return string
      */
-    public function loginUsername()
+    public function username()
     {
         return 'name';
     }

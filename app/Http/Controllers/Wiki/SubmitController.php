@@ -14,12 +14,11 @@ use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 class SubmitController extends BaseController
 {
     /**
-     * @param Request $request
      * @param WikiRepository $wiki
      */
-    public function __construct(Request $request, WikiRepository $wiki)
+    public function __construct(WikiRepository $wiki)
     {
-        parent::__construct($request, $wiki);
+        parent::__construct($wiki);
 
         $this->breadcrumb->push('Edycja strony');
     }
@@ -75,7 +74,7 @@ class SubmitController extends BaseController
             $subscribe = auth()->user()->allow_subscribe && !$wiki->wasUserInvolved($this->userId);
             $this->wiki->save($wiki, $request);
 
-            $subscribersId = $wiki->subscribers()->lists('user_id')->toArray();
+            $subscribersId = $wiki->subscribers()->pluck('user_id')->toArray();
 
             app('alert.wiki.subscriber')
                 ->with([

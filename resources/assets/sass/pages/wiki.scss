@@ -3,8 +3,8 @@
 @import "../helpers/mixins";
 @import "../vendor/bootstrap/variables";
 @import "../vendor/font-awesome/variables";
-@import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
-@import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
+@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
+@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 @import "../components/related";
 @import "../components/sidemenu";
 @import "../components/metadata";
@@ -430,24 +430,6 @@ article > header {
 
   .depth-2 {
     margin-left: 20px;
-  }
-}
-
-// Definition. Backward compatible.
-// -----------------------------------
-
-dfn {
-  border-top: 1px solid $border-color;
-  display: block;
-  padding: 10px 0 15px 30px;
-  min-height: 30px;
-  position: relative;
-
-  &:before {
-    @include font-awesome($fa-var-info);
-    left: 0;
-    top: 7px;
-    font-size: $font-size-large;
   }
 }
 

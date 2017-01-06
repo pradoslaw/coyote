@@ -41,7 +41,7 @@ class CommentController extends Controller
             $comment->save();
 
             if ($comment->wasRecentlyCreated) {
-                $subscribersId = $wiki->subscribers()->lists('user_id')->toArray();
+                $subscribersId = $wiki->subscribers()->pluck('user_id')->toArray();
                 $container = new Container();
 
                 $container->attach(

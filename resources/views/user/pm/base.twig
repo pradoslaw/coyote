@@ -2,8 +2,6 @@
 {% set page_name = page_name|default('Wiadomości prywatne') %}
 {% block title %}{{ page_name }} {{ parent() }}{% endblock %}
 
-{% import 'components/modals.twig' as modal %}
-
 {% block content %}
     <h2>{{ page_name }}</h2>
 
@@ -18,38 +16,10 @@
             {% endblock %}
         </div>
     </div>
-
-    {{ modal.confirm('Czy na pewno usunąć tę wiadomość? Tej operacji nie będzie można cofnąć.') }}
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
-    <script type="text/javascript">
-        $(function() {
-            $('.btn-delete-pm').click(function() {
-                var $this = $(this);
-
-                $('#confirm').modal('show').one('click', '.danger', function() {
-                    $('<form>', {'method': 'POST', 'action': $this.attr('href')})
-                            .append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">')
-                            .appendTo('body')
-                            .submit();
-                });
-
-                return false;
-            });
-
-            $('#box-pm a[data-toggle="tab"]').click(function(e) {
-                if ($(e.target).attr('aria-controls') == 'preview') {
-                    $('#preview').html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
-
-                    $.post('{{ route('user.pm.preview') }}', {'text': $('textarea[name="text"]').val()}, function(html) {
-                        $('#preview').html(html);
-                    });
-                }
-            });
-        });
-    </script>
+    <script src="{{ cdn('js/pm.js') }}"></script>
 {% endblock %}

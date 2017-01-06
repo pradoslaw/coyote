@@ -1,28 +1,6 @@
 <?php
 
-// logowanie uzytkownika
 /** @var $this \Illuminate\Routing\Router */
-$this->get('Login', ['uses' => 'Auth\LoginController@index', 'as' => 'login']);
-$this->post('Login', 'Auth\LoginController@signin');
-// wylogowanie
-$this->get('Logout', ['uses' => 'Auth\LoginController@signout', 'as' => 'logout']);
-
-// rejestracja uzytkownika
-$this->get('Register', ['uses' => 'Auth\RegisterController@index', 'as' => 'register']);
-$this->post('Register', 'Auth\RegisterController@signup');
-
-// przypominanie hasla
-// @todo do zmiany metoda controller() na post() oraz get()
-$this->controller('Password', 'Auth\PasswordController');
-
-// potwierdzenie adresu e-mail
-$this->get('Confirm', 'Auth\ConfirmController@index')->name('confirm');
-$this->post('Confirm', 'Auth\ConfirmController@generateLink');
-$this->get('Confirm/Email', 'Auth\ConfirmController@email');
-
-$this->get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login', 'as' => 'oauth']);
-$this->get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');
-
 $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth', 'as' => 'user.'], function () {
     /** @var $this \Illuminate\Routing\Router */
     // strona glowna panelu uzytkownika
@@ -50,7 +28,7 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Pm/Submit', ['uses' => 'PmController@submit', 'as' => 'pm.submit']);
     $this->post('Pm/Submit', 'PmController@save');
     $this->post('Pm/Delete/{id}', ['uses' => 'PmController@delete', 'as' => 'pm.delete']);
-    $this->post('Pm/Trash/{root}', ['uses' => 'PmController@trash', 'as' => 'pm.trash']);
+    $this->post('Pm/Trash/{id}', ['uses' => 'PmController@trash', 'as' => 'pm.trash']);
     $this->post('Pm/Preview', ['uses' => 'PmController@preview', 'as' => 'pm.preview']);
     $this->get('Pm/Ajax', ['uses' => 'PmController@ajax', 'as' => 'pm.ajax']);
     $this->post('Pm/Paste', ['uses' => 'PmController@paste', 'as' => 'pm.paste']);
@@ -97,11 +75,6 @@ $this->get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'use
 // zapis ustawien do tabeli settings. moga to byc np. niestandardowe ustawienia takie jak
 // np. domyslna zakladka na stronie glownej
 $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
-
-// podtrzymanie sesji
-// @deprecated
-$this->get('User/Ping', ['uses' => 'User\PingController@index']);
-$this->get('ping', ['uses' => 'User\PingController@index']);
 
 // przekierowanie do wlasciwego alertu po guid.
 $this->get('alert/{guid}', ['uses' => 'User\AlertsController@url'])->name('user.alerts.url');

@@ -42,13 +42,9 @@
     </div>
 {% endblock %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/auth.css') }}">
-{% endblock %}
-
 {% block body %}
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/auth.css') }}">
+
     {{ parent() }}
 
     <script type="text/javascript">

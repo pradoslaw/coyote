@@ -26,6 +26,9 @@ class MarkdownTest extends \Codeception\TestCase\Test
     // tests
     public function testParseUserName()
     {
+        $input = $this->markdown->parse('@');
+        $this->tester->assertEquals('<p>@</p>', $input);
+
         $input = $this->markdown->parse('@admin lorem ipsum');
         $this->tester->assertRegExp('/<a href=".*">@admin<\/a> lorem ipsum/', $input);
 
@@ -55,6 +58,12 @@ class MarkdownTest extends \Codeception\TestCase\Test
 
         $input = $this->markdown->parse('@admin\'s. lorem ipsum');
         $this->tester->assertRegExp('/<a href=".*">@admin<\/a>\'s. lorem ipsum/', $input);
+
+        $input = $this->markdown->parse('@admin @admin');
+        $this->tester->assertRegExp('/<a href=".*">@admin<\/a> <a href=".*">@admin<\/a>/', $input);
+
+        $input = $this->markdown->parse("@admin\n@admin");
+        $this->tester->assertRegExp("/<a href=\".*\">@admin<\/a>\n<a href=\".*\">@admin<\/a>/", $input);
 
         $now = new \DateTime('now');
         $this->tester->haveRecord('users', ['name' => 'admin admiński', 'email' => 'foo@bar.com', 'created_at' => $now, 'updated_at' => $now]);

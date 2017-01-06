@@ -1,3 +1,5 @@
+import '../components/subscribe';
+
 $(() => {
     'use strict';
 

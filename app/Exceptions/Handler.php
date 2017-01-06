@@ -3,6 +3,7 @@
 namespace Coyote\Exceptions;
 
 use Exception;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Session\TokenMismatchException;
@@ -39,7 +40,7 @@ class Handler extends ExceptionHandler
     {
         if ($this->shouldReport($e)) {
             // log input data and url for further analyse
-            $this->log->error('+', ['url' => request()->url(), 'input' => request()->all(), 'ip' => request()->ip()]);
+            logger()->error('+', ['url' => request()->url(), 'input' => request()->all(), 'ip' => request()->ip()]);
 
             if (app()->environment('production')) {
                 // send report to sentry
@@ -132,5 +133,21 @@ class Handler extends ExceptionHandler
 
         // on production site, we MUST render "nice" error page
         return view('errors.500')->render();
+    }
+
+    /**
+     * Convert an authentication exception into an unauthenticated response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Auth\AuthenticationException  $exception
+     * @return \Illuminate\Http\Response
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        return redirect()->guest('login');
     }
 }

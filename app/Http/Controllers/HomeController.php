@@ -99,6 +99,8 @@ class HomeController extends Controller
             }
         }
 
+        $this->public['settings_url'] = route('user.settings.ajax', [], false);
+
         return $this->view('home', $result)->with('settings', $this->getSettings());
     }
 

@@ -149,16 +149,16 @@
 
 {% block head %}
     {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/profile.css') }}">
-    <link rel="stylesheet" href="{{ cdn('css/microblog.css') }}">
-
+    
     <script type="text/javascript">
         var uploadUrl = '{{ route('microblog.upload') }}';
     </script>
 {% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/profile.css') }}">
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/microblog.css') }}">
+
     {{ parent() }}
 
     <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
@@ -184,4 +184,6 @@
             });
         });
     </script>
+
+    <script src="{{ cdn('js/profile.js') }}"></script>
 {% endblock %}

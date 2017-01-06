@@ -6,7 +6,6 @@
 
 /vendor
 /node_modules
-/resources/assets/bower
 .env
 supervisor.conf
 

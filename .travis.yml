@@ -33,7 +33,6 @@ before_script:
   - php artisan migrate --seed --env="testing"
   - php vendor/bin/codecept build
   - make file-permission
-  - make install-assets
   - make assets-production
   - phantomjs --webdriver=4444 2>&1 >/dev/null &
   - sleep 5

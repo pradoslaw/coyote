@@ -209,34 +209,17 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="{{ cdn('css/homepage.css') }}">
-
     <script type="text/javascript">
         var uploadUrl = '{{ route('microblog.upload') }}';
     </script>
 {% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/homepage.css') }}">
+
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/tab.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/microblog.js') }}"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('#stream').perfectScrollbar({suppressScrollX: true});
-
-            $('#forum-tabs a').click(function() {
-                var index = $('#forum-tabs a').index(this);
-                $.post('{{ route('user.settings.ajax', [], false) }}', {'homepage_mode': index});
-            });
-
-            $('#reputation-tabs a').click(function() {
-                var index = $('#reputation-tabs a').index(this);
-                $.post('{{ route('user.settings.ajax', [], false) }}', {'homepage_reputation': index});
-            });
-        });
-    </script>
+    <script src="{{ cdn('js/posting.js') }}"></script>
+    <script src="{{ cdn('js/microblog.js') }}"></script>
+    <script src="{{ cdn('js/homepage.js') }}"></script>
 {% endblock %}

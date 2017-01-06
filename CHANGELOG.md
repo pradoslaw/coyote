@@ -1,3 +1,13 @@
+## 2.1
+
+- Upgrade do Laravel 5.3
+- Usunięcie bowera na rzecz npm
+- Webpack + babel zamiast samego babela
+- Grupowanie wiadomości po nazwie użytkownika (jeden użytkownik = jedna konwersacja)
+- Znacznik `<u>` jest ponownie dozwolony przez parser 
+- Okno powiadomień oraz wiadomości prywatnych na urzędzeniach mobilnych: wyświetlanie na całą szerokość okna
+- Zmiana sposobu wyświetlania listy użytkowników online (https://github.com/adam-boduch/coyote/issues/174)
+
 ## 2.0
 
 **Ogólne**:

@@ -24,7 +24,7 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
         return $this->model->selectRaw("url, metadata->>'topic_id' AS topic_id")
                     ->whereRaw("metadata->>'topic_id' IN(" . $this->join($topicsId) . ")")
                     ->get()
-                    ->lists('url', 'topic_id');
+                    ->pluck('url', 'topic_id');
     }
 
     /**

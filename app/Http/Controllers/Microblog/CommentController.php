@@ -74,7 +74,7 @@ class CommentController extends Controller
             $parent = $microblog->parent;
 
             if ($microblog->wasRecentlyCreated) {
-                $subscribers = $parent->subscribers()->lists('user_id')->toArray();
+                $subscribers = $parent->subscribers()->pluck('user_id')->toArray();
                 $alert = new Container();
 
                 // we need to send alerts AFTER saving comment to database because we need ID of comment

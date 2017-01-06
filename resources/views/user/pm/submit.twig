@@ -1,14 +1,14 @@
 {% extends 'user.pm.base' %}
 {% set parent = 'user.pm.submit' %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
 {% block pm %}
     {{ form_open({'url': route('user.pm.submit'), 'method': 'POST', 'class': 'form-horizontal'}) }}
 
     <div class="form-group">
         <div class="col-md-12 {{ errors.has('recipient') > 0 ? 'has-error' }}">
-            {{ form_text('recipient', input_old('recipient', request().get('to')), {class: 'form-control', placeholder: 'Odbiorca...', id: 'recipient', tabindex: 1, autofocus: 'autofocus'}) }}
+            {{ form_text('recipient', input_old('recipient', request().get('to')), {'data-prompt-url': route('user.prompt'), class: 'form-control', placeholder: 'Odbiorca...', id: 'recipient', tabindex: 1, autofocus: 'autofocus'}) }}
 
             {% if errors.first('recipient') %}
                 <span class="help-block">{{ errors.first('recipient') }}</span>
@@ -25,6 +25,7 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="body">
                     {% include 'components.toolbar' %}
+
                     <textarea name="text" class="form-control" rows="5" data-paste-url="{{ route('user.pm.paste') }}" data-prompt-url="{{ route('user.prompt') }}" tabindex="2">{{ input_old('text') }}</textarea>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="preview"></div>
@@ -48,16 +49,7 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/tab.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/auto-complete.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('textarea[name="text"]').wikiEditor().prompt().fastSubmit().autogrow().pasteImage();
-            $('#recipient').autocomplete({
-                url: '{{ route('user.prompt') }}'
-            });
-        });
-    </script>
+    <script src="{{ cdn('js/posting.js') }}"></script>
+    <script src="{{ cdn('js/auto-complete.js') }}"></script>
+    <script src="{{ cdn('js/wikieditor.js') }}"></script>
 {% endblock %}

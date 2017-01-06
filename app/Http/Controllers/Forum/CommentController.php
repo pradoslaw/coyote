@@ -102,7 +102,7 @@ class CommentController extends Controller
                 ];
 
                 $subscribersId = $this->forum->onlyUsersWithAccess(
-                    $this->post->subscribers()->lists('user_id')->toArray()
+                    $this->post->subscribers()->pluck('user_id')->toArray()
                 );
 
                 if ($subscribersId) {

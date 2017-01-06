@@ -1,3 +1,5 @@
+import declination from '../components/declination';
+
 Date.prototype.asInteger = function () {
     return String(this.getFullYear()) + String(this.getMonth() + 1) + String((this.getDate() < 10 ? '0' : '') + this.getDate());
 };
@@ -22,9 +24,9 @@ function getDiffSecond(remote) {
     return getTimeSpan(remote);
 }
 
-var countTime = function () {
-    $('.timestamp[data-timestamp]').each(function () {
-        var timestamp = $(this).attr('data-timestamp');
+let countTime = function () {
+    $('.timestamp[data-timestamp]').each(() => {
+        let timestamp = $(this).attr('data-timestamp');
 
         if (getDiffMinute(timestamp) < 60) {
             if (getDiffSecond(timestamp) >= 60) {
@@ -35,11 +37,11 @@ var countTime = function () {
             }
         }
         else {
-            var currDate = new Date((new Date().getTime()));
-            var currValue = currDate.asInteger();
+            let currDate = new Date((new Date().getTime()));
+            let currValue = currDate.asInteger();
 
-            var spanDate = new Date(timestamp * 1000);
-            var spanValue = spanDate.asInteger();
+            let spanDate = new Date(timestamp * 1000);
+            let spanValue = spanDate.asInteger();
 
             if (spanValue == currValue) {
                 $(this).text('dziś, ' + spanDate.getHour() + ':' + spanDate.getMinute());

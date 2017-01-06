@@ -33,42 +33,131 @@
                 <div id="navbar-border-top"></div>
 
                 <div class="max-width">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mobile-menu" style="margin-left: 15px">
+                    <div class="clearfix">
+                        <button type="button" class="navbar-toggle margin-sm-left" data-toggle="collapse" data-target="#mobile-menu">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
 
-                        {% if auth_check() %}
-                            <ul class="visible-xs nav navbar-right pull-right">
-                                <li class="alerts">
-                                    <a href="{{ route('user.alerts') }}">
+                        <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
+                            <img id="logo" src="{{ cdn('img/logo.png') }}" class="hidden-md hidden-sm hidden-xs">
+                            <img id="logo-mobile" src="{{ cdn('img/logo-mobile.png') }}" class="visible-md visible-sm visible-xs">
+                        </a>
+
+                        <ul id="desktop-menu" class="nav navbar-nav hidden-xs">
+                            {% for item in menu.roots() %}
+                                <li {{ forms.attr(item.attr) }}>
+                                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
+
+                                    {% if item.hasChildren() %}
+                                        <ul class="dropdown-menu left">
+                                            {% for children in item.children() %}
+                                                <li>
+                                                    <a href="{{ children.url }}">{{ children.title }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right hidden-sm hidden-xs" role="search">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+
+                                    <span class="input-group-btn">
+
+                                    <button class="btn btn-link">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                                </div>
+                            </div>
+                        </form>
+
+                        {% if auth_check()  %}
+                            <div class="navbar-right dropdown avatar hidden-xs">
+                                <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail" style="width: 35px">
+                                    <span class="caret"></span>
+                                </a>
+
+                                <ul id="dropdown-user" class="dropdown-menu right">
+                                    <li class="dropdown-username"><a class="dropdown-userhome" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="{{ route('user.pm') }}"><i class="fa fa-envelope fa-fw"></i> Wiadomości</a></li>
+                                    <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
+                                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
+                                    <li><a href="{{ url('Pomoc') }}"><i class="fa fa-info-circle fa-fw"></i> Pomoc</a></li>
+
+                                    {% if can('adm-access') %}
+                                        <li><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
+                                    {% endif %}
+
+                                    <li class="divider"></li>
+                                    <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a></li>
+                                </ul>
+                            </div>
+
+                            <ul class="nav navbar-nav pull-right">
+                                <li id="btn-alerts" class="btn-alerts">
+                                    <a href="{{ route('user.alerts') }}" data-url="{{ route('user.alerts.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('alerts_unread') %}
                                             <span class="badge">{{ user('alerts_unread') }}</span>
                                         {% endif %}
 
                                         <i class="fa fa-bell fa-fw"></i>
                                     </a>
+
+                                    <div id="dropdown-alerts" class="dropdown-menu right">
+                                        <div class="dropdown-header">
+                                            <a title="Przejdź do listy powiadomień" href="{{ route('user.alerts') }}">Powiadomienia</a>
+
+                                            <a id="btn-mark-read" title="Oznacz jako przeczytane" href="{{ route('user.alerts.mark') }}">
+                                                <i class="fa fa-calendar-check-o"></i>
+                                            </a>
+                                        </div>
+                                        <div class="dropdown-modal">
+                                            <ul>
+
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </li>
 
-                                <li class="messages">
-                                    <a href="{{ route('user.pm') }}">
+                                <li id="btn-messages" class="btn-messages">
+                                    <a href="{{ route('user.pm') }}" data-url="{{ route('user.pm.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('pm_unread') %}
                                             <span class="badge">{{ user('pm_unread') }}</span>
                                         {% endif %}
 
                                         <i class="fa fa-envelope fa-fw"></i>
                                     </a>
+
+                                    <div id="dropdown-messages" class="dropdown-menu right">
+                                        <div class="dropdown-header">
+                                            <a title="Przejdź do listy wiadomości" href="{{ route('user.pm') }}">Wiadomości</a>
+
+                                            <a id="btn-write-message" href="{{ route('user.pm.submit') }}">
+                                                Wyślij wiadomość
+                                            </a>
+                                        </div>
+                                        <div class="dropdown-modal">
+                                            <ul>
+                                                <li><i class="fa fa-spin fa-spinner"></i></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
+                        {% else %}
+                            <a class="btn btn-warning btn-sm navbar-right navbar-btn btn-register" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
+                            <a class="btn btn-default btn-sm navbar-right navbar-btn" href="{{ route('login') }}">Logowanie</a>
                         {% endif %}
-
-                        <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-                            <img id="logo" src="{{ cdn('img/logo.png') }}" class="hidden-md hidden-sm hidden-xs">
-                            <img id="logo-mobile" src="{{ cdn('img/logo-mobile.png') }}" class="visible-md visible-sm visible-xs">
-                        </a>
                     </div>
 
                     <div class="visible-xs">
@@ -107,119 +196,6 @@
                                 <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control input-sm">
                             </form>
                         </div>
-                    </div>
-
-                    <div class="hidden-xs">
-                        <ul id="desktop-menu" class="nav navbar-nav">
-                            {% for item in menu.roots() %}
-                                <li {{ forms.attr(item.attr) }}>
-                                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
-
-                                    {% if item.hasChildren() %}
-                                        <ul class="dropdown-menu left">
-                                            {% for children in item.children() %}
-                                                <li>
-                                                    <a href="{{ children.url }}">{{ children.title }}</a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-
-                        <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right hidden-sm" role="search">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-link">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
-
-                        {% if auth_check()  %}
-                            <div class="navbar-right dropdown avatar">
-                                <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail" style="width: 35px">
-                                    <span class="caret"></span>
-                                </a>
-
-                                <ul id="dropdown-user" class="dropdown-menu right">
-                                    <li class="dropdown-username"><a class="dropdown-userhome" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="{{ route('user.pm') }}"><i class="fa fa-envelope fa-fw"></i> Wiadomości</a></li>
-                                    <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
-                                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
-                                    <li><a href="{{ url('Pomoc') }}"><i class="fa fa-info-circle fa-fw"></i> Pomoc</a></li>
-
-                                    {% if can('adm-access') %}
-                                        <li><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
-                                    {% endif %}
-
-                                    <li class="divider"></li>
-                                    <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a></li>
-                                </ul>
-                            </div>
-
-                            <ul class="nav navbar-nav navbar-right">
-                                <li id="alerts" class="alerts">
-                                    <a href="{{ route('user.alerts') }}" data-url="{{ route('user.alerts.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        {% if user('alerts_unread') %}
-                                            <span class="badge">{{ user('alerts_unread') }}</span>
-                                        {% endif %}
-
-                                        <i class="fa fa-bell fa-fw"></i>
-                                    </a>
-
-                                    <div id="dropdown-alerts" class="dropdown-menu right">
-                                        <div class="dropdown-header">
-                                            <a title="Przejdź do listy powiadomień" href="{{ route('user.alerts') }}">Powiadomienia</a>
-
-                                            <a id="btn-mark-read" title="Oznacz jako przeczytane" href="{{ route('user.alerts.mark') }}">
-                                                <i class="fa fa-calendar-check-o"></i>
-                                            </a>
-                                        </div>
-                                        <div class="dropdown-modal">
-                                            <ul>
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li id="messages" class="messages">
-                                    <a href="{{ route('user.pm') }}" data-url="{{ route('user.pm.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        {% if user('pm_unread') %}
-                                            <span class="badge">{{ user('pm_unread') }}</span>
-                                        {% endif %}
-
-                                        <i class="fa fa-envelope fa-fw"></i>
-                                    </a>
-
-                                    <div id="dropdown-messages" class="dropdown-menu right">
-                                        <div class="dropdown-header">
-                                            <a title="Przejdź do listy wiadomości" href="{{ route('user.pm') }}">Wiadomości</a>
-
-                                            <a id="btn-write-message" href="{{ route('user.pm.submit') }}">
-                                                Wyślij wiadomość
-                                            </a>
-                                        </div>
-                                        <div class="dropdown-modal">
-                                            <ul>
-                                                <li><i class="fa fa-spin fa-spinner"></i></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        {% else %}
-                            <a class="btn btn-warning btn-sm navbar-right navbar-btn btn-register" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
-                            <a class="btn btn-default btn-sm navbar-right navbar-btn" href="{{ route('login') }}">Logowanie</a>
-                        {% endif %}
                     </div>
                 </div>
             </header>
@@ -282,16 +258,17 @@
                 <div id="footer-copyright">
                     <div class="row max-width">
                         <div class="col-lg-12">
-                            <div class="pull-left">Copyright © 2000-2016 <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net - programowanie i tworzenie stron WWW</a></div>
+                            <div class="pull-left">Copyright © 2000-2017 <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net - programowanie i tworzenie stron WWW</a></div>
 
-                            <div class="pull-right">Coyote 2.0: {{ timer() }}</div>
+                            <div class="pull-right">Coyote {{ config('app.version') }}: {{ timer() }}</div>
                         </div>
                     </div>
                 </div>
             </footer>
         </div>
 
-        <script src="{{ cdn('js/main.js') }}"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="{{ cdn('js/app.js') }}"></script>
         {% endblock %}
     </body>
 </html>

@@ -1,7 +1,9 @@
 <?php
 
-namespace Coyote\Listeners;
+namespace Coyote\Http\Middleware;
 
+use Closure;
+use Illuminate\Container\Container as App;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface;
@@ -9,10 +11,9 @@ use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
-use Illuminate\Routing\Events\RouteMatched;
-use Illuminate\Container\Container as App;
+use Illuminate\Http\Request;
 
-class BindRouteDefaultModel
+class DefaultBindings
 {
     /**
      * @var array
@@ -43,20 +44,25 @@ class BindRouteDefaultModel
     }
 
     /**
-     * Handle the event.
+     * Handle an incoming request.
      *
-     * @param RouteMatched $event
+     * @param  Request $request
+     * @param  \Closure $next
+     * @return mixed
      */
-    public function handle(RouteMatched $event)
+    public function handle(Request $request, Closure $next)
     {
-        $optional = $this->getOptionalParameters($event->route->getUri());
+        $route = $request->route();
+        $optional = $this->getOptionalParameters($route->getUri());
 
         foreach ($optional as $parameter) {
-            if (isset($this->default[$parameter]) && null === $event->route->getParameter($parameter)) {
+            if (isset($this->default[$parameter]) && null === $route->getParameter($parameter)) {
                 $model = $this->app->make($this->default[$parameter])->makeModel();
-                $event->route->setParameter($parameter, $model);
+                $route->setParameter($parameter, $model);
             }
         }
+
+        return $next($request);
     }
 
     /**

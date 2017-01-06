@@ -49,7 +49,7 @@ class CategoryController extends BaseController
         }
 
         $collapse = $this->collapse();
-        $postsPerPage = $this->postsPerPage($this->getRouter()->getCurrentRequest());
+        $postsPerPage = $this->postsPerPage($this->request);
 
         return $this->view('forum.category')->with(
             compact('forumList', 'forum', 'topics', 'sections', 'collapse', 'flags', 'postsPerPage')

@@ -5,8 +5,8 @@
         $('.dropdown-backdrop').remove();
 
         $('[data-toggle="dropdown"]').each(function() {
-            var $this = $(this);
-            var $parent = $this.parent();
+            let $this = $(this);
+            let $parent = $this.parent();
 
             if (!$parent.hasClass('open')) {
                 return;
@@ -19,10 +19,10 @@
 
     $('body')
         .on('click', '[data-toggle="dropdown"]', function(e) {
-            var $this = $(this);
-            var $parent = $this.parent();
-            var dropdown = $this.next('.dropdown-menu');
-            var isOpen = $parent.hasClass('open');
+            let $this = $(this);
+            let $parent = $this.parent();
+            let dropdown = $this.next('.dropdown-menu');
+            let isOpen = $parent.hasClass('open');
 
             clearMenus();
 
@@ -56,8 +56,8 @@
     };
 
     $(document).on('click', function(e) {
-        var target = $(e.target);
-        var selectors = '.dropdown-menu, [data-toggle="dropdown"]';
+        let target = $(e.target);
+        let selectors = '.dropdown-menu, [data-toggle="dropdown"]';
 
         if (e.which !== 2 && !target.is(selectors) && !target.parent().is(selectors)) {
             clearMenus();
