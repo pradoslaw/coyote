@@ -190,16 +190,18 @@ $(() => {
         .on('click', ':submit', () => $('#job-posting').submit())
         .on('click', 'button[data-submit-state]', e => $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state')));
 
-    $(window).scroll(() => {
-        let bottom = $(window).scrollTop() + $(window).height();
+    if (navigation.length) {
+        $(window).scroll(() => {
+            let bottom = $(window).scrollTop() + $(window).height();
 
-        if (bottom > navigation.offset().top) {
-            fixed.fadeOut();
-        }
-        else {
-            fixed.show();
-        }
-    }).trigger('scroll');
+            if (bottom > navigation.offset().top) {
+                fixed.fadeOut();
+            }
+            else {
+                fixed.show();
+            }
+        }).trigger('scroll');
+    }
 
     /**
      * Save and exit button
