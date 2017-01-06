@@ -31,4 +31,12 @@ class Location
             }
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return $this->latitude !== null && $this->longitude !== null && $this->city !== null;
+    }
 }

@@ -58,7 +58,7 @@ class AdController extends Controller
         if ($preferences !== null) {
             $location = $this->lookupLocation();
 
-            if ($location->longitude !== null || $location->latitude !== null) {
+            if ($location->isValid()) {
                 $builder->setSort(new Geodistance($location->latitude, $location->longitude));
 
                 $data = [
