@@ -33,84 +33,20 @@
                 <div id="navbar-border-top"></div>
 
                 <div class="max-width">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mobile-menu" style="margin-left: 15px">
+                    <div class="clearfix">
+                        <button type="button" class="navbar-toggle margin-sm-left" data-toggle="collapse" data-target="#mobile-menu">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
 
-                        {% if auth_check() %}
-                            <ul class="visible-xs nav navbar-right pull-right">
-                                <li class="alerts">
-                                    <a href="{{ route('user.alerts') }}">
-                                        {% if user('alerts_unread') %}
-                                            <span class="badge">{{ user('alerts_unread') }}</span>
-                                        {% endif %}
-
-                                        <i class="fa fa-bell fa-fw"></i>
-                                    </a>
-                                </li>
-
-                                <li class="messages">
-                                    <a href="{{ route('user.pm') }}">
-                                        {% if user('pm_unread') %}
-                                            <span class="badge">{{ user('pm_unread') }}</span>
-                                        {% endif %}
-
-                                        <i class="fa fa-envelope fa-fw"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        {% endif %}
-
                         <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
                             <img id="logo" src="{{ cdn('img/logo.png') }}" class="hidden-md hidden-sm hidden-xs">
                             <img id="logo-mobile" src="{{ cdn('img/logo-mobile.png') }}" class="visible-md visible-sm visible-xs">
                         </a>
-                    </div>
 
-                    <div class="visible-xs">
-                        <div id="mobile-menu" class="collapse navbar-collapse nav navbar-nav">
-                            {% for item in menu.roots() %}
-                                <div {{ forms.attr(item.attr) }}>
-                                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                                </div>
-                            {% endfor %}
-
-                            <div class="divider"></div>
-
-                            {% if auth_check() %}
-                                <div><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></div>
-                                <div><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></div>
-
-                                {% if can('adm-access') %}
-                                    <div><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></div>
-                                {% endif %}
-
-                                <div><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a></div>
-                            {% else %}
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <a class="btn btn-warning btn-xs" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <a class="btn btn-default btn-xs" href="{{ route('login') }}">Logowanie</a>
-                                    </div>
-                                </div>
-                            {% endif %}
-
-                            <div class="divider"></div>
-
-                            <form action="{{ search_url|default(route('search')) }}" role="search">
-                                <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control input-sm">
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="hidden-xs">
-                        <ul id="desktop-menu" class="nav navbar-nav">
+                        <ul id="desktop-menu" class="nav navbar-nav hidden-xs">
                             {% for item in menu.roots() %}
                                 <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
@@ -128,21 +64,23 @@
                             {% endfor %}
                         </ul>
 
-                        <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right hidden-sm" role="search">
+                        <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right hidden-sm hidden-xs" role="search">
                             <div class="form-group">
                                 <div class="input-group">
                                     <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+
                                     <span class="input-group-btn">
-                                        <button class="btn btn-link">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </span>
+
+                                    <button class="btn btn-link">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
                                 </div>
                             </div>
                         </form>
 
                         {% if auth_check()  %}
-                            <div class="navbar-right dropdown avatar">
+                            <div class="navbar-right dropdown avatar hidden-xs">
                                 <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail" style="width: 35px">
                                     <span class="caret"></span>
@@ -165,7 +103,7 @@
                                 </ul>
                             </div>
 
-                            <ul class="nav navbar-nav navbar-right">
+                            <ul class="nav navbar-nav pull-right">
                                 <li id="alerts" class="alerts">
                                     <a href="{{ route('user.alerts') }}" data-url="{{ route('user.alerts.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('alerts_unread') %}
@@ -220,6 +158,44 @@
                             <a class="btn btn-warning btn-sm navbar-right navbar-btn btn-register" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
                             <a class="btn btn-default btn-sm navbar-right navbar-btn" href="{{ route('login') }}">Logowanie</a>
                         {% endif %}
+                    </div>
+
+                    <div class="visible-xs">
+                        <div id="mobile-menu" class="collapse navbar-collapse nav navbar-nav">
+                            {% for item in menu.roots() %}
+                                <div {{ forms.attr(item.attr) }}>
+                                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
+                                </div>
+                            {% endfor %}
+
+                            <div class="divider"></div>
+
+                            {% if auth_check() %}
+                                <div><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></div>
+                                <div><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></div>
+
+                                {% if can('adm-access') %}
+                                    <div><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></div>
+                                {% endif %}
+
+                                <div><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a></div>
+                            {% else %}
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <a class="btn btn-warning btn-xs" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <a class="btn btn-default btn-xs" href="{{ route('login') }}">Logowanie</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="divider"></div>
+
+                            <form action="{{ search_url|default(route('search')) }}" role="search">
+                                <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control input-sm">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </header>
