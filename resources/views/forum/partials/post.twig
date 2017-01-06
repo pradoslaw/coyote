@@ -117,11 +117,13 @@
                 </div>
 
                 {% if index == 0 and topic.tags.count() %}
-                    <ul class="tag-clouds">
-                        {% for tag in topic.tags %}
-                            <li><a href="{{ route('forum.tag', [tag.name|url_encode]) }}">{{ tag.name }}</a></li>
-                        {% endfor %}
-                    </ul>
+                    <div class="padding-sm-top padding-sm-bottom">
+                        <ul class="tag-clouds">
+                            {% for tag in topic.tags %}
+                                <li><a href="{{ route('forum.tag', [tag.name|url_encode]) }}">{{ tag.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 {% endif %}
 
                 <div class="clearfix"></div>

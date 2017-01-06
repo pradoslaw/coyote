@@ -91,7 +91,7 @@
     cursor: pointer;
 
     span {
-      font-size: .8em;
+      font-size: 11px;
       background: #EEE;
       border-radius: 5px;
       display: inline;
@@ -101,6 +101,7 @@
       position: relative;
       transition: all .25s linear;
     }
+
     &.hover {
       background-color: #F8F8F8;
       color: #D7661C;
