@@ -4,6 +4,8 @@
     "require": false,
     "_config": false,
     "Session": true,
-    "ws": false
+    "ws": false,
+    "$": false,
+    "jQuery": false
   }
 }
