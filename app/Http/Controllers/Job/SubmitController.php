@@ -153,7 +153,7 @@ class SubmitController extends Controller
             'enable_apply'      => 'boolean',
             'email'             => 'sometimes|required|email',
             'tags.*.name'       => 'tag',
-            'tags.*.priority'   => 'int|min:0|max:1'
+            'tags.*.priority'   => 'required|int|min:0|max:1'
         ]);
 
         $userId = $request->session()->pull('job.user_id');
