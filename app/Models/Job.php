@@ -105,8 +105,16 @@ class Job extends Model
                 "city" => [
                     "type" => "multi_field",
                     "fields" => [
-                        "city" => ["type" => "string", "index" => "analyzed", "store" => "yes"],
-                        "city_original" => ["type" => "string", "analyzer" => "keyword_analyzer"]
+                        "city" => [
+                            "type" => "string",
+                            "index" => "analyzed",
+                            "store" => "yes",
+                            "analyzer" => "keyword_analyzer_with_asciifolding"
+                        ],
+                        "city_original" => [
+                            "type" => "string",
+                            "analyzer" => "keyword_analyzer"
+                        ]
                     ]
                 ],
                 "coordinates" => [

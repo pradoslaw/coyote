@@ -6,6 +6,7 @@ use Coyote\Services\Elasticsearch\DslInterface;
 use Coyote\Services\Elasticsearch\Filter;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Parser\Helpers;
+use Transliterator;
 
 class City extends Filter implements DslInterface
 {
@@ -68,6 +69,8 @@ class City extends Filter implements DslInterface
             return $queryBuilder->getBody();
         }
 
+        $transliterator = Transliterator::create('Any-Latin; Latin-ASCII');
+
         return $this->addOrFilter($queryBuilder, [
             'nested' => [
                 'path' => 'locations',
@@ -78,7 +81,9 @@ class City extends Filter implements DslInterface
                         ],
                         'filter' => [
                             'terms' => [
-                                'city_original' => array_map('mb_strtolower', $this->cities)
+                                'city' => array_map(function($city) use($transliterator) {
+                                    return $transliterator->transliterate(mb_strtolower($city));
+                                }, $this->cities)
                             ]
                         ]
                     ]
