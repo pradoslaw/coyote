@@ -65,6 +65,13 @@ class Create extends Command
                                         "tokenizer" => "keyword",
                                         "filter" => "lowercase"
                                     ],
+                                    "keyword_analyzer_with_asciifolding" => [
+                                        "tokenizer" => "keyword",
+                                        "filter" => [
+                                            "lowercase",
+                                            "asciifolding"
+                                        ]
+                                    ],
                                     "stopwords_analyzer" => [
                                         "tokenizer" => "whitespace",
                                         "filter" => [

@@ -98,15 +98,27 @@
 
             {% if user.posts > 0 %}
                 <ul class="nav nav-pills">
-                    <li role="presentation" {{ tab == 'reputation' ? 'class="active"' }}><a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}" role="tab" data-toggle="tab">Reputacja</a></li>
-                    <li role="presentation" {{ tab == 'post' ? 'class="active"' }}><a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}" role="tab" data-toggle="tab">Posty na forum</a></li>
+                    <li role="presentation" {{ tab == 'reputation' ? 'class="active"' }}>
+                        <a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}" role="tab">
+                            Reputacja
+                        </a>
+                    </li>
+                    <li role="presentation" {{ tab == 'post' ? 'class="active"' }}>
+                        <a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}" role="tab">
+                            Posty na forum
+                        </a>
+                    </li>
+                    <li role="presentation" {{ tab == 'microblog' ? 'class="active"' }}>
+                        <a title="Zobacz wpisy opublikowane na mikroblogu użytkownika" href="{{ route('profile', [user.id, 'Microblog']) }}" role="tab">
+                            Mikroblog
+                        </a>
+                    </li>
                 </ul>
             {% endif %}
 
             <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
 
             {{ module|raw }}
-
         </div>
         <div class="col-md-3">
             <ul class="side-menu">
@@ -135,10 +147,43 @@
     </div>
 {% endblock %}
 
+{% block head %}
+    {{ parent() }}
+    
+    <script type="text/javascript">
+        var uploadUrl = '{{ route('microblog.upload') }}';
+    </script>
+{% endblock %}
+
 {% block body %}
     <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/profile.css') }}">
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/microblog.css') }}">
 
     {{ parent() }}
+
+    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
+    <script type="text/javascript" src="{{ cdn('js/microblog.js') }}"></script>
+    <script>
+        $(function() {
+            var isReady = true;
+
+            $('#wrap').perfectScrollbar().on('ps-y-reach-end', function() {
+                if (!isReady) {
+                    return;
+                }
+
+                var offset = $('#reputation').find('.reputation-item').length;
+                isReady = false;
+
+                $.get(_config.profile_history, {offset: offset}, function(html) {
+                    $('#reputation').append(html);
+                    isReady = true;
+                });
+            });
+        });
+    </script>
 
     <script src="{{ cdn('js/profile.js') }}"></script>
 {% endblock %}
