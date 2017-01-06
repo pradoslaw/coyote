@@ -32,7 +32,7 @@ module.exports = {
         'job-submit': './pages/job/submit.js',
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({name: "app", minChunks: 2, chunks: ["microblog", "forum", 'wiki', 'job', 'homepage', 'job-submit']}),
+        new webpack.optimize.CommonsChunkPlugin({name: "app", minChunks: 2, chunks: ['microblog', 'pm', 'forum', 'wiki', 'job', 'homepage', 'job-submit']}),
     ]
 };
 
