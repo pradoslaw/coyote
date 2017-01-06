@@ -1,7 +1,7 @@
 {% extends 'user.pm.base' %}
 {% set parent = 'user.pm.submit' %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
 {% block pm %}
     {{ form_open({'url': route('user.pm.submit'), 'method': 'POST', 'class': 'form-horizontal'}) }}

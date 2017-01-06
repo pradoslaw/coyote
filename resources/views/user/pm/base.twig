@@ -2,8 +2,6 @@
 {% set page_name = page_name|default('Wiadomości prywatne') %}
 {% block title %}{{ page_name }} {{ parent() }}{% endblock %}
 
-{% import 'components.modals' as modal %}
-
 {% block content %}
     <h2>{{ page_name }}</h2>
 
@@ -18,8 +16,6 @@
             {% endblock %}
         </div>
     </div>
-
-    {{ modal.confirm('Czy na pewno usunąć tę wiadomość? Tej operacji nie będzie można cofnąć.') }}
 {% endblock %}
 
 {% block body %}

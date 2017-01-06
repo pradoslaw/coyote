@@ -1,4 +1,6 @@
 import 'jquery-color-animation/jquery.animate-colors';
+import Dialog from '../libs/dialog';
+import Config from '../libs/config';
 
 $(function() {
     $('textarea[name="text"]').each(function() {
@@ -45,12 +47,17 @@ $(function() {
     });
 
     $('.btn-delete-pm').click(function() {
-        $('#confirm').modal('show').one('click', '.danger', () => {
-            $('<form>', {'method': 'POST', 'action': $(this).attr('href')})
-                .append('<input type="hidden" name="_token" value="' + $('meta[name="csrf-token"]').attr('content') + '">')
-                .appendTo('body')
-                .submit();
-        });
+        Dialog.confirm({
+            message: $(this).data('confirm'),
+            form: {
+                attr: {
+                    action: $(this).attr('href'),
+                    method: 'post'
+                },
+                csrfToken: Config.csrfToken()
+            }}
+        )
+        .show();
 
         return false;
     });

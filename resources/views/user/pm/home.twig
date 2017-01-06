@@ -10,7 +10,8 @@
             content: '<p class="excerpt"><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255)|default('(kliknij, aby przeczytać)')|e ~ '</a></p>',
             delete_link: route('user.pm.trash', [item.author_id]),
             link_to_profile: false,
-            show_marked_date: false
+            show_marked_date: false,
+            confirm_message: 'Czy na pewno usunąć całą konwersację z tym użytkonikiem? Tej operacji nie będzie można cofnąć.'
         } %}
     {% else %}
         <p class="alert alert-warning">Brak wiadomości prywatnych.</p>

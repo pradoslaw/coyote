@@ -11,7 +11,7 @@ $(function() {
         this.html(this.data('origin')).removeAttr('disabled').removeAttr('data-origin');
     };
 
-    $('form').on('submit', function() {
+    $(document).on('submit', 'form', function() {
         let submit = $(this).find(':submit');
 
         if (typeof submit.data('submit-state') !== 'undefined') {

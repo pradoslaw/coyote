@@ -37,13 +37,16 @@ class Dialog {
             message: '',
             buttons: [],
             form: {
-                method: 'POST',
-                action: ''
+                attr: {
+                    action: '',
+                    method: 'POST'
+                },
+                csrfToken: ''
             }
         };
 
         this._options = $.extend(defaultOptions, options);
-        this._modal = this._build();
+        this._build();
     }
 
     /**
@@ -78,7 +81,7 @@ class Dialog {
      * @private
      */
     _build() {
-        let modal = this._createDiv('modal fade').attr({role: 'dialog', 'aria-labelledby': 'alert-model', 'aria-hidden': true, tabindex: -1});
+        this._modal = this._createDiv('modal fade').attr({role: 'dialog', 'aria-labelledby': 'alert-model', 'aria-hidden': true, tabindex: -1});
 
         let dialog = this._buildDialog();
         let content = this._buildContent();
@@ -90,16 +93,19 @@ class Dialog {
 
         dialog.append(content);
 
-        modal.append(dialog);
-        modal.appendTo('body');
+        this._modal.append(dialog);
+        this._modal.appendTo('body');
 
-        if (this._options.form.action) {
-            modal.wrap(() => {
-                return $('<form>').attr(this._options.form);
+        if (this._options.form.attr.action) {
+            this._modal.wrap(() => {
+                console.log(this._options.form.attr);
+                return $('<form>').attr(this._options.form.attr);
             });
-        }
 
-        return modal;
+            if (this._options.form.csrfToken) {
+                this._modal.append('<input type="hidden" name="_token" value="' + this._options.form.csrfToken + '">');
+            }
+        }
     }
 
     /**

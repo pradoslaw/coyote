@@ -9,7 +9,8 @@
                     content: '<div class="pm-text">' ~ item.text ~ '</div>',
                     delete_link: route('user.pm.delete', item.id),
                     link_to_profile: true,
-                    show_marked_date: true
+                    show_marked_date: true,
+                    confirm_message: 'Czy na pewno usunąć tę wiadomość? Tej operacji nie będzie można cofnąć.'
                 } %}
             {% endfor %}
         </div>

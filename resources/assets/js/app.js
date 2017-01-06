@@ -18,13 +18,14 @@ window.ws = RealtimeFactory();
 
 import './components/notifications.js';
 import './components/pm.js';
+import Config from './libs/config';
 
 $(function() {
     'use strict';
 
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': Config.csrfToken()
         }
     });
 });
