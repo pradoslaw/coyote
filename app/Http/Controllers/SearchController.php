@@ -6,7 +6,6 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Builders\MixedBuilder;
 use Coyote\Services\Elasticsearch\MultiResultSet;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Item;
@@ -15,24 +14,17 @@ use Lavary\Menu\Menu;
 class SearchController extends Controller
 {
     /**
-     * @var Request
-     */
-    private $request;
-
-    /**
      * @var ForumRepository
      */
     private $forum;
 
     /**
-     * @param Request $request
      * @param ForumRepository $forum
      */
-    public function __construct(Request $request, ForumRepository $forum)
+    public function __construct(ForumRepository $forum)
     {
         parent::__construct();
 
-        $this->request = $request;
         $this->forum = $forum;
     }
 
