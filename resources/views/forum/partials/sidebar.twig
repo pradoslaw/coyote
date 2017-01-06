@@ -14,8 +14,10 @@
         {% if tags.user %}
             {% include 'forum.partials.tags' with {'tags': tags.user} %}
         {% else %}
-            <div class="tag-clouds">
-                <a href="javascript:" class="btn-add">(Brak tagów. Kliknij, aby dodać)</a>
+            <div class="padding-sm-top">
+                <div class="tag-clouds">
+                    <a href="javascript:" class="btn-add">(Brak tagów. Kliknij, aby dodać)</a>
+                </div>
             </div>
         {% endif %}
 

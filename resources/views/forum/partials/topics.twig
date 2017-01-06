@@ -91,7 +91,7 @@
                             </h5>
 
                             {% if topic.tags %}
-                                <ul class="tag-clouds pull-right hidden-xxs">
+                                <ul class="tag-clouds tag-clouds-sm pull-right hidden-xxs">
                                     {% for tag in topic.tags %}
                                         <li><a href="{{ route('forum.tag', [tag.name|url_encode]) }}" data-tag="{{ tag.name }}">{{ tag.name }}</a></li>
                                     {% endfor %}
