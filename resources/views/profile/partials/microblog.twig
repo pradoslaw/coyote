@@ -1,0 +1,9 @@
+<section id="microblog" class="box">
+    {% for microblog in microblogs %}
+        {% include "microblog.partials.microblog" %}
+    {% endfor %}
+
+    <div class="text-center">
+        {{ pagination|raw }}
+    </div>
+</section>

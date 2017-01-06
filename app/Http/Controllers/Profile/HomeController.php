@@ -9,6 +9,8 @@ use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Repositories\Criteria\Microblog\OnlyMine;
+use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Coyote\User;
 use Illuminate\Http\Request;
 
@@ -32,17 +34,24 @@ class HomeController extends Controller
     private $post;
 
     /**
+     * @var MicroblogRepository
+     */
+    private $microblog;
+
+    /**
      * @param UserRepository $user
      * @param ReputationRepository $reputation
      * @param PostRepository $post
+     * @param MicroblogRepository $microblog
      */
-    public function __construct(UserRepository $user, ReputationRepository $reputation, PostRepository $post)
+    public function __construct(UserRepository $user, ReputationRepository $reputation, PostRepository $post, MicroblogRepository $microblog)
     {
         parent::__construct();
 
         $this->user = $user;
         $this->reputation = $reputation;
         $this->post = $post;
+        $this->microblog = $microblog;
     }
 
     /**
@@ -53,7 +62,7 @@ class HomeController extends Controller
     public function index($user, $tab = 'reputation')
     {
         $this->validateWith(
-            $this->getValidationFactory()->make(['tab' => strtolower($tab)], ['tab' => 'in:history,reputation,post'])
+            $this->getValidationFactory()->make(['tab' => strtolower($tab)], ['tab' => 'in:history,reputation,post,microblog'])
         );
 
         $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
@@ -135,5 +144,40 @@ class HomeController extends Controller
             'given_votes'   => $this->post->countGivenVotes($user->id),
             'received_votes'=> $this->post->countReceivedVotes($user->id),
         ]);
+    }
+
+    /**
+     * @param User $user
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    private function microblog(User $user)
+    {
+        $microblogs = $this->getMicroblogs($user);
+
+        return view('profile.partials.microblog', [
+            'user' => $user,
+            'microblogs' => $microblogs->items(),
+            'pagination' => $microblogs->render()
+        ]);
+    }
+
+    private function getMicroblogs(User $user)
+    {
+        // @todo podobny kod (w 99%) znajduje sie w kontrolerze Microblog\HomeController@index
+        $this->microblog->resetCriteria();
+        $this->microblog->pushCriteria(new OnlyMine($user->id));
+
+        $microblogs = $this->microblog->paginate(10);
+        $parser = app('parser.microblog');
+
+        foreach ($microblogs as &$microblog) {
+            $microblog->text = $parser->parse($microblog->text);
+
+            foreach ($microblog->comments as &$comment) {
+                $comment->html = $parser->parse($comment->text);
+            }
+        }
+
+        return $microblogs;
     }
 }
