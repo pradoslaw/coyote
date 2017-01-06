@@ -42,6 +42,7 @@ class HomeController extends Controller
      * @param UserRepository $user
      * @param ReputationRepository $reputation
      * @param PostRepository $post
+     * @param MicroblogRepository $microblog
      */
     public function __construct(UserRepository $user, ReputationRepository $reputation, PostRepository $post, MicroblogRepository $microblog)
     {
