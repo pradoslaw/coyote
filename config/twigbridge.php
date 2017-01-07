@@ -108,7 +108,8 @@ return [
             'Coyote\Services\TwigBridge\Extensions\Block',
             'Coyote\Services\TwigBridge\Extensions\FormBuilder',
 //            'Coyote\Services\TwigBridge\Extensions\Grid',
-            'Coyote\Services\TwigBridge\Extensions\Media'
+            'Coyote\Services\TwigBridge\Extensions\Media',
+            'Coyote\Services\TwigBridge\Extensions\Parser'
         ],
         /*
         |--------------------------------------------------------------------------
