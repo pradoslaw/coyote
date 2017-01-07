@@ -53,17 +53,17 @@ class PasswordCest
         $I->amOnPage('/Password');
         $I->fillField('email', 'joe@doe.com');
         $I->click('button[type=submit]');
-        $I->see('Na podany adres e-mail wysłane zostały dalsze instrukcje');
+        $I->see('Link służący do zresetowania hasła, został wysłany na adres e-mail!');
 
         $I->seeRecord('users', ['name' => 'Joe Doe']);
 
         $I->seeRecord('password_resets', ['email' => 'joe@doe.com']);
         $record = $I->grabRecord('password_resets', ['email' => 'joe@doe.com']);
 
-        $I->amOnPage('Password/reset/' . $record['token']);
+        $I->amOnPage('password/reset/' . $record['token']);
         $I->fillField('email', 'joe@doe.com');
-        $I->fillField('password', '1234');
-        $I->fillField('password_confirmation', '1234');
+        $I->fillField('password', '123456');
+        $I->fillField('password_confirmation', '123456');
         $I->click('button[type=submit]');
         $I->see('Hasło zostało ustawione. Zostałeś prawidłowo zalogowany.');
     }
@@ -75,7 +75,7 @@ class PasswordCest
         $I->amOnPage('/Password');
         $I->fillField('email', $user->email);
         $I->click('button[type=submit]');
-        $I->see('Ten użytkownik nie istnieje lub został usunięty.');
+        $I->see('Użytkownik o podanym adresie e-mail nie istnieje lub został usunięty.');
     }
 }
 

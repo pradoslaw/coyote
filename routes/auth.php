@@ -19,7 +19,7 @@ $this->get('Confirm/Email', 'Auth\ConfirmController@email');
 $this->get('Password', 'Auth\ForgotPasswordController@showLinkRequestForm');
 $this->post('Password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
-$this->post('Password/reset', 'Auth\ResetPasswordController@reset');
+$this->post('password/reset', 'Auth\ResetPasswordController@reset');
 
 $this->get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login'])->name('oauth');
 $this->get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');

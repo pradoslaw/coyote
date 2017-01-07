@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'password' => 'Hasło musi zawierać co najmniej 3 znaki długości.',
-    'reset' => 'Hasło zostało zresetowane!',
+    'password' => 'Hasło musi zawierać co najmniej 6 znaków długości oraz być identyczne w obydwu polach.',
+    'reset' => 'Hasło zostało ustawione. Zostałeś prawidłowo zalogowany.',
     'sent' => 'Link służący do zresetowania hasła, został wysłany na adres e-mail!',
-    'token' => 'URL jest nieprawidłowy albo utracił swoją ważność.',
-    'user' => "Nie możemy znaleźć konta użytkownika o tym adresie e-mail.",
+    'token' => 'Link jest nieprawidłowy albo utracił swoją ważność.',
+    'user' => "Użytkownik o podanym adresie e-mail nie istnieje lub został usunięty.",
 
 ];

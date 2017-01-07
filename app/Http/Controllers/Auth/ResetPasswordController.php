@@ -25,7 +25,7 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -50,23 +50,9 @@ class ResetPasswordController extends Controller
     {
         $this->breadcrumb->push('Odzyskiwanie hasła', url('Password/reset'));
 
-        return view('auth.reset')->with(
+        return $this->view('auth.reset')->with(
             ['token' => $token, 'email' => $request->email]
         );
-    }
-
-    /**
-     * Get the password reset validation rules.
-     *
-     * @return array
-     */
-    protected function rules()
-    {
-        return [
-            'token'    => 'required',
-            'email'    => 'required|email',
-            'password' => 'required|confirmed|min:3',
-        ];
     }
 
     /**
