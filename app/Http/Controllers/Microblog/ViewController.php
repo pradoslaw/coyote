@@ -18,13 +18,6 @@ class ViewController extends Controller
         $microblog = $repository->findOrFail($id);
         abort_if(!is_null($microblog->parent_id), 404);
 
-        $parser = app('parser.microblog');
-        $microblog->text = $parser->parse($microblog->text);
-
-        foreach ($microblog->comments as &$comment) {
-            $comment->html = $parser->parse($comment->text);
-        }
-
         $excerpt = excerpt($microblog->text);
 
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));

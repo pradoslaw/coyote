@@ -30,7 +30,7 @@
 
         <div class="comment-body margin-md-right">
             <h6>{{ link_to_profile(comment.user_id, comment.name, comment.is_active, comment.is_blocked) }}</h6>
-            <div class="media-content">{{ comment.html|raw }}</div>
+            <div class="media-content">{{ comment.text|parse('microblog')|raw }}</div>
 
             <ul class="list-inline">
                 <li>

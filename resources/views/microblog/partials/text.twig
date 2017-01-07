@@ -1,4 +1,4 @@
-{{ microblog.text|raw }}
+{{ microblog.text|parse('microblog')|raw }}
 
 {% if microblog.media|length > 0 %}
     <div class="thumbnails row">
