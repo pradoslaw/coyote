@@ -16,14 +16,10 @@ $this->post('Confirm', 'Auth\ConfirmController@generateLink');
 $this->get('Confirm/Email', 'Auth\ConfirmController@email');
 
 // Password Reset Routes...
-$this->get('Password', 'Auth\PasswordController@showLinkRequestForm');
-$this->post('Password', 'Auth\PasswordController@sendResetLinkEmail');
-$this->get('Password/reset/{token}', 'Auth\PasswordController@showResetForm');
-$this->post('Password/reset/', 'Auth\PasswordController@reset');
-//$this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
-//$this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
-//$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
-//$this->post('password/reset', 'Auth\ResetPasswordController@reset');
+$this->get('Password', 'Auth\ForgotPasswordController@showLinkRequestForm');
+$this->post('Password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
+$this->post('Password/reset', 'Auth\ResetPasswordController@reset');
 
-$this->get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login', 'as' => 'oauth']);
+$this->get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login'])->name('oauth');
 $this->get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');
