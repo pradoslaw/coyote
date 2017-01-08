@@ -37,31 +37,31 @@ class ParserServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('parser.microblog', function ($app) {
+        $this->app->singleton('parser.microblog', function ($app) {
             return new MicroblogFactory($app);
         });
 
-        $this->app->bind('parser.sig', function ($app) {
+        $this->app->singleton('parser.sig', function ($app) {
             return new SigFactory($app);
         });
 
-        $this->app->bind('parser.pm', function ($app) {
+        $this->app->singleton('parser.pm', function ($app) {
             return new PmFactory($app);
         });
 
-        $this->app->bind('parser.post', function ($app) {
+        $this->app->singleton('parser.post', function ($app) {
             return new PostFactory($app);
         });
 
-        $this->app->bind('parser.comment', function ($app) {
+        $this->app->singleton('parser.comment', function ($app) {
             return new CommentFactory($app);
         });
 
-        $this->app->bind('parser.job', function ($app) {
+        $this->app->singleton('parser.job', function ($app) {
             return new JobFactory($app);
         });
 
-        $this->app->bind('parser.wiki', function ($app) {
+        $this->app->singleton('parser.wiki', function ($app) {
             return new WikiFactory($app);
         });
     }
