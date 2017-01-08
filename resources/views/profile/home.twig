@@ -149,7 +149,7 @@
 
 {% block head %}
     {{ parent() }}
-    
+
     <script type="text/javascript">
         var uploadUrl = '{{ route('microblog.upload') }}';
     </script>
@@ -161,8 +161,6 @@
 
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
     <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
     <script type="text/javascript" src="{{ cdn('js/microblog.js') }}"></script>
     <script>
