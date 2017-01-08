@@ -23,7 +23,7 @@ class Parser extends Twig_Extension
         return [
             new Twig_SimpleFilter('parse', function ($text, $name) {
                 return app('parser.' . $name)->parse($text);
-            }),
+            }, ['is_safe' => ['html']]),
         ];
     }
 }
