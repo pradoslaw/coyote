@@ -176,12 +176,8 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        $parser = app('parser.microblog');
         $comments = $this->microblog->getComments([$id])->slice(0, -2);
 
-        foreach ($comments as &$comment) {
-            $comment->html = $parser->parse($comment->text);
-        }
         return view('microblog.partials.comments', ['microblog' => ['id' => $id], 'comments' => $comments]);
     }
 }

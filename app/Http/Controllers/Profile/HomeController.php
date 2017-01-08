@@ -138,36 +138,15 @@ class HomeController extends Controller
      */
     private function microblog(User $user)
     {
-        $microblogs = $this->getMicroblogs($user);
+        $this->microblog->resetCriteria();
+        $this->microblog->pushCriteria(new OnlyMine($user->id));
+
+        $microblogs = $this->microblog->paginate(10);
 
         return view('profile.partials.microblog', [
             'user'          => $user,
             'microblogs'    => $microblogs->items(),
             'pagination'    => $microblogs->render()
         ]);
-    }
-
-    /**
-     * @param User $user
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    private function getMicroblogs(User $user)
-    {
-        // @todo podobny kod (w 99%) znajduje sie w kontrolerze Microblog\HomeController@index
-        $this->microblog->resetCriteria();
-        $this->microblog->pushCriteria(new OnlyMine($user->id));
-
-        $microblogs = $this->microblog->paginate(10);
-        $parser = app('parser.microblog');
-
-        foreach ($microblogs as &$microblog) {
-            $microblog->text = $parser->parse($microblog->text);
-
-            foreach ($microblog->comments as &$comment) {
-                $comment->html = $parser->parse($comment->text);
-            }
-        }
-
-        return $microblogs;
     }
 }
