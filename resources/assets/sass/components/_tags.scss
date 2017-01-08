@@ -43,6 +43,15 @@
       margin-right: 0;
     }
   }
+
+  @media screen and (max-width: $screen-xs) {
+    > li {
+      >a,
+      >span {
+        font-size: 11px;
+      }
+    }
+  }
 }
 
 .cloud {
