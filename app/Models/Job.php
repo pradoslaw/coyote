@@ -367,7 +367,7 @@ class Job extends Model
      */
     public function setSalaryFromAttribute($value)
     {
-        $this->attributes['salary_from'] = (int) trim($value);
+        $this->attributes['salary_from'] = $value === null ? null : (int) trim($value);
     }
 
     /**
@@ -375,7 +375,7 @@ class Job extends Model
      */
     public function setSalaryToAttribute($value)
     {
-        $this->attributes['salary_to'] = (int) trim($value);
+        $this->attributes['salary_to'] = $value === null ? null : (int) trim($value);
     }
 
     /**
