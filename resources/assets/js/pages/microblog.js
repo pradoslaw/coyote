@@ -258,11 +258,11 @@ $(function () {
         .on('click', 'a[data-toggle="lightbox"]', function(e) {
             e.preventDefault();
 
-            // require.ensure(['ekko-lightbox/ekko-lightbox'], () => {
-            //     require('ekko-lightbox/ekko-lightbox')($);
-            //
-            //     $(this).ekkoLightbox();
-            // });
+            require.ensure([], (require) => {
+                require('ekko-lightbox/dist/ekko-lightbox');
+
+                $(this).ekkoLightbox();
+            });
         })
         .on('click', '.read-more', function()
         {
