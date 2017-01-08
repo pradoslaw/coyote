@@ -75,10 +75,10 @@ abstract class Controller extends BaseController
 
             $this->request = $request;
 
+            $this->buildPublic();
+
             return $next($request);
         });
-
-        $this->buildPublic();
     }
 
     protected function buildPublic()
