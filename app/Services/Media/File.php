@@ -119,7 +119,7 @@ abstract class File implements MediaInterface
      */
     public function path($filename = null)
     {
-        return $this->rootPath() . '/' . ($filename ?: $this->relative());
+        return $this->root() . '/' . ($filename ?: $this->relative());
     }
 
     /**

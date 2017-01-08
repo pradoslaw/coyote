@@ -11,11 +11,11 @@
 
             <div class="media">
                 <div class="media-left hidden-xs">
-                    <div class="img-placeholder img-thumbnail" style="{{ user('photo') ? 'display: none' }}">
+                    <div class="img-placeholder img-thumbnail" style="{{ user('photo').name ? 'display: none' }}">
                         <img src="{{ cdn('img/avatar.png') }}">
                     </div>
 
-                    <div class="img-container img-thumbnail" style="{{ not user('photo') ? 'display: none' }}">
+                    <div class="img-container img-thumbnail" style="{{ not user('photo').name ? 'display: none' }}">
                         <img src="{{ user_photo(user('photo')) }}">
 
                         <a href="{{ route('user.photo.delete') }}" id="btn-delete-photo">

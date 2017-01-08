@@ -47,7 +47,7 @@ class Media extends Twig_Extension
         if (is_string($filename)) {
             return $this->getMediaUrl('photo', $filename)->url();
         } elseif ($filename instanceof MediaInterface) {
-            return $filename->url();
+            return $filename->getFilename() ? $filename->url() : cdn('img/avatar.png');
         } else {
             throw new \Exception('Parameter needs to be either string or MediaInterface object.');
         }
