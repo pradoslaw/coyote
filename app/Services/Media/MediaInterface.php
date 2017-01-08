@@ -32,6 +32,14 @@ interface MediaInterface
     public function url();
 
     /**
+     * Return full path (example: /var/www/makana.pl/storage/uploads/maps/12345.jpg)
+     *
+     * @param string|null $filename
+     * @return string
+     */
+    public function path($filename = null);
+
+    /**
      * @return mixed
      */
     public function get();
@@ -62,4 +70,9 @@ interface MediaInterface
      * @return bool
      */
     public function isImage();
+
+    /**
+     * @return string
+     */
+    public function root();
 }

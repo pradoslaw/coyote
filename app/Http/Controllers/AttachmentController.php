@@ -32,7 +32,7 @@ abstract class AttachmentController extends Controller
             'size' => $media->size(),
             'file' => $media->getFilename(),
             'name' => $media->getName(),
-            'mime' => $mime->guess($media->url()->path())
+            'mime' => $mime->guess($media->path())
         ]);
 
         return $this->renderForm($attachment);
@@ -59,7 +59,7 @@ abstract class AttachmentController extends Controller
 
         $attachment = $this->create([
             'size' => $media->size(),
-            'mime' => $mime->guess($media->url()->path()),
+            'mime' => $mime->guess($media->path()),
             'file' => $media->getFilename(),
             'name' => $media->getName()
         ]);

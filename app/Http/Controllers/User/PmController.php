@@ -249,7 +249,7 @@ class PmController extends BaseController
             'suffix'    => 'png',
             'name'      => $media->getName(),
             'file'      => $media->getFilename(),
-            'mime'      => $mime->guess($media->url()->path()),
+            'mime'      => $mime->guess($media->path()),
             'url'       => (string) $media->url()
         ]);
     }

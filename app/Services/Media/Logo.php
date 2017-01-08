@@ -14,7 +14,7 @@ class Logo extends File
     {
         parent::upload($uploadedFile);
 
-        $this->thumbnail->file(new \Coyote\Services\Thumbnail\Objects\Logo())->make($this->url()->path());
+        $this->thumbnail->file(new \Coyote\Services\Thumbnail\Objects\Logo())->make($this->path());
 
         return $this;
     }

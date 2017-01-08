@@ -112,6 +112,17 @@ abstract class File implements MediaInterface
     }
 
     /**
+     * Return full path (example: /var/www/makana.pl/storage/uploads/maps/12345.jpg)
+     *
+     * @param string|null $filename
+     * @return string
+     */
+    public function path($filename = null)
+    {
+        return $this->rootPath() . '/' . ($filename ?: $this->relative());
+    }
+
+    /**
      * @return mixed
      */
     public function get()
@@ -169,6 +180,15 @@ abstract class File implements MediaInterface
     public function relative()
     {
         return $this->directory . '/' . $this->filename;
+    }
+
+    /**
+     * @return string
+     */
+    public function root()
+    {
+        $default = config('filesystems.default');
+        return config("filesystems.disks.$default.root");
     }
 
     /**

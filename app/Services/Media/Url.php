@@ -43,17 +43,6 @@ class Url
     }
 
     /**
-     * Return full path (example: /var/www/makana.pl/storage/uploads/maps/12345.jpg)
-     *
-     * @param string|null $filename
-     * @return string
-     */
-    public function path($filename = null)
-    {
-        return $this->rootPath() . '/' . ($filename ?: $this->file->relative());
-    }
-
-    /**
      * @return string
      */
     public function __toString()
@@ -64,18 +53,9 @@ class Url
     /**
      * @return string
      */
-    protected function rootPath()
-    {
-        $default = config('filesystems.default');
-        return config("filesystems.disks.$default.root");
-    }
-
-    /**
-     * @return string
-     */
     protected function publicPath()
     {
-        return implode('/', array_diff(explode('/', $this->rootPath()), explode('/', public_path())));
+        return implode('/', array_diff(explode('/', $this->file->root()), explode('/', public_path())));
     }
 
     /**

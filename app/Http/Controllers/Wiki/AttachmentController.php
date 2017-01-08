@@ -20,7 +20,7 @@ class AttachmentController extends BaseAttachmentController
         $headers = $this->getHeaders($attachment->name, $attachment->mime, false, $attachment->size);
 
         return response()->download(
-            $attachment->file->url()->path(),
+            $attachment->file->path(),
             $attachment->name,
             $headers
         );
