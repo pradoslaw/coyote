@@ -35,12 +35,6 @@ elixir(function (mix) {
     ], 'public/js/jquery-ui.js')
 
     /*
-     | Komponent uzywany przy publikowaniu tekstu. laczy ze soba pluginy, np. dynamicznie zmieniajace
-     | rozmiar pola textarea, czy tez podpowiadajacy login uzytkownika w tekscie
-     */
-    .scripts(['plugins/prompt.js', 'plugins/autogrow.js', 'plugins/fast-submit.js', 'plugins/upload.js', 'plugins/input-focus.js'], 'public/js/posting.js')
-
-    /*
      | JS do prostego edytora markdown
      */
     .scripts(['plugins/wikieditor.js'], 'public/js/wikieditor.js')

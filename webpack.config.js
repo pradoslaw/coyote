@@ -22,6 +22,7 @@ module.exports = {
     context: path.join(__dirname, 'resources/assets/js'),
     entry: {
         app: './app.js',
+        posting: './posting.js',
         microblog: './pages/microblog.js',
         forum: './pages/forum.js',
         wiki: './pages/wiki.js',

@@ -131,6 +131,9 @@ $(function () {
                         });
 
                         return false;
+                    }).escape(function() {
+                        entryText.html(entries[$this.data('id')]);
+                        delete entries[$this.data('id')];
                     });
                 });
             } else {
@@ -194,11 +197,9 @@ $(function () {
                 form.addClass('js-editable');
 
                 var textarea = $('textarea', form);
-                textarea.autogrow().inputFocus().prompt().keydown(function(e) {
-                    if (e.keyCode === 27) {
-                        body.show();
-                        form.hide();
-                    }
+                textarea.autogrow().inputFocus().prompt().escape(function() {
+                    body.show();
+                    form.hide();
                 });
 
                 form.fastSubmit().submit(function() {
