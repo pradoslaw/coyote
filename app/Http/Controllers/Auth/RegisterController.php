@@ -10,7 +10,6 @@ use Coyote\Mail\UserRegistered;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
-use Illuminate\Mail\Message;
 
 class RegisterController extends Controller
 {
