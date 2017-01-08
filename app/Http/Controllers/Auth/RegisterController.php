@@ -6,6 +6,7 @@ use Coyote\Actkey;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Auth\RegisterForm;
+use Coyote\Mail\UserRegistered;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
@@ -66,11 +67,7 @@ class RegisterController extends Controller
             ]);
 
             $url = Actkey::createLink($user->id);
-
-            $this->getMailFactory()->queue('emails.auth.register', ['url' => $url], function (Message $message) use ($email) {
-                $message->to($email);
-                $message->subject('Dziękujemy za rejestrację. Potwierdź autentyczność swojego adresu e-mail');
-            });
+            $this->getMailFactory()->to($email)->send(new UserRegistered($url));
 
             auth()->login($user, true);
             stream(Stream_Create::class, new Stream_Person());
