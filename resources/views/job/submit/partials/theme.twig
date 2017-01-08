@@ -4,7 +4,7 @@
 {% endmacro %}
 
 {% macro group_open(name, class) %}
-    <div class="form-group {{ class }} {{ session_get('errors').first(name) ? 'has-error' }}">
+    <div class="form-group {{ class }} {{ session_get('errors').hasAny(name is iterable ? name : [name]) ? 'has-error' }}">
 {% endmacro %}
 
 {% macro group_close() %}
