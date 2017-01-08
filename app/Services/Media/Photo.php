@@ -4,7 +4,7 @@ namespace Coyote\Services\Media;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class Logo extends File
+class Photo extends File
 {
     /**
      * @param UploadedFile $uploadedFile
@@ -14,7 +14,7 @@ class Logo extends File
     {
         parent::upload($uploadedFile);
 
-        $this->thumbnail->file(new \Coyote\Services\Thumbnail\Objects\Logo())->make($this->url()->path());
+        $this->thumbnail->file(new \Coyote\Services\Thumbnail\Objects\Photo())->make($this->url()->path());
 
         return $this;
     }

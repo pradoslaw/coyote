@@ -25,14 +25,14 @@ abstract class AttachmentController extends Controller
             config('filesystems.upload_mimes')
         )]);
 
-        $media = $this->getMediaFactory('attachment')->upload($request->file('attachment'));
+        $media = $this->getMediaFactory()->make('attachment')->upload($request->file('attachment'));
         $mime = MimeTypeGuesser::getInstance();
 
         $attachment = $this->create([
             'size' => $media->size(),
             'file' => $media->getFilename(),
             'name' => $media->getName(),
-            'mime' => $mime->guess($media->path())
+            'mime' => $mime->guess($media->url()->path())
         ]);
 
         return $this->renderForm($attachment);
@@ -54,12 +54,12 @@ abstract class AttachmentController extends Controller
 
         $this->validateWith($validator);
 
-        $media = $this->getMediaFactory('attachment')->put(file_get_contents('data://' . substr($input, 7)));
+        $media = $this->getMediaFactory()->make('attachment')->put(file_get_contents('data://' . substr($input, 7)));
         $mime = MimeTypeGuesser::getInstance();
 
         $attachment = $this->create([
             'size' => $media->size(),
-            'mime' => $mime->guess($media->path()),
+            'mime' => $mime->guess($media->url()->path()),
             'file' => $media->getFilename(),
             'name' => $media->getName()
         ]);

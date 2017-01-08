@@ -36,10 +36,21 @@ class Media extends Twig_Extension
     /**
      * @param string $filename
      * @return string
+     * @throws \Exception
      */
     public function userPhoto($filename)
     {
-        return $filename ? $this->getMediaUrl('user_photo', $filename) : cdn('img/avatar.png');
+        if (!$filename) {
+            return cdn('img/avatar.png');
+        }
+
+        if (is_string($filename)) {
+            return $this->getMediaUrl('photo', $filename)->url();
+        } elseif ($filename instanceof MediaInterface) {
+            return $filename->url();
+        } else {
+            throw new \Exception('Parameter needs to be either string or MediaInterface object.');
+        }
     }
 
     /**
@@ -48,7 +59,7 @@ class Media extends Twig_Extension
      */
     public function logo($filename)
     {
-        return $filename ? $this->getMediaUrl('logo', $filename) : cdn('img/logo-gray.png');
+        return $filename ? (string) $this->getMediaUrl('logo', $filename)->url() : cdn('img/logo-gray.png');
     }
 
     /**
@@ -59,17 +70,16 @@ class Media extends Twig_Extension
      */
     public function thumbnail(MediaInterface $media)
     {
-        // @todo obecnie generuje miniatury tylko dla mikroblogow. moze warto to rozszerzyc?
-        return $media->getFactory()->getThumbnail()->url(new Microblog())->make($media->url());
+        return $media->url()->thumbnail(new Microblog());
     }
 
     /**
      * @param string $factory
      * @param string $filename
-     * @return string
+     * @return MediaInterface
      */
     private function getMediaUrl($factory, $filename)
     {
-        return $this->getMediaFactory($factory)->make(['file_name' => $filename])->url();
+        return $this->getMediaFactory()->make($factory, ['file_name' => $filename]);
     }
 }

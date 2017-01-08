@@ -3,7 +3,7 @@
 namespace Coyote;
 
 use Coyote\Services\Elasticsearch\CharFilters\MicroblogFilter;
-use Coyote\Services\Media\Factories\AbstractFactory;
+use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -128,8 +128,8 @@ class Microblog extends Model
             $factory = $this->getMediaFactory();
 
             foreach ($json['image'] as $image) {
-                $media[] = $factory->make([
-                    'file_name' => $image,
+                $media[] = $factory->make('attachment', [
+                    'file_name' => $image
                 ]);
             }
         }
@@ -215,11 +215,11 @@ class Microblog extends Model
     }
 
     /**
-     * @return AbstractFactory
+     * @return MediaFactory
      */
     protected function getMediaFactory()
     {
-        return app('media.attachment');
+        return app(MediaFactory::class);
     }
 
     /**

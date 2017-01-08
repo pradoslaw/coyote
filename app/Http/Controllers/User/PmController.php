@@ -241,7 +241,7 @@ class PmController extends BaseController
 
         $this->validateWith($validator);
 
-        $media = $this->getMediaFactory('screenshot')->put(file_get_contents('data://' . substr($input, 7)));
+        $media = $this->getMediaFactory()->make('screenshot')->put(file_get_contents('data://' . substr($input, 7)));
         $mime = MimeTypeGuesser::getInstance();
 
         return response()->json([
@@ -249,8 +249,8 @@ class PmController extends BaseController
             'suffix'    => 'png',
             'name'      => $media->getName(),
             'file'      => $media->getFilename(),
-            'mime'      => $mime->guess($media->path()),
-            'url'       => $media->url()
+            'mime'      => $mime->guess($media->url()->path()),
+            'url'       => (string) $media->url()
         ]);
     }
 

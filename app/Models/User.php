@@ -3,6 +3,8 @@
 namespace Coyote;
 
 use Coyote\Notifications\ResetPasswordNotification;
+use Coyote\Services\Media\Photo;
+use Coyote\Services\Media\Factory as MediaFactory;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -48,7 +50,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $firm
  * @property string $position
  * @property string $access_ip
- * @property string $photo
+ * @property \Coyote\Services\Media\MediaInterface $photo
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -206,6 +208,20 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function skills()
     {
         return $this->hasMany('Coyote\User\Skill')->orderBy('order');
+    }
+
+    /**
+     * @param string $value
+     * @return \Coyote\Services\Media\MediaInterface
+     */
+    public function getPhotoAttribute($value)
+    {
+        if (!($value instanceof Photo)) {
+            $photo = app(MediaFactory::class)->make('photo', ['file_name' => $value]);
+            $this->attributes['photo'] = $photo;
+        }
+
+        return $this->attributes['photo'];
     }
 
     /**

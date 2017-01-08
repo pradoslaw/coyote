@@ -184,10 +184,10 @@ class SubmitController extends Controller
             'photo'             => 'required|image|max:' . (config('filesystems.upload_max_size') * 1024)
         ]);
 
-        $media = $this->getMediaFactory('attachment')->upload($request->file('photo'));
+        $media = $this->getMediaFactory()->make('attachment')->upload($request->file('photo'));
 
         return response()->json([
-            'url' => $media->url(),
+            'url' => (string) $media->url(),
             'name' => $media->getFilename()
         ]);
     }
@@ -207,11 +207,11 @@ class SubmitController extends Controller
         );
 
         $this->validateWith($validator);
-        $media = $this->getMediaFactory('attachment')->put(file_get_contents('data://' . substr($input, 7)));
+        $media = $this->getMediaFactory()->make('attachment')->put(file_get_contents('data://' . substr($input, 7)));
 
         return response()->json([
             'name' => $media->getFilename(),
-            'url' => $media->url()
+            'url' => (string) $media->url()
         ]);
     }
 }
