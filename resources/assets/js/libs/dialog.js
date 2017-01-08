@@ -22,6 +22,10 @@ class Button {
         return this._options.onClick;
     }
 
+    set onClick(onClick) {
+        this.options.onClick = onClick;
+    }
+
     build() {
         return $('<button></button>').attr(this.attr).text(this.label).on('click', this.onClick);
     }
@@ -46,7 +50,7 @@ class Dialog {
         };
 
         this._options = $.extend(defaultOptions, options);
-        this._build();
+        this.build();
     }
 
     /**
@@ -64,12 +68,33 @@ class Dialog {
     }
 
     /**
+     * Get button by label name
+     *
+     * @param {string} label
+     * @return {object}
+     */
+    getButton(label) {
+        return this._options.buttons.filter(button => button.label == label)[0];
+    }
+
+    /**
      * Show dialog.
      */
     show() {
         this._modal.on('hidden.bs.modal', () => this.destroy()).modal('show');
     }
 
+    /**
+     * Close dialog
+     */
+    close() {
+        this._modal.modal('hide');
+        this.destroy();
+    }
+
+    /**
+     * Remove modal from DOM.
+     */
     destroy() {
         this._modal.remove();
     }
@@ -77,10 +102,9 @@ class Dialog {
     /**
      * Build dialog and return jQuery object.
      *
-     * @return {jQuery}
-     * @private
+     * @return {Dialog}
      */
-    _build() {
+    build() {
         this._modal = this._createDiv('modal fade').attr({role: 'dialog', 'aria-labelledby': 'alert-model', 'aria-hidden': true, tabindex: -1});
 
         let dialog = this._buildDialog();
@@ -98,7 +122,6 @@ class Dialog {
 
         if (this._options.form.attr.action) {
             this._modal.wrap(() => {
-                console.log(this._options.form.attr);
                 return $('<form>').attr(this._options.form.attr);
             });
 
@@ -106,6 +129,8 @@ class Dialog {
                 this._modal.append('<input type="hidden" name="_token" value="' + this._options.form.csrfToken + '">');
             }
         }
+
+        return this;
     }
 
     /**
