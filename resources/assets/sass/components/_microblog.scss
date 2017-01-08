@@ -151,6 +151,12 @@
       padding: 4px;
     }
 
+    .comment-body {
+      @include break-word;
+
+      width: calc(100% - 20px);
+    }
+
     // Comment text
     // ----------------
 
@@ -158,7 +164,6 @@
       font-size: 12px;
       display: inline;
 
-      @include break-word;
       @include link-color-darker;
 
       // markdown moze "produkowac" <p> w tresci komentarza. pierwsza linia komentarza musi byc na rowni
@@ -187,6 +192,7 @@
 
       font-size: 13px;
       display: inline;
+      margin-right: 3px;
     }
 
     .list-inline {

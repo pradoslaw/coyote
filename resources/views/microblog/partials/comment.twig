@@ -28,7 +28,7 @@
             <button type="submit" class="btn btn-xs btn-submit" title="Zapisz (Ctrl+Enter)"><i class="fa fa-fw fa-share-square-o"></i></button>
         {{ form_close() }}
 
-        <div class="comment-body margin-md-right">
+        <div class="comment-body">
             <h6>{{ link_to_profile(comment.user_id, comment.name, comment.is_active, comment.is_blocked) }}</h6>
             <div class="media-content">{{ comment.html|raw }}</div>
 
