@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Notifications\ResetPasswordNotification;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -254,5 +255,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
 
         return $access;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }
