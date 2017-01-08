@@ -52,7 +52,7 @@ class AttachmentController extends BaseAttachmentController
             200,
             $headers
         ) : response()->download(
-            $attachment->file->path(),
+            $attachment->file->url()->path(),
             $attachment->name,
             $headers
         );

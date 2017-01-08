@@ -83,6 +83,10 @@ class Url
      */
     private function makeUrl()
     {
+        if ($this->file->getDownloadUrl() && !$this->file->isImage()) {
+            return $this->file->getDownloadUrl();
+        }
+
         return cdn($this->publicPath() . '/' . $this->file->relative());
     }
 }

@@ -31,6 +31,11 @@ abstract class File implements MediaInterface
     /**
      * @var string
      */
+    protected $downloadUrl;
+
+    /**
+     * @var string
+     */
     protected $filename;
 
     /**
@@ -80,6 +85,25 @@ abstract class File implements MediaInterface
     }
 
     /**
+     * @return string
+     */
+    public function getDownloadUrl()
+    {
+        return $this->downloadUrl;
+    }
+
+    /**
+     * @param string $downloadUrl
+     * @return $this
+     */
+    public function setDownloadUrl($downloadUrl)
+    {
+        $this->downloadUrl = $downloadUrl;
+
+        return $this;
+    }
+
+    /**
      * @return Url
      */
     public function url()
@@ -111,7 +135,7 @@ abstract class File implements MediaInterface
     {
         $this->setName($uploadedFile->getClientOriginalName());
         $this->setFilename($this->getUniqueName($uploadedFile->getClientOriginalExtension()));
-        $this->put(file_get_contents($uploadedFile->getRealPath()));
+        $this->filesystem->put($this->relative(), file_get_contents($uploadedFile->getRealPath()));
 
         return $this;
     }
@@ -145,6 +169,14 @@ abstract class File implements MediaInterface
     public function relative()
     {
         return $this->directory . '/' . $this->filename;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImage()
+    {
+        return in_array(pathinfo($this->getFilename(), PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
     }
 
     /**

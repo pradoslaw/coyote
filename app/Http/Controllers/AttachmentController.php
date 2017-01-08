@@ -83,7 +83,7 @@ abstract class AttachmentController extends Controller
         // we're changing field name because front end expect this field to be an array
         $form->get('id')->setName('attachments[][id]');
 
-        return $form->render();
+        return (string) $form->render();
     }
 
     /**

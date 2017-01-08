@@ -57,4 +57,9 @@ interface MediaInterface
      * @return bool
      */
     public function delete();
+
+    /**
+     * @return bool
+     */
+    public function isImage();
 }
