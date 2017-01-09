@@ -173,13 +173,13 @@ abstract class File implements MediaInterface
     }
 
     /**
-     * Return relative path. Example: maps/1234.jpg
+     * Return relative path. Example: attachment/1234.jpg
      *
      * @return string
      */
     public function relative()
     {
-        return $this->directory . '/' . $this->filename;
+        return $this->directory() . '/' . $this->filename;
     }
 
     /**
@@ -245,5 +245,23 @@ abstract class File implements MediaInterface
     protected function getHumanName($extension)
     {
         return 'screenshot-' . date('YmdHis') . '.' . $extension;
+    }
+
+    /**
+     * @return string
+     */
+    protected function directory()
+    {
+        if (strlen($this->filename) !== 17) {
+            return $this->directory;
+        }
+
+        $timestamp = hexdec(substr($this->filename, 0, 8));
+        // as of 15th of Jan, we decided to put files into subdirectories
+        if ($timestamp < 1484438400) {
+            return $this->directory;
+        }
+
+        return $this->directory . '/' . substr($this->filename, 0, 2);
     }
 }
