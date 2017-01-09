@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
 
 class PostForm extends Form
 {
-    const RULE_USER_NAME            = 'sometimes|required|string|min:2|max:20';
+    const RULE_USER_NAME            = 'required|string|min:2|max:20';
     const RULE_USER_UNIQUE          = 'unique:users,name';
     const RULE_SUBJECT              = 'sometimes|required|min:3|max:200';
     const RULE_TEXT                 = 'required';
@@ -87,6 +87,16 @@ class PostForm extends Form
                 }
             }
         });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setupRules()
+    {
+        parent::setupRules();
+
+        $this->request->merge(array_filter(array_map('trim', $this->request->only('subject', 'user_name', 'text'))));
     }
 
     /**

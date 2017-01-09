@@ -175,7 +175,7 @@ abstract class FormRequest
     /**
      * Validate the class instance.
      *
-     * @return \Illuminate\Validation\Validator
+     * @return Validator
      */
     public function validate()
     {
@@ -205,7 +205,7 @@ abstract class FormRequest
      * Get the validator instance for the request.
      * This code overrides getValidatorInstance() method from ValidatesWhenResolvedTrait.
      *
-     * @return \Illuminate\Validation\Validator
+     * @return Validator
      */
     protected function getValidatorInstance()
     {
