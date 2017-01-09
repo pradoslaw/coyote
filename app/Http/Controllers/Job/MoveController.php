@@ -7,7 +7,6 @@ use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Repositories\Contracts\PollRepositoryInterface as PollRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
@@ -74,26 +73,36 @@ class MoveController extends Controller
         /** @var \Coyote\Post $post */
         $post = app(PostRepository::class)->newInstance();
 
-        $topic->subject = $job->title;
-        $post->text = $job->description;
+        $topic->fill(['subject' => $job->title]);
+        $topic->forum()->associate($forum);
+
+        /** @var StreamRepositoryInterface $stream */
+        $stream = app(StreamRepositoryInterface::class);
+
+        $log = $stream->findWhere(['object.objectType' => 'job', 'object.id' => $job->id, 'verb' => 'create'])->first();
+
+        $post->forceFill([
+            'user_id'   => $job->user_id,
+            'text'      => $job->description,
+            'ip'        => $log->ip,
+            'browser'   => $log->browser,
+            'host'      => gethostbyaddr($log->ip)
+        ]);
 
         $this->transaction(function () use ($request, $job, $forum, $topic, $post) {
-            $poll = app(PollRepository::class)->newInstance();
-            /** @var StreamRepositoryInterface $stream */
-            $stream = app(StreamRepositoryInterface::class);
+            $topic->save();
 
-            $log = $stream->findWhere(['object.objectType' => 'job', 'object.id' => $job->id, 'verb' => 'create'])->first();
-            $this->post->save($request, $job->user, $forum, $topic, $post, $poll);
+            $post->forum()->associate($forum);
+            $post->topic()->associate($topic);
+
+            $post->save();
 
             if ($job->user_id !== $job->user->id) {
                 $post->subscribers()->create(['user_id' => $job->user_id]);
             }
 
-            // ugly fix: set correct IP according to job offer's author
-            $ip = ['ip' => $log->ip, 'browser' => $log->browser];
-
-            $post->update($ip);
-            $post->logs()->first()->update($ip);
+            $log = new \Coyote\Post\Log();
+            $log->fillWithPost($post)->fill(['subject' => $topic->subject]);
 
             event(new JobDeleting($job));
 

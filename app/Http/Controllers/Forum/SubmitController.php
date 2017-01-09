@@ -71,9 +71,9 @@ class SubmitController extends BaseController
         $form = $this->getForm($forum, $topic, $post);
         $form->validate();
 
-        $request = $form->getRequest();
+        return $this->transaction(function () use ($form, $forum, $topic, $post) {
+            $request = $form->getRequest();
 
-        return $this->transaction(function () use ($request, $forum, $topic, $post) {
             $actor = new Stream_Actor($this->auth);
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
@@ -83,7 +83,7 @@ class SubmitController extends BaseController
 
             $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
             // saving post through repository... we need to pass few object to save relationships
-            $this->post->save($request, $this->auth, $forum, $topic, $post, $poll);
+            $this->post->save($form, $this->auth, $forum, $topic, $post, $poll);
 
             // url to the post
             $url = UrlBuilder::post($post);
