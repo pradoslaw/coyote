@@ -1,3 +1,5 @@
+import declination from '../../components/declination';
+
 $(function () {
     'use strict';
 
@@ -365,17 +367,20 @@ $(function () {
         $('strong', $(this).parents('form')).text(580 - parseInt($(this).val().length));
     })
     .on('click', '.btn-comment-edit', function() {
-        var $comment = $(this).parent();
+        let $comment = $(this).parent();
+        let id = $comment.data('comment-id');
 
         $.get($(this).attr('href'), function(html) {
-            comments[$comment.data('comment-id')] = $comment.html();
-            $comment.html(html).find('textarea').prompt().fastSubmit().autogrow().inputFocus();
+            comments[id] = $comment.html();
+            $comment.html(html).find('textarea').prompt().fastSubmit().autogrow().inputFocus().escape(function() {
+                $comment.html(comments[id]);
+            });
         });
 
         return false;
     })
     .on('click', '.btn-reset', function() {
-        var $comment = $(this).parent().parent();
+        let $comment = $(this).parent().parent();
 
         $comment.html(comments[$comment.data('comment-id')]);
         return false;
@@ -402,13 +407,18 @@ $(function () {
     var posts = {};
 
     $('.btn-fast-edit').click(function() {
-        var $this = $(this);
-        var $post = $('.post-content[data-post-id="' + $this.data('post-id') + '"]');
+        let $this = $(this);
+        let $post = $('.post-content[data-post-id="' + $this.data('post-id') + '"]');
 
         if (!$this.hasClass('active')) {
             $.get($this.attr('href'), function(html) {
-                posts[$this.data('post-id')] = $post.html();
-                $post.html(html).find('textarea').prompt().fastSubmit().autogrow().inputFocus();
+                let id = $this.data('post-id');
+
+                posts[id] = $post.html();
+                $post.html(html).find('textarea').prompt().fastSubmit().autogrow().inputFocus().escape(function() {
+                    $post.html(posts[id]);
+                    $this.removeClass('active');
+                });
 
                 $this.addClass('active');
             })

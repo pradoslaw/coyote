@@ -1,3 +1,6 @@
+import '../components/subscribe';
+import Dialog from '../libs/dialog';
+
 $(() => {
     'use strict';
 
@@ -19,9 +22,6 @@ $(() => {
             form.find(':submit').removeAttr('disabled').text('Zapisz');
         })
         .error(event => {
-            let modal = $('#modal-error');
-            modal.modal('show');
-
             if (typeof event.responseJSON !== 'undefined') {
                 let error = '';
 
@@ -33,7 +33,7 @@ $(() => {
                     error = event.responseJSON[key];
                 }
 
-                modal.find('.modal-body').text(error);
+                Dialog.alert({message: error}).show();
             }
         });
 

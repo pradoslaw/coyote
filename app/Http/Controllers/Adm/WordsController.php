@@ -41,7 +41,7 @@ class WordsController extends BaseController
      */
     public function save(Request $request)
     {
-        $original = $this->word->lists('replacement', 'word');
+        $original = $this->word->pluck('replacement', 'word');
         $input = array_combine($request->input('word'), $request->input('replacement'));
 
         $this->transaction(function () use ($original, $input) {

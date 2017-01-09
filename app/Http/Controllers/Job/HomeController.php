@@ -22,11 +22,6 @@ class HomeController extends Controller
     const DEFAULT_TAB = self::TAB_FILTERED;
 
     /**
-     * @var Request
-     */
-    private $request;
-
-    /**
      * @var JobRepository
      */
     private $job;
@@ -56,7 +51,6 @@ class HomeController extends Controller
 
         $this->middleware('geocode');
 
-        $this->request = $request;
         $this->job = $job;
         $this->builder = new SearchBuilder($request);
 
@@ -189,14 +183,14 @@ class HomeController extends Controller
             $selected = [
                 'tags'          => $this->builder->tag->getTags(),
                 'cities'        => array_map('mb_strtolower', $this->builder->city->getCities()),
-                'remote'        => $this->request->has('remote') || $this->getRouter()->currentRouteName() === 'job.remote'
+                'remote'        => $this->request->has('remote') || $this->request->route()->getName() === 'job.remote'
             ];
         }
 
         return $this->view('job.home', [
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
-            'currencyList'      => Currency::lists('name', 'id'),
+            'currencyList'      => Currency::pluck('name', 'id'),
             'preferences'       => $this->preferences,
             'tabs'              => $this->getTabs(),
             'tab'               => $this->tab

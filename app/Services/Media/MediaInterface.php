@@ -2,15 +2,10 @@
 
 namespace Coyote\Services\Media;
 
-use Coyote\Services\Media\Factories\AbstractFactory as MediaFactory;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface MediaInterface
 {
-    /**
-     * @return MediaFactory
-     */
-    public function getFactory();
-
     /**
      * @return string
      */
@@ -32,30 +27,17 @@ interface MediaInterface
     public function getName();
 
     /**
-     * @return string
-     */
-    public function getDownloadUrl();
-
-    /**
-     * @param string $downloadUrl
-     * @return $this
-     */
-    public function setDownloadUrl($downloadUrl);
-
-    /**
-     * @return string
-     */
-    public function path();
-
-    /**
-     * @return string
+     * @return Url
      */
     public function url();
 
     /**
-     * @param mixed $content
+     * Return full path (example: /var/www/makana.pl/storage/uploads/maps/12345.jpg)
+     *
+     * @param string|null $filename
+     * @return string
      */
-    public function put($content);
+    public function path($filename = null);
 
     /**
      * @return mixed
@@ -68,12 +50,29 @@ interface MediaInterface
     public function size();
 
     /**
-     * @return bool
+     * @param UploadedFile $uploadedFile
+     * @return MediaInterface
      */
-    public function isImage();
+    public function upload(UploadedFile $uploadedFile);
+
+    /**
+     * @param mixed $content
+     * @return MediaInterface
+     */
+    public function put($content);
 
     /**
      * @return bool
      */
     public function delete();
+
+    /**
+     * @return bool
+     */
+    public function isImage();
+
+    /**
+     * @return string
+     */
+    public function root();
 }

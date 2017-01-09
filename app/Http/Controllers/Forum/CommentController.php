@@ -35,17 +35,18 @@ class CommentController extends Controller
      */
     private $post;
 
-    /**
-     * @param Request $request
-     */
-    public function __construct(Request $request)
+    public function __construct()
     {
         parent::__construct();
 
-        // set variables from middleware
-        foreach ($request->attributes->keys() as $key) {
-            $this->$key = $request->attributes->get($key);
-        }
+        $this->middleware(function (Request $request, $next) {
+            // set variables from middleware
+            foreach ($request->attributes->keys() as $key) {
+                $this->{$key} = $request->attributes->get($key);
+            }
+
+            return $next($request);
+        });
     }
 
     /**
@@ -102,7 +103,7 @@ class CommentController extends Controller
                 ];
 
                 $subscribersId = $this->forum->onlyUsersWithAccess(
-                    $this->post->subscribers()->lists('user_id')->toArray()
+                    $this->post->subscribers()->pluck('user_id')->toArray()
                 );
 
                 if ($subscribersId) {

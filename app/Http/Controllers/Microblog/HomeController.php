@@ -44,17 +44,6 @@ class HomeController extends Controller
         // we MUST NOT cache popular entries because it may contains current user's data
         $popular = $this->microblog->takePopular(5);
 
-        $parser = app('parser.microblog');
-
-        foreach ($microblogs->items() as &$microblog) {
-            /** @var \Coyote\Microblog $microblog */
-            $microblog->text = $parser->parse($microblog->text);
-
-            foreach ($microblog->comments as &$comment) {
-                $comment->html = $parser->parse($comment->text);
-            }
-        }
-
         return $this->view('microblog.home', [
             'count'                     => $this->microblog->count(),
             'count_user'                => $this->microblog->countForUser($this->userId),

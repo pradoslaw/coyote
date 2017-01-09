@@ -4,11 +4,11 @@ namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
 use Coyote\Forum;
+use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Topic;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -129,7 +129,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(Request $request, $user, Forum $forum, Topic $topic, Post $post, $poll)
+    public function save(PostForm $form, $user, Forum $forum, Topic $topic, Post $post, $poll)
     {
         $postId = $post->id;
         $log = new Post\Log();
@@ -137,14 +137,14 @@ class PostRepository extends Repository implements PostRepositoryInterface
         /**
          * @var $topic Topic
          */
-        $topic->fill($request->all());
+        $topic->fill($form->all());
         $topic->forum()->associate($forum);
         $topic->poll()->associate($poll);
 
         $topic->save();
-        $tags = $request->get('tags', []);
+        $tags = $form->getRequest()->get('tags', []);
 
-        if ($topic->wasRecentlyCreated || $postId == $topic->first_post_id) {
+        if (is_array($tags) && ($topic->wasRecentlyCreated || $postId == $topic->first_post_id)) {
             // assign tags to topic
             $topic->setTags($tags);
         }
@@ -152,19 +152,16 @@ class PostRepository extends Repository implements PostRepositoryInterface
         /**
          * @var $post Post
          */
-        $post->fill($request->all());
+        $post->fill($form->all());
 
         if (empty($postId)) {
             if ($user) {
                 $post->user()->associate($user);
             }
 
-            /**
-             * @var $request \Coyote\Http\CustomRequest
-             */
-            $post->ip = $request->ip();
-            $post->browser = $request->browser();
-            $post->host = gethostbyaddr($request->ip());
+            $post->ip = $form->getRequest()->ip();
+            $post->browser = $form->getRequest()->browser();
+            $post->host = gethostbyaddr($form->getRequest()->ip());
         }
 
         $log->fillWithPost($post)->fill(['subject' => $topic->subject, 'tags' => $tags]);
@@ -188,7 +185,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             $post->logs()->save($log);
         }
 
-        $post->syncAttachments(array_pluck($request->get('attachments', []), 'id'));
+        $post->syncAttachments(array_pluck($form->getRequest()->get('attachments', []), 'id'));
 
         if ($user) {
             if (empty($postId)) {
@@ -196,7 +193,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 $post->subscribe($user->id, true);
             }
 
-            $topic->subscribe($user->id, $request->get('subscribe'));
+            $topic->subscribe($user->id, $form->getRequest()->get('subscribe'));
         }
 
         return $post;

@@ -74,7 +74,7 @@ class CommentController extends Controller
             $parent = $microblog->parent;
 
             if ($microblog->wasRecentlyCreated) {
-                $subscribers = $parent->subscribers()->lists('user_id')->toArray();
+                $subscribers = $parent->subscribers()->pluck('user_id')->toArray();
                 $alert = new Container();
 
                 // we need to send alerts AFTER saving comment to database because we need ID of comment
@@ -176,12 +176,8 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        $parser = app('parser.microblog');
         $comments = $this->microblog->getComments([$id])->slice(0, -2);
 
-        foreach ($comments as &$comment) {
-            $comment->html = $parser->parse($comment->text);
-        }
         return view('microblog.partials.comments', ['microblog' => ['id' => $id], 'comments' => $comments]);
     }
 }

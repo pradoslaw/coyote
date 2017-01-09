@@ -42,44 +42,4 @@ class FunctionalTester extends \Codeception\Actor
 
         return $user;
     }
-
-    public function createForum($attributes = [])
-    {
-        $fake = Factory::create();
-
-        $data = [
-            'name' => $name = $fake->name,
-            'slug' => str_slug($name),
-            'description' => $fake->text
-        ];
-
-        return \Coyote\Forum::forceCreate(array_merge($data, $attributes));
-    }
-
-    public function createTopic($attributes)
-    {
-        $fake = Factory::create();
-
-        $data = [
-            'subject' => $name = $fake->name,
-            'slug' => str_slug($name)
-        ];
-
-        return \Coyote\Topic::forceCreate(array_merge($data, $attributes));
-    }
-
-    public function createPost($attributes)
-    {
-        $fake = Factory::create();
-
-        $data = [
-            'text' => $fake->text,
-            'ip' => $fake->ipv4,
-            'browser' => $fake->userAgent,
-            'host' => $fake->domainName,
-            'user_id' => null
-        ];
-
-        return \Coyote\Post::forceCreate(array_merge($data, $attributes));
-    }
 }

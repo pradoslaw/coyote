@@ -5,13 +5,13 @@
  * @param declinationSet
  * @returns {*}
  */
-function declination(value, declinationSet) {
+module.exports = function declination(value, declinationSet) {
     if (value == 1) {
         return declinationSet[0];
     }
     else {
-        var unit = value % 10;
-        var decimal = Math.round((value % 100) / 10);
+        let unit = value % 10;
+        let decimal = Math.round((value % 100) / 10);
 
         if ((unit == 2 || unit == 2 || unit == 3 || unit == 4) && (decimal != 1)) {
             return declinationSet[1];
@@ -20,4 +20,4 @@ function declination(value, declinationSet) {
             return declinationSet[2];
         }
     }
-}
+};

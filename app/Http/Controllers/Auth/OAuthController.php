@@ -78,7 +78,7 @@ class OAuthController extends Controller
                 $filename = null;
 
                 if ($photoUrl) {
-                    $media = $this->getMediaFactory('user_photo')->put(file_get_contents($photoUrl));
+                    $media = $this->getMediaFactory()->make('user_photo')->put(file_get_contents($photoUrl));
                     $filename = $media->getFilename();
                 }
 

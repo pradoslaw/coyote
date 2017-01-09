@@ -11,11 +11,11 @@
             <div class="panel-body comment">
                 {% if can('wiki-admin') or comment.user_id == user('id') %}
                     <div class="dropdown pull-right">
-                        <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="comment-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="comment-menu-{{ comment.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
                         </button>
 
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu">
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu-{{ comment.id }}">
                             <li><a href="javascript:" class="btn-edit" data-id="{{ comment.id }}"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
                             <li><a href="javascript:" data-target="#modal-confirm-{{ comment.id }}" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
                         </ul>
@@ -31,9 +31,9 @@
                     </li>
                 </ul>
 
-                <p class="comment-content">
+                <div class="comment-content">
                     {{ comment.html|raw }}
-                </p>
+                </div>
 
                 {% if can('wiki-admin') or comment.user_id == user('id') %}
                     {{ form_open({url: route('wiki.comment.save', [wiki.id, comment.id]), class: 'comment-form'}) }}

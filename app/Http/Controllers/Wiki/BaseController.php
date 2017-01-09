@@ -19,15 +19,19 @@ abstract class BaseController extends Controller
     protected $parents;
 
     /**
-     * @param Request $request
      * @param WikiRepository $wiki
      */
-    public function __construct(Request $request, WikiRepository $wiki)
+    public function __construct(WikiRepository $wiki)
     {
         parent::__construct();
 
         $this->wiki = $wiki;
-        $this->buildBreadcrumb($request->wiki);
+
+        $this->middleware(function (Request $request, $next) {
+            $this->buildBreadcrumb($request->attributes->get('wiki'));
+
+            return $next($request);
+        });
     }
 
     /**

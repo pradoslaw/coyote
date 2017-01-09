@@ -20,10 +20,10 @@ class SubmitController extends Controller
             'logo'             => 'required|image'
         ]);
 
-        $media = $this->getMediaFactory('logo')->upload($request->file('logo'));
+        $media = $this->getMediaFactory()->make('logo')->upload($request->file('logo'));
 
         return response()->json([
-            'url' => $media->url(),
+            'url' => (string) $media->url(),
             'name' => $media->getFilename()
         ]);
     }

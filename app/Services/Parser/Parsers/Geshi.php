@@ -29,15 +29,8 @@ class Geshi implements ParserInterface
             // class may have prefix "language". omit it.
             if (substr($language, 0, 8) === 'language') {
                 $language = substr($language, 9);
-            }
-
-            if (isset($alias[$language])) {
-                $language = $alias[$language];
-            }
-
-            if ($language) {
                 /* nadaj jezyk kolorowania skladnii */
-                $geshi->set_language($language, true);
+                $geshi->set_language(isset($alias[$language]) ? $alias[$language] : $language, true);
             }
 
             $geshi->set_source(htmlspecialchars_decode($matches[2][$i]));

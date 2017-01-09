@@ -12,7 +12,7 @@
 
                     <small class="text-muted">
                         {% include 'job.partials.location' with {
-                            locations: job.locations.lists('city'),
+                            locations: job.locations.pluck('city'),
                             separator: job.firm is not null,
                             linkable: false
                         } %}
@@ -26,7 +26,7 @@
                 </p>
 
                 {% if job.tags %}
-                    <ul class="tag-clouds">
+                    <ul class="tag-clouds tag-clouds-xs">
                         {% for tag in job.tags[0:3] %}
                             <li><span>{{ tag }}</span></li>
                         {% endfor %}

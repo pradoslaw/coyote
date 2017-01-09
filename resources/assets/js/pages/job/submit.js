@@ -1,3 +1,6 @@
+import '../../plugins/uploader';
+import '../job/tinymce';
+
 class Tags {
     constructor(options) {
         let defaults = {
@@ -27,8 +30,6 @@ class Tags {
         this.onItemClick();
         this.onRemove();
 
-        // let self = this;
-
         $(document).bind('click', e => {
             let $target = $(e.target);
 
@@ -39,8 +40,6 @@ class Tags {
     }
 
     onKeyUp() {
-        // let self = this;
-
         this.input.on('keyup', e => {
             let keyCode = e.keyCode || window.event.keyCode;
 
@@ -104,8 +103,6 @@ class Tags {
     }
 
     onItemClick() {
-        // let self = this;
-
         this.dropdown.on('click', 'li', e => {
             this.addTag($(e.currentTarget).find('span').text());
             this.hideDropdown();
@@ -121,8 +118,6 @@ class Tags {
     }
 
     onFocus() {
-        // let self = this;
-
         this.input.on('focus click', () => {
             this.dropdown.show();
         });
@@ -165,8 +160,6 @@ class Tags {
             .toLowerCase()
             .replace(/ /g, '-');
 
-        // let self = this;
-
         $.post(this.input.data('post-url'), {name: value}, html => {
             this.container.append(html);
         }).fail(() => {
@@ -197,16 +190,18 @@ $(() => {
         .on('click', ':submit', () => $('#job-posting').submit())
         .on('click', 'button[data-submit-state]', e => $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state')));
 
-    $(window).scroll(() => {
-        let bottom = $(window).scrollTop() + $(window).height();
+    if (navigation.length) {
+        $(window).scroll(() => {
+            let bottom = $(window).scrollTop() + $(window).height();
 
-        if (bottom > navigation.offset().top) {
-            fixed.fadeOut();
-        }
-        else {
-            fixed.show();
-        }
-    }).trigger('scroll');
+            if (bottom > navigation.offset().top) {
+                fixed.fadeOut();
+            }
+            else {
+                fixed.show();
+            }
+        }).trigger('scroll');
+    }
 
     /**
      * Save and exit button

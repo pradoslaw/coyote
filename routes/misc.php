@@ -22,3 +22,8 @@ $this->get('Flag/Delete/{id}', ['uses' => 'FlagController@modal', 'middleware' =
 $this->get('sitemap/{sitemap?}', ['uses' => 'SitemapController@index', 'as' => 'sitemap']);
 
 $this->get('Search', ['uses' => 'SearchController@index', 'as' => 'search']);
+
+// Ping request to the server
+// -----------------------------
+
+$this->get('ping', ['uses' => 'User\PingController@index'])->name('ping');

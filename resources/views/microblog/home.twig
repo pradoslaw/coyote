@@ -3,7 +3,6 @@
 {% block description %}Mikroblogi umożliwiają prowadzenie własnego dziennika programistycznego. Jeżeli masz coś ciekawego do zakomunikowania, znalazłeś ciekawy link, chcesz się podzielić fragmentem ciekawego kodu źródłowego, to jest miejsce dla Ciebie.{% endblock %}
 {% block keywords %}blog, programista, programiści, newsy{% endblock %}
 
-{% import 'components.forms' as forms %}
 {% import 'components.modals' as modal %}
 
 {% block container %}
@@ -54,11 +53,13 @@
             <div id="box-popular-tags" class="box">
                 <h4 class="border"><i class="fa fa-tag fa-fw"></i> Popularne tagi</h4>
 
-                <ul class="tag-clouds">
-                    {% for name, count in tags %}
-                        <li><a href="{{ route('microblog.tag', [name]) }}">{{ name }} <small>({{ count }})</small></a></li>
-                    {% endfor %}
-                </ul>
+                <div class="padding-sm-top padding-sm-bottom">
+                    <ul class="tag-clouds cloud">
+                        {% for name, count in tags %}
+                            <li><a href="{{ route('microblog.tag', [name]) }}">{{ name }}</a><small>× {{ count }}</small></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
 
             <div id="box-popular-entries" class="box">
@@ -87,15 +88,10 @@
             </div>
         </aside>
     </div>
-
-    {{ modal.alert('Nie można dodać załącznika. Być może plik ma nieprawidłowy format lub jest zbyt duży?') }}
-    {{ modal.confirm('Czy na pewno usunąć ten wpis?') }}
 {% endblock %}
 
 {% block head %}
     {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/microblog.css') }}">
 
     <script>
         var uploadUrl = '{{ route('microblog.upload') }}';
@@ -104,9 +100,10 @@
 {% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/microblog.css') }}">
+
     {{ parent() }}
 
     <script src="{{ cdn('js/microblog.js') }}"></script>
     <script src="{{ cdn('js/posting.js') }}"></script>
-    <script src="{{ cdn('js/modal.js') }}"></script>
 {% endblock %}

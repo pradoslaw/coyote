@@ -14,7 +14,19 @@
     margin-right: #{$width};
   }
 
+  .margin-#{$size}-left {
+    margin-left: #{$width};
+  }
+
   .padding-#{$size} {
     padding: #{$width};
+  }
+
+  .padding-#{$size}-top {
+    padding-top: #{$width};
+  }
+
+  .padding-#{$size}-bottom {
+    padding-bottom: #{$width};
   }
 }

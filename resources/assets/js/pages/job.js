@@ -1,3 +1,5 @@
+import '../components/subscribe';
+import '../plugins/tags';
 
 class Filter {
     constructor(form) {

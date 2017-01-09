@@ -150,38 +150,19 @@
 {% block head %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="{{ cdn('css/profile.css') }}">
-    <link rel="stylesheet" href="{{ cdn('css/microblog.css') }}">
-
     <script type="text/javascript">
         var uploadUrl = '{{ route('microblog.upload') }}';
     </script>
 {% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/profile.css') }}">
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/microblog.css') }}">
+
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/modal.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/perfect-scrollbar.js') }}"></script>
     <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
     <script type="text/javascript" src="{{ cdn('js/microblog.js') }}"></script>
-    <script>
-        $(function() {
-            var isReady = true;
 
-            $('#wrap').perfectScrollbar().on('ps-y-reach-end', function() {
-                if (!isReady) {
-                    return;
-                }
-
-                var offset = $('#reputation').find('.reputation-item').length;
-                isReady = false;
-
-                $.get(_config.profile_history, {offset: offset}, function(html) {
-                    $('#reputation').append(html);
-                    isReady = true;
-                });
-            });
-        });
-    </script>
+    <script src="{{ cdn('js/profile.js') }}"></script>
 {% endblock %}

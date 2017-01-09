@@ -2,6 +2,9 @@
 
 namespace Coyote;
 
+use Coyote\Notifications\ResetPasswordNotification;
+use Coyote\Services\Media\Photo;
+use Coyote\Services\Media\Factory as MediaFactory;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -9,6 +12,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @property int $id
@@ -46,11 +50,11 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @property string $firm
  * @property string $position
  * @property string $access_ip
- * @property string $photo
+ * @property \Coyote\Services\Media\MediaInterface $photo
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable, Authorizable, CanResetPassword, Notifiable;
 
     /**
      * The database table used by the model.
@@ -207,11 +211,25 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
+     * @param string $value
+     * @return \Coyote\Services\Media\MediaInterface
+     */
+    public function getPhotoAttribute($value)
+    {
+        if (!($value instanceof Photo)) {
+            $photo = app(MediaFactory::class)->make('photo', ['file_name' => $value]);
+            $this->attributes['photo'] = $photo;
+        }
+
+        return $this->attributes['photo'];
+    }
+
+    /**
      * @return int[]
      */
     public function getGroupsId()
     {
-        return $this->groups()->lists('id')->toArray();
+        return $this->groups()->pluck('id')->toArray();
     }
 
     /**
@@ -227,7 +245,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             ->orderBy('value')
             ->select(['name', 'value'])
             ->get()
-            ->lists('value', 'name');
+            ->pluck('value', 'name');
     }
 
     /**
@@ -253,5 +271,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
 
         return $access;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

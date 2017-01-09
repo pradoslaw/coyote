@@ -44,8 +44,12 @@ class HomeController extends Controller
      * @param PostRepository $post
      * @param MicroblogRepository $microblog
      */
-    public function __construct(UserRepository $user, ReputationRepository $reputation, PostRepository $post, MicroblogRepository $microblog)
-    {
+    public function __construct(
+        UserRepository $user,
+        ReputationRepository $reputation,
+        PostRepository $post,
+        MicroblogRepository $microblog
+    ) {
         parent::__construct();
 
         $this->user = $user;
@@ -61,12 +65,8 @@ class HomeController extends Controller
      */
     public function index($user, $tab = 'reputation')
     {
-        $this->validateWith(
-            $this->getValidationFactory()->make(['tab' => strtolower($tab)], ['tab' => 'in:history,reputation,post,microblog'])
-        );
-
         $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
-        $this->public['profile_history'] = route('profile.history', [$user->id]);
+        $this->public['reputation_url'] = route('profile.history', [$user->id]);
 
         $menu = $this->getUserMenu();
 
@@ -83,20 +83,6 @@ class HomeController extends Controller
             'tab'           => strtolower($tab),
             'module'        => $this->$tab($user)
         ]);
-    }
-
-    /**
-     * Run the validation routine against the given validator.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @param  \Illuminate\Http\Request|null  $request
-     * @return void
-     */
-    public function validateWith($validator, Request $request = null)
-    {
-        if ($validator->fails()) {
-            abort(404);
-        }
     }
 
     /**
@@ -152,32 +138,15 @@ class HomeController extends Controller
      */
     private function microblog(User $user)
     {
-        $microblogs = $this->getMicroblogs($user);
-
-        return view('profile.partials.microblog', [
-            'user' => $user,
-            'microblogs' => $microblogs->items(),
-            'pagination' => $microblogs->render()
-        ]);
-    }
-
-    private function getMicroblogs(User $user)
-    {
-        // @todo podobny kod (w 99%) znajduje sie w kontrolerze Microblog\HomeController@index
         $this->microblog->resetCriteria();
         $this->microblog->pushCriteria(new OnlyMine($user->id));
 
         $microblogs = $this->microblog->paginate(10);
-        $parser = app('parser.microblog');
 
-        foreach ($microblogs as &$microblog) {
-            $microblog->text = $parser->parse($microblog->text);
-
-            foreach ($microblog->comments as &$comment) {
-                $comment->html = $parser->parse($comment->text);
-            }
-        }
-
-        return $microblogs;
+        return view('profile.partials.microblog', [
+            'user'          => $user,
+            'microblogs'    => $microblogs->items(),
+            'pagination'    => $microblogs->render()
+        ]);
     }
 }

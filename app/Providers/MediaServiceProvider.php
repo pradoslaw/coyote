@@ -3,11 +3,8 @@
 namespace Coyote\Providers;
 
 use Coyote\Http\Factories\FilesystemFactory;
-use Coyote\Services\Media\Factories\AttachmentFactory;
-use Coyote\Services\Media\Factories\LogoFactory;
-use Coyote\Services\Media\Factories\ScreenshotFactory;
-use Coyote\Services\Media\Factories\UserPhotoFactory;
 use Illuminate\Support\ServiceProvider;
+use Coyote\Services\Media\Factory;
 
 class MediaServiceProvider extends ServiceProvider
 {
@@ -37,20 +34,8 @@ class MediaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('media.attachment', function ($app) {
-            return new AttachmentFactory($this->getFilesystemFactory(), $app['thumbnail']);
-        });
-
-        $this->app->singleton('media.logo', function ($app) {
-            return new LogoFactory($this->getFilesystemFactory(), $app['thumbnail']);
-        });
-
-        $this->app->singleton('media.screenshot', function ($app) {
-            return new ScreenshotFactory($this->getFilesystemFactory(), $app['thumbnail']);
-        });
-
-        $this->app->singleton('media.user_photo', function ($app) {
-            return new UserPhotoFactory($this->getFilesystemFactory(), $app['thumbnail']);
+        $this->app->singleton('media.factory', function ($app) {
+            return new Factory($app);
         });
     }
 
@@ -61,6 +46,6 @@ class MediaServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['media.attachment', 'media.logo', 'media.screenshot', 'media.user_photo'];
+        return ['media.factory', Factory::class];
     }
 }

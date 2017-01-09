@@ -3,6 +3,7 @@
 namespace Coyote\Exceptions;
 
 use Exception;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Session\TokenMismatchException;
@@ -10,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -39,7 +41,7 @@ class Handler extends ExceptionHandler
     {
         if ($this->shouldReport($e)) {
             // log input data and url for further analyse
-            $this->log->error('+', ['url' => request()->url(), 'input' => request()->all(), 'ip' => request()->ip()]);
+            logger()->error('+', ['url' => request()->url(), 'input' => request()->all(), 'ip' => request()->ip()]);
 
             if (app()->environment('production')) {
                 // send report to sentry
@@ -120,17 +122,32 @@ class Handler extends ExceptionHandler
     /**
      * Get the html response content.
      *
-     * @param  string  $content
-     * @param  string  $css
-     * @return string
+     * @param  \Exception  $e
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function decorate($content, $css)
+    protected function convertExceptionToResponse(Exception $e)
     {
         if (config('app.debug')) {
-            return parent::decorate($content, $css);
+            return parent::convertExceptionToResponse($e);
         }
 
         // on production site, we MUST render "nice" error page
-        return view('errors.500')->render();
+        return SymfonyResponse::create(view('errors.500')->render(), 500);
+    }
+
+    /**
+     * Convert an authentication exception into an unauthenticated response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Auth\AuthenticationException  $exception
+     * @return \Illuminate\Http\Response
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        return redirect()->guest('login');
     }
 }

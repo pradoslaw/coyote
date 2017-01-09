@@ -2,9 +2,9 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Topic;
 use Coyote\User;
-use Illuminate\Http\Request;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Poll;
@@ -62,7 +62,7 @@ interface PostRepositoryInterface extends RepositoryInterface
     public function findPosts(array $postsId, $topicId);
 
     /**
-     * @param Request $request
+     * @param PostForm $form
      * @param User|null $user
      * @param Forum $forum
      * @param Topic $topic
@@ -70,7 +70,7 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @param Poll|null $poll
      * @return Post $post
      */
-    public function save(Request $request, $user, Forum $forum, Topic $topic, Post $post, $poll);
+    public function save(PostForm $form, $user, Forum $forum, Topic $topic, Post $post, $poll);
 
     /**
      * @param int $userId

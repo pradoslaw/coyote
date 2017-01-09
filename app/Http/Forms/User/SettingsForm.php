@@ -32,7 +32,7 @@ class SettingsForm extends Form
 
         // id uzytkownika, ktorego ustawienia wlasnie edytujemy
         $userId = $user->id;
-        $groupList = $user->groups()->lists('name', 'id')->toArray();
+        $groupList = $user->groups()->pluck('name', 'id')->toArray();
 
         $this->add('email', 'email', [
             'rules' => 'required|email|email_unique:' . $userId,

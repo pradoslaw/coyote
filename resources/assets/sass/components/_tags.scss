@@ -3,24 +3,29 @@
 .tag-clouds {
   list-style: none;
   margin: 0;
-  padding: 13px 0;
+  padding: 0;
   overflow: hidden;
 
   > li {
-    display: inline;
-    float: left;
-    margin-right: 4px;
+    display: inline-block;
+    margin-right: 1px;
 
-    > a, > span {
+    > a,
+    > span {
       color: $gray-light;
-      font-size: 11px;
+      font-size: 12px;
       display: inline-block;
-      padding: 4px 10px;
+      padding: 4px 7px;
       text-shadow: 1px 1px 1px white;
       background: $gray-lighter;
-      margin: 4px 5px 0 1px;
+      margin: 1px 1px 1px 0;
       border-radius: 5px;
       transition: all .25s linear;
+    }
+
+    > a + small,
+    > span + small {
+      margin-left: 2px;
     }
 
     > a:hover {
@@ -36,6 +41,41 @@
 
     &:last-child {
       margin-right: 0;
+    }
+  }
+
+  @media screen and (max-width: $screen-xs) {
+    > li {
+      >a,
+      >span {
+        font-size: 11px;
+      }
+    }
+  }
+}
+
+.cloud {
+  > li {
+    > a {
+      margin: 2px 2px 4px 0;
+    }
+  }
+}
+
+.tag-clouds-sm {
+  > li {
+    > a,
+    > span {
+      padding: 1px 6px;
+    }
+  }
+}
+
+.tag-clouds-xs {
+  > li {
+    > a,
+    > span {
+      padding: 1px 4px;
     }
   }
 }
@@ -60,7 +100,7 @@
     cursor: pointer;
 
     span {
-      font-size: .8em;
+      font-size: 11px;
       background: #EEE;
       border-radius: 5px;
       display: inline;
@@ -70,6 +110,7 @@
       position: relative;
       transition: all .25s linear;
     }
+
     &.hover {
       background-color: #F8F8F8;
       color: #D7661C;
@@ -96,37 +137,43 @@
   }
 
   .tag-clouds {
-    padding: 0;
     display: inline;
     position: relative;
   }
 
-  .tag-clouds li a {
-    cursor: pointer;
-    position: relative;
+  .tag-clouds {
+    > li {
+      margin-right: 5px;
 
-    &:hover {
-      text-decoration: none;
-      background: #DDD;
-    }
+      > a {
+        cursor: pointer;
+        position: relative;
 
-    &.remove:hover:after {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0.5;
-      border-radius: 5px;
-      top: 0;
-      left: 0;
-      background-color: black;
-      vertical-align: middle;
-      text-align: center;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      text-shadow: none;
-      font-size: $font-size-large;
-      @include font-awesome($fa-var-remove);
+        &:hover {
+          text-decoration: none;
+          background: #DDD;
+        }
+
+        &.remove:hover:after {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          opacity: 0.5;
+          border-radius: 5px;
+          top: 0;
+          left: 0;
+          background-color: black;
+          vertical-align: middle;
+          text-align: center;
+          justify-content: center;
+          align-items: center;
+          color: #fff;
+          text-shadow: none;
+          font-size: $font-size-large;
+
+          @include font-awesome($fa-var-remove);
+        }
+      }
     }
   }
 }

@@ -16,6 +16,7 @@ Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
     * php-mbstring
     * php-pgsql
     * php-mongodb
+    * php-intl
 * PostgreSQL >= 9.3
 * MongoDB >= 2.7
 * composer
@@ -38,6 +39,7 @@ Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
 2. `sudo apt-get install php-curl`
 3. `sudo apt-get install pph-mongodb`
 4. `sudo apt-get install php-pgsql`
+4. `sudo apt-get install php-intl`
 6. `git clone https://github.com/adam-boduch/coyote.git .`
 7. `psql -c 'create database coyote;' -U postgres`
 8. `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)

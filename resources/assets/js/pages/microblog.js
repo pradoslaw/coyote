@@ -1,3 +1,7 @@
+import declination from '../components/declination';
+import Dialog from '../libs/dialog';
+import 'jquery-color-animation/jquery.animate-colors';
+
 $(function () {
     'use strict';
 
@@ -11,7 +15,7 @@ $(function () {
         }
 
         if (error) {
-            $('#alert').modal('show').find('.modal-body').text(error);
+            Dialog.alert({message: error}).show();
         }
     });
 
@@ -128,6 +132,9 @@ $(function () {
                         });
 
                         return false;
+                    }).escape(function() {
+                        entryText.html(entries[$this.data('id')]);
+                        delete entries[$this.data('id')];
                     });
                 });
             } else {
@@ -138,16 +145,22 @@ $(function () {
             e.preventDefault();
         })
         .on('click', '.btn-remove', function () {
-            var $this = $(this);
+            let $this = $(this);
+            let dialog = Dialog.confirm({message: 'Czy na pewno usunąć ten wpis?'});
 
-            $('#confirm').modal('show').one('click', '.danger', function() {
+            dialog.getButton('Tak, usuń').onClick = (e) => {
+                $(e.currentTarget).disable();
+
                 $.post($this.attr('href'), function() {
+                    dialog.close();
+
                     $('#entry-' + $this.data('id')).fadeOut(500);
                 });
 
-                $('#confirm').modal('hide');
                 return false;
-            });
+            };
+
+            dialog.build().show();
 
             return false;
         })
@@ -191,11 +204,9 @@ $(function () {
                 form.addClass('js-editable');
 
                 var textarea = $('textarea', form);
-                textarea.autogrow().inputFocus().prompt().keydown(function(e) {
-                    if (e.keyCode === 27) {
-                        body.show();
-                        form.hide();
-                    }
+                textarea.autogrow().inputFocus().prompt().escape(function() {
+                    body.show();
+                    form.hide();
                 });
 
                 form.fastSubmit().submit(function() {
@@ -215,16 +226,22 @@ $(function () {
             }
         })
         .on('click', '.btn-sm-remove', function() {
-            var $this = $(this);
+            let $this = $(this);
+            let dialog = Dialog.confirm({message: 'Czy na pewno usunąć ten wpis?'});
 
-            $('#confirm').modal('show').one('click', '.danger', function() {
+            dialog.getButton('Tak, usuń').onClick = (e) => {
+                $(e.currentTarget).disable();
+
                 $.post($this.attr('href'), function() {
+                    dialog.close();
+
                     $('#comment-' + $this.data('id')).fadeOut(500);
                 });
 
-                $('#confirm').modal('hide');
                 return false;
-            });
+            };
+
+            dialog.build().show();
 
             return false;
         })
@@ -240,7 +257,12 @@ $(function () {
         })
         .on('click', 'a[data-toggle="lightbox"]', function(e) {
             e.preventDefault();
-            $(this).ekkoLightbox();
+
+            require.ensure([], (require) => {
+                require('ekko-lightbox/dist/ekko-lightbox');
+
+                $(this).ekkoLightbox();
+            });
         })
         .on('click', '.read-more', function()
         {
@@ -307,8 +329,7 @@ $(function () {
                 var file = this.files[0];
 
                 if (file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/jpeg') {
-                    $('#alert').modal('show');
-                    $('.modal-body').text('Format pliku jest nieprawidłowy. Załącznik musi być zdjęciem JPG, PNG lub GIF');
+                    Dialog.alert({message: 'Format pliku jest nieprawidłowy. Załącznik musi być zdjęciem JPG, PNG lub GIF'}).show();
                 }
                 else {
                     var formData = new FormData($form[0]);
@@ -327,10 +348,8 @@ $(function () {
                                 add(data);
                             },
                             error: function (err) {
-                                $('#alert').modal('show');
-
                                 if (typeof err.responseJSON !== 'undefined') {
-                                    $('.modal-body').text(err.responseJSON.photo[0]);
+                                    Dialog.alert({message: err.responseJSON.photo[0]}).show();
                                 }
 
                                 $('.thumbnail:last', $form).remove();

@@ -43,13 +43,8 @@
     </div>
 {% endblock %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/user.css') }}">
-{% endblock %}
-
 {% block body %}
-    {{ parent() }}
+    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/user.css') }}">
 
+    {{ parent() }}
 {% endblock %}

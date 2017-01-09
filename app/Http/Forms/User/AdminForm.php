@@ -59,7 +59,7 @@ class AdminForm extends SettingsForm
             'rules' => 'bool'
         ]);
 
-        $groups = $this->group->pluck('name', 'id')->toArray();
+        $groups = $this->group->pluck('name', 'id');
 
         $this->add('groups', 'choice', [
             'label' => 'Grupy użytkownika',

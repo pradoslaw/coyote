@@ -50,7 +50,7 @@ class AdController extends Controller
     {
         $data = [];
 
-        $builder = new AdBuilder($this->getRouter()->getCurrentRequest());
+        $builder = new AdBuilder($this->request);
         $preferences = $this->getSetting('job.preferences');
 
         $builder->setPreferences(new Preferences($preferences));
@@ -58,7 +58,7 @@ class AdController extends Controller
         if ($preferences !== null) {
             $location = $this->lookupLocation();
 
-            if ($location->longitude !== null || $location->latitude !== null) {
+            if ($location->isValid()) {
                 $builder->setSort(new Geodistance($location->latitude, $location->longitude));
 
                 $data = [
@@ -91,7 +91,7 @@ class AdController extends Controller
         }
 
         // ... otherwise lookup by ip
-        return new Location($this->getByIp($this->getRouter()->getCurrentRequest()->ip()) ?: []);
+        return new Location($this->getByIp($this->request->ip()) ?: []);
     }
 
     /**

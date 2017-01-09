@@ -11,16 +11,16 @@ use Coyote\Services\Breadcrumb\Breadcrumb;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\Connection;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
 
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests, GateFactory, CacheFactory;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, GateFactory, CacheFactory;
 
     /**
      * @var Breadcrumb
@@ -57,25 +57,38 @@ abstract class Controller extends BaseController
     protected $public = [];
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * Controller constructor.
      */
     public function __construct()
     {
         $this->breadcrumb = new Breadcrumb();
-        $this->userId = auth()->check() ? auth()->user()->id : null;
-        $this->sessionId = request()->session()->getId();
-        $this->auth = auth()->user();
 
-        $this->buildPublic();
+        $this->middleware(function (Request $request, $next) {
+            $this->auth = $request->user();
+            $this->userId = $request->user() ? $this->auth->id : null;
+            $this->sessionId = $request->session()->getId();
+
+            $this->request = $request;
+
+            $this->buildPublic();
+
+            return $next($request);
+        });
     }
 
     protected function buildPublic()
     {
         // URL to main page and CDN
-        $this->public = [
+        $this->public = array_merge($this->public, [
             'public' => url()->route('home'),
-            'cdn' => config('app.cdn') ? ('//' . config('app.cdn')) : url()->route('home')
-        ];
+            'cdn' => config('app.cdn') ? ('//' . config('app.cdn')) : url()->route('home'),
+            'ping' => route('ping', [], false)
+        ]);
 
         if ($this->userId && config('services.ws.host')) {
             $this->public['ws'] = config('services.ws.host') . (config('services.ws.port') ? ':' . config('services.ws.port') : '');

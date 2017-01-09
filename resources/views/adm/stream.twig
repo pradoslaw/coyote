@@ -9,7 +9,7 @@
             </div>
 
             <div class="panel-body">
-                {{ paginator.render()|raw }}
+                <div class="text-center">{{ paginator.render()|raw }}</div>
 
                 <div class="stream">
                     {% for activity in paginator %}
@@ -19,7 +19,7 @@
                     {% endfor %}
                 </div>
 
-                {{ paginator.render()|raw }}
+                <div class="text-center">{{ paginator.render()|raw }}</div>
             </div>
         </div>
     {% endif %}

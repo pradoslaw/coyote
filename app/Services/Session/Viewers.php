@@ -45,21 +45,21 @@ class Viewers
     public function render($path = null)
     {
         $groups = [self::USER => [], self::ROBOT => []];
+        /** @var \Illuminate\Support\Collection $collection */
         $collection = $this->session->byPath($path);
 
         // zlicza liczbe userow
         $total = $collection->count();
         // zlicza gosci online (niezalogowani uzytkownicy)
         $guests = $collection->where('user_id', null)->count();
+        // ilosc zalogowanych userow online
+        $registered = $total - $guests;
 
         // zlicza ilosc robotow na stronie
         $robots = $collection->filter(function ($item) {
             return $item->robot;
         })
         ->count();
-
-        // liczba rzeczywistych osob z pominieciem botow
-        $people = $total - $robots;
 
         foreach ($collection->groupBy('group') as $name => $rowset) {
             if ($name == '') {
@@ -85,23 +85,25 @@ class Viewers
         // nie zostala jeszcze zaktualizowana. w takim przypadku bedziemy musieli dodac "recznie"
         // uzytkownika ktory aktualnie dokonal tego zadania
         if (!$collection->contains('id', $this->request->session()->getId())) {
-            $people++;
             $total++;
 
             if ($this->request->user()) {
                 $groupName = self::USER;
+                $registered++;
 
                 if ($this->request->user()->group_id) {
                     $groupName = $this->request->user()->group->name;
                 }
 
                 $groups[$groupName] = $this->makeProfileLink($this->request->user()->id, $this->request->user()->name);
+            } else {
+                $guests++;
             }
         }
 
         ksort($groups);
 
-        return view('components.viewers', compact('groups', 'total', 'guests', 'people', 'robots'));
+        return view('components.viewers', compact('groups', 'total', 'guests', 'registered', 'robots'));
     }
 
     private function makeProfileLink($userId, $userName)

@@ -7,6 +7,7 @@ use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
+use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
@@ -20,9 +21,13 @@ class ApplicationController extends Controller
     {
         parent::__construct();
 
-        /** @var \Coyote\Job $job */
-        $job = $this->getRouter()->getCurrentRequest()->route('job');
-        abort_if($job->hasApplied($this->userId, $this->sessionId), 404);
+        $this->middleware(function (Request $request, $next) {
+            /** @var \Coyote\Job $job */
+            $job = $request->route('job');
+            abort_if($job->hasApplied($this->userId, $this->sessionId), 404);
+
+            return $next($request);
+        });
     }
 
     /**

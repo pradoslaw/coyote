@@ -2,10 +2,22 @@
 
 namespace Coyote\Services\Media;
 
-use Coyote\Services\Media\Factories\AbstractFactory as MediaFactory;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Coyote\Services\Thumbnail\Factory as Thumbnail;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class File implements MediaInterface
 {
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var Thumbnail
+     */
+    protected $thumbnail;
+
     /**
      * @var string
      */
@@ -19,36 +31,25 @@ abstract class File implements MediaInterface
     /**
      * @var string
      */
-    protected $filename;
+    protected $downloadUrl;
 
     /**
      * @var string
      */
-    protected $downloadUrl;
+    protected $filename;
 
     /**
-     * @var MediaFactory
+     * @param Filesystem $filesystem
+     * @param Thumbnail $thumbnail
      */
-    protected $factory;
-
-    /**
-     * @param MediaFactory $factory
-     */
-    public function __construct(MediaFactory $factory)
+    public function __construct(Filesystem $filesystem, Thumbnail $thumbnail)
     {
-        $this->factory = $factory;
+        $this->filesystem = $filesystem;
+        $this->thumbnail = $thumbnail;
 
         if (empty($this->directory)) {
             $this->directory = strtolower(class_basename($this));
         }
-    }
-
-    /**
-     * @return MediaFactory
-     */
-    public function getFactory()
-    {
-        return $this->factory;
     }
 
     /**
@@ -103,33 +104,22 @@ abstract class File implements MediaInterface
     }
 
     /**
-     * @return string
+     * @return Url
      */
     public function url()
     {
-        if ($this->downloadUrl && !$this->isImage()) {
-            return $this->downloadUrl;
-        }
-
-        $public = implode('/', array_diff(explode('/', $this->root()), explode('/', public_path())));
-
-        return cdn($public . '/' . $this->relative());
+        return new Url($this->thumbnail, $this);
     }
 
     /**
+     * Return full path (example: /var/www/makana.pl/storage/uploads/maps/12345.jpg)
+     *
+     * @param string|null $filename
      * @return string
      */
-    public function path()
+    public function path($filename = null)
     {
-        return $this->root() . '/' . $this->relative();
-    }
-
-    /**
-     * @param mixed $content
-     */
-    public function put($content)
-    {
-        $this->factory->getFilesystem()->put($this->relative(), $content);
+        return $this->root() . '/' . ($filename ?: $this->relative());
     }
 
     /**
@@ -137,7 +127,7 @@ abstract class File implements MediaInterface
      */
     public function get()
     {
-        return $this->factory->getFilesystem()->get($this->relative());
+        return $this->filesystem->get($this->relative());
     }
 
     /**
@@ -145,7 +135,60 @@ abstract class File implements MediaInterface
      */
     public function size()
     {
-        return $this->factory->getFilesystem()->size($this->relative());
+        return $this->filesystem->size($this->relative());
+    }
+
+    /**
+     * @param UploadedFile $uploadedFile
+     * @return MediaInterface
+     */
+    public function upload(UploadedFile $uploadedFile)
+    {
+        $this->setName($uploadedFile->getClientOriginalName());
+        $this->setFilename($this->getUniqueName($uploadedFile->getClientOriginalExtension()));
+        $this->filesystem->put($this->relative(), file_get_contents($uploadedFile->getRealPath()));
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $content
+     * @return MediaInterface
+     */
+    public function put($content)
+    {
+        $this->setName($this->getHumanName('png'));
+        $this->setFilename($this->getUniqueName('png'));
+        $this->filesystem->put($this->relative(), $content);
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function delete()
+    {
+        return $this->filesystem->delete($this->relative());
+    }
+
+    /**
+     * Return relative path. Example: attachment/1234.jpg
+     *
+     * @return string
+     */
+    public function relative()
+    {
+        return $this->directory() . '/' . $this->filename;
+    }
+
+    /**
+     * @return string
+     */
+    public function root()
+    {
+        $default = config('filesystems.default');
+        return config("filesystems.disks.$default.root");
     }
 
     /**
@@ -157,35 +200,68 @@ abstract class File implements MediaInterface
     }
 
     /**
-     * @return bool
-     */
-    public function delete()
-    {
-        return $this->factory->getFilesystem()->delete($this->relative());
-    }
-
-    /**
-     * @return string
-     */
-    protected function relative()
-    {
-        return $this->directory . '/' . $this->filename;
-    }
-
-    /**
-     * @return string
-     */
-    protected function root()
-    {
-        $default = config('filesystems.default');
-        return config("filesystems.disks.$default.root");
-    }
-
-    /**
      * @return string
      */
     public function __toString()
     {
-        return $this->getFilename();
+        return (string) $this->getFilename();
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return method_exists($this, camel_case($name));
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if (!isset($this->{$name})) {
+            throw new \InvalidArgumentException("Method $name does not exist in File class.");
+        }
+
+        return $this->{camel_case($name)}();
+    }
+
+    /**
+     * @param string $extension
+     * @return string
+     */
+    protected function getUniqueName($extension)
+    {
+        return uniqid() . '.' . strtolower($extension);
+    }
+
+    /**
+     * @param string $extension
+     * @return string
+     */
+    protected function getHumanName($extension)
+    {
+        return 'screenshot-' . date('YmdHis') . '.' . $extension;
+    }
+
+    /**
+     * @return string
+     */
+    protected function directory()
+    {
+        if (strlen($this->filename) !== 17) {
+            return $this->directory;
+        }
+
+        $timestamp = hexdec(substr($this->filename, 0, 8));
+        // as of 15th of Jan, we decided to put files into subdirectories
+        if ($timestamp < 1484438400) {
+            return $this->directory;
+        }
+
+        return $this->directory . '/' . substr($this->filename, 0, 2);
     }
 }

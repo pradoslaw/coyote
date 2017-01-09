@@ -2,16 +2,15 @@
 
 namespace Coyote\Http\Factories;
 
-use Coyote\Services\Media\Factories\AbstractFactory;
+use Coyote\Services\Media\Factory;
 
 trait MediaFactory
 {
     /**
-     * @param string $factory
-     * @return AbstractFactory
+     * @return Factory
      */
-    private function getMediaFactory($factory)
+    private function getMediaFactory()
     {
-        return app('media.' . $factory);
+        return app(Factory::class);
     }
 }

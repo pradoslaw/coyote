@@ -14,7 +14,6 @@ $I->fillField('email', $fake->email);
 $I->fillField('password', 'password');
 $I->fillField('password_confirmation', 'password');
 $I->canSeeCheckboxIsChecked('input[name=human]');
-
 $I->click('button[type=submit]');
 
 $I->seeInCurrentUrl('/');

@@ -92,7 +92,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->limit($limit)
             ->get()
-            ->lists('count', 'name');
+            ->pluck('count', 'name');
     }
 
     /**
@@ -109,7 +109,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->getQuery()
             ->whereIn('job_tags.tag_id', $tagsId)
             ->get()
-            ->lists('count', 'name');
+            ->pluck('count', 'name');
     }
 
     /**

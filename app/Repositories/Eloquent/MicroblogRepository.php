@@ -205,7 +205,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->orderBy($this->raw('COUNT(*)'), 'DESC')
                 ->limit(30)
                 ->get()
-                ->lists('count', 'name')
+                ->pluck('count', 'name')
                 ->toArray();
     }
 

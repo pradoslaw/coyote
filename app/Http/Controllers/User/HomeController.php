@@ -40,30 +40,28 @@ class HomeController extends BaseController
      * Upload zdjecia na serwer
      *
      * @param Request $request
-     * @param UserRepository $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function upload(Request $request, UserRepository $user)
+    public function upload(Request $request)
     {
         $this->validate($request, [
             'photo'             => 'required|image'
         ]);
 
-        $media = $this->getMediaFactory('user_photo')->upload($request->file('photo'));
-        $user->update(['photo' => $media->getFilename()], $this->userId);
+        $media = $this->auth->photo->upload($request->file('photo'));
+        $this->auth->save();
 
         return response()->json([
-            'url' => $media->url()
+            'url' => (string) $media->url()
         ]);
     }
 
     /**
      * Usuniecie zdjecia z serwera
-     *
-     * @param UserRepository $user
      */
-    public function delete(UserRepository $user)
+    public function delete()
     {
-        $user->update(['photo' => null], $this->userId);
+        $this->auth->photo = null;
+        $this->auth->save();
     }
 }

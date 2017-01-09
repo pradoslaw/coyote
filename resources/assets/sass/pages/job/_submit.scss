@@ -1,6 +1,6 @@
 @charset "UTF-8";
-@import "../../../bower/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
-@import "../../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
+@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
+@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
 @import "../../components/affix";
 
 $font-size-control-label: 15px;
@@ -129,7 +129,6 @@ $font-size-control-label: 15px;
   }
 
   .tag-clouds {
-    padding: 0;
     float: left;
     margin-right: 20px;
 

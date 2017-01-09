@@ -72,7 +72,7 @@
                             </div>
                         {{ theme.group_close() }}
 
-                        {{ theme.group_open('salary_from', 'form-group-border') }}
+                        {{ theme.group_open(['salary_from', 'salary_to'], 'form-group-border') }}
                             <label class="control-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>
 
                             <div>
@@ -222,7 +222,6 @@
     {{ parent() }}
 
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script src="{{ cdn('js/job-tinymce.js') }}"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
     <script>
         $(function() {

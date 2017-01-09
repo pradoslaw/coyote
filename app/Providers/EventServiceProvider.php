@@ -6,7 +6,6 @@ use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Events\UserWasSaved;
-use Coyote\Listeners\BindRouteDefaultModel;
 use Coyote\Listeners\ChangeImageUrl;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
@@ -21,10 +20,8 @@ use Coyote\Listeners\PostListener;
 use Coyote\Listeners\TopicListener;
 use Coyote\Listeners\JobListener;
 use Illuminate\Auth\Events\Lockout;
-use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Mail\Events\MessageSending;
-use Illuminate\Routing\Events\RouteMatched;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -34,7 +31,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        RouteMatched::class => [BindRouteDefaultModel::class],
         UserWasSaved::class => [FlushUserCache::class, SaveLocationsInJobPreferences::class],
         Lockout::class => [SendLockoutEmail::class],
         FirewallWasSaved::class => [FlushFirewallCache::class],
@@ -61,12 +57,11 @@ class EventServiceProvider extends ServiceProvider
     /**
      * Register any other events for your application.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher $events
      * @return void
      */
-    public function boot(DispatcherContract $events)
+    public function boot()
     {
-        parent::boot($events);
+        parent::boot();
 
         //
     }

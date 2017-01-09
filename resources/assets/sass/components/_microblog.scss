@@ -1,6 +1,6 @@
 @charset "UTF-8";
-@import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
-@import "../../bower/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
+@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
+@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 
 .microblog {
   .media-heading {
@@ -186,6 +186,9 @@
     .media-body {
       overflow: visible;
     }
+
+    // User name
+    // ---------------------
 
     h6 {
       @include link-color-darker;

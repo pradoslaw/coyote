@@ -34,7 +34,7 @@ class ConfirmController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function index(Request $request)
     {

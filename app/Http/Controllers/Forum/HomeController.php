@@ -10,6 +10,7 @@ use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
+use Coyote\Repositories\Criteria\Topic\SkipLockedCategories;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
@@ -51,12 +52,16 @@ class HomeController extends BaseController
             return true;
         });
 
-        // currently selected tab
-        list(, $suffix) = explode('.', $this->getRouter()->currentRouteName());
+        $this->middleware(function (Request $request, $next) {
+            // currently selected tab
+            list(, $suffix) = explode('.', $request->route()->getName());
 
-        if (in_array($suffix, ['categories', 'all', 'unanswered', 'subscribes', 'mine', 'interesting'])) {
-            $this->setSetting('forum.tab', $suffix);
-        }
+            if (in_array($suffix, ['categories', 'all', 'unanswered', 'subscribes', 'mine', 'interesting'])) {
+                $this->setSetting('forum.tab', $suffix);
+            }
+
+            return $next($request);
+        });
     }
 
     /**
@@ -66,7 +71,7 @@ class HomeController extends BaseController
      */
     protected function view($view = null, $data = [])
     {
-        list(, $suffix) = explode('.', $this->getRouter()->currentRouteName());
+        list(, $suffix) = explode('.', $this->request->route()->getName());
 
         $currentTab = $suffix == 'home' ? $this->getSetting('forum.tab', 'categories') : $suffix;
         $title = null;
@@ -123,6 +128,8 @@ class HomeController extends BaseController
      */
     public function all()
     {
+        $this->topic->pushCriteria(new SkipLockedCategories());
+
         return $this->loadAndRender();
     }
 
@@ -161,7 +168,7 @@ class HomeController extends BaseController
         $user = app(UserRepositoryInterface::class)->find($userId);
         abort_if(is_null($user), 404);
 
-        if ($this->getRouter()->currentRouteName() == 'forum.user') {
+        if ($this->request->route()->getName() == 'forum.user') {
             $this
                 ->tabs
                 ->add('Posty: ' . $user->name, [
@@ -190,13 +197,11 @@ class HomeController extends BaseController
      */
     public function tag($name)
     {
-        $request = $this->getRouter()->getCurrentRequest();
-
         $this
             ->tabs
-            ->add('Wątki z: ' . $request->route('tag'), [
+            ->add('Wątki z: ' . $this->request->route('tag'), [
                 'route' => [
-                    'forum.tag', urlencode($request->route('tag'))
+                    'forum.tag', urlencode($this->request->route('tag'))
                 ]
             ])
             ->activate();
@@ -235,7 +240,7 @@ class HomeController extends BaseController
         $this->topic->pushCriteria(new OnlyThoseWithAccess($this->auth));
 
         // if someone wants to find all user's topics, we can't hide those from our hidden categories.
-        if (strpos($this->getRouter()->currentRouteAction(), '@user') === false) {
+        if (strpos($this->request->route()->getActionName(), '@user') === false) {
             $this->topic->pushCriteria(new BelongsToForum($this->forum->order->findAllVisibleIds($this->userId)));
         }
 
@@ -246,7 +251,7 @@ class HomeController extends BaseController
                 $this->sessionId,
                 'topics.last_post_id',
                 'DESC',
-                $this->topicsPerPage($this->getRouter()->getCurrentRequest())
+                $this->topicsPerPage($this->request)
             )
             ->appends(request()->except('page'));
     }
@@ -263,7 +268,7 @@ class HomeController extends BaseController
             $flags = $this->getFlagFactory()->takeForTopics($topics->groupBy('id')->keys()->toArray());
         }
 
-        $postsPerPage = $this->postsPerPage($this->getRouter()->getCurrentRequest());
+        $postsPerPage = $this->postsPerPage($this->request);
 
         return $this->view('forum.topics')->with(compact('topics', 'flags', 'postsPerPage'));
     }

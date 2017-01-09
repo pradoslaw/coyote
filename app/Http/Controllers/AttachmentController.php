@@ -25,7 +25,7 @@ abstract class AttachmentController extends Controller
             config('filesystems.upload_mimes')
         )]);
 
-        $media = $this->getMediaFactory('attachment')->upload($request->file('attachment'));
+        $media = $this->getMediaFactory()->make('attachment')->upload($request->file('attachment'));
         $mime = MimeTypeGuesser::getInstance();
 
         $attachment = $this->create([
@@ -54,7 +54,7 @@ abstract class AttachmentController extends Controller
 
         $this->validateWith($validator);
 
-        $media = $this->getMediaFactory('attachment')->put(file_get_contents('data://' . substr($input, 7)));
+        $media = $this->getMediaFactory()->make('attachment')->put(file_get_contents('data://' . substr($input, 7)));
         $mime = MimeTypeGuesser::getInstance();
 
         $attachment = $this->create([
@@ -83,7 +83,7 @@ abstract class AttachmentController extends Controller
         // we're changing field name because front end expect this field to be an array
         $form->get('id')->setName('attachments[][id]');
 
-        return $form->render();
+        return (string) $form->render();
     }
 
     /**
