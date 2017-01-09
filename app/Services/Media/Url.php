@@ -39,7 +39,7 @@ class Url
             return null;
         }
 
-        return cdn($this->thumbnail->url($template)->make((string) $this));
+        return $this->thumbnail->url($template)->make((string) $this);
     }
 
     /**
