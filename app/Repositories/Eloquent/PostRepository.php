@@ -9,7 +9,6 @@ use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Topic;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
 /**

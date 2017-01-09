@@ -20,21 +20,6 @@ use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 class MoveController extends Controller
 {
     /**
-     * @var PostRepository
-     */
-    private $post;
-
-    /**
-     * @param PostRepository $post
-     */
-    public function __construct(PostRepository $post)
-    {
-        parent::__construct();
-
-        $this->post = $post;
-    }
-
-    /**
      * @param Job $job
      * @return \Illuminate\View\View
      */
@@ -89,7 +74,7 @@ class MoveController extends Controller
             'host'      => gethostbyaddr($log->ip)
         ]);
 
-        $this->transaction(function () use ($request, $job, $forum, $topic, $post) {
+        $this->transaction(function () use ($job, $forum, $topic, $post) {
             $topic->save();
 
             $post->forum()->associate($forum);
