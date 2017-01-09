@@ -5,7 +5,6 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
@@ -23,7 +22,7 @@ use Illuminate\Http\Request;
  */
 class SubmitController extends Controller
 {
-    use FilesystemFactory, MediaFactory;
+    use MediaFactory;
 
     /**
      * @var User

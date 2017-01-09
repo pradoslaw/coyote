@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Factories\FilesystemFactory;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
@@ -15,7 +14,7 @@ use Coyote\Services\Stream\Objects\Application as Stream_Application;
 
 class ApplicationController extends Controller
 {
-    use FilesystemFactory, MailFactory;
+    use MailFactory;
 
     public function __construct()
     {

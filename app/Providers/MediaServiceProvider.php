@@ -2,14 +2,11 @@
 
 namespace Coyote\Providers;
 
-use Coyote\Http\Factories\FilesystemFactory;
 use Illuminate\Support\ServiceProvider;
 use Coyote\Services\Media\Factory;
 
 class MediaServiceProvider extends ServiceProvider
 {
-    use FilesystemFactory;
-
     /**
      * Indicates if loading of the provider is deferred.
      *
