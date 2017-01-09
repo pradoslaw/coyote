@@ -1,3 +1,5 @@
+import Config from '../libs/config';
+
 $(function() {
     $('#wrap').each(function() {
         require.ensure([], (require) => {
@@ -13,7 +15,7 @@ $(function() {
                 let offset = $('#reputation').find('.reputation-item').length;
                 pending = true;
 
-                $.get(_config.reputation_url, {offset: offset}, function(html) {
+                $.get(Config.get('reputation_url'), {offset: offset}, function(html) {
                     $('#reputation').append(html);
 
                     pending = false;
