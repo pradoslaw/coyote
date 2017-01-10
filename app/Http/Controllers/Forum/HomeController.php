@@ -43,16 +43,17 @@ class HomeController extends BaseController
                 $data = array_pull($row, 'data');
                 $menu->add($title, $row)->data($data);
             }
-        })
-        ->filter(function (Item $item) {
-            if ($item->data('role') === true) {
-                return $this->userId !== null;
-            }
-
-            return true;
         });
 
         $this->middleware(function (Request $request, $next) {
+            $this->tabs->filter(function (Item $item) {
+                if ($item->data('role') === true) {
+                    return $this->userId !== null;
+                }
+
+                return true;
+            });
+
             // currently selected tab
             list(, $suffix) = explode('.', $request->route()->getName());
 
