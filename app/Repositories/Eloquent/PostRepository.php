@@ -211,10 +211,18 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
         $text = join("\n\n", [$previous->text, $post->text]);
 
+        $data = [
+            'text' => $text,
+            'subject' => $post->topic->subject,
+            'tags' => [],
+            'user_id' => $userId,
+            'ip' => request()->ip(),
+            'browser' => request()->browser(),
+            'host' => gethostbyaddr(request()->ip())
+        ];
+
         $previous->update(['text' => $text, 'edit_count' => $previous->edit_count + 1, 'editor_id' => $userId]);
-        $previous->logs()->create(
-            array_merge($post->toArray(), ['text' => $text, 'subject' => $post->topic->subject, 'tags' => []])
-        );
+        $previous->logs()->create(array_merge($post->toArray(), $data));
 
         $this->app[Post\Attachment::class]->where('post_id', $post->id)->update(['post_id' => $previous->id]);
         $this->app[Post\Comment::class]->where('post_id', $post->id)->update(['post_id' => $previous->id]);
