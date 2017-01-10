@@ -44,11 +44,11 @@ class Realtime {
             (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + _config.ws + '/realtime?token=' + _config.token
         );
 
-        this._handler.onopen = function (e) {
+        this._handler.onopen = () => {
             this._retries = 0;
         };
 
-        this._handler.onmessage = function (e) {
+        this._handler.onmessage = e => {
             let data = JSON.parse(e.data);
 
             if (data.event) {
@@ -56,7 +56,7 @@ class Realtime {
             }
         };
 
-        this._handler.onclose = function () {
+        this._handler.onclose = () => {
             if (++this._retries < MAX_RETRIES) {
                 setTimeout(this._connect, DEFAULT_INTERVAL * this._retries);
             }
