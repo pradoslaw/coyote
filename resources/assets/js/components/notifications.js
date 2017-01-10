@@ -79,7 +79,7 @@ class Notifications
             badge.remove();
         }
         else {
-            if (!badge) {
+            if (!badge.length) {
                 $('> a:first', this._self).prepend('<span class="badge">' + value + '</span>');
             } else {
                 badge.text(value);
