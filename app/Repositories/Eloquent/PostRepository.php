@@ -201,6 +201,28 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
     /**
      * @param int $userId
+     * @param \Coyote\Post $post
+     * @return \Coyote\Post
+     */
+    public function merge($userId, $post)
+    {
+        /** @var \Coyote\Post $previous */
+        $previous = $post->previous();
+
+        $text = join("\n\n", [$previous->text, $post->text]);
+
+        $previous->update(['text' => $text, 'edit_count' => $previous->edit_count + 1, 'editor_id' => $userId]);
+        $previous->logs()->create(
+            array_merge($post->toArray(), ['text' => $text, 'subject' => $post->topic->subject, 'tags' => []])
+        );
+
+        $post->delete();
+
+        return $previous;
+    }
+
+    /**
+     * @param int $userId
      * @return mixed
      */
     public function takeRatesForUser($userId)

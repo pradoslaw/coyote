@@ -74,6 +74,13 @@ interface PostRepositoryInterface extends RepositoryInterface
 
     /**
      * @param int $userId
+     * @param \Coyote\Post $post
+     * @return \Coyote\Post
+     */
+    public function merge($userId, $post);
+
+    /**
+     * @param int $userId
      * @return mixed
      */
     public function takeRatesForUser($userId);

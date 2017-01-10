@@ -21,18 +21,9 @@ class MergeController extends BaseController
         $this->authorize('merge', $post->forum);
 
         $url = $this->transaction(function () use ($post) {
-            /** @var \Coyote\Post $previous */
-            $previous = $post->previous();
-
-            $text = $previous->text . "\n\n" . $post->text;
-
-            $previous->update(['text' => $text, 'edit_count' => $previous->edit_count + 1, 'editor_id' => $this->userId]);
-            $previous->logs()->create(
-                array_merge($post->toArray(), ['text' => $text, 'subject' => $post->topic->subject, 'tags' => []])
-            );
+            $previous = $this->post->merge($this->userId, $post);
 
             $url = UrlBuilder::topic($post->topic);
-            $post->delete();
 
             // add post to elasticsearch
             event(new PostWasSaved($previous));
