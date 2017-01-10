@@ -25,7 +25,7 @@ function getDiffSecond(remote) {
 }
 
 let countTime = function () {
-    $('.timestamp[data-timestamp]').each(() => {
+    $('.timestamp[data-timestamp]').each(function() {
         let timestamp = $(this).attr('data-timestamp');
 
         if (getDiffMinute(timestamp) < 60) {
