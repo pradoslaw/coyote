@@ -88,15 +88,25 @@ class LogController extends BaseController
             $post->save();
 
             if ($post->id === $topic->first_post_id) {
-                $topic->fill(['subject' => $log->subject]);
-                // assign tags to topic
-                $topic->tags()->sync(app(TagRepositoryInterface::class)->multiInsert($log->tags));
+                // w starej wersji nie logowalismy zmian w temacie watku
+                if ($log->subject) {
+                    $topic->fill(['subject' => $log->subject]);
+                }
+
+                if ($log->tags) {
+                    // assign tags to topic
+                    $topic->tags()->sync(app(TagRepositoryInterface::class)->multiInsert($log->tags));
+                }
 
                 $topic->save();
             }
 
             $log = (new Log())->fill($log->toArray());
             $log->user_id = $this->userId;
+            $log->ip = $this->request->ip();
+            $log->browser = $this->request->browser();
+            $log->host = gethostbyaddr($this->request->ip());
+
             $log->save();
 
             $url = UrlBuilder::post($post);
