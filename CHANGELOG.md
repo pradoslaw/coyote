@@ -9,6 +9,8 @@
 - Zmiana sposobu wyświetlania listy użytkowników online (https://github.com/adam-boduch/coyote/issues/174)
 - Lista mikroblogów użytkownika widoczna w jego profilu
 - Wyszukiwarka w module "Praca" wyszukuje nazwy miejscowości zapisane bez polskich znaków
+- Wyświetlanie tagów do wątków, nawet na małych ekranach
+- Delikatnie powiększenie czcionki tagów kosztem paddingu
 
 ## 2.0
 
