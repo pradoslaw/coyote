@@ -18,7 +18,7 @@ class Actor extends ObjectAbstract
                 'displayName'   => $user->name,
                 'id'            => $user->id,
                 'url'           => route('profile', [$user->id], false),
-                'image'         => $user->photo
+                'image'         => $user->photo->getFilename()
             ], $data);
         }
 
