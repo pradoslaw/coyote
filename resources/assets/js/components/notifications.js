@@ -75,7 +75,7 @@ class Notifications
     _setBadge(value) {
         let badge = $('.badge', this._self);
 
-        if (!value) {
+        if (parseInt(value) === 0) {
             badge.remove();
         }
         else {
