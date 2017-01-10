@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Session;
 
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as Session;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Illuminate\Http\Request;
 
 /**
@@ -17,7 +17,7 @@ class Viewers
     const ROBOT = 'Robot';
 
     /**
-     * @var Session
+     * @var SessionRepository
      */
     private $session;
 
@@ -27,10 +27,10 @@ class Viewers
     private $request;
 
     /**
-     * @param Session $session
+     * @param SessionRepository $session
      * @param Request $request
      */
-    public function __construct(Session $session, Request $request)
+    public function __construct(SessionRepository $session, Request $request)
     {
         $this->session = $session;
         $this->request = $request;
@@ -46,7 +46,7 @@ class Viewers
     {
         $groups = [self::USER => [], self::ROBOT => []];
         /** @var \Illuminate\Support\Collection $collection */
-        $collection = $this->session->byPath($path);
+        $collection = $this->unique($this->session->byPath($path));
 
         // zlicza liczbe userow
         $total = $collection->count();
@@ -106,6 +106,11 @@ class Viewers
         return view('components.viewers', compact('groups', 'total', 'guests', 'registered', 'robots'));
     }
 
+    /**
+     * @param int $userId
+     * @param string $userName
+     * @return string
+     */
     private function makeProfileLink($userId, $userName)
     {
         return link_to_route(
@@ -114,5 +119,27 @@ class Viewers
             [$userId],
             ['data-user-id' => $userId]
         );
+    }
+
+    /**
+     * @param \Illuminate\Support\Collection $collection
+     * @return \Illuminate\Support\Collection
+     */
+    private function unique($collection)
+    {
+        $guests = $collection->filter(function ($item) {
+            return $item->user_id === null;
+        });
+
+        $collection
+            ->filter(function (\Coyote\Session $item) {
+                return $item->user_id !== null;
+            })
+            ->unique('user_id')
+            ->each(function (\Coyote\Session $item) use ($guests) {
+                $guests->push($item);
+            });
+
+        return $guests;
     }
 }
