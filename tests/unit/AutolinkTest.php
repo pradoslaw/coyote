@@ -14,6 +14,9 @@ class AutolinkTest extends \Codeception\TestCase\Test
     {
         $parser = new Autolink();
 
+        $input = '@4programmers.net';
+        $this->tester->assertEquals($input, $parser->parse($input));
+
         $input = '<a href="http://4programmers.net">4programmers</a>.net';
         $this->tester->assertEquals($input, $parser->parse($input));
 

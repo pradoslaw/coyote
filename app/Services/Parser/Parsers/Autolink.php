@@ -31,7 +31,7 @@ class Autolink extends Parser implements ParserInterface
      */
     private function parseUrl(string $text): string
     {
-        return preg_replace_callback(
+        $processed = preg_replace_callback(
             self::REGEXP_URL,
             function ($match) {
                 $url = $match[0];
@@ -44,6 +44,15 @@ class Autolink extends Parser implements ParserInterface
             },
             $text
         );
+
+        // regexp posiada buga, nie parsuje poprawnie URL-i jezeli zawiera on (
+        // poki co nie mam rozwiazania na ten problem, dlatego zwracamy nieprzeprasowany tekst
+        // w przypadku bledu
+        if (preg_last_error() === PREG_NO_ERROR) {
+            return $processed;
+        }
+
+        return $text;
     }
 
     /**
