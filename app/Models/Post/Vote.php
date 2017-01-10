@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 
+/**
+ * @property int $post_id
+ * @property int $user_id
+ * @property int $forum_id
+ * @property string $ip
+ */
 class Vote extends Model
 {
     use ForUser;

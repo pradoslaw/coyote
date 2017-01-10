@@ -216,6 +216,16 @@ class PostRepository extends Repository implements PostRepositoryInterface
             array_merge($post->toArray(), ['text' => $text, 'subject' => $post->topic->subject, 'tags' => []])
         );
 
+        $this->app[Post\Attachment::class]->where('post_id', $post->id)->update(['post_id' => $previous->id]);
+        $this->app[Post\Comment::class]->where('post_id', $post->id)->update(['post_id' => $previous->id]);
+
+        $post->votes()->each(function ($vote) use ($previous) {
+            /** @var \Coyote\Post\Vote $vote */
+            if (!$previous->votes()->forUser($vote->user_id)->exists()) {
+                $previous->votes()->create(array_except($vote->toArray(), ['post_id']));
+            }
+        });
+
         $post->delete();
 
         return $previous;
