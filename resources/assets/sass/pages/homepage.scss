@@ -79,6 +79,8 @@
       color: #969696;
       clear: both;
 
+      @include text-overflow;
+
       a {
         color: #969696;
       }
@@ -89,6 +91,7 @@
         float: left;
         width: 17%;
         padding-top: 1px;
+
         @include text-overflow;
       }
     }
