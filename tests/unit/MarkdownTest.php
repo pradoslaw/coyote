@@ -117,4 +117,30 @@ class MarkdownTest extends \Codeception\TestCase\Test
         $input = $this->markdown->parse('[test](http://www.google.pl/)');
         $this->tester->assertEquals('<p><a href="http://www.google.pl/">test</a></p>', $input);
     }
+
+    public function testParseHashTag()
+    {
+        $this->markdown->setEnableHashParser(true);
+
+        $input = 'http://4programmers.net#hashtag';
+        $this->tester->assertEquals("<p>$input</p>", $this->markdown->parse($input));
+
+        $input = '#';
+        $this->tester->assertEquals("<p>$input</p>", $this->markdown->parse($input));
+
+        $input = 'test#';
+        $this->tester->assertEquals("<p>$input</p>", $this->markdown->parse($input));
+
+        $input = $this->markdown->parse('#coyote');
+        $this->tester->assertRegExp('/<a href=".*">#coyote<\/a>/', $input);
+
+        $input = $this->markdown->parse('(#coyote)');
+        $this->tester->assertRegExp('/\(<a href=".*">#coyote<\/a>\)/', $input);
+
+        $input = $this->markdown->parse('#coyote #4programmers.net');
+        $this->tester->assertRegExp('/<a href=".*">#coyote<\/a> <a href=".*">#4programmers.net<\/a>/', $input);
+
+        $input = $this->markdown->parse("#coyote\n#4programmers.net");
+        $this->tester->assertRegExp("/<a href=\".*\">#coyote<\/a>\n<a href=\".*\">#4programmers.net<\/a>/", $input);
+    }
 }

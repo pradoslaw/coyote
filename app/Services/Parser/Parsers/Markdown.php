@@ -86,7 +86,11 @@ class Markdown extends \Parsedown implements ParserInterface
     protected function inlineHash($excerpt)
     {
         if (!$this->enableHashParser) {
-            return null;
+            return;
+        }
+
+        if (!$this->isSingleWord($excerpt)) {
+            return;
         }
 
         if (preg_match('~#([\p{L}\p{Mn}0-9\._+-]+)~u', $excerpt['text'], $matches)) {
@@ -139,7 +143,7 @@ class Markdown extends \Parsedown implements ParserInterface
         $text = &$excerpt['text'];
         $start = strpos($text, '@');
 
-        if ($this->isNotEmail($excerpt)) {
+        if ($this->isSingleWord($excerpt)) {
             if (!isset($text[$start + 1])) {
                 return null;
             }
@@ -186,19 +190,18 @@ class Markdown extends \Parsedown implements ParserInterface
      * @param array $excerpt
      * @return bool
      */
-    private function isNotEmail(&$excerpt)
+    private function isSingleWord(&$excerpt)
     {
         // the whole text
         $context = &$excerpt['context'];
-        // "@" position
+        // "@" or "#" position
         $start = mb_strpos($context, $excerpt['text']);
-        // previous character (before "@")
+        // previous character (before "@" or "#")
         $preceding = mb_substr($context, $start - 1, 1);
 
         return mb_substr($excerpt['text'], $start + 1, 1) !== false
             && ($start === 0 || in_array($preceding, [' ', '(', "\n"]));
     }
-
 
     /**
      * Find the position of the first occurrence of a character in a string
