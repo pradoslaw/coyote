@@ -215,6 +215,13 @@ class SubmitController extends Controller
             $data = $request->all();
             $data['benefits'] = array_filter(array_unique(array_map('trim', $data['benefits'])));
 
+            // if agency - set null value. we don't to show them with agencies offers
+            if ($request->input('is_agency')) {
+                foreach (['employees', 'founded', 'headline', 'description', 'latitude', 'longitude', 'street', 'city', 'house', 'postcode', 'benefits'] as $column) {
+                    $data[$column] = null;
+                }
+            }
+
             $request->session()->put('firm', $data);
         }
 
@@ -297,7 +304,7 @@ class SubmitController extends Controller
             }
         }
 
-        if ($firm['description']) {
+        if (!empty($firm['description'])) {
             $firm['description'] = $parser->parse($firm['description']);
         }
 
@@ -365,10 +372,12 @@ class SubmitController extends Controller
 
                 $firm->benefits()->delete();
 
-                foreach ($data['benefits'] as $benefit) {
-                    $firm->benefits()->create([
-                        'name' => $benefit
-                    ]);
+                if (!empty($data['benefits'])) {
+                    foreach ($data['benefits'] as $benefit) {
+                        $firm->benefits()->create([
+                            'name' => $benefit
+                        ]);
+                    }
                 }
             }
 

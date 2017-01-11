@@ -54,8 +54,8 @@ class OfferController extends Controller
         $parser = app('parser.job');
 
         foreach (['description', 'requirements', 'recruitment'] as $name) {
-            if (!empty($job->$name)) {
-                $job->$name = $parser->parse($job->$name);
+            if (!empty($job->{$name})) {
+                $job->{$name} = $parser->parse($job->{$name});
             }
         }
 
@@ -64,7 +64,7 @@ class OfferController extends Controller
         $firm = [];
         if ($job->firm_id) {
             $firm = $this->firm->find($job->firm_id);
-            $firm->description = $parser->parse($firm->description);
+            $firm->description = $parser->parse((string) $firm->description);
         }
 
         $job->increment('views');

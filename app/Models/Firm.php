@@ -46,9 +46,9 @@ class Firm extends Model
         parent::boot();
 
         static::saving(function ($model) {
-            foreach (['latitude', 'longitude', 'founded', 'employees'] as $column) {
-                if (empty($model->$column)) {
-                    $model->$column = null;
+            foreach (['latitude', 'longitude', 'founded', 'employees', 'headline', 'description', 'latitude', 'longitude', 'street', 'city', 'house', 'postcode'] as $column) {
+                if (empty($model->{$column})) {
+                    $model->{$column} = null;
                 }
             }
         });
