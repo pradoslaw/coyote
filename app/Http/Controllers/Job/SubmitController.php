@@ -217,7 +217,7 @@ class SubmitController extends Controller
 
             // if agency - set null value. we don't to show them with agencies offers
             if ($request->input('is_agency')) {
-                foreach (['employees', 'founded', 'headline', 'description', 'latitude', 'longitude', 'street', 'city', 'house', 'postcode', 'benefits'] as $column) {
+                foreach (['employees', 'founded', 'headline', 'latitude', 'longitude', 'street', 'city', 'house', 'postcode', 'benefits'] as $column) {
                     $data[$column] = null;
                 }
             }

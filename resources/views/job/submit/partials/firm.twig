@@ -75,6 +75,13 @@
             {{ theme.error('website', 'Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.') }}
         {{ theme.group_close() }}
 
+        <div class="form-group">
+            <label class="control-label">Opis firmy</label>
+
+            {{ form_textarea('description', input_old('description', firm.description), {'class': 'form-control', 'style': 'height: 60px'}) }}
+            <span class="help-block">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
+        </div>
+
         <div class="form-group form-group-border agency">
             <label class="control-label">Liczba pracowników w firmie</label>
 
@@ -94,13 +101,6 @@
 
             {{ form_text('headline', input_old('headline', firm.headline), {'class': 'form-control', 'maxlength': 100}) }}
             <span class="help-block">Pozostało <strong>{{ (100 - input_old('headline', firm.headline)|length) }}</strong> znaków.</span>
-        </div>
-
-        <div class="form-group agency">
-            <label class="control-label">Opis firmy</label>
-
-            {{ form_textarea('description', input_old('description', firm.description), {'class': 'form-control', 'style': 'height: 60px'}) }}
-            <span class="help-block">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
         </div>
 
         <div class="form-group form-group-border agency">
