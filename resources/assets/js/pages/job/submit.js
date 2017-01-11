@@ -255,6 +255,7 @@ $(() => {
     })
     .on('change', 'input[name="is_agency"]', e => {
         $('.agency').toggle($(e.currentTarget).val() != 1);
+        google.maps.event.trigger(map, 'resize');
     })
     .on('focus', ':input', e => {
         let $this = $(e.currentTarget);
@@ -363,18 +364,18 @@ $(() => {
 function initialize() {
     'use strict';
 
-    var mapOptions =
+    let mapOptions =
     {
         zoom: 6,
         center: new google.maps.LatLng(51.919438, 19.14513599999998),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
-    var geocoder = new google.maps.Geocoder();
-    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    var marker;
+    let geocoder = new google.maps.Geocoder();
+    let map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    let marker;
 
-    var geocodeResult = function (results, status) {
+    let geocodeResult = function (results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
             map.setCenter(results[0].geometry.location);
 
@@ -390,8 +391,8 @@ function initialize() {
             map.setZoom(16);
             $('#address').val(results[0].formatted_address);
 
-            var country = '', city = '', street = '', postcode = '';
-            var components = results[0].address_components;
+            let country = '', city = '', street = '', postcode = '';
+            let components = results[0].address_components;
 
             for (let item in components) {
                 if (components.hasOwnProperty(item)) {
@@ -421,16 +422,16 @@ function initialize() {
         }
     };
 
-    var geocode = function (address) {
+    let geocode = function (address) {
         geocoder.geocode({'address': address}, geocodeResult);
     };
 
-    var reverseGeocode = function (coordinates) {
+    let reverseGeocode = function (coordinates) {
         geocoder.geocode({'latLng': coordinates}, geocodeResult);
     };
 
     if (!isNaN(parseFloat($('#latitude').val())) && !isNaN(parseFloat($('#longitude').val()))) {
-        var coordinates = new google.maps.LatLng(parseFloat($('#latitude').val()), parseFloat($('#longitude').val()));
+        let coordinates = new google.maps.LatLng(parseFloat($('#latitude').val()), parseFloat($('#longitude').val()));
 
         marker = new google.maps.Marker({
             map: map,
@@ -440,8 +441,8 @@ function initialize() {
         map.setCenter(coordinates);
     }
 
-    var onAddressChange = function () {
-        var val = $.trim($('#address').val());
+    let onAddressChange = function () {
+        let val = $.trim($('#address').val());
 
         if (val.length) {
             geocode(val);
@@ -455,7 +456,7 @@ function initialize() {
     };
 
     $('#address').keypress(function (e) {
-        var code = e.keyCode || e.which;
+        let code = e.keyCode || e.which;
 
         if (code === 13) {
             onAddressChange();
