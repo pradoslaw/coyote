@@ -25,6 +25,11 @@ class Tag extends Model
     protected $dates = ['created_at', 'deleted_at'];
 
     /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
      * @var bool
      */
     public $timestamps = false;

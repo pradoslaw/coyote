@@ -5,6 +5,17 @@ namespace Coyote\Post;
 use Illuminate\Database\Eloquent\Model;
 use Coyote\Post;
 
+/**
+ * @property int $post_id
+ * @property int $user_id
+ * @property string $text
+ * @property string $subject
+ * @property array $tags
+ * @property string $comment
+ * @property string $ip
+ * @property string $browser
+ * @property string $host
+ */
 class Log extends Model
 {
     /**
@@ -30,6 +41,8 @@ class Log extends Model
      * @var array
      */
     public $timestamps = false;
+
+    protected $casts = ['tags' => 'json'];
 
     /**
      * @param $tags
@@ -71,16 +84,20 @@ class Log extends Model
             return true;
         }
 
+        /** @var Log $previous */
         $previous = static::where('post_id', $this->post_id)->latest()->limit(1)->first();
         if (!$previous) {
             return true;
         }
 
-        $isDirty = false;
-        $compare = ['tags', 'subject', 'tags', 'text'];
+        if (!empty(array_diff($this->tags, $previous->tags))) {
+            return true;
+        }
 
-        foreach ($compare as $column) {
-            if ($previous->$column !== $this->$column) {
+        $isDirty = false;
+
+        foreach (['subject', 'text'] as $column) {
+            if ($previous->{$column} !== $this->{$column}) {
                 $isDirty = true;
                 break;
             }
