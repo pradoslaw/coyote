@@ -2,14 +2,12 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
 use Coyote\Services\Elasticsearch\Geodistance;
 use Coyote\Services\Geocoder\Location;
-use Illuminate\Http\Request;
 
 class AdController extends Controller
 {
@@ -30,17 +28,11 @@ class AdController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $output = $this->getCacheFactory()->remember('ad:' . md5($request->session()->getId()), 60, function () use ($request) {
-            return $this->load();
-        });
-
-        // cache output response for 1h
-        return response($output)->setMaxAge(3600)->setExpires(new Carbon('+1 hour'));
+        return response($this->load());
     }
 
     /**
@@ -54,8 +46,9 @@ class AdController extends Controller
         $preferences = $this->getSetting('job.preferences');
 
         $builder->setPreferences(new Preferences($preferences));
+        $builder->setSessionId($this->sessionId);
 
-        if ($preferences !== null) {
+        if ($preferences === null) {
             $location = $this->lookupLocation();
 
             if ($location->isValid()) {

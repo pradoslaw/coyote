@@ -41,19 +41,24 @@ class FieldValueFactor extends FunctionScore
     public function apply(QueryBuilderInterface $queryBuilder)
     {
         $body = $this->wrap($queryBuilder);
-
-        $body['query']['function_score']['functions'][] = ['field_value_factor' => value(function () {
-            $result = [];
-
-            foreach (['field', 'modifier', 'factor'] as $option) {
-                if ($this->{$option} !== null) {
-                    $result[$option] = $this->{$option};
-                }
-            }
-
-            return $result;
-        })];
+        $body['query']['function_score']['functions'][] = ['field_value_factor' => $this->getSetup()];
 
         return $body;
+    }
+
+    /**
+     * @return array
+     */
+    private function getSetup()
+    {
+        $result = [];
+
+        foreach (['field', 'modifier', 'factor'] as $option) {
+            if ($this->{$option} !== null) {
+                $result[$option] = $this->{$option};
+            }
+        }
+
+        return $result;
     }
 }
