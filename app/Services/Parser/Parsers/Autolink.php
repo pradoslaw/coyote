@@ -8,7 +8,8 @@ class Autolink extends Parser implements ParserInterface
     const REGEXP_URL = '#(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))#u';
     const REGEXP_EMAIL = '#(^|[\n \[\]\:<>&;]|\()([a-z0-9&\-_.]+?@[\w\-]+\.(?:[\w\-\.]+\.)?[\w]+)#i';
 
-    const LINK_TITLE_LEN = 64;
+    const TITLE_LEN = 64;
+    const TITLE_DOTS = '[...]';
 
     /**
      * @param string $text
@@ -42,10 +43,7 @@ class Autolink extends Parser implements ParserInterface
                     $url = 'http://' . $url;
                 }
 
-                $title = htmlspecialchars($match[0], ENT_QUOTES, 'UTF-8', false);
-                if (mb_strlen($title) > self::LINK_TITLE_LEN) {
-                    $title = $this->truncate($title, self::LINK_TITLE_LEN);
-                }
+                $title = $this->truncate(htmlspecialchars($match[0], ENT_QUOTES, 'UTF-8', false));
 
                 return link_to($url, $title);
             },
@@ -68,14 +66,18 @@ class Autolink extends Parser implements ParserInterface
      * @param string $dots
      * @return string
      */
-    private function truncate(string $text, int $length = 80, string $dots = "[...]"): string
+    private function truncate(string $text, int $length = self::TITLE_LEN, string $dots = self::TITLE_DOTS): string
     {
-        $padding = ($length - mb_strlen($dots)) / 2;
+        if (mb_strlen($text) > $length) {
+            $padding = ($length - mb_strlen($dots)) / 2;
 
-        $result = mb_substr($text, 0, $padding);
-        $result .= $dots;
-        $result .= mb_substr($text, -$padding);
+            $result = mb_substr($text, 0, $padding);
+            $result .= $dots;
+            $result .= mb_substr($text, -$padding);
 
-        return $result;
+            return $result;
+        }
+
+        return $text;
     }
 }
