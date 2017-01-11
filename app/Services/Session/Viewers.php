@@ -3,7 +3,9 @@
 namespace Coyote\Services\Session;
 
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Coyote\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 /**
  * Generuje widok przedstawiajacy liste osob na danej stronie z podzialem na boty, zalogowane osoby itp
@@ -122,21 +124,21 @@ class Viewers
     }
 
     /**
-     * @param \Illuminate\Support\Collection $collection
-     * @return \Illuminate\Support\Collection
+     * @param Collection $collection
+     * @return Collection
      */
-    private function unique($collection)
+    private function unique(Collection $collection)
     {
-        $guests = $collection->filter(function ($item) {
+        $guests = $collection->filter(function (Session $item) {
             return $item->user_id === null;
         });
 
         $collection
-            ->filter(function (\Coyote\Session $item) {
+            ->filter(function (Session $item) {
                 return $item->user_id !== null;
             })
             ->unique('user_id')
-            ->each(function (\Coyote\Session $item) use ($guests) {
+            ->each(function (Session $item) use ($guests) {
                 $guests->push($item);
             });
 
