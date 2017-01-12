@@ -68,7 +68,9 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
      */
     public function subscribes($userId)
     {
-        return $this
+        $this->applyCriteria();
+
+        $result = $this
             ->model
             ->select(['jobs.*', 'firms.name AS firm.name', 'firms.logo AS firm.logo', 'currencies.name AS currency_name'])
             ->join('job_subscribers', function (JoinClause $join) use ($userId) {
@@ -79,6 +81,10 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->with('locations')
             ->with('tags')
             ->get();
+
+        $this->resetModel();
+
+        return $result;
     }
 
     /**

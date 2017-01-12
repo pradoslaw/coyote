@@ -4,57 +4,33 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Job\Preferences;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Illuminate\Http\Request;
 use Coyote\Job;
 use Coyote\Currency;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Lavary\Menu\Builder;
-use Lavary\Menu\Menu;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
-    const TAB_ALL = 'all';
-    const TAB_FILTERED = 'filtered';
-
-    const DEFAULT_TAB = self::TAB_FILTERED;
-
-    /**
-     * @var JobRepository
-     */
-    private $job;
-
-    /**
-     * @var string
-     */
-    private $tab = self::TAB_ALL;
-
     /**
      * @var array|mixed
      */
     private $preferences = [];
 
     /**
-     * @var SearchBuilder
-     */
-    private $builder;
-
-    /**
      * @param JobRepository $job
-     * @param Request $request
      */
-    public function __construct(JobRepository $job, Request $request)
+    public function __construct(JobRepository $job)
     {
-        parent::__construct();
+        parent::__construct($job);
 
         $this->middleware('geocode');
 
-        $this->job = $job;
-        $this->builder = new SearchBuilder($request);
+        $this->middleware(function (Request $request, $next) {
+            $this->builder = new SearchBuilder($request);
 
-        $this->public['promptUrl'] = route('job.tag.prompt');
+            return $next($request);
+        });
     }
 
     /**
@@ -168,10 +144,6 @@ class HomeController extends Controller
 
         $pagination->appends($this->request->except('page'));
 
-        // we need to display actual number of active offers so don't remove line below!
-        $this->job->pushCriteria(new PriorDeadline());
-        $count = $this->job->count();
-
         $subscribes = [];
 
         if ($this->userId) {
@@ -191,28 +163,10 @@ class HomeController extends Controller
             'ratesList'         => Job::getRatesList(),
             'employmentList'    => Job::getEmploymentList(),
             'currencyList'      => Currency::pluck('name', 'id'),
-            'preferences'       => $this->preferences,
-            'tabs'              => $this->getTabs(),
-            'tab'               => $this->tab
+            'preferences'       => $this->preferences
         ])->with(
             compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count', 'selected')
         );
-    }
-
-    /**
-     * @return \Lavary\Menu\Builder
-     */
-    protected function getTabs()
-    {
-        return app(Menu::class)->make('job_tabs', function (Builder $builder) {
-            $icon = app('html')->tag('i', '', ['id' => 'btn-editor', 'class' => 'fa fa-cog', 'title' => 'Ustaw swoje preferencje']);
-
-            $builder->add('Wszystkie', ['route' => ['job.home', 'tab' => 'all'], 'nickname' => 'all']);
-            $builder->add('Wybrane dla mnie', ['route' => ['job.home', 'tab' => 'filtered'], 'nickname' => 'filtered']);
-
-            $builder->get('filtered')->append($icon);
-            $builder->get($this->tab)->active();
-        });
     }
 
     /**

@@ -19,11 +19,6 @@
 {% block description %}Praca dla programistów. Pracodawco: umieść u nas swoją ofertę pracy - zupełnie za darmo. Znajdź u nas pracownika wśród 50 000 programistów.{% endblock %}
 {% block keywords %}programowanie, praca, C#, Java, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
 
-{% set declinationOffers = ['oferta', 'oferty', 'ofert'] %}
-
-{% import 'components.forms' as forms %}
-{% import 'components.modals' as modals %}
-
 {% block container %}
     {{ modals.alert('Błąd podczas dodawania tagów. Sprawdź proszę czy nazwa tagu jest prawidłowa.') }}
 
@@ -206,68 +201,7 @@
 {% endblock %}
 
 {% block fixed %}
-    <div id="job-header-container">
-        <div class="row max-width">
-            <div class="col-md-9">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="row">
-                            <div id="box-search" class="col-md-8 col-sm-12 col-xs-12">
-                                {{ form_open({'url': route('job.home'), 'class': 'form-inline outline', 'method': 'get'}) }}
-                                    <div class="form-group input-keywords col-sm-5 col-xs-6">
-                                        <div class="col-content">
-                                            {{ form_input('search', 'q', request('q'), {'class': 'form-control', 'placeholder': 'Słowo kluczowe lub nazwa firmy'}) }}
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group input-location col-sm-5 col-xs-6">
-                                        <div class="col-content">
-                                            {{ form_input('search', 'city', request('city')|join(', '), {'class': 'form-control', 'placeholder': 'Nazwa miejscowości'}) }}
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-sm-2 hidden-xs">
-                                        <button class="btn btn-primary btn-search" type="submit">
-                                            <i class="fa fa-search"></i> <span class="hidden-xxs">{{ declination(count, declinationOffers) }}</span>
-                                        </button>
-                                    </div>
-
-                                {{ form_close() }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <ul class="nav nav-tabs">
-                    {% for item in tabs.roots() %}
-                        <li {{ forms.attr(item.attr) }}>
-                            <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                        </li>
-                    {% endfor %}
-
-                    {% if tab == 'filtered' %}
-                        <div class="alert alert-warning alert-popover left hidden-xs hidden-sm" data-id="job-pref" style="left: 285px">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
-
-                            Kliknij na ikonkę <i class="fa fa-cog"></i> aby ustawić preferencje wyszukiwania.
-                        </div>
-                    {% endif %}
-                </ul>
-            </div>
-
-            <div class="col-md-3 hidden-sm hidden-xs">
-                <section id="post-offer">
-                    <h4>Dla pracodawców</h4>
-
-                    <span class="outline">
-                        <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary" title="Dodaj ofertę pracy zupełnie za darmo!">Dodaj ofertę pracy</a>
-                    </span>
-
-                    <p>* żadnych ukrytych kosztów!</p>
-                </section>
-            </div>
-        </div>
-    </div>
+    {% include 'job.partials.header' %}
 
     {{ parent() }}
 

@@ -1,12 +1,9 @@
 {% extends 'layout' %}
+
 {% set search_url = route('job.home') %}
 {% set search_placeholder = 'Szukaj w ofertach pracy...' %}
 
-{% block head %}
-    {{ parent() }}
-
-
-{% endblock %}
+{% set declinationOffers = ['oferta', 'oferty', 'ofert'] %}
 
 {% block body %}
     {% import 'components.modals' as modals %}

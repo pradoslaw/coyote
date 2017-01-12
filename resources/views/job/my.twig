@@ -1,0 +1,16 @@
+{% extends 'job.base' %}
+{%- block title -%}
+    Moje oferty pracy
+
+    {{ parent() }}
+{%- endblock -%}
+
+{% block fixed %}
+    {% include 'job.partials.header' %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}

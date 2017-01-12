@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -38,7 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Job extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, ForUser;
     use Searchable {
         getIndexBody as parentGetIndexBody;
     }

@@ -153,7 +153,7 @@ abstract class Controller extends BaseController
      */
     protected function view($view = null, $data = [])
     {
-        if (!request()->ajax()) {
+        if (!$this->request->ajax()) {
             // public JS variables
             $data['public'] = json_encode($this->public);
 
