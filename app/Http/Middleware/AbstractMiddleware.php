@@ -31,4 +31,17 @@ abstract class AbstractMiddleware
             return redirect()->guest(route('login'));
         }
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function redirect(Request $request)
+    {
+        return redirect()->route(
+            $request->route()->getName(),
+            array_merge($request->route()->parameters(), $request->query()),
+            301
+        );
+    }
 }

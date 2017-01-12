@@ -28,11 +28,7 @@ class ForumAccess extends AbstractMiddleware
 
         // case sensitive redirection. redirect to the original url if needed.
         if ($this->isInvalidUrl() && $request->isMethod('get')) {
-            return redirect()->route(
-                $request->route()->getName(),
-                array_merge($request->route()->parameters(), $request->query()),
-                301
-            );
+            return $this->redirect($request);
         }
 
         if (!$forum->userCanAccess($request->user() ? $request->user()->id : null)) {

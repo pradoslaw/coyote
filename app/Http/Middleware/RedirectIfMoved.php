@@ -6,7 +6,7 @@ use Closure;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Illuminate\Http\Request;
 
-class RedirectIfMoved
+class RedirectIfMoved extends AbstractMiddleware
 {
     /**
      * @var ForumRepository
@@ -42,11 +42,7 @@ class RedirectIfMoved
             $request->route()->setParameter('slug', $topic->slug);
 
             if ($request->isMethod('get')) {
-                return redirect()->route(
-                    $request->route()->getName(),
-                    array_merge($request->route()->parameters(), $request->query()),
-                    301
-                );
+                return $this->redirect($request);
             }
         }
 
