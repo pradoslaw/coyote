@@ -1,5 +1,6 @@
 import DesktopNotifications from '../libs/notifications';
 import Session from '../libs/session';
+import Config from '../libs/config';
 
 /**
  * Manager alerts counter (set, get or clear)
@@ -26,10 +27,10 @@ class Notifications
     set(value) {
         if (value > 0) {
             this._setTitle('(' + (value) + ') ' + this._pageTitle);
-            this._setIcon(_config.cdn + '/img/xicon/favicon' + Math.min(value, 6) + '.png');
+            this._setIcon(Config.cdn(`/img/xicon/favicon${Math.min(value, 6)}.png`));
         } else {
             this._setTitle(this._pageTitle);
-            this._setIcon(_config.cdn + '/img/favicon.png');
+            this._setIcon(Config.cdn('/img/favicon.png'));
         }
 
         this._setBadge(value);
@@ -80,7 +81,7 @@ class Notifications
         }
         else {
             if (!badge.length) {
-                $('> a:first', this._self).prepend('<span class="badge">' + value + '</span>');
+                $('> a:first', this._self).prepend(`<span class="badge">${value}</span>`);
             } else {
                 badge.text(value);
             }
@@ -104,7 +105,7 @@ class Notifications
      * @private
      */
     _setIcon(url) {
-        $('head link[rel=icon]').attr('href', url);
+        $('head link[rel="shortcut icon"]').attr('href', url);
     }
 
     /**

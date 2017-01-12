@@ -12,6 +12,16 @@ let Config = {
     },
 
     /**
+     * Get link to CDN url.
+     *
+     * @param {string} url
+     * @return {string}
+     */
+    cdn: function(url) {
+        return this.get('cdn') + url.startsWith('/') ? url : ('/' + url);
+    },
+
+    /**
      * @return {jQuery}
      */
     csrfToken() {

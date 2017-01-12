@@ -36,12 +36,12 @@ class Pm
     _setBadge(value) {
         let badge = $('.badge', this._self);
 
-        if (value === 0) {
+        if (parseInt(value) === 0) {
             badge.remove();
         }
         else {
-            if (!badge) {
-                $('> a:first', this._self).prepend('<span class="badge">' + value + '</span>');
+            if (!badge.length) {
+                $('> a:first', this._self).prepend(`<span class="badge">${value}</span>`);
             } else {
                 badge.text(value);
             }
