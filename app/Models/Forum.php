@@ -227,6 +227,9 @@ class Forum extends Model
         return $builder;
     }
 
+    /**
+     * @return string
+     */
     public function getRouteKeyName()
     {
         return 'slug';
