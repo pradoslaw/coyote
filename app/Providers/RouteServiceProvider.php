@@ -68,7 +68,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->model('block', BlockRepositoryInterface::class);
 
         $this->router->bind('forum', function ($slug) {
-            return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();
+            return $this->app->make(ForumRepositoryInterface::class, [$this->app])->whereRaw('LOWER(slug) = ?', [mb_strtolower($slug)])->firstOrFail();
         });
 
         parent::boot();
