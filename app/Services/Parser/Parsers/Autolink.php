@@ -8,6 +8,9 @@ class Autolink extends Parser implements ParserInterface
     const REGEXP_URL = '#(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))#u';
     const REGEXP_EMAIL = '#(^|[\n \[\]\:<>&;]|\()([a-z0-9&\-_.]+?@[\w\-]+\.(?:[\w\-\.]+\.)?[\w]+)#i';
 
+    const TITLE_LEN = 64;
+    const TITLE_DOTS = '[...]';
+
     /**
      * @param string $text
      * @return string
@@ -40,7 +43,9 @@ class Autolink extends Parser implements ParserInterface
                     $url = 'http://' . $url;
                 }
 
-                return link_to($url, htmlspecialchars($match[0], ENT_QUOTES, 'UTF-8', false));
+                $title = $this->truncate(htmlspecialchars($match[0], ENT_QUOTES, 'UTF-8', false));
+
+                return link_to($url, $title);
             },
             $text
         );
@@ -62,5 +67,26 @@ class Autolink extends Parser implements ParserInterface
     private function parseEmail(string $text): string
     {
         return preg_replace(self::REGEXP_EMAIL, "\$1<a href=\"mailto:\$2\">$2</a>", $text);
+    }
+
+    /**
+     * @param string $text
+     * @param int $length
+     * @param string $dots
+     * @return string
+     */
+    private function truncate(string $text, int $length = self::TITLE_LEN, string $dots = self::TITLE_DOTS): string
+    {
+        if (mb_strlen($text) > $length) {
+            $padding = ($length - mb_strlen($dots)) / 2;
+
+            $result = mb_substr($text, 0, $padding);
+            $result .= $dots;
+            $result .= mb_substr($text, -$padding);
+
+            return $result;
+        }
+
+        return $text;
     }
 }
