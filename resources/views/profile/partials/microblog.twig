@@ -1,9 +1,23 @@
 <section id="microblog" class="box">
-    {% for microblog in microblogs %}
-        {% include "microblog.partials.microblog" %}
-    {% endfor %}
+    {% if microblogs is not empty %}
+        {% for microblog in microblogs %}
+            {% include "microblog.partials.microblog" %}
+        {% endfor %}
 
-    <div class="text-center">
-        {{ pagination|raw }}
-    </div>
+        <div class="text-center">
+            {{ pagination|raw }}
+        </div>
+    {% else %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="well well-sm empty-result">
+                            <p>Użytkownik nie opublikował ani jednego wpisu na mikroblogu.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 </section>
