@@ -14,30 +14,31 @@ $(function() {
             let overview = $('#overview');
             let pending = false;
 
-            $(this).perfectScrollbar().scrollTop(overview.outerHeight());
-
-            $(this).on('mouseenter', '.unread', () => {
-                $(this).off('mouseenter');
-                $(this).animate({backgroundColor: '#fff'});
-            })
-            .on('ps-y-reach-start', () => {
-                if (pending === true) {
-                    return;
-                }
-
-                pending = true;
-                $.get(_config.infinity_url, {offset: $('.media', overview).length}, html => {
-                    overview.prepend(html);
-
-                    // jezeli nie ma wiecej wiadomosci, to ajax nie bedzie kolejny raz wyslany
-                    if ($.trim(html) === '') {
-                        $(this).off('ps-y-reach-start');
+            $(this)
+                .perfectScrollbar()
+                .scrollTop(overview.outerHeight())
+                .on('ps-y-reach-start', () => {
+                    if (pending === true) {
+                        return;
                     }
 
-                    pending = false;
+                    pending = true;
+                    $.get(Config.get('infinity_url'), {offset: $('.media', overview).length}, html => {
+                        overview.prepend(html);
+
+                        // jezeli nie ma wiecej wiadomosci, to ajax nie bedzie kolejny raz wyslany
+                        if ($.trim(html) === '') {
+                            $(this).off('ps-y-reach-start');
+                        }
+
+                        pending = false;
+                    });
                 });
-            });
         });
+    })
+    .on('mouseenter', '.unread', (e) => {
+        $(e.currentTarget).off('mouseenter');
+        $(e.currentTarget).animate({backgroundColor: '#fff'});
     });
 
     $('#recipient').each(function() {
@@ -47,17 +48,18 @@ $(function() {
     });
 
     $('.btn-delete-pm').click(function() {
-        Dialog.confirm({
-            message: $(this).data('confirm'),
-            form: {
-                attr: {
-                    action: $(this).attr('href'),
-                    method: 'post'
-                },
-                csrfToken: Config.csrfToken()
-            }}
-        )
-        .show();
+        Dialog
+            .confirm({
+                message: $(this).data('confirm'),
+                form: {
+                    attr: {
+                        action: $(this).attr('href'),
+                        method: 'post'
+                    },
+                    csrfToken: Config.csrfToken()
+                }}
+            )
+            .show();
 
         return false;
     });
@@ -66,7 +68,7 @@ $(function() {
         if ($(e.target).attr('aria-controls') == 'preview') {
             $('#preview').html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
 
-            $.post(_config.preview_url, {'text': $('textarea[name="text"]').val()}, html => {
+            $.post(Config.get('preview_url'), {'text': $('textarea[name="text"]').val()}, html => {
                 $('#preview').html(html);
             });
         }
