@@ -43,6 +43,10 @@ class ForumAccess extends AbstractMiddleware
      */
     private function isInvalidUrl()
     {
+        // nie dziala dla podkategorii
+        if ($this->request->route('forum')->parent_id) {
+            return false;
+        }
         list(, $name, ) = explode('/', trim($this->request->getPathInfo(), '/'));
 
         $name = rawurldecode(trim($name));
