@@ -44,6 +44,7 @@ class ForumAccess extends AbstractMiddleware
     private function isInvalidUrl()
     {
         list(, $name, ) = explode('/', trim($this->request->getPathInfo(), '/'));
+        $name = urldecode($name);
 
         if ($name !== $this->request->route('forum')->slug) {
             return true;
