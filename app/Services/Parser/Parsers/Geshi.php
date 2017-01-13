@@ -4,6 +4,8 @@ namespace Coyote\Services\Parser\Parsers;
 
 class Geshi implements ParserInterface
 {
+    const ALIAS = ['html' => 'html5', 'c#' => 'csharp'];
+
     /**
      * @param string $text
      * @return string
@@ -16,8 +18,6 @@ class Geshi implements ParserInterface
             return $text;
         }
 
-        $alias = ['html' => 'html5'];
-
         $geshi = new \Boduch\Geshi\Geshi();
         $geshi->line_ending = "\n";
         /* tekst bedzie zawarty w	znaczniku <pre>	*/
@@ -29,8 +29,12 @@ class Geshi implements ParserInterface
             // class may have prefix "language". omit it.
             if (substr($language, 0, 8) === 'language') {
                 $language = substr($language, 9);
+
                 /* nadaj jezyk kolorowania skladnii */
-                $geshi->set_language(isset($alias[$language]) ? $alias[$language] : $language, true);
+                $geshi->set_language(!empty(self::ALIAS[$language]) ? self::ALIAS[$language] : $language, true);
+            } else {
+                // this is important in case of code: <code class="my-own-does-not-exist-language"></code>
+                $geshi->set_language('none', true);
             }
 
             $geshi->set_source(htmlspecialchars_decode($matches[2][$i]));
