@@ -52,7 +52,6 @@ class OAuthController extends Controller
         $oauth = $this->getSocialiteFactory()->driver($provider)->user();
         $user = $this->user->findWhere(['provider' => $provider, 'provider_id' => $oauth->getId()])->first();
 
-        $isNew = false;
         if (!$user) {
             $user = $this->user->findByEmail($oauth->getEmail());
 
@@ -91,18 +90,16 @@ class OAuthController extends Controller
                     'provider' => $provider,
                     'provider_id' => $oauth->getId()
                 ]);
-
-                $isNew = true;
             }
         }
 
-        if ($user->is_blocked) {
+        if ($user->is_blocked || !$user->is_active) {
             return redirect()->route('login', [
                 'error' => 'Konto zostało zablokowane.'
             ]);
         }
 
-        return $this->doLogin($user, $isNew);
+        return $this->doLogin($user);
     }
 
     /**
@@ -115,12 +112,11 @@ class OAuthController extends Controller
 
     /**
      * @param User $user
-     * @param bool $isNew
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function doLogin(User $user, bool $isNew)
+    private function doLogin(User $user)
     {
-        if ($isNew) {
+        if ($user->wasRecentlyCreated) {
             stream(Stream_Create::class, new Stream_Person($user->toArray()));
         } else {
             stream(Stream_Login::class);
