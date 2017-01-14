@@ -142,3 +142,10 @@
   max-height: 280px;
   overflow: hidden;
 }
+
+.well.empty-result {
+  background-position: center left;
+  margin-bottom: 0;
+  min-height: 68px;
+  padding: 12px 0;
+}
