@@ -4,10 +4,11 @@ namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
+use Coyote\User;
 use Laravel\Socialite\Contracts\Factory as Socialite;
 
 class OAuthController extends Controller
@@ -23,7 +24,7 @@ class OAuthController extends Controller
      * OAuthController constructor.
      * @param User $user
      */
-    public function __construct(User $user)
+    public function __construct(UserRepositoryInterface $user)
     {
         parent::__construct();
         $this->user = $user;
@@ -59,8 +60,6 @@ class OAuthController extends Controller
                 $user->provider = $provider;
                 $user->provider_id = $oauth->getId();
                 $user->save();
-
-                stream(Stream_Login::class);
             } else {
                 $name = $oauth->getName() ?: $oauth->getNickName();
 
@@ -91,16 +90,16 @@ class OAuthController extends Controller
                     'provider' => $provider,
                     'provider_id' => $oauth->getId()
                 ]);
-
-                stream(Stream_Create::class, new Stream_Person($user->toArray()));
             }
-        } else {
-            // put information into the activity stream...
-            stream(Stream_Login::class);
         }
 
-        auth()->login($user, true);
-        return redirect()->intended(route('home'));
+        if ($user->is_blocked || !$user->is_active) {
+            return redirect()->route('login', [
+                'error' => 'Konto zostało zablokowane.'
+            ]);
+        }
+
+        return $this->doLogin($user);
     }
 
     /**
@@ -109,5 +108,22 @@ class OAuthController extends Controller
     public function getSocialiteFactory()
     {
         return app(Socialite::class);
+    }
+
+    /**
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function doLogin(User $user)
+    {
+        if ($user->wasRecentlyCreated) {
+            stream(Stream_Create::class, new Stream_Person($user->toArray()));
+        } else {
+            stream(Stream_Login::class);
+        }
+
+        auth()->login($user, true);
+
+        return redirect()->intended(route('home'));
     }
 }

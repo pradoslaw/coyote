@@ -11,6 +11,14 @@
 
                 {% include 'auth.oauth' %}
 
+                {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
+                {# niestety z jakiegos powodu nie mozna tego komunikatu przekazac w sesji #}
+                {% if request().has('error') %}
+                    <div class="alert alert-danger">
+                        {{ request().get('error') }}
+                    </div>
+                {% endif %}
+
                 {{ form_start(form) }}
                     {{ form_row(form.name) }}
                     {{ form_row(form.password) }}
