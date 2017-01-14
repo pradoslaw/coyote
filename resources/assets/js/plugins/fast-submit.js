@@ -5,9 +5,10 @@
         return this.each(function () {
             $(this).keydown(function(e) {
                 if (e.keyCode === 13) {
-                    var form = $(this).closest('form');
+                    let form = $(this).closest('form');
+                    let isDisabled = form.find(':submit').attr('disabled') === 'disabled';
 
-                    if (e.ctrlKey) {
+                    if (e.ctrlKey && !isDisabled) {
                         form.submit();
                     }
                 }

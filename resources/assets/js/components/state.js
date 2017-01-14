@@ -2,9 +2,13 @@ $(function() {
     'use strict';
 
     $.fn.disable = function() {
+        if (this.attr('disabled') == 'disabled') {
+            return;
+        }
+
         let origin = this.html();
 
-        this.html('<i class="fa fa-spinner fa-spin fa-fw"></i> ' + origin).attr({'disabled': 'disabled', 'data-origin': origin});
+        this.html(`<i class="fa fa-spinner fa-spin fa-fw"></i> ${origin}`).attr({'disabled': 'disabled', 'data-origin': origin});
     };
 
     $.fn.enable = function() {
