@@ -15,12 +15,10 @@
             {{-- Array Of Links --}}
             @if (is_array($element))
                 @foreach ($element as $page => $url)
-                    @if (count($element) <= 3 or $page <= max(5, $paginator->currentPage() + 1))
-                        @if ($page == $paginator->currentPage())
-                            <li class="active"><span>{{ $page }}</span></li>
-                        @else
-                            <li><a href="{{ $url }}">{{ $page }}</a></li>
-                        @endif
+                    @if ($page == $paginator->currentPage())
+                        <li class="active"><span>{{ $page }}</span></li>
+                    @else
+                        <li><a href="{{ $url }}">{{ $page }}</a></li>
                     @endif
                 @endforeach
             @endif
