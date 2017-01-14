@@ -105,7 +105,7 @@ pewne czynności cykliczne.
 2. Dodaj linię: `* * * * * php /var/www/path-to-app/artisan schedule:run >> /dev/null 2>&1`
 
 
-### Konfiguracja Elasticearch
+### Konfiguracja Elasticsearch
 
 Po instalacji Elasticsearch, konieczne jest utworzenie indeksu oraz typów. Wykonaj poniższe polecenia:
 
