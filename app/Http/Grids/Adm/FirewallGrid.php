@@ -33,7 +33,7 @@ class FirewallGrid extends Grid
                 'clickable' => function (Firewall $row) {
                     return link_to_route('adm.user.save', $row->user_name, [$row->user_id]);
                 },
-                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'users.name'])
             ])
             ->addColumn('ip', [
                 'title' => 'IP',
