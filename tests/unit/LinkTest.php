@@ -125,6 +125,14 @@ class LinkTest extends \Codeception\TestCase\Test
         $this->tester->assertContains("<pre><code>[[Kim jesteśmy?]]</code></pre>", $input);
     }
 
+    public function testYoutubeVideos()
+    {
+        $parser = new Link($this->repository, '4programmers.net', $this->htmlBuilder);
+
+        $this->tester->assertContains('iframe', $parser->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94')));
+        $this->tester->assertContains('iframe', $parser->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94#foo')));
+    }
+
     public function testAutolink()
     {
         $parser = new \Coyote\Services\Parser\Parsers\Autolink();

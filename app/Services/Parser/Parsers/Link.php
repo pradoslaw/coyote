@@ -173,7 +173,7 @@ class Link extends Parser implements ParserInterface
     private function makeIframe(string $videoId): string
     {
         $iframe = (string) $this->html->tag('iframe', '', [
-            'src' => 'http://youtube.com/embed/' . $videoId,
+            'src'   => 'https://youtube.com/embed/' . $videoId,
             'class' => 'embed-responsive-item'
         ]);
 
