@@ -63,6 +63,9 @@ class Viewers
         })
         ->count();
 
+        // only number of human guests
+        $guests -= $robots;
+
         foreach ($collection->groupBy('group') as $name => $rowset) {
             if ($name == '') {
                 $name = self::USER;
