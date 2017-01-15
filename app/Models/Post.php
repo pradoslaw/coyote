@@ -55,7 +55,7 @@ class Post extends Model
      */
     protected $mapping = [
         "tags" => [
-            "type" => "multi_field",
+            "type" => "string",
             "fields" => [
                 "tag" => [
                     "type" => "string"

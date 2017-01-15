@@ -11,7 +11,7 @@ return [
     |
     | http://www.elasticsearch.org/guide/en/elasticsearch/client/php-api/current/_configuration.html
     */
-    'hosts'     => ['localhost:9200'],
+    'hosts' => ['localhost:9200'],
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ return [
         'dr', 'i', 'u', 'aby', 'albo', 'ale', 'ani', 'aż', 'bardzo', 'bez', 'bo', 'bowiem', 'by', 'byli', 'bym', 'był',
         'była', 'było', 'były', 'być', 'będzie', 'będą', 'chce', 'choć', 'co', 'coraz', 'coś', 'czy', 'czyli', 'często',
         'dla', 'do', 'gdy', 'gdyby', 'gdyż', 'gdzie', 'go', 'ich', 'im', 'inne', 'iż', 'ja', 'jak', 'jakie', 'jako',
-        'je', 'jednak',  'jednym',  'jedynie', 'jego', 'jej', 'jest', 'jeszcze', 'jeśli', 'jeżeli', 'już', 'ją', 'kiedy',
+        'je', 'jednak', 'jednym', 'jedynie', 'jego', 'jej', 'jest', 'jeszcze', 'jeśli', 'jeżeli', 'już', 'ją', 'kiedy',
         'kilku', 'kto', 'która', 'które', 'którego', 'której', 'który', 'których', 'którym', 'którzy', 'lat', 'lecz',
         'lub', 'ma', 'mają', 'mamy', 'mi', 'miał', 'mimo', 'mnie', 'mogą', 'może', 'można', 'mu', 'musi', 'na', 'nad',
         'nam', 'nas', 'nawet', 'nic', 'nich', 'nie', 'niej', 'nim', 'niż', 'no', 'nowe', 'np', 'nr', 'o', 'od', 'ok',
