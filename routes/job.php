@@ -6,7 +6,7 @@
 /** @var $this \Illuminate\Routing\Router */
 $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home', 'middleware' => 'job.redirect']);
-    $this->get('My', ['uses' => 'MyController@index', 'as' => 'my']);
+    $this->get('My', ['uses' => 'MyOffersController@index', 'as' => 'my', 'middleware' => 'auth']);
 
     $this->get('Submit/{id?}', ['uses' => 'SubmitController@getIndex', 'as' => 'submit', 'middleware' => 'auth']);
     $this->post('Submit', ['uses' => 'SubmitController@postIndex', 'middleware' => 'auth']);

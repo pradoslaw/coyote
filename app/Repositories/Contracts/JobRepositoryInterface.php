@@ -52,4 +52,10 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getSubscribed($userId);
+
+    /**
+     * @param int $userId
+     * @return \Illuminate\Support\Collection
+     */
+    public function getMyOffers($userId);
 }

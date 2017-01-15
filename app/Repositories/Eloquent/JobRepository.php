@@ -22,8 +22,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     }
 
     /**
-     * @param int $id
-     * @return mixed
+     * @inheritdoc
      */
     public function findById($id)
     {
@@ -38,7 +37,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function count()
     {
@@ -47,8 +46,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     }
 
     /**
-     * @param string $city
-     * @return int
+     * @inheritdoc
      */
     public function countOffersInCity(string $city)
     {
@@ -61,10 +59,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     }
 
     /**
-     * Get subscribed job offers for given user id
-     *
-     * @param int $userId
-     * @return mixed
+     * @inheritdoc
      */
     public function subscribes($userId)
     {
@@ -88,8 +83,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     }
 
     /**
-     * @param int $limit
-     * @return mixed
+     * @inheritdoc
      */
     public function getPopularTags($limit = 1000)
     {
@@ -102,10 +96,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     }
 
     /**
-     * Return tags with job offers counter
-     *
-     * @param array $tagsId
-     * @return mixed
+     * @inheritdoc
      */
     public function getTagsWeight(array $tagsId)
     {
@@ -116,6 +107,41 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->whereIn('job_tags.tag_id', $tagsId)
             ->get()
             ->pluck('count', 'name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSubscribed($userId)
+    {
+        return $this
+            ->app
+            ->make(Job\Subscriber::class)
+            ->select(['jobs.id', 'title', 'slug', 'job_subscribers.created_at'])
+            ->join('jobs', 'jobs.id', '=', 'job_subscribers.job_id')
+            ->where('job_subscribers.user_id', $userId)
+            ->whereNull('deleted_at')
+            ->orderBy('job_subscribers.id', 'DESC')
+            ->paginate();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMyOffers($userId)
+    {
+        $this->applyCriteria();
+
+        $result = $this
+            ->model
+            ->select(['jobs.*', 'firms.name AS firm_name'])
+            ->leftJoin('firms', 'firms.id', '=', 'firm_id')
+            ->where('jobs.user_id', $userId)
+            ->get();
+
+        $this->resetModel();
+
+        return $result;
     }
 
     /**
@@ -133,22 +159,5 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
                 ->whereNull('tags.deleted_at')
                 ->where('deadline_at', '>', $this->raw('NOW()'))
             ->groupBy('name');
-    }
-
-    /**
-     * @param int $userId
-     * @return mixed
-     */
-    public function getSubscribed($userId)
-    {
-        return $this
-            ->app
-            ->make(Job\Subscriber::class)
-            ->select(['jobs.id', 'title', 'slug', 'job_subscribers.created_at'])
-            ->join('jobs', 'jobs.id', '=', 'job_subscribers.job_id')
-            ->where('job_subscribers.user_id', $userId)
-            ->whereNull('deleted_at')
-            ->orderBy('job_subscribers.id', 'DESC')
-            ->paginate();
     }
 }
