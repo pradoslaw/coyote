@@ -39,12 +39,23 @@ abstract class Parser
     {
         if (!empty($this->hash)) {
             while (count($this->hash) > 0) {
-                end($this->hash); // set pointer to the last element
-
-                $uniqId = key($this->hash); // key of the assoc array
-                $text = str_replace($uniqId, array_pop($this->hash), $text);
+                $text = $this->unhashLast($text);
             }
         }
+
+        return $text;
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    protected function unhashLast($text)
+    {
+        end($this->hash); // set pointer to the last element
+        $uniqId = key($this->hash); // key of the assoc array
+
+        $text = str_replace($uniqId, array_pop($this->hash), $text);
 
         return $text;
     }

@@ -6,7 +6,6 @@ use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Container;
-use Coyote\Services\Parser\Parsers\Autolink;
 use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Geshi;
 use Coyote\Services\Parser\Parsers\Link;
@@ -41,7 +40,7 @@ class MicroblogFactory extends AbstractFactory
                             ->setBreaksEnabled(true)
                             ->setEnableHashParser(true)
                     );
-                    $parser->attach(new Autolink());
+
                     $parser->attach(new Purifier());
                     $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost(), $this->app['html']));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));

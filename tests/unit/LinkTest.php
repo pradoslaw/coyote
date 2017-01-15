@@ -135,7 +135,7 @@ class LinkTest extends \Codeception\TestCase\Test
 
     public function testAutolink()
     {
-        $parser = new \Coyote\Services\Parser\Parsers\Autolink();
+        $parser = new Link($this->repository, '4programmers.net', $this->htmlBuilder);
 
         $input = $parser->parse('http://4programmers.net');
         $this->tester->assertEquals('<a href="http://4programmers.net">http://4programmers.net</a>', $input);
@@ -160,6 +160,15 @@ class LinkTest extends \Codeception\TestCase\Test
 
         $input = $parser->parse('<foo@bar.com>');
         $this->tester->assertEquals('<<a href="mailto:foo@bar.com">foo@bar.com</a>>', $input);
+
+        $input = '@4programmers.net';
+        $this->tester->assertEquals($input, $parser->parse($input));
+
+        $input = '<a href="http://4programmers.net">4programmers</a>.net';
+        $this->tester->assertEquals($input, $parser->parse($input));
+
+        $input = 'www.4programmers.net';
+        $this->tester->assertEquals('<a href="http://www.4programmers.net">www.4programmers.net</a>', $parser->parse($input));
     }
 
     private function createPage($title, $path)
