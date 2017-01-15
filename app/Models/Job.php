@@ -104,7 +104,7 @@ class Job extends Model
             "type" => "nested",
             "properties" => [
                 "city" => [
-                    "type" => "multi_field",
+                    "type" => "string",
                     "fields" => [
                         "city" => [
                             "type" => "string",
@@ -136,7 +136,7 @@ class Job extends Model
             "analyzer" => "default_analyzer"
         ],
         "tags" => [
-            "type" => "multi_field",
+            "type" => "string",
             "fields" => [
                 "tag" => [
                     "type" => "string"
@@ -151,7 +151,7 @@ class Job extends Model
             "type" => "object",
             "properties" => [
                 "name" => [
-                    "type" => "multi_field",
+                    "type" => "string",
                     "fields" => [
                         // mozliwosc szukania po nazwie firmy
                         "name" => ["type" => "string", "analyzer" => "default_analyzer"],
