@@ -16,6 +16,11 @@ class LinkTest extends \Codeception\TestCase\Test
     protected $link;
 
     /**
+     * @var \Collective\Html\HtmlBuilder
+     */
+    protected $htmlBuilder;
+
+    /**
      * @var mixed
      */
     protected $repository;
@@ -23,6 +28,7 @@ class LinkTest extends \Codeception\TestCase\Test
     protected function _before()
     {
         $this->repository = new \Coyote\Repositories\Eloquent\PageRepository(app());
+        $this->htmlBuilder = app('html');
     }
 
     protected function _after()
@@ -33,7 +39,7 @@ class LinkTest extends \Codeception\TestCase\Test
     public function testParseInternalLinks()
     {
         $host = '4programmers.net';
-        $this->link = new Link($this->repository, $host);
+        $this->link = new Link($this->repository, $host, $this->htmlBuilder);
 
         $fake = Factory::create();
 
@@ -47,7 +53,7 @@ class LinkTest extends \Codeception\TestCase\Test
         $this->parse($url, $title);
 
         $host = 'dev.4programmers.net';
-        $this->link = new Link($this->repository, $host);
+        $this->link = new Link($this->repository, $host, $this->htmlBuilder);
 
         $url = 'http://' . $host . $path;
         $this->parse($url, $title);
@@ -56,7 +62,7 @@ class LinkTest extends \Codeception\TestCase\Test
     public function testParseInternalLinksWithPolishCharacters()
     {
         $host = '4programmers.net';
-        $this->link = new Link($this->repository, $host);
+        $this->link = new Link($this->repository, $host, $this->htmlBuilder);
 
         $title = 'łatwo przyszło, łatwo poszło';
         $path = '/' . str_slug($title);
@@ -71,7 +77,7 @@ class LinkTest extends \Codeception\TestCase\Test
     public function testParseInternalAccessors()
     {
         $host = '4programmers.net';
-        $this->link = new Link($this->repository, $host);
+        $this->link = new Link($this->repository, $host, $this->htmlBuilder);
 
         $title = 'Forum dyskusyjne';
         $path = '/Discussion_board';

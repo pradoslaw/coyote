@@ -41,7 +41,7 @@ class PostFactory extends AbstractFactory
                     $parser->attach(new Latex());
                     $parser->attach(new Autolink());
                     $parser->attach(new Purifier());
-                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
+                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost(), $this->app['html']));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
                     $parser->attach(new Geshi());
 

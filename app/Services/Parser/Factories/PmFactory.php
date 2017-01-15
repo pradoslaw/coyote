@@ -30,7 +30,7 @@ class PmFactory extends AbstractFactory
         $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));
         $parser->attach(new Autolink());
         $parser->attach(new Purifier());
-        $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
+        $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost(), $this->app['html']));
         $parser->attach(new Geshi());
 
         if ($this->isSmiliesAllowed()) {

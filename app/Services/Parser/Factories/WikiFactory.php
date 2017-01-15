@@ -47,7 +47,7 @@ class WikiFactory extends AbstractFactory
                 $parser->attach(new Latex());
                 $parser->attach(new Autolink());
                 $parser->attach((new Purifier())->set('HTML.Allowed', implode(',', $allowedTags)));
-                $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
+                $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost(), $this->app['html']));
                 $parser->attach(new Context());
                 $parser->attach(new Geshi());
 

@@ -2,7 +2,8 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
-use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
+use Collective\Html\HtmlBuilder;
+use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 
 class Link extends Parser implements ParserInterface
 {
@@ -10,7 +11,7 @@ class Link extends Parser implements ParserInterface
     const LINK_INTERNAL_REGEXP = '\[\[(.*?)(\|(.*?))*\]\]';
 
     /**
-     * @var Page
+     * @var PageRepository
      */
     private $page;
 
@@ -20,15 +21,22 @@ class Link extends Parser implements ParserInterface
     private $host;
 
     /**
+     * @var HtmlBuilder|null
+     */
+    private $html;
+
+    /**
      * Link constructor.
      *
-     * @param Page $page
+     * @param PageRepository $page
      * @param string $host
+     * @param HtmlBuilder|null $html
      */
-    public function __construct(Page $page, string $host)
+    public function __construct(PageRepository $page, string $host, HtmlBuilder $html = null)
     {
         $this->page = $page;
         $this->host = $host;
+        $this->html = $html;
     }
 
     /**
@@ -40,7 +48,7 @@ class Link extends Parser implements ParserInterface
         $text = $this->hashBlock($text, 'code');
         $text = $this->hashInline($text, 'img');
 
-        $text = $this->parseInternalLinks($text);
+        $text = $this->parseLinks($text);
         $text = $this->parseInternalAccessors($text);
 
         $text = $this->unhash($text);
@@ -49,26 +57,41 @@ class Link extends Parser implements ParserInterface
     }
 
     /**
-     * @param $text
-     * @return mixed
+     * @param string $text
+     * @return string
      */
-    protected function parseInternalLinks($text)
+    protected function parseLinks($text)
     {
         if (!preg_match_all('/' . self::LINK_TAG_REGEXP . '/siU', $text, $matches, PREG_SET_ORDER)) {
             return $text;
         }
 
         for ($i = 0, $count = count($matches); $i < $count; $i++) {
-            $link = $matches[$i][2];
+            $link  = $matches[$i][2];
             $title = $matches[$i][3];
+            $match = $matches[$i][0];
 
-            if (urldecode($title) === urldecode($link) && ($path = $this->getPathFromUrl($link)) !== false) {
-                $page = $this->page->findByPath($path);
-                $html = $matches[$i][0];
+            $text = $this->parseInternalLink($text, $match, $link, $title);
+            $text = $this->parseYoutubeLinks($text, $match, $link);
+        }
 
-                if ($page) {
-                    $text = str_replace($html, link_to($link, $page->title), $text);
-                }
+        return $text;
+    }
+
+    /**
+     * @param string $text
+     * @param string $match
+     * @param string $url
+     * @param string $title
+     * @return string
+     */
+    protected function parseInternalLink($text, $match, $url, $title)
+    {
+        if (urldecode($title) === urldecode($url) && ($path = $this->getPathFromInternalUrl($url)) !== false) {
+            $page = $this->page->findByPath($path);
+
+            if ($page) {
+                $text = str_replace($match, link_to($url, $page->title), $text);
             }
         }
 
@@ -121,29 +144,57 @@ class Link extends Parser implements ParserInterface
     }
 
     /**
+     * @param string $text
+     * @param string $match
+     * @param string $url
+     * @return string
+     */
+    protected function parseYoutubeLinks($text, $match, $url)
+    {
+        if ($this->html === null) {
+            return $text;
+        }
+
+        $components = parse_url($url);
+
+        if ($this->getHost($components['host']) === 'youtube.com' && trim($components['path'], '/') === 'watch') {
+            parse_str($components['query'], $query);
+
+            $text = str_replace($match, $this->makeIframe($query['v']), $text);
+        }
+
+        return $text;
+    }
+
+    /**
+     * @param string $videoId
+     * @return string
+     */
+    private function makeIframe(string $videoId): string
+    {
+        $iframe = (string) $this->html->tag('iframe', '', [
+            'src' => 'http://youtube.com/embed/' . $videoId,
+            'class' => 'embed-responsive-item'
+        ]);
+
+        return (string) $this->html->tag('div', $iframe, ['class' => 'embed-responsive embed-responsive-16by9']);
+    }
+
+    /**
      * Get path from url only if it's internal link (false if it's NOT internal link)
      *
      * @example http://4programmers.net/Foo/Bar => /Foo/Bar
      * @param string $url
      * @return string|bool
      */
-    private function getPathFromUrl($url)
+    private function getPathFromInternalUrl($url)
     {
         $component = parse_url($url);
         $path = false;
 
         if (!empty($component['path']) && !empty($component['host'])) {
-            // host odnosnika (np. 4programmers.net lub forum.4programmers.net). Przeksztalcamy
-            // ten url tak, aby uzyskac tylko domene wyzszego rzedu, czyli 4programmers.net
-            $parts = explode('.', $component['host']);
-            $host = implode('.', array_slice($parts, -2, 2));
-
             // sprawdzamy, czy mamy do czynienia z linkiem wewnetrznym
-            if (stripos($this->host, $host) !== false) {
-                if ($parts[0] == 'www') {
-                    array_shift($parts);
-                }
-
+            if ($this->host === $this->getHost($component['host'])) {
                 $path = urldecode($component['path']);
             }
         }
@@ -165,5 +216,22 @@ class Link extends Parser implements ParserInterface
         }
 
         return $hash;
+    }
+
+    /**
+     * Get host without "www" at the beginning.
+     *
+     * @param string $host
+     * @return string
+     */
+    private function getHost(string $host): string
+    {
+        $parts = explode('.', $host);
+
+        if ($parts[0] === 'www') {
+            array_shift($parts);
+        }
+
+        return implode('.', $parts);
     }
 }
