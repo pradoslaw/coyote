@@ -7,6 +7,7 @@ import {RealtimeFactory} from './libs/realtime.js';
 import './components/dropdown.js';
 import './components/scrolltop.js';
 import './components/breadcrumb.js';
+import './components/navbar-toggle.js';
 import './components/state.js';
 import './components/date.js';
 import './components/vcard.js';
@@ -20,7 +21,7 @@ import './components/notifications.js';
 import './components/pm.js';
 import Config from './libs/config';
 
-$(function() {
+$(function () {
     'use strict';
 
     $.ajaxSetup({
