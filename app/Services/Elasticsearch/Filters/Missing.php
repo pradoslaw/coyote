@@ -22,6 +22,9 @@ class Missing extends Filter
      */
     public function apply(QueryBuilderInterface $queryBuilder)
     {
-        return $this->addOrFilter($queryBuilder, ['missing' => ['field' => $this->field]]);
+        $body = $queryBuilder->getBody();
+        $body['query']['bool']['must_not']['exists'] = ['field' => $this->field];
+
+        return $body;
     }
 }

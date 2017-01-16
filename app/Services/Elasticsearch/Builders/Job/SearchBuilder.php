@@ -5,7 +5,7 @@ namespace Coyote\Services\Elasticsearch\Builders\Job;
 use Coyote\Services\Elasticsearch\Aggs;
 use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
-use Coyote\Services\Elasticsearch\Query;
+use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\Filters;
@@ -110,7 +110,7 @@ class SearchBuilder
     {
         if ($this->request->has('q')) {
             $this->queryBuilder->addQuery(
-                new Query($this->request->get('q'), ['title^2', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
+                new MultiMatch($this->request->get('q'), ['title^2', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
             );
         }
 
@@ -131,14 +131,14 @@ class SearchBuilder
         }
 
         $sort = $this->getSort();
-        $this->queryBuilder->addSort(new Sort($sort, $this->getOrder()));
+        $this->queryBuilder->sort(new Sort($sort, $this->getOrder()));
 
         $this->addFilters();
         $this->addFunctionScore();
         // facet search
         $this->addAggregation();
 
-        $this->queryBuilder->setSize(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
+        $this->queryBuilder->size(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
 
         return $this->queryBuilder;
     }

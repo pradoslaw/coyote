@@ -28,7 +28,7 @@ class MoreLikeThisBuilder
         $builder->addMoreLikeThis($mlt);
         $builder->addFilter(new NotTerm('id', $job->id));
 
-        $builder->setSize(0, 5);
+        $builder->size(0, 5);
 
         return $builder;
     }

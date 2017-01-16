@@ -29,13 +29,13 @@ class AdBuilder extends SearchBuilder
         $this->addFunctionScore();
 
         $this->queryBuilder->addFunction(new Random());
-        $this->queryBuilder->setSize(0, 4);
+        $this->queryBuilder->size(0, 4);
 
         return $this->queryBuilder;
     }
 
     public function setSort($sort)
     {
-        $this->queryBuilder->addSort($sort);
+        $this->queryBuilder->sort($sort);
     }
 }

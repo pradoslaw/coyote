@@ -4,6 +4,9 @@ namespace Coyote\Services\Elasticsearch;
 
 class QueryBuilder implements QueryBuilderInterface
 {
+    const MUST = 'must';
+    const SHOULD = 'should';
+
     /**
      * Default query builder array
      *
@@ -11,21 +14,11 @@ class QueryBuilder implements QueryBuilderInterface
      */
     protected $body = [
         'query' => [
-            'filtered' => [
-                'query' => [
-                    'match_all' => []
-                ],
-                'filter' => [
-                    'and' => [
-                        'filters' => [
-                            [
-                                'or' => [
-                                    'filters' => []
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+            'bool' => [
+                'must' => [],
+                'must_not' => [],
+                'should' => [],
+                'filter' => [ ]
             ]
         ],
 
@@ -44,6 +37,11 @@ class QueryBuilder implements QueryBuilderInterface
     protected $stock = [];
 
     /**
+     * @var DslInterface[]
+     */
+    protected $bool = [];
+
+    /**
      * @return array
      */
     public function getBody()
@@ -52,12 +50,34 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * @param DslInterface $query
+     * @param DslInterface $bool
+     * @return $this
+     */
+    public function should(DslInterface $bool)
+    {
+        $this->bool[self::SHOULD][] = $bool;
+
+        return $this;
+    }
+
+    /**
+     * @param DslInterface $bool
+     * @return $this
+     */
+    public function must(DslInterface $bool)
+    {
+        $this->bool[self::MUST][] = $bool;
+
+        return $this;
+    }
+
+    /**
+     * @param DslInterface $bool
      * @return $this|QueryBuilder
      */
-    public function addQuery(DslInterface $query)
+    public function addQuery(DslInterface $bool)
     {
-        return $this->addToStock($query);
+        return $this->addToStock($bool);
     }
 
     /**
@@ -73,7 +93,7 @@ class QueryBuilder implements QueryBuilderInterface
      * @param DslInterface $sort
      * @return $this|QueryBuilder
      */
-    public function addSort(DslInterface $sort)
+    public function sort(DslInterface $sort)
     {
         return $this->addToStock($sort);
     }
@@ -91,7 +111,7 @@ class QueryBuilder implements QueryBuilderInterface
      * @param DslInterface $highlight
      * @return QueryBuilder
      */
-    public function addHighlight(DslInterface $highlight)
+    public function highlight(DslInterface $highlight)
     {
         return $this->addToStock($highlight);
     }
@@ -108,11 +128,14 @@ class QueryBuilder implements QueryBuilderInterface
     /**
      * @param int $from
      * @param int $size
+     * @return $this
      */
-    public function setSize($from, $size)
+    public function size($from, $size)
     {
         $this->body['from'] = $from;
         $this->body['size'] = $size;
+
+        return $this;
     }
 
     /**
@@ -129,6 +152,13 @@ class QueryBuilder implements QueryBuilderInterface
      */
     public function build()
     {
+        foreach ($this->bool as $context => $stock) {
+            foreach ($stock as $item) {
+                /** @var DslInterface $item */
+                $this->body['query']['bool'][$context][] = $item->apply($this);
+            }
+        }
+
         foreach ($this->stock as $stock) {
             $this->body = $stock->apply($this);
         }

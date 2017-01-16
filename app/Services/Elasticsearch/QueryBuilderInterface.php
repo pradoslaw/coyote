@@ -25,7 +25,7 @@ interface QueryBuilderInterface
      * @param DslInterface $sort
      * @return $this|QueryBuilder
      */
-    public function addSort(DslInterface $sort);
+    public function sort(DslInterface $sort);
 
     /**
      * @param DslInterface $aggs
@@ -37,13 +37,14 @@ interface QueryBuilderInterface
      * @param DslInterface $highlight
      * @return QueryBuilder
      */
-    public function addHighlight(DslInterface $highlight);
+    public function highlight(DslInterface $highlight);
 
     /**
      * @param int $from
      * @param int $size
+     * @return $this
      */
-    public function setSize($from, $size);
+    public function size($from, $size);
 
     /**
      * @return array
