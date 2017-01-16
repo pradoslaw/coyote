@@ -2,9 +2,9 @@
 
 namespace Coyote\Services\Elasticsearch\Builders;
 
-use Coyote\Services\Elasticsearch\Filters\Missing;
-use Coyote\Services\Elasticsearch\Filters\Post\Forum;
-use Coyote\Services\Elasticsearch\Query;
+use Coyote\Services\Elasticsearch\Filters\Post\ForumMustExist;
+use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
+use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\Sort;
@@ -22,28 +22,25 @@ class MixedBuilder
     public function build(Request $request) : QueryBuilderInterface
     {
         $fields = [
-            'topics.subject',
-            'topics.text',
-            'microblogs.text',
-            'wiki.title',
-            'wiki.long_title',
-            'wiki.text',
-            'wiki.excerpt',
-            'jobs.title',
-            'jobs.description',
-            'jobs.requirements',
-            'jobs.recruitment'
+            'subject',
+            'text',
+            'text',
+            'title',
+            'long_title',
+            'text',
+            'excerpt',
+            'title',
+            'description',
+            'requirements',
+            'recruitment'
         ];
 
-        $builder = new QueryBuilder();
-        $builder->addQuery(new Query($request->input('q'), $fields));
-        $builder->addSort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
-        $builder->addHighlight(new Highlight(['subject', 'text', 'title', 'long_title', 'excerpt', 'description', 'requirements']));
-        $builder->addFilter(new Forum($request->attributes->get('forum_id')));
-        $builder->addFilter(new Missing('forum_id'));
-
-        $builder->setSize(($request->input('page', 1) - 1) * self::PER_PAGE, self::PER_PAGE);
-
-        return $builder;
+        return (new QueryBuilder())
+            ->must(new MultiMatch($request->input('q'), $fields))
+            ->must(new ForumMustExist())
+            ->should(new OnlyThoseWithAccess($request->attributes->get('forum_id')))
+            ->sort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')))
+            ->highlight(new Highlight(['subject', 'text', 'title', 'long_title', 'excerpt', 'description', 'requirements']))
+            ->size(($request->input('page', 1) - 1) * self::PER_PAGE, self::PER_PAGE);
     }
 }

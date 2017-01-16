@@ -10,7 +10,7 @@ use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\QueryParser;
 use Coyote\Services\Elasticsearch\Sort;
-use Coyote\Services\Elasticsearch\Query;
+use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\Highlight;
 use Coyote\Services\Elasticsearch\Filters\Term;
 use Illuminate\Http\Request;
@@ -28,8 +28,8 @@ class SearchBuilder
     {
         $builder = new QueryBuilder();
         $builder->addFilter(new Forum($forumId));
-        $builder->addSort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
-        $builder->addHighlight(new Highlight(['topic.subject', 'text', 'tags']));
+        $builder->sort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
+        $builder->highlight(new Highlight(['topic.subject', 'text', 'tags']));
 
         // parse given query and fetch keywords and filters
         $parser = new QueryParser(
@@ -70,11 +70,11 @@ class SearchBuilder
 
         // specify query string and fields
         if ($parser->getFilteredQuery()) {
-            $builder->addQuery(new Query($parser->getFilteredQuery(), ['text^2', 'topic.subject', 'tags^4']));
+            $builder->addQuery(new MultiMatch($parser->getFilteredQuery(), ['text^2', 'topic.subject', 'tags^4']));
         }
 
         $builder->addFunction(new Decay('created_at', '180d'));
-        $builder->setSize(($request->input('page', 1) - 1) * 10, 10);
+        $builder->size(($request->input('page', 1) - 1) * 10, 10);
 
         return $builder;
     }

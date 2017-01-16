@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch;
 
-class Query implements DslInterface
+class MultiMatch implements DslInterface
 {
     /**
      * @var string
@@ -31,16 +31,12 @@ class Query implements DslInterface
      */
     public function apply(QueryBuilderInterface $queryBuilder)
     {
-        $body = $queryBuilder->getBody();
-
-        $body['query']['filtered']['query'] = [
-            'query_string' => [
-                'query' => $this->escape($this->query),
-                'fields' => $this->fields
+        return [
+            'multi_match' => [
+                'query'     => $this->escape($this->query),
+                'fields'    => $this->fields
             ]
         ];
-
-        return $body;
     }
 
     /**
