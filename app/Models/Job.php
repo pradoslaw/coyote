@@ -104,19 +104,10 @@ class Job extends Model
             "type" => "nested",
             "properties" => [
                 "city" => [
-                    "type" => "text",
-                    "analyzer" => "keyword_analyzer_with_asciifolding",
+                    "type" => "string",
+                    "analyzer" => "keyword_asciifolding_analyzer",
                     "fields" => [
-//                        "city" => [
-//                            "type" => "text",
-////                            "index" => "analyzed",
-////                            "store" => "yes",
-//                            "analyzer" => "keyword_analyzer_with_asciifolding"
-//                        ],
-                        "original" => [
-                            "type" => "keyword",
-//                            "analyzer" => "keyword_analyzer"
-                        ]
+                        "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
                     ]
                 ],
                 "coordinates" => [
@@ -139,13 +130,7 @@ class Job extends Model
         "tags" => [
             "type" => "text",
             "fields" => [
-//                "tag" => [
-//                    "type" => "text"
-//                ],
-                "original" => [
-                    "type" => "keyword",
-//                    "index" => "not_analyzed"
-                ]
+                "original" => ["type" => "keyword"]
             ]
         ],
         "firm" => [
@@ -155,10 +140,8 @@ class Job extends Model
                     "type" => "text",
                     "analyzer" => "default_analyzer",
                     "fields" => [
-                        // mozliwosc szukania po nazwie firmy
-//                        "name" => ["type" => "text", "analyzer" => "default_analyzer"],
                         // filtrujemy firmy po tym polu
-                        "original" => ["type" => "string", "analyzer" => "keyword_analyzer"]
+                        "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
                     ]
                 ]
             ]
