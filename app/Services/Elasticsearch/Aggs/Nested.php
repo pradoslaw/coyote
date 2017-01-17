@@ -22,7 +22,7 @@ class Nested extends Aggs implements DslInterface
                     'path' => $this->name
                 ],
                 'aggs' => [
-                    $this->field => [
+                    str_replace('.', '_', $this->field) => [
                         'terms' => [
                             'field' => $this->field,
                             'size' => 15

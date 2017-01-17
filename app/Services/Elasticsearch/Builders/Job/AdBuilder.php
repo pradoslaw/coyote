@@ -28,7 +28,7 @@ class AdBuilder extends SearchBuilder
         $this->addFilters();
         $this->addFunctionScore();
 
-        $this->queryBuilder->addFunction(new Random());
+        $this->queryBuilder->scoreFunction(new Random());
         $this->queryBuilder->size(0, 4);
 
         return $this->queryBuilder;

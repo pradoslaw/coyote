@@ -65,6 +65,7 @@ class Create extends Command
                                         "tokenizer" => "keyword",
                                         "filter" => "lowercase"
                                     ],
+                                    // used to index city names
                                     "keyword_analyzer_with_asciifolding" => [
                                         "tokenizer" => "keyword",
                                         "filter" => [

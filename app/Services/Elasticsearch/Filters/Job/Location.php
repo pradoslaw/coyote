@@ -36,7 +36,7 @@ class Location extends Filter implements DslInterface
     public function apply(QueryBuilderInterface $queryBuilder)
     {
         if (empty($this->locations)) {
-            return $queryBuilder->getBody();
+            return (object) [];
         }
 
         $geodistance = [];
@@ -45,33 +45,20 @@ class Location extends Filter implements DslInterface
             $geodistance[] = [
                 'geo_distance' => [
                     'distance' => '40km',
-                    'coordinates' => $location
+                    'locations.coordinates' => $location
                 ]
             ];
         }
 
-        return $this->addOrFilter($queryBuilder, [
+        return [
             'nested' => [
                 'path' => 'locations',
                 'query' => [
-                    'filtered' => [
-                        'query' => [
-                            'match_all' => []
-                        ],
-                        'filter' => [
-                            'and' => [
-                                'filters' => [
-                                    [
-                                        'or' => [
-                                            'filters' => $geodistance
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
+                    'bool' => [
+                        'must' => $geodistance
                     ]
                 ]
             ]
-        ]);
+        ];
     }
 }

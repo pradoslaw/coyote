@@ -68,6 +68,7 @@ class Tag extends Terms implements DslInterface
     public function apply(QueryBuilderInterface $queryBuilder)
     {
         parent::__construct('tags.original', $this->tags);
+
         return parent::apply($queryBuilder);
     }
 }
