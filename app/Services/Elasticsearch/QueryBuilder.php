@@ -72,24 +72,6 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * @param DslInterface $bool
-     * @return $this|QueryBuilder
-     */
-    public function addQuery(DslInterface $bool)
-    {
-        return $this->addToStock($bool);
-    }
-
-    /**
-     * @param DslInterface $filter
-     * @return $this|QueryBuilder
-     */
-    public function addFilter(DslInterface $filter)
-    {
-        return $this->addToStock($filter);
-    }
-
-    /**
      * @param DslInterface $sort
      * @return $this|QueryBuilder
      */
@@ -102,7 +84,7 @@ class QueryBuilder implements QueryBuilderInterface
      * @param DslInterface $aggs
      * @return QueryBuilder
      */
-    public function addAggs(DslInterface $aggs)
+    public function aggs(DslInterface $aggs)
     {
         return $this->addToStock($aggs);
     }
@@ -120,7 +102,7 @@ class QueryBuilder implements QueryBuilderInterface
      * @param DslInterface $mlt
      * @return QueryBuilder
      */
-    public function addMoreLikeThis(DslInterface $mlt)
+    public function moreLikeThis(DslInterface $mlt)
     {
         return $this->addToStock($mlt);
     }
@@ -142,7 +124,7 @@ class QueryBuilder implements QueryBuilderInterface
      * @param DslInterface $function
      * @return QueryBuilder
      */
-    public function addFunction(DslInterface $function)
+    public function scoreFunction(DslInterface $function)
     {
         return $this->addToStock($function);
     }
@@ -158,7 +140,7 @@ class QueryBuilder implements QueryBuilderInterface
                 $this->body['query']['bool'][$context][] = $item->apply($this);
             }
         }
-
+//dd($this->body,$this->stock);
         foreach ($this->stock as $stock) {
             $this->body = $stock->apply($this);
         }

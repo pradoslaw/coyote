@@ -4,7 +4,7 @@ namespace Coyote\Services\Elasticsearch\Builders\Forum;
 
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Coyote\Services\Elasticsearch\Filters\Post\Forum;
+use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
@@ -27,7 +27,7 @@ class SearchBuilder
     public function build(Request $request, $forumId) : QueryBuilderInterface
     {
         $builder = new QueryBuilder();
-        $builder->addFilter(new Forum($forumId));
+        $builder->must(new OnlyThoseWithAccess($forumId));
         $builder->sort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
         $builder->highlight(new Highlight(['topic.subject', 'text', 'tags']));
 
@@ -57,7 +57,7 @@ class SearchBuilder
                 $field = 'user_name';
             }
 
-            $builder->addFilter(new Term($field, $value));
+            $builder->must(new Term($field, $value));
         }
 
         // filter by browser is not part of the filter. we need to append it to query
@@ -65,15 +65,15 @@ class SearchBuilder
 
         // we need to apply rest of the filters
         foreach ($parser->getFilters() as $field => $value) {
-            $builder->addFilter(new Term($field, $value));
+            $builder->must(new Term($field, $value));
         }
 
         // specify query string and fields
         if ($parser->getFilteredQuery()) {
-            $builder->addQuery(new MultiMatch($parser->getFilteredQuery(), ['text^2', 'topic.subject', 'tags^4']));
+            $builder->must(new MultiMatch($parser->getFilteredQuery(), ['text^2', 'topic.subject', 'tags^4']));
         }
 
-        $builder->addFunction(new Decay('created_at', '180d'));
+        $builder->scoreFunction(new Decay('created_at', '180d'));
         $builder->size(($request->input('page', 1) - 1) * 10, 10);
 
         return $builder;

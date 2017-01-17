@@ -10,16 +10,16 @@ interface QueryBuilderInterface
     public function getBody();
 
     /**
-     * @param DslInterface $query
-     * @return $this|QueryBuilder
+     * @param DslInterface $bool
+     * @return $this
      */
-    public function addQuery(DslInterface $query);
+    public function should(DslInterface $bool);
 
     /**
-     * @param DslInterface $filter
-     * @return $this|QueryBuilder
+     * @param DslInterface $bool
+     * @return $this
      */
-    public function addFilter(DslInterface $filter);
+    public function must(DslInterface $bool);
 
     /**
      * @param DslInterface $sort
@@ -31,7 +31,7 @@ interface QueryBuilderInterface
      * @param DslInterface $aggs
      * @return QueryBuilder
      */
-    public function addAggs(DslInterface $aggs);
+    public function aggs(DslInterface $aggs);
 
     /**
      * @param DslInterface $highlight
@@ -40,11 +40,23 @@ interface QueryBuilderInterface
     public function highlight(DslInterface $highlight);
 
     /**
+     * @param DslInterface $mlt
+     * @return QueryBuilder
+     */
+    public function moreLikeThis(DslInterface $mlt);
+
+    /**
      * @param int $from
      * @param int $size
      * @return $this
      */
     public function size($from, $size);
+
+    /**
+     * @param DslInterface $function
+     * @return QueryBuilder
+     */
+    public function scoreFunction(DslInterface $function);
 
     /**
      * @return array

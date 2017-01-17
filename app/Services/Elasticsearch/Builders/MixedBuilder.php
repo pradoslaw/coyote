@@ -40,7 +40,9 @@ class MixedBuilder
             ->must(new ForumMustExist())
             ->should(new OnlyThoseWithAccess($request->attributes->get('forum_id')))
             ->sort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')))
-            ->highlight(new Highlight(['subject', 'text', 'title', 'long_title', 'excerpt', 'description', 'requirements']))
+            ->highlight(
+                new Highlight(['subject', 'text', 'title', 'long_title', 'excerpt', 'description', 'requirements'])
+            )
             ->size(($request->input('page', 1) - 1) * self::PER_PAGE, self::PER_PAGE);
     }
 }
