@@ -3,7 +3,7 @@
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Job;
-use Coyote\Services\Elasticsearch\Filters\NotTerm;
+use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
@@ -20,13 +20,13 @@ class MoreLikeThisBuilder
 
         $mlt = new MoreLikeThis(['title', 'description', 'tags']);
         $mlt->addDoc([
-            '_index' => config('elasticsearch.default_index'),
-            '_type' => 'jobs',
-            '_id' => $job->id
+            '_index'        => config('elasticsearch.default_index'),
+            '_type'         => 'jobs',
+            '_id'           => $job->id
         ]);
 
-        $builder->addMoreLikeThis($mlt);
-        $builder->addFilter(new NotTerm('id', $job->id));
+        $builder->moreLikeThis($mlt);
+        $builder->mustNot(new Term('id', $job->id));
 
         $builder->size(0, 5);
 

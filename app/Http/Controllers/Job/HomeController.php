@@ -119,6 +119,7 @@ class HomeController extends BaseController
         $build = $this->builder->build()->build();
         // show build query in laravel's debugbar
         debugbar()->debug(json_encode($build));
+        debugbar()->debug(($build));
 
         $result = $this->job->search($build);
         stop_measure('search');
@@ -129,7 +130,7 @@ class HomeController extends BaseController
 
         $context = !$this->request->has('q') ? 'global.' : '';
         $aggregations = [
-            'cities'        => $result->getAggregations("${context}locations.city_original"),
+            'cities'        => $result->getAggregations("${context}locations.locations_city_original"),
             'tags'          => $result->getAggregations("${context}tags"),
             'remote'        => $result->getAggregations("${context}remote")
         ];

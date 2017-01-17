@@ -20,8 +20,8 @@ class Remote extends Term implements DslInterface
      * @param QueryBuilderInterface $queryBuilder
      * @return mixed
      */
-    public function apply(QueryBuilderInterface $queryBuilder)
-    {
-        return $this->addOrFilter($queryBuilder, [static::FILTER_NAME => [$this->field => $this->value]]);
-    }
+//    public function apply(QueryBuilderInterface $queryBuilder)
+//    {
+//        return $this->addOrFilter($queryBuilder, [static::FILTER_NAME => [$this->field => $this->value]]);
+//    }
 }

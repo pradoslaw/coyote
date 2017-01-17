@@ -3,6 +3,7 @@
 namespace Coyote\Services\Elasticsearch\Builders\Wiki;
 
 use Coyote\Services\Elasticsearch\Filters\NotTerm;
+use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
@@ -20,14 +21,14 @@ class MoreLikeThisBuilder
 
         $mlt = new MoreLikeThis(['title', 'excerpt']);
         $mlt->addDoc([
-            '_index' => config('elasticsearch.default_index'),
-            '_type' => 'wiki',
-            '_id' => $wiki->id
+            '_index'    => config('elasticsearch.default_index'),
+            '_type'     => 'wiki',
+            '_id'       => $wiki->id
         ]);
 
-        $builder->addMoreLikeThis($mlt);
-        $builder->addFilter(new NotTerm('id', $wiki->id));
-        $builder->addFilter(new NotTerm('wiki_id', $wiki->wiki_id));
+        $builder->moreLikeThis($mlt);
+        $builder->mustNot(new NotTerm('id', $wiki->id));
+        $builder->mustNot(new Term('wiki_id', $wiki->wiki_id));
 
         $builder->size(0, 10);
 

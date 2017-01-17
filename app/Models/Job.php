@@ -104,17 +104,18 @@ class Job extends Model
             "type" => "nested",
             "properties" => [
                 "city" => [
-                    "type" => "string",
+                    "type" => "text",
+                    "analyzer" => "keyword_analyzer_with_asciifolding",
                     "fields" => [
-                        "city" => [
-                            "type" => "string",
-                            "index" => "analyzed",
-                            "store" => "yes",
-                            "analyzer" => "keyword_analyzer_with_asciifolding"
-                        ],
-                        "city_original" => [
-                            "type" => "string",
-                            "analyzer" => "keyword_analyzer"
+//                        "city" => [
+//                            "type" => "text",
+////                            "index" => "analyzed",
+////                            "store" => "yes",
+//                            "analyzer" => "keyword_analyzer_with_asciifolding"
+//                        ],
+                        "original" => [
+                            "type" => "keyword",
+//                            "analyzer" => "keyword_analyzer"
                         ]
                     ]
                 ],
@@ -124,26 +125,26 @@ class Job extends Model
             ]
         ],
         "title" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ],
         "description" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ],
         "requirements" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ],
         "tags" => [
-            "type" => "string",
+            "type" => "text",
             "fields" => [
-                "tag" => [
-                    "type" => "string"
-                ],
+//                "tag" => [
+//                    "type" => "text"
+//                ],
                 "original" => [
-                    "type" => "string",
-                    "index" => "not_analyzed"
+                    "type" => "keyword",
+//                    "index" => "not_analyzed"
                 ]
             ]
         ],
@@ -151,12 +152,13 @@ class Job extends Model
             "type" => "object",
             "properties" => [
                 "name" => [
-                    "type" => "string",
+                    "type" => "text",
+                    "analyzer" => "default_analyzer",
                     "fields" => [
                         // mozliwosc szukania po nazwie firmy
-                        "name" => ["type" => "string", "analyzer" => "default_analyzer"],
+//                        "name" => ["type" => "text", "analyzer" => "default_analyzer"],
                         // filtrujemy firmy po tym polu
-                        "name_original" => ["type" => "string", "analyzer" => "keyword_analyzer"]
+                        "original" => ["type" => "string", "analyzer" => "keyword_analyzer"]
                     ]
                 ]
             ]

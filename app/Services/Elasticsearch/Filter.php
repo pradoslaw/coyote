@@ -31,7 +31,7 @@ abstract class Filter implements DslInterface
     public function apply(QueryBuilderInterface $queryBuilder)
     {
         if (empty($this->value)) {
-            return [];
+            return (object) [];
         }
 
         return [static::FILTER_NAME => [$this->field => $this->value]];

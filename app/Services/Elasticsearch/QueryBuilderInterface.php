@@ -22,6 +22,12 @@ interface QueryBuilderInterface
     public function must(DslInterface $bool);
 
     /**
+     * @param DslInterface $bool
+     * @return $this
+     */
+    public function mustNot(DslInterface $bool);
+
+    /**
      * @param DslInterface $sort
      * @return $this|QueryBuilder
      */

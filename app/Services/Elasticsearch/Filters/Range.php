@@ -25,6 +25,6 @@ class Range extends Filter implements DslInterface
      */
     private function filterValue($value)
     {
-        return (int) trim(str_replace(' ', '', $value));
+        return trim(str_replace(' ', '', $value));
     }
 }

@@ -82,7 +82,7 @@ class SearchBuilder
      */
     public function addRemoteFilter()
     {
-        $this->queryBuilder->addFilter(new Filters\Job\Remote());
+        $this->queryBuilder->must(new Filters\Job\Remote());
     }
 
     /**
@@ -91,8 +91,8 @@ class SearchBuilder
      */
     public function addSalaryFilter($salary, $currencyId)
     {
-        $this->queryBuilder->addFilter(new Filters\Range('salary', ['gte' => $salary]));
-        $this->queryBuilder->addFilter(new Filters\Job\Currency($currencyId));
+        $this->queryBuilder->must(new Filters\Range('salary', ['gte' => $salary]));
+        $this->queryBuilder->must(new Filters\Job\Currency($currencyId));
     }
 
     /**
@@ -100,7 +100,7 @@ class SearchBuilder
      */
     public function addFirmFilter($name)
     {
-        $this->queryBuilder->addFilter(new Filters\Job\Firm($name));
+        $this->queryBuilder->must(new Filters\Job\Firm($name));
     }
 
     /**
@@ -109,7 +109,7 @@ class SearchBuilder
     public function build() : QueryBuilderInterface
     {
         if ($this->request->has('q')) {
-            $this->queryBuilder->addQuery(
+            $this->queryBuilder->must(
                 new MultiMatch($this->request->get('q'), ['title^2', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
             );
         }
@@ -146,25 +146,25 @@ class SearchBuilder
     protected function addFilters()
     {
         // it's really important. we MUST show only active offers
-        $this->queryBuilder->addFilter(new Filters\Range('deadline_at', ['gte' => 'now']));
-        $this->queryBuilder->addFilter($this->city);
-        $this->queryBuilder->addFilter($this->tag);
-        $this->queryBuilder->addFilter($this->location);
+        $this->queryBuilder->must(new Filters\Range('deadline_at', ['gte' => 'now']));
+        $this->queryBuilder->must($this->city);
+        $this->queryBuilder->must($this->tag);
+        $this->queryBuilder->must($this->location);
     }
 
     protected function addFunctionScore()
     {
         // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 1)
-        $this->queryBuilder->addFunction(new FieldValueFactor('score', 'log', 1));
+        $this->queryBuilder->scoreFunction(new FieldValueFactor('score', 'log', 1));
         // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
-        $this->queryBuilder->addFunction(new Decay('created_at', '14d', 0.1));
+        $this->queryBuilder->scoreFunction(new Decay('created_at', '14d', 0.1));
     }
 
     protected function addAggregation()
     {
-        $this->queryBuilder->addAggs(new Aggs\Job\Location());
-        $this->queryBuilder->addAggs(new Aggs\Job\Remote());
-        $this->queryBuilder->addAggs(new Aggs\Job\Tag());
+        $this->queryBuilder->aggs(new Aggs\Job\Location());
+        $this->queryBuilder->aggs(new Aggs\Job\Remote());
+        $this->queryBuilder->aggs(new Aggs\Job\Tag());
     }
 
     /**

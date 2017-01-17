@@ -5,6 +5,7 @@ namespace Coyote\Services\Elasticsearch;
 class QueryBuilder implements QueryBuilderInterface
 {
     const MUST = 'must';
+    const MUST_NOT = 'must_not';
     const SHOULD = 'should';
 
     /**
@@ -67,6 +68,17 @@ class QueryBuilder implements QueryBuilderInterface
     public function must(DslInterface $bool)
     {
         $this->bool[self::MUST][] = $bool;
+
+        return $this;
+    }
+
+    /**
+     * @param DslInterface $bool
+     * @return $this
+     */
+    public function mustNot(DslInterface $bool)
+    {
+        $this->bool[self::MUST_NOT][] = $bool;
 
         return $this;
     }
