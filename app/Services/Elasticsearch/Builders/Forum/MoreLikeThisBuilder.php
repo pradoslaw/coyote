@@ -27,7 +27,7 @@ class MoreLikeThisBuilder
             '_id'       => $topic->id
         ]);
 
-        $builder->moreLikeThis($mlt);
+        $builder->must($mlt);
 
         $builder->must(new OnlyThoseWithAccess($forumId));
         $builder->must(new ForumMustExist('id', $topic->id));

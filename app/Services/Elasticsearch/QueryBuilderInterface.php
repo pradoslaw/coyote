@@ -46,12 +46,6 @@ interface QueryBuilderInterface
     public function highlight(DslInterface $highlight);
 
     /**
-     * @param DslInterface $mlt
-     * @return QueryBuilder
-     */
-    public function moreLikeThis(DslInterface $mlt);
-
-    /**
      * @param int $from
      * @param int $size
      * @return $this

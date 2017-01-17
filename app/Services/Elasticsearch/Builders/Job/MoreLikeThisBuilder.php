@@ -25,7 +25,7 @@ class MoreLikeThisBuilder
             '_id'           => $job->id
         ]);
 
-        $builder->moreLikeThis($mlt);
+        $builder->must($mlt);
         $builder->mustNot(new Term('id', $job->id));
 
         $builder->size(0, 5);

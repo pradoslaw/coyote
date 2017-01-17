@@ -36,23 +36,20 @@ class MoreLikeThis implements DslInterface
      */
     public function apply(QueryBuilderInterface $queryBuilder)
     {
-        $body = $queryBuilder->getBody();
-        $query = &$body['query']['filtered']['query'];
-
-        $query['more_like_this'] = [
-            'fields' => $this->fields,
-            'docs' => [],
-            'min_term_freq' => 1,
-            'min_doc_freq' => 1,
-            'max_query_terms' => 5
+        $result = [
+            'more_like_this' => [
+                'fields' => $this->fields,
+                'like' => [],
+                'min_term_freq' => 1,
+                'min_doc_freq' => 1,
+                'max_query_terms' => 5
+            ]
         ];
 
         foreach ($this->docs as $doc) {
-            $query['more_like_this']['docs'][] = $doc;
+            $result['more_like_this']['like'][] = $doc;
         }
 
-        unset($body['query']['filtered']['query']['match_all']);
-
-        return $body;
+        return $result;
     }
 }
