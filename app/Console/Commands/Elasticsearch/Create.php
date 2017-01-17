@@ -61,12 +61,13 @@ class Create extends Command
                                     ]
                                 ],
                                 "analyzer" => [
+                                    // just like keyword type except lowercase filter
                                     "keyword_analyzer" => [
                                         "tokenizer" => "keyword",
                                         "filter" => "lowercase"
                                     ],
                                     // used to index city names
-                                    "keyword_analyzer_with_asciifolding" => [
+                                    "keyword_asciifolding_analyzer" => [
                                         "tokenizer" => "keyword",
                                         "filter" => [
                                             "lowercase",
