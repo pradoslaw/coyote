@@ -111,15 +111,6 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * @param DslInterface $mlt
-     * @return QueryBuilder
-     */
-    public function moreLikeThis(DslInterface $mlt)
-    {
-        return $this->addToStock($mlt);
-    }
-
-    /**
      * @param int $from
      * @param int $size
      * @return $this
