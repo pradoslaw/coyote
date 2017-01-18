@@ -16,18 +16,18 @@ class MoreLikeThisBuilder extends QueryBuilder
     private $topic;
 
     /**
-     * @var int
+     * @var int[]
      */
     private $forumId;
 
     /**
      * @param Topic $topic
-     * @param $forumId
+     * @param int[] $forumsId
      */
-    public function __construct(Topic $topic, $forumId)
+    public function __construct(Topic $topic, $forumsId)
     {
         $this->topic = $topic;
-        $this->forumId = $forumId;
+        $this->forumId = $forumsId;
     }
 
     /**
@@ -44,8 +44,8 @@ class MoreLikeThisBuilder extends QueryBuilder
 
         $this->must($mlt);
 
+        $this->must(new ForumMustExist());
         $this->must(new OnlyThoseWithAccess($this->forumId));
-        $this->must(new ForumMustExist('id', $this->topic->id));
 
         return parent::build();
     }
