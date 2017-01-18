@@ -19,7 +19,7 @@ class QueryBuilder implements QueryBuilderInterface
                 'must' => [],
                 'must_not' => [],
                 'should' => [],
-                'filter' => [ ]
+                'filter' => []
             ]
         ],
 
@@ -143,7 +143,7 @@ class QueryBuilder implements QueryBuilderInterface
                 $this->body['query']['bool'][$context][] = $item->apply($this);
             }
         }
-//dd($this->body,$this->stock);
+
         foreach ($this->stock as $stock) {
             $this->body = $stock->apply($this);
         }
