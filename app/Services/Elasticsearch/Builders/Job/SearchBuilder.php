@@ -126,17 +126,17 @@ class SearchBuilder extends QueryBuilder
         $sort = $this->getSort();
         $this->sort(new Sort($sort, $this->getOrder()));
 
-        $this->addFilters();
-        $this->addFunctionScore();
+        $this->setupFilters();
+        $this->setupScoreFunctions();
         // facet search
-        $this->addAggregation();
+        $this->setupAggregations();
 
         $this->size(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
 
         return parent::build();
     }
 
-    protected function addFilters()
+    protected function setupFilters()
     {
         // it's really important. we MUST show only active offers
         $this->must(new Filters\Range('deadline_at', ['gte' => 'now']));
@@ -145,15 +145,15 @@ class SearchBuilder extends QueryBuilder
         $this->must($this->location);
     }
 
-    protected function addFunctionScore()
+    protected function setupScoreFunctions()
     {
         // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 1)
-        $this->scoreFunction(new FieldValueFactor('score', 'log', 1));
+        $this->score(new FieldValueFactor('score', 'log', 1));
         // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
-        $this->scoreFunction(new Decay('created_at', '14d', 0.1));
+        $this->score(new Decay('created_at', '14d', 0.1));
     }
 
-    protected function addAggregation()
+    protected function setupAggregations()
     {
         $this->aggs(new Aggs\Job\Location());
         $this->aggs(new Aggs\Job\Remote());

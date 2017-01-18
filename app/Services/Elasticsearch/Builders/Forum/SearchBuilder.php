@@ -94,7 +94,7 @@ class SearchBuilder extends QueryBuilder
             $this->must(new MultiMatch($parser->getFilteredQuery(), ['text^2', 'topic.subject', 'tags^4']));
         }
 
-        $this->scoreFunction(new Decay('created_at', '180d'));
+        $this->score(new Decay('created_at', '180d'));
         $this->size(($this->request->input('page', 1) - 1) * 10, 10);
 
         return parent::build();

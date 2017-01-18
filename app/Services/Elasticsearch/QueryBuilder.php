@@ -127,7 +127,7 @@ class QueryBuilder implements QueryBuilderInterface
      * @param DslInterface $function
      * @return QueryBuilder
      */
-    public function scoreFunction(DslInterface $function)
+    public function score(DslInterface $function)
     {
         return $this->addToStock($function);
     }

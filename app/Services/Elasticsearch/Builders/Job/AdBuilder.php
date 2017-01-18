@@ -25,10 +25,10 @@ class AdBuilder extends SearchBuilder
      */
     public function build()
     {
-        $this->addFilters();
-        $this->addFunctionScore();
+        $this->setupFilters();
+        $this->setupScoreFunctions();
 
-        $this->scoreFunction(new Random($this->sessionId));
+        $this->score(new Random($this->sessionId));
         $this->size(0, 4);
 
         return QueryBuilder::build();
