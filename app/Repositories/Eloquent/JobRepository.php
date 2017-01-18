@@ -8,7 +8,7 @@ use Coyote\Repositories\Contracts\SubscribableInterface;
 use Illuminate\Database\Query\JoinClause;
 
 /**
- * @method mixed search(array $body)
+ * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
  * @method $this withTrashed()
  */
 class JobRepository extends Repository implements JobRepositoryInterface, SubscribableInterface
@@ -41,21 +41,33 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
      */
     public function count()
     {
-        $this->applyCriteria();
-        return $this->model->count();
+        return $this->applyCriteria(function () {
+            return $this->model->count();
+        });
     }
 
     /**
      * @inheritdoc
      */
-    public function countOffersInCity(string $city)
+    public function countCityOffers(string $city)
     {
-        return $this
-            ->model
-            ->join('job_locations', 'jobs.id', '=', 'job_locations.job_id')
-            ->where('city', $city)
-            ->where('deadline_at', '>', $this->raw('NOW()'))
-            ->count();
+        return $this->applyCriteria(function () use ($city) {
+            return $this
+                ->model
+                ->join('job_locations', 'jobs.id', '=', 'job_locations.job_id')
+                ->where('city', $city)
+                ->count();
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function counterUserOffers(int $userId)
+    {
+        return (int) $this->applyCriteria(function () use ($userId) {
+            return $this->model->forUser($userId)->count();
+        });
     }
 
     /**

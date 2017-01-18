@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
 use Coyote\Services\Elasticsearch\Geodistance;
 use Coyote\Services\Geocoder\Location;
@@ -43,20 +44,21 @@ class AdController extends Controller
         $data = [];
 
         $builder = new AdBuilder($this->request);
-        $preferences = $this->getSetting('job.preferences');
+        $preferences = new Preferences($this->getSetting('job.preferences'));
 
-        $builder->setPreferences(new Preferences($preferences));
-        $builder->setSessionId($this->sessionId);
+        $builder->setPreferences($preferences);
 
-        if ($preferences === null) {
+        if ($preferences->isEmpty()) {
             $location = $this->lookupLocation();
 
             if ($location->isValid()) {
                 $builder->setSort(new Geodistance($location->latitude, $location->longitude));
 
+                $this->job->pushCriteria(new PriorDeadline());
+
                 $data = [
                     'location' => $location,
-                    'offers_count' => $this->job->countOffersInCity($location->city)
+                    'offers_count' => $this->job->countCityOffers($location->city)
                 ];
             }
         }
