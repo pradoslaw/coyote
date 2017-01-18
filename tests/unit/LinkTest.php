@@ -132,6 +132,10 @@ class LinkTest extends \Codeception\TestCase\Test
         $this->tester->assertContains('iframe', $parser->parse('https://www.youtube.com/watch?v=7dU3ybPqV94'));
         $this->tester->assertContains('iframe', $parser->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94')));
         $this->tester->assertContains('iframe', $parser->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94#foo')));
+        $this->tester->assertContains('iframe', $parser->parse('https://youtu.be/enOjqwOE1ec'));
+        $this->tester->assertContains('iframe', $parser->parse('https://www.youtu.be/enOjqwOE1ec'));
+        $this->tester->assertNotContains('iframe', $parser->parse('https://youtu.be/'));
+        $this->tester->assertContains('iframe', $parser->parse(link_to('https://youtu.be/enOjqwOE1ec')));
 
         $this->tester->assertContains('https://www.youtube.com/watch?v=7dU3ybPqV94', $parser->parse('<code>https://www.youtube.com/watch?v=7dU3ybPqV94</code>'));
     }

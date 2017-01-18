@@ -52,6 +52,8 @@ class Link extends Parser implements ParserInterface
      */
     public function parse($text)
     {
+        // first, make <a> from plain URL's
+        // -----------------------------------------
         $text = $this->hashBlock($text, ['code', 'a']);
         $text = $this->hashInline($text, 'img');
 
@@ -59,13 +61,18 @@ class Link extends Parser implements ParserInterface
         $text = $this->parseEmail($text);
 
         $text = $this->unhash($text);
+        // ------------------------------------------
 
         $text = $this->hashBlock($text, 'code');
         $text = $this->hashInline($text, 'img');
 
+        // then, parse internal links and youtube video links
+        // --------------------------------------------------
         $text = $this->parseLinks($text);
 
         $text = $this->hashBlock($text, 'a');
+
+        // at last, parse coyote markup
         $text = $this->parseInternalAccessors($text);
 
         $text = $this->unhash($text);
@@ -170,11 +177,20 @@ class Link extends Parser implements ParserInterface
 
         $components = parse_url($url);
 
-        if ($this->isUrl($components)
-            && $this->getHost($components['host']) === 'youtube.com' && trim($components['path'], '/') === 'watch') {
-            parse_str($components['query'], $query);
+        if ($this->isUrl($components)) {
+            // get host without "www"
+            $host = $this->getHost($components['host']);
+            $path = trim($components['path'], '/');
 
-            $text = str_replace($match, $this->makeIframe($query['v']), $text);
+            if ($host === 'youtube.com' && $path === 'watch') {
+                parse_str($components['query'], $query);
+
+                $text = str_replace($match, $this->makeIframe($query['v']), $text);
+            }
+
+            if ($host === 'youtu.be' && $path !== '') {
+                $text = str_replace($match, $this->makeIframe($path), $text);
+            }
         }
 
         return $text;
