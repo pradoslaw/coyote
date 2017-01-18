@@ -10,7 +10,7 @@ use Coyote\Post;
 use Coyote\Poll;
 
 /**
- * @method mixed search(array $body)
+ * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
  * @method void setResponse(string $response)
  * @method $this withTrashed()
  */

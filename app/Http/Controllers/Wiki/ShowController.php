@@ -110,10 +110,7 @@ class ShowController extends BaseController
     private function getMoreLikeThis(Wiki $wiki)
     {
         return $this->getCacheFactory()->remember('wiki:mlt', 60 * 24, function () use ($wiki) {
-            $builder = (new MoreLikeThisBuilder())->build($wiki);
-            $build = $builder->build();
-
-            return $this->wiki->search($build)->getSource();
+            return $this->wiki->search(new MoreLikeThisBuilder($wiki))->getSource();
         });
     }
 

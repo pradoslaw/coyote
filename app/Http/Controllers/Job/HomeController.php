@@ -114,15 +114,7 @@ class HomeController extends BaseController
      */
     private function load()
     {
-        start_measure('search', 'Elasticsearch');
-
-        $build = $this->builder->build()->build();
-        // show build query in laravel's debugbar
-        debugbar()->debug(json_encode($build));
-        debugbar()->debug(($build));
-
-        $result = $this->job->search($build);
-        stop_measure('search');
+        $result = $this->job->search($this->builder);
 
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)

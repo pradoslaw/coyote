@@ -7,12 +7,11 @@ use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
 use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
-use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\Filters;
 use Coyote\Services\Elasticsearch\Sort;
 use Illuminate\Http\Request;
 
-class SearchBuilder
+class SearchBuilder extends QueryBuilder
 {
     const PER_PAGE = 15;
     const DEFAULT_SORT = '_score';
@@ -21,11 +20,6 @@ class SearchBuilder
      * @var Request
      */
     protected $request;
-
-    /**
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
 
     /**
      * @var Filters\Job\City
@@ -49,7 +43,6 @@ class SearchBuilder
     {
         $this->request = $request;
 
-        $this->queryBuilder = new QueryBuilder();
         $this->city = new Filters\Job\City();
         $this->tag = new Filters\Job\Tag();
         $this->location = new Filters\Job\Location();
@@ -82,7 +75,7 @@ class SearchBuilder
      */
     public function addRemoteFilter()
     {
-        $this->queryBuilder->must(new Filters\Job\Remote());
+        $this->must(new Filters\Job\Remote());
     }
 
     /**
@@ -91,8 +84,8 @@ class SearchBuilder
      */
     public function addSalaryFilter($salary, $currencyId)
     {
-        $this->queryBuilder->must(new Filters\Range('salary', ['gte' => $salary]));
-        $this->queryBuilder->must(new Filters\Job\Currency($currencyId));
+        $this->must(new Filters\Range('salary', ['gte' => $salary]));
+        $this->must(new Filters\Job\Currency($currencyId));
     }
 
     /**
@@ -100,16 +93,16 @@ class SearchBuilder
      */
     public function addFirmFilter($name)
     {
-        $this->queryBuilder->must(new Filters\Job\Firm($name));
+        $this->must(new Filters\Job\Firm($name));
     }
 
     /**
-     * @return QueryBuilderInterface
+     * @return array
      */
-    public function build() : QueryBuilderInterface
+    public function build()
     {
         if ($this->request->has('q')) {
-            $this->queryBuilder->must(
+            $this->must(
                 new MultiMatch($this->request->get('q'), ['title^2', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
             );
         }
@@ -131,40 +124,40 @@ class SearchBuilder
         }
 
         $sort = $this->getSort();
-        $this->queryBuilder->sort(new Sort($sort, $this->getOrder()));
+        $this->sort(new Sort($sort, $this->getOrder()));
 
         $this->addFilters();
         $this->addFunctionScore();
         // facet search
         $this->addAggregation();
 
-        $this->queryBuilder->size(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
+        $this->size(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
 
-        return $this->queryBuilder;
+        return parent::build();
     }
 
     protected function addFilters()
     {
         // it's really important. we MUST show only active offers
-        $this->queryBuilder->must(new Filters\Range('deadline_at', ['gte' => 'now']));
-        $this->queryBuilder->must($this->city);
-        $this->queryBuilder->must($this->tag);
-        $this->queryBuilder->must($this->location);
+        $this->must(new Filters\Range('deadline_at', ['gte' => 'now']));
+        $this->must($this->city);
+        $this->must($this->tag);
+        $this->must($this->location);
     }
 
     protected function addFunctionScore()
     {
         // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 1)
-        $this->queryBuilder->scoreFunction(new FieldValueFactor('score', 'log', 1));
+        $this->scoreFunction(new FieldValueFactor('score', 'log', 1));
         // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
-        $this->queryBuilder->scoreFunction(new Decay('created_at', '14d', 0.1));
+        $this->scoreFunction(new Decay('created_at', '14d', 0.1));
     }
 
     protected function addAggregation()
     {
-        $this->queryBuilder->aggs(new Aggs\Job\Location());
-        $this->queryBuilder->aggs(new Aggs\Job\Remote());
-        $this->queryBuilder->aggs(new Aggs\Job\Tag());
+        $this->aggs(new Aggs\Job\Location());
+        $this->aggs(new Aggs\Job\Remote());
+        $this->aggs(new Aggs\Job\Tag());
     }
 
     /**

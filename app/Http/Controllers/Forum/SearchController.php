@@ -36,14 +36,8 @@ class SearchController extends BaseController
             $this->validate($request, ['f' => 'sometimes|int|in:' . implode(',', $forumsId)]);
 
             // we need to limit results to given categories...
-            $builder = (new SearchBuilder())->build($request, $request->has('f') ? $request->get('f') : $forumsId);
-
-            $build = $builder->build();
-            debugbar()->debug(json_encode($build));
-
-            start_measure('Elasticsearch');
-            $response = $this->post->search($build);
-            stop_measure('Elasticsearch');
+            $builder = (new SearchBuilder($request, $request->has('f') ? $request->get('f') : $forumsId));
+            $response = $this->post->search($builder);
 
             $highlights = $response->getHighlights();
 

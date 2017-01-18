@@ -65,8 +65,7 @@ class SearchController extends Controller
         $this->request->attributes->set('forum_id', $this->forum->pluck('id'));
 
         // build elasticsearch request
-        $builder = (new MixedBuilder())->build($this->request);
-        $body = $builder->build();
+        $body = (new MixedBuilder($this->request))->build();
 
         $params = [
             'index'     => config('elasticsearch.default_index'),

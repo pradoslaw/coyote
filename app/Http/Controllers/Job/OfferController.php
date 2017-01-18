@@ -74,15 +74,8 @@ class OfferController extends Controller
             $flag = $this->getFlagFactory()->takeForJob($job->id);
         }
 
-        $builder = (new MoreLikeThisBuilder())->build($job);
-
-        $build = $builder->build();
-        debugbar()->debug(json_encode($build));
-
-        debugbar()->startMeasure('More like this');
         // search related topics
-        $mlt = $this->job->search($build)->getSource();
-        debugbar()->stopMeasure('More like this');
+        $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
         return $this->view('job.offer', [
             'ratesList'         => Job::getRatesList(),

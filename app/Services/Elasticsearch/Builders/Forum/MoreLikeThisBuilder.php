@@ -6,32 +6,47 @@ use Coyote\Services\Elasticsearch\Filters\Post\ForumMustExist;
 use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
-use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Topic;
 
-class MoreLikeThisBuilder
+class MoreLikeThisBuilder extends QueryBuilder
 {
     /**
-     * @param Topic $topic
-     * @param int|array $forumId
-     * @return QueryBuilderInterface
+     * @var Topic
      */
-    public function build(Topic $topic, $forumId) : QueryBuilderInterface
-    {
-        $builder = new QueryBuilder();
+    private $topic;
 
+    /**
+     * @var int
+     */
+    private $forumId;
+
+    /**
+     * @param Topic $topic
+     * @param $forumId
+     */
+    public function __construct(Topic $topic, $forumId)
+    {
+        $this->topic = $topic;
+        $this->forumId = $forumId;
+    }
+
+    /**
+     * @return array
+     */
+    public function build()
+    {
         $mlt = new MoreLikeThis(['subject', 'posts.text']);
         $mlt->addDoc([
             '_index'    => config('elasticsearch.default_index'),
             '_type'     => 'topics',
-            '_id'       => $topic->id
+            '_id'       => $this->topic->id
         ]);
 
-        $builder->must($mlt);
+        $this->must($mlt);
 
-        $builder->must(new OnlyThoseWithAccess($forumId));
-        $builder->must(new ForumMustExist('id', $topic->id));
+        $this->must(new OnlyThoseWithAccess($this->forumId));
+        $this->must(new ForumMustExist('id', $this->topic->id));
 
-        return $builder;
+        return parent::build();
     }
 }

@@ -3,7 +3,6 @@
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Services\Elasticsearch\Functions\Random;
-use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 
 class AdBuilder extends SearchBuilder
 {
@@ -21,21 +20,21 @@ class AdBuilder extends SearchBuilder
     }
 
     /**
-     * @return QueryBuilderInterface
+     * @return array
      */
-    public function build() : QueryBuilderInterface
+    public function build()
     {
         $this->addFilters();
         $this->addFunctionScore();
 
-        $this->queryBuilder->scoreFunction(new Random());
-        $this->queryBuilder->size(0, 4);
+        $this->scoreFunction(new Random());
+        $this->size(0, 4);
 
-        return $this->queryBuilder;
+        return parent::build();
     }
 
     public function setSort($sort)
     {
-        $this->queryBuilder->sort($sort);
+        $this->sort($sort);
     }
 }

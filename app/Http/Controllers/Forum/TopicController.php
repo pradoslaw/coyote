@@ -66,13 +66,10 @@ class TopicController extends BaseController
         $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, 60 * 24, function () use ($topic) {
             $this->forum->pushCriteria(new OnlyThoseWithAccess());
 
-            $builder = (new MoreLikeThisBuilder())->build($topic, $this->forum->pluck('id'));
-
-            $build = $builder->build();
-            debugbar()->debug($build);
+            $builder = new MoreLikeThisBuilder($topic, $this->forum->pluck('id'));
 
             // search related topics
-            $mlt = $this->topic->search($build);
+            $mlt = $this->topic->search($builder);
 
             // it's important to reset criteria for the further queries
             $this->forum->resetCriteria();

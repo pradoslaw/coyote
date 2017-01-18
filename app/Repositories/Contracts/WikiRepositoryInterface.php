@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 /**
  * @package Coyote\Repositories\Contracts
  * @method $this withTrashed()
+ * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
  */
 interface WikiRepositoryInterface extends RepositoryInterface
 {
