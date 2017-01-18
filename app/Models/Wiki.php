@@ -55,19 +55,19 @@ class Wiki extends Model
      */
     protected $mapping = [
         "title" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ],
         "long_title" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ],
         "text" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ],
         "excerpt" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ],
         "created_at" => [
