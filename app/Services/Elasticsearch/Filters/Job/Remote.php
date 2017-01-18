@@ -4,7 +4,6 @@ namespace Coyote\Services\Elasticsearch\Filters\Job;
 
 use Coyote\Services\Elasticsearch\DslInterface;
 use Coyote\Services\Elasticsearch\Filters\Term;
-use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 
 class Remote extends Term implements DslInterface
 {
@@ -15,13 +14,4 @@ class Remote extends Term implements DslInterface
     {
         parent::__construct('is_remote', 1);
     }
-
-    /**
-     * @param QueryBuilderInterface $queryBuilder
-     * @return mixed
-     */
-//    public function apply(QueryBuilderInterface $queryBuilder)
-//    {
-//        return $this->addOrFilter($queryBuilder, [static::FILTER_NAME => [$this->field => $this->value]]);
-//    }
 }

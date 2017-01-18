@@ -7,7 +7,6 @@ use Coyote\Services\Elasticsearch\Filter;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Parser\Helpers;
 use Illuminate\Support\Str;
-use Transliterator;
 
 class City extends Filter implements DslInterface
 {
