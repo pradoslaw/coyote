@@ -304,7 +304,7 @@ class Link extends Parser implements ParserInterface
     }
 
     /**
-     * @param $path
+     * @param string $path
      * @return string
      */
     private function getHashFromPath(&$path)
