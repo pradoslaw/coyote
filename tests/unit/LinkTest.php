@@ -16,6 +16,11 @@ class LinkTest extends \Codeception\TestCase\Test
     protected $link;
 
     /**
+     * @var \Collective\Html\HtmlBuilder
+     */
+    protected $htmlBuilder;
+
+    /**
      * @var mixed
      */
     protected $repository;
@@ -23,6 +28,7 @@ class LinkTest extends \Codeception\TestCase\Test
     protected function _before()
     {
         $this->repository = new \Coyote\Repositories\Eloquent\PageRepository(app());
+        $this->htmlBuilder = app('html');
     }
 
     protected function _after()
@@ -33,7 +39,7 @@ class LinkTest extends \Codeception\TestCase\Test
     public function testParseInternalLinks()
     {
         $host = '4programmers.net';
-        $this->link = new Link($this->repository, $host);
+        $this->link = new Link($this->repository, $host, $this->htmlBuilder);
 
         $fake = Factory::create();
 
@@ -47,7 +53,7 @@ class LinkTest extends \Codeception\TestCase\Test
         $this->parse($url, $title);
 
         $host = 'dev.4programmers.net';
-        $this->link = new Link($this->repository, $host);
+        $this->link = new Link($this->repository, $host, $this->htmlBuilder);
 
         $url = 'http://' . $host . $path;
         $this->parse($url, $title);
@@ -56,7 +62,7 @@ class LinkTest extends \Codeception\TestCase\Test
     public function testParseInternalLinksWithPolishCharacters()
     {
         $host = '4programmers.net';
-        $this->link = new Link($this->repository, $host);
+        $this->link = new Link($this->repository, $host, $this->htmlBuilder);
 
         $title = 'łatwo przyszło, łatwo poszło';
         $path = '/' . str_slug($title);
@@ -71,7 +77,7 @@ class LinkTest extends \Codeception\TestCase\Test
     public function testParseInternalAccessors()
     {
         $host = '4programmers.net';
-        $this->link = new Link($this->repository, $host);
+        $this->link = new Link($this->repository, $host, $this->htmlBuilder);
 
         $title = 'Forum dyskusyjne';
         $path = '/Discussion_board';
@@ -119,9 +125,24 @@ class LinkTest extends \Codeception\TestCase\Test
         $this->tester->assertContains("<pre><code>[[Kim jesteśmy?]]</code></pre>", $input);
     }
 
+    public function testYoutubeVideos()
+    {
+        $parser = new Link($this->repository, '4programmers.net', $this->htmlBuilder);
+
+        $this->tester->assertContains('iframe', $parser->parse('https://www.youtube.com/watch?v=7dU3ybPqV94'));
+        $this->tester->assertContains('iframe', $parser->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94')));
+        $this->tester->assertContains('iframe', $parser->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94#foo')));
+        $this->tester->assertContains('iframe', $parser->parse('https://youtu.be/enOjqwOE1ec'));
+        $this->tester->assertContains('iframe', $parser->parse('https://www.youtu.be/enOjqwOE1ec'));
+        $this->tester->assertNotContains('iframe', $parser->parse('https://youtu.be/'));
+        $this->tester->assertContains('iframe', $parser->parse(link_to('https://youtu.be/enOjqwOE1ec')));
+
+        $this->tester->assertContains('https://www.youtube.com/watch?v=7dU3ybPqV94', $parser->parse('<code>https://www.youtube.com/watch?v=7dU3ybPqV94</code>'));
+    }
+
     public function testAutolink()
     {
-        $parser = new \Coyote\Services\Parser\Parsers\Autolink();
+        $parser = new Link($this->repository, '4programmers.net', $this->htmlBuilder);
 
         $input = $parser->parse('http://4programmers.net');
         $this->tester->assertEquals('<a href="http://4programmers.net">http://4programmers.net</a>', $input);
@@ -146,6 +167,15 @@ class LinkTest extends \Codeception\TestCase\Test
 
         $input = $parser->parse('<foo@bar.com>');
         $this->tester->assertEquals('<<a href="mailto:foo@bar.com">foo@bar.com</a>>', $input);
+
+        $input = '@4programmers.net';
+        $this->tester->assertEquals($input, $parser->parse($input));
+
+        $input = '<a href="http://4programmers.net">4programmers</a>.net';
+        $this->tester->assertEquals($input, $parser->parse($input));
+
+        $input = 'www.4programmers.net';
+        $this->tester->assertEquals('<a href="http://www.4programmers.net">www.4programmers.net</a>', $parser->parse($input));
     }
 
     private function createPage($title, $path)

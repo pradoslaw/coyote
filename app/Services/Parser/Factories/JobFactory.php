@@ -5,7 +5,6 @@ namespace Coyote\Services\Parser\Factories;
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Container;
-use Coyote\Services\Parser\Parsers\Autolink;
 use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Purifier;
@@ -31,7 +30,6 @@ class JobFactory extends AbstractFactory
             $text = $this->cache($text, function () use ($parser) {
                 $parser->attach(new Purifier());
                 $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
-                $parser->attach(new Autolink());
                 $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 
                 return $parser;

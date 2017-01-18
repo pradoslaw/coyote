@@ -2,15 +2,23 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
-use Coyote\Repositories\Contracts\PageRepositoryInterface as Page;
+use Collective\Html\HtmlBuilder;
+use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 
 class Link extends Parser implements ParserInterface
 {
     const LINK_TAG_REGEXP = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
     const LINK_INTERNAL_REGEXP = '\[\[(.*?)(\|(.*?))*\]\]';
 
+    // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
+    const REGEXP_URL = '#(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))#u';
+    const REGEXP_EMAIL = '#(^|[\n \[\]\:<>&;]|\()([a-z0-9&\-_.]+?@[\w\-]+\.(?:[\w\-\.]+\.)?[\w]+)#i';
+
+    const TITLE_LEN = 64;
+    const TITLE_DOTS = '[...]';
+
     /**
-     * @var Page
+     * @var PageRepository
      */
     private $page;
 
@@ -20,15 +28,22 @@ class Link extends Parser implements ParserInterface
     private $host;
 
     /**
+     * @var HtmlBuilder|null
+     */
+    private $html;
+
+    /**
      * Link constructor.
      *
-     * @param Page $page
+     * @param PageRepository $page
      * @param string $host
+     * @param HtmlBuilder|null $html
      */
-    public function __construct(Page $page, string $host)
+    public function __construct(PageRepository $page, string $host, HtmlBuilder $html = null)
     {
         $this->page = $page;
         $this->host = $host;
+        $this->html = $html;
     }
 
     /**
@@ -37,10 +52,27 @@ class Link extends Parser implements ParserInterface
      */
     public function parse($text)
     {
+        // first, make <a> from plain URL's
+        // -----------------------------------------
+        $text = $this->hashBlock($text, ['code', 'a']);
+        $text = $this->hashInline($text, 'img');
+
+        $text = $this->parseUrl($text);
+        $text = $this->parseEmail($text);
+
+        $text = $this->unhash($text);
+        // ------------------------------------------
+
         $text = $this->hashBlock($text, 'code');
         $text = $this->hashInline($text, 'img');
 
-        $text = $this->parseInternalLinks($text);
+        // then, parse internal links and youtube video links
+        // --------------------------------------------------
+        $text = $this->parseLinks($text);
+
+        $text = $this->hashBlock($text, 'a');
+
+        // at last, parse coyote markup
         $text = $this->parseInternalAccessors($text);
 
         $text = $this->unhash($text);
@@ -49,26 +81,41 @@ class Link extends Parser implements ParserInterface
     }
 
     /**
-     * @param $text
-     * @return mixed
+     * @param string $text
+     * @return string
      */
-    protected function parseInternalLinks($text)
+    protected function parseLinks($text)
     {
         if (!preg_match_all('/' . self::LINK_TAG_REGEXP . '/siU', $text, $matches, PREG_SET_ORDER)) {
             return $text;
         }
 
         for ($i = 0, $count = count($matches); $i < $count; $i++) {
-            $link = $matches[$i][2];
+            $link  = $matches[$i][2];
             $title = $matches[$i][3];
+            $match = $matches[$i][0];
 
-            if (urldecode($title) === urldecode($link) && ($path = $this->getPathFromUrl($link)) !== false) {
-                $page = $this->page->findByPath($path);
-                $html = $matches[$i][0];
+            $text = $this->parseInternalLink($text, $match, $link, $title);
+            $text = $this->parseYoutubeLinks($text, $match, $link);
+        }
 
-                if ($page) {
-                    $text = str_replace($html, link_to($link, $page->title), $text);
-                }
+        return $text;
+    }
+
+    /**
+     * @param string $text
+     * @param string $match
+     * @param string $url
+     * @param string $title
+     * @return string
+     */
+    protected function parseInternalLink($text, $match, $url, $title)
+    {
+        if (urldecode($title) === urldecode($url) && ($path = $this->getPathFromInternalUrl($url)) !== false) {
+            $page = $this->page->findByPath($path);
+
+            if ($page) {
+                $text = str_replace($match, link_to($url, $page->title), $text);
             }
         }
 
@@ -83,8 +130,6 @@ class Link extends Parser implements ParserInterface
      */
     protected function parseInternalAccessors($text)
     {
-        $text = $this->hashBlock($text, 'a');
-
         if (!preg_match_all('/' . self::LINK_INTERNAL_REGEXP . '/i', $text, $matches, PREG_SET_ORDER)) {
             return $text;
         }
@@ -115,9 +160,116 @@ class Link extends Parser implements ParserInterface
             $text = str_replace($origin, link_to($path . ($hash ? '#' . $hash : ''), $title, $attr), $text);
         }
 
-        $text = $this->unhash($text);
+        return $text;
+    }
+
+    /**
+     * @param string $text
+     * @param string $match
+     * @param string $url
+     * @return string
+     */
+    protected function parseYoutubeLinks($text, $match, $url)
+    {
+        if ($this->html === null) {
+            return $text;
+        }
+
+        $components = parse_url($url);
+
+        if ($this->isUrl($components)) {
+            // get host without "www"
+            $host = $this->getHost($components['host']);
+            $path = trim($components['path'], '/');
+
+            if ($host === 'youtube.com' && $path === 'watch') {
+                parse_str($components['query'], $query);
+
+                $text = str_replace($match, $this->makeIframe($query['v']), $text);
+            }
+
+            if ($host === 'youtu.be' && $path !== '') {
+                $text = str_replace($match, $this->makeIframe($path), $text);
+            }
+        }
 
         return $text;
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    protected function parseUrl(string $text): string
+    {
+        $processed = preg_replace_callback(
+            self::REGEXP_URL,
+            function ($match) {
+                $url = $match[0];
+
+                if (!preg_match('#^[\w]+?://.*?#i', $url)) {
+                    $url = 'http://' . $url;
+                }
+
+                $title = $this->truncate(htmlspecialchars($match[0], ENT_QUOTES, 'UTF-8', false));
+
+                return link_to($url, $title);
+            },
+            $text
+        );
+
+        // regexp posiada buga, nie parsuje poprawnie URL-i jezeli zawiera on (
+        // poki co nie mam rozwiazania na ten problem, dlatego zwracamy nieprzeprasowany tekst
+        // w przypadku bledu
+        if (preg_last_error() === PREG_NO_ERROR) {
+            return $processed;
+        }
+
+        return $text;
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    protected function parseEmail(string $text): string
+    {
+        return preg_replace(self::REGEXP_EMAIL, "\$1<a href=\"mailto:\$2\">$2</a>", $text);
+    }
+
+    /**
+     * @param string $text
+     * @param int $length
+     * @param string $dots
+     * @return string
+     */
+    private function truncate(string $text, int $length = self::TITLE_LEN, string $dots = self::TITLE_DOTS): string
+    {
+        if (mb_strlen($text) > $length) {
+            $padding = ($length - mb_strlen($dots)) / 2;
+
+            $result = mb_substr($text, 0, $padding);
+            $result .= $dots;
+            $result .= mb_substr($text, -$padding);
+
+            return $result;
+        }
+
+        return $text;
+    }
+
+    /**
+     * @param string $videoId
+     * @return string
+     */
+    private function makeIframe(string $videoId): string
+    {
+        $iframe = (string) $this->html->tag('iframe', '', [
+            'src'   => 'https://youtube.com/embed/' . $videoId,
+            'class' => 'embed-responsive-item'
+        ]);
+
+        return (string) $this->html->tag('div', $iframe, ['class' => 'embed-responsive embed-responsive-16by9']);
     }
 
     /**
@@ -127,28 +279,28 @@ class Link extends Parser implements ParserInterface
      * @param string $url
      * @return string|bool
      */
-    private function getPathFromUrl($url)
+    private function getPathFromInternalUrl($url)
     {
-        $component = parse_url($url);
+        $components = parse_url($url);
         $path = false;
 
-        if (!empty($component['path']) && !empty($component['host'])) {
-            // host odnosnika (np. 4programmers.net lub forum.4programmers.net). Przeksztalcamy
-            // ten url tak, aby uzyskac tylko domene wyzszego rzedu, czyli 4programmers.net
-            $parts = explode('.', $component['host']);
-            $host = implode('.', array_slice($parts, -2, 2));
-
+        if ($this->isUrl($components)) {
             // sprawdzamy, czy mamy do czynienia z linkiem wewnetrznym
-            if (stripos($this->host, $host) !== false) {
-                if ($parts[0] == 'www') {
-                    array_shift($parts);
-                }
-
-                $path = urldecode($component['path']);
+            if ($this->host === $this->getHost($components['host'])) {
+                $path = urldecode($components['path']);
             }
         }
 
         return $path;
+    }
+
+    /**
+     * @param array $components
+     * @return bool
+     */
+    private function isUrl(array $components)
+    {
+        return (!empty($components['path']) && !empty($components['host']));
     }
 
     /**
@@ -165,5 +317,22 @@ class Link extends Parser implements ParserInterface
         }
 
         return $hash;
+    }
+
+    /**
+     * Get host without "www" at the beginning.
+     *
+     * @param string $host
+     * @return string
+     */
+    private function getHost(string $host): string
+    {
+        $parts = explode('.', $host);
+
+        if ($parts[0] === 'www') {
+            array_shift($parts);
+        }
+
+        return implode('.', $parts);
     }
 }
