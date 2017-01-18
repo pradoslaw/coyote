@@ -245,17 +245,21 @@ class Link extends Parser implements ParserInterface
      */
     private function truncate(string $text, int $length = self::TITLE_LEN, string $dots = self::TITLE_DOTS): string
     {
-        if (mb_strlen($text) > $length) {
-            $padding = ($length - mb_strlen($dots)) / 2;
-
-            $result = mb_substr($text, 0, $padding);
-            $result .= $dots;
-            $result .= mb_substr($text, -$padding);
-
-            return $result;
+        if (mb_strlen($text) < $length) {
+            return $text;
         }
 
-        return $text;
+        if ($this->host === parse_url($text, PHP_URL_HOST)) {
+            return $text;
+        }
+
+        $padding = ($length - mb_strlen($dots)) / 2;
+
+        $result = mb_substr($text, 0, $padding);
+        $result .= $dots;
+        $result .= mb_substr($text, -$padding);
+
+        return $result;
     }
 
     /**

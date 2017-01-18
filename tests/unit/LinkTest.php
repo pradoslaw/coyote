@@ -178,6 +178,22 @@ class LinkTest extends \Codeception\TestCase\Test
         $this->tester->assertEquals('<a href="http://www.4programmers.net">www.4programmers.net</a>', $parser->parse($input));
     }
 
+    public function testAutolinkLongUrl()
+    {
+        $parser = new Link($this->repository, '4programmers.net', $this->htmlBuilder);
+
+        $input = $parser->parse('https://scrutinizer-ci.com/g/adam-boduch/coyote/inspections/8778b728-ef73-4167-8092-424a57a8e66d');
+        $this->tester->assertEquals('<a href="https://scrutinizer-ci.com/g/adam-boduch/coyote/inspections/8778b728-ef73-4167-8092-424a57a8e66d">https://scrutinizer-ci.com/g/[...]8-ef73-4167-8092-424a57a8e66d</a>', $input);
+
+        $title = '"Kompetentność" uczących się programowania';
+        $path = '/Forum/Spolecznosc/266098-kompetentnosc_uczacych_sie_programowania';
+
+        $this->createPage($title, $path);
+
+        $input = $parser->parse('http://4programmers.net/Forum/Spolecznosc/266098-kompetentnosc_uczacych_sie_programowania');
+        $this->tester->assertEquals('<a href="http://4programmers.net/Forum/Spolecznosc/266098-kompetentnosc_uczacych_sie_programowania">&quot;Kompetentność&quot; uczących się programowania</a>', $input);
+    }
+
     private function createPage($title, $path)
     {
         $now = new \DateTime('now');
