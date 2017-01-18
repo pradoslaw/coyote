@@ -79,7 +79,7 @@ abstract class BaseController extends Controller
     {
         $this->tabs->filter(function (Item $item) {
             if ($item->data('role') === true) {
-                return $this->userId !== null && $this->job->forUser($this->userId)->exists();
+                return $this->userId !== null && $this->job->counterUserOffers($this->userId);
             }
 
             return true;

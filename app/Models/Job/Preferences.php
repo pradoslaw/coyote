@@ -81,6 +81,19 @@ class Preferences
     }
 
     /**
+     * Return TRUE is preferences are empty. For example - user might fill fields with empty values.
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->attributes) ||
+            (empty($this->attributes['tags'])
+                && empty($this->attributes['city']
+                    && empty($this->attributes['salary'])));
+    }
+
+    /**
      * @param $name
      * @param $value
      */
