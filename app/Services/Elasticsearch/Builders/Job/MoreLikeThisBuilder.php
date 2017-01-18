@@ -6,30 +6,39 @@ use Coyote\Job;
 use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
-use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 
-class MoreLikeThisBuilder
+class MoreLikeThisBuilder extends QueryBuilder
 {
     /**
-     * @param Job $job
-     * @return QueryBuilderInterface
+     * @var Job
      */
-    public function build(Job $job) : QueryBuilderInterface
-    {
-        $builder = new QueryBuilder();
+    private $job;
 
+    /**
+     * @param Job $job
+     */
+    public function __construct(Job $job)
+    {
+        $this->job = $job;
+    }
+
+    /**
+     * @return array
+     */
+    public function build()
+    {
         $mlt = new MoreLikeThis(['title', 'description', 'tags']);
         $mlt->addDoc([
             '_index'        => config('elasticsearch.default_index'),
             '_type'         => 'jobs',
-            '_id'           => $job->id
+            '_id'           => $this->job->id
         ]);
 
-        $builder->must($mlt);
-        $builder->mustNot(new Term('id', $job->id));
+        $this->must($mlt);
+        $this->mustNot(new Term('id', $this->job->id));
 
-        $builder->size(0, 5);
+        $this->size(0, 5);
 
-        return $builder;
+        return parent::build();
     }
 }

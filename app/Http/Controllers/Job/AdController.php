@@ -61,7 +61,7 @@ class AdController extends Controller
             }
         }
 
-        $result = $this->job->search($builder->build()->build());
+        $result = $this->job->search($builder);
         if (!$result->total()) {
             return '';
         }

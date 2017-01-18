@@ -3,7 +3,7 @@
 namespace Coyote\Repositories\Contracts;
 
 /**
- * @method mixed search(array $body)
+ * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
  * @method $this withTrashed()
  */
 interface JobRepositoryInterface extends RepositoryInterface

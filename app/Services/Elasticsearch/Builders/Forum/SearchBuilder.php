@@ -7,7 +7,6 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\QueryBuilder;
-use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\QueryParser;
 use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Services\Elasticsearch\MultiMatch;
@@ -15,7 +14,7 @@ use Coyote\Services\Elasticsearch\Highlight;
 use Coyote\Services\Elasticsearch\Filters\Term;
 use Illuminate\Http\Request;
 
-class SearchBuilder
+class SearchBuilder extends QueryBuilder
 {
     const FIELD_IP          = 'ip';
     const FIELD_USER        = 'user';
@@ -24,16 +23,38 @@ class SearchBuilder
 
     use GateFactory;
 
-    public function build(Request $request, $forumId) : QueryBuilderInterface
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var array
+     */
+    private $forumsId;
+
+    /**
+     * @param Request $request
+     * @param array $forumsId
+     */
+    public function __construct(Request $request, $forumsId)
     {
-        $builder = new QueryBuilder();
-        $builder->must(new OnlyThoseWithAccess($forumId));
-        $builder->sort(new Sort($request->get('sort', '_score'), $request->get('order', 'desc')));
-        $builder->highlight(new Highlight(['topic.subject', 'text', 'tags']));
+        $this->request = $request;
+        $this->forumsId = $forumsId;
+    }
+
+    /**
+     * @return array
+     */
+    public function build()
+    {
+        $this->must(new OnlyThoseWithAccess($this->forumsId));
+        $this->sort(new Sort($this->request->get('sort', '_score'), $this->request->get('order', 'desc')));
+        $this->highlight(new Highlight(['topic.subject', 'text', 'tags']));
 
         // parse given query and fetch keywords and filters
         $parser = new QueryParser(
-            $request->get('q'),
+            $this->request->get('q'),
             [self::FIELD_IP, self::FIELD_USER, self::FIELD_BROWSER, self::FIELD_HOST]
         );
 
@@ -57,7 +78,7 @@ class SearchBuilder
                 $field = 'user_name';
             }
 
-            $builder->must(new Term($field, $value));
+            $this->must(new Term($field, $value));
         }
 
         // filter by browser is not part of the filter. we need to append it to query
@@ -65,17 +86,17 @@ class SearchBuilder
 
         // we need to apply rest of the filters
         foreach ($parser->getFilters() as $field => $value) {
-            $builder->must(new Term($field, $value));
+            $this->must(new Term($field, $value));
         }
 
         // specify query string and fields
         if ($parser->getFilteredQuery()) {
-            $builder->must(new MultiMatch($parser->getFilteredQuery(), ['text^2', 'topic.subject', 'tags^4']));
+            $this->must(new MultiMatch($parser->getFilteredQuery(), ['text^2', 'topic.subject', 'tags^4']));
         }
 
-        $builder->scoreFunction(new Decay('created_at', '180d'));
-        $builder->size(($request->input('page', 1) - 1) * 10, 10);
+        $this->scoreFunction(new Decay('created_at', '180d'));
+        $this->size(($this->request->input('page', 1) - 1) * 10, 10);
 
-        return $builder;
+        return parent::build();
     }
 }

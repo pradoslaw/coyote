@@ -5,7 +5,7 @@ namespace Coyote\Repositories\Contracts;
 /**
  * @package Coyote\Repositories\Contracts
  * @method $this withTrashed()
- * @method mixed search(array $body)
+ * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
  */
 interface TopicRepositoryInterface extends RepositoryInterface
 {

@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Coyote\Services\Elasticsearch\CharFilters\CharFilterInteface;
+use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\ResultSet;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Illuminate\Contracts\Support\Arrayable;
@@ -50,12 +51,12 @@ trait Searchable
     }
 
     /**
-     * @param array $body
+     * @param QueryBuilderInterface $queryBuilder
      * @return ResultSet
      */
-    public function search($body)
+    public function search(QueryBuilderInterface $queryBuilder)
     {
-        return new ResultSet($this->performSearch($body));
+        return new ResultSet($this->performSearch($queryBuilder->build()));
     }
 
     /**
@@ -87,10 +88,20 @@ trait Searchable
      */
     protected function performSearch($body)
     {
+        // show build query in laravel's debugbar
+        debugbar()->debug(json_encode($body));
+        debugbar()->debug($body);
+
         $params = $this->getParams();
         $params['body'] = $body;
 
-        return $this->getClient()->search($params);
+        debugbar()->startMeasure('Elasticsearch');
+
+        $result = $this->getClient()->search($params);
+
+        debugbar()->stopMeasure('Elasticsearch');
+
+        return $result;
     }
 
     /**
