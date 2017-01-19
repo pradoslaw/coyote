@@ -55,7 +55,7 @@ class Location extends Filter implements DslInterface
                 'path' => 'locations',
                 'query' => [
                     'bool' => [
-                        'must' => $geodistance
+                        'should' => $geodistance
                     ]
                 ]
             ]
