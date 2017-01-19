@@ -32,7 +32,10 @@ $(function () {
             var count = parseInt($(this).data('count'));
             var $this = $(this);
 
-            $this.addClass('loader').text('Proszę czekać...');
+            if ($this.attr('disabled') === 'disabled') {
+                return false;
+            }
+            $this.attr('disabled', 'disabled').text('Proszę czekać...');
 
             $.post($this.attr('href'), function (data) {
                 count = parseInt(data.count);
@@ -45,7 +48,7 @@ $(function () {
                 $this.toggleClass('thumbs-on').tooltip('destroy').removeAttr('data-original-title');
             })
             .complete(function () {
-                $this.removeClass('loader');
+                $this.removeAttr('disabled');
                 $this.text(count + ' ' + declination(count, ['głos', 'głosy', 'głosów']));
 
                 // jezeli wpis jest w sekcji "popularne wpisy" to tam tez nalezy oznaczyc, ze
