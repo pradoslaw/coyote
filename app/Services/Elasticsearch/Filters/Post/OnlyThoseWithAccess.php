@@ -7,8 +7,12 @@ use Coyote\Services\Elasticsearch\Filters\Terms;
 
 class OnlyThoseWithAccess extends Terms implements DslInterface
 {
-    public function __construct(array $forumsId)
+    public function __construct($forumId)
     {
-        parent::__construct('forum_id', $forumsId);
+        if (!is_array($forumId)) {
+            $forumId = [$forumId]; // make array
+        }
+
+        parent::__construct('forum_id', $forumId);
     }
 }
