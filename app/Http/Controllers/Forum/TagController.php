@@ -3,8 +3,8 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Illuminate\Http\Request;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as Tag;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as Forum;
+use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 
 class TagController extends BaseController
 {
@@ -26,15 +26,19 @@ class TagController extends BaseController
 
     /**
      * @param Request $request
-     * @param Tag $tag
-     * @param Forum $forum
+     * @param TagRepository $tag
+     * @param ForumRepository $forum
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function prompt(Request $request, Tag $tag, Forum $forum)
+    public function prompt(Request $request, TagRepository $tag, ForumRepository $forum)
     {
+        // we don't wanna tags with "#" at the beginning
+        $request->merge(['q' => ltrim($request['q'], '#')]);
         $this->validate($request, ['q' => 'required|string|max:25']);
-        $tags = $tag->lookupName(ltrim($request['q'], '#'));
 
+        // search for tag
+        $tags = $tag->lookupName($request->input('q'));
+        // calculate weight
         $tags = $forum->getTagsWeight($tags->pluck('name')->toArray());
 
         return view('components.tags')->with('tags', $tags);
@@ -45,6 +49,9 @@ class TagController extends BaseController
      */
     public function valid(Request $request)
     {
+        // we don't wanna tags with "#" at the beginning
+        $request->merge(['t' => ltrim($request['t'], '#')]);
+
         $this->validate($request, ['t' => 'required|string|max:25|tag|tag_creation:2']);
     }
 }

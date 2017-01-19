@@ -51,7 +51,13 @@
 
             function filterData(value) {
                 // @todo odczytywac z pola z klasy TagValidator
-                return $.trim(value.toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, ''));
+                value = $.trim(value.toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, ''));
+
+                if (value.startsWith('#')) {
+                    value = value.substr(1);
+                }
+
+                return value;
             }
 
             editor.prepend('<ul class="tag-clouds"></ul>');
@@ -173,7 +179,7 @@
                     onChange($this.val());
                 }
                 else {
-                    var searchText = $.trim($(this).val().toLowerCase());
+                    var searchText = filterData($(this).val());
 
                     clearTimeout(timeId);
 

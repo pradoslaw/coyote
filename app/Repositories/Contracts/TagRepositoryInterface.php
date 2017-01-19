@@ -5,14 +5,14 @@ namespace Coyote\Repositories\Contracts;
 interface TagRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param $name
-     * @return mixed
+     * @param string $name
+     * @return \Coyote\Tag[]
      */
     public function lookupName($name);
 
     /**
-     * @param array $tags
-     * @return array Ids of tags
+     * @param string[] $tags
+     * @return int[] Ids of tags
      */
     public function multiInsert(array $tags);
 }

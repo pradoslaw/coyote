@@ -30,12 +30,15 @@ class TagController extends Controller
      * @param Request $request
      * @param Tag $tag
      * @param Job $job
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function prompt(Request $request, Tag $tag, Job $job)
     {
+        // we don't wanna tags with "#" at the beginning
+        $request->merge(['q' => ltrim($request['q'], '#')]);
+
         $this->validate($request, ['q' => 'required|string|max:25']);
-        $tags = $tag->lookupName(ltrim($request['q'], '#'));
+        $tags = $tag->lookupName($request['q']);
 
         $job->pushCriteria(new PriorDeadline());
         $tags = $job->getTagsWeight($tags->pluck('id')->toArray());
@@ -48,6 +51,9 @@ class TagController extends Controller
      */
     public function valid(Request $request)
     {
+        // we don't wanna tags with "#" at the beginning
+        $request->merge(['t' => ltrim($request['t'], '#')]);
+
         $this->validate($request, ['t' => 'required|string|max:25|tag']);
     }
 }

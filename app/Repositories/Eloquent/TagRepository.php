@@ -15,8 +15,7 @@ class TagRepository extends Repository implements TagRepositoryInterface
     }
 
     /**
-     * @param $name
-     * @return mixed
+     * @inheritdoc
      */
     public function lookupName($name)
     {
@@ -24,14 +23,12 @@ class TagRepository extends Repository implements TagRepositoryInterface
             ->model
             ->select(['tags.id', 'name'])
             ->where('name', 'ILIKE', $name . '%')
+            ->limit(100)
             ->get();
     }
 
     /**
-     * Insert tags and return theirs ids
-     *
-     * @param array $tags
-     * @return array Ids of tags
+     * @inheritdoc
      */
     public function multiInsert(array $tags)
     {
