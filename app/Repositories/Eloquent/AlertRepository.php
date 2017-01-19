@@ -7,7 +7,6 @@ use Coyote\Alert\Setting;
 use Coyote\Alert\Sender;
 use Coyote\Alert\Type;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface;
-use Coyote\Services\Declination\Declination;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -30,10 +29,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
      */
     public function paginate($userId, $perPage = 20)
     {
-        $alerts = $this->prepare($userId)->paginate($perPage);
-//        $alerts = $this->formatHeadline($alerts);
-
-        return $alerts;
+        return $this->prepare($userId)->paginate($perPage);
     }
 
     /**
@@ -44,10 +40,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
      */
     public function takeForUser($userId, $limit = 10, $offset = 0)
     {
-        $alerts = $this->prepare($userId)->take($limit)->skip($offset)->get();
-//        $alerts = $this->formatHeadline($alerts);
-
-        return $alerts;
+        return $this->prepare($userId)->take($limit)->skip($offset)->get();
     }
 
     /**
@@ -75,34 +68,6 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
             ->whereNull('read_at')
             ->where('url', $url)
             ->update(['read_at' => Carbon::now()]);
-    }
-
-    /**
-     * Format notification's headline
-     *
-     * @param \Illuminate\Support\Collection $alerts
-     * @return mixed
-     */
-    private function formatHeadline($alerts)
-    {
-        $alerts->each(function ($alert) {
-            $alert->senders = $alert->senders->unique('name');
-
-            $alert->user = $alert->senders->first();
-            $count = $alert->senders->count();
-
-            if ($count === 2 && $alert->user->name !== $alert->senders[1]->name) {
-                $sender = $alert->user->name . ' (oraz ' . $alert->senders[1]->name . ')';
-            } elseif ($count > 2) {
-                $sender = $alert->user->name . ' (oraz ' . Declination::format($count, ['osoba', 'osoby', 'osób']) . ')';
-            } else {
-                $sender = $alert->user->name;
-            }
-
-            $alert->headline = str_replace('{sender}', $sender, $alert->headline);
-        });
-
-        return $alerts;
     }
 
     /**
