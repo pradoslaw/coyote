@@ -29,9 +29,7 @@ class GeocodeIp
             $geoIp = app('geo-ip');
             $result = $geoIp->ip($request->ip());
 
-            if (is_array($result)) {
-                $request->attributes->add(['geocode' => new Location($result)]);
-            }
+            $request->attributes->add(['geocode' => is_array($result) ? new Location($result) : new Location()]);
         }
 
         return $next($request);

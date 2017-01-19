@@ -8,7 +8,6 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
 use Coyote\Services\Elasticsearch\Geodistance;
-use Coyote\Services\Geocoder\Location;
 
 class AdController extends Controller
 {
@@ -26,6 +25,8 @@ class AdController extends Controller
         parent::__construct();
 
         $this->job = $job;
+
+        $this->middleware('geocode');
     }
 
     /**
@@ -49,7 +50,7 @@ class AdController extends Controller
         $builder->setPreferences($preferences);
 
         if ($preferences->isEmpty()) {
-            $location = $this->lookupLocation();
+            $location = $this->request->attributes->get('geocode');
 
             if ($location->isValid()) {
                 $builder->setSort(new Geodistance($location->latitude, $location->longitude));
@@ -70,39 +71,5 @@ class AdController extends Controller
 
         // search jobs that might be close to your location
         return (string) view('job.ad', $data, ['jobs' => $result->getSource()]);
-    }
-
-    /**
-     * @return Location
-     */
-    private function lookupLocation()
-    {
-        if ($this->userId !== null && $this->auth->latitude !== null && $this->auth->longitude !== null) {
-            return new Location([
-                'latitude'  => $this->auth->latitude,
-                'longitude' => $this->auth->longitude,
-                'city'      => $this->auth->location
-            ]);
-        }
-
-        // ... otherwise lookup by ip
-        return new Location($this->getByIp($this->request->ip()) ?: []);
-    }
-
-    /**
-     * @param string $ip
-     * @return array
-     */
-    private function getByIp($ip)
-    {
-        return $this->getGeoIp()->ip($ip);
-    }
-
-    /**
-     * @return \Coyote\Services\GeoIp\GeoIp
-     */
-    private function getGeoIp()
-    {
-        return app('geo-ip');
     }
 }
