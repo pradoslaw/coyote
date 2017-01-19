@@ -8,6 +8,8 @@ use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 
 class Location extends Filter implements DslInterface
 {
+    const DISTANCE = '40km';
+
     /**
      * @var array
      */
@@ -44,7 +46,7 @@ class Location extends Filter implements DslInterface
         foreach ($this->locations as $location) {
             $geodistance[] = [
                 'geo_distance' => [
-                    'distance' => '40km',
+                    'distance' => self::DISTANCE,
                     'locations.coordinates' => $location
                 ]
             ];

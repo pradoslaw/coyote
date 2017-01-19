@@ -9,6 +9,7 @@ use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Filters;
 use Coyote\Services\Elasticsearch\Sort;
+use Coyote\Services\Geocoder\Location;
 use Illuminate\Http\Request;
 
 class SearchBuilder extends QueryBuilder
@@ -71,6 +72,14 @@ class SearchBuilder extends QueryBuilder
     }
 
     /**
+     * @param Location|null $location
+     */
+    public function setBoostLocation(Location $location = null)
+    {
+        $this->must(new Filters\Job\LocationScore($location));
+    }
+
+    /**
      * Apply remote job filter
      */
     public function addRemoteFilter()
@@ -123,8 +132,7 @@ class SearchBuilder extends QueryBuilder
             $this->addRemoteFilter();
         }
 
-        $sort = $this->getSort();
-        $this->sort(new Sort($sort, $this->getOrder()));
+        $this->sort(new Sort($this->getSort(), $this->getOrder()));
 
         $this->setupFilters();
         $this->setupScoreFunctions();
