@@ -301,11 +301,15 @@ class Link extends Parser implements ParserInterface
     }
 
     /**
-     * @param array $components
+     * @param array|false $components
      * @return bool
      */
-    private function isUrl(array $components)
+    private function isUrl($components)
     {
+        if (!is_array($components)) {
+            return false;
+        }
+
         return (!empty($components['path']) && !empty($components['host']));
     }
 
