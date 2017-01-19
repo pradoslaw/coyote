@@ -14,13 +14,13 @@ class AlertTransformer extends TransformerAbstract
      */
     public function transform(Alert $alert)
     {
-        $alert->senders = $alert->senders->unique('name');
+        $senders = $alert->senders->unique('name');
 
-        $alert->user = $alert->senders->first();
-        $count = $alert->senders->count();
+        $alert->user = $senders->first();
+        $count = $senders->count();
 
-        if ($count === 2 && $alert->user->name !== $alert->senders[1]->name) {
-            $sender = $alert->user->name . ' (oraz ' . $alert->senders[1]->name . ')';
+        if ($count === 2) {
+            $sender = $alert->user->name . ' (oraz ' . $senders->last()->name . ')';
         } elseif ($count > 2) {
             $sender = $alert->user->name . ' (oraz ' . Declination::format($count, ['osoba', 'osoby', 'osób']) . ')';
         } else {
