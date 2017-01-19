@@ -56,8 +56,8 @@ class PurgeJobs extends Command
             'type'  => 'jobs',
             'body'  => [
                 'query' => [
-                    'filtered' => [
-                        'filter' => [
+                    'bool' => [
+                        'must' => [
                             ['range' => ['deadline_at' => ['lt' => 'now']]]
                         ]
                     ]
@@ -79,14 +79,15 @@ class PurgeJobs extends Command
 
         foreach ($result as $hit) {
             $user = $this->user->find($hit['user_id'], ['name', 'email']);
+            $this->elasticsearch->delete(
+                ['id' => $hit->id, 'index' => config('elasticsearch.default_index'), 'type' => 'jobs']
+            );
 
             if ($user->email) {
                 $this->sendEmail($user, $hit);
                 $this->info(sprintf('Sending e-mail about ending offer: %s.', $hit['title']));
             }
         }
-
-        $this->elasticsearch->deleteByQuery($this->params);
     }
 
     /**
