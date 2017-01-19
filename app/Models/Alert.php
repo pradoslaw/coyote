@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $guid
  * @property \Carbon\Carbon $read_at
  * @property bool $is_marked
+ * @property Alert\Sender[] $senders
  */
 class Alert extends Model
 {

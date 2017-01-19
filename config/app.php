@@ -225,7 +225,9 @@ return [
         // Pakiet Laravel Grid do budowania tabel oraz filtrowania i sortowania
         Boduch\Grid\GridServiceProvider::class,
         // sentry, raportowanie bugow
-        Sentry\SentryLaravel\SentryLaravelServiceProvider::class
+        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
+        // Fractal
+        Spatie\Fractal\FractalServiceProvider::class
     ],
     /*
     |--------------------------------------------------------------------------

@@ -9,10 +9,10 @@
             {% set head_date = '' %}
 
             <nav class="text-center">
-                {{ alerts.render()|raw }}
+                {{ pagination.render()|raw }}
             </nav>
 
-            {% for alert in alerts %}
+            {% for alert in pagination %}
                 {% if head_date != alert.created_at|date('d F Y') %}
                     <h2>{{ alert.created_at|date('d F Y') }}</h2>
                     {% set head_date = alert.created_at|date('d F Y') %}
@@ -31,6 +31,7 @@
                             <h4 class="pull-left"><a href="{{ url }}">{{ alert.headline }}</a></h4>
                             <small class="pull-right">{{ alert.created_at|format_date }}</small>
                         </header>
+
                         <h3><a href="{{ url }}">{{ alert.subject|raw }}</a></h3>
                         <p class="excerpt"><a href="{{ url }}">{{ alert.excerpt|raw }}</a></p>
                     </div>
@@ -40,7 +41,7 @@
             {% endfor %}
 
             <nav class="text-center">
-                {{ alerts.render()|raw }}
+                {{ pagination.render()|raw }}
             </nav>
         </div>
     </div>

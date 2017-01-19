@@ -45,7 +45,8 @@
         "chrisboulton/php-diff": "dev-master",
         "sentry/sentry": "^1.5",
         "sentry/sentry-laravel": "^0.4.1",
-        "erusev/parsedown": "^1.6"
+        "erusev/parsedown": "^1.6",
+        "spatie/laravel-fractal": "^3.2"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",

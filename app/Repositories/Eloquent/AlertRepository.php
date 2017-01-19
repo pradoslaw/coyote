@@ -8,6 +8,7 @@ use Coyote\Alert\Sender;
 use Coyote\Alert\Type;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface;
 use Coyote\Services\Declination\Declination;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @package Coyote\Repositories\Eloquent
@@ -30,7 +31,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
     public function paginate($userId, $perPage = 20)
     {
         $alerts = $this->prepare($userId)->paginate($perPage);
-        $alerts = $this->formatHeadline($alerts);
+//        $alerts = $this->formatHeadline($alerts);
 
         return $alerts;
     }
@@ -44,7 +45,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
     public function takeForUser($userId, $limit = 10, $offset = 0)
     {
         $alerts = $this->prepare($userId)->take($limit)->skip($offset)->get();
-        $alerts = $this->formatHeadline($alerts);
+//        $alerts = $this->formatHeadline($alerts);
 
         return $alerts;
     }
@@ -85,6 +86,8 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
     private function formatHeadline($alerts)
     {
         $alerts->each(function ($alert) {
+            $alert->senders = $alert->senders->unique('name');
+
             $alert->user = $alert->senders->first();
             $count = $alert->senders->count();
 
@@ -114,7 +117,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
                 ->model
                 ->select(['alerts.*', 'alert_types.headline'])
                 ->where('user_id', $userId)
-                ->with(['senders' => function ($sql) {
+                ->with(['senders' => function (HasMany $sql) {
                     $sql
                         ->select([
                             'alert_id',

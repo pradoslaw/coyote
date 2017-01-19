@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\User;
 use Coyote\Alert;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Coyote\Transformers\AlertTransformer;
 use Illuminate\Http\Request;
 use Carbon;
 
@@ -50,13 +51,14 @@ class AlertsController extends BaseController
     {
         $this->breadcrumb->push('Powiadomienia', route('user.alerts'));
 
-        $alerts = $this->alert->paginate($this->userId);
-        $session = $session->findBy('user_id', $this->userId, ['created_at']);
-
+        $pagination = $this->alert->paginate($this->userId);
         // mark as read
-        $this->mark($alerts);
+        $this->mark($pagination);
 
-        return $this->view('user.alerts.home')->with(compact('alerts', 'session'));
+        $session = $session->findBy('user_id', $this->userId, ['created_at']);
+        $pagination->setCollection(collect(fractal($pagination->getCollection(), new AlertTransformer())->toArray()));
+
+        return $this->view('user.alerts.home')->with(compact('pagination', 'session'));
     }
 
     /**
@@ -93,13 +95,16 @@ class AlertsController extends BaseController
         $alerts = $this->alert->takeForUser($this->userId, max(10, $unread), $request->query('offset', 0));
         $unread -= $this->mark($alerts);
 
+        // format notification's headline
+        $alerts = collect(fractal($alerts, new AlertTransformer())->toArray());
+
         $view = view('user.alerts.ajax', [
             'alerts'    => $alerts,
             'session'   => $session->findBy('user_id', $this->userId, ['created_at']),
-        ])->render();
+        ]);
 
         return response()->json([
-            'html'      => $view,
+            'html'      => $view->render(),
             'unread'    => $unread
         ]);
     }
