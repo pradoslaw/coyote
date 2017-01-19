@@ -2,6 +2,8 @@
 import 'core-js/fn/promise';
 // required for PhantomJS to run tests
 import 'core-js/modules/es6.function.bind';
+// JS's startsWith() -- support for IE and old Opera
+import 'core-js/modules/es6.string.starts-with';
 
 import {RealtimeFactory} from './libs/realtime.js';
 import './components/dropdown.js';
