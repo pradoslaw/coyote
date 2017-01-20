@@ -1,5 +1,12 @@
 var webpack = require('webpack');
 var path = require('path');
+var env = require('node-env-file');
+
+env(__dirname + '/.env');
+
+function cdn(path) {
+    return (typeof process.env.CDN != 'undefined' ? ('//' + process.env.CDN) : '') + path;
+}
 
 module.exports = {
     module: {
@@ -18,7 +25,7 @@ module.exports = {
         path: path.join(__dirname, 'public/js'),
         filename: '[name].js',
         chunkFilename: '[chunkhash].js',
-        publicPath: '/js/'
+        publicPath: cdn('/js/')
     },
     context: path.join(__dirname, 'resources/assets/js'),
     entry: {
