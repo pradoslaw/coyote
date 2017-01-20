@@ -80,7 +80,7 @@ class PurgeJobs extends Command
         foreach ($result as $hit) {
             $user = $this->user->find($hit['user_id'], ['name', 'email']);
             $this->elasticsearch->delete(
-                ['id' => $hit->id, 'index' => config('elasticsearch.default_index'), 'type' => 'jobs']
+                ['id' => $hit['id'], 'index' => config('elasticsearch.default_index'), 'type' => 'jobs']
             );
 
             if ($user->email) {
