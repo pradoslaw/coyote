@@ -415,19 +415,8 @@ class Job extends Model
         $body = $this->parentGetIndexBody();
 
         // maximum offered salary
-        $salary = max($this->salary_from, $this->salary_to);
+        $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
         $body = array_except($body, ['deleted_at', 'enable_apply']);
-
-        // we need to calculate monthly salary in order to sorting data by salary
-        if ($salary && $this->rate_id != self::MONTH) {
-            if ($this->rate_id == self::YEAR) {
-                $salary = round($salary / 12);
-            } elseif ($this->rate_id == self::WEEK) {
-                $salary = round($salary * 4);
-            } else {
-                $salary = round($salary * 8 * 5 * 4);
-            }
-        }
 
         $locations = [];
 
@@ -452,6 +441,8 @@ class Job extends Model
         $body = array_merge($body, [
             'locations'         => $locations,
             'salary'            => $salary,
+            'salary_from'       => $this->monthlySalary($this->salary_from),
+            'salary_to'         => $this->monthlySalary($this->salary_to),
             // yes, we index currency name so we don't have to look it up in database during search process
             'currency_name'     => $this->currency()->value('name'),
             'firm'              => $this->firm()->first(['name', 'logo']),
@@ -459,5 +450,27 @@ class Job extends Model
         ]);
 
         return $body;
+    }
+
+    /**
+     * @param float|null $salary
+     * @return float|null
+     */
+    private function monthlySalary($salary)
+    {
+        if (empty($salary) || $this->rate_id === self::MONTH) {
+            return $salary;
+        }
+
+        // we need to calculate monthly salary in order to sorting data by salary
+        if ($this->rate_id == self::YEAR) {
+            $salary = round($salary / 12);
+        } elseif ($this->rate_id == self::WEEK) {
+            $salary = round($salary * 4);
+        } elseif ($this->rate_id == self::HOUR) {
+            $salary = round($salary * 8 * 5 * 4);
+        }
+
+        return $salary;
     }
 }

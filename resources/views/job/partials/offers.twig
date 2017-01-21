@@ -51,7 +51,7 @@
 
                             {% if job.salary_from or job.salary_to %}
                                 <p class="text-primary visible-xs">
-                                    {% include 'job.partials.salary' with {rate_label: true} %}
+                                    {% include 'job.partials.salary' %}
                                 </p>
                             {% endif %}
 
@@ -66,7 +66,7 @@
                         <td class="col-salary hidden-xs hidden-xxs">
                             {% if job.salary_from or job.salary_to %}
                                 <p class="text-primary">
-                                    {% include 'job.partials.salary' with {rate_label: true} %}
+                                    {% include 'job.partials.salary' %}
                                 </p>
                             {% endif %}
                         </td>
