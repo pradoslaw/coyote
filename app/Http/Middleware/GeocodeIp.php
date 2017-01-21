@@ -3,6 +3,7 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
+use Coyote\Services\Geocoder\Location;
 use Illuminate\Http\Request;
 
 class GeocodeIp
@@ -16,13 +17,19 @@ class GeocodeIp
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user() && !$request->user()->location) {
+        if ($request->user() && $request->user()->location) {
+            $request->attributes->add([
+                'geocode' => new Location([
+                    'city'          => $request->user()->location,
+                    'latitude'      => $request->user()->latitude,
+                    'longitude'     => $request->user()->longitude
+                ])
+            ]);
+        } else {
             $geoIp = app('geo-ip');
             $result = $geoIp->ip($request->ip());
 
-            if (is_array($result)) {
-                $request->attributes->add(['geocode' => $result]);
-            }
+            $request->attributes->add(['geocode' => is_array($result) ? new Location($result) : new Location()]);
         }
 
         return $next($request);
