@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Stream\Activities;
 
-use Coyote\Services\Stream\ToArray;
+use Coyote\Services\Arrayable\ToArray;
 use Coyote\Services\Stream\Objects\ObjectInterface;
 
 /**

@@ -36,8 +36,18 @@ class Geocoder implements GeocoderInterface
         $result = $this->request(['address' => $address]);
 
         if ($result['status'] === 'OK') {
-            $latlng = $result['results'][0]['geometry']['location'];
-            return new Location(['latitude' => $latlng['lat'], 'longitude' => $latlng['lng']]);
+            $match = $result['results'][0];
+
+            $latlng = $match['geometry']['location'];
+            $location = new Location(['latitude' => $latlng['lat'], 'longitude' => $latlng['lng']]);
+
+            foreach ($match['address_components'] as $component) {
+                if (in_array('locality', $component['types'])) {
+                    $location->city = $component['short_name'];
+                }
+            }
+
+            return $location;
         }
 
         return new Location();
@@ -54,7 +64,7 @@ class Geocoder implements GeocoderInterface
         $response = $this->client->request('GET', '/maps/api/geocode/json', [
             'base_uri'      => self::GEOCODE_URL,
             'http_errors'   => true,
-            'query'         => array_merge($query, ['key' => $this->appKey])
+            'query'         => array_merge($query, ['key' => $this->appKey, 'language' => config('app.locale')])
         ]);
 
         return json_decode((string) $response->getBody(), true);

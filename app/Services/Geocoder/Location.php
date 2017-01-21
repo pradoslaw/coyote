@@ -2,8 +2,13 @@
 
 namespace Coyote\Services\Geocoder;
 
-class Location
+use Coyote\Services\Arrayable\ToArray;
+use Illuminate\Contracts\Support\Arrayable;
+
+class Location implements Arrayable
 {
+    use ToArray;
+
     /**
      * @var float
      */

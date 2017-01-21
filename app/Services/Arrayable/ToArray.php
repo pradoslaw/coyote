@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Stream;
+namespace Coyote\Services\Arrayable;
 
 trait ToArray
 {
