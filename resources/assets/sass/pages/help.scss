@@ -49,9 +49,10 @@
   }
 
   > ul {
-    > li
+    > li {
       > a {
-      font-weight: bold;
+        font-weight: bold;
+      }
     }
   }
 }
