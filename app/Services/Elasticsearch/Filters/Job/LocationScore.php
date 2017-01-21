@@ -8,9 +8,10 @@ use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 
 class LocationScore extends Filter
 {
-    const WEIGHT = 2;
-    const SCALE = '10km';
+    const WEIGHT = '0.2';
     const OFFSET = '20km';
+    const SCALE = '100km';
+    const DECAY = '0.5';
 
     /**
      * @param GeocoderLocation|null $value
@@ -54,10 +55,16 @@ class LocationScore extends Filter
                                             'lon' => $this->value->longitude
                                         ],
                                         'scale' => self::SCALE,
-                                        'offset' => self::OFFSET
+                                        'offset' => self::OFFSET,
+                                        'decay' => self::DECAY
                                     ]
                                 ],
                                 'weight' => self::WEIGHT
+                            ],
+                            [
+                                'script_score' => [
+                                    'script' => '0'
+                                ]
                             ]
                         ]
                     ]
