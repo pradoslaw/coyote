@@ -13,13 +13,13 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Services\Geocoder\GeocoderInterface;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Services\Parser\Helpers\City;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
-use Coyote\Services\GeoIp\Normalizers\Locale;
 
 class SubmitController extends Controller
 {
@@ -38,19 +38,21 @@ class SubmitController extends Controller
      */
     private $tag;
 
-    /**
-     * @var \Coyote\Services\GeoIp\GeoIp
-     */
-    private $geoIp;
+    private $geocoder;
 
     /**
      * SubmitController constructor.
      * @param JobRepository $job
      * @param FirmRepository $firm
      * @param TagRepository $tag
+     * @param GeocoderInterface $geocoder
      */
-    public function __construct(JobRepository $job, FirmRepository $firm, TagRepository $tag)
-    {
+    public function __construct(
+        JobRepository $job,
+        FirmRepository $firm,
+        TagRepository $tag,
+        GeocoderInterface $geocoder
+    ) {
         parent::__construct();
 
         $this->middleware('job.revalidate', ['except' => ['postTag', 'getFirmPartial']]);
@@ -62,7 +64,7 @@ class SubmitController extends Controller
         $this->firm = $firm;
         $this->tag = $tag;
 
-        $this->geoIp = app('geo-ip');
+        $this->geocoder = $geocoder;
 
         $this->public['firm_partial'] = route('job.submit.firm.partial');
     }
@@ -385,9 +387,7 @@ class SubmitController extends Controller
             $job->locations()->delete();
 
             foreach ($locations as $location) {
-                $job->locations()->create(
-                    $this->geocode($location)
-                );
+                $job->locations()->create($this->geocode($location));
             }
 
             $job->tags()->sync($tags);
@@ -405,7 +405,7 @@ class SubmitController extends Controller
     }
 
     /**
-     * @param $city
+     * @param string $city
      * @return array
      */
     private function geocode($city)
@@ -415,18 +415,13 @@ class SubmitController extends Controller
         ];
 
         try {
-            // @todo Ten mechanizm trzeba bedzie zmienic w przypadku angielskiej wersji serwisu
-            $normalizer = new Locale(config('app.locale'));
+            $location = $this->geocoder->geocode($city);
 
-            // we just want a first hit of a results with local name of the city
-            // so Warsaw will become Warszawa
-            $result = $normalizer->normalize($this->geoIp->city($city));
+            if (!$location->city) {
+                $location->city = $city;
+            }
 
-            $location = array_merge($location, [
-                'latitude' => $result['latitude'],
-                'longitude' => $result['longitude'],
-                'city' => $result['name']
-            ]);
+            $location = $location->toArray();
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
         }
