@@ -72,7 +72,7 @@
       background: url('/img/hand-writing-nice-to-have.png') no-repeat;
       height: 45px;
       position: absolute;
-      z-index: 1000;
+      z-index: 0; // 0 so tags can be clickable
       width: 200px;
       left: -27px;
       top: 11px;
