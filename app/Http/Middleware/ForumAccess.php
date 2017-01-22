@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 class ForumAccess extends AbstractMiddleware
 {
     /**
-     * @var Request
-     */
-    private $request;
-
-    /**
      * Handle an incoming request.
      *
      * @param  Request  $request
@@ -21,8 +16,6 @@ class ForumAccess extends AbstractMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $this->request = $request;
-
         /** @var \Coyote\Forum $forum */
         $forum = $request->route('forum');
 
