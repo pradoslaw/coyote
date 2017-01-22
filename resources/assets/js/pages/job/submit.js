@@ -121,7 +121,13 @@ class Tags {
     }
 
     _onHover() {
-        this.dropdown.on('hover', 'li', e => $(e.currentTarget).addClass('hover'), e => $(e.currentTarget).removeClass('hover'));
+        this.dropdown
+            .on('mouseenter', 'li', e => {
+                $(e.currentTarget).addClass('hover');
+            })
+            .on('mouseleave', 'li', e => {
+                $(e.currentTarget).removeClass('hover');
+            });
     }
 
     _onItemClick() {
