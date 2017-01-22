@@ -78,9 +78,13 @@
   h5 {
     padding-bottom: 1px;
     font-size: $font-size-base;
-    color: $link-color-darker;
+    font-weight: bold;
 
     @include text-overflow;
+
+    &:hover {
+      color: $link-color-darker;
+    }
   }
 
   p {
