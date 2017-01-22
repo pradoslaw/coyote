@@ -43,11 +43,6 @@ class LocationScore extends Filter
                         'score_mode' => 'sum',
                         'functions' => [
                             [
-                                'filter' => [
-                                    'exists' => [
-                                        'field' => $this->field
-                                    ]
-                                ],
                                 'gauss' => [
                                     $this->field => [
                                         'origin' => [

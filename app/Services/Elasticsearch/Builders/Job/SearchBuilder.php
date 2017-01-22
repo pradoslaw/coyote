@@ -76,7 +76,7 @@ class SearchBuilder extends QueryBuilder
      */
     public function setBoostLocation(Location $location = null)
     {
-        $this->must(new Filters\Job\LocationScore($location));
+        $this->should(new Filters\Job\LocationScore($location));
     }
 
     /**
