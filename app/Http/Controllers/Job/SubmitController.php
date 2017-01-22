@@ -121,6 +121,9 @@ class SubmitController extends Controller
 
         // @todo Uzyc mechanizmu geolokalizacji
         $defaultCountryId = array_search('Polska', $countryList->toArray());
+        $popularTags = $this->job->getPopularTags();
+
+        $this->public += ['popular_tags' => $popularTags];
 
         return $this->view('job.submit.home', [
             'countryList'       => $countryList,
@@ -129,7 +132,7 @@ class SubmitController extends Controller
             'employmentList'    => Job::getEmploymentList(),
             'rateList'          => Job::getRatesList(),
             'remote_range_list' => Job::getRemoteRangeList(),
-            'popularTags'       => $this->job->getPopularTags()
+            'popularTags'       => $popularTags
         ])->with(
             compact('job', 'firm')
         );

@@ -1,5 +1,6 @@
 import '../../plugins/uploader';
 import '../job/tinymce';
+import Config from '../../libs/config';
 
 class Tags {
     constructor(options) {
@@ -25,23 +26,23 @@ class Tags {
             'top':				this.input.position().top + this.input.outerHeight()
         });
 
-        this.onFocus();
-        this.onKeyUp();
-        this.onKeyDown();
-        this.onHover();
-        this.onItemClick();
-        this.onRemove();
+        this._onFocus();
+        this._onKeyUp();
+        this._onKeyDown();
+        this._onHover();
+        this._onItemClick();
+        this._onRemove();
 
         $(document).bind('click', e => {
             let $target = $(e.target);
 
             if (!$target.is(this.input)) {
-                this.hideDropdown();
+                this._hideDropdown();
             }
         });
     }
 
-    onKeyUp() {
+    _onKeyUp() {
         this.input.on('keyup', e => {
             let keyCode = e.keyCode || window.event.keyCode;
 
@@ -53,40 +54,59 @@ class Tags {
                     this.addTag(this.input.val());
                 }
 
-                this.hideDropdown();
+                this._hideDropdown();
                 this.input.val('');
+                this._loadDefaultTags();
 
                 e.preventDefault();
             }
             else if (keyCode === 40) { // down
                 this.select(this.selectedIndex + 1);
+                this._showDropdown();
             }
             else if (keyCode === 38) { // up
                 this.select(this.selectedIndex - 1);
+            }
+            else if (keyCode === 27) {
+                this._hideDropdown();
             }
             else {
                 let searchText = this.input.val().toLowerCase();
                 let hits = 0;
 
-                $('li', this.dropdown).each(index => {
-                    let item = $('li:eq(' + index + ')', this.dropdown);
-                    let text = item.find('span').text();
+                let popularTags = Config.get('popular_tags');
+                let dropdown = '';
 
-                    if (!text.toLowerCase().startsWith(searchText)) {
-                        item.hide();
-                    }
-                    else  {
-                        item.show();
+                for (let value in popularTags) {
+                    if (popularTags.hasOwnProperty(value) && value.startsWith(searchText)) {
+                        dropdown += this._buildTagItem(value, popularTags[value]);
                         hits++;
                     }
-                });
+                }
 
-                this.dropdown.toggle(hits > 0);
+                this.dropdown.html(dropdown).toggle(hits > 0);
             }
         });
     }
 
-    onKeyDown() {
+    _buildTagItem(value, count) {
+        return `<li><span>${value}</span> <small>× ${count}</small></li>`;
+    }
+
+    _loadDefaultTags() {
+        let popularTags = Config.get('popular_tags');
+        let dropdown = '';
+
+        for (let value in popularTags) {
+            if (popularTags.hasOwnProperty(value)) {
+                dropdown += this._buildTagItem(value, popularTags[value]);
+            }
+        }
+
+        this.dropdown.html(dropdown);
+    }
+
+    _onKeyDown() {
         this.input.on('keydown', e => {
             let keyCode = e.keyCode || window.event.keyCode;
 
@@ -100,32 +120,33 @@ class Tags {
         });
     }
 
-    onHover() {
-        $('li', this.dropdown).hover(e => $(e.currentTarget).addClass('hover'), e => $(e.currentTarget).removeClass('hover'));
+    _onHover() {
+        this.dropdown.on('hover', 'li', e => $(e.currentTarget).addClass('hover'), e => $(e.currentTarget).removeClass('hover'));
     }
 
-    onItemClick() {
+    _onItemClick() {
         this.dropdown.on('click', 'li', e => {
             this.addTag($(e.currentTarget).find('span').text());
-            this.hideDropdown();
+            this._hideDropdown();
 
             this.input.val('').focus();
+            this._loadDefaultTags();
         });
     }
 
-    onSuggestionClick() {
+    _onSuggestionClick() {
         $(this.setup.suggestion).click(e => {
             this.addTag($(e.currentTarget).text());
         });
     }
 
-    onRemove() {
+    _onRemove() {
         this.container.on('click', this.setup.remove, e => {
             $(e.currentTarget).parents('.tag-item').remove();
         });
     }
 
-    onFocus() {
+    _onFocus() {
         this.input.on('focus click', () => {
             this.dropdown.show();
         });
@@ -150,11 +171,11 @@ class Tags {
         }
     }
 
-    hideDropdown() {
+    _hideDropdown() {
         this.dropdown.hide();
     }
 
-    showDropdown() {
+    _showDropdown() {
         this.dropdown.show();
     }
 
@@ -182,7 +203,7 @@ class Tags {
                     this.help.html('');
                 } else {
                     this.help.html(`Podpowiedź: ${this._buildSuggestions(suggestions)}`);
-                    this.onSuggestionClick();
+                    this._onSuggestionClick();
                 }
             });
 
@@ -345,7 +366,7 @@ $(() => {
     });
 
     $('#btn-add-firm').click(() => {
-        $.get(_config.firm_partial, {}, (html) => {
+        $.get(Config.get('firm_partial'), {}, (html) => {
             $('#box-edit-firm').replaceWith(html);
 
             $('#modal-firm').modal('hide');
