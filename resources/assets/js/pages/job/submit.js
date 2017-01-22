@@ -72,7 +72,7 @@ class Tags {
                     let item = $('li:eq(' + index + ')', this.dropdown);
                     let text = item.find('span').text();
 
-                    if (text.toLowerCase().indexOf(searchText) === -1) {
+                    if (!text.toLowerCase().startsWith(searchText)) {
                         item.hide();
                     }
                     else  {
