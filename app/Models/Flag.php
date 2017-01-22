@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $text
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property Flag\Type $type
  */
 class Flag extends Model
 {
@@ -33,11 +34,11 @@ class Flag extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function type()
     {
-        return $this->hasMany('Coyote\Flag\Type');
+        return $this->belongsTo('Coyote\Flag\Type');
     }
 
     /**

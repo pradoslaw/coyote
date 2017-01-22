@@ -210,6 +210,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany('Coyote\User\Skill')->orderBy('order');
     }
 
+    public function notificationSetting($typeId)
+    {
+        return $this->hasOne('Coyote\Alert\Setting')->where('type_id', $typeId)->first();
+    }
+
+    public function getUnreadNotification($objectId)
+    {
+        return $this->hasOne('Coyote\Alert')->where('object_id', '=', $objectId)->whereNull('read_at')->first();
+    }
+
     /**
      * @param string $value
      * @return \Coyote\Services\Media\MediaInterface

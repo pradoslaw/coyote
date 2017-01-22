@@ -4,6 +4,10 @@ namespace Coyote\Flag;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $name
+ * @property string $description
+ */
 class Type extends Model
 {
     /**
