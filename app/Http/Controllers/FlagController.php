@@ -85,7 +85,7 @@ class FlagController extends Controller
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response|null
      */
     public function delete($id)
     {
@@ -96,11 +96,13 @@ class FlagController extends Controller
             return response('Unauthorized.', 401);
         }
 
-        $flag->moderator_id = $this->userId;
-        $flag->save();
+        $this->transaction(function () use ($flag, $object) {
+            $flag->moderator_id = $this->userId;
+            $flag->save();
 
-        $flag->delete();
-        stream(Stream_Delete::class, $object);
+            $flag->delete();
+            stream(Stream_Delete::class, $object);
+        });
     }
 
     /**
