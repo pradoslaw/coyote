@@ -70,7 +70,7 @@
 
     &:hover {
       h5 {
-        color: $brand-primary;
+        color: $link-color-darker;
       }
     }
   }
@@ -81,10 +81,6 @@
     font-weight: bold;
 
     @include text-overflow;
-
-    &:hover {
-      color: $link-color-darker;
-    }
   }
 
   p {
