@@ -80,7 +80,7 @@
   }
 }
 
-.tag-suggestions {
+.tag-dropdown {
   border: 2px solid #DDD;
   list-style-type: none;
   border-radius: 3px;
@@ -120,6 +120,12 @@
       font-size: 80%;
     }
   }
+}
+
+.tag-suggestion {
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .tag-editor {

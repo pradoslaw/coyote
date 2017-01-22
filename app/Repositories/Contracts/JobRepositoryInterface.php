@@ -64,4 +64,10 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return \Illuminate\Support\Collection
      */
     public function getMyOffers($userId);
+
+    /**
+     * @param array $tags
+     * @return array
+     */
+    public function getTagSuggestions(array $tags): array;
 }

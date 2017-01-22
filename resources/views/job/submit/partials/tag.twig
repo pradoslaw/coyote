@@ -5,7 +5,7 @@
         </ol>
     </div>
 
-    {{ form_hidden('tags[' ~ tag.name ~ '][name]', tag.name) }}
+    {{ form_hidden('tags[' ~ tag.name ~ '][name]', tag.name, {class: 'tag-name'}) }}
 
     <div class="col-xs-6">
         <div class="radio radio-primary radio-inline">

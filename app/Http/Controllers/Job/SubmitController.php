@@ -38,6 +38,9 @@ class SubmitController extends Controller
      */
     private $tag;
 
+    /**
+     * @var GeocoderInterface
+     */
     private $geocoder;
 
     /**

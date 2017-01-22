@@ -3,42 +3,39 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\JobRepositoryInterface as Job;
+use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
-use Illuminate\Http\Request;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as Tag;
+use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 
 class TagController extends Controller
 {
     /**
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function submit(Request $request)
+    public function submit()
     {
-        $this->validate($request, ['name' => 'required|string|max:25|tag']);
+        $this->validate($this->request, ['name' => 'required|string|max:25|tag']);
 
         return view('job.submit.partials.tag', [
             'tag' => [
-                'name' => $request->name,
+                'name' => $this->request->input('name'),
                 'priority' => 1
             ]
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param Tag $tag
-     * @param Job $job
+     * @param TagRepository $tag
+     * @param JobRepository $job
      * @return \Illuminate\View\View
      */
-    public function prompt(Request $request, Tag $tag, Job $job)
+    public function prompt(TagRepository $tag, JobRepository $job)
     {
         // we don't wanna tags with "#" at the beginning
-        $request->merge(['q' => ltrim($request['q'], '#')]);
+        $this->request->merge(['q' => ltrim($this->request->input('q'), '#')]);
 
-        $this->validate($request, ['q' => 'required|string|max:25']);
-        $tags = $tag->lookupName($request['q']);
+        $this->validate($this->request, ['q' => 'required|string|max:25']);
+        $tags = $tag->lookupName($this->request->input('q'));
 
         $job->pushCriteria(new PriorDeadline());
         $tags = $job->getTagsWeight($tags->pluck('id')->toArray());
@@ -47,13 +44,24 @@ class TagController extends Controller
     }
 
     /**
-     * @param Request $request
+     * Validate tag
      */
-    public function valid(Request $request)
+    public function valid()
     {
         // we don't wanna tags with "#" at the beginning
-        $request->merge(['t' => ltrim($request['t'], '#')]);
+        $this->request->merge(['t' => ltrim($this->request->input('t'), '#')]);
 
-        $this->validate($request, ['t' => 'required|string|max:25|tag']);
+        $this->validate($this->request, ['t' => 'required|string|max:25|tag']);
+    }
+
+    /**
+     * @param JobRepository $job
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function suggestions(JobRepository $job)
+    {
+        $suggestions = $job->getTagSuggestions($this->request->input('t'));
+
+        return response()->json($suggestions);
     }
 }
