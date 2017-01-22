@@ -26,35 +26,10 @@ class ForumAccess extends AbstractMiddleware
         /** @var \Coyote\Forum $forum */
         $forum = $request->route('forum');
 
-        // case sensitive redirection. redirect to the original url if needed.
-        if ($this->isInvalidUrl() && $request->isMethod('get')) {
-            return $this->redirect($request);
-        }
-
         if (!$forum->userCanAccess($request->user() ? $request->user()->id : null)) {
             return $this->unauthorized($request);
         }
 
         return $next($request);
-    }
-
-    /**
-     * @return bool
-     */
-    private function isInvalidUrl()
-    {
-        // nie dziala dla podkategorii
-        if ($this->request->route('forum')->parent_id) {
-            return false;
-        }
-        list(, $name, ) = explode('/', trim($this->request->getPathInfo(), '/'));
-
-        $name = rawurldecode(trim($name));
-
-        if ($name !== $this->request->route('forum')->slug) {
-            return true;
-        }
-
-        return false;
     }
 }

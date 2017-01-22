@@ -2,9 +2,11 @@
 
 namespace Coyote\Exceptions;
 
+use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -106,6 +108,10 @@ class Handler extends ExceptionHandler
                 ->with('error', 'Wygląda na to, że nie wysłałeś tego formularza przez dłuższy czas. Spróbuj ponownie!');
         }
 
+        if (($e instanceof HttpException && $e->getStatusCode() === 404) || $e instanceof ModelNotFoundException) {
+            return $this->renderHttpErrorException($request, $e);
+        }
+
         return parent::render($request, $e);
     }
 
@@ -116,6 +122,23 @@ class Handler extends ExceptionHandler
     protected function renderForbiddenException(ForbiddenException $e)
     {
         return response()->view('errors.forbidden', $e->firewall->toArray(), 401);
+    }
+
+    /**
+     * @param Request $request
+     * @param HttpException|ModelNotFoundException $e
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|SymfonyResponse
+     */
+    protected function renderHttpErrorException(Request $request, $e)
+    {
+        $path = rawurldecode(rtrim($request->getPathInfo(), '/'));
+        $page = $this->container[PageRepositoryInterface::class]->findByPath($path);
+
+        if (!$page) {
+            return parent::render($request, $e);
+        }
+
+        return redirect($page->path, 301);
     }
 
     /**
