@@ -28,36 +28,47 @@
                     <strong>Informacja na e-mail</strong>
                 </div>
             </div>
-            {% for setting in settings %}
-                <div class="row">
-                    <div class="col-xs-8">
-                        {{ setting.name }}
-                    </div>
-                    <div class="col-xs-2">
-                        {{ form_hidden('settings[' ~ setting.id ~ '][profile]', 0) }}
 
-                        <div class="checkbox">
-                            {% set random = 'id' ~ random() %}
-                            {{ form_checkbox('settings[' ~ setting.id ~ '][profile]', 1, setting.profile, {id: random, class: 'styled'}) }}
-
-                            <label for="{{ random }}">
-
-                            </label>
+            {% for category, settings in groups %}
+                {% if category %}
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <strong>{{ category }}</strong>
                         </div>
                     </div>
-                    <div class="col-xs-2">
-                        {{ form_hidden('settings[' ~ setting.id ~ '][email]', 0) }}
+                {% endif %}
 
-                        <div class="checkbox">
-                            {% set random = 'id' ~ random() %}
-                            {{ form_checkbox('settings[' ~ setting.id ~ '][email]', 1, setting.email, {id: random, class: 'styled'}) }}
+                {% for setting in settings %}
+                    <div class="row">
+                        <div class="col-xs-8">
+                            {{ setting.name }}
+                        </div>
+                        <div class="col-xs-2">
+                            {{ form_hidden('settings[' ~ setting.id ~ '][profile]', 0) }}
 
-                            <label for="{{ random }}">
+                            <div class="checkbox">
+                                {% set random = 'id' ~ random() %}
+                                {{ form_checkbox('settings[' ~ setting.id ~ '][profile]', 1, setting.profile, {id: random, class: 'styled'}) }}
 
-                            </label>
+                                <label for="{{ random }}">
+
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            {{ form_hidden('settings[' ~ setting.id ~ '][email]', 0) }}
+
+                            <div class="checkbox">
+                                {% set random = 'id' ~ random() %}
+                                {{ form_checkbox('settings[' ~ setting.id ~ '][email]', 1, setting.email, {id: random, class: 'styled'}) }}
+
+                                <label for="{{ random }}">
+
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endfor %}
             {% endfor %}
 
             <div class="row">

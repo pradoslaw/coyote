@@ -67,9 +67,9 @@ class AlertsController extends BaseController
     public function settings()
     {
         $this->breadcrumb->push('Ustawienia powiadomień', route('user.alerts.settings'));
-        $settings = $this->alert->getUserSettings($this->userId);
+        $groups = $this->alert->getUserSettings($this->userId)->groupBy('category');
 
-        return $this->view('user.alerts.settings', compact('settings'));
+        return $this->view('user.alerts.settings', compact('groups'));
     }
 
     /**

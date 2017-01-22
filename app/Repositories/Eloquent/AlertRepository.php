@@ -127,6 +127,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
             ->select([
                 'alert_settings.*',
                 'alert_types.name',
+                'alert_types.category',
                 'users.email AS user_email',
                 'is_active',
                 'is_blocked',
