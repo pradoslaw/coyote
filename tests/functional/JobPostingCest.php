@@ -30,7 +30,7 @@ class JobPostingCest
         $fake = Factory::create();
 
         $I->fillField('input[name=title]', $title = $fake->text(50));
-        $I->fillField('input[name=city]', $city = $fake->city);
+        $I->fillField('input[name=city]', $city = 'Zielona góra');
         $I->fillField('input[name=salary_from]', $salaryFrom = $fake->numberBetween(0, 999));
         $I->fillField('input[name=salary_to]', $salaryTo = $fake->numberBetween(1000, 2000));
 
