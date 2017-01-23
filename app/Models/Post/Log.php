@@ -90,7 +90,12 @@ class Log extends Model
             return true;
         }
 
-        if (!empty(array_diff($this->tags, (array) $previous->tags))) {
+        $diff = array_merge(
+            array_diff($this->tags, (array) $previous->tags),
+            array_diff((array) $previous->tags, $this->tags)
+        );
+
+        if (!empty($diff)) {
             return true;
         }
 
