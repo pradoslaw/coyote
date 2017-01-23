@@ -101,7 +101,7 @@
                                 {% include 'components.tags' with {'tags': popularTags} only %}
                             </ol>
 
-                            <div id="tags-container">
+                            <div id="tags-container" class="margin-md-top">
                                 {% for tag in input_old('tags', job.tags) %}
                                     {% include 'job.submit.partials.tag' %}
                                 {% endfor %}
@@ -222,6 +222,7 @@
     {{ parent() }}
 
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="{{ cdn('js/jquery-ui.js') }}"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
     <script>
         $(function() {

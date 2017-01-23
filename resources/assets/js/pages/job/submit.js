@@ -414,6 +414,8 @@ $(() => {
 
         return false;
     });
+
+    $('#tags-container').sortable();
 });
 
 function initialize() {

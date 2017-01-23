@@ -344,11 +344,14 @@ class SubmitController extends Controller
 
         $tags = [];
         if (!empty($data['tags'])) {
+            $order = 0;
+
             foreach ($data['tags'] as $tag) {
                 $model = $this->tag->firstOrCreate(['name' => $tag['name']]);
 
                 $tags[$model->id] = [
-                    'priority' => $tag['priority'] ?? 0
+                    'priority' => $tag['priority'] ?? 0,
+                    'order' => ++$order
                 ];
             }
         }

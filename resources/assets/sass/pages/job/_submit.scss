@@ -122,19 +122,16 @@ $font-size-control-label: 15px;
 // -----------------------------------------------
 
 #tags-container {
-  margin-top: 30px;
-
   > .row {
-    margin-bottom: 10px;
+    cursor: move;
   }
 
   .tag-clouds {
-    float: left;
-    margin-right: 20px;
+    display: inline;
 
     a {
       margin-top: 0;
-      cursor: not-allowed;
+      cursor: move;
     }
   }
 

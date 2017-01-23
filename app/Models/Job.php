@@ -310,7 +310,7 @@ class Job extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany('Coyote\Tag', 'job_tags')->withPivot('priority');
+        return $this->belongsToMany('Coyote\Tag', 'job_tags')->orderBy('order')->withPivot(['priority', 'order']);
     }
 
     /**
@@ -446,7 +446,8 @@ class Job extends Model
             // yes, we index currency name so we don't have to look it up in database during search process
             'currency_name'     => $this->currency()->value('name'),
             'firm'              => $this->firm()->first(['name', 'logo']),
-            'tags'              => $this->tags()->orderBy('priority', 'DESC')->pluck('name')
+            // higher tag's priorities first
+            'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')
         ]);
 
         return $body;
