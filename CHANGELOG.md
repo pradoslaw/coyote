@@ -11,6 +11,11 @@
 - Wyszukiwarka w module "Praca" wyszukuje nazwy miejscowości zapisane bez polskich znaków
 - Wyświetlanie tagów do wątków, nawet na małych ekranach
 - Delikatnie powiększenie czcionki tagów kosztem paddingu
+- Grupowanie ustawień powiadomień w panelu użytkownika
+- Optymalizacja wyszukiwania tagów w formularzu dodawania nowej oferty
+- Sugerowanie tagów w formularza nowej oferty pracy
+- Wynagrodzenie na liście ofert, w dziale Praca prezentowane jest w ujęciu miesięcznym (mimo, że w ofercie zostało określone np. godzinowo)
+- Lista ofert pracy w dziale Praca uwzględnia w drobnym stopniu Twoją aktualną lokalizację (prezentując oferty pracy zdalnej lub bliskie Twojemu miejscu zamieszkania)
 
 ## 2.0
 
