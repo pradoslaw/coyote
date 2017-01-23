@@ -129,7 +129,6 @@ class TopicController extends BaseController
         $this->pushForumCriteria();
         $forumList = $this->forum->choices();
 
-        $this->breadcrumb($forum);
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
         $flags = $activities = [];

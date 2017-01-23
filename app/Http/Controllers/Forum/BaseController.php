@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
@@ -43,7 +44,16 @@ abstract class BaseController extends Controller
         $this->topic = $topic;
         $this->post = $post;
 
-        $this->breadcrumb->push('Forum', route('forum.home'));
+        $this->middleware(function (Request $request, $next) {
+            $this->breadcrumb->push('Forum', route('forum.home'));
+            $forum = $request->route('forum');
+
+            if ($forum instanceof Forum) {
+                $this->breadcrumb($forum);
+            }
+
+            return $next($request);
+        });
     }
 
     /**
@@ -54,8 +64,7 @@ abstract class BaseController extends Controller
     public function breadcrumb($forum)
     {
         if ($forum->parent_id) {
-            $parent = $this->forum->find($forum->parent_id, ['slug', 'name']);
-            $this->breadcrumb->push($parent->name, route('forum.category', [$parent->slug]));
+            $this->breadcrumb->push($forum->parent->name, route('forum.category', [$forum->parent->slug]));
         }
 
         $this->breadcrumb->push($forum->name, route('forum.category', [$forum->slug]));

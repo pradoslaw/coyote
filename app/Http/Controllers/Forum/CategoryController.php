@@ -18,9 +18,6 @@ class CategoryController extends BaseController
      */
     public function index($forum, Request $request)
     {
-        // builds breadcrumb for this category
-        $this->breadcrumb($forum);
-
         $this->pushForumCriteria();
         $forumList = $this->forum->choices();
 

@@ -32,8 +32,6 @@ class SubmitController extends BaseController
      */
     public function index(Request $request, $forum, $topic, $post = null)
     {
-        $this->breadcrumb($forum);
-
         if (!empty($topic->id)) {
             $this->breadcrumb->push([
                 $topic->subject => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
