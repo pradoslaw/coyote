@@ -85,11 +85,9 @@
 
   .media-object {
     width: 70px;
-    height: 70px;
 
     @media screen and (max-width: $screen-sm) {
-      width: 40px;
-      height: 40px;
+      display: none;
     }
   }
 
