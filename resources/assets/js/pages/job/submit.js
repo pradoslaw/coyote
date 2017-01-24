@@ -415,7 +415,10 @@ $(() => {
         return false;
     });
 
-    $('#tags-container').sortable();
+    // podepnij plugin tylko na stronie oferty pracy, a nie na stronie z formularzem skladania aplikacji
+    $('#tags-container').each(function () {
+        $(this).sortable();
+    });
 });
 
 function initialize() {
