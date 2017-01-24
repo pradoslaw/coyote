@@ -31,7 +31,7 @@ class BaseController extends Controller
 
             /** @var \Lavary\Menu\Builder $menu */
             $menu->add('Strona główna', ['route' => 'adm.dashboard'])->prepend($fa('fa-desktop fa-fw'));
-            $menu->add('Użytkownicy', ['route' => 'adm.user'])->prepend($fa('fa-user fa-fw'));
+            $menu->add('Użytkownicy', ['route' => 'adm.users'])->prepend($fa('fa-user fa-fw'));
             $menu->add('Grupy', ['route' => 'adm.groups'])->prepend($fa('fa-users fa-fw'))->data('permission', 'adm-group');
             $menu->add('Bany', ['route' => 'adm.firewall'])->prepend($fa('fa-ban fa-fw'));
             $menu->add('Kto jest online', ['route' => 'adm.sessions'])->prepend($fa('fa-eye fa-fw'));

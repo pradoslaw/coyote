@@ -10,7 +10,7 @@ use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\Events\UserWasSaved;
 
-class UserController extends BaseController
+class UsersController extends BaseController
 {
     /**
      * @var UserRepository
@@ -25,7 +25,7 @@ class UserController extends BaseController
         parent::__construct();
 
         $this->user = $user;
-        $this->breadcrumb->push('Użytkownicy', route('adm.user'));
+        $this->breadcrumb->push('Użytkownicy', route('adm.users'));
     }
 
     /**
@@ -36,7 +36,7 @@ class UserController extends BaseController
         $grid = $this->gridBuilder()->createGrid(UsersGrid::class);
         $grid->setSource(new EloquentSource($this->user->newQuery()));
 
-        return $this->view('adm.user.home', ['grid' => $grid]);
+        return $this->view('adm.users.home', ['grid' => $grid]);
     }
 
     /**
@@ -45,9 +45,9 @@ class UserController extends BaseController
      */
     public function edit($user)
     {
-        $this->breadcrumb->push($user->name, route('adm.user.save', [$user->id]));
+        $this->breadcrumb->push($user->name, route('adm.users.save', [$user->id]));
 
-        return $this->view('adm.user.save', [
+        return $this->view('adm.users.save', [
             'user' => $user,
             'form' => $this->getForm($user)
         ]);
@@ -93,7 +93,7 @@ class UserController extends BaseController
     protected function getForm($user)
     {
         return $this->createForm(AdminForm::class, $user, [
-            'url' => route('adm.user.save', [$user->id])
+            'url' => route('adm.users.save', [$user->id])
         ]);
     }
 }

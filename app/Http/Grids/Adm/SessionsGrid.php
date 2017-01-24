@@ -22,7 +22,7 @@ class SessionsGrid extends Grid
                 'sortable' => true,
                 'clickable' => function (Session $session) {
                     if ($session->user_id) {
-                        return link_to_route('adm.user.save', $session->name, [$session->user_id]);
+                        return link_to_route('adm.users.save', $session->name, [$session->user_id]);
                     } else {
                         return $session->robot ?: '--';
                     }

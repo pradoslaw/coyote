@@ -67,9 +67,9 @@ $this->group(
         ////////////////////////////////////////////////////////////////////////////////////
 
 
-        $this->get('User', 'UserController@index')->name('user');
-        $this->get('User/Save/{user}', 'UserController@edit')->name('user.save');
-        $this->post('User/Save/{user}', 'UserController@save');
+        $this->get('Users', 'UsersController@index')->name('users');
+        $this->get('Users/Save/{user}', 'UsersController@edit')->name('users.save');
+        $this->post('Users/Save/{user}', 'UsersController@save');
 
         $this->get('Firewall', 'FirewallController@index')->name('firewall');
         $this->get('Firewall/Save/{firewall?}', 'FirewallController@edit')->name('firewall.save');
@@ -108,7 +108,7 @@ $this->group(
         $this->get('Words', ['uses' => 'WordsController@index'])->name('words');
         $this->post('Words', ['uses' => 'WordsController@save'])->name('words.save');
 
-        $this->get('Block', ['uses' => 'BlocksController@index'])->name('blocks');
+        $this->get('Blocks', ['uses' => 'BlocksController@index'])->name('blocks');
         $this->get('Blocks/Save/{block?}', 'BlocksController@edit')->name('blocks.save');
         $this->post('Blocks/Save/{block?}', 'BlocksController@save');
         $this->post('Blocks/Delete/{block}', 'BlocksController@delete')->name('blocks.delete');

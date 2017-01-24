@@ -31,7 +31,7 @@ class UsersGrid extends Grid
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
                 'clickable' => function (User $user) {
-                    return link_to_route('adm.user.save', $user->name, [$user->id]);
+                    return link_to_route('adm.users.save', $user->name, [$user->id]);
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])
@@ -66,7 +66,7 @@ class UsersGrid extends Grid
                 'sortable' => true
             ])
             ->addRowAction(new EditButton(function (User $user) {
-                return route('adm.user.save', [$user->id]);
+                return route('adm.users.save', [$user->id]);
             }));
     }
 }

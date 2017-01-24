@@ -31,7 +31,7 @@ class FlagsGrid extends Grid
                 'sortable' => true,
                 'placeholder' => '--',
                 'clickable' => function (Flag $row) {
-                    return link_to_route('adm.user.save', $row->user_name, [$row->user_id]);
+                    return link_to_route('adm.users.save', $row->user_name, [$row->user_id]);
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])
@@ -51,7 +51,7 @@ class FlagsGrid extends Grid
             ->addColumn('moderator_name', [
                 'title' => 'Zamknięty przez',
                 'clickable' => function (Flag $row) {
-                    return link_to_route('adm.user.save', $row->moderator_name, [$row->moderator_id]);
+                    return link_to_route('adm.users.save', $row->moderator_name, [$row->moderator_id]);
                 },
                 'placeholder' => '--'
             ])

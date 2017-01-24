@@ -31,7 +31,7 @@ class FirewallGrid extends Grid
                 'sortable' => true,
                 'placeholder' => '--',
                 'clickable' => function (Firewall $row) {
-                    return link_to_route('adm.user.save', $row->user_name, [$row->user_id]);
+                    return link_to_route('adm.users.save', $row->user_name, [$row->user_id]);
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'users.name'])
             ])
@@ -54,7 +54,7 @@ class FirewallGrid extends Grid
             ->addColumn('moderator_name', [
                 'title' => 'Założony przez',
                 'clickable' => function (Firewall $row) {
-                    return link_to_route('adm.user.save', $row->moderator_name, [$row->moderator_id]);
+                    return link_to_route('adm.users.save', $row->moderator_name, [$row->moderator_id]);
                 }
             ])
             ->addRowAction(new EditButton(function (Firewall $row) {
