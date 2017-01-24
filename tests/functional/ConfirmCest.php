@@ -84,6 +84,8 @@ class ConfirmCest
         $I->fillField('email', $newEmail);
         $I->click('Zapisz');
 
+        $I->seeCurrentRouteIs('user.settings');
+
         $I->seeInField('email', $newEmail);
     }
 }

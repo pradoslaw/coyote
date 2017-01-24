@@ -13,6 +13,8 @@ class Person extends ObjectAbstract
             $data = auth()->user()->toArray();
         }
 
+        logger()->debug($data);
+
         $this->id = $data['id'];
         $this->displayName = $data['name'];
         $this->url = route('profile', [$this->id], false);
