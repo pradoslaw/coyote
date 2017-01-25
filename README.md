@@ -32,13 +32,13 @@ Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
 
 ## Instalacja
 
-1. `sudo apt-get install php-gd`
-2. `sudo apt-get install php-mbstring`
-2. `sudo apt-get install php-mcrypt`
-2. `sudo apt-get install php-pear`
-2. `sudo apt-get install php-curl`
-3. `sudo apt-get install pph-mongodb`
-4. `sudo apt-get install php-pgsql`
+1. `sudo apt-get -y install php-gd`
+2. `sudo apt-get -y install php-mbstring`
+2. `sudo apt-get -y install php-mcrypt`
+2. `sudo apt-get -y install php-pear`
+2. `sudo apt-get -y install php-curl`
+3. `sudo apt-get -y install php-mongodb`
+4. `sudo apt-get -y install php-pgsql`
 6. `git clone https://github.com/adam-boduch/coyote.git .`
 7. `psql -c 'create database coyote;' -U postgres`
 8. `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
