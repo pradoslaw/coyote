@@ -7,7 +7,6 @@ use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
-use Coyote\Services\Elasticsearch\Geodistance;
 
 class AdController extends Controller
 {
@@ -45,6 +44,8 @@ class AdController extends Controller
         $data = [];
 
         $builder = new AdBuilder($this->request);
+        $builder->setBoostLocation($this->request->attributes->get('geocode'));
+
         $preferences = new Preferences($this->getSetting('job.preferences'));
 
         $builder->setPreferences($preferences);
@@ -53,8 +54,6 @@ class AdController extends Controller
             $location = $this->request->attributes->get('geocode');
 
             if ($location->isValid()) {
-                $builder->setSort(new Geodistance($location->latitude, $location->longitude));
-
                 $this->job->pushCriteria(new PriorDeadline());
 
                 $data = [
