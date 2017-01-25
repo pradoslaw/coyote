@@ -110,6 +110,29 @@ class Markdown extends \Parsedown implements ParserInterface
     }
 
     /**
+     * We don't want <h1> in our text
+     * We also need to disable this syntax due to parsedown error. #foo should NOT be parser
+     * because markdown needs extra space after "#". Otherwise it is hashtag.
+     *
+     * DO NOT REMOVE THIS METHOD.
+     *
+     * @param $line
+     * @return array|null
+     */
+    protected function blockHeader($line)
+    {
+        $block = parent::blockHeader($line);
+
+        if (isset($block['element'])) {
+            if ($block['element']['name'] == 'h1') {
+                return null;
+            }
+        }
+
+        return $block;
+    }
+
+    /**
      * Parse users login
      *
      * @param array $excerpt
