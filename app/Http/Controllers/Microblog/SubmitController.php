@@ -180,7 +180,7 @@ class SubmitController extends Controller
     public function upload(Request $request)
     {
         $this->validate($request, [
-            'photo'             => 'required|image|max:' . (config('filesystems.upload_max_size') * 1024)
+            'photo'             => 'required|mimes:jpeg,bmp,png|max:' . (config('filesystems.upload_max_size') * 1024)
         ]);
 
         $media = $this->getMediaFactory()->make('attachment')->upload($request->file('photo'));

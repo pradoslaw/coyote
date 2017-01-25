@@ -17,7 +17,7 @@ class SubmitController extends Controller
     public function logo(Request $request)
     {
         $this->validate($request, [
-            'logo'             => 'required|image'
+            'logo'             => 'required|mimes:jpeg,bmp,png'
         ]);
 
         $media = $this->getMediaFactory()->make('logo')->upload($request->file('logo'));
