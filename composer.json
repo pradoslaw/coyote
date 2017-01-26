@@ -46,7 +46,8 @@
         "sentry/sentry": "^1.5",
         "sentry/sentry-laravel": "^0.4.1",
         "erusev/parsedown": "^1.6",
-        "spatie/laravel-fractal": "^3.2"
+        "spatie/laravel-fractal": "^3.2",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
