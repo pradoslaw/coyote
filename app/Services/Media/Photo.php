@@ -13,9 +13,25 @@ class Photo extends File
     public function upload(UploadedFile $uploadedFile)
     {
         parent::upload($uploadedFile);
-
-        $this->thumbnail->file(new \Coyote\Services\Thumbnail\Objects\Photo())->make($this->path());
+        $this->resize();
 
         return $this;
+    }
+
+    /**
+     * @param mixed $content
+     * @return MediaInterface
+     */
+    public function put($content)
+    {
+        parent::put($content);
+        $this->resize();
+
+        return $this;
+    }
+
+    private function resize()
+    {
+        $this->thumbnail->file(new \Coyote\Services\Thumbnail\Objects\Photo())->make($this->path());
     }
 }

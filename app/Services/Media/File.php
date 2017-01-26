@@ -146,6 +146,7 @@ abstract class File implements MediaInterface
     {
         $this->setName($uploadedFile->getClientOriginalName());
         $this->setFilename($this->getUniqueName($uploadedFile->getClientOriginalExtension()));
+
         $this->filesystem->put($this->relative(), file_get_contents($uploadedFile->getRealPath()));
 
         return $this;
@@ -159,6 +160,7 @@ abstract class File implements MediaInterface
     {
         $this->setName($this->getHumanName('png'));
         $this->setFilename($this->getUniqueName('png'));
+
         $this->filesystem->put($this->relative(), $content);
 
         return $this;
