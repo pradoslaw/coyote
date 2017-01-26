@@ -28,11 +28,11 @@ function initTinymce() {
         setup: function (ed) {
             ed.on('init', function (args) {
                 if ('recruitment' === args.target.id) {
-                    $('input[name="enable_apply"]:checked').trigger('change');
+                    $('input[name="enable_apply"]:checked').trigger('click');
                 }
             });
         }
     });
 }
 
-initTinymce();
+export default initTinymce;

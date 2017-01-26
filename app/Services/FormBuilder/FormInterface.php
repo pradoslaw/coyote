@@ -135,6 +135,11 @@ interface FormInterface
     public function all();
 
     /**
+     * @return string
+     */
+    public function toJson();
+
+    /**
      * @return bool
      */
     public function isSubmitted();

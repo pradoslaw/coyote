@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Carbon\Carbon;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Illuminate\Database\Eloquent\Model;
@@ -83,13 +84,16 @@ class Job extends Model
     ];
 
     protected $attributes = [
-        'enable_apply' => true
+        'enable_apply' => 1,
+        'title' => ''
     ];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    protected $appends = ['deadline'];
 
     /**
      * Elasticsearch type mapping
@@ -364,6 +368,16 @@ class Job extends Model
     public function setSalaryToAttribute($value)
     {
         $this->attributes['salary_to'] = $value === null ? null : (int) trim($value);
+    }
+
+    public function getDeadlineAttribute()
+    {
+        return $this->exists ? (new Carbon($this->deadline_at))->diff(Carbon::now())->days : 90;
+    }
+
+    public function getCityAttribute()
+    {
+        return $this->locations()->get()->implode('city', ', ');
     }
 
     /**

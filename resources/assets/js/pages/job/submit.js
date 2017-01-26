@@ -1,5 +1,5 @@
 import '../../plugins/uploader';
-import '../job/tinymce';
+import initTinymce from '../job/tinymce';
 import Config from '../../libs/config';
 
 class Tags {
@@ -9,12 +9,17 @@ class Tags {
             dropdown: '.tag-dropdown',
             container: '#tags-container',
             remove: '.btn-remove',
-            suggestion: '.tag-suggestion'
+            suggestion: '.tag-suggestion',
+            onSelect: function (value) {}
         };
 
         this.setup = $.extend(defaults, options);
-
         this.input = $(this.setup.input);
+
+        if (!this.input.length) {
+            return;
+        }
+
         this.help = this.input.next('.help-block');
         this.dropdown = $(this.setup.dropdown);
         this.container = $(this.setup.container);
@@ -31,7 +36,7 @@ class Tags {
         this._onKeyDown();
         this._onHover();
         this._onItemClick();
-        this._onRemove();
+        // this._onRemove();
 
         $(document).bind('click', e => {
             let $target = $(e.target);
@@ -146,11 +151,11 @@ class Tags {
         });
     }
 
-    _onRemove() {
-        this.container.on('click', this.setup.remove, e => {
-            $(e.currentTarget).parents('.tag-item').remove();
-        });
-    }
+    // _onRemove() {
+    //     this.container.on('click', this.setup.remove, e => {
+    //         $(e.currentTarget).parents('.tag-item').remove();
+    //     });
+    // }
 
     _onFocus() {
         this.input.on('focus click', () => {
@@ -195,27 +200,28 @@ class Tags {
             .toLowerCase()
             .replace(/ /g, '-');
 
-        $.post(this.input.data('post-url'), {name: value}, html => {
-            this.container.append(html);
-
-            let tags = [];
-
-            $('.tag-name').each(function() { // function zamiast arrow function
-                tags.push($(this).val());
-            });
-
-            $.get(this.input.data('suggestions-url'), {t: tags}, suggestions => {
-                if (!suggestions.length) {
-                    this.help.html('');
-                } else {
-                    this.help.html(`Podpowiedź: ${this._buildSuggestions(suggestions)}`);
-                    this._onSuggestionClick();
-                }
-            });
-
-        }).fail(() => {
-            $('#alert').modal('show');
-        });
+        this.setup.onSelect(value);
+        // $.post(this.input.data('post-url'), {name: value}, html => {
+        //     this.container.append(html);
+        //
+        //     let tags = [];
+        //
+        //     $('.tag-name').each(function() { // function zamiast arrow function
+        //         tags.push($(this).val());
+        //     });
+        //
+        //     $.get(this.input.data('suggestions-url'), {t: tags}, suggestions => {
+        //         if (!suggestions.length) {
+        //             this.help.html('');
+        //         } else {
+        //             this.help.html(`Podpowiedź: ${this._buildSuggestions(suggestions)}`);
+        //             this._onSuggestionClick();
+        //         }
+        //     });
+        //
+        // }).fail(() => {
+        //     $('#alert').modal('show');
+        // });
 
         this.selectedIndex = - 1;
         $('li', this.dropdown).removeClass('hover').show();
@@ -226,12 +232,71 @@ class Tags {
     }
 }
 
+new Vue({
+    el: '#job-posting',
+    delimiters: ['${', '}'],
+    data: {
+        job: job,
+        tags: tags,
+        errors: errors,
+        enable_apply: true
+    },
+    mounted: function() {
+        initTinymce();
+
+        new Tags({
+            onSelect: (value) => {
+                this.tags.push({name: value, pivot: {priority: 1}});
+            }
+        });
+
+        $('#tags-container').sortable();
+    },
+    methods: {
+        removeTag: function(index) {
+            this.tags.splice(index, 1);
+        },
+        charCounter: function (item, limit) {
+            return limit - this.job[item].length;
+        },
+        isInvalid: function(fields) {
+            return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
+        }
+    },
+    computed: {
+        deadlineDate: function () {
+            let value = parseInt(this.job.deadline);
+
+            if (value > 0) {
+                let date = new Date();
+                date.setDate(date.getDate() + value);
+
+                return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+            }
+            else {
+                return '--';
+            }
+        }
+    },
+    watch: {
+        'job.enable_apply': function(flag) {
+            if (Boolean(parseInt(flag))) {
+                tinymce.get('recruitment').hide();
+
+                $('#recruitment').attr('disabled', 'disabled').hide();
+            } else {
+                tinymce.get('recruitment').show();
+
+                $('#recruitment').removeAttr('disabled');
+            }
+        }
+    }
+});
+
+
 $(() => {
     'use strict';
 
-    if ($('#tag').length) {
-        new Tags();
-    }
 
     if (typeof google !== 'undefined') {
         google.maps.event.addDomListener(window, 'load', initialize);
@@ -269,41 +334,32 @@ $(() => {
         $('.jumbotron .close').click();
     });
 
-    $('#job-posting').on('change', 'input[name="enable_apply"]', e => {
-        if (Boolean(parseInt($(e.currentTarget).val()))) {
-            tinymce.get('recruitment').hide();
-            $('#recruitment').attr('disabled', 'disabled').hide();
+    $('#job-posting')
+    //     .on('change', 'input[name="enable_apply"]', e => {
 
-            $('input[name="email"]').removeAttr('disabled');
-        }
-        else {
-            tinymce.get('recruitment').show();
-            $('input[name="email"]').attr('disabled', 'disabled');
-            $('#recruitment').removeAttr('disabled');
-        }
-    })
-    .on('keyup', 'input[name="deadline"]', e => {
-        let $this = $(e.currentTarget);
-        let value = parseInt($this.val());
-
-        if (value > 0) {
-            let date = new Date();
-            date.setDate(date.getDate() + value);
-
-            $this.next('span').children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
-        }
-        else {
-            $this.next('span').children('strong').text('--');
-        }
-    })
-    .on('change keyup', 'input[maxlength]', e => {
-        let $this = $(e.currentTarget);
-        let maxLength = $this.attr('maxlength');
-        let container = $this.next('span');
-        let length = maxLength - $this.val().length;
-
-        container.children('strong').text(length);
-    })
+    // })
+    // .on('keyup', 'input[name="deadline"]', e => {
+    //     let $this = $(e.currentTarget);
+    //     let value = parseInt($this.val());
+    //
+    //     if (value > 0) {
+    //         let date = new Date();
+    //         date.setDate(date.getDate() + value);
+    //
+    //         $this.next('span').children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+    //     }
+    //     else {
+    //         $this.next('span').children('strong').text('--');
+    //     }
+    // })
+    // .on('change keyup', 'input[maxlength]', e => {
+    //     let $this = $(e.currentTarget);
+    //     let maxLength = $this.attr('maxlength');
+    //     let container = $this.next('span');
+    //     let length = maxLength - $this.val().length;
+    //
+    //     container.children('strong').text(length);
+    // })
     .on('change', 'input[name="private"]', e => {
         $('#box-edit-firm, #choose-firm').toggle($(e.currentTarget).val() == 0);
         $('#box-buttons').toggle($(e.currentTarget).val() != 0);
@@ -415,10 +471,7 @@ $(() => {
         return false;
     });
 
-    // podepnij plugin tylko na stronie oferty pracy, a nie na stronie z formularzem skladania aplikacji
-    $('#tags-container').each(function () {
-        $(this).sortable();
-    });
+
 });
 
 function initialize() {

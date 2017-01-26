@@ -4,10 +4,10 @@ namespace Coyote\Http\Controllers\Job;
 
 use Carbon\Carbon;
 use Coyote\Country;
-use Coyote\Currency;
 use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
+use Coyote\Http\Forms\Job\JobForm;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
@@ -88,13 +88,6 @@ class SubmitController extends Controller
             $job->setDefaultUserId($this->userId);
 
             if ($job->id) {
-                $job->city = $job->locations()->get()->implode('city', ', ');
-                $job->deadline = (new Carbon($job->deadline_at))->diff(Carbon::now())->days;
-
-                $job->tags = $job->tags()->get()->each(function (&$item) {
-                    $item->priority = $item->pivot->priority;
-                });
-
                 $firm = $this->loadFirm((int) $job->firm_id);
             } else {
                 // either load firm assigned to existing job offer or load user's default firm
@@ -114,28 +107,24 @@ class SubmitController extends Controller
             $this->authorize('update', $firm);
         }
 
+        $form = $this->createForm(JobForm::class, $job);
         $request->session()->put('job', $job->toArray());
 
         $this->breadcrumb($job);
-        $countryList = Country::pluck('name', 'id');
 
-        // @todo Uzyc mechanizmu geolokalizacji
-        $defaultCountryId = array_search('Polska', $countryList->toArray());
         $popularTags = $this->job->getPopularTags();
 
         $this->public += ['popular_tags' => $popularTags];
+        debugbar()->debug($form->all());
 
         return $this->view('job.submit.home', [
-            'countryList'       => $countryList,
-            'defaultCountryId'  => $defaultCountryId,
-            'currencyList'      => Currency::pluck('name', 'id'),
-            'employmentList'    => Job::getEmploymentList(),
-            'rateList'          => Job::getRatesList(),
-            'remote_range_list' => Job::getRemoteRangeList(),
-            'popularTags'       => $popularTags
-        ])->with(
-            compact('job', 'firm')
-        );
+            'popularTags'       => $popularTags,
+            'form'              => $form,
+            'form_errors'       => $form->errors() ? $form->errors()->toJson() : '[]',
+            'job'               => $form->toJson(),
+            'tags'              => collect($form->get('tags')->getChildrenValues())->toJson(),
+            'firm'              => $firm
+        ]);
     }
 
     /**
@@ -144,25 +133,8 @@ class SubmitController extends Controller
      */
     public function postIndex(Request $request)
     {
-        $this->validate($request, [
-            'title'             => 'required|min:2|max:60',
-            'country_id'        => 'required|integer',
-            'currency_id'       => 'required|integer',
-            'rate_id'           => 'required|integer',
-            'is_remote'         => 'bool',
-            'remote_range'      => 'integer|min:10|max:100',
-            'employment_id'     => 'required|integer',
-            'city'              => 'string|city',
-            'salary_from'       => 'integer',
-            'salary_to'         => 'integer',
-            'deadline'          => 'integer|min:1|max:365',
-            'requirements'      => 'string',
-            'recruitment'       => 'required_if:enable_apply,0|string',
-            'enable_apply'      => 'boolean',
-            'email'             => 'sometimes|required|email',
-            'tags.*.name'       => 'tag',
-            'tags.*.priority'   => 'required|int|min:0|max:1'
-        ]);
+        $form = $this->createForm(JobForm::class);
+        $form->validate();
 
         $userId = $request->session()->pull('job.user_id');
         $request->session()->put('job', $request->all() + ['user_id' => $userId]);

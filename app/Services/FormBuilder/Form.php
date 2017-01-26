@@ -281,6 +281,14 @@ abstract class Form extends FormRequest implements FormInterface
     /**
      * @inheritdoc
      */
+    public function toJson()
+    {
+        return json_encode($this->all());
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function isSubmitted()
     {
         return $this->request->method() === $this->getMethod();

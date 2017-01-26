@@ -1,7 +1,6 @@
 {% extends 'job.base' %}
 {% block title %}Wystaw ofertę pracy{{ parent() }}{% endblock %}
 
-{% import 'job.submit.partials.theme' as theme %}
 {% import 'components.modals' as modals %}
 
 {% block container %}
@@ -25,10 +24,11 @@
                 </p>
             {% endif %}
 
-            {{ form_open({'url': route('job.submit'), 'class': '', 'id': 'job-posting'}) }}
-                {{ form_hidden('id', job.id) }}
-                {{ form_hidden('firm_id', job.firm_id) }}
-                {{ form_hidden('slug', job.slug) }}
+            {{ form_open({'url': route('job.submit'), 'class': '', 'id': 'job-posting', 'v-cloak': 'v-cloak'}) }}
+                {{ form_widget(form.id) }}
+                {{ form_widget(form.firm_id) }}
+                {{ form_widget(form.slug) }}
+
                 {{ form_hidden('done', 0) }}
 
                 <div class="panel panel-default">
@@ -37,58 +37,50 @@
                     </div>
                     <div class="panel-body">
 
-                        {{ theme.group_open('title', 'form-group-border') }}
-                            <label class="control-label">Tytuł oferty <em class="text-danger">*</em></label>
+                        {{ form_row(form.title) }}
 
-                            {{ form_text('title', input_old('title', job.title), {'class': 'form-control', 'placeholder': 'Np. Senior Java Developer', 'maxlength': 60}) }}
-                            {{ theme.error('title', 'Pozostało: <strong>' ~ (60 - input_old('title', job.title)|length) ~ '</strong> znaków</span>') }}
-                        {{ theme.group_close() }}
-
-                        {{ theme.group_open('city', 'form-group-border') }}
+                        <div class="form-group form-group-border" v-bind:class="{'has-error': isInvalid(['city'])}">
                             <label class="control-label">Lokalizacja</label>
 
                             <div class="row">
                                 <div class="col-sm-2">
-                                    {{ form_select('country_id', countryList, input_old('country_id', job.country_id ?: defaultCountryId), {'class': 'form-control'}) }}
+                                    {{ form_widget(form.country_id) }}
                                 </div>
                                 <div class="col-sm-7" style="padding-left: 0">
-                                    {{ form_text('city', input_old('city', job.city), {'class': 'form-control', 'placeholder': 'Np. Wrocław, Warszawa'}) }}
+                                    {{ form_widget(form.city) }}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="checkbox">
-                                        {{ form_checkbox('is_remote', 1, input_old('remote', job.is_remote), {'id': 'remote'}) }}
+                                        {{ form_widget(form.is_remote) }}
+                                        {{ form_label(form.is_remote) }}
 
-                                        <label for="remote">
-                                            Możliwa praca zdalna w zakresie
-                                        </label>
-
-                                        {{ form_select('remote_range', remote_range_list, input_old('remote_range', job.id ? job.remote_range : 100), {placeholder: '--', class: 'form-control input-sm input-inline', style: 'width: 100px'}) }}
+                                        {{ form_widget(form.remote_range) }}
                                     </div>
 
-                                    {{ theme.error('city') }}
+                                    {{ form_error(form.city) }}
                                 </div>
                             </div>
-                        {{ theme.group_close() }}
+                        </div>
 
-                        {{ theme.group_open(['salary_from', 'salary_to'], 'form-group-border') }}
+                        <div class="form-group form-group-border" v-bind:class="{'has-error': isInvalid(['salary_from', 'salary_to'])}">
                             <label class="control-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>
 
                             <div>
                                 od
-                                {{ form_text('salary_from', input_old('salary_from', job.salary_from), {'class': 'form-control input-inline'}) }}
+                                {{ form_widget(form.salary_from) }}
 
                                 do
-                                {{ form_text('salary_to', input_old('salary_to', job.salary_to), {'class': 'form-control input-inline'}) }}
-                                {{ form_select('currency_id', currencyList, input_old('currency_id', job.currency_id), {'class': 'form-control input-inline'}) }}
-                                {{ form_select('rate_id', rateList, input_old('rate_id', job.rate_id), {'class': 'form-control input-inline'}) }}
-                                {{ form_select('employment_id', employmentList, input_old('employment_id', job.employment_id), {'class': 'form-control input-inline'}) }}
+                                {{ form_widget(form.salary_to) }}
+                                {{ form_widget(form.currency_id) }}
+                                {{ form_widget(form.rate_id) }}
+                                {{ form_widget(form.employment_id) }}
 
-                                {{ theme.error('salary_from', 'Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!') }}
-                                {{ theme.error('salary_to') }}
+                                {{ form_error(form.salary_from) }}
+                                {{ form_error(form.salary_to) }}
                             </div>
-                        {{ theme.group_close() }}
+                        </div>
 
                         <div class="form-group has-feedback">
                             <label class="control-label">Kluczowe technologie (wymagane lub mile widziane)</label>
@@ -102,9 +94,35 @@
                             </ol>
 
                             <div id="tags-container" class="margin-md-top">
-                                {% for tag in input_old('tags', job.tags) %}
-                                    {% include 'job.submit.partials.tag' %}
-                                {% endfor %}
+                                <div v-for="(tag, index) in tags" class="row tag-item margin-sm-bottom">
+                                    <div class="col-xs-5">
+                                        <ol class="tag-clouds">
+                                            <li><a href="javascript:" title="Chwyć, aby przenieść na dół lub na górę">${ tag.name }</a></li>
+                                        </ol>
+                                    </div>
+
+                                    <input type="hidden" :name="'tags[' + index + '][name]'" :value="tag.name" class="tag-name">
+
+                                    <div class="col-xs-6">
+                                        <div class="radio radio-primary radio-inline">
+                                            <input type="radio" :name="'tags[' + index + '][priority]'" value="1" :checked="tag.pivot.priority == 1" :id="tag.name + '-must-have'">
+
+                                            <label :for="tag.name + '-must-have'"> Wymagane </label>
+                                        </div>
+                                        <div class="radio radio-inline">
+                                            <input type="radio" :name="'tags[' + index + '][priority]'" value="0" :checked="tag.pivot.priority == 0" :id="tag.name + '-nice-to-have'">
+
+                                            <label :for="tag.name + '-nice-to-have'"> Mile widziane </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-1">
+                                        <a class="btn-xs btn-remove pull-right" href="javascript:" title="Kliknij, aby usunąć tag" v-on:click="removeTag(index)">
+                                            <i class="fa fa-remove text-danger"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -116,46 +134,33 @@
                     </div>
 
                     <div class="panel-body">
-                        {{ theme.group_open('deadline', 'form-group-border') }}
-                            <label class="control-label">Data ważności oferty</label>
+                        <div class="form-group form-group-border" v-bind:class="{'has-error': isInvalid(['deadline'])}">
+                            {{ form_label(form.deadline) }}
 
-                            {% set deadline = input_old('deadline', job.deadline ?: 90) %}
-                            {{ form_text('deadline', deadline, {'class': 'form-control input-inline'}) }} dni
-                            {{ theme.error('deadline', 'Oferta będzie widoczna na stronie do dnia <strong>' ~ ('+' ~ deadline ~ ' days')|date('Y-m-d') ~ '</strong>') }}
-                        {{ theme.group_close() }}
-
-                        <div class="form-group">
-                            <label class="control-label">Opis oferty</label>
-
-                            {{ form_textarea('description', input_old('description', job.description), {'class': 'form-control', 'style': 'height: 140px'}) }}
-                            <span class="help-block">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
+                            {{ form_widget(form.deadline) }} dni
+                            {{ form_error(form.deadline) }}
                         </div>
 
-                        {{ theme.group_open('email') }}
-                            <div class="radio">
-                                {{ form_radio('enable_apply', 1, job.enable_apply == true, {'id': 'apply-enable'}) }}
+                        {{ form_row(form.description) }}
 
-                                <label for="apply-enable">
-                                    Zezwól na wysyłanie CV poprzez serwis 4programmers.net
-                                </label>
-                            </div>
+                        <div class="form-group" v-bind:class="{'has-error': isInvalid(['email'])}">
+                            {#{{ form_row(form.enable_apply.child(0)) }}#}
+                            {{ form_row(form.enable_apply.child(0), {attr: {'v-model': 'job.enable_apply'}}) }}
 
-                            {{ form_text('email', input_old('email', job.email ?: user('email')), {'class': 'form-control'}) }}
-                            {{ theme.error('email', 'Podaj adres e-mail na jaki wyślemy Ci informacje o kandydatach. Adres e-mail nie będzie widoczny dla osób postronnych.') }}
-                        {{ theme.group_close() }}
+                            {{ form_widget(form.email, {attr: {':disabled': 'job.enable_apply == 0'}}) }}
+                            {{ form_error(form.email) }}
+                        </div>
 
-                        {{ theme.group_open('recruitment') }}
-                            <div class="radio">
-                                {{ form_radio('enable_apply', 0, job.enable_apply == false, {'id': 'apply-disable'}) }}
+                        <div class="form-group" v-bind:class="{'has-error': isInvalid(['recruitment'])}">
+                            {#{{ form_row(form.enable_apply.child(1)) }}#}
+                            {{ form_row(form.enable_apply.child(1), {attr: {'v-model': 'job.enable_apply'}}) }}
 
-                                <label for="apply-disable">
-                                    ...lub podaj informacje w jaki sposób kandydaci mogą aplikować na to stanowisko
-                                </label>
-                            </div>
-
-                            {{ form_textarea('recruitment', input_old('recruitment', job.recruitment), {'class': 'form-control', 'style': 'height: 40px'}) }}
-                            {{ theme.error('recruitment') }}
-                        {{ theme.group_close() }}
+                            {#<div v-if="job.enable_apply == 0">#}
+                                {#{{ form_widget(form.recruitment, {attr: {'v-if': 'job.enable_apply == 0', ':disabled': 'job.enable_apply == 1'}}) }}#}
+                                {{ form_widget(form.recruitment) }}
+                            {#</div>#}
+                            {{ form_error(form.recruitment) }}
+                        </div>
 
                         <div id="form-navigation" class="form-group">
                             <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Informacje o firmie <i class="fa fa-angle-right"></i></button>
@@ -220,12 +225,19 @@
 {% block body %}
     {{ parent() }}
 
+    <script>
+        var job = {{ job|raw }};
+        var tags = {{ tags|raw }};
+        var errors = {{ form_errors|raw }};
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="{{ cdn('js/jquery-ui.js') }}"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
     <script>
         $(function() {
-            $('input[name="title"]').focus();
+//            $('input[name="title"]').focus();
         })
     </script>
 

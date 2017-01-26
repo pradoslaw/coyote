@@ -1,0 +1,12 @@
+{% extends 'forms.themes.inline.row' %}
+
+{% block label %}{% endblock %}
+{% block wrap %}
+    <div class="radio">
+        {{ include(widget_path) }}
+
+        <label for="{{ attr.id }}">
+            {{ label }}
+        </label>
+    </div>
+{% endblock %}
