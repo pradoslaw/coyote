@@ -62,13 +62,17 @@ class UsersController extends BaseController
         $form = $this->getForm($user);
         $form->validate();
 
-        $data = $form->all();
+        $this->transaction(function () use ($user, $form) {
+            $data = $form->all();
 
-        $this->transaction(function () use ($user, $data) {
+            if ($form->get('delete_photo')->isChecked()) {
+                $data['photo'] = null;
+            }
+
             // we use forceFill() to fill fields that are NOT in $fillable model's array.
             // we can do that because $form->all() returns only fields in form. $request->all() returns
             // all fields in HTTP POST so it's not secure.
-            $user->forceFill(array_except($data, ['submit', 'skills', 'groups']))->save();
+            $user->forceFill(array_except($data, ['submit', 'skills', 'groups', 'delete_photo']))->save();
             $user->skills()->delete();
 
             if (!empty($data['skills'])) {

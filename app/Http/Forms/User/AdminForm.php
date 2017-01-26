@@ -40,24 +40,26 @@ class AdminForm extends SettingsForm
 
         parent::buildForm();
 
-        $this->add('skills', 'collection', [
-            'label' => 'Umiejętności',
-            'child_attr' => [
-                'type' => 'child_form',
-                'class' => SkillsForm::class,
-                'value' => $this->data
-            ]
-        ]);
-
-        $this->addAfter('group_id', 'is_confirm', 'checkbox', [
-            'label' => 'Potwierdzony adres e-mail',
-            'rules' => 'bool'
-        ]);
-
-        $this->addAfter('group_id', 'is_active', 'checkbox', [
-            'label' => 'Konto aktywne',
-            'rules' => 'bool'
-        ]);
+        $this
+            ->add('skills', 'collection', [
+                'label' => 'Umiejętności',
+                'child_attr' => [
+                    'type' => 'child_form',
+                    'class' => SkillsForm::class,
+                    'value' => $this->data
+                ]
+            ])
+            ->addAfter('group_id', 'is_confirm', 'checkbox', [
+                'label' => 'Potwierdzony adres e-mail',
+                'rules' => 'bool'
+            ])
+            ->addAfter('group_id', 'is_active', 'checkbox', [
+                'label' => 'Konto aktywne',
+                'rules' => 'bool'
+            ])
+            ->addAfter('allow_sticky_header', 'delete_photo', 'checkbox', [
+                'label' => 'Usuń zdjęcie'
+            ]);
 
         $groups = $this->group->pluck('name', 'id');
 
