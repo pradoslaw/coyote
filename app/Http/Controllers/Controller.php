@@ -128,17 +128,19 @@ abstract class Controller extends BaseController
             $repository = app(ForumRepositoryInterface::class);
             // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
             $repository->resetCriteria();
-            $repository->resetModel();
+            // make sure we don't skip criteria
+            $repository->skipCriteria(false);
 
             $repository->pushCriteria(new OnlyThoseWithAccess($this->auth));
             $repository->pushCriteria(new AccordingToUserOrder($this->userId));
             $repository->applyCriteria();
 
-            return $repository->select(['name', 'slug'])->whereNull('parent_id')->get();
+            return $repository->select(['name', 'slug'])->whereNull('parent_id')->get()->toArray();
         });
 
         foreach ($categories as $forum) {
-            $menu->forum->add($forum->name, route('forum.category', [$forum->slug]));
+            /** @var array $forum */
+            $menu->forum->add($forum['name'], route('forum.category', [$forum['slug']]));
         }
 
         return $menu;
