@@ -9,20 +9,9 @@ use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
-use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 
 class SubmitController extends BaseController
 {
-    /**
-     * @param WikiRepository $wiki
-     */
-    public function __construct(WikiRepository $wiki)
-    {
-        parent::__construct($wiki);
-
-        $this->breadcrumb->push('Edycja strony');
-    }
-
     /**
      * @param \Coyote\Wiki $wiki
      * @param Request $request
@@ -36,6 +25,9 @@ class SubmitController extends BaseController
         if (!$wiki->exists) {
             $form->get('parent_id')->setValue($request->input('parentId'));
         }
+
+        $this->breadcrumb->push($wiki->title, url($wiki->path));
+        $this->breadcrumb->push($wiki->exists ? 'Edycja strony' : 'Dodaj nową stronę');
 
         return $this->view('wiki.submit')->with(compact('form', 'wiki'));
     }

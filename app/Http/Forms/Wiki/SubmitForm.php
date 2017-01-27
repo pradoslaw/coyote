@@ -71,7 +71,7 @@ class SubmitForm extends Form
             ->add('excerpt', 'textarea', [
                 'rules' => 'string|max:500',
                 'label' => 'Skrócony opis artykułu',
-                'help' => 'Maksymalnie 500 znaków',
+                'help' => 'Maksymalnie 500 znaków.',
                 'attr' => [
                     'rows' => 3
                 ]
