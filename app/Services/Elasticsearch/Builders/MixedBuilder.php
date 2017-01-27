@@ -2,7 +2,6 @@
 
 namespace Coyote\Services\Elasticsearch\Builders;
 
-use Coyote\Services\Elasticsearch\Filters\Post\ForumMustExist;
 use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
@@ -48,8 +47,7 @@ class MixedBuilder extends QueryBuilder
 
         $this
             ->must(new MultiMatch($this->request->input('q'), $fields))
-            ->must(new ForumMustExist())
-            ->should(new OnlyThoseWithAccess($this->request->attributes->get('forum_id')))
+            ->must(new OnlyThoseWithAccess($this->request->attributes->get('forum_id')))
             ->sort(new Sort($this->request->get('sort', '_score'), $this->request->get('order', 'desc')))
             ->highlight(
                 new Highlight(['subject', 'text', 'title', 'long_title', 'excerpt', 'description', 'requirements'])
