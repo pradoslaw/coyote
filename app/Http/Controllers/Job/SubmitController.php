@@ -81,8 +81,8 @@ class SubmitController extends Controller
     {
         if ($request->session()->has('job')) {
             // get form content from session and fill model
-            $job = $this->job->forceFill((array) $request->session()->get('job'));
-            $firm = $this->firm->forceFill((array) $request->session()->get('firm'));
+            $job = $request->session()->get('job');
+            $firm = $request->session()->get('firm');
         } else {
             $job = $this->job->findOrNew($id);
             $job->setDefaultUserId($this->userId);
@@ -97,7 +97,7 @@ class SubmitController extends Controller
             $job->firm_id = $firm->id; // it's really important to assign default firm id to job offer
 
             if (!empty($firm->id)) {
-                $request->session()->put('firm', $firm->toArray());
+                $request->session()->put('firm', $firm);
             }
         }
 
@@ -108,7 +108,7 @@ class SubmitController extends Controller
         }
 
         $form = $this->createForm(JobForm::class, $job);
-        $request->session()->put('job', $job->toArray());
+        $request->session()->put('job', $job);
 
         $this->breadcrumb($job);
 
@@ -137,7 +137,7 @@ class SubmitController extends Controller
         $form->validate();
 
         $userId = $request->session()->pull('job.user_id');
-        $request->session()->put('job', $request->all() + ['user_id' => $userId]);
+        $request->session()->put('job', $this->job->forceFill($form->all()));
 
         return $this->next($request, redirect()->route('job.submit.firm'));
     }
