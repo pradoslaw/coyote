@@ -133,7 +133,7 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * @param array $fields
+     * @param string[] $fields
      * @return $this
      */
     public function source(array $fields)
