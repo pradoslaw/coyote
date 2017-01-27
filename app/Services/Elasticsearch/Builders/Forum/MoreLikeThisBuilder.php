@@ -2,7 +2,6 @@
 
 namespace Coyote\Services\Elasticsearch\Builders\Forum;
 
-use Coyote\Services\Elasticsearch\Filters\Post\ForumMustExist;
 use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
@@ -43,9 +42,9 @@ class MoreLikeThisBuilder extends QueryBuilder
         ]);
 
         $this->must($mlt);
-
-        $this->must(new ForumMustExist());
         $this->must(new OnlyThoseWithAccess($this->forumId));
+        // we need only those fields to save in cache
+        $this->source(['id', 'subject', 'slug', 'updated_at', 'forum.*']);
 
         return parent::build();
     }

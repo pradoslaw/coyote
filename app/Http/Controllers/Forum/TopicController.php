@@ -59,8 +59,6 @@ class TopicController extends BaseController
             $page = $this->post->getPage(min(2147483647, (int) $request->get('p')), $topic->id, $perPage);
         }
 
-        start_measure('More like this');
-
         // build "more like this" block. it's important to send elasticsearch query before
         // send SQL query to database because search() method exists only in Model and not Builder class.
         $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, 60 * 24, function () use ($topic) {
@@ -75,8 +73,6 @@ class TopicController extends BaseController
             $this->forum->resetCriteria();
             return $mlt;
         });
-
-        stop_measure('More like this');
 
         $this->post->pushCriteria(new ObtainSubscribers($this->userId));
 

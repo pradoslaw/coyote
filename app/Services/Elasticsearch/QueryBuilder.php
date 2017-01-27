@@ -133,6 +133,17 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
+     * @param array $fields
+     * @return $this
+     */
+    public function source(array $fields)
+    {
+        $this->body['_source'] = $fields;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function build()
