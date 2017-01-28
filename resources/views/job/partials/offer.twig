@@ -10,17 +10,17 @@
 
 <div id="job-offer" class="panel-body">
     <div class="media">
-        {% if firm.logo %}
+        {% if job.firm.logo %}
             <div class="media-left hidden-xxs">
-                <img class="media-object" src="{{ logo(firm.logo) }}" alt="{{ firm.name }}">
+                <img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
             </div>
         {% endif %}
 
         <div class="media-body">
             <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
 
-            {% if firm.name %}
-                <a class="employer" title="Zobacz oferty pracy z firmy {{ firm.name }}" href="{{ route('job.firm', [firm.name]) }}">{{ firm.name }}</a>
+            {% if job.firm.name %}
+                <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a>
             {% endif %}
 
             {% if job.salary_from or job.salary_to %}
@@ -32,7 +32,7 @@
             <ul class="metadata list-inline location">
                 <li title="Lokalizacja">
                     <i class="fa fa-map-marker"></i>
-                    {{ job.country_name }}
+                    {{ job.country.name }}
 
                     {% include 'job.partials.location' with {'locations': job.locations.pluck('city')} %}
                 </li>
@@ -57,7 +57,7 @@
 
                 <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
                     <i class="fa fa-clock-o"></i>
-                    {{ deadline }} dni do końca
+                    {{ job.deadline }} dni do końca
                 </li>
                 <li>
                     <i class="fa fa-pencil"></i>
@@ -103,25 +103,25 @@
                 </div>
             {% endif %}
 
-            {% if firm.benefits|length %}
+            {% if job.firm.benefits|length %}
                 <h2>Oferujemy</h2>
 
                 <ul class="benefits list-group row">
-                    {% for benefit in firm.benefits %}
+                    {% for benefit in job.firm.benefits %}
                         <li class="list-group-item col-xs-12 col-sm-6 checked"><i class="fa fa-check fa-fw"></i> {{ benefit.name }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}
 
-            {% if firm.name and (firm.headline or firm.description) %}
-                <h2>{{ firm.name }}</h2>
+            {% if job.firm.name and (job.firm.headline or job.firm.description) %}
+                <h2>{{ job.firm.name }}</h2>
 
                 <div class="text">
-                    {% if firm.headline %}
-                        <blockquote>{{ firm.headline }}</blockquote>
+                    {% if job.firm.headline %}
+                        <blockquote>{{ job.firm.headline }}</blockquote>
                     {% endif %}
 
-                    {{ firm.description|raw }}
+                    {{ job.firm.description|raw }}
                 </div>
             {% endif %}
 

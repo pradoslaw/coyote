@@ -129,7 +129,7 @@ class Choice extends Collection
         foreach ($this->choices as $key => $label) {
             $id = str_replace('.', '_', $this->name) . '_' . $key;
 
-            $this->children[] = $this->makeField($name, $type, $this->parent, $this->childAttr + [
+            $this->children[] = $this->makeField($name, $type, $this->parent, [
                 'is_child' => true,
                 'label' => $label,
                 'checked_value' => $key,
@@ -140,7 +140,8 @@ class Choice extends Collection
                 'label_attr' => [
                     'for' => $id
                 ]
-            ]);
+            ])
+            ->mergeOptions($this->childAttr);
         }
     }
 }

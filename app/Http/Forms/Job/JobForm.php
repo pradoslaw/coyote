@@ -2,20 +2,27 @@
 
 namespace Coyote\Http\Forms\Job;
 
-use Carbon\Carbon;
 use Coyote\Country;
 use Coyote\Currency;
 use Coyote\Job;
 use Coyote\Services\FormBuilder\Form;
-use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
+use Coyote\Services\FormBuilder\FormEvents;
+use Coyote\Services\Geocoder\GeocoderInterface;
+use Coyote\Services\Parser\Helpers\City;
+use Coyote\Tag;
 use Illuminate\Database\Eloquent\Model;
 
-class JobForm extends Form implements ValidatesWhenSubmitted
+class JobForm extends Form
 {
     /**
      * @var string
      */
     protected $theme = self::THEME_INLINE;
+
+    /**
+     * @var Job
+     */
+    protected $data;
 
     /**
      * It's public so we can use use attr from twig
@@ -25,6 +32,43 @@ class JobForm extends Form implements ValidatesWhenSubmitted
     public $attr = [
         'method' => self::POST,
     ];
+
+    /**
+     * @var GeocoderInterface
+     */
+    private $geocoder;
+
+    /**
+     * @param GeocoderInterface $geocoder
+     */
+    public function __construct(GeocoderInterface $geocoder)
+    {
+        parent::__construct();
+
+        $this->geocoder = $geocoder;
+
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (JobForm $form) {
+            $this->forget($this->data->tags);
+            $this->forget($this->data->locations);
+
+            // deadline not exists in table "jobs" nor in fillable array. set value so model can transform it
+            // to Carbon object
+            $this->data->deadline = $form->get('deadline')->getValue();
+
+            foreach ($form->get('tags')->getChildrenValues() as $tag) {
+                $pivot = $this->data->tags()->newPivot(['priority' => $tag['priority']]);
+                $model = (new Tag($tag))->setRelation('pivot', $pivot);
+
+                $this->data->tags->add($model);
+            }
+
+            $cities = (new City())->grab($form->get('city')->getValue());
+
+            foreach ($cities as $city) {
+                $this->data->locations->add(new Job\Location($this->geocode($city)));
+            }
+        });
+    }
 
     public function buildForm()
     {
@@ -167,6 +211,41 @@ class JobForm extends Form implements ValidatesWhenSubmitted
             // @todo Uzyc mechanizmu geolokalizacji
             $this->get('country_id')->setValue(array_search('Polska', $this->get('country_id')->getChoices()));
             $this->get('remote_range')->setValue(100);
+        }
+    }
+
+    /**
+     * @param string $city
+     * @return array
+     */
+    private function geocode($city)
+    {
+        $location = [
+            'city'          => $city
+        ];
+
+        try {
+            $location = $this->geocoder->geocode($city);
+
+            if (!$location->city) {
+                $location->city = $city;
+            }
+
+            $location = $location->toArray();
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+        }
+
+        return $location;
+    }
+
+    /**
+     * @param mixed $collection
+     */
+    private function forget($collection)
+    {
+        foreach ($collection as $key => $model) {
+            unset($collection[$key]);
         }
     }
 }

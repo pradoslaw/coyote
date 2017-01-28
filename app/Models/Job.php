@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Carbon\Carbon;
+use Coyote\Job\Location;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $deadline_at
+ * @property int $deadline
  * @property int $salary_from
  * @property int $salary_to
  * @property int $country_id
@@ -37,6 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property User $user
  * @property Firm $firm
  * @property Tag[] $tags
+ * @property Location[] $locations
  */
 class Job extends Model
 {
@@ -64,8 +67,6 @@ class Job extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
-        'firm_id',
         'title',
         'description',
         'requirements',
@@ -85,14 +86,25 @@ class Job extends Model
 
     protected $attributes = [
         'enable_apply' => 1,
+        'is_remote' => 0,
         'title' => ''
     ];
+
+    /**
+     * Cast to when calling toArray() (for example before index in elasticsearch).
+     *
+     * @var array
+     */
+    protected $casts = ['is_remote' => 'boolean'];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
 
+    /**
+     * @var array
+     */
     protected $appends = ['deadline'];
 
     /**
@@ -130,6 +142,12 @@ class Job extends Model
         "requirements" => [
             "type" => "text",
             "analyzer" => "default_analyzer"
+        ],
+        "is_remote" => [
+            "type" => "boolean"
+        ],
+        "remote_range" => [
+            "type" => "integer"
         ],
         "tags" => [
             "type" => "text",
@@ -344,6 +362,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country()
+    {
+        return $this->belongsTo('Coyote\Country');
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)
@@ -370,14 +396,28 @@ class Job extends Model
         $this->attributes['salary_to'] = $value === null ? null : (int) trim($value);
     }
 
-    public function getDeadlineAttribute()
+    /**
+     * @param int $value
+     */
+    public function setDeadlineAttribute($value)
     {
-        return $this->exists ? (new Carbon($this->deadline_at))->diff(Carbon::now())->days : 90;
+        $this->attributes['deadline_at'] = Carbon::now()->addDay($value);
     }
 
+    /**
+     * @return int
+     */
+    public function getDeadlineAttribute()
+    {
+        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now())->days : 90;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getCityAttribute()
     {
-        return $this->locations()->get()->implode('city', ', ');
+        return $this->locations->implode('city', ', ');
     }
 
     /**
@@ -461,7 +501,8 @@ class Job extends Model
             'salary_to'         => $this->monthlySalary($this->salary_to),
             // yes, we index currency name so we don't have to look it up in database during search process
             'currency_name'     => $this->currency()->value('name'),
-            'firm'              => $this->firm()->first(['name', 'logo']),
+            // logo is instance of File object. casting to string returns file name.
+            'firm'              => array_map('strval', $this->firm()->first(['name', 'logo'])->toArray()),
             // higher tag's priorities first
             'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')
         ]);

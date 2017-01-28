@@ -1,14 +1,12 @@
 {% extends 'job.base' %}
 {% block title %}Podgląd{{ parent() }}{% endblock %}
 
-{% import 'job.submit.partials.theme' as theme %}
-
 {% block container %}
     <div class="row">
         <main class="col-md-8 col-12-sm col-12-xs">
             {% include 'job.submit.partials.indicator' with {'current': 3} %}
 
-            {{ form_open({'url': route('job.submit.save'), 'class': '', 'id': 'job-posting'}) }}
+            {{ form_open({'url': route('job.submit.save'), 'class': 'submit-form'}) }}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Podgląd
@@ -38,6 +36,11 @@
 {% block body %}
     {{ parent() }}
 
+    <script>
+        var data = {};
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 

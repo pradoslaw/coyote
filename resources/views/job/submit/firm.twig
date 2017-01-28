@@ -1,7 +1,6 @@
 {% extends 'job.base' %}
 {% block title %}Informacje o firmie{{ parent() }}{% endblock %}
 
-{% import 'job.submit.partials.theme' as theme %}
 {% import 'components.modals' as modal %}
 
 {% block container %}
@@ -12,7 +11,6 @@
     <div class="row">
         <main class="col-md-8 col-12-sm col-12-xs">
             {% include 'job.submit.partials.indicator' with {'current': 2} %}
-            {% set private = input_old('private', firm.private|default(not job.firm_id)) %}
 
             {% if errors.any %}
                 <p class="alert alert-danger">
@@ -20,7 +18,7 @@
                 </p>
             {% endif %}
 
-            {{ form_open({'url': route('job.submit.firm'), 'class': '', 'id': 'job-posting'}) }}
+            {{ form_open({'url': route('job.submit.firm'), 'id': 'firm-form', 'class': 'submit-form', 'v-cloak': 'v-cloak'}) }}
             {{ form_hidden('done', 0) }}
 
             <div class="panel panel-default">
@@ -28,55 +26,138 @@
                     Informacje o firmie
                 </div>
                 <div class="panel-body">
-                    <div class="form-group">
-                        <div class="radio">
-                            {{ form_radio('private', 1, private == true, {'id': 'private'}) }}
+                    {{ form_row(form.is_private, {child_attr: {attr: {'v-model': 'firm.is_private'}}}) }}
 
-                            <label for="private">
-                                Jestem osobą prywatną
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="radio">
-                            {{ form_radio('private', 0, private == false, {'id': 'public'}) }}
-
-                            <label for="public">
-                                Reprezentuje firmę
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="box-buttons" class="form-group" style="display: none">
+                    <div id="box-buttons" class="form-group" v-show="firm.is_private == 1">
                         <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
+
                         <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Podgląd <i class="fa fa-angle-right"></i></button>
                     </div>
                 </div>
 
-                {% if firms|length > 1 %}
-                    <table id="choose-firm" class="table">
-                        <tbody>
-                            {% for item in firms %}
-                                <tr>
-                                    <td style="width: 10%">
-                                        <img class="img-thumbnail" src="{{ logo(item.logo) }}">
-                                    </td>
-                                    <td>
-                                        <h4>{{ item.name }}</h4>
-                                        <p>{{ item.headline }}</p>
-                                    </td>
-                                    <td class="text-center" style="vertical-align: middle">
-                                        <a href="{{ route('job.submit.firm.partial', [item.id]) }}" class="btn btn-sm text-center btn-firm {{ item.id == firm.id ? 'btn-primary' : 'btn-default' }}">Wybierz</a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% endif %}
+                <table id="choose-firm" class="table" v-if="firms.length > 1">
+                    <tbody>
+                        <tr v-for="item in firms">
+                            <td style="width: 10%">
+                                <img class="img-thumbnail" :src="item.thumbnail">
+                            </td>
+                            <td>
+                                <h4>${ item.name }</h4>
+                                <p>${ item.headline }</p>
+                            </td>
+                            <td class="text-center" style="vertical-align: middle">
+                                <a href="javascript:" class="btn btn-sm text-center btn-firm" :class="[item.id == firm.id ? 'btn-primary' : 'btn-default']">Wybierz</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-            {% include 'job.submit.partials.firm' %}
+            <div id="box-edit-firm" class="panel panel-default" v-show="firm.is_private == 0">
+                <div class="panel-heading">
+                    Dane firmy
+                </div>
+
+                {{ form_widget(form.id) }}
+
+                <div class="panel-body">
+                    <div class="form-group form-group-border" :class="{'has-error': isInvalid(['name'])}">
+                        {{ form_label(form.name) }}
+
+                        <div class="input-group">
+                            {{ form_widget(form.name) }}
+
+                            <div class="input-group-addon">
+                                <a href="javascript:" id="btn-add-firm" title="Dodaj nową firmę"><i class="fa fa-plus"></i></a>
+                            </div>
+                        </div>
+
+                        {{ form_error(form.name) }}
+                    </div>
+
+                    {{ form_row(form.is_agency) }}
+
+                    <div class="form-group">
+                        <label class="control-label">Logo</label>
+
+                        <div class="row">
+                            <div class="col-sm-2">
+                                {{ form_widget(form.logo) }}
+
+                                <div class="img-placeholder img-thumbnail" v-show="!firm.logo">
+                                    <img src="{{ cdn('img/logo-gray.png') }}">
+                                </div>
+
+                                <div class="img-container img-thumbnail" v-show="firm.logo">
+
+                                    <img src="{{ logo(form.logo.value) }}">
+
+                                    <div id="btn-delete-photo" class="btn-flush">
+                                        <i class="fa fa-remove fa-2x"></i>
+                                    </div>
+                                </div>
+
+                                <a id="btn-change-photo" href="{{ route('firm.logo') }}" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_row(form.website, {row_attr: {':class': "{'has-error': isInvalid(['name'])}"}}) }}
+                    {{ form_row(form.description) }}
+                    {{ form_row(form.employees, {row_attr: {'v-show': 'firm.is_agency == 0'}}) }}
+                    {{ form_row(form.founded, {row_attr: {':class': "{'has-error': isInvalid(['founded'])}", 'v-show': 'firm.is_agency == 0'}}) }}
+                    {{ form_row(form.headline, {row_attr: {':class': "{'has-error': isInvalid(['headline'])}", 'v-show': 'firm.is_agency == 0'}}) }}
+
+                    <div class="form-group form-group-border" v-show="firm.is_agency == 0">
+                        {{ form_label(form.address) }}
+
+                        {{ form_widget(form.latitude) }}
+                        {{ form_widget(form.longitude) }}
+                        {{ form_widget(form.street) }}
+                        {{ form_widget(form.city) }}
+                        {{ form_widget(form.country) }}
+                        {{ form_widget(form.postcode) }}
+                        {{ form_widget(form.house) }}
+                        {{ form_widget(form.address) }}
+                        {{ form_error(form.address) }}
+
+                        <div id="map"></div>
+                    </div>
+
+                    <div class="form-group form-group-border" v-show="firm.is_agency == 0">
+                        <label class="control-label">Benefity</label>
+                        <span class="help-block">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w polu poniżej.</span>
+
+                        <ol class="benefits list-group">
+
+                            <li class="list-group-item col-sm-6 clickable" v-for="benefit in default_benefits" :class="{checked: benefits.indexOf(benefit) > -1}" @click="toggleBenefit(benefit)">
+                                <i class="fa fa-check"></i> ${ benefit }
+
+                                <input type="checkbox" name="benefits[]" :value="benefit" :checked="benefits.indexOf(benefit) > -1">
+                            </li>
+
+                            <li class="list-group-item col-xs-6 checked" v-for="benefit in benefits" v-if="default_benefits.indexOf(benefit) === -1">
+                                <i class="fa fa-check"></i>
+                                <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm">
+                            </li>
+
+                            <li class="list-group-item col-xs-6 checked">
+                                <i class="fa fa-check"></i>
+                                <input type="text" name="benefits[]" class="form-control input-sm">
+                            </li>
+                        </ol>
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div id="form-navigation" class="form-group">
+                        <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
+
+                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Podgląd <i class="fa fa-angle-right"></i></button>
+                        <button type="submit" class="btn btn-danger pull-right btn-save" data-submit-state="Proszę czekać..."><i class="fa fa-save"></i> Zapisz i zakończ</button>
+                    </div>
+                </div>
+            </div>
 
             {{ form_close() }}
         </main>
@@ -118,6 +199,17 @@
 {% block body %}
     {{ parent() }}
 
+    <script>
+        var data = {
+            default_benefits: {{ default_benefits|json_encode|raw }},
+            benefits: {{ benefits|json_encode|raw }},
+            firm: {{ firm|raw }},
+            firms: {{ firms|raw }},
+            errors: {{ form_errors|raw }}
+        };
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
 

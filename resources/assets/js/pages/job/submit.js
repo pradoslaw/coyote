@@ -232,62 +232,108 @@ class Tags {
     }
 }
 
-new Vue({
-    el: '#job-posting',
-    delimiters: ['${', '}'],
-    data: {
-        job: job,
-        tags: tags,
-        errors: errors,
-        enable_apply: true
-    },
-    mounted: function() {
-        initTinymce();
+if (document.getElementById('job-posting')) {
+    new Vue({
+        el: '#job-posting',
+        delimiters: ['${', '}'],
+        data: data,
+        mounted: function () {
+            initTinymce();
 
-        new Tags({
-            onSelect: (value) => {
-                this.tags.push({name: value, pivot: {priority: 1}});
+            new Tags({
+                onSelect: (value) => {
+                    this.tags.push({name: value, pivot: {priority: 1}});
+                }
+            });
+
+            $('#tags-container').sortable();
+        },
+        methods: {
+            removeTag: function (index) {
+                this.tags.splice(index, 1);
+            },
+            charCounter: function (item, limit) {
+                return limit - this.job[item].length;
+            },
+            isInvalid: function (fields) {
+                return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
             }
-        });
+        },
+        computed: {
+            deadlineDate: function () {
+                let value = parseInt(this.job.deadline);
 
-        $('#tags-container').sortable();
+                if (value > 0) {
+                    let date = new Date();
+                    date.setDate(date.getDate() + value);
+
+                    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+                }
+                else {
+                    return '--';
+                }
+            }
+        },
+        watch: {
+            'job.enable_apply': function (flag) {
+                if (Boolean(parseInt(flag))) {
+                    tinymce.get('recruitment').hide();
+
+                    $('#recruitment').attr('disabled', 'disabled').hide();
+                } else {
+                    tinymce.get('recruitment').show();
+
+                    $('#recruitment').removeAttr('disabled');
+                }
+            }
+        }
+    });
+}
+
+var map;
+
+new Vue({
+    el: '#firm-form',
+    delimiters: ['${', '}'],
+    data: data,
+    mounted: function() {
+        if (typeof google !== 'undefined') {
+            google.maps.event.addDomListener(window, 'load', initialize);
+        }
+
+        initTinymce();
     },
     methods: {
-        removeTag: function(index) {
-            this.tags.splice(index, 1);
-        },
         charCounter: function (item, limit) {
-            return limit - this.job[item].length;
+            return limit - String(this.firm[item] !== null ? this.firm[item] : '').length;
         },
-        isInvalid: function(fields) {
+
+        isInvalid: function (fields) {
             return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
+        },
+
+        toggleBenefit: function (item) {
+            let index = this.benefits.indexOf(item);
+
+            if (index === -1) {
+                this.benefits.push(item);
+            } else {
+                this.benefits.splice(index, 1);
+            }
         }
     },
     computed: {
-        deadlineDate: function () {
-            let value = parseInt(this.job.deadline);
 
-            if (value > 0) {
-                let date = new Date();
-                date.setDate(date.getDate() + value);
-
-                return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-            }
-            else {
-                return '--';
-            }
-        }
     },
     watch: {
-        'job.enable_apply': function(flag) {
-            if (Boolean(parseInt(flag))) {
-                tinymce.get('recruitment').hide();
+        firm: {
+            is_private: function (flag) {
+                if (!Boolean(parseInt(flag))) {
+                    google.maps.event.trigger(map, 'resize');
+                }
+            },
+            is_agency: function (flag) {
 
-                $('#recruitment').attr('disabled', 'disabled').hide();
-            } else {
-                tinymce.get('recruitment').show();
-
-                $('#recruitment').removeAttr('disabled');
             }
         }
     }
@@ -298,16 +344,14 @@ $(() => {
     'use strict';
 
 
-    if (typeof google !== 'undefined') {
-        google.maps.event.addDomListener(window, 'load', initialize);
-    }
+
 
     let navigation = $('#form-navigation');
     let fixed = $('#form-navbar-fixed');
 
     $('#form-navigation-container')
         .html(navigation.html())
-        .on('click', ':submit', () => $('#job-posting').submit())
+        .on('click', ':submit', () => $('.submit-form').submit())
         .on('click', 'button[data-submit-state]', e => $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state')));
 
     if (navigation.length) {
@@ -360,14 +404,14 @@ $(() => {
     //
     //     container.children('strong').text(length);
     // })
-    .on('change', 'input[name="private"]', e => {
-        $('#box-edit-firm, #choose-firm').toggle($(e.currentTarget).val() == 0);
-        $('#box-buttons').toggle($(e.currentTarget).val() != 0);
-    })
-    .on('change', 'input[name="is_agency"]', e => {
-        $('.agency').toggle($(e.currentTarget).val() != 1);
-        google.maps.event.trigger(map, 'resize');
-    })
+    // .on('change', 'input[name="private"]', e => {
+    //     $('#box-edit-firm, #choose-firm').toggle($(e.currentTarget).val() == 0);
+    //     $('#box-buttons').toggle($(e.currentTarget).val() != 0);
+    // })
+    // .on('change', 'input[name="is_agency"]', e => {
+    //     $('.agency').toggle($(e.currentTarget).val() != 1);
+    //     google.maps.event.trigger(map, 'resize');
+    // })
     .on('focus', ':input', e => {
         let $this = $(e.currentTarget);
         let offset = $this.offset().top;
@@ -385,91 +429,91 @@ $(() => {
         }
     });
 
-    if ($('input[name="private"]').val()) {
-        $('input[name="private"]:checked').trigger('change');
-    }
+    // if ($('input[name="private"]').val()) {
+    //     $('input[name="private"]:checked').trigger('change');
+    // }
+    //
+    // if ($('input[name="is_agency"]').val()) {
+    //     $('input[name="is_agency"]:checked').trigger('change');
+    // }
 
-    if ($('input[name="is_agency"]').val()) {
-        $('input[name="is_agency"]:checked').trigger('change');
-    }
-
-    $('.benefits').on('keyup focus blur', 'input[type="text"]', e => {
-        let $this = $(e.currentTarget);
-        let nextItem = $this.parent().next('li');
-
-        if ($this.val().length > 0) {
-            if (!nextItem.length) {
-                let clone = $this.parent().clone();
-                $('input', clone).val('');
-
-                clone.insertAfter($this.parent());
-            }
-        }
-        else if (nextItem.length) {
-            if ($('input', nextItem).val().length === 0) {
-                nextItem.remove();
-            }
-        }
-    }).on('click', 'li.clickable', e => {
-        let checkbox = $(e.currentTarget).children(':checkbox');
-
-        checkbox.prop('checked', !checkbox.is(':checked'));
-        $(e.currentTarget).toggleClass('checked');
-    });
+    // $('.benefits').on('keyup focus blur', 'input[type="text"]', e => {
+    //     let $this = $(e.currentTarget);
+    //     let nextItem = $this.parent().next('li');
+    //
+    //     if ($this.val().length > 0) {
+    //         if (!nextItem.length) {
+    //             let clone = $this.parent().clone();
+    //             $('input', clone).val('');
+    //
+    //             clone.insertAfter($this.parent());
+    //         }
+    //     }
+    //     else if (nextItem.length) {
+    //         if ($('input', nextItem).val().length === 0) {
+    //             nextItem.remove();
+    //         }
+    //     }
+    // }).on('click', 'li.clickable', e => {
+    //     let checkbox = $(e.currentTarget).children(':checkbox');
+    //
+    //     checkbox.prop('checked', !checkbox.is(':checked'));
+    //     $(e.currentTarget).toggleClass('checked');
+    // });
 
     $.uploader({
         input: 'logo',
         onChanged: function(data) {
-            $('#job-posting').find('input[name="logo"]').val(data.name);
+            $('#firm-form').find('input[name="logo"]').val(data.name);
         },
         onDeleted: function() {
-            $('#job-posting').find('input[name="logo"]').val('');
+            $('#firm-form').find('input[name="logo"]').val('');
         }
     });
 
-    $('#btn-add-firm').click(() => {
-        $.get(Config.get('firm_partial'), {}, (html) => {
-            $('#box-edit-firm').replaceWith(html);
-
-            $('#modal-firm').modal('hide');
-            initialize();
-        });
-    });
+    // $('#btn-add-firm').click(() => {
+    //     $.get(Config.get('firm_partial'), {}, (html) => {
+    //         $('#box-edit-firm').replaceWith(html);
+    //
+    //         $('#modal-firm').modal('hide');
+    //         initialize();
+    //     });
+    // });
 
     /**
      * Ability to create new firm and assign it to the offer
      */
-    $('#box-edit-firm').find('input[name="name"]').one('keyup', () => {
-        if ($('#firm-id').val() === '') {
-            return true;
-        }
-
-        $('#modal-firm').modal('show').find('.btn-primary').one('click', () => {
-            $('#btn-add-firm').click();
-
-            return false;
-        });
-    });
+    // $('#box-edit-firm').find('input[name="name"]').one('keyup', () => {
+    //     if ($('#firm-id').val() === '') {
+    //         return true;
+    //     }
+    //
+    //     $('#modal-firm').modal('show').find('.btn-primary').one('click', () => {
+    //         $('#btn-add-firm').click();
+    //
+    //         return false;
+    //     });
+    // });
 
     /**
      * Ability to assign different firm to this job offer
      */
-    $('.btn-firm').click(e => {
-        let self = $(e.currentTarget);
-
-        $.get(self.attr('href'), (html) => {
-            $('#box-edit-firm').replaceWith(html);
-            initialize();
-
-            $('.btn-firm').not(self).removeClass('btn-primary').addClass('btn-default');
-            self.addClass('btn-primary').removeClass('btn-default');
-
-            tinymce.EditorManager.editors = [];
-            initTinymce();
-        });
-
-        return false;
-    });
+    // $('.btn-firm').click(e => {
+    //     let self = $(e.currentTarget);
+    //
+    //     $.get(self.attr('href'), (html) => {
+    //         $('#box-edit-firm').replaceWith(html);
+    //         initialize();
+    //
+    //         $('.btn-firm').not(self).removeClass('btn-primary').addClass('btn-default');
+    //         self.addClass('btn-primary').removeClass('btn-default');
+    //
+    //         tinymce.EditorManager.editors = [];
+    //         initTinymce();
+    //     });
+    //
+    //     return false;
+    // });
 
 
 });
@@ -485,7 +529,7 @@ function initialize() {
     };
 
     let geocoder = new google.maps.Geocoder();
-    let map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    map = new google.maps.Map(document.getElementById("map"), mapOptions);
     let marker;
 
     let geocodeResult = function (results, status) {
@@ -580,4 +624,6 @@ function initialize() {
     google.maps.event.addListener(map, 'click', (e) => {
         reverseGeocode(e.latLng);
     });
+
+    return map;
 }

@@ -32,7 +32,7 @@ class JobListener
         $event->job->putToIndex();
 
         // we need to update elasticsearch index by updating firm name and logo in all job offers
-        if ($event->job->firm_id) {
+        if ($event->job->firm_id && $event->job->firm->isDirty(['name', 'logo'])) {
             dispatch(new UpdateJobOffers($event->job->firm_id));
         }
     }

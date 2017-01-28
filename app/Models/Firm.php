@@ -2,11 +2,16 @@
 
 namespace Coyote;
 
+use Coyote\Services\Media\Factory as MediaFactory;
+use Coyote\Services\Media\Logo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $is_agency
+ * @property int $user_id
+ * @property \Coyote\Firm\Benefit[] $benefits
+ * @property Logo $logo
  */
 class Firm extends Model
 {
@@ -18,7 +23,6 @@ class Firm extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
         'name',
         'logo',
         'website',
@@ -104,6 +108,20 @@ class Firm extends Model
         $name = trim($name);
 
         $this->attributes['name'] = $name;
+    }
+
+    /**
+     * @param string $value
+     * @return \Coyote\Services\Media\MediaInterface
+     */
+    public function getLogoAttribute($value)
+    {
+        if (!($value instanceof Logo)) {
+            $logo = app(MediaFactory::class)->make('logo', ['file_name' => $value]);
+            $this->attributes['logo'] = $logo;
+        }
+
+        return $this->attributes['logo'];
     }
 
     /**

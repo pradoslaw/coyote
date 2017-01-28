@@ -24,7 +24,7 @@
                 </p>
             {% endif %}
 
-            {{ form_open({'url': route('job.submit'), 'class': '', 'id': 'job-posting', 'v-cloak': 'v-cloak'}) }}
+            {{ form_open({'url': route('job.submit'), 'class': 'submit-form', 'id': 'job-posting', 'v-cloak': 'v-cloak'}) }}
                 {{ form_widget(form.id) }}
                 {{ form_widget(form.firm_id) }}
                 {{ form_widget(form.slug) }}
@@ -39,7 +39,7 @@
 
                         {{ form_row(form.title) }}
 
-                        <div class="form-group form-group-border" v-bind:class="{'has-error': isInvalid(['city'])}">
+                        <div class="form-group form-group-border" :class="{'has-error': isInvalid(['city'])}">
                             <label class="control-label">Lokalizacja</label>
 
                             <div class="row">
@@ -64,7 +64,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group form-group-border" v-bind:class="{'has-error': isInvalid(['salary_from', 'salary_to'])}">
+                        <div class="form-group form-group-border" :class="{'has-error': isInvalid(['salary_from', 'salary_to'])}">
                             <label class="control-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>
 
                             <div>
@@ -90,7 +90,7 @@
                             <span class="fa fa-tag form-control-feedback" aria-hidden="true"></span>
 
                             <ol class="tag-dropdown">
-                                {% include 'components.tags' with {'tags': popularTags} only %}
+                                {% include 'components.tags' with {'tags': popular_tags} only %}
                             </ol>
 
                             <div id="tags-container" class="margin-md-top">
@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="panel-body">
-                        <div class="form-group form-group-border" v-bind:class="{'has-error': isInvalid(['deadline'])}">
+                        <div class="form-group form-group-border" :class="{'has-error': isInvalid(['deadline'])}">
                             {{ form_label(form.deadline) }}
 
                             {{ form_widget(form.deadline) }} dni
@@ -143,23 +143,20 @@
 
                         {{ form_row(form.description) }}
 
-                        <div class="form-group" v-bind:class="{'has-error': isInvalid(['email'])}">
-                            {#{{ form_row(form.enable_apply.child(0)) }}#}
+                        <div class="form-group" :class="{'has-error': isInvalid(['email'])}">
                             {{ form_row(form.enable_apply.child(0), {attr: {'v-model': 'job.enable_apply'}}) }}
 
                             {{ form_widget(form.email, {attr: {':disabled': 'job.enable_apply == 0'}}) }}
                             {{ form_error(form.email) }}
                         </div>
 
-                        <div class="form-group" v-bind:class="{'has-error': isInvalid(['recruitment'])}">
-                            {#{{ form_row(form.enable_apply.child(1)) }}#}
+                        <div class="form-group" :class="{'has-error': isInvalid(['recruitment'])}">
                             {{ form_row(form.enable_apply.child(1), {attr: {'v-model': 'job.enable_apply'}}) }}
 
-                            {#<div v-if="job.enable_apply == 0">#}
-                                {#{{ form_widget(form.recruitment, {attr: {'v-if': 'job.enable_apply == 0', ':disabled': 'job.enable_apply == 1'}}) }}#}
+                            <div v-show="job.enable_apply == 0">
                                 {{ form_widget(form.recruitment) }}
-                            {#</div>#}
-                            {{ form_error(form.recruitment) }}
+                                {{ form_error(form.recruitment) }}
+                            </div>
                         </div>
 
                         <div id="form-navigation" class="form-group">
@@ -226,9 +223,7 @@
     {{ parent() }}
 
     <script>
-        var job = {{ job|raw }};
-        var tags = {{ tags|raw }};
-        var errors = {{ form_errors|raw }};
+        var data = {job: {{ job|raw }}, tags: {{ tags|raw }}, errors: {{ form_errors|raw }}};
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>

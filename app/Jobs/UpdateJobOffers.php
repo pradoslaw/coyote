@@ -49,7 +49,7 @@ class UpdateJobOffers extends Job implements ShouldQueue
                     'doc' => [
                         'firm' => [
                             'name' => $result['name'],
-                            'logo' => $result['logo']
+                            'logo' => (string) $result['logo'] // cast to string returns filename
                         ]
                     ]
                 ]

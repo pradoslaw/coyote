@@ -1,62 +1,43 @@
-{% import 'job.submit.partials.theme' as theme %}
-
-<div id="box-edit-firm" class="panel panel-default">
+<div id="box-edit-firm" class="panel panel-default" v-show="firm.is_private == 0">
     <div class="panel-heading">
         Dane firmy
     </div>
 
-    {{ form_hidden('id', input_old('id', firm.id), {'id': 'firm-id'}) }}
+    {{ form_widget(form.id) }}
 
     <div class="panel-body">
-        {{ theme.group_open('name', 'form-group-border') }}
-            <label class="control-label">Nazwa firmy <em class="text-danger">*</em></label>
+        <div class="form-group form-group-border" :class="{'has-error': isInvalid(['name'])}">
+            {{ form_label(form.name) }}
 
             <div class="input-group">
-                {{ form_text('name', input_old('name', firm.name), {'class': 'form-control'}) }}
+                {{ form_widget(form.name) }}
 
                 <div class="input-group-addon">
                     <a href="javascript:" id="btn-add-firm" title="Dodaj nową firmę"><i class="fa fa-plus"></i></a>
                 </div>
             </div>
 
-            {{ theme.error('name', 'Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.') }}
-        {{ theme.group_close() }}
-
-        {% set is_agency = input_old('is_agency', firm.is_agency) %}
-
-        <div class="form-group">
-            <div class="radio">
-                {{ form_radio('is_agency', 0, is_agency == 0, {'id': 'direct'}) }}
-
-                <label for="direct">
-                    Bezpośredni pracodawca
-                </label>
-            </div>
+            {{ form_error(form.name) }}
         </div>
-        <div class="form-group form-group-border">
-            <div class="radio">
-                {{ form_radio('is_agency', 1, is_agency == 1, {'id': 'agency'}) }}
 
-                <label for="agency">
-                    Agencja pośrednictwa / IT outsourcing
-                </label>
-            </div>
-        </div>
+        {{ form_row(form.is_agency) }}
 
         <div class="form-group">
             <label class="control-label">Logo</label>
 
             <div class="row">
                 <div class="col-sm-2">
-                    {% set logo = input_old('logo', firm.logo) %}
-                    {{ form_hidden('logo', logo) }}
+                    {#{% set logo = input_old('logo', firm.logo) %}#}
+                    {#{{ form_hidden('logo', logo) }}#}
+                    {{ form_widget(form.logo) }}
 
-                    <div class="img-placeholder img-thumbnail" style="{{ logo ? 'display: none' }}">
+                    <div class="img-placeholder img-thumbnail" v-show="!firm.logo">
                         <img src="{{ cdn('img/logo-gray.png') }}">
                     </div>
 
-                    <div class="img-container img-thumbnail" style="{{ not logo ? 'display: none' }}">
-                        <img src="{{ logo(logo) }}">
+                    <div class="img-container img-thumbnail" v-show="firm.logo">
+
+                        <img src="{{ logo(form.logo.value) }}">
 
                         <div id="btn-delete-photo" class="btn-flush">
                             <i class="fa fa-remove fa-2x"></i>
@@ -68,81 +49,44 @@
             </div>
         </div>
 
-        {{ theme.group_open('website', 'form-group-border') }}
-            <label class="control-label">Strona WWW</label>
+        {{ form_row(form.website, {row_attr: {':class': "{'has-error': isInvalid(['name'])}"}}) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.employees, {row_attr: {'v-show': 'firm.is_agency == 0'}}) }}
+        {{ form_row(form.founded, {row_attr: {':class': "{'has-error': isInvalid(['founded'])}", 'v-show': 'firm.is_agency == 0'}}) }}
+        {{ form_row(form.headline, {row_attr: {':class': "{'has-error': isInvalid(['headline'])}", 'v-show': 'firm.is_agency == 0'}}) }}
 
-            {{ form_text('website', input_old('website', firm.website), {'class': 'form-control'}) }}
-            {{ theme.error('website', 'Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.') }}
-        {{ theme.group_close() }}
+        <div class="form-group form-group-border" v-show="firm.is_agency == 0">
+            {{ form_label(form.address) }}
 
-        <div class="form-group">
-            <label class="control-label">Opis firmy</label>
-
-            {{ form_textarea('description', input_old('description', firm.description), {'class': 'form-control', 'style': 'height: 60px'}) }}
-            <span class="help-block">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
-        </div>
-
-        <div class="form-group form-group-border agency">
-            <label class="control-label">Liczba pracowników w firmie</label>
-
-            {{ form_select('employees', {'': ''} + employeesList, input_old('employees', firm.employees), {'class': 'form-control'}) }}
-            <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
-        </div>
-
-        <div class="form-group form-group-border agency">
-            <label class="control-label">Rok powstania</label>
-
-            {{ form_select('founded', {'': ''} + foundedList, input_old('founded', firm.founded ?: 'now'|date('Y')), {'class': 'form-control'}) }}
-            <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
-        </div>
-
-        <div class="form-group agency">
-            <label class="control-label">Motto lub nagłówek</label>
-
-            {{ form_text('headline', input_old('headline', firm.headline), {'class': 'form-control', 'maxlength': 100}) }}
-            <span class="help-block">Pozostało <strong>{{ (100 - input_old('headline', firm.headline)|length) }}</strong> znaków.</span>
-        </div>
-
-        <div class="form-group form-group-border agency">
-            <label class="control-label">Adres</label>
-
-            {{ form_hidden('latitude', input_old('latitude', firm.latitude), {'id': 'latitude'}) }}
-            {{ form_hidden('longitude', input_old('latitude', firm.longitude), {'id': 'longitude'}) }}
-            {{ form_hidden('street', input_old('street', firm.street)) }}
-            {{ form_hidden('city', input_old('city', firm.city)) }}
-            {{ form_hidden('country', input_old('country', firm.country)) }}
-            {{ form_hidden('postcode', input_old('postcode', firm.postcode)) }}
-            {{ form_hidden('house', input_old('house', firm.house)) }}
-
-            {{ form_text('address', input_old('address', firm.street ~ ' ' ~ firm.house ~ ' ' ~ firm.city), {'class': 'form-control', 'id': 'address'}) }}
-            <span class="help-block">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
+            {{ form_widget(form.latitude) }}
+            {{ form_widget(form.longitude) }}
+            {{ form_widget(form.street) }}
+            {{ form_widget(form.city) }}
+            {{ form_widget(form.country) }}
+            {{ form_widget(form.postcode) }}
+            {{ form_widget(form.house) }}
+            {{ form_widget(form.address) }}
+            {{ form_error(form.address) }}
 
             <div id="map"></div>
         </div>
 
-        <div class="form-group form-group-border agency">
+        <div class="form-group form-group-border" v-show="firm.is_agency == 0">
             <label class="control-label">Benefity</label>
             <span class="help-block">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w polu poniżej.</span>
 
-            {% set benefits = input_old('benefits', firm.benefits) %}
-
             <ol class="benefits list-group">
-                {% for benefit in benefitsList %}
-                    <li class="list-group-item col-sm-6 clickable {{ benefit in benefits ? 'checked' }}">
-                        <i class="fa fa-check"></i> {{ benefit }}
 
-                        <input type="checkbox" name="benefits[]" value="{{ benefit }}" {{ benefit in benefits ? 'checked' }}>
-                    </li>
-                {% endfor %}
+                <li class="list-group-item col-sm-6 clickable" v-for="benefit in default_benefits" :class="{checked: benefits.indexOf(benefit) > -1}" @click="toggleBenefit(benefit)">
+                    <i class="fa fa-check"></i> ${ benefit }
 
-                {% for benefit in benefits %}
-                    {% if benefit not in benefitsList and benefit != '' %}
-                        <li class="list-group-item col-xs-6 checked">
-                            <i class="fa fa-check"></i>
-                            <input type="text" name="benefits[]" value="{{ benefit }}" class="form-control input-sm">
-                        </li>
-                    {% endif %}
-                {% endfor %}
+                    <input type="checkbox" name="benefits[]" :value="benefit" :checked="benefits.indexOf(benefit) > -1">
+                </li>
+
+                <li class="list-group-item col-xs-6 checked" v-for="benefit in benefits" v-if="default_benefits.indexOf(benefit) === -1">
+                    <i class="fa fa-check"></i>
+                    <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm">
+                </li>
 
                 <li class="list-group-item col-xs-6 checked">
                     <i class="fa fa-check"></i>
