@@ -166,8 +166,6 @@ class SubmitController extends Controller
         $form = $this->createForm(FirmForm::class, $job->firm);
         $form->validate();
 
-        dd($job);
-
         $request->session()->put(Job::class, $job);
 
         return $this->next($request, redirect()->route('job.submit.preview'));
@@ -243,6 +241,10 @@ class SubmitController extends Controller
             }
 
             if ($job->firm_id) {
+                // reassociate job with firm. user could change firm, that's why we have to do it again.
+                $job->firm->syncOriginal();
+                $job->firm()->associate($job->firm);
+
                 $job->firm->save();
 
                 $job->firm->benefits()->delete();

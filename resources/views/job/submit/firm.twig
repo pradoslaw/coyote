@@ -35,7 +35,7 @@
                     <tbody>
                         <tr v-for="item in firms">
                             <td style="width: 10%">
-                                <img class="img-thumbnail" :src="item.logo">
+                                <img class="img-thumbnail" :src="item.thumbnail">
                             </td>
                             <td>
                                 <h4>${ item.name }</h4>
@@ -85,7 +85,7 @@
                                 </div>
 
                                 <div class="img-container img-thumbnail" v-show="firm.logo">
-                                    <img :src="firm.logo">
+                                    <img :src="firm.thumbnail">
 
                                     <div id="btn-delete-photo" class="btn-flush">
                                         <i class="fa fa-remove fa-2x"></i>

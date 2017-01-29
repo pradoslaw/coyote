@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ * @property int $id
  * @property int $is_agency
  * @property int $user_id
  * @property bool $is_private

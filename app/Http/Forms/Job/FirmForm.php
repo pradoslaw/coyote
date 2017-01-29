@@ -49,6 +49,8 @@ class FirmForm extends Form
             }
 
             $this->data->fill($data);
+            // assign firm id. id is not fillable - that's why we must set it directly.
+            $this->data->id = $form->get('id')->getValue();
         });
     }
 
@@ -112,7 +114,10 @@ class FirmForm extends Form
                 ]
             ])
             ->add('logo', 'hidden', [
-                'rules' => 'string'
+                'rules' => 'string',
+                'attr' => [
+                    'v-model' => 'firm.logo'
+                ]
             ])
             ->add('description', 'textarea', [
                 'label' => 'Opis firmy',
@@ -237,7 +242,14 @@ class FirmForm extends Form
     public function toJson()
     {
         $json = json_decode(parent::toJson());
-        $json->logo = $this->get('logo')->getValue()->getFilename() ? (string) $this->get('logo')->getValue()->url() : null;
+
+        $json->thumbnail = null;
+        $json->logo = null;
+
+        if ($this->get('logo')->getValue()->getFilename()) {
+            $json->thumbnail = $this->get('logo')->getValue()->url();
+            $json->logo = $this->get('logo')->getValue()->getFilename();
+        }
 
         return json_encode($json);
     }

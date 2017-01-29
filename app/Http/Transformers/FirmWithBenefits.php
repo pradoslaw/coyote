@@ -16,7 +16,8 @@ class FirmWithBenefits extends TransformerAbstract
         $data = array_except($firm->toArray(), ['benefits']);
 
         return array_merge($data, [
-            'logo' => $firm->logo->getFilename() ? (string) $firm->logo->url() : cdn('img/logo-gray.png'),
+            'thumbnail' => $firm->logo->getFilename() ? (string) $firm->logo->url() : cdn('img/logo-gray.png'),
+            'logo' => $firm->getOriginal('logo'),
             'benefits' => $firm->benefits->pluck('name')->toArray()
         ]);
     }
