@@ -55,14 +55,19 @@ class FirmForm extends Form
     public function buildForm()
     {
         $this
-            ->add('id', 'hidden')
+            ->setAttr(['id' => 'firm-form', 'class' => 'submit-form', 'v-cloak' => 'v-cloak'])
+            ->setUrl(route('job.submit.firm'))
+            ->add('id', 'hidden', [
+                'attr' => [
+                    'v-model' => 'firm.id'
+                ]
+            ])
             ->add('is_private', 'choice', [
                 'multiple' => false,
                 'rules' => 'boolean',
-                'value' => 1,
                 'choices' => [
-                    1 => 'Jestem osobą prywatną',
-                    0 => 'Reprezentuje firmę'
+                    true => 'Jestem osobą prywatną',
+                    false => 'Reprezentuje firmę'
                 ],
                 'child_attr' => [
                     'attr' => [
@@ -73,7 +78,10 @@ class FirmForm extends Form
             ->add('name', 'text', [
                 'rules' => 'required_if:is_private,0|max:60',
                 'label' => 'Nazwa firmy',
-                'help' => 'Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.'
+                'help' => 'Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.',
+                'attr' => [
+                    'v-model' => 'firm.name'
+                ]
             ])
             ->add('is_agency', 'choice', [
                 'multiple' => false,
@@ -96,7 +104,11 @@ class FirmForm extends Form
                 'label' => 'Strona WWW',
                 'help' => 'Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.',
                 'row_attr' => [
-                    'class' => 'form-group-border'
+                    'class' => 'form-group-border',
+                    ':class' => "{'has-error': isInvalid(['name'])}"
+                ],
+                'attr' => [
+                    'v-model' => 'firm.website'
                 ]
             ])
             ->add('logo', 'hidden', [
@@ -105,7 +117,10 @@ class FirmForm extends Form
             ->add('description', 'textarea', [
                 'label' => 'Opis firmy',
                 'rules' => 'string',
-                'help' => 'Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?'
+                'help' => 'Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?',
+                'attr' => [
+                    'v-model' => 'firm.description'
+                ]
             ])
             ->add('employees', 'select', [
                 'label' => 'Liczba pracowników w firmie',
@@ -114,7 +129,11 @@ class FirmForm extends Form
                 'choices' => Firm::getEmployeesList(),
                 'empty_value' => '--',
                 'row_attr' => [
-                    'class' => 'form-group-border'
+                    'class' => 'form-group-border',
+                    'v-show' => 'firm.is_agency == 0'
+                ],
+                'attr' => [
+                    'v-model' => 'firm.employees'
                 ]
             ])
             ->add('founded', 'select', [
@@ -124,53 +143,75 @@ class FirmForm extends Form
                 'choices' => Firm::getFoundedList(),
                 'empty_value' => '--',
                 'row_attr' => [
-                    'class' => 'form-group-border'
+                    'class' => 'form-group-border',
+                    ':class' => "{'has-error': isInvalid(['founded'])}",
+                    'v-show' => 'firm.is_agency == 0'
+                ],
+                'attr' => [
+                    'v-model' => 'firm.founded'
                 ]
-
             ])
             ->add('headline', 'text', [
                 'rules' => 'string|max:100',
                 'label' => 'Motto lub nagłówek',
-                'help' => 'Pozostało ${ charCounter(\'headline\', 100) } znaków',
+                'help' => 'Pozostało ${ charCounter(\'firm.headline\', 100) } znaków',
                 'attr' => [
-                    'maxlength' => 100
+                    'maxlength' => 100,
+                    'v-model' => 'firm.headline'
+                ],
+                'row_attr' => [
+                    ':class' => "{'has-error': isInvalid(['headline'])}",
+                    'v-show' => 'firm.is_agency == 0'
                 ]
             ])
             ->add('latitude', 'hidden', [
                 'rules' => 'numeric',
                 'attr' => [
-                    'id' => 'latitude'
+                    'id' => 'latitude',
+                    'v-model' => 'firm.latitude'
                 ]
             ])
             ->add('longitude', 'hidden', [
                 'rules' => 'numeric',
                 'attr' => [
-                    'id' => 'longitude'
+                    'id' => 'longitude',
+                    'v-model' => 'firm.longitude'
                 ]
             ])
             ->add('street', 'hidden', [
-                'rules' => 'string|max:255'
+                'rules' => 'string|max:255',
+                'attr' => [
+                    'v-model' => 'firm.street'
+                ]
             ])
             ->add('city', 'hidden', [
-                'rules' => 'string|max:255'
+                'rules' => 'string|max:255',
+                'attr' => [
+                    'v-model' => 'firm.city'
+                ]
             ])
             ->add('country', 'hidden')
             ->add('postcode', 'hidden', [
-                'rules' => 'string|max:50'
+                'rules' => 'string|max:50',
+                'attr' => [
+                    'v-model' => 'firm.postcode'
+                ]
             ])
             ->add('house', 'hidden', [
-                'rules' => 'string|max:50'
+                'rules' => 'string|max:50',
+                'attr' => [
+                    'v-model' => 'firm.house'
+                ]
             ])
             ->add('address', 'text', [
                 'label' => 'Adres',
                 'help' => 'Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.',
                 'attr' => [
-                    'id' => 'address'
+                    'id' => 'address',
                 ]
             ])
             ->add('benefits', 'collection', [
                 'property' => 'name',
-//                'value' => $this->data->benefits->all(),
                 'child_attr' => [
                     'type' => 'text'
                 ]
@@ -190,15 +231,26 @@ class FirmForm extends Form
         return ['name.required_if' => 'Nazwa firmy jest wymagana'];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function toJson()
+    {
+        $json = json_decode(parent::toJson());
+        $json->logo = $this->get('logo')->getValue()->getFilename() ? (string) $this->get('logo')->getValue()->url() : null;
+
+        return json_encode($json);
+    }
+
     private function setDefaultOptions()
     {
         if ($this->data instanceof Firm && !$this->isSubmitted()) {
             if ($this->data->exists) {
-                $this->get('address')->setValue("{$this->data->street} {$this->data->house} {$this->data->city}");
+                $this->get('address')->setValue(trim("{$this->data->street} {$this->data->house} {$this->data->city}"));
             }
 
             $this->get('benefits')->setValue($this->data->benefits->all());
-            $this->get('is_private')->setValue((int) !$this->get('id')->getValue());
+//            $this->get('is_private')->setValue(!$this->get('id')->getValue());
         }
     }
 

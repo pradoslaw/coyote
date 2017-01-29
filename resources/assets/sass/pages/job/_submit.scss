@@ -145,13 +145,6 @@ $font-size-control-label: 15px;
   }
 }
 
-// "Save and close" button
-// --------------------------------------------
-
-.btn-save {
-  margin-right: 10px;
-}
-
 // Submit form
 // --------------------------------------------
 
@@ -186,7 +179,7 @@ $font-size-control-label: 15px;
     li.checked {
       color: $gray-darker;
 
-      i {
+      i.fa-check {
         color: $brand-primary;
       }
     }

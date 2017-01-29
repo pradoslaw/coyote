@@ -40,17 +40,7 @@ class Media extends Twig_Extension
      */
     public function userPhoto($filename)
     {
-        if (!$filename) {
-            return cdn('img/avatar.png');
-        }
-
-        if (is_string($filename)) {
-            return $this->getMediaUrl('photo', $filename)->url();
-        } elseif ($filename instanceof MediaInterface) {
-            return $filename->getFilename() ? $filename->url() : cdn('img/avatar.png');
-        } else {
-            throw new \Exception('Parameter needs to be either string or MediaInterface object.');
-        }
+        return (string) $this->getMediaUrl('photo', $filename, 'img/avatar.png');
     }
 
     /**
@@ -59,7 +49,7 @@ class Media extends Twig_Extension
      */
     public function logo($filename)
     {
-        return $filename ? (string) $this->getMediaUrl('logo', $filename)->url() : cdn('img/logo-gray.png');
+        return (string) $this->getMediaUrl('logo', $filename, 'img/logo-gray.png');
     }
 
     /**
@@ -76,10 +66,21 @@ class Media extends Twig_Extension
     /**
      * @param string $factory
      * @param string $filename
-     * @return MediaInterface
+     * @return string
+     * @throws \Exception
      */
-    private function getMediaUrl($factory, $filename)
+    private function getMediaUrl($factory, $filename, $placeholder)
     {
-        return $this->getMediaFactory()->make($factory, ['file_name' => $filename]);
+        if (!$filename) {
+            return cdn($placeholder);
+        }
+
+        if (is_string($filename)) {
+            return $this->getMediaFactory()->make($factory, ['file_name' => $filename])->url();
+        } elseif ($filename instanceof MediaInterface) {
+            return $filename->getFilename() ? $filename->url() : cdn($placeholder);
+        } else {
+            throw new \Exception('Parameter needs to be either string or MediaInterface object.');
+        }
     }
 }

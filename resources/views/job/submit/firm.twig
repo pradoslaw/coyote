@@ -4,10 +4,6 @@
 {% import 'components.modals' as modal %}
 
 {% block container %}
-    <form id="upload-form" action="{{ route('firm.logo') }}">
-        <input type="file" id="input-file" name="logo" style="visibility: hidden; height: 0">
-    </form>
-
     <div class="row">
         <main class="col-md-8 col-12-sm col-12-xs">
             {% include 'job.submit.partials.indicator' with {'current': 2} %}
@@ -18,7 +14,7 @@
                 </p>
             {% endif %}
 
-            {{ form_open({'url': route('job.submit.firm'), 'id': 'firm-form', 'class': 'submit-form', 'v-cloak': 'v-cloak'}) }}
+            {{ form_start(form) }}
             {{ form_hidden('done', 0) }}
 
             <div class="panel panel-default">
@@ -26,27 +22,27 @@
                     Informacje o firmie
                 </div>
                 <div class="panel-body">
-                    {{ form_row(form.is_private, {child_attr: {attr: {'v-model': 'firm.is_private'}}}) }}
+                    {{ form_row(form.is_private) }}
 
-                    <div id="box-buttons" class="form-group" v-show="firm.is_private == 1">
+                    <div class="form-group" v-show="firm.is_private == 1">
                         <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
 
                         <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Podgląd <i class="fa fa-angle-right"></i></button>
                     </div>
                 </div>
 
-                <table id="choose-firm" class="table" v-if="firms.length > 1">
+                <table class="table" v-if="firms.length > 1" v-show="firm.is_private == 0">
                     <tbody>
                         <tr v-for="item in firms">
                             <td style="width: 10%">
-                                <img class="img-thumbnail" :src="item.thumbnail">
+                                <img class="img-thumbnail" :src="item.logo">
                             </td>
                             <td>
                                 <h4>${ item.name }</h4>
                                 <p>${ item.headline }</p>
                             </td>
                             <td class="text-center" style="vertical-align: middle">
-                                <a href="javascript:" class="btn btn-sm text-center btn-firm" :class="[item.id == firm.id ? 'btn-primary' : 'btn-default']">Wybierz</a>
+                                <a href="javascript:" @click="selectFirm(item.id)" class="btn btn-sm text-center btn-firm" :class="[item.id == firm.id ? 'btn-primary' : 'btn-default']">Wybierz</a>
                             </td>
                         </tr>
                     </tbody>
@@ -68,7 +64,7 @@
                             {{ form_widget(form.name) }}
 
                             <div class="input-group-addon">
-                                <a href="javascript:" id="btn-add-firm" title="Dodaj nową firmę"><i class="fa fa-plus"></i></a>
+                                <a href="javascript:" title="Dodaj nową firmę"><i class="fa fa-plus"></i></a>
                             </div>
                         </div>
 
@@ -89,8 +85,7 @@
                                 </div>
 
                                 <div class="img-container img-thumbnail" v-show="firm.logo">
-
-                                    <img src="{{ logo(form.logo.value) }}">
+                                    <img :src="firm.logo">
 
                                     <div id="btn-delete-photo" class="btn-flush">
                                         <i class="fa fa-remove fa-2x"></i>
@@ -102,11 +97,11 @@
                         </div>
                     </div>
 
-                    {{ form_row(form.website, {row_attr: {':class': "{'has-error': isInvalid(['name'])}"}}) }}
+                    {{ form_row(form.website) }}
                     {{ form_row(form.description) }}
-                    {{ form_row(form.employees, {row_attr: {'v-show': 'firm.is_agency == 0'}}) }}
-                    {{ form_row(form.founded, {row_attr: {':class': "{'has-error': isInvalid(['founded'])}", 'v-show': 'firm.is_agency == 0'}}) }}
-                    {{ form_row(form.headline, {row_attr: {':class': "{'has-error': isInvalid(['headline'])}", 'v-show': 'firm.is_agency == 0'}}) }}
+                    {{ form_row(form.employees) }}
+                    {{ form_row(form.founded) }}
+                    {{ form_row(form.headline) }}
 
                     <div class="form-group form-group-border" v-show="firm.is_agency == 0">
                         {{ form_label(form.address) }}
@@ -131,19 +126,21 @@
                         <ol class="benefits list-group">
 
                             <li class="list-group-item col-sm-6 clickable" v-for="benefit in default_benefits" :class="{checked: benefits.indexOf(benefit) > -1}" @click="toggleBenefit(benefit)">
-                                <i class="fa fa-check"></i> ${ benefit }
+                                <i class="fa fa-fw " :class="{'fa-check': benefits.indexOf(benefit) > -1, 'fa-minus': benefits.indexOf(benefit) === -1}"></i> ${ benefit }
 
                                 <input type="checkbox" name="benefits[]" :value="benefit" :checked="benefits.indexOf(benefit) > -1">
                             </li>
 
                             <li class="list-group-item col-xs-6 checked" v-for="benefit in benefits" v-if="default_benefits.indexOf(benefit) === -1">
-                                <i class="fa fa-check"></i>
-                                <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm">
+                                <i class="fa fa-fw fa-check"></i>
+
+                                <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm" @keydown.enter.prevent="updateBenefit">
+                                <button class="btn btn-default btn-xs btn-delete" title="Usuń tę pozycję" @click="removeBenefit(benefit)"><i class="fa fa-minus-circle text-danger"></i></button>
                             </li>
 
                             <li class="list-group-item col-xs-6 checked">
-                                <i class="fa fa-check"></i>
-                                <input type="text" name="benefits[]" class="form-control input-sm">
+                                <i class="fa fa-fw fa-check"></i>
+                                <input type="text" name="benefits[]" class="form-control input-sm" @keydown.enter.prevent="addBenefit" placeholder="Naciśnij Enter, aby dodać">
                             </li>
                         </ol>
 
@@ -154,12 +151,12 @@
                         <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
 
                         <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Podgląd <i class="fa fa-angle-right"></i></button>
-                        <button type="submit" class="btn btn-danger pull-right btn-save" data-submit-state="Proszę czekać..."><i class="fa fa-save"></i> Zapisz i zakończ</button>
+                        <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" data-submit-state="Proszę czekać..."><i class="fa fa-save"></i> Zapisz i zakończ</button>
                     </div>
                 </div>
             </div>
 
-            {{ form_close() }}
+            {{ form_end() }}
         </main>
 
         <aside class="col-md-4 hidden-sm hidden-xs hidden-xxs">

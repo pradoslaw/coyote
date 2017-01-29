@@ -8,6 +8,7 @@ use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Queue\SerializesModels;
 
 /**
  * @property int $id
@@ -57,7 +58,7 @@ class Job extends Model
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job' => ['description' => 10, 'requirements' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15],
+        'job' => ['description' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15],
         'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
@@ -84,9 +85,14 @@ class Job extends Model
         'enable_apply'
     ];
 
+    /**
+     * Default fields values.
+     *
+     * @var array
+     */
     protected $attributes = [
-        'enable_apply' => 1,
-        'is_remote' => 0,
+        'enable_apply' => true,
+        'is_remote' => false,
         'title' => ''
     ];
 
@@ -95,7 +101,7 @@ class Job extends Model
      *
      * @var array
      */
-    protected $casts = ['is_remote' => 'boolean'];
+    protected $casts = ['is_remote' => 'boolean', 'enable_apply' => 'boolean'];
 
     /**
      * @var string
@@ -211,6 +217,9 @@ class Job extends Model
 
             $seconds = ($timestamp - 1380585600) / 35000;
             $model->rank = number_format($model->score + $seconds, 6, '.', '');
+
+            // field must not be null
+            $model->is_remote = (int) $model->is_remote;
         });
     }
 
@@ -501,11 +510,15 @@ class Job extends Model
             'salary_to'         => $this->monthlySalary($this->salary_to),
             // yes, we index currency name so we don't have to look it up in database during search process
             'currency_name'     => $this->currency()->value('name'),
-            // logo is instance of File object. casting to string returns file name.
-            'firm'              => array_map('strval', $this->firm()->first(['name', 'logo'])->toArray()),
             // higher tag's priorities first
             'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')
         ]);
+
+        if (!empty($body['firm'])) {
+            // logo is instance of File object. casting to string returns file name.
+            // cast to (array) if firm is empty.
+            $body['firm'] = array_map('strval', (array) array_only($body['firm'], ['name', 'logo']));
+        }
 
         return $body;
     }

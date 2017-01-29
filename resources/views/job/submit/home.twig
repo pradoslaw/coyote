@@ -24,7 +24,7 @@
                 </p>
             {% endif %}
 
-            {{ form_open({'url': route('job.submit'), 'class': 'submit-form', 'id': 'job-posting', 'v-cloak': 'v-cloak'}) }}
+            {{ form_start(form) }}
                 {{ form_widget(form.id) }}
                 {{ form_widget(form.firm_id) }}
                 {{ form_widget(form.slug) }}
@@ -162,8 +162,8 @@
                         <div id="form-navigation" class="form-group">
                             <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Informacje o firmie <i class="fa fa-angle-right"></i></button>
 
-                            {% if job.firm_id %}
-                                <button type="submit" class="btn btn-danger pull-right btn-save" data-submit-state="Proszę czekać..." title="Zapisz tę ofertę"><i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}</button>
+                            {% if not firm.is_private %}
+                                <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" data-submit-state="Proszę czekać..." title="Zapisz tę ofertę"><i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}</button>
                             {% endif %}
                         </div>
                     </div>

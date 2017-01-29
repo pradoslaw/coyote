@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int $is_agency
  * @property int $user_id
+ * @property bool $is_private
+ * @property string $description
  * @property \Coyote\Firm\Benefit[] $benefits
  * @property Logo $logo
  */
@@ -37,13 +39,21 @@ class Firm extends Model
         'house',
         'postcode',
         'latitude',
-        'longitude'
+        'longitude',
+        'is_private'
     ];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * Do not change default value. It is set to FALSE on purpose.
+     *
+     * @var bool
+     */
+    protected $isPrivate = false;
 
     public static function boot()
     {
@@ -125,6 +135,22 @@ class Firm extends Model
     }
 
     /**
+     * @param bool $flag
+     */
+    public function setIsPrivateAttribute($flag)
+    {
+        $this->isPrivate = $flag;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsPrivateAttribute()
+    {
+        return $this->isPrivate;
+    }
+
+    /**
      * @param int $userId
      */
     public function setDefaultUserId($userId)
@@ -132,5 +158,24 @@ class Firm extends Model
         if (empty($this->user_id)) {
             $this->user_id = $userId;
         }
+    }
+
+    public function __sleep()
+    {
+        if ($this->logo instanceof Logo) {
+            $this->attributes['logo'] = $this->logo->getFilename();
+        }
+
+        $properties = (new \ReflectionClass($this))->getProperties();
+
+        $result = [];
+
+        foreach ($properties as $property) {
+            if (!$property->isStatic()) {
+                $result[] = $property->getName();
+            }
+        }
+
+        return $result;
     }
 }

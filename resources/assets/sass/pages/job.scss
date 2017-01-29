@@ -12,6 +12,14 @@
 .benefits {
   .list-group-item {
     border: none;
+    font-size: 15px;
+
+    .btn-delete {
+      position: absolute;
+      top: 15px;
+      right: 33px;
+      border: 0;
+    }
   }
 }
 

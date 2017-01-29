@@ -75,6 +75,8 @@ class JobForm extends Form
         $countryList = Country::pluck('name', 'id')->toArray();
 
         $this
+            ->setAttr(['class' => 'submit-form', 'v-cloak' => 'v-cloak'])
+            ->setUrl(route('job.submit'))
             ->add('id', 'hidden')
             ->add('slug', 'hidden')
             ->add('firm_id', 'hidden')
@@ -82,7 +84,7 @@ class JobForm extends Form
                 'rules' => 'min:2|max:60',
                 'label' => 'Tytuł oferty',
                 'required' => true,
-                'help' => 'Pozostało ${ charCounter(\'title\', 60) } znaków',
+                'help' => 'Pozostało ${ charCounter(\'job.title\', 60) } znaków',
                 'attr' => [
                     'placeholder' => 'Np. Senior Java Developer',
                     'maxlength' => 60,
@@ -180,8 +182,8 @@ class JobForm extends Form
                 'multiple' => false,
                 'choices' => [
 
-                    1 => 'Zezwól na wysyłanie CV poprzez serwis 4programmers.net',
-                    0 => '...lub podaj informacje w jaki sposób kandydaci mogą aplikować na to stanowisko',
+                    true => 'Zezwól na wysyłanie CV poprzez serwis 4programmers.net',
+                    false => '...lub podaj informacje w jaki sposób kandydaci mogą aplikować na to stanowisko',
                 ]
             ])
             ->add('recruitment', 'textarea', [

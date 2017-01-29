@@ -1,317 +1,61 @@
 import '../../plugins/uploader';
 import initTinymce from '../job/tinymce';
-import Config from '../../libs/config';
+import Tags from '../../libs/tags';
+import Dialog from '../../libs/dialog';
 
-class Tags {
-    constructor(options) {
-        let defaults = {
-            input: '#tag',
-            dropdown: '.tag-dropdown',
-            container: '#tags-container',
-            remove: '.btn-remove',
-            suggestion: '.tag-suggestion',
-            onSelect: function (value) {}
-        };
-
-        this.setup = $.extend(defaults, options);
-        this.input = $(this.setup.input);
-
-        if (!this.input.length) {
-            return;
-        }
-
-        this.help = this.input.next('.help-block');
-        this.dropdown = $(this.setup.dropdown);
-        this.container = $(this.setup.container);
-        this.selectedIndex = -1;
-
-        this.dropdown.css({
-            'width':			this.input.outerWidth() - 4,
-            'left':				this.input.position().left,
-            'top':				this.input.position().top + this.input.outerHeight()
-        });
-
-        this._onFocus();
-        this._onKeyUp();
-        this._onKeyDown();
-        this._onHover();
-        this._onItemClick();
-        // this._onRemove();
-
-        $(document).bind('click', e => {
-            let $target = $(e.target);
-
-            if (!$target.is(this.input)) {
-                this._hideDropdown();
+function toInt(data) {
+    for (let item in data) {
+        if (data.hasOwnProperty(item)) {
+            if (typeof(data[item]) == 'boolean') {
+                data[item] = +data[item];
             }
-        });
-    }
 
-    _onKeyUp() {
-        this.input.on('keyup', e => {
-            let keyCode = e.keyCode || window.event.keyCode;
-
-            if (keyCode === 13) {
-                if ($('li.hover', this.dropdown).find('span').text() !== '') {
-                    this.addTag($('li.hover', this.dropdown).find('span').text());
-                }
-                else if (this.input.val() !== '') {
-                    this.addTag(this.input.val());
-                }
-
-                this._hideDropdown();
-                this.input.val('');
-                this._loadDefaultTags();
-
-                e.preventDefault();
-            }
-            else if (keyCode === 40) { // down
-                this.select(this.selectedIndex + 1);
-                this._showDropdown();
-            }
-            else if (keyCode === 38) { // up
-                this.select(this.selectedIndex - 1);
-            }
-            else if (keyCode === 27) {
-                this._hideDropdown();
-            }
-            else {
-                let searchText = this.input.val().toLowerCase();
-                let hits = 0;
-
-                let popularTags = Config.get('popular_tags');
-                let dropdown = '';
-
-                for (let value in popularTags) {
-                    if (popularTags.hasOwnProperty(value) && value.startsWith(searchText)) {
-                        dropdown += this._buildTagItem(value, popularTags[value]);
-                        hits++;
-                    }
-                }
-
-                this.dropdown.html(dropdown).toggle(hits > 0);
-            }
-        });
-    }
-
-    _buildTagItem(value, count) {
-        return `<li><span>${value}</span> <small>× ${count}</small></li>`;
-    }
-
-    _loadDefaultTags() {
-        let popularTags = Config.get('popular_tags');
-        let dropdown = '';
-
-        for (let value in popularTags) {
-            if (popularTags.hasOwnProperty(value)) {
-                dropdown += this._buildTagItem(value, popularTags[value]);
+            if (typeof(data[item]) == 'object') {
+                data[item] = toInt(data[item]);
             }
         }
-
-        this.dropdown.html(dropdown);
     }
 
-    _onKeyDown() {
-        this.input.on('keydown', e => {
-            let keyCode = e.keyCode || window.event.keyCode;
-
-            if (keyCode === 27) {
-                this.input.val('');
-                this.dropdown.hide();
-            }
-            else if (keyCode === 13) {
-                e.preventDefault();
-            }
-        });
-    }
-
-    _onHover() {
-        this.dropdown
-            .on('mouseenter', 'li', e => {
-                $(e.currentTarget).addClass('hover');
-            })
-            .on('mouseleave', 'li', e => {
-                $(e.currentTarget).removeClass('hover');
-            });
-    }
-
-    _onItemClick() {
-        this.dropdown.on('click', 'li', e => {
-            this.addTag($(e.currentTarget).find('span').text());
-            this._hideDropdown();
-
-            this.input.val('').focus();
-            this._loadDefaultTags();
-        });
-    }
-
-    _onSuggestionClick() {
-        $(this.setup.suggestion).click(e => {
-            this.addTag($(e.currentTarget).text());
-        });
-    }
-
-    // _onRemove() {
-    //     this.container.on('click', this.setup.remove, e => {
-    //         $(e.currentTarget).parents('.tag-item').remove();
-    //     });
-    // }
-
-    _onFocus() {
-        this.input.on('focus click', () => {
-            this.dropdown.show();
-        });
-    }
-
-    select(position) {
-        let length = $('li:visible', this.dropdown).length;
-
-        if (length > 0) {
-            if (position >= length) {
-                position = 0;
-            }
-            else if (position < 0) {
-                position = length -1;
-            }
-            this.selectedIndex = position;
-
-            $('li:visible', this.dropdown).removeClass('hover');
-            $('li:visible:eq(' + this.selectedIndex + ')', this.dropdown).addClass('hover');
-
-            this.dropdown.scrollTop(position * $('li:first', this.dropdown).outerHeight());
-        }
-    }
-
-    _hideDropdown() {
-        this.dropdown.hide();
-    }
-
-    _showDropdown() {
-        this.dropdown.show();
-    }
-
-    addTag(value) {
-        value = $.trim(value)
-            .toString()
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/'/g, "&#39;")
-            .replace(/"/g, "&#34;")
-            .toLowerCase()
-            .replace(/ /g, '-');
-
-        this.setup.onSelect(value);
-        // $.post(this.input.data('post-url'), {name: value}, html => {
-        //     this.container.append(html);
-        //
-        //     let tags = [];
-        //
-        //     $('.tag-name').each(function() { // function zamiast arrow function
-        //         tags.push($(this).val());
-        //     });
-        //
-        //     $.get(this.input.data('suggestions-url'), {t: tags}, suggestions => {
-        //         if (!suggestions.length) {
-        //             this.help.html('');
-        //         } else {
-        //             this.help.html(`Podpowiedź: ${this._buildSuggestions(suggestions)}`);
-        //             this._onSuggestionClick();
-        //         }
-        //     });
-        //
-        // }).fail(() => {
-        //     $('#alert').modal('show');
-        // });
-
-        this.selectedIndex = - 1;
-        $('li', this.dropdown).removeClass('hover').show();
-    }
-
-    _buildSuggestions(tags) {
-        return tags.map(tag => $('<a>', {class: this.setup.suggestion.substr(1)}).text(tag).prop('outerHTML')).join(', ');
-    }
+    return data;
 }
 
-if (document.getElementById('job-posting')) {
-    new Vue({
-        el: '#job-posting',
-        delimiters: ['${', '}'],
-        data: data,
-        mounted: function () {
-            initTinymce();
-
-            new Tags({
-                onSelect: (value) => {
-                    this.tags.push({name: value, pivot: {priority: 1}});
-                }
-            });
-
-            $('#tags-container').sortable();
-        },
-        methods: {
-            removeTag: function (index) {
-                this.tags.splice(index, 1);
-            },
-            charCounter: function (item, limit) {
-                return limit - this.job[item].length;
-            },
-            isInvalid: function (fields) {
-                return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
-            }
-        },
-        computed: {
-            deadlineDate: function () {
-                let value = parseInt(this.job.deadline);
-
-                if (value > 0) {
-                    let date = new Date();
-                    date.setDate(date.getDate() + value);
-
-                    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-                }
-                else {
-                    return '--';
-                }
-            }
-        },
-        watch: {
-            'job.enable_apply': function (flag) {
-                if (Boolean(parseInt(flag))) {
-                    tinymce.get('recruitment').hide();
-
-                    $('#recruitment').attr('disabled', 'disabled').hide();
-                } else {
-                    tinymce.get('recruitment').show();
-
-                    $('#recruitment').removeAttr('disabled');
-                }
-            }
-        }
-    });
-}
+data = toInt(data);
 
 var map;
 
 new Vue({
-    el: '#firm-form',
+    el: '.submit-form',
     delimiters: ['${', '}'],
     data: data,
-    mounted: function() {
+    mounted: function () {
+        initTinymce();
+
         if (typeof google !== 'undefined') {
             google.maps.event.addDomListener(window, 'load', initialize);
         }
 
-        initTinymce();
+        new Tags({
+            onSelect: (value) => {
+                this.tags.push({name: value, pivot: {priority: 1}});
+            }
+        });
+
+        $('#tags-container').each(function () {
+            $(this).sortable();
+        });
     },
     methods: {
-        charCounter: function (item, limit) {
-            return limit - String(this.firm[item] !== null ? this.firm[item] : '').length;
+        removeTag: function (index) {
+            this.tags.splice(index, 1);
         },
-
         isInvalid: function (fields) {
             return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
         },
+        charCounter: function (item, limit) {
+            let model = item.split('.').reduce((o, i) => o[i], this);
 
+            return limit - String(model !== null ? model : '').length;
+        },
         toggleBenefit: function (item) {
             let index = this.benefits.indexOf(item);
 
@@ -320,20 +64,60 @@ new Vue({
             } else {
                 this.benefits.splice(index, 1);
             }
+        },
+        addBenefit: function (e) {
+            if (e.target.value.trim()) {
+                this.benefits.push(e.target.value);
+            }
+
+            e.target.value = '';
+        },
+        removeBenefit: function (benefit) {
+            this.benefits.splice(this.benefits.indexOf(benefit), 1);
+        },
+        updateBenefit: function () {
+            //
+        },
+        selectFirm: function (firmId) {
+            let index = this.firms.findIndex(element => element.id == firmId);
+
+            this.firm = this.firms[index];
+            this.firm.is_private = +false;
+
+            this.benefits = this.firm.benefits;
+            console.log(this.firm.website);
         }
     },
     computed: {
+        deadlineDate: function () {
+            let value = parseInt(this.job.deadline);
 
+            if (value > 0) {
+                let date = new Date();
+                date.setDate(date.getDate() + value);
+
+                return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+            }
+            else {
+                return '--';
+            }
+        }
     },
     watch: {
-        firm: {
-            is_private: function (flag) {
-                if (!Boolean(parseInt(flag))) {
-                    google.maps.event.trigger(map, 'resize');
-                }
-            },
-            is_agency: function (flag) {
+        'job.enable_apply': function (flag) {
+            if (Boolean(parseInt(flag))) {
+                tinymce.get('recruitment').hide();
 
+                $('#recruitment').attr('disabled', 'disabled').hide();
+            } else {
+                tinymce.get('recruitment').show();
+
+                $('#recruitment').removeAttr('disabled');
+            }
+        },
+        'firm.is_private': function (flag) {
+            if (!Boolean(parseInt(flag))) {
+                google.maps.event.trigger(map, 'resize');
             }
         }
     }
@@ -342,9 +126,6 @@ new Vue({
 
 $(() => {
     'use strict';
-
-
-
 
     let navigation = $('#form-navigation');
     let fixed = $('#form-navbar-fixed');
@@ -378,41 +159,7 @@ $(() => {
         $('.jumbotron .close').click();
     });
 
-    $('#job-posting')
-    //     .on('change', 'input[name="enable_apply"]', e => {
-
-    // })
-    // .on('keyup', 'input[name="deadline"]', e => {
-    //     let $this = $(e.currentTarget);
-    //     let value = parseInt($this.val());
-    //
-    //     if (value > 0) {
-    //         let date = new Date();
-    //         date.setDate(date.getDate() + value);
-    //
-    //         $this.next('span').children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
-    //     }
-    //     else {
-    //         $this.next('span').children('strong').text('--');
-    //     }
-    // })
-    // .on('change keyup', 'input[maxlength]', e => {
-    //     let $this = $(e.currentTarget);
-    //     let maxLength = $this.attr('maxlength');
-    //     let container = $this.next('span');
-    //     let length = maxLength - $this.val().length;
-    //
-    //     container.children('strong').text(length);
-    // })
-    // .on('change', 'input[name="private"]', e => {
-    //     $('#box-edit-firm, #choose-firm').toggle($(e.currentTarget).val() == 0);
-    //     $('#box-buttons').toggle($(e.currentTarget).val() != 0);
-    // })
-    // .on('change', 'input[name="is_agency"]', e => {
-    //     $('.agency').toggle($(e.currentTarget).val() != 1);
-    //     google.maps.event.trigger(map, 'resize');
-    // })
-    .on('focus', ':input', e => {
+    $('.submit-form').on('focus', ':input', e => {
         let $this = $(e.currentTarget);
         let offset = $this.offset().top;
         let name = $this.attr('name');
@@ -429,38 +176,6 @@ $(() => {
         }
     });
 
-    // if ($('input[name="private"]').val()) {
-    //     $('input[name="private"]:checked').trigger('change');
-    // }
-    //
-    // if ($('input[name="is_agency"]').val()) {
-    //     $('input[name="is_agency"]:checked').trigger('change');
-    // }
-
-    // $('.benefits').on('keyup focus blur', 'input[type="text"]', e => {
-    //     let $this = $(e.currentTarget);
-    //     let nextItem = $this.parent().next('li');
-    //
-    //     if ($this.val().length > 0) {
-    //         if (!nextItem.length) {
-    //             let clone = $this.parent().clone();
-    //             $('input', clone).val('');
-    //
-    //             clone.insertAfter($this.parent());
-    //         }
-    //     }
-    //     else if (nextItem.length) {
-    //         if ($('input', nextItem).val().length === 0) {
-    //             nextItem.remove();
-    //         }
-    //     }
-    // }).on('click', 'li.clickable', e => {
-    //     let checkbox = $(e.currentTarget).children(':checkbox');
-    //
-    //     checkbox.prop('checked', !checkbox.is(':checked'));
-    //     $(e.currentTarget).toggleClass('checked');
-    // });
-
     $.uploader({
         input: 'logo',
         onChanged: function(data) {
@@ -470,15 +185,6 @@ $(() => {
             $('#firm-form').find('input[name="logo"]').val('');
         }
     });
-
-    // $('#btn-add-firm').click(() => {
-    //     $.get(Config.get('firm_partial'), {}, (html) => {
-    //         $('#box-edit-firm').replaceWith(html);
-    //
-    //         $('#modal-firm').modal('hide');
-    //         initialize();
-    //     });
-    // });
 
     /**
      * Ability to create new firm and assign it to the offer
