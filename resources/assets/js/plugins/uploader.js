@@ -44,7 +44,9 @@ $(function() {
                     setup.changeButton.removeAttr('disabled');
                 },
                 error: function (err) {
-                    Dialog.alert({message: err.responseJSON.logo[0]}).show();
+                    let keys = Object.keys(err.responseJSON);
+
+                    Dialog.alert({message: err.responseJSON[keys[0]][0]}).show();
                 }
             }, 'json');
         });
