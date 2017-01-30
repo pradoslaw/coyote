@@ -58,15 +58,40 @@ $(function() {
         });
 
         setup.deleteButton.on('click', function() {
-            if (typeof $(this).attr('href') != 'undefined') {
-                $.post($(this).attr('href'));
-            }
+            let dialog = Dialog.confirm({
+                message: 'Czy na pewno usunąć?',
+                buttons: [{
+                    label: 'Anuluj',
+                    attr: {
+                        'class': 'btn btn-default',
+                        'type': 'button',
+                        'data-dismiss': 'modal'
+                    }
+                },
+                {
+                    label: 'Tak, usuń',
+                    attr: {
+                        'class': 'btn btn-danger',
+                        'type': 'submit',
+                        'data-submit-state': 'Usuwanie...'
+                    },
+                    onClick: () => {
+                        if (typeof $(this).attr('href') != 'undefined') {
+                            $.post($(this).attr('href'));
+                        }
 
-            $('.img-container').hide();
-            $('.img-placeholder').show();
+                        $('.img-container').hide();
+                        $('.img-placeholder').show();
 
-            setup.onChanged({url: $('.img-placeholder > img').attr('src')});
-            setup.onDeleted();
+                        setup.onChanged({url: $('.img-placeholder > img').attr('src')});
+                        setup.onDeleted();
+
+                        dialog.close();
+                    }
+                }]
+            });
+
+            dialog.show();
 
             return false;
         });
