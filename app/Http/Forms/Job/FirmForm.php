@@ -37,15 +37,17 @@ class FirmForm extends Form
             $data = $form->all();
             $data['benefits'] = array_filter(array_unique(array_map('trim', $data['benefits'])));
 
-            foreach ($data['benefits'] as $benefit) {
-                $this->data->benefits->add(new Firm\Benefit(['name' => $benefit]));
-            }
-
             // if agency - set null value. we don't to show them with agencies offers
             if ($form->get('is_agency')->getValue()) {
-                foreach (['employees', 'founded', 'headline', 'latitude', 'longitude', 'street', 'city', 'house', 'postcode', 'benefits'] as $column) {
+                foreach (['employees', 'founded', 'headline', 'latitude', 'longitude', 'street', 'city', 'house', 'postcode'] as $column) {
                     $this->data->{$column} = null;
                 }
+
+                $data['benefits'] = [];
+            }
+
+            foreach ($data['benefits'] as $benefit) {
+                $this->data->benefits->add(new Firm\Benefit(['name' => $benefit]));
             }
 
             $this->data->fill($data);
@@ -82,7 +84,8 @@ class FirmForm extends Form
                 'label' => 'Nazwa firmy',
                 'help' => 'Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.',
                 'attr' => [
-                    'v-model' => 'firm.name'
+                    'v-model' => 'firm.name',
+                    '@keyup.once' => 'changeFirm'
                 ]
             ])
             ->add('is_agency', 'choice', [

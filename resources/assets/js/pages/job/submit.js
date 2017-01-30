@@ -112,19 +112,7 @@ new Vue({
                         'class': 'btn btn-primary'
                     },
                     onClick: () => {
-                        this.firm = {
-                            'id': null,
-                            'headline': '',
-                            'logo': null,
-                            'description': null,
-                            'website': null,
-                            'is_private': +false,
-                            'is_agency': false,
-                            'employees': null,
-                            'founded': null
-                        };
-
-                        this.benefits = [];
+                        this.newFirm();
                         dialog.close();
                     }
                 }]
@@ -141,6 +129,46 @@ new Vue({
             this.benefits = this.firm.benefits;
 
             tinymce.get('description').setContent(this.firm.description);
+        },
+        changeFirm: function () {
+            let dialog = new Dialog({
+                title: 'Zmiana nazwy firmy?',
+                message: 'Zamierzasz edytować nazwę tej firmy. Weź pod uwagę, że zmieniona nazwa będzie wyświetlana przy wszystkich Twoich ofertach. Czy może chcesz dodać nową firmę?',
+                buttons: [{
+                    label: 'Jest OK, chce tylko zmienić nazwę',
+                    attr: {
+                        'class': 'btn btn-default',
+                        'type': 'button',
+                        'data-dismiss': 'modal'
+                    }
+                }, {
+                    label: 'Tak, chcę dodać nową firmę',
+                    attr: {
+                        'class': 'btn btn-primary'
+                    },
+                    onClick: () => {
+                        this.newFirm();
+                        dialog.close();
+                    }
+                }]
+            });
+
+            dialog.show();
+        },
+        newFirm: function () {
+            this.firm = {
+                'id': null,
+                'headline': '',
+                'logo': null,
+                'description': null,
+                'website': null,
+                'is_private': +false,
+                'is_agency': +false,
+                'employees': null,
+                'founded': null
+            };
+
+            this.benefits = [];
         }
     },
     computed: {
