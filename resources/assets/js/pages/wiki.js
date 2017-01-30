@@ -1,3 +1,4 @@
+import 'jquery-prettytextdiff/jquery.pretty-text-diff';
 import '../components/subscribe';
 import Dialog from '../libs/dialog';
 
