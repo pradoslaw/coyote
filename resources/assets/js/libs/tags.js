@@ -7,7 +7,6 @@ class Tags {
             dropdown: '.tag-dropdown',
             container: '#tags-container',
             remove: '.btn-remove',
-            suggestion: '.tag-suggestion',
             onSelect: function (value) {}
         };
 
@@ -18,7 +17,6 @@ class Tags {
             return;
         }
 
-        this.help = this.input.next('.help-block');
         this.dropdown = $(this.setup.dropdown);
         this.container = $(this.setup.container);
         this.selectedIndex = -1;
@@ -34,7 +32,6 @@ class Tags {
         this._onKeyDown();
         this._onHover();
         this._onItemClick();
-        // this._onRemove();
 
         $(document).bind('click', e => {
             let $target = $(e.target);
@@ -149,12 +146,6 @@ class Tags {
         });
     }
 
-    // _onRemove() {
-    //     this.container.on('click', this.setup.remove, e => {
-    //         $(e.currentTarget).parents('.tag-item').remove();
-    //     });
-    // }
-
     _onFocus() {
         this.input.on('focus click', () => {
             this.dropdown.show();
@@ -199,34 +190,9 @@ class Tags {
             .replace(/ /g, '-');
 
         this.setup.onSelect(value);
-        // $.post(this.input.data('post-url'), {name: value}, html => {
-        //     this.container.append(html);
-        //
-        //     let tags = [];
-        //
-        //     $('.tag-name').each(function() { // function zamiast arrow function
-        //         tags.push($(this).val());
-        //     });
-        //
-        //     $.get(this.input.data('suggestions-url'), {t: tags}, suggestions => {
-        //         if (!suggestions.length) {
-        //             this.help.html('');
-        //         } else {
-        //             this.help.html(`Podpowiedź: ${this._buildSuggestions(suggestions)}`);
-        //             this._onSuggestionClick();
-        //         }
-        //     });
-        //
-        // }).fail(() => {
-        //     $('#alert').modal('show');
-        // });
 
         this.selectedIndex = - 1;
         $('li', this.dropdown).removeClass('hover').show();
-    }
-
-    _buildSuggestions(tags) {
-        return tags.map(tag => $('<a>', {class: this.setup.suggestion.substr(1)}).text(tag).prop('outerHTML')).join(', ');
     }
 }
 

@@ -3,6 +3,12 @@ import initTinymce from '../job/tinymce';
 import Tags from '../../libs/tags';
 import Dialog from '../../libs/dialog';
 
+/**
+ * Cast data from bool to int to properly display radio buttons (0 and 1 instade of true and false).
+ *
+ * @param data
+ * @return {*}
+ */
 function toInt(data) {
     for (let item in data) {
         if (data.hasOwnProperty(item)) {
@@ -19,14 +25,12 @@ function toInt(data) {
     return data;
 }
 
-data = toInt(data);
-
 var map;
 
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
-    data: data,
+    data: toInt(data),
     mounted: function () {
         initTinymce();
 
@@ -37,6 +41,11 @@ new Vue({
         new Tags({
             onSelect: (value) => {
                 this.tags.push({name: value, pivot: {priority: 1}});
+                let pluck = this.tags.map((item) => item.name);
+
+                $.get($('#tag').data('suggestions-url'), {t: pluck}, result => {
+                    this.suggestions = result;
+                });
             }
         });
 
@@ -45,6 +54,14 @@ new Vue({
         });
     },
     methods: {
+        /**
+         * Add tag after clicking on suggestion tag.
+         *
+         * @param {String} value
+         */
+        addTag: function (value) {
+            this.tags.push({name: value, pivot: {priority: 1}});
+        },
         removeTag: function (index) {
             this.tags.splice(index, 1);
         },

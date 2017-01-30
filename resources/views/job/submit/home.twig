@@ -86,7 +86,16 @@
                             <label class="control-label">Kluczowe technologie (wymagane lub mile widziane)</label>
 
                             {{ form_text('tag', '', {'id': 'tag', 'class': 'form-control', 'placeholder': 'Np. Java, MS-SQL', 'autocomplete': 'off', 'data-post-url': route('job.submit.tag'), 'data-suggestions-url': route('job.tag.suggestions')}) }}
-                            <span class="help-block">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
+
+                            <span class="help-block" v-if="suggestions.length == 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
+                            <span class="help-block" v-if="suggestions.length > 0">
+                                Podpowiedź:
+
+                                <template v-for="(suggestion, index) in suggestions">
+                                    <a href="javascript:" class="tag-suggestion" @click="addTag(suggestion)">${ suggestion }</a>${ index < suggestions.length - 1 ? ', ' : '' }
+                                </template>
+                            </span>
+
                             <span class="fa fa-tag form-control-feedback" aria-hidden="true"></span>
 
                             <ol class="tag-dropdown">
@@ -223,7 +232,7 @@
     {{ parent() }}
 
     <script>
-        var data = {job: {{ job|raw }}, tags: {{ tags|raw }}, errors: {{ form_errors|raw }}};
+        var data = {job: {{ job|raw }}, tags: {{ tags|raw }}, errors: {{ form_errors|raw }}, suggestions: []};
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
