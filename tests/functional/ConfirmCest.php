@@ -26,7 +26,7 @@ class ConfirmCest
 
         $I->amOnPage('Confirm');
         $I->fillField('email', $user->email);
-        $I->click('button[type=submit]');
+        $I->click('Wyślij e-mail z linkiem aktywacyjnym');
         $I->see('Na podany adres e-mail został wysłany link aktywacyjny.');
 
         $I->seeRecord('actkeys', ['user_id' => $user->id]);
@@ -41,7 +41,7 @@ class ConfirmCest
     {
         $I->amOnPage('Confirm');
         $I->fillField('email', 'somefakeemail@fakeemail.com');
-        $I->click('button[type=submit]');
+        $I->click('Wyślij e-mail z linkiem aktywacyjnym');
 
         $I->seeFormErrorMessage('email', 'Podany adres e-mail nie istnieje.');
     }
@@ -52,7 +52,7 @@ class ConfirmCest
 
         $I->amOnPage('Confirm');
         $I->fillField('email', $user->email);
-        $I->click('button[type=submit]');
+        $I->click('Wyślij e-mail z linkiem aktywacyjnym');
 
         $I->seeFormErrorMessage('email', 'Ten adres e-mail jest już zweryfikowany.');
     }
@@ -67,7 +67,7 @@ class ConfirmCest
 
         $newEmail = 'fooooo@baaaaar.com';
         $I->fillField('email', $newEmail);
-        $I->click('button[type=submit]');
+        $I->click('Zapisz');
 
         $I->seeInField('email', $user->email);
         $I->see('Na adres ' . $newEmail . ' wysłaliśmy link umożliwiający zmianę adresu e-mail.');
