@@ -99,7 +99,11 @@
                                     {% endif %}
 
                                     <li class="divider"></li>
-                                    <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a></li>
+                                    <li>
+                                        {{ form_open({url: route('logout')}) }}
+                                            <button type="submit"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button>
+                                        {{ form_close() }}
+                                    </li>
                                 </ul>
                             </div>
 

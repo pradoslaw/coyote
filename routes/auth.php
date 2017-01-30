@@ -3,8 +3,7 @@
 /** @var $this \Illuminate\Routing\Router */
 $this->get('Login', ['uses' => 'Auth\LoginController@index', 'as' => 'login']);
 $this->post('Login', 'Auth\LoginController@signin');
-// wylogowanie
-$this->get('Logout', ['uses' => 'Auth\LoginController@signout', 'as' => 'logout']);
+$this->post('Logout', ['uses' => 'Auth\LoginController@signout', 'as' => 'logout']);
 
 // rejestracja uzytkownika
 $this->get('Register', ['uses' => 'Auth\RegisterController@index', 'as' => 'register']);

@@ -174,8 +174,28 @@ header.navbar-default {
 #dropdown-user {
   right: 13px;
 
-  li a {
-    padding: 5px 20px 5px 8px;
+  // logout button
+  button {
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+
+    &:hover {
+      background-color: $dropdown-link-hover-bg;
+    }
+
+    &:focus, &:active {
+      outline: none;
+    }
+  }
+
+  > li {
+    > a,
+    // logout button
+    button {
+      padding: 5px 20px 5px 8px;
+    }
   }
 }
 
