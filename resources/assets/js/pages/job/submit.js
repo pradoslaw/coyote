@@ -78,14 +78,50 @@ new Vue({
         updateBenefit: function () {
             //
         },
+        addFirm: function () {
+            let dialog = new Dialog({
+                title: 'Dodanie nowej firmy',
+                message: 'Czy na pewno chcesz dodać nową firme i przypisać ją do tego ogłoszenia?',
+                buttons: [{
+                    label: 'Anuluj',
+                    attr: {
+                        'class': 'btn btn-default',
+                        'type': 'button',
+                        'data-dismiss': 'modal'
+                    }
+                }, {
+                    label: 'Tak',
+                    attr: {
+                        'class': 'btn btn-primary'
+                    },
+                    onClick: () => {
+                        this.firm = {
+                            'id': null,
+                            'headline': '',
+                            'logo': null,
+                            'description': null,
+                            'website': null,
+                            'is_private': +false,
+                            'is_agency': false,
+                            'employees': null,
+                            'founded': null
+                        };
+
+                        this.benefits = [];
+                        dialog.close();
+                    }
+                }]
+            });
+
+            dialog.show();
+        },
         selectFirm: function (firmId) {
             let index = this.firms.findIndex(element => element.id == firmId);
 
             this.firm = this.firms[index];
-            this.firm.is_private = +false;
+            this.firm.is_private = +false; // must be the number - not bool
 
             this.benefits = this.firm.benefits;
-            console.log(this.firm.website);
         }
     },
     computed: {

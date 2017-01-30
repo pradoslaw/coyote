@@ -247,7 +247,7 @@ class FirmForm extends Form
         $json->logo = null;
 
         if ($this->get('logo')->getValue()->getFilename()) {
-            $json->thumbnail = $this->get('logo')->getValue()->url();
+            $json->thumbnail = (string) $this->get('logo')->getValue()->url();
             $json->logo = $this->get('logo')->getValue()->getFilename();
         }
 
@@ -262,7 +262,6 @@ class FirmForm extends Form
             }
 
             $this->get('benefits')->setValue($this->data->benefits->all());
-//            $this->get('is_private')->setValue(!$this->get('id')->getValue());
         }
     }
 
