@@ -114,12 +114,12 @@
 
                                     <div class="col-xs-6">
                                         <div class="radio radio-primary radio-inline">
-                                            <input type="radio" :name="'tags[' + index + '][priority]'" value="1" :checked="tag.pivot.priority == 1" :id="tag.name + '-must-have'">
+                                            <input type="radio" :name="'tags[' + index + '][priority]'" v-model="tag.pivot.priority" value="1" :id="tag.name + '-must-have'">
 
                                             <label :for="tag.name + '-must-have'"> Wymagane </label>
                                         </div>
                                         <div class="radio radio-inline">
-                                            <input type="radio" :name="'tags[' + index + '][priority]'" value="0" :checked="tag.pivot.priority == 0" :id="tag.name + '-nice-to-have'">
+                                            <input type="radio" :name="'tags[' + index + '][priority]'" v-model="tag.pivot.priority" value="0" :id="tag.name + '-nice-to-have'">
 
                                             <label :for="tag.name + '-nice-to-have'"> Mile widziane </label>
                                         </div>
