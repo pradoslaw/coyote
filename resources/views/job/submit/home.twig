@@ -117,7 +117,7 @@
                                     </div>
 
                                     <div class="col-xs-1">
-                                        <a class="btn-xs btn-remove pull-right" href="javascript:" title="Kliknij, aby usunąć tag" v-on:click="removeTag(index)">
+                                        <a class="btn-xs btn-remove pull-right" href="javascript:" title="Kliknij, aby usunąć tag" @click="removeTag(index)">
                                             <i class="fa fa-remove text-danger"></i>
                                         </a>
                                     </div>
@@ -232,7 +232,7 @@
     <script src="{{ cdn('js/job-submit.js') }}"></script>
     <script>
         $(function() {
-//            $('input[name="title"]').focus();
+            $('input[name="title"]').focus();
         })
     </script>
 

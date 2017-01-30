@@ -73,6 +73,11 @@ abstract class Field
     protected $rowAttr = [];
 
     /**
+     * @var array
+     */
+    protected $helpAttr = [];
+
+    /**
      * Name of the property for value setting
      *
      * @var string
@@ -275,6 +280,25 @@ abstract class Field
     public function setRowAttr($rowAttr)
     {
         $this->rowAttr = $rowAttr;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHelpAttr()
+    {
+        return $this->helpAttr;
+    }
+
+    /**
+     * @param array $helpAttr
+     * @return $this
+     */
+    public function setHelpAttr($helpAttr)
+    {
+        $this->helpAttr = $helpAttr;
+
+        return $this;
     }
 
     /**

@@ -84,7 +84,7 @@ class JobForm extends Form
                 'rules' => 'min:2|max:60',
                 'label' => 'Tytuł oferty',
                 'required' => true,
-                'help' => 'Pozostało ${ charCounter(\'job.title\', 60) } znaków',
+                'help' => 'Pozostało <strong>${ charCounter(\'job.title\', 60) }</strong> znaków',
                 'attr' => [
                     'placeholder' => 'Np. Senior Java Developer',
                     'maxlength' => 60,
@@ -161,7 +161,7 @@ class JobForm extends Form
             ->add('deadline', 'text', [
                 'label' => 'Data ważnosci oferty',
                 'rules' => 'integer|min:1|max:365',
-                'help' => 'Oferta będzie widoczna na stronie do dnia ${ deadlineDate }',
+                'help' => 'Oferta będzie widoczna na stronie do dnia <strong>${ deadlineDate }</strong>',
                 'attr' => [
                     'class' => 'input-inline',
                     'v-model' => 'job.deadline'

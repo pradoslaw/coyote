@@ -159,7 +159,7 @@ class FirmForm extends Form
             ->add('headline', 'text', [
                 'rules' => 'string|max:100',
                 'label' => 'Motto lub nagłówek',
-                'help' => 'Pozostało ${ charCounter(\'firm.headline\', 100) } znaków',
+                'help' => 'Pozostało <strong>${ charCounter(\'firm.headline\', 100) }</strong> znaków',
                 'attr' => [
                     'maxlength' => 100,
                     'v-model' => 'firm.headline'
