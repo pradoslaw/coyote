@@ -1,8 +1,6 @@
 {% extends 'job.base' %}
 {% block title %}Informacje o firmie{{ parent() }}{% endblock %}
 
-{% import 'components.modals' as modal %}
-
 {% block container %}
     <div class="row">
         <main class="col-md-8 col-12-sm col-12-xs">
@@ -173,7 +171,6 @@
         </aside>
     </div>
 
-    {{ modal.alert('Nie można dodać loga firmy. Proszę skontaktuj się z administratorem serwera.') }}
 
     <div class="modal fade" id="modal-firm" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">
         <div class="modal-dialog">

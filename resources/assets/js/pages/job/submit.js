@@ -139,6 +139,8 @@ new Vue({
             this.firm.is_private = +false; // must be the number - not bool
 
             this.benefits = this.firm.benefits;
+
+            tinymce.get('description').setContent(this.firm.description);
         }
     },
     computed: {

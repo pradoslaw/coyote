@@ -1,8 +1,10 @@
+import Dialog from '../libs/dialog';
+
 $(function() {
     'use strict';
 
     $.uploader = function(options) {
-        var defaults = {
+        let defaults = {
             input: 'photo',
             changeButton: $('#btn-change-photo'),
             deleteButton: $('#btn-delete-photo'),
@@ -10,15 +12,15 @@ $(function() {
             onDeleted: function() {}
         };
 
-        var setup = $.extend(defaults, options);
+        let setup = $.extend(defaults, options);
 
-        var form = $('<form />', {method: 'post', 'action': setup.changeButton.attr('href')});
-        var input = $('<input />', {type: 'file', id: 'input-file', name: setup.input, style: 'visibility: hidden; height: 0'}).appendTo(form);
+        let form = $('<form />', {method: 'post', 'action': setup.changeButton.attr('href')});
+        let input = $('<input />', {type: 'file', id: 'input-file', name: setup.input, style: 'visibility: hidden; height: 0'}).appendTo(form);
 
         form.appendTo('body');
 
         input.change(function() {
-            var formData = new FormData(form[0]);
+            let formData = new FormData(form[0]);
 
             $.ajax({
                 url: form.attr('action'),
@@ -42,12 +44,7 @@ $(function() {
                     setup.changeButton.removeAttr('disabled');
                 },
                 error: function (err) {
-                    // alert(err.responseJSON.photo[0]);
-                    $('#alert').modal('show');
-
-                    if (typeof err.responseJSON !== 'undefined') {
-                        $('.modal-body').text(err.responseJSON.photo[0]);
-                    }
+                    Dialog.alert({message: err.responseJSON.logo[0]}).show();
                 }
             }, 'json');
         });

@@ -241,8 +241,13 @@ class SubmitController extends Controller
             }
 
             if ($job->firm_id) {
+                $job->firm->syncOriginalAttribute('id');
+                // user might click on "add new firm" button in form. make sure user_id is set up.
+                $job->firm->setDefaultUserId($this->userId);
+
+                $this->authorize('update', $job->firm);
+
                 // reassociate job with firm. user could change firm, that's why we have to do it again.
-                $job->firm->syncOriginal();
                 $job->firm()->associate($job->firm);
 
                 $job->firm->save();
