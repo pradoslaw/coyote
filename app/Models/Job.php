@@ -248,9 +248,9 @@ class Job extends Model
             }
 
             $score += min(25, $firm->benefits()->count() * 5);
-            $score -= ($firm->is_agency * 10);
+            $score -= ($firm->is_agency * 15);
         } else {
-            $score -= 10;
+            $score -= 15;
         }
 
         return max(0, $score); // score can't be negative
