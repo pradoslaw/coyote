@@ -51,8 +51,12 @@ class FirmForm extends Form
             }
 
             $this->data->fill($data);
-            // assign firm id. id is not fillable - that's why we must set it directly.
-            $this->data->id = $form->get('id')->getValue();
+
+            // new firm has empty ID.
+            if (!empty($data['id'])) {
+                // assign firm id. id is not fillable - that's why we must set it directly.
+                $this->data->id = (int) $data['id'];
+            }
         });
     }
 
@@ -62,6 +66,7 @@ class FirmForm extends Form
             ->setAttr(['id' => 'firm-form', 'class' => 'submit-form', 'v-cloak' => 'v-cloak'])
             ->setUrl(route('job.submit.firm'))
             ->add('id', 'hidden', [
+                'rules' => 'sometimes|integer',
                 'attr' => [
                     'v-model' => 'firm.id'
                 ]
@@ -85,7 +90,7 @@ class FirmForm extends Form
                 'help' => 'Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.',
                 'attr' => [
                     'v-model' => 'firm.name',
-                    '@keyup.once' => 'changeFirm'
+                    '@keydown.once' => 'changeFirm'
                 ]
             ])
             ->add('is_agency', 'choice', [

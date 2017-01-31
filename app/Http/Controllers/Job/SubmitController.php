@@ -166,6 +166,11 @@ class SubmitController extends Controller
         $form = $this->createForm(FirmForm::class, $job->firm);
         $form->validate();
 
+        if ($job->firm->exists) {
+            // syncOriginalAttribute() is important if user changes firm
+            $job->firm->syncOriginalAttribute('id');
+        }
+
         $request->session()->put(Job::class, $job);
 
         return $this->next($request, redirect()->route('job.submit.preview'));
@@ -238,19 +243,18 @@ class SubmitController extends Controller
 
             if ($job->firm->is_private) {
                 $job->firm()->dissociate();
-            }
-
-            if ($job->firm_id) {
-                $job->firm->syncOriginalAttribute('id');
+                // firm name is required to save firm
+            } elseif ($job->firm->name) {
                 // user might click on "add new firm" button in form. make sure user_id is set up.
                 $job->firm->setDefaultUserId($this->userId);
 
                 $this->authorize('update', $job->firm);
 
+                // fist, we need to save firm because firm might not exist.
+                $job->firm->save();
+
                 // reassociate job with firm. user could change firm, that's why we have to do it again.
                 $job->firm()->associate($job->firm);
-
-                $job->firm->save();
 
                 $job->firm->benefits()->delete();
                 $job->firm->benefits()->saveMany($job->firm->benefits);

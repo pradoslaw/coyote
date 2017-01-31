@@ -12,6 +12,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $is_agency
  * @property int $user_id
  * @property bool $is_private
+ * @property string $name
+ * @property string $city
+ * @property string $street
+ * @property string $house
+ * @property string $postcode
+ * @property string $website
  * @property string $description
  * @property \Coyote\Firm\Benefit[] $benefits
  * @property Logo $logo
@@ -48,6 +54,15 @@ class Firm extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * Default fields values. Important for vue.js
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'is_agency' => false
+    ];
 
     /**
      * Do not change default value. It is set to FALSE on purpose.

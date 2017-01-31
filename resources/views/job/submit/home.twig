@@ -171,7 +171,7 @@
                         <div id="form-navigation" class="form-group">
                             <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Informacje o firmie <i class="fa fa-angle-right"></i></button>
 
-                            {% if not firm.is_private %}
+                            {% if not firm.is_private and firm.name %}
                                 <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" data-submit-state="Proszę czekać..." title="Zapisz tę ofertę"><i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}</button>
                             {% endif %}
                         </div>

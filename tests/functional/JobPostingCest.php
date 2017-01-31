@@ -41,7 +41,7 @@ class JobPostingCest
         $I->click('Informacje o firmie');
         $I->seeCurrentRouteIs('job.submit.firm');
 
-        $I->selectOption('input[name=private]', '1');
+        $I->selectOption('input[name=is_private]', '1');
         $I->click('Podgląd');
         $I->click('Opublikuj');
 
@@ -60,12 +60,12 @@ class JobPostingCest
 
         $I->fillField('input[name=title]', $title = $fake->text(50));
         $I->selectOption(['name' => 'employment_id'], '1');
-        $I->cantSee('Zapisz i zakończ');
+        $I->cantSee('Zapisz jako');
 
         $I->click('Informacje o firmie');
         $I->seeCurrentRouteIs('job.submit.firm');
 
-        $I->selectOption('input[name=private]', '0');
+        $I->seeOptionIsSelected('input[name=is_private]', '0');
 
         $I->fillField(['name' => 'name'], $firm = $fake->name);
         $I->fillField(['name' => 'website'], $website = 'http://4programmers.net');
@@ -81,6 +81,25 @@ class JobPostingCest
         $I->see($firm, '.employer');
         $I->see($website, '#box-job-firm');
         $I->see($headline, 'blockquote');
+    }
 
+    public function createSecondJobOfferAsFirm(FunctionalTester $I)
+    {
+        $I->wantTo('Create new job offer when firm exists');
+
+        $fake = Factory::create();
+        $I->haveRecord('firms', ['user_id' => $this->user->id, 'name' => $firm = $fake->company]);
+
+        $I->amOnRoute('job.submit');
+        $I->canSee("Zapisz jako $firm", '.btn-save');
+        $I->fillField('input[name=title]', $title = $fake->text(50));
+        $I->selectOption(['name' => 'employment_id'], '1');
+        $I->fillField('input[name=done]', 1);
+
+        $I->click("Zapisz jako $firm", '.btn-save');
+
+        $I->seeCurrentRouteIs('job.offer');
+        $I->see($title, '.media-heading');
+        $I->see($firm, '.employer');
     }
 }
