@@ -52,6 +52,8 @@ new Vue({
         $('#tags-container').each(function () {
             $(this).sortable();
         });
+
+        $('[v-loader]').remove();
     },
     methods: {
         /**
