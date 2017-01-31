@@ -68,7 +68,7 @@ class SettingRepository extends Repository implements SettingRepositoryInterface
     /**
      * @param $userId
      * @param $sessionId
-     * @return \Illuminate\Database\Eloquent\Collection|null
+     * @return array
      */
     public function getAll($userId, $sessionId)
     {

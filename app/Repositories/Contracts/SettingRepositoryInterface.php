@@ -24,7 +24,7 @@ interface SettingRepositoryInterface extends RepositoryInterface
     /**
      * @param $userId
      * @param $sessionId
-     * @return \Illuminate\Database\Eloquent\Collection|null
+     * @return array
      */
     public function getAll($userId, $sessionId);
 }
