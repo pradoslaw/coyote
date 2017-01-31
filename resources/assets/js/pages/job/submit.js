@@ -174,6 +174,7 @@ new Vue({
             };
 
             this.benefits = [];
+            tinymce.get('description').setContent(''); // new firm - empty description
         }
     },
     computed: {

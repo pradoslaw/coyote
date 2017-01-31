@@ -53,7 +53,11 @@ class FirmForm extends Form
             $this->data->fill($data);
 
             // new firm has empty ID.
-            if (!empty($data['id'])) {
+            if (empty($data['id'])) {
+                $this->data->exists = false;
+
+                unset($this->data->id);
+            } else {
                 // assign firm id. id is not fillable - that's why we must set it directly.
                 $this->data->id = (int) $data['id'];
             }
