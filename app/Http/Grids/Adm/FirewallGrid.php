@@ -38,7 +38,7 @@ class FirewallGrid extends Grid
             ->addColumn('ip', [
                 'title' => 'IP',
                 'decorators' => [new Ip()],
-                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'firewall.ip']),
             ])
             ->addColumn('expire_at', [
                 'title' => 'Data przedawnienia',
