@@ -42,6 +42,13 @@ $(function () {
             },
             'user'
         );
+    }).on('/Praca/Application/*', () => {
+        require.ensure([],
+            require => {
+                require('./pages/job/application');
+            },
+            'application'
+        );
     });
 
     r.resolve();

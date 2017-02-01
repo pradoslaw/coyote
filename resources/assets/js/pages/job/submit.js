@@ -1,5 +1,5 @@
 import '../../plugins/uploader';
-import initTinymce from '../job/tinymce';
+import initTinymce from '../../libs/tinymce';
 import Tags from '../../libs/tags';
 import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';

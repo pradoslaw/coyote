@@ -33,20 +33,7 @@
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
-
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script src="{{ cdn('js/job-submit.js') }}"></script>
 
-    <script type="text/javascript">
-        $(function() {
-            $('input[name="cv_placeholder"]').click(function() {
-                $('input[name="cv"]').click();
-            });
-
-            $(':file').change(function() {
-                $(this).next().val($(this).val());
-            })
-        });
-    </script>
+    {{ parent() }}
 {% endblock %}
