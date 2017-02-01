@@ -259,14 +259,15 @@ class FirmForm extends Form
      */
     public function toJson()
     {
-        $json = json_decode(parent::toJson());
+        logger()->debug(Form::toJson());
+        $json = json_decode(parent::toJson(), true);
 
-        $json->thumbnail = null;
-        $json->logo = null;
+        $json['thumbnail'] = null;
+        $json['logo'] = null;
 
         if ($this->get('logo')->getValue()->getFilename()) {
-            $json->thumbnail = (string) $this->get('logo')->getValue()->url();
-            $json->logo = $this->get('logo')->getValue()->getFilename();
+            $json['thumbnail'] = (string) $this->get('logo')->getValue()->url();
+            $json['logo'] = $this->get('logo')->getValue()->getFilename();
         }
 
         return json_encode($json);
