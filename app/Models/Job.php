@@ -417,7 +417,7 @@ class Job extends Model
      */
     public function getDeadlineAttribute()
     {
-        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now())->days : 90;
+        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now())->days + 1 : 90;
     }
 
     /**

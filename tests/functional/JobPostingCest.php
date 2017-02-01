@@ -174,6 +174,7 @@ class JobPostingCest
         $I->seeOptionIsSelected('country_id', 'Polska');
 
         $I->fillField('title', $title = $fake->text(50));
+        $I->fillField('deadline', 100);
         $I->selectOption('employment_id', 2);
         $I->selectOption('country_id', 2);
         $I->selectOption('rate_id', 2);
@@ -190,6 +191,7 @@ class JobPostingCest
         $I->canSeeOptionIsSelected('remote_range', '60%');
         $I->seeInField('title', $title);
         $I->seeInField('email', '');
+        $I->seeInField('deadline', 100);
 
         $I->fillField('email', $email = $fake->email);
         $I->click('Informacje o firmie');
