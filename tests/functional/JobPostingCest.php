@@ -163,4 +163,43 @@ class JobPostingCest
         $I->see($title, '.media-heading');
         $I->cantSee($firm);
     }
+
+    public function tryToCreateJobOfferWithErrors(FunctionalTester $I)
+    {
+        $I->wantTo('Create job offer with empty fields');
+        $fake = Factory::create();
+
+        $I->amOnRoute('job.submit');
+
+        $I->seeOptionIsSelected('country_id', 'Polska');
+
+        $I->fillField('title', $title = $fake->text(50));
+        $I->selectOption('employment_id', 2);
+        $I->selectOption('country_id', 2);
+        $I->selectOption('rate_id', 2);
+        $I->selectOption('remote_range', 60);
+
+        $I->fillField('email', '');
+        $I->click('Informacje o firmie');
+
+        $I->canSeeFormHasErrors();
+
+        $I->canSeeOptionIsSelected('country_id', 'Belgia');
+        $I->canSeeOptionIsSelected('employment_id', 'Umowa zlecenie');
+        $I->canSeeOptionIsSelected('rate_id', 'rocznie');
+        $I->canSeeOptionIsSelected('remote_range', '60%');
+        $I->seeInField('title', $title);
+        $I->seeInField('email', '');
+
+        $I->fillField('email', $email = $fake->email);
+        $I->click('Informacje o firmie');
+        $I->click('Podstawowe informacje');
+
+        $I->canSeeOptionIsSelected('country_id', 'Belgia');
+        $I->canSeeOptionIsSelected('employment_id', 'Umowa zlecenie');
+        $I->canSeeOptionIsSelected('rate_id', 'rocznie');
+        $I->canSeeOptionIsSelected('remote_range', '60%');
+        $I->seeInField('title', $title);
+        $I->seeInField('email', $email);
+    }
 }

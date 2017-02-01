@@ -70,7 +70,7 @@ class SubmitController extends Controller
                 $job->firm()->associate($firm);
             }
 
-            $job->load(['tags', 'locations']);
+            $job->load(['tags', 'locations', 'country']);
         }
 
         $this->authorize('update', $job);
@@ -90,8 +90,7 @@ class SubmitController extends Controller
             'form_errors'       => $form->errors() ? $form->errors()->toJson() : '[]',
             'job'               => $form->toJson(),
             // firm information (in order to show firm nam on the button)
-            'firm'              => $job->firm,
-            'tags'              => collect($form->get('tags')->getChildrenValues())->toJson()
+            'firm'              => $job->firm
         ]);
     }
 

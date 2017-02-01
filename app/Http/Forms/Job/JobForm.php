@@ -10,7 +10,6 @@ use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\Geocoder\GeocoderInterface;
 use Coyote\Services\Parser\Helpers\City;
 use Coyote\Tag;
-use Illuminate\Database\Eloquent\Model;
 
 class JobForm extends Form
 {
@@ -67,6 +66,30 @@ class JobForm extends Form
             foreach ($cities as $city) {
                 $this->data->locations->add(new Job\Location($this->geocode($city)));
             }
+
+            $this->data->country()->associate((new Country())->find($form->get('country_id')->getValue()));
+        });
+
+        $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) {
+            $session = $form->getRequest()->session();
+
+            if ($session->hasOldInput('tags')) {
+                $assoc = [];
+
+                foreach ($form->get('tags')->getChildrenValues() as $tag) {
+                    $assoc[] = [
+                        'name' => $tag['name'],
+                        'pivot' => [
+                            'priority' => $tag['priority']
+                        ]
+                    ];
+                }
+
+                $form->get('tags')->setValue($assoc);
+            }
+
+            // tags as json (for vue.js)
+            $form->get('tags')->setValue(collect($form->get('tags')->getChildrenValues())->toJson());
         });
     }
 
@@ -207,7 +230,8 @@ class JobForm extends Form
 
     protected function setupDefaultValues()
     {
-        if ($this->data instanceof Model && !$this->data->exists) {
+        // default attributes only if model does not exist and wasn't filled before.
+        if (!$this->data->exists && !$this->data->isDirty(['title']) && !$this->isSubmitted()) {
             $this->get('email')->setValue($this->request->user()->email);
 
             // @todo Uzyc mechanizmu geolokalizacji
@@ -242,7 +266,7 @@ class JobForm extends Form
     }
 
     /**
-     * @param \Illuminate\Support\Collection $collection
+     * @param  mixed $collection
      */
     private function forget($collection)
     {

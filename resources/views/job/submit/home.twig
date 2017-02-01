@@ -234,7 +234,7 @@
     {{ parent() }}
 
     <script>
-        var data = {job: {{ job|raw }}, tags: {{ tags|raw }}, errors: {{ form_errors|raw }}, suggestions: []};
+        var data = {job: {{ job|raw }}, tags: {{ form.tags.value|raw }}, errors: {{ form_errors|raw }}, suggestions: []};
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
