@@ -11,7 +11,6 @@ use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
@@ -32,20 +31,11 @@ class SubmitController extends Controller
     private $firm;
 
     /**
-     * @var TagRepository
-     */
-    private $tag;
-
-    /**
      * @param JobRepository $job
      * @param FirmRepository $firm
-     * @param TagRepository $tag
      */
-    public function __construct(
-        JobRepository $job,
-        FirmRepository $firm,
-        TagRepository $tag
-    ) {
+    public function __construct(JobRepository $job, FirmRepository $firm)
+    {
         parent::__construct();
 
         $this->middleware('job.revalidate', ['except' => ['postTag', 'getFirmPartial']]);
@@ -55,7 +45,6 @@ class SubmitController extends Controller
 
         $this->job = $job;
         $this->firm = $firm;
-        $this->tag = $tag;
     }
 
     /**

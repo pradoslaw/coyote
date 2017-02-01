@@ -275,10 +275,6 @@ class FirmForm extends Form
     private function setDefaultOptions()
     {
         if ($this->data instanceof Firm && !$this->isSubmitted()) {
-//            if ($this->data->exists) {
-//                $this->get('address')->setValue(trim("{$this->data->street} {$this->data->house} {$this->data->city}"));
-//            }
-
             $this->get('benefits')->setValue($this->data->benefits->all());
         }
     }
