@@ -207,7 +207,11 @@ class FirmForm extends Form
                     'v-model' => 'firm.city'
                 ]
             ])
-            ->add('country', 'hidden')
+            ->add('country', 'hidden', [
+                'attr' => [
+                    'v-model' => 'firm.country'
+                ]
+            ])
             ->add('postcode', 'hidden', [
                 'rules' => 'string|max:50',
                 'attr' => [
@@ -225,6 +229,8 @@ class FirmForm extends Form
                 'help' => 'Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.',
                 'attr' => [
                     'id' => 'address',
+                    'v-model' => 'address',
+                    '@keydown.enter.prevent' => 'changeAddress'
                 ]
             ])
             ->add('benefits', 'collection', [
@@ -269,9 +275,9 @@ class FirmForm extends Form
     private function setDefaultOptions()
     {
         if ($this->data instanceof Firm && !$this->isSubmitted()) {
-            if ($this->data->exists) {
-                $this->get('address')->setValue(trim("{$this->data->street} {$this->data->house} {$this->data->city}"));
-            }
+//            if ($this->data->exists) {
+//                $this->get('address')->setValue(trim("{$this->data->street} {$this->data->house} {$this->data->city}"));
+//            }
 
             $this->get('benefits')->setValue($this->data->benefits->all());
         }

@@ -2,6 +2,7 @@ import '../../plugins/uploader';
 import initTinymce from '../job/tinymce';
 import Tags from '../../libs/tags';
 import Dialog from '../../libs/dialog';
+import Map from '../../libs/map';
 
 /**
  * Cast data from bool to int to properly display radio buttons (0 and 1 instade of true and false).
@@ -25,8 +26,6 @@ function toInt(data) {
     return data;
 }
 
-var map;
-
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
@@ -34,8 +33,19 @@ new Vue({
     mounted: function () {
         initTinymce();
 
+        this.marker = null;
+
         if (typeof google !== 'undefined') {
-            google.maps.event.addDomListener(window, 'load', initialize);
+            this.map = new Map();
+
+            if (this.firm.latitude !== null && this.firm.longitude !== null) {
+                this._setupMarker();
+            }
+
+            this.map.setupGeocodeOnMapClick(result => {
+                this.firm = Object.assign(this.firm, result);
+                this._setupMarker();
+            });
         }
 
         new Tags({
@@ -177,6 +187,28 @@ new Vue({
 
             this.benefits = [];
             tinymce.get('description').setContent(''); // new firm - empty description
+        },
+        changeAddress: function (e) {
+            let val = e.target.value.trim();
+
+            if (val.length) {
+                this.map.geocode(val, (result) => {
+                    this.firm = Object.assign(this.firm, result);
+
+                    this._setupMarker(); // must be inside closure
+                });
+            }
+            else {
+                ['longitude', 'latitude', 'country', 'city', 'street', 'postcode'].forEach(field => {
+                    this.firm[field] = null;
+                });
+
+                this._setupMarker();
+            }
+        },
+        _setupMarker: function () {
+            this.map.removeMarker(this.marker);
+            this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
         }
     },
     computed: {
@@ -192,6 +224,9 @@ new Vue({
             else {
                 return '--';
             }
+        },
+        address: function () {
+            return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') +  ' ' + (this.firm.city || '')).trim();
         }
     },
     watch: {
@@ -213,7 +248,6 @@ new Vue({
         }
     }
 });
-
 
 $(() => {
     'use strict';
