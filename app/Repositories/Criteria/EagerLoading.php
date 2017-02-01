@@ -12,7 +12,7 @@ class EagerLoading extends Criteria
     private $relations;
 
     /**
-     * @param string|string[] $relations
+     * @param string $relations
      */
     public function __construct($relations)
     {
@@ -22,7 +22,7 @@ class EagerLoading extends Criteria
     /**
      * @param \Illuminate\Database\Eloquent\Builder $model
      * @param Repository $repository
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function apply($model, Repository $repository)
     {
