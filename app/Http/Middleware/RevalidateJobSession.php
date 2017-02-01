@@ -17,12 +17,7 @@ class RevalidateJobSession
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->has('revalidate')
-//            || ($request->session()->has('job')
-//                && $request->route('id') !== null
-//                && $request->session()->get('job.id') !== $request->route('id'))
-
-        ) {
+        if ($request->has('revalidate')) {
             $this->removeSession($request);
         }
 
