@@ -72,6 +72,6 @@ class FirewallRepository extends Repository implements FirewallRepositoryInterfa
      */
     private function toModel(array $firewall)
     {
-        return new Firewall($firewall);
+        return (new Firewall)->forceFill($firewall); // forceFill to set ID
     }
 }
