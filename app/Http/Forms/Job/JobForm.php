@@ -242,7 +242,7 @@ class JobForm extends Form
     }
 
     /**
-     * @param mixed $collection
+     * @param Tag[] $collection
      */
     private function forget($collection)
     {
