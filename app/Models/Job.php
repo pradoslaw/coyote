@@ -8,7 +8,6 @@ use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Queue\SerializesModels;
 
 /**
  * @property int $id

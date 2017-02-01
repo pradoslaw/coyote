@@ -280,7 +280,7 @@ class FirmForm extends Form
     }
 
     /**
-     * @param mixed $collection
+     * @param Firm\Benefit[] $collection
      */
     private function forget($collection)
     {
