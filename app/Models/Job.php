@@ -245,7 +245,7 @@ class Job extends Model
     {
         $list = [];
 
-        for ($i = 100; $i >= 0; $i -= 10) {
+        for ($i = 100; $i > 0; $i -= 10) {
             $list[$i] = "$i%";
         }
 
