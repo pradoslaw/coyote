@@ -8,8 +8,8 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
+use Coyote\Repositories\Criteria\Topic\SkipForum;
 use Coyote\Repositories\Criteria\Topic\SkipLockedCategories;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
@@ -242,7 +242,7 @@ class HomeController extends BaseController
 
         // if someone wants to find all user's topics, we can't hide those from our hidden categories.
         if (strpos($this->request->route()->getActionName(), '@user') === false) {
-            $this->topic->pushCriteria(new BelongsToForum($this->forum->order->findAllVisibleIds($this->userId)));
+            $this->topic->pushCriteria(new SkipForum($this->forum->order->findHiddenIds($this->userId)));
         }
 
         return $this

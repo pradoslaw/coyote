@@ -38,17 +38,22 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function findAllVisibleIds($userId)
+    public function findHiddenIds($userId)
     {
         if ($userId === null) {
             return [];
         }
 
-        return $this
+        $result = $this
             ->model
+            ->select(['forum_id', 'forums.id AS child_forum_id'])
             ->where('user_id', $userId)
-            ->where('is_hidden', 0)
-            ->pluck('forum_id')
-            ->toArray();
+            ->where('is_hidden', 1)
+            ->leftJoin('forums', 'parent_id', '=', 'forum_orders.forum_id')
+            ->get();
+
+        return array_unique(
+            array_merge($result->pluck('forum_id')->toArray(), $result->pluck('child_forum_id')->toArray())
+        );
     }
 }

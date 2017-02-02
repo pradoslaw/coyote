@@ -21,5 +21,5 @@ interface OrderRepositoryInterface extends RepositoryInterface
      * @param int|null $userId
      * @return array
      */
-    public function findAllVisibleIds($userId);
+    public function findHiddenIds($userId);
 }
