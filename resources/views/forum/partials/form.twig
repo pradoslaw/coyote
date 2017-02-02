@@ -1,6 +1,6 @@
 <form method="post" action="{{ route('forum.comment.save', [comment.id]) }}" {{ comment.id is not defined ? ('class="collapse" id="form-' ~ post.id ~ '"')|raw }}>
     <input type="hidden" value="{{ post.id }}" name="post_id">
-    <textarea cols="90" rows="1" class="form-control" name="text" maxlength="580" data-prompt-url="{{ route('forum.prompt', [topic.id]) }}" placeholder="Tylko Off-Topic. Nie odpowiadaj tutaj na pytania zawarte w poście.">{{ comment.text }}</textarea>
+    <textarea cols="90" rows="1" class="form-control" name="text" maxlength="580" data-prompt-url="{{ route('forum.prompt', [topic.id]) }}" placeholder="Drobne uwagi, sugestie. Nie odpowiadaj tutaj na pytania zawarte w poście.">{{ comment.text }}</textarea>
 
     <p class="text-muted pull-left">Pozostało <strong>{{ 580 - comment.text|length }}</strong> znaków</p>
 
