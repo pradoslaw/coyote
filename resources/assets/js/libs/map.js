@@ -24,7 +24,7 @@ class Map {
     }
 
     addMarker(latitude, longitude) {
-        if (latitude === null || longitude === null) {
+        if (!latitude || !longitude) {
             return null;
         }
 

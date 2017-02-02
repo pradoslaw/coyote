@@ -5,9 +5,12 @@ namespace Coyote\Http\Forms\Job;
 use Coyote\Firm;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
+use Coyote\Services\Media\Factory as MediaFactory;
 
 class FirmForm extends Form
 {
+    const PRE_JSON = 'pre_json';
+
     /**
      * @var string
      */
@@ -62,6 +65,14 @@ class FirmForm extends Form
                 $this->data->id = (int) $data['id'];
             }
         });
+
+        $this->addEventListener(self::PRE_JSON, function (Form $form) {
+            if ($form->getRequest()->session()->hasOldInput('logo')) {
+                $form->get('logo')->setValue(
+                    $this->container[MediaFactory::class]->make('logo', ['file_name' => $form->getRequest()->session()->getOldInput('logo')])
+                );
+            }
+        });
     }
 
     public function buildForm()
@@ -114,12 +125,12 @@ class FirmForm extends Form
                 ]
             ])
             ->add('website', 'text', [
-                'rules' => 'url',
+                'rules' => 'sometimes|url',
                 'label' => 'Strona WWW',
                 'help' => 'Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.',
                 'row_attr' => [
                     'class' => 'form-group-border',
-                    ':class' => "{'has-error': isInvalid(['name'])}"
+                    ':class' => "{'has-error': isInvalid(['website'])}"
                 ],
                 'attr' => [
                     'v-model' => 'firm.website'
@@ -251,7 +262,7 @@ class FirmForm extends Form
 
     public function messages()
     {
-        return ['name.required_if' => 'Nazwa firmy jest wymagana'];
+        return ['name.required_if' => 'Nazwa firmy jest wymagana.'];
     }
 
     /**
@@ -259,6 +270,8 @@ class FirmForm extends Form
      */
     public function toJson()
     {
+        $this->events->dispatch(self::PRE_JSON);
+
         $json = json_decode(parent::toJson(), true);
 
         $json['thumbnail'] = null;

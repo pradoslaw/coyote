@@ -38,7 +38,7 @@ new Vue({
         if (typeof google !== 'undefined') {
             this.map = new Map();
 
-            if (this.firm.latitude !== null && this.firm.longitude !== null) {
+            if (this.firm.latitude && this.firm.longitude) {
                 this._setupMarker();
             }
 
@@ -51,8 +51,10 @@ new Vue({
         new Tags({
             onSelect: (value) => {
                 this.tags.push({name: value, pivot: {priority: 1}});
-                let pluck = this.tags.map((item) => item.name);
+                // fetch only tag name
+                let pluck = this.tags.map(item => item.name);
 
+                // request suggestions
                 $.get($('#tag').data('suggestions-url'), {t: pluck}, result => {
                     this.suggestions = result;
                 });
@@ -143,7 +145,7 @@ new Vue({
             tinymce.get('description').setContent(this.firm.description);
         },
         changeFirm: function () {
-            if (this.firm.name === null) {
+            if (!this.firm.name) {
                 return;
             }
 
@@ -192,7 +194,7 @@ new Vue({
             let val = e.target.value.trim();
 
             if (val.length) {
-                this.map.geocode(val, (result) => {
+                this.map.geocode(val, result => {
                     this.firm = Object.assign(this.firm, result);
 
                     this._setupMarker(); // must be inside closure
@@ -311,113 +313,3 @@ $(() => {
         }
     });
 });
-
-function initialize() {
-    'use strict';
-
-    let mapOptions =
-    {
-        zoom: 6,
-        center: new google.maps.LatLng(51.919438, 19.14513599999998),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-
-    let geocoder = new google.maps.Geocoder();
-    map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    let marker;
-
-    let geocodeResult = function (results, status) {
-        if (status === google.maps.GeocoderStatus.OK) {
-            map.setCenter(results[0].geometry.location);
-
-            if (marker) {
-                marker.setMap(null);
-            }
-
-            marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-
-            map.setZoom(16);
-            $('#address').val(results[0].formatted_address);
-
-            let country = '', city = '', street = '', postcode = '';
-            let components = results[0].address_components;
-
-            for (let item in components) {
-                if (components.hasOwnProperty(item)) {
-                    let component = components[item];
-
-                    if (!country && component.types.indexOf('country') > -1) {
-                        country = component.long_name;
-                    }
-                    if (!postcode && component.types.indexOf('postal_code') > -1) {
-                        postcode = component.long_name;
-                    }
-                    if (!city && component.types.indexOf('locality') > -1) {
-                        city = component.long_name;
-                    }
-                    if (!postcode && component.types.indexOf('route') > -1) {
-                        street = component.long_name;
-                    }
-                }
-            }
-
-            $(':hidden[name=country]').val(country);
-            $(':hidden[name=city]').val(city);
-            $(':hidden[name=street]').val(street);
-            $(':hidden[name=postcode]').val(postcode);
-            $('#longitude').val(results[0].geometry.location.lng());
-            $('#latitude').val(results[0].geometry.location.lat());
-        }
-    };
-
-    let geocode = function (address) {
-        geocoder.geocode({'address': address}, geocodeResult);
-    };
-
-    let reverseGeocode = function (coordinates) {
-        geocoder.geocode({'latLng': coordinates}, geocodeResult);
-    };
-
-    if (!isNaN(parseFloat($('#latitude').val())) && !isNaN(parseFloat($('#longitude').val()))) {
-        let coordinates = new google.maps.LatLng(parseFloat($('#latitude').val()), parseFloat($('#longitude').val()));
-
-        marker = new google.maps.Marker({
-            map: map,
-            position: coordinates
-        });
-
-        map.setCenter(coordinates);
-    }
-
-    let onAddressChange = function () {
-        let val = $.trim($('#address').val());
-
-        if (val.length) {
-            geocode(val);
-        }
-        else {
-            $('#longitude, #latitude').val(0);
-            $(':hidden[name=country], :hidden[name=city], :hidden[name=street], :hidden[name=postcode]').val('');
-
-            marker.setMap(null);
-        }
-    };
-
-    $('#address').keypress(function (e) {
-        let code = e.keyCode || e.which;
-
-        if (code === 13) {
-            onAddressChange();
-            return false;
-        }
-    });
-
-    google.maps.event.addListener(map, 'click', (e) => {
-        reverseGeocode(e.latLng);
-    });
-
-    return map;
-}

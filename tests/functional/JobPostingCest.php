@@ -204,4 +204,33 @@ class JobPostingCest
         $I->seeInField('title', $title);
         $I->seeInField('email', $email);
     }
+
+    public function tryToCreateJobOfferWithEmptyFirmName(FunctionalTester $I)
+    {
+        $I->wantTo('Create job offer with empty firm name');
+        $fake = Factory::create();
+
+        $I->amOnRoute('job.submit');
+
+        $I->fillField('title', $title = $fake->text(50));
+        $I->selectOption('employment_id', 1);
+
+        $I->click('Informacje o firmie');
+        $I->seeCurrentRouteIs('job.submit.firm');
+
+        $I->click('Podgląd');
+        $I->canSeeFormHasErrors();
+        $I->canSeeFormErrorMessage('name', 'Nazwa firmy jest wymagana.');
+        $I->fillField('name', $firm = $fake->company);
+
+        $I->click('Podgląd');
+        $I->see($title, '.media-heading');
+        $I->see($firm, '.employer');
+        $I->click('Opublikuj');
+
+        $I->seeCurrentRouteIs('job.offer');
+
+        $I->see($title, '.media-heading');
+        $I->see($firm, '.employer');
+    }
 }
