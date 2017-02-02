@@ -1,7 +1,6 @@
 function initTinymce() {
     tinymce.init({
         selector: "textarea",
-        //height: 150,
         plugins: [
             "advlist lists spellchecker",
             "code",
@@ -24,15 +23,7 @@ function initTinymce() {
 
         indentation : '16px',
         content_style: "body, * {font-size: 14px !important; font-family: Arial, sans-serif !important;}",
-
-        setup: function (ed) {
-            ed.on('init', function (args) {
-                if ('recruitment' === args.target.id) {
-                    $('input[name="enable_apply"]:checked').trigger('change');
-                }
-            });
-        }
     });
 }
 
-initTinymce();
+export default initTinymce;

@@ -1,5 +1,6 @@
 import '../components/subscribe';
 import '../plugins/tags';
+import Config from '../libs/config';
 
 class Filter {
     constructor(form) {
@@ -9,13 +10,12 @@ class Filter {
     }
 
     onFilterClick() {
-        let self = this;
-
-        this.form.on('click', '.list-group-item a', (e) => {
+        this.form.on('click', '.list-group-item a', e => {
             let checkbox = $(e.currentTarget).prev(':checkbox');
 
             checkbox.attr('checked', !checkbox.is(':checked'));
-            self.onSubmit();
+            this.onSubmit();
+
             return false;
         });
     }
@@ -30,9 +30,9 @@ $(() => {
 
     new Filter('#box-filter');
 
-    $('#editor').on('shown.bs.modal', (e) => {
+    $('#editor').on('shown.bs.modal', e => {
         $('#tags').tag({
-            promptUrl: _config.promptUrl
+            promptUrl: Config.get('promptUrl')
         });
 
         $(e.currentTarget).off('shown.bs.modal');
@@ -54,7 +54,7 @@ $(() => {
 
             let errors = e.responseJSON;
 
-            Object.keys(errors).forEach((key) => {
+            Object.keys(errors).forEach(key => {
                 form.find(`[data-column="${key}"]`).addClass('has-error').find('.help-block').text(errors[key][0]);
             });
 

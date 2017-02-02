@@ -24,6 +24,10 @@ pre {
   text-decoration: underline;
 }
 
+[v-cloak] {
+  display: none;
+}
+
 // Definition. Backward compatible.
 // -----------------------------------
 

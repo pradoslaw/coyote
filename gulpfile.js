@@ -42,8 +42,7 @@ elixir(function (mix) {
     /*
      | auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
      */
-    .scripts(['plugins/auto-complete.js'], 'public/js/auto-complete.js')
-    .scripts(['plugins/uploader.js'], 'public/js/uploader.js');
+    .scripts(['plugins/auto-complete.js'], 'public/js/auto-complete.js');
 
     mix.webpack('app.js');
 
@@ -82,7 +81,6 @@ elixir(function (mix) {
             'js/jquery-ui.js',
             'js/wiki.js',
             'js/geo-ip.js',
-            'js/uploader.js',
 
             'css/main.css',
             'css/auth.css',

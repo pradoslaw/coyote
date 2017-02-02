@@ -2,21 +2,18 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Carbon\Carbon;
-use Coyote\Country;
-use Coyote\Currency;
 use Coyote\Events\JobWasSaved;
-use Coyote\Firm;
 use Coyote\Firm\Benefit;
+use Coyote\Http\Forms\Job\FirmForm;
+use Coyote\Http\Forms\Job\JobForm;
+use Coyote\Http\Transformers\FirmWithBenefits;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
-use Coyote\Services\Geocoder\GeocoderInterface;
+use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
-use Coyote\Services\Parser\Helpers\City;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -34,28 +31,11 @@ class SubmitController extends Controller
     private $firm;
 
     /**
-     * @var TagRepository
-     */
-    private $tag;
-
-    /**
-     * @var GeocoderInterface
-     */
-    private $geocoder;
-
-    /**
-     * SubmitController constructor.
      * @param JobRepository $job
      * @param FirmRepository $firm
-     * @param TagRepository $tag
-     * @param GeocoderInterface $geocoder
      */
-    public function __construct(
-        JobRepository $job,
-        FirmRepository $firm,
-        TagRepository $tag,
-        GeocoderInterface $geocoder
-    ) {
+    public function __construct(JobRepository $job, FirmRepository $firm)
+    {
         parent::__construct();
 
         $this->middleware('job.revalidate', ['except' => ['postTag', 'getFirmPartial']]);
@@ -65,11 +45,6 @@ class SubmitController extends Controller
 
         $this->job = $job;
         $this->firm = $firm;
-        $this->tag = $tag;
-
-        $this->geocoder = $geocoder;
-
-        $this->public['firm_partial'] = route('job.submit.firm.partial');
     }
 
     /**
@@ -77,65 +52,46 @@ class SubmitController extends Controller
      * @param int $id
      * @return \Illuminate\View\View
      */
-    public function getIndex(Request $request, $id = 0)
+    public function getIndex(Request $request, $id = null)
     {
-        if ($request->session()->has('job')) {
-            // get form content from session and fill model
-            $job = $this->job->forceFill((array) $request->session()->get('job'));
-            $firm = $this->firm->forceFill((array) $request->session()->get('firm'));
+        /** @var \Coyote\Job $job */
+        if ($id === null && $request->session()->has(Job::class)) {
+            // get form content from session
+            $job = $request->session()->get(Job::class);
         } else {
             $job = $this->job->findOrNew($id);
             $job->setDefaultUserId($this->userId);
 
-            if ($job->id) {
-                $job->city = $job->locations()->get()->implode('city', ', ');
-                $job->deadline = (new Carbon($job->deadline_at))->diff(Carbon::now())->days;
-
-                $job->tags = $job->tags()->get()->each(function (&$item) {
-                    $item->priority = $item->pivot->priority;
-                });
-
-                $firm = $this->loadFirm((int) $job->firm_id);
-            } else {
-                // either load firm assigned to existing job offer or load user's default firm
+            // load default firm regardless of offer is private or not
+            if (!$job->firm_id) {
                 $firm = $this->loadDefaultFirm();
+                $firm->is_private = $job->exists && !$job->firm_id;
+
+                $job->firm()->associate($firm);
             }
 
-            $job->firm_id = $firm->id; // it's really important to assign default firm id to job offer
-
-            if (!empty($firm->id)) {
-                $request->session()->put('firm', $firm->toArray());
-            }
+            $job->load(['tags', 'locations', 'country']);
         }
 
         $this->authorize('update', $job);
+        $this->authorize('update', $job->firm);
 
-        if (!empty($firm->user_id)) {
-            $this->authorize('update', $firm);
-        }
-
-        $request->session()->put('job', $job->toArray());
+        $form = $this->createForm(JobForm::class, $job);
+        $request->session()->put(Job::class, $job);
 
         $this->breadcrumb($job);
-        $countryList = Country::pluck('name', 'id');
 
-        // @todo Uzyc mechanizmu geolokalizacji
-        $defaultCountryId = array_search('Polska', $countryList->toArray());
         $popularTags = $this->job->getPopularTags();
-
         $this->public += ['popular_tags' => $popularTags];
 
         return $this->view('job.submit.home', [
-            'countryList'       => $countryList,
-            'defaultCountryId'  => $defaultCountryId,
-            'currencyList'      => Currency::pluck('name', 'id'),
-            'employmentList'    => Job::getEmploymentList(),
-            'rateList'          => Job::getRatesList(),
-            'remote_range_list' => Job::getRemoteRangeList(),
-            'popularTags'       => $popularTags
-        ])->with(
-            compact('job', 'firm')
-        );
+            'popular_tags'      => $popularTags,
+            'form'              => $form,
+            'form_errors'       => $form->errors() ? $form->errors()->toJson() : '[]',
+            'job'               => $form->toJson(),
+            // firm information (in order to show firm nam on the button)
+            'firm'              => $job->firm
+        ]);
     }
 
     /**
@@ -144,28 +100,16 @@ class SubmitController extends Controller
      */
     public function postIndex(Request $request)
     {
-        $this->validate($request, [
-            'title'             => 'required|min:2|max:60',
-            'country_id'        => 'required|integer',
-            'currency_id'       => 'required|integer',
-            'rate_id'           => 'required|integer',
-            'is_remote'         => 'bool',
-            'remote_range'      => 'integer|min:10|max:100',
-            'employment_id'     => 'required|integer',
-            'city'              => 'string|city',
-            'salary_from'       => 'integer',
-            'salary_to'         => 'integer',
-            'deadline'          => 'integer|min:1|max:365',
-            'requirements'      => 'string',
-            'recruitment'       => 'required_if:enable_apply,0|string',
-            'enable_apply'      => 'boolean',
-            'email'             => 'sometimes|required|email',
-            'tags.*.name'       => 'tag',
-            'tags.*.priority'   => 'required|int|min:0|max:1'
-        ]);
+        /** @var \Coyote\Job $job */
+        $job = $request->session()->get(Job::class);
 
-        $userId = $request->session()->pull('job.user_id');
-        $request->session()->put('job', $request->all() + ['user_id' => $userId]);
+        $form = $this->createForm(JobForm::class, $job);
+        $form->validate();
+
+        // only fillable columns! we don't want to set fields like "city" or "tags" because they don't exists.
+        $job->fill($form->all());
+
+        $request->session()->put(Job::class, $job);
 
         return $this->next($request, redirect()->route('job.submit.firm'));
     }
@@ -176,17 +120,26 @@ class SubmitController extends Controller
      */
     public function getFirm(Request $request)
     {
-        $job = $request->session()->get('job');
-        $firm = $request->session()->get('firm');
+        /** @var \Coyote\Job $job */
+        $job = clone $request->session()->get(Job::class);
 
         // get all firms assigned to user...
-        $firms = $this->getFirms($job['user_id']);
+        $this->firm->pushCriteria(new EagerLoading('benefits'));
+        $firms = fractal($this->firm->findAllBy('user_id', $job->user_id), new FirmWithBenefits())->toJson();
 
         $this->breadcrumb($job);
 
-        return $this->view('job.submit.firm', $this->getFirmOptions())->with(
-            compact('job', 'firm', 'firms')
-        );
+        $form = $this->createForm(FirmForm::class, $job->firm);
+
+        return $this->view('job.submit.firm')->with([
+            'job'               => $job,
+            'firm'              => $form->toJson(),
+            'firms'             => $firms,
+            'form'              => $form,
+            'form_errors'       => $form->errors() ? $form->errors()->toJson() : '[]',
+            'benefits'          => $form->get('benefits')->getChildrenValues(),
+            'default_benefits'  => Benefit::getBenefitsList(), // default benefits,
+        ]);
     }
 
     /**
@@ -195,66 +148,20 @@ class SubmitController extends Controller
      */
     public function postFirm(Request $request)
     {
-        $this->validate($request, [
-            'name'          => 'required_if:private,0|max:60',
-            'is_agency'     => 'boolean',
-            'logo'          => 'string',
-            'website'       => 'url',
-            'employees'     => 'integer',
-            'founded'       => 'integer',
-            'headline'      => 'string|max:100',
-            'description'   => 'string',
-            'latitude'      => 'numeric',
-            'longitude'     => 'numeric',
-            'street'        => 'string|max:255',
-            'city'          => 'string|max:255',
-            'house'         => 'string|max:50',
-            'postcode'      => 'string|max:50'
-        ], [
-            'name.required_if' => 'Nazwa firmy jest wymagana'
-        ]);
+        /** @var \Coyote\Job $job */
+        $job = $request->session()->get(Job::class);
 
-        // if offer is private, we MUST remove firm data from session
-        if ($request->get('private')) {
-            $request->session()->forget('firm');
-            // very IMPORTANT: set firm id to null in case we don't want to associate firm with this offer
-            $request->session()->put('job.firm_id', null);
-        } else {
-            $data = $request->all();
-            $data['benefits'] = array_filter(array_unique(array_map('trim', $data['benefits'])));
+        $form = $this->createForm(FirmForm::class, $job->firm);
+        $form->validate();
 
-            // if agency - set null value. we don't to show them with agencies offers
-            if ($request->input('is_agency')) {
-                foreach (['employees', 'founded', 'headline', 'latitude', 'longitude', 'street', 'city', 'house', 'postcode', 'benefits'] as $column) {
-                    $data[$column] = null;
-                }
-            }
-
-            $request->session()->put('firm', $data);
+        if ($job->firm->exists) {
+            // syncOriginalAttribute() is important if user changes firm
+            $job->firm->syncOriginalAttribute('id');
         }
+
+        $request->session()->put(Job::class, $job);
 
         return $this->next($request, redirect()->route('job.submit.preview'));
-    }
-
-    /**
-     * AJAX request: get firm form edit
-     *
-     * @param Request $request
-     * @param null $id
-     * @return mixed
-     */
-    public function getFirmPartial(Request $request, $id = null)
-    {
-        $firm = null;
-
-        if ($id) {
-            $firm = $this->loadFirm($id);
-            $this->authorize('update', $firm);
-
-            $request->session()->put('firm', $firm->toArray());
-        }
-
-        return view('job.submit.partials.firm', $this->getFirmOptions())->with(compact('firm'));
     }
 
     /**
@@ -263,46 +170,12 @@ class SubmitController extends Controller
      */
     public function getPreview(Request $request)
     {
-        $job = $request->session()->get('job');
-        $firm = $request->session()->get('firm');
+        /** @var \Coyote\Job $job */
+        $job = clone $request->session()->get(Job::class);
 
         $this->breadcrumb($job);
 
-        /*
-         * We need to do a little transformation so data from session can look like data from database
-         */
-        $benefits = [];
-        if (!empty($firm['benefits'])) {
-            foreach ($firm['benefits'] as $benefit) {
-                if (!empty($benefit)) {
-                    $benefits[] = ['name' => $benefit];
-                }
-            }
-
-            $firm['benefits'] = $benefits;
-        }
-
-        $tags = [];
-        if (!empty($job['tags'])) {
-            $tags = [Job\Tag::NICE_TO_HAVE => [], Job\Tag::MUST_HAVE => []];
-
-            foreach ($job['tags'] as $tag) {
-                $tags[$tag['priority']][] = [
-                    'name' => $tag['name']
-                ];
-            }
-        }
-
-        $job['country_name'] = Country::find($job['country_id'])->name;
-
-        if (!empty($job['city'])) {
-            $job['locations'] = collect();
-            $grabber = new City();
-
-            foreach ($grabber->grab($job['city']) as $city) {
-                $job['locations']->push(['city' => $city]);
-            }
-        }
+        $tags = $job->tags->groupBy('pivot.priority');
 
         $parser = app('parser.job');
 
@@ -312,20 +185,20 @@ class SubmitController extends Controller
             }
         }
 
-        if (!empty($firm['description'])) {
-            $firm['description'] = $parser->parse($firm['description']);
+        if ($job->firm->is_private) {
+            $job->firm()->dissociate();
         }
 
-        $deadline = new Carbon();
-        $deadline->addDays($job['deadline']);
+        if (!empty($job->firm->description)) {
+            $job->firm->description = $parser->parse($job->firm->description);
+        }
 
         return $this->view('job.submit.preview', [
+            'job'               => $job,
+            'tags'              => $tags,
             'ratesList'         => Job::getRatesList(),
-            'employmentList'    => Job::getEmploymentList(),
-            'deadline'          => $deadline->diff(Carbon::now())->days
-        ])->with(
-            compact('job', 'firm', 'tags')
-        );
+            'employmentList'    => Job::getEmploymentList()
+        ]);
     }
 
     /**
@@ -334,120 +207,65 @@ class SubmitController extends Controller
      */
     public function save(Request $request)
     {
-        $data = $request->session()->get('job');
-
         /** @var \Coyote\Job $job */
-        $job = $this->job->findOrNew((int) $data['id']);
-        $job->setDefaultUserId($this->userId);
+        $job = clone $request->session()->get(Job::class);
 
         $this->authorize('update', $job);
 
         $tags = [];
-        if (!empty($data['tags'])) {
+        if ($job->tags->count()) {
             $order = 0;
 
-            foreach ($data['tags'] as $tag) {
-                $model = $this->tag->firstOrCreate(['name' => $tag['name']]);
+            foreach ($job->tags as $tag) {
+                $model = $tag->firstOrCreate(['name' => $tag->name]);
 
                 $tags[$model->id] = [
-                    'priority' => $tag['priority'] ?? 0,
-                    'order' => ++$order
+                    'priority'  => $tag->pivot->priority ?? 0,
+                    'order'     => ++$order
                 ];
             }
         }
 
-        $locations = (new City())->grab($data['city']);
-        $job->fill($data);
-
-        // quickfix: ta linia kodu wywolywana jest juz wczesniej. jakims sposobem czasami tablica $data
-        // nie zawiera user_id. nie potrafie poki co odwzorowac tego bledu. dlatego na wszelki wypadek
-        // ponownie ustawiam user_id jezeli jest puste. w preeciwnym wypadeku generowany byl wyjatek o pustym
-        // user_id
-        $job->setDefaultUserId($this->userId);
-
-        $job->deadline_at = Carbon::now()->addDay($data['deadline']);
-
-        $this->transaction(function () use (&$job, $request, $locations, $tags) {
+        $this->transaction(function () use (&$job, $request, $tags) {
             $activity = $job->id ? Stream_Update::class : Stream_Create::class;
 
-            if ($request->session()->has('firm.name')) {
-                $data = $request->session()->get('firm');
+            if ($job->firm->is_private) {
+                $job->firm()->dissociate();
+                // firm name is required to save firm
+            } elseif ($job->firm->name) {
+                // user might click on "add new firm" button in form. make sure user_id is set up.
+                $job->firm->setDefaultUserId($this->userId);
 
-                $firm = $this->firm->findOrNew((int) $data['id']);
-                $firm->setDefaultUserId($this->userId);
+                $this->authorize('update', $job->firm);
 
-                $this->authorize('update', $firm);
+                // fist, we need to save firm because firm might not exist.
+                $job->firm->save();
 
-                $firm->fill($data)->save();
-                $job->firm_id = $firm->id; // it's important to assign firm id to the offer
+                // reassociate job with firm. user could change firm, that's why we have to do it again.
+                $job->firm()->associate($job->firm);
 
-                $firm->benefits()->delete();
-
-                if (!empty($data['benefits'])) {
-                    foreach ($data['benefits'] as $benefit) {
-                        $firm->benefits()->create([
-                            'name' => $benefit
-                        ]);
-                    }
-                }
+                $job->firm->benefits()->delete();
+                $job->firm->benefits()->saveMany($job->firm->benefits);
             }
 
             $job->save();
-            $job->locations()->delete();
 
-            foreach ($locations as $location) {
-                $job->locations()->create($this->geocode($location));
-            }
+            $job->locations()->delete();
+            $job->locations()->saveMany($job->locations);
 
             $job->tags()->sync($tags);
 
             event(new JobWasSaved($job));
-            $request->session()->forget(['job', 'firm']);
 
             $parser = app('parser.job');
             $job->description = $parser->parse($job->description);
 
             stream($activity, (new Stream_Job)->map($job));
+
+            $request->session()->forget(Job::class);
         });
 
         return redirect()->to(UrlBuilder::job($job))->with('success', 'Oferta została prawidłowo dodana.');
-    }
-
-    /**
-     * @param string $city
-     * @return array
-     */
-    private function geocode($city)
-    {
-        $location = [
-            'city'          => $city
-        ];
-
-        try {
-            $location = $this->geocoder->geocode($city);
-
-            if (!$location->city) {
-                $location->city = $city;
-            }
-
-            $location = $location->toArray();
-        } catch (\Exception $e) {
-            logger()->error($e->getMessage());
-        }
-
-        return $location;
-    }
-
-    /**
-     * @return array
-     */
-    private function getFirmOptions()
-    {
-        return [
-            'employeesList'     => Firm::getEmployeesList(),
-            'foundedList'       => Firm::getFoundedList(),
-            'benefitsList'      => Benefit::getBenefitsList(), // default benefits,
-        ];
     }
 
     /**
@@ -478,42 +296,20 @@ class SubmitController extends Controller
     }
 
     /**
-     * @param int $userId
-     * @return mixed
-     */
-    private function getFirms($userId)
-    {
-        // get all firms assigned to user...
-        return $this->firm->findAllBy('user_id', $userId);
-    }
-
-    /**
-     * @param int $firmId
-     * @return mixed
-     */
-    private function loadFirm($firmId)
-    {
-        $firm = $this->firm->findOrNew((int) $firmId);
-        $firm->benefits = $firm->benefits()->pluck('name')->toArray();
-
-        return $firm;
-    }
-
-    /**
      * Load user's default firm
      *
      * @return \Coyote\Firm
      */
     private function loadDefaultFirm()
     {
-        $firm = $this->firm->newInstance();
-        $firms = $this->getFirms($this->userId);
+        $firm = $this->firm->findBy('user_id', $this->userId);
 
-        if ($firms->count()) {
-            $firm = $firms->first();
+        if (!$firm) {
+            /** @var \Coyote\Firm $firm */
+            $firm = $this->firm->newInstance();
+            $firm->setDefaultUserId($this->userId);
         }
 
-        $firm->benefits = $firm->benefits()->pluck('name')->toArray();
         return $firm;
     }
 }

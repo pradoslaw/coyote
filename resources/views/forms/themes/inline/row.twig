@@ -1,7 +1,9 @@
 {% import 'components.forms' as forms %}
 
 <div {{ forms.attr(row_attr|merge({class: (row_attr.class|default('') ~ ' form-group ' ~ (error ? ' has-error'))|trim})) }}>
-    {% block label %}{{ include(theme ~ '.label') }}{% endblock %}
+    {% if label %}
+        {% block label %}{{ include(theme ~ '.label') }}{% endblock %}
+    {% endif %}
 
     {% block wrap %}
         {% block widget %}{{ include(widget_path) }}{% endblock widget %}

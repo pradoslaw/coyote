@@ -45,7 +45,7 @@ class HomeController extends BaseController
     public function upload(Request $request)
     {
         $this->validate($request, [
-            'photo'             => 'required|mimes:jpeg,bmp,png'
+            'photo'             => 'required|mimes:jpeg,jpg,png,gif'
         ]);
 
         $media = $this->auth->photo->upload($request->file('photo'));

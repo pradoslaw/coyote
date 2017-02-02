@@ -22,6 +22,7 @@ window.ws = RealtimeFactory();
 import './components/notifications.js';
 import './components/pm.js';
 import Config from './libs/config';
+import Router from './libs/router';
 
 $(function () {
     'use strict';
@@ -31,4 +32,24 @@ $(function () {
             'X-CSRF-TOKEN': Config.csrfToken()
         }
     });
+
+    let r = new Router();
+
+    r.on('/User', () => {
+        require.ensure([],
+            require => {
+                require('./pages/user');
+            },
+            'user'
+        );
+    }).on('/Praca/Application/*', () => {
+        require.ensure([],
+            require => {
+                require('./pages/job/application');
+            },
+            'application'
+        );
+    });
+
+    r.resolve();
 });

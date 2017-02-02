@@ -1,8 +1,6 @@
 {% extends 'user.base' %}
 {% block title %}Moje konto{{ parent() }}{% endblock %}
 
-{% import 'components.modals' as modal %}
-
 {% block content %}
     <h2>Start</h2>
 
@@ -118,20 +116,4 @@
         {#</div>#}
     {#</div>#}
 
-    {{ modal.alert('Uups. Coś poszło nie tak w trakcie dodawania fotografii.') }}
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
-
-    <script src="{{ cdn('js/uploader.js') }}"></script>
-    <script>
-        $(function () {
-            $.uploader({
-                onChanged: function(data) {
-                    $('.avatar img').attr('src', data.url);
-                }
-            });
-        });
-    </script>
 {% endblock %}

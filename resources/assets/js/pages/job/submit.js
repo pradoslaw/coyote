@@ -1,248 +1,263 @@
 import '../../plugins/uploader';
-import '../job/tinymce';
-import Config from '../../libs/config';
+import initTinymce from '../../libs/tinymce';
+import Tags from '../../libs/tags';
+import Dialog from '../../libs/dialog';
+import Map from '../../libs/map';
 
-class Tags {
-    constructor(options) {
-        let defaults = {
-            input: '#tag',
-            dropdown: '.tag-dropdown',
-            container: '#tags-container',
-            remove: '.btn-remove',
-            suggestion: '.tag-suggestion'
-        };
-
-        this.setup = $.extend(defaults, options);
-
-        this.input = $(this.setup.input);
-        this.help = this.input.next('.help-block');
-        this.dropdown = $(this.setup.dropdown);
-        this.container = $(this.setup.container);
-        this.selectedIndex = -1;
-
-        this.dropdown.css({
-            'width':			this.input.outerWidth() - 4,
-            'left':				this.input.position().left,
-            'top':				this.input.position().top + this.input.outerHeight()
-        });
-
-        this._onFocus();
-        this._onKeyUp();
-        this._onKeyDown();
-        this._onHover();
-        this._onItemClick();
-        this._onRemove();
-
-        $(document).bind('click', e => {
-            let $target = $(e.target);
-
-            if (!$target.is(this.input)) {
-                this._hideDropdown();
+/**
+ * Cast data from bool to int to properly display radio buttons (0 and 1 instade of true and false).
+ *
+ * @param data
+ * @return {*}
+ */
+function toInt(data) {
+    for (let item in data) {
+        if (data.hasOwnProperty(item)) {
+            if (typeof(data[item]) == 'boolean') {
+                data[item] = +data[item];
             }
-        });
+
+            if (typeof(data[item]) == 'object') {
+                data[item] = toInt(data[item]);
+            }
+        }
     }
 
-    _onKeyUp() {
-        this.input.on('keyup', e => {
-            let keyCode = e.keyCode || window.event.keyCode;
+    return data;
+}
 
-            if (keyCode === 13) {
-                if ($('li.hover', this.dropdown).find('span').text() !== '') {
-                    this.addTag($('li.hover', this.dropdown).find('span').text());
-                }
-                else if (this.input.val() !== '') {
-                    this.addTag(this.input.val());
-                }
+new Vue({
+    el: '.submit-form',
+    delimiters: ['${', '}'],
+    data: toInt(data),
+    mounted: function () {
+        initTinymce();
 
-                this._hideDropdown();
-                this.input.val('');
-                this._loadDefaultTags();
+        this.marker = null;
 
-                e.preventDefault();
+        if (typeof google !== 'undefined') {
+            this.map = new Map();
+
+            if (this.firm.latitude !== null && this.firm.longitude !== null) {
+                this._setupMarker();
             }
-            else if (keyCode === 40) { // down
-                this.select(this.selectedIndex + 1);
-                this._showDropdown();
+
+            this.map.setupGeocodeOnMapClick(result => {
+                this.firm = Object.assign(this.firm, result);
+                this._setupMarker();
+            });
+        }
+
+        new Tags({
+            onSelect: (value) => {
+                this.tags.push({name: value, pivot: {priority: 1}});
+                let pluck = this.tags.map((item) => item.name);
+
+                $.get($('#tag').data('suggestions-url'), {t: pluck}, result => {
+                    this.suggestions = result;
+                });
             }
-            else if (keyCode === 38) { // up
-                this.select(this.selectedIndex - 1);
+        });
+
+        $('#tags-container').each(function () {
+            $(this).sortable();
+        });
+
+        $('[v-loader]').remove();
+    },
+    methods: {
+        /**
+         * Add tag after clicking on suggestion tag.
+         *
+         * @param {String} value
+         */
+        addTag: function (value) {
+            this.tags.push({name: value, pivot: {priority: 1}});
+        },
+        removeTag: function (index) {
+            this.tags.splice(index, 1);
+        },
+        isInvalid: function (fields) {
+            return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
+        },
+        charCounter: function (item, limit) {
+            let model = item.split('.').reduce((o, i) => o[i], this);
+
+            return limit - String(model !== null ? model : '').length;
+        },
+        toggleBenefit: function (item) {
+            let index = this.benefits.indexOf(item);
+
+            if (index === -1) {
+                this.benefits.push(item);
+            } else {
+                this.benefits.splice(index, 1);
             }
-            else if (keyCode === 27) {
-                this._hideDropdown();
+        },
+        addBenefit: function (e) {
+            if (e.target.value.trim()) {
+                this.benefits.push(e.target.value);
+            }
+
+            e.target.value = '';
+        },
+        removeBenefit: function (benefit) {
+            this.benefits.splice(this.benefits.indexOf(benefit), 1);
+        },
+        updateBenefit: function () {
+            //
+        },
+        addFirm: function () {
+            let dialog = new Dialog({
+                title: 'Dodanie nowej firmy',
+                message: 'Czy na pewno chcesz dodać nową firme i przypisać ją do tego ogłoszenia?',
+                buttons: [{
+                    label: 'Anuluj',
+                    attr: {
+                        'class': 'btn btn-default',
+                        'type': 'button',
+                        'data-dismiss': 'modal'
+                    }
+                }, {
+                    label: 'Tak',
+                    attr: {
+                        'class': 'btn btn-primary'
+                    },
+                    onClick: () => {
+                        this.newFirm();
+                        dialog.close();
+                    }
+                }]
+            });
+
+            dialog.show();
+        },
+        selectFirm: function (firmId) {
+            let index = this.firms.findIndex(element => element.id == firmId);
+
+            this.firm = this.firms[index];
+            this.firm.is_private = +false; // must be the number - not bool
+
+            this.benefits = this.firm.benefits;
+
+            tinymce.get('description').setContent(this.firm.description);
+        },
+        changeFirm: function () {
+            if (this.firm.name === null) {
+                return;
+            }
+
+            let dialog = new Dialog({
+                title: 'Zmiana nazwy firmy?',
+                message: 'Zamierzasz edytować nazwę tej firmy. Weź pod uwagę, że zmieniona nazwa będzie wyświetlana przy wszystkich Twoich ofertach. Czy może chcesz dodać nową firmę?',
+                buttons: [{
+                    label: 'Jest OK, chce tylko zmienić nazwę',
+                    attr: {
+                        'class': 'btn btn-default',
+                        'type': 'button',
+                        'data-dismiss': 'modal'
+                    }
+                }, {
+                    label: 'Tak, chcę dodać nową firmę',
+                    attr: {
+                        'class': 'btn btn-primary'
+                    },
+                    onClick: () => {
+                        this.newFirm();
+                        dialog.close();
+                    }
+                }]
+            });
+
+            dialog.show();
+        },
+        newFirm: function () {
+            this.firm = {
+                'id': null,
+                'name': null,
+                'headline': '',
+                'logo': null,
+                'description': null,
+                'website': null,
+                'is_private': +false,
+                'is_agency': +false,
+                'employees': null,
+                'founded': null
+            };
+
+            this.benefits = [];
+            tinymce.get('description').setContent(''); // new firm - empty description
+        },
+        changeAddress: function (e) {
+            let val = e.target.value.trim();
+
+            if (val.length) {
+                this.map.geocode(val, (result) => {
+                    this.firm = Object.assign(this.firm, result);
+
+                    this._setupMarker(); // must be inside closure
+                });
             }
             else {
-                let searchText = this.input.val().toLowerCase();
-                let hits = 0;
+                ['longitude', 'latitude', 'country', 'city', 'street', 'postcode'].forEach(field => {
+                    this.firm[field] = null;
+                });
 
-                let popularTags = Config.get('popular_tags');
-                let dropdown = '';
-
-                for (let value in popularTags) {
-                    if (popularTags.hasOwnProperty(value) && value.startsWith(searchText)) {
-                        dropdown += this._buildTagItem(value, popularTags[value]);
-                        hits++;
-                    }
-                }
-
-                this.dropdown.html(dropdown).toggle(hits > 0);
+                this._setupMarker();
             }
-        });
-    }
+        },
+        _setupMarker: function () {
+            this.map.removeMarker(this.marker);
+            this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
+        }
+    },
+    computed: {
+        deadlineDate: function () {
+            let value = parseInt(this.job.deadline);
 
-    _buildTagItem(value, count) {
-        return `<li><span>${value}</span> <small>× ${count}</small></li>`;
-    }
+            if (value > 0) {
+                let date = new Date();
+                date.setDate(date.getDate() + value);
 
-    _loadDefaultTags() {
-        let popularTags = Config.get('popular_tags');
-        let dropdown = '';
+                return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+            }
+            else {
+                return '--';
+            }
+        },
+        address: function () {
+            return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') +  ' ' + (this.firm.city || '')).trim();
+        }
+    },
+    watch: {
+        'job.enable_apply': function (flag) {
+            if (Boolean(parseInt(flag))) {
+                tinymce.get('recruitment').hide();
 
-        for (let value in popularTags) {
-            if (popularTags.hasOwnProperty(value)) {
-                dropdown += this._buildTagItem(value, popularTags[value]);
+                $('#recruitment').attr('disabled', 'disabled').hide();
+            } else {
+                tinymce.get('recruitment').show();
+
+                $('#recruitment').removeAttr('disabled');
+            }
+        },
+        'firm.is_private': function (flag) {
+            if (!Boolean(parseInt(flag))) {
+                google.maps.event.trigger(map, 'resize');
             }
         }
-
-        this.dropdown.html(dropdown);
     }
-
-    _onKeyDown() {
-        this.input.on('keydown', e => {
-            let keyCode = e.keyCode || window.event.keyCode;
-
-            if (keyCode === 27) {
-                this.input.val('');
-                this.dropdown.hide();
-            }
-            else if (keyCode === 13) {
-                e.preventDefault();
-            }
-        });
-    }
-
-    _onHover() {
-        this.dropdown
-            .on('mouseenter', 'li', e => {
-                $(e.currentTarget).addClass('hover');
-            })
-            .on('mouseleave', 'li', e => {
-                $(e.currentTarget).removeClass('hover');
-            });
-    }
-
-    _onItemClick() {
-        this.dropdown.on('click', 'li', e => {
-            this.addTag($(e.currentTarget).find('span').text());
-            this._hideDropdown();
-
-            this.input.val('').focus();
-            this._loadDefaultTags();
-        });
-    }
-
-    _onSuggestionClick() {
-        $(this.setup.suggestion).click(e => {
-            this.addTag($(e.currentTarget).text());
-        });
-    }
-
-    _onRemove() {
-        this.container.on('click', this.setup.remove, e => {
-            $(e.currentTarget).parents('.tag-item').remove();
-        });
-    }
-
-    _onFocus() {
-        this.input.on('focus click', () => {
-            this.dropdown.show();
-        });
-    }
-
-    select(position) {
-        let length = $('li:visible', this.dropdown).length;
-
-        if (length > 0) {
-            if (position >= length) {
-                position = 0;
-            }
-            else if (position < 0) {
-                position = length -1;
-            }
-            this.selectedIndex = position;
-
-            $('li:visible', this.dropdown).removeClass('hover');
-            $('li:visible:eq(' + this.selectedIndex + ')', this.dropdown).addClass('hover');
-
-            this.dropdown.scrollTop(position * $('li:first', this.dropdown).outerHeight());
-        }
-    }
-
-    _hideDropdown() {
-        this.dropdown.hide();
-    }
-
-    _showDropdown() {
-        this.dropdown.show();
-    }
-
-    addTag(value) {
-        value = $.trim(value)
-            .toString()
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/'/g, "&#39;")
-            .replace(/"/g, "&#34;")
-            .toLowerCase()
-            .replace(/ /g, '-');
-
-        $.post(this.input.data('post-url'), {name: value}, html => {
-            this.container.append(html);
-
-            let tags = [];
-
-            $('.tag-name').each(function() { // function zamiast arrow function
-                tags.push($(this).val());
-            });
-
-            $.get(this.input.data('suggestions-url'), {t: tags}, suggestions => {
-                if (!suggestions.length) {
-                    this.help.html('');
-                } else {
-                    this.help.html(`Podpowiedź: ${this._buildSuggestions(suggestions)}`);
-                    this._onSuggestionClick();
-                }
-            });
-
-        }).fail(() => {
-            $('#alert').modal('show');
-        });
-
-        this.selectedIndex = - 1;
-        $('li', this.dropdown).removeClass('hover').show();
-    }
-
-    _buildSuggestions(tags) {
-        return tags.map(tag => $('<a>', {class: this.setup.suggestion.substr(1)}).text(tag).prop('outerHTML')).join(', ');
-    }
-}
+});
 
 $(() => {
     'use strict';
-
-    if ($('#tag').length) {
-        new Tags();
-    }
-
-    if (typeof google !== 'undefined') {
-        google.maps.event.addDomListener(window, 'load', initialize);
-    }
 
     let navigation = $('#form-navigation');
     let fixed = $('#form-navbar-fixed');
 
     $('#form-navigation-container')
         .html(navigation.html())
-        .on('click', ':submit', () => $('#job-posting').submit())
+        .on('click', ':submit', () => $('.submit-form').submit())
         .on('click', 'button[data-submit-state]', e => $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state')));
 
     if (navigation.length) {
@@ -269,50 +284,7 @@ $(() => {
         $('.jumbotron .close').click();
     });
 
-    $('#job-posting').on('change', 'input[name="enable_apply"]', e => {
-        if (Boolean(parseInt($(e.currentTarget).val()))) {
-            tinymce.get('recruitment').hide();
-            $('#recruitment').attr('disabled', 'disabled').hide();
-
-            $('input[name="email"]').removeAttr('disabled');
-        }
-        else {
-            tinymce.get('recruitment').show();
-            $('input[name="email"]').attr('disabled', 'disabled');
-            $('#recruitment').removeAttr('disabled');
-        }
-    })
-    .on('keyup', 'input[name="deadline"]', e => {
-        let $this = $(e.currentTarget);
-        let value = parseInt($this.val());
-
-        if (value > 0) {
-            let date = new Date();
-            date.setDate(date.getDate() + value);
-
-            $this.next('span').children('strong').text(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
-        }
-        else {
-            $this.next('span').children('strong').text('--');
-        }
-    })
-    .on('change keyup', 'input[maxlength]', e => {
-        let $this = $(e.currentTarget);
-        let maxLength = $this.attr('maxlength');
-        let container = $this.next('span');
-        let length = maxLength - $this.val().length;
-
-        container.children('strong').text(length);
-    })
-    .on('change', 'input[name="private"]', e => {
-        $('#box-edit-firm, #choose-firm').toggle($(e.currentTarget).val() == 0);
-        $('#box-buttons').toggle($(e.currentTarget).val() != 0);
-    })
-    .on('change', 'input[name="is_agency"]', e => {
-        $('.agency').toggle($(e.currentTarget).val() != 1);
-        google.maps.event.trigger(map, 'resize');
-    })
-    .on('focus', ':input', e => {
+    $('.submit-form').on('focus', ':input', e => {
         let $this = $(e.currentTarget);
         let offset = $this.offset().top;
         let name = $this.attr('name');
@@ -329,95 +301,14 @@ $(() => {
         }
     });
 
-    if ($('input[name="private"]').val()) {
-        $('input[name="private"]:checked').trigger('change');
-    }
-
-    if ($('input[name="is_agency"]').val()) {
-        $('input[name="is_agency"]:checked').trigger('change');
-    }
-
-    $('.benefits').on('keyup focus blur', 'input[type="text"]', e => {
-        let $this = $(e.currentTarget);
-        let nextItem = $this.parent().next('li');
-
-        if ($this.val().length > 0) {
-            if (!nextItem.length) {
-                let clone = $this.parent().clone();
-                $('input', clone).val('');
-
-                clone.insertAfter($this.parent());
-            }
-        }
-        else if (nextItem.length) {
-            if ($('input', nextItem).val().length === 0) {
-                nextItem.remove();
-            }
-        }
-    }).on('click', 'li.clickable', e => {
-        let checkbox = $(e.currentTarget).children(':checkbox');
-
-        checkbox.prop('checked', !checkbox.is(':checked'));
-        $(e.currentTarget).toggleClass('checked');
-    });
-
     $.uploader({
         input: 'logo',
         onChanged: function(data) {
-            $('#job-posting').find('input[name="logo"]').val(data.name);
+            $('#firm-form').find('input[name="logo"]').val(data.name);
         },
         onDeleted: function() {
-            $('#job-posting').find('input[name="logo"]').val('');
+            $('#firm-form').find('input[name="logo"]').val('');
         }
-    });
-
-    $('#btn-add-firm').click(() => {
-        $.get(Config.get('firm_partial'), {}, (html) => {
-            $('#box-edit-firm').replaceWith(html);
-
-            $('#modal-firm').modal('hide');
-            initialize();
-        });
-    });
-
-    /**
-     * Ability to create new firm and assign it to the offer
-     */
-    $('#box-edit-firm').find('input[name="name"]').one('keyup', () => {
-        if ($('#firm-id').val() === '') {
-            return true;
-        }
-
-        $('#modal-firm').modal('show').find('.btn-primary').one('click', () => {
-            $('#btn-add-firm').click();
-
-            return false;
-        });
-    });
-
-    /**
-     * Ability to assign different firm to this job offer
-     */
-    $('.btn-firm').click(e => {
-        let self = $(e.currentTarget);
-
-        $.get(self.attr('href'), (html) => {
-            $('#box-edit-firm').replaceWith(html);
-            initialize();
-
-            $('.btn-firm').not(self).removeClass('btn-primary').addClass('btn-default');
-            self.addClass('btn-primary').removeClass('btn-default');
-
-            tinymce.EditorManager.editors = [];
-            initTinymce();
-        });
-
-        return false;
-    });
-
-    // podepnij plugin tylko na stronie oferty pracy, a nie na stronie z formularzem skladania aplikacji
-    $('#tags-container').each(function () {
-        $(this).sortable();
     });
 });
 
@@ -432,7 +323,7 @@ function initialize() {
     };
 
     let geocoder = new google.maps.Geocoder();
-    let map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    map = new google.maps.Map(document.getElementById("map"), mapOptions);
     let marker;
 
     let geocodeResult = function (results, status) {
@@ -527,4 +418,6 @@ function initialize() {
     google.maps.event.addListener(map, 'click', (e) => {
         reverseGeocode(e.latLng);
     });
+
+    return map;
 }

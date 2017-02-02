@@ -2,11 +2,25 @@
 
 namespace Coyote;
 
+use Coyote\Services\Media\Factory as MediaFactory;
+use Coyote\Services\Media\Logo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ * @property int $id
  * @property int $is_agency
+ * @property int $user_id
+ * @property bool $is_private
+ * @property string $name
+ * @property string $city
+ * @property string $street
+ * @property string $house
+ * @property string $postcode
+ * @property string $website
+ * @property string $description
+ * @property \Coyote\Firm\Benefit[] $benefits
+ * @property Logo $logo
  */
 class Firm extends Model
 {
@@ -18,7 +32,6 @@ class Firm extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
         'name',
         'logo',
         'website',
@@ -33,13 +46,30 @@ class Firm extends Model
         'house',
         'postcode',
         'latitude',
-        'longitude'
+        'longitude',
+        'is_private'
     ];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * Default fields values. Important for vue.js
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'is_agency' => false
+    ];
+
+    /**
+     * Do not change default value. It is set to FALSE on purpose.
+     *
+     * @var bool
+     */
+    protected $isPrivate = false;
 
     public static function boot()
     {
@@ -107,6 +137,36 @@ class Firm extends Model
     }
 
     /**
+     * @param string $value
+     * @return \Coyote\Services\Media\MediaInterface
+     */
+    public function getLogoAttribute($value)
+    {
+        if (!($value instanceof Logo)) {
+            $logo = app(MediaFactory::class)->make('logo', ['file_name' => $value]);
+            $this->attributes['logo'] = $logo;
+        }
+
+        return $this->attributes['logo'];
+    }
+
+    /**
+     * @param bool $flag
+     */
+    public function setIsPrivateAttribute($flag)
+    {
+        $this->isPrivate = $flag;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsPrivateAttribute()
+    {
+        return $this->isPrivate;
+    }
+
+    /**
      * @param int $userId
      */
     public function setDefaultUserId($userId)
@@ -114,5 +174,24 @@ class Firm extends Model
         if (empty($this->user_id)) {
             $this->user_id = $userId;
         }
+    }
+
+    public function __sleep()
+    {
+        if ($this->logo instanceof Logo) {
+            $this->attributes['logo'] = $this->logo->getFilename();
+        }
+
+        $properties = (new \ReflectionClass($this))->getProperties();
+
+        $result = [];
+
+        foreach ($properties as $property) {
+            if (!$property->isStatic()) {
+                $result[] = $property->getName();
+            }
+        }
+
+        return $result;
     }
 }

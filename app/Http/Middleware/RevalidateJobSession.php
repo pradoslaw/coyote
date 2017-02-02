@@ -3,6 +3,7 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
+use Coyote\Job;
 use Illuminate\Http\Request;
 
 class RevalidateJobSession
@@ -16,11 +17,7 @@ class RevalidateJobSession
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->has('revalidate')
-            || ($request->session()->has('job')
-                && $request->route('id') !== null
-                && $request->session()->get('job.id') !== $request->route('id'))
-        ) {
+        if ($request->has('revalidate')) {
             $this->removeSession($request);
         }
 
@@ -32,7 +29,6 @@ class RevalidateJobSession
      */
     private function removeSession(Request $request)
     {
-        $request->session()->remove('job');
-        $request->session()->remove('firm');
+        $request->session()->remove(Job::class);
     }
 }

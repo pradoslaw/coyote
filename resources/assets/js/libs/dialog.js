@@ -22,8 +22,8 @@ class Button {
         return this._options.onClick;
     }
 
-    set onClick(onClick) {
-        this.options.onClick = onClick;
+    set onClick (onClick) {
+        this._options.onClick = onClick;
     }
 
     build() {

@@ -10,6 +10,16 @@ class Choice extends Collection
     protected $choices = [];
 
     /**
+     * @var bool
+     */
+    protected $multiple = true;
+
+    /**
+     * @var bool
+     */
+    protected $expanded = true;
+
+    /**
      * @return array
      */
     public function getChoices()
@@ -24,6 +34,44 @@ class Choice extends Collection
     public function setChoices(array $choices)
     {
         $this->choices = $choices;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMultiple(): bool
+    {
+        return $this->multiple;
+    }
+
+    /**
+     * @param bool $flag
+     * @return $this
+     */
+    public function setMultiple(bool $flag)
+    {
+        $this->multiple = $flag;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExpanded(): bool
+    {
+        return $this->expanded;
+    }
+
+    /**
+     * @param bool $flag
+     * @return $this
+     */
+    public function setExpanded(bool $flag)
+    {
+        $this->expanded = $flag;
 
         return $this;
     }
@@ -47,18 +95,24 @@ class Choice extends Collection
         return $values;
     }
 
-    /** @todo ability of creating list of radio buttons */
+    /** @todo ability of creating multiple select */
     public function createChildren()
     {
-        $this->buildCheckboxes();
+        if ($this->expanded && $this->multiple) {
+            $this->buildCheckableChildren('checkbox');
+        }
+
+        if ($this->expanded && !$this->multiple) {
+            $this->buildCheckableChildren('radio');
+        }
     }
 
     /**
-     * Create set of checkboxes
+     * @param string $type
      */
-    private function buildCheckboxes()
+    private function buildCheckableChildren($type)
     {
-        $name = $this->name . '[]';
+        $name = $this->name . ($this->multiple ? '[]' : '');
 
         $checkedValues = $this->value;
         if ($checkedValues instanceof \Illuminate\Support\Collection) {
@@ -75,7 +129,7 @@ class Choice extends Collection
         foreach ($this->choices as $key => $label) {
             $id = str_replace('.', '_', $this->name) . '_' . $key;
 
-            $this->children[] = $this->makeField($name, 'checkbox', $this->parent, $this->childAttr + [
+            $this->children[] = $this->makeField($name, $type, $this->parent, [
                 'is_child' => true,
                 'label' => $label,
                 'checked_value' => $key,
@@ -86,7 +140,8 @@ class Choice extends Collection
                 'label_attr' => [
                     'for' => $id
                 ]
-            ]);
+            ])
+            ->mergeOptions($this->childAttr);
         }
     }
 }

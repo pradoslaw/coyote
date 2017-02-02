@@ -2,6 +2,8 @@
 
 namespace Coyote;
 
+use Carbon\Carbon;
+use Coyote\Job\Location;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $deadline_at
+ * @property int $deadline
  * @property int $salary_from
  * @property int $salary_to
  * @property int $country_id
@@ -36,6 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property User $user
  * @property Firm $firm
  * @property Tag[] $tags
+ * @property Location[] $locations
  */
 class Job extends Model
 {
@@ -53,7 +57,7 @@ class Job extends Model
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job' => ['description' => 10, 'requirements' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15],
+        'job' => ['description' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15],
         'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
@@ -63,8 +67,6 @@ class Job extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
-        'firm_id',
         'title',
         'description',
         'requirements',
@@ -82,14 +84,33 @@ class Job extends Model
         'enable_apply'
     ];
 
+    /**
+     * Default fields values.
+     *
+     * @var array
+     */
     protected $attributes = [
-        'enable_apply' => true
+        'enable_apply' => true,
+        'is_remote' => false,
+        'title' => ''
     ];
+
+    /**
+     * Cast to when calling toArray() (for example before index in elasticsearch).
+     *
+     * @var array
+     */
+    protected $casts = ['is_remote' => 'boolean', 'enable_apply' => 'boolean'];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    protected $appends = ['deadline'];
 
     /**
      * Elasticsearch type mapping
@@ -126,6 +147,12 @@ class Job extends Model
         "requirements" => [
             "type" => "text",
             "analyzer" => "default_analyzer"
+        ],
+        "is_remote" => [
+            "type" => "boolean"
+        ],
+        "remote_range" => [
+            "type" => "integer"
         ],
         "tags" => [
             "type" => "text",
@@ -189,6 +216,9 @@ class Job extends Model
 
             $seconds = ($timestamp - 1380585600) / 35000;
             $model->rank = number_format($model->score + $seconds, 6, '.', '');
+
+            // field must not be null
+            $model->is_remote = (int) $model->is_remote;
         });
     }
 
@@ -340,6 +370,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country()
+    {
+        return $this->belongsTo('Coyote\Country');
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)
@@ -364,6 +402,30 @@ class Job extends Model
     public function setSalaryToAttribute($value)
     {
         $this->attributes['salary_to'] = $value === null ? null : (int) trim($value);
+    }
+
+    /**
+     * @param int $value
+     */
+    public function setDeadlineAttribute($value)
+    {
+        $this->attributes['deadline_at'] = Carbon::now()->addDay($value);
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeadlineAttribute()
+    {
+        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now())->days + 1 : 90;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCityAttribute()
+    {
+        return $this->locations->implode('city', ', ');
     }
 
     /**
@@ -447,10 +509,15 @@ class Job extends Model
             'salary_to'         => $this->monthlySalary($this->salary_to),
             // yes, we index currency name so we don't have to look it up in database during search process
             'currency_name'     => $this->currency()->value('name'),
-            'firm'              => $this->firm()->first(['name', 'logo']),
             // higher tag's priorities first
             'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')
         ]);
+
+        if (!empty($body['firm'])) {
+            // logo is instance of File object. casting to string returns file name.
+            // cast to (array) if firm is empty.
+            $body['firm'] = array_map('strval', (array) array_only($body['firm'], ['name', 'logo']));
+        }
 
         return $body;
     }
