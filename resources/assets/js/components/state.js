@@ -6,7 +6,8 @@ $(function() {
             return;
         }
 
-        let origin, text = this.html();
+        let origin = this.html();
+        let text = origin;
 
         if (typeof this.data('submit-state') !== 'undefined') {
             text = this.data('submit-state');

@@ -337,14 +337,13 @@ $(function () {
         var $this = $(this);
 
         $('#modal-comment-delete').modal('show').one('click', '.danger', function() {
-            $(this).attr('disabled', 'disabled').text('Usuwanie...');
+            $(this).disable();
 
-            $.post($this.attr('href'), function() {
+            $.post($this.attr('href'), () => {
+                $(this).enable();
                 $('#modal-comment-delete').modal('hide');
 
-                $this.parent().fadeOut(function() {
-                    $(this).remove();
-                });
+                $this.parent().remove();
             })
             .error(function(event) {
                 if (typeof event.responseJSON.error !== 'undefined') {
