@@ -38,8 +38,8 @@ class SubmitController extends Controller
     {
         parent::__construct();
 
-        $this->middleware('job.revalidate', ['except' => ['postTag', 'getFirmPartial']]);
-        $this->middleware('job.session', ['except' => ['getIndex', 'postIndex', 'postTag', 'getFirmPartial']]);
+        $this->middleware('job.revalidate');
+        $this->middleware('job.session', ['except' => ['getIndex']]);
 
         $this->breadcrumb->push('Praca', route('job.home'));
 
