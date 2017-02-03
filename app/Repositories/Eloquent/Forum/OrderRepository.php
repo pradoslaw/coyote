@@ -52,8 +52,8 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
             ->leftJoin('forums', 'parent_id', '=', 'forum_orders.forum_id')
             ->get();
 
-        return array_unique(
+        return array_filter(array_unique(
             array_merge($result->pluck('forum_id')->toArray(), $result->pluck('child_forum_id')->toArray())
-        );
+        ));
     }
 }
