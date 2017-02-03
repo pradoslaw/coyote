@@ -114,7 +114,16 @@ class JobForm extends Form
                     'v-model' => 'job.title'
                 ],
                 'row_attr' => [
-                    'class' => 'form-group form-group-border'
+                    'class' => 'col-sm-9'
+                ]
+            ])
+            ->add('seniority_id', 'select', [
+                'rules' => 'integer',
+                'label' => 'Staż pracy',
+                'choices' => Job::getSeniorityList(),
+                'empty_value' => '--',
+                'row_attr' => [
+                    'class' => 'col-sm-2'
                 ]
             ])
             ->add('country_id', 'select', [

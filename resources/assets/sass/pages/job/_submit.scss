@@ -167,6 +167,11 @@ $font-size-control-label: 15px;
     &:last-child {
       border-bottom: none;
     }
+
+    // nested .form-group
+    .form-group {
+      margin-bottom: 0;
+    }
   }
 
   .benefits {

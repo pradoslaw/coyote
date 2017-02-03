@@ -78,9 +78,10 @@ class OfferController extends Controller
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
         return $this->view('job.offer', [
-            'ratesList'         => Job::getRatesList(),
-            'employmentList'    => Job::getEmploymentList(),
-            'employeesList'     => Firm::getEmployeesList(),
+            'rates_list'        => Job::getRatesList(),
+            'employment_list'   => Job::getEmploymentList(),
+            'employees_list'    => Firm::getEmployeesList(),
+            'seniority_list'    => Job::getSeniorityList(),
             'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days,
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
             'applied'           => $job->hasApplied($this->userId, $this->sessionId)
