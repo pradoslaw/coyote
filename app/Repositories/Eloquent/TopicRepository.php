@@ -10,7 +10,7 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 
 /**
  * @method $this withTrashed()
- * @method string search(array $body)
+ * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
  */
 class TopicRepository extends Repository implements TopicRepositoryInterface, SubscribableInterface
 {

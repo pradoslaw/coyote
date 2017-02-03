@@ -61,8 +61,14 @@
                 </li>
                 <li>
                     <i class="fa fa-pencil"></i>
-                    {{ employmentList[job.employment_id] }}
+                    {{ employment_list[job.employment_id] }}
                 </li>
+                {% if job.seniority_id %}
+                    <li title="Wymagany staż">
+                        <i class="fa fa-area-chart"></i>
+                        {{ seniority_list[job.seniority_id] }}
+                    </li>
+                {% endif %}
             </ul>
 
             {% if tags|length > 0 %}

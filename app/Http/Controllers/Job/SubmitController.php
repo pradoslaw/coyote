@@ -196,8 +196,9 @@ class SubmitController extends Controller
         return $this->view('job.submit.preview', [
             'job'               => $job,
             'tags'              => $tags,
-            'ratesList'         => Job::getRatesList(),
-            'employmentList'    => Job::getEmploymentList()
+            'rates_list'        => Job::getRatesList(),
+            'employment_list'   => Job::getEmploymentList(),
+            'seniority_list'    => Job::getSeniorityList()
         ]);
     }
 

@@ -39,7 +39,18 @@
                     </div>
                     <div class="panel-body">
 
-                        {{ form_row(form.title) }}
+                        <div class="form-group form-group-border">
+
+
+                        {#<div class="row">#}
+                            {#<div class="col-xs-12">#}
+                                    <div class="row">
+                                        {{ form_row(form.title) }}
+                                        {{ form_row(form.seniority_id) }}
+                                    </div>
+                            {#</div>#}
+                        {#</div>#}
+                        </div>
 
                         <div class="form-group form-group-border" :class="{'has-error': isInvalid(['city'])}">
                             <label class="control-label">Lokalizacja</label>

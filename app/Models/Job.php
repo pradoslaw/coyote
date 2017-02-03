@@ -53,11 +53,18 @@ class Job extends Model
     const WEEK            = 3;
     const HOUR            = 4;
 
+    const STUDENT         = 1;
+    const JUNIOR          = 2;
+    const MID             = 3;
+    const SENIOR          = 4;
+    const LEAD            = 5;
+    const MANAGER         = 6;
+
     /**
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job' => ['description' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15],
+        'job' => ['description' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
         'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
@@ -81,7 +88,8 @@ class Job extends Model
         'employment_id',
         'deadline_at',
         'email',
-        'enable_apply'
+        'enable_apply',
+        'seniority_id'
     ];
 
     /**
@@ -205,7 +213,7 @@ class Job extends Model
 
         static::saving(function (Job $model) {
             // nullable column
-            foreach (['firm_id', 'salary_from', 'salary_to', 'remote_range'] as $column) {
+            foreach (['firm_id', 'salary_from', 'salary_to', 'remote_range', 'seniority_id'] as $column) {
                 if (empty($model->{$column})) {
                     $model->{$column} = null;
                 }
@@ -223,7 +231,7 @@ class Job extends Model
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public static function getRatesList()
     {
@@ -231,11 +239,19 @@ class Job extends Model
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public static function getEmploymentList()
     {
         return [1 => 'Umowa o pracę', 2 => 'Umowa zlecenie', 3 => 'Umowa o dzieło', 4 => 'Kontrakt'];
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getSeniorityList()
+    {
+        return [self::STUDENT => 'Stażysta', self::JUNIOR => 'Junior', self::MID => 'Mid-Level', self::SENIOR => 'Senior', self::LEAD => 'Lead', self::MANAGER => 'Manager'];
     }
 
     /**

@@ -90,7 +90,7 @@
                                 {{ form_text('salary', request('salary'), {'id': 'salary-input', 'class': 'input-sm form-control'}) }}
                             </div>
                             <div class="col-xs-4" style="padding-left: 0">
-                                {{ form_select('currency', currencyList, request('currency'), {'class': 'input-sm form-control'}) }}
+                                {{ form_select('currency', currency_list, request('currency'), {'class': 'input-sm form-control'}) }}
                             </div>
                         </div>
 
@@ -183,7 +183,7 @@
                                 </div>
 
                                 <div class="col-xs-2">
-                                    {{ form_select('currency_id', currencyList, preferences.currency_id, {class: 'form-control'}) }}
+                                    {{ form_select('currency_id', currency_list, preferences.currency_id, {class: 'form-control'}) }}
                                 </div>
                             </div>
 
