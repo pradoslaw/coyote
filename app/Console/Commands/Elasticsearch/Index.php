@@ -106,7 +106,7 @@ class Index extends Command
 
         // ugly hack for job offers...
         if ($objectName === 'Coyote\Job') {
-            $builder = $builder->where('deadline_at', '>=', new Expression('NOW()'));
+            $builder = $builder->where('deadline_at', '>=', new Expression('NOW()'))->with('firm');
         } elseif ($objectName === 'Coyote\Microblog') {
             $builder = $builder->whereNull('parent_id');
         }
