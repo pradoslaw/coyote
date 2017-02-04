@@ -47,7 +47,7 @@ class AdController extends Controller
         $data = [];
         $tags = $this->getRefererTags();
 
-        if ($tags) {
+        if (!empty($tags)) {
             $builder->boostTags($tags);
         } else {
             $preferences = new Preferences($this->getSetting('job.preferences'));
@@ -87,6 +87,10 @@ class AdController extends Controller
         }
 
         $path = parse_url($referer, PHP_URL_PATH);
+        if (!$path) {
+            return [];
+        }
+
         $page = $this->page->findByPath($path);
 
         if (!$page) {
