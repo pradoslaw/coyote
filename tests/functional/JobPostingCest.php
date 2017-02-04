@@ -33,6 +33,7 @@ class JobPostingCest
         $I->fillField('input[name=city]', $city = 'Zielona góra');
         $I->fillField('input[name=salary_from]', $salaryFrom = $fake->numberBetween(0, 999));
         $I->fillField('input[name=salary_to]', $salaryTo = $fake->numberBetween(1000, 2000));
+        $I->selectOption('currency_id', 5);
 
         $I->fillField('textarea[name=description]', $fake->text);
         $I->selectOption(['name' => 'employment_id'], '1');
@@ -49,6 +50,7 @@ class JobPostingCest
         $I->see($title, '.media-heading');
         $I->see($city);
         $I->see($salaryFrom, '.salary');
+        $I->see('CHF', '.salary');
     }
 
     public function createJobOfferAsFirm(FunctionalTester $I)
