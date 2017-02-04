@@ -450,7 +450,7 @@ class Job extends Model
      */
     public function getCurrencyNameAttribute()
     {
-        return $this->currency->value('name');
+        return $this->currency()->value('name');
     }
 
     /**
