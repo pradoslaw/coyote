@@ -15,8 +15,7 @@ class PageRepository extends Repository implements PageRepositoryInterface
     }
 
     /**
-     * @param string $path
-     * @return mixed
+     * @inheritdoc
      */
     public function findByPath($path)
     {

@@ -6,7 +6,7 @@ interface PageRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param string $path
-     * @return mixed
+     * @return \Coyote\Page
      */
     public function findByPath($path);
 

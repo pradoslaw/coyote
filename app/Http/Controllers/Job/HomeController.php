@@ -63,7 +63,7 @@ class HomeController extends BaseController
             $this->builder->setPreferences($this->preferences);
         }
 
-        $this->builder->setBoostLocation($this->request->attributes->get('geocode'));
+        $this->builder->boostLocation($this->request->attributes->get('geocode'));
 
         return $this->load();
     }

@@ -300,7 +300,7 @@ class Job extends Model
             $score -= 15;
         }
 
-        return max(0, $score); // score can't be negative
+        return max(1, $score); // score can't be negative. 1 point min for elasticsearch algorithm
     }
 
     /**
