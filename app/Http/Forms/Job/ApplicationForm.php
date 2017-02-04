@@ -57,7 +57,7 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
         parent::__construct();
 
         $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) {
-            if ($form->request->session()->hasOldInput('cv')) {
+            if ($form->request->session()->getOldInput('cv')) {
                 $name = explode('_', $form->get('cv')->getValue(), 2)[1];
 
                 $attr = $form->get('cv')->getAttr();
