@@ -46,6 +46,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     $this->get('Application/{job}', ['uses' => 'ApplicationController@submit', 'as' => 'candidate']);
     $this->post('Application/{job}', ['uses' => 'ApplicationController@save', 'as' => 'candidate']);
+    $this->post('Upload', ['uses' => 'ApplicationController@upload', 'as' => 'application.upload']);
 
     // wyswietlanie promownych ofert pracy
     $this->get('Ad', ['uses' => 'AdController@index', 'as' => 'ad']);

@@ -8,6 +8,7 @@
 @import "../components/metadata";
 @import "job/home";
 @import "job/submit";
+@import "job/application";
 
 .benefits {
   .list-group-item {
@@ -51,15 +52,6 @@ img[src*="logo-gray"] {
 // --------------------------------
 
 @import "job/offer";
-
-// Formularz wysylania aplikacji w odpowiedzi na oferty pracy
-// ---------------------------------
-
-#job-application {
-  input[readonly] {
-    background-color: transparent;
-  }
-}
 
 // Maksymalna wielkosc czcionki klasy .lead wykorzystywana w sekcji "Ustaw swoja lokalizacje"
 // -------------------------------------------------------------------------------------------

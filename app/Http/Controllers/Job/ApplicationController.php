@@ -6,8 +6,8 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
+use Coyote\Mail\ApplicationSent;
 use Illuminate\Http\Request;
-use Illuminate\Mail\Message;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\Stream\Objects\Application as Stream_Application;
@@ -20,13 +20,16 @@ class ApplicationController extends Controller
     {
         parent::__construct();
 
-        $this->middleware(function (Request $request, $next) {
-            /** @var \Coyote\Job $job */
-            $job = $request->route('job');
-            abort_if($job->hasApplied($this->userId, $this->sessionId), 404);
+        $this->middleware(
+            function (Request $request, $next) {
+                /** @var \Coyote\Job $job */
+                $job = $request->route('job');
+                abort_if($job->hasApplied($this->userId, $this->sessionId), 404);
 
-            return $next($request);
-        });
+                return $next($request);
+            },
+            ['except' => 'upload']
+        );
     }
 
     /**
@@ -49,11 +52,11 @@ class ApplicationController extends Controller
         $form = $this->createForm(ApplicationForm::class);
 
         if ($this->userId) {
-            $form->email->setValue($this->auth->email);
+            $form->get('email')->setValue($this->auth->email);
         }
 
         // set default message
-        $form->text->setValue(view('job.partials.application', compact('job')));
+        $form->get('text')->setValue(view('job.partials.application', compact('job')));
 
         return $this->view('job.application', compact('job', 'form'))->with(
             'subscribed',
@@ -68,47 +71,47 @@ class ApplicationController extends Controller
      */
     public function save(Job $job, ApplicationForm $form)
     {
-        $attachment = [];
-
+        $filesystem = app('filesystem')->disk('local');
         $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->sessionId];
-        $file = $form->getRequest()->file('cv');
 
-        if ($file !== null) {
-            $attachment = [
-                'name' => $file->getClientOriginalName(),
-                'content' => file_get_contents($file->getRealPath())
-            ];
-        }
+        $mail = new ApplicationSent($form, $job);
 
-        $this->transaction(function () use ($job, $data, $attachment) {
+        $this->transaction(function () use ($form, $job, $data, $mail, $filesystem) {
             $target = (new Stream_Job)->map($job);
 
             $job->applications()->create($data);
-            $job = $job->toArray();
-
-            $this->getMailFactory()->send(
-                'emails.job.application',
-                $data,
-                function (Message $message) use ($data, $job, $attachment) {
-                    $message->to($job['email']);
-                    $message->replyTo($data['email'], $data['name']);
-                    $message->subject(sprintf('[%s] %s', $data['name'], $job['title']));
-
-                    if (!empty($attachment)) {
-                        $message->attachData($attachment['content'], $attachment['name']);
-                    }
-
-                    if (!empty($data['cc'])) {
-                        $message->cc($data['email']);
-                    }
-                }
-            );
+            $this->getMailFactory()->send($mail);
 
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
         });
 
+        if ($form->get('cv')->getValue()) {
+            $filesystem->delete('tmp/' . $form->get('cv')->getValue());
+        }
+
         return redirect()
             ->route('job.offer', [$job->id, $job->slug])
             ->with('success', 'Zgłoszenie zostało prawidłowo wysłane.');
+    }
+
+    /**
+     * Upload cv/resume
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function upload(Request $request)
+    {
+        $this->validate($request, [
+            'cv'             => 'max:' . (config('filesystems.upload_max_size') * 1024) . '|mimes:pdf,doc,docx,rtf'
+        ]);
+
+        $filename = uniqid() . '_' . $request->file('cv')->getClientOriginalName();
+        $request->file('cv')->storeAs('tmp', $filename, 'local');
+
+        return response()->json([
+            'filename' => $filename,
+            'name' => $request->file('cv')->getClientOriginalName()
+        ]);
     }
 }

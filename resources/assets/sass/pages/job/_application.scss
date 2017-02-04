@@ -1,0 +1,19 @@
+// Formularz wysylania aplikacji w odpowiedzi na oferty pracy
+// ---------------------------------
+
+#uploader {
+  background-color: #f8f8f8;
+  border: 2px dotted $border-color;
+  box-shadow: none;
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  font-size: $font-size-small;
+
+  &:before {
+    @include font-awesome($fa-var-file-pdf-o);
+    top: 5px;
+    left: 5px;
+    font-size: $font-size-base;
+  }
+}

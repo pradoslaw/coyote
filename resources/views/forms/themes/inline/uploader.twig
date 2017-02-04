@@ -1,0 +1,10 @@
+{% extends 'forms.themes.inline.row' %}
+{% import 'components.forms' as forms %}
+
+{% block widget %}
+    {{ form_hidden(name) }}
+
+    <div {{ forms.attr(attr) }}>
+        {{ attr.placeholder }}
+    </div>
+{% endblock %}
