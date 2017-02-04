@@ -3,3 +3,8 @@ code {
   padding: 1px 4px;
   font-size: 100%;
 }
+
+// <code> inside </a>
+a code {
+  color: $brand-primary;
+}
