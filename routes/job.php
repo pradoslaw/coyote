@@ -34,7 +34,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city', 'middleware' => 'job.redirect']);
     $this->get('Firma/{name}', ['uses' => 'HomeController@firm', 'as' => 'firm', 'middleware' => 'job.redirect']);
 
-    $this->get('{id}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
+    $this->get('{job}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
 
     $this->post('Subscribe/{job}', [
         'uses' => 'SubscribeController@index',

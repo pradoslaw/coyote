@@ -23,7 +23,7 @@ class MoveController extends Controller
      * @param Job $job
      * @return \Illuminate\View\View
      */
-    public function index(Job $job)
+    public function index($job)
     {
         $forum = app(ForumRepository::class);
 
@@ -46,7 +46,7 @@ class MoveController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function move(Job $job, Request $request)
+    public function move($job, Request $request)
     {
         $this->validate($request, [
             'forum_id' => 'required|integer|exists:forums,id'

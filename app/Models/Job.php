@@ -40,6 +40,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Firm $firm
  * @property Tag[] $tags
  * @property Location[] $locations
+ * @property Currency[] $currency
  */
 class Job extends Model
 {
@@ -442,6 +443,14 @@ class Job extends Model
     public function getCityAttribute()
     {
         return $this->locations->implode('city', ', ');
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrencyNameAttribute()
+    {
+        return $this->currency->value('name');
     }
 
     /**

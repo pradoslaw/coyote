@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Carbon\Carbon;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
@@ -26,7 +25,6 @@ class OfferController extends Controller
     private $firm;
 
     /**
-     * OfferController constructor.
      * @param JobRepository $job
      * @param FirmRepository $firm
      */
@@ -39,15 +37,11 @@ class OfferController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param \Coyote\Job $job
      * @return \Illuminate\View\View
      */
-    public function index($id)
+    public function index($job)
     {
-        // call method from repository to fetch job data and country name and currency
-        /** @var \Coyote\Job $job */
-        $job = $this->job->findById($id);
-
         $this->breadcrumb->push('Praca', route('job.home'));
         $this->breadcrumb->push($job->title, route('job.offer', [$job->id, $job->slug]));
 
@@ -82,7 +76,6 @@ class OfferController extends Controller
             'employment_list'   => Job::getEmploymentList(),
             'employees_list'    => Firm::getEmployeesList(),
             'seniority_list'    => Job::getSeniorityList(),
-            'deadline'          => Carbon::parse($job->deadline_at)->diff(Carbon::now())->days,
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
             'applied'           => $job->hasApplied($this->userId, $this->sessionId)
         ])->with(

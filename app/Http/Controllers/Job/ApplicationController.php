@@ -36,7 +36,7 @@ class ApplicationController extends Controller
      * @param Job $job
      * @return \Illuminate\View\View
      */
-    public function submit(Job $job)
+    public function submit($job)
     {
         abort_if(!$job->enable_apply, 404);
 
@@ -69,7 +69,7 @@ class ApplicationController extends Controller
      * @param ApplicationForm $form
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(Job $job, ApplicationForm $form)
+    public function save($job, ApplicationForm $form)
     {
         $filesystem = app('filesystem')->disk('local');
         $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->sessionId];
