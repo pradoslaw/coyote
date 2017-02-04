@@ -44,11 +44,14 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     $this->post('Preferences', ['uses' => 'PreferencesController@index', 'as' => 'preferences']);
 
-    $this->get('Application/{job}', ['uses' => 'ApplicationController@submit', 'as' => 'candidate']);
-    $this->post('Application/{job}', ['uses' => 'ApplicationController@save', 'as' => 'candidate']);
+    // Send job's application
+    // ------------------------------------------------------------------------------------------
+    $this->get('Application/{job}', ['uses' => 'ApplicationController@submit', 'as' => 'application']);
+    $this->post('Application/{job}', ['uses' => 'ApplicationController@save', 'as' => 'application']);
     $this->post('Upload', ['uses' => 'ApplicationController@upload', 'as' => 'application.upload']);
 
-    // wyswietlanie promownych ofert pracy
+    // Job's ads
+    // --------------------------------------------------------------
     $this->get('Ad', ['uses' => 'AdController@index', 'as' => 'ad']);
 
     // move job offer

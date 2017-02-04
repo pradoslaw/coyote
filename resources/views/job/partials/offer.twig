@@ -139,7 +139,7 @@
                 </div>
             {% else %}
                 <div id="apply">
-                    <a class="btn btn-primary" href="{{ not preview ? route('job.candidate', [job.id]) : 'javascript:' }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
+                    <a class="btn btn-primary" href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
                 </div>
             {% endif %}
         </div>
