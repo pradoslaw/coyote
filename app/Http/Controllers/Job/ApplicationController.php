@@ -76,7 +76,7 @@ class ApplicationController extends Controller
 
         $mail = new ApplicationSent($form, $job);
 
-        $this->transaction(function () use ($form, $job, $data, $mail, $filesystem) {
+        $this->transaction(function () use ($job, $data, $mail) {
             $target = (new Stream_Job)->map($job);
 
             $job->applications()->create($data);
