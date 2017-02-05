@@ -87,6 +87,11 @@ class SettingsForm extends Form
                     'placeholder' => 'Np. Junior Java Developer'
                 ]
             ])
+            ->add('github', 'text', [
+                'rules' => 'string|max:200',
+                'label' => 'Konto Github',
+                'help' => 'Nazwa użytkownika lub link do konta Github.'
+            ])
             ->add('bio', 'textarea', [
                 'rules' => 'string|max:500',
                 'label' => 'O sobie',
@@ -144,6 +149,16 @@ class SettingsForm extends Form
 
                 $form->get('latitude')->setValue($location->latitude);
                 $form->get('longitude')->setValue($location->longitude);
+            }
+        });
+
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
+            $github = $form->get('github')->getValue();
+
+            if ($github) {
+                if (filter_var($github, FILTER_VALIDATE_URL) === false) {
+                    $form->get('github')->setValue('https://github.com/' . $github);
+                }
             }
         });
     }

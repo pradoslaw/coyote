@@ -64,6 +64,16 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                 $form->get('cv')->setAttr(array_merge($attr, ['placeholder' => $name]));
             }
         });
+
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
+            $github = $form->get('github')->getValue();
+
+            if ($github) {
+                if (filter_var($github, FILTER_VALIDATE_URL) === false) {
+                    $form->get('github')->setValue('https://github.com/' . $github);
+                }
+            }
+        });
     }
 
     public function buildForm()
@@ -97,6 +107,11 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                     'data-upload-url' => route('job.application.upload')
                 ],
                 'template' => 'uploader'
+            ])
+            ->add('github', 'text', [
+                'rules' => 'string|max:200',
+                'label' => 'Konto Github',
+                'help' => 'Nazwa użytkownika lub link do konta Github.'
             ])
             ->add('salary', 'select', [
                 'label' => 'Minimalne oczekiwania wynagrodzenie',

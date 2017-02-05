@@ -44,6 +44,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $ip
  * @property string $browser
  * @property string $website
+ * @property string $github
  * @property string $location
  * @property float $latitude
  * @property float $longitude

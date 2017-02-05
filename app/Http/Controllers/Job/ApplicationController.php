@@ -53,6 +53,7 @@ class ApplicationController extends Controller
 
         if ($this->userId) {
             $form->get('email')->setValue($this->auth->email);
+            $form->get('github')->setValue($this->auth->github);
         }
 
         // set default message

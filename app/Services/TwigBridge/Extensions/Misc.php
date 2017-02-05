@@ -23,7 +23,8 @@ class Misc extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('timer', [$this, 'getGenerationTime']),
+            new Twig_SimpleFunction('timer', [$this, 'totalRuntime']),
+            new Twig_SimpleFunction('github', [$this, 'githubAccountName']),
             new Twig_SimpleFunction('declination', [Declination::class, 'format']),
             new Twig_SimpleFunction('sortable', [$this, 'sortable'], ['is_safe' => ['html']])
         ];
@@ -50,7 +51,7 @@ class Misc extends Twig_Extension
      *
      * @return string
      */
-    public function getGenerationTime()
+    public function totalRuntime()
     {
         // w przypadku testow funkcjonalnych, stala ta nie jest deklarowana
         if (!defined('LARAVEL_START')) {
@@ -64,6 +65,24 @@ class Misc extends Twig_Extension
         } else {
             return number_format($timer, 2) . ' s';
         }
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    public function githubAccountName($url)
+    {
+        if (!$url) {
+            return '';
+        }
+
+        $path = parse_url($url, PHP_URL_PATH);
+        if (!$path) {
+            return '';
+        }
+
+        return trim($path, '/');
     }
 
     /**
