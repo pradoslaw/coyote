@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Coyote\Notifications\ResetPasswordNotification;
+use Coyote\Services\Alert\DatabaseChannel;
 use Coyote\Services\Media\Photo;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Illuminate\Auth\Authenticatable;
@@ -211,9 +212,24 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany('Coyote\User\Skill')->orderBy('order');
     }
 
-    public function notificationSetting($typeId)
+    /**
+     * @param int $typeId
+     * @return array
+     */
+    public function notificationChannels($typeId)
     {
-        return $this->hasOne('Coyote\Alert\Setting')->where('type_id', $typeId)->first();
+        $channels = [];
+        $settings = $this->hasOne('Coyote\Alert\Setting')->where('type_id', $typeId)->first();
+
+        if ($settings->profile) {
+            $channels[] = DatabaseChannel::class;
+        }
+
+        if ($this->email && $this->is_active && $this->is_confirm && !$this->is_blocked && $settings->email) {
+            $channels[] = 'mail';
+        }
+
+        return $channels;
     }
 
     public function getUnreadNotification($objectId)
