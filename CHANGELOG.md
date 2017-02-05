@@ -11,6 +11,7 @@
 - Grupowanie wiadomości po nazwie użytkownika (jeden użytkownik = jedna konwersacja)
 - Okno powiadomień oraz wiadomości prywatnych na urzędzeniach mobilnych: wyświetlanie na całą szerokość okna
 - Lista mikroblogów użytkownika widoczna w jego profilu
+- Możliwość zapisania linku do konta github
 
 **Forum**
 - Wyświetlanie tagów do wątków, nawet na małych ekranach
@@ -25,6 +26,7 @@
 - Lista ofert pracy w dziale Praca uwzględnia w drobnym stopniu Twoją aktualną lokalizację (prezentując oferty pracy zdalnej lub bliskie Twojemu miejscu zamieszkania)
 - Formularz dodawania nowego ogłoszenia: przypisany na Vue.js
 - Nowe pole z możliwością określania stażu pracy w ogłoszeniu (junior, seniot itp)
+- Formularz aplikacji o pracę: możliwość wysłania linka do konta Github
 
 ## 2.0
 
