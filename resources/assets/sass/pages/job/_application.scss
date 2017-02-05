@@ -6,15 +6,15 @@
   border: 2px dotted $border-color;
   box-shadow: none;
   position: relative;
-  padding-left: 25px;
+  padding-left: 30px;
   cursor: pointer;
   font-size: $font-size-small;
 
   &:before {
     @include font-awesome($fa-var-file-pdf-o);
-    top: 5px;
-    left: 5px;
-    font-size: $font-size-base;
+    top: 3px;
+    left: 10px;
+    font-size: 14px;
   }
 }
 
