@@ -21,13 +21,7 @@
 
                     <tr>
                         <td class="col-logo">
-                            <a href="{{ url }}">
-                                {% if job.firm.logo %}
-                                    <img title="{{ job.firm.name }}" src="{{ logo(job.firm.logo) }}">
-                                {% else %}
-                                    <img src="{{ cdn('img/logo-gray.png') }}">
-                                {% endif %}
-                            </a>
+                            <a href="{{ url }}"><img alt="{{ job.firm.name }}" src="{{ logo(job.firm.logo) }}"></a>
                         </td>
                         <td class="col-body">
                             <h2><a href="{{ url }}" title="{{ job.title|raw }}">{{ job.title|raw }}</a></h2>

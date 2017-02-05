@@ -66,6 +66,7 @@ class Media extends Twig_Extension
     /**
      * @param string $factory
      * @param string $filename
+     * @param string $placeholder
      * @return string
      * @throws \Exception
      */
