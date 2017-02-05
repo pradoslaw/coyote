@@ -101,7 +101,7 @@
                                     <li class="divider"></li>
                                     <li>
                                         {{ form_open({url: route('logout')}) }}
-                                            <button type="submit"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button>
+                                            <button type="submit" class="btn-sign-out"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button>
                                         {{ form_close() }}
                                     </li>
                                 </ul>
@@ -182,7 +182,9 @@
                                     <div><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></div>
                                 {% endif %}
 
-                                <div><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</a></div>
+                                {{ form_open({url: route('logout')}) }}
+                                    <div><button type="submit" class="btn-sign-out"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button></div>
+                                {{ form_close() }}
                             {% else %}
                                 <div class="row">
                                     <div class="col-xs-6">
