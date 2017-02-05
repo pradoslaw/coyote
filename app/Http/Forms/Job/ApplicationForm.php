@@ -111,7 +111,10 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
             ->add('github', 'text', [
                 'rules' => 'string|max:200',
                 'label' => 'Konto Github',
-                'help' => 'Nazwa użytkownika lub link do konta Github.'
+                'help' => 'Nazwa użytkownika lub link do konta Github.',
+                'row_attr' => [
+                    'class' => 'github'
+                ]
             ])
             ->add('salary', 'select', [
                 'label' => 'Minimalne oczekiwania wynagrodzenie',

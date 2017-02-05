@@ -17,3 +17,19 @@
     font-size: $font-size-base;
   }
 }
+
+.github {
+  position: relative;
+
+  &:before {
+    @include font-awesome($fa-var-github);
+    top: 28px;
+    left: 10px;
+    font-size: 15px;
+    color: $gray-light;
+  }
+
+  input {
+    padding-left: 30px;
+  }
+}
