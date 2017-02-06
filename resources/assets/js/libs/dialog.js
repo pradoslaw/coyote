@@ -1,5 +1,8 @@
 
 class Button {
+    /**
+     * @param options
+     */
     constructor(options) {
         let defaultOptions = {
             label: '',
