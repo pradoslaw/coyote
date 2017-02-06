@@ -204,7 +204,7 @@ class JobForm extends Form
                 ]
             ])
             ->add('description', 'textarea', [
-                'label' => 'Opis oferty',
+                'label' => 'Opis oferty (opcjonalnie)',
                 'help' => 'Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.',
                 'style' => 'height: 140px'
             ])
