@@ -363,6 +363,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function features()
+    {
+        return $this->belongsToMany('Coyote\Feature', 'job_features')->withPivot(['is_checked', 'value']);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function subscribers()
