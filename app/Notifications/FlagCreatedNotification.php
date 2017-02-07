@@ -5,8 +5,8 @@ namespace Coyote\Notifications;
 use Coyote\Alert;
 use Coyote\Flag;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class FlagCreatedNotification extends Notification implements ShouldQueue
@@ -54,6 +54,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->greeting($user->name)
+            ->subject($user->name . ' dodał nowy raport')
             ->line(sprintf('%s zgłosił naruszenie z powodu %s.', $this->flag->user->name, $this->flag->type->name))
             ->line('Kliknij na poniższy przycisk jeżeli chcesz podjąć w związku z tym jakieś działania.')
             ->action('Zobacz raport', $this->notificationUrl());
@@ -97,11 +98,16 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     }
 
     /**
+     * @param \Coyote\User $user
      * @return array
      */
-    public function toBroadcast()
+    public function toBroadcast($user)
     {
-        return [];
+        return [
+            'headline'  => $user->name . ' dodał nowy raport',
+            'subject'   => $this->flag->type->name,
+            'url'       => $this->notificationUrl()
+        ];
     }
 
     /**
