@@ -90,6 +90,8 @@ class JobForm extends Form
 
             // tags as json (for vue.js)
             $form->get('tags')->setValue(collect($form->get('tags')->getChildrenValues())->toJson());
+            // features as json
+            $form->get('features')->setValue(collect($form->get('features')->getChildrenValues())->toJson());
         });
     }
 
@@ -201,6 +203,14 @@ class JobForm extends Form
                 'child_attr' => [
                     'type' => 'child_form',
                     'class' => TagsForm::class
+                ]
+            ])
+            ->add('features', 'collection', [
+                'label' => 'Narzędzia oraz metodologia pracy',
+                'help' => 'Zaznaczenie tych pól nie jest obowiązkowe, jednak wpływaja one na pozycję oferty na liście wyszukiwania.',
+                'child_attr' => [
+                    'type' => 'child_form',
+                    'class' => FeaturesForm::class
                 ]
             ])
             ->add('description', 'textarea', [

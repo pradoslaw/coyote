@@ -60,7 +60,6 @@ class SubmitController extends Controller
             $job = $request->session()->get(Job::class);
         } else {
             $job = $this->job->findOrNew($id);
-            $job->setDefaultUserId($this->userId);
 
             // load default firm regardless of offer is private or not
             if (!$job->firm_id) {
@@ -70,7 +69,10 @@ class SubmitController extends Controller
                 $job->firm()->associate($firm);
             }
 
-            $job->load(['tags', 'locations', 'country']);
+            $job->load(['tags', 'features', 'locations', 'country']);
+
+            $job->setDefaultUserId($this->userId);
+            $job->setDefaultFeatures($this->job->getDefaultFeatures());
         }
 
         $this->authorize('update', $job);

@@ -40,16 +40,10 @@
                     <div class="panel-body">
 
                         <div class="form-group form-group-border">
-
-
-                        {#<div class="row">#}
-                            {#<div class="col-xs-12">#}
-                                    <div class="row">
-                                        {{ form_row(form.title) }}
-                                        {{ form_row(form.seniority_id) }}
-                                    </div>
-                            {#</div>#}
-                        {#</div>#}
+                            <div class="row">
+                                {{ form_row(form.title) }}
+                                {{ form_row(form.seniority_id) }}
+                            </div>
                         </div>
 
                         <div class="form-group form-group-border" :class="{'has-error': isInvalid(['city'])}">
@@ -163,6 +157,27 @@
                             {{ form_error(form.deadline) }}
                         </div>
 
+                        <div class="form-group form-group-border">
+                            {{ form_label(form.features) }}
+                            {{ form_error(form.features) }}
+
+                            <ol class="features list-group clearfix form-horizontal">
+                                <li class="list-group-item col-sm-6" v-for="feature in features" :class="{checked: feature.pivot.is_checked}">
+                                    <div class="form-group">
+                                        <div class="col-xs-7 control-label">
+                                            <i class="fa fa-fw " :class="{'fa-check': feature.pivot.is_checked, 'fa-minus': !feature.pivot.is_checked}"></i>
+
+                                            ${ feature.name }
+                                        </div>
+
+                                        <div class="col-xs-5">
+                                            <input type="text" class="form-control input-sm" :placeholder="feature.default" :disabled="!feature.pivot.is_checked">
+                                        </div>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+
                         {{ form_row(form.description) }}
 
                         <div class="form-group" :class="{'has-error': isInvalid(['email'])}">
@@ -245,7 +260,13 @@
     {{ parent() }}
 
     <script>
-        var data = {job: {{ job|raw }}, tags: {{ form.tags.value|raw }}, errors: {{ form_errors|raw }}, suggestions: []};
+        var data = {
+            job: {{ job|raw }},
+            tags: {{ form.tags.value|raw }},
+            features: {{ form.features.value|raw }},
+            errors: {{ form_errors|raw }},
+            suggestions: []
+        };
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>

@@ -174,7 +174,7 @@ $font-size-control-label: 15px;
     }
   }
 
-  .benefits {
+  .benefits, .features {
     li {
       border: none;
       color: $gray-light;
@@ -197,6 +197,10 @@ $font-size-control-label: 15px;
       display: inline-block;
       width: 90%;
       margin-left: 10px;
+    }
+
+    .control-label {
+      text-align: left;
     }
   }
 }
