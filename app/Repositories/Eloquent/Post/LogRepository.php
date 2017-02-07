@@ -41,18 +41,17 @@ class LogRepository extends Repository implements LogRepositoryInterface
      */
     public function takeForPost($postId)
     {
-        return $this->model->selectRaw(
-                        'DISTINCT ON(post_log.id)
-                        post_log.*,
-                        posts.user_name,
-                        users.name AS author_name,
-                        sessions.updated_at AS session_updated_at'
-                    )
-                    ->where('post_id', $postId)
-                    ->join('posts', 'posts.id', '=', 'post_id')
-                    ->leftJoin('users', 'users.id', '=', 'post_log.user_id')
-                    ->leftJoin('sessions', 'sessions.user_id', '=', 'posts.user_id')
-                    ->orderBy('post_log.id', 'DESC')
-                    ->get();
+        return $this->model->select([
+                'post_log.id',
+                'post_log.*',
+                'posts.user_name',
+                'users.name AS author_name',
+                'users.is_online'
+            ])
+            ->where('post_id', $postId)
+            ->join('posts', 'posts.id', '=', 'post_id')
+            ->leftJoin('users', 'users.id', '=', 'post_log.user_id')
+            ->orderBy('post_log.id', 'DESC')
+            ->get();
     }
 }

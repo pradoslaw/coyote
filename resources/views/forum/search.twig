@@ -54,7 +54,7 @@
                             <div class="post-body">
                                 <div class="row">
                                     <div class="col-sm-2 col-xs-12 col-user">
-                                        <h5 class="{{ log.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.session_updated_at ? 'online' : 'offline' }}">
+                                        <h5 class="{{ log.is_online ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.is_online ? 'online' : 'offline' }}">
                                             {% if post.user_id %}
                                                 {{ link_to_profile(users[post.user_id]) }}
                                             {% else %}

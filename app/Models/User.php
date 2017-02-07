@@ -53,6 +53,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $position
  * @property string $access_ip
  * @property \Coyote\Services\Media\MediaInterface $photo
+ * @property bool $is_online
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -118,7 +119,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'allow_subscribe' => 'int',
         'allow_sticky_header' => 'int',
         'is_confirm' => 'int',
-        'is_active' => 'int'
+        'is_active' => 'int',
+        'is_online' => 'int'
     ];
 
     public static function boot()

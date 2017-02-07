@@ -444,6 +444,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 'author.photo',
                 'author.is_active',
                 'author.is_blocked',
+                'author.is_online',
                 'author.sig',
                 'author.location',
                 'author.posts AS author_posts',
@@ -485,8 +486,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         }
 
         return $sql
-            ->selectRaw('DISTINCT ON(posts.id) posts.*, sessions.updated_at AS session_updated_at')
-            ->leftJoin('sessions', 'sessions.user_id', '=', 'posts.user_id')
+            ->selectRaw('posts.*')
             ->orderBy('posts.id');
     }
 }
