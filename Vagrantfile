@@ -10,6 +10,8 @@ Vagrant.configure("2") do |config|
 	config.vm.network :forwarded_port, guest: 5432, host: 5433
 	config.ssh.forward_agent = true
 
+	#ENV['LC_ALL']="en_US.UTF-8"
+
 	# Specify folder which you would like to have available in your box
 	#config.vm.synced_folder ".", "/vagrant"
 

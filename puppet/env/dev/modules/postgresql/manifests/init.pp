@@ -1,7 +1,6 @@
 class postgresql {
-	package { ['postgresql', 'postgresql-contrib']:
-		ensure => present,
-		require => Exec['apt-get update'],
+	package { 'postgresql':
+		ensure => present
 	}
 
 	service { 'postgresql':
