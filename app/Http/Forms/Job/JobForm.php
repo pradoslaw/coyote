@@ -5,6 +5,7 @@ namespace Coyote\Http\Forms\Job;
 use Coyote\Country;
 use Coyote\Currency;
 use Coyote\Job;
+use Coyote\Repositories\Contracts\FeatureRepositoryInterface as FeatureRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\Geocoder\GeocoderInterface;
@@ -38,16 +39,24 @@ class JobForm extends Form
     private $geocoder;
 
     /**
-     * @param GeocoderInterface $geocoder
+     * @var FeatureRepository
      */
-    public function __construct(GeocoderInterface $geocoder)
+    private $feature;
+
+    /**
+     * @param GeocoderInterface $geocoder
+     * @param FeatureRepository $feature
+     */
+    public function __construct(GeocoderInterface $geocoder, FeatureRepository $feature)
     {
         parent::__construct();
 
         $this->geocoder = $geocoder;
+        $this->feature = $feature;
 
         $this->addEventListener(FormEvents::POST_SUBMIT, function (JobForm $form) {
             $this->forget($this->data->tags);
+            $this->forget($this->data->features);
             $this->forget($this->data->locations);
 
             // deadline not exists in table "jobs" nor in fillable array. set value so model can transform it
@@ -61,6 +70,13 @@ class JobForm extends Form
                 $this->data->tags->add($model);
             }
 
+            foreach ($form->request->get('features') as $featureId => $feature) {
+                $pivot = $this->data->features()->newPivot(['checked' => (int) $feature['checked']]);
+                $model = $this->feature->find($featureId)->setRelation('pivot', $pivot);
+
+                $this->data->features->add($model);
+            }
+
             $cities = (new City())->grab($form->get('city')->getValue());
 
             foreach ($cities as $city) {
@@ -70,7 +86,7 @@ class JobForm extends Form
             $this->data->country()->associate((new Country())->find($form->get('country_id')->getValue()));
         });
 
-        $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) {
+        $this->addEventListener(FormEvents::PRE_RENDER, function (JobForm $form) {
             $session = $form->getRequest()->session();
 
             if ($session->hasOldInput('tags')) {
@@ -90,7 +106,7 @@ class JobForm extends Form
 
             // tags as json (for vue.js)
             $form->get('tags')->setValue(collect($form->get('tags')->getChildrenValues())->toJson());
-            // features as json
+            // features as json (for vue.js)
             $form->get('features')->setValue(collect($form->get('features')->getChildrenValues())->toJson());
         });
     }
@@ -145,7 +161,6 @@ class JobForm extends Form
                 'label_attr' => [
                     'for' => 'remote'
                 ]
-
             ])
             ->add('remote_range', 'select', [
                 'rules' => 'integer|min:10|max:100',

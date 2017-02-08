@@ -74,7 +74,7 @@ class SubmitController extends Controller
             $job->setDefaultUserId($this->userId);
             $job->setDefaultFeatures($this->job->getDefaultFeatures());
         }
-
+//dd($job);
         $this->authorize('update', $job);
         $this->authorize('update', $job->firm);
 
@@ -216,7 +216,7 @@ class SubmitController extends Controller
         $this->authorize('update', $job);
 
         $tags = [];
-        if ($job->tags->count()) {
+        if (count($job->tags)) {
             $order = 0;
 
             foreach ($job->tags as $tag) {
@@ -229,7 +229,12 @@ class SubmitController extends Controller
             }
         }
 
-        $this->transaction(function () use (&$job, $request, $tags) {
+        $features = [];
+        foreach ($job->features as $feature) {
+            $features[$feature->id] = $feature->pivot->toArray();
+        }
+
+        $this->transaction(function () use (&$job, $request, $tags, $features) {
             $activity = $job->id ? Stream_Update::class : Stream_Create::class;
 
             if ($job->firm->is_private) {
@@ -257,6 +262,7 @@ class SubmitController extends Controller
             $job->locations()->saveMany($job->locations);
 
             $job->tags()->sync($tags);
+            $job->features()->sync($features);
 
             event(new JobWasSaved($job));
 

@@ -368,7 +368,7 @@ class Job extends Model
      */
     public function features()
     {
-        return $this->belongsToMany('Coyote\Feature', 'job_features')->orderBy('order')->withPivot(['is_checked', 'name']);
+        return $this->belongsToMany('Coyote\Feature', 'job_features')->orderBy('order')->withPivot(['checked', 'value']);
     }
 
     /**
@@ -479,7 +479,7 @@ class Job extends Model
     {
         if (!count($this->features)) {
             foreach ($features as $feature) {
-                $pivot = $this->features()->newPivot(['is_checked' => false]);
+                $pivot = $this->features()->newPivot(['checked' => false]);
                 $this->features->add($feature->setRelation('pivot', $pivot));
             }
         }

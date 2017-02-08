@@ -106,8 +106,14 @@ new Vue({
         removeBenefit: function (benefit) {
             this.benefits.splice(this.benefits.indexOf(benefit), 1);
         },
-        updateBenefit: function () {
-            //
+        updateBenefit: function () {},
+        /**
+         * Enable/disable feature for this offer.
+         *
+         * @param feature
+         */
+        toggleFeature: function (feature) {
+            feature.pivot.checked = +!feature.pivot.checked;
         },
         addFirm: function () {
             let dialog = new Dialog({

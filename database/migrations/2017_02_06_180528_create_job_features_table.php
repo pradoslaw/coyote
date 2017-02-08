@@ -19,8 +19,8 @@ class CreateJobFeaturesTable extends Migration
             $table->increments('id');
             $table->integer('job_id');
             $table->smallInteger('feature_id');
-            $table->string('name')->nullable();
-            $table->tinyInteger('is_checked')->default(0);
+            $table->string('value')->nullable();
+            $table->tinyInteger('checked')->default(0);
 
             $table->index('job_id');
 
