@@ -46,10 +46,10 @@ abstract class GridBuilderTestCase extends TestCase
 
         $this->view = $this->app['view'];
         $this->request = $this->app['request'];
-        $this->request->setSession($this->app['session.store']);
+        $this->request->setLaravelSession($this->app['session.store']);
         $this->validator = $this->app['validator'];
         $this->htmlBuilder = new HtmlBuilder($this->app['url'], $this->view);
-        $this->formBuilder = new FormBuilder($this->htmlBuilder, $this->app['url'], $this->view, $this->request->session()->getToken());
+        $this->formBuilder = new FormBuilder($this->htmlBuilder, $this->app['url'], $this->view, $this->request->session()->token());
 
         $this->gridHelper = new GridHelper($this->request, $this->validator, $this->view, $this->htmlBuilder, $this->formBuilder);
     }
