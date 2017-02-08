@@ -54,7 +54,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->greeting($user->name)
-            ->subject($user->name . ' dodał nowy raport')
+            ->subject($this->flag->user->name . ' dodał nowy raport')
             ->line(sprintf('%s zgłosił naruszenie z powodu %s.', $this->flag->user->name, $this->flag->type->name))
             ->line('Kliknij na poniższy przycisk jeżeli chcesz podjąć w związku z tym jakieś działania.')
             ->action('Zobacz raport', $this->notificationUrl());
