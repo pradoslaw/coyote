@@ -44,7 +44,7 @@
                     {{ job.created_at|format_date }}
                 </li>
 
-                {% if not preview and can('update', job) %}
+                {% if not preview and can('job-update') %}
                     <li class="counter">
                         <i class="fa fa-eye"></i>
                         {{ declination(job.views, ['odsłony', 'odsłon', 'odsłony']) }}
