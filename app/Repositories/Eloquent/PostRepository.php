@@ -454,8 +454,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 'author.created_at AS author_created_at',
                 'author.visited_at AS author_visited_at',
                 'editor.name AS editor_name',
-                'editor.name AS editor_is_active',
-                'editor.name AS editor_is_blocked',
+                'editor.is_active AS editor_is_active',
+                'editor.is_blocked AS editor_is_blocked',
                 'groups.name AS group_name',
                 'pa.user_id AS accept_on'
             ])
