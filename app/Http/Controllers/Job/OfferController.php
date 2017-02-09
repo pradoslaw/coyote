@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FlagFactory;
-use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Firm;
 use Coyote\Job;
@@ -20,20 +19,13 @@ class OfferController extends Controller
     private $job;
 
     /**
-     * @var FirmRepository
-     */
-    private $firm;
-
-    /**
      * @param JobRepository $job
-     * @param FirmRepository $firm
      */
-    public function __construct(JobRepository $job, FirmRepository $firm)
+    public function __construct(JobRepository $job)
     {
         parent::__construct();
 
         $this->job = $job;
-        $this->firm = $firm;
     }
 
     /**
@@ -55,10 +47,8 @@ class OfferController extends Controller
 
         $tags = $job->tags()->get()->groupBy('pivot.priority');
 
-        $firm = [];
         if ($job->firm_id) {
-            $firm = $this->firm->find($job->firm_id);
-            $firm->description = $parser->parse((string) $firm->description);
+            $job->firm->description = $parser->parse((string) $job->firm->description);
         }
 
         $job->increment('views');
@@ -68,7 +58,7 @@ class OfferController extends Controller
             $flag = $this->getFlagFactory()->takeForJob($job->id);
         }
 
-        // search related topics
+        // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
         return $this->view('job.offer', [
@@ -79,7 +69,7 @@ class OfferController extends Controller
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
             'applied'           => $job->hasApplied($this->userId, $this->sessionId)
         ])->with(
-            compact('job', 'firm', 'tags', 'flag', 'mlt')
+            compact('job', 'tags', 'flag', 'mlt')
         );
     }
 }
