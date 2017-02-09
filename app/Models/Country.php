@@ -17,4 +17,12 @@ class Country extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * @return array
+     */
+    public static function getCountriesList()
+    {
+        return self::pluck('name', 'id')->toArray();
+    }
 }

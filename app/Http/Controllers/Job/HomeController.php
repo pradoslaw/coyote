@@ -157,7 +157,7 @@ class HomeController extends BaseController
         return $this->view('job.home', [
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),
-            'currency_list'     => Currency::pluck('name', 'id'),
+            'currency_list'     => Currency::getCurrenciesList(),
             'preferences'       => $this->preferences
         ])->with(
             compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count', 'selected')

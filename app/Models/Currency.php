@@ -17,4 +17,12 @@ class Currency extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * @return array
+     */
+    public static function getCurrenciesList()
+    {
+        return self::pluck('name', 'id')->toArray();
+    }
 }

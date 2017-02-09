@@ -95,8 +95,6 @@ class JobForm extends Form
 
     public function buildForm()
     {
-        $countryList = Country::pluck('name', 'id')->toArray();
-
         $this
             ->setAttr(['class' => 'submit-form', 'v-cloak' => 'v-cloak'])
             ->setUrl(route('job.submit'))
@@ -128,7 +126,7 @@ class JobForm extends Form
             ])
             ->add('country_id', 'select', [
                 'rules' => 'required|integer',
-                'choices' => $countryList
+                'choices' => Country::getCountriesList()
             ])
             ->add('city', 'text', [
                 'rules' => 'string|city',
@@ -171,7 +169,7 @@ class JobForm extends Form
             ])
             ->add('currency_id', 'select', [
                 'rules' => 'required|integer',
-                'choices' => Currency::pluck('name', 'id')->toArray(),
+                'choices' => Currency::getCurrenciesList(),
                 'attr' => [
                     'class' => 'input-inline'
                 ]
