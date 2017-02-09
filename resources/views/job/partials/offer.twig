@@ -12,7 +12,7 @@
     <div class="media">
         {% if job.firm.logo %}
             <div class="media-left hidden-xxs">
-                <img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
+                <a title="Zobacz wszystkie oferty {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}"><img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}"></a>
             </div>
         {% endif %}
 
