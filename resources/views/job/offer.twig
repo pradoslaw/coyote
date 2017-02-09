@@ -29,40 +29,40 @@
         <aside class="col-md-3">
             {% include 'job.partials.sidemenu' %}
 
-            {% if job.firm_id and (firm.street or firm.website or firm.employees or firm.founded or firm.latitude) %}
+            {% if job.firm_id and (job.firm.street or job.firm.website or job.firm.employees or job.firm.founded or job.firm.latitude) %}
                 <section id="box-job-firm" class="box">
                     <h4><i class="fa fa-info-circle fa-fw"></i> O firmie</h4>
 
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <ul class="list-unstyled">
-                                {% if firm.street %}
+                                {% if job.firm.street %}
                                     <li>
                                         <i class="fa fa-home fa-fw"></i>
-                                        {{ firm.street }} {{ firm.house }} {{ firm.postcode }} {{ firm.city }}
+                                        {{ job.firm.street }} {{ job.firm.house }} {{ job.firm.postcode }} {{ job.firm.city }}
                                     </li>
                                 {% endif %}
-                                {% if firm.website %}
+                                {% if job.firm.website %}
                                     <li>
                                         <i class="fa fa-link fa-fw"></i>
-                                        <a href="{{ firm.website }}">{{ firm.website }}</a>
+                                        <a href="{{ job.firm.website }}">{{ job.firm.website }}</a>
                                     </li>
                                 {% endif %}
-                                {% if firm.employees %}
+                                {% if job.firm.employees %}
                                     <li>
                                         <i class="fa fa-users fa-fw"></i>
-                                        {{ employees_list[firm.employees] }} pracowników
+                                        {{ employees_list[job.firm.employees] }} pracowników
                                     </li>
                                 {% endif %}
-                                {% if firm.founded %}
+                                {% if job.firm.founded %}
                                     <li>
                                         <i class="fa fa-calendar-o fa-fw"></i>
-                                        Rok założenia: {{ firm.founded }}
+                                        Rok założenia: {{ job.firm.founded }}
                                     </li>
                                 {% endif %}
                             </ul>
 
-                            {% if firm.longitude and firm.latitude %}
+                            {% if job.firm.longitude and job.firm.latitude %}
                                 <div id="map" style="height: 300px"></div>
                             {% endif %}
                         </div>
@@ -96,11 +96,11 @@
         </div>
     {% endif %}
 
-    {% if firm.latitude and firm.longitude %}
+    {% if job.firm.latitude and job.firm.longitude %}
         <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
         <script type="text/javascript">
             function initialize() {
-                var coordinates = new google.maps.LatLng({{ firm.latitude }}, {{ firm.longitude }});
+                var coordinates = new google.maps.LatLng({{ job.firm.latitude }}, {{ job.firm.longitude }});
                 var mapOptions = {
                     zoom: 16,
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
