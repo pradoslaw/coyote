@@ -177,12 +177,20 @@ $font-size-control-label: 15px;
   .benefits, .features {
     li {
       border: none;
-      color: $gray-light;
+      color: $gray-lighter;
       cursor: pointer;
+
+      i {
+        font-size: 120%;
+      }
+
+      i.fa-remove {
+        color: #ddd;
+      }
     }
 
     li.checked {
-      color: $gray-darker;
+      //color: $gray-darker;
 
       i.fa-check {
         color: $brand-primary;
