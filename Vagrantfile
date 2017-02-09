@@ -10,8 +10,6 @@ Vagrant.configure("2") do |config|
 	config.vm.network :forwarded_port, guest: 5432, host: 5433
 	config.ssh.forward_agent = true
 
-	#ENV['LC_ALL']="en_US.UTF-8"
-
 	# Specify folder which you would like to have available in your box
 	#config.vm.synced_folder ".", "/vagrant"
 
@@ -32,6 +30,9 @@ Vagrant.configure("2") do |config|
 
 		# Dual core
 		v.customize ["modifyvm", :id, "--cpus", 2]
+
+		#prevent npm issues
+		v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate//var/www", "1"]
 	end
 
 	# Install puppet

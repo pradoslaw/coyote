@@ -1,6 +1,6 @@
 # see also http://dev.alexishevia.com/2013/09/setting-up-nodejs-dev-environment-with.html
 class nodejs {
-	package { 'nodejs':
+	package { ['nodejs', 'npm']:
 		ensure => present
 	}
 

@@ -11,18 +11,21 @@ sudo -u postgres psql -c "create database coyote;"
 sudo service postgresql restart
 
 #konfigutrujemy mongo do użycia lokalnie
-sudo sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' /etc/mongodb.conf
+#sudo sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' /etc/mongodb.conf
 #ustawiamy autoryzację dla mongo
-sudo sed -i 's/#auth = true/auth = true/g' /etc/mongodb.conf
+#sudo sed -i 's/#auth = true/auth = true/g' /etc/mongodb.conf
 sudo service mongodb restart
 #mongo: dodajemy admina
-mongo admin --eval "db.createUser({user: 'mongo', pwd: 'mongo', roles: ['userAdminAnyDatabase', 'dbAdminAnyDatabase', 'readWriteAnyDatabase']})"
+#mongo admin --eval "db.createUser({user: 'coyote', pwd: 'coyote', roles: ['userAdminAnyDatabase', 'dbAdminAnyDatabase', 'readWriteAnyDatabase']})"
 
 cp .env.default .env
-#ustawiamy userów i hasła
+#ustawiamy userów i hasła - upewniamy się, że user i hasło do Mongo są puste - inaczej dostaniemy auth failed
 sudo sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=postgres/g' .env
-sudo sed -i 's/^MONGO_USERNAME=.*/MONGO_USERNAME=mongo/g' .env
-sudo sed -i 's/^MONGO_PASSWORD=.*/MONGO_PASSWORD=mongo/g' .env
+sudo sed -i 's/^MONGO_USERNAME=.*/MONGO_USERNAME=/g' .env
+sudo sed -i 's/^MONGO_PASSWORD=.*/MONGO_PASSWORD=/g' .env
+
+#musimy mieć gulpa globalnie
+sudo npm install -g gulp
 
 make install-dev
 php artisan key:generate
