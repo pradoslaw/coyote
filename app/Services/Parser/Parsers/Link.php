@@ -272,7 +272,8 @@ class Link extends Parser implements ParserInterface
     {
         $iframe = (string) $this->html->tag('iframe', '', [
             'src'   => 'https://youtube.com/embed/' . $videoId,
-            'class' => 'embed-responsive-item'
+            'class' => 'embed-responsive-item',
+            'allowfullscreen' => 'allowfullscreen'
         ]);
 
         return (string) $this->html->tag('div', $iframe, ['class' => 'embed-responsive embed-responsive-16by9']);
