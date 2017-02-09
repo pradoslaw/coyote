@@ -127,7 +127,7 @@
                         <ol class="benefits list-group">
 
                             <li class="list-group-item col-sm-6 clickable" v-for="benefit in default_benefits" :class="{checked: benefits.indexOf(benefit) > -1}" @click="toggleBenefit(benefit)">
-                                <i class="fa fa-fw " :class="{'fa-check': benefits.indexOf(benefit) > -1, 'fa-minus': benefits.indexOf(benefit) === -1}"></i> ${ benefit }
+                                <i class="fa fa-fw " :class="{'fa-check': benefits.indexOf(benefit) > -1, 'fa-remove': benefits.indexOf(benefit) === -1}"></i> ${ benefit }
 
                                 <input type="checkbox" name="benefits[]" :value="benefit" :checked="benefits.indexOf(benefit) > -1">
                             </li>

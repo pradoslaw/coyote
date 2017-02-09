@@ -157,15 +157,16 @@
                             {{ form_error(form.deadline) }}
                         </div>
 
+                        {{ form_row(form.description) }}
+
                         <div class="form-group form-group-border">
                             {{ form_label(form.features) }}
                             {{ form_error(form.features) }}
 
                             <ol class="features list-group clearfix form-horizontal">
-                                <li class="list-group-item col-sm-6" v-for="feature in features" :class="{checked: feature.pivot.checked}">
+                                <li class="list-group-item col-xs-12 col-sm-6" v-for="feature in features" :class="{checked: feature.pivot.checked}">
                                     <div class="form-group">
                                         <div class="col-xs-7 control-label" @click="toggleFeature(feature)">
-                                            {#<i class="fa fa-fw " :class="{'fa-check-square-o': feature.pivot.checked, 'fa-square-o': !feature.pivot.checked}"></i>#}
                                             <i class="fa fa-fw " :class="{'fa-check': feature.pivot.checked, 'fa-remove': !feature.pivot.checked}"></i>
 
                                             ${ feature.name }
@@ -180,8 +181,6 @@
                                 </li>
                             </ol>
                         </div>
-
-                        {{ form_row(form.description) }}
 
                         <div class="form-group" :class="{'has-error': isInvalid(['email'])}">
                             {{ form_row(form.enable_apply.child(0), {attr: {'v-model': 'job.enable_apply'}}) }}

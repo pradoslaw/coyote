@@ -59,19 +59,26 @@ class JobForm extends Form
             $this->forget($this->data->features);
             $this->forget($this->data->locations);
 
+            $features = $form->request->get('features');
+            $tags = $form->request->get('tags');
+
             // deadline not exists in table "jobs" nor in fillable array. set value so model can transform it
             // to Carbon object
             $this->data->deadline = $form->get('deadline')->getValue();
 
-            foreach ($form->get('tags')->getChildrenValues() as $tag) {
+            foreach ($tags as $tag) {
                 $pivot = $this->data->tags()->newPivot(['priority' => $tag['priority']]);
                 $model = (new Tag($tag))->setRelation('pivot', $pivot);
 
                 $this->data->tags->add($model);
             }
 
-            foreach ($form->request->get('features') as $featureId => $feature) {
-                $pivot = $this->data->features()->newPivot(['checked' => (int) $feature['checked']]);
+            foreach ($features as $featureId => $feature) {
+                $pivot = $this->data->features()->newPivot([
+                    'checked'       => (int) $feature['checked'],
+                    'value'         => $feature['value']
+                ]);
+
                 $model = $this->feature->find($featureId)->setRelation('pivot', $pivot);
 
                 $this->data->features->add($model);

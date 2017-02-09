@@ -174,26 +174,23 @@ $font-size-control-label: 15px;
     }
   }
 
-  .benefits, .features {
+  .benefits,
+  .features {
     li {
-      border: none;
-      color: $gray-lighter;
+      //border: none;
+      //color: $gray-lighter;
       cursor: pointer;
 
-      i {
-        font-size: 120%;
+
+      &:nth-child(odd) {
+        padding-left: 0;
       }
 
-      i.fa-remove {
-        color: #ddd;
-      }
-    }
-
-    li.checked {
-      //color: $gray-darker;
-
-      i.fa-check {
-        color: $brand-primary;
+      .btn-delete {
+        position: absolute;
+        top: 15px;
+        right: 33px;
+        border: 0;
       }
     }
 
@@ -209,6 +206,12 @@ $font-size-control-label: 15px;
 
     .control-label {
       text-align: left;
+    }
+  }
+
+  .features {
+    li {
+      height: 45px;
     }
   }
 }
