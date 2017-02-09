@@ -3,9 +3,11 @@
     {% spaceless %}
         {{ job.title }}
 
-        {% if job.firm_id and not firm.is_agency %}
-            @ {{ firm.name }}
+        {% if job.firm_id and not job.firm.is_agency %}
+            @ {{ job.firm.name }}
         {% endif %}
+
+        :: praca dla programistów
 
         {{ parent() }}
     {% endspaceless %}
