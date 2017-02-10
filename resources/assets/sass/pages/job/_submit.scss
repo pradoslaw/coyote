@@ -177,14 +177,9 @@ $font-size-control-label: 15px;
   .benefits,
   .features {
     li {
-      //border: none;
-      //color: $gray-lighter;
+      font-size: $font-size-base;
       cursor: pointer;
-
-
-      &:nth-child(odd) {
-        padding-left: 0;
-      }
+      padding-left: 0;
 
       .btn-delete {
         position: absolute;

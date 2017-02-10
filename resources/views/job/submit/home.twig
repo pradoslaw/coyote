@@ -5,7 +5,7 @@
 
 {% block container %}
     <div class="row">
-        <main class="col-md-8 col-12-sm col-12-xs">
+        <main class="col-xlg-8 col-lg-9 col-12-md">
             <div class="jumbotron alert-popover" data-id="job-jumbotron">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
 
@@ -164,7 +164,7 @@
                             {{ form_error(form.features) }}
 
                             <ol class="features list-group clearfix form-horizontal">
-                                <li class="list-group-item col-xs-12 col-sm-6" v-for="feature in features" :class="{checked: feature.pivot.checked}">
+                                <li class="list-group-item col-md-12 col-lg-6" v-for="feature in features" :class="{checked: feature.pivot.checked}">
                                     <div class="form-group">
                                         <div class="col-xs-7 control-label" @click="toggleFeature(feature)">
                                             <i class="fa fa-fw " :class="{'fa-check': feature.pivot.checked, 'fa-remove': !feature.pivot.checked}"></i>
@@ -210,7 +210,7 @@
             {{ form_close() }}
         </main>
 
-        <aside class="col-md-4 hidden-sm hidden-xs hidden-xxs">
+        <aside class="col-xlg-4 col-xlg-3 hidden-md">
             <div id="hint-container">
                 <div id="hint-title" class="sidebar-hint" style="display: none;">
                     <h4>Jak tytułować oferty pracy?</h4>
