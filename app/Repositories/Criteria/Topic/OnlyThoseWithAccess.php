@@ -13,6 +13,6 @@ class OnlyThoseWithAccess extends \Coyote\Repositories\Criteria\Forum\OnlyThoseW
      */
     public function apply($model, Repository $repository)
     {
-        return $this->subQuery($model, $repository, 'topics.forum_id');
+        return $this->applyNested($model, $repository, 'topics.forum_id');
     }
 }

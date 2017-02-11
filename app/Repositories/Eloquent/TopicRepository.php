@@ -93,7 +93,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->trackForum($userId, $sessionId)
             ->trackTopic($userId, $sessionId)
             ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
-            ->with('tags')
+            ->with(['tags', 'forum'])
             ->orderBy('topics.ordering')
             ->when($userId, function (Builder $builder) use ($userId) {
                 return $builder->addSelect(['ts.created_at AS subscribe_on'])
