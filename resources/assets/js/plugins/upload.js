@@ -35,9 +35,13 @@
                 });
             };
 
-            if (navigator.userAgent.indexOf("Chrome") > -1) {
+            if ('onpaste' in textarea[0]) {
                 textarea[0].onpaste = function(e) {
-                    var items = e.clipboardData.items;
+                    var items = [];
+
+                    if (e.clipboardData && e.clipboardData.items) {
+                        items = e.clipboardData.items;
+                    }
 
                     if (items.length) {
                         var blob = items[0].getAsFile();
@@ -58,44 +62,6 @@
                         }
                     }
                 };
-            } else if (navigator.userAgent.indexOf("Firefox") > -1 && navigator.userAgent.indexOf("Trident") === -1) {
-                var $placeholder = $('<div id="placeholder" contenteditable="true" style="position: absolute; left: -10000px; top: -10000px; width: 1px; height: 1px;"></div>');
-
-                textarea.keydown(function(e) {
-                    if (e.ctrlKey && !e.shiftKey && !e.altKey && e.which === 86) {
-                        var top = $(window).scrollTop();
-                        $placeholder.css('top', top);
-
-                        $placeholder.focus();
-                    }
-                });
-
-                $placeholder.on('paste', function(e) {
-                    var $placeholder = $(this);
-                    var data = (e.originalEvent || e).clipboardData.getData('text/plain');
-
-                    if (data) {
-                        if (textarea[0].selectionStart !== textarea[0].selectionEnd) {
-                            textarea[0].value  = textarea[0].value.substring(0, textarea[0].selectionStart) + data + textarea[0].value.substring(textarea[0].selectionEnd, textarea[0].value.length);
-                        } else {
-                            textarea.insertAtCaret(data, '', '');
-                        }
-
-                        $placeholder.html('');
-                    } else {
-                        setTimeout(function() {
-                            var image = $('img', $placeholder).get(0);
-                            if (image !== undefined) {
-                                data = image.src;
-                                upload(data);
-                            }
-
-                            $placeholder.html('');
-
-                        }, 60);
-                    }
-                })
-                .appendTo('body');
             }
         });
     };
