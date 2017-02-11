@@ -137,7 +137,7 @@
                                 <i class="fa fa-fw fa-check"></i>
 
                                 <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm" @keydown.enter.prevent="updateBenefit">
-                                <button class="btn btn-default btn-xs btn-delete" title="Usuń tę pozycję" @click="removeBenefit(benefit)"><i class="fa fa-minus-circle text-danger"></i></button>
+                                <button class="btn btn-default btn-xs btn-delete" title="Usuń tę pozycję" @click.prevent="removeBenefit(benefit)"><i class="fa fa-minus-circle text-danger"></i></button>
                             </li>
 
                             <li class="list-group-item col-xs-6 checked">
