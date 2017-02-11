@@ -322,7 +322,7 @@ class Job extends Model
     {
         $instance = new Job\Location();
 
-        return new HasMany($instance->newQuery(), $this, $instance->getTable().'.'.$this->getForeignKey(), $this->getKeyName());
+        return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $this->getForeignKey(), $this->getKeyName());
     }
 
     /**

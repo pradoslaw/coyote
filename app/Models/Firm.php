@@ -126,7 +126,7 @@ class Firm extends Model
     {
         $instance = new Firm\Benefit();
 
-        return new HasMany($instance->newQuery(), $this, $instance->getTable().'.'.$this->getForeignKey(), $this->getKeyName());
+        return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $this->getForeignKey(), $this->getKeyName());
     }
 
     /**
