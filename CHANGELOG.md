@@ -27,6 +27,7 @@
 - Formularz dodawania nowego ogłoszenia: przypisany na Vue.js
 - Nowe pole z możliwością określania stażu pracy w ogłoszeniu (junior, seniot itp)
 - Formularz aplikacji o pracę: możliwość wysłania linka do konta Github
+- Logo w ogłoszeniu jest linkiem, który prowadzi do wszystkich ofert danej firmy
 
 ## 2.0
 
