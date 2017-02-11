@@ -116,7 +116,7 @@
                             <i class="fa fa-fw {{ feature.pivot.checked ? 'fa-check' : 'fa-remove' }}"></i> {{ feature.name }}
 
                             {% if feature.pivot.value %}
-                                <small class="text-muted">({{ feature.pivot.value }})</small>
+                                <small class="text-muted"> ― {{ feature.pivot.value }}</small>
                             {% endif %}
                         </li>
                     {% endfor %}

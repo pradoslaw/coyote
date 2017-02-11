@@ -60,27 +60,24 @@ class JobForm extends Form
             $this->data->locations->flush();
             $this->data->features->flush();
 
-            $features = $form->request->get('features');
-            $tags = $form->request->get('tags');
-
             // deadline not exists in table "jobs" nor in fillable array. set value so model can transform it
             // to Carbon object
             $this->data->deadline = $form->get('deadline')->getValue();
 
-            foreach ($tags as $tag) {
+            foreach ($form->get('tags')->getChildrenValues() as $tag) {
                 $pivot = $this->data->tags()->newPivot(['priority' => $tag['priority']]);
                 $model = (new Tag($tag))->setRelation('pivot', $pivot);
 
                 $this->data->tags->add($model);
             }
 
-            foreach ($features as $featureId => $feature) {
+            foreach ($form->get('features')->getChildrenValues() as $feature) {
                 $pivot = $this->data->features()->newPivot([
                     'checked'       => (int) $feature['checked'],
                     'value'         => $feature['value'] ?? null
                 ]);
 
-                $model = $this->feature->find($featureId)->setRelation('pivot', $pivot);
+                $model = $this->feature->find($feature['id'])->setRelation('pivot', $pivot);
 
                 $this->data->features->add($model);
             }
@@ -110,6 +107,24 @@ class JobForm extends Form
                 }
 
                 $form->get('tags')->setValue($assoc);
+            }
+
+            if ($session->hasOldInput('features')) {
+                $assoc = [];
+
+                foreach ($form->get('features')->getChildrenValues() as $feature) {
+                    $assoc[] = [
+                        'id' => $feature['id'],
+                        'name' => $feature['name'],
+                        'default' => $feature['default'],
+                        'pivot' => [
+                            'checked' => (int) $feature['checked'],
+                            'value' => $feature['value'] ?? ''
+                        ]
+                    ];
+                }
+
+                $form->get('features')->setValue($assoc);
             }
 
             // tags as json (for vue.js)
@@ -239,7 +254,10 @@ class JobForm extends Form
             ->add('description', 'textarea', [
                 'label' => 'Opis oferty (opcjonalnie)',
                 'help' => 'Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.',
-                'style' => 'height: 140px'
+                'style' => 'height: 140px',
+                'row_attr' => [
+                    'class' => 'form-group-border'
+                ]
             ])
             ->add('enable_apply', 'choice', [
                 'multiple' => false,
