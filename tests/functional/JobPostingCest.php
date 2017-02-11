@@ -74,6 +74,8 @@ class JobPostingCest
         $I->fillField(['name' => 'headline'], $headline = $fake->text(20));
         $I->fillField('textarea[name=description]', $fake->text());
         $I->selectOption('select[name=employees]', 2);
+        $I->fillField('country', 'Polska');
+        $I->fillField('city', 'Wrocław');
 
         $I->click('Podgląd');
         $I->click('Opublikuj');
@@ -83,6 +85,8 @@ class JobPostingCest
         $I->see($firm, '.employer');
         $I->see($website, '#box-job-firm');
         $I->see($headline, 'blockquote');
+
+        $I->canSeeRecord('firms', ['name' => $firm, 'country_id' => 14, 'city' => 'Wrocław']);
     }
 
     public function createSecondJobOfferAsFirm(FunctionalTester $I)
