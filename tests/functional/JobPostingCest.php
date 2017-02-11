@@ -239,4 +239,30 @@ class JobPostingCest
         $I->see($title, '.media-heading');
         $I->see($firm, '.employer');
     }
+
+    public function createOfferByClickingSaveAsButton(FunctionalTester $I)
+    {
+        $I->wantTo('Create a offer by clicking "save as" button (quick save)');
+
+        $fake = Factory::create();
+        $id = $I->haveRecord('firms', ['user_id' => $this->user->id, 'name' => $firm = $fake->company]);
+
+        $I->haveRecord('firm_benefits', ['firm_id' => $id, 'name' => 'Game-boy']);
+        $I->haveRecord('firm_benefits', ['firm_id' => $id, 'name' => 'TV']);
+
+        $I->amOnRoute('job.submit');
+
+        $I->fillField('input[name=title]', $title = $fake->text(50));
+        $I->selectOption('employment_id', 1);
+        $I->fillField('done', 1);
+
+        $I->click("Zapisz jako $firm");
+
+        $I->seeCurrentRouteIs('job.offer');
+        $I->see($title, '.media-heading');
+        $I->see($firm, '.employer');
+
+        $I->see('Game-boy');
+        $I->see('TV');
+    }
 }

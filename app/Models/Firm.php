@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Services\Eloquent\HasMany;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\Logo;
 use Illuminate\Database\Eloquent\Model;
@@ -119,11 +120,13 @@ class Firm extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function benefits()
     {
-        return $this->hasMany('Coyote\Firm\Benefit');
+        $instance = new Firm\Benefit();
+
+        return new HasMany($instance->newQuery(), $this, $instance->getTable().'.'.$this->getForeignKey(), $this->getKeyName());
     }
 
     /**

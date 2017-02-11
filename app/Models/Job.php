@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Job\Location;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
+use Coyote\Services\Eloquent\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -315,11 +316,13 @@ class Job extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function locations()
     {
-        return $this->hasMany('Coyote\Job\Location');
+        $instance = new Job\Location();
+
+        return new HasMany($instance->newQuery(), $this, $instance->getTable().'.'.$this->getForeignKey(), $this->getKeyName());
     }
 
     /**

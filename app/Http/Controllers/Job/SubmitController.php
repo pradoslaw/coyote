@@ -71,6 +71,7 @@ class SubmitController extends Controller
             }
 
             $job->load(['tags', 'locations', 'country']);
+            $job->firm->load('benefits');
         }
 
         $this->authorize('update', $job);
@@ -244,15 +245,12 @@ class SubmitController extends Controller
 
                 // reassociate job with firm. user could change firm, that's why we have to do it again.
                 $job->firm()->associate($job->firm);
-
-                $job->firm->benefits()->delete();
-                $job->firm->benefits()->saveMany($job->firm->benefits);
+                // remove old benefits and save new ones.
+                $job->firm->benefits()->push($job->firm->benefits);
             }
 
             $job->save();
-
-            $job->locations()->delete();
-            $job->locations()->saveMany($job->locations);
+            $job->locations()->push($job->locations);
 
             $job->tags()->sync($tags);
 
