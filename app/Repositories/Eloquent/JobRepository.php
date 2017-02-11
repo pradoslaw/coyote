@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Coyote\Feature;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
@@ -91,6 +92,18 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->limit($limit)
             ->get()
             ->pluck('count', 'name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDefaultFeatures()
+    {
+        return $this
+            ->app
+            ->make(Feature::class)
+            ->orderBy('order')
+            ->get();
     }
 
     /**

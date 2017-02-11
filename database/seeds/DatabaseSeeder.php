@@ -30,5 +30,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CountriesTableSeeder::class);
         $this->call(WikiTableSeeder::class);
         $this->call(BlocksTableSeeder::class);
+        $this->call(FeaturesTableSeeder::class);
     }
 }

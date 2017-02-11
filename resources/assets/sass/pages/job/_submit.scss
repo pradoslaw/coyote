@@ -174,18 +174,18 @@ $font-size-control-label: 15px;
     }
   }
 
-  .benefits {
+  .benefits,
+  .features {
     li {
-      border: none;
-      color: $gray-light;
+      font-size: $font-size-base;
       cursor: pointer;
-    }
+      padding-left: 0;
 
-    li.checked {
-      color: $gray-darker;
-
-      i.fa-check {
-        color: $brand-primary;
+      .btn-delete {
+        position: absolute;
+        top: 15px;
+        right: 33px;
+        border: 0;
       }
     }
 
@@ -197,6 +197,16 @@ $font-size-control-label: 15px;
       display: inline-block;
       width: 90%;
       margin-left: 10px;
+    }
+
+    .control-label {
+      text-align: left;
+    }
+  }
+
+  .features {
+    li {
+      height: 45px;
     }
   }
 }

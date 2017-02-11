@@ -3,7 +3,7 @@
 
 {% block container %}
     <div class="row">
-        <main class="col-md-8 col-12-sm col-12-xs">
+        <main class="col-xlg-8 col-lg-9 col-12-md">
             {% include 'job.submit.partials.indicator' with {'current': 2} %}
 
             {% include 'job.submit.partials.loader' %}
@@ -128,7 +128,7 @@
                         <ol class="benefits list-group">
 
                             <li class="list-group-item col-sm-6 clickable" v-for="benefit in default_benefits" :class="{checked: benefits.indexOf(benefit) > -1}" @click="toggleBenefit(benefit)">
-                                <i class="fa fa-fw " :class="{'fa-check': benefits.indexOf(benefit) > -1, 'fa-minus': benefits.indexOf(benefit) === -1}"></i> ${ benefit }
+                                <i class="fa fa-fw " :class="{'fa-check': benefits.indexOf(benefit) > -1, 'fa-remove': benefits.indexOf(benefit) === -1}"></i> ${ benefit }
 
                                 <input type="checkbox" name="benefits[]" :value="benefit" :checked="benefits.indexOf(benefit) > -1">
                             </li>
@@ -161,7 +161,7 @@
             {{ form_end() }}
         </main>
 
-        <aside class="col-md-4 hidden-sm hidden-xs hidden-xxs">
+        <aside class="col-xlg-4 col-lg-3 hidden-md">
             <div id="hint-container">
                 <div id="hint-headline" class="sidebar-hint" style="display: none;">
                     <h4>Motto lub nagłówek</h4>

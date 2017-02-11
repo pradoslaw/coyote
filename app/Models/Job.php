@@ -42,6 +42,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Tag[] $tags
  * @property Location[] $locations
  * @property Currency[] $currency
+ * @property Feature[] $features
  */
 class Job extends Model
 {
@@ -366,6 +367,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function features()
+    {
+        return $this->belongsToMany('Coyote\Feature', 'job_features')->orderBy('order')->withPivot(['checked', 'value']);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function subscribers()
@@ -463,6 +472,19 @@ class Job extends Model
     {
         if (empty($this->user_id)) {
             $this->user_id = $userId;
+        }
+    }
+
+    /**
+     * @param mixed $features
+     */
+    public function setDefaultFeatures($features)
+    {
+        if (!count($this->features)) {
+            foreach ($features as $feature) {
+                $pivot = $this->features()->newPivot(['checked' => false]);
+                $this->features->add($feature->setRelation('pivot', $pivot));
+            }
         }
     }
 

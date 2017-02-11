@@ -5,6 +5,7 @@ namespace Coyote\Http\Forms\Job;
 use Coyote\Country;
 use Coyote\Currency;
 use Coyote\Job;
+use Coyote\Repositories\Contracts\FeatureRepositoryInterface as FeatureRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\Geocoder\GeocoderInterface;
@@ -38,28 +39,50 @@ class JobForm extends Form
     private $geocoder;
 
     /**
-     * @param GeocoderInterface $geocoder
+     * @var FeatureRepository
      */
-    public function __construct(GeocoderInterface $geocoder)
+    private $feature;
+
+    /**
+     * @param GeocoderInterface $geocoder
+     * @param FeatureRepository $feature
+     */
+    public function __construct(GeocoderInterface $geocoder, FeatureRepository $feature)
     {
         parent::__construct();
 
         $this->geocoder = $geocoder;
+        $this->feature = $feature;
 
         $this->addEventListener(FormEvents::POST_SUBMIT, function (JobForm $form) {
             // call macro and flush collection items
             $this->data->tags->flush();
             $this->data->locations->flush();
+            $this->data->features->flush();
+
+            $features = $form->request->get('features');
+            $tags = $form->request->get('tags');
 
             // deadline not exists in table "jobs" nor in fillable array. set value so model can transform it
             // to Carbon object
             $this->data->deadline = $form->get('deadline')->getValue();
 
-            foreach ($form->get('tags')->getChildrenValues() as $tag) {
+            foreach ($tags as $tag) {
                 $pivot = $this->data->tags()->newPivot(['priority' => $tag['priority']]);
                 $model = (new Tag($tag))->setRelation('pivot', $pivot);
 
                 $this->data->tags->add($model);
+            }
+
+            foreach ($features as $featureId => $feature) {
+                $pivot = $this->data->features()->newPivot([
+                    'checked'       => (int) $feature['checked'],
+                    'value'         => $feature['value'] ?? null
+                ]);
+
+                $model = $this->feature->find($featureId)->setRelation('pivot', $pivot);
+
+                $this->data->features->add($model);
             }
 
             $cities = (new City())->grab($form->get('city')->getValue());
@@ -71,7 +94,7 @@ class JobForm extends Form
             $this->data->country()->associate((new Country())->find($form->get('country_id')->getValue()));
         });
 
-        $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) {
+        $this->addEventListener(FormEvents::PRE_RENDER, function (JobForm $form) {
             $session = $form->getRequest()->session();
 
             if ($session->hasOldInput('tags')) {
@@ -91,6 +114,8 @@ class JobForm extends Form
 
             // tags as json (for vue.js)
             $form->get('tags')->setValue(collect($form->get('tags')->getChildrenValues())->toJson());
+            // features as json (for vue.js)
+            $form->get('features')->setValue(collect($form->get('features')->getChildrenValues())->toJson());
         });
     }
 
@@ -144,7 +169,6 @@ class JobForm extends Form
                 'label_attr' => [
                     'for' => 'remote'
                 ]
-
             ])
             ->add('remote_range', 'select', [
                 'rules' => 'integer|min:10|max:100',
@@ -204,8 +228,16 @@ class JobForm extends Form
                     'class' => TagsForm::class
                 ]
             ])
+            ->add('features', 'collection', [
+                'label' => 'Narzędzia oraz metodologia pracy',
+                'help' => 'Zaznaczenie tych pól nie jest obowiązkowe, jednak wpływaja one na pozycję oferty na liście wyszukiwania.',
+                'child_attr' => [
+                    'type' => 'child_form',
+                    'class' => FeaturesForm::class
+                ]
+            ])
             ->add('description', 'textarea', [
-                'label' => 'Opis oferty',
+                'label' => 'Opis oferty (opcjonalnie)',
                 'help' => 'Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.',
                 'style' => 'height: 140px'
             ])
