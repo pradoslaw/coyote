@@ -47,8 +47,6 @@ class FirmForm extends Form
         });
 
         $this->addEventListener(FormEvents::POST_SUBMIT, function (FirmForm $form) {
-            $this->forget($this->data->benefits);
-
             $data = $form->all();
             $data['benefits'] = array_filter(array_unique(array_map('trim', $data['benefits'])));
 
@@ -61,10 +59,14 @@ class FirmForm extends Form
                 $data['benefits'] = [];
             }
 
+            $models = [];
+
             foreach ($data['benefits'] as $benefit) {
-                $this->data->benefits->add(new Firm\Benefit(['name' => $benefit]));
+                $models[] = new Firm\Benefit(['name' => $benefit]);
             }
 
+            // call macro and replace collection items
+            $this->data->benefits->replace($models);
             $this->data->fill($data);
 
             // new firm has empty ID.
@@ -302,16 +304,6 @@ class FirmForm extends Form
     {
         if ($this->data instanceof Firm && !$this->isSubmitted()) {
             $this->get('benefits')->setValue($this->data->benefits->all());
-        }
-    }
-
-    /**
-     * @param Firm\Benefit[] $collection
-     */
-    private function forget($collection)
-    {
-        foreach ($collection as $key => $model) {
-            unset($collection[$key]);
         }
     }
 }

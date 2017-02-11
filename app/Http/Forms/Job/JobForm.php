@@ -47,8 +47,9 @@ class JobForm extends Form
         $this->geocoder = $geocoder;
 
         $this->addEventListener(FormEvents::POST_SUBMIT, function (JobForm $form) {
-            $this->forget($this->data->tags);
-            $this->forget($this->data->locations);
+            // call macro and flush collection items
+            $this->data->tags->flush();
+            $this->data->locations->flush();
 
             // deadline not exists in table "jobs" nor in fillable array. set value so model can transform it
             // to Carbon object
@@ -270,15 +271,5 @@ class JobForm extends Form
         }
 
         return $location;
-    }
-
-    /**
-     * @param  mixed $collection
-     */
-    private function forget($collection)
-    {
-        foreach ($collection as $key => $model) {
-            unset($collection[$key]);
-        }
     }
 }

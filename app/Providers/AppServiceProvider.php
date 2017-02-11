@@ -4,6 +4,7 @@ use Coyote\Repositories\Contracts\SettingRepositoryInterface;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
@@ -51,6 +52,8 @@ class AppServiceProvider extends ServiceProvider
             // show mongodb queries in laravel debugbar
             $this->app['db']->connection('mongodb')->enableQueryLog();
         }
+
+        $this->registerMacros();
     }
 
     /**
@@ -83,6 +86,17 @@ class AppServiceProvider extends ServiceProvider
                     $form->validate();
                 }
             });
+        });
+    }
+
+    private function registerMacros()
+    {
+        Collection::macro('flush', function () {
+            $this->items = [];
+        });
+
+        Collection::macro('replace', function ($items) {
+            $this->items = $items;
         });
     }
 }
