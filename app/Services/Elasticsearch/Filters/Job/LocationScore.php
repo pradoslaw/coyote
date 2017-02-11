@@ -58,7 +58,7 @@ class LocationScore extends Filter
                             ],
                             [
                                 'script_score' => [
-                                    'script' => '0'
+                                    'script' => '1' // praca zdalna, brak lokalizacji. score bedzie rowne 1?
                                 ]
                             ]
                         ]
