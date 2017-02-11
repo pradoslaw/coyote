@@ -10,7 +10,7 @@ class FeaturesForm extends Form
     {
         $this
             ->add('name', 'text', [
-                'rules' => 'string'
+                'rules' => 'string|max:100'
             ])
             ->add('is_checked', 'checkbox', [
                 'rules' => 'bool'

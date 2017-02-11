@@ -76,7 +76,7 @@ class JobForm extends Form
             foreach ($features as $featureId => $feature) {
                 $pivot = $this->data->features()->newPivot([
                     'checked'       => (int) $feature['checked'],
-                    'value'         => $feature['value']
+                    'value'         => $feature['value'] ?? null
                 ]);
 
                 $model = $this->feature->find($featureId)->setRelation('pivot', $pivot);
