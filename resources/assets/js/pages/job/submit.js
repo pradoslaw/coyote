@@ -48,7 +48,7 @@ new Vue({
             });
         }
 
-        new Tags({
+        this.tagComponent = new Tags({
             onSelect: (value) => {
                 this.tags.push({name: value, pivot: {priority: 1}});
                 // fetch only tag name
@@ -74,7 +74,7 @@ new Vue({
          * @param {String} value
          */
         addTag: function (value) {
-            this.tags.push({name: value, pivot: {priority: 1}});
+            this.tagComponent.addTag(value);
         },
         removeTag: function (index) {
             this.tags.splice(index, 1);
