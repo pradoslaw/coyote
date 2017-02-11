@@ -32,18 +32,9 @@ class MultiMatch implements DslInterface
     {
         return [
             'multi_match' => [
-                'query'     => $this->escape($this->query),
+                'query'     => $this->query,
                 'fields'    => $this->fields
             ]
         ];
-    }
-
-    /**
-     * @param $query
-     * @return mixed
-     */
-    protected function escape($query)
-    {
-        return str_replace(['/', '\:'], ['\/', ':'], preg_quote($query, '+-!{}[]^~*?\\'));
     }
 }
