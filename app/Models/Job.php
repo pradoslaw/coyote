@@ -286,6 +286,7 @@ class Job extends Model
 
         // 30 points maximum...
         $score += min(30, (count($this->tags()->get()) * 10));
+        $score += count($this->features()->get());
 
         if ($this->firm_id) {
             $firm = $this->firm;
