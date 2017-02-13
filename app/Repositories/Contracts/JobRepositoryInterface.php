@@ -40,9 +40,10 @@ interface JobRepositoryInterface extends RepositoryInterface
     public function getPopularTags($limit = 1000);
 
     /**
+     * @param int $userId
      * @return \Coyote\Feature[]
      */
-    public function getDefaultFeatures();
+    public function getDefaultFeatures($userId);
 
     /**
      * Return tags with job offers counter

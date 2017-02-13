@@ -97,11 +97,21 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     /**
      * @inheritdoc
      */
-    public function getDefaultFeatures()
+    public function getDefaultFeatures($userId)
     {
+        $sub = $this->toSql(
+            $this->model->select('id')->where('user_id', $userId)->orderBy('id', 'DESC')->limit(1)
+        );
+
         return $this
             ->app
             ->make(Feature::class)
+            ->selectRaw(
+                'features.*, COALESCE(job_features.checked, 0) AS checked, COALESCE(job_features.value, \'\') AS value'
+            )
+            ->leftJoin('job_features', function (JoinClause $join) use ($sub) {
+                return $join->on('job_id', '=', $this->raw("($sub)"))->on('feature_id', '=', 'features.id');
+            })
             ->orderBy('order')
             ->get();
     }

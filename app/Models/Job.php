@@ -483,7 +483,7 @@ class Job extends Model
     {
         if (!count($this->features)) {
             foreach ($features as $feature) {
-                $pivot = $this->features()->newPivot(['checked' => false]);
+                $pivot = $this->features()->newPivot(['checked' => $feature->checked, 'value' => $feature->value]);
                 $this->features->add($feature->setRelation('pivot', $pivot));
             }
         }

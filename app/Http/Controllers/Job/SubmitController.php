@@ -73,7 +73,7 @@ class SubmitController extends Controller
             $job->firm->load('benefits');
 
             $job->setDefaultUserId($this->userId);
-            $job->setDefaultFeatures($this->job->getDefaultFeatures());
+            $job->setDefaultFeatures($this->job->getDefaultFeatures($this->userId));
         }
 
         $this->authorize('update', $job);
