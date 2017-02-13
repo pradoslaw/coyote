@@ -75,7 +75,7 @@ class SubmitController extends Controller
             $job->setDefaultUserId($this->userId);
             $job->setDefaultFeatures($this->job->getDefaultFeatures());
         }
-//dd($job);
+
         $this->authorize('update', $job);
         $this->authorize('update', $job->firm);
 
