@@ -61,13 +61,22 @@ class OfferController extends Controller
         // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
+        // calculate enabled features. should we display this element in twig?
+        $featuresCount = $job
+            ->features
+            ->filter(function ($item) {
+                return $item->pivot->checked;
+            })
+            ->count();
+
         return $this->view('job.offer', [
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),
             'employees_list'    => Firm::getEmployeesList(),
             'seniority_list'    => Job::getSeniorityList(),
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
-            'applied'           => $job->hasApplied($this->userId, $this->sessionId)
+            'applied'           => $job->hasApplied($this->userId, $this->sessionId),
+            'features_count'    => $featuresCount
         ])->with(
             compact('job', 'tags', 'flag', 'mlt')
         );
