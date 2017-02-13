@@ -229,7 +229,7 @@ class PageListener implements ShouldQueue
         );
 
         $events->listen(
-            'Coyote\Events\JobWasDeleted',
+            'Coyote\Events\JobDeleted',
             'Coyote\Listeners\PageListener@onJobDelete'
         );
 
