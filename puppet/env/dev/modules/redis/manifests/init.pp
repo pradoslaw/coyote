@@ -1,7 +1,6 @@
 class redis {
 	package { "redis-server":
-		ensure  => installed,
-		require => Class["Nodejs"],
+		ensure  => installed
 	}
 
 	service { 'redis-server':

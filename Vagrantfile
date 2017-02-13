@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
 		v.customize ["modifyvm", :id, "--cpus", 2]
 
 		#prevent npm issues
-		v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate//var/www", "1"]
+		v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate//vagrant", "1"]
 	end
 
 	# Install puppet

@@ -27,6 +27,6 @@ sudo sed -i 's/^MONGO_PASSWORD=.*/MONGO_PASSWORD=/g' .env
 #musimy mieć gulpa globalnie
 sudo npm install -g gulp
 
-make install-dev
+make install-vagrant
 php artisan key:generate
 #php artisan config:clear

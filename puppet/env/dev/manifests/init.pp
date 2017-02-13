@@ -20,4 +20,4 @@ Exec {
 	path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ]
 }
 
-include baseconfig, nginx, php, postgresql, mongodb, composer, nodejs, redis, elasticsearch, supervisor
+include baseconfig, nginx, php, postgresql, mongodb, composer, redis, elasticsearch, supervisor
