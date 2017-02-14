@@ -60,6 +60,7 @@ class SubmitController extends Controller
             $job = $request->session()->get(Job::class);
         } else {
             $job = $this->job->findOrNew($id);
+            abort_if($job->is_expired, 404);
 
             // load default firm regardless of offer is private or not
             if (!$job->firm_id) {
