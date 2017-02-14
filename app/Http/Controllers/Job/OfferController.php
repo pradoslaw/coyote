@@ -61,7 +61,7 @@ class OfferController extends Controller
         // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
-        // calculate enabled features. should we display this element in twig?
+        // calculate enabled features. determines if we should display this element in twig
         $featuresCount = $job
             ->features
             ->filter(function ($item) {
