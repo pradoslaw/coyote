@@ -182,6 +182,7 @@ return [
             'asset',
             'keywords',
             'public_path',
+            'http_build_query',
             'grid' => ['is_safe' => ['html']],
             'grid_column' => ['is_safe' => ['html']],
             'grid_row' => ['is_safe' => ['html']],
@@ -218,7 +219,8 @@ return [
         |
         */
         'filters'   => [
-            'str_limit' => ['is_safe' => ['html']]
+            'str_limit' => ['is_safe' => ['html']],
+            'http_build_query'
         ],
     ],
 ];
