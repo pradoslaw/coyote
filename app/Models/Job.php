@@ -531,7 +531,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'enable_apply']);
+        $body = array_except($body, ['deleted_at', 'enable_apply', 'features']);
 
         $locations = [];
 
