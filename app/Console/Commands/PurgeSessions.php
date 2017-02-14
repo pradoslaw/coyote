@@ -27,7 +27,7 @@ class PurgeSessions extends Command
      */
     public function handle()
     {
-        session()->getHandler()->gc(config('session.lifetime'));
+        session()->getHandler()->gc(config('session.lifetime') * 60);
 
         $this->info('Session purged.');
     }
