@@ -96,7 +96,7 @@ class Link extends Parser implements ParserInterface
             $match = $matches[$i][0];
 
             $text = $this->parseInternalLink($text, $match, $link, $title);
-            $text = $this->parseYoutubeLinks($text, $match, $link);
+            $text = $this->parseYoutubeLinks($text, $match, $link, $title);
         }
 
         return $text;
@@ -116,6 +116,46 @@ class Link extends Parser implements ParserInterface
 
             if ($page) {
                 $text = str_replace($match, link_to($url, $page->title), $text);
+            }
+        }
+
+        return $text;
+    }
+
+    /**
+     * @param string $text
+     * @param string $match
+     * @param string $url
+     * @param string $title
+     * @return string
+     */
+    protected function parseYoutubeLinks($text, $match, $url, $title)
+    {
+        if ($this->html === null) {
+            return $text;
+        }
+
+        if (urldecode($title) !== urldecode($url)) {
+            return $text;
+        }
+
+        $components = parse_url($url);
+
+        if ($this->isUrl($components)) {
+            // get host without "www"
+            $host = $this->getHost($components['host']);
+            $path = trim($components['path'], '/');
+
+            if ($host === 'youtube.com' && $path === 'watch') {
+                parse_str($components['query'], $query);
+
+                if (!empty($query['v'])) {
+                    $text = str_replace($match, $this->makeIframe($query['v']), $text);
+                }
+            }
+
+            if ($host === 'youtu.be' && $path !== '') {
+                $text = str_replace($match, $this->makeIframe($path), $text);
             }
         }
 
@@ -158,41 +198,6 @@ class Link extends Parser implements ParserInterface
             }
 
             $text = str_replace($origin, link_to($path . ($hash ? '#' . $hash : ''), $title, $attr), $text);
-        }
-
-        return $text;
-    }
-
-    /**
-     * @param string $text
-     * @param string $match
-     * @param string $url
-     * @return string
-     */
-    protected function parseYoutubeLinks($text, $match, $url)
-    {
-        if ($this->html === null) {
-            return $text;
-        }
-
-        $components = parse_url($url);
-
-        if ($this->isUrl($components)) {
-            // get host without "www"
-            $host = $this->getHost($components['host']);
-            $path = trim($components['path'], '/');
-
-            if ($host === 'youtube.com' && $path === 'watch') {
-                parse_str($components['query'], $query);
-
-                if (!empty($query['v'])) {
-                    $text = str_replace($match, $this->makeIframe($query['v']), $text);
-                }
-            }
-
-            if ($host === 'youtu.be' && $path !== '') {
-                $text = str_replace($match, $this->makeIframe($path), $text);
-            }
         }
 
         return $text;
