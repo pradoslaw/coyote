@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $deadline_at
  * @property int $deadline
+ * @property bool $is_expired
  * @property int $salary_from
  * @property int $salary_to
  * @property int $country_id
@@ -447,7 +448,15 @@ class Job extends Model
      */
     public function getDeadlineAttribute()
     {
-        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now())->days + 1 : 90;
+        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now(), false)->days + 1 : 90;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsExpiredAttribute()
+    {
+        return (new Carbon($this->deadline_at))->isPast();
     }
 
     /**

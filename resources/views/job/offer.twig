@@ -23,6 +23,12 @@
                 {% include 'components.flag' %}
             {% endif %}
 
+            {% if job.is_expired %}
+                <div class="alert alert-warning">
+                    To ogłoszenie wygasło w dniu <strong>{{ job.deadline_at|format_date }}</strong>.
+                </div>
+            {% endif %}
+
             <div class="panel panel-default">
                 {% include 'job.partials.offer' %}
             </div>

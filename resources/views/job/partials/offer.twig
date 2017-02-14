@@ -55,10 +55,12 @@
                     </li>
                 {% endif %}
 
-                <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
-                    <i class="fa fa-clock-o"></i>
-                    {{ job.deadline }} dni do końca
-                </li>
+                {% if not job.is_expired %}
+                    <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
+                        <i class="fa fa-clock-o"></i>
+                        {{ job.deadline }} dni do końca
+                    </li>
+                {% endif %}
                 <li>
                     <i class="fa fa-pencil"></i>
                     {{ employment_list[job.employment_id] }}
@@ -145,6 +147,7 @@
                 </div>
             {% endif %}
 
+            {% if not job.is_expired %}
             {% if not job.enable_apply %}
                 <h3>Informacje o rekrutacji</h3>
 
@@ -155,6 +158,7 @@
                 <div id="apply" class="margin-lg-top">
                     <a class="btn btn-primary" href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
                 </div>
+            {% endif %}
             {% endif %}
         </div>
     </div>

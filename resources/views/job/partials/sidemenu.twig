@@ -1,6 +1,6 @@
 {% import 'components.modals' as modals %}
 
-{% if job.enable_apply %}
+{% if job.enable_apply and not job.is_expired %}
     <div class="box-apply hidden-sm hidden-xs margin-md-bottom">
         <span class="outline">
             <a class="btn btn-primary" href="{{ route('job.application', [job.id]) }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
@@ -19,7 +19,7 @@
         </a>
     </li>
 
-    {% if can('update', job) %}
+    {% if not job.is_expired and can('update', job) %}
         <li>
             <a class="btn-edit" href="{{ route('job.submit', [job.id]) }}">
                 <i class="fa fa-fw fa-edit"></i>
