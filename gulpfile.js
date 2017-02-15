@@ -61,9 +61,6 @@ elixir(function (mix) {
         .sass('pages/pastebin.scss')
         .sass('pages/search.scss');
 
-    mix.copy('node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 'public/js/datepicker.js');
-    mix.copy('node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css', 'public/css/datepicker.css');
-
     // versioning only on production server
     if (elixir.config.production) {
         mix.version([
