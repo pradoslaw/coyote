@@ -27,7 +27,10 @@ class PurgeSessions extends Command
      */
     public function handle()
     {
-        session()->getHandler()->gc(config('session.lifetime') * 60);
+        // dlugosc sesji okreslona jest na 120 min. nie wiem czemu nie moge okreslic krotszej wartosci, gdyz
+        // wywalaja sie testy na travisie. niemniej jednak, usuwamy uzytkownikow z tabeli sessions, juz po 15
+        // min nieaktywnosci
+        session()->getHandler()->gc(15 * 60);
 
         $this->info('Session purged.');
     }
