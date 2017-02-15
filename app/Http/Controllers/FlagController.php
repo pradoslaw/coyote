@@ -91,7 +91,7 @@ class FlagController extends Controller
 
             $this->user->pushCriteria(new HasPermission($this->getPermissionName($flag)));
 
-            $user = $this
+            $users = $this
                 ->user
                 ->all()
                 ->sortByDesc(function ($user) {
@@ -99,10 +99,10 @@ class FlagController extends Controller
                     return $user->id == $this->userId ? -1
                         : ($user->is_online ? Carbon::now()->timestamp : $user->visited_at->timestamp);
                 })
-                ->first();
+                ->splice(0, 5);
 
             /** @var \Coyote\User $user */
-            if ($user) {
+            foreach ($users as $user) {
                 $user->notify(new FlagCreatedNotification($flag));
             }
 
