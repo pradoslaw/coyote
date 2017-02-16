@@ -15,3 +15,7 @@ Minimalne oczekiwane wynagrodzenie: <b>{{ salary }}</b><br>
 {% if dismissal_period %}
 Obecny okres wypowiedzenia: <b>{{ dismissal_period }}</b><br>
 {% endif %}
+
+{% if github %}
+Link do konta Github: <b>{{ link_to(github) }}</b>
+{% endif %}

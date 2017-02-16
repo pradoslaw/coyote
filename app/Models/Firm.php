@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Services\Eloquent\HasMany;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\Logo;
 use Illuminate\Database\Eloquent\Model;
@@ -76,7 +77,7 @@ class Firm extends Model
         parent::boot();
 
         static::saving(function ($model) {
-            foreach (['latitude', 'longitude', 'founded', 'employees', 'headline', 'description', 'latitude', 'longitude', 'street', 'city', 'house', 'postcode'] as $column) {
+            foreach (['latitude', 'longitude', 'founded', 'employees', 'headline', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode'] as $column) {
                 if (empty($model->{$column})) {
                     $model->{$column} = null;
                 }
@@ -119,11 +120,13 @@ class Firm extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function benefits()
     {
-        return $this->hasMany('Coyote\Firm\Benefit');
+        $instance = new Firm\Benefit();
+
+        return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $this->getForeignKey(), $this->getKeyName());
     }
 
     /**

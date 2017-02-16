@@ -63,7 +63,7 @@ class HomeController extends BaseController
             $this->builder->setPreferences($this->preferences);
         }
 
-        $this->builder->setBoostLocation($this->request->attributes->get('geocode'));
+        $this->builder->boostLocation($this->request->attributes->get('geocode'));
 
         return $this->load();
     }
@@ -155,9 +155,9 @@ class HomeController extends BaseController
         }
 
         return $this->view('job.home', [
-            'ratesList'         => Job::getRatesList(),
-            'employmentList'    => Job::getEmploymentList(),
-            'currencyList'      => Currency::pluck('name', 'id'),
+            'rates_list'        => Job::getRatesList(),
+            'employment_list'   => Job::getEmploymentList(),
+            'currency_list'     => Currency::getCurrenciesList(),
             'preferences'       => $this->preferences
         ])->with(
             compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count', 'selected')

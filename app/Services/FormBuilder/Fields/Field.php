@@ -18,7 +18,7 @@ abstract class Field
     protected $name;
 
     /**
-     * @var string
+     * @var mixed
      */
     protected $value;
 
@@ -125,7 +125,7 @@ abstract class Field
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getValue()
     {
@@ -133,7 +133,9 @@ abstract class Field
     }
 
     /**
-     * @param string $value
+     * Set value (can be string, can be array etc)
+     *
+     * @param mixed $value
      */
     public function setValue($value)
     {

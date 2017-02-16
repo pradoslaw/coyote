@@ -140,6 +140,7 @@ class HomeController extends BaseController
     public function unanswered()
     {
         $this->topic->pushCriteria(new Unanswered());
+
         return $this->loadAndRender();
     }
 
@@ -189,6 +190,7 @@ class HomeController extends BaseController
     public function subscribes()
     {
         $this->topic->pushCriteria(new Subscribes($this->userId));
+
         return $this->loadAndRender();
     }
 
@@ -254,7 +256,7 @@ class HomeController extends BaseController
                 'DESC',
                 $this->topicsPerPage($this->request)
             )
-            ->appends(request()->except('page'));
+            ->appends($this->request->except('page'));
     }
 
     /**

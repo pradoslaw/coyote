@@ -41,7 +41,7 @@
                             <a {{ topic.unread ? ('href="' ~ route('forum.topic.mark', [topic.id]) ~ '"')|raw }} title="{{ title }}" class="center-block ico {{ class }} {{ topic.unread ? 'new' : 'normal' }}"></a>
                         </td>
                         <td class="col-subject">
-                            {% set replies_real = (can('delete', forum) ? topic.replies_real : topic.replies) %}
+                            {% set replies_real = (can('delete', topic.forum) ? topic.replies_real : topic.replies) %}
 
                             {% if replies_real > postsPerPage %}
                                 {% set pages = (replies_real / postsPerPage)|round(0, 'ceil') %}

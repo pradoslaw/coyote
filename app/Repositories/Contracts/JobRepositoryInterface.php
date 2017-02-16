@@ -9,12 +9,6 @@ namespace Coyote\Repositories\Contracts;
 interface JobRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param int $id
-     * @return mixed
-     */
-    public function findById($id);
-
-    /**
      * @return int
      */
     public function count();
@@ -44,6 +38,12 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getPopularTags($limit = 1000);
+
+    /**
+     * @param int $userId
+     * @return \Coyote\Feature[]
+     */
+    public function getDefaultFeatures($userId);
 
     /**
      * Return tags with job offers counter

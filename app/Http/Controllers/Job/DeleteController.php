@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Events\JobDeleted;
 use Coyote\Events\JobDeleting;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Job;
@@ -22,6 +23,8 @@ class DeleteController extends Controller
             $job->delete();
 
             stream(Stream_Delete::class, (new Stream_Job)->map($job));
+
+            event(new JobDeleted($job));
         });
 
         return redirect()->route('job.home')->with('success', 'Oferta pracy została usunięta.');

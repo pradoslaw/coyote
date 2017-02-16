@@ -55,6 +55,12 @@
                                         <a href="{{ user.website }}">{{ user.website }}</a>
                                     </li>
                                 {% endif %}
+                                {% if user.github %}
+                                    <li title="Link do konta Github">
+                                        <i class="fa fa-github fa-fw"></i>
+                                        <a href="{{ user.github }}">{{ github(user.github) }}</a>
+                                    </li>
+                                {% endif %}
                                 {% if user.visited_at %}
                                     <li title="Ostatnia wizyta">
                                         <i class="fa fa-sign-in fa-fw"></i>

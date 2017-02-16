@@ -1,0 +1,57 @@
+<?php
+
+namespace Coyote\Services\Elasticsearch;
+
+class QueryString implements DslInterface
+{
+    /**
+     * @var string
+     */
+    protected $query;
+
+    /**
+     * @var array
+     */
+    protected $fields;
+
+    /**
+     * @var int
+     */
+    protected $boost;
+
+    /**
+     * @param string $query
+     * @param array $fields
+     * @param int $boost
+     */
+    public function __construct($query, $fields, $boost = 1)
+    {
+        $this->query = $query;
+        $this->fields = $fields;
+        $this->boost = $boost;
+    }
+
+    /**
+     * @param QueryBuilderInterface $queryBuilder
+     * @return array
+     */
+    public function apply(QueryBuilderInterface $queryBuilder)
+    {
+        return [
+            'query_string' => [
+                'query'     => $this->escape($this->query),
+                'fields'    => $this->fields,
+                'boost'     => $this->boost
+            ]
+        ];
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    protected function escape($query)
+    {
+        return str_replace(['/', '\:'], ['\/', ':'], preg_quote($query, '+-!{}[]^~*?\\'));
+    }
+}

@@ -33,6 +33,7 @@ class JobPostingCest
         $I->fillField('input[name=city]', $city = 'Zielona góra');
         $I->fillField('input[name=salary_from]', $salaryFrom = $fake->numberBetween(0, 999));
         $I->fillField('input[name=salary_to]', $salaryTo = $fake->numberBetween(1000, 2000));
+        $I->selectOption('currency_id', 5);
 
         $I->fillField('textarea[name=description]', $fake->text);
         $I->selectOption(['name' => 'employment_id'], '1');
@@ -49,6 +50,7 @@ class JobPostingCest
         $I->see($title, '.media-heading');
         $I->see($city);
         $I->see($salaryFrom, '.salary');
+        $I->see('CHF', '.salary');
     }
 
     public function createJobOfferAsFirm(FunctionalTester $I)
@@ -72,6 +74,8 @@ class JobPostingCest
         $I->fillField(['name' => 'headline'], $headline = $fake->text(20));
         $I->fillField('textarea[name=description]', $fake->text());
         $I->selectOption('select[name=employees]', 2);
+        $I->fillField('country', 'Polska');
+        $I->fillField('city', 'Wrocław');
 
         $I->click('Podgląd');
         $I->click('Opublikuj');
@@ -81,6 +85,8 @@ class JobPostingCest
         $I->see($firm, '.employer');
         $I->see($website, '#box-job-firm');
         $I->see($headline, 'blockquote');
+
+        $I->canSeeRecord('firms', ['name' => $firm, 'country_id' => 14, 'city' => 'Wrocław']);
     }
 
     public function createSecondJobOfferAsFirm(FunctionalTester $I)
@@ -232,5 +238,31 @@ class JobPostingCest
 
         $I->see($title, '.media-heading');
         $I->see($firm, '.employer');
+    }
+
+    public function createOfferByClickingSaveAsButton(FunctionalTester $I)
+    {
+        $I->wantTo('Create a offer by clicking "save as" button (quick save)');
+
+        $fake = Factory::create();
+        $id = $I->haveRecord('firms', ['user_id' => $this->user->id, 'name' => $firm = $fake->company]);
+
+        $I->haveRecord('firm_benefits', ['firm_id' => $id, 'name' => 'Game-boy']);
+        $I->haveRecord('firm_benefits', ['firm_id' => $id, 'name' => 'TV']);
+
+        $I->amOnRoute('job.submit');
+
+        $I->fillField('input[name=title]', $title = $fake->text(50));
+        $I->selectOption('employment_id', 1);
+        $I->fillField('done', 1);
+
+        $I->click("Zapisz jako $firm");
+
+        $I->seeCurrentRouteIs('job.offer');
+        $I->see($title, '.media-heading');
+        $I->see($firm, '.employer');
+
+        $I->see('Game-boy');
+        $I->see('TV');
     }
 }

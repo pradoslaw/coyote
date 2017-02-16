@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Job;
 
+use Coyote\Country;
 use Coyote\Firm;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
@@ -35,24 +36,37 @@ class FirmForm extends Form
         parent::__construct();
 
         $this->addEventListener(FormEvents::POST_SUBMIT, function (FirmForm $form) {
-            $this->forget($this->data->benefits);
+            if ($form->get('country')->getValue()) {
+                $assoc = array_flip(Country::getCountriesList());
 
+                if (isset($assoc[$form->get('country')->getValue()])) {
+                    // transform country name to country id
+                    $form->get('country_id')->setValue($assoc[$form->get('country')->getValue()]);
+                }
+            }
+        });
+
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (FirmForm $form) {
             $data = $form->all();
             $data['benefits'] = array_filter(array_unique(array_map('trim', $data['benefits'])));
 
             // if agency - set null value. we don't to show them with agencies offers
             if ($form->get('is_agency')->getValue()) {
-                foreach (['employees', 'founded', 'headline', 'latitude', 'longitude', 'street', 'city', 'house', 'postcode'] as $column) {
+                foreach (['employees', 'founded', 'headline', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode'] as $column) {
                     $this->data->{$column} = null;
                 }
 
                 $data['benefits'] = [];
             }
 
+            $models = [];
+
             foreach ($data['benefits'] as $benefit) {
-                $this->data->benefits->add(new Firm\Benefit(['name' => $benefit]));
+                $models[] = new Firm\Benefit(['name' => $benefit]);
             }
 
+            // call macro and replace collection items
+            $this->data->benefits->replace($models);
             $this->data->fill($data);
 
             // new firm has empty ID.
@@ -218,6 +232,7 @@ class FirmForm extends Form
                     'v-model' => 'firm.city'
                 ]
             ])
+            ->add('country_id', 'hidden')
             ->add('country', 'hidden', [
                 'attr' => [
                     'v-model' => 'firm.country'
@@ -289,16 +304,6 @@ class FirmForm extends Form
     {
         if ($this->data instanceof Firm && !$this->isSubmitted()) {
             $this->get('benefits')->setValue($this->data->benefits->all());
-        }
-    }
-
-    /**
-     * @param Firm\Benefit[] $collection
-     */
-    private function forget($collection)
-    {
-        foreach ($collection as $key => $model) {
-            unset($collection[$key]);
         }
     }
 }

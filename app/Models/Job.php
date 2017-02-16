@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Job\Location;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
+use Coyote\Services\Eloquent\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $deadline_at
  * @property int $deadline
+ * @property bool $is_expired
  * @property int $salary_from
  * @property int $salary_to
  * @property int $country_id
@@ -40,6 +42,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Firm $firm
  * @property Tag[] $tags
  * @property Location[] $locations
+ * @property Currency[] $currency
+ * @property Feature[] $features
  */
 class Job extends Model
 {
@@ -53,11 +57,18 @@ class Job extends Model
     const WEEK            = 3;
     const HOUR            = 4;
 
+    const STUDENT         = 1;
+    const JUNIOR          = 2;
+    const MID             = 3;
+    const SENIOR          = 4;
+    const LEAD            = 5;
+    const MANAGER         = 6;
+
     /**
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job' => ['description' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15],
+        'job' => ['description' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
         'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
@@ -81,7 +92,8 @@ class Job extends Model
         'employment_id',
         'deadline_at',
         'email',
-        'enable_apply'
+        'enable_apply',
+        'seniority_id'
     ];
 
     /**
@@ -205,7 +217,7 @@ class Job extends Model
 
         static::saving(function (Job $model) {
             // nullable column
-            foreach (['firm_id', 'salary_from', 'salary_to', 'remote_range'] as $column) {
+            foreach (['firm_id', 'salary_from', 'salary_to', 'remote_range', 'seniority_id'] as $column) {
                 if (empty($model->{$column})) {
                     $model->{$column} = null;
                 }
@@ -223,7 +235,7 @@ class Job extends Model
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public static function getRatesList()
     {
@@ -231,11 +243,19 @@ class Job extends Model
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public static function getEmploymentList()
     {
         return [1 => 'Umowa o pracę', 2 => 'Umowa zlecenie', 3 => 'Umowa o dzieło', 4 => 'Kontrakt'];
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getSeniorityList()
+    {
+        return [self::STUDENT => 'Stażysta', self::JUNIOR => 'Junior', self::MID => 'Mid-Level', self::SENIOR => 'Senior', self::LEAD => 'Lead', self::MANAGER => 'Manager'];
     }
 
     /**
@@ -267,6 +287,7 @@ class Job extends Model
 
         // 30 points maximum...
         $score += min(30, (count($this->tags()->get()) * 10));
+        $score += count($this->features()->wherePivot('checked', true)->get()) * 5;
 
         if ($this->firm_id) {
             $firm = $this->firm;
@@ -283,7 +304,7 @@ class Job extends Model
             $score -= 15;
         }
 
-        return max(0, $score); // score can't be negative
+        return max(1, $score); // score can't be negative. 1 point min for elasticsearch algorithm
     }
 
     /**
@@ -298,11 +319,13 @@ class Job extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function locations()
     {
-        return $this->hasMany('Coyote\Job\Location');
+        $instance = new Job\Location();
+
+        return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $this->getForeignKey(), $this->getKeyName());
     }
 
     /**
@@ -343,6 +366,14 @@ class Job extends Model
     public function tags()
     {
         return $this->belongsToMany('Coyote\Tag', 'job_tags')->orderBy('order')->withPivot(['priority', 'order']);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function features()
+    {
+        return $this->belongsToMany('Coyote\Feature', 'job_features')->orderBy('order')->withPivot(['checked', 'value']);
     }
 
     /**
@@ -417,7 +448,15 @@ class Job extends Model
      */
     public function getDeadlineAttribute()
     {
-        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now())->days + 1 : 90;
+        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now(), false)->days + 1 : 90;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsExpiredAttribute()
+    {
+        return (new Carbon($this->deadline_at))->isPast();
     }
 
     /**
@@ -429,12 +468,33 @@ class Job extends Model
     }
 
     /**
+     * @return string
+     */
+    public function getCurrencyNameAttribute()
+    {
+        return $this->currency()->value('name');
+    }
+
+    /**
      * @param int $userId
      */
     public function setDefaultUserId($userId)
     {
         if (empty($this->user_id)) {
             $this->user_id = $userId;
+        }
+    }
+
+    /**
+     * @param mixed $features
+     */
+    public function setDefaultFeatures($features)
+    {
+        if (!count($this->features)) {
+            foreach ($features as $feature) {
+                $pivot = $this->features()->newPivot(['checked' => $feature->checked, 'value' => $feature->value]);
+                $this->features->add($feature->setRelation('pivot', $pivot));
+            }
         }
     }
 
@@ -480,7 +540,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'enable_apply']);
+        $body = array_except($body, ['deleted_at', 'enable_apply', 'features']);
 
         $locations = [];
 

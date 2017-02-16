@@ -2,9 +2,13 @@
 
 namespace Coyote\Http\Controllers;
 
+use Carbon\Carbon;
 use Coyote\Flag\Type;
+use Coyote\Notifications\FlagCreatedNotification;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Criteria\HasPermission;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Objects\Flag as Stream_Flag;
@@ -24,15 +28,22 @@ class FlagController extends Controller
     private $forum;
 
     /**
+     * @var UserRepository
+     */
+    private $user;
+
+    /**
      * @param FlagRepository $flag
      * @param ForumRepository $forum
+     * @param UserRepository $user
      */
-    public function __construct(FlagRepository $flag, ForumRepository $forum)
+    public function __construct(FlagRepository $flag, ForumRepository $forum, UserRepository $user)
     {
         parent::__construct();
 
         $this->flag = $flag;
         $this->forum = $forum;
+        $this->user = $user;
     }
 
     /**
@@ -77,9 +88,25 @@ class FlagController extends Controller
             $data['metadata'] = $this->decrypt($data['metadata']);
 
             $flag = $this->flag->create($data);
-            $object = (new Stream_Flag())->map($flag);
 
-            stream(Stream_Create::class, $object);
+            $this->user->pushCriteria(new HasPermission($this->getPermissionName($flag)));
+
+            $users = $this
+                ->user
+                ->all()
+                ->sortByDesc(function ($user) {
+                    /** @var \Coyote\User $user */
+                    return $user->id == $this->userId ? -1
+                        : ($user->is_online ? Carbon::now()->timestamp : $user->visited_at->timestamp);
+                })
+                ->splice(0, 5);
+
+            /** @var \Coyote\User $user */
+            foreach ($users as $user) {
+                $user->notify(new FlagCreatedNotification($flag));
+            }
+
+            stream(Stream_Create::class, (new Stream_Flag())->map($flag));
         });
     }
 
@@ -147,5 +174,20 @@ class FlagController extends Controller
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param \Coyote\Flag $flag
+     * @return string
+     */
+    private function getPermissionName($flag)
+    {
+        $permission = $flag->metadata->permission;
+
+        if (isset($flag->metadata->forum_id)) {
+            $permission = "forum-$permission";
+        }
+
+        return $permission;
     }
 }

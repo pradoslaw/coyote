@@ -6,7 +6,6 @@
         <main class="col-md-8 col-12-sm col-12-xs">
             {% include 'job.submit.partials.indicator' with {'current': 3} %}
 
-            {{ form_open({'url': route('job.submit.save'), 'class': 'submit-form'}) }}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Podgląd
@@ -16,6 +15,7 @@
                 </div>
             </div>
 
+            {{ form_open({'url': route('job.submit.save'), 'class': 'submit-form'}) }}
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div id="form-navigation" class="form-group">

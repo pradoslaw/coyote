@@ -3,6 +3,7 @@
 namespace Coyote\Http\Forms\Job;
 
 use Coyote\Services\FormBuilder\Form;
+use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 
 class ApplicationForm extends Form implements ValidatesWhenSubmitted
@@ -24,7 +25,7 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
     ];
 
     /**
-     * @var string
+     * @var array
      */
     private $dismissalPeriodChoices = [
         'Brak',
@@ -51,6 +52,30 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
         'enctype' => 'multipart/form-data'
     ];
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->addEventListener(FormEvents::PRE_RENDER, function (Form $form) {
+            if ($form->request->session()->getOldInput('cv')) {
+                $name = explode('_', $form->get('cv')->getValue(), 2)[1];
+
+                $attr = $form->get('cv')->getAttr();
+                $form->get('cv')->setAttr(array_merge($attr, ['placeholder' => $name]));
+            }
+        });
+
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
+            $github = $form->get('github')->getValue();
+
+            if ($github) {
+                if (filter_var($github, FILTER_VALIDATE_URL) === false) {
+                    $form->get('github')->setValue('https://github.com/' . $github);
+                }
+            }
+        });
+    }
+
     public function buildForm()
     {
         $this
@@ -72,12 +97,23 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Numer telefonu',
                 'help' => 'Podanie numeru telefonu nie jest obowiązkowe, ale pozwoli na szybki kontakt.'
             ])
-            ->add('cv', 'file', [
-                'rules' => 'max:' . (config('filesystems.upload_max_size') * 1024) . '|mimes:pdf,doc,docx,rtf',
+            ->add('cv', 'hidden', [
                 'label' => 'CV/Resume',
                 'help' => 'CV/résumé z rozszerzeniem *.pdf, *.doc, *.docx lub *.rtf.',
                 'attr' => [
-                    'placeholder' => 'Kliknij, aby dodać załącznik'
+                    'placeholder' => 'Kliknij, aby dodać załącznik',
+                    'id' => 'uploader',
+                    'class' => 'form-control',
+                    'data-upload-url' => route('job.application.upload')
+                ],
+                'template' => 'uploader'
+            ])
+            ->add('github', 'text', [
+                'rules' => 'string|max:200',
+                'label' => 'Konto Github',
+                'help' => 'Nazwa użytkownika lub link do konta Github.',
+                'row_attr' => [
+                    'class' => 'github'
                 ]
             ])
             ->add('salary', 'select', [

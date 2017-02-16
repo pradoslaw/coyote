@@ -4,10 +4,9 @@ namespace Coyote\Notifications;
 
 use Coyote\Alert;
 use Coyote\Flag;
-use Coyote\Services\Alert\DatabaseChannel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class FlagCreatedNotification extends Notification implements ShouldQueue
@@ -42,22 +41,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
      */
     public function via($user)
     {
-        $settings = $user->notificationSetting(static::ID);
-
-        if (!$settings->profile && !$settings->email) {
-            return [];
-        }
-
-        $this->broadcast[] = 'user:' . $user->id;
-        $notification = $user->getUnreadNotification($this->objectId());
-
-        $channels = [DatabaseChannel::class];
-
-        if (empty($notification->id)) {
-            $channels[] = 'mail';
-        }
-
-        return $channels;
+        return $this->channels($user);
     }
 
     /**
@@ -69,8 +53,11 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     public function toMail($user)
     {
         return (new MailMessage)
-                    ->line('Właśnie dodano nowy raport')
-                    ->action('Notification Action', 'https://laravel.com');
+            ->greeting($user->name)
+            ->subject($this->flag->user->name . ' dodał nowy raport')
+            ->line(sprintf('%s zgłosił naruszenie z powodu %s.', $this->flag->user->name, $this->flag->type->name))
+            ->line('Kliknij na poniższy przycisk jeżeli chcesz podjąć w związku z tym jakieś działania.')
+            ->action('Zobacz raport', $this->notificationUrl());
     }
 
     /**
@@ -80,15 +67,15 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     public function toDatabase($user)
     {
         return [
-            'object_id' => $this->objectId(),
-            'user_id' => $user->id,
-            'type_id' => static::ID,
-            'subject' => $this->flag->type->name,
-            'excerpt' => $this->flag->text,
-            'url' => $this->flag->url
+            'object_id'     => $this->objectId(),
+            'user_id'       => $user->id,
+            'type_id'       => static::ID,
+            'subject'       => $this->flag->type->name,
+            'excerpt'       => $this->flag->text,
+            'url'           => $this->flag->url,
+            'guid'          => $this->id
         ];
     }
-
 
     /**
      * Generowanie unikalnego ciagu znakow dla wpisu na mikro
@@ -111,10 +98,41 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     }
 
     /**
+     * @param \Coyote\User $user
      * @return array
      */
-    public function toBroadcast()
+    public function toBroadcast($user)
     {
-        return [];
+        return [
+            'headline'  => $user->name . ' dodał nowy raport',
+            'subject'   => $this->flag->type->name,
+            'url'       => $this->notificationUrl()
+        ];
+    }
+
+    /**
+     * @param \Coyote\User $user
+     * @return mixed
+     */
+    protected function channels($user)
+    {
+        $channels = $user->notificationChannels(static::ID);
+
+        $this->broadcast[] = 'user:' . $user->id;
+        $notification = $user->getUnreadNotification($this->objectId());
+
+        if (!empty($notification->id)) {
+            unset($channels[array_search('email', $channels)]);
+        }
+
+        return $channels;
+    }
+
+    /**
+     * @return string
+     */
+    protected function notificationUrl()
+    {
+        return route('user.alerts.url', [$this->id]);
     }
 }

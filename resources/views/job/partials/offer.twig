@@ -12,7 +12,7 @@
     <div class="media">
         {% if job.firm.logo %}
             <div class="media-left hidden-xxs">
-                <img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
+                <a title="Zobacz wszystkie oferty {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}"><img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}"></a>
             </div>
         {% endif %}
 
@@ -44,7 +44,7 @@
                     {{ job.created_at|format_date }}
                 </li>
 
-                {% if not preview and can('update', job) %}
+                {% if not preview and can('job-update') %}
                     <li class="counter">
                         <i class="fa fa-eye"></i>
                         {{ declination(job.views, ['odsłony', 'odsłon', 'odsłony']) }}
@@ -55,14 +55,22 @@
                     </li>
                 {% endif %}
 
-                <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
-                    <i class="fa fa-clock-o"></i>
-                    {{ job.deadline }} dni do końca
-                </li>
+                {% if not job.is_expired %}
+                    <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
+                        <i class="fa fa-clock-o"></i>
+                        {{ job.deadline }} dni do końca
+                    </li>
+                {% endif %}
                 <li>
                     <i class="fa fa-pencil"></i>
-                    {{ employmentList[job.employment_id] }}
+                    {{ employment_list[job.employment_id] }}
                 </li>
+                {% if job.seniority_id %}
+                    <li title="Wymagany staż">
+                        <i class="fa fa-area-chart"></i>
+                        {{ seniority_list[job.seniority_id] }}
+                    </li>
+                {% endif %}
             </ul>
 
             {% if tags|length > 0 %}
@@ -96,17 +104,31 @@
             {% endif %}
 
             {% if job.description %}
-                <h2>Opis oferty</h2>
+                <h3>Opis oferty</h3>
 
                 <div class="text">
                     {{ job.description|raw }}
                 </div>
             {% endif %}
 
-            {% if job.firm.benefits|length %}
-                <h2>Oferujemy</h2>
+            {% if job.features and features_count > 0 %}
+                <ul class="features list-group row margin-md-top">
+                    {% for feature in job.features %}
+                        <li class="list-group-item col-xs-12 col-sm-6 {{ feature.pivot.checked ? 'checked' }}">
+                            <i class="fa fa-fw {{ feature.pivot.checked ? 'fa-check' : 'fa-remove' }}"></i> {{ feature.name }}
 
-                <ul class="benefits list-group row">
+                            {% if feature.pivot.value %}
+                                <small class="text-muted"> ― {{ feature.pivot.value }}</small>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if job.firm.benefits|length %}
+                <h3>Oferujemy</h3>
+
+                <ul class="benefits list-group row margin-md-top">
                     {% for benefit in job.firm.benefits %}
                         <li class="list-group-item col-xs-12 col-sm-6 checked"><i class="fa fa-check fa-fw"></i> {{ benefit.name }}</li>
                     {% endfor %}
@@ -114,7 +136,7 @@
             {% endif %}
 
             {% if job.firm.name and (job.firm.headline or job.firm.description) %}
-                <h2>{{ job.firm.name }}</h2>
+                <h3>{{ job.firm.name }}</h3>
 
                 <div class="text">
                     {% if job.firm.headline %}
@@ -125,16 +147,18 @@
                 </div>
             {% endif %}
 
+            {% if not job.is_expired %}
             {% if not job.enable_apply %}
-                <h2>Informacje o rekrutacji</h2>
+                <h3>Informacje o rekrutacji</h3>
 
                 <div class="text">
                     {{ job.recruitment|raw }}
                 </div>
             {% else %}
-                <div id="apply">
-                    <a class="btn btn-primary" href="{{ not preview ? route('job.candidate', [job.id]) : 'javascript:' }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
+                <div id="apply" class="margin-lg-top">
+                    <a class="btn btn-primary" href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
                 </div>
+            {% endif %}
             {% endif %}
         </div>
     </div>

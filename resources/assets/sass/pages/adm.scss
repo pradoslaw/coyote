@@ -1,6 +1,7 @@
 @charset "UTF-8";
 @import "../vendor/bootstrap/variables";
 @import "../vendor/font-awesome/variables";
+@import "../vendor/flatpickr";
 @import "../helpers/variables";
 
 html {
@@ -14,7 +15,6 @@ html {
 body.fixed-top {
   padding-top: 0;
 }
-
 
 // override class from main.scss
 .max-width {

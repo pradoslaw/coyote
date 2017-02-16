@@ -108,7 +108,8 @@ header.navbar-default {
 }
 
 #desktop-menu > li > a,
-#mobile-menu > div > a {
+#mobile-menu > div > a,
+#mobile-menu > form > div > button {
   color: #3C3C3C;
   font-family: "Open Sans", Arial, sans-serif;
   font-size: 13px;
@@ -127,6 +128,14 @@ header.navbar-default {
 
   .btn {
     display: block;
+  }
+
+  .btn-sign-out {
+    padding: 0;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -171,30 +180,27 @@ header.navbar-default {
   }
 }
 
+// logout button
+.btn-sign-out {
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+
+  &:focus, &:active {
+    outline: none;
+  }
+}
+
 #dropdown-user {
   right: 13px;
 
-  // logout button
-  button {
-    border: none;
-    background: none;
-    width: 100%;
-    text-align: left;
+  > li > a,
+  .btn-sign-out {
+    padding: 5px 20px 5px 8px;
 
     &:hover {
       background-color: $dropdown-link-hover-bg;
-    }
-
-    &:focus, &:active {
-      outline: none;
-    }
-  }
-
-  > li {
-    > a,
-    // logout button
-    button {
-      padding: 5px 20px 5px 8px;
     }
   }
 }

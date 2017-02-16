@@ -2,7 +2,7 @@
 {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
 
 {% macro render_name(post) %}
-    <h5 class="{{ post.session_updated_at ? 'online' : 'offline' }}" title="Użytkownik jest {{ post.session_updated_at ? 'online' : 'offline' }}">
+    <h5 class="{{ post.is_online ? 'online' : 'offline' }}" title="Użytkownik jest {{ post.is_online ? 'online' : 'offline' }}">
         {% if post.user_id %}
             {{ link_to_profile(post.user_id, post.author_name, post.is_active, post.is_blocked) }}
         {% else %}
@@ -66,7 +66,7 @@
                     </p>
                     <p class="hidden-xs">
                         <strong>Ostatnio:</strong>
-                        <small>{{ post.session_updated_at|default(post.author_visited_at)|format_date }}</small>
+                        <small>{{ post.author_visited_at|format_date }}</small>
                     </p>
 
                     {% if post.location %}

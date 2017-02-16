@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Coyote\Feature;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
@@ -20,21 +21,6 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     public function model()
     {
         return 'Coyote\Job';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function findById($id)
-    {
-        $this->applyCriteria();
-
-        return $this
-            ->model
-            ->select(['jobs.*', 'countries.name AS country_name', 'currencies.name AS currency_name'])
-            ->leftJoin('countries', 'countries.id', '=', 'country_id')
-            ->leftJoin('currencies', 'currencies.id', '=', 'currency_id')
-            ->findOrFail($id);
     }
 
     /**
@@ -106,6 +92,28 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->limit($limit)
             ->get()
             ->pluck('count', 'name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDefaultFeatures($userId)
+    {
+        $sub = $this->toSql(
+            $this->model->select('id')->where('user_id', $userId)->orderBy('id', 'DESC')->limit(1)
+        );
+
+        return $this
+            ->app
+            ->make(Feature::class)
+            ->selectRaw(
+                'features.*, COALESCE(job_features.checked, 0) AS checked, COALESCE(job_features.value, \'\') AS value'
+            )
+            ->leftJoin('job_features', function (JoinClause $join) use ($sub) {
+                return $join->on('job_id', '=', $this->raw("($sub)"))->on('feature_id', '=', 'features.id');
+            })
+            ->orderBy('order')
+            ->get();
     }
 
     /**

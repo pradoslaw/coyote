@@ -10,7 +10,7 @@ class SubscribeController extends Controller
     /**
      * @param Job $job
      */
-    public function index(Job $job)
+    public function index($job)
     {
         $subscribe = $job->subscribers()->forUser($this->userId)->first();
 

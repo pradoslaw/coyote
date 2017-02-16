@@ -16,7 +16,7 @@ class TagController extends BaseController
      */
     public function save(Request $request)
     {
-        $this->validate($request, ['tags.*' => 'required|max:25|tag']);
+        $this->validate($request, ['tag' => 'array', 'tags.*' => 'required|max:25|tag']);
 
         $tags = json_encode($request->get('tags', []));
         $this->setSetting('forum.tags', $tags);

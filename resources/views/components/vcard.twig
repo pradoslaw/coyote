@@ -3,7 +3,7 @@
 
 <div id="vcard">
     <div id="vcard-header">
-        <a href="{{ route('profile', [user.id]) }}">{{ user.name }}</a>
+        {{ link_to_profile(user) }}
     </div>
 
     <div id="vcard-content">

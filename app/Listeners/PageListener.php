@@ -2,6 +2,7 @@
 
 namespace Coyote\Listeners;
 
+use Coyote\Events\JobDeleted;
 use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Events\TopicWasMoved;
@@ -10,7 +11,6 @@ use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\ForumWasSaved;
 use Coyote\Events\ForumWasDeleted;
 use Coyote\Events\JobWasSaved;
-use Coyote\Events\JobDeleting;
 use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Microblog;
@@ -150,9 +150,9 @@ class PageListener implements ShouldQueue
     }
 
     /**
-     * @param JobDeleting $event
+     * @param JobDeleted $event
      */
-    public function onJobDelete(JobDeleting $event)
+    public function onJobDelete(JobDeleted $event)
     {
         $this->page->findByContent($event->job['id'], Job::class)->delete();
     }
@@ -229,7 +229,7 @@ class PageListener implements ShouldQueue
         );
 
         $events->listen(
-            'Coyote\Events\JobWasDeleted',
+            'Coyote\Events\JobDeleted',
             'Coyote\Listeners\PageListener@onJobDelete'
         );
 

@@ -49,6 +49,16 @@ $(function () {
             },
             'application'
         );
+    }).on('/Adm/Firewall/*', () => {
+        require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
+            require('flatpickr');
+            const Polish = require('flatpickr/dist/l10n/pl.js').pl;
+
+            $('#expire-at').flatpickr({
+                allowInput: true,
+                locale: Polish
+            });
+        });
     });
 
     r.resolve();

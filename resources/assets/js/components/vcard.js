@@ -1,18 +1,25 @@
+import Config from '../libs/config';
+
 $(function () {
     'use strict';
 
-    var toolTipTimer;
+    let toolTipTimer;
 
     $('body').delegate('a[data-user-id]', 'mouseenter mouseleave', function (e) {
+        // jezeli link jest umieszczony w komponencie vcard - pomijamy dalsze czynnosci
+        if ($(this).parent().is('#vcard-header')) {
+            return;
+        }
+
         clearTimeout(toolTipTimer);
 
         if (e.type === 'mouseenter') {
-            var userId = $(this).data('user-id');
+            let userId = $(this).data('user-id');
 
             toolTipTimer = setTimeout(function () {
                 $.ajax({
                     type: 'GET',
-                    url: _config.public + '/User/Vcard/' + userId,
+                    url: `${Config.get('public')}/User/Vcard/${userId}`,
                     dataType: 'html',
                     crossDomain: true,
                     xhrFields: {

@@ -18,6 +18,17 @@
     }
   }
 
+  h3 {
+    &:after {
+      height: 1px;
+      width: 10%;
+      content: '';
+      display: block;
+      background-color: #e4e6e8;
+      margin-top: 10px;
+    }
+  }
+
   .employer {
     margin-right: 3px;
     font-size: 14px;
@@ -48,11 +59,11 @@
     }
   }
 
-  .benefits {
-    i {
-      color: $brand-primary;
-    }
-  }
+  //.benefits {
+  //  i {
+  //    color: $brand-primary;
+  //  }
+  //}
 
   .tags {
     margin-top: 10px;
@@ -114,14 +125,6 @@
   @media screen and (min-width: $screen-sm) {
     display: inline;
   }
-}
-
-.box-apply {
-  margin-bottom: 20px;
-}
-
-#apply {
-  margin-top: 30px;
 }
 
 .side-menu {

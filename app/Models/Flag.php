@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property Flag\Type $type
+ * @property User $user
  */
 class Flag extends Model
 {
@@ -39,6 +40,14 @@ class Flag extends Model
     public function type()
     {
         return $this->belongsTo('Coyote\Flag\Type');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('Coyote\User');
     }
 
     /**

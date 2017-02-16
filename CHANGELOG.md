@@ -1,21 +1,33 @@
 ## 2.1
 
+**Ogólne**
 - Upgrade do Laravel 5.3
 - Usunięcie bowera na rzecz npm
 - Webpack + babel zamiast samego babela
-- Grupowanie wiadomości po nazwie użytkownika (jeden użytkownik = jedna konwersacja)
 - Znacznik `<u>` jest ponownie dozwolony przez parser 
-- Okno powiadomień oraz wiadomości prywatnych na urzędzeniach mobilnych: wyświetlanie na całą szerokość okna
 - Zmiana sposobu wyświetlania listy użytkowników online (https://github.com/adam-boduch/coyote/issues/174)
+
+**Panel użytkownika**
+- Grupowanie wiadomości po nazwie użytkownika (jeden użytkownik = jedna konwersacja)
+- Okno powiadomień oraz wiadomości prywatnych na urzędzeniach mobilnych: wyświetlanie na całą szerokość okna
 - Lista mikroblogów użytkownika widoczna w jego profilu
-- Wyszukiwarka w module "Praca" wyszukuje nazwy miejscowości zapisane bez polskich znaków
+- Możliwość zapisania linku do konta github
+
+**Forum**
 - Wyświetlanie tagów do wątków, nawet na małych ekranach
 - Delikatnie powiększenie czcionki tagów kosztem paddingu
 - Grupowanie ustawień powiadomień w panelu użytkownika
+
+**Praca**
+- Wyszukiwarka w module "Praca" wyszukuje nazwy miejscowości zapisane bez polskich znaków
 - Optymalizacja wyszukiwania tagów w formularzu dodawania nowej oferty
 - Sugerowanie tagów w formularza nowej oferty pracy
 - Wynagrodzenie na liście ofert, w dziale Praca prezentowane jest w ujęciu miesięcznym (mimo, że w ofercie zostało określone np. godzinowo)
 - Lista ofert pracy w dziale Praca uwzględnia w drobnym stopniu Twoją aktualną lokalizację (prezentując oferty pracy zdalnej lub bliskie Twojemu miejscu zamieszkania)
+- Formularz dodawania nowego ogłoszenia: przypisany na Vue.js
+- Nowe pole z możliwością określania stażu pracy w ogłoszeniu (junior, seniot itp)
+- Formularz aplikacji o pracę: możliwość wysłania linka do konta Github
+- Logo w ogłoszeniu jest linkiem, który prowadzi do wszystkich ofert danej firmy
 
 ## 2.0
 

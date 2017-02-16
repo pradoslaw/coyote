@@ -84,7 +84,12 @@ class Tags {
                     }
                 }
 
-                this.dropdown.html(dropdown).toggle(hits > 0);
+                if (!hits) {
+                    dropdown = `<li><small>Dodaj...</small> <span>${searchText}</span></li>`;
+                    hits = 1;
+                }
+
+                this.dropdown.html(dropdown).toggle(hits >= 1);
             }
         });
     }

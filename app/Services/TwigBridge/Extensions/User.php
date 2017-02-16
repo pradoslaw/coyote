@@ -89,7 +89,7 @@ class User extends Twig_Extension
 
                     $attributes     = ['data-user-id' => $userId];
                     if ($isBlocked || !$isActive) {
-                        $attributes['class'] = 'del';
+                        $attributes['class'] = 'user-deleted';
                     }
                     return link_to_route('profile', $name, $userId, $attributes);
                 },

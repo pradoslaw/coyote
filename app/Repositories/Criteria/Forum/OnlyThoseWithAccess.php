@@ -31,7 +31,7 @@ class OnlyThoseWithAccess extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $this->subQuery($model, $repository, 'forums.id');
+        return $this->applyNested($model, $repository, 'forums.id');
     }
 
     /**
@@ -40,7 +40,7 @@ class OnlyThoseWithAccess extends Criteria
      * @param string $column
      * @return mixed
      */
-    protected function subQuery($model, Repository $repository, $column)
+    protected function applyNested($model, Repository $repository, $column)
     {
         return $model->whereNested(function (Builder $sub) use ($repository, $column) {
             $sub->whereNotExists(function (Builder $sub) use ($repository, $column) {

@@ -6,6 +6,7 @@ use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface;
+use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
@@ -66,6 +67,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->model('firewall', FirewallRepositoryInterface::class);
         $this->router->model('group', GroupRepositoryInterface::class);
         $this->router->model('block', BlockRepositoryInterface::class);
+        $this->router->model('job', JobRepositoryInterface::class);
 
         $this->router->bind('forum', function ($slug) {
             return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();

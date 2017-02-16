@@ -136,6 +136,7 @@ class AlertRepository extends Repository implements AlertRepositoryInterface
             ->whereIn('user_id', $userId)
             ->join('users', 'users.id', '=', 'user_id')
             ->join('alert_types', 'alert_types.id', '=', 'type_id')
+            ->where('is_public', 1)
             ->orderBy('alert_types.id')
             ->get();
     }

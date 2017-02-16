@@ -3,6 +3,7 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
+use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Illuminate\Container\Container as App;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
@@ -25,7 +26,8 @@ class DefaultBindings
         'pastebin' => PastebinRepositoryInterface::class,
         'firewall' => FirewallRepositoryInterface::class,
         'group' => GroupRepositoryInterface::class,
-        'block' => BlockRepositoryInterface::class
+        'block' => BlockRepositoryInterface::class,
+        'job' => JobRepositoryInterface::class
     ];
 
     /**

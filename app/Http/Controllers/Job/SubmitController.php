@@ -60,7 +60,7 @@ class SubmitController extends Controller
             $job = $request->session()->get(Job::class);
         } else {
             $job = $this->job->findOrNew($id);
-            $job->setDefaultUserId($this->userId);
+            abort_if($job->is_expired, 404);
 
             // load default firm regardless of offer is private or not
             if (!$job->firm_id) {
@@ -70,7 +70,11 @@ class SubmitController extends Controller
                 $job->firm()->associate($firm);
             }
 
-            $job->load(['tags', 'locations', 'country']);
+            $job->load(['tags', 'features', 'locations', 'country']);
+            $job->firm->load('benefits');
+
+            $job->setDefaultUserId($this->userId);
+            $job->setDefaultFeatures($this->job->getDefaultFeatures($this->userId));
         }
 
         $this->authorize('update', $job);
@@ -193,11 +197,20 @@ class SubmitController extends Controller
             $job->firm->description = $parser->parse($job->firm->description);
         }
 
+        $featuresCount = $job
+            ->features
+            ->filter(function ($item) {
+                return $item->pivot->checked;
+            })
+            ->count();
+
         return $this->view('job.submit.preview', [
             'job'               => $job,
             'tags'              => $tags,
-            'ratesList'         => Job::getRatesList(),
-            'employmentList'    => Job::getEmploymentList()
+            'rates_list'        => Job::getRatesList(),
+            'employment_list'   => Job::getEmploymentList(),
+            'seniority_list'    => Job::getSeniorityList(),
+            'features_count'    => $featuresCount
         ]);
     }
 
@@ -213,7 +226,7 @@ class SubmitController extends Controller
         $this->authorize('update', $job);
 
         $tags = [];
-        if ($job->tags->count()) {
+        if (count($job->tags)) {
             $order = 0;
 
             foreach ($job->tags as $tag) {
@@ -226,7 +239,12 @@ class SubmitController extends Controller
             }
         }
 
-        $this->transaction(function () use (&$job, $request, $tags) {
+        $features = [];
+        foreach ($job->features as $feature) {
+            $features[$feature->id] = $feature->pivot->toArray();
+        }
+
+        $this->transaction(function () use (&$job, $request, $tags, $features) {
             $activity = $job->id ? Stream_Update::class : Stream_Create::class;
 
             if ($job->firm->is_private) {
@@ -243,17 +261,15 @@ class SubmitController extends Controller
 
                 // reassociate job with firm. user could change firm, that's why we have to do it again.
                 $job->firm()->associate($job->firm);
-
-                $job->firm->benefits()->delete();
-                $job->firm->benefits()->saveMany($job->firm->benefits);
+                // remove old benefits and save new ones.
+                $job->firm->benefits()->push($job->firm->benefits);
             }
 
             $job->save();
-
-            $job->locations()->delete();
-            $job->locations()->saveMany($job->locations);
+            $job->locations()->push($job->locations);
 
             $job->tags()->sync($tags);
+            $job->features()->sync($features);
 
             event(new JobWasSaved($job));
 

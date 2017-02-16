@@ -107,8 +107,10 @@ return [
             'Coyote\Services\TwigBridge\Extensions\Elasticsearch',
             'Coyote\Services\TwigBridge\Extensions\Block',
             'Coyote\Services\TwigBridge\Extensions\FormBuilder',
-//            'Coyote\Services\TwigBridge\Extensions\Grid',
-            'Coyote\Services\TwigBridge\Extensions\Media'
+            'Coyote\Services\TwigBridge\Extensions\Media',
+
+            // odkomentuj jezeli potrzebujesz profilera wewnatrz twig. {% stopwatch %} oraz {% endstopwatch %}
+//            'Barryvdh\Debugbar\Twig\Extension\Stopwatch',
         ],
         /*
         |--------------------------------------------------------------------------
@@ -180,6 +182,7 @@ return [
             'asset',
             'keywords',
             'public_path',
+            'http_build_query',
             'grid' => ['is_safe' => ['html']],
             'grid_column' => ['is_safe' => ['html']],
             'grid_row' => ['is_safe' => ['html']],
@@ -216,7 +219,8 @@ return [
         |
         */
         'filters'   => [
-            'str_limit' => ['is_safe' => ['html']]
+            'str_limit' => ['is_safe' => ['html']],
+            'http_build_query'
         ],
     ],
 ];

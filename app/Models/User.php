@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Coyote\Notifications\ResetPasswordNotification;
+use Coyote\Services\Alert\DatabaseChannel;
 use Coyote\Services\Media\Photo;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Illuminate\Auth\Authenticatable;
@@ -44,6 +45,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $ip
  * @property string $browser
  * @property string $website
+ * @property string $github
  * @property string $location
  * @property float $latitude
  * @property float $longitude
@@ -51,6 +53,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $position
  * @property string $access_ip
  * @property \Coyote\Services\Media\MediaInterface $photo
+ * @property bool $is_online
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -116,7 +119,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'allow_subscribe' => 'int',
         'allow_sticky_header' => 'int',
         'is_confirm' => 'int',
-        'is_active' => 'int'
+        'is_active' => 'int',
+        'is_online' => 'int'
     ];
 
     public static function boot()
@@ -210,9 +214,24 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany('Coyote\User\Skill')->orderBy('order');
     }
 
-    public function notificationSetting($typeId)
+    /**
+     * @param int $typeId
+     * @return array
+     */
+    public function notificationChannels($typeId)
     {
-        return $this->hasOne('Coyote\Alert\Setting')->where('type_id', $typeId)->first();
+        $channels = [];
+        $settings = $this->hasOne('Coyote\Alert\Setting')->where('type_id', $typeId)->first();
+
+        if ($settings->profile) {
+            $channels[] = DatabaseChannel::class;
+        }
+
+        if ($this->email && $this->is_active && $this->is_confirm && !$this->is_blocked && $settings->email) {
+            $channels[] = 'mail';
+        }
+
+        return $channels;
     }
 
     public function getUnreadNotification($objectId)

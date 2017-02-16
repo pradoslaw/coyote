@@ -5,9 +5,11 @@
 <section class="panel panel-wrapper">
     <div id="box-jobs" class="panel-body">
         <ul id="sort" class="hidden-xs">
-            <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
-            <li>{{ sortable('id', 'Data dodania', ['_score', 'asc']) }}</li>
-            <li>{{ sortable('salary', 'Wynagrodzenie', ['_score', 'asc']) }}</li>
+            {% set sort = input_get('sort', '_score') %}
+
+            <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: '_score', order: 'desc'})), 'Trafność', {class: 'sort' ~ (sort == '_score' ? ' desc')}) }}</li>
+            <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'id', order: 'desc'})), 'Data dodania', {class: 'sort' ~ (sort == 'id' ? ' desc')}) }}</li>
+            <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'salary', order: 'desc'})), 'Wynagrodzenie', {class: 'sort' ~ (sort == 'salary' ? ' desc')}) }}</li>
         </ul>
 
         <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary btn-sm pull-right visible-xs visible-sm" style="margin-top: 6px; margin-bottom: 10px" title="Dodaj ofertę pracy zupełnie za darmo!">Dodaj ofertę pracy</a>
@@ -21,19 +23,13 @@
 
                     <tr>
                         <td class="col-logo">
-                            <a href="{{ url }}">
-                                {% if job.firm.logo %}
-                                    <img title="{{ job.firm.name }}" src="{{ logo(job.firm.logo) }}">
-                                {% else %}
-                                    <img src="{{ cdn('img/logo-gray.png') }}">
-                                {% endif %}
-                            </a>
+                            <a href="{{ url }}"><img alt="{{ job.firm.name }}" src="{{ logo(job.firm.logo) }}"></a>
                         </td>
                         <td class="col-body">
                             <h2><a href="{{ url }}" title="{{ job.title|raw }}">{{ job.title|raw }}</a></h2>
 
                             {% if job.score >= 140 %}
-                                <img src="/img/medal.png" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy">
+                                <a href="{{ url }}"><img src="/img/medal.png" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
                             {% endif %}
 
                             <p>

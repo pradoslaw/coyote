@@ -240,7 +240,7 @@ $(function () {
     });
 
     setInterval(() => {
-        $.get(_config.ping, token => {
+        $.get(Config.get('ping'), token => {
             $('meta[name="csrf-token"]').attr('content', token);
             $(':hidden[name="_token"]').val(token);
 
