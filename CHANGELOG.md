@@ -28,6 +28,8 @@
 - Nowe pole z możliwością określania stażu pracy w ogłoszeniu (junior, seniot itp)
 - Formularz aplikacji o pracę: możliwość wysłania linka do konta Github
 - Logo w ogłoszeniu jest linkiem, który prowadzi do wszystkich ofert danej firmy
+- Link do powrotu do listy ofert w ogłoszeniu o pracę
+- Wyczyszczenie pola wyszukiwania powoduje przeładowanie formularza
 
 ## 2.0
 
