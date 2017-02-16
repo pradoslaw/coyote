@@ -230,11 +230,13 @@ class JobForm extends Form
                     'class' => 'input-inline'
                 ]
             ])
-            ->add('deadline', 'text', [
+            ->add('deadline', 'number', [
                 'label' => 'Data ważnosci oferty',
                 'rules' => 'integer|min:1|max:365',
                 'help' => 'Oferta będzie widoczna na stronie do dnia <strong>${ deadlineDate }</strong>',
                 'attr' => [
+                    'min' => 1,
+                    'max' => 365,
                     'class' => 'input-inline',
                     'v-model' => 'job.deadline'
                 ]
