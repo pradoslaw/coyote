@@ -17,8 +17,8 @@
 {% block keywords %}{{ keywords(job.description)|join(',') }}{% endblock %}
 
 {% block container %}
-    <div class="row" style="margin-top: 20px">
-        <div class="col-md-9">
+    <div class="row margin-md-top">
+        <div class="col-xs-12">
             {% if flag %}
                 {% include 'components.flag' %}
             {% endif %}
@@ -29,6 +29,14 @@
                 </div>
             {% endif %}
 
+            <div class="job-navlinks padding-xs">
+                <i class="fa fa-backward text-primary"></i> <a href="{{ previous_url ?: route('job.home') }}">Powrót do listy ofert</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9">
             <div class="panel panel-default">
                 {% include 'job.partials.offer' %}
             </div>

@@ -64,6 +64,7 @@ class HomeController extends BaseController
         }
 
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
+        $this->request->session()->put('current_url', $this->request->fullUrl());
 
         return $this->load();
     }

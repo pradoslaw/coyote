@@ -59,12 +59,6 @@
     }
   }
 
-  //.benefits {
-  //  i {
-  //    color: $brand-primary;
-  //  }
-  //}
-
   .tags {
     margin-top: 10px;
 
@@ -151,5 +145,19 @@
         font-size: $font-size-base + 1;
       }
     }
+  }
+}
+
+// Navigation (back to all offers link)
+// -------------------------------------
+
+.job-navlinks {
+  i {
+    color: lighten($brand-primary, 5);
+    font-size: 10px;
+  }
+
+  a {
+    color: #626262;
   }
 }
