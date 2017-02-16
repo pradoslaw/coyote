@@ -9,19 +9,6 @@ use Coyote\Services\Elasticsearch\QueryString;
 class AdBuilder extends SearchBuilder
 {
     /**
-     * @var string|null
-     */
-    protected $sessionId = null;
-
-    /**
-     * @param string $sessionId
-     */
-    public function setSessionId(string $sessionId)
-    {
-        $this->sessionId = $sessionId;
-    }
-
-    /**
      * @param array $tags
      */
     public function boostTags(array $tags)
