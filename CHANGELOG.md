@@ -30,6 +30,7 @@
 - Logo w ogłoszeniu jest linkiem, który prowadzi do wszystkich ofert danej firmy
 - Link do powrotu do listy ofert w ogłoszeniu o pracę
 - Wyczyszczenie pola wyszukiwania powoduje przeładowanie formularza
+- Zmiana w algorytmie sortowania: losowe "wypychanie" starszych ofert na górę listy
 
 ## 2.0
 
