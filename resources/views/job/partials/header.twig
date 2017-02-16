@@ -20,7 +20,7 @@
 
                             <div class="form-group col-sm-2 col-xs-1">
                                 <button class="btn btn-primary btn-search" type="submit">
-                                    <i class="fa fa-search"></i> <span class="hidden-xs">{{ declination(count, declinationOffers) }}</span>
+                                    <i class="fa fa-search"></i> <span class="hidden-xs">{{ declination(pagination.total ?: count, declinationOffers) }}</span>
                                 </button>
                             </div>
 

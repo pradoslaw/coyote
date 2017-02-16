@@ -146,8 +146,6 @@ class SearchBuilder extends QueryBuilder
 
     protected function setupFilters()
     {
-        // it's really important. we MUST show only active offers
-        $this->must(new Filters\Range('deadline_at', ['gte' => 'now']));
         $this->must($this->city);
         $this->must($this->tag);
         $this->must($this->location);
