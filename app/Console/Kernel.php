@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('coyote:counter')->everyFiveMinutes();
         $schedule->command('job:purge')->hourly();
-        $schedule->command('session:purge')->everyFiveMinutes();
+        $schedule->command('session:purge')->everyMinute();
         $schedule->command('pastebin:purge')->hourly();
         $schedule->command('firewall:purge')->hourly();
         $schedule->command('sitemap:create')->dailyAt('03:00:00');
