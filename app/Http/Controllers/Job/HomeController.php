@@ -64,7 +64,7 @@ class HomeController extends BaseController
         }
 
         $this->builder->setSessionId(md5($this->request->session()->getId()));
-        $this->builder->boostLocation($this->request->attributes->get('geocode'));
+//        $this->builder->boostLocation($this->request->attributes->get('geocode'));
 
         $this->request->session()->put('current_url', $this->request->fullUrl());
 
