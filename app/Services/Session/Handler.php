@@ -77,7 +77,7 @@ class Handler extends DatabaseSessionHandler
             $request = $container->make('request');
 
             $payload['ip'] = $request->ip();
-            $payload['url'] = $request->fullUrl();
+            $payload['url'] = str_limit($request->fullUrl(), 3999);
             $payload['browser'] = substr((string) $request->header('User-Agent'), 0, 500);
             $payload['robot'] = $this->robot($payload['browser']);
 
