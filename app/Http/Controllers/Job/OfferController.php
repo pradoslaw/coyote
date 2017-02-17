@@ -76,7 +76,8 @@ class OfferController extends Controller
             'seniority_list'    => Job::getSeniorityList(),
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
             'applied'           => $job->hasApplied($this->userId, $this->sessionId),
-            'features_count'    => $featuresCount
+            'features_count'    => $featuresCount,
+            'previous_url'      => $this->request->session()->get('current_url')
         ])->with(
             compact('job', 'tags', 'flag', 'mlt')
         );

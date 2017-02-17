@@ -5,6 +5,7 @@ namespace Coyote\Services\Elasticsearch\Builders\Job;
 use Coyote\Services\Elasticsearch\Aggs;
 use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
+use Coyote\Services\Elasticsearch\Functions\Random;
 use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Filters;
@@ -38,6 +39,11 @@ class SearchBuilder extends QueryBuilder
     public $tag;
 
     /**
+     * @var string|null
+     */
+    protected $sessionId = null;
+
+    /**
      * @param Request $request
      */
     public function __construct(Request $request)
@@ -47,6 +53,14 @@ class SearchBuilder extends QueryBuilder
         $this->city = new Filters\Job\City();
         $this->tag = new Filters\Job\Tag();
         $this->location = new Filters\Job\Location();
+    }
+
+    /**
+     * @param string $sessionId
+     */
+    public function setSessionId(string $sessionId)
+    {
+        $this->sessionId = $sessionId;
     }
 
     /**
@@ -132,6 +146,7 @@ class SearchBuilder extends QueryBuilder
             $this->addRemoteFilter();
         }
 
+        $this->score(new Random($this->sessionId));
         $this->sort(new Sort($this->getSort(), $this->getOrder()));
 
         $this->setupFilters();
@@ -146,8 +161,6 @@ class SearchBuilder extends QueryBuilder
 
     protected function setupFilters()
     {
-        // it's really important. we MUST show only active offers
-        $this->must(new Filters\Range('deadline_at', ['gte' => 'now']));
         $this->must($this->city);
         $this->must($this->tag);
         $this->must($this->location);

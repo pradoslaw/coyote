@@ -69,4 +69,11 @@ $(() => {
 
         return false;
     });
+
+    /**
+     * Reload form after click on "x" button
+     */
+    $('input[type=search]').on('search', function () {
+        $(this).closest('form').submit();
+    });
 });

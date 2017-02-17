@@ -17,6 +17,6 @@ class MyOffersController extends BaseController
         $offers = $this->job->getMyOffers($this->userId);
         $grid = $this->gridBuilder()->createGrid(MyOffersGrid::class)->setSource(new CollectionSource($offers));
 
-        return $this->view('job.my_offers')->with('grid', $grid);
+        return $this->view('job.my_offers')->with(['grid' => $grid, 'count' => $this->job->count()]);
     }
 }
