@@ -71,7 +71,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
             'user_id'       => $user->id,
             'type_id'       => static::ID,
             'subject'       => $this->flag->type->name,
-            'excerpt'       => $this->flag->text,
+            'excerpt'       => str_limit($this->flag->text, 250),
             'url'           => $this->flag->url,
             'guid'          => $this->id
         ];
