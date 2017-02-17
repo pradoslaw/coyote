@@ -163,7 +163,7 @@ class HomeController extends BaseController
             'currency_list'     => Currency::getCurrenciesList(),
             'preferences'       => $this->preferences
         ])->with(
-            compact('jobs', 'aggregations', 'pagination', 'subscribes', 'count', 'selected')
+            compact('jobs', 'aggregations', 'pagination', 'subscribes', 'selected')
         );
     }
 

@@ -67,7 +67,8 @@ abstract class BaseController extends Controller
     {
         return parent::view($view, array_merge($data, [
             'tabs'          => $this->getTabs(),
-            'tab'           => $this->tab
+            'tab'           => $this->tab,
+            'count'         => $this->job->count()
         ]));
     }
 
