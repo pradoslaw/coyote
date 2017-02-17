@@ -63,6 +63,10 @@ Czy biblioteka mcrypt jest zainstalowana? Jeżeli nie to `apt-get install php-mc
 
 `sudo apt-get install pkg-config libssl-dev`
 
+## Uruchomienie
+
+Działanie projektu wymaga zainstalowania serwera HTTP takiego jak Apache czy Nginx. PHP udostępnia jednak prosty serwer HTTP, który można wykorzystać, aby sprawdzić działanie aplikacji. Aby go uruchomić należy wykonać polecenie: `php -S localhost:8000 -t public`
+
 ## Vagrant
 
 Aby nie instalować wszystkich pakietów lokalnie, można skorzystać z Vagranta. Obecna wersja nie umożliwia jeszcze całkowitej instalacji z wnętrza Vagranta (jeśli wiesz, jak sprawić, by `npm install` i `gulp` działało na Vagrancie pod systemem Windows, daj znać), więc wymagane są następujące narzędzia zainstalowane lokalnie:
@@ -77,10 +81,6 @@ Aby nie instalować wszystkich pakietów lokalnie, można skorzystać z Vagranta
 3. gulp
 4. w `etc/hosts` dodajemy wpis `192.168.10.10  coyote.dev`
 5. w przeglądarce pod adresem `coyote.dev` powinniśmy zobaczyć działającą wersję Coyote
-
-## Uruchomienie
-
-Działanie projektu wymaga zainstalowania serwera HTTP takiego jak Apache czy Nginx. PHP udostępnia jednak prosty serwer HTTP, który można wykorzystać, aby sprawdzić działanie aplikacji. Aby go uruchomić należy wykonać polecenie: `php -S localhost:8000 -t public`
 
 ## Testowanie
 
