@@ -3,7 +3,9 @@
 {% set linkable = linkable is defined ? linkable : true %}
 
 {% for city in locations %}
-    {% set data = data|merge(linkable ? [link_to_route('job.city', city, [city], {'title': 'Znajdź oferty z miasta ' ~ city})] : [city]) %}
+    {% if city %}
+        {% set data = data|merge(linkable ? [link_to_route('job.city', city, [city], {'title': 'Znajdź oferty z miasta ' ~ city})] : [city]) %}
+    {% endif %}
 {% endfor %}
 
 {% if separator and (data|length > 0 or job.is_remote) %}
