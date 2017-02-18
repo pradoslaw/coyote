@@ -173,7 +173,7 @@ class Link extends Parser implements ParserInterface
     /**
      * Parse "old" coyote links like [[Foo/Bar]] to http://4programmers.net/Foo/Bar
      *
-     * @param $text
+     * @param string $text
      * @return string
      */
     protected function parseInternalAccessors($text)
