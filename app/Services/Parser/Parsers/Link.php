@@ -150,12 +150,20 @@ class Link extends Parser implements ParserInterface
                 parse_str($components['query'], $query);
 
                 if (!empty($query['v'])) {
-                    $text = str_replace($match, $this->makeIframe($query['v']), $text);
+                    parse_str($components['fragment'] ?? '', $fragments);
+
+                    $text = str_replace(
+                        $match,
+                        $this->makeIframe($query['v'], $this->timeToSeconds($fragments['t'] ?? null)),
+                        $text
+                    );
                 }
             }
 
             if ($host === 'youtu.be' && $path !== '') {
-                $text = str_replace($match, $this->makeIframe($path), $text);
+                parse_str($components['query'] ?? '', $query);
+
+                $text = str_replace($match, $this->makeIframe($path, $this->timeToSeconds($query['t'] ?? null)), $text);
             }
         }
 
@@ -270,13 +278,31 @@ class Link extends Parser implements ParserInterface
     }
 
     /**
+     * @param string|null $time
+     * @return null|int
+     */
+    private function timeToSeconds($time)
+    {
+        if (!$time) {
+            return null;
+        }
+
+        if (!preg_match('/(\d+)m(\d+)s/', $time, $match)) {
+            return null;
+        }
+
+        return ($match[1] * 60) + $match[2];
+    }
+
+    /**
      * @param string $videoId
+     * @param int $start
      * @return string
      */
-    private function makeIframe(string $videoId): string
+    private function makeIframe(string $videoId, int $start = null): string
     {
         $iframe = (string) $this->html->tag('iframe', '', [
-            'src'   => 'https://youtube.com/embed/' . $videoId,
+            'src'   => 'https://youtube.com/embed/' . $videoId . ($start !== null ? "?start=$start" : ''),
             'class' => 'embed-responsive-item',
             'allowfullscreen' => 'allowfullscreen'
         ]);

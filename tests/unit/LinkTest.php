@@ -141,6 +141,9 @@ class LinkTest extends \Codeception\TestCase\Test
         $this->tester->assertContains('iframe', $parser->parse('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">https://www.youtube.com/watch?v=SC9ybxMDGlE</a>'));
 
         $this->tester->assertContains('https://www.youtube.com/watch?v=7dU3ybPqV94', $parser->parse('<code>https://www.youtube.com/watch?v=7dU3ybPqV94</code>'));
+
+        $this->tester->assertContains('https://youtube.com/embed/vd0zDG4vwOw?start=1107', $parser->parse('https://youtu.be/vd0zDG4vwOw?t=18m27s'));
+        $this->tester->assertContains('https://youtube.com/embed/vd0zDG4vwOw?start=1107', $parser->parse('https://www.youtube.com/watch?v=vd0zDG4vwOw#t=18m27s'));
     }
 
     public function testAutolink()
