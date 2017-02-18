@@ -560,6 +560,12 @@ class Job extends Model
             $locations[] = $nested;
         }
 
+        // I don't know why elasticsearch skips documents with empty locations field when we use function_score.
+        // That's why I add empty object (workaround).
+        if (empty($locations)) {
+            $locations[] = (object) [];
+        }
+
         $body['score'] = intval($body['score']);
 
         $body = array_merge($body, [
