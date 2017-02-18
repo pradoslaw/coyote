@@ -224,10 +224,6 @@ class Job extends Model
             }
 
             $model->score = $model->getScore();
-            $timestamp = $model->created_at ? strtotime($model->created_at) : time();
-
-            $seconds = ($timestamp - 1380585600) / 35000;
-            $model->rank = number_format($model->score + $seconds, 6, '.', '');
 
             // field must not be null
             $model->is_remote = (int) $model->is_remote;
