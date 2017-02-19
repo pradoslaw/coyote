@@ -33,9 +33,9 @@ class DatabaseChannel
         $alert = $user->getUnreadNotification($notification->objectId());
 
         if (empty($alert->id)) {
-            $alert = $this->alert->create($data + ['guid' => str_random(25)]);
+            $alert = $this->alert->create($data);
         }
 
-        $alert->senders()->create(['user_id' => $user->id, 'name' => $user->name]);
+        $alert->senders()->create($notification->sender());
     }
 }

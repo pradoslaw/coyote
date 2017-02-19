@@ -78,6 +78,17 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     }
 
     /**
+     * @return array
+     */
+    public function sender()
+    {
+        return [
+            'user_id'       => $this->flag->user_id,
+            'name'          => $this->flag->user->name
+        ];
+    }
+
+    /**
      * Generowanie unikalnego ciagu znakow dla wpisu na mikro
      *
      * @return string
