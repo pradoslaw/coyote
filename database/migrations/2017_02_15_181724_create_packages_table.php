@@ -15,14 +15,12 @@ class CreatePackagesTable extends Migration
     public function up()
     {
         $this->schema->create('packages', function (Blueprint $table) {
-            $table->smallInteger('id');
+            $table->smallIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->float('price')->default(0.0);
             $table->smallInteger('currency_id')->default(\Coyote\Currency::PLN);
             $table->smallInteger('is_active')->default(1);
-
-            $table->primary('id');
         });
     }
 
