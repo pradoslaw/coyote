@@ -217,6 +217,23 @@ new Vue({
         _setupMarker: function () {
             this.map.removeMarker(this.marker);
             this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
+        },
+        more: function () {
+            let index = this._getIndex();
+
+            if (typeof this.duration[index + 1] !== 'undefined') {
+                this.length = this.duration[index + 1];
+            }
+        },
+        less: function () {
+            let index = this._getIndex();
+
+            if (typeof this.duration[index - 1] !== 'undefined') {
+                this.length = this.duration[index - 1];
+            }
+        },
+        _getIndex: function () {
+            return this.duration.findIndex(item => item == this.length);
         }
     },
     computed: {
@@ -235,6 +252,12 @@ new Vue({
         },
         address: function () {
             return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') +  ' ' + (this.firm.city || '')).trim();
+        },
+        hasMore: function () {
+            return typeof this.duration[this._getIndex() + 1] !== 'undefined';
+        },
+        hasLess: function () {
+            return typeof this.duration[this._getIndex() - 1] !== 'undefined';
         }
     },
     watch: {

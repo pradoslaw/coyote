@@ -200,6 +200,54 @@
                                 {{ form_error(form.recruitment) }}
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default panel-promo">
+                    <div class="panel-heading">
+                        Promowanie ogłoszenia
+                    </div>
+
+                    <div class="panel-body">
+                        <h3 class="margin-md-bottom">Co zyskujesz?</h3>
+
+                        <ul class="list-unstyled margin-md-top margin-md-bottom">
+                            <li><i class="fa fa-check-circle fa-fw text-primary"></i> Wyróżnienie <strong>na górze wyników</strong> - Twoja oferta będzie zawsze wyświetlana nad darmowymi.</li>
+                            <li><i class="fa fa-check-circle fa-fw text-primary"></i> Promowanie oferty na forum i stronie głównej. <a href="#">Zobacz jak to wygląda</a>.</li>
+                            <li><i class="fa fa-check-circle fa-fw text-primary"></i> Tylko <strong>9 zł</strong> netto za dzień. Sam decydujesz ile dni oferta ma być promowana.</li>
+                        </ul>
+
+                        <div class="well well-sm">
+                            <div class="checkbox">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <input id="is_premium" name="is_premium" type="checkbox" value="1" v-model="job.is_premium">
+
+                                        <label for="is_premium">
+                                            Tak, chciałbym skorzystać z opcji promowania ogłoszenia.
+                                        </label>
+                                    </div>
+
+                                    <div class="col-sm-2 pricing text-center" v-show="job.is_premium">
+                                        <strong>9 zł</strong> netto
+                                    </div>
+
+                                    <div class="col-sm-2 pricing text-center" v-show="job.is_premium">
+                                        <div class="duration-changer margin-md-right">
+                                            <i class="fa fa-minus-circle" @click="less()" :class="{'disabled': !hasLess}"></i>
+
+                                            <strong>${ length } dni</strong>
+
+                                            <i class="fa fa-plus-circle" @click="more()" :class="{'disabled': !hasMore}"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-1 pricing text-right" v-show="job.is_premium">
+                                        <strong class="total-price">${ price * length } zł</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div id="form-navigation" class="form-group">
                             <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Informacje o firmie <i class="fa fa-angle-right"></i></button>
@@ -266,6 +314,9 @@
     <script>
         var data = {
             job: {{ job|raw }},
+            price: 9,
+            length: 30,
+            duration: [3, 5, 7, 14, 30, 40, 50, 60, 70, 80, 90],
             tags: {{ form.tags.value|raw }},
             features: {{ form.features.value|raw }},
             errors: {{ form_errors|raw }},
@@ -279,7 +330,7 @@
     <script src="{{ cdn('js/job-submit.js') }}"></script>
     <script>
         $(function() {
-            $('input[name="title"]').focus();
+//            $('input[name="title"]').focus();
         })
     </script>
 
