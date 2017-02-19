@@ -26,6 +26,14 @@ class SessionRepository extends Repository implements SessionRepositoryInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function purge()
+    {
+        $this->app['db']->table('session_log')->where('updated_at', '<=', $this->raw("NOW() - INTERVAL '1 month'"))->whereNull('user_id')->delete();
+    }
+
+    /**
      * Pobiera liste sesji uzytkownikow ktorzy odwiedzaja dana strone
      *
      * @param null $path

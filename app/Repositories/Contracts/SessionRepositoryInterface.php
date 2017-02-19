@@ -14,6 +14,11 @@ interface SessionRepositoryInterface extends RepositoryInterface
     public function extend($sessionId);
 
     /**
+     * Remove old sessions from session_log table.
+     */
+    public function purge();
+
+    /**
      * Pobiera liste sesji uzytkownikow ktorzy odwiedzaja dana strone
      *
      * @param null $path
