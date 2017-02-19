@@ -279,7 +279,9 @@ class JobForm extends Form
                 'rules' => 'sometimes|required|email',
                 'help' => 'Podaj adres e-mail na jaki wyślemy Ci informacje o kandydatach. Adres e-mail nie będzie widoczny dla osób postronnych.'
             ])
-
+            ->add('is_premium', 'hidden', [
+                'rules' => 'bool'
+            ])
             ->add('submit', 'submit', [
                 'label' => 'Zapisz',
                 'attr' => [

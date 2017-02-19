@@ -94,7 +94,8 @@ class Job extends Model
         'deadline_at',
         'email',
         'enable_apply',
-        'seniority_id'
+        'seniority_id',
+        'is_premium'
     ];
 
     /**
@@ -105,6 +106,7 @@ class Job extends Model
     protected $attributes = [
         'enable_apply' => true,
         'is_remote' => false,
+        'is_premium' => false,
         'title' => ''
     ];
 
@@ -206,6 +208,9 @@ class Job extends Model
         ],
         "rank" => [
             "type" => "float"
+        ],
+        "is_premium" => [
+            "type" => "int"
         ]
     ];
 
