@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class PackagesTableSeeder extends Seeder
+class PlansTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class PackagesTableSeeder extends Seeder
      */
     public function run()
     {
-        \Coyote\Package::forceCreate(['name' => 'Ogłoszenie na górze listy', 'price' => 9]);
+        \Coyote\Plan::forceCreate(['name' => 'Ogłoszenie na górze listy', 'price' => 9]);
     }
 }

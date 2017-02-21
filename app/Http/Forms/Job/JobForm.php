@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Job;
 
+use Carbon\Carbon;
 use Coyote\Country;
 use Coyote\Currency;
 use Coyote\Job;
@@ -62,7 +63,8 @@ class JobForm extends Form
 
             // deadline not exists in table "jobs" nor in fillable array. set value so model can transform it
             // to Carbon object
-            $this->data->deadline = $form->get('deadline')->getValue();
+//            $this->data->deadline = $form->get('deadline')->getValue();
+//            $this->data->package_length = $form->get('package_length')->getValue();
 
             foreach ($form->get('tags')->getChildrenValues() as $tag) {
                 $pivot = $this->data->tags()->newPivot(['priority' => $tag['priority']]);
@@ -278,17 +280,9 @@ class JobForm extends Form
             ->add('email', 'email', [
                 'rules' => 'sometimes|required|email',
                 'help' => 'Podaj adres e-mail na jaki wyślemy Ci informacje o kandydatach. Adres e-mail nie będzie widoczny dla osób postronnych.'
-            ])
-            ->add('is_premium', 'hidden', [
-                'rules' => 'bool'
-            ])
-            ->add('submit', 'submit', [
-                'label' => 'Zapisz',
-                'attr' => [
-                    'data-submit-state' => 'Wysyłanie...'
-                ]
             ]);
 
+        $this->setupPlanFields();
         $this->setupDefaultValues();
     }
 
@@ -302,6 +296,30 @@ class JobForm extends Form
             $this->get('country_id')->setValue(array_search('Polska', $this->get('country_id')->getChoices()));
             $this->get('remote_range')->setValue(100);
         }
+    }
+
+    protected function setupPlanFields()
+    {
+        // can't show that fields if plan is enabled
+        if ($this->data->exists && Carbon::now() < $this->data->plan_ends_at) {
+            return;
+        }
+
+        $this
+            ->add('enable_plan', 'checkbox', [
+                'rules' => 'bool',
+                'label' => 'Tak, chciałbym sokrzystać z opcji promowania ogłoszenia.',
+                'attr' => [
+                    'id' => 'enable_plan',
+                    'v-model' => 'job.enable_plan'
+                ]
+            ])
+            ->add('plan_length', 'hidden', [
+                'rules' => 'integer|min:3',
+                'attr' => [
+                    'v-model' => 'job.plan_length'
+                ]
+            ]);
     }
 
     /**

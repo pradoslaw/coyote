@@ -222,18 +222,18 @@ new Vue({
             let index = this._getIndex();
 
             if (typeof this.duration[index + 1] !== 'undefined') {
-                this.length = this.duration[index + 1];
+                this.job.plan_length = this.duration[index + 1];
             }
         },
         less: function () {
             let index = this._getIndex();
 
             if (typeof this.duration[index - 1] !== 'undefined') {
-                this.length = this.duration[index - 1];
+                this.job.plan_length = this.duration[index - 1];
             }
         },
         _getIndex: function () {
-            return this.duration.findIndex(item => item == this.length);
+            return this.duration.findIndex(item => item == this.job.plan_length);
         }
     },
     computed: {

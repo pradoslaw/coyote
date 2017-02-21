@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePackagesTable extends Migration
+class CreatePlansTable extends Migration
 {
     use SchemaBuilder;
 
@@ -14,7 +14,7 @@ class CreatePackagesTable extends Migration
      */
     public function up()
     {
-        $this->schema->create('packages', function (Blueprint $table) {
+        $this->schema->create('plans', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
@@ -31,6 +31,6 @@ class CreatePackagesTable extends Migration
      */
     public function down()
     {
-        $this->schema->drop('packages');
+        $this->schema->drop('plans');
     }
 }

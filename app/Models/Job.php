@@ -45,6 +45,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Location[] $locations
  * @property Currency[] $currency
  * @property Feature[] $features
+ * @property bool $enable_plan
+ * @property int $plan_id
+ * @property int $plan_length
+ * @property \Carbon\Carbon $plan_starts_at
+ * @property \Carbon\Carbon $plan_ends_at
  */
 class Job extends Model
 {
@@ -91,11 +96,16 @@ class Job extends Model
         'currency_id',
         'rate_id',
         'employment_id',
+        'deadline', // column does not really exist in db (model attribute instead)
         'deadline_at',
         'email',
         'enable_apply',
         'seniority_id',
-        'is_premium'
+        'enable_plan',
+        'plan_id',
+        'plan_length', // column does not really exist in db (model attribute instead)
+        'plan_starts_at',
+        'plan_ends_at'
     ];
 
     /**
@@ -106,7 +116,7 @@ class Job extends Model
     protected $attributes = [
         'enable_apply' => true,
         'is_remote' => false,
-        'is_premium' => false,
+        'enable_plan' => false,
         'title' => ''
     ];
 
@@ -121,6 +131,11 @@ class Job extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'package_starts_at', 'package_ends_at'];
 
     /**
      * @var array
@@ -206,12 +221,17 @@ class Job extends Model
         "score" => [
             "type" => "long"
         ],
-        "rank" => [
-            "type" => "float"
-        ],
-        "is_premium" => [
+        "enable_plan" => [
             "type" => "int"
-        ]
+        ],
+        "plan_starts_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
+        "plan_ends_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
     ];
 
     /**
@@ -451,6 +471,24 @@ class Job extends Model
     public function getDeadlineAttribute()
     {
         return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now(), false)->days + 1 : 90;
+    }
+
+    /**
+     * @param int $value
+     */
+    public function setPlanLengthAttribute($value)
+    {
+        // set up the plan duration
+        $this->attributes['plan_starts_at'] = Carbon::now();
+        $this->attributes['plan_ends_at'] = Carbon::now()->addDays($value);
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlanLengthAttribute()
+    {
+        return $this->plan_ends_at ? ($this->plan_ends_at->diffInDays($this->plan_starts_at) + 1) : 30;
     }
 
     /**
