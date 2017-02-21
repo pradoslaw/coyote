@@ -135,7 +135,7 @@ class Job extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'package_starts_at', 'package_ends_at'];
+    protected $dates = ['created_at', 'updated_at', 'deadline_at', 'plan_starts_at', 'plan_ends_at'];
 
     /**
      * @var array
@@ -222,7 +222,7 @@ class Job extends Model
             "type" => "long"
         ],
         "enable_plan" => [
-            "type" => "int"
+            "type" => "boolean"
         ],
         "plan_starts_at" => [
             "type" => "date",

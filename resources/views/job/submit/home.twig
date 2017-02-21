@@ -144,6 +144,58 @@
                     </div>
                 </div>
 
+                {% if form.enable_plan is defined %}
+                    <div class="panel panel-default panel-promo">
+                        <div class="panel-heading">
+                            Promowanie ogłoszenia
+                        </div>
+
+                        {{ form_widget(form.plan_length) }}
+
+                        <div class="panel-body">
+                            <h3 class="margin-md-bottom">Co zyskujesz?</h3>
+
+                            <ul class="list-unstyled margin-md-top margin-md-bottom">
+                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Wyróżnienie <strong>na górze wyników</strong> - Twoja oferta będzie zawsze wyświetlana nad darmowymi.</li>
+                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Promowanie oferty na forum i stronie głównej. <a href="#">Zobacz jak to wygląda</a>.</li>
+                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Tylko <strong>${ price } zł</strong> netto za dzień. Sam decydujesz ile dni oferta ma być promowana.</li>
+                            </ul>
+
+                            <div class="well well-sm">
+                                <div class="checkbox">
+                                    <div class="row">
+                                        <div class="col-sm-7">
+                                            {{ form_widget(form.enable_plan) }}
+
+                                            <label for="enable_plan">
+                                                {{ form.enable_plan.label }}
+                                            </label>
+                                        </div>
+
+                                        <div class="col-sm-2 pricing text-center" v-show="job.enable_plan">
+                                            <strong>${ price } zł</strong> netto
+                                        </div>
+
+                                        <div class="col-sm-2 pricing text-center" v-show="job.enable_plan">
+                                            <div class="duration-changer margin-md-right">
+                                                <i class="fa fa-minus-circle" @click="less()" :class="{'disabled': !hasLess}"></i>
+
+                                                <strong>${ job.plan_length } dni</strong>
+
+                                                <i class="fa fa-plus-circle" @click="more()" :class="{'disabled': !hasMore}"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-1 pricing text-right" v-show="job.enable_plan">
+                                            <strong class="total-price">${ price * job.plan_length } zł</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Szczegółowe informacje
@@ -200,68 +252,16 @@
                                 {{ form_error(form.recruitment) }}
                             </div>
                         </div>
+
+                        <div id="form-navigation" class="form-group">
+                            <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Informacje o firmie <i class="fa fa-angle-right"></i></button>
+
+                            {% if not firm.is_private and firm.name %}
+                                <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" data-submit-state="Proszę czekać..." title="Zapisz tę ofertę"><i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}</button>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-
-                {% if form.enable_plan is defined %}
-                    <div class="panel panel-default panel-promo">
-                        <div class="panel-heading">
-                            Promowanie ogłoszenia
-                        </div>
-
-                        {{ form_widget(form.plan_length) }}
-
-                        <div class="panel-body">
-                            <h3 class="margin-md-bottom">Co zyskujesz?</h3>
-
-                            <ul class="list-unstyled margin-md-top margin-md-bottom">
-                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Wyróżnienie <strong>na górze wyników</strong> - Twoja oferta będzie zawsze wyświetlana nad darmowymi.</li>
-                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Promowanie oferty na forum i stronie głównej. <a href="#">Zobacz jak to wygląda</a>.</li>
-                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Tylko <strong>${ price } zł</strong> netto za dzień. Sam decydujesz ile dni oferta ma być promowana.</li>
-                            </ul>
-
-                            <div class="well well-sm">
-                                <div class="checkbox">
-                                    <div class="row">
-                                        <div class="col-sm-7">
-                                            {{ form_widget(form.enable_plan) }}
-
-                                            <label for="enable_plan">
-                                                {{ form.enable_plan.label }}
-                                            </label>
-                                        </div>
-
-                                        <div class="col-sm-2 pricing text-center" v-show="job.enable_plan">
-                                            <strong>${ price } zł</strong> netto
-                                        </div>
-
-                                        <div class="col-sm-2 pricing text-center" v-show="job.enable_plan">
-                                            <div class="duration-changer margin-md-right">
-                                                <i class="fa fa-minus-circle" @click="less()" :class="{'disabled': !hasLess}"></i>
-
-                                                <strong>${ job.plan_length } dni</strong>
-
-                                                <i class="fa fa-plus-circle" @click="more()" :class="{'disabled': !hasMore}"></i>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-1 pricing text-right" v-show="job.enable_plan">
-                                            <strong class="total-price">${ price * job.plan_length } zł</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="form-navigation" class="form-group">
-                                <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Informacje o firmie <i class="fa fa-angle-right"></i></button>
-
-                                {% if not firm.is_private and firm.name %}
-                                    <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" data-submit-state="Proszę czekać..." title="Zapisz tę ofertę"><i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}</button>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
             {{ form_close() }}
         </main>
 
