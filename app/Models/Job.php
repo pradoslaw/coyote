@@ -488,7 +488,7 @@ class Job extends Model
      */
     public function getPlanLengthAttribute()
     {
-        return $this->plan_ends_at ? ($this->plan_ends_at->diffInDays($this->plan_starts_at) + 1) : 30;
+        return $this->plan_ends_at ? $this->plan_ends_at->diffInDays($this->plan_starts_at) : 30;
     }
 
     /**
