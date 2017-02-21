@@ -23,6 +23,8 @@
     "laravel-elixir": "^6.0.0-14",
     "laravel-elixir-webpack-official": "^1.0.2",
     "node-env-file": "^0.1.8",
-    "perfect-scrollbar": "^0.6.15"
+    "perfect-scrollbar": "^0.6.15",
+    "vue-loader": "^11.1.0",
+    "vue-template-compiler": "^2.1.10"
   }
 }

@@ -177,13 +177,7 @@
                                         </div>
 
                                         <div class="col-sm-2 pricing text-center" v-show="job.enable_plan">
-                                            <div class="duration-changer margin-md-right">
-                                                <i class="fa fa-minus-circle" @click="less()" :class="{'disabled': !hasLess}"></i>
-
-                                                <strong>${ job.plan_length } dni</strong>
-
-                                                <i class="fa fa-plus-circle" @click="more()" :class="{'disabled': !hasMore}"></i>
-                                            </div>
+                                            <changer :value="job.plan_length" :choices="[3, 5, 7, 14, 30, 40, 50, 60, 70, 80, 90]" @change="changePlan"></changer>
                                         </div>
 
                                         <div class="col-sm-1 pricing text-right" v-show="job.enable_plan">
@@ -319,7 +313,6 @@
         var data = {
             job: {{ job|raw }},
             price: 9,
-            duration: [3, 5, 7, 14, 30, 40, 50, 60, 70, 80, 90],
             tags: {{ form.tags.value|raw }},
             features: {{ form.features.value|raw }},
             errors: {{ form_errors|raw }},
