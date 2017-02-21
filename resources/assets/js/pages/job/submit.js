@@ -26,6 +26,8 @@ function toInt(data) {
     return data;
 }
 
+Vue.component('changer', require('../../components/changer.vue'));
+
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
@@ -218,22 +220,8 @@ new Vue({
             this.map.removeMarker(this.marker);
             this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
         },
-        more: function () {
-            let index = this._getIndex();
-
-            if (typeof this.duration[index + 1] !== 'undefined') {
-                this.job.plan_length = this.duration[index + 1];
-            }
-        },
-        less: function () {
-            let index = this._getIndex();
-
-            if (typeof this.duration[index - 1] !== 'undefined') {
-                this.job.plan_length = this.duration[index - 1];
-            }
-        },
-        _getIndex: function () {
-            return this.duration.findIndex(item => item == this.job.plan_length);
+        changePlan: function (value) {
+            this.job.plan_length = value;
         }
     },
     computed: {
@@ -252,12 +240,6 @@ new Vue({
         },
         address: function () {
             return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') +  ' ' + (this.firm.city || '')).trim();
-        },
-        hasMore: function () {
-            return typeof this.duration[this._getIndex() + 1] !== 'undefined';
-        },
-        hasLess: function () {
-            return typeof this.duration[this._getIndex() - 1] !== 'undefined';
         }
     },
     watch: {
