@@ -31,6 +31,6 @@ class DatabaseSeeder extends Seeder
         $this->call(WikiTableSeeder::class);
         $this->call(BlocksTableSeeder::class);
         $this->call(FeaturesTableSeeder::class);
-        $this->call(PackagesTableSeeder::class);
+        $this->call(PlansTableSeeder::class);
     }
 }
