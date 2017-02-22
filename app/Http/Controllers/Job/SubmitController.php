@@ -94,7 +94,9 @@ class SubmitController extends Controller
             'form_errors'       => $form->errors() ? $form->errors()->toJson() : '[]',
             'job'               => $form->toJson(),
             // firm information (in order to show firm nam on the button)
-            'firm'              => $job->firm
+            'firm'              => $job->firm,
+            // is plan is still going on?
+            'is_plan_ongoing'   => $job->isPlanOngoing()
         ]);
     }
 
@@ -264,7 +266,7 @@ class SubmitController extends Controller
                 // remove old benefits and save new ones.
                 $job->firm->benefits()->push($job->firm->benefits);
             }
-
+//dd($job);
             $job->save();
             $job->locations()->push($job->locations);
 

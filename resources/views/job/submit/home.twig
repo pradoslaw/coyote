@@ -144,7 +144,7 @@
                     </div>
                 </div>
 
-                {% if form.enable_plan is defined %}
+                {% if not is_plan_ongoing %}
                     <div class="panel panel-default panel-promo">
                         <div class="panel-heading">
                             Promowanie ogłoszenia
