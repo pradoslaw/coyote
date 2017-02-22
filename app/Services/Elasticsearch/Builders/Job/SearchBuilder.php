@@ -3,6 +3,7 @@
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Services\Elasticsearch\Aggs;
+use Coyote\Services\Elasticsearch\ConstantScore;
 use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
 use Coyote\Services\Elasticsearch\Functions\Random;
@@ -157,6 +158,9 @@ class SearchBuilder extends QueryBuilder
         $this->setupScoreFunctions();
         // facet search
         $this->setupAggregations();
+
+        // premium offers go first
+        $this->should(new ConstantScore(new Filters\Term('enable_plan', true), 10));
 
         $this->size(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
 

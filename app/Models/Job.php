@@ -253,6 +253,7 @@ class Job extends Model
 
             // field must not be null
             $model->is_remote = (int) $model->is_remote;
+            $model->enable_plan = (int) $model->enable_plan;
         });
     }
 
@@ -536,6 +537,14 @@ class Job extends Model
                 $this->features->add($feature->setRelation('pivot', $pivot));
             }
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPlanOngoing()
+    {
+        return $this->exists && $this->enable_plan && Carbon::now()->between($this->plan_starts_at, $this->plan_ends_at);
     }
 
     /**

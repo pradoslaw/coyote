@@ -301,7 +301,7 @@ class JobForm extends Form
     protected function setupPlanFields()
     {
         // can't show that fields if plan is enabled
-        if ($this->data->exists && Carbon::now() < $this->data->plan_ends_at) {
+        if ($this->data->isPlanOngoing()) {
             return;
         }
 
