@@ -12,6 +12,13 @@
             <meta name="description" content="{% block description %}{% endblock %}">
             <meta name="keywords" content="{% block keywords %}{% endblock %}">
 
+            <!-- Facebook sharing meta-data -->
+            <meta property="og:url" content="http://4programmers.net/" />
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content="4programmers.net" />
+            <meta property="og:description" content="Największe forum programistyczne w Polsce" />
+            <meta property="og:image" content="{{ cdn('img/facebook_sharing_image.jpg') }}" />
+
             <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
 
             <script type="text/javascript">var _config = {{ public|default('{}')|raw }};</script>
