@@ -13,9 +13,9 @@
             <meta name="keywords" content="{% block keywords %}{% endblock %}">
 
             <!-- Facebook sharing meta-data -->
-            <meta property="og:url" content="{{ config_get('app.url') }}" />
+            <meta property="og:url" content="{{ config('app.url') }}" />
             <meta property="og:type" content="website" />
-            <meta property="og:title" content="{{ config_get('app.name') }}" />
+            <meta property="og:title" content="{{ config('app.name') }}" />
             <meta property="og:description" content="{% block description %}{% endblock %}" />
             <meta property="og:image" content="{{ cdn('img/facebook_sharing_image.jpg') }}" />
 
