@@ -173,7 +173,7 @@ class Markdown extends \Parsedown implements ParserInterface
             $name = substr($text, $start, $end);
 
             // user name ends with ")" -- we strip if login is within bracket
-            if ($name[mb_strlen($name) - 1] === ')' && mb_strpos($name, '(') === false) {
+            if (strlen($name) > 0 && $name[mb_strlen($name) - 1] === ')' && mb_strpos($name, '(') === false) {
                 $name = mb_substr($name, 0, -1);
                 $length -= 1;
             }
