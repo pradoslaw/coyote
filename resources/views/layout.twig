@@ -13,11 +13,11 @@
             <meta name="keywords" content="{% block keywords %}{% endblock %}">
 
             <!-- Facebook sharing meta-data -->
-            <meta property="og:url" content="{{ config('app.url') }}" />
+            <meta property="og:url" content="{{ app.request.url }}" />
             <meta property="og:type" content="website" />
             <meta property="og:title" content="{{ block('title') }}" />
             <meta property="og:description" content="{{ block('description') }}" />
-            <meta property="og:image" content="{{ cdn('img/facebook_sharing_image.jpg') }}" />
+            <meta property="og:image" content="{{ cdn('img/logo.png') }}" />
 
             <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
 
