@@ -106,6 +106,9 @@ class MarkdownTest extends \Codeception\TestCase\Test
 
         $input = $this->markdown->parse('@First(Name): hello');
         $this->tester->assertRegExp('/<a href=".*">@First\(Name\)<\/a>: hello/', $input);
+
+        $input = $this->markdown->parse('@{First(Name)}: hello');
+        $this->tester->assertRegExp('/<a href=".*">@First\(Name\)<\/a>: hello/', $input);
     }
 
     public function testParseLinks()
