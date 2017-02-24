@@ -152,7 +152,7 @@ class Markdown extends \Parsedown implements ParserInterface
                 return null;
             }
 
-            $exitChar = $text[$start + 1] === '{' ? '}' : ":,.\'\n) "; // <-- space at the end
+            $exitChar = $text[$start + 1] === '{' ? '}' : ":,.\'\n "; // <-- space at the end
             $end = $this->strpos($text, $exitChar, $start);
 
             if ($end === false) {
@@ -171,6 +171,13 @@ class Markdown extends \Parsedown implements ParserInterface
             }
 
             $name = substr($text, $start, $end);
+
+            // user name ends with ")" -- we strip if login is within bracket
+            if ($name[mb_strlen($name) - 1] === ')' && mb_strpos($name, '(') === false) {
+                $name = mb_substr($name, 0, -1);
+                $length -= 1;
+            }
+
             $user = $this->user->findByName($name);
 
             if ($user) {
