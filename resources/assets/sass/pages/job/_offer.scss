@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 
 #job-offer {
   .media-body {
@@ -103,6 +104,10 @@
 
     @media screen and (max-width: $screen-sm) {
       font-size: $font-size-small;
+    }
+
+    img:not(.img-smile) {
+      @include img-responsive();
     }
 
     @include adjust-list-padding;
