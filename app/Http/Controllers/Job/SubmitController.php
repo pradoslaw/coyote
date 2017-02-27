@@ -6,6 +6,7 @@ use Coyote\Events\JobWasSaved;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Forms\Job\FirmForm;
 use Coyote\Http\Forms\Job\JobForm;
+use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Http\Transformers\FirmWithBenefits;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
@@ -216,6 +217,18 @@ class SubmitController extends Controller
         ]);
     }
 
+    public function getCheckout(Request $request)
+    {
+        return $this->view('job.submit.checkout', [
+            'form' => $this->createForm(PaymentForm::class)
+        ]);
+    }
+
+    public function postCheckout(Request $request)
+    {
+
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
@@ -266,7 +279,7 @@ class SubmitController extends Controller
                 // remove old benefits and save new ones.
                 $job->firm->benefits()->push($job->firm->benefits);
             }
-//dd($job);
+
             $job->save();
             $job->locations()->push($job->locations);
 

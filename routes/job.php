@@ -20,6 +20,14 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'middleware' => 'auth'
     ]);
 
+    $this->get('Submit/Checkout', [
+        'uses' => 'SubmitController@getCheckout',
+        'as' => 'submit.checkout',
+        'middleware' => 'auth'
+    ]);
+
+    $this->post('Submit/Checkout', ['uses' => 'SubmitController@postCheckout', 'middleware' => 'auth']);
+
     $this->post('Submit/Save', ['uses' => 'SubmitController@save', 'as' => 'submit.save', 'middleware' => 'auth']);
 
     $this->post('Tag/Submit', ['uses' => 'TagController@submit', 'as' => 'submit.tag']);

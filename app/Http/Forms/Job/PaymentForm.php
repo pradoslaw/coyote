@@ -1,0 +1,83 @@
+<?php
+
+namespace Coyote\Http\Forms\Job;
+
+use Carbon\Carbon;
+use Coyote\Services\FormBuilder\Form;
+
+class PaymentForm extends Form
+{
+    /**
+     * @var string
+     */
+    protected $theme = self::THEME_INLINE;
+
+    public function buildForm()
+    {
+        $this
+            ->add('name', 'text', [
+                'required' => true,
+                'label' => 'Nazwa (jaka widnieje na karcie kredytowej)',
+                'help' => 'Np. imię i nazwisko. Maksymalnie 32 znaki.',
+                'rules' => 'string|max:32'
+            ])
+            ->add('number', 'text', [
+                'required' => true,
+                'label' => 'Numer karty kredytowej lub debetowej',
+                'help' => 'Numer karty nie będzie przechowywany na naszym serwerze.',
+                'rules' => 'string'
+            ])
+            ->add('exp_year', 'select', [
+                'required' => true,
+                'rules' => 'int',
+                'choices' => $this->getYearList(),
+                'attr' => [
+                    'class' => 'input-inline'
+                ]
+            ])
+            ->add('exp_month', 'select', [
+                'required' => true,
+                'rules' => 'int',
+                'choices' => $this->getMonthList(),
+                'attr' => [
+                    'class' => 'input-inline'
+                ]
+            ])
+            ->add('cvc', 'text', [
+                'required' => true,
+                'rules' => 'int',
+                'label' => 'Kod zabezpieczeń',
+                'help' => '3 ostatnie cyfry na odwrocie karty'
+            ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function getYearList()
+    {
+        $yearList = [];
+        $currYear = date('Y');
+
+        for ($i = $currYear; $i <= $currYear + 10; $i++) {
+            $yearList[$i] = $i;
+        }
+
+        return $yearList;
+    }
+
+    /**
+     * @return array
+     */
+    private function getMonthList()
+    {
+        $monthList = [];
+        $currYear = date('Y');
+
+        for ($i = 1; $i <= 12; $i++) {
+            $monthList[$i] = sprintf('%2d - %s', $i, Carbon::createFromDate($currYear, $i, 1)->formatLocalized('%B'));
+        }
+
+        return $monthList;
+    }
+}

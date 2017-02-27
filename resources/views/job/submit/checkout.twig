@@ -1,0 +1,137 @@
+{% extends 'job.base' %}
+{% block title %}Płatność{{ parent() }}{% endblock %}
+
+{% block container %}
+    <div class="row">
+        {{ form_open({url: '#', class: 'submit-form'}) }}
+
+        <main class="col-md-8 col-12-sm col-12-xs">
+            {% include 'job.submit.partials.indicator' with {'current': 4} %}
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <img src="/img/blur_edges.jpg" class="img-responsive">
+                        </div>
+
+                        <div class="col-sm-7">
+                            {{ form_row(form.name) }}
+                            {#{{ form_row(form.number) }}#}
+
+                            <div class="form-group form-group-border credit-card-container">
+                                {{ form_label(form.number) }}
+
+                                <img src="/img/mastercard.png" class="mastercard">
+                                <img src="/img/visa.png" class="visa">
+                                <img src="/img/maestro.png" class="maestro">
+
+                                {{ form_widget(form.number) }}
+                                {{ form_error(form.number) }}
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <label class="control-label">Data ważności *</label>
+
+                                        <div class="row">
+                                            <div class="col-xs-7" style="padding-right: 0">
+                                                {{ form_widget(form.exp_month) }}
+                                            </div>
+                                            <div class="col-xs-5">
+                                                {{ form_widget(form.exp_year) }}
+                                                {{ form_error(form.exp_year) }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        {{ form_label(form.cvc) }}
+
+                                        {{ form_widget(form.cvc) }}
+                                        {{ form_error(form.cvc) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="form-navigation" class="form-group">
+                        <a href="{{ route('job.submit.preview') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podgląd</a>
+
+                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Zapisywanie...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="col-md-4 hidden-sm hidden-xs hidden-xxs">
+            <div class="panel panel-default panel-review" style="margin-top: 100px">
+                <div class="panel-heading">
+                    Twoja płatność obejmuje
+                </div>
+
+                <div class="panel-body">
+                    <div class="row margin-xs-top margin-xs-bottom">
+                        <div class="col-xs-6">
+                            Promocja ogłoszenia (30 dni)
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            270 zł
+                        </div>
+                    </div>
+
+                    <div class="row margin-xs-top margin-xs-bottom">
+                        <div class="col-xs-6">
+                            VAT (23%)
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            27 zł
+                        </div>
+                    </div>
+
+                    <div class="row margin-xs-top margin-xs-bottom">
+                        <div class="col-xs-6">
+                            <strong>Do zapłaty:</strong>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <strong>297 zł</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <span>Cena</span>
+                            <small>(Płatność pobrana zostanie w walucie euro)</small>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <span>49 euro</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        {{ form_close() }}
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script>
+        var data = {};
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="{{ cdn('js/job-submit.js') }}"></script>
+
+    {% include 'job.submit.partials.navigation' %}
+{% endblock %}
