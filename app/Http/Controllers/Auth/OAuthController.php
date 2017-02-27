@@ -8,7 +8,6 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
-use Coyote\User;
 use Laravel\Socialite\Contracts\Factory as Socialite;
 
 class OAuthController extends Controller
@@ -16,7 +15,7 @@ class OAuthController extends Controller
     use MediaFactory;
 
     /**
-     * @var User
+     * @var UserRepository
      */
     private $user;
 
