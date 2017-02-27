@@ -7,7 +7,6 @@ use Coyote\Flag;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\MailMessage;
 
 class FlagCreatedNotification extends Notification implements ShouldQueue
 {
@@ -42,22 +41,6 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     public function via($user)
     {
         return $this->channels($user);
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  \Coyote\User  $user
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($user)
-    {
-        return (new MailMessage)
-            ->greeting($user->name)
-            ->subject($this->flag->user->name . ' dodał nowy raport')
-            ->line(sprintf('%s zgłosił naruszenie z powodu %s.', $this->flag->user->name, $this->flag->type->name))
-            ->line('Kliknij na poniższy przycisk jeżeli chcesz podjąć w związku z tym jakieś działania.')
-            ->action('Zobacz raport', $this->notificationUrl());
     }
 
     /**
@@ -130,11 +113,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
         $channels = $user->notificationChannels(static::ID);
 
         $this->broadcast[] = 'user:' . $user->id;
-        $notification = $user->getUnreadNotification($this->objectId());
-
-        if (!empty($notification->id)) {
-            unset($channels[array_search('email', $channels)]);
-        }
+        unset($channels[array_search('email', $channels)]);
 
         return $channels;
     }
