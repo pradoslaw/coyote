@@ -353,3 +353,45 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   //   top: -2px;
   // }
 }
+
+.panel-review {
+  > .panel-body {
+    strong {
+      font-size: 14px;
+    }
+  }
+
+  > .panel-footer {
+    span {
+      font-size: $font-size-large;
+      display: block;
+    }
+
+    small {
+      font-size: 11px;
+    }
+  }
+}
+
+.credit-card-container {
+  position: relative;
+
+  > img {
+    position: absolute;
+  }
+
+  .visa {
+    top: 23px;
+    right: 4px;
+  }
+
+  .mastercard {
+    top: 29px;
+    right: 40px;
+  }
+
+  .maestro {
+    top: 29px;
+    right: 78px;
+  }
+}
