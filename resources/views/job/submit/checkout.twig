@@ -5,7 +5,7 @@
     <div class="row">
         {{ form_open({url: '#', class: 'submit-form'}) }}
 
-        <main class="col-md-8 col-12-sm col-12-xs">
+        <main class="col-md-8">
             {% include 'job.submit.partials.indicator' with {'current': 4} %}
 
             <div class="panel panel-default">
@@ -20,7 +20,6 @@
 
                         <div class="col-sm-7">
                             {{ form_row(form.name) }}
-                            {#{{ form_row(form.number) }}#}
 
                             <div class="form-group form-group-border credit-card-container">
                                 {{ form_label(form.number) }}
@@ -69,7 +68,7 @@
             </div>
         </main>
 
-        <aside class="col-md-4 hidden-sm hidden-xs hidden-xxs">
+        <aside class="col-md-4">
             <div class="panel panel-default panel-review" style="margin-top: 100px">
                 <div class="panel-heading">
                     Twoja płatność obejmuje
