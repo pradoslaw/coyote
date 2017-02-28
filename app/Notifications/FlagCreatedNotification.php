@@ -4,6 +4,7 @@ namespace Coyote\Notifications;
 
 use Coyote\Alert;
 use Coyote\Flag;
+use Coyote\Services\Alert\DatabaseChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -110,12 +111,9 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
      */
     protected function channels($user)
     {
-        $channels = $user->notificationChannels(static::ID);
-
         $this->broadcast[] = 'user:' . $user->id;
-        unset($channels[array_search('email', $channels)]);
 
-        return $channels;
+        return [DatabaseChannel::class];
     }
 
     /**
