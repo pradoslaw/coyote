@@ -19,6 +19,7 @@ class AddPlansColumnsToJobsTable extends Migration
             $table->addColumn('integer', 'plan_id')->nullable();
             $table->addColumn('timestamptz', 'plan_starts_at')->nullable();
             $table->addColumn('timestamptz', 'plan_ends_at')->nullable();
+            $table->addColumn('string', 'payment_id')->nullable();
 
             $table->foreign('plan_id')->references('id')->on('plans')->onDelete('no action');
         });
@@ -34,7 +35,7 @@ class AddPlansColumnsToJobsTable extends Migration
         $this->schema->table('jobs', function (Blueprint $table) {
             $table->dropForeign('jobs_plan_id_foreign');
 
-            $table->dropColumn(['is_premium', 'plan_id', 'plan_starts_at', 'plan_ends_at']);
+            $table->dropColumn(['is_premium', 'plan_id', 'plan_starts_at', 'plan_ends_at', 'payment_id']);
         });
     }
 }
