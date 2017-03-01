@@ -29,4 +29,12 @@
   .padding-#{$size}-bottom {
     padding-bottom: #{$width};
   }
+
+  .padding-#{$size}-left {
+    padding-left: #{$width};
+  }
+
+  .padding-#{$size}-right {
+    padding-right: #{$width};
+  }
 }

@@ -145,7 +145,7 @@
                 </div>
 
                 {% if not is_plan_ongoing %}
-                    <div class="panel panel-default panel-promo">
+                    <div class="panel panel-default panel-plans">
                         <div class="panel-heading">
                             Promowanie ogłoszenia
                         </div>
@@ -172,15 +172,14 @@
                                             </label>
                                         </div>
 
-                                        <div class="col-sm-2 pricing text-center" v-show="job.enable_plan">
-                                            <strong>${ price } zł</strong> netto
-                                        </div>
+                                        <div class="col-sm-5 text-right" v-show="job.enable_plan">
+                                            <span class="pricing"><strong>${ price } zł</strong> netto</span>
+                                            <sup class="padding-md-left padding-md-right">x</sup>
 
-                                        <div class="col-sm-2 pricing text-center" v-show="job.enable_plan">
-                                            <changer :value="job.plan_length" :choices="[3, 5, 7, 14, 30, 40, 50, 60, 70, 80, 90]" @change="changePlan"></changer>
-                                        </div>
+                                            <changer :value="job.plan_length" class="pricing" :choices="[3, 5, 7, 14, 30, 40, 50, 60, 70, 80, 90]" @change="changePlan"></changer>
 
-                                        <div class="col-sm-1 pricing text-right" v-show="job.enable_plan">
+                                            <sup class="padding-md-left padding-md-right">=</sup>
+
                                             <strong class="total-price">${ price * job.plan_length } zł</strong>
                                         </div>
                                     </div>

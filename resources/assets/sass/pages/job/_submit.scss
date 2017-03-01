@@ -295,7 +295,7 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 // Panel with promo options
 // -----------------------------
 
-.panel-promo {
+.panel-plans {
   h3 {
     color: $gray;
     margin-top: 0;
@@ -348,10 +348,10 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
     margin-top: -1px;
     line-height: 1;
   }
-  //
-  //sup {
-  //   top: -2px;
-  // }
+
+  sup {
+     top: -2px;
+   }
 }
 
 .panel-review {
