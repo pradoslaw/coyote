@@ -281,10 +281,29 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 // Tag icon in tag input field
 // ----------------------------------------------
 
-.has-feedback label ~ .form-control-feedback {
+.has-feedback label ~ .fa.form-control-feedback {
   top: 30px;
   font-size: $font-size-large;
   color: $gray;
+}
+
+.has-feedback label ~ img {
+  position: absolute;
+
+  &.visa {
+    top: 23px;
+    right: 4px;
+  }
+
+  &.mastercard {
+    top: 29px;
+    right: 40px;
+  }
+
+  &.maestro {
+    top: 29px;
+    right: 78px;
+  }
 }
 
 #map {
@@ -370,28 +389,5 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
     small {
       font-size: 11px;
     }
-  }
-}
-
-.credit-card-container {
-  position: relative;
-
-  > img {
-    position: absolute;
-  }
-
-  .visa {
-    top: 23px;
-    right: 4px;
-  }
-
-  .mastercard {
-    top: 29px;
-    right: 40px;
-  }
-
-  .maestro {
-    top: 29px;
-    right: 78px;
   }
 }
