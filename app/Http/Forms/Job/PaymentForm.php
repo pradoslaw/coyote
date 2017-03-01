@@ -24,7 +24,7 @@ class PaymentForm extends Form
             ->add('number', 'text', [
                 'required' => true,
                 'label' => 'Numer karty kredytowej lub debetowej',
-                'help' => 'Numer karty nie będzie przechowywany na naszym serwerze.',
+                'help' => 'Nie martw się. Numer karty nie będzie przechowywany na naszym serwerze.',
                 'rules' => 'string'
             ])
             ->add('exp_year', 'select', [
@@ -47,7 +47,7 @@ class PaymentForm extends Form
                 'required' => true,
                 'rules' => 'int',
                 'label' => 'Kod zabezpieczeń (CVC)',
-                'help' => '3 ostatnie cyfry na odwrocie karty'
+                'help' => '3 ostatnie cyfry na odwrocie karty.'
             ]);
     }
 
