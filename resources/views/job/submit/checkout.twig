@@ -15,7 +15,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-sm-5">
-                            <img src="/img/blur_edges.jpg" class="img-responsive">
+                            <img src="{{ cdn('img/blur_edges.jpg') }}" class="img-responsive">
                         </div>
 
                         <div class="col-sm-7">
@@ -24,9 +24,9 @@
                             <div class="form-group form-group-border credit-card-container has-feedback">
                                 {{ form_label(form.number) }}
 
-                                <img src="/img/mastercard.png" class="mastercard">
-                                <img src="/img/visa.png" class="visa">
-                                <img src="/img/maestro.png" class="maestro">
+                                <img src="{{ cdn('img/mastercard.png') }}" class="mastercard">
+                                <img src="{{ cdn('img/visa.png') }}" class="visa">
+                                <img src="{{ cdn('img/maestro.png') }}" class="maestro">
 
                                 {{ form_widget(form.number) }}
                                 {{ form_error(form.number) }}
