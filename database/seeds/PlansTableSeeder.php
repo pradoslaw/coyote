@@ -11,6 +11,6 @@ class PlansTableSeeder extends Seeder
      */
     public function run()
     {
-        \Coyote\Plan::forceCreate(['name' => 'Ogłoszenie na górze listy', 'price' => 9]);
+        \Coyote\Plan::forceCreate(['name' => 'Promocja ogłoszenia', 'price' => 9]);
     }
 }

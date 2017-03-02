@@ -45,11 +45,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Location[] $locations
  * @property Currency[] $currency
  * @property Feature[] $features
- * @property bool $enable_plan
  * @property int $plan_id
  * @property int $plan_length
- * @property \Carbon\Carbon $plan_starts_at
- * @property \Carbon\Carbon $plan_ends_at
  */
 class Job extends Model
 {
@@ -101,11 +98,8 @@ class Job extends Model
         'email',
         'enable_apply',
         'seniority_id',
-        'enable_plan',
         'plan_id',
         'plan_length', // column does not really exist in db (model attribute instead)
-        'plan_starts_at',
-        'plan_ends_at'
     ];
 
     /**
@@ -116,7 +110,6 @@ class Job extends Model
     protected $attributes = [
         'enable_apply' => true,
         'is_remote' => false,
-        'enable_plan' => false,
         'title' => ''
     ];
 
@@ -125,7 +118,7 @@ class Job extends Model
      *
      * @var array
      */
-    protected $casts = ['is_remote' => 'boolean', 'enable_apply' => 'boolean'];
+    protected $casts = ['is_remote' => 'boolean'];
 
     /**
      * @var string
@@ -135,7 +128,7 @@ class Job extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'deadline_at', 'plan_starts_at', 'plan_ends_at'];
+    protected $dates = ['created_at', 'updated_at', 'deadline_at'];
 
     /**
      * @var array
@@ -221,17 +214,9 @@ class Job extends Model
         "score" => [
             "type" => "long"
         ],
-        "enable_plan" => [
+        "boost" => [
             "type" => "boolean"
-        ],
-        "plan_starts_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-        "plan_ends_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
+        ]
     ];
 
     /**
@@ -253,9 +238,10 @@ class Job extends Model
 
             // field must not be null
             $model->is_remote = (int) $model->is_remote;
-            $model->enable_plan = (int) $model->enable_plan;
         });
     }
+
+    private $plan = ['id' => null, 'length' => 30];
 
     /**
      * @return array
@@ -432,6 +418,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany('Coyote\Payment');
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)
@@ -477,11 +471,25 @@ class Job extends Model
     /**
      * @param int $value
      */
+    public function setPlanIdAttribute($value)
+    {
+        $this->plan['id'] = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlanIdAttribute()
+    {
+        return $this->plan['id'];
+    }
+
+    /**
+     * @param int $value
+     */
     public function setPlanLengthAttribute($value)
     {
-        // set up the plan duration
-        $this->attributes['plan_starts_at'] = Carbon::now();
-        $this->attributes['plan_ends_at'] = Carbon::now()->addDays($value);
+        $this->plan['length'] = $value;
     }
 
     /**
@@ -489,7 +497,7 @@ class Job extends Model
      */
     public function getPlanLengthAttribute()
     {
-        return $this->plan_ends_at ? $this->plan_ends_at->diffInDays($this->plan_starts_at) : 30;
+        return $this->plan['length'];
     }
 
     /**
@@ -544,7 +552,11 @@ class Job extends Model
      */
     public function isPlanOngoing()
     {
-        return $this->exists && $this->enable_plan && Carbon::now()->between($this->plan_starts_at, $this->plan_ends_at);
+        if (!$this->exists) {
+            return false;
+        }
+
+        return $this->payments()->where('status_id', Payment::PAID)->where('ends_at', '>', Carbon::now())->exists();
     }
 
     /**
@@ -589,7 +601,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'enable_apply', 'features']);
+        $body = array_except($body, ['deleted_at', 'plan_id', 'features']);
 
         $locations = [];
 

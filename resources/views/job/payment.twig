@@ -3,11 +3,9 @@
 
 {% block container %}
     <div class="row">
-        {{ form_open({url: '#', class: 'submit-form'}) }}
+        {{ form_start(form) }}
 
         <main class="col-md-8">
-            {% include 'job.submit.partials.indicator' with {'current': 4} %}
-
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
@@ -60,16 +58,14 @@
                     </div>
 
                     <div id="form-navigation" class="form-group">
-                        <a href="{{ route('job.submit.preview') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podgląd</a>
-
-                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Zapisywanie...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
+                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Zapłać i zapisz<i class="fa fa-angle-right"></i></button>
                     </div>
                 </div>
             </div>
         </main>
 
         <aside class="col-md-4">
-            <div class="panel panel-default panel-review" style="margin-top: 100px">
+            <div class="panel panel-default panel-review">
                 <div class="panel-heading">
                     Twoja płatność obejmuje
                 </div>
@@ -117,20 +113,19 @@
             </div>
         </aside>
 
-        {{ form_close() }}
+        {{ form_end() }}
     </div>
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
 
-    <script>
-        var data = {};
-    </script>
+    {#<script>#}
+        {#var data = {};#}
+    {#</script>#}
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script src="{{ cdn('js/job-submit.js') }}"></script>
+    {#<script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>#}
+    {#<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>#}
+    {#<script src="{{ cdn('js/job-submit.js') }}"></script>#}
 
-    {% include 'job.submit.partials.navigation' %}
 {% endblock %}

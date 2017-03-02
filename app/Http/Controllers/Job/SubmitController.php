@@ -217,18 +217,6 @@ class SubmitController extends Controller
         ]);
     }
 
-    public function getCheckout(Request $request)
-    {
-        return $this->view('job.submit.checkout', [
-            'form' => $this->createForm(PaymentForm::class)
-        ]);
-    }
-
-    public function postCheckout(Request $request)
-    {
-
-    }
-
     /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
