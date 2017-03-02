@@ -274,6 +274,10 @@ class SubmitController extends Controller
             $job->tags()->sync($tags);
             $job->features()->sync($features);
 
+            if ($job->plan_id) {
+                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan_length]);
+            }
+
             event(new JobWasSaved($job));
 
             $parser = app('parser.job');

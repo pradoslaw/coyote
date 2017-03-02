@@ -47,6 +47,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Feature[] $features
  * @property int $plan_id
  * @property int $plan_length
+ * @property true $boost
  */
 class Job extends Model
 {

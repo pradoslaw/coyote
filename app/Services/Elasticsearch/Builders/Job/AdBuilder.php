@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
+use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\Functions\Random;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryString;
@@ -21,7 +22,9 @@ class AdBuilder extends SearchBuilder
      */
     public function build()
     {
-        $this->setupFilters();
+        // only premium offers
+        $this->must(new Term('boost', true));
+
         $this->setupScoreFunctions();
 
         $this->score(new Random($this->sessionId));

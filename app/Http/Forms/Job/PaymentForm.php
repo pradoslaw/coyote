@@ -15,7 +15,7 @@ class PaymentForm extends Form
     public function buildForm()
     {
         $this
-            ->setUrl(route('job.payment'))
+            ->setUrl(route('job.payment', [$this->data->id]))
             ->setAttr(['class' => 'submit-form'])
             ->add('name', 'text', [
                 'required' => true,
