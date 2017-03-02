@@ -72,7 +72,7 @@ class AdController extends Controller
             return '';
         }
 
-        // search jobs that might be close to your location
+        // search jobs that might be interesting for user
         return (string) view('job.ad', $data, ['jobs' => $result->getSource()]);
     }
 

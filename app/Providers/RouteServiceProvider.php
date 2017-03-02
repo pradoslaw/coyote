@@ -9,6 +9,7 @@ use Coyote\Repositories\Contracts\GroupRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
+use Coyote\Repositories\Contracts\PaymentRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
@@ -50,6 +51,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->pattern('user', '[0-9]+');
         $this->router->pattern('post', '[0-9]+');
         $this->router->pattern('job', '[0-9]+');
+        $this->router->pattern('payment', '[0-9a-z\-]+');
 
         $this->router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
         $this->router->pattern('tag', '([a-ząęśżźćółń0-9\-\.\#\+])+');
@@ -68,6 +70,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->model('group', GroupRepositoryInterface::class);
         $this->router->model('block', BlockRepositoryInterface::class);
         $this->router->model('job', JobRepositoryInterface::class);
+        $this->router->model('payment', PaymentRepositoryInterface::class);
 
         $this->router->bind('forum', function ($slug) {
             return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();

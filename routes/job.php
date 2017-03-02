@@ -61,13 +61,13 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     // Payment routes
     // -----------------------------
-    $this->get('Payment', [
+    $this->get('Payment/{payment}', [
         'uses' => 'PaymentController@index',
         'as' => 'payment',
         'middleware' => 'auth'
     ]);
 
-    $this->post('Payment', ['uses' => 'PaymentController@process', 'middleware' => 'auth']);
+    $this->post('Payment/{payment}', ['uses' => 'PaymentController@makePayment', 'middleware' => 'auth']);
 });
 
 $this->group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {

@@ -14,6 +14,7 @@ use Ramsey\Uuid;
  * @property int $invoice_id
  * @property \Carbon\Carbon $starts_at
  * @property \Carbon\Carbon $ends_at
+ * @property Job $job
  */
 class Payment extends Model
 {
@@ -25,6 +26,21 @@ class Payment extends Model
      */
     public $incrementing = false;
 
+    /**
+     * @var array
+     */
+    protected $fillable = ['plan_id', 'status_id', 'days', 'starts_at', 'ends_at'];
+
+    /**
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'starts_at', 'ends_at'];
+
+    /**
+     * @var array
+     */
+    protected $attributes = ['status_id' => self::PENDING];
+
     public static function boot()
     {
         parent::boot();
@@ -32,5 +48,13 @@ class Payment extends Model
         static::creating(function (Payment $payment) {
             $payment->id = Uuid\Uuid::uuid4();
         });
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function job()
+    {
+        return $this->belongsTo(Job::class);
     }
 }
