@@ -165,14 +165,14 @@
                                 <div class="checkbox">
                                     <div class="row">
                                         <div class="col-sm-7">
-                                            {{ form_widget(form.enable_plan) }}
+                                            {{ form_widget(form.plan_id) }}
 
-                                            <label for="enable_plan">
-                                                {{ form.enable_plan.label }}
+                                            <label for="{{ form.plan_id.attr.id }}">
+                                                {{ form.plan_id.label }}
                                             </label>
                                         </div>
 
-                                        <div class="col-sm-5 text-right" v-show="job.enable_plan">
+                                        <div class="col-sm-5 text-right" v-show="job.plan_id">
                                             <span class="pricing"><strong>${ price } zł</strong> netto</span>
                                             <sup class="padding-md-left padding-md-right">x</sup>
 

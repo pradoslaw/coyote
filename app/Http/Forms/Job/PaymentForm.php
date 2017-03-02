@@ -15,6 +15,8 @@ class PaymentForm extends Form
     public function buildForm()
     {
         $this
+            ->setUrl(route('job.payment'))
+            ->setAttr(['class' => 'submit-form'])
             ->add('name', 'text', [
                 'required' => true,
                 'label' => 'Nazwa (jaka widnieje na karcie kredytowej)',

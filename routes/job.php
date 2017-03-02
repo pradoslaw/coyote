@@ -20,14 +20,6 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'middleware' => 'auth'
     ]);
 
-    $this->get('Submit/Checkout', [
-        'uses' => 'SubmitController@getCheckout',
-        'as' => 'submit.checkout',
-        'middleware' => 'auth'
-    ]);
-
-    $this->post('Submit/Checkout', ['uses' => 'SubmitController@postCheckout', 'middleware' => 'auth']);
-
     $this->post('Submit/Save', ['uses' => 'SubmitController@save', 'as' => 'submit.save', 'middleware' => 'auth']);
 
     $this->post('Tag/Submit', ['uses' => 'TagController@submit', 'as' => 'submit.tag']);
@@ -65,6 +57,17 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     // move job offer
     $this->get('Move/{job}', ['uses' => 'MoveController@index', 'as' => 'move', 'middleware' => 'can:job-delete']);
     $this->post('Move/{job}', ['uses' => 'MoveController@move', 'middleware' => 'can:job-delete']);
+
+
+    // Payment routes
+    // -----------------------------
+    $this->get('Payment', [
+        'uses' => 'PaymentController@index',
+        'as' => 'payment',
+        'middleware' => 'auth'
+    ]);
+
+    $this->post('Payment', ['uses' => 'PaymentController@process', 'middleware' => 'auth']);
 });
 
 $this->group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {

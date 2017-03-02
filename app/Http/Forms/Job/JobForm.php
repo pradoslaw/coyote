@@ -306,12 +306,12 @@ class JobForm extends Form
         }
 
         $this
-            ->add('enable_plan', 'checkbox', [
+            ->add('plan_id', 'checkbox', [
                 'rules' => 'bool',
                 'label' => 'Tak, chciałbym sokrzystać z opcji promowania ogłoszenia.',
                 'attr' => [
-                    'id' => 'enable_plan',
-                    'v-model' => 'job.enable_plan'
+                    'id' => 'plan_id',
+                    'v-model' => 'job.plan_id'
                 ]
             ])
             ->add('plan_length', 'hidden', [
