@@ -142,7 +142,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $topic->poll()->associate($poll);
 
         $topic->save();
-        $tags = array_unique($form->getRequest()->get('tags', []));
+        $tags = array_unique((array) $form->getRequest()->get('tags', []));
 
         if (is_array($tags) && ($topic->wasRecentlyCreated || $postId == $topic->first_post_id)) {
             // assign tags to topic
