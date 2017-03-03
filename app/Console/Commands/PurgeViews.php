@@ -54,12 +54,11 @@ class PurgeViews extends Command
             /** @var \Coyote\Page $page */
             $page = $this->page->findByPath('/' . trim($path, '/'));
             if (!empty($page->id)) {
-                $content = $page->content();
+                $content = $page->content()->getResults();
 
                 if ($content) {
                     $hits = $redis->smembers($key);
 
-                    $content = $content->getResults();
                     $content->timestamps = false;
                     $content->increment('views', count($hits));
 
