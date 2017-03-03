@@ -14,6 +14,10 @@ $(function() {
     });
 
     $('#input-file').change(function() {
+        if (!$(this).val()) {
+            return;
+        }
+
         let formData = new FormData(form[0]);
 
         $.ajax({
@@ -23,11 +27,11 @@ $(function() {
             cache: false,
             contentType: false,
             processData: false,
-            success: (data) => {
+            success: data => {
                 $('#uploader').text(data.name);
                 $(':hidden[name="cv"]').val(data.filename);
             },
-            error: function (err) {
+            error: err => {
                 Dialog.alert({message: err.responseJSON.cv[0]}).show();
             }
         }, 'json');
