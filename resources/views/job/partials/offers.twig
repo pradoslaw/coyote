@@ -21,8 +21,12 @@
                 {% for job in jobs %}
                     {% set url = route('job.offer', [job.id, job.slug]) %}
 
-                    <tr>
+                    <tr {{ loop.first and job.boost ? 'class="top-spot"' }}>
                         <td class="col-logo">
+                            {% if job.boost %}
+                                <span class="label top-spot-badge">Promowana</span>
+                            {% endif %}
+
                             <a href="{{ url }}"><img alt="{{ job.firm.name }}" src="{{ logo(job.firm.logo) }}"></a>
                         </td>
                         <td class="col-body">
