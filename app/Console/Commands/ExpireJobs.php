@@ -2,17 +2,18 @@
 
 namespace Coyote\Console\Commands;
 
+use Coyote\Events\JobWasSaved;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Illuminate\Console\Command;
 
-class TurnOffPremiumJobs extends Command
+class ExpireJobs extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'job:name';
+    protected $signature = 'job:expire';
 
     /**
      * The console command description.
@@ -43,6 +44,13 @@ class TurnOffPremiumJobs extends Command
      */
     public function handle()
     {
-        //
+        $jobs = $this->job->getExpiredOffers();
+
+        foreach ($jobs as $job) {
+            $job->boost = false;
+            $job->save();
+
+            event(new JobWasSaved($job)); // reindex in elasticsearch
+        }
     }
 }
