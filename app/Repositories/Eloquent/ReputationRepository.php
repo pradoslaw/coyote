@@ -138,7 +138,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
     {
         $from = $this
             ->model
-            ->selectRaw('user_id, SUM(value) AS reputation')
+            ->selectRaw('user_id, GREATEST(0, SUM(value)) AS reputation')
             ->whereRaw("reputations.created_at >= '$dateTime'")
             ->orderBy('reputation', 'DESC')
             ->limit($limit)
