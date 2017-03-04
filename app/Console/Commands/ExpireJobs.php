@@ -39,8 +39,6 @@ class ExpireJobs extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
@@ -50,7 +48,11 @@ class ExpireJobs extends Command
             $job->boost = false;
             $job->save();
 
+            $this->info($job->title . ' was expired.');
+
             event(new JobWasSaved($job)); // reindex in elasticsearch
         }
+
+        $this->info('Done.');
     }
 }
