@@ -39,6 +39,7 @@ module.exports = {
         pm: './pages/pm.js',
         profile: './pages/profile.js',
         'job-submit': './pages/job/submit.js',
+        wikieditor: './plugins/wikieditor.js'
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({name: "app", minChunks: 2, chunks: ['microblog', 'pm', 'forum', 'wiki', 'job', 'homepage', 'job-submit']}),

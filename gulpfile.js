@@ -34,10 +34,6 @@ elixir(function (mix) {
         node_module('jquery-ui.1.11.1/ui/sortable.js')
     ], 'public/js/jquery-ui.js')
 
-    /*
-     | JS do prostego edytora markdown
-     */
-    .scripts(['plugins/wikieditor.js'], 'public/js/wikieditor.js')
     .scripts(['plugins/geo-ip.js'], 'public/js/geo-ip.js')
     /*
      | auto complete. uzywany m.in. w podczas pisania wiadomosci, czy tez ustalania umiejetnosci
