@@ -4,6 +4,11 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $symbol
+ */
 class Currency extends Model
 {
     const PLN = 1;
@@ -11,13 +16,6 @@ class Currency extends Model
     const USD = 3;
     const GBP = 4;
     const CHF = 5;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['name'];
 
     /**
      * @var bool
@@ -30,5 +28,13 @@ class Currency extends Model
     public static function getCurrenciesList()
     {
         return self::pluck('name', 'id')->toArray();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function exchanges()
+    {
+        return $this->hasMany(Exchange::class);
     }
 }
