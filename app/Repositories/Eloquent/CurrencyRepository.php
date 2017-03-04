@@ -14,6 +14,4 @@ class CurrencyRepository extends Repository implements CurrencyRepositoryInterfa
     {
         return Currency::class;
     }
-
-//    public function addExchange()
 }

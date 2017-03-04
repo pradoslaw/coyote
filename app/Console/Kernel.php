@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\PurgeFirewall',
         'Coyote\Console\Commands\PurgeSessions',
         'Coyote\Console\Commands\PurgeJobs',
+        'Coyote\Console\Commands\ExpireJobs',
         'Coyote\Console\Commands\CreateSitemap',
 //        'Coyote\Console\Commands\Migrate',
 //        'Coyote\Console\Commands\Markdown',
@@ -39,6 +40,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('coyote:counter')->everyFiveMinutes();
         $schedule->command('job:purge')->hourly();
+        $schedule->command('job:expire')->hourly();
         $schedule->command('session:purge')->everyMinute();
         $schedule->command('pastebin:purge')->hourly();
         $schedule->command('firewall:purge')->hourly();

@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Feature;
+use Coyote\Payment;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
@@ -181,7 +182,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
                 ->from('tags')
                 ->whereIn('name', $tags)
                 ->join('job_tags', 'job_tags.tag_id', '=', 'tags.id')
-                ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquen's scope (deleted_at column)
+                ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquent's scope (deleted_at column)
         );
 
         return $this
@@ -190,13 +191,35 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->from($this->raw("($sub) AS t"))
             ->join('job_tags', 'job_tags.job_id', '=', 't.job_id')
             ->join('tags', 'tags.id', '=', 'job_tags.tag_id')
-            ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquen's scope (deleted_at column)
+            ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquent's scope (deleted_at column)
             ->whereNotIn('name', $tags)
             ->groupBy('tags.name')
             ->orderByRaw('COUNT(*) DESC')
             ->limit(5)
             ->pluck('name')
             ->toArray();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExpiredOffers()
+    {
+        $sub = $this
+            ->app
+            ->make(Payment::class)
+            ->selectRaw('DISTINCT ON(job_id) job_id, ends_at')
+            ->orderBy('job_id', 'DESC')
+            ->orderBy('id', 'DESC')
+            ->toSql();
+
+        return $this
+            ->model
+            ->select('jobs.*')
+            ->join($this->raw("($sub) AS payments"), 'payments.job_id', '=', 'jobs.id')
+            ->where('boost', 1)
+            ->where('ends_at', '<', $this->raw('NOW()'))
+            ->get();
     }
 
     /**
