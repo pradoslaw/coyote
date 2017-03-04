@@ -7,14 +7,25 @@ use Coyote\Events\PaymentPaid;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
+use Coyote\Repositories\Contracts\CurrencyRepositoryInterface as CurrencyRepository;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function __construct()
+    /**
+     * @var CurrencyRepository
+     */
+    private $currency;
+
+    /**
+     * @param CurrencyRepository $currency
+     */
+    public function __construct(CurrencyRepository $currency)
     {
         parent::__construct();
+
+        $this->currency = $currency;
 
         $this->middleware(function (Request $request, $next) {
             /** @var \Coyote\Payment $payment */
@@ -37,7 +48,11 @@ class PaymentController extends Controller
         $this->breadcrumb->push('Promowanie ogłoszenia');
 
         return $this->view('job.payment', [
-            'form' => $this->createForm(PaymentForm::class, $payment)
+            'form'              => $this->createForm(PaymentForm::class, $payment),
+            'net_price'         => $payment->netPrice(),
+            'gross_price'       => $payment->grossPrice(),
+            'vat'               => $payment->vat(),
+            'exchange_rate'     => $this->currency->yesterdaysRate('EUR')
         ]);
     }
 

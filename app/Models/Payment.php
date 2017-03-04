@@ -15,6 +15,7 @@ use Ramsey\Uuid;
  * @property \Carbon\Carbon $starts_at
  * @property \Carbon\Carbon $ends_at
  * @property Job $job
+ * @property Plan $plan
  */
 class Payment extends Model
 {
@@ -56,5 +57,37 @@ class Payment extends Model
     public function job()
     {
         return $this->belongsTo(Job::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    /**
+     * @return float
+     */
+    public function netPrice()
+    {
+        return $this->plan->price * $this->days;
+    }
+
+    /**
+     * @return float
+     */
+    public function grossPrice()
+    {
+        return $this->netPrice() * $this->plan->vat_rate;
+    }
+
+    /**
+     * @return float
+     */
+    public function vat()
+    {
+        return $this->grossPrice() - $this->netPrice();
     }
 }

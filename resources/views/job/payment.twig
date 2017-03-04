@@ -76,7 +76,7 @@
                             Promocja ogłoszenia (30 dni)
                         </div>
                         <div class="col-xs-6 text-right">
-                            270 zł
+                            {{ net_price|round(2) }} zł
                         </div>
                     </div>
 
@@ -85,7 +85,7 @@
                             VAT (23%)
                         </div>
                         <div class="col-xs-6 text-right">
-                            27 zł
+                            {{ vat|round(2) }} zł
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@
                             <strong>Do zapłaty:</strong>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <strong>297 zł</strong>
+                            <strong>{{ gross_price|round(2) }} zł</strong>
                         </div>
                     </div>
                 </div>
@@ -103,10 +103,10 @@
                     <div class="row">
                         <div class="col-xs-8">
                             <span>Cena</span>
-                            <small>(Płatność pobrana zostanie w walucie euro)</small>
+                            <small>(Płatność pobrana zostanie w walucie euro wg. kursu NBP)</small>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <span>49 euro</span>
+                            <span>{{ (gross_price * exchange_rate)|round(2) }} €</span>
                         </div>
                     </div>
                 </div>
