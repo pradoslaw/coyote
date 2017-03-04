@@ -19,10 +19,11 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\PurgeSessions',
         'Coyote\Console\Commands\PurgeJobs',
         'Coyote\Console\Commands\CreateSitemap',
-        'Coyote\Console\Commands\Migrate',
-        'Coyote\Console\Commands\Markdown',
+//        'Coyote\Console\Commands\Migrate',
+//        'Coyote\Console\Commands\Markdown',
         'Coyote\Console\Commands\FlushCache',
         'Coyote\Console\Commands\SetupTags',
+        'Coyote\Console\Commands\GetCurrencyExchange',
         'Coyote\Console\Commands\Elasticsearch\Mapping',
         'Coyote\Console\Commands\Elasticsearch\Create',
         'Coyote\Console\Commands\Elasticsearch\Index'
@@ -42,5 +43,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('pastebin:purge')->hourly();
         $schedule->command('firewall:purge')->hourly();
         $schedule->command('sitemap:create')->dailyAt('03:00:00');
+        $schedule->command('currency:exchange')->dailyAt('12:00:00');
     }
 }

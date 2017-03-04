@@ -227,7 +227,8 @@ return [
         // sentry, raportowanie bugow
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         // Fractal
-        Spatie\Fractal\FractalServiceProvider::class
+        Spatie\Fractal\FractalServiceProvider::class,
+        Swap\Laravel\SwapServiceProvider::class
     ],
     /*
     |--------------------------------------------------------------------------
