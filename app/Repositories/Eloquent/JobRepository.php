@@ -218,6 +218,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->select('jobs.*')
             ->join($this->raw("($sub) AS payments"), 'payments.job_id', '=', 'jobs.id')
             ->where('boost', 1)
+            ->where('status_id', Payment::PAID)
             ->where('ends_at', '<', $this->raw('NOW()'))
             ->get();
     }

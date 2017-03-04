@@ -6,7 +6,6 @@ use Coyote\Events\JobWasSaved;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Forms\Job\FirmForm;
 use Coyote\Http\Forms\Job\JobForm;
-use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Http\Transformers\FirmWithBenefits;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
@@ -287,6 +286,11 @@ class SubmitController extends Controller
 
             $request->session()->forget(Job::class);
         });
+
+        $paymentUuid = $job->getPaymentUuid();
+        if ($paymentUuid) {
+            return redirect()->route('job.payment', [$paymentUuid]);
+        }
 
         return redirect()->to(UrlBuilder::job($job))->with('success', 'Oferta została prawidłowo dodana.');
     }
