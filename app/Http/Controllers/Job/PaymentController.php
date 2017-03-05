@@ -52,7 +52,7 @@ class PaymentController extends Controller
             'net_price'         => $payment->netPrice(),
             'gross_price'       => $payment->grossPrice(),
             'vat'               => $payment->vat(),
-            'exchange_rate'     => $this->currency->yesterdaysRate('EUR')
+            'exchange_rate'     => $this->currency->latest('EUR')
         ]);
     }
 

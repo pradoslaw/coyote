@@ -20,6 +20,8 @@ class CreateExchangesTable extends Migration
             $table->smallInteger('currency_id');
             $table->float('value');
 
+            $table->index('currency_id');
+
             $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('cascade');
         });
     }
