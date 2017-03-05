@@ -15,7 +15,6 @@ class PaymentForm extends Form
     public function buildForm()
     {
         $this
-            ->setUrl(route('job.payment', [$this->data->id]))
             ->setAttr(['class' => 'submit-form'])
             ->add('name', 'text', [
                 'required' => true,
@@ -50,6 +49,10 @@ class PaymentForm extends Form
                 'rules' => 'int',
                 'label' => 'Kod zabezpieczeń (CVC)',
                 'help' => '3 ostatnie cyfry na odwrocie karty.'
+            ])
+            ->add('invoice', 'child_form', [
+                'class' => InvoiceForm::class,
+                'value' => $this->data->job->firm
             ]);
     }
 

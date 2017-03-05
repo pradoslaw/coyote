@@ -63,6 +63,20 @@ class ChildForm extends ParentType
     }
 
     /**
+     * @return array
+     */
+    public function getChildrenValues()
+    {
+        $values = [];
+
+        foreach ($this->children as $key => $child) {
+            $values[$key] = $child->getValue();
+        }
+
+        return $values;
+    }
+
+    /**
      * @todo Jezeli formualarz jest wysylany metoda POST to metoda createChildren() jest wywolywana 2x.
      * Raz w linii 35, w pliku ChildForm.php, a drugi raz w pliku Collection.php z linii 144 (wywolanie metody
      * setValue()).

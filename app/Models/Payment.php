@@ -16,6 +16,7 @@ use Ramsey\Uuid;
  * @property \Carbon\Carbon $ends_at
  * @property Job $job
  * @property Plan $plan
+ * @property Invoice $invoice
  */
 class Payment extends Model
 {
@@ -65,6 +66,14 @@ class Payment extends Model
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 
     /**

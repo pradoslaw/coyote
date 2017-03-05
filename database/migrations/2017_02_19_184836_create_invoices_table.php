@@ -18,12 +18,12 @@ class CreateInvoicesTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->timestampTz('created_at');
-            $table->string('name');
-            $table->string('number', 50);
+            $table->string('name')->nullable();
+            $table->string('number', 50)->nullable();
             $table->string('vat_id', 20)->nullable();
-            $table->string('address');
-            $table->string('city');
-            $table->string('postal_code', 30);
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('postal_code', 30)->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('no action');
         });

@@ -316,6 +316,16 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function last()
+    {
+        return $this->applyCriteria(function () {
+            return $this->model->orderBy('id', 'DESC')->first();
+        });
+    }
+
+    /**
      * @param $method
      * @param $args
      * @return mixed
