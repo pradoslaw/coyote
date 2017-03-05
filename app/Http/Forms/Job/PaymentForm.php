@@ -59,6 +59,18 @@ class PaymentForm extends Form
     /**
      * @return array
      */
+    public function attributes()
+    {
+        return [
+            'name' => 'nazwa',
+            'number' => 'numer karty kredytowej',
+            'cvc' => 'CVC'
+        ];
+    }
+
+    /**
+     * @return array
+     */
     private function getYearList()
     {
         $yearList = [];

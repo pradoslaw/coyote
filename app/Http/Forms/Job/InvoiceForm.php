@@ -40,4 +40,15 @@ class InvoiceForm extends Form
             $this->get('address')->setValue($this->data->street . ' ' . $this->data->house);
         }
     }
+
+    /**
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'name' => 'nazwa',
+            'vat_id' => 'NIP'
+        ];
+    }
 }
