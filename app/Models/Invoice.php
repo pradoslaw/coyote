@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $user_id
  * @property string $name
+ * @property string $number
  * @property string $address
  * @property string $city
  * @property string $postal_code
@@ -19,6 +20,11 @@ class Invoice extends Model
      * @var array
      */
     protected $fillable = ['user_id', 'name', 'address', 'city', 'postal_code'];
+
+    /**
+     * @var array
+     */
+    protected $dates = ['created_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -54,5 +60,16 @@ class Invoice extends Model
         }
 
         return round($price, 2);
+    }
+
+    /**
+     * Set the value of the "updated at" attribute.
+     *
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function setUpdatedAt($value)
+    {
+        return $this;
     }
 }

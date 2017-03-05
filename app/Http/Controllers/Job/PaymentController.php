@@ -8,6 +8,8 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CurrencyRepositoryInterface as CurrencyRepository;
+use Coyote\Repositories\Contracts\InvoiceRepositoryInterface as InvoiceRepository;
+use Coyote\Services\Invoice\Enumerator;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 
@@ -19,13 +21,20 @@ class PaymentController extends Controller
     private $currency;
 
     /**
-     * @param CurrencyRepository $currency
+     * @var InvoiceRepository
      */
-    public function __construct(CurrencyRepository $currency)
+    private $invoice;
+
+    /**
+     * @param CurrencyRepository $currency
+     * @param InvoiceRepository $invoice
+     */
+    public function __construct(CurrencyRepository $currency, InvoiceRepository $invoice)
     {
         parent::__construct();
 
         $this->currency = $currency;
+        $this->invoice = $invoice;
 
         $this->middleware(function (Request $request, $next) {
             /** @var \Coyote\Payment $payment */
@@ -48,7 +57,7 @@ class PaymentController extends Controller
         $this->breadcrumb->push('Promowanie ogłoszenia');
 
         return $this->view('job.payment', [
-            'form'              => $this->createForm(PaymentForm::class, $payment),
+            'form'              => $this->getForm($payment),
             'net_price'         => $payment->netPrice(),
             'gross_price'       => $payment->grossPrice(),
             'vat'               => $payment->vat(),
@@ -58,21 +67,44 @@ class PaymentController extends Controller
 
     /**
      * @param \Coyote\Payment $payment
+     * @param Enumerator $enumerator
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function makePayment($payment)
+    public function makePayment($payment, Enumerator $enumerator)
     {
+        $form = $this->getForm($payment);
+        $form->validate();
+
         try {
-            $payment->status_id = Payment::PAID;
-            $payment->starts_at = Carbon::now();
-            $payment->ends_at = Carbon::now()->addDays($payment->days);
+            $this->transaction(function () use ($payment, $form, $enumerator) {
+                /** @var \Coyote\Invoice $invoice */
+                $invoice = $this->invoice->newInstance(
+                    array_merge($form->get('invoice')->getChildrenValues(), ['user_id' => $this->userId])
+                );
 
-            $payment->save();
+                // setup invoice number
+                $enumerator->setup($invoice);
+                // save the invoice
+                $invoice->save();
 
-            $payment->job->boost = true;
-            $payment->job->save();
+                $payment->status_id = Payment::PAID;
 
+                // establish plan's finish date
+                $payment->starts_at = Carbon::now();
+                $payment->ends_at = Carbon::now()->addDays($payment->days);
+
+                // associate invoice with payment
+                $payment->invoice()->associate($invoice);
+                $payment->save();
+
+                // boost job offer so it's on the top of the list
+                $payment->job->boost = true;
+                $payment->job->save();
+
+            });
+
+            // reindex job offer
             event(new PaymentPaid($payment->job));
         } catch (\Exception $e) {
             throw $e;
@@ -86,5 +118,14 @@ class PaymentController extends Controller
     public function callback()
     {
         //
+    }
+
+    /**
+     * @param \Coyote\Payment $payment
+     * @return \Coyote\Services\FormBuilder\Form
+     */
+    private function getForm($payment)
+    {
+        return $this->createForm(PaymentForm::class, $payment);
     }
 }

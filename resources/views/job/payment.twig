@@ -12,14 +12,14 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-sm-5">
+                        <div class="col-lg-5 hidden-md hidden-sm hidden-xs">
                             <img src="{{ cdn('img/blur_edges.jpg') }}" class="img-responsive">
                         </div>
 
-                        <div class="col-sm-7">
+                        <div class="col-lg-7 col-md-12">
                             {{ form_row(form.name) }}
 
-                            <div class="form-group form-group-border credit-card-container has-feedback">
+                            <div class="form-group form-group-border credit-card-container has-feedback {{ errors.any('number') ? 'has-error' }}">
                                 {{ form_label(form.number) }}
 
                                 <img src="{{ cdn('img/mastercard.png') }}" class="mastercard">
@@ -30,7 +30,7 @@
                                 {{ form_error(form.number) }}
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group form-group-border">
                                 <div class="row">
                                     <div class="col-sm-7">
                                         <label class="control-label">Data ważności *</label>
@@ -47,11 +47,34 @@
                                     </div>
 
                                     <div class="col-sm-5">
-                                        {{ form_label(form.cvc) }}
-
-                                        {{ form_widget(form.cvc) }}
-                                        {{ form_error(form.cvc) }}
+                                        {{ form_row(form.cvc) }}
                                     </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    {{ form_row(form.invoice.children.name) }}
+                                </div>
+
+                                <div class="col-sm-5">
+                                    {{ form_row(form.invoice.children.vat_id) }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-4 address">
+                                    {{ form_row(form.invoice.children.address) }}
+                                </div>
+
+                                <div class="col-sm-3">
+                                    {{ form_row(form.invoice.children.postal_code) }}
+                                </div>
+
+                                <div class="col-sm-5">
+                                    {{ form_row(form.invoice.children.city) }}
+
                                 </div>
                             </div>
                         </div>

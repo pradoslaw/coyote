@@ -143,6 +143,13 @@ interface RepositoryInterface
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
 
     /**
+     * Get last element.
+     *
+     * @return mixed
+     */
+    public function last();
+
+    /**
      * Get a new raw query expression.
      *
      * @param  mixed  $value
