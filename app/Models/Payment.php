@@ -99,4 +99,28 @@ class Payment extends Model
     {
         return $this->grossPrice() - $this->netPrice();
     }
+
+    /**
+     * @return float
+     */
+    public function getNetPriceAttribute()
+    {
+        return $this->netPrice();
+    }
+
+    /**
+     * @return float
+     */
+    public function getGrossPriceAttribute()
+    {
+        return $this->grossPrice();
+    }
+
+    /**
+     * @return float
+     */
+    public function getVatAttribute()
+    {
+        return $this->vat();
+    }
 }

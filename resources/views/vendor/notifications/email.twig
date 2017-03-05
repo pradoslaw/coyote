@@ -14,7 +14,7 @@
 
     <!-- Intro -->
     {% for line in introLines %}
-        <p>{{ line }}</p>
+        <p>{{ line|raw }}</p>
     {% endfor %}
 
     <!-- Action Button -->
@@ -33,7 +33,7 @@
     <!-- Outro -->
     {% for line in outroLines %}
         <p>
-            {{ line }}
+            {{ line|raw }}
         </p>
     {% endfor %}
 

@@ -31,13 +31,14 @@ class Generator
     public function create(array $attributes, Payment $payment): Invoice
     {
         /** @var \Coyote\Invoice $invoice */
-        $invoice = $this->repository->create($attributes + ['number' => $this->getNumber()]);
+        $invoice = $this->repository->create(
+            array_merge($attributes, ['number' => $this->getNumber(), 'currency_id' => $payment->plan->currency_id])
+        );
 
         $invoice->items()->create([
             'description'   => $this->getDescription($payment),
             'price'         => $payment->plan->price * $payment->days,
-            'vat_rate'      => $payment->plan->vat_rate,
-            'currency_id'   => $payment->plan->currency_id
+            'vat_rate'      => $payment->plan->vat_rate
         ]);
 
         return $invoice;
