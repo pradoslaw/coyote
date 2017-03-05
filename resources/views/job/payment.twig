@@ -96,10 +96,10 @@
                 <div class="panel-body">
                     <div class="row margin-xs-top margin-xs-bottom">
                         <div class="col-xs-6">
-                            Promocja ogłoszenia (30 dni)
+                            Promocja ogłoszenia ({{ payment.days }} dni)
                         </div>
                         <div class="col-xs-6 text-right">
-                            {{ net_price|round(2) }} zł
+                            {{ payment.net_price|round(2) }} zł
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@
                             VAT (23%)
                         </div>
                         <div class="col-xs-6 text-right">
-                            {{ vat|round(2) }} zł
+                            {{ payment.vat|round(2) }} zł
                         </div>
                     </div>
 
@@ -117,7 +117,7 @@
                             <strong>Do zapłaty:</strong>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <strong>{{ gross_price|round(2) }} zł</strong>
+                            <strong>{{ payment.gross_price|round(2) }} zł</strong>
                         </div>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                             <small>(Płatność pobrana zostanie w walucie euro wg. kursu NBP)</small>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <span>{{ (gross_price * exchange_rate)|round(2) }} €</span>
+                            <span>{{ (payment.gross_price * exchange_rate)|round(2) }} €</span>
                         </div>
                     </div>
                 </div>

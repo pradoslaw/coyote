@@ -12,14 +12,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $address
  * @property string $city
  * @property string $postal_code
+ * @property int $currency_id
  * @property Item[] $items
+ * @property Currency $currency
  */
 class Invoice extends Model
 {
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'address', 'city', 'postal_code'];
+    protected $fillable = ['user_id', 'name', 'number', 'vat_id', 'address', 'city', 'postal_code', 'currency_id'];
 
     /**
      * @var array
@@ -32,6 +34,14 @@ class Invoice extends Model
     public function items()
     {
         return $this->hasMany(Item::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
     }
 
     /**
@@ -60,6 +70,22 @@ class Invoice extends Model
         }
 
         return round($price, 2);
+    }
+
+    /**
+     * @return float
+     */
+    public function getGrossPriceAttribute()
+    {
+        return $this->grossPrice();
+    }
+
+    /**
+     * @return float
+     */
+    public function getNetPriceAttribute()
+    {
+        return $this->netPrice();
     }
 
     /**

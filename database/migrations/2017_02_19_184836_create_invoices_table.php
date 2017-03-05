@@ -24,6 +24,7 @@ class CreateInvoicesTable extends Migration
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('postal_code', 30)->nullable();
+            $table->smallInteger('currency_id')->default(\Coyote\Currency::PLN);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('no action');
         });

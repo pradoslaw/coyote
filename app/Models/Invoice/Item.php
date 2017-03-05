@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property string $description
  * @property float $price
- * @property int $currency_id
  * @property int $vat_rate
  */
 class Item extends Model
@@ -20,7 +19,7 @@ class Item extends Model
     /**
      * @var array
      */
-    protected $fillable = ['description', 'price', 'currency_id', 'vat_rate'];
+    protected $fillable = ['description', 'price', 'vat_rate'];
 
     /**
      * @var bool
@@ -40,6 +39,6 @@ class Item extends Model
      */
     public function grossPrice()
     {
-        return round($this->price + ($this->price * ($this->vat_rate / 100)), 2);
+        return round($this->price * $this->vat_rate, 2);
     }
 }

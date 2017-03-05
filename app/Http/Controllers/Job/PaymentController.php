@@ -6,9 +6,11 @@ use Carbon\Carbon;
 use Coyote\Events\PaymentPaid;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
+use Coyote\Notifications\SuccessfulPaymentNotification;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CurrencyRepositoryInterface as CurrencyRepository;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
+use Coyote\Services\Invoice\Pdf as InvoicePdf;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 
@@ -50,9 +52,7 @@ class PaymentController extends Controller
 
         return $this->view('job.payment', [
             'form'              => $this->getForm($payment),
-            'net_price'         => $payment->netPrice(),
-            'gross_price'       => $payment->grossPrice(),
-            'vat'               => $payment->vat(),
+            'payment'           => $payment,
             'exchange_rate'     => $this->currency->latest('EUR')
         ]);
     }
@@ -60,19 +60,20 @@ class PaymentController extends Controller
     /**
      * @param \Coyote\Payment $payment
      * @param InvoiceGenerator $generator
+     * @param InvoicePdf $pdf
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function makePayment($payment, InvoiceGenerator $generator)
+    public function makePayment($payment, InvoiceGenerator $generator, InvoicePdf $pdf)
     {
         $form = $this->getForm($payment);
         $form->validate();
 
         try {
-            $this->transaction(function () use ($payment, $form, $generator) {
+            $this->transaction(function () use ($payment, $form, $generator, $pdf) {
                 /** @var \Coyote\Invoice $invoice */
                 $invoice = $generator->create(
-                    array_merge($form->get('invoice')->getChildrenValues(), ['user_id' => $this->userId]),
+                    array_merge($form->all()['invoice'], ['user_id' => $this->userId]),
                     $payment
                 );
 
@@ -90,6 +91,9 @@ class PaymentController extends Controller
                 $payment->job->boost = true;
                 $payment->job->save();
 
+                $pdf->setVendor(config('vendor'));
+
+                $this->auth->notify(new SuccessfulPaymentNotification($payment, base64_encode($pdf->create($payment))));
             });
 
             // reindex job offer
