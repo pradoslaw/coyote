@@ -2,7 +2,6 @@
 
 namespace Coyote\Repositories\Eloquent;
 
-use Carbon\Carbon;
 use Coyote\Currency;
 use Coyote\Repositories\Contracts\CurrencyRepositoryInterface;
 
@@ -17,25 +16,16 @@ class CurrencyRepository extends Repository implements CurrencyRepositoryInterfa
     }
 
     /**
-     * @param string $date
-     * @param string $currency
-     * @return float
+     * @inheritdoc
      */
-    public function rate($date, $currency)
+    public function latest($currency)
     {
         return $this
             ->model
             ->where('name', $currency)
             ->join('exchanges', 'currency_id', '=', 'currencies.id')
-            ->where('date', $date)
+            ->orderBy('exchanges.id', 'DESC')
+            ->limit(1)
             ->value('value');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function yesterdaysRate($currency)
-    {
-        return $this->rate(Carbon::yesterday(), $currency);
     }
 }
