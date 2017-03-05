@@ -20,7 +20,7 @@ class CreateInvoiceItemsTable extends Migration
             $table->string('description');
             $table->float('price');
             $table->smallInteger('currency_id')->default(\Coyote\Currency::PLN);
-            $table->smallInteger('vat_rate')->default(23);
+            $table->float('vat_rate')->default(1.23);
 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('no action');
             $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('no action');

@@ -8,8 +8,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CurrencyRepositoryInterface as CurrencyRepository;
-use Coyote\Repositories\Contracts\InvoiceRepositoryInterface as InvoiceRepository;
-use Coyote\Services\Invoice\Enumerator;
+use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 
@@ -21,20 +20,13 @@ class PaymentController extends Controller
     private $currency;
 
     /**
-     * @var InvoiceRepository
-     */
-    private $invoice;
-
-    /**
      * @param CurrencyRepository $currency
-     * @param InvoiceRepository $invoice
      */
-    public function __construct(CurrencyRepository $currency, InvoiceRepository $invoice)
+    public function __construct(CurrencyRepository $currency)
     {
         parent::__construct();
 
         $this->currency = $currency;
-        $this->invoice = $invoice;
 
         $this->middleware(function (Request $request, $next) {
             /** @var \Coyote\Payment $payment */
@@ -67,26 +59,22 @@ class PaymentController extends Controller
 
     /**
      * @param \Coyote\Payment $payment
-     * @param Enumerator $enumerator
+     * @param InvoiceGenerator $generator
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function makePayment($payment, Enumerator $enumerator)
+    public function makePayment($payment, InvoiceGenerator $generator)
     {
         $form = $this->getForm($payment);
         $form->validate();
 
         try {
-            $this->transaction(function () use ($payment, $form, $enumerator) {
+            $this->transaction(function () use ($payment, $form, $generator) {
                 /** @var \Coyote\Invoice $invoice */
-                $invoice = $this->invoice->newInstance(
-                    array_merge($form->get('invoice')->getChildrenValues(), ['user_id' => $this->userId])
+                $invoice = $generator->create(
+                    array_merge($form->get('invoice')->getChildrenValues(), ['user_id' => $this->userId]),
+                    $payment
                 );
-
-                // setup invoice number
-                $enumerator->setup($invoice);
-                // save the invoice
-                $invoice->save();
 
                 $payment->status_id = Payment::PAID;
 
