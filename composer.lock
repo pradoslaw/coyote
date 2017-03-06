@@ -1709,16 +1709,16 @@
         },
         {
             "name": "jaybizzle/crawler-detect",
-            "version": "v1.2.35",
+            "version": "v1.2.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JayBizzle/Crawler-Detect.git",
-                "reference": "e075d2a74cc34324e27efad542b3ab90dd0fa4e5"
+                "reference": "186cdc021f972a7e06963a84ef692d75f5b325c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JayBizzle/Crawler-Detect/zipball/e075d2a74cc34324e27efad542b3ab90dd0fa4e5",
-                "reference": "e075d2a74cc34324e27efad542b3ab90dd0fa4e5",
+                "url": "https://api.github.com/repos/JayBizzle/Crawler-Detect/zipball/186cdc021f972a7e06963a84ef692d75f5b325c6",
+                "reference": "186cdc021f972a7e06963a84ef692d75f5b325c6",
                 "shasum": ""
             },
             "require": {
@@ -1753,7 +1753,7 @@
                 "crawlerdetect",
                 "php crawler detect"
             ],
-            "time": "2017-02-14T21:40:33+00:00"
+            "time": "2017-03-03T21:13:00+00:00"
         },
         {
             "name": "jenssegers/agent",
@@ -2834,16 +2834,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v3.0.4",
+            "version": "v3.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "0bf561dfe75ba80441c22adecc0529056671a7d2"
+                "reference": "2b9e2f71b722f7c53918ab0c25f7646c2013f17d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/0bf561dfe75ba80441c22adecc0529056671a7d2",
-                "reference": "0bf561dfe75ba80441c22adecc0529056671a7d2",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/2b9e2f71b722f7c53918ab0c25f7646c2013f17d",
+                "reference": "2b9e2f71b722f7c53918ab0c25f7646c2013f17d",
                 "shasum": ""
             },
             "require": {
@@ -2881,7 +2881,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2017-02-10T20:20:03+00:00"
+            "time": "2017-03-05T18:23:57+00:00"
         },
         {
             "name": "paragonie/random_compat",
