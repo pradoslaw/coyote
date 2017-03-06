@@ -19,7 +19,7 @@
                         <div class="col-lg-7 col-md-12">
                             {{ form_row(form.name) }}
 
-                            <div class="form-group form-group-border credit-card-container has-feedback {{ errors.any('number') ? 'has-error' }}">
+                            <div class="form-group form-group-border credit-card-container has-feedback {{ errors.has('number') ? 'has-error' }}">
                                 {{ form_label(form.number) }}
 
                                 <img src="{{ cdn('img/mastercard.png') }}" class="mastercard">
@@ -47,7 +47,7 @@
                                     </div>
 
                                     <div class="col-sm-5">
-                                        <div class="form-group has-feedback {{ errors.any('cvc') ? 'has-error' }}">
+                                        <div class="form-group has-feedback {{ errors.has('cvc') ? 'has-error' }}">
                                             {{ form_label(form.cvc) }}
 
                                             <img src="{{ cdn('img/cvc.png') }}" class="cvc">
