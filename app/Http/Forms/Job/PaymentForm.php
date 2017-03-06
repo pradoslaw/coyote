@@ -50,6 +50,13 @@ class PaymentForm extends Form
                 'label' => 'Kod zabezpieczeń (CVC)',
                 'help' => '3 ostatnie cyfry na odwrocie karty.'
             ])
+            ->add('enable_invoice', 'checkbox', [
+                'label' => 'Tak, chcę otrzymać fakturę',
+                'value' => true,
+                'attr' => [
+                    'id' => 'enable-invoice'
+                ]
+            ])
             ->add('invoice', 'child_form', [
                 'class' => InvoiceForm::class,
                 'value' => $this->data->job->firm

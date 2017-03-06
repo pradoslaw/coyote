@@ -304,6 +304,11 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
     top: 29px;
     right: 78px;
   }
+
+  &.cvc {
+    top: 25px;
+    right: 5px;
+  }
 }
 
 #map {
@@ -390,8 +395,4 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
       font-size: 11px;
     }
   }
-}
-
-.address {
-  padding-right: 0;
 }
