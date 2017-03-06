@@ -89,6 +89,7 @@ class PaymentController extends Controller
 
                 // boost job offer so it's on the top of the list
                 $payment->job->boost = true;
+                $payment->job->deadline_at = max($payment->job->deadline_at, $payment->ends_at);
                 $payment->job->save();
 
                 $pdf->setVendor(config('vendor'));
