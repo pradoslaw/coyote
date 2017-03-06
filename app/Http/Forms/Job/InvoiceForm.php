@@ -17,22 +17,22 @@ class InvoiceForm extends Form
         $this
             ->add('name', 'text', [
                 'label' => 'Nazwa firmy',
-                'rules' => 'string|max:200|required_with:invoice.vat_id'
+                'rules' => 'string|max:200|required_with:enable_invoice'
             ])
             ->add('vat_id', 'text', [
-                'label' => 'NIP',
+                'label' => 'NIP (opcjonalnie)',
                 'rules' => 'string'
             ])
             ->add('address', 'text', [
-                'rules' => 'string|required_with:invoice.vat_id',
+                'rules' => 'string|required_with:enable_invoice',
                 'label' => 'Adres',
             ])
             ->add('city', 'text', [
-                'rules' => 'string|required_with:invoice.vat_id',
+                'rules' => 'string|required_with:enable_invoice',
                 'label' => 'Miejscowość',
             ])
             ->add('postal_code', 'text', [
-                'rules' => 'string|required_with:invoice.vat_id',
+                'rules' => 'string|required_with:enable_invoice',
                 'label' => 'Kod pocztowy',
             ]);
 
