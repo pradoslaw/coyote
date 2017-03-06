@@ -150,7 +150,8 @@ new Vue({
 
             this.benefits = this.firm.benefits;
 
-            tinymce.get('description').setContent(this.firm.description);
+            // text can not be NULL
+            tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
         },
         changeFirm: function () {
             if (!this.firm.name) {
