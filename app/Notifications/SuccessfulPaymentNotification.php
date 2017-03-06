@@ -60,13 +60,13 @@ class SuccessfulPaymentNotification extends Notification implements ShouldQueue
                     $this->payment->invoice->currency->symbol
                 )
             )
+            ->line('W załączniku znajdziesz fakturę VAT.')
             ->line(
                 sprintf(
                     'Twoje ogłoszenie <strong>%s</strong> jest już promowane w naszym serwisie.',
                     $this->payment->job->title
                 )
             )
-            ->line('W załączniku znajdziesz fakturę VAT.')
             ->action('Zobacz ogłoszenie', route('job.offer', [$this->payment->job->id, $this->payment->job->slug]))
             ->line('Dziekujemy za skorzystanie z naszych usług.')
             ->attachData(base64_decode($this->pdf), $this->getFilename());
