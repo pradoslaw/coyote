@@ -31,6 +31,9 @@ module.exports = {
         chunkFilename: '[chunkhash].js',
         publicPath: cdn('/js/')
     },
+    externals: {
+        jquery: "jQuery"
+    },
     context: path.join(__dirname, 'resources/assets/js'),
     entry: {
         app: './app.js',

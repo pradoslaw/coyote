@@ -26,7 +26,10 @@ class PaymentForm extends Form
                 'required' => true,
                 'label' => 'Numer karty kredytowej lub debetowej',
                 'help' => 'Nie martw się. Numer karty nie będzie przechowywany na naszym serwerze.',
-                'rules' => 'string'
+                'rules' => 'string',
+                'attr' => [
+                    'id' => 'credit-card'
+                ]
             ])
             ->add('exp_year', 'select', [
                 'required' => true,
@@ -48,7 +51,10 @@ class PaymentForm extends Form
                 'required' => true,
                 'rules' => 'int',
                 'label' => 'Kod zabezpieczeń (CVC)',
-                'help' => '3 ostatnie cyfry na odwrocie karty.'
+                'help' => '3 ostatnie cyfry na odwrocie karty.',
+                'attr' => [
+                    'id' => 'cvc'
+                ]
             ])
             ->add('enable_invoice', 'checkbox', [
                 'label' => 'Tak, chcę otrzymać fakturę',

@@ -164,13 +164,5 @@
 {% block body %}
     {{ parent() }}
 
-    <script>
-        $(function() {
-            $('#enable-invoice')
-                .change(function() {
-                    $('.invoice').toggle($(this).is(':checked'));
-                })
-                .trigger('change');
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 {% endblock %}
