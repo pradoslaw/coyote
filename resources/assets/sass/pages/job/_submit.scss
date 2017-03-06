@@ -5,29 +5,6 @@
 
 $font-size-control-label: 15px;
 
-// Banner that is shown at the top of the form
-// -------------------------------------------------
-
-.jumbotron {
-  padding: 15px 30px;
-
-  h1 {
-    font-size: 35px;
-  }
-
-  p {
-    font-size: 16px;
-  }
-
-  &.alert-popover {
-    position: static;
-
-    .close {
-      font-size: 25px;
-    }
-  }
-}
-
 // Wizard form. Element that indicates current step
 // -----------------------------------------------------
 

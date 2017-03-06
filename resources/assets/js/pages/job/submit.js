@@ -294,10 +294,6 @@ $(() => {
         $('input[name="done"]').val(1);
     });
 
-    $('.jumbotron .btn-close').click(() => {
-        $('.jumbotron .close').click();
-    });
-
     $('.submit-form').on('focus', ':input', e => {
         let $this = $(e.currentTarget);
         let offset = $this.offset().top;
