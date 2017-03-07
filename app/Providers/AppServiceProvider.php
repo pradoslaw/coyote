@@ -1,9 +1,12 @@
-<?php namespace Coyote\Providers;
+<?php
+
+namespace Coyote\Providers;
 
 use Coyote\Repositories\Contracts\SettingRepositoryInterface;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
+use Coyote\Services\Invoice;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
@@ -86,6 +89,10 @@ class AppServiceProvider extends ServiceProvider
                     $form->validate();
                 }
             });
+        });
+
+        $this->app->resolving(Invoice\Pdf::class, function (Invoice\Pdf $pdf, $app) {
+            $pdf->setVendor($app['config']->get('vendor'));
         });
     }
 

@@ -92,8 +92,6 @@ class PaymentController extends Controller
                 $payment->job->deadline_at = max($payment->job->deadline_at, $payment->ends_at);
                 $payment->job->save();
 
-                $pdf->setVendor(config('vendor'));
-
                 $this->auth->notify(new SuccessfulPaymentNotification($payment, base64_encode($pdf->create($payment))));
             });
 
