@@ -79,6 +79,7 @@
     padding-bottom: 1px;
     font-size: $font-size-base;
     font-weight: bold;
+    color: $brand-primary;
 
     @include text-overflow;
   }

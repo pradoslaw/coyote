@@ -78,7 +78,7 @@ $headings-font-family:    Arial, sans-serif !default;
 $headings-font-weight:    normal !default; // <!-- zmiana
 $headings-line-height:    1.1 !default;
 //$headings-color:          inherit !default;
-$headings-color:          #80a41a !default; // <!-- zmiana
+$headings-color:          lighten($text-color, 10%) !default; // <!-- zmiana
 
 
 //== Iconography

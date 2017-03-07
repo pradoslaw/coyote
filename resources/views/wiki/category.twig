@@ -41,7 +41,7 @@
                     </div>
 
                     <header>
-                        <h1>{{ wiki.title }}</h1>
+                        <h1><a href="{{ url(wiki.path) }}">{{ wiki.title }}</a></h1>
                     </header>
 
                     {{ wiki.text|raw }}
