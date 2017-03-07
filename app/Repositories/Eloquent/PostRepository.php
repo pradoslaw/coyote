@@ -160,8 +160,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
             }
 
             $post->ip = $form->getRequest()->ip();
-            $post->browser = $form->getRequest()->browser();
-            $post->host = gethostbyaddr($form->getRequest()->ip());
+            $post->browser = str_limit($form->getRequest()->browser(), 250);
+            $post->host = str_limit(gethostbyaddr($form->getRequest()->ip()), 250);
         }
 
         $log->fillWithPost($post)->fill(['subject' => $topic->subject, 'tags' => $tags]);
