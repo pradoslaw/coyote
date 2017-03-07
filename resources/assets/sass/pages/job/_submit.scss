@@ -272,7 +272,7 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 // Panel with promo options
 // -----------------------------
 
-.panel-plans {
+.plans {
   h3 {
     color: $gray;
     margin-top: 0;
@@ -329,4 +329,53 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
   sup {
      top: -2px;
    }
+}
+
+.plan-tooltip-wrapper {
+  cursor: help;
+  position: relative;
+
+  > .plan-tooltip {
+    position: absolute;
+    background-color: #fff;
+    border: 2px solid $border-color;
+    padding: 5px;
+    display: none;
+    right: -450px;
+    top: -118px;
+    z-index: 1000;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+    border-radius: $border-radius-base;
+
+    &:before, &:after {
+      right: 100%;
+      top: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+
+    &:after {
+      border-color: rgba(255, 255, 255, 0);
+      border-right-color: #fff;
+      border-width: 10px;
+      margin-top: -10px;
+    }
+
+    &:before {
+      border-color: rgba(208, 208, 208, 0);
+      border-right-color: $border-color;
+      border-width: 13px;
+      margin-top: -13px;
+    }
+  }
+
+  &:hover {
+    > .plan-tooltip {
+      display: block;
+    }
+  }
 }

@@ -136,7 +136,7 @@
                 </div>
 
                 {% if not is_plan_ongoing %}
-                    <div class="panel panel-default panel-plans">
+                    <div class="panel panel-default plans">
                         <div class="panel-heading">
                             Promowanie ogłoszenia
                         </div>
@@ -148,7 +148,16 @@
 
                             <ul class="list-unstyled margin-md-top margin-md-bottom">
                                 <li><i class="fa fa-check-circle fa-fw text-primary"></i> Wyróżnienie <strong>na górze wyników</strong> - Twoja oferta będzie zawsze wyświetlana nad darmowymi.</li>
-                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Promowanie oferty na forum i stronie głównej. <a href="#">Zobacz jak to wygląda</a>.</li>
+                                <li>
+                                    <i class="fa fa-check-circle fa-fw text-primary"></i>
+                                    <strong>Reklama</strong> oferty na forum i stronie głównej.
+
+                                    <a href="javascript:" class="plan-tooltip-wrapper">
+                                        Zobacz jak to wygląda.
+
+                                        <div class="plan-tooltip"><img src="{{ cdn('img/offer-example.jpg') }}"></div>
+                                    </a>
+                                </li>
                                 <li><i class="fa fa-check-circle fa-fw text-primary"></i> Tylko <strong>${ price } zł</strong> netto za dzień. Sam decydujesz ile dni oferta ma być promowana.</li>
                             </ul>
 
@@ -316,7 +325,7 @@
     <script src="{{ cdn('js/job-submit.js') }}"></script>
     <script>
         $(function() {
-//            $('input[name="title"]').focus();
+            $('input[name="title"]').focus();
         })
     </script>
 
