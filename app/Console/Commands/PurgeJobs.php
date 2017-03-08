@@ -61,7 +61,8 @@ class PurgeJobs extends Command
                             ['range' => ['deadline_at' => ['lt' => 'now']]]
                         ]
                     ]
-                ]
+                ],
+                'size' => 100
             ]
         ];
 

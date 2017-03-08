@@ -51,17 +51,19 @@
 
                         <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
 
-                        {% if aggregations.remote[1] is not null %}
+                        {% if aggregations.remote[100] is not null %}
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     {{ form_checkbox('remote', 1, selected.remote) }}
 
                                     <a href="{{ route('job.remote') }}">
-                                        <span>Praca zdalna</span>
-                                        <small>({{ declination(aggregations.remote[1], declinationOffers) }})</small>
+                                        <span>100% pracy zdalnej</span>
+                                        <small>({{ declination(aggregations.remote[100], declinationOffers) }})</small>
                                     </a>
                                 </li>
                             </ul>
+
+                            {{ form_hidden('remote_range', 100) }}
                         {% endif %}
 
                         {% if aggregations.cities|length > 0 %}

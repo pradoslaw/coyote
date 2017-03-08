@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $country_id
  * @property int $currency_id
  * @property int $is_remote
+ * @property int $remote_range
  * @property int $enable_apply
  * @property int $visits
  * @property int $rate_id
@@ -562,9 +563,9 @@ class Job extends Model
             $locations[] = (object) [];
         }
 
-        $body['score'] = intval($body['score']);
-
         $body = array_merge($body, [
+            // score must be int
+            'score'             => (int) $body['score'],
             'locations'         => $locations,
             'salary'            => $salary,
             'salary_from'       => $this->monthlySalary($this->salary_from),
@@ -572,7 +573,9 @@ class Job extends Model
             // yes, we index currency name so we don't have to look it up in database during search process
             'currency_name'     => $this->currency()->value('name'),
             // higher tag's priorities first
-            'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')
+            'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name'),
+            // index null instead of 100 is job is not remote
+            'remote_range'      => $this->is_remote ? $this->remote_range : null
         ]);
 
         if (!empty($body['firm'])) {

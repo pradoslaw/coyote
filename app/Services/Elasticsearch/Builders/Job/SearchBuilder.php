@@ -99,6 +99,10 @@ class SearchBuilder extends QueryBuilder
     public function addRemoteFilter()
     {
         $this->must(new Filters\Job\Remote());
+
+        if ($this->request->has('remote_range')) {
+            $this->must(new Filters\Job\RemoteRange());
+        }
     }
 
     /**
