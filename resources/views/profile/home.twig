@@ -64,12 +64,12 @@
                                 {% if user.visited_at %}
                                     <li title="Ostatnia wizyta">
                                         <i class="fa fa-sign-in fa-fw"></i>
-                                        {{ user.visited_at.diffForHumans() }}
+                                        {{ user.visited_at|format_date }}
                                     </li>
                                 {% endif %}
                                 <li title="Data rejestracji">
                                     <i class="fa fa-user-plus fa-fw"></i>
-                                    {{ user.created_at.diffForHumans() }}
+                                    {{ user.created_at|format_date }}
                                 </li>
                                 <li title="Liczba wizyt">
                                     <i class="fa fa-eye fa-fw"></i>
