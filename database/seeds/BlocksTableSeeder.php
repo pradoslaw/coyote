@@ -17,7 +17,7 @@ class BlocksTableSeeder extends Seeder
     var xhr= new XMLHttpRequest();
     
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.open('GET', '/Praca/Ad', true);
+    xhr.open('GET', '/Praca/recommendations', true);
     
     xhr.onreadystatechange= function() {
         if (this.readyState !== 4 ) return;
