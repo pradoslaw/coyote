@@ -27,7 +27,13 @@ class Currency extends Model
      */
     public static function getCurrenciesList()
     {
-        return self::pluck('name', 'id')->toArray();
+        $result = [];
+
+        foreach (self::all() as $row) {
+            $result[$row->id] = sprintf('%s (%s)', $row->name, $row->symbol);
+        }
+
+        return $result;
     }
 
     /**
