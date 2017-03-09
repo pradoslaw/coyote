@@ -126,7 +126,7 @@ abstract class BaseController extends Controller
         $tags = $this->getSetting('forum.tags');
 
         if ($tags) {
-            $tags = json_decode($tags);
+            $tags = (array) json_decode($tags);
 
             $weight = $this->forum->getTagsWeight($tags);
             $diff = array_diff($tags, array_keys($weight));
