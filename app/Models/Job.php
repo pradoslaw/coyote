@@ -520,9 +520,9 @@ class Job extends Model
     /**
      * @return string
      */
-    public function getCurrencyNameAttribute()
+    public function getCurrencySymbolAttribute()
     {
-        return $this->currency()->value('name');
+        return $this->currency()->value('symbol');
     }
 
     /**
@@ -644,7 +644,7 @@ class Job extends Model
             'salary_from'       => $this->monthlySalary($this->salary_from),
             'salary_to'         => $this->monthlySalary($this->salary_to),
             // yes, we index currency name so we don't have to look it up in database during search process
-            'currency_name'     => $this->currency()->value('symbol'),
+            'currency_symbol'   => $this->currency()->value('symbol'),
             // higher tag's priorities first
             'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name'),
             // index null instead of 100 is job is not remote
