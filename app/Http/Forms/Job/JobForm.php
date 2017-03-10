@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Forms\Job;
 
-use Carbon\Carbon;
 use Coyote\Country;
 use Coyote\Currency;
 use Coyote\Job;
@@ -60,11 +59,6 @@ class JobForm extends Form
             $this->data->tags->flush();
             $this->data->locations->flush();
             $this->data->features->flush();
-
-            // deadline not exists in table "jobs" nor in fillable array. set value so model can transform it
-            // to Carbon object
-//            $this->data->deadline = $form->get('deadline')->getValue();
-//            $this->data->package_length = $form->get('package_length')->getValue();
 
             foreach ($form->get('tags')->getChildrenValues() as $tag) {
                 $pivot = $this->data->tags()->newPivot(['priority' => $tag['priority']]);
