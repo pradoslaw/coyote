@@ -75,13 +75,19 @@ class ApplicationController extends Controller
         $filesystem = app('filesystem')->disk('local');
         $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->sessionId];
 
-        $mail = new ApplicationSent($form, $job);
-
-        $this->transaction(function () use ($job, $data, $mail) {
+        $this->transaction(function () use ($job, $form, $data) {
             $target = (new Stream_Job)->map($job);
 
             $job->applications()->create($data);
-            $this->getMailFactory()->send($mail);
+
+            $mailer = $this->getMailFactory();
+            // send mail to offer's owner
+            $mailer->to($job->email)->send(new ApplicationSent($form, $job));
+
+            if ($form->get('cc')->isChecked()) {
+                // send to application author
+                $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($form, $job));
+            }
 
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
         });
