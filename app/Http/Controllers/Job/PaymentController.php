@@ -9,9 +9,14 @@ use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Notifications\SuccessfulPaymentNotification;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CurrencyRepositoryInterface as CurrencyRepository;
+use Coyote\Services\Cardinity\Client as Cardinity;
+use Coyote\Services\Cardinity\Exceptions\Declined;
+use Coyote\Services\Cardinity\Exceptions\ValidationFailed;
+use Coyote\Services\Cardinity\Payment\Create as PaymentCreate;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Coyote\Services\Invoice\Pdf as InvoicePdf;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -70,40 +75,76 @@ class PaymentController extends Controller
         $form->validate();
 
         try {
-            $this->transaction(function () use ($payment, $form, $generator, $pdf) {
-                /** @var \Coyote\Invoice $invoice */
-                $invoice = $generator->create(
-                    array_merge($form->all()['invoice'], ['user_id' => $this->userId]),
-                    $payment
-                );
+            $this->beginTransaction();
 
-                $payment->status_id = Payment::PAID;
+            /** @var \Coyote\Invoice $invoice */
+            $invoice = $generator->create(
+                array_merge($form->all()['invoice'], ['user_id' => $this->userId]),
+                $payment
+            );
 
-                // establish plan's finish date
-                $payment->starts_at = Carbon::now();
-                $payment->ends_at = Carbon::now()->addDays($payment->days);
+            $payment->status_id = Payment::PAID;
 
-                // associate invoice with payment
-                $payment->invoice()->associate($invoice);
-                $payment->save();
+            // establish plan's finish date
+            $payment->starts_at = Carbon::now();
+            $payment->ends_at = Carbon::now()->addDays($payment->days);
 
-                // boost job offer so it's on the top of the list
-                $payment->job->boost = true;
-                $payment->job->deadline_at = max($payment->job->deadline_at, $payment->ends_at);
-                $payment->job->save();
+            // associate invoice with payment
+            $payment->invoice()->associate($invoice);
+            $payment->save();
 
-                $this->auth->notify(new SuccessfulPaymentNotification($payment, base64_encode($pdf->create($payment))));
-            });
+            // boost job offer so it's on the top of the list
+            $payment->job->boost = true;
+            $payment->job->deadline_at = max($payment->job->deadline_at, $payment->ends_at);
+            $payment->job->save();
+
+            $cardinity = new Cardinity(config('services.cardinity.key'), config('services.cardinity.secret'));
+            $method = new PaymentCreate([
+                'amount' => round($payment->grossPrice() * $this->currency->latest('EUR'), 2),
+                'currency' => 'EUR',
+                'settle' => true,
+                'order_id' => $payment->id,
+                'country' => 'PL',
+                'payment_method' => PaymentCreate::CARD,
+                'payment_instrument' => [
+                    'pan' => $form->get('number')->getValue(),
+                    'exp_year' => $form->get('exp_year')->getValue(),
+                    'exp_month' => $form->get('exp_month')->getValue(),
+                    'cvc' => $form->get('cvc')->getValue(),
+                    'holder' => $form->get('name')->getValue()
+                ],
+            ]);
+
+            /** @var \Coyote\Services\Cardinity\Payment $result */
+            $result = $cardinity->call($method);
+            logger()->debug('Successfully payment', ['uuid' => $result->id]);
+
+            $this->auth->notify(new SuccessfulPaymentNotification($payment, base64_encode($pdf->create($payment))));
 
             // reindex job offer
             event(new PaymentPaid($payment->job));
+
+            $this->commit();
+        } catch (ValidationFailed $e) {
+            return $this->handlePaymentException($e, 'payment.validation');
+        } catch (Declined $e) {
+            return $this->handlePaymentException($e, 'payment.declined');
         } catch (\Exception $e) {
+            $this->rollback();
+
             throw $e;
         }
 
         return redirect()
             ->to(UrlBuilder::job($payment->job))
-            ->with('success', 'Płatność zaakceptowana. Rozpoczynamy promowanie ogłoszenia.');
+            ->with('success', trans('payment.success'));
+    }
+
+    private function handlePaymentException($exception, $translationId)
+    {
+        $this->rollback();
+
+        return back()->withInput()->with('error', trans($translationId));
     }
 
     public function callback()
@@ -118,5 +159,20 @@ class PaymentController extends Controller
     private function getForm($payment)
     {
         return $this->createForm(PaymentForm::class, $payment);
+    }
+
+    private function beginTransaction()
+    {
+        app(Connection::class)->beginTransaction();
+    }
+
+    private function commit()
+    {
+        app(Connection::class)->commit();
+    }
+
+    private function rollback()
+    {
+        app(Connection::class)->rollback();
     }
 }

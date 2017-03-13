@@ -81,5 +81,10 @@ return [
     'geo-ip' => [
         'host'          => 'geo-ip.pl',
         'port'          => ''
+    ],
+
+    'cardinity' => [
+        'key'           => env('CARDINITY_KEY'),
+        'secret'        => env('CARDINITY_SECRET')
     ]
 ];
