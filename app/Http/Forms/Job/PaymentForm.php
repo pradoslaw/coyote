@@ -44,6 +44,7 @@ class PaymentForm extends Form
                 'required' => true,
                 'rules' => 'int|cc_date:exp_month,exp_year',
                 'choices' => $this->getMonthList(),
+                'value' => date('m'),
                 'attr' => [
                     'class' => 'input-inline'
                 ]
