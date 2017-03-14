@@ -35,5 +35,6 @@ class CountriesTableSeeder extends Seeder
         Country::create(['name' => 'Włochy']);
         Country::create(['name' => 'Anglia']);
         Country::create(['name' => 'Holandia']);
+        Country::create(['name' => 'Singapur']);
     }
 }
