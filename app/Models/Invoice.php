@@ -29,6 +29,11 @@ class Invoice extends Model
     protected $dates = ['created_at'];
 
     /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function items()

@@ -160,7 +160,7 @@ class SearchBuilder extends QueryBuilder
         $this->setupAggregations();
 
         // premium offers go first
-        $this->should(new ConstantScore(new Filters\Term('boost', true), 10));
+        $this->should(new ConstantScore(new Filters\Term('boost', true), 40));
 
         $this->size(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
 
