@@ -32,12 +32,13 @@
 
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-sm-7">
+                                    <div class="col-sm-7 {{ errors.has('exp_month') ? 'has-error' }}">
                                         <label class="control-label">Data ważności karty *</label>
 
                                         <div class="row">
                                             <div class="col-xs-7" style="padding-right: 0">
                                                 {{ form_widget(form.exp_month) }}
+                                                {{ form_error(form.exp_month) }}
                                             </div>
                                             <div class="col-xs-5">
                                                 {{ form_widget(form.exp_year) }}
@@ -102,7 +103,7 @@
                     </div>
 
                     <div id="form-navigation" class="form-group">
-                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
+                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
                     </div>
                 </div>
             </div>
