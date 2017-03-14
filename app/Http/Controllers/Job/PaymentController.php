@@ -11,7 +11,11 @@ use Coyote\Payment;
 use Coyote\Repositories\Contracts\CurrencyRepositoryInterface as CurrencyRepository;
 use Coyote\Services\Cardinity\Client as Cardinity;
 use Coyote\Services\Cardinity\Exceptions\Declined;
+use Coyote\Services\Cardinity\Exceptions\Forbidden;
+use Coyote\Services\Cardinity\Exceptions\InternalServerError;
+use Coyote\Services\Cardinity\Exceptions\ServiceUnavailable;
 use Coyote\Services\Cardinity\Exceptions\ValidationFailed;
+use Coyote\Services\Cardinity\Exceptions\Unauthorized;
 use Coyote\Services\Cardinity\Payment\Create as PaymentCreate;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Coyote\Services\Invoice\Pdf as InvoicePdf;
@@ -98,7 +102,7 @@ class PaymentController extends Controller
             $payment->job->deadline_at = max($payment->job->deadline_at, $payment->ends_at);
             $payment->job->save();
 
-            $cardinity = new Cardinity(config('services.cardinity.key'), config('services.cardinity.secret'));
+            $cardinity = Cardinity::create();
             $method = new PaymentCreate([
                 'amount' => round($payment->grossPrice() * $this->currency->latest('EUR'), 2),
                 'currency' => 'EUR',
@@ -125,6 +129,14 @@ class PaymentController extends Controller
             event(new PaymentPaid($payment->job));
 
             $this->commit();
+        } catch (Forbidden $e) {
+            return $this->handlePaymentException($e, 'payment.forbidden');
+        } catch (InternalServerError $e) {
+            return $this->handlePaymentException($e, 'payment.internal_server');
+        } catch (ServiceUnavailable $e) {
+            return $this->handlePaymentException($e, 'payment.service_unavailable');
+        } catch (Unauthorized $e) {
+            return $this->handlePaymentException($e, 'payment.unauthorized');
         } catch (ValidationFailed $e) {
             return $this->handlePaymentException($e, 'payment.validation');
         } catch (Declined $e) {
