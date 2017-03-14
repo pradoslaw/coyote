@@ -73,7 +73,7 @@ class PaymentController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function makePayment($payment, InvoiceGenerator $generator, InvoicePdf $pdf)
+    public function process($payment, InvoiceGenerator $generator, InvoicePdf $pdf)
     {
         $form = $this->getForm($payment);
         $form->validate();
@@ -102,28 +102,25 @@ class PaymentController extends Controller
             $payment->job->deadline_at = max($payment->job->deadline_at, $payment->ends_at);
             $payment->job->save();
 
-            $cardinity = Cardinity::create();
-            $method = new PaymentCreate([
-                'amount' => round($payment->grossPrice() * $this->currency->latest('EUR'), 2),
-                'currency' => 'EUR',
-                'settle' => true,
-                'order_id' => $payment->id,
-                'country' => 'PL',
-                'payment_method' => PaymentCreate::CARD,
-                'payment_instrument' => [
-                    'pan' => $form->get('number')->getValue(),
-                    'exp_year' => $form->get('exp_year')->getValue(),
-                    'exp_month' => $form->get('exp_month')->getValue(),
-                    'cvc' => $form->get('cvc')->getValue(),
-                    'holder' => $form->get('name')->getValue()
+            $result = Cardinity::create()->createPayment([
+                'amount'            => round($payment->grossPrice() * $this->currency->latest('EUR'), 2),
+                'currency'          => 'EUR',
+                'settle'            => true,
+                'order_id'          => $payment->id,
+                'country'           => 'PL',
+                'payment_method'    => PaymentCreate::CARD,
+                'payment_instrument'=> [
+                    'pan'           => $form->get('number')->getValue(),
+                    'exp_year'      => $form->get('exp_year')->getValue(),
+                    'exp_month'     => $form->get('exp_month')->getValue(),
+                    'cvc'           => $form->get('cvc')->getValue(),
+                    'holder'        => $form->get('name')->getValue()
                 ],
             ]);
 
-            /** @var \Coyote\Services\Cardinity\Payment $result */
-            $result = $cardinity->call($method);
             logger()->debug('Successfully payment', ['uuid' => $result->id]);
 
-            $this->auth->notify(new SuccessfulPaymentNotification($payment, base64_encode($pdf->create($payment))));
+            $this->auth->notify(new SuccessfulPaymentNotification($payment, $pdf));
 
             // reindex job offer
             event(new PaymentPaid($payment->job));

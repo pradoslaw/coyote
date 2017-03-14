@@ -2,29 +2,15 @@
 
 namespace Coyote\Services\Invoice;
 
-use Illuminate\Contracts\View\Factory as ViewFactory;
 use Coyote\Payment;
 use Mpdf\Mpdf;
 
 class Pdf
 {
     /**
-     * @var ViewFactory
-     */
-    protected $view;
-
-    /**
      * @var array
      */
     protected $vendor;
-
-    /**
-     * @param ViewFactory $view
-     */
-    public function __construct(ViewFactory $view)
-    {
-        $this->view = $view;
-    }
 
     /**
      * @param array $vendor
@@ -55,7 +41,7 @@ class Pdf
      */
     protected function view(Payment $payment)
     {
-        return $this->view->make('components.invoice', [
+        return view('components.invoice', [
             'invoice'           => $payment->invoice,
             'currency'          => $payment->invoice->currency->symbol,
             'vendor'            => $this->vendor
