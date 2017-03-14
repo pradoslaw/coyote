@@ -17,6 +17,14 @@ class Client
     private $client;
 
     /**
+     * @return Client
+     */
+    public static function create()
+    {
+        return new self(config('services.cardinity.key'), config('services.cardinity.secret'));
+    }
+
+    /**
      * @param string $key
      * @param string $secret
      */
