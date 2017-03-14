@@ -52,7 +52,8 @@
         "php-http/message": "^1.5",
         "php-http/guzzle6-adapter": "^1.1",
         "mpdf/mpdf": "dev-development",
-        "guzzlehttp/oauth-subscriber": "^0.3.0"
+        "guzzlehttp/oauth-subscriber": "^0.3.0",
+        "inacho/php-credit-card-validator": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
