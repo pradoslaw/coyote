@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Cardinity;
 
+use Coyote\Services\Cardinity\Payment\Create;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\HandlerStack;
@@ -66,6 +67,15 @@ class Client
         } catch (\Exception $e) {
             throw new Exceptions\UnexpectedError($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * @param array $data
+     * @return Payment
+     */
+    public function createPayment(array $data): Payment
+    {
+        return $this->call(new Create($data));
     }
 
     /**

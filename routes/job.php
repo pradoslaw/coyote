@@ -62,7 +62,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'middleware' => 'auth'
     ]);
 
-    $this->post('Payment/{payment}', ['uses' => 'PaymentController@makePayment', 'middleware' => 'auth']);
+    $this->post('Payment/{payment}', ['uses' => 'PaymentController@process', 'middleware' => 'auth']);
 
     // Job's ads
     // --------------------------------------------------------------
