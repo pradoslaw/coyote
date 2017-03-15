@@ -50,7 +50,7 @@ class JobPostingCest
         $I->see($title, '.media-heading');
         $I->see($city);
         $I->see($salaryFrom, '.salary');
-        $I->see('CHF', '.salary');
+        $I->see('₣', '.salary');
     }
 
     public function createJobOfferAsFirm(FunctionalTester $I)
