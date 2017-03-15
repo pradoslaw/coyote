@@ -119,7 +119,7 @@ class Job extends Model
      *
      * @var array
      */
-    protected $casts = ['is_remote' => 'boolean'];
+    protected $casts = ['is_remote' => 'boolean', 'boost' => 'boolean'];
 
     /**
      * @var string

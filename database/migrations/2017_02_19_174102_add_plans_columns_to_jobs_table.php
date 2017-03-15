@@ -16,7 +16,7 @@ class AddPlansColumnsToJobsTable extends Migration
     {
         $this->schema->table('jobs', function (Blueprint $table) {
             $table->addColumn('integer', 'plan_id')->nullable();
-            $table->addColumn('smallInteger', 'boost')->nullable();
+            $table->addColumn('smallInteger', 'boost')->default(0);
 
             $table->foreign('plan_id')->references('id')->on('plans')->onDelete('no action');
         });
