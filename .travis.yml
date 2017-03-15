@@ -36,7 +36,6 @@ install:
 before_script:
   - sudo make install-gulp
   - psql -c 'create database coyote_test;' -U postgres
-  - mongo coyote_test --eval 'db.createUser("travis", "test");'
   - cp .env.testing .env
   - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
   - php artisan migrate --seed --env="testing"
