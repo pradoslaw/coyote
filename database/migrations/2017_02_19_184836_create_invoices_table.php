@@ -27,6 +27,7 @@ class CreateInvoicesTable extends Migration
             $table->smallInteger('currency_id')->default(\Coyote\Currency::PLN);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('no action');
+            $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('no action');
         });
     }
 
