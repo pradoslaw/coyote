@@ -2,7 +2,8 @@
 
 namespace Coyote\Events;
 
-use Coyote\Job;
+use Coyote\Payment;
+use Coyote\User;
 use Illuminate\Queue\SerializesModels;
 
 class PaymentPaid
@@ -10,15 +11,22 @@ class PaymentPaid
     use SerializesModels;
 
     /**
-     * @var Job
+     * @var Payment
      */
-    public $job;
+    public $payment;
 
     /**
-     * @param Job $job
+     * @var User
      */
-    public function __construct(Job $job)
+    public $user;
+
+    /**
+     * @param Payment $payment
+     * @param User $user
+     */
+    public function __construct(Payment $payment, User $user)
     {
-        $this->job = $job;
+        $this->payment = $payment;
+        $this->user = $user;
     }
 }

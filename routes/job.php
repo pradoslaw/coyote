@@ -64,6 +64,12 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     $this->post('Payment/{payment}', ['uses' => 'PaymentController@process', 'middleware' => 'auth']);
 
+    $this->post('Payment/{payment}/Callback', [
+        'uses' => 'PaymentController@callback',
+        'as' => 'payment.callback',
+        'middleware' => 'auth'
+    ]);
+
     // Job's ads
     // --------------------------------------------------------------
     $this->get('recommendations', ['uses' => 'AdController@index', 'as' => 'ad']);

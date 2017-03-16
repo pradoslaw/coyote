@@ -5,8 +5,6 @@ namespace Coyote\Services\Invoice;
 use Coyote\Invoice;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\InvoiceRepositoryInterface as InvoiceRepository;
-use Carbon\Carbon;
-use Coyote\Repositories\Criteria\Invoice\ForMonth;
 
 class Generator
 {
@@ -32,7 +30,7 @@ class Generator
     {
         /** @var \Coyote\Invoice $invoice */
         $invoice = $this->repository->create(
-            array_merge($attributes, ['number' => $this->getNumber(), 'currency_id' => $payment->plan->currency_id])
+            array_merge($attributes, ['currency_id' => $payment->plan->currency_id])
         );
 
         $invoice->items()->create([
@@ -42,25 +40,6 @@ class Generator
         ]);
 
         return $invoice;
-    }
-
-    /**
-     * @return string
-     */
-    private function getNumber(): string
-    {
-        $date = Carbon::now();
-
-        $this->repository->pushCriteria(new ForMonth($date));
-        $last = $this->repository->last();
-
-        $count = 0;
-
-        if ($last) {
-            $count = last(explode('/', $last->number));
-        }
-
-        return sprintf('%s/%d/%02d/%d', '4P', $date->year, $date->month, $count + 1);
     }
 
     /**

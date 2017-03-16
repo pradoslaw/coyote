@@ -4,8 +4,10 @@ namespace Coyote\Providers;
 
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
+use Coyote\Events\PaymentPaid;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Events\UserWasSaved;
+use Coyote\Listeners\BoostJobOffer;
 use Coyote\Listeners\ChangeImageUrl;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
@@ -36,7 +38,8 @@ class EventServiceProvider extends ServiceProvider
         FirewallWasSaved::class => [FlushFirewallCache::class],
         FirewallWasDeleted::class => [FlushFirewallCache::class],
         SuccessfulLogin::class => [SendSuccessfulLoginEmail::class],
-        MessageSending::class => [ChangeImageUrl::class]
+        MessageSending::class => [ChangeImageUrl::class],
+        PaymentPaid::class => [BoostJobOffer::class]
     ];
 
     /**

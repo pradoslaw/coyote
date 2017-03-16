@@ -8,5 +8,5 @@ return [
     'service_unavailable' => 'Płatność nie została pobrana. Usługa tymczasowo niedostępna. Prosimy spróbować za kilka minut.',
     'unauthorized' => 'Płatność nie została pobrana. Prosimy o kontakt pod adresem ' . config('mail.from.address'),
 
-    'success' => 'Dziękujemy! Płatność została zaksięgowana. Ogłoszenie jest już promowane.'
+    'success' => 'Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.'
 ];

@@ -17,7 +17,7 @@ class CreateInvoicesTable extends Migration
         $this->schema->create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->timestampTz('created_at');
+            $table->timestampsTz();
             $table->string('name')->nullable();
             $table->string('number', 50)->nullable();
             $table->string('vat_id', 20)->nullable();

@@ -3,31 +3,26 @@
 namespace Coyote\Notifications;
 
 use Coyote\Payment;
-use Coyote\Services\Invoice\Pdf as InvoicePdf;
-use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SuccessfulPaymentNotification extends Notification implements ShouldQueue
+class SuccessfulPaymentNotification extends Notification
 {
-    use Queueable;
-
     /**
      * @var Payment
      */
     private $payment;
 
     /**
-     * @var InvoicePdf
+     * @var string
      */
     private $pdf;
 
     /**
      * @param Payment $payment
-     * @param InvoicePdf $pdf
+     * @param string $pdf
      */
-    public function __construct(Payment $payment, InvoicePdf $pdf)
+    public function __construct(Payment $payment, string $pdf)
     {
         $this->payment = $payment;
         $this->pdf = $pdf;
@@ -70,7 +65,7 @@ class SuccessfulPaymentNotification extends Notification implements ShouldQueue
             )
             ->action('Zobacz ogłoszenie', route('job.offer', [$this->payment->job->id, $this->payment->job->slug]))
             ->line('Dziekujemy za skorzystanie z naszych usług.')
-            ->attachData($this->pdf->create($this->payment), $this->getFilename());
+            ->attachData($this->pdf, $this->getFilename());
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Coyote\Services\Cardinity;
 
 use Coyote\Services\Cardinity\Payment\Create;
+use Coyote\Services\Cardinity\Payment\Finalize;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\HandlerStack;
@@ -76,6 +77,16 @@ class Client
     public function createPayment(array $data): Payment
     {
         return $this->call(new Create($data));
+    }
+
+    /**
+     * @param string $paymentId
+     * @param string $authorizeData
+     * @return Payment
+     */
+    public function finalizePayment(string $paymentId, string $authorizeData): Payment
+    {
+        return $this->call(new Finalize($paymentId, $authorizeData));
     }
 
     /**

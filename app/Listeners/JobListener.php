@@ -51,9 +51,9 @@ class JobListener
      *
      * @param PaymentPaid $event
      */
-    public function onJobPay(PaymentPaid $event)
+    public function onJobOfferPaid(PaymentPaid $event)
     {
-        $event->job->putToIndex();
+        $event->payment->job->putToIndex();
     }
 
     /**
@@ -75,7 +75,7 @@ class JobListener
 
         $events->listen(
             'Coyote\Events\PaymentPaid',
-            'Coyote\Listeners\JobListener@onJobPay'
+            'Coyote\Listeners\JobListener@onJobOfferPaid'
         );
     }
 }
