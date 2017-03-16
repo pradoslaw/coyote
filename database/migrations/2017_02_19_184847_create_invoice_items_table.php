@@ -21,7 +21,7 @@ class CreateInvoiceItemsTable extends Migration
             $table->float('price');
             $table->float('vat_rate')->default(1.23);
 
-            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('no action');
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
         });
     }
 

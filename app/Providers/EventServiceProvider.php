@@ -38,8 +38,7 @@ class EventServiceProvider extends ServiceProvider
         FirewallWasSaved::class => [FlushFirewallCache::class],
         FirewallWasDeleted::class => [FlushFirewallCache::class],
         SuccessfulLogin::class => [SendSuccessfulLoginEmail::class],
-        MessageSending::class => [ChangeImageUrl::class],
-        PaymentPaid::class => [BoostJobOffer::class]
+        MessageSending::class => [ChangeImageUrl::class]
     ];
 
     /**
@@ -64,8 +63,9 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
+        // set high priority. we need to call this listener first.
+        $this->app['events']->listen(PaymentPaid::class, BoostJobOffer::class, 1000);
 
-        //
+        parent::boot();
     }
 }

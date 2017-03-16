@@ -53,6 +53,8 @@ class JobListener
      */
     public function onJobOfferPaid(PaymentPaid $event)
     {
+        // set on true before indexing
+        $event->payment->job->boost = true;
         $event->payment->job->putToIndex();
     }
 

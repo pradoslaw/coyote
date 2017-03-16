@@ -147,7 +147,7 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param $payment
+     * @param \Coyote\Payment $payment
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
