@@ -3,6 +3,27 @@
 // Darker links in table
 // ------------------------------------
 
-table {
-  @include link-color-darker;
+article {
+  table {
+    @include link-color-darker;
+
+    width: 100%;
+
+    thead {
+      border: 1px solid #bbbbbb;
+      background-color: #cccccc;
+      th {
+        border: 1px solid #bbbbbb;
+        padding: $table-cell-padding;
+      }
+    }
+    tbody {
+      tr {
+        td {
+          border: 1px solid #cccccc;
+          padding: $table-cell-padding;
+        }
+      }
+    }
+  }
 }
