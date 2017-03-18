@@ -103,6 +103,8 @@
                     </div>
 
                     <div id="form-navigation" class="form-group">
+                        <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Powrót do ogłoszenia</a>
+
                         <button type="submit" class="btn btn-primary pull-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
                     </div>
                 </div>

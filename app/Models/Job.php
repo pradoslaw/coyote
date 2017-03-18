@@ -560,6 +560,11 @@ class Job extends Model
         return $this->payments()->where('status_id', Payment::PAID)->where('ends_at', '>', Carbon::now())->exists();
     }
 
+    public function getPendingPayment()
+    {
+        return $this->payments()->where('status_id', Payment::PENDING)->orderBy('id', 'DESC')->first();
+    }
+
     /**
      * @return string|null
      */
