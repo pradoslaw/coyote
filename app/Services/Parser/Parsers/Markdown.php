@@ -214,9 +214,12 @@ class Markdown extends \Parsedown implements ParserInterface
         $start = mb_strpos($context, $excerpt['text']);
         // previous character (before "@" or "#")
         $preceding = mb_substr($context, $start - 1, 1);
+        // next character (after "@" or "#")
+        $following = mb_substr($context, $start + 1, 1);
 
         return mb_substr($excerpt['text'], $start + 1, 1) !== false
-            && ($start === 0 || in_array($preceding, [' ', '(', "\n"]));
+            && ($start === 0 || in_array($preceding, [' ', '(', "\n"]))
+                && $following !== ' ';
     }
 
     /**
