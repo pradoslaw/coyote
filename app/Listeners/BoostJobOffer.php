@@ -62,6 +62,9 @@ class BoostJobOffer implements ShouldQueue
             $event->user->notify(
                 new SuccessfulPaymentNotification($event->payment, $this->pdf->create($event->payment))
             );
+
+            // payment is done. remove any pending payments (if any...)
+            $event->payment->job->payments()->where('status_id', Payment::PENDING)->delete();
         });
     }
 }

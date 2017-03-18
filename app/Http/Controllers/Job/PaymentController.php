@@ -79,7 +79,7 @@ class PaymentController extends Controller
         $form = $this->getForm($payment);
         $form->validate();
 
-        $payment = $this->handlePayment(function () use ($payment, $form) {
+        return $this->handlePayment(function () use ($payment, $form) {
             $result = Cardinity::create()->createPayment([
                 'amount'            => round($payment->grossPrice() * $this->currency->latest('EUR'), 2),
                 'currency'          => 'EUR',
@@ -122,12 +122,10 @@ class PaymentController extends Controller
             // boost job offer, send invoice and reindex
             event(new PaymentPaid($payment, $this->auth));
 
-            return $payment;
+            return redirect()
+                ->to(UrlBuilder::job($payment->job))
+                ->with('success', trans('payment.success'));
         });
-
-        return redirect()
-            ->to(UrlBuilder::job($payment->job))
-            ->with('success', trans('payment.success'));
     }
 
     /**
@@ -138,18 +136,16 @@ class PaymentController extends Controller
      */
     public function callback($payment, Request $request)
     {
-        $payment = $this->handlePayment(function () use ($payment, $request) {
+        return $this->handlePayment(function () use ($payment, $request) {
             Cardinity::create()->finalizePayment($request->input('MD'), $request->input('PaRes'));
 
             // boost job offer, send invoice and reindex
             event(new PaymentPaid($payment, $this->auth));
 
-            return $payment;
+            return redirect()
+                ->to(UrlBuilder::job($payment->job))
+                ->with('success', trans('payment.success'));
         });
-
-        return redirect()
-            ->to(UrlBuilder::job($payment->job))
-            ->with('success', trans('payment.success'));
     }
 
     /**
