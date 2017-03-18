@@ -57,7 +57,7 @@
         }
 
         img {
-            width: 100%;
+            width: 300px;
         }
 
         .row-1 {
@@ -80,7 +80,7 @@
     <table style="margin-left: auto; margin-right: auto" width="100%">
         <tr>
             <td class="row-1">
-                <br><br><h3>Faktura nr.: {{ invoice.number }}</h3><br>
+                <br><br><h3>Faktura nr: {{ invoice.number }}</h3><br>
 
                 Data wystawienia: {{ invoice.created_at|date('Y-m-d') }}<br>
                 Data sprzedaży: {{ invoice.created_at|date('Y-m-d') }}
@@ -154,7 +154,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="padding-top: 30px">
+            <td colspan="2" style="padding-top: 30px; font-size: 18px">
                 <strong>Zapłacono:</strong> {{ invoice.gross_price }} {{ currency }}
             </td>
         </tr>

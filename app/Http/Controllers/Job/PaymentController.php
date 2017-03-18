@@ -100,7 +100,7 @@ class PaymentController extends Controller
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
             /** @var \Coyote\Invoice $invoice */
             $invoice = $this->invoice->create(
-                array_merge($form->all()['invoice'], ['user_id' => $this->auth->id]),
+                array_merge($form->get('enable_invoice')->isChecked() ? $form->all()['invoice'] : [], ['user_id' => $this->auth->id]),
                 $payment
             );
 

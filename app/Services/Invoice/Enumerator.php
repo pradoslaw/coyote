@@ -52,6 +52,6 @@ class Enumerator
             $count = last(explode('/', $last->number));
         }
 
-        return sprintf('%s/%d/%02d/%d', '4P', $date->year, $date->month, $count + 1);
+        return sprintf('%s/%d/%d/%02d', '4P', $count + 1, $date->month, $date->year);
     }
 }

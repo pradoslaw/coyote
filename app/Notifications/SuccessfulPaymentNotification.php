@@ -14,7 +14,7 @@ class SuccessfulPaymentNotification extends Notification
     private $payment;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $pdf;
 
@@ -22,7 +22,7 @@ class SuccessfulPaymentNotification extends Notification
      * @param Payment $payment
      * @param string $pdf
      */
-    public function __construct(Payment $payment, string $pdf)
+    public function __construct(Payment $payment, $pdf)
     {
         $this->payment = $payment;
         $this->pdf = $pdf;
@@ -46,7 +46,7 @@ class SuccessfulPaymentNotification extends Notification
      */
     public function toMail($user)
     {
-        return (new MailMessage)
+        $mail = (new MailMessage)
             ->to($user->email)
             ->subject(sprintf('Potwierdzenie płatności za promowanie oferty: %s', $this->payment->job->title))
             ->line(
@@ -55,8 +55,13 @@ class SuccessfulPaymentNotification extends Notification
                     $this->payment->invoice->grossPrice(),
                     $this->payment->invoice->currency->symbol
                 )
-            )
-            ->line('W załączniku znajdziesz fakturę VAT.')
+            );
+
+        if ($this->pdf) {
+            $mail->line('W załączniku znajdziesz fakturę VAT.');
+        }
+
+        $mail
             ->line(
                 sprintf(
                     'Twoje ogłoszenie <strong>%s</strong> jest już promowane w naszym serwisie.',
@@ -64,8 +69,13 @@ class SuccessfulPaymentNotification extends Notification
                 )
             )
             ->action('Zobacz ogłoszenie', route('job.offer', [$this->payment->job->id, $this->payment->job->slug]))
-            ->line('Dziekujemy za skorzystanie z naszych usług.')
-            ->attachData($this->pdf, $this->getFilename());
+            ->line('Dziekujemy za skorzystanie z naszych usług.');
+
+        if ($this->pdf) {
+            $mail->attachData($this->pdf, $this->getFilename());
+        }
+
+        return $mail;
     }
 
     /**

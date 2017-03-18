@@ -42,8 +42,14 @@ class BoostJobOffer implements ShouldQueue
     public function handle(PaymentPaid $event)
     {
         app(Connection::class)->transaction(function () use ($event) {
-            // set up invoice number since it's already paid.
-            $this->enumerator->enumerate($event->payment->invoice);
+            $pdf = null;
+
+            if ($event->payment->invoice->name) {
+                // set up invoice number since it's already paid.
+                $this->enumerator->enumerate($event->payment->invoice);
+                // create pdf
+                $pdf = $this->pdf->create($event->payment);
+            }
 
             $event->payment->status_id = Payment::PAID;
 
@@ -60,7 +66,7 @@ class BoostJobOffer implements ShouldQueue
 
             // send email with invoice
             $event->user->notify(
-                new SuccessfulPaymentNotification($event->payment, $this->pdf->create($event->payment))
+                new SuccessfulPaymentNotification($event->payment, $pdf)
             );
 
             // payment is done. remove any pending payments (if any...)
