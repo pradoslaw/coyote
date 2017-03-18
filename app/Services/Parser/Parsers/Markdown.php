@@ -180,20 +180,25 @@ class Markdown extends \Parsedown implements ParserInterface
 
             $user = $this->user->findByName($name);
 
+            $replacement = [
+                'extent' => $length,
+                'element' => [
+                    'name' => 'a',
+                    'text' => '@' . $name
+                ]
+            ];
+
             if ($user) {
-                return [
-                    'extent' => $length,
-                    'element' => [
-                        'name' => 'a',
-                        'text' => '@' . $name,
-                        'attributes' => [
-                            'href' => route('profile', [$user->id]),
-                            'data-user-id' => $user->id,
-                            'class' => 'mention'
-                        ]
-                    ]
+                $replacement['element']['attributes'] = [
+                    'href' => route('profile', [$user->id]),
+                    'data-user-id' => $user->id,
+                    'class' => 'mention'
                 ];
+            } else {
+                $replacement['element']['name'] = 'strong';
             }
+
+            return $replacement;
         }
     }
 
