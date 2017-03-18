@@ -74,11 +74,11 @@ $font-size-control-label: 15px;
 // --------------------------------------------
 
 #hint-container {
-  position: absolute;
+  margin-top: 99px;
 }
 
-.sidebar-hint {
-  margin-top: 0;
+.sidebar-hint p {
+  font-size: 13px;
 }
 
 // Fixed navigation bar with "next", "previous" buttons

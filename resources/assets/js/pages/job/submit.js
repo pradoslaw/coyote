@@ -294,23 +294,6 @@ $(() => {
         $('input[name="done"]').val(1);
     });
 
-    $('.submit-form').on('focus', ':input', e => {
-        let $this = $(e.currentTarget);
-        let offset = $this.offset().top;
-        let name = $this.attr('name');
-
-        $('.sidebar-hint').hide();
-
-        if (typeof name !== 'undefined') {
-            name = name.replace('[', '').replace(']', '');
-
-            $('#hint-' + name).fadeIn();
-            offset -= $('aside').offset().top;
-
-            $('#hint-container').css('top', offset);
-        }
-    });
-
     $.uploader({
         input: 'logo',
         onChanged: function(data) {
