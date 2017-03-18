@@ -62,11 +62,11 @@ import Textarea from '../libs/textarea';
             let select      = $('.select-menu-wrapper', toolbar).find('ul');
 
             $.each(languages, function(key, value) {
-                select.append('<li><a data-open="<br>```' + key + '<br>" data-close="<br>```" title="Kod źródłowy: ' + value + '">' + value + '</a></li>');
+                select.append('<li><a data-open="```' + key + '<br>" data-close="<br>```" title="Kod źródłowy: ' + value + '">' + value + '</a></li>');
             });
 
             $('a[data-open], button[data-open]', toolbar).click(function() {
-                el.insertAtCaret($(this).data('open').replace(/<br>/g, "\n"), $(this).data('close').replace(/<br>/g, "\n"), el.isSelected() ? el.getSelection() : ' ');
+                el.insertAtCaret($(this).data('open').replace(/<br>/g, "\n"), $(this).data('close').replace(/<br>/g, "\n"), el.isSelected() ? el.getSelection() : '');
             });
 
             $(textarea).bind('keydown', function(e) {
