@@ -7,6 +7,7 @@ use Coyote\Services\Elasticsearch\ConstantScore;
 use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
 use Coyote\Services\Elasticsearch\Functions\Random;
+use Coyote\Services\Elasticsearch\Functions\ScriptScore;
 use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Filters;
@@ -160,7 +161,7 @@ class SearchBuilder extends QueryBuilder
         $this->setupAggregations();
 
         // premium offers go first
-        $this->should(new ConstantScore(new Filters\Term('boost', true), 40));
+        $this->should(new ConstantScore(new Filters\Term('boost', true), 100));
 
         $this->size(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
 
@@ -180,6 +181,8 @@ class SearchBuilder extends QueryBuilder
         $this->score(new FieldValueFactor('score', 'log', 1));
         // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
         $this->score(new Decay('created_at', '14d', 0.1));
+        // extra boost for premium offers
+        $this->score(new ScriptScore("doc['boost'].value ? 10 : 1"));
     }
 
     protected function setupAggregations()
