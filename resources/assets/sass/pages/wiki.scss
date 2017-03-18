@@ -5,6 +5,8 @@
 @import "../vendor/font-awesome/variables";
 @import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
 @import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
+@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/table-row";
+@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
 @import "../components/related";
 @import "../components/sidemenu";
 @import "../components/metadata";
@@ -176,6 +178,7 @@ article > header {
   }
 
   @include link-color-darker;
+  @include stripped-table;
 }
 
 // Przyciski edycji tekstu oraz dodawania nowego artykulu

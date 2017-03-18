@@ -5,8 +5,4 @@
 
 table {
   @include link-color-darker;
-
-  @extend .table;
-  @extend .table-striped;
-  @extend .table-bordered;
 }
