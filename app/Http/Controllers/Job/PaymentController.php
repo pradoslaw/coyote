@@ -79,7 +79,7 @@ class PaymentController extends Controller
         $form = $this->getForm($payment);
         $form->validate();
 
-        try {
+        $payment = $this->handlePayment(function () use ($payment, $form) {
             $result = Cardinity::create()->createPayment([
                 'amount'            => round($payment->grossPrice() * $this->currency->latest('EUR'), 2),
                 'currency'          => 'EUR',
@@ -97,6 +97,7 @@ class PaymentController extends Controller
                 ],
             ]);
 
+            // save invoice data. keep in mind that we do not setup invoice number until payment is done.
             /** @var \Coyote\Invoice $invoice */
             $invoice = $this->invoice->create(
                 array_merge($form->all()['invoice'], ['user_id' => $this->auth->id]),
@@ -118,32 +119,15 @@ class PaymentController extends Controller
 
             logger()->debug('Successfully payment', ['uuid' => $result->id]);
 
-            // boost job offer and reindex
+            // boost job offer, send invoice and reindex
             event(new PaymentPaid($payment, $this->auth));
-        } catch (Forbidden $e) {
-            return $this->handlePaymentException($e, 'payment.forbidden');
-        } catch (InternalServerError $e) {
-            return $this->handlePaymentException($e, 'payment.internal_server');
-        } catch (ServiceUnavailable $e) {
-            return $this->handlePaymentException($e, 'payment.service_unavailable');
-        } catch (Unauthorized $e) {
-            return $this->handlePaymentException($e, 'payment.unauthorized');
-        } catch (ValidationFailed $e) {
-            return $this->handlePaymentException($e, 'payment.validation');
-        } catch (Declined $e) {
-            return $this->handlePaymentException($e, 'payment.declined');
-        } catch (\Exception $e) {
-            throw $e;
-        }
+
+            return $payment;
+        });
 
         return redirect()
             ->to(UrlBuilder::job($payment->job))
             ->with('success', trans('payment.success'));
-    }
-
-    private function handlePaymentException($exception, $translationId)
-    {
-        return back()->withInput()->with('error', trans($translationId));
     }
 
     /**
@@ -154,14 +138,14 @@ class PaymentController extends Controller
      */
     public function callback($payment, Request $request)
     {
-        try {
+        $payment = $this->handlePayment(function () use ($payment, $request) {
             Cardinity::create()->finalizePayment($request->input('MD'), $request->input('PaRes'));
 
-            // boost job offer and reindex
+            // boost job offer, send invoice and reindex
             event(new PaymentPaid($payment, $this->auth));
-        } catch (\Exception $e) {
-            throw $e;
-        }
+
+            return $payment;
+        });
 
         return redirect()
             ->to(UrlBuilder::job($payment->job))
@@ -175,5 +159,50 @@ class PaymentController extends Controller
     private function getForm($payment)
     {
         return $this->createForm(PaymentForm::class, $payment);
+    }
+
+    /**
+     * @param \Exception $exception
+     * @param $translationId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function handlePaymentException($exception, $translationId)
+    {
+        if (!($exception instanceof ValidationFailed) && !($exception instanceof Declined)) {
+            // log error without credit card number etc.
+            logger()->error($exception);
+
+            if (app()->environment('production')) {
+                // sentry will cut off credit card number
+                app('sentry')->captureException($exception);
+            }
+        }
+
+        return back()->withInput()->with('error', trans($translationId));
+    }
+
+    /**
+     * @param \Closure $callback
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
+    private function handlePayment(\Closure $callback)
+    {
+        try {
+            return $callback();
+        } catch (Forbidden $e) {
+            return $this->handlePaymentException($e, 'payment.forbidden');
+        } catch (InternalServerError $e) {
+            return $this->handlePaymentException($e, 'payment.internal_server');
+        } catch (ServiceUnavailable $e) {
+            return $this->handlePaymentException($e, 'payment.service_unavailable');
+        } catch (Unauthorized $e) {
+            return $this->handlePaymentException($e, 'payment.unauthorized');
+        } catch (ValidationFailed $e) {
+            return $this->handlePaymentException($e, 'payment.validation');
+        } catch (Declined $e) {
+            return $this->handlePaymentException($e, 'payment.declined');
+        } catch (\Exception $e) {
+            return $this->handlePaymentException($e, 'payment.unhandled');
+        }
     }
 }
