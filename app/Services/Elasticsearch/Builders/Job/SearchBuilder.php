@@ -180,7 +180,8 @@ class SearchBuilder extends QueryBuilder
         // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 1)
         $this->score(new FieldValueFactor('score', 'log', 1));
         // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
-        $this->score(new Decay('created_at', '14d', 0.1));
+        // za wyjatkiem 1 dnia publikacji
+        $this->score(new Decay('created_at', '14d', 0.1, '1d'));
         // extra boost for premium offers
         $this->score(new ScriptScore("doc['boost'].value ? 10 : 1"));
     }
