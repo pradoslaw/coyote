@@ -288,7 +288,7 @@ class SubmitController extends Controller
         });
 
         $paymentUuid = $job->getPaymentUuid();
-        if ($paymentUuid) {
+        if ($paymentUuid !== null) {
             return redirect()->route('job.payment', [$paymentUuid]);
         }
 
