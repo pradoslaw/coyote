@@ -25,6 +25,9 @@ class CreatePaymentsTable extends Migration
             $table->timestampTz('ends_at')->nullable();
             $table->integer('invoice_id')->nullable();
 
+            $table->primary('id');
+            $table->index('job_id');
+
             $table->foreign('job_id')->references('id')->on('jobs')->onDelete('no action');
             $table->foreign('plan_id')->references('id')->on('plans')->onDelete('no action');
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('no action');

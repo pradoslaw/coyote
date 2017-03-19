@@ -560,9 +560,12 @@ class Job extends Model
         return $this->payments()->where('status_id', Payment::PAID)->where('ends_at', '>', Carbon::now())->exists();
     }
 
+    /**
+     * @return Payment
+     */
     public function getPendingPayment()
     {
-        return $this->payments()->where('status_id', Payment::PENDING)->orderBy('id', 'DESC')->first();
+        return $this->payments()->where('status_id', Payment::PENDING)->orderBy('created_at', 'DESC')->first();
     }
 
     /**
@@ -570,7 +573,7 @@ class Job extends Model
      */
     public function getPaymentUuid()
     {
-        return $this->payments()->where('status_id', Payment::PENDING)->orderBy('id', 'DESC')->first(['id']);
+        return $this->payments()->where('status_id', Payment::PENDING)->orderBy('created_at', 'DESC')->first(['id']);
     }
 
     /**
