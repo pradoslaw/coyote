@@ -325,7 +325,7 @@ class JobPostingCest
 
         $payment = $I->haveRecord(
             \Coyote\Payment::class,
-            ['job_id' => $job->id, 'plan_id' => $plan->id, 'status_id' => \Coyote\Payment::PENDING, 'days' => 5]
+            ['job_id' => $job->id, 'plan_id' => $plan->id, 'status_id' => \Coyote\Payment::NEW, 'days' => 5]
         );
 
         $I->amOnRoute('job.payment', [$payment->id]);

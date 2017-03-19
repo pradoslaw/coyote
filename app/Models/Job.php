@@ -563,9 +563,9 @@ class Job extends Model
     /**
      * @return Payment
      */
-    public function getPendingPayment()
+    public function getUnpaidPayment()
     {
-        return $this->payments()->where('status_id', Payment::PENDING)->orderBy('created_at', 'DESC')->first();
+        return $this->payments()->where('status_id', Payment::NEW)->orderBy('created_at', 'DESC')->first();
     }
 
     /**
@@ -573,7 +573,7 @@ class Job extends Model
      */
     public function getPaymentUuid()
     {
-        return $this->payments()->where('status_id', Payment::PENDING)->orderBy('created_at', 'DESC')->first(['id']);
+        return $this->payments()->where('status_id', Payment::NEW)->orderBy('created_at', 'DESC')->first(['id']);
     }
 
     /**

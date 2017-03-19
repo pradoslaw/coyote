@@ -70,7 +70,7 @@ class BoostJobOffer implements ShouldQueue
             );
 
             // payment is done. remove any pending payments (if any...)
-            $event->payment->job->payments()->where('status_id', Payment::PENDING)->delete();
+            $event->payment->job->payments()->where('status_id', Payment::NEW)->delete();
         });
     }
 }

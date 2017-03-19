@@ -19,7 +19,7 @@ class CreatePaymentsTable extends Migration
             $table->timestampsTz();
             $table->integer('job_id');
             $table->smallInteger('plan_id');
-            $table->smallInteger('status_id')->default(\Coyote\Payment::PENDING);
+            $table->smallInteger('status_id')->default(\Coyote\Payment::NEW);
             $table->smallInteger('days');
             $table->timestampTz('starts_at')->nullable();
             $table->timestampTz('ends_at')->nullable();

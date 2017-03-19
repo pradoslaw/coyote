@@ -9,6 +9,7 @@ use Coyote\Events\SuccessfulLogin;
 use Coyote\Events\UserWasSaved;
 use Coyote\Listeners\BoostJobOffer;
 use Coyote\Listeners\ChangeImageUrl;
+use Coyote\Listeners\ChangePaymentStatus;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
 use Coyote\Listeners\MicroblogListener;
@@ -64,6 +65,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         // set high priority. we need to call this listener first.
+        $this->app['events']->listen(PaymentPaid::class, ChangePaymentStatus::class, 1001);
         $this->app['events']->listen(PaymentPaid::class, BoostJobOffer::class, 1000);
 
         parent::boot();

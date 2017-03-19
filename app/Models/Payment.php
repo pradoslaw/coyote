@@ -20,8 +20,9 @@ use Ramsey\Uuid;
  */
 class Payment extends Model
 {
-    const PENDING = 1;
-    const PAID = 2;
+    const NEW = 1;
+    const PENDING = 2;
+    const PAID = 3;
 
     /**
      * @var bool
@@ -41,7 +42,7 @@ class Payment extends Model
     /**
      * @var array
      */
-    protected $attributes = ['status_id' => self::PENDING];
+    protected $attributes = ['status_id' => self::NEW];
 
     public static function boot()
     {
