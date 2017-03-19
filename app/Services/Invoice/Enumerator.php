@@ -49,7 +49,7 @@ class Enumerator
         $count = 0;
 
         if ($last) {
-            $count = last(explode('/', $last->number));
+            $count = explode('/', $last->number)[1];
         }
 
         return sprintf('%s/%d/%d/%02d', '4P', $count + 1, $date->month, $date->year);
