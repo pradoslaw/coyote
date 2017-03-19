@@ -138,7 +138,7 @@
 
                     <div class="row margin-xs-top margin-xs-bottom">
                         <div class="col-xs-6">
-                            <strong>Do zapłaty:</strong>
+                            <strong>Suma:</strong>
                         </div>
                         <div class="col-xs-6 text-right">
                             <strong>{{ payment.gross_price|round(2) }} zł</strong>
@@ -149,8 +149,8 @@
                 <div class="panel-footer">
                     <div class="row">
                         <div class="col-xs-8">
-                            <span>Cena</span>
-                            <small>(Płatność pobrana zostanie w walucie euro wg. kursu NBP)</small>
+                            <span>Do zapłaty</span>
+                            <small>(Kwota przeliczona wg. kursu NBP)</small>
                         </div>
                         <div class="col-xs-4 text-right">
                             <span>{{ (payment.gross_price * exchange_rate)|round(2) }} €</span>
