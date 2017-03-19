@@ -20,8 +20,6 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\PurgeJobs',
         'Coyote\Console\Commands\ExpireJobs',
         'Coyote\Console\Commands\CreateSitemap',
-//        'Coyote\Console\Commands\Migrate',
-//        'Coyote\Console\Commands\Markdown',
         'Coyote\Console\Commands\FlushCache',
         'Coyote\Console\Commands\SetupTags',
         'Coyote\Console\Commands\GetCurrencyExchange',
