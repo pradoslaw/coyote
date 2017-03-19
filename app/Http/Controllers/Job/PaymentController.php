@@ -137,7 +137,8 @@ class PaymentController extends Controller
     public function callback($payment, Request $request)
     {
         return $this->handlePayment(function () use ($payment, $request) {
-            Cardinity::create()->finalizePayment($request->input('MD'), $request->input('PaRes'));
+            $result = Cardinity::create()->finalizePayment($request->input('MD'), $request->input('PaRes'));
+            logger()->debug('Successfully payment via 3D Secure', ['uuid' => $result->id]);
 
             // boost job offer, send invoice and reindex
             event(new PaymentPaid($payment, $this->auth));

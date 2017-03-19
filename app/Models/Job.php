@@ -99,7 +99,7 @@ class Job extends Model
         'email',
         'enable_apply',
         'seniority_id',
-        'plan_id',
+        'plan_id', // column does not really exist in db (model attribute instead)
         'plan_length', // column does not really exist in db (model attribute instead)
     ];
 

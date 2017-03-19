@@ -265,4 +265,94 @@ class JobPostingCest
         $I->see('Game-boy');
         $I->see('TV');
     }
+
+    public function createPremiumOffer(FunctionalTester $I)
+    {
+        $I->wantTo('Create premium offer');
+        $fake = Factory::create();
+
+        $I->amOnRoute('job.submit');
+
+        $I->fillField('title', $title = $fake->text(50));
+        $I->selectOption('employment_id', 1);
+
+        $I->checkOption('#plan_id');
+        $I->click('Informacje o firmie');
+        $I->click('Podstawowe informacje');
+
+        $I->canSeeCheckboxIsChecked('#plan_id');
+
+        $I->click('Informacje o firmie');
+        $I->selectOption('is_private', '1');
+        $I->fillField('done', 1);
+        $I->click('Zapisz i zakończ');
+
+        $I->seeCurrentRouteIs('job.payment');
+        $I->see('Płatność poprzez bezpieczne połączenie');
+        $I->uncheckOption('enable_invoice');
+
+        $I->fillField('name', 'Jan Kowalski');
+        $I->fillField('number', '5555555555554444');
+        $I->fillField('cvc', '123');
+
+        $I->click('Zapłać i zapisz');
+
+        $I->seeCurrentRouteIs('job.offer');
+        $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
+
+        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title]);
+        $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
+
+        $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
+        $I->assertNotEmpty($payment->invoice);
+    }
+
+    public function validatePaymentForm(FunctionalTester $I)
+    {
+        $I->wantTo('Validate payment form');
+        $fake = Factory::create();
+
+        $plan = $I->grabRecord(\Coyote\Plan::class);
+
+        \Coyote\Job::unguard();
+
+        $job = $I->haveRecord(\Coyote\Job::class, [
+            'title' => $fake->text(50),
+            'user_id' => $this->user->id,
+            'description' => $fake->text,
+            'deadline_at' => \Carbon\Carbon::now()->addDays(5)
+        ]);
+
+        $payment = $I->haveRecord(
+            \Coyote\Payment::class,
+            ['job_id' => $job->id, 'plan_id' => $plan->id, 'status_id' => \Coyote\Payment::PENDING, 'days' => 5]
+        );
+
+        $I->amOnRoute('job.payment', [$payment->id]);
+        $I->click('Zapłać i zapisz');
+
+        $I->seeFormErrorMessage('name');
+        $I->seeFormErrorMessage('number');
+        $I->seeFormErrorMessage('cvc');
+        $I->seeFormErrorMessage('invoice.address');
+        $I->seeFormErrorMessage('invoice.postal_code');
+        $I->seeFormErrorMessage('invoice.city');
+
+        $I->fillField('name', $fake->firstName . ' ' . $fake->lastName);
+        $I->fillField('number', '1111111111111111');
+        $I->fillField('cvc', 123);
+
+        $I->uncheckOption('enable_invoice');
+
+        $I->click('Zapłać i zapisz');
+
+        $I->seeFormErrorMessage('number', 'Wprowadzony numer karty jest nieprawidłowy.');
+        $I->seeFormErrorMessage('cvc', 'Wprowadzony kod CVC jest nieprawidłowy.');
+
+        $I->fillField('number', '4111111111111111');
+        $I->click('Zapłać i zapisz');
+
+        $I->seeCurrentRouteIs('job.offer');
+        $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
+    }
 }
