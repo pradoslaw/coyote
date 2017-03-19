@@ -146,14 +146,16 @@
                     </div>
                 </div>
 
+                {% set price = (payment.gross_price * exchange_rate)|round(2) %}
+
                 <div class="panel-footer">
                     <div class="row">
                         <div class="col-xs-8">
-                            <span>Do zapłaty:</span>
+                            <span>Do zapłaty: <i class="fa fa-question-circle" data-toggle="tooltip" title="Twoja karta obciążona zostanie w kwocie {{ price }} €. Jeżeli Twoją walutą rozliczeniową nie jest euro, to ostateczna cena zależy od kursu wymiany walut Twojego banku."></i></span>
                             <small>(Kwota przeliczona wg. kursu NBP)</small>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <span>{{ (payment.gross_price * exchange_rate)|round(2) }} €</span>
+                            <span>{{ price }} €</span>
                         </div>
                     </div>
                 </div>
