@@ -659,10 +659,10 @@ class Job extends Model
             'remote_range'      => $this->is_remote ? $this->remote_range : null
         ]);
 
-        if (!empty($body['firm'])) {
+        if ($this->firm_id) {
             // logo is instance of File object. casting to string returns file name.
             // cast to (array) if firm is empty.
-            $body['firm'] = array_map('strval', (array) array_only($body['firm'], ['name', 'logo']));
+            $body['firm'] = array_map('strval', (array) array_only($this->firm->toArray(), ['name', 'logo']));
         }
 
         return $body;
