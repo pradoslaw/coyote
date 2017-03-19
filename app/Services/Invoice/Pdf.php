@@ -5,8 +5,6 @@ namespace Coyote\Services\Invoice;
 use Coyote\Payment;
 use Mpdf\Mpdf;
 
-define("_MPDF_TEMP_PATH", storage_path('app'));
-
 class Pdf
 {
     /**
@@ -31,7 +29,7 @@ class Pdf
      */
     public function create(Payment $payment)
     {
-        $mpdf = new Mpdf();
+        $mpdf = new Mpdf(['tempDir' => storage_path('app')]);
         $mpdf->WriteHTML($this->view($payment)->render());
 
         return $mpdf->Output('', 'S');
