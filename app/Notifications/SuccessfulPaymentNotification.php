@@ -57,7 +57,7 @@ class SuccessfulPaymentNotification extends Notification
                 )
             );
 
-        if ($this->pdf) {
+        if ($this->pdf !== null) {
             $mail->line('W załączniku znajdziesz fakturę VAT.');
         }
 
@@ -71,7 +71,7 @@ class SuccessfulPaymentNotification extends Notification
             ->action('Zobacz ogłoszenie', route('job.offer', [$this->payment->job->id, $this->payment->job->slug]))
             ->line('Dziekujemy za skorzystanie z naszych usług.');
 
-        if ($this->pdf) {
+        if ($this->pdf !== null) {
             $mail->attachData($this->pdf, $this->getFilename());
         }
 
