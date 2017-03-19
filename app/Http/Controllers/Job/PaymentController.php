@@ -160,7 +160,7 @@ class PaymentController extends Controller
 
     /**
      * @param \Exception $exception
-     * @param $translationId
+     * @param string $translationId
      * @return \Illuminate\Http\RedirectResponse
      */
     private function handlePaymentException($exception, $translationId)

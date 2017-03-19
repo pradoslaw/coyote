@@ -245,7 +245,7 @@ class Job extends Model
     private $plan = ['id' => null, 'length' => 30];
 
     /**
-     * @return array
+     * @return string[]
      */
     public static function getRatesList()
     {
@@ -253,7 +253,7 @@ class Job extends Model
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public static function getEmploymentList()
     {
@@ -261,7 +261,7 @@ class Job extends Model
     }
 
     /**
-     * @return array[]
+     * @return string[]
      */
     public static function getSeniorityList()
     {
