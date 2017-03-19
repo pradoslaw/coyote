@@ -5,6 +5,8 @@ namespace Coyote\Services\Invoice;
 use Coyote\Payment;
 use Mpdf\Mpdf;
 
+define("_MPDF_TEMP_PATH", storage_path('app'));
+
 class Pdf
 {
     /**
