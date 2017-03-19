@@ -60,10 +60,6 @@ class JobForm extends Form
             $this->data->locations->flush();
             $this->data->features->flush();
 
-            // deadline not exists in table "jobs" nor in fillable array. set value so model can transform it
-            // to Carbon object
-            $this->data->deadline = $form->get('deadline')->getValue();
-
             foreach ($form->get('tags')->getChildrenValues() as $tag) {
                 $pivot = $this->data->tags()->newPivot(['priority' => $tag['priority']]);
                 $model = (new Tag($tag))->setRelation('pivot', $pivot);
@@ -278,15 +274,9 @@ class JobForm extends Form
             ->add('email', 'email', [
                 'rules' => 'sometimes|required|email',
                 'help' => 'Podaj adres e-mail na jaki wyślemy Ci informacje o kandydatach. Adres e-mail nie będzie widoczny dla osób postronnych.'
-            ])
-
-            ->add('submit', 'submit', [
-                'label' => 'Zapisz',
-                'attr' => [
-                    'data-submit-state' => 'Wysyłanie...'
-                ]
             ]);
 
+        $this->setupPlanFields();
         $this->setupDefaultValues();
     }
 
@@ -300,6 +290,30 @@ class JobForm extends Form
             $this->get('country_id')->setValue(array_search('Polska', $this->get('country_id')->getChoices()));
             $this->get('remote_range')->setValue(100);
         }
+    }
+
+    protected function setupPlanFields()
+    {
+        // can't show that fields if plan is enabled
+        if ($this->data->isPlanOngoing()) {
+            return;
+        }
+
+        $this
+            ->add('plan_id', 'checkbox', [
+                'rules' => 'bool',
+                'label' => 'Tak, chciałbym sokrzystać z opcji promowania ogłoszenia.',
+                'attr' => [
+                    'id' => 'plan_id',
+                    'v-model' => 'job.plan_id'
+                ]
+            ])
+            ->add('plan_length', 'hidden', [
+                'rules' => 'integer|min:3',
+                'attr' => [
+                    'v-model' => 'job.plan_length'
+                ]
+            ]);
     }
 
     /**

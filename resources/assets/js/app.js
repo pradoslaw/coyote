@@ -42,14 +42,24 @@ $(function () {
             },
             'user'
         );
-    }).on('/Praca/Application/*', () => {
+    })
+    .on('/Praca/Application/*', () => {
         require.ensure([],
             require => {
                 require('./pages/job/application');
             },
             'application'
         );
-    }).on('/Adm/Firewall/*', () => {
+    })
+    .on('/Praca/Payment/*', () => {
+        require.ensure([],
+            require => {
+                require('./pages/job/payment');
+            },
+            'payment'
+        );
+    })
+    .on('/Adm/Firewall/*', () => {
         require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
             require('flatpickr');
             const Polish = require('flatpickr/dist/l10n/pl.js').pl;

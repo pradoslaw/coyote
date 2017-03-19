@@ -6,15 +6,6 @@
 {% block container %}
     <div class="row">
         <main class="col-lg-9 col-12-md">
-            <div class="jumbotron alert-popover" data-id="job-jumbotron">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
-
-                <h1>Zaczynamy...</h1>
-                <p>Pamiętaj, że informacje zawarte w tym formularzu, możesz zmienić w każdej chwili, a ogłoszenie jest publikowane bezpłatnie.
-                    Prosimy o zamieszczanie rzeczowych informacji. Frazesy w stylu <em>młoda dynamiczna firma</em> nie są dobrze widziane przez programistów.</p>
-
-                <p><button class="btn btn-default btn-close" role="button" data-dismiss="alert" aria-label="Close">Ok, zrozumiałem</button></p>
-            </div>
 
             {% include 'job.submit.partials.indicator' with {'current': 1} %}
 
@@ -144,6 +135,60 @@
                     </div>
                 </div>
 
+                {% if not is_plan_ongoing %}
+                    <div class="panel panel-default plans">
+                        <div class="panel-heading">
+                            Promowanie ogłoszenia
+                        </div>
+
+                        {{ form_widget(form.plan_length) }}
+
+                        <div class="panel-body">
+                            <h3 class="margin-md-bottom">Co zyskujesz?</h3>
+
+                            <ul class="list-unstyled margin-md-top margin-md-bottom">
+                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Wyróżnienie <strong>na górze wyników</strong> - Twoja oferta będzie zawsze wyświetlana nad darmowymi.</li>
+                                <li>
+                                    <i class="fa fa-check-circle fa-fw text-primary"></i>
+                                    <strong>Reklama</strong> oferty na forum i stronie głównej.
+
+                                    <a href="javascript:" class="plan-tooltip-wrapper">
+                                        Zobacz jak to wygląda.
+
+                                        <div class="plan-tooltip"><img src="{{ cdn('img/offer-example.jpg') }}"></div>
+                                    </a>
+                                </li>
+                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Tylko <strong>${ price } zł</strong> netto za dzień. Sam decydujesz ile dni oferta ma być promowana.</li>
+                            </ul>
+
+                            <div class="well well-sm">
+                                <div class="checkbox">
+                                    <div class="row">
+                                        <div class="col-sm-7">
+                                            {{ form_widget(form.plan_id) }}
+
+                                            <label for="{{ form.plan_id.attr.id }}">
+                                                {{ form.plan_id.label }}
+                                            </label>
+                                        </div>
+
+                                        <div class="col-sm-5 text-right" v-show="job.plan_id">
+                                            <span class="pricing"><strong>${ price } zł</strong> netto</span>
+                                            <sup class="padding-md-left padding-md-right">x</sup>
+
+                                            <changer :value="job.plan_length" class="pricing" :choices="[3, 5, 7, 14, 30, 40, 50, 60, 70, 80, 90]" @change="changePlan"></changer>
+
+                                            <sup class="padding-md-left padding-md-right">=</sup>
+
+                                            <strong class="total-price">${ price * job.plan_length } zł</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Szczegółowe informacje
@@ -214,42 +259,32 @@
         </main>
 
         <aside class="col-lg-3 hidden-md hidden-sm hidden-xs">
+
             <div id="hint-container">
-                <div id="hint-title" class="sidebar-hint" style="display: none;">
-                    <h4>Jak tytułować oferty pracy?</h4>
+                <div id="hint-title" class="sidebar-hint">
+                    <h4>Ile kosztuje dodanie ogłoszenia?</h4>
 
                     <p>
-                        Masz 60 znaków na to, aby przekonać potencjalnego kandydata, aby kliknął w Twoje ogłoszenie. Nie zapomnij w polu obok, określić wymaganego stażu pracy (Junior, Senior itp).
-                    </p>
-                </div>
-                <div id="hint-city" class="sidebar-hint" style="display: none;">
-                    <h4>Lokalizacja</h4>
-
-                    <p>
-                        Nie zapomnij napisać jakiego miasta dotyczy ogłoszenie. Jeżeli jest to praca zdalna to zaznacz
-                        <em>praca zdalna</em> a pole lokalizacji pozostaw puste. <strong>Nie wpisuj</strong> w tym polu
-                        nazwy dzielnicy czy dodatkowych informacji. To pole powinno zawierać jedynie nazwę miejscowości.
-                        Dzięki temu będziemy w stanie wyświetlać tę ofertę użytkownikom pochodzącym z danego miasta.
+                        Dodanie ogłoszenia jest zupełnie <strong>darmowe</strong>. Polecamy jednak skorzystanie z opcji
+                        promowania w cenie <strong>9 zł netto</strong> za dzień.
                     </p>
 
-                    <p>
-                        Jeżeli oferta tyczy się kilku miast, możesz je wypisać po przecinku.
-                    </p>
-                </div>
-                <div id="hint-salary_from" class="sidebar-hint" style="display: none;">
-                    <h4>Wynagrodzenie</h4>
+                    <h4 class="margin-md-top">Zalety promowanego ogłoszenia</h4>
+
+                    <p><i class="fa fa-check fa-fw"></i> Ogłoszenie wyświetlane nad tymi darmowymi.</p>
+                    <p><i class="fa fa-check fa-fw"></i> Reklama na stronie głównej oraz forum.</p>
+                    <p><i class="fa fa-check fa-fw"></i> Sam decydujesz ile dni oferta ma być promowana.</p>
+
+                    <h4 class="margin-md-top">Formy płatności</h4>
 
                     <p>
-                        Zdecydowana większość programistów programistów chce wiedzieć na jakie wynagrodzenie może liczyć.
-                        Podając widełki płacowe oszczędzasz czas - swój i potencjalnych kandydatów.
+                        Za opcję promowania zapłacisz kartą Visa, Mastercard lub Maestro.
                     </p>
-                </div>
-                <div id="hint-tag" class="sidebar-hint" style="display: none;">
-                    <h4>Kluczowe technologie</h4>
+
+                    <h4 class="margin-md-top">Faktura VAT</h4>
 
                     <p>
-                        Określ technologie potrzebne do wykonywania pracy. Te słowa kluczowe są wyświetlane przy ofercie
-                        i służą lepszemu pozycjonowaniu. Pomogą nam w lepszym doborze oferty potencjalnemu kandydatowi.
+                        Fakturę VAT prześlemy Ci na e-mail. Dane do faktury podasz w ostatnim kroku.
                     </p>
                 </div>
             </div>
@@ -266,6 +301,7 @@
     <script>
         var data = {
             job: {{ job|raw }},
+            price: 9,
             tags: {{ form.tags.value|raw }},
             features: {{ form.features.value|raw }},
             errors: {{ form_errors|raw }},

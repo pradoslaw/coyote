@@ -26,6 +26,8 @@ function toInt(data) {
     return data;
 }
 
+Vue.component('changer', require('../../components/changer.vue'));
+
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
@@ -148,7 +150,8 @@ new Vue({
 
             this.benefits = this.firm.benefits;
 
-            tinymce.get('description').setContent(this.firm.description);
+            // text can not be NULL
+            tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
         },
         changeFirm: function () {
             if (!this.firm.name) {
@@ -217,6 +220,9 @@ new Vue({
         _setupMarker: function () {
             this.map.removeMarker(this.marker);
             this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
+        },
+        changePlan: function (value) {
+            this.job.plan_length = value;
         }
     },
     computed: {
@@ -286,27 +292,6 @@ $(() => {
      */
     $('.btn-save').on('click', () => {
         $('input[name="done"]').val(1);
-    });
-
-    $('.jumbotron .btn-close').click(() => {
-        $('.jumbotron .close').click();
-    });
-
-    $('.submit-form').on('focus', ':input', e => {
-        let $this = $(e.currentTarget);
-        let offset = $this.offset().top;
-        let name = $this.attr('name');
-
-        $('.sidebar-hint').hide();
-
-        if (typeof name !== 'undefined') {
-            name = name.replace('[', '').replace(']', '');
-
-            $('#hint-' + name).fadeIn();
-            offset -= $('aside').offset().top;
-
-            $('#hint-container').css('top', offset);
-        }
     });
 
     $.uploader({

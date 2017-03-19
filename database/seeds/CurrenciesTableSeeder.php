@@ -12,10 +12,10 @@ class CurrenciesTableSeeder extends Seeder
      */
     public function run()
     {
-        Currency::create(['name' => 'zł']);
-        Currency::create(['name' => '€']);
-        Currency::create(['name' => '$']);
-        Currency::create(['name' => '£']);
-        Currency::create(['name' => 'CHF']);
+        Currency::forceCreate(['name' => 'PLN', 'symbol' => 'zł']);
+        Currency::forceCreate(['name' => 'EUR', 'symbol' => '€']);
+        Currency::forceCreate(['name' => 'USD', 'symbol' => '$']);
+        Currency::forceCreate(['name' => 'GBP', 'symbol' => '£']);
+        Currency::forceCreate(['name' => 'CHF', 'symbol' => '₣']);
     }
 }

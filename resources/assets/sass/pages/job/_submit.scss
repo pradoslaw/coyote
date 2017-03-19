@@ -5,29 +5,6 @@
 
 $font-size-control-label: 15px;
 
-// Banner that is shown at the top of the form
-// -------------------------------------------------
-
-.jumbotron {
-  padding: 15px 30px;
-
-  h1 {
-    font-size: 35px;
-  }
-
-  p {
-    font-size: 16px;
-  }
-
-  &.alert-popover {
-    position: static;
-
-    .close {
-      font-size: 25px;
-    }
-  }
-}
-
 // Wizard form. Element that indicates current step
 // -----------------------------------------------------
 
@@ -97,11 +74,11 @@ $font-size-control-label: 15px;
 // --------------------------------------------
 
 #hint-container {
-  position: absolute;
+  margin-top: 99px;
 }
 
-.sidebar-hint {
-  margin-top: 0;
+.sidebar-hint p {
+  font-size: 13px;
 }
 
 // Fixed navigation bar with "next", "previous" buttons
@@ -281,7 +258,7 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 // Tag icon in tag input field
 // ----------------------------------------------
 
-.has-feedback label ~ .form-control-feedback {
+.has-feedback label ~ .fa.form-control-feedback {
   top: 30px;
   font-size: $font-size-large;
   color: $gray;
@@ -290,4 +267,115 @@ select[name=currency_id], select[name=rate_id], select[name=employment_id], sele
 #map {
   height: 200px;
   margin-bottom: 10px;
+}
+
+// Panel with promo options
+// -----------------------------
+
+.plans {
+  h3 {
+    color: $gray;
+    margin-top: 0;
+    font-size: 16px;
+  }
+
+  .well {
+    padding: 9px 15px;
+  }
+
+  .list-unstyled {
+    li {
+      margin: 10px 0;
+      font-size: 14px;
+    }
+  }
+
+  .pricing {
+    color: $text-muted;
+    font-size: 14px;
+  }
+
+  .duration-changer {
+    display: inline;
+
+    i {
+      font-size: $font-size-large;
+      color: $gray-light;
+      cursor: pointer;
+
+      &.fa-plus-circle {
+        margin-left: 5px;
+      }
+
+      &.fa-minus-circle {
+        margin-right: 5px;
+      }
+
+      &.disabled {
+        opacity: .4;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .total-price {
+    color: $brand-primary;
+    font-size: 19px;
+    display: inline-block;
+    margin-top: -1px;
+    line-height: 1;
+  }
+
+  sup {
+     top: -2px;
+   }
+}
+
+.plan-tooltip-wrapper {
+  cursor: help;
+  position: relative;
+
+  > .plan-tooltip {
+    position: absolute;
+    background-color: #fff;
+    border: 2px solid $border-color;
+    padding: 5px;
+    display: none;
+    right: -450px;
+    top: -118px;
+    z-index: 1000;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+    border-radius: $border-radius-base;
+
+    &:before, &:after {
+      right: 100%;
+      top: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+
+    &:after {
+      border-color: rgba(255, 255, 255, 0);
+      border-right-color: #fff;
+      border-width: 10px;
+      margin-top: -10px;
+    }
+
+    &:before {
+      border-color: rgba(208, 208, 208, 0);
+      border-right-color: $border-color;
+      border-width: 13px;
+      margin-top: -13px;
+    }
+  }
+
+  &:hover {
+    > .plan-tooltip {
+      display: block;
+    }
+  }
 }

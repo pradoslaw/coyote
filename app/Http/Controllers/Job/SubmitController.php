@@ -94,7 +94,9 @@ class SubmitController extends Controller
             'form_errors'       => $form->errors() ? $form->errors()->toJson() : '[]',
             'job'               => $form->toJson(),
             // firm information (in order to show firm nam on the button)
-            'firm'              => $job->firm
+            'firm'              => $job->firm,
+            // is plan is still going on?
+            'is_plan_ongoing'   => $job->isPlanOngoing()
         ]);
     }
 
@@ -271,6 +273,10 @@ class SubmitController extends Controller
             $job->tags()->sync($tags);
             $job->features()->sync($features);
 
+            if ($job->plan_id) {
+                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan_length]);
+            }
+
             event(new JobWasSaved($job));
 
             $parser = app('parser.job');
@@ -280,6 +286,11 @@ class SubmitController extends Controller
 
             $request->session()->forget(Job::class);
         });
+
+        $paymentUuid = $job->getPaymentUuid();
+        if ($paymentUuid) {
+            return redirect()->route('job.payment', [$paymentUuid]);
+        }
 
         return redirect()->to(UrlBuilder::job($job))->with('success', 'Oferta została prawidłowo dodana.');
     }

@@ -4,8 +4,10 @@ namespace Coyote\Providers;
 
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
+use Coyote\Events\PaymentPaid;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Events\UserWasSaved;
+use Coyote\Listeners\BoostJobOffer;
 use Coyote\Listeners\ChangeImageUrl;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
@@ -61,8 +63,9 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
+        // set high priority. we need to call this listener first.
+        $this->app['events']->listen(PaymentPaid::class, BoostJobOffer::class, 1000);
 
-        //
+        parent::boot();
     }
 }

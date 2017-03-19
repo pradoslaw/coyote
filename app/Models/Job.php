@@ -45,6 +45,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Location[] $locations
  * @property Currency[] $currency
  * @property Feature[] $features
+ * @property int $plan_id
+ * @property int $plan_length
+ * @property true $boost
  */
 class Job extends Model
 {
@@ -91,10 +94,13 @@ class Job extends Model
         'currency_id',
         'rate_id',
         'employment_id',
+        'deadline', // column does not really exist in db (model attribute instead)
         'deadline_at',
         'email',
         'enable_apply',
-        'seniority_id'
+        'seniority_id',
+        'plan_id', // column does not really exist in db (model attribute instead)
+        'plan_length', // column does not really exist in db (model attribute instead)
     ];
 
     /**
@@ -113,12 +119,17 @@ class Job extends Model
      *
      * @var array
      */
-    protected $casts = ['is_remote' => 'boolean', 'enable_apply' => 'boolean'];
+    protected $casts = ['is_remote' => 'boolean', 'boost' => 'boolean'];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'deadline_at'];
 
     /**
      * @var array
@@ -204,8 +215,8 @@ class Job extends Model
         "score" => [
             "type" => "long"
         ],
-        "rank" => [
-            "type" => "float"
+        "boost" => [
+            "type" => "boolean"
         ]
     ];
 
@@ -230,6 +241,8 @@ class Job extends Model
             $model->is_remote = (int) $model->is_remote;
         });
     }
+
+    private $plan = ['id' => null, 'length' => 30];
 
     /**
      * @return array
@@ -406,6 +419,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany('Coyote\Payment');
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)
@@ -449,6 +470,38 @@ class Job extends Model
     }
 
     /**
+     * @param int $value
+     */
+    public function setPlanIdAttribute($value)
+    {
+        $this->plan['id'] = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlanIdAttribute()
+    {
+        return $this->plan['id'];
+    }
+
+    /**
+     * @param int $value
+     */
+    public function setPlanLengthAttribute($value)
+    {
+        $this->plan['length'] = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlanLengthAttribute()
+    {
+        return $this->plan['length'];
+    }
+
+    /**
      * @return bool
      */
     public function getIsExpiredAttribute()
@@ -467,9 +520,9 @@ class Job extends Model
     /**
      * @return string
      */
-    public function getCurrencyNameAttribute()
+    public function getCurrencySymbolAttribute()
     {
-        return $this->currency()->value('name');
+        return $this->currency()->value('symbol');
     }
 
     /**
@@ -493,6 +546,34 @@ class Job extends Model
                 $this->features->add($feature->setRelation('pivot', $pivot));
             }
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPlanOngoing()
+    {
+        if (!$this->exists) {
+            return false;
+        }
+
+        return $this->payments()->where('status_id', Payment::PAID)->where('ends_at', '>', Carbon::now())->exists();
+    }
+
+    /**
+     * @return Payment
+     */
+    public function getPendingPayment()
+    {
+        return $this->payments()->where('status_id', Payment::PENDING)->orderBy('created_at', 'DESC')->first();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPaymentUuid()
+    {
+        return $this->payments()->where('status_id', Payment::PENDING)->orderBy('created_at', 'DESC')->first(['id']);
     }
 
     /**
@@ -537,7 +618,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'enable_apply', 'features']);
+        $body = array_except($body, ['deleted_at', 'plan_id', 'features']);
 
         $locations = [];
 
@@ -571,7 +652,7 @@ class Job extends Model
             'salary_from'       => $this->monthlySalary($this->salary_from),
             'salary_to'         => $this->monthlySalary($this->salary_to),
             // yes, we index currency name so we don't have to look it up in database during search process
-            'currency_name'     => $this->currency()->value('name'),
+            'currency_symbol'   => $this->currency()->value('symbol'),
             // higher tag's priorities first
             'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name'),
             // index null instead of 100 is job is not remote

@@ -4,6 +4,7 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\JobDeleting;
 use Coyote\Events\JobWasSaved;
+use Coyote\Events\PaymentPaid;
 use Coyote\Jobs\UpdateJobOffers;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 
@@ -46,6 +47,18 @@ class JobListener
     }
 
     /**
+     * Reindex job offer as it was paid.
+     *
+     * @param PaymentPaid $event
+     */
+    public function onJobOfferPaid(PaymentPaid $event)
+    {
+        // set on true before indexing
+        $event->payment->job->boost = true;
+        $event->payment->job->putToIndex();
+    }
+
+    /**
      * Register the listeners for the subscriber.
      *
      * @param  \Illuminate\Events\Dispatcher  $events
@@ -60,6 +73,11 @@ class JobListener
         $events->listen(
             'Coyote\Events\JobDeleting',
             'Coyote\Listeners\JobListener@onJobDeleting'
+        );
+
+        $events->listen(
+            'Coyote\Events\PaymentPaid',
+            'Coyote\Listeners\JobListener@onJobOfferPaid'
         );
     }
 }

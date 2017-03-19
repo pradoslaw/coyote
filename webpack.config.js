@@ -12,6 +12,10 @@ module.exports = {
     module: {
         loaders: [
             {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
@@ -26,6 +30,9 @@ module.exports = {
         filename: '[name].js',
         chunkFilename: '[chunkhash].js',
         publicPath: cdn('/js/')
+    },
+    externals: {
+        jquery: "jQuery"
     },
     context: path.join(__dirname, 'resources/assets/js'),
     entry: {

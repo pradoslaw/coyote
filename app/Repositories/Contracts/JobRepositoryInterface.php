@@ -66,6 +66,11 @@ interface JobRepositoryInterface extends RepositoryInterface
     public function getMyOffers($userId);
 
     /**
+     * @return \Coyote\Job[]
+     */
+    public function getExpiredOffers();
+
+    /**
      * @param array $tags
      * @return array
      */

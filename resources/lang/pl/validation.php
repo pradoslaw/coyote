@@ -39,7 +39,7 @@ return [
     'filled'               => 'The :attribute field is required.',
     'image'                => 'The :attribute must be an image.',
     'in'                   => 'The selected :attribute is invalid.',
-    'integer'              => 'The :attribute must be an integer.',
+    'integer'              => 'Pole :attribute must musi być liczbą całkowitą.',
     'ip'                   => 'The :attribute must be a valid IP address.',
     'json'                 => 'The :attribute must be a valid JSON string.',
     'max'                  => [
@@ -91,6 +91,9 @@ return [
     'wiki_route'           => 'Nie można dodać strony o tym tytule ponieważ koliduje z już istniejącą.',
     'email_unique'         => 'Podany adres e-mail przypisany jest do innego użytkownika.',
     'email_confirmed'      => 'Ten adres e-mail nie został zweryfikowany. <a href=":link">Kliknij tutaj</a> by go potwierdzić.',
+    'cc_number'            => 'Wprowadzony numer karty jest nieprawidłowy.',
+    'cc_cvc'               => 'Wprowadzony kod CVC jest nieprawidłowy.',
+    'cc_date'              => 'Upłynęła data ważności karty.',
 
     /*
     |--------------------------------------------------------------------------
