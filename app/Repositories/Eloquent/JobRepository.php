@@ -205,21 +205,22 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
      */
     public function getExpiredOffers()
     {
-        $sub = $this
-            ->app
-            ->make(Payment::class)
-            ->selectRaw('DISTINCT ON(job_id) job_id, ends_at')
-            ->orderBy('job_id', 'DESC')
-            ->orderBy('id', 'DESC')
-            ->toSql();
+        $sub = $this->toSql(
+            $this
+                ->app
+                ->make(Payment::class)
+                ->selectRaw('DISTINCT ON(job_id) job_id, ends_at')
+                ->where('status_id', Payment::PAID)
+                ->where('ends_at', '<', $this->raw('NOW()'))
+                ->orderBy('job_id', 'DESC')
+                ->orderBy('created_at', 'DESC')
+        );
 
         return $this
             ->model
             ->select('jobs.*')
             ->join($this->raw("($sub) AS payments"), 'payments.job_id', '=', 'jobs.id')
             ->where('boost', 1)
-            ->where('status_id', Payment::PAID)
-            ->where('ends_at', '<', $this->raw('NOW()'))
             ->get();
     }
 
