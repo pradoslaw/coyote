@@ -30,6 +30,7 @@ class Pdf
     public function create(Payment $payment)
     {
         $mpdf = new Mpdf(['tempDir' => storage_path('app')]);
+        $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($this->view($payment)->render());
 
         return $mpdf->Output('', 'S');
