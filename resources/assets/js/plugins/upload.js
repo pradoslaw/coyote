@@ -3,13 +3,13 @@
 
     $.fn.pasteImage = function (complete) {
         return this.each(function () {
-            var setup = {
+            let setup = {
                 complete: function (textarea, result) {
-                    textarea.insertAtCaret('![' + result.name + '](' + result.url + ')', '', ' ');
+                    textarea.insertAtCaret('', '', '![' + result.name + '](' + result.url + ')');
                 }
             };
 
-            var textarea = $(this);
+            let textarea = $(this);
             setup.url = textarea.data('paste-url');
 
             if (typeof setup.url === 'undefined') {
@@ -20,11 +20,11 @@
                 setup.complete = complete;
             }
 
-            var upload = function(base64) {
+            let upload = function(base64) {
                 textarea.attr('readonly', 'readonly');
 
-                var p = textarea.offset();
-                var loader = $('<div id="ajax-loader"><i class="fa fa-cog fa-spin"></i></div>').css({top: p.top, left: p.left, width: textarea.outerWidth(), height: textarea.outerHeight()}).appendTo('body');
+                let p = textarea.offset();
+                let loader = $('<div id="ajax-loader"><i class="fa fa-cog fa-spin"></i></div>').css({top: p.top, left: p.left, width: textarea.outerWidth(), height: textarea.outerHeight()}).appendTo('body');
 
                 $.post(setup.url, base64, function(result) {
                     setup.complete(textarea, result);
@@ -37,18 +37,18 @@
 
             if ('onpaste' in textarea[0]) {
                 textarea[0].onpaste = function(e) {
-                    var items = [];
+                    let items = [];
 
                     if (e.clipboardData && e.clipboardData.items) {
                         items = e.clipboardData.items;
                     }
 
                     if (items.length) {
-                        var blob = items[0].getAsFile();
-                        var fr = new FileReader();
+                        let blob = items[0].getAsFile();
+                        let fr = new FileReader();
 
                         fr.onload = function(e) {
-                            var mime = /^data:image/g;
+                            let mime = /^data:image/g;
 
                             if (!mime.test(e.target.result)) {
                                 return false;

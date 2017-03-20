@@ -565,7 +565,7 @@ $(function () {
                 $('#attachments tbody').append(html);
 
                 var link = $('a', html);
-                textarea.insertAtCaret("\n", "\n", '![' + link.text() + '](' + link.data('url') + ')');
+                textarea.insertAtCaret("", "", '![' + link.text() + '](' + link.data('url') + ')');
             })
             .wikiEditor()
             .prompt()
