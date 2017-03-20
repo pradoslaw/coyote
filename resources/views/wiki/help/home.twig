@@ -10,7 +10,9 @@
                     <h1>{{ wiki.title }}</h1>
                 </header>
 
-                {{ wiki.text|raw }}
+                <div class="text-body">
+                    {{ wiki.text|raw }}
+                </div>
             </article>
         </div>
     </div>

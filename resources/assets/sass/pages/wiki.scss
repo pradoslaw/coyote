@@ -173,8 +173,14 @@ article > header {
 // --------------------
 
 .text-body {
+  font-size: $font-size-medium;
+
+  @media screen and (max-width: $screen-sm) {
+    font-size: $font-size-small;
+  }
+
   img:not(.img-smile) {
-    @include img-responsive();
+    @include img-responsive;
   }
 
   @include link-color-darker;
