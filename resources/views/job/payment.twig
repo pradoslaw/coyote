@@ -151,7 +151,7 @@
                 <div class="panel-footer">
                     <div class="row">
                         <div class="col-xs-8">
-                            <span>Do zapłaty: <i class="fa fa-question-circle" data-toggle="tooltip" title="Twoja karta obciążona zostanie w kwocie {{ price }} €. Jeżeli Twoją walutą rozliczeniową nie jest euro, to zaksięgowana kwota zależec będzie od kursu wymiany walut Twojego banku."></i></span>
+                            <span>Do zapłaty:</span>
                             <small>(Kwota przeliczona wg. kursu NBP)</small>
                         </div>
                         <div class="col-xs-4 text-right">
@@ -159,7 +159,13 @@
                         </div>
                     </div>
                 </div>
+
             </div>
+
+            <p class="payment-tip">
+                Twoja karta obciążona zostanie w kwocie {{ price }} €. <strong>{{ payment.gross_price|round(2) }} zł = {{ price }} €</strong>.
+                Twój bank może pobrać opłatę za transakcję w obcej walucie jeżeli Twoją walutą rozliczeniową nie jest euro.
+            </p>
         </aside>
 
         {{ form_end() }}

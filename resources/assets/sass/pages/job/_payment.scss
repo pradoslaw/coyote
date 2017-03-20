@@ -47,6 +47,8 @@
   }
 }
 
-.tooltip-inner {
-  white-space: normal;
+.payment-tip {
+  line-height: 150%;
+  padding: 5px;
+  font-size: $font-size-small;
 }

@@ -9,6 +9,4 @@ $(function($) {
 
     $("#credit-card").mask("9999-9999-9999-9999");
     $("#cvc").mask("999");
-
-    $('.fa-question-circle').tooltip();
 });
