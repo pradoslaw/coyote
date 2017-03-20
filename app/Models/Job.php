@@ -72,7 +72,7 @@ class Job extends Model
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job' => ['description' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
+        'job' => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
         'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
@@ -297,7 +297,7 @@ class Job extends Model
 
         // 30 points maximum...
         $score += min(30, (count($this->tags()->get()) * 10));
-        $score += count($this->features()->wherePivot('checked', true)->get()) * 5;
+        $score += min(50, count($this->features()->wherePivot('checked', true)->get()) * 5);
 
         if ($this->firm_id) {
             $firm = $this->firm;
