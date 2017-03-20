@@ -11,6 +11,7 @@ use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
@@ -27,7 +28,8 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         ValidationException::class,
         ForbiddenException::class,
-        TokenMismatchException::class
+        TokenMismatchException::class,
+        CommandNotFoundException::class
     ];
 
     /**
