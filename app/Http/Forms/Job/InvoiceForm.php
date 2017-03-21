@@ -21,18 +21,18 @@ class InvoiceForm extends Form
             ])
             ->add('vat_id', 'text', [
                 'label' => 'NIP (opcjonalnie)',
-                'rules' => 'string'
+                'rules' => 'string|max:20'
             ])
             ->add('address', 'text', [
-                'rules' => 'string|required_with:enable_invoice',
+                'rules' => 'string|required_with:enable_invoice|max:200',
                 'label' => 'Adres',
             ])
             ->add('city', 'text', [
-                'rules' => 'string|required_with:enable_invoice',
+                'rules' => 'string|required_with:enable_invoice|max:200',
                 'label' => 'Miejscowość',
             ])
             ->add('postal_code', 'text', [
-                'rules' => 'string|required_with:enable_invoice',
+                'rules' => 'string|required_with:enable_invoice|max:30',
                 'label' => 'Kod pocztowy',
             ]);
 
