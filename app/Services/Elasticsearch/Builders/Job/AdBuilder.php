@@ -39,7 +39,7 @@ class AdBuilder extends SearchBuilder
             'firm.*',
             'locations',
             'tags',
-            'currency_name',
+            'currency_symbol',
             'salary_from',
             'salary_to'
         ]);
