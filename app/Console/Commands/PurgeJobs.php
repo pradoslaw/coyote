@@ -95,7 +95,7 @@ class PurgeJobs extends Command
      */
     private function sendEmail(User $user, array $hit)
     {
-        $this->getMailFactory()->queue('emails.job.reminder', $hit, function (Message $message) use ($hit, $user) {
+        $this->getMailFactory()->queue('emails.job.expired', $hit, function (Message $message) use ($hit, $user) {
             $message->subject('Twoje ogłoszenie "' . $hit['title'] . '" wygasło.');
             $message->to($user->email);
         });

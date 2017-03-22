@@ -2,6 +2,7 @@
 
 namespace Coyote\Console;
 
+use Coyote\Console\Commands\PlanReminderCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,7 +26,8 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\GetCurrencyExchange',
         'Coyote\Console\Commands\Elasticsearch\Mapping',
         'Coyote\Console\Commands\Elasticsearch\Create',
-        'Coyote\Console\Commands\Elasticsearch\Index'
+        'Coyote\Console\Commands\Elasticsearch\Index',
+        PlanReminderCommand::class
     ];
 
     /**

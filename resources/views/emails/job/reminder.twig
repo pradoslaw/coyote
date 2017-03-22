@@ -1,11 +1,47 @@
 {% extends 'emails.layout' %}
 
 {% block content %}
-    Twoje ogłoszenie <b>{{ title }}</b> zostało zakończone i nie jest już wyświetlane w serwisie 4programmers.net.<br><br>
+    <p>Dziękujemy za skorzystanie z serwisu <strong>{{ config('app.name') }}</strong> i dodanie swojego ogłoszenie o pracę.</p>
 
-    Link do ogłoszenia: {{ link_to_route('job.offer', title, [id, slug]) }}<br><br>
+    <p>
+        W naszym serwisie każdego dnia dodawanych jest kilkadziesiąt nowych ofert pracy. Aby zapewnić sobie lepszą skuteczność, zachęcamy
+        do skorzystania z opcji <strong>promowania</strong>.
+    </p>
 
-    Dziękujemy za skorzystanie z naszego serwisu. W razie dodatkowych pytań pozostajemy do dyspozycji.<br><br>
+    <h4>Zalety promowanego ogłoszenia</h4>
 
-    Jeżeli chesz dodać kolejne ogłoszenie, kliknij {{ link_to_route('job.submit', 'tutaj') }}.
+    <ul>
+        <li>Wyróżnienie na <strong>górze wyników</strong> - Twoja oferta będzie zawsze wyświetlana nad darmowymi.</li>
+        <li><strong>Reklama</strong> oferty na forum i stronie głównej.</li>
+        <li>Tylko <strong>9 zł</strong> (~2 €) netto za dzień. Sam decydujesz ile dni oferta ma być promowana.</li>
+    </ul>
+
+    <hr>
+
+    <p>Aby skorzystać z opcji promowania, <strong>edytuj ofertę</strong> pracy i zaznacz opcję:<br><i>Tak, chciałbym sokrzystać z opcji promowania ogłoszenia.</i></p>
+
+    {% if jobs|length > 1 %}
+        <p>Kliknij na poniższy link, aby rozpocząć:</p>
+
+        <ul>
+            {% for job in jobs %}
+                <li>{{ link_to_route('job.submit', 'Promowanie oferty: ' ~ job.title, [job.id]) }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <table class="action" align="center" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="center">
+                    <a href="{{ route('job.submit', [jobs[0].id]) }}" class="button success" style="color: #fff" target="_blank">
+                        Kliknij, aby rozpocząć
+                    </a>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+
+    <p>Z poważaniem,<br>{{ config('app.name') }}</p>
+{% endblock %}
+
+{% block footnote %}
 {% endblock %}

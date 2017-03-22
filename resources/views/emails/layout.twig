@@ -5,10 +5,19 @@
     <meta name="viewport" content="width=320, target-densitydpi=device-dpi">
 
     <style type="text/css">
+        .content {
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444444;
+            padding: 20px
+        }
+
         a, a:active, a:visited, a:hover, .content a {
-            color: #80A41A;
-            font-weight: bold;
-            text-decoration: none;
+            color: #5e7813;
+            /*color: #80A41A;*/
+            /*font-weight: bold;*/
+            /*text-decoration: none;*/
         }
 
         hr {
@@ -41,11 +50,17 @@
         h1, h2, h3, h4, h5, h6 {
             line-height: 100% !important;
             -webkit-font-smoothing: antialiased;
-            color: #80A41A;
+            color: #4d4d4d;
         }
 
         h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
             color: inherit;
+        }
+
+        .greeting {
+            margin-top: 0;
+            font-size: 19px;
+            text-align: left;
         }
 
         pre {
@@ -77,6 +92,13 @@
             font-size: 13px;
             border-left: 5px solid #eee;
             color: #777;
+        }
+
+        .action {
+            width: 100%;
+            margin: 30px auto;
+            padding: 0;
+            text-align: center;
         }
 
         .button {
@@ -123,9 +145,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="content" style="text-align: left; font-size: 14px; line-height: 18px; color: #444444; padding: 20px">
+                            <td class="content">
                                 {% block container %}
-                                    <h1 style="margin-top: 0; color: #2F3133; font-size: 19px; font-weight: bold; text-align: left;">Witaj</h1>
+                                    <h1 class="greeting">Witaj,</h1>
 
                                     {% block content %}
                                     {% endblock %}
