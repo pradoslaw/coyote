@@ -12,6 +12,7 @@ use Coyote\Listeners\ChangeImageUrl;
 use Coyote\Listeners\ChangePaymentStatus;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
+use Coyote\Listeners\LogSentMessage;
 use Coyote\Listeners\MicroblogListener;
 use Coyote\Listeners\SaveLocationsInJobPreferences;
 use Coyote\Listeners\SendLockoutEmail;
@@ -39,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
         FirewallWasSaved::class => [FlushFirewallCache::class],
         FirewallWasDeleted::class => [FlushFirewallCache::class],
         SuccessfulLogin::class => [SendSuccessfulLoginEmail::class],
-        MessageSending::class => [ChangeImageUrl::class]
+        MessageSending::class => [ChangeImageUrl::class, LogSentMessage::class]
     ];
 
     /**

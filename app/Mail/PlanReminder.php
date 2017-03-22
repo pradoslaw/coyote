@@ -19,7 +19,7 @@ class PlanReminder extends Mailable
     {
         $this->jobs = $jobs;
 
-        $this->subject('Skorzystaj z opcji promowania ogłoszenia: ' . $jobs->first()->title);
+        $this->subject('Skorzystaj z opcji promowania swojego ogłoszenia');
     }
 
     /**

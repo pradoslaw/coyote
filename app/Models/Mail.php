@@ -16,5 +16,21 @@ class Mail extends Model
     /**
      * @var array
      */
+    protected $fillable = ['subject', 'email'];
+
+    /**
+     * @var array
+     */
     protected $dates = ['created_at'];
+
+    /**
+     * Set the value of the "updated at" attribute.
+     *
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function setUpdatedAt($value)
+    {
+        return $this;
+    }
 }
