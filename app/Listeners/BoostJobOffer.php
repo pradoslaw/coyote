@@ -3,6 +3,7 @@
 namespace Coyote\Listeners;
 
 use Carbon\Carbon;
+use Coyote\Events\JobWasSaved;
 use Coyote\Events\PaymentPaid;
 use Coyote\Notifications\SuccessfulPaymentNotification;
 use Coyote\Payment;
@@ -64,13 +65,16 @@ class BoostJobOffer implements ShouldQueue
             $event->payment->job->deadline_at = max($event->payment->job->deadline_at, $event->payment->ends_at);
             $event->payment->job->save();
 
+            // payment is done. remove any pending payments (if any...)
+            $event->payment->job->payments()->where('status_id', Payment::NEW)->delete();
+
+            // reindex job offer
+            event(new JobWasSaved($event->payment->job));
+
             // send email with invoice
             $event->user->notify(
                 new SuccessfulPaymentNotification($event->payment, $pdf)
             );
-
-            // payment is done. remove any pending payments (if any...)
-            $event->payment->job->payments()->where('status_id', Payment::NEW)->delete();
         });
     }
 }
