@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\Auth;
 
-use Carbon\Carbon;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\LoginForm;
@@ -108,14 +107,9 @@ class LoginController extends Controller
      */
     public function signout(Request $request)
     {
-        $user = $this->user->findOrFail($this->userId);
-
-        $user->ip = $request->ip();
-        $user->browser = $request->browser(); // metoda browser() nie jest dostepna dla testow funkcjonalnych
-        $user->visited_at = Carbon::now();
-        $user->visits = $this->auth->visits + 1;
-        $user->is_online = false;
-        $user->save();
+        $this->auth->ip = $request->ip();
+        // metoda browser() nie jest dostepna dla testow funkcjonalnych
+        $this->auth->browser = $request->browser();
 
         stream(Stream_Logout::class);
 
