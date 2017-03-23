@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Invoice extends Model
 {
+    use WithoutUpdatedAt;
+
     /**
      * @var array
      */
@@ -32,6 +34,17 @@ class Invoice extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (Invoice $model) {
+            if (empty($model->number)) {
+                $model->number = null;
+            }
+        });
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -91,16 +104,5 @@ class Invoice extends Model
     public function getNetPriceAttribute()
     {
         return $this->netPrice();
-    }
-
-    /**
-     * Set the value of the "updated at" attribute.
-     *
-     * @param  mixed  $value
-     * @return $this
-     */
-    public function setUpdatedAt($value)
-    {
-        return $this;
     }
 }

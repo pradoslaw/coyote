@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Mail extends Model
 {
+    use WithoutUpdatedAt;
+
     /**
      * @var array
      */
@@ -22,15 +24,4 @@ class Mail extends Model
      * @var array
      */
     protected $dates = ['created_at'];
-
-    /**
-     * Set the value of the "updated at" attribute.
-     *
-     * @param  mixed  $value
-     * @return $this
-     */
-    public function setUpdatedAt($value)
-    {
-        return $this;
-    }
 }
