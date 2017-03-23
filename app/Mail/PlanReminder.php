@@ -12,7 +12,6 @@ class PlanReminder extends Mailable
     public $jobs;
 
     /**
-
      * @param \Coyote\Job[] $jobs
      */
     public function __construct($jobs)
