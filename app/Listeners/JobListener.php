@@ -4,7 +4,6 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\JobDeleting;
 use Coyote\Events\JobWasSaved;
-use Coyote\Events\PaymentPaid;
 use Coyote\Jobs\UpdateJobOffers;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 
