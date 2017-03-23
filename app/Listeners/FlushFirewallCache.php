@@ -2,20 +2,20 @@
 
 namespace Coyote\Listeners;
 
-use Coyote\Repositories\Eloquent\FirewallRepository;
-use Illuminate\Contracts\Cache\Repository;
+use Coyote\Services\Firewall\Rules;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 class FlushFirewallCache
 {
     /**
-     * @var Repository
+     * @var Cache
      */
     protected $cache;
 
     /**
-     * @param Repository $cache
+     * @param Cache $cache
      */
-    public function __construct(Repository $cache)
+    public function __construct(Cache $cache)
     {
         $this->cache = $cache;
     }
@@ -25,6 +25,6 @@ class FlushFirewallCache
      */
     public function handle()
     {
-        $this->cache->forget(FirewallRepository::CACHE_KEY);
+        $this->cache->forget(Rules::CACHE_KEY);
     }
 }
