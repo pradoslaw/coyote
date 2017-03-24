@@ -86,8 +86,7 @@ abstract class Controller extends BaseController
         // URL to main page and CDN
         $this->public = array_merge($this->public, [
             'public'    => url()->route('home'),
-            'cdn'       => config('app.cdn') ? ('//' . config('app.cdn')) : url()->route('home'),
-            'ping'      => route('ping', [], false)
+            'cdn'       => config('app.cdn') ? ('//' . config('app.cdn')) : url()->route('home')
         ]);
 
         if ($this->userId && config('services.ws.host')) {
