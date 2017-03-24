@@ -94,6 +94,13 @@ interface RepositoryInterface
     public function find($id, $columns = ['*']);
 
     /**
+     * @param array $ids
+     * @param array $columns
+     * @return mixed
+     */
+    public function findMany(array $ids, $columns = ['*']);
+
+    /**
      * @param $id
      * @param array $columns
      * @return mixed

@@ -58,7 +58,7 @@ class Handler implements \SessionHandlerInterface
     public function write($sessionId, $payload)
     {
         $payload = unserialize($payload);
-        $payload = $this->getDefaultPayload($payload);
+        $payload = ['id' => $sessionId] + $this->getDefaultPayload($payload);
 
         $this->redis->set($sessionId, serialize($payload));
         $this->redis->sadd('sessions', $sessionId);

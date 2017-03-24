@@ -227,6 +227,18 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
+     * @param array $ids
+     * @param array $columns
+     * @return mixed
+     */
+    public function findMany(array $ids, $columns = ['*'])
+    {
+        return $this->applyCriteria(function () use ($ids, $columns) {
+            return $this->model->findMany($ids, $columns);
+        });
+    }
+
+    /**
      * @param $id
      * @param array $columns
      * @return mixed

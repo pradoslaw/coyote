@@ -2,16 +2,14 @@
 
 namespace Coyote\Services\Session;
 
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
-use Coyote\Session;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Criteria\User\InSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 
 /**
  * Generuje widok przedstawiajacy liste osob na danej stronie z podzialem na boty, zalogowane osoby itp
- *
- * Class Viewers
- * @package Coyote\Session
  */
 class Viewers
 {
@@ -24,17 +22,24 @@ class Viewers
     private $session;
 
     /**
+     * @var UserRepository
+     */
+    private $user;
+
+    /**
      * @var Request
      */
     private $request;
 
     /**
      * @param SessionRepository $session
+     * @param UserRepository $user
      * @param Request $request
      */
-    public function __construct(SessionRepository $session, Request $request)
+    public function __construct(SessionRepository $session, UserRepository $user, Request $request)
     {
         $this->session = $session;
+        $this->user = $user;
         $this->request = $request;
     }
 
@@ -48,7 +53,7 @@ class Viewers
     {
         $groups = [self::USER => [], self::ROBOT => []];
         /** @var \Illuminate\Support\Collection $collection */
-        $collection = $this->unique($this->session->byPath($path));
+        $collection = $this->unique($this->session->getByPath($path));
 
         // zlicza liczbe userow
         $total = $collection->count();
@@ -59,12 +64,14 @@ class Viewers
 
         // zlicza ilosc robotow na stronie
         $robots = $collection->filter(function ($item) {
-            return $item->robot;
+            return $item['robot'];
         })
         ->count();
 
         // only number of human guests
         $guests -= $robots;
+
+        $collection = $this->setupUsersName($collection);
 
         foreach ($collection->groupBy('group') as $name => $rowset) {
             if ($name == '') {
@@ -74,8 +81,8 @@ class Viewers
             }
 
             foreach ($rowset as $user) {
-                if ($user->user_id) {
-                    $groups[$name][] = $this->makeProfileLink($user->user_id, $user->name);
+                if ($user['user_id'] !== null) {
+                    $groups[$name][] = $this->makeProfileLink($user['user_id'], $user['name']);
                 }
             }
         }
@@ -112,6 +119,31 @@ class Viewers
     }
 
     /**
+     * @param Collection $collection
+     * @return Collection
+     */
+    private function setupUsersName(Collection $collection)
+    {
+        $registered = $collection->filter(function ($item) {
+            return $item['user_id'] !== null;
+        });
+
+        // include group name and only few columns in query
+        $this->user->pushCriteria(new InSession());
+        $result = $this->user->findMany($registered->pluck('user_id')->toArray());
+
+        foreach ($result as $row) {
+            foreach ($collection as $key => $item) {
+                if ($row->user_id == $item['user_id']) {
+                    $collection[$key] = array_merge($item, $row->toArray());
+                }
+            }
+        }
+
+        return $collection;
+    }
+
+    /**
      * @param int $userId
      * @param string $userName
      * @return string
@@ -132,16 +164,16 @@ class Viewers
      */
     private function unique(Collection $collection)
     {
-        $guests = $collection->filter(function (Session $item) {
-            return $item->user_id === null;
+        $guests = $collection->filter(function (array $item) {
+            return $item['user_id'] === null;
         });
 
         $collection
-            ->filter(function (Session $item) {
-                return $item->user_id !== null;
+            ->filter(function (array $item) {
+                return $item['user_id'] !== null;
             })
             ->unique('user_id')
-            ->each(function (Session $item) use ($guests) {
+            ->each(function (array $item) use ($guests) {
                 $guests->push($item);
             });
 
