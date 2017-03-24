@@ -3,11 +3,11 @@
 namespace Coyote\Services\Session;
 
 use Illuminate\Container\Container;
-use Illuminate\Session\CacheBasedSessionHandler;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Redis\Database as Redis;
 use Jenssegers\Agent\Agent;
 
-class Handler extends CacheBasedSessionHandler
+class Handler implements \SessionHandlerInterface
 {
     /**
      * @var Container
@@ -15,14 +15,33 @@ class Handler extends CacheBasedSessionHandler
     protected $container;
 
     /**
-     * @param Container $container
-     * @return $this
+     * @var Redis
      */
-    public function setContainer(Container $container)
+    protected $redis;
+
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
+        $this->redis = $container['redis'];
+    }
 
-        return $this;
+    /**
+     * {@inheritdoc}
+     */
+    public function open($savePath, $sessionName)
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function close()
+    {
+        return true;
     }
 
     /**
@@ -30,18 +49,21 @@ class Handler extends CacheBasedSessionHandler
      */
     public function read($sessionId)
     {
-        return parent::read($this->sessionId($sessionId));
+        return $this->redis->get($sessionId);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write($sessionId, $data)
+    public function write($sessionId, $payload)
     {
-        $data = unserialize($data);
-        $data = $this->getDefaultPayload($data);
+        $payload = unserialize($payload);
+        $payload = $this->getDefaultPayload($payload);
 
-        return parent::write($this->sessionId($sessionId), serialize($data));
+        $this->redis->set($sessionId, serialize($payload));
+        $this->redis->sadd('sessions', $sessionId);
+
+        return true;
     }
 
     /**
@@ -49,7 +71,18 @@ class Handler extends CacheBasedSessionHandler
      */
     public function destroy($sessionId)
     {
-        return parent::destroy($this->sessionId($sessionId));
+        $this->redis->srem('sessions', $sessionId);
+        $this->redis->del($sessionId);
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function gc($lifetime)
+    {
+        return true;
     }
 
     /**
@@ -102,14 +135,5 @@ class Handler extends CacheBasedSessionHandler
         }
 
         return $agent->robot();
-    }
-
-    /**
-     * @param string $sessionId
-     * @return string
-     */
-    private function sessionId($sessionId)
-    {
-        return 'session:' . $sessionId;
     }
 }

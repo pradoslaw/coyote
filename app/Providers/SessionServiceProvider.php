@@ -5,7 +5,6 @@ namespace Coyote\Providers;
 use Illuminate\Support\ServiceProvider;
 use Coyote\Services\Session\Viewers;
 use Coyote\Services\Session\Handler;
-use Illuminate\Contracts\Cache\Repository as CacheContract;
 
 class SessionServiceProvider extends ServiceProvider
 {
@@ -17,9 +16,7 @@ class SessionServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app['session']->extend('coyote', function ($app) {
-            $lifetime = $app['config']->get('session.lifetime');
-
-            return (new Handler($app[CacheContract::class], $lifetime))->setContainer($app);
+            return new Handler($app);
         });
 
         $this->app->bind('session.viewers', function ($app) {
