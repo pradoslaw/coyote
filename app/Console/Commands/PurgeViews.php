@@ -4,6 +4,7 @@ namespace Coyote\Console\Commands;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Illuminate\Console\Command;
+use Illuminate\Database\Connection;
 
 class PurgeViews extends Command
 {
@@ -27,6 +28,11 @@ class PurgeViews extends Command
     private $page;
 
     /**
+     * @var mixed
+     */
+    private $redis;
+
+    /**
      * Create a new command instance.
      *
      * @param PageRepository $page
@@ -36,6 +42,7 @@ class PurgeViews extends Command
         parent::__construct();
 
         $this->page = $page;
+        $this->redis = app('redis');
     }
 
     /**
@@ -45,31 +52,37 @@ class PurgeViews extends Command
      */
     public function handle()
     {
-        $redis = app('redis');
-        $keys = $redis->keys('hit:*');
+        // get hits as serialized arrays
+        $keys = $this->redis->smembers('hits');
 
-        foreach ($keys as $key) {
-            list(, $path) = explode(':', $key);
+        if (!$keys) {
+            return;
+        }
 
-            /** @var \Coyote\Page $page */
-            $page = $this->page->findByPath('/' . trim($path, '/'));
-            if (!empty($page->id)) {
-                $content = $page->content()->getResults();
+        // hits as groupped collection
+        $pages = collect(array_map('unserialize', $keys))->groupBy('path');
 
-                if ($content) {
-                    $hits = $redis->smembers($key);
+        app(Connection::class)->transaction(function () use ($pages, $keys) {
+            foreach ($pages as $path => $hits) {
+                /** @var \Coyote\Page $page */
+                $page = $this->page->findByPath('/' . $path);
 
-                    $content->timestamps = false;
-                    $content->increment('views', count($hits));
+                if (!empty($page->id)) {
+                    $content = $page->content()->getResults();
 
-                    $this->store($page, $hits);
+                    if ($content) {
+                        $content->timestamps = false;
+                        $content->increment('views', count($hits));
 
-                    $this->info('Added ' . count($hits) . ' views to: ' . $path);
+                        $this->store($page, $hits);
+
+                        $this->info('Added ' . count($hits) . ' views to: ' . $path);
+                    }
                 }
             }
 
-            $redis->del($key); // remove key from redis no matter what
-        }
+            $this->redis->srem('hits', $keys);
+        });
     }
 
     /**
@@ -79,11 +92,9 @@ class PurgeViews extends Command
     private function store($page, $hits)
     {
         foreach ($hits as $hit) {
-            list($userId, ) = explode(';', $hit);
-
-            if (is_numeric($userId)) {
+            if ($hit['user_id']) {
                 /** @var \Coyote\Page\Visit $visits */
-                $visits = $page->visits()->firstOrNew(['user_id' => $userId]);
+                $visits = $page->visits()->firstOrNew(['user_id' => $hit['user_id']]);
                 $visits->visits++;
 
                 $visits->save();
