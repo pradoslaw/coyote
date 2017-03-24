@@ -40,9 +40,9 @@ class SessionRepository implements SessionRepositoryInterface
         }
 
         return $collection->filter(function ($item) use ($path) {
-            $path = parse_url($item['url'], PHP_URL_PATH);
+            $urlPath = parse_url($item['url'], PHP_URL_PATH);
 
-            return starts_with($path, $path);
+            return starts_with($path, $urlPath);
         });
     }
 
