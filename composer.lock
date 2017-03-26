@@ -45,12 +45,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/adam-boduch/laravel-grid.git",
-                "reference": "daa23f7a044e326c7742647d7922563eb45ac79e"
+                "reference": "490e8a13f46765d67a4f81c5231b1d764e13bf70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/daa23f7a044e326c7742647d7922563eb45ac79e",
-                "reference": "daa23f7a044e326c7742647d7922563eb45ac79e",
+                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/490e8a13f46765d67a4f81c5231b1d764e13bf70",
+                "reference": "490e8a13f46765d67a4f81c5231b1d764e13bf70",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 }
             ],
             "description": "Laravel grid package",
-            "time": "2017-02-08T10:46:23+00:00"
+            "time": "2017-03-26T08:56:08+00:00"
         },
         {
             "name": "barryvdh/laravel-debugbar",

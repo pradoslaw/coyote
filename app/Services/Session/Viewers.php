@@ -3,7 +3,6 @@
 namespace Coyote\Services\Session;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Repositories\Criteria\User\InSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
@@ -22,9 +21,9 @@ class Viewers
     private $session;
 
     /**
-     * @var UserRepository
+     * @var Registered
      */
-    private $user;
+    private $registered;
 
     /**
      * @var Request
@@ -33,13 +32,13 @@ class Viewers
 
     /**
      * @param SessionRepository $session
-     * @param UserRepository $user
+     * @param Registered $registered
      * @param Request $request
      */
-    public function __construct(SessionRepository $session, UserRepository $user, Request $request)
+    public function __construct(SessionRepository $session, Registered $registered, Request $request)
     {
         $this->session = $session;
-        $this->user = $user;
+        $this->registered = $registered;
         $this->request = $request;
     }
 
@@ -71,7 +70,7 @@ class Viewers
         // only number of human guests
         $guests -= $robots;
 
-        $collection = $this->setupUsersName($collection);
+        $collection = $this->registered->setup($collection);
 
         foreach ($collection->groupBy('group') as $name => $rowset) {
             if ($name == '') {
@@ -116,31 +115,6 @@ class Viewers
         ksort($groups);
 
         return view('components.viewers', compact('groups', 'total', 'guests', 'registered', 'robots'));
-    }
-
-    /**
-     * @param Collection $collection
-     * @return Collection
-     */
-    private function setupUsersName(Collection $collection)
-    {
-        $registered = $collection->filter(function ($item) {
-            return $item['user_id'] !== null;
-        });
-
-        // include group name and only few columns in query
-        $this->user->pushCriteria(new InSession());
-        $result = $this->user->findMany($registered->pluck('user_id')->toArray());
-
-        foreach ($result as $row) {
-            foreach ($collection as $key => $item) {
-                if ($row->user_id == $item['user_id']) {
-                    $collection[$key] = array_merge($item, $row->toArray());
-                }
-            }
-        }
-
-        return $collection;
     }
 
     /**
