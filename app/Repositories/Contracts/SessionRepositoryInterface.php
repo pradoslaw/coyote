@@ -11,7 +11,7 @@ interface SessionRepositoryInterface
 
     /**
      * @param string|null $path
-     * @return \Illuminate\Support\Collection|static
+     * @return \Illuminate\Support\Collection
      */
     public function getByPath($path = null);
 
