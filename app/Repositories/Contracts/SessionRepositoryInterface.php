@@ -5,13 +5,19 @@ namespace Coyote\Repositories\Contracts;
 interface SessionRepositoryInterface
 {
     /**
-     * Remove old sessions from session_log table.
+     * @return \Illuminate\Support\Collection
      */
-//    public function purge();
+    public function all();
 
     /**
      * @param string|null $path
      * @return \Illuminate\Support\Collection|static
      */
     public function getByPath($path = null);
+
+    /**
+     * @param int $lifetime
+     * @return \Illuminate\Support\Collection
+     */
+    public function gc(int $lifetime);
 }

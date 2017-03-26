@@ -18,7 +18,6 @@ use Coyote\Listeners\SaveLocationsInJobPreferences;
 use Coyote\Listeners\SendLockoutEmail;
 use Coyote\Listeners\SendSuccessfulLoginEmail;
 use Coyote\Listeners\SetupLoginDate;
-use Coyote\Listeners\SetupLogoutDate;
 use Coyote\Listeners\SetupWikiLinks;
 use Coyote\Listeners\WikiListener;
 use Coyote\Listeners\PageListener;
@@ -27,7 +26,6 @@ use Coyote\Listeners\TopicListener;
 use Coyote\Listeners\JobListener;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Auth\Events\Logout;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Mail\Events\MessageSending;
 
@@ -45,7 +43,6 @@ class EventServiceProvider extends ServiceProvider
         FirewallWasDeleted::class => [FlushFirewallCache::class],
         SuccessfulLogin::class => [SendSuccessfulLoginEmail::class],
         Login::class => [SetupLoginDate::class],
-        Logout::class => [SetupLogoutDate::class],
         MessageSending::class => [ChangeImageUrl::class, LogSentMessage::class]
     ];
 

@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Auth;
 
+use Carbon\Carbon;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\LoginForm;
@@ -110,6 +111,9 @@ class LoginController extends Controller
         $this->auth->ip = $request->ip();
         // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $this->auth->browser = $request->browser();
+
+        $this->auth->signout(Carbon::now());
+        $this->auth->save();
 
         stream(Stream_Logout::class);
 

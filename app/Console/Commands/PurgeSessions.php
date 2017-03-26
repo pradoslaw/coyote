@@ -2,7 +2,9 @@
 
 namespace Coyote\Console\Commands;
 
+use Carbon\Carbon;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Console\Command;
 
 class PurgeSessions extends Command
@@ -27,13 +29,20 @@ class PurgeSessions extends Command
     private $session;
 
     /**
-     * @param SessionRepository $session
+     * @var UserRepository
      */
-    public function __construct(SessionRepository $session)
+    private $user;
+
+    /**
+     * @param SessionRepository $session
+     * @param UserRepository $user
+     */
+    public function __construct(SessionRepository $session, UserRepository $user)
     {
         parent::__construct();
 
         $this->session = $session;
+        $this->user = $user;
     }
 
     /**
@@ -43,12 +52,55 @@ class PurgeSessions extends Command
      */
     public function handle()
     {
-        session()->getHandler()->gc(config('session.lifetime') * 60);
+        $result = $this->session->all();
+        $lifetime = config('session.lifetime') * 60;
 
-        if (rand(1, 20) <= 2) {
-            $this->session->purge();
+        foreach ($result as $row) {
+            if ($row['updated_at'] < time() - $lifetime) {
+                $this->signout($row);
+            } else {
+                $this->extend($row);
+            }
         }
 
+        $this->session->gc($lifetime);
+
         $this->info('Session purged.');
+    }
+
+    /**
+     * @param array $session
+     */
+    private function extend(array $session)
+    {
+        if (empty($session['user_id'])) {
+            return;
+        }
+
+        /** @var \Coyote\User $user */
+        $user = $this->user->find($session['user_id']);
+
+        $user->timestamps = false;
+        $user->visited_at = Carbon::now();
+
+        $user->save();
+    }
+
+    /**
+     * @param array $session
+     */
+    private function signout(array $session)
+    {
+        if (empty($session['user_id'])) {
+            return;
+        }
+
+        /** @var \Coyote\User $user */
+        $user = $this->user->find($session['user_id']);
+
+        $this->info('Remove ' . $user->name . '\'s session');
+
+        $user->signout(Carbon::createFromTimestamp($session['updated_at']));
+        $user->save();
     }
 }

@@ -66,6 +66,21 @@ class SessionRepository implements SessionRepositoryInterface
         return array_map('unserialize', $result);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function gc(int $lifetime)
+    {
+        foreach ($this->all() as $item) {
+            if ($item['updated_at'] < time() - $lifetime) {
+                $this->redis->del($item['id']);
+                $this->redis->srem('sessions', $item['id']);
+            }
+        }
+
+        return true;
+    }
+
     protected function makeRedis()
     {
         $this->redis = $this->app['redis'];
