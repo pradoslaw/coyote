@@ -28,8 +28,33 @@ class SessionRepository implements SessionRepositoryInterface
     }
 
     /**
-     * @param string|null $path
-     * @return \Illuminate\Support\Collection|static
+     * @inheritdoc
+     */
+    public function set(string $sessionId, array $payload)
+    {
+        $this->redis->set($sessionId, serialize($payload));
+        $this->redis->sadd('sessions', $sessionId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get(string $sessionId)
+    {
+        return $this->redis->get($sessionId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function destroy(string $sessionId)
+    {
+        $this->redis->srem('sessions', $sessionId);
+        $this->redis->del($sessionId);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getByPath($path = null)
     {
@@ -47,7 +72,7 @@ class SessionRepository implements SessionRepositoryInterface
     }
 
     /**
-     * @return mixed
+     * @inheritdoc
      */
     public function all()
     {

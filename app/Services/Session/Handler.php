@@ -2,9 +2,9 @@
 
 namespace Coyote\Services\Session;
 
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Redis\Database as Redis;
 use Jenssegers\Agent\Agent;
 
 class Handler implements \SessionHandlerInterface
@@ -15,17 +15,18 @@ class Handler implements \SessionHandlerInterface
     protected $container;
 
     /**
-     * @var Redis
+     * @var SessionRepository
      */
-    protected $redis;
+    protected $repository;
 
     /**
+     * @param SessionRepository $repository
      * @param Container $container
      */
-    public function __construct(Container $container)
+    public function __construct(SessionRepository $repository, Container $container)
     {
+        $this->repository = $repository;
         $this->container = $container;
-        $this->redis = $container['redis'];
     }
 
     /**
@@ -49,7 +50,7 @@ class Handler implements \SessionHandlerInterface
      */
     public function read($sessionId)
     {
-        return $this->redis->get($sessionId);
+        return $this->repository->get($sessionId);
     }
 
     /**
@@ -60,8 +61,7 @@ class Handler implements \SessionHandlerInterface
         $payload = unserialize($payload);
         $payload = ['id' => $sessionId] + $this->getDefaultPayload($payload);
 
-        $this->redis->set($sessionId, serialize($payload));
-        $this->redis->sadd('sessions', $sessionId);
+        $this->repository->set($sessionId, $payload);
 
         return true;
     }
@@ -71,8 +71,7 @@ class Handler implements \SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        $this->redis->srem('sessions', $sessionId);
-        $this->redis->del($sessionId);
+        $this->repository->destroy($sessionId);
 
         return true;
     }

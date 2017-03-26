@@ -19,7 +19,7 @@ class SessionServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app['session']->extend('coyote', function ($app) {
-            return new Handler($app);
+            return new Handler($app[SessionRepositoryInterface::class], $app);
         });
 
         $this->app->bind('session.viewers', function ($app) {
