@@ -74,9 +74,9 @@ class CollectionSource implements SourceInterface
     protected function filterValue($key, $value, $operator)
     {
         if ($operator == FilterOperator::OPERATOR_LIKE || $operator == FilterOperator::OPERATOR_ILIKE) {
-            $this->collection = $this->collection->whereLoose($key, $value);
-        } else {
             $this->collection = $this->collection->where($key, $value);
+        } else {
+            $this->collection = $this->collection->whereStrict($key, $value);
         }
     }
 }
