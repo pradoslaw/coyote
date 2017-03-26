@@ -3,6 +3,7 @@
 namespace Coyote\Console\Commands;
 
 use Carbon\Carbon;
+use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Console\Command;
@@ -34,15 +35,22 @@ class PurgeSessions extends Command
     private $user;
 
     /**
+     * @var GuestRepository
+     */
+    private $guest;
+
+    /**
      * @param SessionRepository $session
      * @param UserRepository $user
+     * @param GuestRepository $guest
      */
-    public function __construct(SessionRepository $session, UserRepository $user)
+    public function __construct(SessionRepository $session, UserRepository $user, GuestRepository $guest)
     {
         parent::__construct();
 
         $this->session = $session;
         $this->user = $user;
+        $this->guest = $guest;
     }
 
     /**
