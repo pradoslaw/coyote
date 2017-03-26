@@ -17,12 +17,13 @@ import './components/popover.js';
 import './components/flag.js';
 import './bootstrap';
 
+import Config from './libs/config';
+import Router from './libs/router';
+
 window.ws = RealtimeFactory();
 
 import './components/notifications.js';
 import './components/pm.js';
-import Config from './libs/config';
-import Router from './libs/router';
 
 $(function () {
     'use strict';
