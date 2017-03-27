@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
+use Coyote\Services\Forum\Marked;
 use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
@@ -16,13 +17,15 @@ class CategoryController extends BaseController
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($forum, Request $request)
+    public function index($forum, Request $request, Marked $marked)
     {
         $this->pushForumCriteria();
         $forumList = $this->forum->choices();
 
         // execute query: get all subcategories that user can has access to
-        $sections = $this->forum->groupBySections($this->userId, $this->sessionId, $forum->id);
+        $sections = $this->forum->groupBySections($this->userId, $this->guestId, $forum->id);
+        // mark unread categories
+        $sections = $marked->setupForumMarkedAt($sections);
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
@@ -38,6 +41,8 @@ class CategoryController extends BaseController
                 $this->topicsPerPage($request)
             )
             ->appends($request->except('page'));
+
+        $topics = $marked->setupTopicMarkedAt($topics);
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
@@ -58,11 +63,11 @@ class CategoryController extends BaseController
      */
     public function mark($forum)
     {
-        $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
+        $this->forum->markAsRead($forum->id, $this->userId, $this->guestId);
         $forums = $this->forum->where('parent_id', $forum->id)->get();
 
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
+            $this->forum->markAsRead($forum->id, $this->userId, $this->guestId);
         }
     }
 
