@@ -238,4 +238,17 @@ $(function () {
 
         DesktopNotifications.doNotify(data.headline, data.subject, data.url);
     });
+
+    setInterval(() => {
+        $.get(Config.get('ping'), token => {
+            $('meta[name="csrf-token"]').attr('content', token);
+            $(':hidden[name="_token"]').val(token);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': token
+                }
+            });
+        });
+    }, Config.get('ping_interval') * 60 * 1000);
 });
