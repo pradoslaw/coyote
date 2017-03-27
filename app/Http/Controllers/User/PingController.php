@@ -11,6 +11,6 @@ class PingController extends Controller
      */
     public function index()
     {
-        return response('ping');
+        return response(csrf_token());
     }
 }
