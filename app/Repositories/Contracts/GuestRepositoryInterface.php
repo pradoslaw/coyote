@@ -12,7 +12,7 @@ interface GuestRepositoryInterface extends RepositoryInterface
      * @param Session $session
      * @return Guest
      */
-    public function store(Session $session): Guest;
+    public function save(Session $session): Guest;
 
     /**
      * @param int|null $userId

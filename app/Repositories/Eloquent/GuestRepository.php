@@ -20,7 +20,7 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function store(Session $session): Guest
+    public function save(Session $session): Guest
     {
         /** @var Guest $guest */
         $guest = $this->model->firstOrNew(

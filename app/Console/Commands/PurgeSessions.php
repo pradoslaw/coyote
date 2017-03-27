@@ -101,7 +101,7 @@ class PurgeSessions extends Command
      */
     private function signout($session)
     {
-        $this->guest->store($session);
+        $this->guest->save($session);
 
         if (empty($session->userId)) {
             return;
