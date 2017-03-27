@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\LoginForm;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
@@ -18,21 +17,10 @@ class LoginController extends Controller
 {
     use ThrottlesLogins;
 
-    /**
-     * @var UserRepository
-     */
-    private $user;
-
-    /**
-     * LoginController constructor.
-     * @param UserRepository $user
-     */
-    public function __construct(UserRepository $user)
+    public function __construct()
     {
         parent::__construct();
         $this->middleware('guest', ['except' => 'signout']);
-
-        $this->user = $user;
     }
 
     /**
@@ -69,14 +57,8 @@ class LoginController extends Controller
         if (auth()->attempt(['name' => $user->name, 'password' => $form->password->getValue()], true)) {
             // put information into the activity stream...
             stream(Stream_Login::class);
-            // send notification about new login
-            event(
-                new SuccessfulLogin(
-                    auth()->user(),
-                    $form->getRequest()->ip(),
-                    substr((string) $form->getRequest()->header('User-Agent'), 0, 900)
-                )
-            );
+            // send notification about new signin
+            $this->fireSuccessfulLoginEvent($form->getRequest());
 
             return redirect()->intended(route('home'));
         }
@@ -141,5 +123,19 @@ class LoginController extends Controller
     protected function maxLoginAttempts()
     {
         return 3;
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function fireSuccessfulLoginEvent(Request $request)
+    {
+        event(
+            new SuccessfulLogin(
+                auth()->user(),
+                $request->ip(),
+                substr((string) $request->header('User-Agent'), 0, 900)
+            )
+        );
     }
 }
