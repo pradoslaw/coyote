@@ -16,6 +16,8 @@ interface SessionRepositoryInterface
     public function destroy(string $sessionId);
 
     /**
+     * Return session as serialized string (required by laravel's session)
+     *
      * @param string $sessionId
      * @return mixed
      */

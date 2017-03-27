@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Redis;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 use Coyote\Session;
 use Illuminate\Container\Container as App;
+use Predis\Pipeline\Pipeline;
 
 class SessionRepository implements SessionRepositoryInterface
 {
@@ -79,7 +80,7 @@ class SessionRepository implements SessionRepositoryInterface
     {
         $sessionIds = $this->redis->smembers('sessions');
 
-        $result = $this->redis->pipeline(function ($pipe) use ($sessionIds) {
+        $result = $this->redis->pipeline(function (Pipeline $pipe) use ($sessionIds) {
             $result = [];
 
             foreach ($sessionIds as $sessionId) {
