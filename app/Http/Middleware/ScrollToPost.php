@@ -55,7 +55,7 @@ class ScrollToPost
         ];
 
         if (empty($markTime[Forum::class])) {
-            $markTime[Forum::class] = $this->guest->getCreatedAt($userId, $guestId);
+            $markTime[Forum::class] = $this->guest->createdAt($userId, $guestId);
         }
 
         $request->attributes->set('mark_time', $markTime);

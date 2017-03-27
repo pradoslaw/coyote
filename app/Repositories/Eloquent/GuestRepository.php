@@ -42,7 +42,7 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getCreatedAt($userId, $guestId = null): Carbon
+    public function createdAt($userId, $guestId = null): Carbon
     {
         static $dateTime;
 

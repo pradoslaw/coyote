@@ -84,7 +84,7 @@ class Marked
      */
     private function getDefaultDateTime(): Carbon
     {
-        return $this->guest->getCreatedAt(
+        return $this->guest->createdAt(
             $this->request->session()->get('user_id'),
             $this->request->session()->get('guest_id')
         );

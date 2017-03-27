@@ -59,7 +59,7 @@ class AlertsController extends BaseController
 
         return $this->view('user.alerts.home', [
             'pagination'        => $pagination,
-            'guest_created_at'  => $guest->getCreatedAt($this->userId)
+            'guest_created_at'  => $guest->createdAt($this->userId)
         ]);
     }
 
@@ -102,7 +102,7 @@ class AlertsController extends BaseController
 
         $view = view('user.alerts.ajax', [
             'alerts'    => $alerts,
-            'session'   => $guest->getCreatedAt($this->userId)
+            'session'   => $guest->createdAt($this->userId)
         ]);
 
         return response()->json([
