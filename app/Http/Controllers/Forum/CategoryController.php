@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
-use Coyote\Services\Forum\Marked;
+use Coyote\Services\Forum\Personalizer;
 use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
@@ -15,9 +15,10 @@ class CategoryController extends BaseController
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
+     * @param Personalizer $personalizer
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($forum, Request $request, Marked $marked)
+    public function index($forum, Request $request, Personalizer $personalizer)
     {
         $this->pushForumCriteria();
         $forumList = $this->forum->choices();
@@ -25,7 +26,7 @@ class CategoryController extends BaseController
         // execute query: get all subcategories that user can has access to
         $sections = $this->forum->groupBySections($this->userId, $this->guestId, $forum->id);
         // mark unread categories
-        $sections = $marked->setupForumMarkedAt($sections);
+        $sections = $personalizer->markUnreadCategories($sections);
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
@@ -42,7 +43,7 @@ class CategoryController extends BaseController
             )
             ->appends($request->except('page'));
 
-        $topics = $marked->setupTopicMarkedAt($topics);
+        $topics = $personalizer->markUnreadTopics($topics);
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class Marked
+class Personalizer
 {
     /**
      * @var GuestRepository
@@ -34,7 +34,7 @@ class Marked
      * @param LengthAwarePaginator $paginator
      * @return LengthAwarePaginator
      */
-    public function setupTopicMarkedAt(LengthAwarePaginator $paginator): LengthAwarePaginator
+    public function markUnreadTopics(LengthAwarePaginator $paginator): LengthAwarePaginator
     {
         foreach ($paginator->items() as &$topic) {
             if (empty($topic->forum_marked_at)) {
@@ -60,7 +60,7 @@ class Marked
      * @param Collection $sections
      * @return Collection
      */
-    public function setupForumMarkedAt(Collection $sections)
+    public function markUnreadCategories(Collection $sections)
     {
         foreach ($sections as $section) {
             // loop for each category (even subcategories)
