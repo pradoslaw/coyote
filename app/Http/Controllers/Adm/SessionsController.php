@@ -18,17 +18,8 @@ class SessionsController extends BaseController
 
         $grid = $this->gridBuilder()
             ->createGrid(SessionsGrid::class)
-            ->setSource(new CollectionSource($this->collect($registered->setup(collect($session->all())))));
+            ->setSource(new CollectionSource($registered->setup($session->all())));
 
         return $this->view('adm.sessions')->with('grid', $grid);
-    }
-
-    private function collect($collection)
-    {
-        foreach ($collection as $key => $value) {
-            $collection[$key] = collect($value);
-        }
-
-        return $collection;
     }
 }

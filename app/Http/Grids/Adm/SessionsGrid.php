@@ -9,6 +9,7 @@ use Boduch\Grid\Row;
 use Carbon\Carbon;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Order;
+use Coyote\Session;
 use Jenssegers\Agent\Agent;
 
 class SessionsGrid extends Grid
@@ -20,11 +21,11 @@ class SessionsGrid extends Grid
             ->addColumn('name', [
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
-                'clickable' => function ($session) {
-                    if ($session['user_id']) {
-                        return link_to_route('adm.users.save', $session['name'], [$session['user_id']]);
+                'clickable' => function (Session $session) {
+                    if ($session->userId) {
+                        return link_to_route('adm.users.save', $session->name, [$session->userId]);
                     } else {
-                        return $session['robot'] ?: '--';
+                        return $session->robot ?: '--';
                     }
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
@@ -32,16 +33,16 @@ class SessionsGrid extends Grid
             ->addColumn('created_at', [
                 'title' => 'Data logowania',
                 'sortable' => true,
-                'render' => function ($row) {
-                    return Carbon::createFromTimestamp($row['created_at']);
+                'render' => function (Session $session) {
+                    return Carbon::createFromTimestamp($session->createdAt);
                 },
                 'decorator' => [$this->getDateTimeDecorator()]
             ])
             ->addColumn('updated_at', [
                 'title' => 'Ostatnia aktywność',
                 'sortable' => true,
-                'render' => function ($row) {
-                    return Carbon::createFromTimestamp($row['updated_at']);
+                'render' => function (Session $session) {
+                    return Carbon::createFromTimestamp($session->updatedAt);
                 },
                 'decorator' => [$this->getDateTimeDecorator()]
             ])
@@ -52,8 +53,8 @@ class SessionsGrid extends Grid
             ])
             ->addColumn('url', [
                 'title' => 'Strona',
-                'render' => function ($row) {
-                    return link_to($row['url']);
+                'render' => function (Session $session) {
+                    return link_to($session->url);
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])
