@@ -18,7 +18,7 @@ class Guest extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'session_id', 'predictions'];
+    protected $fillable = ['id', 'user_id', 'session_id', 'predictions'];
 
     /**
      * @var string
