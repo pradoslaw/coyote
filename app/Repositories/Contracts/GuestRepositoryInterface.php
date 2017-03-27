@@ -17,7 +17,7 @@ interface GuestRepositoryInterface extends RepositoryInterface
     /**
      * @param int|null $userId
      * @param string|null $guestId
-     * @return Carbon
+     * @return Carbon|null
      */
-    public function createdAt($userId, $guestId = null): Carbon;
+    public function createdAt($userId, $guestId = null);
 }

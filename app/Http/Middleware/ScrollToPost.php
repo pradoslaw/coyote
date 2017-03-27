@@ -4,8 +4,8 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Coyote\Forum;
-use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
+use Coyote\Services\Forum\Personalizer;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
@@ -18,18 +18,18 @@ class ScrollToPost
     protected $post;
 
     /**
-     * @var GuestRepository
+     * @var Personalizer
      */
-    protected $guest;
+    protected $personalizer;
 
     /**
      * @param PostRepository $post
-     * @param GuestRepository $guest
+     * @param Personalizer $personalizer
      */
-    public function __construct(PostRepository $post, GuestRepository $guest)
+    public function __construct(PostRepository $post, Personalizer $personalizer)
     {
         $this->post = $post;
-        $this->guest = $guest;
+        $this->personalizer = $personalizer;
     }
 
     /**
@@ -55,7 +55,8 @@ class ScrollToPost
         ];
 
         if (empty($markTime[Forum::class])) {
-            $markTime[Forum::class] = $this->guest->createdAt($userId, $guestId);
+            // try to establish user's first visit datetime
+            $markTime[Forum::class] = $this->personalizer->getDefaultDateTime();
         }
 
         $request->attributes->set('mark_time', $markTime);
