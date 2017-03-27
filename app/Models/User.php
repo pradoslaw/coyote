@@ -312,14 +312,4 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         $this->notify(new ResetPasswordNotification($token));
     }
-
-    /**
-     * @param mixed $date
-     */
-    public function signout($date)
-    {
-        $this->visited_at = $date;
-        $this->visits += 1;
-        $this->is_online = false;
-    }
 }

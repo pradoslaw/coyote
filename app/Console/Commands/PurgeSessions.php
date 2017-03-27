@@ -112,7 +112,7 @@ class PurgeSessions extends Command
 
         $this->info('Remove ' . $user->name . '\'s session');
 
-        $user->signout(Carbon::createFromTimestamp($session['updated_at']));
+        $user->is_online = false;
         $user->save();
     }
 }

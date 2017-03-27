@@ -112,7 +112,9 @@ class LoginController extends Controller
         // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $this->auth->browser = $request->browser();
 
-        $this->auth->signout(Carbon::now());
+        $this->auth->visited_at = Carbon::now();
+        $this->auth->is_online = false;
+
         $this->auth->save();
 
         stream(Stream_Logout::class);

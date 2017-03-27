@@ -16,7 +16,9 @@ class SetupLoginDate
     public function handle(Login $event)
     {
         $event->user->is_online = true;
+        $event->user->visits += 1;
         $event->user->visited_at = Carbon::now();
+
         $event->user->save();
     }
 }
