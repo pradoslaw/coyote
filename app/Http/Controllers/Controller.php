@@ -8,7 +8,6 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Breadcrumb\Breadcrumb;
-use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\Connection;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
@@ -43,6 +42,11 @@ abstract class Controller extends BaseController
     protected $sessionId;
 
     /**
+     * @var string
+     */
+    protected $guestId;
+
+    /**
      * Stores user's custom settings (like active tab or tags) from settings table
      *
      * @var array|null
@@ -72,6 +76,7 @@ abstract class Controller extends BaseController
             $this->auth = $request->user();
             $this->userId = $request->user() ? $this->auth->id : null;
             $this->sessionId = $request->session()->getId();
+            $this->guestId = $request->session()->get('guest_id');
 
             $this->request = $request;
 

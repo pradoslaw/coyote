@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Alert;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Transformers\AlertTransformer;
 use Illuminate\Http\Request;
 use Carbon;
@@ -44,10 +44,10 @@ class AlertsController extends BaseController
     }
 
     /**
-     * @param SessionRepository $session
+     * @param GuestRepository $guest
      * @return \Illuminate\View\View
      */
-    public function index(SessionRepository $session)
+    public function index(GuestRepository $guest)
     {
         $this->breadcrumb->push('Powiadomienia', route('user.alerts'));
 
@@ -55,10 +55,12 @@ class AlertsController extends BaseController
         // mark as read
         $this->mark($pagination);
 
-        $session = $session->findBy('user_id', $this->userId, ['created_at']);
         $pagination->setCollection(collect(fractal($pagination->getCollection(), new AlertTransformer())->toArray()));
 
-        return $this->view('user.alerts.home')->with(compact('pagination', 'session'));
+        return $this->view('user.alerts.home', [
+            'pagination'        => $pagination,
+            'guest_created_at'  => $guest->getCreatedAt($this->userId)
+        ]);
     }
 
     /**
@@ -84,11 +86,11 @@ class AlertsController extends BaseController
     }
 
     /**
-     * @param SessionRepository $session
+     * @param GuestRepository $guest
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ajax(SessionRepository $session, Request $request)
+    public function ajax(GuestRepository $guest, Request $request)
     {
         $unread = $this->auth->alerts_unread;
 
@@ -100,7 +102,7 @@ class AlertsController extends BaseController
 
         $view = view('user.alerts.ajax', [
             'alerts'    => $alerts,
-            'session'   => $session->findBy('user_id', $this->userId, ['created_at']),
+            'session'   => $guest->getCreatedAt($this->userId)
         ]);
 
         return response()->json([

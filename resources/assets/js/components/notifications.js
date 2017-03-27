@@ -240,6 +240,7 @@ $(function () {
     });
 
     setInterval(() => {
+        // send ping request to the server just to extend session cookie lifetime.
         $.get(Config.get('ping'), token => {
             $('meta[name="csrf-token"]').attr('content', token);
             $(':hidden[name="_token"]').val(token);

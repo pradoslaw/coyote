@@ -38,4 +38,24 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
 
         return $guest;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCreatedAt($userId, $guestId = null): Carbon
+    {
+        static $dateTime;
+
+        if (!empty($dateTime)) {
+            return $dateTime;
+        }
+
+        if ($userId) {
+            $result = $this->findBy('user_id', $userId, ['created_at']);
+        } else {
+            $result = $this->find($guestId, ['created_at']);
+        }
+
+        return $dateTime = ($result !== null ? $result->created_at : Carbon::now());
+    }
 }

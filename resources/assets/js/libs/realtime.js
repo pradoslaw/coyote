@@ -27,7 +27,7 @@ class Realtime {
         this._callbacks = {};
         this._retries = 0;
 
-        if (this._isSupported()) {
+        if (this._isSupported() && this._host) {
             this._connect();
         }
     }

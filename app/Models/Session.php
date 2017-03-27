@@ -35,6 +35,11 @@ class Session implements \ArrayAccess
     public $url;
 
     /**
+     * @var string
+     */
+    public $ip;
+
+    /**
      * @var int
      */
     public $createdAt;
