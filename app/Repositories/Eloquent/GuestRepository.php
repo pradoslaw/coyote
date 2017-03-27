@@ -14,4 +14,9 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
     {
         return Guest::class;
     }
+
+    public function store()
+    {
+        //
+    }
 }
