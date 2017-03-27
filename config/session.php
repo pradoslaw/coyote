@@ -101,7 +101,7 @@ return [
     |
     */
 
-    'cookie'          => 'coyote_session',
+    'cookie'          => 'cs',
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Path
