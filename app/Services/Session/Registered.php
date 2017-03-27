@@ -4,6 +4,7 @@ namespace Coyote\Services\Session;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\User\InSession;
+use Coyote\Session;
 use Illuminate\Support\Collection;
 
 class Registered
@@ -27,8 +28,8 @@ class Registered
      */
     public function setup(Collection $collection)
     {
-        $registered = $collection->filter(function ($item) {
-            return $item['user_id'] !== null;
+        $registered = $collection->filter(function (Session $item) {
+            return $item->userId !== null;
         });
 
         // include group name and only few columns in query
@@ -36,13 +37,14 @@ class Registered
         $result = $this->user->findMany($registered->pluck('user_id')->toArray());
 
         foreach ($result as $row) {
-            foreach ($collection as $key => $item) {
+            foreach ($collection as &$item) {
                 if ($row->user_id == $item['user_id']) {
-                    $collection[$key] = array_merge($item, $row->toArray());
+                    $item['name'] = $row->name;
+                    $item['group'] = $row->group;
                 }
             }
         }
 
-        return $collection;
+        return $collection->sortBy('name');
     }
 }

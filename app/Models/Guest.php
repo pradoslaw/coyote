@@ -5,8 +5,7 @@ namespace Coyote;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
- * @property string $session_id
+ * @property string $id
  * @property int $user_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -25,4 +24,9 @@ class Guest extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
 }

@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Redis;
 
 use Coyote\Repositories\Contracts\SessionRepositoryInterface;
+use Coyote\Session;
 use Illuminate\Container\Container as App;
 
 class SessionRepository implements SessionRepositoryInterface
@@ -58,7 +59,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function getByPath($path = null)
     {
-        $collection = collect($this->all());
+        $collection = $this->all();
 
         if ($path === null) {
             return $collection;
@@ -88,7 +89,12 @@ class SessionRepository implements SessionRepositoryInterface
             return $result;
         });
 
-        return array_map('unserialize', $result);
+        return collect(array_map(
+            function ($item) {
+                return new Session(unserialize($item));
+            },
+            $result
+        ));
     }
 
     /**
@@ -97,7 +103,7 @@ class SessionRepository implements SessionRepositoryInterface
     public function gc(int $lifetime)
     {
         foreach ($this->all() as $item) {
-            if ($item['updated_at'] < time() - $lifetime) {
+            if ($item->expired($lifetime)) {
                 $this->redis->del($item['id']);
                 $this->redis->srem('sessions', $item['id']);
             }

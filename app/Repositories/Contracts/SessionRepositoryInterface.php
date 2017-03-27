@@ -22,19 +22,19 @@ interface SessionRepositoryInterface
     public function get(string $sessionId);
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return \Coyote\Session[]
      */
     public function all();
 
     /**
      * @param string|null $path
-     * @return \Illuminate\Support\Collection
+     * @return \Coyote\Session[]
      */
     public function getByPath($path = null);
 
     /**
      * @param int $lifetime
-     * @return \Illuminate\Support\Collection
+     * @return bool
      */
     public function gc(int $lifetime);
 }

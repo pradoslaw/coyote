@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Session;
 use Illuminate\Console\Command;
 
 class PurgeSessions extends Command
@@ -61,10 +62,11 @@ class PurgeSessions extends Command
     public function handle()
     {
         $result = $this->session->all();
+        // convert minutes to seconds
         $lifetime = config('session.lifetime') * 60;
 
         foreach ($result as $row) {
-            if ($row['updated_at'] < time() - $lifetime) {
+            if ($row->expired($lifetime)) {
                 $this->signout($row);
             } else {
                 $this->extend($row);
@@ -77,34 +79,36 @@ class PurgeSessions extends Command
     }
 
     /**
-     * @param array $session
+     * @param Session $session
      */
-    private function extend(array $session)
+    private function extend($session)
     {
-        if (empty($session['user_id'])) {
+        if (empty($session->userId)) {
             return;
         }
 
         /** @var \Coyote\User $user */
-        $user = $this->user->find($session['user_id']);
+        $user = $this->user->find($session->userId, ['id', 'visited_at']);
 
         $user->timestamps = false;
-        $user->visited_at = Carbon::now();
+        $user->visited_at = Carbon::createFromTimestamp($session->updatedAt);
 
         $user->save();
     }
 
     /**
-     * @param array $session
+     * @param Session $session
      */
-    private function signout(array $session)
+    private function signout($session)
     {
-        if (empty($session['user_id'])) {
+        $this->guest->store($session);
+
+        if (empty($session->userId)) {
             return;
         }
 
         /** @var \Coyote\User $user */
-        $user = $this->user->find($session['user_id']);
+        $user = $this->user->find($session->userId);
 
         $this->info('Remove ' . $user->name . '\'s session');
 

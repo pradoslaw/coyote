@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Session;
 
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
@@ -133,21 +133,21 @@ class Viewers
     }
 
     /**
-     * @param Collection $collection
+     * @param Session[] $collection
      * @return Collection
      */
     private function unique(Collection $collection)
     {
-        $guests = $collection->filter(function (array $item) {
-            return $item['user_id'] === null;
+        $guests = $collection->filter(function (Session $item) {
+            return $item->userId === null;
         });
 
         $collection
-            ->filter(function (array $item) {
-                return $item['user_id'] !== null;
+            ->filter(function (Session $item) {
+                return $item->userId !== null;
             })
             ->unique('user_id')
-            ->each(function (array $item) use ($guests) {
+            ->each(function (Session $item) use ($guests) {
                 $guests->push($item);
             });
 
