@@ -62,7 +62,8 @@ class RegisterController extends Controller
             $user = $this->user->newUser([
                 'name'     => $request->input('name'),
                 'email'    => $email,
-                'password' => bcrypt($request->input('password'))
+                'password' => bcrypt($request->input('password')),
+                'guest_id' => $request->session()->get('guest_id')
             ]);
 
             $url = Actkey::createLink($user->id);

@@ -87,7 +87,8 @@ class OAuthController extends Controller
                     'is_active' => 1,
                     'is_confirm' => 1,
                     'provider' => $provider,
-                    'provider_id' => $oauth->getId()
+                    'provider_id' => $oauth->getId(),
+                    'guest_id' => $this->request->session()->get('guest_id')
                 ]);
             }
 
