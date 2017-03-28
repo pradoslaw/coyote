@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepositor
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Session;
 use Illuminate\Console\Command;
+use Illuminate\Database\Connection;
 
 class PurgeSessions extends Command
 {
@@ -65,15 +66,17 @@ class PurgeSessions extends Command
         // convert minutes to seconds
         $lifetime = config('session.lifetime') * 60;
 
-        foreach ($result as $row) {
-            if ($row->expired($lifetime)) {
-                $this->signout($row);
-            } else {
-                $this->extend($row);
+        app(Connection::class)->transaction(function () use ($result, $lifetime) {
+            foreach ($result as $row) {
+                if ($row->expired($lifetime)) {
+                    $this->signout($row);
+                } else {
+                    $this->extend($row);
+                }
             }
-        }
 
-        $this->session->gc($lifetime);
+            $this->session->gc($lifetime);
+        });
 
         $this->info('Session purged.');
     }

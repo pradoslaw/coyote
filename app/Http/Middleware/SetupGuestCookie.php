@@ -11,19 +11,54 @@ class SetupGuestCookie
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
+        // establish quest id
+        $guestId = $this->getGuestIdValue($request);
+
         /** @var \Illuminate\Http\Response $response */
         $response = $next($request);
 
-        if (!$request->cookie(config('session.guest_cookie'))) {
-            $response->cookie(config('session.guest_cookie'), (string) Uuid::uuid4(), 525948); // 1 year
+        // cookie value
+        $cookie = $request->cookie(config('session.guest_cookie'));
+
+        if ($cookie === null || $cookie !== $guestId) {
+            $response->cookie(config('session.guest_cookie'), $guestId, 525948); // 1 year
         }
 
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @return string
+     */
+    private function getGuestIdValue(Request $request): string
+    {
+        // get guest_id from session. this does not require additional query to redis
+        $guestId = $request->session()->get('guest_id');
+
+        // cookie was removed or this is users' first visit
+        if ($guestId === null) {
+            if (!empty($request->user())) {
+                $guestId = $request->user()->guest_id;
+            } else {
+                $guestId = (string) Uuid::uuid4();
+            }
+
+            $request->session()->set('guest_id', $guestId);
+        }
+
+        // validate registered user's guest_id with the one from session
+        if (!empty($request->user()) && $request->user()->guest_id !== $guestId) {
+            $guestId = $request->user()->guest_id;
+            $request->session()->set('guest_id', $guestId);
+        }
+
+        return $guestId;
     }
 }

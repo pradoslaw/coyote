@@ -22,8 +22,8 @@ class Kernel extends HttpKernel
         'web' => [
             \Coyote\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            Middleware\SetupGuestCookie::class,
             \Illuminate\Session\Middleware\StartSession::class,
+            Middleware\SetupGuestCookie::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             // todo: nieprawidlowe dzialanie middleware, tymczasowo zakomentowane
             //\Coyote\Http\Middleware\VerifyCsrfToken::class,

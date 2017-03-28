@@ -23,14 +23,12 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
     public function save(Session $session): Guest
     {
         /** @var Guest $guest */
-        $guest = $this->model->firstOrNew(
-            $session->userId ? ['user_id' => $session->userId] : ['id' => $session->guestId]
-        );
+        $guest = $this->model->findOrNew($session->guestId);
 
-        $guest->id = $session->guestId;
         $guest->updated_at = Carbon::createFromTimestamp($session->updatedAt);
 
         if (!$guest->exists) {
+            $guest->user_id = $session->userId;
             $guest->created_at = Carbon::createFromTimestamp($session->createdAt);
         }
 
