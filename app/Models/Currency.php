@@ -29,7 +29,7 @@ class Currency extends Model
     {
         $result = [];
 
-        foreach (self::all() as $row) {
+        foreach (self::orderBy('id')->get() as $row) {
             $result[$row->id] = sprintf('%s (%s)', $row->name, $row->symbol);
         }
 
