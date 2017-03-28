@@ -109,7 +109,7 @@ class Handler implements \SessionHandlerInterface
         if ($container->bound('request')) {
             $request = $container->make('request');
 
-            $payload['guest_id'] = $request->cookie('guest_id');
+            $payload['guest_id'] = $request->cookie(config('session.guest_cookie'));
             $payload['ip'] = $request->ip();
             $payload['browser'] = substr((string) $request->header('User-Agent'), 0, 500);
             $payload['robot'] = $this->robot($payload['browser']);
