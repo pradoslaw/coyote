@@ -39,11 +39,6 @@ abstract class Controller extends BaseController
     /**
      * @var string
      */
-    protected $sessionId;
-
-    /**
-     * @var string
-     */
     protected $guestId;
 
     /**
@@ -75,7 +70,6 @@ abstract class Controller extends BaseController
         $this->middleware(function (Request $request, $next) {
             $this->auth = $request->user();
             $this->userId = $request->user() ? $this->auth->id : null;
-            $this->sessionId = $request->session()->getId();
             $this->guestId = $request->session()->get('guest_id');
 
             $this->request = $request;

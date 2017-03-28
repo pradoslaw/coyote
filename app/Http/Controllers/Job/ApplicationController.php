@@ -24,7 +24,7 @@ class ApplicationController extends Controller
             function (Request $request, $next) {
                 /** @var \Coyote\Job $job */
                 $job = $request->route('job');
-                abort_if($job->hasApplied($this->userId, $this->sessionId), 404);
+                abort_if($job->hasApplied($this->userId, $this->guestId), 404);
 
                 return $next($request);
             },
@@ -73,7 +73,7 @@ class ApplicationController extends Controller
     public function save($job, ApplicationForm $form)
     {
         $filesystem = app('filesystem')->disk('local');
-        $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->sessionId];
+        $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->guestId];
 
         $this->transaction(function () use ($job, $form, $data) {
             $target = (new Stream_Job)->map($job);
