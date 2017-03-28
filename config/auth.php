@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'www',
         'passwords' => 'users',
     ],
 
@@ -36,7 +36,7 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'www' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
@@ -68,12 +68,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => Coyote\User::class,
-        ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        ]
     ],
 
     /*
