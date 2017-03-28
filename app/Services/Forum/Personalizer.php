@@ -4,7 +4,6 @@ namespace Coyote\Services\Forum;
 
 use Carbon\Carbon;
 use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -17,24 +16,17 @@ class Personalizer
     protected $guest;
 
     /**
-     * @var SessionRepository
-     */
-    protected $session;
-
-    /**
      * @var Request
      */
     protected $request;
 
     /**
      * @param GuestRepository $guest
-     * @param SessionRepository $session
      * @param Request $request
      */
-    public function __construct(GuestRepository $guest, SessionRepository $session, Request $request)
+    public function __construct(GuestRepository $guest, Request $request)
     {
         $this->guest = $guest;
-        $this->session = $session;
         $this->request = $request;
     }
 
@@ -92,13 +84,19 @@ class Personalizer
      */
     public function getDefaultDateTime(): Carbon
     {
+        static $createdAt;
+
+        if (!empty($createdAt)) {
+            return $createdAt;
+        }
+
         $createdAt = $this->guest->createdAt(
             $this->request->session()->get('user_id'),
             $this->request->session()->get('guest_id')
         );
 
         if ($createdAt === null) {
-            $createdAt = Carbon::createFromTimestamp($this->session->get('created_at'));
+            $createdAt = Carbon::createFromTimestamp($this->request->session()->get('created_at'));
         }
 
         return $createdAt;

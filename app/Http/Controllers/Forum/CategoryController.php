@@ -36,7 +36,7 @@ class CategoryController extends BaseController
             ->topic
             ->paginate(
                 $this->userId,
-                $this->sessionId,
+                $this->guestId,
                 'topics.last_post_id',
                 'DESC',
                 $this->topicsPerPage($request)
