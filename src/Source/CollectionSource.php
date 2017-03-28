@@ -29,7 +29,7 @@ class CollectionSource implements SourceInterface
     {
         foreach ($columns as $column) {
             /** @var \Boduch\Grid\Column $column */
-            if ($column->isFilterable() && $column->getFilter()->isEmpty()) {
+            if ($column->isFilterable() && !$column->getFilter()->isEmpty()) {
                 $this->filterValue(
                     $column->getFilter()->getName(),
                     $column->getFilter()->getInput(),
@@ -69,7 +69,6 @@ class CollectionSource implements SourceInterface
      * @param string $key
      * @param string $value
      * @param string $operator
-     * @return mixed
      */
     protected function filterValue($key, $value, $operator)
     {
