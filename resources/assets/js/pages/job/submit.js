@@ -67,6 +67,21 @@ new Vue({
             $(this).sortable();
         });
 
+        // ugly hack to initialize jquery fn after dom is loaded
+        $(() => {
+            $.uploader({
+                input: 'logo',
+                onChanged: data => {
+                    this.firm.thumbnail = $('.img-container > img').attr('src');
+                    this.firm.logo = data.name;
+                },
+                onDeleted: () => {
+                    this.firm.logo = null;
+                    this.firm.thumbnail = null;
+                }
+            });
+        });
+
         $('[v-loader]').remove();
     },
     methods: {
@@ -134,7 +149,7 @@ new Vue({
                         'class': 'btn btn-primary'
                     },
                     onClick: () => {
-                        this.newFirm();
+                        this._newFirm();
                         dialog.close();
                     }
                 }]
@@ -174,7 +189,7 @@ new Vue({
                         'class': 'btn btn-primary'
                     },
                     onClick: () => {
-                        this.newFirm();
+                        this._newFirm();
                         dialog.close();
                     }
                 }]
@@ -182,12 +197,13 @@ new Vue({
 
             dialog.show();
         },
-        newFirm: function () {
+        _newFirm: function () {
             this.firm = {
                 'id': null,
                 'name': null,
                 'headline': '',
                 'logo': null,
+                'thumbnail': null,
                 'description': null,
                 'website': null,
                 'is_private': +false,
@@ -292,15 +308,5 @@ $(() => {
      */
     $('.btn-save').on('click', () => {
         $('input[name="done"]').val(1);
-    });
-
-    $.uploader({
-        input: 'logo',
-        onChanged: function(data) {
-            $('#firm-form').find('input[name="logo"]').val(data.name);
-        },
-        onDeleted: function() {
-            $('#firm-form').find('input[name="logo"]').val('');
-        }
     });
 });
