@@ -26,9 +26,10 @@ class Realtime {
         this._host = host;
         this._callbacks = {};
         this._retries = 0;
+        this._isConnected = false;
 
         if (this._isSupported() && this._host) {
-            this._connect();
+            this.connect();
         }
     }
 
@@ -49,13 +50,14 @@ class Realtime {
         return this;
     }
 
-    _connect() {
+    connect() {
         this._handler = new WebSocket(
             (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + this._host + PATH
         );
 
         this._handler.onopen = () => {
             this._retries = 0;
+            this._isConnected = true;
         };
 
         this._handler.onmessage = e => {
@@ -67,10 +69,16 @@ class Realtime {
         };
 
         this._handler.onclose = () => {
+            this._isConnected = false;
+
             if (++this._retries < MAX_RETRIES) {
-                setTimeout(this._connect, DEFAULT_INTERVAL * this._retries);
+                setTimeout(() => this.connect(), DEFAULT_INTERVAL * this._retries);
             }
         };
+    }
+
+    get isConnected() {
+        return this._isConnected;
     }
 
     _isSupported() {
