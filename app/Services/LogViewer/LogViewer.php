@@ -82,7 +82,7 @@ class LogViewer
 
                 if ($this->parseMessage($message, $matches)) {
                     $current = $this->compile($matches);
-                    $current = array_merge($current, json_decode($header[3], true));
+                    $current = array_merge($current, (array) json_decode($header[3], true));
                 }
 
                 $stack = &$result[count($result) - 1]['stack'];
