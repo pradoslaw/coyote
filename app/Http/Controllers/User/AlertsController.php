@@ -102,7 +102,7 @@ class AlertsController extends BaseController
 
         $view = view('user.alerts.ajax', [
             'alerts'    => $alerts,
-            'session'   => $guest->createdAt($this->userId)
+            'guest_created_at'   => $guest->createdAt($this->userId)
         ]);
 
         return response()->json([

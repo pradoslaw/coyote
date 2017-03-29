@@ -154,7 +154,7 @@ class Notifications
     }
 
     /**
-     * Blick on notification.
+     * Click on notification.
      *
      * @param e
      * @return {boolean}
