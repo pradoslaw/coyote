@@ -31,6 +31,7 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
         $guest->user_id = $session->userId;
 
         if (!$guest->exists) {
+            $guest->id = $session->guestId;
             $guest->created_at = Carbon::createFromTimestamp($session->createdAt);
         }
 
