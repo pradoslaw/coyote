@@ -5,7 +5,6 @@ namespace Coyote\Repositories\Redis;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 use Coyote\Session;
 use Illuminate\Container\Container as App;
-use Predis\Pipeline\Pipeline;
 
 class SessionRepository implements SessionRepositoryInterface
 {
@@ -34,8 +33,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function set(string $sessionId, array $payload)
     {
-        $this->redis->set($sessionId, serialize($payload));
-        $this->redis->sadd('sessions', $sessionId);
+        $this->redis->hset('sessions', $sessionId, serialize($payload));
     }
 
     /**
@@ -43,7 +41,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function get(string $sessionId)
     {
-        return $this->redis->get($sessionId);
+        return $this->redis->hget('sessions', $sessionId);
     }
 
     /**
@@ -51,8 +49,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function destroy(string $sessionId)
     {
-        $this->redis->srem('sessions', $sessionId);
-        $this->redis->del($sessionId);
+        $this->redis->hdel('sessions', $sessionId);
     }
 
     /**
@@ -78,21 +75,11 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function all()
     {
-        $sessionIds = $this->redis->smembers('sessions');
-
-        $result = $this->redis->pipeline(function (Pipeline $pipe) use ($sessionIds) {
-            $result = [];
-
-            foreach ($sessionIds as $sessionId) {
-                $result[] = $pipe->get($sessionId);
-            }
-
-            return $result;
-        });
+        $result = $this->redis->hvals('sessions');
 
         return collect(array_map(
             function ($item) {
-                return new Session(unserialize($item));
+                return $this->makeModel(unserialize($item));
             },
             $result
         ));
@@ -105,12 +92,20 @@ class SessionRepository implements SessionRepositoryInterface
     {
         foreach ($this->all() as $item) {
             if ($item->expired($lifetime)) {
-                $this->redis->del($item['id']);
-                $this->redis->srem('sessions', $item['id']);
+                $this->redis->hdel('sessions', $item['id']);
             }
         }
 
         return true;
+    }
+
+    /**
+     * @param array $data
+     * @return Session
+     */
+    protected function makeModel(array $data): Session
+    {
+        return new Session($data);
     }
 
     protected function makeRedis()
