@@ -26,7 +26,7 @@ class SetupGuestCookie
         /** @var \Illuminate\Http\Response $response */
         $response = $next($request);
 
-        if (!($response instanceof BinaryFileResponse) && $cookie === null || $cookie !== $guestId) {
+        if (!($response instanceof BinaryFileResponse) && ($cookie === null || $cookie !== $guestId)) {
             $response->cookie(config('session.guest_cookie'), $guestId, 525948); // 1 year
         }
 
