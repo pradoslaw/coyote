@@ -90,7 +90,7 @@ abstract class Controller extends BaseController
             'ping_interval' => config('session.lifetime') - 5 // every 10 minutes
         ]);
 
-        if (config('services.ws.host')) {
+        if (config('services.ws.host') && $this->userId) {
             $this->public['ws'] = config('services.ws.host') . (config('services.ws.port') ? ':' . config('services.ws.port') : '');
         }
     }
