@@ -22,7 +22,7 @@ class SetupLoginDate // <!-- do not put ShouldQueue
     }
 
     /**
-     * Handle the login event (either via oauth or via regular form)
+     * Handle the login event (either via oauth or via regular form or session create).
      *
      * @param  Login  $event
      * @return void
