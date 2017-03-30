@@ -93,7 +93,7 @@ class LoginController extends Controller
         $this->auth->ip = $request->ip();
         // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $this->auth->browser = $request->browser();
-
+        $this->auth->visits += 1;
         $this->auth->visited_at = Carbon::now();
         $this->auth->is_online = false;
 

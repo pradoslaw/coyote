@@ -115,6 +115,7 @@ class PurgeSessions extends Command
 
         $this->info('Remove ' . $user->name . '\'s session');
 
+        $user->visits += 1;
         $user->is_online = false;
         $user->save();
     }
