@@ -8,6 +8,8 @@ use Illuminate\Container\Container as App;
 
 class SessionRepository implements SessionRepositoryInterface
 {
+    const REDIS_KEY = 'sessions';
+
     /**
      * @var App
      */
@@ -33,7 +35,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function set(string $sessionId, array $payload)
     {
-        $this->redis->hset('sessions', $sessionId, serialize($payload));
+        $this->redis->hset(self::REDIS_KEY, $sessionId, serialize($payload));
     }
 
     /**
@@ -41,7 +43,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function get(string $sessionId)
     {
-        return $this->redis->hget('sessions', $sessionId);
+        return $this->redis->hget(self::REDIS_KEY, $sessionId);
     }
 
     /**
@@ -49,7 +51,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function destroy(string $sessionId)
     {
-        $this->redis->hdel('sessions', $sessionId);
+        $this->redis->hdel(self::REDIS_KEY, $sessionId);
     }
 
     /**
@@ -57,17 +59,21 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function getByPath($path = null)
     {
-        $collection = $this->all();
-
         if ($path === null) {
-            return $collection;
+            return $this->all();
         }
 
-        return $collection->filter(function ($item) use ($path) {
-            $sessionPath = parse_url($item['url'], PHP_URL_PATH);
+        $collection = $this->unserialize($this->redis->hvals(self::REDIS_KEY));
 
-            return starts_with($sessionPath, $path);
-        });
+        return $collection
+            ->filter(function ($item) use ($path) {
+                $sessionPath = parse_url($item['url'], PHP_URL_PATH);
+
+                return starts_with($sessionPath, $path);
+            })
+            ->map(function ($item) {
+                return $this->makeModel($item);
+            });
     }
 
     /**
@@ -75,14 +81,13 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function all()
     {
-        $result = $this->redis->hvals('sessions');
+        start_measure('redis collect sessions');
+        $result = $this->unserialize($this->redis->hvals(self::REDIS_KEY));
+        stop_measure('redis collect sessions');
 
-        return collect(array_map(
-            function ($item) {
-                return $this->makeModel(unserialize($item));
-            },
-            $result
-        ));
+        return $result->map(function ($item) {
+            return $this->makeModel($item);
+        });
     }
 
     /**
@@ -92,7 +97,7 @@ class SessionRepository implements SessionRepositoryInterface
     {
         foreach ($this->all() as $item) {
             if ($item->expired($lifetime)) {
-                $this->redis->hdel('sessions', $item['id']);
+                $this->redis->hdel(self::REDIS_KEY, $item['id']);
             }
         }
 
@@ -100,16 +105,25 @@ class SessionRepository implements SessionRepositoryInterface
     }
 
     /**
-     * @param array $data
+     * @param array $item
      * @return Session
      */
-    protected function makeModel(array $data): Session
+    protected function makeModel(array $item): Session
     {
-        return new Session($data);
+        return new Session($item);
     }
 
     protected function makeRedis()
     {
         $this->redis = $this->app['redis'];
+    }
+
+    /**
+     * @param array $rowset
+     * @return \Illuminate\Support\Collection
+     */
+    private function unserialize(array $rowset)
+    {
+        return collect(array_map('unserialize', $rowset));
     }
 }

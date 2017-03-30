@@ -51,8 +51,11 @@ class Viewers
     public function render($path = null)
     {
         $groups = [self::USER => [], self::ROBOT => []];
+
+        start_measure('get collection');
         /** @var \Illuminate\Support\Collection $collection */
         $collection = $this->unique($this->session->getByPath($path));
+        stop_measure('get collection');
 
         // zlicza liczbe userow
         $total = $collection->count();
