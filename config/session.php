@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'lifetime'        => env('SESSION_LIFETIME', 15),
+    'lifetime'        => env('SESSION_LIFETIME', 10),
     'expire_on_close' => false,
     /*
     |--------------------------------------------------------------------------
