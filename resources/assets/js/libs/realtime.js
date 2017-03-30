@@ -77,6 +77,13 @@ class Realtime {
         };
     }
 
+    disconnect() {
+        this._retries = MAX_RETRIES + 1;
+        this._isConnected = false;
+
+        this._handler.close();
+    }
+
     get isConnected() {
         return this._isConnected;
     }
@@ -92,6 +99,10 @@ export function RealtimeFactory() {
     // response to the heartbeat event
     realtime.on('hb', function(data, handler) {
         handler.send(data);
+    });
+
+    realtime.on('exit', function() {
+        realtime.disconnect();
     });
 
     return realtime;
