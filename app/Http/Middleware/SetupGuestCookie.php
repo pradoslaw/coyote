@@ -5,6 +5,7 @@ namespace Coyote\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class SetupGuestCookie
 {
@@ -25,7 +26,7 @@ class SetupGuestCookie
         /** @var \Illuminate\Http\Response $response */
         $response = $next($request);
 
-        if ($cookie === null || $cookie !== $guestId) {
+        if (!($response instanceof BinaryFileResponse) && $cookie === null || $cookie !== $guestId) {
             $response->cookie(config('session.guest_cookie'), $guestId, 525948); // 1 year
         }
 
