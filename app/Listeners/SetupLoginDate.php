@@ -29,6 +29,9 @@ class SetupLoginDate // <!-- do not put ShouldQueue
      */
     public function handle(Login $event)
     {
+        // don't update updated_at column
+        $event->user->timestamps = false;
+
         $event->user->forceFill([
             'ip'            => $this->request->ip(),
             'is_online'     => true,

@@ -94,6 +94,7 @@ class PurgeSessions extends Command
         $user = $this->user->find($session->userId);
 
         $user->timestamps = false;
+        // update only this field:
         $user->visited_at = Carbon::createFromTimestamp($session->updatedAt);
 
         $user->save();
@@ -113,10 +114,11 @@ class PurgeSessions extends Command
         /** @var \Coyote\User $user */
         $user = $this->user->find($session->userId);
 
-        $this->info('Remove ' . $user->name . '\'s session');
+        $this->info('Remove ' . $user->name . '\'s session. IP: ' . $session->ip);
 
         $user->visits += 1;
         $user->is_online = false;
+
         $user->save();
     }
 }
