@@ -35,7 +35,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function set(string $sessionId, array $payload)
     {
-        $this->redis->hset(self::REDIS_KEY, $sessionId, serialize($payload));
+        return $this->redis->hset(self::REDIS_KEY, $sessionId, serialize($payload));
     }
 
     /**
@@ -51,7 +51,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function destroy(string $sessionId)
     {
-        $this->redis->hdel(self::REDIS_KEY, $sessionId);
+        return $this->redis->hdel(self::REDIS_KEY, $sessionId);
     }
 
     /**
@@ -84,9 +84,9 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function all()
     {
-        start_measure('redis collect sessions');
+//        start_measure('redis collect sessions');
         $result = $this->unserialize($this->redis->hvals(self::REDIS_KEY));
-        stop_measure('redis collect sessions');
+//        stop_measure('redis collect sessions');
 
         return $result->map(function ($item) {
             return $this->makeModel($item);

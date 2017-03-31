@@ -12,6 +12,7 @@ interface SessionRepositoryInterface
 
     /**
      * @param string $sessionId
+     * @return mixed
      */
     public function destroy(string $sessionId);
 
