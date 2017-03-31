@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Alert;
 use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
-use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Transformers\AlertTransformer;
 use Illuminate\Http\Request;
 use Carbon;
@@ -44,10 +43,9 @@ class AlertsController extends BaseController
     }
 
     /**
-     * @param GuestRepository $guest
      * @return \Illuminate\View\View
      */
-    public function index(GuestRepository $guest)
+    public function index()
     {
         $this->breadcrumb->push('Powiadomienia', route('user.alerts'));
 
@@ -58,8 +56,8 @@ class AlertsController extends BaseController
         $pagination->setCollection(collect(fractal($pagination->getCollection(), new AlertTransformer())->toArray()));
 
         return $this->view('user.alerts.home', [
-            'pagination'        => $pagination,
-            'guest_created_at'  => $guest->createdAt($this->userId)
+            'pagination'          => $pagination,
+            'session_created_at'  => $this->request->session()->get('created_at')
         ]);
     }
 
@@ -86,11 +84,10 @@ class AlertsController extends BaseController
     }
 
     /**
-     * @param GuestRepository $guest
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ajax(GuestRepository $guest, Request $request)
+    public function ajax(Request $request)
     {
         $unread = $this->auth->alerts_unread;
 
@@ -101,8 +98,8 @@ class AlertsController extends BaseController
         $alerts = collect(fractal($alerts, new AlertTransformer())->toArray());
 
         $view = view('user.alerts.ajax', [
-            'alerts'    => $alerts,
-            'guest_created_at'   => $guest->createdAt($this->userId)
+            'alerts'               => $alerts,
+            'session_created_at'   => $this->request->session()->get('created_at')
         ]);
 
         return response()->json([
