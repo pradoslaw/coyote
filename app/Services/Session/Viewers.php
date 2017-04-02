@@ -131,7 +131,7 @@ class Viewers
             ->db
             ->table('sessions')
             ->when($path !== null, function (Builder $builder) use ($path) {
-                return $builder->whereRaw('LOWER(path) = ?', [mb_strtolower($path)]);
+                return $builder->where('path', 'LIKE', mb_strtolower($path) . '%');
             })
             ->get(['id', 'user_id', 'robot']);
 

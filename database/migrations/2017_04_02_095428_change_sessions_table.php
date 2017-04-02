@@ -21,7 +21,7 @@ class ChangeSessionsTable extends Migration
             $table->dropColumn(['ip', 'created_at', 'updated_at', 'url', 'browser', 'payload']);
         });
 
-        $this->db->unprepared('CREATE INDEX "sessions_path_index" ON "sessions" USING btree (LOWER(path))');
+        $this->db->unprepared('CREATE INDEX "sessions_path_index" ON "sessions" (path text_pattern_ops)');
     }
 
     /**
