@@ -2,40 +2,40 @@
 
 namespace Coyote\Console\Commands;
 
-use Coyote\Repositories\Contracts\FirewallRepositoryInterface as FirewallRepository;
+use Coyote\Repositories\Contracts\PastebinRepositoryInterface as PastebinRepository;
 use Illuminate\Console\Command;
 
-class PurgeFirewall extends Command
+class PurgePastebinCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'firewall:purge';
+    protected $signature = 'pastebin:purge';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Purge expired firewall entries.';
+    protected $description = 'Purge old pastebin entries.';
 
     /**
-     * @var FirewallRepository
+     * @var PastebinRepository
      */
-    protected $firewall;
+    protected $pastebin;
 
     /**
      * Create a new command instance.
      *
-     * @param FirewallRepository $firewall
+     * @param PastebinRepository $pastebin
      */
-    public function __construct(FirewallRepository $firewall)
+    public function __construct(PastebinRepository $pastebin)
     {
         parent::__construct();
 
-        $this->firewall = $firewall;
+        $this->pastebin = $pastebin;
     }
 
     /**
@@ -45,7 +45,7 @@ class PurgeFirewall extends Command
      */
     public function handle()
     {
-        $this->firewall->purge();
+        $this->pastebin->purge();
         $this->info('Done.');
     }
 }

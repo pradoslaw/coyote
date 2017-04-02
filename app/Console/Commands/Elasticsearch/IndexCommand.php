@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Container\Container as App;
 use Illuminate\Database\Query\Expression;
 
-class Index extends Command
+class IndexCommand extends Command
 {
     use EsTrait;
 

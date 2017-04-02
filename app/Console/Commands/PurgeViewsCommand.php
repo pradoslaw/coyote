@@ -6,7 +6,7 @@ use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection;
 
-class PurgeViews extends Command
+class PurgeViewsCommand extends Command
 {
     /**
      * The name and signature of the console command.

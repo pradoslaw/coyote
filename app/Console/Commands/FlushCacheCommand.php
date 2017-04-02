@@ -5,7 +5,7 @@ namespace Coyote\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Cache\Repository as Cache;
 
-class FlushCache extends Command
+class FlushCacheCommand extends Command
 {
     /**
      * The name and signature of the console command.

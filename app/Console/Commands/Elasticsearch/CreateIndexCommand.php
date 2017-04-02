@@ -4,7 +4,7 @@ namespace Coyote\Console\Commands\Elasticsearch;
 
 use Illuminate\Console\Command;
 
-class Create extends Command
+class CreateIndexCommand extends Command
 {
     /**
      * The name and signature of the console command.

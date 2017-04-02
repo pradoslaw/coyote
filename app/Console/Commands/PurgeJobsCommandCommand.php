@@ -10,7 +10,7 @@ use Elasticsearch\Client;
 use Illuminate\Console\Command;
 use Illuminate\Mail\Message;
 
-class PurgeJobs extends Command
+class PurgeJobsCommand extends Command
 {
     use MailFactory;
 

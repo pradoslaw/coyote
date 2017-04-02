@@ -6,10 +6,10 @@ use Coyote\Searchable;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container as App;
 
-class Mapping extends Command
+class CreateMappingCommand extends Command
 {
     use EsTrait;
-    
+
     /**
      * The name and signature of the console command.
      *

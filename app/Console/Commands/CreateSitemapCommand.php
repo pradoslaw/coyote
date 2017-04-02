@@ -5,7 +5,7 @@ namespace Coyote\Console\Commands;
 use Illuminate\Console\Command;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 
-class CreateSitemap extends Command
+class CreateSitemapCommand extends Command
 {
     /**
      * The name and signature of the console command.

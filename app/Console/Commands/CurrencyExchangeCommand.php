@@ -5,7 +5,7 @@ namespace Coyote\Console\Commands;
 use Coyote\Repositories\Contracts\CurrencyRepositoryInterface as CurrencyRepository;
 use Illuminate\Console\Command;
 
-class GetCurrencyExchange extends Command
+class CurrencyExchangeCommand extends Command
 {
     /**
      * The name and signature of the console command.

@@ -6,7 +6,7 @@ use Coyote\Events\JobWasSaved;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Illuminate\Console\Command;
 
-class ExpireJobs extends Command
+class ExpireJobsCommand extends Command
 {
     /**
      * The name and signature of the console command.

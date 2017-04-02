@@ -10,7 +10,7 @@ use Coyote\Session;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection as Db;
 
-class PurgeSessions extends Command
+class PurgeSessionsCommand extends Command
 {
     /**
      * The name and signature of the console command.
