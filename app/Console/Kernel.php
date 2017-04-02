@@ -22,7 +22,6 @@ class Kernel extends ConsoleKernel
         'Coyote\Console\Commands\ExpireJobs',
         'Coyote\Console\Commands\CreateSitemap',
         'Coyote\Console\Commands\FlushCache',
-        'Coyote\Console\Commands\SetupTags',
         'Coyote\Console\Commands\GetCurrencyExchange',
         'Coyote\Console\Commands\Elasticsearch\Mapping',
         'Coyote\Console\Commands\Elasticsearch\Create',
