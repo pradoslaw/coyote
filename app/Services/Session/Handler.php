@@ -107,6 +107,7 @@ class Handler implements \SessionHandlerInterface
         }
 
         if ($container->bound('request')) {
+            /** @var \Illuminate\Http\Request $request */
             $request = $container->make('request');
 
             $payload['ip'] = $request->ip();
@@ -115,6 +116,7 @@ class Handler implements \SessionHandlerInterface
 
             if (!$request->ajax()) {
                 $payload['url'] = str_limit($request->fullUrl(), 3999);
+                $payload['path'] = str_limit($request->path(), 999, '');
             }
         }
 

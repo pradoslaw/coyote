@@ -8,7 +8,7 @@ use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepositor
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Session;
 use Illuminate\Console\Command;
-use Illuminate\Database\Connection;
+use Illuminate\Database\Connection as Db;
 
 class PurgeSessions extends Command
 {
@@ -32,6 +32,11 @@ class PurgeSessions extends Command
     private $session;
 
     /**
+     * @var Db
+     */
+    private $db;
+
+    /**
      * @var UserRepository
      */
     private $user;
@@ -42,14 +47,16 @@ class PurgeSessions extends Command
     private $guest;
 
     /**
+     * @param Db $db
      * @param SessionRepository $session
      * @param UserRepository $user
      * @param GuestRepository $guest
      */
-    public function __construct(SessionRepository $session, UserRepository $user, GuestRepository $guest)
+    public function __construct(Db $db, SessionRepository $session, UserRepository $user, GuestRepository $guest)
     {
         parent::__construct();
 
+        $this->db = $db;
         $this->session = $session;
         $this->user = $user;
         $this->guest = $guest;
@@ -66,15 +73,27 @@ class PurgeSessions extends Command
         // convert minutes to seconds
         $lifetime = config('session.lifetime') * 60;
 
-        app(Connection::class)->transaction(function () use ($result, $lifetime) {
-            foreach ($result as $row) {
-                if ($row->expired($lifetime)) {
-                    $this->signout($row);
+        $this->db->transaction(function () use ($result, $lifetime) {
+            $this->db->unprepared('TRUNCATE sessions');
+            $values = [];
+
+            foreach ($result as $session) {
+                if ($session->expired($lifetime)) {
+                    $this->signout($session);
                 } else {
-                    $this->extend($row);
+                    $this->extend($session);
+
+                    $path = str_limit(parse_url($session->url, PHP_URL_PATH), 999, '');
+
+                    $values[] = array_merge(
+                        array_only($session->toArray(), ['id', 'user_id', 'robot']),
+                        ['path' => $path]
+                    );
                 }
             }
 
+            // make a copy of sessions in postgres for faster calculations (number of visitors for give page etc.)
+            $this->db->table('sessions')->insert($values);
             $this->session->gc($lifetime);
         });
 
@@ -105,6 +124,7 @@ class PurgeSessions extends Command
      */
     private function signout($session)
     {
+        // save user's last visit
         $this->guest->save($session);
 
         if (empty($session->userId)) {
@@ -116,6 +136,7 @@ class PurgeSessions extends Command
 
         $this->info('Remove ' . $user->name . '\'s session. IP: ' . $session->ip);
 
+        $user->timestamps = false;
         $user->visits += 1;
         $user->is_online = false;
 

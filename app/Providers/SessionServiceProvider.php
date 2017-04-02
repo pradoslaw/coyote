@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 
 use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 use Coyote\Services\Session\Registered;
+use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Coyote\Services\Session\Viewers;
@@ -24,7 +25,7 @@ class SessionServiceProvider extends ServiceProvider
 
         $this->app->bind('session.viewers', function ($app) {
             return new Viewers(
-                $app[SessionRepositoryInterface::class],
+                $app[Connection::class],
                 $app[Registered::class],
                 $app[Request::class]
             );

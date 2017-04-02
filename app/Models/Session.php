@@ -2,8 +2,15 @@
 
 namespace Coyote;
 
-class Session implements \ArrayAccess
+use Coyote\Services\Arrayable\ToArray;
+use Illuminate\Contracts\Support\Arrayable;
+
+class Session implements \ArrayAccess, Arrayable
 {
+    use ToArray{
+        toArray as parentToArray;
+    }
+
     /**
      * @var string
      */
@@ -33,6 +40,11 @@ class Session implements \ArrayAccess
      * @var string
      */
     public $url;
+
+    /**
+     * @var string
+     */
+    public $path;
 
     /**
      * @var string
@@ -116,5 +128,19 @@ class Session implements \ArrayAccess
     public function offsetUnset($offset)
     {
         return true;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $result = [];
+
+        foreach ($this->parentToArray() as $key => $value) {
+            $result[snake_case($key)] = $value;
+        }
+
+        return $result;
     }
 }

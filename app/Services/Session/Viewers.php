@@ -3,9 +3,10 @@
 namespace Coyote\Services\Session;
 
 use Coyote\Session;
+use Illuminate\Database\Connection as Db;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 
 /**
  * Generuje widok przedstawiajacy liste osob na danej stronie z podzialem na boty, zalogowane osoby itp
@@ -16,9 +17,9 @@ class Viewers
     const ROBOT = 'Robot';
 
     /**
-     * @var SessionRepository
+     * @var Db
      */
-    private $session;
+    private $db;
 
     /**
      * @var Registered
@@ -31,13 +32,13 @@ class Viewers
     private $request;
 
     /**
-     * @param SessionRepository $session
+     * @param Db $db
      * @param Registered $registered
      * @param Request $request
      */
-    public function __construct(SessionRepository $session, Registered $registered, Request $request)
+    public function __construct(Db $db, Registered $registered, Request $request)
     {
-        $this->session = $session;
+        $this->db = $db;
         $this->registered = $registered;
         $this->request = $request;
     }
@@ -52,10 +53,10 @@ class Viewers
     {
         $groups = [self::USER => [], self::ROBOT => []];
 
-        start_measure('get collection');
-        /** @var \Illuminate\Support\Collection $collection */
-        $collection = $this->unique($this->session->getByPath($path));
-        stop_measure('get collection');
+        start_measure('total time');
+        $collection = $this->collection($path);
+
+        stop_measure('total time');
 
         // zlicza liczbe userow
         $total = $collection->count();
@@ -118,6 +119,28 @@ class Viewers
         ksort($groups);
 
         return view('components.viewers', compact('groups', 'total', 'guests', 'registered', 'robots'));
+    }
+
+    /**
+     * @param string|null $path
+     * @return Collection
+     */
+    private function collection($path): Collection
+    {
+        $result = $this
+            ->db
+            ->table('sessions')
+            ->when($path !== null, function (Builder $builder) use ($path) {
+                return $builder->whereRaw('LOWER(path) = ?', [mb_strtolower($path)]);
+            })
+            ->get(['id', 'user_id', 'robot']);
+
+        $collection = $result->map(function ($item) {
+            return new Session((array) $item);
+        });
+
+        /** @var \Illuminate\Support\Collection $collection */
+        return $this->unique($collection);
     }
 
     /**

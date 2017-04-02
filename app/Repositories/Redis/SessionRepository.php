@@ -84,9 +84,7 @@ class SessionRepository implements SessionRepositoryInterface
      */
     public function all()
     {
-//        start_measure('redis collect sessions');
         $result = $this->unserialize($this->redis->hvals(self::REDIS_KEY));
-//        stop_measure('redis collect sessions');
 
         return $result->map(function ($item) {
             return $this->makeModel($item);
