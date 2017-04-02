@@ -115,8 +115,10 @@ class Handler implements \SessionHandlerInterface
             $payload['robot'] = $this->robot($payload['browser']);
 
             if (!$request->ajax()) {
+                $path = str_limit($request->path(), 999, '');
+
                 $payload['url'] = str_limit($request->fullUrl(), 3999);
-                $payload['path'] = str_limit($request->path(), 999, '');
+                $payload['path'] = $path === '/' ? $path : ('/' . $path);
             }
         }
 
