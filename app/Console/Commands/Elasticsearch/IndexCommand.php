@@ -53,20 +53,11 @@ class IndexCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
         if ($this->confirm('Do you want to index data in Elasticsearch?', true)) {
-            $model = $this->option('model');
-
-            if (!$model) {
-                $this->all();
-            } else {
-                $this->one($model);
-            }
-
+            $this->dispatch();
             $this->info('Done.');
         }
     }

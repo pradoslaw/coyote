@@ -41,19 +41,12 @@ class CreateMappingCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
         if ($this->option('force') || $this->confirm('Do you want to create Elasticsearch mapping?', true)) {
-            $model = ucfirst($this->option('model'));
-
-            if (!$model) {
-                $this->all();
-            } else {
-                $this->one($model);
-            }
+            $this->dispatch();
+            $this->info('Done.');
         }
     }
 
