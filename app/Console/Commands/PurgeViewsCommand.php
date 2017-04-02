@@ -4,7 +4,7 @@ namespace Coyote\Console\Commands;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Illuminate\Console\Command;
-use Illuminate\Database\Connection;
+use Illuminate\Database\Connection as Db;
 
 class PurgeViewsCommand extends Command
 {
@@ -23,6 +23,11 @@ class PurgeViewsCommand extends Command
     protected $description = 'Increment pages views';
 
     /**
+     * @var Db
+     */
+    private $db;
+
+    /**
      * @var PageRepository
      */
     private $page;
@@ -33,14 +38,14 @@ class PurgeViewsCommand extends Command
     private $redis;
 
     /**
-     * Create a new command instance.
-     *
+     * @param Db $db
      * @param PageRepository $page
      */
-    public function __construct(PageRepository $page)
+    public function __construct(Db $db, PageRepository $page)
     {
         parent::__construct();
 
+        $this->db = $db;
         $this->page = $page;
         $this->redis = app('redis');
     }
@@ -62,7 +67,7 @@ class PurgeViewsCommand extends Command
         // hits as groupped collection
         $pages = collect(array_map('unserialize', $keys))->groupBy('path');
 
-        app(Connection::class)->transaction(function () use ($pages, $keys) {
+        $this->db->transaction(function () use ($pages, $keys) {
             foreach ($pages as $path => $hits) {
                 /** @var \Coyote\Page $page */
                 $page = $this->page->findByPath('/' . $path);
