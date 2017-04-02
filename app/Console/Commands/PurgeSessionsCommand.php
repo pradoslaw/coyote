@@ -87,7 +87,7 @@ class PurgeSessionsCommand extends Command
 
                     $values[] = array_merge(
                         array_only($session->toArray(), ['id', 'user_id', 'robot']),
-                        ['path' => $path]
+                        ['path' => mb_strtolower($path)]
                     );
                 }
             }
