@@ -25,9 +25,7 @@ class AdBuilder extends SearchBuilder
         // only premium offers
         $this->must(new Term('boost', true));
 
-        $this->setupScoreFunctions();
-
-        $this->score(new Random($this->sessionId));
+        $this->score(new Random());
         $this->size(0, 4);
 
         $this->source([
