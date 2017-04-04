@@ -39,14 +39,14 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * Gets categories grouped by sections. You need to pass either $userId or $sessionId (for anonymous users)
+     * Gets forum categories. You need to pass either $userId or $guestId (for anonymous users)
      *
      * @param int $userId
-     * @param string $sessionId
+     * @param string $guestId
      * @param null|int $parentId
      * @return mixed
      */
-    public function groupBySections($userId, $sessionId, $parentId = null)
+    public function categories($userId, $guestId, $parentId = null)
     {
         $this->applyCriteria();
 
@@ -68,50 +68,16 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
             ->leftJoin('users', 'users.id', '=', 'posts.user_id')
             ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
-            ->trackForum($userId, $sessionId)
-            ->trackTopic($userId, $sessionId)
+            ->trackForum($userId, $guestId)
+            ->trackTopic($userId, $guestId)
             ->when($parentId, function (Builder $builder) use ($parentId) {
                 return $builder->where('parent_id', $parentId);
             })
             ->get();
 
-        // execute query and fetch all forum categories
-        $parents = $this->buildNested($result, $parentId);
-        $parents = $this->fillUpSectionNames($parents);
-
-        foreach ($parents as &$parent) {
-            if (isset($parent->children)) {
-                foreach ($parent->children as $child) {
-                    $parent->topics += $child->topics;
-                    $parent->posts += $child->posts;
-
-                    // created_at contains last post's created date.
-                    if ($child->created_at > $parent->created_at) {
-                        if ($child->forum_unread) {
-                            $parent->forum_unread = true;
-                        }
-
-                        $parent->last_post_id = $child->last_post_id;
-                        $parent->topic_unread = $child->topic_unread;
-                        $parent->created_at = $child->created_at;
-                        $parent->user_id = $child->user_id;
-                        $parent->photo = $child->photo;
-                        $parent->is_active = $child->is_active;
-                        $parent->is_confirm = $child->is_confirm;
-                        $parent->user_name = $child->user_name;
-                        $parent->anonymous_name = $child->anonymous_name;
-                        $parent->subject = $child->subject;
-                        $parent->route = $child->route;
-                    }
-                }
-            }
-        }
-
-        // finally... group by sections
-        $sections = $parents->groupBy('section');
         $this->resetModel();
 
-        return $sections;
+        return $result;
     }
 
     /**

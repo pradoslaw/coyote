@@ -57,26 +57,24 @@ class Personalizer
     }
 
     /**
-     * @param Collection $sections
+     * @param Collection $categories
      * @return Collection
      */
-    public function markUnreadCategories(Collection $sections)
+    public function markUnreadCategories(Collection $categories)
     {
-        foreach ($sections as $section) {
-            // loop for each category (even subcategories)
-            foreach ($section as &$row) {
-                if (empty($row->forum_marked_at)) {
-                    $row->forum_marked_at = $this->getDefaultDateTime();
-                }
-
-                // are there any new posts (since I last marked category as read)?
-                $row->forum_unread = $row->created_at > $row->forum_marked_at;
-                $row->topic_unread = $row->created_at > $row->topic_marked_at && $row->forum_unread;
-                $row->route = route('forum.topic', [$row->slug, $row->topic_id, $row->topic_slug]);
+        // loop for each category
+        foreach ($categories as &$row) {
+            if (empty($row->forum_marked_at)) {
+                $row->forum_marked_at = $this->getDefaultDateTime();
             }
+
+            // are there any new posts (since I last marked category as read)?
+            $row->forum_unread = $row->created_at > $row->forum_marked_at;
+            $row->topic_unread = $row->created_at > $row->topic_marked_at && $row->forum_unread;
+            $row->route = route('forum.topic', [$row->slug, $row->topic_id, $row->topic_slug]);
         }
 
-        return $sections;
+        return $categories;
     }
 
     /**

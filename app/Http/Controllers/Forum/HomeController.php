@@ -15,6 +15,7 @@ use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
+use Coyote\Services\Forum\TreeBuilder;
 use Coyote\Services\Forum\Personalizer;
 use Illuminate\Http\Request;
 use Lavary\Menu\Item;
@@ -130,12 +131,15 @@ class HomeController extends BaseController
     {
         $this->pushForumCriteria();
         // execute query: get all categories that user can has access
-        $sections = $this->forum->groupBySections($this->userId, $this->guestId);
-        // get categories collapse
-        $collapse = $this->collapse();
-
+        $sections = $this->forum->categories($this->userId, $this->guestId);
         // establish forum's marked date
         $sections = $this->personalizer->markUnreadCategories($sections);
+
+        $treeBuilder = new TreeBuilder();
+        $sections = $treeBuilder->sections($sections);
+
+        // get categories collapse
+        $collapse = $this->collapse();
 
         return $this->view('forum.home')->with(compact('sections', 'collapse'));
     }
