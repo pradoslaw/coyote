@@ -12,6 +12,7 @@ use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\ObtainSubscribers;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
 use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
+use Coyote\Services\Forum\TreeBuilder;
 use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -123,7 +124,9 @@ class TopicController extends BaseController
 
         // create forum list for current user (according to user's privileges)
         $this->pushForumCriteria();
-        $forumList = $this->forum->choices();
+
+        $treeBuilder = new TreeBuilder();
+        $forumList = $treeBuilder->listBySlug($this->forum->list());
 
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
@@ -138,7 +141,7 @@ class TopicController extends BaseController
             }
 
             $this->forum->skipCriteria(true);
-            $adminForumList = $this->forum->choices();
+            $adminForumList = $treeBuilder->listBySlug($this->forum->list());
         }
 
         // informacje o powodzie zablokowania watku, przeniesienia itp

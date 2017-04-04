@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Services\Elasticsearch\Builders\Forum\SearchBuilder;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Services\Forum\TreeBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -25,7 +26,7 @@ class SearchController extends BaseController
 
         // create forum list for current user (according to user's privileges)
         $this->pushForumCriteria();
-        $forumList = $this->forum->choices('id'); // forum id as key
+        $forumList = (new TreeBuilder())->listById($this->forum->list()); // forum id as key
 
         $users = [];
         $response = $highlights = null;

@@ -24,7 +24,7 @@ class CategoryController extends BaseController
         $treeBuilder = new TreeBuilder();
 
         $this->pushForumCriteria();
-        $forumList = $this->forum->choices();
+        $forumList = $treeBuilder->listBySlug($this->forum->list());
 
         // execute query: get all subcategories that user can has access to
         $sections = $this->forum->categories($this->userId, $this->guestId, $forum->id);

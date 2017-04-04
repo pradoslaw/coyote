@@ -136,6 +136,10 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     public function applyCriteria(callable $callable = null)
     {
         if ($this->skipCriteria === true) {
+            if (!is_null($callable)) {
+                return $callable();
+            }
+
             return $this;
         }
 

@@ -7,14 +7,20 @@ use Illuminate\Support\Collection;
 class TreeBuilder
 {
     /**
-     * @param Collection $result
+     * Make a tree-like structure:
+     *
+     * Section
+     * -- Category
+     *    -- Subcategory
+     *
+     * @param Collection $categories
      * @param null|int $parentId
      * @return Collection
      */
-    public function sections($result, $parentId = null)
+    public function sections($categories, $parentId = null)
     {
         // execute query and fetch all forum categories
-        $parents = $this->buildNested($result, $parentId);
+        $parents = $this->buildNested($categories, $parentId);
         $parents = $this->fillUpSectionNames($parents);
 
         foreach ($parents as &$parent) {
@@ -48,6 +54,46 @@ class TreeBuilder
 
         // finally... group by sections
         return $parents->groupBy('section');
+    }
+
+    /**
+     * @param \Coyote\Forum[] $categories
+     * @return array
+     */
+    public function listById($categories)
+    {
+        return $this->makeList($categories, 'id');
+    }
+
+    /**
+     * @param \Coyote\Forum[] $categories
+     * @return array
+     */
+    public function listBySlug($categories)
+    {
+        return $this->makeList($categories, 'slug');
+    }
+
+    /**
+     * @param \Coyote\Forum[] $categories
+     * @param int|null $root
+     * @return array
+     */
+    private function makeList($categories, $root)
+    {
+        $list = [];
+
+        foreach ($this->buildNested($categories) as $parent) {
+            $list[$parent->{$root}] = $parent->name;
+
+            if (isset($parent->children)) {
+                foreach ($parent->children as $child) {
+                    $list[$child->{$root}] = str_repeat('&nbsp;', 4) . $child->name;
+                }
+            }
+        }
+
+        return $list;
     }
 
     /**

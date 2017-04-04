@@ -31,11 +31,11 @@ interface ForumRepositoryInterface extends RepositoryInterface
     public function getRestricted();
 
     /**
-     * Builds up a category list that can be shown in a <select>
+     * Sort a list of categories that can be shown in a <select>
      *
-     * @return array
+     * @return \Coyote\Forum[]
      */
-    public function choices($key = 'slug');
+    public function list();
 
     /**
      * Forum categories as flatten array od models.

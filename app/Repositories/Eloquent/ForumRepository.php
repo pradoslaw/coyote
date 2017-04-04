@@ -165,32 +165,13 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * Builds up a category list that can be shown in a <select>
-     *
-     * @param string $key
-     * @return array
+     * @inheritdoc
      */
-    public function choices($key = 'slug')
+    public function list()
     {
-        $this->applyCriteria();
-
-        $choices = [];
-        $result = $this->model->select(['forums.id', 'name', 'slug', 'parent_id'])->orderBy('forums.order')->get();
-        $tree = $this->buildNested($result);
-
-        foreach ($tree as $parent) {
-            $choices[$parent->$key] = $parent->name;
-
-            if (isset($parent->children)) {
-                foreach ($parent->children as $child) {
-                    $choices[$child->$key] = str_repeat('&nbsp;', 4) . $child->name;
-                }
-            }
-        }
-
-        $this->resetModel();
-
-        return $choices;
+        return $this->applyCriteria(function () {
+            return $this->model->select(['forums.id', 'name', 'slug', 'parent_id'])->orderBy('forums.order')->get();
+        });
     }
 
     /**
