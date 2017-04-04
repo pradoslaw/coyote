@@ -11,7 +11,6 @@ use Coyote\Forum;
 use Illuminate\Container\Container as App;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Collection;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
 {
@@ -84,7 +83,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      * @param int $userId
      * @return mixed
      */
-    public function getOrderForUser($userId)
+    public function categoriesOrder($userId)
     {
         $this->applyCriteria();
 
@@ -104,10 +103,9 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
         $parents = $sql->get();
 
-        $result = $this->fillUpSectionNames($parents)->groupBy('section');
         $this->resetModel();
 
-        return $result;
+        return $parents;
     }
 
     /**
@@ -121,82 +119,13 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * @param Collection $parents
-     * @return Collection
-     */
-    private function fillUpSectionNames($parents)
-    {
-        // we must fill section field in every row just to group rows by section name.
-        $section = '';
-        foreach ($parents as &$parent) {
-            if ($parent->section) {
-                $section = $parent->section;
-            } else {
-                $parent->section = $section;
-            }
-        }
-
-        return $parents;
-    }
-
-    /**
-     * @param Collection $rowset
-     * @param int $parentId
-     * @return Collection
-     */
-    private function buildNested($rowset, $parentId = null)
-    {
-        // extract only main categories
-        $parents = $rowset->where('parent_id', $parentId)->keyBy('id');
-
-        // extract only children categories
-        $children = $rowset->filter(function ($item) use ($parentId) {
-            return $item->parent_id != $parentId;
-        })->groupBy('parent_id');
-
-        // we merge children with parent element
-        foreach ($children as $parentId => $child) {
-            if (!empty($parents[$parentId])) {
-                $parents[$parentId]->children = $child;
-            }
-        }
-
-        return $parents;
-    }
-
-    /**
      * @inheritdoc
      */
     public function list()
     {
         return $this->applyCriteria(function () {
-            return $this->model->select(['forums.id', 'name', 'slug', 'parent_id'])->orderBy('forums.order')->get();
+            return $this->model->orderBy('forums.order')->get();
         });
-    }
-
-    /**
-     * Forum categories as flatten array od models.
-     *
-     * @return \Coyote\Forum[]
-     */
-    public function flatten()
-    {
-        $result = $this->model->select()->orderBy('order')->get();
-        $nested = $this->buildNested($result);
-
-        $flatten = [];
-
-        foreach ($nested as $parent) {
-            $flatten[] = $parent;
-
-            if (isset($parent->children)) {
-                foreach ($parent->children as $child) {
-                    $flatten[] = $child;
-                }
-            }
-        }
-
-        return $flatten;
     }
 
     /**

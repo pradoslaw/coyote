@@ -21,7 +21,7 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * @param int $userId
      * @return mixed
      */
-    public function getOrderForUser($userId);
+    public function categoriesOrder($userId);
 
     /**
      * Get restricted access forums.
@@ -36,13 +36,6 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * @return \Coyote\Forum[]
      */
     public function list();
-
-    /**
-     * Forum categories as flatten array od models.
-     *
-     * @return \Coyote\Forum[]
-     */
-    public function flatten();
 
     /**
      * @return array

@@ -76,6 +76,27 @@ class TreeBuilder
 
     /**
      * @param \Coyote\Forum[] $categories
+     * @return array
+     */
+    public function flat($categories)
+    {
+        $list = [];
+
+        foreach ($this->buildNested($categories) as $parent) {
+            $list[] = $parent;
+
+            if (isset($parent->children)) {
+                foreach ($parent->children as $child) {
+                    $list[] = $child;
+                }
+            }
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param \Coyote\Forum[] $categories
      * @param int|null $root
      * @return array
      */
@@ -116,7 +137,7 @@ class TreeBuilder
     }
 
     /**
-     * @param Collection $rowset
+     * @param Collection|\Coyote\Forum[] $rowset
      * @param int $parentId
      * @return Collection
      */
