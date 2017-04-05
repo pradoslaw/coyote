@@ -4,6 +4,7 @@
             <div class="media-left">
                 <img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
             </div>
+
             <div class="media-body">
                 <h5 class="media-heading">{{ job.title|raw }}</h5>
 
@@ -21,7 +22,7 @@
 
                 <p>
                     {% if job.salary_from or job.salary_to %}
-                        <strong class="text-primary">{% include 'job.partials.salary' %}</strong>
+                        {% include 'job.partials.salary' %}
                     {% endif %}
                 </p>
 

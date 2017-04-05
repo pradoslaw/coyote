@@ -24,9 +24,9 @@
             {% endif %}
 
             {% if job.salary_from or job.salary_to %}
-                <strong class="salary pull-right text-primary">
+                <p class="salary pull-right">
                     {% include 'job.partials.salary' with {net_label: true, rate_label: true} %}
-                </strong>
+                </p>
             {% endif %}
 
             <ul class="metadata list-inline location">

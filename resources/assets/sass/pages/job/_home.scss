@@ -233,7 +233,7 @@ $header-footer-border: #c7c7c7;
         margin: 0;
       }
 
-      small {
+      small.location {
         color: $gray-light;
 
         a {
@@ -258,7 +258,6 @@ $header-footer-border: #c7c7c7;
       width: 15%;
 
       p {
-        font-weight: bold;
         font-size: $font-size-small;
         margin: 0;
       }
@@ -325,6 +324,9 @@ $header-footer-border: #c7c7c7;
 
 .medal {
   margin-left: 8px;
+  background: url('/img/medal.png') no-repeat;
+  width: 20px;
+  height: 20px;
 }
 
 // Label with "Promo" label

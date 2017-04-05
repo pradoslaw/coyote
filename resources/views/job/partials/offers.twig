@@ -33,7 +33,7 @@
                             <h2><a href="{{ url }}" title="{{ job.title|raw }}">{{ job.title|raw }}</a></h2>
 
                             {% if job.score >= 140 %}
-                                <a href="{{ url }}"><img src="{{ cdn('img/medal.png') }}" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
+                                <a href="{{ url }}" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
                             {% endif %}
 
                             <p>
@@ -41,7 +41,7 @@
                                     <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a>
                                 {% endif %}
 
-                                <small>
+                                <small class="location">
                                     {% include 'job.partials.location' with {
                                         locations: job.locations.pluck('city'),
                                         separator: job.firm is not null
@@ -50,7 +50,7 @@
                             </p>
 
                             {% if job.salary_from or job.salary_to %}
-                                <p class="text-primary visible-xs">
+                                <p class="salary visible-xs">
                                     {% include 'job.partials.salary' %}
                                 </p>
                             {% endif %}
@@ -65,7 +65,7 @@
                         </td>
                         <td class="col-salary hidden-xs hidden-xxs">
                             {% if job.salary_from or job.salary_to %}
-                                <p class="text-primary">
+                                <p class="salary">
                                     {% include 'job.partials.salary' %}
                                 </p>
                             {% endif %}
