@@ -37,6 +37,7 @@
 - Link do powrotu do listy ofert w ogłoszeniu o pracę
 - Wyczyszczenie pola wyszukiwania powoduje przeładowanie formularza
 - Zmiana w algorytmie sortowania: losowe "wypychanie" starszych ofert na górę listy
+- Możliwość określania stawki brutto lub netto
 
 ## 2.0
 

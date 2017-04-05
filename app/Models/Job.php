@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $enable_apply
  * @property int $visits
  * @property int $rate_id
+ * @property bool $is_gross
  * @property int $employment_id
  * @property int $views
  * @property float $score
@@ -68,6 +69,9 @@ class Job extends Model
     const LEAD            = 5;
     const MANAGER         = 6;
 
+    const NET             = 0;
+    const GROSS           = 1;
+
     /**
      * Filling each field adds points to job offer score.
      */
@@ -87,6 +91,7 @@ class Job extends Model
         'requirements',
         'recruitment',
         'is_remote',
+        'is_gross',
         'remote_range',
         'country_id',
         'salary_from',
@@ -119,7 +124,7 @@ class Job extends Model
      *
      * @var array
      */
-    protected $casts = ['is_remote' => 'boolean', 'boost' => 'boolean'];
+    protected $casts = ['is_remote' => 'boolean', 'boost' => 'boolean', 'is_gross' => 'boolean'];
 
     /**
      * @var string
@@ -250,6 +255,14 @@ class Job extends Model
     public static function getRatesList()
     {
         return [self::MONTH => 'miesięcznie', self::YEAR => 'rocznie', self::WEEK => 'tygodniowo', self::HOUR => 'godzinowo'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getTaxList()
+    {
+        return [self::NET => 'netto', self::GROSS => 'brutto'];
     }
 
     /**

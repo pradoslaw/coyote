@@ -1,5 +1,6 @@
 {% set salary_from = job.salary_from|number_format(0, ' ', ' ') %}
 {% set salary_to = job.salary_to|number_format(0, ' ', ' ') %}
+{% set net_label = net_label|default(false) %}
 
 {% if salary_from and salary_to %}
     {{ salary_from }} - {{ salary_to }}
@@ -13,7 +14,9 @@
     {{ job.currency_symbol }}
 {% endif %}
 
-{% if net_label %}
+{% if job.is_gross %}
+    <small>brutto</small>
+{% elseif net_label %}
     <small>netto</small>
 {% endif %}
 

@@ -33,7 +33,7 @@
                             <h2><a href="{{ url }}" title="{{ job.title|raw }}">{{ job.title|raw }}</a></h2>
 
                             {% if job.score >= 140 %}
-                                <a href="{{ url }}"><img src="/img/medal.png" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
+                                <a href="{{ url }}"><img src="{{ cdn('img/medal.png') }}" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
                             {% endif %}
 
                             <p>

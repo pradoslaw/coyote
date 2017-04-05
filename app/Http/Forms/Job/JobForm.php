@@ -205,6 +205,13 @@ class JobForm extends Form
                     'class' => 'input-inline'
                 ]
             ])
+            ->add('is_gross', 'select', [
+                'rules' => 'required|boolean',
+                'choices' => Job::getTaxList(),
+                'attr' => [
+                    'class' => 'input-inline'
+                ]
+            ])
             ->add('currency_id', 'select', [
                 'rules' => 'required|integer',
                 'choices' => Currency::getCurrenciesList(),
