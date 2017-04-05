@@ -175,8 +175,8 @@ $(function () {
      * Share post link
      */
     $('.btn-share').one('click', function() {
-        var url = $(this).attr('href');
-        var $input = $('<input type="text" class="form-control input-sm" style="width: 300px" value="' + url + '" />');
+        let url = $(this).attr('href');
+        let $input = $('<input type="text" class="form-control input-sm" style="width: 300px" value="' + url + '" readonly />');
 
         $input.click(function() {
             this.select();
