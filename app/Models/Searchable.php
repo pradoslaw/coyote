@@ -19,13 +19,20 @@ trait Searchable
      * Index data in elasticsearch
      *
      * @return mixed
+     * @throws \Exception
      */
     public function putToIndex()
     {
         $params = $this->getParams();
         $params['body'] = $this->filterData($this->getIndexBody());
 
-        return $this->getClient()->index($params);
+        try {
+            return $this->getClient()->index($params);
+        } catch (\Exception $e) {
+            logger()->error($params);
+
+            throw $e;
+        }
     }
 
     /**

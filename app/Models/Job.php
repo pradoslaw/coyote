@@ -654,7 +654,7 @@ class Job extends Model
             // yes, we index currency name so we don't have to look it up in database during search process
             'currency_symbol'   => $this->currency()->value('symbol'),
             // higher tag's priorities first
-            'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name'),
+            'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')->toArray(),
             // index null instead of 100 is job is not remote
             'remote_range'      => $this->is_remote ? $this->remote_range : null
         ]);
