@@ -47,11 +47,11 @@
                 {% if not preview and can('job-update') %}
                     <li class="counter">
                         <i class="fa fa-eye"></i>
-                        {{ declination(job.views, ['odsłony', 'odsłon', 'odsłony']) }}
+                        {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
                     </li>
                     <li class="applications">
                         <i class="fa fa-files-o"></i>
-                        {{ declination(job.applications.count(), ['aplikacji', 'aplikacja', 'aplikacji']) }}
+                        {{ declination(job.applications.count(), ['aplikacja', 'aplikacje', 'aplikacji']) }}
                     </li>
                 {% endif %}
 
