@@ -198,6 +198,9 @@
       margin-right: 3px;
     }
 
+    // Links with number of votes and comment's date
+    // -----------------------------------------------------
+
     .list-inline {
       color: $gray-light;
       font-size: 11px;
@@ -205,6 +208,10 @@
 
       a {
         color: $gray-light;
+
+        &.thumbs-on {
+          color: $brand-primary;
+        }
       }
 
       li {

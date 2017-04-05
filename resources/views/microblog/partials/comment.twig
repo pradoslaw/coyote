@@ -37,7 +37,7 @@
                     <a href="{{ route('microblog.view', [microblog.id]) }}#comment-{{ comment.id }}" title="{{ comment.created_at|format_date(false) }}" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
                 </li>
                 <li>
-                    <a href="{{ route('microblog.vote', [comment.id]) }}" class="btn-sm-thumbs" data-id="{{ comment.id }}" data-count="{{ comment.votes }}" data-toggle="tooltip" data-placement="top">
+                    <a href="{{ route('microblog.vote', [comment.id]) }}" class="btn-sm-thumbs {{ comment.thumbs_on ? 'thumbs-on' }}" data-id="{{ comment.id }}" data-count="{{ comment.votes }}" data-toggle="tooltip" data-placement="top">
                         {{ declination(comment.votes, ['głos', 'głosy', 'głosów']) }}
                     </a>
                 </li>

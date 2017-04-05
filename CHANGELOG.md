@@ -6,6 +6,8 @@
 - Webpack + babel zamiast samego babela
 - Znacznik `<u>` jest ponownie dozwolony przez parser 
 - Zmiana sposobu wyświetlania listy użytkowników online (https://github.com/adam-boduch/coyote/issues/174)
+- Obsługa sesji poprzez Redis
+- Zmiana sposobu autentyfikacji użytkownika na serwerze WebSocket: cookie z ID sesji zamiast tokena
 
 **Panel użytkownika**
 - Grupowanie wiadomości po nazwie użytkownika (jeden użytkownik = jedna konwersacja)
@@ -17,6 +19,10 @@
 - Wyświetlanie tagów do wątków, nawet na małych ekranach
 - Delikatnie powiększenie czcionki tagów kosztem paddingu
 - Grupowanie ustawień powiadomień w panelu użytkownika
+
+**Mikroblogu**
+
+- Link do głosowania na komentarz zmienia kolor jeżeli oddano na niego głos
 
 **Praca**
 - Wyszukiwarka w module "Praca" wyszukuje nazwy miejscowości zapisane bez polskich znaków
