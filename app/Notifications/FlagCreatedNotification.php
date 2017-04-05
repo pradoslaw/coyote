@@ -6,10 +6,13 @@ use Coyote\Alert;
 use Coyote\Flag;
 use Coyote\Services\Alert\DatabaseChannel;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Channels\BroadcastChannel;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
-class FlagCreatedNotification extends Notification implements ShouldQueue
+class FlagCreatedNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
     use Queueable;
 
@@ -41,7 +44,9 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
      */
     public function via($user)
     {
-        return $this->channels($user);
+        $this->broadcast[] = 'user:' . $user->id;
+
+        return $this->channels();
     }
 
     /**
@@ -93,27 +98,34 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * @param \Coyote\User $user
-     * @return array
+     * Get the broadcast event name.
+     *
+     * @return string
      */
-    public function toBroadcast($user)
+    public function broadcastAs()
     {
-        return [
-            'headline'  => $user->name . ' dodał nowy raport',
-            'subject'   => $this->flag->type->name,
-            'url'       => $this->notificationUrl()
-        ];
+        return 'alert';
     }
 
     /**
      * @param \Coyote\User $user
+     * @return BroadcastMessage
+     */
+    public function toBroadcast($user)
+    {
+        return new BroadcastMessage([
+            'headline'  => $user->name . ' dodał nowy raport',
+            'subject'   => $this->flag->type->name,
+            'url'       => $this->notificationUrl()
+        ]);
+    }
+
+    /**
      * @return mixed
      */
-    protected function channels($user)
+    protected function channels()
     {
-        $this->broadcast[] = 'user:' . $user->id;
-
-        return [DatabaseChannel::class];
+        return [DatabaseChannel::class, BroadcastChannel::class];
     }
 
     /**
