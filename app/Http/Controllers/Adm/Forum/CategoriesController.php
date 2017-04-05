@@ -40,7 +40,7 @@ class CategoriesController extends BaseController
         $grid = $this
             ->gridBuilder()
             ->createGrid(CategoriesGrid::class)
-            ->setSource(new CollectionSource(collect($treeBuilder->flat($this->forum->list()))))
+            ->setSource(new CollectionSource(collect($treeBuilder->flat($this->forum->orderBy('order')->get()))))
             ->setEnablePagination(false);
 
         return $this->view('adm.forum.categories.home')->with('grid', $grid);
