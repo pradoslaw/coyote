@@ -2,6 +2,10 @@
 @import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
 @import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 
+input[placeholder] {
+  text-overflow: ellipsis;
+}
+
 .microblog {
   .media-heading {
     margin-bottom: 2px;
