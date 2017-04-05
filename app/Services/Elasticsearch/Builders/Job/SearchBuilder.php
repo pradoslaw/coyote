@@ -134,6 +134,9 @@ class SearchBuilder extends QueryBuilder
             $this->must(
                 new MultiMatch($this->request->get('q'), ['title^2', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
             );
+        } else {
+            // no keywords were provided -- let's calculate score based on score functions
+            $this->setupScoreFunctions();
         }
 
         if ($this->request->has('city')) {
@@ -152,11 +155,11 @@ class SearchBuilder extends QueryBuilder
             $this->addRemoteFilter();
         }
 
-        $this->score(new Random($this->sessionId));
+        $this->score(new Random($this->sessionId, 2));
         $this->sort(new Sort($this->getSort(), $this->getOrder()));
 
         $this->setupFilters();
-        $this->setupScoreFunctions();
+
         // facet search
         $this->setupAggregations();
 

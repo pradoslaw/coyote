@@ -13,11 +13,18 @@ class Random extends FunctionScore
     protected $sessionId;
 
     /**
-     * @param string|null $sessionId
+     * @var int
      */
-    public function __construct(string $sessionId = null)
+    protected $weight;
+
+    /**
+     * @param string|null $sessionId
+     * @param int $weight
+     */
+    public function __construct(string $sessionId = null, int $weight = 1)
     {
         $this->sessionId = $sessionId;
+        $this->weight = $weight;
     }
 
     /**
@@ -30,8 +37,9 @@ class Random extends FunctionScore
 
         $body['query']['function_score']['functions'][] = [
             'random_score' => [
-                'seed' => $this->sessionId
-            ]
+                'seed' => $this->sessionId,
+            ],
+            'weight' => $this->weight
         ];
 
         return $body;
