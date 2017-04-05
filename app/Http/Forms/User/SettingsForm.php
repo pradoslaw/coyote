@@ -123,7 +123,7 @@ class SettingsForm extends Form
                 'label' => 'Pokazuj sygnaturki użytkowników'
             ])
             ->add('sig', 'textarea', [
-                'rules' => 'string|max:499',
+                'rules' => 'string|max:499|spam:50',
                 'label' => 'Sygnatura',
                 'help' => 'Podpis będzie widoczny przy każdym Twoim poście. Uwaga! Użytkownicy posiadający mniej niż 50 punktów reputacji nie mogą umieszczać linków w tym polu.',
                 'attr' => [
