@@ -31,4 +31,21 @@ class PaymentRepository extends Repository implements PaymentRepositoryInterface
             ->where('status_id', Payment::PAID)
             ->exists();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function filter()
+    {
+        return $this
+            ->model
+            ->select([
+                'payments.id',
+                'payments.created_at',
+                'status_id',
+                'job_id',
+                'invoice_id'
+            ])
+            ->with(['job', 'invoice']);
+    }
 }

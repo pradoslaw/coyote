@@ -12,4 +12,9 @@ interface PaymentRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function hasRecentlyPaid(int $userId, int $days = 7);
+
+    /**
+     * @return mixed
+     */
+    public function filter();
 }

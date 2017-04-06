@@ -40,6 +40,11 @@ class Payment extends Model
     protected $dates = ['created_at', 'updated_at', 'starts_at', 'ends_at'];
 
     /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
      * @var array
      */
     protected $attributes = ['status_id' => self::NEW];
@@ -54,11 +59,19 @@ class Payment extends Model
     }
 
     /**
+     * @return array
+     */
+    public static function getPaymentsList()
+    {
+        return [Payment::NEW => 'Nowy', Payment::PENDING => 'W trakcie realizacji', Payment::PAID => 'Zapłacono'];
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function job()
     {
-        return $this->belongsTo(Job::class);
+        return $this->belongsTo(Job::class)->withTrashed();
     }
 
     /**

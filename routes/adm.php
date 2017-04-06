@@ -112,5 +112,23 @@ $this->group(
         $this->get('Blocks/Save/{block?}', 'BlocksController@edit')->name('blocks.save');
         $this->post('Blocks/Save/{block?}', 'BlocksController@save');
         $this->post('Blocks/Delete/{block}', 'BlocksController@delete')->name('blocks.delete');
+
+        $this->get('Payments', [
+            'uses' => 'PaymentsController@index',
+            'middleware' => 'can:adm-payment',
+            'as' => 'payments'
+        ]);
+
+        $this->get('Payments/Show/{payment}', [
+            'uses' => 'PaymentsController@show',
+            'middleware' => 'can:adm-payment',
+            'as' => 'payments.show'
+        ]);
+
+        $this->get('Payments/Invoice/{payment}', [
+            'uses' => 'PaymentsController@invoice',
+            'middleware' => 'can:adm-payment',
+            'as' => 'payments.invoice'
+        ]);
     }
 );
