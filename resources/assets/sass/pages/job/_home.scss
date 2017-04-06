@@ -324,6 +324,8 @@ $header-footer-border: #c7c7c7;
 
 .medal {
   margin-left: 8px;
+  margin-top: -4px;
+  display: inline-block;
   background: url('/img/medal.png') no-repeat;
   width: 20px;
   height: 20px;
