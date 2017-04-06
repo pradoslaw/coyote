@@ -18,7 +18,7 @@ class ViewController extends Controller
         $microblog = $repository->findOrFail($id);
         abort_if(!is_null($microblog->parent_id), 404);
 
-        $excerpt = excerpt($microblog->text);
+        $excerpt = excerpt($microblog->html);
 
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));
         $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
