@@ -35,9 +35,12 @@ class AttachmentController extends BaseAttachmentController
         $attachment = $this->attachment->findOrFail($id);
 
         // post_id can be null if saving post was not completed.
-        if ($attachment->post_id) {
-            $attachment->post->forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
+        // post could also be deleted.
+        if ($attachment->post === null) {
+            abort(404);
         }
+
+        $attachment->post->forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
 
         set_time_limit(0);
 
