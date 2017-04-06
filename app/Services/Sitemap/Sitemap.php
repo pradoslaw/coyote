@@ -85,7 +85,13 @@ class Sitemap
             list(, $filename) = explode('/', $request->path());
         }
 
-        return $this->filesystem->get(self::ROOT . '/' . $filename);
+        $path = self::ROOT . '/' . $filename;
+
+        if (!$this->filesystem->exists($path)) {
+            abort(404);
+        }
+
+        return $this->filesystem->get($path);
     }
 
     /**
