@@ -12,7 +12,7 @@ class PaymentsGrid extends Grid
     public function buildGrid()
     {
         $this
-            ->setDefaultOrder(new Order('payments.id', 'desc'))
+            ->setDefaultOrder(new Order('created_at', 'desc'))
             ->addColumn('created_at', [
                 'title' => 'Data dodania',
                 'sortable' => true,
