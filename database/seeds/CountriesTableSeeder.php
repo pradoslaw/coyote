@@ -12,29 +12,29 @@ class CountriesTableSeeder extends Seeder
      */
     public function run()
     {
-        Country::create(['name' => 'Austria']);
-        Country::create(['name' => 'Belgia']);
-        Country::create(['name' => 'Czechy']);
-        Country::create(['name' => 'Dania']);
-        Country::create(['name' => 'Francja']);
-        Country::create(['name' => 'Hiszpania']);
-        Country::create(['name' => 'Irlandia']);
-        Country::create(['name' => 'Islandia']);
-        Country::create(['name' => 'Liechtenstein']);
-        Country::create(['name' => 'Luksemburg']);
-        Country::create(['name' => 'Malta']);
-        Country::create(['name' => 'Niemcy']);
-        Country::create(['name' => 'Norwegia']);
-        Country::create(['name' => 'Polska']);
-        Country::create(['name' => 'Finlandia']);
-        Country::create(['name' => 'Portulgalia']);
-        Country::create(['name' => 'Szwajcaria']);
-        Country::create(['name' => 'Szwecja']);
-        Country::create(['name' => 'Wielka Brytania']);
-        Country::create(['name' => 'USA']);
-        Country::create(['name' => 'Włochy']);
-        Country::create(['name' => 'Anglia']);
-        Country::create(['name' => 'Holandia']);
-        Country::create(['name' => 'Singapur']);
+        Country::forceCreate(['name' => 'Austria', 'code' => 'AT']);
+        Country::forceCreate(['name' => 'Belgia', 'code' => 'BE']);
+        Country::forceCreate(['name' => 'Czechy', 'code' => 'CZ']);
+        Country::forceCreate(['name' => 'Dania', 'code' => 'DK']);
+        Country::forceCreate(['name' => 'Francja', 'code' => 'FR']);
+        Country::forceCreate(['name' => 'Hiszpania', 'code' => 'ES']);
+        Country::forceCreate(['name' => 'Irlandia', 'code' => 'IE']);
+        Country::forceCreate(['name' => 'Islandia', 'code' => 'IS']);
+        Country::forceCreate(['name' => 'Liechtenstein', 'code' => 'LI', 'eu' => false]);
+        Country::forceCreate(['name' => 'Luksemburg', 'code' => 'LU']);
+        Country::forceCreate(['name' => 'Malta', 'code' => 'MT']);
+        Country::forceCreate(['name' => 'Niemcy', 'code' => 'DE']);
+        Country::forceCreate(['name' => 'Norwegia', 'code' => 'NO', 'eu' => false]);
+        Country::forceCreate(['name' => 'Polska', 'code' => 'PL']);
+        Country::forceCreate(['name' => 'Finlandia', 'code' => 'FI']);
+        Country::forceCreate(['name' => 'Portugalia', 'code' => 'PT']);
+        Country::forceCreate(['name' => 'Szwajcaria', 'code' => 'CH', 'eu' => false]);
+        Country::forceCreate(['name' => 'Szwecja', 'code' => 'SE']);
+        Country::forceCreate(['name' => 'Wielka Brytania', 'code' => 'GB']);
+        Country::forceCreate(['name' => 'USA', 'code' => 'US', 'eu' => false]);
+        Country::forceCreate(['name' => 'Włochy', 'code' => 'IT']);
+        Country::forceCreate(['name' => 'Anglia', 'code' => 'EN']); // <-- wielka brytania powinna wystarczyc
+        Country::forceCreate(['name' => 'Holandia', 'code' => 'NL']);
+        Country::forceCreate(['name' => 'Singapur', 'code' => 'SG', 'eu' => false]);
     }
 }

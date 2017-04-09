@@ -4,6 +4,11 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $name
+ * @property string $code
+ * @property bool $eu
+ */
 class Country extends Model
 {
     /**
