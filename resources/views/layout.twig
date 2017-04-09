@@ -54,7 +54,7 @@
                         </a>
 
                         <ul id="desktop-menu" class="nav navbar-nav hidden-xs">
-                            {% for item in menu.roots() %}
+                            {% for item in __master_menu.roots() %}
                                 <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
 
@@ -173,7 +173,7 @@
 
                     <div class="visible-xs">
                         <div id="mobile-menu" class="collapse navbar-collapse nav navbar-nav">
-                            {% for item in menu.roots() %}
+                            {% for item in __master_menu.roots() %}
                                 <div {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
                                 </div>

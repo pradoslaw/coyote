@@ -4,9 +4,6 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\GateFactory;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface;
-use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
-use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Breadcrumb\Breadcrumb;
 use Illuminate\Database\Connection;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -14,8 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Lavary\Menu\Builder;
-use Lavary\Menu\Menu;
 
 abstract class Controller extends BaseController
 {
@@ -72,55 +67,6 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Application menu. Menu can be overwrite in admin panel.
-     *
-     * @return \Lavary\Menu\Builder
-     */
-    protected function buildMenu()
-    {
-        $menu = app(Menu::class)->make('master', function (Builder $menu) {
-            foreach (config('laravel-menu.master') as $title => $data) {
-                $children = array_pull($data, 'children');
-                $item = $menu->add($title, $data);
-
-                foreach ((array) $children as $key => $child) {
-                    /** @var \Lavary\Menu\Item $item */
-                    $item->add($key, $child);
-                }
-            }
-        });
-
-        if (!$this->userId || ($this->userId && $this->auth->created_at->diffInDays() <= 7)) {
-            // tymczasowo wyswietlana ikona "Nowosc" przy ofertach pracy.
-            $badge = app('html')->tag('span', 'Nowość', ['class' => 'badge new']);
-            $menu->get('praca')->append($badge);
-        }
-
-        // cache user customized menu for 7 days
-        $categories = $this->getCacheFactory()->tags('menu-for-user')->remember('menu-for-user:' . $this->userId, 60 * 24 * 7, function () {
-            /** @var ForumRepositoryInterface $repository */
-            $repository = app(ForumRepositoryInterface::class);
-            // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
-            $repository->resetCriteria();
-            // make sure we don't skip criteria
-            $repository->skipCriteria(false);
-
-            $repository->pushCriteria(new OnlyThoseWithAccess($this->auth));
-            $repository->pushCriteria(new AccordingToUserOrder($this->userId));
-            $repository->applyCriteria();
-
-            return $repository->select(['name', 'slug'])->whereNull('parent_id')->get()->toArray();
-        });
-
-        foreach ($categories as $forum) {
-            /** @var array $forum */
-            $menu->forum->add($forum['name'], route('forum.category', [$forum['slug']]));
-        }
-
-        return $menu;
-    }
-
-    /**
      * Renders view with breadcrumb
      *
      * @param string|null $view
@@ -133,8 +79,6 @@ abstract class Controller extends BaseController
             if (count($this->breadcrumb)) {
                 $data['breadcrumb'] = $this->breadcrumb->render();
             }
-
-            $data['menu'] = $this->buildMenu();
         }
 
         return view($view, $data);

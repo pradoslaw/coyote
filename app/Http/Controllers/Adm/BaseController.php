@@ -75,6 +75,14 @@ class BaseController extends Controller
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function view($view = null, $data = [])
+    {
+        return parent::view($view, array_merge($data, ['menu' => $this->buildMenu()]));
+    }
+
+    /**
      * @return Menu
      */
     protected function getMenuFactory()

@@ -2,11 +2,19 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Http\Factories\CacheFactory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\ServiceProvider;
+use Coyote\Repositories\Contracts\ForumRepositoryInterface;
+use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
+use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Lavary\Menu\Builder;
+use Lavary\Menu\Menu;
 
 class ViewServiceProvider extends ServiceProvider
 {
+    use CacheFactory;
+
     /**
      * Bootstrap the application services.
      *
@@ -18,7 +26,10 @@ class ViewServiceProvider extends ServiceProvider
             $this->registerPublicData();
             $this->registerWebSocket();
 
-            $view->with('__public', json_encode($this->app['request']->attributes->all()));
+            $view->with([
+                '__public' => json_encode($this->app['request']->attributes->all()),
+                '__master_menu' => $this->buildMasterMenu()
+            ]);
         });
     }
 
@@ -40,5 +51,48 @@ class ViewServiceProvider extends ServiceProvider
             'ping'          => route('ping', [], false),
             'ping_interval' => config('session.lifetime') - 5 // every 10 minutes
         ]);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function buildMasterMenu()
+    {
+        $builder = app(Menu::class)->make('master', function (Builder $menu) {
+            foreach (config('laravel-menu.master') as $title => $data) {
+                $children = array_pull($data, 'children');
+                $item = $menu->add($title, $data);
+
+                foreach ((array) $children as $key => $child) {
+                    /** @var \Lavary\Menu\Item $item */
+                    $item->add($key, $child);
+                }
+            }
+        });
+
+        $userId = $this->app['request']->user() ? $this->app['request']->user()->id : null;
+
+        // cache user customized menu for 7 days
+        $categories = $this->getCacheFactory()->tags('menu-for-user')->remember('menu-for-user:' . $userId, 60 * 24 * 7, function () use ($userId) {
+            /** @var ForumRepositoryInterface $repository */
+            $repository = app(ForumRepositoryInterface::class);
+            // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
+            $repository->resetCriteria();
+            // make sure we don't skip criteria
+            $repository->skipCriteria(false);
+
+            $repository->pushCriteria(new OnlyThoseWithAccess($this->app['request']->user()));
+            $repository->pushCriteria(new AccordingToUserOrder($userId));
+            $repository->applyCriteria();
+
+            return $repository->select(['name', 'slug'])->whereNull('parent_id')->get()->toArray();
+        });
+
+        foreach ($categories as $forum) {
+            /** @var array $forum */
+            $builder->forum->add($forum['name'], route('forum.category', [$forum['slug']]));
+        }
+
+        return $builder;
     }
 }
