@@ -57,22 +57,22 @@ class ViewServiceProvider extends ServiceProvider
 
     private function buildMasterMenu()
     {
-        $builder = app(Menu::class)->make('__master_menu___', function (Builder $menu) {
-            foreach (config('laravel-menu.master') as $title => $data) {
-                $children = array_pull($data, 'children');
-                $item = $menu->add($title, $data);
-
-                foreach ((array) $children as $key => $child) {
-                    /** @var \Lavary\Menu\Item $item */
-                    $item->add($key, $child);
-                }
-            }
-        });
-
         $userId = $this->app['request']->user() ? $this->app['request']->user()->id : null;
 
         // cache user customized menu for 7 days
-        $categories = $this->getCacheFactory()->tags('menu-for-user')->remember('menu-for-user:' . $userId, 60 * 24 * 7, function () use ($userId) {
+        return $this->getCacheFactory()->tags('menu-for-user')->remember('menu-for-user:' . $userId, 60 * 24 * 7, function () use ($userId) {
+            $builder = app(Menu::class)->make('__master_menu___', function (Builder $menu) {
+                foreach (config('laravel-menu.master') as $title => $data) {
+                    $children = array_pull($data, 'children');
+                    $item = $menu->add($title, $data);
+
+                    foreach ((array) $children as $key => $child) {
+                        /** @var \Lavary\Menu\Item $item */
+                        $item->add($key, $child);
+                    }
+                }
+            });
+
             /** @var ForumRepositoryInterface $repository */
             $repository = app(ForumRepositoryInterface::class);
             // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
@@ -84,14 +84,14 @@ class ViewServiceProvider extends ServiceProvider
             $repository->pushCriteria(new AccordingToUserOrder($userId));
             $repository->applyCriteria();
 
-            return $repository->select(['name', 'slug'])->whereNull('parent_id')->get()->toArray();
+            $categories = $repository->select(['name', 'slug'])->whereNull('parent_id')->get()->toArray();
+
+            foreach ($categories as $forum) {
+                /** @var array $forum */
+                $builder->forum->add($forum['name'], route('forum.category', [$forum['slug']]));
+            }
+
+            return $builder;
         });
-
-        foreach ($categories as $forum) {
-            /** @var array $forum */
-            $builder->forum->add($forum['name'], route('forum.category', [$forum['slug']]));
-        }
-
-        return $builder;
     }
 }
