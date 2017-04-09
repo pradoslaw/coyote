@@ -38,8 +38,6 @@ abstract class BaseController extends Controller
     {
         parent::__construct();
 
-        $this->public['uploadUrl'] = route('forum.upload');
-
         $this->forum = $forum;
         $this->topic = $topic;
         $this->post = $post;
@@ -51,6 +49,8 @@ abstract class BaseController extends Controller
             if ($forum instanceof Forum) {
                 $this->breadcrumb($forum);
             }
+
+            $request->attributes->set('uploadUrl', route('forum.upload'));
 
             return $next($request);
         });

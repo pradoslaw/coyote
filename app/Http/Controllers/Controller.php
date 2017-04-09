@@ -49,13 +49,6 @@ abstract class Controller extends BaseController
     protected $settings = null;
 
     /**
-     * Public data that will be passed to JS as a JSON object
-     *
-     * @var array
-     */
-    protected $public = [];
-
-    /**
      * @var Request
      */
     protected $request;
@@ -74,25 +67,8 @@ abstract class Controller extends BaseController
 
             $this->request = $request;
 
-            $this->buildPublic();
-
             return $next($request);
         });
-    }
-
-    protected function buildPublic()
-    {
-        // URL to main page and CDN
-        $this->public = array_merge($this->public, [
-            'public'        => url()->route('home'),
-            'cdn'           => config('app.cdn') ? ('//' . config('app.cdn')) : url()->route('home'),
-            'ping'          => route('ping', [], false),
-            'ping_interval' => config('session.lifetime') - 5 // every 10 minutes
-        ]);
-
-        if (config('services.ws.host') && $this->userId) {
-            $this->public['ws'] = config('services.ws.host') . (config('services.ws.port') ? ':' . config('services.ws.port') : '');
-        }
     }
 
     /**
@@ -154,9 +130,6 @@ abstract class Controller extends BaseController
     protected function view($view = null, $data = [])
     {
         if (!$this->request->ajax()) {
-            // public JS variables
-            $data['public'] = json_encode($this->public);
-
             if (count($this->breadcrumb)) {
                 $data['breadcrumb'] = $this->breadcrumb->render();
             }
