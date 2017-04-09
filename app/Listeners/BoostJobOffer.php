@@ -45,6 +45,7 @@ class BoostJobOffer implements ShouldQueue
         app(Connection::class)->transaction(function () use ($event) {
             $pdf = null;
 
+            // set up invoice only if firm name was provided. it's required!
             if ($event->payment->invoice->name) {
                 // set up invoice number since it's already paid.
                 $this->enumerator->enumerate($event->payment->invoice);

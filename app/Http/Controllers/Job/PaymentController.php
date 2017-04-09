@@ -87,7 +87,7 @@ class PaymentController extends Controller
                 'order_id'          => $payment->id,
                 'country'           => 'PL',
                 'payment_method'    => PaymentCreate::CARD,
-//                'description'       => '3d-pass',
+//                'description'       => '3d-fail',
                 'payment_instrument'=> [
                     'pan'           => $form->get('number')->getValue(),
                     'exp_year'      => $form->get('exp_year')->getValue(),

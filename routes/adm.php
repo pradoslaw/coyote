@@ -130,5 +130,11 @@ $this->group(
             'middleware' => 'can:adm-payment',
             'as' => 'payments.invoice'
         ]);
+
+        $this->get('Payments/Paid/{payment}', [
+            'uses' => 'PaymentsController@paid',
+            'middleware' => 'can:adm-payment',
+            'as' => 'payments.paid'
+        ]);
     }
 );
