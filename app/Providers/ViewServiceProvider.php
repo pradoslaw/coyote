@@ -26,8 +26,6 @@ class ViewServiceProvider extends ServiceProvider
             $this->registerPublicData();
             $this->registerWebSocket();
 
-            $this->buildMasterMenu();
-
             $view->with([
                 '__public' => json_encode($this->app['request']->attributes->all()),
                 '__master_menu' => $this->buildMasterMenu()
@@ -60,9 +58,10 @@ class ViewServiceProvider extends ServiceProvider
         $userId = $this->app['request']->user() ? $this->app['request']->user()->id : null;
 
         // cache user customized menu for 7 days
-        return $this->getCacheFactory()->tags('menu-for-user')->remember('menu-for-user:' . $userId, 60 * 24 * 7, function () use ($userId) {
+        /** @var \Lavary\Menu\Builder $builder */
+        $builder = $this->getCacheFactory()->tags('menu-for-user')->remember('menu-for-user:' . $userId, 60 * 24 * 7, function () use ($userId) {
             $builder = app(Menu::class)->make('__master_menu___', function (Builder $menu) {
-                foreach (config('laravel-menu.master') as $title => $data) {
+                foreach (config('laravel-menu.__master_menu___') as $title => $data) {
                     $children = array_pull($data, 'children');
                     $item = $menu->add($title, $data);
 
@@ -93,5 +92,18 @@ class ViewServiceProvider extends ServiceProvider
 
             return $builder;
         });
+
+        // ugly hack for laravel menu: remove cached "active" class from item's attribute.
+        if (true === $builder->conf('auto_activate')) {
+            foreach ($builder->all() as $item) {
+                /** @var \Lavary\Menu\Item $item */
+                $item->isActive = false;
+                $item->attr('class', '');
+
+                $item->checkActivationStatus();
+            }
+        }
+
+        return $builder;
     }
 }
