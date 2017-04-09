@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Job;
 
+use Coyote\Country;
 use Coyote\Firm;
 use Coyote\Services\FormBuilder\Form;
 
@@ -34,6 +35,13 @@ class InvoiceForm extends Form
             ->add('postal_code', 'text', [
                 'rules' => 'string|required_with:enable_invoice|max:30',
                 'label' => 'Kod pocztowy',
+            ])
+            ->add('country_id', 'select', [
+                'choices' => $this->getCountriesCode(),
+                'empty_value' => '--',
+                'attr' => [
+                    'class' => 'input-inline'
+                ]
             ]);
 
         if (!empty($this->data) && !$this->isSubmitted() && $this->data instanceof Firm) {
@@ -50,5 +58,11 @@ class InvoiceForm extends Form
             'name' => 'nazwa',
             'vat_id' => 'NIP'
         ];
+    }
+
+    private function getCountriesCode()
+    {
+        return Country::pluck('code', 'id')->toArray();
+
     }
 }

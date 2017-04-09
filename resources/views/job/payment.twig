@@ -81,7 +81,16 @@
                                     </div>
 
                                     <div class="col-sm-5">
-                                        {{ form_row(form.invoice.children.vat_id) }}
+                                        {{ form_label(form.invoice.children.vat_id) }}
+
+                                        <div class="row">
+                                            <div class="col-xs-4" style="padding-right: 0">
+                                                {{ form_widget(form.invoice.children.country_id) }}
+                                            </div>
+                                            <div class="col-xs-8">
+                                                {{ form_widget(form.invoice.children.vat_id) }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
