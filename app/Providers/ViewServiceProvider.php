@@ -22,14 +22,15 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['view']->composer('*', function (View $view) {
+        $this->app['view']->composer('layout', function (View $view) {
             $this->registerPublicData();
             $this->registerWebSocket();
 
             $this->buildMasterMenu();
 
             $view->with([
-                '__public' => json_encode($this->app['request']->attributes->all())
+                '__public' => json_encode($this->app['request']->attributes->all()),
+                '__master_menu' => $this->buildMasterMenu()
             ]);
         });
     }
@@ -56,7 +57,7 @@ class ViewServiceProvider extends ServiceProvider
 
     private function buildMasterMenu()
     {
-        $builder = app(Menu::class)->make('__master_menu', function (Builder $menu) {
+        $builder = app(Menu::class)->make('__master_menu___', function (Builder $menu) {
             foreach (config('laravel-menu.master') as $title => $data) {
                 $children = array_pull($data, 'children');
                 $item = $menu->add($title, $data);
@@ -90,5 +91,7 @@ class ViewServiceProvider extends ServiceProvider
             /** @var array $forum */
             $builder->forum->add($forum['name'], route('forum.category', [$forum['slug']]));
         }
+
+        return $builder;
     }
 }
