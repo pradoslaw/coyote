@@ -26,9 +26,10 @@ class ViewServiceProvider extends ServiceProvider
             $this->registerPublicData();
             $this->registerWebSocket();
 
+            $this->buildMasterMenu();
+
             $view->with([
-                '__public' => json_encode($this->app['request']->attributes->all()),
-                '__master_menu' => $this->buildMasterMenu()
+                '__public' => json_encode($this->app['request']->attributes->all())
             ]);
         });
     }
@@ -53,12 +54,9 @@ class ViewServiceProvider extends ServiceProvider
         ]);
     }
 
-    /**
-     * @return mixed
-     */
     private function buildMasterMenu()
     {
-        $builder = app(Menu::class)->make('master', function (Builder $menu) {
+        $builder = app(Menu::class)->make('__master_menu', function (Builder $menu) {
             foreach (config('laravel-menu.master') as $title => $data) {
                 $children = array_pull($data, 'children');
                 $item = $menu->add($title, $data);
@@ -92,7 +90,5 @@ class ViewServiceProvider extends ServiceProvider
             /** @var array $forum */
             $builder->forum->add($forum['name'], route('forum.category', [$forum['slug']]));
         }
-
-        return $builder;
     }
 }
