@@ -289,7 +289,9 @@ class SubmitController extends Controller
 
         $paymentUuid = $job->getPaymentUuid();
         if ($paymentUuid !== null) {
-            return redirect()->route('job.payment', [$paymentUuid]);
+            return redirect()
+                ->route('job.payment', [$paymentUuid])
+                ->with('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
         }
 
         return redirect()->to(UrlBuilder::job($job))->with('success', 'Oferta została prawidłowo dodana.');
