@@ -46,6 +46,7 @@ class InvoiceForm extends Form
 
         if (!empty($this->data) && !$this->isSubmitted() && $this->data instanceof Firm) {
             $this->get('address')->setValue($this->data->street . ' ' . $this->data->house);
+            $this->get('country_id')->setValue($this->data->country_id);
         }
     }
 
@@ -60,9 +61,11 @@ class InvoiceForm extends Form
         ];
     }
 
+    /**
+     * @return array
+     */
     private function getCountriesCode()
     {
         return Country::pluck('code', 'id')->toArray();
-
     }
 }

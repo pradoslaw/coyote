@@ -51,7 +51,7 @@ class PaymentsController extends BaseController
 
         return $this->view('adm.payments.show')->with([
             'payment'       => $payment,
-            'payment_list'  => Payment::getPaymentsList()
+            'payment_list'  => Payment::getPaymentStatusesList()
         ]);
     }
 

@@ -27,7 +27,7 @@ class PaymentsGrid extends Grid
             ->addColumn('status_id', [
                 'title' => 'Status',
                 'render' => function (Payment $payment) {
-                    return Payment::getPaymentsList()[$payment->status_id];
+                    return Payment::getPaymentStatusesList()[$payment->status_id];
                 }
             ])
             ->addColumn('invoice_id', [
