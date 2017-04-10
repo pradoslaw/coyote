@@ -15,6 +15,8 @@ class InvoiceForm extends Form
 
     public function buildForm()
     {
+        $codeList = $this->getCountriesCode();
+
         $this
             ->add('name', 'text', [
                 'label' => 'Nazwa firmy',
@@ -37,7 +39,8 @@ class InvoiceForm extends Form
                 'label' => 'Kod pocztowy',
             ])
             ->add('country_id', 'select', [
-                'choices' => $this->getCountriesCode(),
+                'choices' => $codeList,
+                'value' => array_flip($codeList)['PL'],
                 'empty_value' => '--',
                 'attr' => [
                     'class' => 'input-inline'
