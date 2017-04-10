@@ -43,7 +43,9 @@ class InvoiceForm extends Form
                 'value' => array_flip($codeList)['PL'],
                 'empty_value' => '--',
                 'attr' => [
-                    'class' => 'input-inline'
+                    'class' => 'input-inline',
+                    'v-model' => 'form.invoice.country_id',
+                    'v-on:change' => 'calculate'
                 ]
             ]);
 

@@ -3,6 +3,7 @@
 namespace Coyote\Http\Forms\Job;
 
 use Carbon\Carbon;
+use Coyote\Country;
 use Coyote\Services\FormBuilder\Form;
 
 class PaymentForm extends Form
@@ -80,6 +81,16 @@ class PaymentForm extends Form
             'number' => 'numer karty kredytowej',
             'cvc' => 'CVC'
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        $value = $this->get('invoice')->getChild('country_id')->getValue();
+
+        return Country::find($value);
     }
 
     /**

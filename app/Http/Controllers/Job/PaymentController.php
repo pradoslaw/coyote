@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Country;
 use Coyote\Events\PaymentPaid;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
@@ -15,6 +16,7 @@ use Coyote\Services\Cardinity\Exceptions\ServiceUnavailable;
 use Coyote\Services\Cardinity\Exceptions\ValidationFailed;
 use Coyote\Services\Cardinity\Exceptions\Unauthorized;
 use Coyote\Services\Cardinity\Payment\Create as PaymentCreate;
+use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Illuminate\Http\Request;
@@ -50,6 +52,8 @@ class PaymentController extends Controller
 
             return $next($request);
         });
+
+        $this->breadcrumb->push('Praca', route('job.home'));
     }
 
     /**
@@ -58,14 +62,24 @@ class PaymentController extends Controller
      */
     public function index($payment)
     {
-        $this->breadcrumb->push('Praca', route('job.home'));
         $this->breadcrumb->push($payment->job->title, UrlBuilder::job($payment->job));
         $this->breadcrumb->push('Promowanie ogłoszenia');
 
+        /** @var PaymentForm $form */
+        $form = $this->getForm($payment);
+        $countries = Country::all();
+
+        // calculate price based on payment details
+        $calculator = CalculatorFactory::payment($payment);
+        $calculator->vatRateBasedOnCountry($form->getCountry());
+
         return $this->view('job.payment', [
-            'form'              => $this->getForm($payment),
+            'form'              => $form,
             'payment'           => $payment,
-            'exchange_rate'     => $this->currency->latest('EUR')
+            'exchange_rate'     => $this->currency->latest('EUR'),
+            'countries'         => $countries->toArray(),
+            'default_vat_rate'  => $payment->plan->vat_rate,
+            'calculator'        => $calculator->toArray()
         ]);
     }
 
