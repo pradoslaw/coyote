@@ -72,7 +72,6 @@ class ApplicationController extends Controller
      */
     public function save($job, ApplicationForm $form)
     {
-        $filesystem = app('filesystem')->disk('local');
         $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->guestId];
 
         $this->transaction(function () use ($job, $form, $data) {
@@ -92,10 +91,6 @@ class ApplicationController extends Controller
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
         });
 
-        if ($form->get('cv')->getValue()) {
-            $filesystem->delete('tmp/' . $form->get('cv')->getValue());
-        }
-
         return redirect()
             ->route('job.offer', [$job->id, $job->slug])
             ->with('success', 'Zgłoszenie zostało prawidłowo wysłane.');
@@ -114,7 +109,7 @@ class ApplicationController extends Controller
         ]);
 
         $filename = uniqid() . '_' . $request->file('cv')->getClientOriginalName();
-        $request->file('cv')->storeAs('tmp', $filename, 'local');
+        $request->file('cv')->storeAs('cv', $filename, 'local');
 
         return response()->json([
             'filename' => $filename,

@@ -3,6 +3,7 @@
 <br><br>
 <hr>
 Imię i nazwisko: <b>{{ name }}</b><br>
+E-mail: <b>{{ link_to('mailto:' ~ email, email) }}</b><br>
 
 {% if phone %}
 Numer telefonu: <b>{{ phone }}</b><br>

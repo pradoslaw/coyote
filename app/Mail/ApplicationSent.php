@@ -37,7 +37,7 @@ class ApplicationSent extends Mailable
     {
         if ($this->form->get('cv')->getValue()) {
             $name = explode('_', $this->form->get('cv')->getValue(), 2)[1];
-            $this->attach(storage_path('app/tmp/' . $this->form->get('cv')->getValue()), ['as' => $name]);
+            $this->attach(storage_path('app/cv/' . $this->form->get('cv')->getValue()), ['as' => $name]);
         }
 
         return $this

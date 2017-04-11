@@ -10,15 +10,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
-                    <h3>Wypełnij poniższy formularz, aby zgłosić swoją ofertę</h3>
-
-                    <div class="alert alert-warning">
-                        Serwis 4programmers.net <strong>nie przechowuje</strong> na swoich serwerach żadnych danych osobowych,
-                        w tym CV oraz listu motywacyjnego.<br>
-
-                        Informacje te są automatycznie wysyłane do potencjalnego pracodawcy/zleceniodawcy,
-                        a następnie <strong>usuwane z naszych serwerów</strong>.
-                    </div>
+                    <h3 class="margin-md-bottom">Wypełnij poniższy formularz, aby zgłosić swoją ofertę</h3>
 
                     {{ form(form) }}
                 </div>
