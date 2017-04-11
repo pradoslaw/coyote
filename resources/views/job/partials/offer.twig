@@ -45,11 +45,11 @@
                 </li>
 
                 {% if not preview and can('job-update') %}
-                    <li class="counter">
+                    <li class="counter" title="Liczba odsłon">
                         <i class="fa fa-eye"></i>
                         {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
                     </li>
-                    <li class="applications">
+                    <li class="applications" title="Liczba osób, które aplikowały na tę ofertę">
                         <i class="fa fa-files-o"></i>
                         {{ declination(job.applications.count(), ['aplikacja', 'aplikacje', 'aplikacji']) }}
                     </li>
@@ -61,7 +61,7 @@
                         {{ job.deadline }} dni do końca
                     </li>
                 {% endif %}
-                <li>
+                <li title="Rodzaj oferowanej umowy">
                     <i class="fa fa-pencil"></i>
                     {{ employment_list[job.employment_id] }}
                 </li>
