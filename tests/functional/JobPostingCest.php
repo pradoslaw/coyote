@@ -340,7 +340,7 @@ class JobPostingCest
 
         $I->fillField('name', $fake->firstName . ' ' . $fake->lastName);
         $I->fillField('number', '1111111111111111');
-        $I->fillField('cvc', 123);
+        $I->fillField('cvc', 012);
 
         $I->uncheckOption('enable_invoice');
 
