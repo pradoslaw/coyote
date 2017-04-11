@@ -81,11 +81,11 @@ class ApplicationController extends Controller
 
             $mailer = $this->getMailFactory();
             // send mail to offer's owner
-            $mailer->to($job->email)->send(new ApplicationSent($form, $job));
+            $mailer->to($job->email)->queue(new ApplicationSent($form, $job));
 
             if ($form->get('cc')->isChecked()) {
                 // send to application author
-                $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($form, $job));
+                $mailer->to($form->get('email')->getValue())->queue(new ApplicationSent($form, $job));
             }
 
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
