@@ -11,22 +11,22 @@ new Vue({
         money: function(value) {
             return parseFloat(value).toFixed(2);
         },
-        calculate: function() {
-            console.log(this.form.invoice.country_id);
+        calculate: function(select) {
+            this.calculator.vat_rate = this.vat_rates[select.target.value];
         }
     },
     computed: {
-        vatRate: function() {
+        percentageVatRate: function() {
             return (this.calculator.vat_rate * 100) - 100;
         },
         netPrice: function() {
             return this.money(this.calculator.net_price);
         },
         grossPrice: function() {
-            return this.money(this.calculator.net_price * this.calculator.vat_rate);
+            return this.money(this.netPrice * this.calculator.vat_rate);
         },
         vatPrice: function() {
-            return this.money(this.grossPrice - this.calculator.net_price);
+            return this.money(this.grossPrice - this.netPrice);
         },
         price: function() {
             return this.money(this.grossPrice * this.exchange_rate);

@@ -37,19 +37,6 @@ class Calculator implements Arrayable
     }
 
     /**
-     * @param Country|null $country
-     * @return $this
-     */
-    public function vatRateBasedOnCountry(Country $country = null)
-    {
-        if ($country !== null && $country->eu) {
-            $this->vatRate = 0;
-        }
-
-        return $this;
-    }
-
-    /**
      * @return float
      */
     public function netPrice()

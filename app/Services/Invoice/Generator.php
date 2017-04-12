@@ -24,9 +24,10 @@ class Generator
     /**
      * @param array $attributes
      * @param Payment $payment
+     * @param Calculator $calculator
      * @return Invoice
      */
-    public function create(array $attributes, Payment $payment): Invoice
+    public function create(array $attributes, Payment $payment, Calculator $calculator): Invoice
     {
         /** @var \Coyote\Invoice $invoice */
         $invoice = $this->repository->create(
@@ -36,7 +37,7 @@ class Generator
         $invoice->items()->create([
             'description'   => $this->getDescription($payment),
             'price'         => $payment->plan->price * $payment->days,
-            'vat_rate'      => $payment->plan->vat_rate
+            'vat_rate'      => $calculator->vatRate
         ]);
 
         return $invoice;

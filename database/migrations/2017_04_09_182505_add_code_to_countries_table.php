@@ -16,7 +16,7 @@ class AddCodeToCountriesTable extends Migration
     {
         $this->schema->table('countries', function (Blueprint $table) {
             $table->string('code')->nullable();
-            $table->tinyInteger('eu')->default(1);
+            $table->float('vat_rate')->default(0);
         });
     }
 
@@ -28,7 +28,7 @@ class AddCodeToCountriesTable extends Migration
     public function down()
     {
         $this->schema->table('countries', function (Blueprint $table) {
-            $table->dropColumn(['code', 'eu']);
+            $table->dropColumn(['code', 'vat_rate']);
         });
     }
 }

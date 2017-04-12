@@ -40,18 +40,16 @@ class InvoiceForm extends Form
             ])
             ->add('country_id', 'select', [
                 'choices' => $codeList,
-                'value' => array_flip($codeList)['PL'],
                 'empty_value' => '--',
                 'attr' => [
                     'class' => 'input-inline',
-                    'v-model' => 'form.invoice.country_id',
                     'v-on:change' => 'calculate'
                 ]
             ]);
 
-        if (!empty($this->data) && !$this->isSubmitted() && $this->data instanceof Firm) {
+        if ($this->data instanceof Firm && !$this->isSubmitted()) {
             $this->get('address')->setValue($this->data->street . ' ' . $this->data->house);
-            $this->get('country_id')->setValue($this->data->country_id);
+            $this->get('country_id')->setValue(empty($this->data->country_id) ? array_flip($codeList)['PL'] : $this->data->country_id);
         }
     }
 

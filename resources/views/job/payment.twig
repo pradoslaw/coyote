@@ -138,7 +138,7 @@
 
                     <div class="row margin-xs-top margin-xs-bottom">
                         <div class="col-xs-6">
-                            VAT (${ vatRate })
+                            VAT (${ percentageVatRate }%)
                         </div>
                         <div class="col-xs-6 text-right">
                             ${ vatPrice } zł
@@ -186,9 +186,8 @@
         var data = {
             exchange_rate: {{ exchange_rate }},
             countries: {{ countries|json_encode|raw }},
-            default_vat_rate: {{ default_vat_rate }},
             calculator: {{ calculator|json_encode|raw }},
-            form: {{ form.toJson|raw }}
+            vat_rates: {{ vat_rates|json_encode|raw }}
         };
     </script>
 

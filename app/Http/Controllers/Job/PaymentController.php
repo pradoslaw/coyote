@@ -67,20 +67,26 @@ class PaymentController extends Controller
 
         /** @var PaymentForm $form */
         $form = $this->getForm($payment);
-        $countries = Country::all();
+        $vatRates = Country::pluck('vat_rate', 'id')->toArray();
 
         // calculate price based on payment details
         $calculator = CalculatorFactory::payment($payment);
-        $calculator->vatRateBasedOnCountry($form->getCountry());
+        $this->setVatRate($vatRates, $form->get('invoice')->get('country_id')->getValue(), $calculator);
 
         return $this->view('job.payment', [
             'form'              => $form,
             'payment'           => $payment,
             'exchange_rate'     => $this->currency->latest('EUR'),
-            'countries'         => $countries->toArray(),
-            'default_vat_rate'  => $payment->plan->vat_rate,
+            'vat_rates'         => $vatRates,
             'calculator'        => $calculator->toArray()
         ]);
+    }
+
+    private function setVatRate($vatRates, $countryId, $calculator)
+    {
+        if (isset($vatRates[$countryId])) {
+            $calculator->vatRate = $vatRates[$countryId];
+        }
     }
 
     /**
@@ -90,12 +96,18 @@ class PaymentController extends Controller
      */
     public function process($payment)
     {
+        /** @var PaymentForm $form */
         $form = $this->getForm($payment);
         $form->validate();
 
-        return $this->handlePayment(function () use ($payment, $form) {
+        $vatRates = Country::pluck('vat_rate', 'id')->toArray();
+
+        $calculator = CalculatorFactory::payment($payment);
+        $this->setVatRate($vatRates, $form->get('invoice')->getValue()['country_id'], $calculator);
+
+        return $this->handlePayment(function () use ($payment, $form, $calculator) {
             $result = Cardinity::create()->createPayment([
-                'amount'            => round($payment->grossPrice() * $this->currency->latest('EUR'), 2),
+                'amount'            => round($calculator->grossPrice() * $this->currency->latest('EUR'), 2),
                 'currency'          => 'EUR',
                 'settle'            => true,
                 'order_id'          => $payment->id,
@@ -115,7 +127,8 @@ class PaymentController extends Controller
             /** @var \Coyote\Invoice $invoice */
             $invoice = $this->invoice->create(
                 array_merge($form->get('enable_invoice')->isChecked() ? $form->all()['invoice'] : [], ['user_id' => $this->auth->id]),
-                $payment
+                $payment,
+                $calculator
             );
 
             // associate invoice with payment
