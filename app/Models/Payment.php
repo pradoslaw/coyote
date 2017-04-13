@@ -61,7 +61,7 @@ class Payment extends Model
     /**
      * @return array
      */
-    public static function getPaymentsList()
+    public static function getPaymentStatusesList()
     {
         return [Payment::NEW => 'Nowy', Payment::PENDING => 'W trakcie realizacji', Payment::PAID => 'Zapłacono'];
     }

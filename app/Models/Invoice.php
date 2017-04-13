@@ -13,8 +13,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $city
  * @property string $postal_code
  * @property int $currency_id
+ * @property int $country_id
  * @property Item[] $items
  * @property Currency $currency
+ * @property Country $country
  */
 class Invoice extends Model
 {
@@ -23,7 +25,7 @@ class Invoice extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'number', 'vat_id', 'address', 'city', 'postal_code', 'currency_id'];
+    protected $fillable = ['user_id', 'name', 'number', 'vat_id', 'address', 'city', 'postal_code', 'currency_id', 'country_id'];
 
     /**
      * @var array
@@ -60,6 +62,14 @@ class Invoice extends Model
     public function currency()
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 
     /**

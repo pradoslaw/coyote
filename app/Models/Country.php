@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property string $name
  * @property string $code
- * @property bool $eu
+ * @property float $vat_rate
  */
 class Country extends Model
 {

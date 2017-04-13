@@ -2,7 +2,7 @@
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
 {% block container %}
-    <div class="row">
+    <div id="payment-form" class="row">
         {{ form_start(form) }}
 
         <main class="col-md-8">
@@ -81,7 +81,16 @@
                                     </div>
 
                                     <div class="col-sm-5">
-                                        {{ form_row(form.invoice.children.vat_id) }}
+                                        {{ form_label(form.invoice.children.vat_id) }}
+
+                                        <div class="row">
+                                            <div class="col-xs-4" style="padding-right: 0">
+                                                {{ form_widget(form.invoice.children.country_id) }}
+                                            </div>
+                                            <div class="col-xs-8">
+                                                {{ form_widget(form.invoice.children.vat_id) }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -112,7 +121,7 @@
         </main>
 
         <aside class="col-md-4">
-            <div class="panel panel-default panel-review">
+            <div class="panel panel-default panel-review" v-cloak>
                 <div class="panel-heading">
                     Twoja płatność obejmuje
                 </div>
@@ -123,16 +132,16 @@
                             Promocja ogłoszenia ({{ payment.days }} dni)
                         </div>
                         <div class="col-xs-6 text-right">
-                            {{ payment.net_price|round(2) }} zł
+                            ${ netPrice } zł
                         </div>
                     </div>
 
                     <div class="row margin-xs-top margin-xs-bottom">
                         <div class="col-xs-6">
-                            VAT ({{ (payment.plan.vat_rate * 100) - 100 }}%)
+                            VAT (${ percentageVatRate }%)
                         </div>
                         <div class="col-xs-6 text-right">
-                            {{ payment.vat|round(2) }} zł
+                            ${ vatPrice } zł
                         </div>
                     </div>
 
@@ -141,12 +150,10 @@
                             <strong>Suma:</strong>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <strong>{{ payment.gross_price|round(2) }} zł</strong>
+                            <strong>${ grossPrice } zł</strong>
                         </div>
                     </div>
                 </div>
-
-                {% set price = (payment.gross_price * exchange_rate)|round(2) %}
 
                 <div class="panel-footer">
                     <div class="row">
@@ -155,15 +162,15 @@
                             <small>(Kwota przeliczona wg. kursu NBP)</small>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <span>{{ price }} €</span>
+                            <span>${ price } €</span>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <p class="payment-tip">
-                Twoja karta obciążona zostanie w kwocie {{ price }} €. <strong>{{ payment.gross_price|round(2) }} zł = {{ price }} €</strong>.
+            <p class="payment-tip" v-cloak>
+                Twoja karta obciążona zostanie w kwocie ${ price } €. <strong>${ grossPrice } zł = ${ price } €</strong>.
                 Twój bank może pobrać opłatę za transakcję w obcej walucie jeżeli Twoją walutą rozliczeniową nie jest euro.
             </p>
         </aside>
@@ -175,5 +182,15 @@
 {% block body %}
     {{ parent() }}
 
+    <script>
+        var data = {
+            exchange_rate: {{ exchange_rate }},
+            countries: {{ countries|json_encode|raw }},
+            calculator: {{ calculator|json_encode|raw }},
+            vat_rates: {{ vat_rates|json_encode|raw }}
+        };
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 {% endblock %}

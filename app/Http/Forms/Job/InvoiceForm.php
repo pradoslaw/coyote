@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Job;
 
+use Coyote\Country;
 use Coyote\Firm;
 use Coyote\Services\FormBuilder\Form;
 
@@ -14,6 +15,8 @@ class InvoiceForm extends Form
 
     public function buildForm()
     {
+        $codeList = $this->getCountriesCode();
+
         $this
             ->add('name', 'text', [
                 'label' => 'Nazwa firmy',
@@ -34,10 +37,19 @@ class InvoiceForm extends Form
             ->add('postal_code', 'text', [
                 'rules' => 'string|required_with:enable_invoice|max:30',
                 'label' => 'Kod pocztowy',
+            ])
+            ->add('country_id', 'select', [
+                'choices' => $codeList,
+                'empty_value' => '--',
+                'attr' => [
+                    'class' => 'input-inline',
+                    'v-on:change' => 'calculate'
+                ]
             ]);
 
-        if (!empty($this->data) && !$this->isSubmitted() && $this->data instanceof Firm) {
+        if ($this->data instanceof Firm && !$this->isSubmitted()) {
             $this->get('address')->setValue($this->data->street . ' ' . $this->data->house);
+            $this->get('country_id')->setValue(empty($this->data->country_id) ? array_flip($codeList)['PL'] : $this->data->country_id);
         }
     }
 
@@ -50,5 +62,13 @@ class InvoiceForm extends Form
             'name' => 'nazwa',
             'vat_id' => 'NIP'
         ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getCountriesCode()
+    {
+        return Country::pluck('code', 'id')->toArray();
     }
 }

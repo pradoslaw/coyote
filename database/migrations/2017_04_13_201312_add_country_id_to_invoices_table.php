@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCodeToCountriesTable extends Migration
+class AddCountryIdToInvoicesTable extends Migration
 {
     use SchemaBuilder;
 
@@ -14,9 +14,8 @@ class AddCodeToCountriesTable extends Migration
      */
     public function up()
     {
-        $this->schema->table('countries', function (Blueprint $table) {
-            $table->string('code')->nullable();
-            $table->float('vat_rate')->default(0);
+        $this->schema->table('invoices', function (Blueprint $table) {
+            $table->smallInteger('country_id')->nullable();
         });
     }
 
@@ -27,8 +26,8 @@ class AddCodeToCountriesTable extends Migration
      */
     public function down()
     {
-        $this->schema->table('countries', function (Blueprint $table) {
-            $table->dropColumn(['code', 'vat_rate']);
+        $this->schema->table('invoices', function (Blueprint $table) {
+            $table->dropColumn(['country_id']);
         });
     }
 }

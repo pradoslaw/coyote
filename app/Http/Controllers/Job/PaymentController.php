@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Country;
 use Coyote\Events\PaymentPaid;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
@@ -15,6 +16,7 @@ use Coyote\Services\Cardinity\Exceptions\ServiceUnavailable;
 use Coyote\Services\Cardinity\Exceptions\ValidationFailed;
 use Coyote\Services\Cardinity\Exceptions\Unauthorized;
 use Coyote\Services\Cardinity\Payment\Create as PaymentCreate;
+use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Illuminate\Http\Request;
@@ -50,6 +52,8 @@ class PaymentController extends Controller
 
             return $next($request);
         });
+
+        $this->breadcrumb->push('Praca', route('job.home'));
     }
 
     /**
@@ -58,15 +62,36 @@ class PaymentController extends Controller
      */
     public function index($payment)
     {
-        $this->breadcrumb->push('Praca', route('job.home'));
         $this->breadcrumb->push($payment->job->title, UrlBuilder::job($payment->job));
         $this->breadcrumb->push('Promowanie ogłoszenia');
 
+        /** @var PaymentForm $form */
+        $form = $this->getForm($payment);
+        $vatRates = Country::pluck('vat_rate', 'id')->toArray();
+
+        // calculate price based on payment details
+        $calculator = CalculatorFactory::payment($payment);
+        $this->setVatRate($vatRates, $form->get('invoice')->get('country_id')->getValue(), $calculator);
+
         return $this->view('job.payment', [
-            'form'              => $this->getForm($payment),
+            'form'              => $form,
             'payment'           => $payment,
-            'exchange_rate'     => $this->currency->latest('EUR')
+            'exchange_rate'     => $this->currency->latest('EUR'),
+            'vat_rates'         => $vatRates,
+            'calculator'        => $calculator->toArray()
         ]);
+    }
+
+    /**
+     * @param array $vatRates
+     * @param int|null $countryId
+     * @param \Coyote\Services\Invoice\Calculator $calculator
+     */
+    private function setVatRate($vatRates, $countryId, $calculator)
+    {
+        if (isset($vatRates[$countryId])) {
+            $calculator->vatRate = $vatRates[$countryId];
+        }
     }
 
     /**
@@ -76,12 +101,18 @@ class PaymentController extends Controller
      */
     public function process($payment)
     {
+        /** @var PaymentForm $form */
         $form = $this->getForm($payment);
         $form->validate();
 
-        return $this->handlePayment(function () use ($payment, $form) {
+        $vatRates = Country::pluck('vat_rate', 'id')->toArray();
+
+        $calculator = CalculatorFactory::payment($payment);
+        $this->setVatRate($vatRates, $form->get('invoice')->getValue()['country_id'], $calculator);
+
+        return $this->handlePayment(function () use ($payment, $form, $calculator) {
             $result = Cardinity::create()->createPayment([
-                'amount'            => round($payment->grossPrice() * $this->currency->latest('EUR'), 2),
+                'amount'            => round($calculator->grossPrice() * $this->currency->latest('EUR'), 2),
                 'currency'          => 'EUR',
                 'settle'            => true,
                 'order_id'          => $payment->id,
@@ -101,7 +132,8 @@ class PaymentController extends Controller
             /** @var \Coyote\Invoice $invoice */
             $invoice = $this->invoice->create(
                 array_merge($form->get('enable_invoice')->isChecked() ? $form->all()['invoice'] : [], ['user_id' => $this->auth->id]),
-                $payment
+                $payment,
+                $calculator
             );
 
             // associate invoice with payment

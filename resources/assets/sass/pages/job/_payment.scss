@@ -52,3 +52,8 @@
   padding: 5px;
   font-size: $font-size-small;
 }
+
+select[name=country_id] {
+  padding-left: 4px;
+  padding-right: 4px;
+}
