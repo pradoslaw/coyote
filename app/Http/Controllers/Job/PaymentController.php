@@ -78,7 +78,8 @@ class PaymentController extends Controller
             'payment'           => $payment,
             'exchange_rate'     => $this->currency->latest('EUR'),
             'vat_rates'         => $vatRates,
-            'calculator'        => $calculator->toArray()
+            'calculator'        => $calculator->toArray(),
+            'default_vat_rate'  => $payment->plan->vat_rate
         ]);
     }
 

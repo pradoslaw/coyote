@@ -266,9 +266,9 @@ class JobPostingCest
         $I->see('TV');
     }
 
-    public function createPremiumOffer(FunctionalTester $I)
+    public function createPremiumOfferWithoutInvoice(FunctionalTester $I)
     {
-        $I->wantTo('Create premium offer');
+        $I->wantTo('Create premium offer without invoice');
         $fake = Factory::create();
 
         $I->amOnRoute('job.submit');
@@ -289,6 +289,7 @@ class JobPostingCest
 
         $I->seeCurrentRouteIs('job.payment');
         $I->see('Płatność poprzez bezpieczne połączenie');
+        $I->seeOptionIsSelected('invoice[country_id]', '--');
         $I->uncheckOption('enable_invoice');
 
         $I->fillField('name', 'Jan Kowalski');
@@ -302,9 +303,69 @@ class JobPostingCest
 
         $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title]);
         $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
+        $invoice = $I->grabRecord(\Coyote\Invoice::class, ['id' => $payment->invoice_id]);
 
         $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
         $I->assertNotEmpty($payment->invoice);
+        $I->assertEquals(30, $payment->days);
+
+        $I->assertEquals(null, $invoice->country_id);
+
+        $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
+        $I->assertEquals(270, $item->price);
+        $I->assertEquals(1.23, $item->vat_rate);
+    }
+
+    public function createPremiumOfferWithInvoice(FunctionalTester $I)
+    {
+        $I->wantTo('Create premium offer with invoice');
+        $fake = Factory::create();
+
+        $I->amOnRoute('job.submit');
+
+        $I->fillField('title', $title = $fake->text(50));
+        $I->selectOption('employment_id', 1);
+
+        $I->checkOption('#plan_id');
+        $I->click('Informacje o firmie');
+        $I->click('Podstawowe informacje');
+
+        $I->canSeeCheckboxIsChecked('#plan_id');
+
+        $I->click('Informacje o firmie');
+        $I->selectOption('is_private', '1');
+        $I->fillField('done', 1);
+        $I->click('Zapisz i zakończ');
+
+        $I->seeCurrentRouteIs('job.payment');
+
+        $I->fillField('name', 'Jan Kowalski');
+        $I->fillField('number', '5555555555554444');
+        $I->fillField('cvc', '123');
+
+        $I->selectOption('invoice[country_id]', 'UK');
+        $I->fillField('invoice[vat_id]', '1234567');
+        $I->fillField('invoice[name]', $fake->name);
+        $I->fillField('invoice[city]', $fake->city);
+        $I->fillField('invoice[address]', $fake->address);
+        $I->fillField('invoice[postal_code]', $fake->postcode);
+
+        $I->click('Zapłać i zapisz');
+
+        $I->seeCurrentRouteIs('job.offer');
+        $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
+
+        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title]);
+        $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
+        $invoice = $I->grabRecord(\Coyote\Invoice::class, ['id' => $payment->invoice_id]);
+
+        $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
+        $I->assertNotEmpty($payment->invoice);
+        $I->assertEquals(30, $payment->days);
+
+        $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
+        $I->assertEquals(270, $item->price);
+        $I->assertEquals(1, $item->vat_rate);
     }
 
     public function validatePaymentForm(FunctionalTester $I)

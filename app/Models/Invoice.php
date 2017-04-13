@@ -42,8 +42,10 @@ class Invoice extends Model
         parent::boot();
 
         static::saving(function (Invoice $model) {
-            if (empty($model->number)) {
-                $model->number = null;
+            foreach (['number', 'country_id'] as $key) {
+                if (empty($model->{$key})) {
+                    $model->{$key} = null;
+                }
             }
         });
     }

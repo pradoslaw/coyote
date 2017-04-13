@@ -12,7 +12,11 @@ new Vue({
             return parseFloat(value).toFixed(2);
         },
         calculate: function(select) {
-            this.calculator.vat_rate = this.vat_rates[select.target.value];
+            if (select.target.value) {
+                this.calculator.vat_rate = this.vat_rates[select.target.value];
+            } else {
+                this.calculator.vat_rate = this.default_vat_rate;
+            }
         }
     },
     computed: {

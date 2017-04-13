@@ -187,7 +187,8 @@
             exchange_rate: {{ exchange_rate }},
             countries: {{ countries|json_encode|raw }},
             calculator: {{ calculator|json_encode|raw }},
-            vat_rates: {{ vat_rates|json_encode|raw }}
+            vat_rates: {{ vat_rates|json_encode|raw }},
+            default_vat_rate: {{ default_vat_rate }}
         };
     </script>
 
