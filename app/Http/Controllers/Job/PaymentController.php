@@ -82,6 +82,11 @@ class PaymentController extends Controller
         ]);
     }
 
+    /**
+     * @param array $vatRates
+     * @param int|null $countryId
+     * @param \Coyote\Services\Invoice\Calculator $calculator
+     */
     private function setVatRate($vatRates, $countryId, $calculator)
     {
         if (isset($vatRates[$countryId])) {

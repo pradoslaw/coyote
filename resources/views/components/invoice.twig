@@ -127,7 +127,7 @@
                 {{ invoice.postal_code }} {{ invoice.city }}<br>
 
                 {% if invoice.vat_id %}
-                    NIP: {{ invoice.vat_id }}
+                    NIP: {{ invoice.country.code ?: '' }}{{ invoice.vat_id }}
                 {% endif %}
             </td>
         </tr>
