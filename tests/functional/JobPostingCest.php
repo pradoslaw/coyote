@@ -343,7 +343,7 @@ class JobPostingCest
         $I->fillField('number', '5555555555554444');
         $I->fillField('cvc', '123');
 
-        $country = $I->grabRecord(\Coyote\Country::class, ['code' => 'UK']);
+        $country = $I->grabRecord(\Coyote\Country::class, ['code' => 'GB']);
 
         $I->selectOption('invoice[country_id]', $country->id);
         $I->fillField('invoice[vat_id]', '1234567');
