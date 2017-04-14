@@ -343,7 +343,9 @@ class JobPostingCest
         $I->fillField('number', '5555555555554444');
         $I->fillField('cvc', '123');
 
-        $I->selectOption('invoice[country_id]', 'UK');
+        $country = $I->grabRecord(\Coyote\Country::class, ['code' => 'UK']);
+
+        $I->selectOption('invoice[country_id]', $country->id);
         $I->fillField('invoice[vat_id]', '1234567');
         $I->fillField('invoice[name]', $fake->name);
         $I->fillField('invoice[city]', $fake->city);
@@ -355,14 +357,18 @@ class JobPostingCest
         $I->seeCurrentRouteIs('job.offer');
         $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
 
+        /** @var \Coyote\Job $job */
         $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title]);
+        /** @var \Coyote\Payment $payment */
         $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
+        /** @var \Coyote\Invoice $invoice */
         $invoice = $I->grabRecord(\Coyote\Invoice::class, ['id' => $payment->invoice_id]);
 
         $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
         $I->assertNotEmpty($payment->invoice);
         $I->assertEquals(30, $payment->days);
 
+        /** @var \Coyote\Invoice\Item $item */
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
         $I->assertEquals(270, $item->price);
         $I->assertEquals(1, $item->vat_rate);
