@@ -15,6 +15,7 @@ use Coyote\Console\Commands\PurgeJobsCommand;
 use Coyote\Console\Commands\PurgePastebinCommand;
 use Coyote\Console\Commands\PurgeSessionsCommand;
 use Coyote\Console\Commands\PurgeViewsCommand;
+use Coyote\Console\Commands\SetupPredictionsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -38,7 +39,8 @@ class Kernel extends ConsoleKernel
         CreateMappingCommand::class,
         CreateIndexCommand::class,
         IndexCommand::class,
-        PlanReminderCommand::class
+        PlanReminderCommand::class,
+        SetupPredictionsCommand::class
     ];
 
     /**

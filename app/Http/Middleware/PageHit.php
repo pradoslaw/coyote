@@ -53,7 +53,7 @@ class PageHit
             'path'          => urldecode(trim($request->path(), '/')),
             'timestamp'     => (int) (round(time() / 300) * 300),
             'user_id'       => empty($request->user()) ? null : $request->user()->id,
-            'session_id'    => $request->session()->getId()
+            'guest_id'      => $request->session()->get('guest_id')
         ]);
     }
 }

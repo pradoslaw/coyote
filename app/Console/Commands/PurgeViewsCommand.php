@@ -2,7 +2,10 @@
 
 namespace Coyote\Console\Commands;
 
+use Carbon\Carbon;
+use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
+use Coyote\Services\Interests\Calculator;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection as Db;
 
@@ -33,6 +36,11 @@ class PurgeViewsCommand extends Command
     private $page;
 
     /**
+     * @var GuestRepository
+     */
+    private $guest;
+
+    /**
      * @var mixed
      */
     private $redis;
@@ -40,13 +48,15 @@ class PurgeViewsCommand extends Command
     /**
      * @param Db $db
      * @param PageRepository $page
+     * @param GuestRepository $guest
      */
-    public function __construct(Db $db, PageRepository $page)
+    public function __construct(Db $db, PageRepository $page, GuestRepository $guest)
     {
         parent::__construct();
 
         $this->db = $db;
         $this->page = $page;
+        $this->guest = $guest;
         $this->redis = app('redis');
     }
 
@@ -79,7 +89,8 @@ class PurgeViewsCommand extends Command
                         $content->timestamps = false;
                         $content->increment('views', count($hits));
 
-                        $this->store($page, $hits);
+                        $this->registerVisit($page, $hits);
+                        $this->registerTags($page, $hits);
 
                         $this->info('Added ' . count($hits) . ' views to: ' . $path);
                     }
@@ -94,7 +105,7 @@ class PurgeViewsCommand extends Command
      * @param \Coyote\Page $page
      * @param array[] $hits
      */
-    private function store($page, $hits)
+    private function registerVisit($page, $hits)
     {
         foreach ($hits as $hit) {
             if ($hit['user_id']) {
@@ -104,6 +115,34 @@ class PurgeViewsCommand extends Command
 
                 $visits->save();
             }
+        }
+    }
+
+    /**
+     * @param \Coyote\Page $page
+     * @param array[] $hits
+     */
+    private function registerTags($page, $hits)
+    {
+        if (empty($page->tags)) {
+            return;
+        }
+
+        foreach ($hits as $hit) {
+            /** @var \Coyote\Guest $guest */
+            $guest = $this->guest->findOrNew($hit['guest_id']);
+
+            if (!$guest->exists) {
+                $guest->id = $hit['guest_id'];
+                $guest->created_at = $guest->updated_at = Carbon::now();
+            }
+
+            $calculator = new Calculator($guest->interests);
+            $calculator->increment($page->tags);
+
+            $guest->interests = $calculator->toArray();
+
+            $guest->save();
         }
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property array predictions
+ * @property array interests
  */
 class Guest extends Model
 {
@@ -18,12 +18,17 @@ class Guest extends Model
      *
      * @var array
      */
-    protected $fillable = ['id', 'user_id', 'session_id', 'predictions'];
+    protected $fillable = ['id', 'user_id', 'interests'];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    protected $casts = ['interests' => 'json'];
 
     /**
      * @var bool
