@@ -63,9 +63,7 @@ class HomeController extends BaseController
             $this->builder->setPreferences($this->preferences);
         }
 
-        $this->builder->setSessionId(md5($this->request->session()->getId()));
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
-
         $this->request->session()->put('current_url', $this->request->fullUrl());
 
         return $this->load();
@@ -123,17 +121,19 @@ class HomeController extends BaseController
 
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)
-        $jobs = $result->getSource();
-
+        $listing = $result->getSource();
+//dd($listing);
         $context = !$this->request->has('q') ? 'global.' : '';
         $aggregations = [
-            'cities'        => $result->getAggregations("${context}locations.locations_city_original"),
-            'tags'          => $result->getAggregations("${context}tags"),
-            'remote'        => $result->getAggregations("${context}remote")
+            'cities'        => $result->getAggregationCount("${context}locations.locations_city_original"),
+            'tags'          => $result->getAggregationCount("${context}tags"),
+            'remote'        => $result->getAggregationCount("${context}remote")
         ];
 
+
+//dd(count($premium));
         $pagination = new LengthAwarePaginator(
-            $jobs,
+            $listing,
             $result->total(),
             SearchBuilder::PER_PAGE,
             LengthAwarePaginator::resolveCurrentPage(),
@@ -161,9 +161,11 @@ class HomeController extends BaseController
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),
             'currency_list'     => Currency::getCurrenciesList(),
-            'preferences'       => $this->preferences
+            'preferences'       => $this->preferences,
+            'listing'           => $listing,
+            'premium_listing'   => $result->getAggregationHits('premium_listing', true)
         ])->with(
-            compact('jobs', 'aggregations', 'pagination', 'subscribes', 'selected')
+            compact('aggregations', 'pagination', 'subscribes', 'selected')
         );
     }
 

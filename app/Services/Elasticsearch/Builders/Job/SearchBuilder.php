@@ -3,11 +3,9 @@
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Services\Elasticsearch\Aggs;
-use Coyote\Services\Elasticsearch\ConstantScore;
 use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
 use Coyote\Services\Elasticsearch\Functions\Random;
-use Coyote\Services\Elasticsearch\Functions\ScriptScore;
 use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Filters;
@@ -132,7 +130,7 @@ class SearchBuilder extends QueryBuilder
     {
         if ($this->request->has('q')) {
             $this->must(
-                new MultiMatch($this->request->get('q'), ['title^2', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
+                new MultiMatch($this->request->get('q'), ['title^3', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
             );
         } else {
             // no keywords were provided -- let's calculate score based on score functions
@@ -163,9 +161,6 @@ class SearchBuilder extends QueryBuilder
         // facet search
         $this->setupAggregations();
 
-        // premium offers go first
-        $this->should(new ConstantScore(new Filters\Term('boost', true), 100));
-
         $this->size(self::PER_PAGE * ((int) $this->request->get('page', 1) - 1), self::PER_PAGE);
 
         return parent::build();
@@ -185,8 +180,6 @@ class SearchBuilder extends QueryBuilder
         // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
         // za wyjatkiem pierwszych 2h publikacji
         $this->score(new Decay('created_at', '14d', 0.1, '2h'));
-        // extra boost for premium offers
-        $this->score(new ScriptScore("doc['boost'].value ? 10 : 1"));
     }
 
     protected function setupAggregations()
@@ -194,6 +187,7 @@ class SearchBuilder extends QueryBuilder
         $this->aggs(new Aggs\Job\Location());
         $this->aggs(new Aggs\Job\Remote());
         $this->aggs(new Aggs\Job\Tag());
+        $this->aggs(new Aggs\Job\Boost());
     }
 
     /**

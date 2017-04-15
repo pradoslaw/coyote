@@ -178,6 +178,11 @@ $header-footer-border: #c7c7c7;
     margin: 0 1px 1px 1px;
     width: 100%;
     table-layout: fixed;
+
+    // extra margin for regular listing (to separate from premium ones).
+    & + table {
+      margin-top: 10px;
+    }
   }
 
   tr {

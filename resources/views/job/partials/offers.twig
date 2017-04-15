@@ -18,7 +18,7 @@
 
         <table>
             <tbody>
-                {% for job in jobs %}
+                {% for job in listing %}
                     {% set url = route('job.offer', [job.id, job.slug]) %}
 
                     <tr {{ loop.first and job.boost ? 'class="top-spot"' }}>

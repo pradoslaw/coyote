@@ -109,7 +109,38 @@
                 </div>
 
                 <div class="col-sm-9 col-xs-12">
-                    {% include 'job.partials.offers' %}
+                    <nav>
+                        {{ pagination|raw }}
+                    </nav>
+
+                    <section class="panel panel-wrapper">
+                        <div id="box-jobs" class="panel-body">
+                            <ul id="sort" class="hidden-xs">
+                                {% set sort = input_get('sort', '_score') %}
+
+                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: '_score', order: 'desc'})), 'Trafność', {class: 'sort' ~ (sort == '_score' ? ' desc')}) }}</li>
+                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'id', order: 'desc'})), 'Data dodania', {class: 'sort' ~ (sort == 'id' ? ' desc')}) }}</li>
+                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'salary', order: 'desc'})), 'Wynagrodzenie', {class: 'sort' ~ (sort == 'salary' ? ' desc')}) }}</li>
+                            </ul>
+
+                            <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary btn-sm pull-right visible-xs visible-sm" style="margin-top: 6px; margin-bottom: 10px" title="Dodaj ofertę pracy zupełnie za darmo!">Dodaj ofertę pracy</a>
+
+                            <div class="clearfix"></div>
+
+                            {% if premium_listing|length > 0 %}
+                                {% include 'job.partials.listing' with {
+                                    listing: premium_listing,
+                                    show_label: true
+                                } %}
+                            {% endif %}
+
+                            {% include 'job.partials.listing' with {listing: listing} %}
+                        </div>
+                    </section>
+
+                    <nav>
+                        {{ pagination|raw }}
+                    </nav>
                 </div>
             </div>
         </main>
