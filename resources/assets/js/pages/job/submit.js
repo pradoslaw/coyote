@@ -13,11 +13,11 @@ import Map from '../../libs/map';
 function toInt(data) {
     for (let item in data) {
         if (data.hasOwnProperty(item)) {
-            if (typeof(data[item]) == 'boolean') {
+            if (typeof(data[item]) === 'boolean') {
                 data[item] = +data[item];
             }
 
-            if (typeof(data[item]) == 'object') {
+            if (typeof(data[item]) === 'object') {
                 data[item] = toInt(data[item]);
             }
         }
@@ -309,4 +309,6 @@ $(() => {
     $('.btn-save').on('click', () => {
         $('input[name="done"]').val(1);
     });
+
+    $('i[data-toggle="tooltip"]').tooltip();
 });
