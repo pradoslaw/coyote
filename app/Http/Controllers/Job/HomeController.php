@@ -55,7 +55,7 @@ class HomeController extends BaseController
         }
 
         // if user want to filter job offers, we MUST select "all" tab
-        if ($this->notEmpty($this->request, ['q', 'city', 'remote', 'tag'])) {
+        if (!empty(array_intersect(['q', 'city', 'remote', 'tag'], array_keys($this->request->input())))) {
             $this->tab = self::TAB_ALL;
         }
 
@@ -167,21 +167,5 @@ class HomeController extends BaseController
             'subscribes'        => $subscribes,
             'selected'          => $selected
         ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param string[] $keys
-     * @return bool
-     */
-    protected function notEmpty(Request $request, array $keys)
-    {
-        foreach ($keys as $key) {
-            if ($request->has($key)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
