@@ -122,7 +122,7 @@ class HomeController extends BaseController
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)
         $listing = $result->getSource();
-//dd($listing);
+
         $context = !$this->request->has('q') ? 'global.' : '';
         $aggregations = [
             'cities'        => $result->getAggregationCount("${context}locations.locations_city_original"),
@@ -130,8 +130,6 @@ class HomeController extends BaseController
             'remote'        => $result->getAggregationCount("${context}remote")
         ];
 
-
-//dd(count($premium));
         $pagination = new LengthAwarePaginator(
             $listing,
             $result->total(),
@@ -163,10 +161,12 @@ class HomeController extends BaseController
             'currency_list'     => Currency::getCurrenciesList(),
             'preferences'       => $this->preferences,
             'listing'           => $listing,
-            'premium_listing'   => $result->getAggregationHits('premium_listing', true)
-        ])->with(
-            compact('aggregations', 'pagination', 'subscribes', 'selected')
-        );
+            'premium_listing'   => $result->getAggregationHits('premium_listing', true),
+            'aggregations'      => $aggregations,
+            'pagination'        => $pagination,
+            'subscribes'        => $subscribes,
+            'selected'          => $selected
+        ]);
     }
 
     /**

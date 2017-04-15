@@ -3,7 +3,7 @@
     {% for job in listing %}
         {% set url = route('job.offer', [job.id, job.slug]) %}
 
-        <tr {{ loop.first and show_label ? 'class="top-spot"' }}>
+        <tr class="{{ loop.first and show_label ? 'top-spot' }} {{ show_highlight and job.boost ? 'highlight' }}">
             <td class="col-logo">
                 {% if loop.first and show_label %}
                     <span class="label top-spot-badge">Promowane</span>

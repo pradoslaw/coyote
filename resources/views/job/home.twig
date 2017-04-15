@@ -134,7 +134,10 @@
                                 } %}
                             {% endif %}
 
-                            {% include 'job.partials.listing' with {listing: listing} %}
+                            {% include 'job.partials.listing' with {
+                                listing: listing,
+                                show_highlight: true
+                            } %}
                         </div>
                     </section>
 
