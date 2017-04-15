@@ -38,6 +38,8 @@
 - Wyczyszczenie pola wyszukiwania powoduje przeładowanie formularza
 - Zmiana w algorytmie sortowania: losowe "wypychanie" starszych ofert na górę listy
 - Możliwość określania stawki brutto lub netto
+- Dodanie obrazka "Bądź pierwszy" pod przyciskiem do aplikowania na ofertę pracy
+- Oddzielenie ofert darmowych od promowanych
 
 ## 2.0
 
