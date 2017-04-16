@@ -47,7 +47,14 @@
 
     {{ parent() }}
 
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+
     <script type="text/javascript">
+        function onSubmit(token) {
+            $('#register-form').find(':submit').disable();
+            document.getElementById("register-form").submit();
+        }
+
         $(function() {
             $('#box-register').find('form').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
 

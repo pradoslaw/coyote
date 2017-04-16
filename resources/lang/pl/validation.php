@@ -95,6 +95,7 @@ return [
     'cc_number'            => 'Wprowadzony numer karty jest nieprawidłowy.',
     'cc_cvc'               => 'Wprowadzony kod CVC jest nieprawidłowy.',
     'cc_date'              => 'Upłynęła data ważności karty.',
+    'recaptcha'            => 'Wartość pola recaptcha jest nieprawidłowa. Prosimy o kontakt.',
 
     /*
     |--------------------------------------------------------------------------

@@ -86,5 +86,10 @@ return [
     'cardinity' => [
         'key'           => env('CARDINITY_KEY'),
         'secret'        => env('CARDINITY_SECRET')
+    ],
+
+    'recaptcha' => [
+        'key'           => env('RECAPTCHA_KEY'),
+        'secret'        => env('RECAPTCHA_SECRET')
     ]
 ];
