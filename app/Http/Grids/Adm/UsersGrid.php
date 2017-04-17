@@ -5,6 +5,7 @@ namespace Coyote\Http\Grids\Adm;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Select;
 use Boduch\Grid\Filters\Text;
+use Coyote\Services\Grid\Components\FirewallButton;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Decorators\Boolean;
 use Boduch\Grid\Decorators\Ip;
@@ -65,6 +66,9 @@ class UsersGrid extends Grid
                 'title' => 'Reputacja',
                 'sortable' => true
             ])
+            ->addRowAction(new FirewallButton(function (User $user) {
+                return route('adm.firewall.save') . '?' . http_build_query(['user' => $user->id, 'ip' => $user->ip]);
+            }))
             ->addRowAction(new EditButton(function (User $user) {
                 return route('adm.users.save', [$user->id]);
             }));
