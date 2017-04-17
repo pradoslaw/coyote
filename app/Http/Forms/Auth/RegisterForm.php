@@ -84,14 +84,18 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
         }
 
         $validator->after(function ($validator) {
-            if (!$this->request->input('g-recaptcha-response')) {
+            if (empty($this->request->input('g-recaptcha-response'))) {
                 $validator->errors()->add('name', trans('validation.recaptcha'));
+
+                return false;
             }
 
             $response = json_decode($this->makeRequest($this->request->input('g-recaptcha-response')), true);
 
             if (!$response['success']) {
                 $validator->errors()->add('name', trans('validation.recaptcha'));
+
+                return false;
             }
         });
 
