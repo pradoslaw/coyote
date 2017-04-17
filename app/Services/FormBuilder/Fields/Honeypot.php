@@ -4,7 +4,7 @@ namespace Coyote\Services\FormBuilder\Fields;
 
 use Coyote\Services\FormBuilder\Form;
 
-class BotHidden extends Field
+class Honeypot extends Field
 {
     /**
      * Field constructor.

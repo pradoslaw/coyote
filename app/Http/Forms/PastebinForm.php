@@ -45,7 +45,7 @@ class PastebinForm extends Form implements ValidatesWhenSubmitted
                     'data-submit-state' => 'Zapisywanie...'
                 ]
             ])
-            ->add('human_email', 'bot_hidden');
+            ->add('human_email', 'honeypot');
 
         if (!empty($this->request->user())) {
             // user's login as default title

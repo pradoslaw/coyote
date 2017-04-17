@@ -37,7 +37,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'E-mail',
                 'help' => 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.'
             ])
-            ->add('email_confirmation', 'bot_hidden')
+            ->add('email_confirmation', 'honeypot')
             ->add('submit', 'submit', [
                 'label' => 'Utwórz konto',
                 'attr' => [
