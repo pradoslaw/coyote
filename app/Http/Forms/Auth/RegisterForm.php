@@ -40,12 +40,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
             ->add('email_confirmation', 'honeypot')
             ->add('submit', 'submit', [
                 'label' => 'Utwórz konto',
-                'attr' => [
-                    'class' => 'g-recaptcha btn btn-primary',
-                    'data-sitekey' => config('services.recaptcha.key'),
-                    'data-callback' => 'onSubmit',
-                    'data-submit-state' => 'Rejestracja...'
-                ]
+                'attr' => $this->recaptcha()
             ]);
     }
 
@@ -58,18 +53,38 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
     }
 
     /**
+     * @return array
+     */
+    protected function recaptcha()
+    {
+        $attr = [
+            'class' => 'g-recaptcha btn btn-primary',
+            'data-submit-state' => 'Rejestracja...'
+        ];
+
+        if (config('services.recaptcha.key')) {
+            $attr += [
+                'data-sitekey' => config('services.recaptcha.key'),
+                'data-callback' => 'onSubmit'
+            ];
+        }
+
+        return $attr;
+    }
+
+    /**
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function getValidatorInstance()
     {
         $validator = parent::getValidatorInstance();
 
-        if (app()->environment('local', 'dev')) {
+        if (empty(config('services.recaptcha.secret'))) {
             return $validator;
         }
 
         $validator->after(function ($validator) {
-            if (empty($this->request->input('g-recaptcha-response'))) {
+            if (!$this->request->input('g-recaptcha-response')) {
                 $validator->errors()->add('name', trans('validation.recaptcha'));
             }
 
