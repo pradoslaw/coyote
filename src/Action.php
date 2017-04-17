@@ -44,7 +44,7 @@ class Action extends Cell
         $html = '';
 
         foreach ($this->rowActions as $rowAction) {
-            $html = $rowAction->setData($this->data)->render();
+            $html .= $rowAction->setData($this->data)->render();
         }
 
         return $html;
