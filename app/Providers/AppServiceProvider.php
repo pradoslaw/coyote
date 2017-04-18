@@ -34,7 +34,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app['validator']->extend('user_exist', 'Coyote\Http\Validators\UserValidator@validateExist');
         $this->app['validator']->extend('password', 'Coyote\Http\Validators\PasswordValidator@validatePassword');
         $this->app['validator']->extend('reputation', 'Coyote\Http\Validators\ReputationValidator@validateReputation');
-        $this->app['validator']->extend('spam', 'Coyote\Http\Validators\SpamValidator@validateSpam');
+        $this->app['validator']->extend('spam_link', 'Coyote\Http\Validators\SpamValidator@validateSpamLink');
+        $this->app['validator']->extend('spam_chinese', 'Coyote\Http\Validators\SpamValidator@validateSpamChinese');
         $this->app['validator']->extend('tag', 'Coyote\Http\Validators\TagValidator@validateTag');
         $this->app['validator']->extend('tag_creation', 'Coyote\Http\Validators\TagValidator@validateTagCreation');
         $this->app['validator']->extend('throttle', 'Coyote\Http\Validators\ThrottleValidator@validateThrottle');
@@ -51,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
             return str_replace(':point', $parameters[0], $message);
         });
 
-        $this->app['validator']->replacer('spam', function ($message, $attribute, $rule, $parameters) {
+        $this->app['validator']->replacer('spam_link', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);
         });
 
