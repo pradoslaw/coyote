@@ -40,7 +40,10 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
             ->add('email_confirmation', 'honeypot')
             ->add('submit', 'submit', [
                 'label' => 'Utwórz konto',
-                'attr' => $this->recaptcha()
+                'attr' => [
+                    'class' => 'g-recaptcha btn btn-primary',
+                    'data-submit-state' => 'Rejestracja...'
+                ]
             ]);
     }
 
@@ -50,26 +53,6 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
     public function rules()
     {
         return parent::rules() + ['human' => 'required'];
-    }
-
-    /**
-     * @return array
-     */
-    protected function recaptcha()
-    {
-        $attr = [
-            'class' => 'g-recaptcha btn btn-primary',
-            'data-submit-state' => 'Rejestracja...'
-        ];
-
-        if (config('services.recaptcha.key')) {
-            $attr += [
-                'data-sitekey' => config('services.recaptcha.key'),
-                'data-callback' => 'onSubmit'
-            ];
-        }
-
-        return $attr;
     }
 
     /**
@@ -91,6 +74,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
             }
 
             $response = json_decode($this->makeRequest($this->request->input('g-recaptcha-response')), true);
+            logger()->debug($response);
 
             if (!$response['success']) {
                 $validator->errors()->add('name', trans('validation.recaptcha'));

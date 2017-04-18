@@ -20,7 +20,18 @@
                     </div>
                 {% endif %}
 
-                {{ form(form) }}
+                {{ form_start(form) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.password) }}
+                {{ form_row(form.password_confirmation) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.email_confirmation) }}
+
+                <div class="g-recaptcha margin-md-bottom" data-sitekey="{{ config('services.recaptcha.key') }}"></div>
+
+                {{ form_row(form.submit) }}
+
+                {{ form_end(form) }}
             </div>
 
             <div id="box-register-sidebar" class="col-sm-5 col-sm-offset-2 hidden-xs">
@@ -42,12 +53,16 @@
     </div>
 {% endblock %}
 
+{% block head %}
+    {{ parent() }}
+
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+{% endblock %}
+
 {% block body %}
     <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/auth.css') }}">
 
     {{ parent() }}
-
-    <script src="https://www.google.com/recaptcha/api.js"></script>
 
     <script type="text/javascript">
         function onSubmit(token) {
