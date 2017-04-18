@@ -121,7 +121,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->model
             ->select(['posts.*', 'users.name'])
             ->leftJoin('users', 'users.id', '=', 'posts.user_id')
-            ->whereIn('posts.id', $postsId)
+            ->whereIn('posts.id', array_map('intval', $postsId))
             ->where('topic_id', $topicId) // <-- this condition for extra security
             ->get();
     }
