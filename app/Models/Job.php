@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $deadline_at
+ * @property \Carbon\Carbon $boost_at
  * @property int $deadline
  * @property bool $is_expired
  * @property int $salary_from
@@ -134,7 +135,7 @@ class Job extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'deadline_at'];
+    protected $dates = ['created_at', 'updated_at', 'deadline_at', 'boost_at'];
 
     /**
      * @var array
@@ -214,6 +215,10 @@ class Job extends Model
             "type" => "date",
             "format" => "yyyy-MM-dd HH:mm:ss"
         ],
+        "boost_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
         "salary" => [
             "type" => "float"
         ],
@@ -224,6 +229,8 @@ class Job extends Model
             "type" => "boolean"
         ]
     ];
+
+    private $plan = ['id' => null, 'length' => 30];
 
     /**
      * We need to set firm id to null offer is private
@@ -245,9 +252,11 @@ class Job extends Model
             // field must not be null
             $model->is_remote = (int) $model->is_remote;
         });
-    }
 
-    private $plan = ['id' => null, 'length' => 30];
+        static::creating(function (Job $model) {
+            $model->boost_at = $model->freshTimestamp();
+        });
+    }
 
     /**
      * @return string[]

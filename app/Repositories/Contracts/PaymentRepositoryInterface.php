@@ -14,6 +14,11 @@ interface PaymentRepositoryInterface extends RepositoryInterface
     public function hasRecentlyPaid(int $userId, int $days = 7);
 
     /**
+     * @return \Coyote\Payment[]
+     */
+    public function ongoingPayments();
+
+    /**
      * @return mixed
      */
     public function filter();

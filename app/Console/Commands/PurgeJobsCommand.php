@@ -77,12 +77,13 @@ class PurgeJobsCommand extends Command
         $result = new ResultSet($this->elasticsearch->search($this->params));
 
         foreach ($result as $hit) {
-            $user = $this->user->find($hit['user_id'], ['name', 'email']);
             $this->elasticsearch->delete(
                 ['id' => $hit['id'], 'index' => config('elasticsearch.default_index'), 'type' => 'jobs']
             );
 
-            if ($user->email) {
+            $user = $this->user->find($hit['user_id'], ['name', 'email']);
+
+            if ($user !== null && $user->email) {
                 $this->sendEmail($user, $hit);
                 $this->info(sprintf('Sending e-mail about ending offer: %s.', $hit['title']));
             }

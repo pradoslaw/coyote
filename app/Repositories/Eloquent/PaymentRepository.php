@@ -35,6 +35,19 @@ class PaymentRepository extends Repository implements PaymentRepositoryInterface
     /**
      * @inheritdoc
      */
+    public function ongoingPayments()
+    {
+        return $this
+            ->model
+            ->select(['days', 'job_id', 'ends_at'])
+            ->where('ends_at', '>', Carbon::now())
+            ->with('job')
+            ->get();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function filter()
     {
         return $this

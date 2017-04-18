@@ -179,7 +179,7 @@ class SearchBuilder extends QueryBuilder
         $this->score(new FieldValueFactor('score', 'log', 1));
         // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
         // za wyjatkiem pierwszych 2h publikacji
-        $this->score(new Decay('created_at', '14d', 0.1, '2h'));
+        $this->score(new Decay('boost_at', '14d', 0.1, '2h'));
     }
 
     protected function setupAggregations()
