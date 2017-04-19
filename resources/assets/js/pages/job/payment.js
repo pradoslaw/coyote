@@ -1,7 +1,7 @@
 import 'jquery.maskedinput/src/jquery.maskedinput';
 
 new Vue({
-    el: '#payment-form',
+    el: '#payment',
     delimiters: ['${', '}'],
     data: window.data,
     mounted: function () {
@@ -12,11 +12,24 @@ new Vue({
             return parseFloat(value).toFixed(2);
         },
         calculate: function(select) {
-            if (select.target.value) {
-                this.calculator.vat_rate = this.vat_rates[select.target.value];
-            } else {
-                this.calculator.vat_rate = this.default_vat_rate;
-            }
+            this.calculator.vat_rate = select.target.value ? this.vat_rates[select.target.value] : this.default_vat_rate;
+        },
+        submit: function(e) {
+            let client = new braintree.api.Client({clientToken: this.client_token});
+
+            client.tokenizeCard({
+                number: this.form.number,
+                cardholderName: this.form.name,
+                expirationMonth: this.form.expiration_month,
+                expirationYear: this.form.expiration_year,
+                cvv: this.form.cvv,
+            }, (err, nonce) => {
+                this.form.payment_method_nonce = nonce;
+
+                this.$nextTick(() => {
+                    HTMLFormElement.prototype.submit.call(e.target);
+                });
+            });
         }
     },
     computed: {
@@ -31,9 +44,6 @@ new Vue({
         },
         vatPrice: function() {
             return this.money(this.grossPrice - this.netPrice);
-        },
-        price: function() {
-            return this.money(this.grossPrice * this.exchange_rate);
         }
     }
 });

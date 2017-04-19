@@ -16,46 +16,57 @@ class PaymentForm extends Form
     public function buildForm()
     {
         $this
-            ->setAttr(['class' => 'submit-form'])
+            ->setAttr([
+                'class' => 'submit-form',
+                'id' => 'payment-form',
+                '@submit.prevent' => 'submit'
+            ])
             ->add('name', 'text', [
                 'required' => true,
                 'label' => 'Nazwa (jaka widnieje na karcie kredytowej)',
                 'help' => 'Np. imię i nazwisko. Maksymalnie 32 znaki.',
-                'rules' => 'string|max:32'
+                'attr' => [
+                    'data-braintree-name' => 'cardholder_name',
+                    'v-model' => 'form.name'
+                ]
             ])
             ->add('number', 'text', [
                 'required' => true,
                 'label' => 'Numer karty kredytowej lub debetowej',
                 'help' => 'Nie martw się. Numer karty nie będzie przechowywany na naszym serwerze.',
-                'rules' => 'string|cc_number',
                 'attr' => [
-                    'id' => 'credit-card'
+                    'id' => 'credit-card',
+                    'data-braintree-name' => 'number',
+                    'v-model' => 'form.number'
                 ]
             ])
             ->add('exp_year', 'select', [
                 'required' => true,
-                'rules' => 'int',
                 'choices' => $this->getYearList(),
                 'attr' => [
-                    'class' => 'input-inline'
+                    'class' => 'input-inline',
+                    'data-braintree-name' => 'expiration_year',
+                    'v-model' => 'form.expiration_year'
                 ]
             ])
             ->add('exp_month', 'select', [
                 'required' => true,
-                'rules' => 'int|cc_date:exp_month,exp_year',
                 'choices' => $this->getMonthList(),
                 'value' => date('m'),
                 'attr' => [
-                    'class' => 'input-inline'
+                    'class' => 'input-inline',
+                    'data-braintree-name' => 'expiration_month',
+                    'v-model' => 'form.expiration_month'
                 ]
             ])
             ->add('cvc', 'text', [
                 'required' => true,
-                'rules' => 'cc_cvc:number',
                 'label' => 'Kod zabezpieczeń (CVC)',
                 'help' => '3 ostatnie cyfry na odwrocie karty.',
                 'attr' => [
-                    'id' => 'cvc'
+                    'id' => 'cvc',
+                    'data-braintree-name' => 'cvv',
+                    'v-model' => 'form.cvv'
                 ]
             ])
             ->add('enable_invoice', 'checkbox', [

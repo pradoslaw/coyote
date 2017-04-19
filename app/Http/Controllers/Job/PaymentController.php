@@ -20,6 +20,9 @@ use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Illuminate\Http\Request;
+use Braintree\{
+    Configuration, ClientToken, Transaction
+};
 
 class PaymentController extends Controller
 {
@@ -54,6 +57,11 @@ class PaymentController extends Controller
         });
 
         $this->breadcrumb->push('Praca', route('job.home'));
+
+        Configuration::environment('sandbox');
+        Configuration::merchantId(config('services.braintree.merchant_id'));
+        Configuration::publicKey(config('services.braintree.public_key'));
+        Configuration::privateKey(config('services.braintree.private_key'));
     }
 
     /**
@@ -76,10 +84,10 @@ class PaymentController extends Controller
         return $this->view('job.payment', [
             'form'              => $form,
             'payment'           => $payment,
-            'exchange_rate'     => $this->currency->latest('EUR'),
             'vat_rates'         => $vatRates,
             'calculator'        => $calculator->toArray(),
-            'default_vat_rate'  => $payment->plan->vat_rate
+            'default_vat_rate'  => $payment->plan->vat_rate,
+            'client_token'      => ClientToken::generate()
         ]);
     }
 
@@ -112,22 +120,23 @@ class PaymentController extends Controller
         $this->setVatRate($vatRates, $form->get('invoice')->getValue()['country_id'], $calculator);
 
         return $this->handlePayment(function () use ($payment, $form, $calculator) {
-            $result = Cardinity::create()->createPayment([
-                'amount'            => round($calculator->grossPrice() * $this->currency->latest('EUR'), 2),
-                'currency'          => 'EUR',
-                'settle'            => true,
-                'order_id'          => $payment->id,
-                'country'           => 'PL',
-                'payment_method'    => PaymentCreate::CARD,
-//                'description'       => '3d-fail',
-                'payment_instrument'=> [
-                    'pan'           => $form->get('number')->getValue(),
-                    'exp_year'      => $form->get('exp_year')->getValue(),
-                    'exp_month'     => $form->get('exp_month')->getValue(),
-                    'cvc'           => $form->get('cvc')->getValue(),
-                    'holder'        => $form->get('name')->getValue()
-                ],
+            $result = Transaction::sale([
+                'amount' => $calculator->grossPrice(),
+                'orderId'          => $payment->id,
+                'paymentMethodNonce' => $this->request->input("payment_method_nonce"),
+                'options' => [
+                    'submitForSettlement' => true
+                ]
             ]);
+
+            if ($result->success || !is_null($result->transaction)) {
+//            $transaction = $result->transaction;
+//            header("Location: transaction.php?id=" . $transaction->id);
+                dd($result);
+            } else {
+//            dd($_POST);
+                return back()->withInput()->with('error', array_first($result->errors->deepAll())->message);
+            }
 
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
             /** @var \Coyote\Invoice $invoice */
@@ -140,17 +149,17 @@ class PaymentController extends Controller
             // associate invoice with payment
             $payment->invoice()->associate($invoice);
             $payment->save();
-
-            if ($result->isPending()) {
-                return view('job.3dsecure', [
-                    'uuid'          => $result->id,
-                    'callback_url'  => route('job.payment.callback', [$payment->id]),
-                    'url'           => $result->authorizationInformation->url,
-                    'data'          => $result->authorizationInformation->data
-                ]);
-            }
-
-            logger()->debug('Successfully payment', ['uuid' => $result->id]);
+//
+//            if ($result->isPending()) {
+//                return view('job.3dsecure', [
+//                    'uuid'          => $result->id,
+//                    'callback_url'  => route('job.payment.callback', [$payment->id]),
+//                    'url'           => $result->authorizationInformation->url,
+//                    'data'          => $result->authorizationInformation->data
+//                ]);
+//            }
+//
+//            logger()->debug('Successfully payment', ['uuid' => $result->id]);
 
             // boost job offer, send invoice and reindex
             event(new PaymentPaid($payment, $this->auth));
