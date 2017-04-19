@@ -39,11 +39,19 @@ class RegisterController extends Controller
     {
         $this->breadcrumb->push('Rejestracja', route('register'));
 
-        $form = $this->createForm(RegisterForm::class, null, [
-            'url' => route('register')
-        ]);
+        $form = $this->getForm();
 
         return $this->view('auth.register', compact('form'));
+    }
+
+    /**
+     * @return \Coyote\Services\FormBuilder\Form
+     */
+    private function getForm()
+    {
+        return $this->createForm(RegisterForm::class, null, [
+            'url' => route('register')
+        ]);
     }
 
     /**
