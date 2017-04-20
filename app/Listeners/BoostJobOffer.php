@@ -63,6 +63,7 @@ class BoostJobOffer implements ShouldQueue
 
             // boost job offer so it's on the top of the list
             $event->payment->job->boost = true;
+            $event->payment->job->boost_at = Carbon::now();
             $event->payment->job->deadline_at = max($event->payment->job->deadline_at, $event->payment->ends_at);
             $event->payment->job->save();
 
