@@ -210,14 +210,21 @@ class Notifications
      * @private
      */
     _onScroll(e) {
+        if (this._isRequestOngoing) {
+            return;
+        }
+
         let items = $(e.currentTarget).find('ul');
+        this._isRequestOngoing = true;
 
         $.get(e.data.url + '?offset=' + $('li', items).length, json => {
             items.append(json.html);
 
-            if ($('li', json.html).length < 10) {
+            if (json.count < 10) {
                 $(e.currentTarget).off('ps-y-reach-end');
             }
+
+            this._isRequestOngoing = false;
         });
     }
 }

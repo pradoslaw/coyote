@@ -104,7 +104,8 @@ class AlertsController extends BaseController
 
         return response()->json([
             'html'      => $view->render(),
-            'unread'    => $unread
+            'unread'    => $unread,
+            'count'     => count($alerts)
         ]);
     }
 
