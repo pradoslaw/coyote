@@ -83,11 +83,6 @@ return [
         'port'          => ''
     ],
 
-    'cardinity' => [
-        'key'           => env('CARDINITY_KEY'),
-        'secret'        => env('CARDINITY_SECRET')
-    ],
-
     'braintree' => [
         'env'           => env('BRAINTREE_ENV'),
         'merchant_id'   => env('BRAINTREE_MERCHANT_ID'),

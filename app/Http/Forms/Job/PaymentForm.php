@@ -25,6 +25,7 @@ class PaymentForm extends Form
                 'required' => true,
                 'label' => 'Nazwa (jaka widnieje na karcie kredytowej)',
                 'help' => 'Np. imię i nazwisko. Maksymalnie 32 znaki.',
+                'rules' => 'string|max:32',
                 'attr' => [
                     'data-braintree-name' => 'cardholder_name',
                     'v-model' => 'form.name'
@@ -34,6 +35,7 @@ class PaymentForm extends Form
                 'required' => true,
                 'label' => 'Numer karty kredytowej lub debetowej',
                 'help' => 'Nie martw się. Numer karty nie będzie przechowywany na naszym serwerze.',
+                'rules' => 'string|cc_number',
                 'attr' => [
                     'id' => 'credit-card',
                     'data-braintree-name' => 'number',
@@ -41,8 +43,8 @@ class PaymentForm extends Form
                 ]
             ])
             ->add('exp_year', 'select', [
-                'required' => true,
                 'choices' => $this->getYearList(),
+                'rules' => 'int',
                 'attr' => [
                     'class' => 'input-inline',
                     'data-braintree-name' => 'expiration_year',
@@ -50,8 +52,8 @@ class PaymentForm extends Form
                 ]
             ])
             ->add('exp_month', 'select', [
-                'required' => true,
                 'choices' => $this->getMonthList(),
+                'rules' => 'int|cc_date:exp_month,exp_year',
                 'value' => date('m'),
                 'attr' => [
                     'class' => 'input-inline',
@@ -60,9 +62,9 @@ class PaymentForm extends Form
                 ]
             ])
             ->add('cvc', 'text', [
-                'required' => true,
                 'label' => 'Kod zabezpieczeń (CVC)',
                 'help' => '3 ostatnie cyfry na odwrocie karty.',
+                'rules' => 'cc_cvc:number',
                 'attr' => [
                     'id' => 'cvc',
                     'data-braintree-name' => 'cvv',

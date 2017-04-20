@@ -15,6 +15,9 @@ new Vue({
             this.calculator.vat_rate = select.target.value ? this.vat_rates[select.target.value] : this.default_vat_rate;
         },
         submit: function(e) {
+            this.form.cvv = $('#cvc').val();
+            this.form.number = $('#credit-card').val();
+
             let client = new braintree.api.Client({clientToken: this.client_token});
 
             client.tokenizeCard({

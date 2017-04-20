@@ -53,7 +53,8 @@
 
                                             <img src="{{ cdn('img/cvc.png') }}" class="cvc">
 
-                                            {{ form_widget(form.cvc) }}
+                                            {#{{ form_widget(form.cvc) }}#}
+                                            <input id="cvc" data-braintree-name="cvv" name="cvc" type="text" class="form-control" v-input-mask="999">
                                             {{ form_error(form.cvc) }}
                                         </div>
                                     </div>

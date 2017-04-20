@@ -2,7 +2,6 @@
 
 namespace Coyote\Services\Invoice;
 
-use Coyote\Country;
 use Illuminate\Contracts\Support\Arrayable;
 
 class Calculator implements Arrayable
