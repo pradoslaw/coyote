@@ -78,7 +78,7 @@ $line-height-computed:    floor(($font-size-base * $line-height-base)) !default;
 $headings-font-family:    Arial, sans-serif !default;
 //$headings-font-weight:    500 !default;
 $headings-font-weight:    normal !default; // <!-- zmiana
-$headings-line-height:    1.1 !default;
+/* $headings-line-height:    1.1 !default; */ // <!-- https://4programmers.net/Forum/Coyote/283610-obciety_nick
 //$headings-color:          inherit !default;
 $headings-color:          lighten($text-color, 10%) !default; // <!-- zmiana
 
