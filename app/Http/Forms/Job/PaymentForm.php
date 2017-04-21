@@ -3,7 +3,6 @@
 namespace Coyote\Http\Forms\Job;
 
 use Carbon\Carbon;
-use Coyote\Country;
 use Coyote\Services\FormBuilder\Form;
 
 class PaymentForm extends Form
@@ -27,7 +26,6 @@ class PaymentForm extends Form
                 'help' => 'Np. imię i nazwisko. Maksymalnie 32 znaki.',
                 'rules' => 'string|max:32',
                 'attr' => [
-                    'data-braintree-name' => 'cardholder_name',
                     'v-model' => 'form.name'
                 ]
             ])
@@ -38,7 +36,6 @@ class PaymentForm extends Form
                 'rules' => 'string|cc_number',
                 'attr' => [
                     'id' => 'credit-card',
-                    'data-braintree-name' => 'number',
                     'v-model' => 'form.number'
                 ]
             ])
@@ -47,7 +44,6 @@ class PaymentForm extends Form
                 'rules' => 'int',
                 'attr' => [
                     'class' => 'input-inline',
-                    'data-braintree-name' => 'expiration_year',
                     'v-model' => 'form.expiration_year'
                 ]
             ])
@@ -57,7 +53,6 @@ class PaymentForm extends Form
                 'value' => date('m'),
                 'attr' => [
                     'class' => 'input-inline',
-                    'data-braintree-name' => 'expiration_month',
                     'v-model' => 'form.expiration_month'
                 ]
             ])
@@ -67,8 +62,7 @@ class PaymentForm extends Form
                 'rules' => 'cc_cvc:number',
                 'attr' => [
                     'id' => 'cvc',
-                    'data-braintree-name' => 'cvv',
-                    'v-model' => 'form.cvv'
+                    'v-model' => 'form.cvc'
                 ]
             ])
             ->add('enable_invoice', 'checkbox', [
@@ -94,16 +88,6 @@ class PaymentForm extends Form
             'number' => 'numer karty kredytowej',
             'cvc' => 'CVC'
         ];
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCountry()
-    {
-        $value = $this->get('invoice')->getChild('country_id')->getValue();
-
-        return Country::find($value);
     }
 
     /**

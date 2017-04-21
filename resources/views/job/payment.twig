@@ -189,12 +189,12 @@
             default_vat_rate: {{ default_vat_rate }},
             client_token: '{{ client_token }}',
             form: {
-                payment_method_nonce: null,
-                number: null,
-                name: null,
+                payment_method_nonce: '',
+                number: '',
+                name: '',
                 expiration_year: {{ 'now'|date('Y') }},
                 expiration_month: {{ form.exp_month.value }},
-                cvv: null
+                cvc: ''
             }
         };
     </script>

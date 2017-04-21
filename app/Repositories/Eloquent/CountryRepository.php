@@ -14,4 +14,12 @@ class CountryRepository extends Repository implements CountryRepositoryInterface
     {
         return Country::class;
     }
+
+    /**
+     * @return array
+     */
+    public function vatRatesList()
+    {
+        return $this->model->pluck('vat_rate', 'id')->toArray();
+    }
 }

@@ -2,13 +2,11 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Country;
 use Coyote\Events\PaymentPaid;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
-
-
+use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
@@ -26,19 +24,27 @@ class PaymentController extends Controller
     private $invoice;
 
     /**
+     * @var CountryRepository
+     */
+    private $country;
+
+    /**
      * @var Db
      */
     private $db;
 
     /**
      * @param InvoiceGenerator $invoice
+     * @param Db $db
+     * @param CountryRepository $country
      */
-    public function __construct(InvoiceGenerator $invoice, Db $db)
+    public function __construct(InvoiceGenerator $invoice, Db $db, CountryRepository $country)
     {
         parent::__construct();
 
         $this->invoice = $invoice;
         $this->db = $db;
+        $this->country = $country;
 
         $this->middleware(function (Request $request, $next) {
             /** @var \Coyote\Payment $payment */
@@ -68,7 +74,7 @@ class PaymentController extends Controller
 
         /** @var PaymentForm $form */
         $form = $this->getForm($payment);
-        $vatRates = Country::pluck('vat_rate', 'id')->toArray();
+        $vatRates = $this->country->vatRatesList();
 
         // calculate price based on payment details
         $calculator = CalculatorFactory::payment($payment);
@@ -107,12 +113,16 @@ class PaymentController extends Controller
         $form = $this->getForm($payment);
         $form->validate();
 
-        $vatRates = Country::pluck('vat_rate', 'id')->toArray();
+        // remove sensitive data
+        $this->request->merge(['number' => '***', 'cvc' => '***']);
+
+        $vatRates = $this->country->vatRatesList();
 
         $calculator = CalculatorFactory::payment($payment);
         $this->setVatRate($vatRates, $form->get('invoice')->getValue()['country_id'], $calculator);
 
         return $this->handlePayment(function () use ($payment, $form, $calculator) {
+            /** @var mixed $result */
             $result = Transaction::sale([
                 'amount'                => number_format($calculator->grossPrice(), 2, '.', ''),
                 'orderId'               => $payment->id,
@@ -168,11 +178,10 @@ class PaymentController extends Controller
     private function handlePaymentException($exception, $message)
     {
         $this->db->rollBack();
-        // log error without credit card number etc.
+        // log error. sensitive data won't be saved (we removed them)
         logger()->error($exception);
 
         if (app()->environment('production')) {
-            // sentry will cut off credit card number
             app('sentry')->captureException($exception);
         }
 

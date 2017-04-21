@@ -43,7 +43,7 @@ class InvoiceForm extends Form
                 'empty_value' => '--',
                 'attr' => [
                     'class' => 'input-inline',
-                    'v-on:change' => 'calculate'
+                    '@change' => 'calculate'
                 ]
             ]);
 

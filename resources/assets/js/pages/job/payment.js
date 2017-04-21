@@ -1,6 +1,6 @@
 import 'jquery.maskedinput/src/jquery.maskedinput';
 
-new Vue({
+let vm = new Vue({
     el: '#payment',
     delimiters: ['${', '}'],
     data: window.data,
@@ -15,7 +15,7 @@ new Vue({
             this.calculator.vat_rate = select.target.value ? this.vat_rates[select.target.value] : this.default_vat_rate;
         },
         submit: function(e) {
-            this.form.cvv = $('#cvc').val();
+            this.form.cvc = $('#cvc').val();
             this.form.number = $('#credit-card').val();
 
             let client = new braintree.api.Client({clientToken: this.client_token});
@@ -25,7 +25,7 @@ new Vue({
                 cardholderName: this.form.name,
                 expirationMonth: this.form.expiration_month,
                 expirationYear: this.form.expiration_year,
-                cvv: this.form.cvv,
+                cvv: this.form.cvc,
             }, (err, nonce) => {
                 this.form.payment_method_nonce = nonce;
 
@@ -58,6 +58,9 @@ $(function($) {
         })
         .trigger('change');
 
-    $("#credit-card").mask("9999-9999-9999-9999");
+    $("#credit-card").mask("9999-9999-9999-9999", {completed: function () {
+        vm.$set(vm.form, 'number', this.val());
+    }});
+
     $("#cvc").mask("999");
 });
