@@ -190,11 +190,11 @@
             client_token: '{{ client_token }}',
             form: {
                 payment_method_nonce: '',
-                number: '',
-                name: '',
-                expiration_year: {{ 'now'|date('Y') }},
-                expiration_month: {{ form.exp_month.value }},
-                cvc: ''
+                number: '{{ form.number.value }}',
+                name: '{{ form.name.value }}',
+                expiration_year: '{{ form.exp_year.value }}',
+                expiration_month: '{{ form.exp_month.value }}',
+                cvc: '{{ form.cvc.value }}'
             }
         };
     </script>

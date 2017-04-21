@@ -42,6 +42,7 @@ class PaymentForm extends Form
             ->add('exp_year', 'select', [
                 'choices' => $this->getYearList(),
                 'rules' => 'int',
+                'value' => date('Y'),
                 'attr' => [
                     'class' => 'input-inline',
                     'v-model' => 'form.expiration_year'
@@ -50,7 +51,7 @@ class PaymentForm extends Form
             ->add('exp_month', 'select', [
                 'choices' => $this->getMonthList(),
                 'rules' => 'int|cc_date:exp_month,exp_year',
-                'value' => date('m'),
+                'value' => date('n'),
                 'attr' => [
                     'class' => 'input-inline',
                     'v-model' => 'form.expiration_month'
