@@ -41,7 +41,7 @@
             <ul class="metadata list-inline primary">
                 <li title="Data opublikowania">
                     <i class="fa fa-calendar"></i>
-                    {{ job.created_at|format_date }}
+                    {{ job.boost_at|format_date }}
                 </li>
 
                 {% if not preview and can('job-update') %}

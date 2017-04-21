@@ -53,11 +53,11 @@
                 {% endif %}
             </td>
             <td class="col-time hidden-sm hidden-xs hidden-xxs">
-                {% if is_today(job.created_at) %}
+                {% if is_today(job.boost_at) %}
                     <p><span class="label label-new">Nowe</span></p>
                 {% endif %}
 
-                <small class="text-muted" title="{{ job.created_at|format_date }}">{{ job.created_at|diff_for_humans }}</small>
+                <small class="text-muted" title="{{ job.boost_at|format_date }}">{{ job.boost_at|diff_for_humans }}</small>
             </td>
             <td class="col-fav">
                 <a class="btn-subscribe {{ subscribes.contains('id', job.id) ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}" title="Dodaj lub usuń tę ofertę do ulubionych">
