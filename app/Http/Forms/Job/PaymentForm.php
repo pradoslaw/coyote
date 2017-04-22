@@ -60,7 +60,7 @@ class PaymentForm extends Form
             ->add('cvc', 'text', [
                 'label' => 'Kod zabezpieczeń (CVC)',
                 'help' => '3 ostatnie cyfry na odwrocie karty.',
-                'rules' => 'cc_cvc:number',
+                'rules' => 'required|cc_cvc:number',
                 'attr' => [
                     'id' => 'cvc',
                     'v-model' => 'form.cvc'
