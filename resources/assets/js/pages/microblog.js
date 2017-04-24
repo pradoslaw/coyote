@@ -102,8 +102,14 @@ $(function () {
         .on('click', '.btn-subscribe', function () {
             var $this = $(this);
 
+            if ($this.attr('disabled') === 'disabled') {
+                return false;
+            }
+
+            $this.attr({disabled: 'disabled', 'data-label': $(this).text()}).text('Proszę czekać...');
+
             $.post($this.attr('href'), function () {
-                $this.toggleClass('subscribe-on');
+                $this.toggleClass('subscribe-on').text($this.data('label')).removeAttr('disabled');
             });
 
             return false;
