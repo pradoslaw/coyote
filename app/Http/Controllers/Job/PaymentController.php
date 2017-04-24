@@ -2,47 +2,50 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Country;
 use Coyote\Events\PaymentPaid;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
-use Coyote\Repositories\Contracts\CurrencyRepositoryInterface as CurrencyRepository;
-use Coyote\Services\Cardinity\Client as Cardinity;
-use Coyote\Services\Cardinity\Exceptions\Declined;
-use Coyote\Services\Cardinity\Exceptions\Forbidden;
-use Coyote\Services\Cardinity\Exceptions\InternalServerError;
-use Coyote\Services\Cardinity\Exceptions\ServiceUnavailable;
-use Coyote\Services\Cardinity\Exceptions\ValidationFailed;
-use Coyote\Services\Cardinity\Exceptions\Unauthorized;
-use Coyote\Services\Cardinity\Payment\Create as PaymentCreate;
+use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
+use Illuminate\Database\Connection as Db;
 use Illuminate\Http\Request;
+use Braintree\Configuration;
+use Braintree\ClientToken;
+use Braintree\Transaction;
+use Braintree\Exception;
 
 class PaymentController extends Controller
 {
-    /**
-     * @var CurrencyRepository
-     */
-    private $currency;
-
     /**
      * @var InvoiceGenerator
      */
     private $invoice;
 
     /**
-     * @param CurrencyRepository $currency
-     * @param InvoiceGenerator $invoice
+     * @var CountryRepository
      */
-    public function __construct(CurrencyRepository $currency, InvoiceGenerator $invoice)
+    private $country;
+
+    /**
+     * @var Db
+     */
+    private $db;
+
+    /**
+     * @param InvoiceGenerator $invoice
+     * @param Db $db
+     * @param CountryRepository $country
+     */
+    public function __construct(InvoiceGenerator $invoice, Db $db, CountryRepository $country)
     {
         parent::__construct();
 
-        $this->currency = $currency;
         $this->invoice = $invoice;
+        $this->db = $db;
+        $this->country = $country;
 
         $this->middleware(function (Request $request, $next) {
             /** @var \Coyote\Payment $payment */
@@ -54,6 +57,11 @@ class PaymentController extends Controller
         });
 
         $this->breadcrumb->push('Praca', route('job.home'));
+
+        Configuration::environment(config('services.braintree.env'));
+        Configuration::merchantId(config('services.braintree.merchant_id'));
+        Configuration::publicKey(config('services.braintree.public_key'));
+        Configuration::privateKey(config('services.braintree.private_key'));
     }
 
     /**
@@ -67,7 +75,7 @@ class PaymentController extends Controller
 
         /** @var PaymentForm $form */
         $form = $this->getForm($payment);
-        $vatRates = Country::pluck('vat_rate', 'id')->toArray();
+        $vatRates = $this->country->vatRatesList();
 
         // calculate price based on payment details
         $calculator = CalculatorFactory::payment($payment);
@@ -76,10 +84,10 @@ class PaymentController extends Controller
         return $this->view('job.payment', [
             'form'              => $form,
             'payment'           => $payment,
-            'exchange_rate'     => $this->currency->latest('EUR'),
             'vat_rates'         => $vatRates,
             'calculator'        => $calculator->toArray(),
-            'default_vat_rate'  => $payment->plan->vat_rate
+            'default_vat_rate'  => $payment->plan->vat_rate,
+            'client_token'      => ClientToken::generate()
         ]);
     }
 
@@ -106,28 +114,30 @@ class PaymentController extends Controller
         $form = $this->getForm($payment);
         $form->validate();
 
-        $vatRates = Country::pluck('vat_rate', 'id')->toArray();
+        // remove sensitive data
+        $this->request->merge(['number' => '***', 'cvc' => '***']);
+
+        $vatRates = $this->country->vatRatesList();
 
         $calculator = CalculatorFactory::payment($payment);
         $this->setVatRate($vatRates, $form->get('invoice')->getValue()['country_id'], $calculator);
 
         return $this->handlePayment(function () use ($payment, $form, $calculator) {
-            $result = Cardinity::create()->createPayment([
-                'amount'            => round($calculator->grossPrice() * $this->currency->latest('EUR'), 2),
-                'currency'          => 'EUR',
-                'settle'            => true,
-                'order_id'          => $payment->id,
-                'country'           => 'PL',
-                'payment_method'    => PaymentCreate::CARD,
-//                'description'       => '3d-fail',
-                'payment_instrument'=> [
-                    'pan'           => $form->get('number')->getValue(),
-                    'exp_year'      => $form->get('exp_year')->getValue(),
-                    'exp_month'     => $form->get('exp_month')->getValue(),
-                    'cvc'           => $form->get('cvc')->getValue(),
-                    'holder'        => $form->get('name')->getValue()
-                ],
+            /** @var mixed $result */
+            $result = Transaction::sale([
+                'amount'                => number_format($calculator->grossPrice(), 2, '.', ''),
+                'orderId'               => $payment->id,
+                'paymentMethodNonce'    => $this->request->input("payment_method_nonce"),
+                'options' => [
+                    'submitForSettlement' => true
+                ]
             ]);
+
+            if (!$result->success || is_null($result->transaction)) {
+                $error = array_first($result->errors->deepAll());
+
+                throw new Exception\ValidationsFailed($error->message, $error->code);
+            }
 
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
             /** @var \Coyote\Invoice $invoice */
@@ -141,37 +151,7 @@ class PaymentController extends Controller
             $payment->invoice()->associate($invoice);
             $payment->save();
 
-            if ($result->isPending()) {
-                return view('job.3dsecure', [
-                    'uuid'          => $result->id,
-                    'callback_url'  => route('job.payment.callback', [$payment->id]),
-                    'url'           => $result->authorizationInformation->url,
-                    'data'          => $result->authorizationInformation->data
-                ]);
-            }
-
-            logger()->debug('Successfully payment', ['uuid' => $result->id]);
-
-            // boost job offer, send invoice and reindex
-            event(new PaymentPaid($payment, $this->auth));
-
-            return redirect()
-                ->to(UrlBuilder::job($payment->job))
-                ->with('success', trans('payment.success'));
-        });
-    }
-
-    /**
-     * @param \Coyote\Payment $payment
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
-     */
-    public function callback($payment, Request $request)
-    {
-        return $this->handlePayment(function () use ($payment, $request) {
-            $result = Cardinity::create()->finalizePayment($request->input('MD'), $request->input('PaRes'));
-            logger()->debug('Successfully payment via 3D Secure', ['uuid' => $result->id]);
+            logger()->debug('Successfully payment', ['result' => $result]);
 
             // boost job offer, send invoice and reindex
             event(new PaymentPaid($payment, $this->auth));
@@ -193,22 +173,20 @@ class PaymentController extends Controller
 
     /**
      * @param \Exception $exception
-     * @param string $translationId
+     * @param string $message
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function handlePaymentException($exception, $translationId)
+    private function handlePaymentException($exception, $message)
     {
-        if (!($exception instanceof ValidationFailed) && !($exception instanceof Declined)) {
-            // log error without credit card number etc.
-            logger()->error($exception);
+        $this->db->rollBack();
+        // log error. sensitive data won't be saved (we removed them)
+        logger()->error($exception);
 
-            if (app()->environment('production')) {
-                // sentry will cut off credit card number
-                app('sentry')->captureException($exception);
-            }
+        if (app()->environment('production')) {
+            app('sentry')->captureException($exception);
         }
 
-        return back()->withInput()->with('error', trans($translationId));
+        return back()->withInput()->with('error', $message);
     }
 
     /**
@@ -217,22 +195,25 @@ class PaymentController extends Controller
      */
     private function handlePayment(\Closure $callback)
     {
+        $this->db->beginTransaction();
+
         try {
-            return $callback();
-        } catch (Forbidden $e) {
-            return $this->handlePaymentException($e, 'payment.forbidden');
-        } catch (InternalServerError $e) {
-            return $this->handlePaymentException($e, 'payment.internal_server');
-        } catch (ServiceUnavailable $e) {
-            return $this->handlePaymentException($e, 'payment.service_unavailable');
-        } catch (Unauthorized $e) {
-            return $this->handlePaymentException($e, 'payment.unauthorized');
-        } catch (ValidationFailed $e) {
-            return $this->handlePaymentException($e, 'payment.validation');
-        } catch (Declined $e) {
-            return $this->handlePaymentException($e, 'payment.declined');
+            $result = $callback();
+            $this->db->commit();
+
+            return $result;
+        } catch (Exception\Authentication $e) {
+            return $this->handlePaymentException($e, trans('payment.forbidden'));
+        } catch (Exception\Authorization $e) {
+            return $this->handlePaymentException($e, trans('payment.unauthorized'));
+        } catch (Exception\Timeout $e) {
+            return $this->handlePaymentException($e, trans('payment.timeout'));
+        } catch (Exception\ServerError $e) {
+            return $this->handlePaymentException($e, trans('payment.unauthorized'));
+        } catch (Exception\ValidationsFailed $e) {
+            return $this->handlePaymentException($e, $e->getMessage());
         } catch (\Exception $e) {
-            return $this->handlePaymentException($e, 'payment.unhandled');
+            return $this->handlePaymentException($e, trans('payment.unhandled'));
         }
     }
 }

@@ -3,7 +3,6 @@
 namespace Coyote\Http\Forms\Job;
 
 use Carbon\Carbon;
-use Coyote\Country;
 use Coyote\Services\FormBuilder\Form;
 
 class PaymentForm extends Form
@@ -16,12 +15,19 @@ class PaymentForm extends Form
     public function buildForm()
     {
         $this
-            ->setAttr(['class' => 'submit-form'])
+            ->setAttr([
+                'class' => 'submit-form',
+                'id' => 'payment-form',
+                '@submit.prevent' => 'submit'
+            ])
             ->add('name', 'text', [
                 'required' => true,
                 'label' => 'Nazwa (jaka widnieje na karcie kredytowej)',
                 'help' => 'Np. imię i nazwisko. Maksymalnie 32 znaki.',
-                'rules' => 'string|max:32'
+                'rules' => 'string|max:32',
+                'attr' => [
+                    'v-model' => 'form.name'
+                ]
             ])
             ->add('number', 'text', [
                 'required' => true,
@@ -29,33 +35,35 @@ class PaymentForm extends Form
                 'help' => 'Nie martw się. Numer karty nie będzie przechowywany na naszym serwerze.',
                 'rules' => 'string|cc_number',
                 'attr' => [
-                    'id' => 'credit-card'
+                    'id' => 'credit-card',
+                    'v-model' => 'form.number'
                 ]
             ])
             ->add('exp_year', 'select', [
-                'required' => true,
-                'rules' => 'int',
                 'choices' => $this->getYearList(),
+                'rules' => 'int',
+                'value' => date('Y'),
                 'attr' => [
-                    'class' => 'input-inline'
+                    'class' => 'input-inline',
+                    'v-model' => 'form.expiration_year'
                 ]
             ])
             ->add('exp_month', 'select', [
-                'required' => true,
-                'rules' => 'int|cc_date:exp_month,exp_year',
                 'choices' => $this->getMonthList(),
-                'value' => date('m'),
+                'rules' => 'int|cc_date:exp_month,exp_year',
+                'value' => date('n'),
                 'attr' => [
-                    'class' => 'input-inline'
+                    'class' => 'input-inline',
+                    'v-model' => 'form.expiration_month'
                 ]
             ])
             ->add('cvc', 'text', [
-                'required' => true,
-                'rules' => 'cc_cvc:number',
                 'label' => 'Kod zabezpieczeń (CVC)',
                 'help' => '3 ostatnie cyfry na odwrocie karty.',
+                'rules' => 'required|cc_cvc:number',
                 'attr' => [
-                    'id' => 'cvc'
+                    'id' => 'cvc',
+                    'v-model' => 'form.cvc'
                 ]
             ])
             ->add('enable_invoice', 'checkbox', [
@@ -81,16 +89,6 @@ class PaymentForm extends Form
             'number' => 'numer karty kredytowej',
             'cvc' => 'CVC'
         ];
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCountry()
-    {
-        $value = $this->get('invoice')->getChild('country_id')->getValue();
-
-        return Country::find($value);
     }
 
     /**

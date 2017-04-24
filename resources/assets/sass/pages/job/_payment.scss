@@ -40,17 +40,7 @@
       font-size: $font-size-large;
       display: block;
     }
-
-    small {
-      font-size: 11px;
-    }
   }
-}
-
-.payment-tip {
-  line-height: 150%;
-  padding: 5px;
-  font-size: $font-size-small;
 }
 
 select[name=country_id] {

@@ -2,7 +2,7 @@
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
 {% block container %}
-    <div id="payment-form" class="row">
+    <div id="payment" class="row">
         {{ form_start(form) }}
 
         <main class="col-md-8">
@@ -114,7 +114,7 @@
                     <div id="form-navigation" class="form-group">
                         <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Powrót do ogłoszenia</a>
 
-                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
+                        <button type="submit" id="submit" class="btn btn-primary pull-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -159,21 +159,17 @@
                     <div class="row">
                         <div class="col-xs-8">
                             <span>Do zapłaty:</span>
-                            <small>(Kwota przeliczona wg. kursu NBP)</small>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <span>${ price } €</span>
+                            <span>${ grossPrice } zł</span>
                         </div>
                     </div>
                 </div>
 
             </div>
-
-            <p class="payment-tip" v-cloak>
-                Twoja karta obciążona zostanie w kwocie ${ price } €. <strong>${ grossPrice } zł = ${ price } €</strong>.
-                Twój bank może pobrać opłatę za transakcję w obcej walucie jeżeli Twoją walutą rozliczeniową nie jest euro.
-            </p>
         </aside>
+
+        <input type="hidden" name="payment_method_nonce" :value="form.payment_method_nonce">
 
         {{ form_end() }}
     </div>
@@ -182,16 +178,26 @@
 {% block body %}
     {{ parent() }}
 
+    <script src="//js.braintreegateway.com/v2/braintree.js"></script>
+
     <script>
         var data = {
-            exchange_rate: {{ exchange_rate }},
             countries: {{ countries|json_encode|raw }},
             calculator: {{ calculator|json_encode|raw }},
             vat_rates: {{ vat_rates|json_encode|raw }},
-            default_vat_rate: {{ default_vat_rate }}
+            default_vat_rate: {{ default_vat_rate }},
+            client_token: '{{ client_token }}',
+            form: {
+                payment_method_nonce: '',
+                number: '{{ form.number.value }}',
+                name: '{{ form.name.value }}',
+                expiration_year: '{{ form.exp_year.value }}',
+                expiration_month: '{{ form.exp_month.value }}',
+                cvc: '{{ form.cvc.value }}'
+            }
         };
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 {% endblock %}
