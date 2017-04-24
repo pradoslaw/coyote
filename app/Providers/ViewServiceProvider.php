@@ -23,7 +23,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['view']->composer('layout', function (View $view) {
+        $this->app['view']->composer(['layout', 'adm.home'], function (View $view) {
             $this->registerPublicData();
             $this->registerWebSocket();
 
