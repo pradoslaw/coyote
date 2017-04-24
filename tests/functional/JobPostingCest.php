@@ -302,7 +302,7 @@ class JobPostingCest
         $I->seeCurrentRouteIs('job.offer');
         $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
 
-        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title]);
+        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'boost' => 1]);
         $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
         $invoice = $I->grabRecord(\Coyote\Invoice::class, ['id' => $payment->invoice_id]);
 
@@ -360,7 +360,7 @@ class JobPostingCest
         $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
 
         /** @var \Coyote\Job $job */
-        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title]);
+        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'boost' => 1]);
         /** @var \Coyote\Payment $payment */
         $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
         /** @var \Coyote\Invoice $invoice */
