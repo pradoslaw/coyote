@@ -25,8 +25,7 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             Middleware\SetupGuestCookie::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            // todo: nieprawidlowe dzialanie middleware, tymczasowo zakomentowane
-            //\Coyote\Http\Middleware\VerifyCsrfToken::class,
+            \Coyote\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             Middleware\DefaultBindings::class,
             \Coyote\Http\Middleware\FirewallBlacklist::class
