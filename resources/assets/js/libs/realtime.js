@@ -22,8 +22,9 @@ const MAX_RETRIES = 50;
 const PATH = '/realtime';
 
 class Realtime {
-    constructor(host) {
+    constructor(host, token) {
         this._host = host;
+        this._token = token;
         this._callbacks = {};
         this._retries = 0;
         this._isConnected = false;
@@ -52,7 +53,7 @@ class Realtime {
 
     connect() {
         this._handler = new WebSocket(
-            (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + this._host + PATH
+            (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + this._host + PATH + '?token=' + this._token
         );
 
         this._handler.onopen = () => {
@@ -94,7 +95,7 @@ class Realtime {
 }
 
 export function RealtimeFactory() {
-    let realtime = new Realtime(Config.get('ws'));
+    let realtime = new Realtime(Config.get('ws'), Config.get('token'));
 
     // response to the heartbeat event
     realtime.on('hb', function(data, handler) {

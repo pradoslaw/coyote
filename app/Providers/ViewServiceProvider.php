@@ -5,6 +5,7 @@ namespace Coyote\Providers;
 use Coyote\Http\Factories\CacheFactory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
@@ -51,6 +52,12 @@ class ViewServiceProvider extends ServiceProvider
             'ping'          => route('ping', [], false),
             'ping_interval' => config('session.lifetime') - 5 // every 10 minutes
         ]);
+
+        if (!empty($this->app['request']->user())) {
+            $this->app['request']->attributes->add([
+                'token' => app(Encrypter::class)->encrypt('user:' . $this->app['request']->user()->id . '|' . time())
+            ]);
+        }
     }
 
     private function buildMasterMenu()
