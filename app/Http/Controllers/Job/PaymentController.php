@@ -12,9 +12,10 @@ use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Illuminate\Database\Connection as Db;
 use Illuminate\Http\Request;
-use Braintree\{
-    Configuration, ClientToken, Transaction, Exception
-};
+use Braintree\Configuration;
+use Braintree\ClientToken;
+use Braintree\Transaction;
+use Braintree\Exception;
 
 class PaymentController extends Controller
 {
