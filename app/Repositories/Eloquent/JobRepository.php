@@ -211,15 +211,16 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
                 ->make(Payment::class)
                 ->selectRaw('DISTINCT ON(job_id) job_id, ends_at')
                 ->where('status_id', Payment::PAID)
-                ->where('ends_at', '<', $this->raw('NOW()'))
                 ->orderBy('job_id', 'DESC')
-                ->orderBy('created_at', 'DESC')
+                ->orderBy('ends_at', 'DESC')
         );
 
         return $this
             ->model
             ->select('jobs.*')
-            ->join($this->raw("($sub) AS payments"), 'payments.job_id', '=', 'jobs.id')
+            ->join($this->raw("($sub) AS payments"), function (JoinClause $join) {
+                $join->on('payments.job_id', '=', 'jobs.id')->on('ends_at', '<', $this->raw('NOW()'));
+            })
             ->where('boost', 1)
             ->get();
     }
