@@ -12,7 +12,7 @@ class BlocksTableSeeder extends Seeder
     public function run()
     {
         $content = <<<EOF
-<div id="job-ad"></div> 
+<div id="hire-me"></div> 
 <script>
     var xhr= new XMLHttpRequest();
     
@@ -23,7 +23,7 @@ class BlocksTableSeeder extends Seeder
         if (this.readyState !== 4 ) return;
         if (this.status !== 200) return;
         
-        document.getElementById('job-ad').innerHTML = this.responseText;
+        document.getElementById('hire-me').innerHTML = this.responseText;
     };
     xhr.send();
 </script>
