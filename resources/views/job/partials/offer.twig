@@ -44,15 +44,20 @@
                     {{ job.boost_at|format_date }}
                 </li>
 
-                {% if not preview and can('job-update') %}
-                    <li class="counter" title="Liczba odsłon">
-                        <i class="fa fa-eye"></i>
-                        {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
-                    </li>
-                    <li class="applications" title="Liczba osób, które aplikowały na tę ofertę">
-                        <i class="fa fa-files-o"></i>
-                        {{ declination(job.applications.count(), ['aplikacja', 'aplikacje', 'aplikacji']) }}
-                    </li>
+                {% if not preview %}
+                    {% if can('job-update') %}
+                        <li class="counter" title="Liczba odsłon">
+                            <i class="fa fa-eye"></i>
+                            {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+                        </li>
+                    {% endif %}
+
+                    {% if user('id') == job.user_id or can('job-update') %}
+                        <li class="applications" title="Liczba osób, które aplikowały na tę ofertę. Informacja widoczna jedynie dla Ciebie.">
+                            <i class="fa fa-files-o"></i>
+                            {{ declination(job.applications.count(), ['aplikacja', 'aplikacje', 'aplikacji']) }}
+                        </li>
+                    {% endif %}
                 {% endif %}
 
                 {% if not job.is_expired %}
