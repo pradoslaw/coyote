@@ -23,96 +23,95 @@
     {{ modals.alert('Błąd podczas dodawania tagów. Sprawdź proszę czy nazwa tagu jest prawidłowa.') }}
 
     <div id="job-main-content" class="row">
-        <main class="col-lg-9 col-md-12">
+        <aside id="box-filter" class="col-lg-2 hidden-md hidden-sm hidden-xs">
+            {{ form_open({'url': route('job.home'), 'method': 'get', 'class': 'form-horizontal'}) }}
+            {{ form_hidden('q', input_get('q')) }}
+
+            <h5><i class="fa fa-cog fa-fw"></i> Technologie</h5>
+
+            {% if aggregations.tags|length > 0 %}
+                <ul class="list-group">
+                    {% for tag, count in aggregations.tags %}
+                        <li class="list-group-item">
+                            {{ form_checkbox('tag[]', tag, tag in selected.tags) }}
+
+                            <a href="{{ route('job.tag', [tag|url_encode]) }}">
+                                <span>{{ tag }}</span>
+                                <small>({{ declination(count, declinationOffers) }})</small>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>--</p>
+            {% endif %}
+
+            <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
+
+            {% if aggregations.remote[100] is not null %}
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        {{ form_checkbox('remote', 1, selected.remote) }}
+
+                        <a href="{{ route('job.remote') }}">
+                            <span>100% pracy zdalnej</span>
+                            <small>({{ declination(aggregations.remote[100], declinationOffers) }})</small>
+                        </a>
+                    </li>
+                </ul>
+
+                {{ form_hidden('remote_range', 100) }}
+            {% endif %}
+
+            {% if aggregations.cities|length > 0 %}
+                <ul class="list-group">
+                    {% for city, count in aggregations.cities %}
+                        <li class="list-group-item">
+                            {{ form_checkbox('city[]', city, city in selected.cities) }}
+
+                            <a href="{{ route('job.city', [city|capitalize]) }}">
+                                <span>{{ city|capitalize }}</span>
+                                <small>({{ declination(count, declinationOffers) }})</small>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>--</p>
+            {% endif %}
+
+            <h5><i class="fa fa-leaf fa-fw"></i> Wynagrodzenie</h5>
+
+            <div class="form-group row">
+                <label for="salary-input" class="col-xs-1 control-label">od</label>
+
+                <div class="col-xs-4">
+                    {{ form_text('salary', request('salary'), {'id': 'salary-input', 'class': 'input-sm form-control'}) }}
+                </div>
+                <div class="col-xs-4" style="padding-left: 0">
+                    {{ form_select('currency', currency_list, request('currency'), {'class': 'input-sm form-control'}) }}
+                </div>
+            </div>
+
+            <div class="form-group row form-search">
+                <div class="col-xs-6">
+                    <button type="submit" class="btn btn-sm btn-primary">Szukaj</button>
+                </div>
+                <div class="col-xs-6">
+                    <a href="{{ route('job.home') }}" class="pull-right btn-reset"><i class="fa fa-remove"></i> Wyczyść filtr</a>
+                </div>
+            </div>
+
+            {{ form_close() }}
+        </aside>
+
+        <main class="col-lg-10 col-md-12">
+            <nav>
+                {{ pagination|raw }}
+            </nav>
 
             <div class="row">
-                <div id="box-filter" class="col-sm-3 hidden-xs">
-                    {{ form_open({'url': route('job.home'), 'method': 'get', 'class': 'form-horizontal'}) }}
-                        {{ form_hidden('q', input_get('q')) }}
-
-                        <h5><i class="fa fa-cog fa-fw"></i> Technologie</h5>
-
-                        {% if aggregations.tags|length > 0 %}
-                            <ul class="list-group">
-                                {% for tag, count in aggregations.tags %}
-                                    <li class="list-group-item">
-                                        {{ form_checkbox('tag[]', tag, tag in selected.tags) }}
-
-                                        <a href="{{ route('job.tag', [tag|url_encode]) }}">
-                                            <span>{{ tag }}</span>
-                                            <small>({{ declination(count, declinationOffers) }})</small>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p>--</p>
-                        {% endif %}
-
-                        <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
-
-                        {% if aggregations.remote[100] is not null %}
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    {{ form_checkbox('remote', 1, selected.remote) }}
-
-                                    <a href="{{ route('job.remote') }}">
-                                        <span>100% pracy zdalnej</span>
-                                        <small>({{ declination(aggregations.remote[100], declinationOffers) }})</small>
-                                    </a>
-                                </li>
-                            </ul>
-
-                            {{ form_hidden('remote_range', 100) }}
-                        {% endif %}
-
-                        {% if aggregations.cities|length > 0 %}
-                            <ul class="list-group">
-                                {% for city, count in aggregations.cities %}
-                                    <li class="list-group-item">
-                                        {{ form_checkbox('city[]', city, city in selected.cities) }}
-
-                                        <a href="{{ route('job.city', [city|capitalize]) }}">
-                                            <span>{{ city|capitalize }}</span>
-                                            <small>({{ declination(count, declinationOffers) }})</small>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p>--</p>
-                        {% endif %}
-
-                        <h5><i class="fa fa-leaf fa-fw"></i> Wynagrodzenie</h5>
-
-                        <div class="form-group row">
-                            <label for="salary-input" class="col-xs-1 control-label">od</label>
-
-                            <div class="col-xs-4">
-                                {{ form_text('salary', request('salary'), {'id': 'salary-input', 'class': 'input-sm form-control'}) }}
-                            </div>
-                            <div class="col-xs-4" style="padding-left: 0">
-                                {{ form_select('currency', currency_list, request('currency'), {'class': 'input-sm form-control'}) }}
-                            </div>
-                        </div>
-
-                        <div class="form-group row form-search">
-                            <div class="col-xs-6">
-                                <button type="submit" class="btn btn-sm btn-primary">Szukaj</button>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="{{ route('job.home') }}" class="pull-right btn-reset"><i class="fa fa-remove"></i> Wyczyść filtr</a>
-                            </div>
-                        </div>
-
-                    {{ form_close() }}
-                </div>
-
-                <div class="col-sm-9 col-xs-12">
-                    <nav>
-                        {{ pagination|raw }}
-                    </nav>
-
+                <div class="col-md-9 col-sm-12">
                     <section class="panel panel-wrapper">
                         <div id="box-jobs" class="panel-body">
                             <ul id="sort" class="hidden-xs">
@@ -145,47 +144,43 @@
                         {{ pagination|raw }}
                     </nav>
                 </div>
+
+                <aside class="col-md-3 hidden-sm">
+                    <ul class="side-menu">
+                        <li><a href="#"><i class="fa fa-fw fa-cog"></i> Preferencje wyszukiwania</a></li>
+                        <li><a href="#"><i class="fa fa-fw fa-user"></i> Pokaż tylko moje oferty</a></li>
+                    </ul>
+
+                    {% if subscribes|length %}
+                        <section class="box sidebar-job-offers">
+                            <h4><i class="fa fa-star fa-fw"></i> Obserwowane oferty pracy</h4>
+
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    {% include 'components.jobs' with {jobs: subscribes} %}
+                                </div>
+                            </div>
+                        </section>
+                    {% endif %}
+
+                    {% if auth_check() and not user('location') and not preferenecs.city and request().get('geocode').city %}
+                        <section class="box">
+                            <h4><i class="fa fa-map-marker fa-fw"></i> Ustaw lokalizację</h4>
+
+                            <div class="panel panel-warning alert-warning">
+                                <div class="panel-body text-center">
+                                    <p class="lead">Czy pochodzisz z: <strong>{{ request().get('geocode').city }}</strong>?</p>
+
+                                    <p class="margin-md-bottom text-justify">Ustaw swoją lokalizację w panelu użytkownika, abyśmy mogli wyświetlać oferty pracy dopasowane do Twojego regionu.</p>
+
+                                    <a href="{{ route('user.settings') }}" class="btn btn-warning">Ustaw lokalizację</a>
+                                </div>
+                            </div>
+                        </section>
+                    {% endif %}
+                </aside>
             </div>
         </main>
-
-        <aside class="col-lg-3 col-lg-offset-0 col-md-9 col-md-offset-3 col-sm-9 col-sm-offset-3">
-            {% if pagination.total() > 0 %}
-                {# ugly hack... fix needed #}
-                <div style="height: 18px"></div>
-            {% endif %}
-
-            {{ render_block('job_ads') }}
-
-            {% if subscribes|length %}
-                <section class="box sidebar-job-offers">
-                    <h4><i class="fa fa-star fa-fw"></i> Obserwowane oferty pracy</h4>
-
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            {% include 'components.jobs' with {jobs: subscribes} %}
-                        </div>
-                    </div>
-                </section>
-            {% endif %}
-
-            {% if auth_check() and not user('location') and not preferenecs.city and request().get('geocode').city %}
-                <section class="box">
-                    <h4><i class="fa fa-map-marker fa-fw"></i> Ustaw lokalizację</h4>
-
-                    <div class="panel panel-warning alert-warning">
-                        <div class="panel-body text-center">
-                            <p class="lead">Czy pochodzisz z: <strong>{{ request().get('geocode').city }}</strong>?</p>
-
-                            <p class="margin-md-bottom text-justify">Ustaw swoją lokalizację w panelu użytkownika, abyśmy mogli wyświetlać oferty pracy dopasowane do Twojego regionu.</p>
-
-                            <a href="{{ route('user.settings') }}" class="btn btn-warning">Ustaw lokalizację</a>
-                        </div>
-                    </div>
-                </section>
-            {% endif %}
-
-
-        </aside>
     </div>
 
     {{ form_open({'url': route('job.preferences'), 'id': 'form-preferences'}) }}
