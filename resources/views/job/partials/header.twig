@@ -24,6 +24,18 @@
                                 </button>
                             </div>
 
+                            {% for field in ['remote', 'remote_range', 'tag', 'salary', 'currency'] %}
+                                {% if input_has(field) %}
+                                    {% if input_get(field) is iterable %}
+                                        {% for key, value in input_get(field) %}
+                                            {{ form_hidden(field ~ '[' ~ key ~ ']', value) }}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ form_hidden(field, input_get(field)) }}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+
                             {{ form_close() }}
                         </div>
                     </div>

@@ -12,16 +12,16 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
      * @var array
      */
     private $salaryChoices = [
-        'od 1000 zl m-c',
-        'od 2000 zl m-c',
-        'od 3000 zl m-c',
-        'od 4000 zl m-c',
-        'od 5000 zl m-c',
-        'od 6000 zl m-c',
-        'od 7000 zl m-c',
-        'od 8000 zl m-c',
-        'od 9000 zl m-c',
-        'od 10000 zl m-c',
+        'od 1000 zł m-c',
+        'od 2000 zł m-c',
+        'od 3000 zł m-c',
+        'od 4000 zł m-c',
+        'od 5000 zł m-c',
+        'od 6000 zł m-c',
+        'od 7000 zł m-c',
+        'od 8000 zł m-c',
+        'od 9000 zł m-c',
+        'od 10000 zł m-c',
     ];
 
     /**
@@ -80,20 +80,20 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
     {
         $this
             ->add('email', 'email', [
-                'rules' => 'required|string|email',
+                'rules' => 'required|string|max:200|email',
                 'label' => 'E-mail',
                 'help' => 'Nie wysyłamy spamu! Obiecujemy.',
                 'attr' => [
                     'placeholder' => 'Np. jan@kowalski.pl'
                 ]
             ])
-            ->add('email_confirmation', 'bot_hidden')
+            ->add('email_confirmation', 'honeypot')
             ->add('name', 'text', [
                 'rules' => 'required|string|max:50',
                 'label' => 'Imię i nazwisko'
             ])
             ->add('phone', 'text', [
-                'rules'  => 'string',
+                'rules'  => 'string|max:50',
                 'label' => 'Numer telefonu',
                 'help' => 'Podanie numeru telefonu nie jest obowiązkowe, ale pozwoli na szybki kontakt.'
             ])

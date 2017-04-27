@@ -94,6 +94,13 @@ interface RepositoryInterface
     public function find($id, $columns = ['*']);
 
     /**
+     * @param array $ids
+     * @param array $columns
+     * @return mixed
+     */
+    public function findMany(array $ids, $columns = ['*']);
+
+    /**
      * @param $id
      * @param array $columns
      * @return mixed
@@ -141,6 +148,13 @@ interface RepositoryInterface
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
+
+    /**
+     * Get last element.
+     *
+     * @return mixed
+     */
+    public function last();
 
     /**
      * Get a new raw query expression.

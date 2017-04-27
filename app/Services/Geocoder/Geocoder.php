@@ -43,7 +43,7 @@ class Geocoder implements GeocoderInterface
 
             foreach ($match['address_components'] as $component) {
                 if (in_array('locality', $component['types'])) {
-                    $location->city = $component['short_name'];
+                    $location->city = $component['long_name'];
                 }
             }
 

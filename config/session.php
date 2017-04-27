@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver'          => env('SESSION_DRIVER', 'file'),
+    'driver'          => 'coyote',
     /*
     |--------------------------------------------------------------------------
     | Session Lifetime
@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'lifetime'        => 120,
+    'lifetime'        => env('SESSION_LIFETIME', 10),
     'expire_on_close' => false,
     /*
     |--------------------------------------------------------------------------
@@ -89,7 +89,7 @@ return [
     |
     */
 
-    'lottery'         => [2, 200],
+    'lottery'         => [2, 2000000],
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Name
@@ -101,7 +101,9 @@ return [
     |
     */
 
-    'cookie'          => 'coyote_session',
+    'cookie'          => 'cs',
+    'guest_cookie'    => 'guid',
+
     /*
     |--------------------------------------------------------------------------
     | Session Cookie Path

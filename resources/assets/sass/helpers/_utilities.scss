@@ -1,7 +1,11 @@
 // Top/bottom margin classes.
 // -------------------------------
 
-@each $size, $width in (lg, 30px), (md, 20px), (sm, 10px), (xs, 5px) {
+@each $size, $width in (lg, 30px), (md, 20px), (sm, 10px), (xs, 5px), (none, 0) {
+  .margin-#{$size} {
+    margin: #{$width};
+  }
+
   .margin-#{$size}-top {
     margin-top: #{$width};
   }
@@ -28,5 +32,13 @@
 
   .padding-#{$size}-bottom {
     padding-bottom: #{$width};
+  }
+
+  .padding-#{$size}-left {
+    padding-left: #{$width};
+  }
+
+  .padding-#{$size}-right {
+    padding-right: #{$width};
   }
 }

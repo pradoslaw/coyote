@@ -37,6 +37,16 @@
 
     <div class="row">
         <div class="col-md-9">
+            {% if payment %}
+                <div class="alert alert-warning">
+                    <h4><i class="fa fa-credit-card fa-fw"></i> Oczekiwanie na płatność...</h4>
+
+                    <p>Ogłoszenie jest już wyświetlane i widoczne dla wszystkich. Nie możemy jednak rozpocząć promowania oferty, dopóki nie uregulujesz płatności w kwocie <strong>{{ payment.grossPrice() }} zł</strong>.</p>
+
+                    <a href="{{ route('job.payment', [payment.id]) }}" class="btn btn-sm alert-warning margin-sm-top">Przejdź do płatności</a>
+                </div>
+            {% endif %}
+
             <div class="panel panel-default">
                 {% include 'job.partials.offer' %}
             </div>
@@ -134,4 +144,10 @@
             google.maps.event.addDomListener(window, 'load', initialize);
         </script>
     {% endif %}
+
+    <script>
+        $(function() {
+            $('.metadata li').tooltip({'container':'body'});
+        });
+    </script>
 {% endblock %}

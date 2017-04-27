@@ -24,6 +24,12 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
         \DB::table('permissions')->insert([
+            'name'           => 'adm-payment',
+            'description'    => 'Podgląd faktur i płatności',
+            'default'        => false
+        ]);
+
+        \DB::table('permissions')->insert([
             'name'           => 'forum-sticky',
             'description'    => 'Zakładanie przyklejonych tematów',
             'default'        => false

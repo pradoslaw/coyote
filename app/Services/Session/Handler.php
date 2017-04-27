@@ -2,68 +2,101 @@
 
 namespace Coyote\Services\Session;
 
-use Carbon\Carbon;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Http\Request;
-use Illuminate\Session\DatabaseSessionHandler;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Guard;
 use Jenssegers\Agent\Agent;
 
-class Handler extends DatabaseSessionHandler
+class Handler implements \SessionHandlerInterface
 {
+    /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     * @var SessionRepository
+     */
+    protected $repository;
+
+    /**
+     * @param SessionRepository $repository
+     * @param Container $container
+     */
+    public function __construct(SessionRepository $repository, Container $container)
+    {
+        $this->repository = $repository;
+        $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function open($savePath, $sessionName)
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function close()
+    {
+        return true;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function read($sessionId)
     {
-        $session = (object) $this->getQuery()->find($sessionId);
-
-        if (isset($session->updated_at)) {
-            if ($session->updated_at < Carbon::now()->subMinutes($this->minutes)) {
-                $this->exists = true;
-
-                return;
-            }
-        }
-
-        if (isset($session->payload)) {
-            $this->exists = true;
-
-            return base64_decode($session->payload);
-        }
+        return $this->repository->get($sessionId);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write($sessionId, $data)
+    public function write($sessionId, $payload)
     {
-        $payload = $this->getDefaultPayload($data);
+        $payload = unserialize($payload);
+        $payload = ['id' => $sessionId] + $this->getDefaultPayload($payload);
 
-        if (!$this->exists) {
-            $this->read($sessionId);
-        }
+        $this->repository->set($sessionId, $payload);
 
-        if ($this->exists) {
-            $this->getQuery()->where('id', $sessionId)->update($payload);
-        } else {
-            $payload['id'] = $sessionId;
+        return true;
+    }
 
-            $this->insert($payload);
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public function destroy($sessionId)
+    {
+        $this->repository->destroy($sessionId);
 
-        $this->exists = true;
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function gc($lifetime)
+    {
+        return true;
     }
 
     /**
      * Get the default payload for the session.
      *
-     * @param  string  $data
+     * @param  array  $payload
      * @return array
      */
-    protected function getDefaultPayload($data)
+    protected function getDefaultPayload($payload)
     {
-        $payload = ['payload' => base64_encode($data), 'updated_at' => new Expression('NOW()')];
+        $payload['updated_at'] = time();
+
+        if (!isset($payload['created_at'])) {
+            $payload['created_at'] = time();
+        }
 
         if (!$container = $this->container) {
             return $payload;
@@ -74,14 +107,19 @@ class Handler extends DatabaseSessionHandler
         }
 
         if ($container->bound('request')) {
+            /** @var \Illuminate\Http\Request $request */
             $request = $container->make('request');
 
             $payload['ip'] = $request->ip();
-            $payload['url'] = str_limit($request->fullUrl(), 3999);
             $payload['browser'] = substr((string) $request->header('User-Agent'), 0, 500);
             $payload['robot'] = $this->robot($payload['browser']);
 
-            $payload = $this->filterUrl($request, $payload);
+            if (!$request->ajax()) {
+                $path = str_limit($request->path(), 999, '');
+
+                $payload['url'] = str_limit($request->fullUrl(), 3999);
+                $payload['path'] = $path === '/' ? $path : ('/' . $path);
+            }
         }
 
         return $payload;
@@ -93,56 +131,12 @@ class Handler extends DatabaseSessionHandler
      */
     private function robot($browser)
     {
-        if ($this->exists) {
-            return null;
-        }
-
         $agent = new Agent();
+
         if (!$agent->isRobot($browser)) {
-            return null;
+            return '';
         }
 
         return $agent->robot();
-    }
-
-    /**
-     * @param array $payload
-     * @throws \Exception
-     */
-    private function insert($payload)
-    {
-        try {
-            $this->getQuery()->insert($payload);
-        } catch (\PDOException $e) {
-            // tutaj moze byc blad z zapisem sesji w przypadku zapytan ajax
-            // @see https://github.com/laravel/framework/issues/9251
-            // docelowo implementacja bedzie zastapiona na redis
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function gc($lifetime)
-    {
-        $this->getQuery()->where('updated_at', '<=', new Expression("NOW() - INTERVAL '$lifetime seconds'"))->delete();
-    }
-
-    /**
-     * Filter url from data. We don't need to save ajax url.
-     *
-     * @param Request $request
-     * @param array $data
-     * @return array
-     */
-    private function filterUrl(Request $request, $data)
-    {
-        if ($request->ajax()) {
-            unset($data['url']);
-        }
-
-        return $data;
     }
 }

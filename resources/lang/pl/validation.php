@@ -39,7 +39,7 @@ return [
     'filled'               => 'The :attribute field is required.',
     'image'                => 'The :attribute must be an image.',
     'in'                   => 'The selected :attribute is invalid.',
-    'integer'              => 'The :attribute must be an integer.',
+    'integer'              => 'Pole :attribute must musi być liczbą całkowitą.',
     'ip'                   => 'The :attribute must be a valid IP address.',
     'json'                 => 'The :attribute must be a valid JSON string.',
     'max'                  => [
@@ -82,7 +82,9 @@ return [
     'user_active'          => 'Konto o tym loginie zostało zablokowane.',
     'user_access'          => 'Dostęp do konta z tego adresu IP jest niemożliwy.',
     'password'             => 'Podano nieprawidłowe hasło.',
-    'reputation'           => 'Potrzebujesz :point punktów reputacji aby zmienić zawartość tego pola.',
+    'reputation'           => 'Potrzebujesz minimum :point punktów reputacji aby zmienić zawartość tego pola.',
+    'spam_link'            => 'Potrzebujesz minimum :point punktów reputacji, aby umieścić link w tym polu.',
+    'spam_chinese'         => 'Z powodu spamu, tekst nie może zawierać chińskich znaków.',
     'tag'                  => 'Podany tag zawiera nieprawidłowe znaki.',
     'tag_creation'         => 'Potrzebujesz :point punktów reputacji, aby utworzyć nowy tag. Wybierz już istniejący.',
     'throttle'             => 'Musisz odczekać jeszcze :delay przed dodaniem kolejnego wpisu.',
@@ -91,6 +93,10 @@ return [
     'wiki_route'           => 'Nie można dodać strony o tym tytule ponieważ koliduje z już istniejącą.',
     'email_unique'         => 'Podany adres e-mail przypisany jest do innego użytkownika.',
     'email_confirmed'      => 'Ten adres e-mail nie został zweryfikowany. <a href=":link">Kliknij tutaj</a> by go potwierdzić.',
+    'cc_number'            => 'Wprowadzony numer karty jest nieprawidłowy.',
+    'cc_cvc'               => 'Wprowadzony kod CVC jest nieprawidłowy.',
+    'cc_date'              => 'Upłynęła data ważności karty.',
+    'recaptcha'            => 'Wartość pola recaptcha jest nieprawidłowa. Prosimy o kontakt.',
 
     /*
     |--------------------------------------------------------------------------

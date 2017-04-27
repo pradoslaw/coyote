@@ -81,15 +81,15 @@ class MarkdownTest extends \Codeception\TestCase\Test
         $this->tester->assertRegExp('/<a href=".*">@admin<\/a> admiński: lorem ipsum/', $input);
 
         $input = $this->markdown->parse('@{admin-admiński} lorem ipsum');
-        $this->tester->assertRegExp('/@{admin-admiński} lorem ipsum/', $input);
+        $this->tester->assertRegExp('/<strong>@admin-admiński<\/strong> lorem ipsum/', $input);
 
         $input = $this->markdown->parse('@admin-admiński lorem ipsum');
-        $this->tester->assertRegExp('/@admin-admiński lorem ipsum/', $input);
+        $this->tester->assertRegExp('/<strong>@admin-admiński<\/strong> lorem ipsum/', $input);
 
         $this->tester->haveRecord('users', ['name' => 'p88.yyy', 'email' => 'foo@bar.com', 'created_at' => $now, 'updated_at' => $now]);
 
         $input = $this->markdown->parse('@p88.yyy lorem ipsum');
-        $this->tester->assertRegExp('/@p88.yyy lorem ipsum/', $input);
+        $this->tester->assertRegExp('/<strong>@p88<\/strong>.yyy lorem ipsum/', $input);
 
         $input = $this->markdown->parse('@{p88.yyy}: lorem ipsum');
         $this->tester->assertRegExp('/<a href=".*">@p88.yyy<\/a>: lorem ipsum/', $input);
@@ -101,6 +101,17 @@ class MarkdownTest extends \Codeception\TestCase\Test
 
         $input = $this->markdown->parse('(@somedomain) lorem ipsum');
         $this->tester->assertRegExp('/\(<a href=".*">@somedomain<\/a>\) lorem ipsum/', $input);
+
+        $this->tester->haveRecord('users', ['name' => 'First(Name)', 'email' => 'bruno@m.com', 'created_at' => $now, 'updated_at' => $now]);
+
+        $input = $this->markdown->parse('@First(Name): hello');
+        $this->tester->assertRegExp('/<a href=".*">@First\(Name\)<\/a>: hello/', $input);
+
+        $input = $this->markdown->parse('@{First(Name)}: hello');
+        $this->tester->assertRegExp('/<a href=".*">@First\(Name\)<\/a>: hello/', $input);
+
+        $input = $this->markdown->parse('@ 2Ghz');
+        $this->tester->assertContains('@ 2Ghz', $input);
     }
 
     public function testParseLinks()

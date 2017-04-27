@@ -4,14 +4,18 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $symbol
+ */
 class Currency extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['name'];
+    const PLN = 1;
+    const EUR = 2;
+    const USD = 3;
+    const GBP = 4;
+    const CHF = 5;
 
     /**
      * @var bool
@@ -23,6 +27,20 @@ class Currency extends Model
      */
     public static function getCurrenciesList()
     {
-        return self::pluck('name', 'id')->toArray();
+        $result = [];
+
+        foreach (self::orderBy('id')->get() as $row) {
+            $result[$row->id] = sprintf('%s (%s)', $row->name, $row->symbol);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function exchanges()
+    {
+        return $this->hasMany(Exchange::class);
     }
 }

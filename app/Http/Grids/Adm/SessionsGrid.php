@@ -6,6 +6,7 @@ use Boduch\Grid\Decorators\Ip;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Filters\Text;
 use Boduch\Grid\Row;
+use Carbon\Carbon;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Order;
 use Coyote\Session;
@@ -21,8 +22,8 @@ class SessionsGrid extends Grid
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
                 'clickable' => function (Session $session) {
-                    if ($session->user_id) {
-                        return link_to_route('adm.users.save', $session->name, [$session->user_id]);
+                    if ($session->userId) {
+                        return link_to_route('adm.users.save', $session->name, [$session->userId]);
                     } else {
                         return $session->robot ?: '--';
                     }
@@ -31,11 +32,19 @@ class SessionsGrid extends Grid
             ])
             ->addColumn('created_at', [
                 'title' => 'Data logowania',
-                'sortable' => true
+                'sortable' => true,
+                'render' => function (Session $session) {
+                    return Carbon::createFromTimestamp($session->createdAt);
+                },
+                'decorator' => [$this->getDateTimeDecorator()]
             ])
             ->addColumn('updated_at', [
                 'title' => 'Ostatnia aktywność',
-                'sortable' => true
+                'sortable' => true,
+                'render' => function (Session $session) {
+                    return Carbon::createFromTimestamp($session->updatedAt);
+                },
+                'decorator' => [$this->getDateTimeDecorator()]
             ])
             ->addColumn('ip', [
                 'title' => 'IP',
@@ -44,8 +53,8 @@ class SessionsGrid extends Grid
             ])
             ->addColumn('url', [
                 'title' => 'Strona',
-                'render' => function ($row) {
-                    return link_to($row->url);
+                'render' => function (Session $session) {
+                    return link_to($session->url);
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])

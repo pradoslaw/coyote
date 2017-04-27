@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $deadline_at
+ * @property \Carbon\Carbon $boost_at
  * @property int $deadline
  * @property bool $is_expired
  * @property int $salary_from
@@ -25,9 +26,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $country_id
  * @property int $currency_id
  * @property int $is_remote
+ * @property int $remote_range
  * @property int $enable_apply
  * @property int $visits
  * @property int $rate_id
+ * @property bool $is_gross
  * @property int $employment_id
  * @property int $views
  * @property float $score
@@ -44,6 +47,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Location[] $locations
  * @property Currency[] $currency
  * @property Feature[] $features
+ * @property int $plan_id
+ * @property int $plan_length
+ * @property true $boost
  */
 class Job extends Model
 {
@@ -64,11 +70,14 @@ class Job extends Model
     const LEAD            = 5;
     const MANAGER         = 6;
 
+    const NET             = 0;
+    const GROSS           = 1;
+
     /**
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job' => ['description' => 10, 'salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
+        'job' => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
         'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
@@ -83,6 +92,7 @@ class Job extends Model
         'requirements',
         'recruitment',
         'is_remote',
+        'is_gross',
         'remote_range',
         'country_id',
         'salary_from',
@@ -90,10 +100,13 @@ class Job extends Model
         'currency_id',
         'rate_id',
         'employment_id',
+        'deadline', // column does not really exist in db (model attribute instead)
         'deadline_at',
         'email',
         'enable_apply',
-        'seniority_id'
+        'seniority_id',
+        'plan_id', // column does not really exist in db (model attribute instead)
+        'plan_length', // column does not really exist in db (model attribute instead)
     ];
 
     /**
@@ -112,12 +125,17 @@ class Job extends Model
      *
      * @var array
      */
-    protected $casts = ['is_remote' => 'boolean', 'enable_apply' => 'boolean'];
+    protected $casts = ['is_remote' => 'boolean', 'boost' => 'boolean', 'is_gross' => 'boolean'];
 
     /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'deadline_at', 'boost_at'];
 
     /**
      * @var array
@@ -197,16 +215,22 @@ class Job extends Model
             "type" => "date",
             "format" => "yyyy-MM-dd HH:mm:ss"
         ],
+        "boost_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ],
         "salary" => [
             "type" => "float"
         ],
         "score" => [
             "type" => "long"
         ],
-        "rank" => [
-            "type" => "float"
+        "boost" => [
+            "type" => "boolean"
         ]
     ];
+
+    private $plan = ['id' => null, 'length' => 30];
 
     /**
      * We need to set firm id to null offer is private
@@ -228,10 +252,14 @@ class Job extends Model
             // field must not be null
             $model->is_remote = (int) $model->is_remote;
         });
+
+        static::creating(function (Job $model) {
+            $model->boost_at = $model->freshTimestamp();
+        });
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public static function getRatesList()
     {
@@ -239,7 +267,15 @@ class Job extends Model
     }
 
     /**
-     * @return array
+     * @return string[]
+     */
+    public static function getTaxList()
+    {
+        return [self::NET => 'netto', self::GROSS => 'brutto'];
+    }
+
+    /**
+     * @return string[]
      */
     public static function getEmploymentList()
     {
@@ -247,7 +283,7 @@ class Job extends Model
     }
 
     /**
-     * @return array[]
+     * @return string[]
      */
     public static function getSeniorityList()
     {
@@ -283,7 +319,7 @@ class Job extends Model
 
         // 30 points maximum...
         $score += min(30, (count($this->tags()->get()) * 10));
-        $score += count($this->features()->wherePivot('checked', true)->get()) * 5;
+        $score += min(50, count($this->features()->wherePivot('checked', true)->get()) * 5);
 
         if ($this->firm_id) {
             $firm = $this->firm;
@@ -405,6 +441,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany('Coyote\Payment');
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)
@@ -448,6 +492,38 @@ class Job extends Model
     }
 
     /**
+     * @param int $value
+     */
+    public function setPlanIdAttribute($value)
+    {
+        $this->plan['id'] = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlanIdAttribute()
+    {
+        return $this->plan['id'];
+    }
+
+    /**
+     * @param int $value
+     */
+    public function setPlanLengthAttribute($value)
+    {
+        $this->plan['length'] = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlanLengthAttribute()
+    {
+        return $this->plan['length'];
+    }
+
+    /**
      * @return bool
      */
     public function getIsExpiredAttribute()
@@ -466,9 +542,9 @@ class Job extends Model
     /**
      * @return string
      */
-    public function getCurrencyNameAttribute()
+    public function getCurrencySymbolAttribute()
     {
-        return $this->currency()->value('name');
+        return $this->currency()->value('symbol');
     }
 
     /**
@@ -492,6 +568,34 @@ class Job extends Model
                 $this->features->add($feature->setRelation('pivot', $pivot));
             }
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPlanOngoing()
+    {
+        if (!$this->exists) {
+            return false;
+        }
+
+        return $this->payments()->where('status_id', Payment::PAID)->where('ends_at', '>', Carbon::now())->exists();
+    }
+
+    /**
+     * @return Payment
+     */
+    public function getUnpaidPayment()
+    {
+        return $this->payments()->where('status_id', Payment::NEW)->orderBy('created_at', 'DESC')->first();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPaymentUuid()
+    {
+        return $this->payments()->where('status_id', Payment::NEW)->orderBy('created_at', 'DESC')->first(['id']);
     }
 
     /**
@@ -536,7 +640,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'enable_apply', 'features']);
+        $body = array_except($body, ['deleted_at', 'features']);
 
         $locations = [];
 
@@ -562,23 +666,25 @@ class Job extends Model
             $locations[] = (object) [];
         }
 
-        $body['score'] = intval($body['score']);
-
         $body = array_merge($body, [
+            // score must be int
+            'score'             => (int) $body['score'],
             'locations'         => $locations,
             'salary'            => $salary,
             'salary_from'       => $this->monthlySalary($this->salary_from),
             'salary_to'         => $this->monthlySalary($this->salary_to),
             // yes, we index currency name so we don't have to look it up in database during search process
-            'currency_name'     => $this->currency()->value('name'),
+            'currency_symbol'   => $this->currency()->value('symbol'),
             // higher tag's priorities first
-            'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')
+            'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')->toArray(),
+            // index null instead of 100 is job is not remote
+            'remote_range'      => $this->is_remote ? $this->remote_range : null
         ]);
 
-        if (!empty($body['firm'])) {
+        if ($this->firm_id) {
             // logo is instance of File object. casting to string returns file name.
             // cast to (array) if firm is empty.
-            $body['firm'] = array_map('strval', (array) array_only($body['firm'], ['name', 'logo']));
+            $body['firm'] = array_map('strval', (array) array_only($this->firm->toArray(), ['name', 'logo']));
         }
 
         return $body;

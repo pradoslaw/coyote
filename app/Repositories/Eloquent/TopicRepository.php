@@ -14,8 +14,6 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface;
  */
 class TopicRepository extends Repository implements TopicRepositoryInterface, SubscribableInterface
 {
-    use UserTrait;
-
     /**
      * @return string
      */
@@ -102,23 +100,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                     });
             })
             ->get();
-
-        foreach ($result as $topic) {
-            if (empty($topic->forum_marked_at)) {
-                $topic->forum_marked_at = $this->firstVisit($userId, $sessionId);
-            }
-
-            /*
-             * Jezeli data napisania ostatniego posta jest pozniejsza
-             * niz data odznaczenia forum jako przeczytanego...
-             * ORAZ
-             * data napisania ostatniego postu jest pozniejsza niz data
-             * ostatniego "czytania" tematu...
-             * ODZNACZ JAKO NOWY
-             */
-            $topic->unread = $topic->last_created_at > $topic->forum_marked_at
-                && $topic->last_created_at > $topic->topic_marked_at;
-        }
 
         return new LengthAwarePaginator(
             $result,

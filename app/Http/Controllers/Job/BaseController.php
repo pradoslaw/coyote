@@ -6,6 +6,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
+use Illuminate\Http\Request;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
@@ -44,7 +45,11 @@ abstract class BaseController extends Controller
     {
         parent::__construct();
 
-        $this->public['promptUrl'] = route('job.tag.prompt');
+        $this->middleware(function (Request $request, $next) {
+            $request->attributes->set('promptUrl', route('job.tag.prompt'));
+
+            return $next($request);
+        });
 
         $this->job = $job;
         // we need to display actual number of active offers so don't remove line below!

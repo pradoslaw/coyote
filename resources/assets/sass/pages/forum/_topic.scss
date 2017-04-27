@@ -1,5 +1,7 @@
 @charset "UTF-8";
 @import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
+@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/table-row";
+@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
 
 // "Kontener" dla posta
 // --------------------------------------------------
@@ -254,6 +256,7 @@
   padding-right: 50px;
 
   @include link-color-darker;
+  @include stripped-table;
 
   hr {
     margin: 15px 0 5px 0;

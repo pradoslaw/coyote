@@ -14,9 +14,11 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\Notifiable;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @property int $id
+ * @property string $guest_id
  * @property int $is_active
  * @property int $is_confirm
  * @property int $is_blocked
@@ -126,6 +128,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public static function boot()
     {
         parent::boot();
+
+        static::creating(function (User $model) {
+            if (empty($model->guest_id)) {
+                $model->guest_id = (string) Uuid::uuid4();
+            }
+        });
 
         static::saving(function (User $model) {
             // jezeli nie wypelniono tych kolumn - ustawiamy na null

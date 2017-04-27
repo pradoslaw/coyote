@@ -55,7 +55,9 @@ $font-family-base:        $font-family-sans-serif !default;
 //$font-size-base:          14px !default;
 $font-size-base:          13px !default; // <!-- zmiana
 $font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
+$font-size-medium:        14px;
 $font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
+$font-size-mini:          11px;
 
 //$font-size-h1:            floor(($font-size-base * 2.6)) !default; // ~36px
 $font-size-h1:            floor(($font-size-base * 1.84)) !default; // ~24px (zmiana)
@@ -76,9 +78,9 @@ $line-height-computed:    floor(($font-size-base * $line-height-base)) !default;
 $headings-font-family:    Arial, sans-serif !default;
 //$headings-font-weight:    500 !default;
 $headings-font-weight:    normal !default; // <!-- zmiana
-$headings-line-height:    1.1 !default;
+$headings-line-height:    1.2 !default; // <!-- https://4programmers.net/Forum/Coyote/283610-obciety_nick
 //$headings-color:          inherit !default;
-$headings-color:          #80a41a !default; // <!-- zmiana
+$headings-color:          lighten($text-color, 10%) !default; // <!-- zmiana
 
 
 //== Iconography

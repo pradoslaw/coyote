@@ -12,6 +12,10 @@ module.exports = {
     module: {
         loaders: [
             {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
@@ -27,6 +31,9 @@ module.exports = {
         chunkFilename: '[chunkhash].js',
         publicPath: cdn('/js/')
     },
+    externals: {
+        jquery: "jQuery"
+    },
     context: path.join(__dirname, 'resources/assets/js'),
     entry: {
         app: './app.js',
@@ -39,6 +46,7 @@ module.exports = {
         pm: './pages/pm.js',
         profile: './pages/profile.js',
         'job-submit': './pages/job/submit.js',
+        wikieditor: './plugins/wikieditor.js'
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({name: "app", minChunks: 2, chunks: ['microblog', 'pm', 'forum', 'wiki', 'job', 'homepage', 'job-submit']}),

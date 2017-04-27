@@ -11,17 +11,17 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * Gets categories grouped by sections. You need to pass either $userId or $sessionId (for anonymous users)
      *
      * @param int $userId
-     * @param string $sessionId
+     * @param string $guestId
      * @param null|int $parentId
      * @return mixed
      */
-    public function groupBySections($userId, $sessionId, $parentId = null);
+    public function categories($userId, $guestId, $parentId = null);
 
     /**
      * @param int $userId
      * @return mixed
      */
-    public function getOrderForUser($userId);
+    public function categoriesOrder($userId);
 
     /**
      * Get restricted access forums.
@@ -31,18 +31,11 @@ interface ForumRepositoryInterface extends RepositoryInterface
     public function getRestricted();
 
     /**
-     * Builds up a category list that can be shown in a <select>
-     *
-     * @return array
-     */
-    public function choices($key = 'slug');
-
-    /**
-     * Forum categories as flatten array od models.
+     * Sort a list of categories that can be shown in a <select>
      *
      * @return \Coyote\Forum[]
      */
-    public function flatten();
+    public function list();
 
     /**
      * @return array

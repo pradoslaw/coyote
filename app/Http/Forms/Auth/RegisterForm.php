@@ -7,6 +7,8 @@ use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 
 class RegisterForm extends Form implements ValidatesWhenSubmitted
 {
+    const RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify';
+
     /**
      * @var string
      */
@@ -15,6 +17,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
     public function buildForm()
     {
         $this
+            ->setAttr(['id' => 'register-form'])
             ->add('name', 'text', [
                 'rules' => 'required|min:2|max:28|username|user_unique',
                 'label' => 'Nazwa użytkownika',
@@ -34,17 +37,68 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'E-mail',
                 'help' => 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.'
             ])
-            ->add('email_confirmation', 'bot_hidden')
+            ->add('email_confirmation', 'honeypot')
             ->add('submit', 'submit', [
                 'label' => 'Utwórz konto',
                 'attr' => [
+                    'class' => 'g-recaptcha btn btn-primary',
                     'data-submit-state' => 'Rejestracja...'
                 ]
             ]);
     }
 
+    /**
+     * @return array
+     */
     public function rules()
     {
         return parent::rules() + ['human' => 'required'];
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function getValidatorInstance()
+    {
+        $validator = parent::getValidatorInstance();
+
+        if (empty(config('services.recaptcha.secret'))) {
+            return $validator;
+        }
+
+        $validator->after(function ($validator) {
+            if (empty($this->request->input('g-recaptcha-response'))) {
+                $validator->errors()->add('name', trans('validation.recaptcha'));
+                logger()->debug('Empty captcha', [$this->request->ip()]);
+
+                return false;
+            }
+
+            $response = json_decode($this->makeRequest($this->request->input('g-recaptcha-response')), true);
+            logger()->debug($response, [$this->request->ip()]);
+
+            if (!$response['success']) {
+                $validator->errors()->add('name', trans('validation.recaptcha'));
+
+                return false;
+            }
+        });
+
+        return $validator;
+    }
+
+    /**
+     * @param string $recaptcha
+     * @return bool|string
+     */
+    private function makeRequest(string $recaptcha)
+    {
+        $data = [
+            'secret'    => config('services.recaptcha.secret'),
+            'remoteip'  => $this->request->ip(),
+            'response'  => $recaptcha
+        ];
+
+        return file_get_contents(self::RECAPTCHA_URL . '?' . http_build_query($data));
     }
 }

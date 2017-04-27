@@ -8,6 +8,7 @@ import Config from '../libs/config';
 class Notifications
 {
     constructor() {
+        this._counter = 0;
         this._self = $('#btn-alerts');
         this._dropdown = $('#dropdown-alerts');
         this._modal = this._dropdown.find('.dropdown-modal');
@@ -22,29 +23,31 @@ class Notifications
     /**
      * Set alerts counter
      *
-     * @param value
+     * @param counter
      */
-    set(value) {
-        if (value > 0) {
-            this._setTitle('(' + (value) + ') ' + this._pageTitle);
-            this._setIcon(Config.cdn(`/img/xicon/favicon${Math.min(value, 6)}.png`));
+    set(counter) {
+        this._counter = parseInt(counter);
+
+        if (this._counter > 0) {
+            this._setTitle('(' + (this._counter) + ') ' + this._pageTitle);
+            this._setIcon(Config.cdn(`/img/xicon/favicon${Math.min(this._counter, 6)}.png`));
         } else {
             this._setTitle(this._pageTitle);
             this._setIcon(Config.cdn('/img/favicon.png'));
         }
 
-        this._setBadge(value);
+        this._setBadge();
     }
 
     /**
      * Set alerts counter and save it in local storage.
      *
-     * @param value
+     * @param counter
      */
-    store(value) {
-        Session.setItem('alerts', parseInt(value));
+    store(counter) {
+        this.set(counter);
 
-        this.set(value);
+        Session.setItem('alerts', this._counter);
     }
 
     /**
@@ -53,7 +56,7 @@ class Notifications
      * @returns {Number|number}
      */
     get() {
-        return parseInt(this._self.find('.badge').text()) || 0;
+        return this._counter;
     }
 
     /**
@@ -70,20 +73,19 @@ class Notifications
     /**
      * Set unread notification's counter.
      *
-     * @param value
      * @private
      */
-    _setBadge(value) {
+    _setBadge() {
         let badge = $('.badge', this._self);
 
-        if (parseInt(value) === 0) {
+        if (this._counter === 0) {
             badge.remove();
         }
         else {
             if (!badge.length) {
-                $('> a:first', this._self).prepend(`<span class="badge">${value}</span>`);
+                $('> a:first', this._self).prepend(`<span class="badge">${this._counter}</span>`);
             } else {
-                badge.text(value);
+                badge.text(this._counter);
             }
         }
     }
@@ -154,7 +156,7 @@ class Notifications
     }
 
     /**
-     * Blick on notification.
+     * Click on notification.
      *
      * @param e
      * @return {boolean}
@@ -208,14 +210,21 @@ class Notifications
      * @private
      */
     _onScroll(e) {
+        if (this._isRequestOngoing) {
+            return;
+        }
+
         let items = $(e.currentTarget).find('ul');
+        this._isRequestOngoing = true;
 
         $.get(e.data.url + '?offset=' + $('li', items).length, json => {
             items.append(json.html);
 
-            if ($('li', json.html).length < 10) {
+            if (json.count < 10) {
                 $(e.currentTarget).off('ps-y-reach-end');
             }
+
+            this._isRequestOngoing = false;
         });
     }
 }
@@ -226,20 +235,28 @@ $(function () {
     let notifications = new Notifications();
 
     Session.addListener(function (e) {
-        if (e.key === 'alerts' && e.newValue !== e.oldValue) {
+        if (e.key === 'alerts' && e.newValue !== notifications.get()) {
             notifications.set(e.newValue);
             notifications.clear();
         }
     });
 
     ws.on('alert', data => {
-        notifications.store(notifications.get() + 1);
+        notifications.set(notifications.get() + 1);
         notifications.clear();
 
         DesktopNotifications.doNotify(data.headline, data.subject, data.url);
+
+        // ugly hack to firefox: store counter in session storage with a lille bit of delay.
+        // if we have two open tabs both with websocket connection, then each tab will receive it's own
+        // notification. saving counter in local storage will call session listener (see above).
+        // make a long story short: without setTimeout() one notification will be shown as two if user
+        // has two open tabs.
+        setTimeout(() => Session.setItem('alerts', notifications.get()), 500);
     });
 
     setInterval(() => {
+        // send ping request to the server just to extend session cookie lifetime.
         $.get(Config.get('ping'), token => {
             $('meta[name="csrf-token"]').attr('content', token);
             $(':hidden[name="_token"]').val(token);
@@ -250,5 +267,5 @@ $(function () {
                 }
             });
         });
-    }, 350000);
+    }, Config.get('ping_interval') * 60 * 1000);
 });

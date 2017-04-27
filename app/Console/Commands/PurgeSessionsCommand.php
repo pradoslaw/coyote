@@ -1,0 +1,145 @@
+<?php
+
+namespace Coyote\Console\Commands;
+
+use Carbon\Carbon;
+use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
+use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Session;
+use Illuminate\Console\Command;
+use Illuminate\Database\Connection as Db;
+
+class PurgeSessionsCommand extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'session:purge';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Purge old sessions.';
+
+    /**
+     * @var SessionRepository
+     */
+    private $session;
+
+    /**
+     * @var Db
+     */
+    private $db;
+
+    /**
+     * @var UserRepository
+     */
+    private $user;
+
+    /**
+     * @var GuestRepository
+     */
+    private $guest;
+
+    /**
+     * @param Db $db
+     * @param SessionRepository $session
+     * @param UserRepository $user
+     * @param GuestRepository $guest
+     */
+    public function __construct(Db $db, SessionRepository $session, UserRepository $user, GuestRepository $guest)
+    {
+        parent::__construct();
+
+        $this->db = $db;
+        $this->session = $session;
+        $this->user = $user;
+        $this->guest = $guest;
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $result = $this->session->all();
+        // convert minutes to seconds
+        $lifetime = config('session.lifetime') * 60;
+
+        $this->db->transaction(function () use ($result, $lifetime) {
+            $this->db->unprepared('TRUNCATE sessions');
+            $values = [];
+
+            foreach ($result as $session) {
+                if ($session->expired($lifetime)) {
+                    $this->signout($session);
+                } else {
+                    $this->extend($session);
+
+                    $path = str_limit(parse_url($session->url, PHP_URL_PATH), 999, '');
+
+                    $values[] = array_merge(
+                        array_only($session->toArray(), ['id', 'user_id', 'robot']),
+                        ['path' => mb_strtolower($path)]
+                    );
+                }
+            }
+
+            // make a copy of sessions in postgres for faster calculations (number of visitors for give page etc.)
+            $this->db->table('sessions')->insert($values);
+            $this->session->gc($lifetime);
+        });
+
+        $this->info('Session purged.');
+    }
+
+    /**
+     * @param Session $session
+     */
+    private function extend($session)
+    {
+        if (empty($session->userId)) {
+            return;
+        }
+
+        /** @var \Coyote\User $user */
+        $user = $this->user->find($session->userId);
+
+        $user->timestamps = false;
+        // update only this field:
+        $user->visited_at = Carbon::createFromTimestamp($session->updatedAt);
+
+        $user->save();
+    }
+
+    /**
+     * @param Session $session
+     */
+    private function signout($session)
+    {
+        // save user's last visit
+        $this->guest->save($session);
+
+        if (empty($session->userId)) {
+            return;
+        }
+
+        /** @var \Coyote\User $user */
+        $user = $this->user->find($session->userId);
+
+        $this->info('Remove ' . $user->name . '\'s session. IP: ' . $session->ip);
+
+        $user->timestamps = false;
+        $user->visits += 1;
+        $user->is_online = false;
+
+        $user->save();
+    }
+}

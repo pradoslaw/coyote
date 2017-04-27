@@ -9,6 +9,7 @@ use Coyote\Permission;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
 use Boduch\Grid\Source\CollectionSource;
+use Coyote\Services\Forum\TreeBuilder;
 use Illuminate\Http\Request;
 
 class PermissionsController extends BaseController
@@ -41,7 +42,8 @@ class PermissionsController extends BaseController
      */
     public function index()
     {
-        $categoriesList = $this->forum->choices('id');
+        $categoriesList = (new TreeBuilder())->listById($this->forum->list());
+
         return $this->view('adm.forum.permissions.home')->with('categoriesList', $categoriesList);
     }
 
@@ -88,7 +90,7 @@ class PermissionsController extends BaseController
 
         return $this->view('adm.forum.permissions.home', [
             'grid' => $grid,
-            'categoriesList' => $this->forum->choices('id')
+            'categoriesList' => (new TreeBuilder())->listById($this->forum->list())
         ]);
     }
 

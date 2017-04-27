@@ -24,7 +24,7 @@ class ApplicationController extends Controller
             function (Request $request, $next) {
                 /** @var \Coyote\Job $job */
                 $job = $request->route('job');
-                abort_if($job->hasApplied($this->userId, $this->sessionId), 404);
+                abort_if($job->hasApplied($this->userId, $this->guestId), 404);
 
                 return $next($request);
             },
@@ -72,23 +72,26 @@ class ApplicationController extends Controller
      */
     public function save($job, ApplicationForm $form)
     {
-        $filesystem = app('filesystem')->disk('local');
-        $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->sessionId];
+        $data = $form->all() + ['user_id' => $this->userId, 'session_id' => $this->guestId];
 
-        $mail = new ApplicationSent($form, $job);
-
-        $this->transaction(function () use ($job, $data, $mail) {
+        $this->transaction(function () use ($job, $form, $data) {
             $target = (new Stream_Job)->map($job);
 
             $job->applications()->create($data);
-            $this->getMailFactory()->send($mail);
+
+            $mailer = $this->getMailFactory();
+            // send mail to offer's owner
+            // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
+            $mailer->to($job->email)->send(new ApplicationSent($form, $job));
+
+            if ($form->get('cc')->isChecked()) {
+                // send to application author
+                // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
+                $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($form, $job));
+            }
 
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
         });
-
-        if ($form->get('cv')->getValue()) {
-            $filesystem->delete('tmp/' . $form->get('cv')->getValue());
-        }
 
         return redirect()
             ->route('job.offer', [$job->id, $job->slug])
@@ -108,7 +111,7 @@ class ApplicationController extends Controller
         ]);
 
         $filename = uniqid() . '_' . $request->file('cv')->getClientOriginalName();
-        $request->file('cv')->storeAs('tmp', $filename, 'local');
+        $request->file('cv')->storeAs('cv', $filename, 'local');
 
         return response()->json([
             'filename' => $filename,

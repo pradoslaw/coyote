@@ -13,15 +13,15 @@
             <meta name="keywords" content="{% block keywords %}{% endblock %}">
 
             <!-- Facebook sharing meta-data -->
-            <meta property="og:url" content="{{ config('app.url') }}" />
+            <meta property="og:url" content="{{ app.request.url }}" />
             <meta property="og:type" content="website" />
             <meta property="og:title" content="{{ block('title') }}" />
             <meta property="og:description" content="{{ block('description') }}" />
-            <meta property="og:image" content="{{ cdn('img/facebook_sharing_image.jpg') }}" />
+            <meta property="og:image" content="{{ cdn('img/logo.png') }}" />
 
             <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
 
-            <script type="text/javascript">var _config = {{ public|default('{}')|raw }};</script>
+            <script type="text/javascript">var _config = {{ __public|default('{}')|raw }};</script>
         {% endblock %}
 
         <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
@@ -54,7 +54,7 @@
                         </a>
 
                         <ul id="desktop-menu" class="nav navbar-nav hidden-xs">
-                            {% for item in menu.roots() %}
+                            {% for item in __master_menu.roots() %}
                                 <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
 
@@ -173,7 +173,7 @@
 
                     <div class="visible-xs">
                         <div id="mobile-menu" class="collapse navbar-collapse nav navbar-nav">
-                            {% for item in menu.roots() %}
+                            {% for item in __master_menu.roots() %}
                                 <div {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
                                 </div>

@@ -35,7 +35,7 @@ class CreateUsersTable extends Migration
             $table->timestampTz('visited_at')->nullable();
             $table->mediumInteger('visits')->default(0);
             $table->string('ip', 45)->nullable();
-            $table->string('browser')->nullable();
+            $table->string('browser', 1000)->nullable();
             $table->string('access_ip')->nullable();
             $table->tinyInteger('alert_login')->default(0);
             $table->tinyInteger('alert_failure')->default(1);

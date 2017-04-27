@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
+use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\Functions\Random;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryString;
@@ -21,10 +22,10 @@ class AdBuilder extends SearchBuilder
      */
     public function build()
     {
-        $this->setupFilters();
-        $this->setupScoreFunctions();
+        // only premium offers
+        $this->must(new Term('boost', true));
 
-        $this->score(new Random($this->sessionId));
+        $this->score(new Random());
         $this->size(0, 4);
 
         $this->source([
@@ -36,7 +37,7 @@ class AdBuilder extends SearchBuilder
             'firm.*',
             'locations',
             'tags',
-            'currency_name',
+            'currency_symbol',
             'salary_from',
             'salary_to'
         ]);

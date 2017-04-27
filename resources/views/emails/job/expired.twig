@@ -1,0 +1,11 @@
+{% extends 'emails.layout' %}
+
+{% block content %}
+    Twoje ogłoszenie <b>{{ title }}</b> zostało zakończone i nie jest już wyświetlane w serwisie 4programmers.net.<br><br>
+
+    Link do ogłoszenia: {{ link_to_route('job.offer', title, [id, slug]) }}<br><br>
+
+    Dziękujemy za skorzystanie z naszego serwisu. W razie dodatkowych pytań pozostajemy do dyspozycji.<br><br>
+
+    Jeżeli chesz dodać kolejne ogłoszenie, kliknij {{ link_to_route('job.submit', 'tutaj') }}.
+{% endblock %}

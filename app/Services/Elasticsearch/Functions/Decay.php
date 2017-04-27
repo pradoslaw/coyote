@@ -23,6 +23,11 @@ class Decay extends FunctionScore
     protected $decay;
 
     /**
+     * @var float|int|null
+     */
+    protected $offset;
+
+    /**
      * @var string
      */
     protected $decayFunction = 'exp';
@@ -31,12 +36,14 @@ class Decay extends FunctionScore
      * @param string $field
      * @param string $scale
      * @param float $decay
+     * @param float|int|null $offset
      */
-    public function __construct($field, $scale, $decay = 0.5)
+    public function __construct($field, $scale, $decay = 0.5, $offset = null)
     {
         $this->field = $field;
         $this->scale = $scale;
         $this->decay = $decay;
+        $this->offset = $offset;
     }
 
     /**
@@ -49,13 +56,27 @@ class Decay extends FunctionScore
 
         $body['query']['function_score']['functions'][] = [
             $this->decayFunction => [
-                $this->field => [
-                    'scale' => $this->scale,
-                    'decay' => $this->decay
-                ]
+                $this->field => $this->getSetup()
             ]
         ];
 
         return $body;
+    }
+
+    /**
+     * @return array
+     */
+    private function getSetup()
+    {
+        $result = [
+            'scale' => $this->scale,
+            'decay' => $this->decay
+        ];
+
+        if ($this->offset) {
+            $result['offset'] = $this->offset;
+        }
+
+        return $result;
     }
 }

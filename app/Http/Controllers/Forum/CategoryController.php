@@ -5,6 +5,8 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
+use Coyote\Services\Forum\TreeBuilder;
+use Coyote\Services\Forum\Personalizer;
 use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
@@ -14,15 +16,22 @@ class CategoryController extends BaseController
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
+     * @param Personalizer $personalizer
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($forum, Request $request)
+    public function index($forum, Request $request, Personalizer $personalizer)
     {
+        $treeBuilder = new TreeBuilder();
+
         $this->pushForumCriteria();
-        $forumList = $this->forum->choices();
+        $forumList = $treeBuilder->listBySlug($this->forum->list());
 
         // execute query: get all subcategories that user can has access to
-        $sections = $this->forum->groupBySections($this->userId, $this->sessionId, $forum->id);
+        $sections = $this->forum->categories($this->userId, $this->guestId, $forum->id);
+        // mark unread categories
+        $sections = $personalizer->markUnreadCategories($sections);
+
+        $sections = $treeBuilder->sections($sections, $forum->id);
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
@@ -32,12 +41,14 @@ class CategoryController extends BaseController
             ->topic
             ->paginate(
                 $this->userId,
-                $this->sessionId,
+                $this->guestId,
                 'topics.last_post_id',
                 'DESC',
                 $this->topicsPerPage($request)
             )
             ->appends($request->except('page'));
+
+        $topics = $personalizer->markUnreadTopics($topics);
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
@@ -58,11 +69,11 @@ class CategoryController extends BaseController
      */
     public function mark($forum)
     {
-        $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
+        $this->forum->markAsRead($forum->id, $this->userId, $this->guestId);
         $forums = $this->forum->where('parent_id', $forum->id)->get();
 
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
+            $this->forum->markAsRead($forum->id, $this->userId, $this->guestId);
         }
     }
 

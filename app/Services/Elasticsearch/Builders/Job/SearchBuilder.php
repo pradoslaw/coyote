@@ -99,6 +99,10 @@ class SearchBuilder extends QueryBuilder
     public function addRemoteFilter()
     {
         $this->must(new Filters\Job\Remote());
+
+        if ($this->request->has('remote_range')) {
+            $this->must(new Filters\Job\RemoteRange());
+        }
     }
 
     /**
@@ -126,8 +130,11 @@ class SearchBuilder extends QueryBuilder
     {
         if ($this->request->has('q')) {
             $this->must(
-                new MultiMatch($this->request->get('q'), ['title^2', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
+                new MultiMatch($this->request->get('q'), ['title^3', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
             );
+        } else {
+            // no keywords were provided -- let's calculate score based on score functions
+            $this->setupScoreFunctions();
         }
 
         if ($this->request->has('city')) {
@@ -146,15 +153,15 @@ class SearchBuilder extends QueryBuilder
             $this->addRemoteFilter();
         }
 
-        $this->score(new Random($this->sessionId));
+        $this->score(new Random($this->sessionId, 2));
         $this->sort(new Sort($this->getSort(), $this->getOrder()));
 
         $this->setupFilters();
-        $this->setupScoreFunctions();
+
         // facet search
         $this->setupAggregations();
 
-        $this->size(self::PER_PAGE * ($this->request->get('page', 1) - 1), self::PER_PAGE);
+        $this->size(self::PER_PAGE * ((int) $this->request->get('page', 1) - 1), self::PER_PAGE);
 
         return parent::build();
     }
@@ -171,7 +178,8 @@ class SearchBuilder extends QueryBuilder
         // wazniejsze sa te ofery, ktorych pole score jest wyzsze. obliczamy to za pomoca wzoru: log(score * 1)
         $this->score(new FieldValueFactor('score', 'log', 1));
         // strsze ogloszenia traca na waznosci, glownie po 14d. z kazdym dniem score bedzie malalo o 1/10
-        $this->score(new Decay('created_at', '14d', 0.1));
+        // za wyjatkiem pierwszych 2h publikacji
+        $this->score(new Decay('boost_at', '14d', 0.1, '2h'));
     }
 
     protected function setupAggregations()
@@ -179,6 +187,7 @@ class SearchBuilder extends QueryBuilder
         $this->aggs(new Aggs\Job\Location());
         $this->aggs(new Aggs\Job\Remote());
         $this->aggs(new Aggs\Job\Tag());
+        $this->aggs(new Aggs\Job\Boost());
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Feature;
+use Coyote\Payment;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
@@ -87,7 +88,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     public function getPopularTags($limit = 500)
     {
         return $this
-            ->getQuery()
+            ->getTagsQueryBuilder()
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->limit($limit)
             ->get()
@@ -124,7 +125,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
         $this->applyCriteria();
 
         return $this
-            ->getQuery()
+            ->getTagsQueryBuilder()
             ->whereIn('job_tags.tag_id', $tagsId)
             ->get()
             ->pluck('count', 'name');
@@ -181,7 +182,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
                 ->from('tags')
                 ->whereIn('name', $tags)
                 ->join('job_tags', 'job_tags.tag_id', '=', 'tags.id')
-                ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquen's scope (deleted_at column)
+                ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquent's scope (deleted_at column)
         );
 
         return $this
@@ -190,7 +191,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->from($this->raw("($sub) AS t"))
             ->join('job_tags', 'job_tags.job_id', '=', 't.job_id')
             ->join('tags', 'tags.id', '=', 'job_tags.tag_id')
-            ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquen's scope (deleted_at column)
+            ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquent's scope (deleted_at column)
             ->whereNotIn('name', $tags)
             ->groupBy('tags.name')
             ->orderByRaw('COUNT(*) DESC')
@@ -200,9 +201,34 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getExpiredOffers()
+    {
+        $sub = $this->toSql(
+            $this
+                ->app
+                ->make(Payment::class)
+                ->selectRaw('DISTINCT ON(job_id) job_id, ends_at')
+                ->where('status_id', Payment::PAID)
+                ->orderBy('job_id', 'DESC')
+                ->orderBy('ends_at', 'DESC')
+        );
+
+        return $this
+            ->model
+            ->select('jobs.*')
+            ->join($this->raw("($sub) AS payments"), function (JoinClause $join) {
+                $join->on('payments.job_id', '=', 'jobs.id')->on('ends_at', '<', $this->raw('NOW()'));
+            })
+            ->where('boost', 1)
+            ->get();
+    }
+
+    /**
      * @return mixed
      */
-    private function getQuery()
+    private function getTagsQueryBuilder()
     {
         return $this
             ->app

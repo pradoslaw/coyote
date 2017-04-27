@@ -175,8 +175,8 @@ $(function () {
      * Share post link
      */
     $('.btn-share').one('click', function() {
-        var url = $(this).attr('href');
-        var $input = $('<input type="text" class="form-control input-sm" style="width: 300px" value="' + url + '" />');
+        let url = $(this).attr('href');
+        let $input = $('<input type="text" class="form-control input-sm" style="width: 300px" value="' + url + '" readonly />');
 
         $input.click(function() {
             this.select();
@@ -551,7 +551,7 @@ $(function () {
             markdown = '[' + $(this).text() + '](' + $(this).data('url') + ')';
         }
 
-        $('textarea[name="text"]', $form).insertAtCaret("\n", "\n", markdown);
+        $('textarea[name="text"]', $form).insertAtCaret("", "", markdown);
         $('.nav-tabs a:first').tab('show');
     });
 
@@ -565,7 +565,7 @@ $(function () {
                 $('#attachments tbody').append(html);
 
                 var link = $('a', html);
-                textarea.insertAtCaret("\n", "\n", '![' + link.text() + '](' + link.data('url') + ')');
+                textarea.insertAtCaret("", "", '![' + link.text() + '](' + link.data('url') + ')');
             })
             .wikiEditor()
             .prompt()

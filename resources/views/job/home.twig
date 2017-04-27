@@ -51,17 +51,19 @@
 
                         <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
 
-                        {% if aggregations.remote[1] is not null %}
+                        {% if aggregations.remote[100] is not null %}
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     {{ form_checkbox('remote', 1, selected.remote) }}
 
                                     <a href="{{ route('job.remote') }}">
-                                        <span>Praca zdalna</span>
-                                        <small>({{ declination(aggregations.remote[1], declinationOffers) }})</small>
+                                        <span>100% pracy zdalnej</span>
+                                        <small>({{ declination(aggregations.remote[100], declinationOffers) }})</small>
                                     </a>
                                 </li>
                             </ul>
+
+                            {{ form_hidden('remote_range', 100) }}
                         {% endif %}
 
                         {% if aggregations.cities|length > 0 %}
@@ -107,12 +109,53 @@
                 </div>
 
                 <div class="col-sm-9 col-xs-12">
-                    {% include 'job.partials.offers' %}
+                    <nav>
+                        {{ pagination|raw }}
+                    </nav>
+
+                    <section class="panel panel-wrapper">
+                        <div id="box-jobs" class="panel-body">
+                            <ul id="sort" class="hidden-xs">
+                                {% set sort = input_get('sort', '_score') %}
+
+                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: '_score', order: 'desc'})), 'Trafność', {class: 'sort' ~ (sort == '_score' ? ' desc')}) }}</li>
+                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'id', order: 'desc'})), 'Data dodania', {class: 'sort' ~ (sort == 'id' ? ' desc')}) }}</li>
+                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'salary', order: 'desc'})), 'Wynagrodzenie', {class: 'sort' ~ (sort == 'salary' ? ' desc')}) }}</li>
+                            </ul>
+
+                            <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary btn-sm pull-right visible-xs visible-sm" style="margin-top: 6px; margin-bottom: 10px" title="Dodaj ofertę pracy zupełnie za darmo!">Dodaj ofertę pracy</a>
+
+                            <div class="clearfix"></div>
+
+                            {% if premium_listing|length > 0 %}
+                                {% include 'job.partials.listing' with {
+                                    listing: premium_listing,
+                                    show_label: true
+                                } %}
+                            {% endif %}
+
+                            {% include 'job.partials.listing' with {
+                                listing: listing,
+                                show_highlight: true
+                            } %}
+                        </div>
+                    </section>
+
+                    <nav>
+                        {{ pagination|raw }}
+                    </nav>
                 </div>
             </div>
         </main>
 
         <aside class="col-lg-3 col-lg-offset-0 col-md-9 col-md-offset-3 col-sm-9 col-sm-offset-3">
+            {% if pagination.total() > 0 %}
+                {# ugly hack... fix needed #}
+                <div style="height: 18px"></div>
+            {% endif %}
+
+            {{ render_block('job_ads') }}
+
             {% if subscribes|length %}
                 <section class="box sidebar-job-offers">
                     <h4><i class="fa fa-star fa-fw"></i> Obserwowane oferty pracy</h4>
@@ -141,7 +184,7 @@
                 </section>
             {% endif %}
 
-            {{ render_block('job_ads') }}
+
         </aside>
     </div>
 

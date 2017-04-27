@@ -1,0 +1,203 @@
+{% extends 'job.base' %}
+{% block title %}Płatność{{ parent() }}{% endblock %}
+
+{% block container %}
+    <div id="payment" class="row">
+        {{ form_start(form) }}
+
+        <main class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-5 hidden-md hidden-sm hidden-xs">
+                            <img src="{{ cdn('img/payment-secure.jpg') }}" class="img-responsive">
+                        </div>
+
+                        <div class="col-lg-7 col-md-12">
+                            {{ form_row(form.name) }}
+
+                            <div class="form-group form-group-border credit-card-container has-feedback {{ errors.has('number') ? 'has-error' }}">
+                                {{ form_label(form.number) }}
+
+                                <img src="{{ cdn('img/mastercard.png') }}" class="mastercard">
+                                <img src="{{ cdn('img/visa.png') }}" class="visa">
+                                <img src="{{ cdn('img/maestro.png') }}" class="maestro">
+
+                                {{ form_widget(form.number) }}
+                                {{ form_error(form.number) }}
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-7 {{ errors.has('exp_month') ? 'has-error' }}">
+                                        <label class="control-label">Data ważności karty *</label>
+
+                                        <div class="row">
+                                            <div class="col-xs-7" style="padding-right: 0">
+                                                {{ form_widget(form.exp_month) }}
+                                                {{ form_error(form.exp_month) }}
+                                            </div>
+                                            <div class="col-xs-5">
+                                                {{ form_widget(form.exp_year) }}
+                                                {{ form_error(form.exp_year) }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        <div class="form-group has-feedback {{ errors.has('cvc') ? 'has-error' }}">
+                                            {{ form_label(form.cvc) }}
+
+                                            <img src="{{ cdn('img/cvc.png') }}" class="cvc">
+
+                                            {{ form_widget(form.cvc) }}
+                                            {{ form_error(form.cvc) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="well well-sm">
+                                        <div class="checkbox margin-none">
+                                            {{ form_widget(form.enable_invoice) }}
+
+                                            <label for="{{ form.enable_invoice.attr.id }}">
+                                                {{ form.enable_invoice.label }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="invoice">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        {{ form_row(form.invoice.children.name) }}
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        {{ form_label(form.invoice.children.vat_id) }}
+
+                                        <div class="row">
+                                            <div class="col-xs-4" style="padding-right: 0">
+                                                {{ form_widget(form.invoice.children.country_id) }}
+                                            </div>
+                                            <div class="col-xs-8">
+                                                {{ form_widget(form.invoice.children.vat_id) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4 padding-none-right">
+                                        {{ form_row(form.invoice.children.address) }}
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        {{ form_row(form.invoice.children.postal_code) }}
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        {{ form_row(form.invoice.children.city) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="form-navigation" class="form-group">
+                        <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Powrót do ogłoszenia</a>
+
+                        <button type="submit" id="submit" class="btn btn-primary pull-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="col-md-4">
+            <div class="panel panel-default panel-review" v-cloak>
+                <div class="panel-heading">
+                    Twoja płatność obejmuje
+                </div>
+
+                <div class="panel-body">
+                    <div class="row margin-xs-top margin-xs-bottom">
+                        <div class="col-xs-6">
+                            Promocja ogłoszenia ({{ payment.days }} dni)
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            ${ netPrice } zł
+                        </div>
+                    </div>
+
+                    <div class="row margin-xs-top margin-xs-bottom">
+                        <div class="col-xs-6">
+                            VAT (${ percentageVatRate }%)
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            ${ vatPrice } zł
+                        </div>
+                    </div>
+
+                    <div class="row margin-xs-top margin-xs-bottom">
+                        <div class="col-xs-6">
+                            <strong>Suma:</strong>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <strong>${ grossPrice } zł</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <span>Do zapłaty:</span>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <span>${ grossPrice } zł</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <input type="hidden" name="payment_method_nonce" :value="form.payment_method_nonce">
+
+        {{ form_end() }}
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="//js.braintreegateway.com/v2/braintree.js"></script>
+
+    <script>
+        var data = {
+            countries: {{ countries|json_encode|raw }},
+            calculator: {{ calculator|json_encode|raw }},
+            vat_rates: {{ vat_rates|json_encode|raw }},
+            default_vat_rate: {{ default_vat_rate }},
+            client_token: '{{ client_token }}',
+            form: {
+                payment_method_nonce: '',
+                number: '{{ form.number.value }}',
+                name: '{{ form.name.value }}',
+                expiration_year: '{{ form.exp_year.value }}',
+                expiration_month: '{{ form.exp_month.value }}',
+                cvc: '{{ form.cvc.value }}'
+            }
+        };
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+{% endblock %}

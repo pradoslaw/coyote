@@ -1,4 +1,4 @@
-{% set visited_at = max(session_at, user.visited_at)|format_date %}
+{% set visited_at = user.visited_at|format_date %}
 {% set created_at = user.created_at|format_date %}
 
 <div id="vcard">
@@ -10,7 +10,7 @@
         <div class="media">
             <div class="media-left">
                 <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
-                <span class="status {{ session_at ?: 'offline' }}">{{ session_at ? 'Online' : 'Offline' }}</span>
+                <span class="status {{ user.is_online ?: 'offline' }}">{{ user.is_online ? 'Online' : 'Offline' }}</span>
 
                 {% if user.group.name %}
                     <span class="label label-default">{{ user.group.name }}</span>
@@ -25,6 +25,10 @@
                     <li title="Data rejestracji: {{ created_at }}">
                         <i class="fa fa-user-plus fa-fw"></i>
                         {{ created_at }}
+                    </li>
+                    <li title="Ilość postów: {{ user.posts }}">
+                        <i class="fa fa-comments-o fa-fw"></i>
+                        {{ declination(user.posts, ['post', 'posty', 'postów']) }}
                     </li>
                 </ul>
 

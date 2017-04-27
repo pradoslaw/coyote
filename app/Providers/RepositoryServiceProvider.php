@@ -2,6 +2,7 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Repositories\Contracts\SessionRepositoryInterface;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
@@ -47,6 +48,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(
             array_pull($this->provides, array_search(StreamRepositoryInterface::class, $this->provides)),
             'Coyote\\Repositories\\Mongodb\\StreamRepository'
+        );
+
+        $this->app->singleton(
+            array_pull($this->provides, array_search(SessionRepositoryInterface::class, $this->provides)),
+            'Coyote\\Repositories\\Redis\\SessionRepository'
         );
 
         foreach ($this->provides as $interface) {

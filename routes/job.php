@@ -50,13 +50,29 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->post('Application/{job}', ['uses' => 'ApplicationController@save', 'as' => 'application']);
     $this->post('Upload', ['uses' => 'ApplicationController@upload', 'as' => 'application.upload']);
 
-    // Job's ads
-    // --------------------------------------------------------------
-    $this->get('Ad', ['uses' => 'AdController@index', 'as' => 'ad']);
-
     // move job offer
     $this->get('Move/{job}', ['uses' => 'MoveController@index', 'as' => 'move', 'middleware' => 'can:job-delete']);
     $this->post('Move/{job}', ['uses' => 'MoveController@move', 'middleware' => 'can:job-delete']);
+
+    // Payment routes
+    // -----------------------------
+    $this->get('Payment/{payment}', [
+        'uses' => 'PaymentController@index',
+        'as' => 'payment',
+        'middleware' => 'auth'
+    ]);
+
+    $this->post('Payment/{payment}', ['uses' => 'PaymentController@process', 'middleware' => 'auth']);
+
+    $this->post('Payment/{payment}/Callback', [
+        'uses' => 'PaymentController@callback',
+        'as' => 'payment.callback',
+        'middleware' => 'auth'
+    ]);
+
+    // Job's ads
+    // --------------------------------------------------------------
+    $this->get('recommendations', ['uses' => 'AdController@index', 'as' => 'ad']);
 });
 
 $this->group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {

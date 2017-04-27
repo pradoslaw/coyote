@@ -121,7 +121,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->model
             ->select(['posts.*', 'users.name'])
             ->leftJoin('users', 'users.id', '=', 'posts.user_id')
-            ->whereIn('posts.id', $postsId)
+            ->whereIn('posts.id', array_map('intval', $postsId))
             ->where('topic_id', $topicId) // <-- this condition for extra security
             ->get();
     }
@@ -142,7 +142,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $topic->poll()->associate($poll);
 
         $topic->save();
-        $tags = array_unique($form->getRequest()->get('tags', []));
+        $tags = array_unique((array) $form->getRequest()->get('tags', []));
 
         if (is_array($tags) && ($topic->wasRecentlyCreated || $postId == $topic->first_post_id)) {
             // assign tags to topic
@@ -160,8 +160,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
             }
 
             $post->ip = $form->getRequest()->ip();
-            $post->browser = $form->getRequest()->browser();
-            $post->host = gethostbyaddr($form->getRequest()->ip());
+            $post->browser = str_limit($form->getRequest()->browser(), 250);
+            $post->host = str_limit(gethostbyaddr($form->getRequest()->ip()), 250);
         }
 
         $log->fillWithPost($post)->fill(['subject' => $topic->subject, 'tags' => $tags]);

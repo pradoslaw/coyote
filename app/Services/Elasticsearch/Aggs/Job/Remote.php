@@ -12,7 +12,7 @@ class Remote extends Aggs\Terms implements DslInterface
 
     public function __construct()
     {
-        parent::__construct('remote', 'is_remote');
+        parent::__construct('remote', 'remote_range');
     }
 
     /**

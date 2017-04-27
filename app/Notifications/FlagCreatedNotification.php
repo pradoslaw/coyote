@@ -4,12 +4,15 @@ namespace Coyote\Notifications;
 
 use Coyote\Alert;
 use Coyote\Flag;
+use Coyote\Services\Alert\DatabaseChannel;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Channels\BroadcastChannel;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\MailMessage;
 
-class FlagCreatedNotification extends Notification implements ShouldQueue
+class FlagCreatedNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
     use Queueable;
 
@@ -41,23 +44,9 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
      */
     public function via($user)
     {
-        return $this->channels($user);
-    }
+        $this->broadcast[] = 'user:' . $user->id;
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  \Coyote\User  $user
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($user)
-    {
-        return (new MailMessage)
-            ->greeting($user->name)
-            ->subject($this->flag->user->name . ' dodał nowy raport')
-            ->line(sprintf('%s zgłosił naruszenie z powodu %s.', $this->flag->user->name, $this->flag->type->name))
-            ->line('Kliknij na poniższy przycisk jeżeli chcesz podjąć w związku z tym jakieś działania.')
-            ->action('Zobacz raport', $this->notificationUrl());
+        return $this->channels();
     }
 
     /**
@@ -109,34 +98,34 @@ class FlagCreatedNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * @param \Coyote\User $user
-     * @return array
+     * Get the broadcast event name.
+     *
+     * @return string
      */
-    public function toBroadcast($user)
+    public function broadcastAs()
     {
-        return [
-            'headline'  => $user->name . ' dodał nowy raport',
-            'subject'   => $this->flag->type->name,
-            'url'       => $this->notificationUrl()
-        ];
+        return 'alert';
     }
 
     /**
      * @param \Coyote\User $user
+     * @return BroadcastMessage
+     */
+    public function toBroadcast($user)
+    {
+        return new BroadcastMessage([
+            'headline'  => $user->name . ' dodał nowy raport',
+            'subject'   => $this->flag->type->name,
+            'url'       => $this->notificationUrl()
+        ]);
+    }
+
+    /**
      * @return mixed
      */
-    protected function channels($user)
+    protected function channels()
     {
-        $channels = $user->notificationChannels(static::ID);
-
-        $this->broadcast[] = 'user:' . $user->id;
-        $notification = $user->getUnreadNotification($this->objectId());
-
-        if (!empty($notification->id)) {
-            unset($channels[array_search('email', $channels)]);
-        }
-
-        return $channels;
+        return [DatabaseChannel::class, BroadcastChannel::class];
     }
 
     /**

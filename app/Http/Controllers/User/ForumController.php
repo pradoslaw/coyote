@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\User;
 use Coyote\Events\UserWasSaved;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface as OrderRepository;
+use Coyote\Services\Forum\TreeBuilder;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 
@@ -43,7 +44,11 @@ class ForumController extends BaseController
         $this->breadcrumb->push('Personalizacja forum', route('user.forum'));
 
         $this->forum->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
-        $sections = $this->forum->getOrderForUser($this->userId);
+        $sections = $this->forum->categoriesOrder($this->userId);
+
+        $treeBuilder = new TreeBuilder();
+
+        $sections = $treeBuilder->sections($sections);
 
         return $this->view('user.forum')->with(compact('sections'));
     }

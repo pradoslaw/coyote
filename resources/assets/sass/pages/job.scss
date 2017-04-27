@@ -8,6 +8,7 @@
 @import "../components/metadata";
 @import "job/home";
 @import "job/submit";
+@import "job/payment";
 @import "job/application";
 
 .benefits,
@@ -40,13 +41,6 @@
   background-color: darken($gray-lighter, 4%);
   padding: 5px;
   display: inline-block;
-}
-
-// Do not wrap line in tooltip. We show tooltip over the "settings preferences" button
-// ---------------------------------
-
-.tooltip {
-  white-space: nowrap;
 }
 
 // Logo container

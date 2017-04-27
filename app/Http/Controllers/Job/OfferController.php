@@ -75,9 +75,10 @@ class OfferController extends Controller
             'employees_list'    => Firm::getEmployeesList(),
             'seniority_list'    => Job::getSeniorityList(),
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
-            'applied'           => $job->hasApplied($this->userId, $this->sessionId),
+            'applied'           => $job->hasApplied($this->userId, $this->guestId),
             'features_count'    => $featuresCount,
-            'previous_url'      => $this->request->session()->get('current_url')
+            'previous_url'      => $this->request->session()->get('current_url'),
+            'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null
         ])->with(
             compact('job', 'tags', 'flag', 'mlt')
         );

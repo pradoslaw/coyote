@@ -19,13 +19,20 @@ trait Searchable
      * Index data in elasticsearch
      *
      * @return mixed
+     * @throws \Exception
      */
     public function putToIndex()
     {
         $params = $this->getParams();
         $params['body'] = $this->filterData($this->getIndexBody());
 
-        return $this->getClient()->index($params);
+        try {
+            return $this->getClient()->index($params);
+        } catch (\Exception $e) {
+            logger()->error($params);
+
+            throw $e;
+        }
     }
 
     /**
@@ -113,7 +120,7 @@ trait Searchable
     {
         $body = $this->toArray();
 
-        foreach (['created_at', 'updated_at', 'deadline_at', 'last_post_created_at'] as $column) {
+        foreach ($this->dates as $column) {
             if (!empty($body[$column])) {
                 $body[$column] = date('Y-m-d H:i:s', strtotime($body[$column]));
             }

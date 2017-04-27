@@ -33,10 +33,7 @@ class PageHit
         $result = $next($request);
 
         // on production environment: store hit in redis
-        app('redis')->sadd(
-            'hit:' . urldecode($request->path()),
-            (empty($request->user()) ? $request->session()->getId() : $request->user()->id) . ';' . round(time() / 300) * 300
-        );
+        app('redis')->sadd('hits', $this->getPayload($request));
 
         // only for developing purposes. it increases counter every time user hits the page
         if (app()->environment('local', 'dev')) {
@@ -44,5 +41,19 @@ class PageHit
         }
 
         return $result;
+    }
+
+    /**
+     * @param Request $request
+     * @return string
+     */
+    private function getPayload(Request $request): string
+    {
+        return serialize([
+            'path'          => urldecode(trim($request->path(), '/')),
+            'timestamp'     => (int) (round(time() / 300) * 300),
+            'user_id'       => empty($request->user()) ? null : $request->user()->id,
+            'guest_id'      => $request->session()->get('guest_id')
+        ]);
     }
 }

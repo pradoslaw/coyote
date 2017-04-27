@@ -62,11 +62,11 @@
 
                     <p class="hidden-xs">
                         <strong>Rejestracja:</strong>
-                        <small>{{ post.author_created_at|format_date }}</small>
+                        <small>{{ post.author_created_at|diff_for_humans }}</small>
                     </p>
                     <p class="hidden-xs">
                         <strong>Ostatnio:</strong>
-                        <small>{{ post.author_visited_at|format_date }}</small>
+                        <small>{{ post.author_visited_at|diff_for_humans }}</small>
                     </p>
 
                     {% if post.location %}

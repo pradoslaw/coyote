@@ -152,7 +152,7 @@ class Markdown extends \Parsedown implements ParserInterface
                 return null;
             }
 
-            $exitChar = $text[$start + 1] === '{' ? '}' : ":,.\'\n) "; // <-- space at the end
+            $exitChar = $text[$start + 1] === '{' ? '}' : ":,.\'\n "; // <-- space at the end
             $end = $this->strpos($text, $exitChar, $start);
 
             if ($end === false) {
@@ -171,22 +171,34 @@ class Markdown extends \Parsedown implements ParserInterface
             }
 
             $name = substr($text, $start, $end);
+
+            // user name ends with ")" -- we strip if login is within bracket
+            if (strlen($name) > 0 && $name[mb_strlen($name) - 1] === ')' && mb_strpos($name, '(') === false) {
+                $name = mb_substr($name, 0, -1);
+                $length -= 1;
+            }
+
             $user = $this->user->findByName($name);
 
+            $replacement = [
+                'extent' => $length,
+                'element' => [
+                    'name' => 'a',
+                    'text' => '@' . $name
+                ]
+            ];
+
             if ($user) {
-                return [
-                    'extent' => $length,
-                    'element' => [
-                        'name' => 'a',
-                        'text' => '@' . $name,
-                        'attributes' => [
-                            'href' => route('profile', [$user->id]),
-                            'data-user-id' => $user->id,
-                            'class' => 'mention'
-                        ]
-                    ]
+                $replacement['element']['attributes'] = [
+                    'href' => route('profile', [$user->id]),
+                    'data-user-id' => $user->id,
+                    'class' => 'mention'
                 ];
+            } else {
+                $replacement['element']['name'] = 'strong';
             }
+
+            return $replacement;
         }
     }
 
@@ -202,9 +214,12 @@ class Markdown extends \Parsedown implements ParserInterface
         $start = mb_strpos($context, $excerpt['text']);
         // previous character (before "@" or "#")
         $preceding = mb_substr($context, $start - 1, 1);
+        // next character (after "@" or "#")
+        $following = mb_substr($context, $start + 1, 1);
 
         return mb_substr($excerpt['text'], $start + 1, 1) !== false
-            && ($start === 0 || in_array($preceding, [' ', '(', "\n"]));
+            && ($start === 0 || in_array($preceding, [' ', '(', "\n"]))
+                && $following !== ' ';
     }
 
     /**

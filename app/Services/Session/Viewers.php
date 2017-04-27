@@ -2,16 +2,15 @@
 
 namespace Coyote\Services\Session;
 
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Session;
+use Illuminate\Database\Connection as Db;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 /**
  * Generuje widok przedstawiajacy liste osob na danej stronie z podzialem na boty, zalogowane osoby itp
- *
- * Class Viewers
- * @package Coyote\Session
  */
 class Viewers
 {
@@ -19,9 +18,14 @@ class Viewers
     const ROBOT = 'Robot';
 
     /**
-     * @var SessionRepository
+     * @var Db
      */
-    private $session;
+    private $db;
+
+    /**
+     * @var Registered
+     */
+    private $registered;
 
     /**
      * @var Request
@@ -29,12 +33,14 @@ class Viewers
     private $request;
 
     /**
-     * @param SessionRepository $session
+     * @param Db $db
+     * @param Registered $registered
      * @param Request $request
      */
-    public function __construct(SessionRepository $session, Request $request)
+    public function __construct(Db $db, Registered $registered, Request $request)
     {
-        $this->session = $session;
+        $this->db = $db;
+        $this->registered = $registered;
         $this->request = $request;
     }
 
@@ -47,13 +53,13 @@ class Viewers
     public function render($path = null)
     {
         $groups = [self::USER => [], self::ROBOT => []];
-        /** @var \Illuminate\Support\Collection $collection */
-        $collection = $this->unique($this->session->byPath($path));
+
+        $collection = $this->data($path);
 
         // zlicza liczbe userow
-        $total = $collection->count();
+        $total = $collection->sum('count');
         // zlicza gosci online (niezalogowani uzytkownicy)
-        $guests = $collection->where('user_id', null)->count();
+        $guests = $collection->where('user_id', null)->sum('count');
         // ilosc zalogowanych userow online
         $registered = $total - $guests;
 
@@ -61,10 +67,35 @@ class Viewers
         $robots = $collection->filter(function ($item) {
             return $item->robot;
         })
-        ->count();
+        ->sum('count');
 
         // only number of human guests
         $guests -= $robots;
+
+        foreach ($collection->keyBy('robot') as $name => $robot) {
+            if ($name) {
+                $groups[self::ROBOT][] = $name . ($robot->count > 1 ? ' (' . $robot->count . 'x)' : '');
+            }
+        }
+
+        $collection = $this->map($collection);
+
+        if ($this->request->user()) {
+            if (!$collection->contains('user_id', $this->request->user()->id)) {
+                $collection->push(new Session(['user_id' => $this->request->user()->id, 'path' => $path]));
+
+                $total++;
+                $registered++;
+            }
+        } elseif ($collection->count() === 0) {
+            // we keep session in redis but also  - list of online users - in postgres.
+            // we refresh table every 1 minute, so info about user's current page might be sometimes outdated.
+            $total++;
+            $guests++;
+        }
+
+        $collection = $this->unique($collection);
+        $collection = $this->registered->setup($collection);
 
         foreach ($collection->groupBy('group') as $name => $rowset) {
             if ($name == '') {
@@ -74,41 +105,48 @@ class Viewers
             }
 
             foreach ($rowset as $user) {
-                if ($user->user_id) {
-                    $groups[$name][] = $this->makeProfileLink($user->user_id, $user->name);
+                if ($user['user_id'] !== null) {
+                    $groups[$name][] = $this->makeProfileLink($user['user_id'], $user['name']);
                 }
-            }
-        }
-
-        foreach ($collection->groupBy('robot') as $name => $rowset) {
-            if ($name) {
-                $groups[self::ROBOT][] = $name . (count($rowset) > 1 ? ' (' . count($rowset) . 'x)' : '');
-            }
-        }
-
-        // moze sie okazac ze wsrod sesji nie ma ID sesji aktualnego requestu poniewaz tabela session
-        // nie zostala jeszcze zaktualizowana. w takim przypadku bedziemy musieli dodac "recznie"
-        // uzytkownika ktory aktualnie dokonal tego zadania
-        if (!$collection->contains('id', $this->request->session()->getId())) {
-            $total++;
-
-            if ($this->request->user()) {
-                $groupName = self::USER;
-                $registered++;
-
-                if ($this->request->user()->group_id) {
-                    $groupName = $this->request->user()->group->name;
-                }
-
-                $groups[$groupName] = $this->makeProfileLink($this->request->user()->id, $this->request->user()->name);
-            } else {
-                $guests++;
             }
         }
 
         ksort($groups);
 
         return view('components.viewers', compact('groups', 'total', 'guests', 'registered', 'robots'));
+    }
+
+    /**
+     * Return raw aggregated data from db.
+     *
+     * @param string|null $path
+     * @return Collection
+     */
+    private function data($path): Collection
+    {
+        $result = $this
+            ->db
+            ->table('sessions')
+            ->when($path !== null, function (Builder $builder) use ($path) {
+                return $builder->where('path', 'LIKE', mb_strtolower($path) . '%');
+            })
+            ->groupBy(['user_id', 'robot'])
+            ->get(['user_id', 'robot', new Expression('COUNT(*)')]);
+
+        return $result;
+    }
+
+    /**
+     * Map raw object into Session class model.
+     *
+     * @param Collection $collection
+     * @return Collection
+     */
+    private function map(Collection $collection): Collection
+    {
+        return $collection->map(function ($item) {
+            return new Session((array) $item);
+        });
     }
 
     /**
@@ -127,18 +165,18 @@ class Viewers
     }
 
     /**
-     * @param Collection $collection
+     * @param Session[] $collection
      * @return Collection
      */
     private function unique(Collection $collection)
     {
         $guests = $collection->filter(function (Session $item) {
-            return $item->user_id === null;
+            return $item->userId === null;
         });
 
         $collection
             ->filter(function (Session $item) {
-                return $item->user_id !== null;
+                return $item->userId !== null;
             })
             ->unique('user_id')
             ->each(function (Session $item) use ($guests) {

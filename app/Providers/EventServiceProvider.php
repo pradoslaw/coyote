@@ -4,15 +4,20 @@ namespace Coyote\Providers;
 
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
+use Coyote\Events\PaymentPaid;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Events\UserWasSaved;
+use Coyote\Listeners\BoostJobOffer;
 use Coyote\Listeners\ChangeImageUrl;
+use Coyote\Listeners\ChangePaymentStatus;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
+use Coyote\Listeners\LogSentMessage;
 use Coyote\Listeners\MicroblogListener;
 use Coyote\Listeners\SaveLocationsInJobPreferences;
 use Coyote\Listeners\SendLockoutEmail;
 use Coyote\Listeners\SendSuccessfulLoginEmail;
+use Coyote\Listeners\SetupLoginDate;
 use Coyote\Listeners\SetupWikiLinks;
 use Coyote\Listeners\WikiListener;
 use Coyote\Listeners\PageListener;
@@ -20,6 +25,7 @@ use Coyote\Listeners\PostListener;
 use Coyote\Listeners\TopicListener;
 use Coyote\Listeners\JobListener;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Mail\Events\MessageSending;
 
@@ -36,7 +42,8 @@ class EventServiceProvider extends ServiceProvider
         FirewallWasSaved::class => [FlushFirewallCache::class],
         FirewallWasDeleted::class => [FlushFirewallCache::class],
         SuccessfulLogin::class => [SendSuccessfulLoginEmail::class],
-        MessageSending::class => [ChangeImageUrl::class]
+        Login::class => [SetupLoginDate::class],
+        MessageSending::class => [ChangeImageUrl::class, LogSentMessage::class]
     ];
 
     /**
@@ -61,8 +68,10 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
+        // set high priority. we need to call this listener first.
+        $this->app['events']->listen(PaymentPaid::class, ChangePaymentStatus::class, 1001);
+        $this->app['events']->listen(PaymentPaid::class, BoostJobOffer::class, 1000);
 
-        //
+        parent::boot();
     }
 }

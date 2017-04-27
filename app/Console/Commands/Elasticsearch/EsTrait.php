@@ -23,4 +23,15 @@ trait EsTrait
 
         return $result;
     }
+
+    protected function dispatch()
+    {
+        $model = ucfirst($this->option('model'));
+
+        if (!$model) {
+            $this->all();
+        } else {
+            $this->one($model);
+        }
+    }
 }

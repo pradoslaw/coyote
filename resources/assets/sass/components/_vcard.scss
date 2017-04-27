@@ -38,6 +38,9 @@
   .list-inline {
     color: $gray-light;
     font-size: 12px;
+    max-width: 328px;
+
+    @include text-overflow;
 
     li {
       @include text-overflow;

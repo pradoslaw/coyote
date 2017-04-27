@@ -51,6 +51,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $abilities = [
         'adm-access',
         'adm-group',
+        'adm-payment',
         'forum-delete',
         'forum-update',
         'forum-lock',

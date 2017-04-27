@@ -183,6 +183,7 @@ return [
         Coyote\Providers\ConfigServiceProvider::class,
         Coyote\Providers\EventServiceProvider::class,
         Coyote\Providers\RouteServiceProvider::class,
+        Coyote\Providers\ViewServiceProvider::class,
         Coyote\Providers\AuthServiceProvider::class,
         Coyote\Providers\BroadcastServiceProvider::class,
         // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
@@ -227,7 +228,8 @@ return [
         // sentry, raportowanie bugow
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         // Fractal
-        Spatie\Fractal\FractalServiceProvider::class
+        Spatie\Fractal\FractalServiceProvider::class,
+        Swap\Laravel\SwapServiceProvider::class
     ],
     /*
     |--------------------------------------------------------------------------

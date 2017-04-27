@@ -47,7 +47,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
      * Find by user name (case insensitive)
      *
      * @param $name
-     * @return \Coyote\User|\Illuminate\Database\Query\Builder|null
+     * @return \Coyote\User|null
      */
     public function findByName($name)
     {
@@ -58,7 +58,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
      * Find by user email (case insensitive). Return only user with confirmed email.
      *
      * @param $email
-     * @return \Coyote\User|\Illuminate\Database\Query\Builder|null
+     * @return \Coyote\User|null
      */
     public function findByEmail($email)
     {
@@ -132,7 +132,17 @@ class UserRepository extends Repository implements UserRepositoryInterface
     {
         return $this
             ->model
-            ->select(['id', 'name', 'photo', 'email', 'is_active', 'is_blocked', 'is_confirm', 'alert_failure'])
+            ->select([
+                'id',
+                'name',
+                'photo',
+                'email',
+                'is_active',
+                'is_blocked',
+                'is_confirm',
+                'alert_failure',
+                'access_ip'
+            ])
             ->whereRaw("LOWER($field) = ?", [mb_strtolower($value)]);
     }
 }

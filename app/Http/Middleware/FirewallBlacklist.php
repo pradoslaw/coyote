@@ -4,16 +4,16 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Coyote\Exceptions\ForbiddenException;
-use Coyote\Repositories\Contracts\FirewallRepositoryInterface as FirewallRepository;
+use Coyote\Services\Firewall\Rules;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 class FirewallBlacklist
 {
     /**
-     * @var FirewallRepository
+     * @var Rules
      */
-    private $firewall;
+    private $rules;
 
     /**
      * @var Guard
@@ -21,12 +21,12 @@ class FirewallBlacklist
     private $auth;
 
     /**
-     * @param FirewallRepository $firewall
+     * @param Rules $rules
      * @param Guard $auth
      */
-    public function __construct(FirewallRepository $firewall, Guard $auth)
+    public function __construct(Rules $rules, Guard $auth)
     {
-        $this->firewall = $firewall;
+        $this->rules = $rules;
         $this->auth = $auth;
     }
 
@@ -55,7 +55,7 @@ class FirewallBlacklist
      */
     protected function handleFirewallRules(Request $request)
     {
-        $firewall = $this->firewall->filter($this->auth->id(), $request->ip());
+        $firewall = $this->rules->find($this->auth->id(), $request->ip());
 
         if ($firewall !== null) {
             throw new ForbiddenException($firewall);

@@ -13,11 +13,11 @@ import Map from '../../libs/map';
 function toInt(data) {
     for (let item in data) {
         if (data.hasOwnProperty(item)) {
-            if (typeof(data[item]) == 'boolean') {
+            if (typeof(data[item]) === 'boolean') {
                 data[item] = +data[item];
             }
 
-            if (typeof(data[item]) == 'object') {
+            if (typeof(data[item]) === 'object') {
                 data[item] = toInt(data[item]);
             }
         }
@@ -25,6 +25,8 @@ function toInt(data) {
 
     return data;
 }
+
+Vue.component('changer', require('../../components/changer.vue'));
 
 new Vue({
     el: '.submit-form',
@@ -63,6 +65,21 @@ new Vue({
 
         $('#tags-container').each(function () {
             $(this).sortable();
+        });
+
+        // ugly hack to initialize jquery fn after dom is loaded
+        $(() => {
+            $.uploader({
+                input: 'logo',
+                onChanged: data => {
+                    this.firm.thumbnail = $('.img-container > img').attr('src');
+                    this.firm.logo = data.name;
+                },
+                onDeleted: () => {
+                    this.firm.logo = null;
+                    this.firm.thumbnail = null;
+                }
+            });
         });
 
         $('[v-loader]').remove();
@@ -132,7 +149,7 @@ new Vue({
                         'class': 'btn btn-primary'
                     },
                     onClick: () => {
-                        this.newFirm();
+                        this._newFirm();
                         dialog.close();
                     }
                 }]
@@ -148,7 +165,8 @@ new Vue({
 
             this.benefits = this.firm.benefits;
 
-            tinymce.get('description').setContent(this.firm.description);
+            // text can not be NULL
+            tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
         },
         changeFirm: function () {
             if (!this.firm.name) {
@@ -171,7 +189,7 @@ new Vue({
                         'class': 'btn btn-primary'
                     },
                     onClick: () => {
-                        this.newFirm();
+                        this._newFirm();
                         dialog.close();
                     }
                 }]
@@ -179,12 +197,13 @@ new Vue({
 
             dialog.show();
         },
-        newFirm: function () {
+        _newFirm: function () {
             this.firm = {
                 'id': null,
                 'name': null,
                 'headline': '',
                 'logo': null,
+                'thumbnail': null,
                 'description': null,
                 'website': null,
                 'is_private': +false,
@@ -217,6 +236,9 @@ new Vue({
         _setupMarker: function () {
             this.map.removeMarker(this.marker);
             this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
+        },
+        changePlan: function (value) {
+            this.job.plan_length = value;
         }
     },
     computed: {
@@ -288,34 +310,5 @@ $(() => {
         $('input[name="done"]').val(1);
     });
 
-    $('.jumbotron .btn-close').click(() => {
-        $('.jumbotron .close').click();
-    });
-
-    $('.submit-form').on('focus', ':input', e => {
-        let $this = $(e.currentTarget);
-        let offset = $this.offset().top;
-        let name = $this.attr('name');
-
-        $('.sidebar-hint').hide();
-
-        if (typeof name !== 'undefined') {
-            name = name.replace('[', '').replace(']', '');
-
-            $('#hint-' + name).fadeIn();
-            offset -= $('aside').offset().top;
-
-            $('#hint-container').css('top', offset);
-        }
-    });
-
-    $.uploader({
-        input: 'logo',
-        onChanged: function(data) {
-            $('#firm-form').find('input[name="logo"]').val(data.name);
-        },
-        onDeleted: function() {
-            $('#firm-form').find('input[name="logo"]').val('');
-        }
-    });
+    $('i[data-toggle="tooltip"]').tooltip();
 });

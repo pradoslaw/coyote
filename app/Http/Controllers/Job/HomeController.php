@@ -55,7 +55,7 @@ class HomeController extends BaseController
         }
 
         // if user want to filter job offers, we MUST select "all" tab
-        if ($this->notEmpty($this->request, ['q', 'city', 'remote', 'tag'])) {
+        if (!empty(array_intersect(['q', 'city', 'remote', 'tag'], array_keys($this->request->input())))) {
             $this->tab = self::TAB_ALL;
         }
 
@@ -63,9 +63,7 @@ class HomeController extends BaseController
             $this->builder->setPreferences($this->preferences);
         }
 
-        $this->builder->setSessionId(md5($this->request->session()->getId()));
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
-
         $this->request->session()->put('current_url', $this->request->fullUrl());
 
         return $this->load();
@@ -123,17 +121,17 @@ class HomeController extends BaseController
 
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)
-        $jobs = $result->getSource();
+        $listing = $result->getSource();
 
         $context = !$this->request->has('q') ? 'global.' : '';
         $aggregations = [
-            'cities'        => $result->getAggregations("${context}locations.locations_city_original"),
-            'tags'          => $result->getAggregations("${context}tags"),
-            'remote'        => $result->getAggregations("${context}remote")
+            'cities'        => $result->getAggregationCount("${context}locations.locations_city_original"),
+            'tags'          => $result->getAggregationCount("${context}tags"),
+            'remote'        => $result->getAggregationCount("${context}remote")
         ];
 
         $pagination = new LengthAwarePaginator(
-            $jobs,
+            $listing,
             $result->total(),
             SearchBuilder::PER_PAGE,
             LengthAwarePaginator::resolveCurrentPage(),
@@ -161,25 +159,13 @@ class HomeController extends BaseController
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),
             'currency_list'     => Currency::getCurrenciesList(),
-            'preferences'       => $this->preferences
-        ])->with(
-            compact('jobs', 'aggregations', 'pagination', 'subscribes', 'selected')
-        );
-    }
-
-    /**
-     * @param Request $request
-     * @param string[] $keys
-     * @return bool
-     */
-    protected function notEmpty(Request $request, array $keys)
-    {
-        foreach ($keys as $key) {
-            if ($request->has($key)) {
-                return true;
-            }
-        }
-
-        return false;
+            'preferences'       => $this->preferences,
+            'listing'           => $listing,
+            'premium_listing'   => $result->getAggregationHits('premium_listing', true),
+            'aggregations'      => $aggregations,
+            'pagination'        => $pagination,
+            'subscribes'        => $subscribes,
+            'selected'          => $selected
+        ]);
     }
 }

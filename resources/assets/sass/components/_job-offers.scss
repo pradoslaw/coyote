@@ -7,12 +7,15 @@
   color: $gray;
 }
 
-#box-job-offers {
+#hire-me {
   .panel-default {
     border: 2px solid lighten($brand-primary, 5%);
   }
 
-  > h4 {
+  // Headline image
+  // -----------------
+
+  h4 {
     a {
       background: url("/img/search-headline.png") no-repeat;
       text-indent: -9999px;
@@ -79,6 +82,7 @@
     padding-bottom: 1px;
     font-size: $font-size-base;
     font-weight: bold;
+    color: $brand-primary;
 
     @include text-overflow;
   }

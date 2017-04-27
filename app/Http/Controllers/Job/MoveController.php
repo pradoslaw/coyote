@@ -8,8 +8,9 @@ use Coyote\Events\TopicWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
-use Coyote\Repositories\Contracts\StreamRepositoryInterface;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
+use Coyote\Services\Forum\TreeBuilder;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Job;
@@ -20,22 +21,62 @@ use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 class MoveController extends Controller
 {
     /**
+     * @var ForumRepository
+     */
+    private $forum;
+
+    /**
+     * @var TopicRepository
+     */
+    private $topic;
+
+    /**
+     * @var PostRepository
+     */
+    private $post;
+
+    /**
+     * @var StreamRepository
+     */
+    private $stream;
+
+    /**
+     * @param ForumRepository $forum
+     * @param TopicRepository $topic
+     * @param PostRepository $post
+     * @param StreamRepository $stream
+     */
+    public function __construct(
+        ForumRepository $forum,
+        TopicRepository $topic,
+        PostRepository $post,
+        StreamRepository $stream
+    ) {
+        parent::__construct();
+
+        $this->forum = $forum;
+        $this->topic = $topic;
+        $this->post = $post;
+        $this->stream = $stream;
+    }
+
+    /**
      * @param Job $job
      * @return \Illuminate\View\View
      */
     public function index($job)
     {
-        $forum = app(ForumRepository::class);
-
         $this->breadcrumb->push([
             'Praca' => route('job.home'),
             $job->title => route('job.offer', [$job->id, $job->slug]),
             'Przenieś ofertę pracy' => ''
         ]);
 
+        $treeBuilder = new TreeBuilder();
+
         return $this->view('job.move')->with([
-            'forumList'         => $forum->choices('id'),
-            'preferred'         => $forum->findBy('name', 'Ogłoszenia drobne', ['id']),
+            'forumList'         => $treeBuilder->listById($this->forum->list()),
+            'preferred'         => $this->forum->findBy('name', 'Ogłoszenia drobne', ['id']),
             'job'               => $job,
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
         ]);
@@ -52,19 +93,16 @@ class MoveController extends Controller
             'forum_id' => 'required|integer|exists:forums,id'
         ]);
 
-        $forum = app(ForumRepository::class)->find($request->input('forum_id'));
+        $forum = $this->forum->find($request->input('forum_id'));
         /** @var \Coyote\Topic $topic */
-        $topic = app(TopicRepository::class)->newInstance();
+        $topic = $this->topic->newInstance();
         /** @var \Coyote\Post $post */
-        $post = app(PostRepository::class)->newInstance();
+        $post = $this->post->newInstance();
 
         $topic->fill(['subject' => $job->title]);
         $topic->forum()->associate($forum);
 
-        /** @var StreamRepositoryInterface $stream */
-        $stream = app(StreamRepositoryInterface::class);
-
-        $log = $stream->findWhere(['object.objectType' => 'job', 'object.id' => $job->id, 'verb' => 'create'])->first();
+        $log = $this->stream->findWhere(['object.objectType' => 'job', 'object.id' => $job->id, 'verb' => 'create'])->first();
 
         $post->forceFill([
             'user_id'   => $job->user_id,

@@ -336,6 +336,8 @@ header.navbar-default {
           margin: 1px 0;
           font-weight: bold;
           font-family: Arial, sans-serif;
+          color: $brand-primary;
+
           @include text-overflow();
         }
 

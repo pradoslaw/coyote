@@ -11,7 +11,7 @@ return [
             'rest_base'        => '',      // string|array
             'active_element'   => 'item',  // item|link
         ],
-        'master' => [
+        '__master_menu___' => [
             'restful'           => true
         ],
         '_forum' => [
@@ -22,7 +22,7 @@ return [
             'auto_activate'    => false
         ]
     ],
-    'master' => [
+    '__master_menu___' => [
         'Forum' => ['route' => 'forum.home'],
         'Mikroblogi' => ['route' => 'microblog.home'],
         'Praca' => ['route' => 'job.home'],

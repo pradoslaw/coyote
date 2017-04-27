@@ -3,7 +3,7 @@
 namespace Coyote\Services\LogViewer;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class LogViewer
 {
@@ -61,7 +61,7 @@ class LogViewer
         $result = [];
 
         if (!$this->filesystem->exists($file)) {
-            throw new FileNotFoundException(sprintf('Could not find %s file in logs.', $file));
+            throw new HttpException(404, sprintf('Could not find %s file in logs.', $file));
         }
 
         $lines = explode("\n", $this->filesystem->get($file));
@@ -82,7 +82,7 @@ class LogViewer
 
                 if ($this->parseMessage($message, $matches)) {
                     $current = $this->compile($matches);
-                    $current = array_merge($current, json_decode($header[3], true));
+                    $current = array_merge($current, (array) json_decode($header[3], true));
                 }
 
                 $stack = &$result[count($result) - 1]['stack'];

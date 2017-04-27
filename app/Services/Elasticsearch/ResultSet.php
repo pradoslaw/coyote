@@ -35,7 +35,7 @@ class ResultSet implements \Countable, \IteratorAggregate
             $this->took = $response['took'];
 
             if (isset($response['aggregations'])) {
-                $this->aggregations = ($response['aggregations']);
+                $this->aggregations = $response['aggregations'];
             }
         }
     }
@@ -142,17 +142,49 @@ class ResultSet implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @param null $name
+     * @param string $name
      * @return \Illuminate\Support\Collection|array
      */
-    public function getAggregations($name = null)
+    public function getAggregationCount($name)
     {
-        if (!$name) {
-            return $this->aggregations;
+        if (!array_has($this->aggregations, $name)) {
+            return [];
         }
 
         $data = array_get($this->aggregations, "$name.buckets");
+
         return collect($data)->pluck('doc_count', 'key');
+    }
+
+    /**
+     * @param string $name
+     * @param string $key
+     * @return \Illuminate\Support\Collection|array
+     */
+    public function getAggregationHits($name, $key)
+    {
+        if (!isset($this->aggregations[$name])) {
+            return [];
+        }
+
+        $collection = collect();
+
+        foreach ($this->aggregations[$name]['buckets'] as $bucket) {
+            if ($bucket['key'] == $key) {
+                $collection = $this->collect($bucket[$name]['hits']['hits']);
+            }
+        }
+
+        return $collection->pluck('_source');
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function getAggregations($name)
+    {
+        return array_get($this->aggregations, $name);
     }
 
     /**

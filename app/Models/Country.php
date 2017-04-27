@@ -4,6 +4,11 @@ namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $name
+ * @property string $code
+ * @property float $vat_rate
+ */
 class Country extends Model
 {
     /**

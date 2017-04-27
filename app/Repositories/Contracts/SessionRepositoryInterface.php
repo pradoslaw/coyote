@@ -2,45 +2,42 @@
 
 namespace Coyote\Repositories\Contracts;
 
-use Carbon\Carbon;
-
-interface SessionRepositoryInterface extends RepositoryInterface
+interface SessionRepositoryInterface
 {
     /**
-     * Set updated_at with current timestamp.
-     *
      * @param string $sessionId
+     * @param array $payload
      */
-    public function extend($sessionId);
+    public function set(string $sessionId, array $payload);
 
     /**
-     * Remove old sessions from session_log table.
-     */
-    public function purge();
-
-    /**
-     * Pobiera liste sesji uzytkownikow ktorzy odwiedzaja dana strone
-     *
-     * @param null $path
+     * @param string $sessionId
      * @return mixed
      */
-    public function byPath($path = null);
+    public function destroy(string $sessionId);
 
     /**
-     * Sprawdza czy dany user jest online. Wykorzystywane np. na stronie profilu uzytkownika Zwracana
-     * jest data ostatniej aktywnosci uzytkownika (jezeli ten jest aktualnie online)
+     * Return session as serialized string (required by laravel's session)
      *
-     * @param $userId
-     * @return \Carbon\Carbon
+     * @param string $sessionId
+     * @return mixed
      */
-    public function updatedAt($userId);
+    public function get(string $sessionId);
 
     /**
-     * Find first user's visit ever. This method is helpful to show unreaded posts/categories since last visit.
-     *
-     * @param int $userId
-     * @param null|string $sessionId
-     * @return string|Carbon
+     * @return \Coyote\Session[]
      */
-    public function findFirstVisit($userId, $sessionId = null);
+    public function all();
+
+    /**
+     * @param string|null $path
+     * @return \Coyote\Session[]
+     */
+    public function getByPath($path = null);
+
+    /**
+     * @param int $lifetime
+     * @return bool
+     */
+    public function gc(int $lifetime);
 }

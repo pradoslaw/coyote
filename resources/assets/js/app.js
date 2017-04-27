@@ -17,12 +17,13 @@ import './components/popover.js';
 import './components/flag.js';
 import './bootstrap';
 
+import Config from './libs/config';
+import Router from './libs/router';
+
 window.ws = RealtimeFactory();
 
 import './components/notifications.js';
 import './components/pm.js';
-import Config from './libs/config';
-import Router from './libs/router';
 
 $(function () {
     'use strict';
@@ -42,14 +43,24 @@ $(function () {
             },
             'user'
         );
-    }).on('/Praca/Application/*', () => {
+    })
+    .on('/Praca/Application/*', () => {
         require.ensure([],
             require => {
                 require('./pages/job/application');
             },
             'application'
         );
-    }).on('/Adm/Firewall/*', () => {
+    })
+    .on('/Praca/Payment/*', () => {
+        require.ensure([],
+            require => {
+                require('./pages/job/payment');
+            },
+            'payment'
+        );
+    })
+    .on('/Adm/Firewall/*', () => {
         require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
             require('flatpickr');
             const Polish = require('flatpickr/dist/l10n/pl.js').pl;

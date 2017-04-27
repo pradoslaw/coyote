@@ -62,6 +62,8 @@ class BaseController extends Controller
             foreach ($files as $file) {
                 $log->add($file, route('adm.log', ['file' => $file]));
             }
+
+            $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-shopping-cart fa-fw'))->data('permission', 'adm-payment');
         })
         ->filter(function ($item) {
             if ($item->data('permission')) {
@@ -70,6 +72,14 @@ class BaseController extends Controller
 
             return true;
         });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function view($view = null, $data = [])
+    {
+        return parent::view($view, array_merge($data, ['menu' => $this->buildMenu()]));
     }
 
     /**

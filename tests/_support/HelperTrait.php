@@ -15,6 +15,7 @@ trait HelperTrait
                 'password'   => $fake->password,
                 'created_at' => new \DateTime(),
                 'updated_at' => new \DateTime(),
+                'guest_id'   => \Faker\Provider\Uuid::uuid()
             ],
             $data
         );

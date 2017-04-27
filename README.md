@@ -17,17 +17,17 @@ Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
     * php-pgsql
     * php-mongodb
     * php-xml
-* PostgreSQL >= 9.3
+* PostgreSQL >= 9.4
 * MongoDB >= 2.7
 * composer
 * node.js
 * npm
 * git
+* Redis
+* Elasticsearch 5.0
 
 ### Zalecane
 
-* Redis
-* Elasticsearch 5.0
 * Supervisor
 
 ## Instalacja

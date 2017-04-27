@@ -136,6 +136,10 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     public function applyCriteria(callable $callable = null)
     {
         if ($this->skipCriteria === true) {
+            if (!is_null($callable)) {
+                return $callable();
+            }
+
             return $this;
         }
 
@@ -227,6 +231,18 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
+     * @param array $ids
+     * @param array $columns
+     * @return mixed
+     */
+    public function findMany(array $ids, $columns = ['*'])
+    {
+        return $this->applyCriteria(function () use ($ids, $columns) {
+            return $this->model->findMany($ids, $columns);
+        });
+    }
+
+    /**
      * @param $id
      * @param array $columns
      * @return mixed
@@ -313,6 +329,16 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
         $this->resetModel();
 
         return $paginator;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function last()
+    {
+        return $this->applyCriteria(function () {
+            return $this->model->orderBy('id', 'DESC')->first();
+        });
     }
 
     /**

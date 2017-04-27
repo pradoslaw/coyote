@@ -12,31 +12,31 @@
 
     > a,
     > span {
-      color: $gray-light;
+      color: $tag-color;
       font-size: 12px;
       display: inline-block;
       padding: 4px 7px;
       text-shadow: 1px 1px 1px white;
-      background: $gray-lighter;
+      background: $tag-bg;
       margin: 1px 1px 1px 0;
       border-radius: 5px;
       transition: all .25s linear;
     }
 
+    // Tag counter
+    // --------------------
+
     > a + small,
     > span + small {
       margin-left: 2px;
+      font-size: 10px;
+      color: $tag-counter-color;
     }
 
     > a:hover {
       text-decoration: none;
-      color: #D7661C;
-      background: darken($gray-lighter, 2%);
-    }
-
-    small {
-      font-size: 10px;
-      color: lighten($gray-light, 10%);
+      color: $tag-hover-color;
+      background: $tag-hover-bg;
     }
 
     &:last-child {
@@ -101,10 +101,10 @@
 
     span {
       font-size: 11px;
-      background: #EEE;
+      background: $tag-bg;
       border-radius: 5px;
       display: inline;
-      color: #7D7D7D;
+      color: $tag-color;
       padding: 4px 10px;
       text-shadow: 1px 1px 1px #FFF;
       position: relative;
@@ -113,7 +113,7 @@
 
     &.hover {
       background-color: #F8F8F8;
-      color: #D7661C;
+      color: $tag-hover-color;
     }
 
     small {

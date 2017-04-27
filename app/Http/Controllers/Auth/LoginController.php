@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\LoginForm;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
@@ -18,21 +17,10 @@ class LoginController extends Controller
 {
     use ThrottlesLogins;
 
-    /**
-     * @var UserRepository
-     */
-    private $user;
-
-    /**
-     * LoginController constructor.
-     * @param UserRepository $user
-     */
-    public function __construct(UserRepository $user)
+    public function __construct()
     {
         parent::__construct();
         $this->middleware('guest', ['except' => 'signout']);
-
-        $this->user = $user;
     }
 
     /**
@@ -69,14 +57,8 @@ class LoginController extends Controller
         if (auth()->attempt(['name' => $user->name, 'password' => $form->password->getValue()], true)) {
             // put information into the activity stream...
             stream(Stream_Login::class);
-            // send notification about new login
-            event(
-                new SuccessfulLogin(
-                    auth()->user(),
-                    $form->getRequest()->ip(),
-                    substr((string) $form->getRequest()->header('User-Agent'), 0, 900)
-                )
-            );
+            // send notification about new signin
+            $this->fireSuccessfulLoginEvent($form->getRequest());
 
             return redirect()->intended(route('home'));
         }
@@ -108,14 +90,14 @@ class LoginController extends Controller
      */
     public function signout(Request $request)
     {
-        $user = $this->user->findOrFail($this->userId);
+        $this->auth->ip = $request->ip();
+        // metoda browser() nie jest dostepna dla testow funkcjonalnych
+        $this->auth->browser = $request->browser();
+        $this->auth->visits += 1;
+        $this->auth->visited_at = Carbon::now();
+        $this->auth->is_online = false;
 
-        $user->ip = $request->ip();
-        $user->browser = $request->browser(); // metoda browser() nie jest dostepna dla testow funkcjonalnych
-        $user->visited_at = Carbon::now();
-        $user->visits = $this->auth->visits + 1;
-        $user->is_online = false;
-        $user->save();
+        $this->auth->save();
 
         stream(Stream_Logout::class);
 
@@ -141,5 +123,19 @@ class LoginController extends Controller
     protected function maxLoginAttempts()
     {
         return 3;
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function fireSuccessfulLoginEvent(Request $request)
+    {
+        event(
+            new SuccessfulLogin(
+                auth()->user(),
+                $request->ip(),
+                substr((string) $request->header('User-Agent'), 0, 900)
+            )
+        );
     }
 }

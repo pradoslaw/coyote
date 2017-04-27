@@ -2,9 +2,11 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Carbon\Carbon;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Services\Session\Registered;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Agent;
 
@@ -19,13 +21,14 @@ class HomeController extends BaseController
      */
     public function index(UserRepository $user, SessionRepository $session)
     {
-        $sessions = $session->where('user_id', $this->userId)->get();
+        $sessions = $session->all()->where('user_id', $this->userId);
 
         foreach ($sessions as &$row) {
             $agent = new Agent();
             $agent->setUserAgent($row['browser']);
 
             $row['agent'] = $agent;
+            $row['updated_at'] = Carbon::createFromTimestamp($row['updated_at']);
         }
 
         return $this->view('user.home', [

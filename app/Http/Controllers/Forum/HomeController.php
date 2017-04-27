@@ -15,6 +15,8 @@ use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
+use Coyote\Services\Forum\TreeBuilder;
+use Coyote\Services\Forum\Personalizer;
 use Illuminate\Http\Request;
 use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
@@ -30,13 +32,25 @@ class HomeController extends BaseController
     private $tabs;
 
     /**
+     * @var Personalizer
+     */
+    private $personalizer;
+
+    /**
      * @param ForumRepository $forum
      * @param TopicRepository $topic
      * @param PostRepository $post
+     * @param Personalizer $personalizer
      */
-    public function __construct(ForumRepository $forum, TopicRepository $topic, PostRepository $post)
-    {
+    public function __construct(
+        ForumRepository $forum,
+        TopicRepository $topic,
+        PostRepository $post,
+        Personalizer $personalizer
+    ) {
         parent::__construct($forum, $topic, $post);
+
+        $this->personalizer = $personalizer;
 
         $this->tabs = app(Menu::class)->make('_forum', function (Builder $menu) {
             foreach (config('laravel-menu._forum') as $title => $row) {
@@ -117,7 +131,13 @@ class HomeController extends BaseController
     {
         $this->pushForumCriteria();
         // execute query: get all categories that user can has access
-        $sections = $this->forum->groupBySections($this->userId, $this->sessionId);
+        $sections = $this->forum->categories($this->userId, $this->guestId);
+        // establish forum's marked date
+        $sections = $this->personalizer->markUnreadCategories($sections);
+
+        $treeBuilder = new TreeBuilder();
+        $sections = $treeBuilder->sections($sections);
+
         // get categories collapse
         $collapse = $this->collapse();
 
@@ -231,7 +251,7 @@ class HomeController extends BaseController
         $forums = $this->forum->all(['id']);
 
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, $this->userId, $this->sessionId);
+            $this->forum->markAsRead($forum->id, $this->userId, $this->guestId);
         }
     }
 
@@ -247,16 +267,18 @@ class HomeController extends BaseController
             $this->topic->pushCriteria(new SkipForum($this->forum->order->findHiddenIds($this->userId)));
         }
 
-        return $this
+        $paginator = $this
             ->topic
             ->paginate(
                 $this->userId,
-                $this->sessionId,
+                $this->guestId,
                 'topics.last_post_id',
                 'DESC',
                 $this->topicsPerPage($this->request)
             )
             ->appends($this->request->except('page'));
+
+        return $this->personalizer->markUnreadTopics($paginator);
     }
 
     /**

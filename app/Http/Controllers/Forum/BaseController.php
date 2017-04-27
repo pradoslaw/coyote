@@ -38,8 +38,6 @@ abstract class BaseController extends Controller
     {
         parent::__construct();
 
-        $this->public['uploadUrl'] = route('forum.upload');
-
         $this->forum = $forum;
         $this->topic = $topic;
         $this->post = $post;
@@ -51,6 +49,8 @@ abstract class BaseController extends Controller
             if ($forum instanceof Forum) {
                 $this->breadcrumb($forum);
             }
+
+            $request->attributes->set('uploadUrl', route('forum.upload'));
 
             return $next($request);
         });
@@ -126,7 +126,7 @@ abstract class BaseController extends Controller
         $tags = $this->getSetting('forum.tags');
 
         if ($tags) {
-            $tags = json_decode($tags);
+            $tags = (array) json_decode($tags);
 
             $weight = $this->forum->getTagsWeight($tags);
             $diff = array_diff($tags, array_keys($weight));

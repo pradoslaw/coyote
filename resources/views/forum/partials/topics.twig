@@ -50,11 +50,13 @@
                                     <dd>
                                         <a href="{{ url }}?page=1">1</a>
 
-                                        {% if pages > 3 %}
+                                        {% if pages > 4 %}
                                             ...
+                                        {% elseif pages == 4 %}
+                                            <a href="{{ url }}?page=2">2</a>
                                         {% endif %}
 
-                                        {% for i in max(2, pages - 3)..pages %}
+                                        {% for i in max(2, pages - 1)..pages %}
                                             <a href="{{ url }}?page={{ i }}">{{ i }}</a>
                                         {% endfor %}
                                     </dd>

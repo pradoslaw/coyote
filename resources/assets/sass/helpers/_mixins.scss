@@ -1,3 +1,4 @@
+
 @mixin text-overflow() {
   overflow: hidden;
   white-space: nowrap;
@@ -21,12 +22,20 @@
 @mixin adjust-list-padding() {
   // default padding is too big
   ul, ol {
-    padding-left: 16px;
+    padding-left: 24px;
   }
 }
 
 @mixin link-color-darker() {
   a {
     color: $link-color-darker;
+  }
+}
+
+@mixin stripped-table() {
+  table {
+    @extend .table;
+    @extend .table-striped;
+    @extend .table-bordered;
   }
 }

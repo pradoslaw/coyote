@@ -49,6 +49,11 @@ class Post extends Model
     protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at'];
+
+    /**
      * Elasticsearch type mapping
      *
      * @var array
