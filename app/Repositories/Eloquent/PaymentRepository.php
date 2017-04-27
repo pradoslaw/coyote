@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Eloquent;
 use Carbon\Carbon;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\PaymentRepositoryInterface;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
 
 class PaymentRepository extends Repository implements PaymentRepositoryInterface
@@ -41,7 +42,9 @@ class PaymentRepository extends Repository implements PaymentRepositoryInterface
             ->model
             ->select(['days', 'job_id', 'ends_at'])
             ->where('ends_at', '>', Carbon::now())
-            ->with('job')
+            ->with(['job' => function (BelongsTo $builder) {
+                $builder->whereNotNull('deleted_at'); // shouldn't laravel do this for us? anyway, no deleted offers!
+            }])
             ->get();
     }
 

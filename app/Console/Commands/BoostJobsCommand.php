@@ -48,7 +48,8 @@ class BoostJobsCommand extends Command
         foreach ($payments as $payment) {
             $every = floor($payment->days / 3);
 
-            if (Carbon::now() > Carbon::parse($payment->job->boost_at)->addDays($every)) {
+            // attention! job can be already removed.
+            if ($payment->job !== null && Carbon::now() > Carbon::parse($payment->job->boost_at)->addDays($every)) {
                 $payment->job->boost_at = Carbon::now();
                 $payment->job->save();
 

@@ -88,7 +88,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     public function getPopularTags($limit = 500)
     {
         return $this
-            ->getQuery()
+            ->getTagsQueryBuilder()
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->limit($limit)
             ->get()
@@ -125,7 +125,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
         $this->applyCriteria();
 
         return $this
-            ->getQuery()
+            ->getTagsQueryBuilder()
             ->whereIn('job_tags.tag_id', $tagsId)
             ->get()
             ->pluck('count', 'name');
@@ -228,7 +228,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     /**
      * @return mixed
      */
-    private function getQuery()
+    private function getTagsQueryBuilder()
     {
         return $this
             ->app
