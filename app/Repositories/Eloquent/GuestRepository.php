@@ -20,8 +20,12 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(Session $session): Guest
+    public function save(Session $session)
     {
+        if (empty($session->guestId)) {
+            return;
+        }
+
         /** @var Guest $guest */
         $guest = $this->model->findOrNew($session->guestId);
 
@@ -36,8 +40,6 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
         }
 
         $guest->save();
-
-        return $guest;
     }
 
     /**
