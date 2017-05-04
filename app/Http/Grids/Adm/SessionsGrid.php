@@ -51,10 +51,10 @@ class SessionsGrid extends Grid
                 'decorators' => [new Ip()],
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'sessions.ip'])
             ])
-            ->addColumn('url', [
+            ->addColumn('path', [
                 'title' => 'Strona',
                 'render' => function (Session $session) {
-                    return link_to($session->url);
+                    return link_to($session->path);
                 },
                 'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
             ])

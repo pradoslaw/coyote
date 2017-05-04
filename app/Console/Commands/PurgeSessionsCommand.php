@@ -83,7 +83,7 @@ class PurgeSessionsCommand extends Command
                 } else {
                     $this->extend($session);
 
-                    $path = str_limit(parse_url($session->url, PHP_URL_PATH), 999, '');
+                    $path = str_limit($session->path, 999, '');
 
                     $values[] = array_merge(
                         array_only($session->toArray(), ['id', 'user_id', 'robot']),

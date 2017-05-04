@@ -39,11 +39,6 @@ class Session implements \ArrayAccess, Arrayable
     /**
      * @var string
      */
-    public $url;
-
-    /**
-     * @var string
-     */
     public $path;
 
     /**

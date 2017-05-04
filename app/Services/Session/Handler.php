@@ -117,7 +117,7 @@ class Handler implements \SessionHandlerInterface
             if (!$request->ajax()) {
                 $path = str_limit($request->path(), 999, '');
 
-                $payload['url'] = str_limit($request->fullUrl(), 3999);
+                // we can't save "url" in session because laravel saves previous URL as url.intended
                 $payload['path'] = $path === '/' ? $path : ('/' . $path);
             }
         }
