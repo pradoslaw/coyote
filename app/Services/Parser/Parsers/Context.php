@@ -62,6 +62,7 @@ class Context extends Parser implements ParserInterface
         } elseif ($indent < $prev) {
             $sub[$indent + 1] = 0;
         }
+
         if (isset($sub[$indent])) {
             $sub[$indent]++;
         } else {
