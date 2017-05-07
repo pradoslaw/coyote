@@ -9,7 +9,7 @@ use Coyote\Stream;
 use Illuminate\Contracts\Auth\Guard;
 use \Illuminate\Contracts\Events\Dispatcher;
 
-class StreamManager
+class Manager
 {
     /**
      * @var StreamRepository

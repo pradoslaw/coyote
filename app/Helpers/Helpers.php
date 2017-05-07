@@ -61,7 +61,7 @@ function keywords($text, $limit = 10)
  */
 function stream($activity, $object = null, $target = null)
 {
-    $manager = app(\Coyote\Services\Stream\StreamManager::class);
+    $manager = app(\Coyote\Services\Stream\Manager::class);
 
     return $manager->save($activity, $object, $target);
 }
