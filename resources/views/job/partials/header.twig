@@ -48,22 +48,6 @@
                         <a href="{{ item.url }}">{{ item.title|raw }}</a>
                     </li>
                 {% endfor %}
-
-                {% if tab == 'filtered' and tabs.roots()|length == 2 %}
-                    <div class="alert alert-warning alert-popover left hidden-xs hidden-sm" data-id="job-pref" style="left: 285px">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
-
-                        Kliknij na ikonkę <i class="fa fa-cog"></i> aby ustawić preferencje wyszukiwania.
-                    </div>
-                {% endif %}
-
-                {% if tab != 'my_offers' and tabs.roots()|length == 3 %}
-                    <div class="alert alert-warning alert-popover left hidden-xs hidden-sm" data-id="job-my-offers" style="left: 355px">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
-
-                        <strong>Nowość!</strong> Kliknij, aby zobaczyć wszystkie dodane oferty.
-                    </div>
-                {% endif %}
             </ul>
         </div>
 

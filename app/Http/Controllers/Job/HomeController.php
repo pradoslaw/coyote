@@ -115,6 +115,16 @@ class HomeController extends BaseController
     /**
      * @return \Illuminate\View\View
      */
+    public function my()
+    {
+        $this->builder->addUserFilter($this->userId);
+
+        return $this->load();
+    }
+
+    /**
+     * @return \Illuminate\View\View
+     */
     private function load()
     {
         $result = $this->job->search($this->builder);

@@ -57,7 +57,6 @@ return [
     ],
     '_jobs' => [
         'Wszystkie' => ['route' => ['job.home', 'tab' => 'all'], 'nickname' => 'all'],
-        'Wybrane dla mnie' => ['route' => ['job.home', 'tab' => 'filtered'], 'nickname' => 'filtered'],
-        'Moje oferty' => ['route' => 'job.my', 'nickname' => 'my_offers', 'data' => ['role' => true]]
+        'Wybrane dla mnie' => ['route' => ['job.home', 'tab' => 'filtered'], 'nickname' => 'filtered']
     ]
 ];

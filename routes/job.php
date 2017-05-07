@@ -6,7 +6,6 @@
 /** @var $this \Illuminate\Routing\Router */
 $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home', 'middleware' => 'job.redirect']);
-    $this->get('My', ['uses' => 'MyOffersController@index', 'as' => 'my', 'middleware' => 'auth']);
 
     $this->get('Submit/{id?}', ['uses' => 'SubmitController@getIndex', 'as' => 'submit', 'middleware' => 'auth']);
     $this->post('Submit', ['uses' => 'SubmitController@postIndex', 'middleware' => 'auth']);
@@ -33,6 +32,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->get('Zdalna', ['uses' => 'HomeController@remote', 'as' => 'remote', 'middleware' => 'job.redirect']);
     $this->get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city', 'middleware' => 'job.redirect']);
     $this->get('Firma/{name}', ['uses' => 'HomeController@firm', 'as' => 'firm', 'middleware' => 'job.redirect']);
+    $this->get('My', ['uses' => 'HomeController@my', 'as' => 'my', 'middleware' => 'auth']);
 
     $this->get('{job}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer']);
 

@@ -124,6 +124,14 @@ class SearchBuilder extends QueryBuilder
     }
 
     /**
+     * @param int $userId
+     */
+    public function addUserFilter($userId)
+    {
+        $this->must(new Filters\Term('user_id', $userId));
+    }
+
+    /**
      * @return array
      */
     public function build()

@@ -1,5 +1,9 @@
 {% extends 'job.base' %}
 {%- block title -%}
+    {% if request().route().getName() == 'job.my' %}
+        Moje oferty ::
+    {% endif %}
+
     Praca
 
     {% if request('q') %}
@@ -147,8 +151,15 @@
 
                 <aside class="col-md-3 hidden-sm">
                     <ul class="side-menu">
-                        <li><a href="#"><i class="fa fa-fw fa-cog"></i> Preferencje wyszukiwania</a></li>
-                        <li><a href="#"><i class="fa fa-fw fa-user"></i> Pokaż tylko moje oferty</a></li>
+                        <li><a id="btn-editor"><i class="fa fa-fw fa-cog"></i> Preferencje wyszukiwania</a></li>
+
+                        {% if user('id') %}
+                            {% if request().route().getName() == 'job.my' %}
+                                <li><a href="{{ route('job.home') }}"><i class="fa fa-fw fa-user"></i> Pokaż wszystkie oferty</a></li>
+                            {% else %}
+                                <li><a href="{{ route('job.my') }}"><i class="fa fa-fw fa-user"></i> Pokaż tylko moje oferty</a></li>
+                            {% endif %}
+                        {% endif %}
                     </ul>
 
                     {% if subscribes|length %}

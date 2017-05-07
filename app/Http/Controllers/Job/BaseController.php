@@ -8,7 +8,6 @@ use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Illuminate\Http\Request;
 use Lavary\Menu\Builder;
-use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
 
 abstract class BaseController extends Controller
@@ -82,17 +81,6 @@ abstract class BaseController extends Controller
      */
     protected function getTabs()
     {
-        $this->tabs->filter(function (Item $item) {
-            if ($item->data('role') === true) {
-                return $this->userId !== null && $this->job->counterUserOffers($this->userId);
-            }
-
-            return true;
-        });
-
-        $icon = app('html')->tag('i', '', ['id' => 'btn-editor', 'class' => 'fa fa-cog', 'title' => 'Ustaw swoje preferencje']);
-
-        $this->tabs->get('filtered')->append($icon);
         $this->tabs->get($this->tab)->active();
 
         return $this->tabs;
