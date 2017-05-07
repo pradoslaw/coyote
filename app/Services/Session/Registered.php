@@ -45,6 +45,6 @@ class Registered
             }
         }
 
-        return $collection->sortBy('name');
+        return $collection->sortBy('name', SORT_NATURAL);
     }
 }
