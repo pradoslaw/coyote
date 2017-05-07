@@ -115,6 +115,9 @@ class PurgeSessionsCommand extends Command
         $user->timestamps = false;
         // update only this field:
         $user->visited_at = Carbon::createFromTimestamp($session->updatedAt);
+        $user->ip = $session->ip;
+        $user->browser = $session->browser;
+        $user->is_online = true;
 
         $user->save();
     }
