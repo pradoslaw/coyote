@@ -20,7 +20,7 @@
 
                 <p>
                     {% if job.firm %}
-                        <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.name]) }}">{{ job.firm.name }}</a>
+                        <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}">{{ job.firm.name }}</a>
                     {% endif %}
 
                     <small class="location">

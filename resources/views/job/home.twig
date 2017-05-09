@@ -6,6 +6,10 @@
 
     Praca
 
+    {% if firm %}
+        w firmie {{ firm }}
+    {% endif %}
+
     {% if request('q') %}
         {{ request('q') }}
     {% endif %}

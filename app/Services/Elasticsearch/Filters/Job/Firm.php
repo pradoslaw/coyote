@@ -13,6 +13,6 @@ class Firm extends Term implements DslInterface
      */
     public function __construct($name)
     {
-        parent::__construct('firm.name.original', mb_strtolower($name));
+        parent::__construct('firm.slug', mb_strtolower($name));
     }
 }

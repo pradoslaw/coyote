@@ -200,6 +200,10 @@ class Job extends Model
                         // filtrujemy firmy po tym polu
                         "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
                     ]
+                ],
+                "slug" => [
+                    "type" => "text",
+                    "analyzer" => "keyword_analyzer"
                 ]
             ]
         ],
@@ -684,7 +688,7 @@ class Job extends Model
         if ($this->firm_id) {
             // logo is instance of File object. casting to string returns file name.
             // cast to (array) if firm is empty.
-            $body['firm'] = array_map('strval', (array) array_only($this->firm->toArray(), ['name', 'logo']));
+            $body['firm'] = array_map('strval', (array) array_only($this->firm->toArray(), ['name', 'logo', 'slug']));
         }
 
         return $body;

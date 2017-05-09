@@ -92,14 +92,14 @@ class HomeController extends BaseController
     }
 
     /**
-     * @param $name
+     * @param $slug
      * @return \Illuminate\View\View
      */
-    public function firm($name)
+    public function firm($slug)
     {
-        $this->builder->addFirmFilter($name);
+        $this->builder->addFirmFilter($slug);
 
-        return $this->load();
+        return $this->load(['firm' => $slug]);
     }
 
     /**
@@ -125,7 +125,7 @@ class HomeController extends BaseController
     /**
      * @return \Illuminate\View\View
      */
-    private function load()
+    private function load(array $data = [])
     {
         $result = $this->job->search($this->builder);
 
@@ -165,7 +165,7 @@ class HomeController extends BaseController
             ];
         }
 
-        return $this->view('job.home', [
+        return $this->view('job.home', array_merge($data, [
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),
             'currency_list'     => Currency::getCurrenciesList(),
@@ -176,6 +176,6 @@ class HomeController extends BaseController
             'pagination'        => $pagination,
             'subscribes'        => $subscribes,
             'selected'          => $selected
-        ]);
+        ]));
     }
 }

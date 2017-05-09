@@ -137,6 +137,7 @@ class Firm extends Model
         $name = trim($name);
 
         $this->attributes['name'] = $name;
+        $this->attributes['slug'] = str_slug($name, '_');
     }
 
     /**
