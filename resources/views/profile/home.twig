@@ -128,20 +128,23 @@
         </div>
         <div class="col-md-3">
             <ul class="side-menu">
-                <li>
-                    <a href="{{ route('user.pm.submit', {to: user.name}) }}"><i class="fa fa-fw fa-envelope"></i> Wyślij wiadomość</a>
-                </li>
+                {% if user.id != user('id') %}
+                    <li>
+                        <a href="{{ route('user.pm.submit', {to: user.name}) }}"><i class="fa fa-fw fa-envelope"></i> Wyślij wiadomość</a>
+                    </li>
+                {% endif %}
 
                 <li>
                     <a href="{{ route('forum.user', [user.id]) }}"><i class="fa fa-fw fa-search"></i> Znajdź posty użytkownika</a>
                 </li>
 
                 {% if can('adm-access') %}
-                    {% if not user.is_blocked and user.is_active %}
+                    {% if not user.is_blocked and user.is_active and user.id != user('id') %}
                         <li>
                             <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fa fa-ban fa-fw"></i> Zablokuj tego użytkownika</a>
                         </li>
                     {% endif %}
+
                     <li>
                         <a href="{{ route('adm.users.save', [user.id]) }}"><i class="fa fa-cogs fa-fw"></i> Przejdź do panelu administracyjnego</a>
                     </li>
