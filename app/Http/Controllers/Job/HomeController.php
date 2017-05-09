@@ -123,6 +123,7 @@ class HomeController extends BaseController
     }
 
     /**
+     * @param array $data
      * @return \Illuminate\View\View
      */
     private function load(array $data = [])
