@@ -15,6 +15,7 @@
 
 {% block description %}{{ excerpt(job.description) }}{% endblock %}
 {% block keywords %}{{ keywords(job.description)|join(',') }}{% endblock %}
+{% block logo %}{{ job.firm.logo ? logo(job.firm.logo, true) : secure_asset('img/apple-touch.png') }}{% endblock %}
 
 {% block container %}
     <div class="row margin-md-top">

@@ -27,9 +27,10 @@ interface MediaInterface
     public function getName();
 
     /**
+     * @param bool|null $secure
      * @return Url
      */
-    public function url();
+    public function url($secure = null);
 
     /**
      * Return full path (example: /var/www/makana.pl/storage/uploads/maps/12345.jpg)

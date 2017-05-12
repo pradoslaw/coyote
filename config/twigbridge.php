@@ -183,6 +183,7 @@ return [
             'keywords',
             'public_path',
             'http_build_query',
+            'secure_asset',
             'grid' => ['is_safe' => ['html']],
             'grid_column' => ['is_safe' => ['html']],
             'grid_row' => ['is_safe' => ['html']],

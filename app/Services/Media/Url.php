@@ -18,6 +18,11 @@ class Url
     protected $file;
 
     /**
+     * @var null|bool
+     */
+    protected $secure;
+
+    /**
      * @param Thumbnail $thumbnail
      * @param File $file
      */
@@ -25,6 +30,17 @@ class Url
     {
         $this->thumbnail = $thumbnail;
         $this->file = $file;
+    }
+
+    /**
+     * @param bool|null $flag
+     * @return $this
+     */
+    public function secure($flag)
+    {
+        $this->secure = $flag;
+
+        return $this;
     }
 
     /**
@@ -67,6 +83,6 @@ class Url
             return $this->file->getDownloadUrl();
         }
 
-        return cdn($this->publicPath() . '/' . $this->file->relative());
+        return cdn($this->publicPath() . '/' . $this->file->relative(), $this->secure);
     }
 }

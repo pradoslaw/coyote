@@ -104,11 +104,12 @@ abstract class File implements MediaInterface
     }
 
     /**
+     * @param null|bool $secure
      * @return Url
      */
-    public function url()
+    public function url($secure = null)
     {
-        return new Url($this->thumbnail, $this);
+        return (new Url($this->thumbnail, $this))->secure($secure);
     }
 
     /**

@@ -13,20 +13,20 @@
             <meta name="keywords" content="{% block keywords %}{% endblock %}">
             <meta name="theme-color" content="#80a41a" />
 
-            <!-- Facebook sharing meta-data -->
-            <meta property="og:url" content="{{ app.request.url }}" />
-            <meta property="og:type" content="website" />
-            <meta property="og:title" content="{{ block('title') }}" />
-            <meta property="og:description" content="{{ block('description') }}" />
-            <meta property="og:image" content="{{ cdn('img/logo.png') }}" />
+            {# Facebook sharing meta-data #}
+            <meta property="og:url" content="{{ app.request.url }}">
+            <meta property="og:type" content="website">
+            <meta property="og:title" content="{{ block('title') }}">
+            <meta property="og:description" content="{{ block('description') }}">
+            <meta property="og:image" content="{{ block('logo') is defined ? block ('logo') : secure_asset('img/apple-touch.png') }}">
 
             <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
 
             <script type="text/javascript">var _config = {{ __public|default('{}')|raw }};</script>
         {% endblock %}
 
-        <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
-        <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
+        <link rel="apple-touch-icon" href="{{ secure_asset('img/apple-touch.png') }}">
+        <link rel="shortcut icon" href="{{ secure_asset('img/favicon.png') }}" type="image/png">
 
         {{ render_region('head') }}
     </head>

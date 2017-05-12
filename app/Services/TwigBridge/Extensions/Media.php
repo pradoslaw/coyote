@@ -45,11 +45,12 @@ class Media extends Twig_Extension
 
     /**
      * @param string $filename
+     * @param bool|null $secure
      * @return string
      */
-    public function logo($filename)
+    public function logo($filename, $secure = null)
     {
-        return (string) $this->getMediaUrl('logo', $filename, 'img/logo-gray.png');
+        return (string) $this->getMediaUrl('logo', $filename, 'img/logo-gray.png', $secure);
     }
 
     /**
@@ -67,19 +68,20 @@ class Media extends Twig_Extension
      * @param string $factory
      * @param string $filename
      * @param string $placeholder
+     * @param bool|null $secure
      * @return string
      * @throws \Exception
      */
-    private function getMediaUrl($factory, $filename, $placeholder)
+    private function getMediaUrl($factory, $filename, $placeholder, $secure = null)
     {
         if (!$filename) {
-            return cdn($placeholder);
+            return cdn($placeholder, $secure);
         }
 
         if (is_string($filename)) {
-            return $this->getMediaFactory()->make($factory, ['file_name' => $filename])->url();
+            return $this->getMediaFactory()->make($factory, ['file_name' => $filename])->url($secure);
         } elseif ($filename instanceof MediaInterface) {
-            return $filename->getFilename() ? $filename->url() : cdn($placeholder);
+            return $filename->getFilename() ? $filename->url($secure) : cdn($placeholder, $secure);
         } else {
             throw new \Exception('Parameter needs to be either string or MediaInterface object.');
         }
