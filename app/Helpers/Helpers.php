@@ -70,7 +70,7 @@ function stream($activity, $object = null, $target = null)
  * Creates CDN assets url
  *
  * @param string $path
- * @param null $secure
+ * @param null|bool $secure
  * @return string
  */
 function cdn($path, $secure = null)
