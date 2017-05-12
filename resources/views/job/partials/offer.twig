@@ -52,7 +52,7 @@
                         </li>
                     {% endif %}
 
-                    {% if user('id') == job.user_id or can('job-update') %}
+                    {% if (user('id') == job.user_id or can('job-update')) and job.enable_apply %}
                         <li class="applications" title="Liczba osób, które aplikowały na tę ofertę. Informacja widoczna jedynie dla Ciebie.">
                             <i class="fa fa-files-o"></i>
                             {{ declination(job.applications.count(), ['aplikacja', 'aplikacje', 'aplikacji']) }}
