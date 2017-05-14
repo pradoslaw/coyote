@@ -117,9 +117,9 @@
 
                             <ul class="nav navbar-nav pull-right">
                                 <li id="btn-alerts" class="btn-alerts">
-                                    <a href="{{ route('user.alerts') }}" data-url="{{ route('user.alerts.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        {% if user('alerts_unread') %}
-                                            <span class="badge">{{ user('alerts_unread') }}</span>
+                                    <a href="{{ route('user.notifications') }}" data-url="{{ route('user.notifications.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {% if user('notifications_unread') %}
+                                            <span class="badge">{{ user('notifications_unread') }}</span>
                                         {% endif %}
 
                                         <i class="fa fa-bell fa-fw"></i>
@@ -127,9 +127,9 @@
 
                                     <div id="dropdown-alerts" class="dropdown-menu right">
                                         <div class="dropdown-header">
-                                            <a title="Przejdź do listy powiadomień" href="{{ route('user.alerts') }}">Powiadomienia</a>
+                                            <a title="Przejdź do listy powiadomień" href="{{ route('user.notifications') }}">Powiadomienia</a>
 
-                                            <a id="btn-mark-read" title="Oznacz jako przeczytane" href="{{ route('user.alerts.mark') }}">
+                                            <a id="btn-mark-read" title="Oznacz jako przeczytane" href="{{ route('user.notifications.mark') }}">
                                                 <i class="fa fa-calendar-check-o"></i>
                                             </a>
                                         </div>

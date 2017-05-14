@@ -1,0 +1,12 @@
+{% extends 'emails.notifications.base' %}
+
+{% block content %}
+    <b>{{ sender }}</b> usunął wątek <b>{{ subject }}</b> z powodu: {{ reason_name }}.<br><br>
+    Szczegóły:<br><br>
+
+    <hr>
+    {{ reason_text }}
+    <hr><br>
+
+    Otrzymujesz tego e-maila ponieważ obserwowałeś ten wątek lub jesteś jego autorem.
+{% endblock %}

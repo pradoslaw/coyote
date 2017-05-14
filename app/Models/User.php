@@ -3,7 +3,7 @@
 namespace Coyote;
 
 use Coyote\Notifications\ResetPasswordNotification;
-use Coyote\Services\Alert\DatabaseChannel;
+use Coyote\Services\Notification\DatabaseChannel;
 use Coyote\Services\Media\Photo;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Illuminate\Auth\Authenticatable;
@@ -24,9 +24,9 @@ use Ramsey\Uuid\Uuid;
  * @property int $is_blocked
  * @property int $group_id
  * @property int $visits
- * @property int $alerts
+ * @property int $notifications
  * @property int $pm
- * @property int $alerts_unread
+ * @property int $notifications_unread
  * @property int $pm_unread
  * @property int $posts
  * @property int $allow_count
@@ -229,7 +229,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function notificationChannels($typeId)
     {
         $channels = [];
-        $settings = $this->hasOne('Coyote\Alert\Setting')->where('type_id', $typeId)->first();
+        $settings = $this->hasOne(Setting::class)->where('type_id', $typeId)->first();
 
         if ($settings->profile) {
             $channels[] = DatabaseChannel::class;
@@ -244,7 +244,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function getUnreadNotification($objectId)
     {
-        return $this->hasOne('Coyote\Alert')->where('object_id', '=', $objectId)->whereNull('read_at')->first();
+        return $this->hasOne(Notification::class)->where('object_id', '=', $objectId)->whereNull('read_at')->first();
     }
 
     /**

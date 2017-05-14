@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Coyote\Services\Alert\Container;
+use Coyote\Services\Notification\Container;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -91,7 +91,7 @@ class CommentController extends Controller
             stream($activity, $object, $target);
 
             if (!$id) {
-                $alert = new Container();
+                $container = new Container();
                 $notification = [
                     'sender_id'   => $this->userId,
                     'sender_name' => $this->auth->name,
@@ -107,9 +107,9 @@ class CommentController extends Controller
                 );
 
                 if ($subscribersId) {
-                    $alert->attach(
+                    $container->attach(
                         // $subscribersId can be int or array. we need to cast to array type
-                        app('alert.post.subscriber')->with($notification)->setUsersId($subscribersId)
+                        app('notification.post.subscriber')->with($notification)->setUsersId($subscribersId)
                     );
                 }
 
@@ -117,12 +117,12 @@ class CommentController extends Controller
                 $subscribersId = $this->forum->onlyUsersWithAccess((new LoginHelper())->grab($this->comment->html));
 
                 if ($subscribersId) {
-                    $alert->attach(
-                        app('alert.post.comment.login')->with($notification)->setUsersId($subscribersId)
+                    $container->attach(
+                        app('notification.post.comment.login')->with($notification)->setUsersId($subscribersId)
                     );
                 }
 
-                $alert->notify();
+                $container->notify();
 
                 // subscribe post. notify about all future comments to this post
                 $this->post->subscribe($this->userId, true);

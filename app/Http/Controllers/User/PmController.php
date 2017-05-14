@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmWasSent;
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Repositories\Contracts\AlertRepositoryInterface as AlertRepository;
+use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Illuminate\Validation\Validator;
@@ -25,9 +25,9 @@ class PmController extends BaseController
     private $user;
 
     /**
-     * @var AlertRepository
+     * @var NotificationRepository
      */
-    private $alert;
+    private $notification;
 
     /**
      * @var PmRepository
@@ -36,15 +36,15 @@ class PmController extends BaseController
 
     /**
      * @param UserRepository $user
-     * @param AlertRepository $alert
+     * @param NotificationRepository $notification
      * @param PmRepository $pm
      */
-    public function __construct(UserRepository $user, AlertRepository $alert, PmRepository $pm)
+    public function __construct(UserRepository $user, NotificationRepository $notification, PmRepository $pm)
     {
         parent::__construct();
 
         $this->user = $user;
-        $this->alert = $alert;
+        $this->notification = $notification;
         $this->pm = $pm;
 
         $this->middleware(function (Request $request, $next) {
@@ -98,8 +98,8 @@ class PmController extends BaseController
                 $this->auth->pm_unread--;
 
                 // IF we have unread alert that is connected with that message... then we also have to mark it as read
-                if ($this->auth->alerts_unread) {
-                    $this->alert->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
+                if ($this->auth->notifications_unread) {
+                    $this->notification->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
                 }
             }
         }
@@ -179,7 +179,7 @@ class PmController extends BaseController
             $excerpt = excerpt($text = $this->getParser()->parse($request->get('text')));
 
             // we need to send notification to recipient
-            app('alert.pm')->with([
+            app('notification.pm')->with([
                 'user_id'     => $pm->author_id,
                 'sender_id'   => $this->auth->id,
                 'sender_name' => $this->auth->name,

@@ -83,7 +83,7 @@ class DeleteController extends BaseController
                 $this->getFlagFactory()->deleteBy('topic_id', $topic->id, $this->userId);
 
                 if ($subscribersId) {
-                    app('alert.topic.delete')
+                    app('notification.topic.delete')
                         ->with($notification)
                         ->setUsersId($subscribersId->toArray())
                         ->notify();
@@ -106,7 +106,7 @@ class DeleteController extends BaseController
                 $this->getFlagFactory()->deleteBy('post_id', $post->id, $this->userId);
 
                 if ($subscribersId) {
-                    app('alert.post.delete')
+                    app('notification.post.delete')
                         ->with($notification)
                         ->setUrl($url)
                         ->setUsersId($subscribersId->toArray())

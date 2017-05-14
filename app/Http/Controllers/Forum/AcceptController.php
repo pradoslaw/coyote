@@ -92,7 +92,7 @@ class AcceptController extends BaseController
                     }
 
                     // send notification to the user
-                    app('alert.post.accept')
+                    app('notification.post.accept')
                         ->setPostId($post->id)
                         ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
                         ->setSubject(str_limit($topic->subject, 84))

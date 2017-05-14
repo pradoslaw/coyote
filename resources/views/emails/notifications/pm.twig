@@ -1,0 +1,10 @@
+{# powiadomienie o wiadomosci prywatnej #}
+{% extends 'emails.notifications.base' %}
+
+{% block content %}
+    Masz nową wiadomość od użytkownika {{ sender }}:<br><br>
+
+    <hr>
+    {{ text|raw }}
+    <hr>
+{% endblock %}

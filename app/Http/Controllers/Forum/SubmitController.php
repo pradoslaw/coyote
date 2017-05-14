@@ -16,7 +16,7 @@ use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
-use Coyote\Services\Alert\Container;
+use Coyote\Services\Notification\Container;
 use Coyote\Post\Log;
 
 class SubmitController extends BaseController
@@ -87,7 +87,7 @@ class SubmitController extends BaseController
             $url = UrlBuilder::post($post);
 
             if ($post->wasRecentlyCreated) {
-                $alert = new Container();
+                $container = new Container();
                 $notification = [
                     'sender_id' => $this->userId,
                     'sender_name' => $request->get('user_name', $this->userId ? $this->auth->name : ''),
@@ -102,18 +102,18 @@ class SubmitController extends BaseController
                 // $subscribersId can be int or array. we need to cast to array type
                 $subscribersId = $forum->onlyUsersWithAccess($topic->subscribers()->pluck('user_id')->toArray());
                 if ($subscribersId) {
-                    $alert->attach(
-                        app('alert.topic.subscriber')->with($notification)->setUsersId($subscribersId)
+                    $container->attach(
+                        app('notification.topic.subscriber')->with($notification)->setUsersId($subscribersId)
                     );
                 }
 
                 // get id of users that were mentioned in the text
                 $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($post->html));
                 if ($subscribersId) {
-                    $alert->attach(app('alert.post.login')->with($notification)->setUsersId($subscribersId));
+                    $container->attach(app('notification.post.login')->with($notification)->setUsersId($subscribersId));
                 }
 
-                $alert->notify();
+                $container->notify();
             }
 
             if ($topic->wasRecentlyCreated || $post->id === $topic->first_post_id) {
@@ -218,7 +218,7 @@ class SubmitController extends BaseController
                 ->save();
 
                 if ($post->user_id) {
-                    app('alert.topic.subject')->with([
+                    app('notification.topic.subject')->with([
                         'users_id'    => $forum->onlyUsersWithAccess([$post->user_id]),
                         'sender_id'   => $this->userId,
                         'sender_name' => $this->auth->name,

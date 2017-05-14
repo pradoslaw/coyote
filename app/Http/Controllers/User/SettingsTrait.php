@@ -33,7 +33,7 @@ trait SettingsTrait
             ],
             [
                 'id' => 'btn-favorites',
-                'route' => 'user.alerts.settings',
+                'route' => 'user.notifications.settings',
                 'icon' => 'fa-bell-o',
                 'label' => 'Ustawienia powiadomień'
             ],

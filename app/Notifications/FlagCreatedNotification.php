@@ -2,9 +2,8 @@
 
 namespace Coyote\Notifications;
 
-use Coyote\Alert;
 use Coyote\Flag;
-use Coyote\Services\Alert\DatabaseChannel;
+use Coyote\Services\Notification\DatabaseChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,7 +15,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
 {
     use Queueable;
 
-    const ID = Alert::FLAG;
+    const ID = \Coyote\Notification::FLAG;
 
     /**
      * @var Flag
@@ -104,7 +103,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
      */
     public function broadcastAs()
     {
-        return 'alert';
+        return 'notification';
     }
 
     /**
@@ -133,6 +132,6 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
      */
     protected function notificationUrl()
     {
-        return route('user.alerts.url', [$this->id]);
+        return route('user.notifications.url', [$this->id]);
     }
 }

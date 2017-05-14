@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Wiki;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Wiki\CommentForm;
-use Coyote\Services\Alert\Container;
+use Coyote\Services\Notification\Container;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -45,7 +45,7 @@ class CommentController extends Controller
                 $container = new Container();
 
                 $container->attach(
-                    app('alert.wiki.comment')
+                    app('notification.wiki.comment')
                         ->with([
                             'subject' => $wiki->title,
                             'users_id' => $subscribersId,

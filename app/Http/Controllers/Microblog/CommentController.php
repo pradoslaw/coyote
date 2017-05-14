@@ -7,7 +7,7 @@ use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Services\Alert\Container;
+use Coyote\Services\Notification\Container;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
@@ -75,10 +75,10 @@ class CommentController extends Controller
 
             if ($microblog->wasRecentlyCreated) {
                 $subscribers = $parent->subscribers()->pluck('user_id')->toArray();
-                $alert = new Container();
+                $container = new Container();
 
                 // we need to send alerts AFTER saving comment to database because we need ID of comment
-                $alertData = [
+                $notificationData = [
                     'microblog_id'=> $microblog->parent_id, // <-- parent_id NOT id (to generate current alert's object_id)
                     'content'     => $microblog->html,
                     'excerpt'     => excerpt($microblog->html),
@@ -91,8 +91,8 @@ class CommentController extends Controller
 
                 if ($subscribers) {
                     // new comment. should we send a notification?
-                    $alert->attach(
-                        app('alert.microblog.subscriber')->with($alertData)->setUsersId($subscribers)
+                    $container->attach(
+                        app('notification.microblog.subscriber')->with($notificationData)->setUsersId($subscribers)
                     );
                 }
 
@@ -101,11 +101,11 @@ class CommentController extends Controller
                 $usersId = $helper->grab($microblog->html);
 
                 if (!empty($usersId)) {
-                    $alert->attach(app('alert.microblog.login')->with($alertData)->setUsersId($usersId));
+                    $container->attach(app('notification.microblog.login')->with($notificationData)->setUsersId($usersId));
                 }
 
                 // send a notify
-                $alert->notify();
+                $container->notify();
 
                 // now we can add user to subscribers list (if he's not in there yet)
                 // after that he will receive notification about other users comments

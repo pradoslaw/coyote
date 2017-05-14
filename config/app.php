@@ -193,7 +193,7 @@ return [
         // do parsowania tekstu w zaleznosci od tego, czy mamy do czynienia z postem, komentarzem itd
         Coyote\Providers\ParserServiceProvider::class,
         // Klasy powiadomien
-        Coyote\Providers\AlertServiceProvider::class,
+        Coyote\Providers\NotificationServiceProvider::class,
         // Klasy obslugi reputacji uzytkownika
         Coyote\Providers\ReputationServiceProvider::class,
         // Obsluga Elasticsearch

@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TagsTableSeeder::class);
         $this->call(ReputationTypesTableSeeder::class);
         $this->call(MicroblogsTableSeeder::class);
-        $this->call(AlertTypesTableSeeder::class);
+        $this->call(NotificationTypesTableSeeder::class);
         $this->call(ForumsTableSeeder::class);
         $this->call(FlagTypesTableSeeder::class);
         $this->call(ForumReasonsTableSeeder::class);

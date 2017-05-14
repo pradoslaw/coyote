@@ -16,12 +16,12 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Visits', ['uses' => 'VisitsController@index', 'as' => 'visits']);
     $this->post('Visits', 'VisitsController@save');
 
-    $this->get('Alerts', ['uses' => 'AlertsController@index', 'as' => 'alerts']);
-    $this->get('Alerts/Settings', ['uses' => 'AlertsController@settings', 'as' => 'alerts.settings']);
-    $this->post('Alerts/Settings', 'AlertsController@save');
-    $this->get('Alerts/Ajax', ['uses' => 'AlertsController@ajax', 'as' => 'alerts.ajax']);
-    $this->post('Alerts/Mark', ['uses' => 'AlertsController@markAsRead', 'as' => 'alerts.mark']);
-    $this->post('Alerts/Delete/{id}', ['uses' => 'AlertsController@delete', 'as' => 'alerts.delete']);
+    $this->get('Notifications', ['uses' => 'NotificationsController@index', 'as' => 'notifications']);
+    $this->get('Notifications/Settings', ['uses' => 'NotificationsController@settings', 'as' => 'notifications.settings']);
+    $this->post('Notifications/Settings', 'NotificationsController@save');
+    $this->get('Notifications/Ajax', ['uses' => 'NotificationsController@ajax', 'as' => 'notifications.ajax']);
+    $this->post('Notifications/Mark', ['uses' => 'NotificationsController@markAsRead', 'as' => 'notifications.mark']);
+    $this->post('Notifications/Delete/{id}', ['uses' => 'NotificationsController@delete', 'as' => 'notifications.delete']);
 
     $this->get('Pm', ['uses' => 'PmController@index', 'as' => 'pm']);
     $this->get('Pm/Show/{id}', ['uses' => 'PmController@show', 'as' => 'pm.show']);
@@ -77,5 +77,6 @@ $this->get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'use
 $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
 
 // przekierowanie do wlasciwego alertu po guid.
-$this->get('alert/{guid}', ['uses' => 'User\AlertsController@url'])->name('user.alerts.url');
+$this->get('alert/{guid}', ['uses' => 'User\NotificationsController@url']);
+$this->get('notification/{guid}', ['uses' => 'User\NotificationsController@url'])->name('user.notifications.url');
 $this->get('ping', ['uses' => 'User\PingController@index'])->name('ping');

@@ -15,7 +15,7 @@ trait HomeTrait
             ],
             [
                 'id' => 'btn-notifies',
-                'route' => 'user.alerts',
+                'route' => 'user.notifications',
                 'icon' => 'fa-bell-o',
                 'label' => 'Powiadomienia'
             ],

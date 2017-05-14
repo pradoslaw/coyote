@@ -51,7 +51,7 @@ class VoteController extends BaseController
                 $post->score++;
 
                 // send notification to the user
-                app('alert.post.vote')
+                app('notification.post.vote')
                     ->setPostId($post->id)
                     ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
                     ->setSubject(str_limit($topic->subject, 84))

@@ -1,0 +1,10 @@
+{# powiadomienie o wystapieniu logina we wpisanie na mikroblogu #}
+{% extends 'emails.notifications.base' %}
+
+{% block content %}
+    <b>{{ sender_name }}</b> użył Twojego loginu w treści wpisu mikrobloga:<br><br>
+
+    <hr>
+    {{ text|raw }}
+    <hr>
+{% endblock %}

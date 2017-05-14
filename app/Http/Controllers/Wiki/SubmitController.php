@@ -68,7 +68,7 @@ class SubmitController extends BaseController
 
             $subscribersId = $wiki->subscribers()->pluck('user_id')->toArray();
 
-            app('alert.wiki.subscriber')
+            app('notification.wiki.subscriber')
                 ->with([
                     'subject' => $wiki->title,
                     'users_id' => $subscribersId,
