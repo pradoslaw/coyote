@@ -47,7 +47,7 @@ class Notifications
     store(counter) {
         this.set(counter);
 
-        Session.setItem('alerts', this._counter);
+        Session.setItem('notifications', this._counter);
     }
 
     /**
@@ -235,13 +235,13 @@ $(function () {
     let notifications = new Notifications();
 
     Session.addListener(function (e) {
-        if (e.key === 'alerts' && e.newValue !== notifications.get()) {
+        if (e.key === 'notifications' && e.newValue !== notifications.get()) {
             notifications.set(e.newValue);
             notifications.clear();
         }
     });
 
-    ws.on('alert', data => {
+    ws.on('notification', data => {
         notifications.set(notifications.get() + 1);
         notifications.clear();
 
@@ -252,7 +252,7 @@ $(function () {
         // notification. saving counter in local storage will call session listener (see above).
         // make a long story short: without setTimeout() one notification will be shown as two if user
         // has two open tabs.
-        setTimeout(() => Session.setItem('alerts', notifications.get()), 500);
+        setTimeout(() => Session.setItem('notifications', notifications.get()), 500);
     });
 
     setInterval(() => {
