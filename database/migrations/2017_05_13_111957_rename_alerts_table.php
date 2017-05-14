@@ -92,6 +92,17 @@ END;$$;
 
 CREATE TRIGGER after_notification_delete AFTER DELETE ON notifications FOR EACH ROW EXECUTE PROCEDURE "after_notification_delete"();
         ');
+
+        DB::unprepared('
+CREATE OR REPLACE FUNCTION after_user_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+	INSERT INTO notification_settings (type_id, user_id, profile, email)
+	SELECT "id", NEW."id", profile, email
+	FROM notification_types;
+
+	RETURN NEW;
+END;$$;
+        ');
     }
 
     /**
@@ -178,6 +189,17 @@ BEGIN
 END;$$;
 
 CREATE TRIGGER after_alert_delete AFTER DELETE ON alerts FOR EACH ROW EXECUTE PROCEDURE "after_alert_delete"();
+        ');
+
+        DB::unprepared('
+CREATE OR REPLACE FUNCTION after_user_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+	INSERT INTO alert_settings (type_id, user_id, profile, email)
+	SELECT "id", NEW."id", profile, email
+	FROM alert_types;
+
+	RETURN NEW;
+END;$$;
         ');
     }
 }
