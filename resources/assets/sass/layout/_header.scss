@@ -173,6 +173,11 @@ header.navbar-default {
 // Glowne menu aplikacji. Po naprowadzeniu kursora myszy nad pozycja pokazujemy liste podmenu
 // ---------------------------------------------------------------------------------------
 
+#desktop-menu {
+  // temporary arrow
+  background: url('/img/arrow.png') no-repeat 154px -5px;
+}
+
 #desktop-menu > li:hover {
   .dropdown-menu {
     display: block;
