@@ -30,12 +30,12 @@ class DatabaseChannel
     public function send($user, Notification $notification)
     {
         $data = $notification->toDatabase($user);
-        $notification = $user->getUnreadNotification($notification->objectId());
 
-        if (empty($notification->id)) {
-            $notification = $this->notification->create($data);
+        $alert = $user->getUnreadNotification($notification->objectId());
+
+        if (empty($alert->id)) {
+            $alert = $this->notification->create($data);
         }
-
-        $notification->senders()->create($notification->sender());
+        $alert->senders()->create($notification->sender());
     }
 }
