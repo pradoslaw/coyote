@@ -5,6 +5,11 @@ namespace Coyote\Services\Stream\Objects;
 class Person extends ObjectAbstract
 {
     /**
+     * @var string
+     */
+    public $image;
+
+    /**
      * @param array $data
      */
     public function __construct(array $data = [])

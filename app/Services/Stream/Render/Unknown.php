@@ -11,4 +11,12 @@ class Unknown extends Render
     {
         return $this->stream['login'];
     }
+
+    /**
+     * @return string
+     */
+    public function email()
+    {
+        return $this->stream['email'];
+    }
 }

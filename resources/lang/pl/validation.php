@@ -52,7 +52,7 @@ return [
     'min'                  => [
         'numeric' => 'Minimalna wartość dla tego pola to :min.',
         'file'    => 'The :attribute must be at least :min kilobytes.',
-        'string'  => 'The :attribute must be at least :min characters.',
+        'string'  => 'To pole musi mieć :min znaków.',
         'array'   => 'The :attribute must have at least :min items.',
     ],
     'not_in'               => 'The selected :attribute is invalid.',

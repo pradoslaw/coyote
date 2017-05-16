@@ -3,6 +3,8 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Services\Stream\Activities\ForgotPassword;
+use Coyote\Services\Stream\Actor;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -65,6 +67,8 @@ class ForgotPasswordController extends Controller
         );
 
         if ($response === Password::RESET_LINK_SENT) {
+            stream((new ForgotPassword(new Actor()))->setEmail($request->input('email')));
+
             return back()->with('success', trans($response));
         }
 

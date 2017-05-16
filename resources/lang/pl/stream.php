@@ -56,6 +56,8 @@ return [
         'firewall'          => ':actor :verb :object',
         'unknown'           => ':actor :verb',
         'unknown:throttle'  => 'Nieudane logowanie na konto :login',
+        'unknown:forgot'    => 'Żądanie przywrócenia hasła do konta :email',
+        'unknown:reset'     => 'Zresetowanie hasła do konta :email',
         'block'             => ':actor :verb :object',
         'pastebin'          => ':actor :verb :object',
         'group'             => ':actor :verb :object :name'
