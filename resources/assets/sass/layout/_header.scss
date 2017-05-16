@@ -175,7 +175,17 @@ header.navbar-default {
 
 #desktop-menu {
   // temporary arrow
-  //background: url('/img/arrow.png') no-repeat 154px -5px;
+  position: relative;
+
+  &:before {
+    position: absolute;
+    top: -5px;
+    left: 154px;
+    width: 20px;
+    height: 29px;
+    background: url('/img/arrow.png') no-repeat;
+    z-index: 100;
+  }
 }
 
 #desktop-menu > li:hover {
