@@ -59,8 +59,6 @@ class WordsController extends BaseController
             foreach (array_keys(array_diff_key($original, $input)) as $key) {
                 $this->word->where('word', $key)->delete();
             }
-
-            $this->getCacheFactory()->forget('words');
         });
 
         return back()->with('success', 'Zmiany zostały zapisane.');

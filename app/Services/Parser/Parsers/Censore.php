@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
-use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
+use Coyote\Repositories\Contracts\WordRepositoryInterface as WordRepository;
 
 /**
  * Class Censore
@@ -10,14 +10,14 @@ use Coyote\Repositories\Contracts\WordRepositoryInterface as Word;
 class Censore extends Parser implements ParserInterface
 {
     /**
-     * @var Word
+     * @var WordRepository
      */
     private $word;
 
     /**
-     * @param Word $word
+     * @param WordRepository $word
      */
-    public function __construct(Word $word)
+    public function __construct(WordRepository $word)
     {
         $this->word = $word;
     }

@@ -13,15 +13,4 @@ class WordRepository extends Repository implements WordRepositoryInterface
     {
         return 'Coyote\Word';
     }
-
-    /**
-     * @param array $columns
-     * @return mixed
-     */
-    public function all($columns = ['*'])
-    {
-        return $this->app['cache']->rememberForever('words', function () use ($columns) {
-            return $this->model->get($columns);
-        });
-    }
 }
