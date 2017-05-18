@@ -24,7 +24,8 @@ class FirewallGrid extends Grid
                 'sortable' => true,
                 'clickable' => function (Firewall $row) {
                     return link_to_route('adm.firewall.save', $row->id, [$row->id]);
-                }
+                },
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_EQ, 'name' => 'firewall.id'])
             ])
             ->addColumn('user_name', [
                 'title' => 'Nazwa użytkownika',
