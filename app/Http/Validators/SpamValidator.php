@@ -33,7 +33,7 @@ class SpamValidator
      */
     public function validateSpamLink($attribute, $value, $parameters)
     {
-        if (trim($value) === '' || $this->isContainUrl($value) === false) {
+        if ($this->isContainUrl($value) === false) {
             return true;
         }
 
@@ -52,7 +52,7 @@ class SpamValidator
             return true;
         }
 
-        if (trim($value) === '' || $this->isContainUrl($value) === false) {
+        if ($this->isContainUrl($value) === false) {
             return true;
         }
 
@@ -80,6 +80,10 @@ class SpamValidator
      */
     private function isContainUrl(string $text): bool
     {
+        if (trim($text) === '') {
+            return false;
+        }
+
         return (bool) preg_match(self::REGEXP_URL, $text);
     }
 
