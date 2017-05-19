@@ -3,6 +3,7 @@
 namespace Coyote\Http\Validators;
 
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\Request;
 
 class SpamValidator
 {
@@ -13,28 +14,49 @@ class SpamValidator
      */
     protected $auth;
 
+    protected $request;
+
     /**
      * @param Guard $auth
      */
-    public function __construct(Guard $auth)
+    public function __construct(Guard $auth, Request $request)
     {
         $this->auth = $auth;
+        $this->request = $request;
     }
 
     /**
      * @param mixed $attribute
      * @param mixed $value
      * @param array $parameters
-     * @param \Illuminate\Validation\Validator $validator
      * @return bool
      */
-    public function validateSpamLink($attribute, $value, $parameters, $validator)
+    public function validateSpamLink($attribute, $value, $parameters)
     {
         if (trim($value) === '' || $this->isContainUrl($value) === false) {
             return true;
         }
 
         return $this->auth->check() && $this->auth->user()->reputation >= $parameters[0];
+    }
+
+    /**
+     * @param mixed $attribute
+     * @param mixed $value
+     * @param array $parameters
+     * @return bool
+     */
+    public function validateSpamForeignLink($attribute, $value, $parameters)
+    {
+        if (!$this->request->server('HTTP_CF_IPCOUNTRY') || 'PL' === $this->request->server('HTTP_CF_IPCOUNTRY')) {
+            return true;
+        }
+
+        if (trim($value) === '' || $this->isContainUrl($value) === false) {
+            return true;
+        }
+
+        return $this->auth->check() && $this->auth->user()->posts >= $parameters[0];
     }
 
     /**

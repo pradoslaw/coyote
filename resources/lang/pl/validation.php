@@ -85,6 +85,7 @@ return [
     'reputation'           => 'Potrzebujesz minimum :point punktów reputacji aby zmienić zawartość tego pola.',
     'spam_link'            => 'Potrzebujesz minimum :point punktów reputacji, aby umieścić link w tym polu.',
     'spam_chinese'         => 'Z powodu spamu, tekst nie może zawierać chińskich znaków.',
+    'spam_foreign'         => 'Musisz napisać min. :posts post, aby umieścić linki w tym polu.',
     'tag'                  => 'Podany tag zawiera nieprawidłowe znaki.',
     'tag_creation'         => 'Potrzebujesz :point punktów reputacji, aby utworzyć nowy tag. Wybierz już istniejący.',
     'throttle'             => 'Musisz odczekać jeszcze :delay przed dodaniem kolejnego wpisu.',
