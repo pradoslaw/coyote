@@ -276,10 +276,6 @@ class SubmitController extends BaseController
             setcookie('mqid' . $topic->id, null, time() - 3600, '/');
         }
 
-        if ($request->input('quote')) {
-            $postsId[] = $request->input('quote');
-        }
-
         if (!empty($postsId)) {
             $posts = $this->post->findPosts(array_unique($postsId), $topic->id);
 
