@@ -26,9 +26,6 @@
                 {{ form_row(form.password_confirmation) }}
                 {{ form_row(form.email) }}
                 {{ form_row(form.email_confirmation) }}
-
-                <div class="g-recaptcha margin-md-bottom" data-sitekey="{{ config('services.recaptcha.key') }}"></div>
-
                 {{ form_row(form.submit) }}
 
                 {{ form_end(form) }}

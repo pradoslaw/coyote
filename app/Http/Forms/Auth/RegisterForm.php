@@ -42,6 +42,8 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Utwórz konto',
                 'attr' => [
                     'class' => 'g-recaptcha btn btn-primary',
+                    'data-sitekey' => config('services.recaptcha.key'),
+                    'data-callback' => 'onSubmit',
                     'data-submit-state' => 'Rejestracja...'
                 ]
             ]);
