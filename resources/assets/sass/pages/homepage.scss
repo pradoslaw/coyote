@@ -261,6 +261,10 @@
         text-align: center;
         color: $gray-light;
       }
+      
+      &::selection {
+        text-shadow: none;
+      }
     }
 
     span.microblog:after {
