@@ -22,7 +22,12 @@ class UserRepository extends Repository implements UserRepositoryInterface
      */
     public function lookupName($name, $userIds = [])
     {
-        $sql = $this->model->select(['id', 'name', 'photo'])->where('name', 'ILIKE', $name . '%');
+        $sql = $this
+            ->model
+            ->select(['id', 'name', 'photo'])
+            ->whereRaw('LOWER(name) LIKE ?', [mb_strtolower($name . '%')])
+            ->where('is_active', 1)
+            ->where('is_blocked', 0);
 
         if (!empty($userIds)) {
             $values = [];
