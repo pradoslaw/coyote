@@ -2,6 +2,8 @@
 
 namespace Coyote;
 
+use Coyote\Page\Stat;
+use Coyote\Page\Visit;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -44,7 +46,15 @@ class Page extends Model
      */
     public function visits()
     {
-        return $this->hasMany('Coyote\Page\Visit');
+        return $this->hasMany(Visit::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function stats()
+    {
+        return $this->hasMany(Stat::class);
     }
 
     /**

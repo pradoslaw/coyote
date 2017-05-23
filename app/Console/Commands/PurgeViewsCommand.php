@@ -115,6 +115,12 @@ class PurgeViewsCommand extends Command
 
                 $visits->save();
             }
+
+            /** @var \Coyote\Page\Stat $stats */
+            $stats = $page->stats()->firstOrNew(['date' => date('Y-m-d')]);
+            $stats->visits++;
+
+            $stats->save();
         }
     }
 
