@@ -51,7 +51,6 @@ class OfferController extends Controller
             $job->firm->description = $parser->parse((string) $job->firm->description);
         }
 
-        $job->increment('views');
         $job->addReferer(url()->previous());
 
         if ($this->getGateFactory()->allows('job-delete')) {

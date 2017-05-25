@@ -51,7 +51,7 @@ class PageHit
     {
         return serialize([
             'path'          => urldecode(trim($request->path(), '/')),
-            'timestamp'     => (int) (round(time() / 300) * 300),
+            'timestamp'     => (int) (round(time() / 60) * 60),
             'user_id'       => empty($request->user()) ? null : $request->user()->id,
             'guest_id'      => $request->session()->get('guest_id')
         ]);
