@@ -14,9 +14,9 @@ abstract class AbstractMiddleware
     {
         if ($request->ajax() || $request->wantsJson()) {
             return response('Unauthorized.', 401);
-        } else {
-            abort(401, 'Unauthorized');
         }
+
+        abort(401, 'Unauthorized');
     }
 
     /**
@@ -27,9 +27,9 @@ abstract class AbstractMiddleware
     {
         if ($request->ajax() || $request->wantsJson()) {
             return response('Unauthorized.', 401);
-        } else {
-            return redirect()->guest(route('login'));
         }
+
+        return redirect()->guest(route('login'));
     }
 
     /**
