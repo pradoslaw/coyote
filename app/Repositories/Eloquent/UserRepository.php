@@ -24,10 +24,11 @@ class UserRepository extends Repository implements UserRepositoryInterface
     {
         $sql = $this
             ->model
-            ->select(['id', 'name', 'photo'])
-            ->whereRaw('LOWER(name) LIKE ?', [mb_strtolower($name . '%')])
+            ->select(['users.id', 'users.name', 'photo', 'groups.name AS group'])
+            ->whereRaw('LOWER(users.name) LIKE ?', [mb_strtolower($name . '%')])
             ->where('is_active', 1)
-            ->where('is_blocked', 0);
+            ->where('is_blocked', 0)
+            ->leftJoin('groups', 'groups.id', '=', 'group_id');
 
         if (!empty($userIds)) {
             $values = [];

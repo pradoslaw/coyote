@@ -2,5 +2,9 @@
 <li>
     <img src="{{ user_photo(user.photo) }}" width="16" height="16">
     <span>{{ user.name }}</span>
+
+    {% if user.group %}
+        <small class="label label-default">{{ user.group }}</small>
+    {% endif %}
 </li>
 {% endfor %}
