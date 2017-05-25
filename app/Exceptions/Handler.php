@@ -133,6 +133,7 @@ class Handler extends ExceptionHandler
      */
     protected function renderHttpErrorException(Request $request, $e)
     {
+        // try to find correct path for given page
         $path = rawurldecode(rtrim($request->getPathInfo(), '/'));
         $page = $this->container[PageRepositoryInterface::class]->findByPath($path);
 

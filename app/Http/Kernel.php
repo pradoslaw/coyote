@@ -62,7 +62,6 @@ class Kernel extends HttpKernel
         'wiki.access'   => Middleware\WikiAccess::class,
         'wiki.lock'     => Middleware\WikiLock::class,
         'page.hit'      => Middleware\PageHit::class,
-        'cache'         => Middleware\CacheController::class,
         'geocode'       => Middleware\GeocodeIp::class
     ];
 }
