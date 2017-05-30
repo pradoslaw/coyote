@@ -79,7 +79,7 @@
                                 <a title="{{ topic.subject }}" href="{{ url ~ (user_id is defined ? ('?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id)) }}">{{ topic.subject }}</a>
 
                                 {% if topic.score %}
-                                    <span class="badge score hidden-xs" title="Liczba głosów oddanych na ten wątek">
+                                    <span class="badge badge-success score hidden-xs" title="Liczba głosów oddanych na ten wątek">
                                         <i class="fa fa-fire"></i>
                                         {{ topic.score }}
                                     </span>

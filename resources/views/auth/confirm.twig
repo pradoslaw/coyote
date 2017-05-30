@@ -11,7 +11,7 @@
         <div class="panel-body">
             {{ form_open({'method': 'POST', 'role': 'form', 'url': url('Confirm'), 'class': 'form-horizontal'}) }}
             {{ form_hidden('token', token) }}
-            {{ forms.text('email', 'E-mail', user_input('email')) }}
+            {{ forms.text('email', 'E-mail', input_old('email', user('email'))) }}
 
             {% if session_has('users') %}
                 {{ forms.select('name', 'Nazwa użytkownika', session_get('users')) }}

@@ -19,6 +19,26 @@ class User extends Twig_Extension
     }
 
     /**
+     * @return Twig_SimpleFunction[]
+     */
+    public function getFunctions()
+    {
+        return [
+            // umozliwia szybki dostep do danych zalogowanego uzytkownika. zamiast:
+            // auth()->user()->name mozemy napisac user('name')
+            new Twig_SimpleFunction('user', [$this, 'getUserValue'], ['is_safe' => ['html']]),
+
+            // w calym serwisie ciagle trzeba generowac link do profilu usera. ta funkcja umozliwia
+            // generowanie linku do profilu na podstawie dostarczonych parametrow. parametrzem moze
+            // byc albo tablica albo poszczegolne dane takie jak ID, login oraz informacje czy uzytkownik
+            // jest zablokowany lub zbanowany
+            new Twig_SimpleFunction('link_to_profile', [&$this, 'linkToProfile'], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction('can', [&$this, 'can'], ['is_safe' => ['html']]),
+            new Twig_SimpleFunction('creator_badge', [&$this, 'creatorBadge'], ['is_safe' => ['html']])
+        ];
+    }
+
+    /**
      * Pobiera wartosc kolumny z tabli users
      *
      * @param $name
@@ -43,73 +63,66 @@ class User extends Twig_Extension
     }
 
     /**
-     * @return Twig_SimpleFunction[]
+     * @param array ...$args
+     * @return string
      */
-    public function getFunctions()
+    public function linkToProfile(... $args)
     {
-        return [
-            // umozliwia szybki dostep do danych zalogowanego uzytkownika. zamiast:
-            // auth()->user()->name mozemy napisac user('name')
-            new Twig_SimpleFunction('user', [$this, 'getUserValue'], ['is_safe' => ['html']]),
+        $user = $args[0];
 
-            // robi to co funkcja powyzej z ta roznica ze najpierw sprawdza czy wartosc nie zostala
-            // przekazana przez POST/GET. jezeli tak to wazniejsze sa dane przekazane w naglowku niz te
-            // zapisane w bazie danych
-            new Twig_SimpleFunction(
-                'user_input',
-                function ($name) {
-                    return request($name, $this->getUserValue($name));
-                }
-            ),
+        if ($user instanceof \Coyote\User) {
+            $user = $user->toArray();
+        }
 
-            // w calym serwisie ciagle trzeba generowac link do profilu usera. ta funkcja umozliwia
-            // generowanie linku do profilu na podstawie dostarczonych parametrow. parametrzem moze
-            // byc albo tablica albo poszczegolne dane takie jak ID, login oraz informacje czy uzytkownik
-            // jest zablokowany lub zbanowany
-            new Twig_SimpleFunction(
-                'link_to_profile',
-                function (... $args) {
-                    $user = $args[0];
+        if (is_array($user)) {
+            $userId     = isset($user['user_id']) ? $user['user_id'] : $user['id'];
+            $name       = isset($user['user_name']) ? $user['user_name'] : $user['name'];
+            $isActive   = $user['is_active'];
+            $isBlocked  = $user['is_blocked'];
+        } else {
+            $userId     = array_shift($args);
+            $name       = array_shift($args);
+            $isActive   = array_shift($args);
+            $isBlocked  = array_shift($args);
+        }
 
-                    if ($user instanceof \Coyote\User) {
-                        $user = $user->toArray();
-                    }
+        $attributes     = ['data-user-id' => $userId];
+        if ($isBlocked || !$isActive) {
+            $attributes['class'] = 'user-deleted';
+        }
+        return link_to_route('profile', $name, $userId, $attributes);
+    }
 
-                    if (is_array($user)) {
-                        $userId     = isset($user['user_id']) ? $user['user_id'] : $user['id'];
-                        $name       = isset($user['user_name']) ? $user['user_name'] : $user['name'];
-                        $isActive   = $user['is_active'];
-                        $isBlocked  = $user['is_blocked'];
-                    } else {
-                        $userId     = array_shift($args);
-                        $name       = array_shift($args);
-                        $isActive   = array_shift($args);
-                        $isBlocked  = array_shift($args);
-                    }
+    /**
+     * @param string $ability
+     * @param null $policy
+     * @param null $object
+     * @return bool
+     */
+    public function can($ability, $policy = null, $object = null)
+    {
+        if (auth()->guest()) {
+            return false;
+        }
 
-                    $attributes     = ['data-user-id' => $userId];
-                    if ($isBlocked || !$isActive) {
-                        $attributes['class'] = 'user-deleted';
-                    }
-                    return link_to_route('profile', $name, $userId, $attributes);
-                },
-                ['is_safe' => ['html']]
-            ),
+        if ($policy === null) {
+            return $this->getGateFactory()->allows($ability);
+        }
 
-            new Twig_SimpleFunction(
-                'can',
-                function ($ability, $policy = null, $object = null) {
-                    if (auth()->guest()) {
-                        return false;
-                    }
+        return policy($policy)->$ability(auth()->user(), $policy, $object);
+    }
 
-                    if ($policy === null) {
-                        return $this->getGateFactory()->allows($ability);
-                    }
+    /**
+     * @param string $html
+     * @param bool $boolean
+     * @return string
+     */
+    public function creatorBadge($html, $boolean)
+    {
+        if (!$boolean) {
+            return $html;
+        }
 
-                    return policy($policy)->$ability(auth()->user(), $policy, $object);
-                }
-            )
-        ];
+        return '<span class="badge badge-creator">' . $html . '</span>';
     }
 }

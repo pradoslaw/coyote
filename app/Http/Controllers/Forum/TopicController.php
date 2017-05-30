@@ -154,7 +154,8 @@ class TopicController extends BaseController
             compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags', 'warnings', 'activities')
         )->with([
             'markTime'      => $markTime[Topic::class] ? $markTime[Topic::class] : $markTime[Forum::class],
-            'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : []
+            'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : [],
+            'author_id'     => $posts[0]->user_id
         ]);
     }
 

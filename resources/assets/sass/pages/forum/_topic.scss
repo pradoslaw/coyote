@@ -380,7 +380,7 @@ div.tooltip-inner {
 .comments {
   margin: 15px 0 5px 25px;
   font-family: Tahoma,sans-serif;
-  font-size: 11px;
+  font-size: $font-size-small - 1px;
   padding-right: 50px;
 
   @include link-color-darker;
@@ -408,16 +408,26 @@ div.tooltip-inner {
       position: absolute;
     }
 
+    // Topic's author
+    // -----------------
+
+    .badge-creator {
+      font-size: $font-size-small - 1px;
+      font-weight: normal;
+      padding: 1px 5px;
+      margin-top: -1px;
+
+      > a:hover {
+        text-decoration: none;
+      }
+    }
+
     .timestamp {
       color: $gray-light;
 
       &:hover {
         color: $alt-link-hover-color;
       }
-    }
-
-    .author {
-      background-color: $gray-lighter;
     }
 
     &:hover {

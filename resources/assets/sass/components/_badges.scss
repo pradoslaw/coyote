@@ -1,0 +1,8 @@
+.badge-creator,
+.badge-success {
+  background-color: $brand-primary;
+
+  > a {
+    color: #fff !important;
+  }
+}
