@@ -34,7 +34,7 @@ install:
   - sudo npm -g install npm@next
 
 before_script:
-  - sudo npm install --g gulp
+  - npm install --g gulp
   - npm install
   - psql -c 'create database coyote_test;' -U postgres
   - cp .env.testing .env
