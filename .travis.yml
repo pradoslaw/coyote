@@ -35,7 +35,7 @@ install:
 
 before_script:
   - sudo npm install --g gulp
-  - sudo npm install
+  - npm install
   - psql -c 'create database coyote_test;' -U postgres
   - cp .env.testing .env
   - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
