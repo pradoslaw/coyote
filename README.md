@@ -55,7 +55,7 @@ class UsersController extends Controller
 
 **Installation steps**
 
-1. run `composer require boduch/laravel-grid`
+1. run `composer require adam-boduch/laravel-grid`
 2. open file `config/app.php`
 3. add `Boduch\Grid\GridServiceProvider::class` into `providers` array
 
