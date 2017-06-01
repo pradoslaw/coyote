@@ -30,7 +30,7 @@ class UsersController extends Controller
             ->addColumn('name')
             ->addColumn('email')
             ->addColumn('created_at')
-            ->setSource(new EloquentSource(new \App\Models\User());
+            ->setSource(new EloquentSource(new \App\Models\User()));
             
         return view('users')->with('grid', $grid);
     }
