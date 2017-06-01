@@ -139,6 +139,8 @@ class CommentController extends Controller
         // we need to pass is_writeable variable to let know that we are able to edit/delete this comment
         return view('forum.partials.comment', [
             'is_writeable'  => true,
+            // get topic's author id
+            'author_id'     => $this->topic->firstPost->user_id,
             'comment'       => $this->comment,
             'forum'         => $this->forum
         ]);
