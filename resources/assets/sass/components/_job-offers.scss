@@ -8,8 +8,16 @@
 }
 
 #hire-me {
-  .panel-default {
-    border: 2px solid lighten($brand-primary, 5%);
+  > .green {
+    > .panel-default {
+      border: 2px solid lighten($brand-primary, 5%);
+    }
+  }
+
+  > .green-dashed {
+    > .panel-default {
+      border: 2px dashed lighten($brand-primary, 5%);
+    }
   }
 
   // Headline image
