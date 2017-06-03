@@ -124,7 +124,7 @@ class FormTest extends \Codeception\TestCase\Test
     protected function _before()
     {
         $this->request = app()->make('request');
-        $this->request->setSession(app('session')->driver('array'));
+        $this->request->setLaravelSession(app('session')->driver('array'));
     }
 
     protected function _after()

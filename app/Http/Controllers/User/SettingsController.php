@@ -5,11 +5,11 @@ namespace Coyote\Http\Controllers\User;
 use Coyote\Events\UserWasSaved;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\User as Forms;
+use Coyote\Mail\EmailConfirmation;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\Actkey;
 use Illuminate\Http\Request;
-use Illuminate\Mail\Message;
 
 class SettingsController extends BaseController
 {
@@ -99,13 +99,6 @@ class SettingsController extends BaseController
         // przed zmiana e-maila trzeba wyslac link potwierdzajacy
         $url = Actkey::createLink($this->auth->id, $email);
 
-        $this->getMailFactory()->queue(
-            'emails.user.change_email',
-            ['url' => $url],
-            function (Message $message) use ($email) {
-                $message->to($email);
-                $message->subject('Prosimy o potwierdzenie nowego adresu e-mail');
-            }
-        );
+        $this->getMailFactory()->to($email)->queue(new EmailConfirmation($url));
     }
 }
