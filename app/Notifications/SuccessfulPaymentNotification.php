@@ -47,7 +47,6 @@ class SuccessfulPaymentNotification extends Notification
     public function toMail($user)
     {
         $mail = (new MailMessage)
-            ->to($user->email)
             ->subject(sprintf('Potwierdzenie płatności za promowanie oferty: %s', $this->payment->job->title))
             ->line(
                 sprintf(

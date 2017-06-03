@@ -55,10 +55,10 @@ class DefaultBindings
     public function handle(Request $request, Closure $next)
     {
         $route = $request->route();
-        $optional = $this->getOptionalParameters($route->getUri());
+        $optional = $this->getOptionalParameters($route->uri());
 
         foreach ($optional as $parameter) {
-            if (isset($this->default[$parameter]) && null === $route->getParameter($parameter)) {
+            if (isset($this->default[$parameter]) && null === $route->parameter($parameter)) {
                 $model = $this->app->make($this->default[$parameter])->makeModel();
                 $route->setParameter($parameter, $model);
             }

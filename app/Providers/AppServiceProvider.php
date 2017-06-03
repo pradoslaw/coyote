@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
+use Symfony\Component\HttpFoundation\Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // set cloud flare as trusted proxy
-        $this->app['request']->setTrustedProxies($this->app['config']->get('cloudflare.ip'));
+        $this->app['request']->setTrustedProxies($this->app['config']->get('cloudflare.ip'), Request::HEADER_X_FORWARDED_ALL);
         // force HTTPS according to cloudflare HTTP_X_FORWARDED_PROTO header
         $this->app['request']->server->set(
             'HTTPS',
@@ -93,7 +94,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app['events']->listen(RouteMatched::class, function () {
-            $this->app->resolving(function (FormInterface $form, $app) {
+            $this->app->resolving(FormInterface::class, function (FormInterface $form, $app) {
                 $form->setContainer($app)
                     ->setRedirector($app->make(Redirector::class))
                     ->setRequest($app->make('request'));

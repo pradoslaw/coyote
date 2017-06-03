@@ -4,14 +4,16 @@ namespace Coyote\Exceptions;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Exception;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
@@ -24,6 +26,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         AuthorizationException::class,
+        AuthenticationException::class,
         HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
@@ -156,8 +159,10 @@ class Handler extends ExceptionHandler
             return parent::convertExceptionToResponse($e);
         }
 
+        $e = FlattenException::create($e);
+
         // on production site, we MUST render "nice" error page
-        return SymfonyResponse::create(view('errors.500')->render(), 500);
+        return SymfonyResponse::create(view('errors.500')->render(), $e->getStatusCode(), $e->getHeaders());
     }
 
     /**

@@ -52,14 +52,14 @@ class SetupGuestCookie
                 $guestId = (string) Uuid::uuid4();
             }
 
-            $request->session()->set('guest_id', $guestId);
+            $request->session()->put('guest_id', $guestId);
         }
 
         // validate registered user's guest_id with the one from session.
         // why? previously user could use website as anonymous user.
         if (!empty($request->user()) && $request->user()->guest_id !== $guestId) {
             $guestId = $request->user()->guest_id;
-            $request->session()->set('guest_id', $guestId);
+            $request->session()->put('guest_id', $guestId);
         }
 
         return $guestId;

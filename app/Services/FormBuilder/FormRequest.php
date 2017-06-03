@@ -8,7 +8,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 abstract class FormRequest
@@ -287,7 +287,7 @@ abstract class FormRequest
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
      *
-     * @throws \Illuminate\Http\Exception\HttpResponseException
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
     protected function failedValidation(Validator $validator)
     {
@@ -301,7 +301,7 @@ abstract class FormRequest
      *
      * @return void
      *
-     * @throws \Illuminate\Http\Exception\HttpResponseException
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
     protected function failedAuthorization()
     {

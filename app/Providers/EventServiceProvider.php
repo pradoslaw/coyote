@@ -68,9 +68,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // set high priority. we need to call this listener first.
-        $this->app['events']->listen(PaymentPaid::class, ChangePaymentStatus::class, 1001);
-        $this->app['events']->listen(PaymentPaid::class, BoostJobOffer::class, 1000);
+        $this->app['events']->listen(PaymentPaid::class, ChangePaymentStatus::class);
+        $this->app['events']->listen(PaymentPaid::class, BoostJobOffer::class);
 
         parent::boot();
     }
