@@ -20,7 +20,7 @@ class AddGuidToAlertsTable extends Migration
             $table->unique('guid');
         });
 
-        $this->db->table('alerts')->chunk(200000, function ($result) {
+        $this->db->table('alerts')->orderBy('id')->chunk(200000, function ($result) {
             foreach ($result as $row) {
                 $this->db->table('alerts')->where('id', $row->id)->update(['guid' => str_random(50)]);
             }
