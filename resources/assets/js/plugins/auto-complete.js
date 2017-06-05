@@ -79,14 +79,14 @@
             }
         }, 'li')
         .on('click', 'li', function () {
-            change($(this).text());
+            change($('span', this).text());
             dropdown.hide();
         });
 
         $this.keydown(function (e) {
             var keyCode = e.keyCode || window.event.keyCode;
 
-            if (keyCode === 27 || keyCode == 9) {
+            if (keyCode === 27 || keyCode === 9) {
                 dropdown.hide();
             }
             else if (keyCode === 13) {
@@ -106,7 +106,7 @@
             }
             else if (keyCode === 13) {
                 if (dropdown.is(':visible') && $('li.hover', dropdown).text() !== '') {
-                    change($('li.hover', dropdown).text());
+                    change($('li.hover span', dropdown).text());
                     dropdown.hide();
                     e.preventDefault();
                 }
