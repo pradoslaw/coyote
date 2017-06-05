@@ -13,18 +13,15 @@ $(function () {
                 if ($.trim(breadcrumb.text()).length > 0) {
                     breadcrumb.attr({id: 'breadcrumb-fixed'}).css(css).hide().appendTo('body');
 
-                    breadcrumb.slideDown('slow', (e) => breadcrumb.animate({opacity: 0.0}, 5000));
-                    breadcrumb.hover((e) => breadcrumb.stop().css(css), (e) => breadcrumb.animate({opacity: 0.0}, 800));
+                    breadcrumb.slideDown('fast');
                 }
             }
             else {
-                breadcrumb.stop(true, true).css(css).animate({opacity: 0.0}, 5000);
+                breadcrumb.css(css);
             }
         }
         else {
-            $('#breadcrumb-fixed').stop().fadeOut(400, function () {
-                $(this).remove();
-            });
+            $('#breadcrumb-fixed').remove();
         }
     };
 
@@ -38,7 +35,7 @@ $(function () {
                 let target = $(window.location.hash);
 
                 if (target.length) {
-                    $('html, body').animate({ scrollTop: target.offset().top - header.outerHeight() - 5 }, 0);
+                    $('html, body').animate({ scrollTop: target.offset().top - header.outerHeight() - 50 }, 0);
                 }
             });
         }
@@ -53,11 +50,6 @@ $(function () {
     let isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
     if (!isMobile && $('header.navbar-fixed-top').length === 1) {
-        if (window.location.hash.length) {
-            setTimeout(() => $(window).scroll(handler), 2000);
-        }
-        else {
-            $(window).scroll(handler);
-        }
+        $(window).scroll(handler);
     }
 });
