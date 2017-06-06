@@ -1,3 +1,9 @@
+## 2.2
+
+**Ogólne**
+- Upgrade do Laravel 5.4
+- "Przyklejony" breadcrumb nie znika na ekranie po pewnym czasie nieaktywności
+
 ## 2.1
 
 **Ogólne**
