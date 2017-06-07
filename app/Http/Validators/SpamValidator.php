@@ -93,6 +93,6 @@ class SpamValidator
      */
     private function isContainChinese(string $text): bool
     {
-        return (bool) preg_match("/\p{Han}+/u", $text);
+        return (bool) preg_match("/\p{Hangul}+/u", $text);
     }
 }
