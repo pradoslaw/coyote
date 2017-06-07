@@ -96,7 +96,8 @@ class PurgeJobsCommand extends Command
      */
     private function sendEmail(User $user, array $hit)
     {
-        $this->getMailFactory()->queue('emails.job.expired', $hit, function (Message $message) use ($hit, $user) {
+        // od laravel 5.4 nie moze byc queue(). musimy uzyc send()
+        $this->getMailFactory()->send('emails.job.expired', $hit, function (Message $message) use ($hit, $user) {
             $message->subject('Twoje ogłoszenie "' . $hit['title'] . '" wygasło.');
             $message->to($user->email);
         });
