@@ -2,9 +2,9 @@
 
 namespace Coyote\Services\Notification\Broadcasts;
 
+use Coyote\Mail\NotificationSent;
 use Coyote\Services\Notification\Providers\ProviderInterface;
 use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Mail\Message;
 
 /**
  * Class Email
@@ -39,13 +39,8 @@ class Email extends Broadcast
         $data = $notification->toArray();
         $data['headline'] = $this->parse($data, $data['headline']);
 
-        $email = $user['user_email'];
-
-        $this->mailer->queue($notification->emailTemplate(), $data, function (Message $message) use ($email, $data) {
-            $message->subject($data['headline']);
-            $message->to($email);
-            $message->from('no-reply@4programmers.net', config('app.name'));
-        });
+        $mailable = (new NotificationSent($notification->emailTemplate(), $data))->subject($data['headline']);
+        $this->mailer->to($user['user_email'])->send($mailable);
 
         return true;
     }
