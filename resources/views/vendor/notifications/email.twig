@@ -14,7 +14,7 @@
 
     <!-- Intro -->
     {% for line in introLines %}
-        <p>{{ line|raw }}</p>
+        <p class="paragraph">{{ line|raw }}</p>
     {% endfor %}
 
     <!-- Action Button -->
@@ -32,13 +32,13 @@
 
     <!-- Outro -->
     {% for line in outroLines %}
-        <p>
+        <p class="paragraph">
             {{ line|raw }}
         </p>
     {% endfor %}
 
     <!-- Salutation -->
-    <p>Z poważaniem,<br>{{ config('app.name') }}</p>
+    <p class="paragraph">Z poważaniem,<br>{{ config('app.name') }}</p>
 
     <!-- Sub Copy -->
     {% if actionText %}
