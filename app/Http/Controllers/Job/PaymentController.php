@@ -114,10 +114,6 @@ class PaymentController extends Controller
         $form = $this->getForm($payment);
         $form->validate();
 
-        // remove sensitive data
-        $this->request->replace(['number' => '***', 'cvc' => '***']);
-        $_POST['number'] = $_POST['cvc'] = '***';
-
         $vatRates = $this->country->vatRatesList();
 
         $calculator = CalculatorFactory::payment($payment);
@@ -134,14 +130,12 @@ class PaymentController extends Controller
                 ]
             ]);
 
+            /** @var $result \Braintree\Result\Error */
             if (!$result->success || is_null($result->transaction)) {
+                /** @var \Braintree\Error\Validation $error */
                 $error = array_first($result->errors->deepAll());
 
-                if (isset($error->message)) {
-                    throw new Exception\ValidationsFailed($error->message, $error->code);
-                }
-
-                throw new Exception\ValidationsFailed(trans('payment.validation'));
+                throw new Exception\ValidationsFailed($error->message, $error->code);
             }
 
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
@@ -183,6 +177,12 @@ class PaymentController extends Controller
      */
     private function handlePaymentException($exception, $message)
     {
+        $back = back()->withInput()->with('error', $message);
+
+        // remove sensitive data
+        $this->request->merge(['number' => '***', 'cvc' => '***']);
+        $_POST['number'] = $_POST['cvc'] = '***';
+
         $this->db->rollBack();
         // log error. sensitive data won't be saved (we removed them)
         logger()->error($exception);
@@ -191,7 +191,7 @@ class PaymentController extends Controller
             app('sentry')->captureException($exception);
         }
 
-        return back()->withInput()->with('error', $message);
+        return $back;
     }
 
     /**
