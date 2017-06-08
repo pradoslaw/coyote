@@ -115,7 +115,8 @@ class PaymentController extends Controller
         $form->validate();
 
         // remove sensitive data
-        $this->request->merge(['number' => '***', 'cvc' => '***']);
+        $this->request->replace(['number' => '***', 'cvc' => '***']);
+        $_POST['number'] = $_POST['cvc'] = '***';
 
         $vatRates = $this->country->vatRatesList();
 
@@ -136,7 +137,11 @@ class PaymentController extends Controller
             if (!$result->success || is_null($result->transaction)) {
                 $error = array_first($result->errors->deepAll());
 
-                throw new Exception\ValidationsFailed($error->message, $error->code);
+                if (isset($error->message)) {
+                    throw new Exception\ValidationsFailed($error->message, $error->code);
+                }
+
+                throw new Exception\ValidationsFailed(trans('payment.validation'));
             }
 
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
