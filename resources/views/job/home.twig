@@ -210,7 +210,9 @@
                     <div class="modal-body">
                         <div class="form-group" data-column="city">
                             <label>Interesuje mnie praca w miejscowościach...</label>
-                            {{ form_input('search', 'city', preferences.city, {class: 'form-control', placeholder: 'Np. Wrocław, Warszawa'}) }}
+                            {#{{ form_input('search', 'city', preferences.city, {class: 'form-control', placeholder: 'Np. Wrocław, Warszawa'}) }}#}
+                            <input type="search" name="city" class="form-control" placeholder="Np. Wrocław, Warszawa" value="{{ preferences.city }}">
+
                             <span class="help-block">Nazwy miejscowości rozdzielone przecinkiem</span>
 
                             <div class="checkbox">
@@ -225,7 +227,9 @@
                         <div class="form-group" data-column="tags">
                             <label>Interesują mnie technologie</label>
 
-                            {{ form_text('tags', preferences.tags|join(', '), {class: 'form-control', placeholder: 'Np. .net, c#', id: 'tags'}) }}
+                            {#{{ form_text('tags', preferences.tags|join(', '), {class: 'form-control', placeholder: 'Np. .net, c#', id: 'tags'}) }}#}
+                            <input type="text" name="tags" class="form-control" placeholder="Np. .net, c#" id="tags" value="{{ preferences.tags|join(', ') }}">
+
                             <span class="help-block"></span>
                         </div>
 
