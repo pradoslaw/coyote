@@ -137,5 +137,9 @@ $this->group(
             'middleware' => 'can:adm-payment',
             'as' => 'payments.paid'
         ]);
+
+        $this->get('Tags', ['uses' => 'TagsController@index'])->name('tags');
+        $this->get('Tags/Save/{tag?}', 'TagsController@edit')->name('tags.save');
+        $this->post('Tags/Save/{tag?}', 'TagsController@save');
     }
 );
