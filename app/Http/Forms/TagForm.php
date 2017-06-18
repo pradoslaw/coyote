@@ -16,6 +16,7 @@ class TagForm extends Form implements ValidatesWhenSubmitted
             ->add('name', 'text', [
                 'rules' => 'required|string|max:40|tag',
                 'label' => 'Nazwa (skrócona)',
+                'help' => 'Tylko podstawowe znaki, małe litery i cyfry.'
 
             ])
             ->add('real_name', 'text', [
