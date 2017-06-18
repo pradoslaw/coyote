@@ -1,4 +1,5 @@
 import declination from '../../components/declination';
+import preventDuplicate from '../../components/prevent-duplicate';
 
 $(function () {
     'use strict';
@@ -251,17 +252,17 @@ $(function () {
     });
 
     $('.vote-up').click(function() {
-        var $this = $(this);
-
-        $.post($this.attr('href'), function(json) {
-            $this.toggleClass('on');
-            $this.prev().text(json.count);
-        })
-            .error(function(event) {
+        preventDuplicate(() => {
+            $.post($(this).attr('href'), json => {
+                $(this).toggleClass('on');
+                $(this).prev().text(json.count);
+            })
+            .error(event => {
                 if (typeof event.responseJSON.error !== 'undefined') {
                     error(event.responseJSON.error);
                 }
             });
+        });
 
         return false;
     });
