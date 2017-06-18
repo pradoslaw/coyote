@@ -2,11 +2,15 @@
 
 namespace Coyote;
 
+use Coyote\Tag\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $name
+ * @property string $real_name
+ * @property int $category_id
+ * @property Category $category
  */
 class Tag extends Model
 {
@@ -17,7 +21,7 @@ class Tag extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'real_name'];
 
     /**
      * @var array
@@ -33,6 +37,14 @@ class Tag extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function __toString()
     {
