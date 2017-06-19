@@ -135,6 +135,10 @@ class PaymentController extends Controller
                 /** @var \Braintree\Error\Validation $error */
                 $error = array_first($result->errors->deepAll());
 
+                if (is_null($error)) {
+                    throw new Exception\ValidationsFailed();
+                }
+
                 throw new Exception\ValidationsFailed($error->message, $error->code);
             }
 
