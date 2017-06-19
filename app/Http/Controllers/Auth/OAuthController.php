@@ -26,6 +26,7 @@ class OAuthController extends Controller
     public function __construct(UserRepository $user)
     {
         parent::__construct();
+
         $this->user = $user;
     }
 
@@ -48,7 +49,7 @@ class OAuthController extends Controller
      */
     public function callback($provider)
     {
-        $oauth = $this->getSocialiteFactory()->driver($provider)->user();
+        $oauth = $this->getSocialiteFactory()->driver($provider)->stateless()->user();
         $user = $this->user->findWhere(['provider' => $provider, 'provider_id' => $oauth->getId()])->first();
 
         if (!$user) {
