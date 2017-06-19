@@ -220,7 +220,7 @@ class PaymentController extends Controller
         } catch (Exception\ServerError $e) {
             return $this->handlePaymentException($e, trans('payment.unauthorized'));
         } catch (Exception\ValidationsFailed $e) {
-            return $this->handlePaymentException($e, $e->getMessage());
+            return $this->handlePaymentException($e, $e->getMessage() ?: trans('payment.validation'));
         } catch (\Exception $e) {
             return $this->handlePaymentException($e, trans('payment.unhandled'));
         }
