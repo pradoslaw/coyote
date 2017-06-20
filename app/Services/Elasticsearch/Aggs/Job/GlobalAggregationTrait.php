@@ -2,9 +2,13 @@
 
 namespace Coyote\Services\Elasticsearch\Aggs\Job;
 
-trait Job
+trait GlobalAggregationTrait
 {
-    protected function buildGlobal($body)
+    /**
+     * @param array $body
+     * @return array
+     */
+    protected function wrapGlobal(array $body): array
     {
         $nested = $body['aggs'][$this->name];
 

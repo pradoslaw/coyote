@@ -2,17 +2,32 @@
 
 namespace Coyote\Services\Elasticsearch\Aggs\Job;
 
-use Coyote\Services\Elasticsearch\Aggs;
 use Coyote\Services\Elasticsearch\DslInterface;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 
-class Tag extends Aggs\Terms implements DslInterface
+class Tag implements DslInterface
 {
-    use Job;
+    use GlobalAggregationTrait;
 
-    public function __construct()
+    /**
+     * Field required by GlobalAggregationTrait
+     *
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var array
+     */
+    private $include = [];
+
+    /**
+     * @param array $include
+     */
+    public function __construct(array $include = [])
     {
-        parent::__construct('tags', 'tags.original');
+        $this->name = 'tags';
+        $this->include = $include;
     }
 
     /**
@@ -21,6 +36,16 @@ class Tag extends Aggs\Terms implements DslInterface
      */
     public function apply(QueryBuilderInterface $queryBuilder)
     {
-        return $this->buildGlobal(parent::apply($queryBuilder));
+        $body = $queryBuilder->getBody();
+
+        $body['aggs'][$this->name] = [
+            'terms' => [
+                'field'     => 'tags.original',
+                'size'      => 15,
+                'include'   => $this->include
+            ]
+        ];
+
+        return $this->wrapGlobal($body);
     }
 }

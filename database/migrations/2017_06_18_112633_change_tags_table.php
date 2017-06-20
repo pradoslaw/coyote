@@ -19,6 +19,7 @@ class ChangeTagsTable extends Migration
             $table->smallInteger('category_id')->nullable();
             $table->string('logo', 25)->nullable();
 
+            $table->index('category_id');
             $table->foreign('category_id')->references('id')->on('tag_categories')->onDelete('no action');
         });
     }

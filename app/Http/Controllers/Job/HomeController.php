@@ -3,8 +3,11 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Job\Preferences;
+use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Repositories\Criteria\Tag\ForCategory;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Tag;
 use Illuminate\Http\Request;
 use Coyote\Job;
 use Coyote\Currency;
@@ -18,11 +21,18 @@ class HomeController extends BaseController
     private $preferences = [];
 
     /**
-     * @param JobRepository $job
+     * @var TagRepository
      */
-    public function __construct(JobRepository $job)
+    private $tag;
+
+    /**
+     * @param JobRepository $job
+     * @param TagRepository $tag
+     */
+    public function __construct(JobRepository $job, TagRepository $tag)
     {
         parent::__construct($job);
+        $this->tag = $tag;
 
         $this->middleware('geocode');
 
@@ -63,6 +73,10 @@ class HomeController extends BaseController
             $this->builder->setPreferences($this->preferences);
         }
 
+        // get only tags belong to specific category
+        $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
+
+        $this->builder->setLanguages($this->tag->pluck('name'));
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
         $this->request->session()->put('current_url', $this->request->fullUrl());
 

@@ -62,7 +62,10 @@ class TagsController extends BaseController
     public function save($tag, TagForm $form)
     {
         $tag->fill($form->all());
-        $tag->logo->upload($form->getRequest()->file('logo'));
+
+        if ($form->getRequest()->hasFile('logo')) {
+            $tag->logo->upload($form->getRequest()->file('logo'));
+        }
 
         $tag->save();
 

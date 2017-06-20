@@ -32,13 +32,14 @@ class TagRepository extends Repository implements TagRepositoryInterface
      */
     public function multiInsert(array $tags)
     {
-        $tagsId = [];
+        $ids = [];
 
         foreach ($tags as $name) {
             $tag = $this->model->firstOrCreate(['name' => $name]);
-            $tagsId[] = $tag->id;
+
+            $ids[] = $tag->id;
         }
 
-        return $tagsId;
+        return $ids;
     }
 }

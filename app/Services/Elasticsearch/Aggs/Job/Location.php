@@ -8,7 +8,7 @@ use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 
 class Location extends Aggs\Nested implements DslInterface
 {
-    use Job;
+    use GlobalAggregationTrait;
 
     public function __construct()
     {
@@ -21,6 +21,6 @@ class Location extends Aggs\Nested implements DslInterface
      */
     public function apply(QueryBuilderInterface $queryBuilder)
     {
-        return $this->buildGlobal(parent::apply($queryBuilder));
+        return $this->wrapGlobal(parent::apply($queryBuilder));
     }
 }
