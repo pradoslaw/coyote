@@ -44,6 +44,11 @@ class SearchBuilder extends QueryBuilder
     protected $sessionId = null;
 
     /**
+     * @var array
+     */
+    protected $languages = [];
+
+    /**
      * @param Request $request
      */
     public function __construct(Request $request)
@@ -61,6 +66,14 @@ class SearchBuilder extends QueryBuilder
     public function setSessionId(string $sessionId)
     {
         $this->sessionId = $sessionId;
+    }
+
+    /**
+     * @param array $languages
+     */
+    public function setLanguages(array $languages)
+    {
+        $this->languages = $languages;
     }
 
     /**
@@ -194,7 +207,7 @@ class SearchBuilder extends QueryBuilder
     {
         $this->aggs(new Aggs\Job\Location());
         $this->aggs(new Aggs\Job\Remote());
-        $this->aggs(new Aggs\Job\Tag());
+        $this->aggs(new Aggs\Job\Tag($this->languages));
         $this->aggs(new Aggs\Job\Boost());
     }
 

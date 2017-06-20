@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Guard;
 
 class TagValidator
 {
-    const REGEXP = '[a-ząęśżźćółń0-9\-\.#,\+]';
+    const REGEXP = '^[a-ząęśżźćółń0-9\-\.#,\+]+$';
 
     /**
      * @var Guard

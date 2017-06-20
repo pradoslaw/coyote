@@ -11,6 +11,7 @@ use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
 use Coyote\Repositories\Contracts\PaymentRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
@@ -71,6 +72,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->model('block', BlockRepositoryInterface::class);
         $this->router->model('job', JobRepositoryInterface::class);
         $this->router->model('payment', PaymentRepositoryInterface::class);
+        $this->router->model('tag', TagRepositoryInterface::class);
 
         $this->router->bind('forum', function ($slug) {
             return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();

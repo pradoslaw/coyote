@@ -4,6 +4,7 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Container\Container as App;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
@@ -27,7 +28,8 @@ class DefaultBindings
         'firewall' => FirewallRepositoryInterface::class,
         'group' => GroupRepositoryInterface::class,
         'block' => BlockRepositoryInterface::class,
-        'job' => JobRepositoryInterface::class
+        'job' => JobRepositoryInterface::class,
+        'tag' => TagRepositoryInterface::class
     ];
 
     /**
