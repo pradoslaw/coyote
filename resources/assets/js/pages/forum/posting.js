@@ -268,17 +268,17 @@ $(function () {
     });
 
     $('.vote-accept[href]').click(function() {
-        var $this = $(this);
-
-        $.post($this.attr('href'), function() {
-            $this.toggleClass('on');
-            $('.vote-accept').not($this).removeClass('on');
-        })
+        preventDuplicate(() => {
+            $.post($(this).attr('href'), () => {
+                $(this).toggleClass('on');
+                $('.vote-accept').not(this).removeClass('on');
+            })
             .error(function(event) {
                 if (typeof event.responseJSON.error !== 'undefined') {
                     error(event.responseJSON.error);
                 }
             });
+        });
 
         return false;
     });
