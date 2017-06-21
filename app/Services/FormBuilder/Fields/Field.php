@@ -202,7 +202,7 @@ abstract class Field
     {
         $this->rules = $rules;
 
-        if ($rules) {
+        if (is_string($rules)) {
             $rules = explode('|', $rules);
 
             if (in_array('required', $rules)) {

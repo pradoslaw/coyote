@@ -3,10 +3,10 @@
 namespace Coyote\Http\Forms;
 
 use Coyote\Services\FormBuilder\Form;
-use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 use Coyote\Tag\Category;
+use Illuminate\Validation\Rule;
 
-class TagForm extends Form implements ValidatesWhenSubmitted
+class TagForm extends Form
 {
     /**
      * It's public so we can use use attr from twig
@@ -25,7 +25,13 @@ class TagForm extends Form implements ValidatesWhenSubmitted
 
         $this
             ->add('name', 'text', [
-                'rules' => 'required|string|max:40|tag',
+                'rules' => [
+                    'required',
+                    'string',
+                    'max:40',
+                    'tag',
+                    Rule::unique('tags')->ignore($this->data->id)
+                ],
                 'label' => 'Nazwa (skrócona)',
                 'help' => 'Tylko podstawowe znaki, małe litery i cyfry.'
 
@@ -51,5 +57,10 @@ class TagForm extends Form implements ValidatesWhenSubmitted
                     'data-submit-state' => 'Zapisywanie...'
                 ]
             ]);
+    }
+
+    public function messages()
+    {
+        return ['name.unique' => 'Tag o tej nazwie już istnieje.'];
     }
 }

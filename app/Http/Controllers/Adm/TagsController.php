@@ -56,11 +56,13 @@ class TagsController extends BaseController
 
     /**
      * @param \Coyote\Tag $tag
-     * @param TagForm $form
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($tag, TagForm $form)
+    public function save($tag)
     {
+        $form = $this->createForm(TagForm::class, $tag);
+        $form->validate();
+
         $tag->fill($form->all());
 
         if ($form->getRequest()->hasFile('logo')) {
