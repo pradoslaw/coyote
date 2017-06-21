@@ -5,6 +5,7 @@ namespace Coyote;
 use Coyote\Services\Eloquent\HasMany;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\Logo;
+use Coyote\Services\Media\SerializeClass;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,7 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Firm extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, SerializeClass;
 
     /**
      * The attributes that are mass assignable.
@@ -178,24 +179,5 @@ class Firm extends Model
         if (empty($this->user_id)) {
             $this->user_id = $userId;
         }
-    }
-
-    public function __sleep()
-    {
-        if ($this->logo instanceof Logo) {
-            $this->attributes['logo'] = $this->logo->getFilename();
-        }
-
-        $properties = (new \ReflectionClass($this))->getProperties();
-
-        $result = [];
-
-        foreach ($properties as $property) {
-            if (!$property->isStatic()) {
-                $result[] = $property->getName();
-            }
-        }
-
-        return $result;
     }
 }

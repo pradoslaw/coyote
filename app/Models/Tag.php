@@ -5,6 +5,7 @@ namespace Coyote;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\Logo;
 use Coyote\Services\Media\MediaInterface;
+use Coyote\Services\Media\SerializeClass;
 use Coyote\Tag\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Tag extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, SerializeClass;
 
     /**
      * The attributes that are mass assignable.

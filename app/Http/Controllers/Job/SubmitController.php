@@ -107,12 +107,12 @@ class SubmitController extends Controller
     public function postIndex(Request $request)
     {
         /** @var \Coyote\Job $job */
-        $job = $request->session()->get(Job::class);
+        $job = clone $request->session()->get(Job::class);
 
         $form = $this->createForm(JobForm::class, $job);
         $form->validate();
 
-        // only fillable columns! we don't want to set fields like "city" or "tags" because they don't exists.
+        // only fillable columns! we don't want to set fields like "city" or "tags" because they don't really exists in db.
         $job->fill($form->all());
 
         $request->session()->put(Job::class, $job);
