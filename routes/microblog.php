@@ -23,5 +23,5 @@ $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     $this->get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
 
     $this->get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine', 'middleware' => 'auth']);
-    $this->get('{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
+    $this->get('{tag_name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
 });

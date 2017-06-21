@@ -55,7 +55,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->pattern('payment', '[0-9a-z\-]+');
 
         $this->router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
-        $this->router->pattern('tag', '([a-ząęśżźćółń0-9\-\.\#\+])+');
+        $this->router->pattern('tag_name', '([a-ząęśżźćółń0-9\-\.\#\+])+');
         $this->router->pattern('slug', '.*');
         $this->router->pattern('path', '.*'); // being used on wiki routes
         $this->router->pattern('tab', 'Reputation|Post|Microblog'); // user's profile tabs

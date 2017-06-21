@@ -8,7 +8,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->post('Preview', ['uses' => 'HomeController@preview', 'as' => 'preview']);
     $this->get('Search', ['uses' => 'SearchController@index', 'as' => 'search']);
 
-    $this->get('Tag/{tag}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
+    $this->get('Tag/{tag_name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     $this->post('Tag/save', ['uses' => 'TagController@save', 'as' => 'tag.save']);
     $this->get('Tag/Prompt', ['uses' => 'TagController@prompt', 'as' => 'tag.prompt']);
     $this->get('Tag/Validate', ['uses' => 'TagController@valid', 'as' => 'tag.validate']);
