@@ -55,6 +55,14 @@ class Topic extends Model
     protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
+     * Hide tags from JSON or/and array. Tag contain closure that can't be serialized. We need to serialize post
+     * in PostWasDeleted() class.
+     *
+     * @var array
+     */
+    protected $hidden = ['tags'];
+
+    /**
      * Elasticsearch type mapping
      *
      * @var array
