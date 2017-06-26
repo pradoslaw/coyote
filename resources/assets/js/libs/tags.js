@@ -192,6 +192,7 @@ class Tags {
             .replace(/'/g, "&#39;")
             .replace(/"/g, "&#34;")
             .toLowerCase()
+            .replace(/\//g, '')
             .replace(/ /g, '-');
 
         this.setup.onSelect(value);
