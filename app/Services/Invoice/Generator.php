@@ -36,7 +36,7 @@ class Generator
 
         $invoice->items()->create([
             'description'   => $this->getDescription($payment),
-            'price'         => $payment->plan->price * $payment->days,
+            'price'         => $calculator->netPrice(),
             'vat_rate'      => $calculator->vatRate
         ]);
 
