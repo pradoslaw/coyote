@@ -17,92 +17,50 @@
 
             {% include 'job.submit.partials.loader' %}
 
-            <div id="plan-table" class="clearfix">
-                <ul class="plan-benefits">
-                    <li><div>Publikacja ogłoszenia na okres <strong>30 dni</strong></div></li>
-                    <li>
-                        <div>
-                            <strong>Reklama</strong> oferty na forum i stronie głównej
-
-                            <a href="javascript:" class="plan-tooltip-wrapper">
-                                <i class="fa fa-question-circle"></i>
-
-                                <div class="plan-tooltip"><img src="{{ cdn('img/offer-example.jpg') }}"></div>
-                            </a>
-                        </div>
-                    </li>
-                    <li><div><strong>Wyróżnienie</strong> kolorem <i class="fa fa-question-circle" data-toggle="tooltip" title="Twoje ogłoszenie otrzyma dodatkowe tło, które odróżni je od standardowych ogłoszeń na liście."></i></div></li>
-                    <li><div>Wyróżnienie ogłoszenia <strong>na górze listy</strong> wyszukiwania</div></li>
-                    <li><div><strong>3x podbicie</strong> ogłoszenia <i class="fa fa-question-circle" data-toggle="tooltip" title="W okresie promowania oferty, 3 razy podbijemy Twoje ogłoszenie na górę listy. Dzięki temu więcej ludzi będzie mogło je zobaczyć."></i></div></li>
-                </ul>
-
-                <div class="plan">
-                    <div class="plan-header">
-                        <div class="plan-price"><strong>30 zł</strong> <small>netto</small></div>
-                    </div>
-
-                    <div class="plan-body">
-                        <ul class="plan-features">
-                            <li><i class="fa fa-check-circle fa-fw text-primary"></i></li>
-                            <li><i class="fa fa-remove fa-fw text-muted"></i></li>
-                            <li><i class="fa fa-remove fa-fw text-muted"></i></li>
-                            <li><i class="fa fa-remove fa-fw text-muted"></i></li>
-                            <li><i class="fa fa-remove fa-fw text-muted"></i></li>
-
-                            <li class="feature-button">
-                                <button class="btn btn-default">Wybierz</button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="plan selected">
-                    <div class="plan-header">
-                        <div class="plan-price"><strong>75.6 zł</strong> <small>netto</small></div>
-                        <div class="plan-price-old"><strong>126 zł</strong> <small>netto</small></div>
-                    </div>
-
-                    <div class="plan-body">
-                        <ul class="plan-features">
-                            <li><i class="fa fa-check-circle fa-fw text-primary"></i></li>
-                            <li><i class="fa fa-check-circle fa-fw text-primary"></i></li>
-                            <li><i class="fa fa-remove fa-fw text-muted"></i></li>
-                            <li><i class="fa fa-remove fa-fw text-muted"></i></li>
-                            <li><i class="fa fa-remove fa-fw text-muted"></i></li>
-
-                            <li class="feature-button">
-                                {#<button class="btn btn-default">Wybierz</button>#}
-
-                                <span class="text-primary"><i class="fa fa-check-circle-o fa-fw text-primary"></i> Wybrano</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="plan">
-                    <div class="plan-header">
-                        <div class="plan-price"><strong>135 zł</strong> <small>netto</small></div>
-                        <div class="plan-price-old"><strong>270 zł</strong> <small>netto</small></div>
-                    </div>
-
-                    <div class="plan-body">
-                        <ul class="plan-features">
-                            <li><i class="fa fa-check-circle fa-fw text-primary"></i></li>
-                            <li><i class="fa fa-check-circle fa-fw text-primary"></i></li>
-                            <li><i class="fa fa-check-circle fa-fw text-primary"></i></li>
-                            <li><i class="fa fa-check-circle fa-fw text-primary"></i></li>
-                            <li><i class="fa fa-check-circle fa-fw text-primary"></i></li>
-
-
-                            <li class="feature-button">
-                                <button class="btn btn-default">Wybierz</button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
             {{ form_start(form) }}
+                {% if not is_plan_ongoing %}
+                    {{ form_widget(form.plan_id) }}
+
+                    <div id="plan-table" class="clearfix margin-lg-top margin-lg-bottom">
+                        <ul class="plan-benefits">
+                            <li><div>Publikacja ogłoszenia na okres <strong>30 dni</strong></div></li>
+                            <li>
+                                <div>
+                                    <strong>Reklama</strong> oferty na forum i stronie głównej
+
+                                    <a href="javascript:" class="plan-tooltip-wrapper">
+                                        <i class="fa fa-question-circle"></i>
+
+                                        <div class="plan-tooltip"><img src="{{ cdn('img/offer-example.jpg') }}"></div>
+                                    </a>
+                                </div>
+                            </li>
+                            <li><div><strong>Wyróżnienie</strong> kolorem <i class="fa fa-question-circle" data-toggle="tooltip" title="Twoje ogłoszenie otrzyma dodatkowe tło, które odróżni je od standardowych ogłoszeń na liście."></i></div></li>
+                            <li><div>Wyróżnienie ogłoszenia <strong>na górze listy</strong> wyszukiwania</div></li>
+                            <li><div><strong>3x podbicie</strong> ogłoszenia <i class="fa fa-question-circle" data-toggle="tooltip" title="W okresie promowania oferty, 3 razy podbijemy Twoje ogłoszenie na górę listy. Dzięki temu więcej ludzi będzie mogło je zobaczyć."></i></div></li>
+                        </ul>
+
+
+                        <div class="plan" v-for="plan in plans" :class="{'selected': job.plan_id == plan.id}">
+                            <div class="plan-header" @click="changePlan(plan.id)">
+                                <div class="plan-price"><strong>${ plan.price * (plan.discount > 0 ? plan.discount : 1) } zł</strong> <small>netto</small></div>
+                                <div class="plan-price-old" v-if="plan.discount > 0"><strong>${ plan.price } zł</strong> <small>netto</small></div>
+                            </div>
+
+                            <div class="plan-body">
+                                <ul class="plan-features">
+                                    <li v-for="n in 5"><i class="fa fa-fw" :class="{'fa-check-circle': plan.benefits.length >= n, 'text-primary': plan.benefits.length >= n, 'fa-remove': plan.benefits.length < n, 'text-muted': plan.benefits.length < n}"></i></li>
+
+                                    <li class="feature-button">
+                                        <button class="btn btn-default" v-if="job.plan_id != plan.id" @click.prevent="changePlan(plan.id)">Wybierz</button>
+                                        <span class="text-primary" v-if="job.plan_id == plan.id"><i class="fa fa-check-circle-o fa-fw text-primary"></i> Wybrano</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 {{ form_widget(form.id) }}
                 {{ form_widget(form.firm_id) }}
                 {{ form_widget(form.slug) }}
@@ -220,62 +178,6 @@
                         </div>
                     </div>
                 </div>
-
-                {% if not is_plan_ongoing %}
-                    <div class="panel panel-default plans">
-                        <div class="panel-heading">
-                            Promowanie ogłoszenia
-                        </div>
-
-                        {{ form_widget(form.plan_length) }}
-
-                        <div class="panel-body">
-                            <h3 class="margin-md-bottom">Co zyskujesz?</h3>
-
-                            <ul class="list-unstyled margin-md-top margin-md-bottom">
-                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Wyższa pozycja na <strong>liście wyszukiwania</strong>. Twoja oferta będzie wyświetlana nad darmowymi.</li>
-                                <li>
-                                    <i class="fa fa-check-circle fa-fw text-primary"></i>
-                                    <strong>Reklama</strong> oferty na forum i stronie głównej.
-
-                                    <a href="javascript:" class="plan-tooltip-wrapper">
-                                        Zobacz jak to wygląda.
-
-                                        <div class="plan-tooltip"><img src="{{ cdn('img/offer-example.jpg') }}"></div>
-                                    </a>
-                                </li>
-                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> <span class="label label-new">Nowość</span> Wyróżnienie <strong>kolorem</strong>. <i class="fa fa-question-circle" style="font-size: 16px; cursor: help;" data-toggle="tooltip" title="Twoje ogłoszenie otrzyma dodatkowe tło, które odróżni je od standardowych ogłoszeń na liście."></i></li>
-                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> <span class="label label-new">Nowość</span> <strong>3x podbicie</strong> ogłoszenia. <i class="fa fa-question-circle" style="font-size: 16px; cursor: help;" data-toggle="tooltip" title="W okresie promowania oferty, 3 razy podbijemy Twoje ogłoszenie na górę listy. Dzięki temu więcej ludzi będzie mogło je zobaczyć."></i></li>
-                                <li><i class="fa fa-check-circle fa-fw text-primary"></i> Tylko <strong>${ price } zł</strong> (~2 €) netto za dzień. Sam decydujesz ile dni oferta ma być promowana.</li>
-                            </ul>
-
-                            <div class="well well-sm">
-                                <div class="checkbox">
-                                    <div class="row">
-                                        <div class="col-sm-7">
-                                            {{ form_widget(form.plan_id) }}
-
-                                            <label for="{{ form.plan_id.attr.id }}">
-                                                {{ form.plan_id.label }}
-                                            </label>
-                                        </div>
-
-                                        <div class="col-sm-5 text-right" v-show="job.plan_id">
-                                            <span class="pricing"><strong>${ price } zł</strong> netto</span>
-                                            <sup class="padding-md-left padding-md-right">x</sup>
-
-                                            <changer :value="job.plan_length" class="pricing" :choices="[3, 5, 7, 14, 30, 40, 50, 60, 70, 80, 90]" @change="changePlan"></changer>
-
-                                            <sup class="padding-md-left padding-md-right">=</sup>
-
-                                            <strong class="total-price">${ price * job.plan_length } zł</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -395,6 +297,7 @@
             tags: {{ form.tags.value|raw }},
             features: {{ form.features.value|raw }},
             errors: {{ form_errors|raw }},
+            plans: {{ plans|raw }},
             suggestions: []
         };
     </script>
@@ -403,11 +306,6 @@
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="{{ cdn('js/jquery-ui.js') }}"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
-    <script>
-        $(function() {
-            $('input[name="title"]').focus();
-        })
-    </script>
 
     {% include 'job.submit.partials.navigation' %}
 {% endblock %}

@@ -11,6 +11,7 @@ use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\Geocoder\GeocoderInterface;
 use Coyote\Services\Parser\Helpers\City;
 use Coyote\Tag;
+use Illuminate\Validation\Rule;
 
 class JobForm extends Form
 {
@@ -307,18 +308,15 @@ class JobForm extends Form
         }
 
         $this
-            ->add('plan_id', 'checkbox', [
-                'rules' => 'bool',
-                'label' => 'Tak, chciałbym sokrzystać z opcji promowania ogłoszenia.',
+            ->add('plan_id', 'hidden', [
+                'rules' => [
+                    'required',
+                    'int',
+                    Rule::exists('plans', 'id')->where('is_active', 1)
+                ],
                 'attr' => [
                     'id' => 'plan_id',
                     'v-model' => 'job.plan_id'
-                ]
-            ])
-            ->add('plan_length', 'hidden', [
-                'rules' => 'integer|min:3',
-                'attr' => [
-                    'v-model' => 'job.plan_length'
                 ]
             ]);
     }

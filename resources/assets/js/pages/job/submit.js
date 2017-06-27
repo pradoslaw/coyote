@@ -237,8 +237,8 @@ new Vue({
             this.map.removeMarker(this.marker);
             this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
         },
-        changePlan: function (value) {
-            this.job.plan_length = value;
+        changePlan: function (planId) {
+            this.job.plan_id = planId;
         }
     },
     computed: {

@@ -48,8 +48,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Currency[] $currency
  * @property Feature[] $features
  * @property int $plan_id
- * @property int $plan_length
  * @property true $boost
+ * @property Plan $plan
  */
 class Job extends Model
 {
@@ -105,8 +105,7 @@ class Job extends Model
         'email',
         'enable_apply',
         'seniority_id',
-        'plan_id', // column does not really exist in db (model attribute instead)
-        'plan_length', // column does not really exist in db (model attribute instead)
+        'plan_id'
     ];
 
     /**
@@ -233,8 +232,6 @@ class Job extends Model
             "type" => "boolean"
         ]
     ];
-
-    private $plan = ['id' => null, 'length' => 30];
 
     /**
      * We need to set firm id to null offer is private
@@ -453,6 +450,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)
@@ -493,38 +498,6 @@ class Job extends Model
     public function getDeadlineAttribute()
     {
         return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now(), false)->days + 1 : 90;
-    }
-
-    /**
-     * @param int $value
-     */
-    public function setPlanIdAttribute($value)
-    {
-        $this->plan['id'] = $value;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPlanIdAttribute()
-    {
-        return $this->plan['id'];
-    }
-
-    /**
-     * @param int $value
-     */
-    public function setPlanLengthAttribute($value)
-    {
-        $this->plan['length'] = $value;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPlanLengthAttribute()
-    {
-        return $this->plan['length'];
     }
 
     /**
@@ -571,6 +544,16 @@ class Job extends Model
                 $pivot = $this->features()->newPivot(['checked' => $feature->checked, 'value' => $feature->value]);
                 $this->features->add($feature->setRelation('pivot', $pivot));
             }
+        }
+    }
+
+    /**
+     * @param int $planId
+     */
+    public function setDefaultPlanId($planId)
+    {
+        if (empty($this->plan_id)) {
+            $this->plan_id = $planId;
         }
     }
 

@@ -11,6 +11,7 @@ use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
@@ -31,10 +32,16 @@ class SubmitController extends Controller
     private $firm;
 
     /**
+     * @var PlanRepository
+     */
+    private $plan;
+
+    /**
      * @param JobRepository $job
      * @param FirmRepository $firm
+     * @param PlanRepository $plan
      */
-    public function __construct(JobRepository $job, FirmRepository $firm)
+    public function __construct(JobRepository $job, FirmRepository $firm, PlanRepository $plan)
     {
         parent::__construct();
 
@@ -45,6 +52,7 @@ class SubmitController extends Controller
 
         $this->job = $job;
         $this->firm = $firm;
+        $this->plan = $plan;
     }
 
     /**
@@ -75,6 +83,7 @@ class SubmitController extends Controller
 
             $job->setDefaultUserId($this->userId);
             $job->setDefaultFeatures($this->job->getDefaultFeatures($this->userId));
+            $job->setDefaultPlanId($this->plan->getDefaultId());
         }
 
         $this->authorize('update', $job);
@@ -96,7 +105,8 @@ class SubmitController extends Controller
             // firm information (in order to show firm nam on the button)
             'firm'              => $job->firm,
             // is plan is still going on?
-            'is_plan_ongoing'   => $job->isPlanOngoing()
+            'is_plan_ongoing'   => $job->isPlanOngoing(),
+            'plans'             => $this->plan->active()->toJson()
         ]);
     }
 
@@ -273,8 +283,8 @@ class SubmitController extends Controller
             $job->tags()->sync($tags);
             $job->features()->sync($features);
 
-            if ($job->plan_id) {
-                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan_length]);
+            if ($job->wasRecentlyCreated || !$job->isPlanOngoing()) {
+                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
             }
 
             event(new JobWasSaved($job));
