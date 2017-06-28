@@ -43,19 +43,20 @@ class BoostJobsCommand extends Command
      */
     public function handle()
     {
-        $payments = $this->payment->ongoingPayments();
+        $payments = $this->payment->ongoingPaymentsWithBoostBenefit();
 
         foreach ($payments as $payment) {
             $every = floor($payment->days / 3);
 
             // attention! job can be already removed.
-            if ($payment->job !== null && Carbon::now() > Carbon::parse($payment->job->boost_at)->addDays($every)) {
+            if ($payment->job !== null
+                && Carbon::now() > Carbon::parse($payment->job->boost_at)->addDays($every)) {
                 $payment->job->boost_at = Carbon::now();
                 $payment->job->save();
 
-                $this->info("Boosting " . $payment->job->title);
+                $this->info("Boosting $payment->job->title");
 
-                event(new JobWasSaved($payment->job));
+                $payment->job->putToIndex();
             }
         }
 
