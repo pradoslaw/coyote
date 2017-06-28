@@ -42,7 +42,7 @@ class UpdateJobOffers extends Job implements ShouldQueue
 
         $job->pushCriteria(new PriorDeadline());
 
-        foreach ($job->findAllBy('firm_id', $this->firmId, ['id']) as $row) {
+        foreach ($job->findWhere(['firm_id' => $this->firmId, 'is_publish' => 1], ['id']) as $row) {
             $client->update(array_merge($params, [
                 'id' => $row['id'],
                 'body' => [

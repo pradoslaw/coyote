@@ -46,6 +46,8 @@ class JobPostingCest
         $I->click('Podgląd');
         $I->click('Opublikuj');
 
+        $I->click('Powrót do ogłoszenia');
+
         $I->seeCurrentRouteIs('job.offer');
         $I->see($title, '.media-heading');
         $I->see($city);
@@ -59,7 +61,9 @@ class JobPostingCest
         $I->amOnRoute('job.submit');
 
         $fake = Factory::create();
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['is_default' => 1]);
 
+        $I->seeInField('plan_id', $plan->id);
         $I->fillField('input[name=title]', $title = $fake->text(50));
         $I->selectOption(['name' => 'employment_id'], '1');
         $I->cantSee('Zapisz jako');
@@ -80,6 +84,8 @@ class JobPostingCest
         $I->click('Podgląd');
         $I->click('Opublikuj');
 
+        $I->click('Powrót do ogłoszenia');
+
         $I->seeCurrentRouteIs('job.offer');
         $I->see($title, '.media-heading');
         $I->see($firm, '.employer');
@@ -93,16 +99,22 @@ class JobPostingCest
     {
         $I->wantTo('Create new job offer when firm exists');
 
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['is_default' => 1]);
+
         $fake = Factory::create();
         $I->haveRecord('firms', ['user_id' => $this->user->id, 'name' => $firm = $fake->company]);
 
         $I->amOnRoute('job.submit');
+
+        $I->seeInField('plan_id', $plan->id);
         $I->canSee("Zapisz jako $firm", '.btn-save');
         $I->fillField('input[name=title]', $title = $fake->text(50));
         $I->selectOption(['name' => 'employment_id'], '1');
         $I->fillField('input[name=done]', 1);
 
         $I->click("Zapisz jako $firm", '.btn-save');
+
+        $I->click('Powrót do ogłoszenia');
 
         $I->seeCurrentRouteIs('job.offer');
         $I->see($title, '.media-heading');
@@ -136,6 +148,8 @@ class JobPostingCest
         $I->see($headline, 'blockquote');
 
         $I->click('Opublikuj');
+        $I->click('Powrót do ogłoszenia');
+
         $I->seeCurrentRouteIs('job.offer');
 
         $I->see($title, '.media-heading');
@@ -164,6 +178,7 @@ class JobPostingCest
         $I->fillField('input[name=done]', 1);
 
         $I->click('Zapisz i zakończ');
+        $I->click('Powrót do ogłoszenia');
 
         $I->seeCurrentRouteIs('job.offer');
         $I->see($title, '.media-heading');
@@ -233,6 +248,7 @@ class JobPostingCest
         $I->see($title, '.media-heading');
         $I->see($firm, '.employer');
         $I->click('Opublikuj');
+        $I->click('Powrót do ogłoszenia');
 
         $I->seeCurrentRouteIs('job.offer');
 
@@ -257,6 +273,7 @@ class JobPostingCest
         $I->fillField('done', 1);
 
         $I->click("Zapisz jako $firm");
+        $I->click('Powrót do ogłoszenia');
 
         $I->seeCurrentRouteIs('job.offer');
         $I->see($title, '.media-heading');
@@ -271,16 +288,18 @@ class JobPostingCest
         $I->wantTo('Create premium offer without invoice');
         $fake = Factory::create();
 
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Mini']);
+
         $I->amOnRoute('job.submit');
 
         $I->fillField('title', $title = $fake->text(50));
         $I->selectOption('employment_id', 1);
 
-        $I->checkOption('#plan_id');
+        $I->fillField('plan_id', $plan->id);
         $I->click('Informacje o firmie');
         $I->click('Podstawowe informacje');
 
-        $I->canSeeCheckboxIsChecked('#plan_id');
+        $I->seeInField('plan_id', $plan->id);
 
         $I->click('Informacje o firmie');
         $I->selectOption('is_private', '1');
@@ -302,18 +321,20 @@ class JobPostingCest
         $I->seeCurrentRouteIs('job.offer');
         $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
 
-        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'boost' => 1]);
+        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'is_publish' => 1]);
+
         $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
         $invoice = $I->grabRecord(\Coyote\Invoice::class, ['id' => $payment->invoice_id]);
 
         $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
         $I->assertNotEmpty($payment->invoice);
         $I->assertEquals(30, $payment->days);
+        $I->assertTrue($job->is_publish);
 
         $I->assertEquals(null, $invoice->country_id);
 
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
-        $I->assertEquals(270, $item->price);
+        $I->assertEquals(30, $item->price);
         $I->assertEquals(1.23, $item->vat_rate);
     }
 
@@ -322,16 +343,18 @@ class JobPostingCest
         $I->wantTo('Create premium offer with invoice');
         $fake = Factory::create();
 
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Standard']);
+
         $I->amOnRoute('job.submit');
 
         $I->fillField('title', $title = $fake->text(50));
         $I->selectOption('employment_id', 1);
 
-        $I->checkOption('#plan_id');
+        $I->fillField('plan_id', $plan->id);
         $I->click('Informacje o firmie');
         $I->click('Podstawowe informacje');
 
-        $I->canSeeCheckboxIsChecked('#plan_id');
+        $I->seeInField('plan_id', $plan->id);
 
         $I->click('Informacje o firmie');
         $I->selectOption('is_private', '1');
@@ -360,7 +383,7 @@ class JobPostingCest
         $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
 
         /** @var \Coyote\Job $job */
-        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'boost' => 1]);
+        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'is_publish' => 1, 'is_ads' => 1]);
         /** @var \Coyote\Payment $payment */
         $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
         /** @var \Coyote\Invoice $invoice */
@@ -372,7 +395,7 @@ class JobPostingCest
 
         /** @var \Coyote\Invoice\Item $item */
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
-        $I->assertEquals(270, $item->price);
+        $I->assertEquals(56.7, $item->price);
         $I->assertEquals(1, $item->vat_rate);
     }
 
@@ -381,7 +404,7 @@ class JobPostingCest
         $I->wantTo('Validate payment form');
         $fake = Factory::create();
 
-        $plan = $I->grabRecord(\Coyote\Plan::class);
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Standard']);
 
         \Coyote\Job::unguard();
 
@@ -394,7 +417,7 @@ class JobPostingCest
 
         $payment = $I->haveRecord(
             \Coyote\Payment::class,
-            ['job_id' => $job->id, 'plan_id' => $plan->id, 'status_id' => \Coyote\Payment::NEW, 'days' => 5]
+            ['job_id' => $job->id, 'plan_id' => $plan->id, 'status_id' => \Coyote\Payment::NEW, 'days' => 30]
         );
 
         $I->amOnRoute('job.payment', [$payment->id]);
