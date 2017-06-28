@@ -17,7 +17,7 @@ class PlansTableSeeder extends Seeder
             'vat_rate' => 1.23,
             'discount' => 0,
             'length' => 30,
-            'benefits' => ['publish']
+            'benefits' => ['is_publish']
         ]);
 
         \Coyote\Plan::forceCreate([
@@ -26,7 +26,7 @@ class PlansTableSeeder extends Seeder
             'vat_rate' => 1.23,
             'discount' => 0.45,
             'length' => 30,
-            'benefits' => ['publish', 'ad'],
+            'benefits' => ['is_publish', 'is_ads'],
             'is_default' => 1
         ]);
 
@@ -36,7 +36,7 @@ class PlansTableSeeder extends Seeder
             'vat_rate' => 1.23,
             'discount' => 0.5,
             'length' => 30,
-            'benefits' => ['publish', 'ad', 'highlight', 'top_spot', 'boost']
+            'benefits' => ['is_publish', 'is_ads', 'is_highlight', 'is_on_top', 'is_boost']
         ]);
     }
 }

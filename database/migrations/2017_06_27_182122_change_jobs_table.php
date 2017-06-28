@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPlanIdToJobsTable extends Migration
+class ChangeJobsTable extends Migration
 {
     use SchemaBuilder;
 
@@ -16,6 +16,11 @@ class AddPlanIdToJobsTable extends Migration
     {
         $this->schema->table('jobs', function (Blueprint $table) {
             $table->smallInteger('plan_id')->nullable();
+            $table->renameColumn('boost', 'is_boost');
+            $table->smallInteger('is_publish')->default(0);
+            $table->smallInteger('is_ads')->default(0);
+            $table->smallInteger('is_highlight')->default(0);
+            $table->smallInteger('is_on_top')->default(0);
 
             $table->foreign('plan_id')->references('id')->on('plans')->onDelete('no action');
         });
@@ -29,7 +34,8 @@ class AddPlanIdToJobsTable extends Migration
     public function down()
     {
         $this->schema->table('jobs', function (Blueprint $table) {
-            $table->dropColumn(['plan_id']);
+            $table->dropColumn(['plan_id', 'is_publish', 'is_ads', 'is_highlight', 'is_on_top']);
+            $table->renameColumn('is_boost', 'boost');
         });
     }
 }

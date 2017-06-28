@@ -68,9 +68,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['events']->listen(PaymentPaid::class, ChangePaymentStatus::class);
-        $this->app['events']->listen(PaymentPaid::class, BoostJobOffer::class);
-
         parent::boot();
     }
 }

@@ -48,7 +48,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Currency[] $currency
  * @property Feature[] $features
  * @property int $plan_id
- * @property true $boost
+ * @property bool $is_boost
+ * @property bool $is_publish
+ * @property bool $is_ads
+ * @property bool $is_highlight
+ * @property bool $is_on_top
  * @property Plan $plan
  */
 class Job extends Model
@@ -77,8 +81,8 @@ class Job extends Model
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job' => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
-        'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
+        'job'             => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
+        'firm'            => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
     /**
@@ -114,9 +118,9 @@ class Job extends Model
      * @var array
      */
     protected $attributes = [
-        'enable_apply' => true,
-        'is_remote' => false,
-        'title' => ''
+        'enable_apply'      => true,
+        'is_remote'         => false,
+        'title'             => ''
     ];
 
     /**
@@ -124,7 +128,15 @@ class Job extends Model
      *
      * @var array
      */
-    protected $casts = ['is_remote' => 'boolean', 'boost' => 'boolean', 'is_gross' => 'boolean'];
+    protected $casts = [
+        'is_remote'         => 'boolean',
+        'is_boost'          => 'boolean',
+        'is_gross'          => 'boolean',
+        'is_publish'        => 'boolean',
+        'is_ads'            => 'boolean',
+        'is_highlight'      => 'boolean',
+        'is_on_top'         => 'boolean'
+    ];
 
     /**
      * @var string
@@ -228,7 +240,19 @@ class Job extends Model
         "score" => [
             "type" => "long"
         ],
-        "boost" => [
+        "is_boost" => [
+            "type" => "boolean"
+        ],
+        "is_publish" => [
+            "type" => "boolean"
+        ],
+        "is_ads" => [
+            "type" => "boolean"
+        ],
+        "is_on_top" => [
+            "type" => "boolean"
+        ],
+        "is_highlight" => [
             "type" => "boolean"
         ]
     ];
