@@ -3,7 +3,6 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Feature;
-use Coyote\Payment;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
@@ -198,31 +197,6 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->limit(5)
             ->pluck('name')
             ->toArray();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExpiredOffers()
-    {
-        $sub = $this->toSql(
-            $this
-                ->app
-                ->make(Payment::class)
-                ->selectRaw('DISTINCT ON(job_id) job_id, ends_at')
-                ->where('status_id', Payment::PAID)
-                ->orderBy('job_id', 'DESC')
-                ->orderBy('ends_at', 'DESC')
-        );
-
-        return $this
-            ->model
-            ->select('jobs.*')
-            ->join($this->raw("($sub) AS payments"), function (JoinClause $join) {
-                $join->on('payments.job_id', '=', 'jobs.id')->on('ends_at', '<', $this->raw('NOW()'));
-            })
-            ->where('boost', 1)
-            ->get();
     }
 
     /**
