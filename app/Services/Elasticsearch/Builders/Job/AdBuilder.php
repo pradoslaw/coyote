@@ -23,7 +23,7 @@ class AdBuilder extends SearchBuilder
     public function build()
     {
         // only premium offers
-        $this->must(new Term('boost', true));
+        $this->must(new Term('is_ads', true));
 
         $this->score(new Random());
         $this->size(0, 4);

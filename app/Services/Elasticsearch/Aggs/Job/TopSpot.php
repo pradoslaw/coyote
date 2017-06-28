@@ -5,7 +5,7 @@ namespace Coyote\Services\Elasticsearch\Aggs\Job;
 use Coyote\Services\Elasticsearch\DslInterface;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 
-class Boost implements DslInterface
+class TopSpot implements DslInterface
 {
     /**
      * @param QueryBuilderInterface $queryBuilder
@@ -17,7 +17,7 @@ class Boost implements DslInterface
 
         $body['aggs']['premium_listing'] = [
             'terms' => [
-                'field' => 'boost',
+                'field' => 'is_on_top',
                 'size' => 3,
                 'order' => [
                     'top_hit' => 'desc'

@@ -208,7 +208,7 @@ class SearchBuilder extends QueryBuilder
         $this->aggs(new Aggs\Job\Location());
         $this->aggs(new Aggs\Job\Remote());
         $this->aggs(new Aggs\Job\Tag($this->languages));
-        $this->aggs(new Aggs\Job\Boost());
+        $this->aggs(new Aggs\Job\TopSpot());
     }
 
     /**

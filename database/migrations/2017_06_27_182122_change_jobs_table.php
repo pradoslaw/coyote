@@ -24,6 +24,9 @@ class ChangeJobsTable extends Migration
 
             $table->foreign('plan_id')->references('id')->on('plans')->onDelete('no action');
         });
+
+        $this->db->statement('UPDATE jobs SET is_ads = 1, is_highlight = 1, is_on_top = 1 WHERE is_boost = 1');
+        $this->db->statement('UPDATE jobs SET is_publish = 1');
     }
 
     /**
