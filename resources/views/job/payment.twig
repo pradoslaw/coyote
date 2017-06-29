@@ -2,6 +2,12 @@
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
 {% block container %}
+    <div class="row">
+        <div class="col-md-9">
+            {% include 'job.submit.partials.indicator' with {'current': 4} %}
+        </div>
+    </div>
+
     <div id="payment" class="row">
         {{ form_start(form) }}
 
