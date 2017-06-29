@@ -33,7 +33,7 @@ class UpdateJobOffers extends Job implements ShouldQueue
     public function handle(JobRepository $job, FirmRepository $firm)
     {
         $client = app('elasticsearch');
-        $result = $firm->find($this->firmId, ['name', 'logo']);
+        $firm = $firm->find($this->firmId, ['name', 'logo']);
 
         $params = [
             'index' => config('elasticsearch.default_index'),
@@ -53,8 +53,8 @@ class UpdateJobOffers extends Job implements ShouldQueue
                 'body' => [
                     'doc' => [
                         'firm' => [
-                            'name' => $result['name'],
-                            'logo' => (string) $result['logo'] // cast to string returns filename
+                            'name' => $firm['name'],
+                            'logo' => (string) $firm['logo'] // cast to string returns filename
                         ]
                     ]
                 ]
