@@ -185,13 +185,6 @@
                     </div>
 
                     <div class="panel-body">
-                        <div class="form-group form-group-border" :class="{'has-error': isInvalid(['deadline'])}">
-                            {{ form_label(form.deadline) }}
-
-                            {{ form_widget(form.deadline) }} dni
-                            {{ form_error(form.deadline) }}
-                        </div>
-
                         {{ form_row(form.description) }}
 
                         <div class="form-group form-group-border">

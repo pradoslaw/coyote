@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Job;
 
+use Carbon\Carbon;
 use Coyote\Country;
 use Coyote\Currency;
 use Coyote\Job;
@@ -88,6 +89,8 @@ class JobForm extends Form
             }
 
             $this->data->country()->associate((new Country())->find($form->get('country_id')->getValue()));
+            // set default deadline_at date time. we're gonna use that in job's preview
+            $this->data->deadline_at = Carbon::now()->addDays(30);
         });
 
         $this->addEventListener(FormEvents::PRE_RENDER, function (JobForm $form) {
@@ -232,17 +235,6 @@ class JobForm extends Form
                 'choices' => Job::getEmploymentList(),
                 'attr' => [
                     'class' => 'input-inline'
-                ]
-            ])
-            ->add('deadline', 'number', [
-                'label' => 'Data ważnosci oferty',
-                'rules' => 'integer|min:1|max:365',
-                'help' => 'Oferta będzie widoczna na stronie do dnia <strong>${ deadlineDate }</strong>',
-                'attr' => [
-                    'min' => 1,
-                    'max' => 365,
-                    'class' => 'input-inline',
-                    'v-model' => 'job.deadline'
                 ]
             ])
             ->add('tags', 'collection', [

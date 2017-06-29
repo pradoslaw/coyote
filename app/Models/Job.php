@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $deadline_at
  * @property \Carbon\Carbon $boost_at
- * @property int $deadline
  * @property bool $is_expired
  * @property int $salary_from
  * @property int $salary_to
@@ -104,7 +103,6 @@ class Job extends Model
         'currency_id',
         'rate_id',
         'employment_id',
-        'deadline', // column does not really exist in db (model attribute instead)
         'deadline_at',
         'email',
         'enable_apply',
@@ -147,11 +145,6 @@ class Job extends Model
      * @var array
      */
     protected $dates = ['created_at', 'updated_at', 'deadline_at', 'boost_at'];
-
-    /**
-     * @var array
-     */
-    protected $appends = ['deadline'];
 
     /**
      * Elasticsearch type mapping
@@ -509,19 +502,11 @@ class Job extends Model
     }
 
     /**
-     * @param int $value
-     */
-    public function setDeadlineAttribute($value)
-    {
-        $this->attributes['deadline_at'] = Carbon::now()->addDay($value);
-    }
-
-    /**
      * @return int
      */
     public function getDeadlineAttribute()
     {
-        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now(), false)->days + 1 : 90;
+        return (new Carbon($this->deadline_at))->diff(Carbon::now(), false)->days;
     }
 
     /**

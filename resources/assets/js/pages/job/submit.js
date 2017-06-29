@@ -242,19 +242,6 @@ new Vue({
         }
     },
     computed: {
-        deadlineDate: function () {
-            let value = parseInt(this.job.deadline);
-
-            if (value > 0) {
-                let date = new Date();
-                date.setDate(date.getDate() + value);
-
-                return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-            }
-            else {
-                return '--';
-            }
-        },
         address: function () {
             return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') +  ' ' + (this.firm.city || '')).trim();
         }
