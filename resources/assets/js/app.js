@@ -4,6 +4,8 @@ import 'core-js/fn/promise';
 import 'core-js/modules/es6.function.bind';
 // JS's startsWith() -- support for IE and old Opera
 import 'core-js/modules/es6.string.starts-with';
+// JS's findIndex() -- support for IE and old Opera
+import 'core-js/modules/es6.array.find-index';
 
 import {RealtimeFactory} from './libs/realtime.js';
 import './components/dropdown.js';
