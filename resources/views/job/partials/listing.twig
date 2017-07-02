@@ -53,7 +53,7 @@
                 {% endif %}
             </td>
             <td class="col-time hidden-sm hidden-xs hidden-xxs">
-                {% if is_today(job.boost_at) %}
+                {% if diff_in_days(job.boost_at) < 1 %}
                     <p><span class="label label-new">Nowe</span></p>
                 {% endif %}
 
