@@ -3,7 +3,7 @@
     {% for job in listing %}
         {% set url = route('job.offer', [job.id, job.slug]) %}
 
-        <tr class="{{ loop.first and show_label ? 'top-spot' }} {{ show_highlight and job.boost ? 'highlight' }}">
+        <tr class="{{ loop.first and show_label ? 'top-spot' }} {{ show_highlight and job.is_highlight ? 'highlight' }}">
             <td class="col-logo">
                 {% if loop.first and show_label %}
                     <span class="label top-spot-badge">Promowane</span>
@@ -53,7 +53,7 @@
                 {% endif %}
             </td>
             <td class="col-time hidden-sm hidden-xs hidden-xxs">
-                {% if is_today(job.boost_at) %}
+                {% if diff_in_days(job.boost_at) < 1 %}
                     <p><span class="label label-new">Nowe</span></p>
                 {% endif %}
 

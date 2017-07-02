@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $deadline_at
  * @property \Carbon\Carbon $boost_at
- * @property int $deadline
  * @property bool $is_expired
  * @property int $salary_from
  * @property int $salary_to
@@ -48,8 +47,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Currency[] $currency
  * @property Feature[] $features
  * @property int $plan_id
- * @property int $plan_length
- * @property true $boost
+ * @property bool $is_boost
+ * @property bool $is_publish
+ * @property bool $is_ads
+ * @property bool $is_highlight
+ * @property bool $is_on_top
+ * @property Plan $plan
  */
 class Job extends Model
 {
@@ -77,8 +80,8 @@ class Job extends Model
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job' => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
-        'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
+        'job'             => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
+        'firm'            => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
     /**
@@ -100,13 +103,11 @@ class Job extends Model
         'currency_id',
         'rate_id',
         'employment_id',
-        'deadline', // column does not really exist in db (model attribute instead)
         'deadline_at',
         'email',
         'enable_apply',
         'seniority_id',
-        'plan_id', // column does not really exist in db (model attribute instead)
-        'plan_length', // column does not really exist in db (model attribute instead)
+        'plan_id'
     ];
 
     /**
@@ -115,9 +116,9 @@ class Job extends Model
      * @var array
      */
     protected $attributes = [
-        'enable_apply' => true,
-        'is_remote' => false,
-        'title' => ''
+        'enable_apply'      => true,
+        'is_remote'         => false,
+        'title'             => ''
     ];
 
     /**
@@ -125,7 +126,15 @@ class Job extends Model
      *
      * @var array
      */
-    protected $casts = ['is_remote' => 'boolean', 'boost' => 'boolean', 'is_gross' => 'boolean'];
+    protected $casts = [
+        'is_remote'         => 'boolean',
+        'is_boost'          => 'boolean',
+        'is_gross'          => 'boolean',
+        'is_publish'        => 'boolean',
+        'is_ads'            => 'boolean',
+        'is_highlight'      => 'boolean',
+        'is_on_top'         => 'boolean'
+    ];
 
     /**
      * @var string
@@ -136,11 +145,6 @@ class Job extends Model
      * @var array
      */
     protected $dates = ['created_at', 'updated_at', 'deadline_at', 'boost_at'];
-
-    /**
-     * @var array
-     */
-    protected $appends = ['deadline'];
 
     /**
      * Elasticsearch type mapping
@@ -229,12 +233,22 @@ class Job extends Model
         "score" => [
             "type" => "long"
         ],
-        "boost" => [
+        "is_boost" => [
+            "type" => "boolean"
+        ],
+        "is_publish" => [
+            "type" => "boolean"
+        ],
+        "is_ads" => [
+            "type" => "boolean"
+        ],
+        "is_on_top" => [
+            "type" => "boolean"
+        ],
+        "is_highlight" => [
             "type" => "boolean"
         ]
     ];
-
-    private $plan = ['id' => null, 'length' => 30];
 
     /**
      * We need to set firm id to null offer is private
@@ -453,6 +467,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)
@@ -480,51 +502,11 @@ class Job extends Model
     }
 
     /**
-     * @param int $value
-     */
-    public function setDeadlineAttribute($value)
-    {
-        $this->attributes['deadline_at'] = Carbon::now()->addDay($value);
-    }
-
-    /**
      * @return int
      */
     public function getDeadlineAttribute()
     {
-        return $this->deadline_at ? (new Carbon($this->deadline_at))->diff(Carbon::now(), false)->days + 1 : 90;
-    }
-
-    /**
-     * @param int $value
-     */
-    public function setPlanIdAttribute($value)
-    {
-        $this->plan['id'] = $value;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPlanIdAttribute()
-    {
-        return $this->plan['id'];
-    }
-
-    /**
-     * @param int $value
-     */
-    public function setPlanLengthAttribute($value)
-    {
-        $this->plan['length'] = $value;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPlanLengthAttribute()
-    {
-        return $this->plan['length'];
+        return (new Carbon($this->deadline_at))->diff(Carbon::now(), false)->days;
     }
 
     /**
@@ -571,6 +553,16 @@ class Job extends Model
                 $pivot = $this->features()->newPivot(['checked' => $feature->checked, 'value' => $feature->value]);
                 $this->features->add($feature->setRelation('pivot', $pivot));
             }
+        }
+    }
+
+    /**
+     * @param int $planId
+     */
+    public function setDefaultPlanId($planId)
+    {
+        if (empty($this->plan_id)) {
+            $this->plan_id = $planId;
         }
     }
 

@@ -7,7 +7,7 @@ use Coyote\Repositories\Contracts\FirmRepositoryInterface;
 class FirmRepository extends Repository implements FirmRepositoryInterface
 {
     /**
-     * @return \Coyote\Firm
+     * @return string
      */
     public function model()
     {

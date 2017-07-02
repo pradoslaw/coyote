@@ -14,7 +14,7 @@ class CalculatorFactory
     {
         return new Calculator([
             'price'         => $payment->plan->price,
-            'quantity'      => $payment->days,
+            'discount'      => $payment->plan->discount,
             'vat_rate'      => $payment->plan->vat_rate
         ]);
     }

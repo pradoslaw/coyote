@@ -237,24 +237,11 @@ new Vue({
             this.map.removeMarker(this.marker);
             this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
         },
-        changePlan: function (value) {
-            this.job.plan_length = value;
+        changePlan: function (planId) {
+            this.job.plan_id = planId;
         }
     },
     computed: {
-        deadlineDate: function () {
-            let value = parseInt(this.job.deadline);
-
-            if (value > 0) {
-                let date = new Date();
-                date.setDate(date.getDate() + value);
-
-                return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-            }
-            else {
-                return '--';
-            }
-        },
         address: function () {
             return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') +  ' ' + (this.firm.city || '')).trim();
         }

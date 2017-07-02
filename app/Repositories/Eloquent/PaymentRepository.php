@@ -36,14 +36,15 @@ class PaymentRepository extends Repository implements PaymentRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function ongoingPayments()
+    public function ongoingPaymentsWithBoostBenefit()
     {
         return $this
             ->model
             ->select(['days', 'job_id', 'ends_at'])
             ->where('ends_at', '>', Carbon::now())
             ->with(['job' => function (BelongsTo $builder) {
-                return $builder->whereNull('deleted_at'); // shouldn't laravel do this for us? anyway, no deleted offers!
+                // shouldn't laravel do this for us? anyway, no deleted offers!
+                return $builder->whereNull('deleted_at')->where('is_boost', true);
             }])
             ->get();
     }

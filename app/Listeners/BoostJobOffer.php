@@ -61,8 +61,10 @@ class BoostJobOffer implements ShouldQueue
 
             $event->payment->save();
 
-            // boost job offer so it's on the top of the list
-            $event->payment->job->boost = true;
+            foreach ($event->payment->plan->benefits as $benefit) {
+                $event->payment->job->{$benefit} = true;
+            }
+
             $event->payment->job->boost_at = Carbon::now();
             $event->payment->job->deadline_at = max($event->payment->job->deadline_at, $event->payment->ends_at);
             $event->payment->job->save();
@@ -70,8 +72,8 @@ class BoostJobOffer implements ShouldQueue
             // payment is done. remove any pending payments (if any...)
             $event->payment->job->payments()->where('status_id', Payment::NEW)->delete();
 
-            // reindex job offer
-            event(new JobWasSaved($event->payment->job));
+            // index job offer
+            $event->payment->job->putToIndex();
 
             // send email with invoice
             $event->user->notify(

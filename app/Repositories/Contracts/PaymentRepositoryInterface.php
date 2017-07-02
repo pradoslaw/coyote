@@ -16,7 +16,7 @@ interface PaymentRepositoryInterface extends RepositoryInterface
     /**
      * @return \Coyote\Payment[]
      */
-    public function ongoingPayments();
+    public function ongoingPaymentsWithBoostBenefit();
 
     /**
      * @return mixed

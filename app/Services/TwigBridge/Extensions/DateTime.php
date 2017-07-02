@@ -31,7 +31,7 @@ class DateTime extends Twig_Extension
             /**
              * Diff in days helper. We use it to calculate age of the job offer.
              */
-            new Twig_SimpleFunction('is_today', [&$this, 'isToday'])
+            new Twig_SimpleFunction('diff_in_days', [&$this, 'diffInDays'])
         ];
     }
 
@@ -49,11 +49,14 @@ class DateTime extends Twig_Extension
 
     /**
      * @param $dateTime
-     * @return bool
+     * @param null|mixed $now
+     * @return int
      */
-    public function isToday($dateTime)
+    public function diffInDays($dateTime, $now = null)
     {
-        return $this->toCarbon($dateTime)->isToday();
+        $dateTime = $this->toCarbon($dateTime);
+
+        return $this->toCarbon($now)->diffInDays($dateTime);
     }
 
     /**

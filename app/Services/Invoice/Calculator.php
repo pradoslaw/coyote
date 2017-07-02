@@ -19,7 +19,7 @@ class Calculator implements Arrayable
     /**
      * @var float
      */
-    public $quantity;
+    public $discount;
 
     /**
      * @param array $attributes
@@ -40,7 +40,7 @@ class Calculator implements Arrayable
      */
     public function netPrice()
     {
-        return round($this->price * $this->quantity, 2);
+        return round($this->calculateDiscount($this->price), 2);
     }
 
     /**
@@ -70,5 +70,14 @@ class Calculator implements Arrayable
             'gross_price'   => $this->grossPrice(),
             'vat_price'     => $this->vatPrice()
         ];
+    }
+
+    /**
+     * @param float $price
+     * @return float
+     */
+    private function calculateDiscount($price)
+    {
+        return $this->discount > 0 ? $price * $this->discount : $price;
     }
 }

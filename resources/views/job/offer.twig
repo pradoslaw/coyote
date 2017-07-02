@@ -42,7 +42,7 @@
                 <div class="alert alert-warning">
                     <h4><i class="fa fa-credit-card fa-fw"></i> Oczekiwanie na płatność...</h4>
 
-                    <p>Ogłoszenie jest już wyświetlane i widoczne dla wszystkich. Nie możemy jednak rozpocząć promowania oferty, dopóki nie uregulujesz płatności w kwocie <strong>{{ payment.grossPrice() }} zł</strong>.</p>
+                    <p>Ogłoszenie jest już w naszej bazie. Nie możemy jednak rozpocząć wyświetlania oferty, dopóki nie uregulujesz płatności.</p>
 
                     <a href="{{ route('job.payment', [payment.id]) }}" class="btn btn-sm alert-warning margin-sm-top">Przejdź do płatności</a>
                 </div>

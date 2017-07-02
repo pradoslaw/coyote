@@ -4,6 +4,7 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\JobDeleting;
 use Coyote\Events\JobWasSaved;
+use Coyote\Events\PaymentPaid;
 use Coyote\Jobs\UpdateJobOffers;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 
@@ -29,8 +30,6 @@ class JobListener
      */
     public function onJobSave(JobWasSaved $event)
     {
-        $event->job->putToIndex();
-
         // we need to update elasticsearch index by updating firm name and logo in all job offers
         if ($event->job->firm_id && $event->job->firm->isDirty(['name', 'logo'])) {
             dispatch(new UpdateJobOffers($event->job->firm_id));
@@ -52,14 +51,10 @@ class JobListener
      */
     public function subscribe($events)
     {
-        $events->listen(
-            'Coyote\Events\JobWasSaved',
-            'Coyote\Listeners\JobListener@onJobSave'
-        );
+        $events->listen(JobWasSaved::class, 'Coyote\Listeners\JobListener@onJobSave');
+        $events->listen(JobDeleting::class, 'Coyote\Listeners\JobListener@onJobDeleting');
 
-        $events->listen(
-            'Coyote\Events\JobDeleting',
-            'Coyote\Listeners\JobListener@onJobDeleting'
-        );
+        $events->listen(PaymentPaid::class, ChangePaymentStatus::class);
+        $events->listen(PaymentPaid::class, BoostJobOffer::class);
     }
 }
