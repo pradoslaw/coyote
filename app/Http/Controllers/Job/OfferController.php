@@ -60,14 +60,6 @@ class OfferController extends Controller
         // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
-        // calculate enabled features. determines if we should display this element in twig
-        $featuresCount = $job
-            ->features
-            ->filter(function ($item) {
-                return $item->pivot->checked;
-            })
-            ->count();
-
         return $this->view('job.offer', [
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),
@@ -75,7 +67,6 @@ class OfferController extends Controller
             'seniority_list'    => Job::getSeniorityList(),
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
             'applied'           => $job->hasApplied($this->userId, $this->guestId),
-            'features_count'    => $featuresCount,
             'previous_url'      => $this->request->session()->get('current_url'),
             'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null
         ])->with(

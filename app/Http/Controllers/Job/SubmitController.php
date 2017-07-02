@@ -209,20 +209,12 @@ class SubmitController extends Controller
             $job->firm->description = $parser->parse($job->firm->description);
         }
 
-        $featuresCount = $job
-            ->features
-            ->filter(function ($item) {
-                return $item->pivot->checked;
-            })
-            ->count();
-
         return $this->view('job.submit.preview', [
             'job'               => $job,
             'tags'              => $tags,
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),
-            'seniority_list'    => Job::getSeniorityList(),
-            'features_count'    => $featuresCount
+            'seniority_list'    => Job::getSeniorityList()
         ]);
     }
 
