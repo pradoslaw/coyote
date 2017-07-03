@@ -567,18 +567,6 @@ class Job extends Model
     }
 
     /**
-     * @return bool
-     */
-    public function isPlanOngoing()
-    {
-        if (!$this->exists) {
-            return false;
-        }
-
-        return $this->payments()->where('status_id', Payment::PAID)->where('ends_at', '>', Carbon::now())->exists();
-    }
-
-    /**
      * @return Payment
      */
     public function getUnpaidPayment()

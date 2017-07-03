@@ -105,7 +105,7 @@ class SubmitController extends Controller
             // firm information (in order to show firm nam on the button)
             'firm'              => $job->firm,
             // is plan is still going on?
-            'is_plan_ongoing'   => $job->isPlanOngoing(),
+            'is_plan_ongoing'   => $job->is_publish,
             'plans'             => $this->plan->active()->toJson()
         ]);
     }
@@ -275,7 +275,7 @@ class SubmitController extends Controller
             $job->tags()->sync($tags);
             $job->features()->sync($features);
 
-            if ($job->wasRecentlyCreated || !$job->isPlanOngoing()) {
+            if ($job->wasRecentlyCreated || !$job->is_publish) {
                 $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
             }
 

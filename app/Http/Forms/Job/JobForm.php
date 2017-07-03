@@ -295,7 +295,7 @@ class JobForm extends Form
     protected function setupPlanFields()
     {
         // can't show that fields if plan is enabled
-        if ($this->data->isPlanOngoing()) {
+        if ($this->data->is_publish) {
             return;
         }
 
