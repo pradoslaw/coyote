@@ -79,7 +79,7 @@ class WikiValidator
             if ($compiled) {
                 $regexs[] = $compiled->getRegex();
             } else {
-                $regexs[] = $this->buildRegex($route->getUri());
+                $regexs[] = $this->buildRegex($route->uri());
             }
         }
 
