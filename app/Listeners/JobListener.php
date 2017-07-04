@@ -30,6 +30,10 @@ class JobListener
      */
     public function onJobSave(JobWasSaved $event)
     {
+        if ($event->job->is_publish) {
+            $event->job->putToIndex();
+        }
+
         // we need to update elasticsearch index by updating firm name and logo in all job offers
         if ($event->job->firm_id && $event->job->firm->isDirty(['name', 'logo'])) {
             dispatch(new UpdateJobOffers($event->job->firm_id));
@@ -41,7 +45,9 @@ class JobListener
      */
     public function onJobDeleting(JobDeleting $event)
     {
-        $event->job->deleteFromIndex();
+        if ($event->job->is_publish) {
+            $event->job->deleteFromIndex();
+        }
     }
 
     /**
