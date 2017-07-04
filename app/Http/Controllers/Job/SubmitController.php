@@ -279,14 +279,10 @@ class SubmitController extends Controller
                 $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
             }
 
-            event(new JobWasSaved($job));
-
-            $parser = app('parser.job');
-            $job->description = $parser->parse($job->description);
-
             stream($activity, (new Stream_Job)->map($job));
-
             $request->session()->forget(Job::class);
+
+            event(new JobWasSaved($job));
         });
 
         $paymentUuid = $job->getPaymentUuid();
