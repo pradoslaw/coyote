@@ -1,4 +1,5 @@
 import 'jquery.maskedinput/src/jquery.maskedinput';
+import Config from '../../libs/config';
 
 let vm = new Vue({
     el: '#payment',
@@ -33,6 +34,13 @@ let vm = new Vue({
                     HTMLFormElement.prototype.submit.call(e.target);
                 });
             });
+        },
+        validateCoupon: function(e) {
+            $.get(Config.get('validate_coupon_url'), {code: e.target.value}, result => {
+                if (typeof result.id !== 'undefined') {
+                    this.coupon = result;
+                }
+            });
         }
     },
     computed: {
@@ -40,7 +48,7 @@ let vm = new Vue({
             return (this.calculator.vat_rate * 100) - 100;
         },
         netPrice: function() {
-            return this.money(this.calculator.net_price);
+            return this.money(this.calculator.net_price - this.coupon.amount);
         },
         grossPrice: function() {
             return this.money(this.netPrice * this.calculator.vat_rate);

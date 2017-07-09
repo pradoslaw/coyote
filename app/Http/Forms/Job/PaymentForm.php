@@ -73,6 +73,14 @@ class PaymentForm extends Form
                     'id' => 'enable-invoice'
                 ]
             ])
+            ->add('coupon', 'text', [
+                'rules' => 'exists:coupons,code',
+                'label' => 'Masz kod promocyjny?',
+                'attr' => [
+                    'class' => 'input-sm',
+                    '@keyup' => 'validateCoupon'
+                ]
+            ])
             ->add('invoice', 'child_form', [
                 'class' => InvoiceForm::class,
                 'value' => $this->data->job->firm

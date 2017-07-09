@@ -81,6 +81,8 @@ class PaymentController extends Controller
         $calculator = CalculatorFactory::payment($payment);
         $this->setVatRate($vatRates, $form->get('invoice')->get('country_id')->getValue(), $calculator);
 
+        $this->request->attributes->set('validate_coupon_url', route('job.coupon'));
+
         return $this->view('job.payment', [
             'form'              => $form,
             'payment'           => $payment,

@@ -70,6 +70,8 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'middleware' => 'auth'
     ]);
 
+    $this->get('Coupon/Validate', ['uses' => 'CouponController@validateCode', 'as' => 'coupon']);
+
     // Job's ads
     // --------------------------------------------------------------
     $this->get('recommendations', ['uses' => 'AdController@index', 'as' => 'ad']);
