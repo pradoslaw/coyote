@@ -4,6 +4,7 @@ namespace Coyote\Http\Forms\Job;
 
 use Carbon\Carbon;
 use Coyote\Services\FormBuilder\Form;
+use Illuminate\Validation\Rule;
 
 class PaymentForm extends Form
 {
@@ -74,11 +75,14 @@ class PaymentForm extends Form
                 ]
             ])
             ->add('coupon', 'text', [
-                'rules' => 'exists:coupons,code',
+                'rules' => Rule::exists('coupons', 'code')->whereNull('deleted_at'),
                 'label' => 'Masz kod promocyjny?',
                 'attr' => [
                     'class' => 'input-sm',
                     '@keyup' => 'validateCoupon'
+                ],
+                'row_attr' => [
+                    'v-show' => 'coupon.id == null'
                 ]
             ])
             ->add('invoice', 'child_form', [

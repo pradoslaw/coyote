@@ -13,8 +13,7 @@ class CalculatorFactory
     public static function payment(Payment $payment): Calculator
     {
         return new Calculator([
-            'price'         => $payment->plan->price,
-            'discount'      => $payment->plan->discount,
+            'price'         => $payment->plan->discount > 0 ? $payment->plan->price * $payment->plan->discount : $payment->plan->price,
             'vat_rate'      => $payment->plan->vat_rate
         ]);
     }

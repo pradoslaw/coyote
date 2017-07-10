@@ -208,7 +208,7 @@
             vat_rates: {{ vat_rates|json_encode|raw }},
             default_vat_rate: {{ default_vat_rate }},
             client_token: '{{ client_token }}',
-            coupon: {amount: 0},
+            coupon: {{ coupon|json_encode|raw }},
             form: {
                 payment_method_nonce: '',
                 number: '{{ form.number.value }}',

@@ -7,6 +7,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
+use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
@@ -35,17 +36,29 @@ class PaymentController extends Controller
     private $db;
 
     /**
+     * @var CouponRepository
+     */
+    private $coupon;
+
+    /**
+     * @var array
+     */
+    private $vatRates;
+
+    /**
      * @param InvoiceGenerator $invoice
      * @param Db $db
      * @param CountryRepository $country
+     * @param CouponRepository $coupon
      */
-    public function __construct(InvoiceGenerator $invoice, Db $db, CountryRepository $country)
+    public function __construct(InvoiceGenerator $invoice, Db $db, CountryRepository $country, CouponRepository $coupon)
     {
         parent::__construct();
 
         $this->invoice = $invoice;
         $this->db = $db;
         $this->country = $country;
+        $this->coupon = $coupon;
 
         $this->middleware(function (Request $request, $next) {
             /** @var \Coyote\Payment $payment */
@@ -57,6 +70,7 @@ class PaymentController extends Controller
         });
 
         $this->breadcrumb->push('Praca', route('job.home'));
+        $this->vatRates = $this->country->vatRatesList();
 
         Configuration::environment(config('services.braintree.env'));
         Configuration::merchantId(config('services.braintree.merchant_id'));
@@ -75,34 +89,24 @@ class PaymentController extends Controller
 
         /** @var PaymentForm $form */
         $form = $this->getForm($payment);
-        $vatRates = $this->country->vatRatesList();
 
         // calculate price based on payment details
         $calculator = CalculatorFactory::payment($payment);
-        $this->setVatRate($vatRates, $form->get('invoice')->get('country_id')->getValue(), $calculator);
+        $calculator->vatRate = $this->vatRates[$form->get('invoice')->get('country_id')->getValue()] ?? $calculator->vatRate;
+
+        $coupon = $this->coupon->firstOrNew(['code' => $form->get('coupon')->getValue()]);
 
         $this->request->attributes->set('validate_coupon_url', route('job.coupon'));
 
         return $this->view('job.payment', [
             'form'              => $form,
             'payment'           => $payment,
-            'vat_rates'         => $vatRates,
+            'vat_rates'         => $this->vatRates,
             'calculator'        => $calculator->toArray(),
             'default_vat_rate'  => $payment->plan->vat_rate,
-            'client_token'      => ClientToken::generate()
+            'client_token'      => ClientToken::generate(),
+            'coupon'            => $coupon->toArray()
         ]);
-    }
-
-    /**
-     * @param array $vatRates
-     * @param int|null $countryId
-     * @param \Coyote\Services\Invoice\Calculator $calculator
-     */
-    private function setVatRate($vatRates, $countryId, $calculator)
-    {
-        if (isset($vatRates[$countryId])) {
-            $calculator->vatRate = $vatRates[$countryId];
-        }
     }
 
     /**
@@ -116,10 +120,13 @@ class PaymentController extends Controller
         $form = $this->getForm($payment);
         $form->validate();
 
-        $vatRates = $this->country->vatRatesList();
-
         $calculator = CalculatorFactory::payment($payment);
-        $this->setVatRate($vatRates, $form->get('invoice')->getValue()['country_id'], $calculator);
+        $calculator->vatRate = $this->vatRates[$form->get('invoice')->getValue()['country_id']] ?? $calculator->vatRate;
+
+        $coupon = $this->coupon->findBy('code', $form->get('coupon')->getValue());
+        if ($coupon) {
+            $calculator->price -= $coupon->amount;
+        }
 
         return $this->handlePayment(function () use ($payment, $form, $calculator) {
             /** @var mixed $result */

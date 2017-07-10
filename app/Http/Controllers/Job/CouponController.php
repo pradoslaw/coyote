@@ -30,7 +30,7 @@ class CouponController extends Controller
         $result = $this->coupon->findBy('code', $this->request->input('code'));
 
         if (!$result) {
-            return [];
+            return (object) [];
         }
 
         return $result;
