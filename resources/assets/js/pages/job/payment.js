@@ -39,6 +39,8 @@ let vm = new Vue({
             $.get(Config.get('validate_coupon_url'), {code: e.target.value}, result => {
                 if (typeof result.id !== 'undefined') {
                     this.coupon = result;
+                } else {
+                    this.coupon = {code: null, amount: 0};
                 }
             });
         }

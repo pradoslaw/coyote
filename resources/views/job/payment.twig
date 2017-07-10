@@ -171,7 +171,18 @@
                         </div>
                     </div>
 
+                    ${ coupon.shown }
+
                     <hr>
+
+                    <div v-show="!coupon.code && show_coupon === false">
+                        <span class="fa-stack">
+                            <i class="fa fa-circle-o fa-stack-2x"></i>
+                            <i class="fa fa-dollar fa-stack-1x"></i>
+                        </span>
+
+                        <a @click="show_coupon = true;" style="text-decoration: underline; font-size: 14px; cursor: pointer">Masz kupon rabatowy?</a>
+                    </div>
 
                     {{ form_row(form.coupon) }}
                 </div>
@@ -208,6 +219,7 @@
             vat_rates: {{ vat_rates|json_encode|raw }},
             default_vat_rate: {{ default_vat_rate }},
             client_token: '{{ client_token }}',
+            show_coupon: false,
             coupon: {{ coupon|json_encode|raw }},
             form: {
                 payment_method_nonce: '',

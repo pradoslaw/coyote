@@ -114,6 +114,9 @@ return [
         'name' => [
             'unique'        => 'Konto o tym loginie już istnieje'
         ],
+        'coupon' => [
+            'exists'        => 'Ten kod promocyjny nie istnieje lub został już wykorzystany.'
+        ],
         'email' => [
             'unique'        => 'Ten e-mail jest już przypisany do innego konta',
             'exists'        => 'Podany adres e-mail nie istnieje.'

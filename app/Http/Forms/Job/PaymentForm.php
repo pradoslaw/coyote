@@ -82,7 +82,7 @@ class PaymentForm extends Form
                     '@keyup' => 'validateCoupon'
                 ],
                 'row_attr' => [
-                    'v-show' => 'coupon.id == null'
+                    'v-show' => 'coupon.code || show_coupon === true'
                 ]
             ])
             ->add('invoice', 'child_form', [
