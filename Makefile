@@ -31,8 +31,8 @@ seed:
 	php artisan db:seed
 
 install-gulp:
-	npm install --g gulp
-	npm install
+	yarn global add gulp
+	yarn install
 
 assets-production:
 	gulp --production
