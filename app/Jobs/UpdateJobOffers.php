@@ -60,5 +60,7 @@ class UpdateJobOffers extends Job implements ShouldQueue
                 ]
             ]));
         }
+
+        $job->resetCriteria();
     }
 }
