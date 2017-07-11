@@ -24,10 +24,15 @@ before_install:
   - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.2.deb && sudo dpkg -i --force-confnew elasticsearch-5.1.2.deb && sudo service elasticsearch restart
   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
   - echo "deb http://repo.mongodb.org/apt/ubuntu precise/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   - sudo apt-get update
   - sudo apt-get install -y mongodb-org=3.2.12 mongodb-org-server=3.2.12 mongodb-org-shell=3.2.12 mongodb-org-mongos=3.2.12 mongodb-org-tools=3.2.12
+  - sudo apt-get install yarn
   - sleep 15
   - mongo --version
+
+cache: yarn
 
 install:
   - composer install
@@ -35,7 +40,7 @@ install:
 
 before_script:
   - sudo npm install --g gulp
-  - npm install
+  - yarn install
   - psql -c 'create database coyote_test;' -U postgres
   - cp .env.testing .env
   - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
