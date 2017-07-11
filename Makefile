@@ -35,10 +35,10 @@ install-gulp:
 	yarn install
 
 assets-production:
-	gulp --production
+	yarn run gulp --production
 
 assets_dev:
-	gulp
+	yarn run gulp
 
 dump-autoload:
 	php artisan clear-compiled
