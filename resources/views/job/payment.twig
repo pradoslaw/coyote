@@ -16,8 +16,8 @@
                 <div class="panel-heading">
                     <i class="fa fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
                 </div>
-                <div class="panel-body">
-                    <div class="row" v-if="grossPrice > 0">
+                <div class="panel-body" v-show="grossPrice > 0">
+                    <div class="row">
                         <div class="col-lg-5 hidden-md hidden-sm hidden-xs">
                             <img src="{{ cdn('img/payment-secure.jpg') }}" class="img-responsive">
                         </div>
