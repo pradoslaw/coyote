@@ -40,6 +40,16 @@ class PaymentsGrid extends Grid
                     return link_to_route('adm.payments.invoice', $payment->invoice->number, [$payment->id]);
                 }
             ])
+            ->addColumn('price', [
+                'title' => 'Kwota brutto',
+                'render' => function (Payment $payment) {
+                    if (!$payment->invoice) {
+                        return '--';
+                    }
+
+                    return $payment->invoice->grossPrice() . ' zł';
+                }
+            ])
             ->addRowAction(new ShowButton(function (Payment $payment) {
                 return route('adm.payments.show', [$payment->id]);
             }));
