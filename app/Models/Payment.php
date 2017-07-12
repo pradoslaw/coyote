@@ -17,6 +17,7 @@ use Ramsey\Uuid;
  * @property Job $job
  * @property Plan $plan
  * @property Invoice $invoice
+ * @property int $coupon_id
  */
 class Payment extends Model
 {

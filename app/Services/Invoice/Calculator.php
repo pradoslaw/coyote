@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Invoice;
 
+use Coyote\Coupon;
 use Illuminate\Contracts\Support\Arrayable;
 
 class Calculator implements Arrayable
@@ -22,6 +23,11 @@ class Calculator implements Arrayable
     public $discount;
 
     /**
+     * @var Coupon|null
+     */
+    protected $coupon;
+
+    /**
      * @param array $attributes
      */
     public function __construct(array $attributes = [])
@@ -33,6 +39,17 @@ class Calculator implements Arrayable
                 $this->{$camelCase} = $value;
             }
         }
+    }
+
+    /**
+     * @param Coupon|null $coupon
+     * @return $this
+     */
+    public function setCoupon(Coupon $coupon = null)
+    {
+        $this->coupon = $coupon;
+
+        return $this;
     }
 
     /**
@@ -78,6 +95,6 @@ class Calculator implements Arrayable
      */
     private function calculateDiscount($price)
     {
-        return $this->discount > 0 ? $price * $this->discount : $price;
+        return ($this->discount > 0 ? $price * $this->discount : $price) - ($this->coupon !== null ? $this->coupon->amount : 0);
     }
 }

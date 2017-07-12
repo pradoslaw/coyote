@@ -79,7 +79,8 @@ class PaymentForm extends Form
                 'label' => 'Masz kod promocyjny?',
                 'attr' => [
                     'class' => 'input-sm',
-                    '@keyup' => 'validateCoupon'
+                    '@keyup' => 'validateCoupon',
+                    'autocomplete' => 'off'
                 ],
                 'row_attr' => [
                     'v-show' => 'coupon.code || show_coupon === true'

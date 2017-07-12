@@ -50,13 +50,16 @@ let vm = new Vue({
             return (this.calculator.vat_rate * 100) - 100;
         },
         netPrice: function() {
-            return this.money(this.calculator.net_price - this.coupon.amount);
+            return this.money(this.calculator.net_price);
         },
         grossPrice: function() {
-            return this.money(this.netPrice * this.calculator.vat_rate);
+            return this.money(this.netPriceAfterDiscount * this.calculator.vat_rate);
+        },
+        netPriceAfterDiscount: function() {
+            return this.money(Math.max(0, this.calculator.net_price - this.coupon.amount));
         },
         vatPrice: function() {
-            return this.money(this.grossPrice - this.netPrice);
+            return this.money(this.grossPrice - this.netPriceAfterDiscount);
         }
     }
 });

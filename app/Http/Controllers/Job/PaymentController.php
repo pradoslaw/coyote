@@ -124,11 +124,9 @@ class PaymentController extends Controller
         $calculator->vatRate = $this->vatRates[$form->get('invoice')->getValue()['country_id']] ?? $calculator->vatRate;
 
         $coupon = $this->coupon->findBy('code', $form->get('coupon')->getValue());
-        if ($coupon) {
-            $calculator->price -= $coupon->amount;
-        }
+        $calculator->setCoupon($coupon);
 
-        return $this->handlePayment(function () use ($payment, $form, $calculator) {
+        return $this->handlePayment(function () use ($payment, $form, $calculator, $coupon) {
             /** @var mixed $result */
             $result = Transaction::sale([
                 'amount'                => number_format($calculator->grossPrice(), 2, '.', ''),
@@ -159,6 +157,11 @@ class PaymentController extends Controller
                 $payment,
                 $calculator
             );
+
+            if ($coupon) {
+                $payment->coupon_id = $coupon->id;
+                $coupon->delete();
+            }
 
             // associate invoice with payment
             $payment->invoice()->associate($invoice);
