@@ -23,6 +23,7 @@
                         </div>
 
                         <div class="col-lg-7 col-md-12">
+                            {{ form_widget(form.price) }}
                             {{ form_row(form.name) }}
 
                             <div class="form-group form-group-border credit-card-container has-feedback {{ errors.has('number') ? 'has-error' }}">
@@ -66,7 +67,8 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
+                            <div class="row" v-if="grossPrice > 0">
                                 <div class="col-xs-12">
                                     <div class="well well-sm">
                                         <div class="checkbox margin-none">
@@ -80,7 +82,8 @@
                                 </div>
                             </div>
 
-                            <div class="invoice">
+                            {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
+                            <div class="invoice" v-if="grossPrice > 0">
                                 <div class="row">
                                     <div class="col-sm-7">
                                         {{ form_row(form.invoice.children.name) }}
@@ -121,6 +124,14 @@
                         <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Powrót do ogłoszenia</a>
 
                         <button type="submit" id="submit" class="btn btn-primary pull-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="panel-body" v-show="grossPrice == 0">
+                    <h2 class="text-center">Płatność nie jest konieczna</h2>
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary" data-submit-state="Zapisywanie...">Zapisz i zakończ</button>
                     </div>
                 </div>
             </div>

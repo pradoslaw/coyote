@@ -4,6 +4,7 @@ namespace Coyote\Http\Forms\Job;
 
 use Carbon\Carbon;
 use Coyote\Services\FormBuilder\Form;
+use Illuminate\Support\Fluent;
 use Illuminate\Validation\Rule;
 
 class PaymentForm extends Form
@@ -21,8 +22,13 @@ class PaymentForm extends Form
                 'id' => 'payment-form',
                 '@submit.prevent' => 'submit'
             ])
+            ->add('price', 'hidden', [
+                'attr' => [
+                    'v-model' => 'grossPrice'
+                ]
+            ])
             ->add('name', 'text', [
-                'required' => true,
+//                'required' => true,
                 'label' => 'Nazwa (jaka widnieje na karcie kredytowej)',
                 'help' => 'Np. imię i nazwisko. Maksymalnie 32 znaki.',
                 'rules' => 'string|max:32',
@@ -31,7 +37,7 @@ class PaymentForm extends Form
                 ]
             ])
             ->add('number', 'text', [
-                'required' => true,
+//                'required' => true,
                 'label' => 'Numer karty kredytowej lub debetowej',
                 'help' => 'Nie martw się. Numer karty nie będzie przechowywany na naszym serwerze.',
                 'rules' => 'string|cc_number',
@@ -61,7 +67,7 @@ class PaymentForm extends Form
             ->add('cvc', 'text', [
                 'label' => 'Kod zabezpieczeń (CVC)',
                 'help' => '3 ostatnie cyfry na odwrocie karty.',
-                'rules' => 'required|cc_cvc:number',
+                'rules' => 'cc_cvc:number',
                 'attr' => [
                     'id' => 'cvc',
                     'v-model' => 'form.cvc'
@@ -102,6 +108,20 @@ class PaymentForm extends Form
             'number' => 'numer karty kredytowej',
             'cvc' => 'CVC'
         ];
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function getValidatorInstance()
+    {
+        $validator = parent::getValidatorInstance();
+
+        $validator->sometimes(['name', 'number', 'cvc'], 'required', function (Fluent $input) {
+            return $input->price > 0;
+        });
+
+        return $validator;
     }
 
     /**

@@ -127,27 +127,31 @@ class PaymentController extends Controller
         $calculator->setCoupon($coupon);
 
         return $this->handlePayment(function () use ($payment, $form, $calculator, $coupon) {
-            /** @var mixed $result */
-            $result = Transaction::sale([
-                'amount'                => number_format($calculator->grossPrice(), 2, '.', ''),
-                'orderId'               => $payment->id,
-                'paymentMethodNonce'    => $this->request->input("payment_method_nonce"),
-                'options' => [
-                    'submitForSettlement' => true
-                ]
-            ]);
+            if ($calculator->grossPrice() > 0) {
+                /** @var mixed $result */
+                $result = Transaction::sale([
+                    'amount'                => number_format($calculator->grossPrice(), 2, '.', ''),
+                    'orderId'               => $payment->id,
+                    'paymentMethodNonce'    => $this->request->input("payment_method_nonce"),
+                    'options' => [
+                        'submitForSettlement' => true
+                    ]
+                ]);
 
-            /** @var $result \Braintree\Result\Error */
-            if (!$result->success || is_null($result->transaction)) {
-                /** @var \Braintree\Error\Validation $error */
-                $error = array_first($result->errors->deepAll());
-                logger()->error(var_export($result, true));
+                /** @var $result \Braintree\Result\Error */
+                if (!$result->success || is_null($result->transaction)) {
+                    /** @var \Braintree\Error\Validation $error */
+                    $error = array_first($result->errors->deepAll());
+                    logger()->error(var_export($result, true));
 
-                if (is_null($error)) {
-                    throw new Exception\ValidationsFailed();
+                    if (is_null($error)) {
+                        throw new Exception\ValidationsFailed();
+                    }
+
+                    throw new Exception\ValidationsFailed($error->message, $error->code);
                 }
 
-                throw new Exception\ValidationsFailed($error->message, $error->code);
+                logger()->debug('Successfully payment', ['result' => $result]);
             }
 
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
@@ -160,14 +164,13 @@ class PaymentController extends Controller
 
             if ($coupon) {
                 $payment->coupon_id = $coupon->id;
+
                 $coupon->delete();
             }
 
             // associate invoice with payment
             $payment->invoice()->associate($invoice);
             $payment->save();
-
-            logger()->debug('Successfully payment', ['result' => $result]);
 
             // boost job offer, send invoice and reindex
             event(new PaymentPaid($payment, $this->auth));
