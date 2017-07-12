@@ -80,3 +80,5 @@ $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as
 $this->get('alert/{guid}', ['uses' => 'User\NotificationsController@url']);
 $this->get('notification/{guid}', ['uses' => 'User\NotificationsController@url'])->name('user.notifications.url');
 $this->get('ping', ['uses' => 'User\PingController@index'])->name('ping');
+
+$this->get('session', ['uses' => 'User\SessionTokenController@index'])->name('session');
