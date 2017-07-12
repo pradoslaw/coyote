@@ -8,6 +8,7 @@ use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
+use Coyote\Services\Invoice\Calculator;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
@@ -127,32 +128,7 @@ class PaymentController extends Controller
         $calculator->setCoupon($coupon);
 
         return $this->handlePayment(function () use ($payment, $form, $calculator, $coupon) {
-            if ($calculator->grossPrice() > 0) {
-                /** @var mixed $result */
-                $result = Transaction::sale([
-                    'amount'                => number_format($calculator->grossPrice(), 2, '.', ''),
-                    'orderId'               => $payment->id,
-                    'paymentMethodNonce'    => $this->request->input("payment_method_nonce"),
-                    'options' => [
-                        'submitForSettlement' => true
-                    ]
-                ]);
-
-                /** @var $result \Braintree\Result\Error */
-                if (!$result->success || is_null($result->transaction)) {
-                    /** @var \Braintree\Error\Validation $error */
-                    $error = array_first($result->errors->deepAll());
-                    logger()->error(var_export($result, true));
-
-                    if (is_null($error)) {
-                        throw new Exception\ValidationsFailed();
-                    }
-
-                    throw new Exception\ValidationsFailed($error->message, $error->code);
-                }
-
-                logger()->debug('Successfully payment', ['result' => $result]);
-            }
+            $this->makeTransaction($payment, $calculator);
 
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
             /** @var \Coyote\Invoice $invoice */
@@ -188,6 +164,43 @@ class PaymentController extends Controller
     private function getForm($payment)
     {
         return $this->createForm(PaymentForm::class, $payment);
+    }
+
+    /**
+     * @param Payment $payment
+     * @param Calculator $calculator
+     * @throws Exception\ValidationsFailed
+     */
+    private function makeTransaction(Payment $payment, Calculator $calculator)
+    {
+        if (!$calculator->grossPrice()) {
+            return;
+        }
+
+        /** @var mixed $result */
+        $result = Transaction::sale([
+            'amount'                => number_format($calculator->grossPrice(), 2, '.', ''),
+            'orderId'               => $payment->id,
+            'paymentMethodNonce'    => $this->request->input("payment_method_nonce"),
+            'options' => [
+                'submitForSettlement' => true
+            ]
+        ]);
+
+        /** @var $result \Braintree\Result\Error */
+        if (!$result->success || is_null($result->transaction)) {
+            /** @var \Braintree\Error\Validation $error */
+            $error = array_first($result->errors->deepAll());
+            logger()->error(var_export($result, true));
+
+            if (is_null($error)) {
+                throw new Exception\ValidationsFailed();
+            }
+
+            throw new Exception\ValidationsFailed($error->message, $error->code);
+        }
+
+        logger()->debug('Successfully payment', ['result' => $result]);
     }
 
     /**
