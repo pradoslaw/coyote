@@ -28,7 +28,6 @@ class PaymentForm extends Form
                 ]
             ])
             ->add('name', 'text', [
-//                'required' => true,
                 'label' => 'Nazwa (jaka widnieje na karcie kredytowej)',
                 'help' => 'Np. imię i nazwisko. Maksymalnie 32 znaki.',
                 'rules' => 'string|max:32',
@@ -37,7 +36,6 @@ class PaymentForm extends Form
                 ]
             ])
             ->add('number', 'text', [
-//                'required' => true,
                 'label' => 'Numer karty kredytowej lub debetowej',
                 'help' => 'Nie martw się. Numer karty nie będzie przechowywany na naszym serwerze.',
                 'rules' => 'string|cc_number',
