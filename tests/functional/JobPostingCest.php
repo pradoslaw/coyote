@@ -397,6 +397,92 @@ class JobPostingCest
         $I->assertEquals(1, $item->vat_rate);
     }
 
+    public function createOfferWithDiscountCoupon(FunctionalTester $I)
+    {
+        $I->wantTo('Create offer with discount coupon');
+        $fake = Factory::create();
+
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Standard']);
+        $coupon = $I->haveRecord(\Coyote\Coupon::class, ['code' => $fake->randomAscii, 'amount' => 30]);
+
+        $I->amOnRoute('job.submit');
+
+        $I->fillField('title', $title = $fake->text(50));
+        $I->selectOption('employment_id', 1);
+
+        $I->fillField('plan_id', $plan->id);
+
+        $I->click('Informacje o firmie');
+        $I->selectOption('is_private', '1');
+        $I->fillField('done', 1);
+        $I->click('Zapisz i zakończ');
+
+        $I->seeCurrentRouteIs('job.payment');
+
+        $I->seeOptionIsSelected('invoice[country_id]', '--');
+        $I->uncheckOption('enable_invoice');
+
+        $I->fillField('name', 'Jan Kowalski');
+        $I->fillField('number', '5555555555554444');
+        $I->fillField('cvc', '123');
+        $I->fillField('payment_method_nonce', 'fake-valid-nonce');
+        $I->fillField('coupon', $coupon->code);
+        $I->fillField('price', 26.7);
+
+        $I->click('Zapłać i zapisz');
+
+        $I->seeCurrentRouteIs('job.offer');
+
+        /** @var \Coyote\Job $job */
+        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'is_publish' => 1, 'is_ads' => 1]);
+        /** @var \Coyote\Payment $payment */
+        $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
+
+        $I->assertEquals(26.7, $payment->invoice->netPrice());
+        $I->assertEquals($coupon->id, $payment->coupon_id);
+
+        $I->assertNotNull($I->grabRecord('coupons', ['code' => $coupon->code])['deleted_at']);
+    }
+
+    public function createOfferWithFullDiscountCoupon(FunctionalTester $I)
+    {
+        $I->wantTo('Create offer with full discount coupon');
+        $fake = Factory::create();
+
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Max']);
+        $coupon = $I->haveRecord(\Coyote\Coupon::class, ['code' => $fake->randomAscii, 'amount' => 200]);
+
+        $I->amOnRoute('job.submit');
+
+        $I->fillField('title', $title = $fake->text(50));
+        $I->selectOption('employment_id', 1);
+
+        $I->fillField('plan_id', $plan->id);
+
+        $I->click('Informacje o firmie');
+        $I->selectOption('is_private', '1');
+        $I->fillField('done', 1);
+        $I->click('Zapisz i zakończ');
+
+        $I->seeCurrentRouteIs('job.payment');
+
+        // normalnie caly formularz faktury jest ukrywany przez vue.js po tym, jak cena == 0 zl
+        $I->uncheckOption('enable_invoice');
+        $I->fillField('coupon', $coupon->code);
+        $I->fillField('price', 0);
+
+        $I->click('Zapisz i zakończ');
+
+        $I->seeCurrentRouteIs('job.offer');
+
+        /** @var \Coyote\Job $job */
+        $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'is_publish' => 1, 'is_ads' => 1, 'is_highlight' => 1, 'is_on_top' => 1]);
+        /** @var \Coyote\Payment $payment */
+        $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
+
+        $I->assertEquals(0, $payment->invoice->netPrice());
+    }
+
     public function validatePaymentForm(FunctionalTester $I)
     {
         $I->wantTo('Validate payment form');

@@ -128,10 +128,10 @@
                 </div>
 
                 <div class="panel-body" v-show="grossPrice == 0">
-                    <h2 class="text-center">Płatność nie jest konieczna</h2>
+                    <h1 class="text-center"><i class="fa fa-check text-primary"></i> Płatność nie jest wymagana</h1>
 
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary" data-submit-state="Zapisywanie...">Zapisz i zakończ</button>
+                    <div class="form-group text-center margin-md-top">
+                        <button type="submit" class="btn btn-primary btn-lg" data-submit-state="Zapisywanie...">Zapisz i zakończ</button>
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@
                 <div class="panel-body">
                     <div class="margin-xs-top margin-xs-bottom clearfix">
                         <div class="pull-left">
-                            Promocja ogłoszenia ({{ payment.days }} dni)
+                            Publikacja ogłoszenia ({{ payment.days }} dni)
                         </div>
                         <div class="pull-right text-right">
                             ${ netPrice } zł
