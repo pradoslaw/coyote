@@ -419,6 +419,8 @@ class JobPostingCest
         );
 
         $I->amOnRoute('job.payment', [$payment->id]);
+
+        $I->fillField('price', $plan->price);
         $I->click('Zapłać i zapisz');
 
         $I->seeFormErrorMessage('name');
