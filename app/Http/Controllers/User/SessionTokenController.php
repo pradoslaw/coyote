@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
@@ -12,9 +11,13 @@ class SessionTokenController extends Controller
     public function index()
     {
         $secret = config('app.key');
-        $userid = $this->userId;
-        $token = hash_hmac('sha256', $userid, $secret);
+        $userId = $this->userId;
+        $expirationDate = strtotime("+ 1 day");
+        $token = $userId . '|' . $expirationDate;
+        $signedToken = $token . '|' . hash_hmac('sha256', $token, $secret);
 
-        return response($token);
+        return response()->json([
+            'token' => $signedToken,
+        ]);
     }
 }
