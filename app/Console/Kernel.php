@@ -3,6 +3,7 @@
 namespace Coyote\Console;
 
 use Coyote\Console\Commands\BoostJobsCommand;
+use Coyote\Console\Commands\CreateCouponCommand;
 use Coyote\Console\Commands\CreateSitemapCommand;
 use Coyote\Console\Commands\CurrencyExchangeCommand;
 use Coyote\Console\Commands\Elasticsearch\CreateIndexCommand;
@@ -42,7 +43,8 @@ class Kernel extends ConsoleKernel
         IndexCommand::class,
         PlanReminderCommand::class,
         SetupPredictionsCommand::class,
-        SetupFirmSlugCommand::class
+        SetupFirmSlugCommand::class,
+        CreateCouponCommand::class
     ];
 
     /**

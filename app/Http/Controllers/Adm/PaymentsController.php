@@ -49,6 +49,13 @@ class PaymentsController extends BaseController
     {
         $this->breadcrumb->push('Szczegóły płatności');
 
+        // load coupons even if they are deleted
+        $payment->load([
+            'coupon' => function ($query) {
+                return $query->withTrashed();
+            }
+        ]);
+
         return $this->view('adm.payments.show')->with([
             'payment'       => $payment,
             'payment_list'  => Payment::getPaymentStatusesList()
