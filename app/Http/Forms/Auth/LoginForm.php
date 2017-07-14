@@ -38,7 +38,7 @@ class LoginForm extends Form implements ValidatesWhenSubmitted
     {
         $this
             ->add('name', 'text', [
-                'rules' => 'required|username',
+                'rules' => 'required',
                 'label' => 'Nazwa użytkownika',
                 'attr' => [
                     'autofocus' => 'autofocus'
