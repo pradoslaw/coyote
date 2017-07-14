@@ -32,19 +32,12 @@ Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
 
 ## Instalacja
 
-1. `sudo apt-get -y install php-gd`
-2. `sudo apt-get -y install php-mbstring`
-2. `sudo apt-get -y install php-mcrypt`
-2. `sudo apt-get -y install php-pear`
-2. `sudo apt-get -y install php-curl`
-3. `sudo apt-get -y install php-mongodb`
-4. `sudo apt-get -y install php-pgsql`
-4. `sudo apt-get -y install php-xml`
-6. `git clone https://github.com/adam-boduch/coyote.git .`
-7. `psql -c 'create database coyote;' -U postgres`
-8. `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
-9. `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
-10. `php artisan key:generate` (generowanie unikalnego klucza, który posłuży do szyfrowania danych)
+1. `sudo apt-get -y install php-gd php-mbstring php-mcrypt php-pear php-curl php-mongodb php-pgsql php-xml`
+2. `git clone https://github.com/adam-boduch/coyote.git .`
+3. `psql -c 'create database coyote;' -U postgres`
+4. `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
+5. `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
+6. `php artisan key:generate` (generowanie unikalnego klucza, który posłuży do szyfrowania danych)
 
 ### Problemy podczas instalacji
 #### Class 'MongoClient' not found
