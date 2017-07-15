@@ -10,7 +10,6 @@ use Coyote\Console\Commands\Elasticsearch\CreateIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\CreateMappingCommand;
 use Coyote\Console\Commands\Elasticsearch\IndexCommand;
 use Coyote\Console\Commands\FlushCacheCommand;
-use Coyote\Console\Commands\PlanReminderCommand;
 use Coyote\Console\Commands\PurgeFirewallCommand;
 use Coyote\Console\Commands\PurgeJobsCommand;
 use Coyote\Console\Commands\PurgePastebinCommand;
@@ -41,7 +40,6 @@ class Kernel extends ConsoleKernel
         CreateMappingCommand::class,
         CreateIndexCommand::class,
         IndexCommand::class,
-        PlanReminderCommand::class,
         SetupPredictionsCommand::class,
         SetupFirmSlugCommand::class,
         CreateCouponCommand::class
@@ -57,7 +55,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('coyote:counter')->everyFiveMinutes();
         $schedule->command('job:purge')->hourly();
-        $schedule->command('job:plan-reminder')->dailyAt('07:00:00');
         $schedule->command('job:boost')->dailyAt('07:00:00');
         $schedule->command('session:purge')->everyMinute()->withoutOverlapping();
         $schedule->command('pastebin:purge')->hourly();
