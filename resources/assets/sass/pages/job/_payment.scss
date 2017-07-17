@@ -4,21 +4,6 @@
 .has-feedback label ~ img {
   position: absolute;
 
-  &.visa {
-    top: 23px;
-    right: 4px;
-  }
-
-  &.mastercard {
-    top: 29px;
-    right: 40px;
-  }
-
-  &.maestro {
-    top: 29px;
-    right: 78px;
-  }
-
   &.cvc {
     top: 25px;
     right: 5px;
@@ -46,4 +31,32 @@
 select[name=country_id] {
   padding-left: 4px;
   padding-right: 4px;
+}
+
+.nav-left {
+  margin-right: -32px;
+
+  > li {
+    border-radius: $border-radius-large 0 0 $border-radius-large;
+    margin-bottom: 20px;
+
+    > a:hover,
+    > a:focus {
+      background-color: transparent;
+    }
+
+    &.active {
+      border-color: $border-color;
+      border-width: 1px 0 1px 1px;
+      border-style: solid;
+      background-color: #fff;
+    }
+
+    strong {
+      display: block;
+      font-size: 15px;
+      font-weight: normal;
+      color: $text-color;
+    }
+  }
 }

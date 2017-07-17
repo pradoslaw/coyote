@@ -43,6 +43,9 @@ let vm = new Vue({
                     this.coupon = {code: null, amount: 0};
                 }
             });
+        },
+        switchTab: function(tab) {
+            this.tab = tab;
         }
     },
     computed: {

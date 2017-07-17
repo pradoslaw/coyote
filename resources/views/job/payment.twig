@@ -18,53 +18,73 @@
                 </div>
                 <div class="panel-body" v-show="grossPrice > 0">
                     <div class="row">
-                        <div class="col-lg-5 hidden-md hidden-sm hidden-xs">
-                            <img src="{{ cdn('img/payment-secure.jpg') }}" class="img-responsive">
+                        <div class="col-lg-4" style="z-index: 1">
+                            <ul class="nav nav-left nav-stacked">
+                                <li role="presentation" :class="{'active': tab == 'card'}">
+                                    <a @click="switchTab('card')" href="javascript:">
+                                        <strong>Karta kredytowa/debetowa</strong>
+
+                                        <img src="{{ cdn('img/mastercard.png') }}">
+                                        <img src="{{ cdn('img/visa.png') }}">
+                                        <img src="{{ cdn('img/maestro.png') }}">
+
+                                    </a>
+                                </li>
+
+                                <li role="presentation" :class="{'active': tab == 'transfer'}">
+                                    <a @click="switchTab('transfer')" href="javascript:">
+                                        <strong>Przelew bankowy</strong>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
 
-                        <div class="col-lg-7 col-md-12">
-                            {{ form_widget(form.price) }}
-                            {{ form_row(form.name) }}
+                        <div class="col-lg-8 col-md-12">
+                            <div class="panel panel-default">
+                                <div id="card" v-show="tab === 'card'" class="panel-body">
+                                    {{ form_widget(form.price) }}
+                                    {{ form_row(form.name) }}
 
-                            <div class="form-group form-group-border credit-card-container has-feedback {{ errors.has('number') ? 'has-error' }}">
-                                {{ form_label(form.number) }}
+                                    <div class="form-group form-group-border credit-card-container has-feedback {{ errors.has('number') ? 'has-error' }}">
+                                        {{ form_label(form.number) }}
 
-                                <img src="{{ cdn('img/mastercard.png') }}" class="mastercard">
-                                <img src="{{ cdn('img/visa.png') }}" class="visa">
-                                <img src="{{ cdn('img/maestro.png') }}" class="maestro">
+                                        {{ form_widget(form.number) }}
+                                        {{ form_error(form.number) }}
+                                    </div>
 
-                                {{ form_widget(form.number) }}
-                                {{ form_error(form.number) }}
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-7 {{ errors.has('exp_month') ? 'has-error' }}">
-                                        <label class="control-label">Data ważności karty *</label>
-
+                                    <div class="form-group">
                                         <div class="row">
-                                            <div class="col-xs-7" style="padding-right: 0">
-                                                {{ form_widget(form.exp_month) }}
-                                                {{ form_error(form.exp_month) }}
+                                            <div class="col-sm-7 {{ errors.has('exp_month') ? 'has-error' }}">
+                                                <label class="control-label">Data ważności karty *</label>
+
+                                                <div class="row">
+                                                    <div class="col-xs-7" style="padding-right: 0">
+                                                        {{ form_widget(form.exp_month) }}
+                                                        {{ form_error(form.exp_month) }}
+                                                    </div>
+                                                    <div class="col-xs-5">
+                                                        {{ form_widget(form.exp_year) }}
+                                                        {{ form_error(form.exp_year) }}
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-xs-5">
-                                                {{ form_widget(form.exp_year) }}
-                                                {{ form_error(form.exp_year) }}
+
+                                            <div class="col-sm-5">
+                                                <div class="form-group has-feedback {{ errors.has('cvc') ? 'has-error' }}">
+                                                    {{ form_label(form.cvc) }}
+
+                                                    <img src="{{ cdn('img/cvc.png') }}" class="cvc">
+
+                                                    {{ form_widget(form.cvc) }}
+                                                    {{ form_error(form.cvc) }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-5">
-                                        <div class="form-group has-feedback {{ errors.has('cvc') ? 'has-error' }}">
-                                            {{ form_label(form.cvc) }}
 
-                                            <img src="{{ cdn('img/cvc.png') }}" class="cvc">
-
-                                            {{ form_widget(form.cvc) }}
-                                            {{ form_error(form.cvc) }}
-                                        </div>
-                                    </div>
                                 </div>
+                                <div id="transfer" v-show="tab === 'transfer'" class="panel-body"></div>
                             </div>
 
                             {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
@@ -232,6 +252,7 @@
             client_token: '{{ client_token }}',
             show_coupon: false,
             coupon: {{ coupon|json_encode|raw }},
+            tab: 'card',
             form: {
                 payment_method_nonce: '',
                 number: '{{ form.number.value }}',
