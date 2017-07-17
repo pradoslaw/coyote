@@ -47,14 +47,28 @@ class SuccessfulPaymentNotification extends Notification
     public function toMail($user)
     {
         $mail = (new MailMessage)
-            ->subject(sprintf('Potwierdzenie płatności za promowanie oferty: %s', $this->payment->job->title))
-            ->line(
+            ->subject(sprintf('Potwierdzenie płatności za promowanie oferty: %s', $this->payment->job->title));
+
+        if ($this->payment->invoice->grossPrice() > 0) {
+            $mail->line(
                 sprintf(
                     'Otrzymaliśmy płatność w kwocie <strong>%s %s</strong>.',
                     $this->payment->invoice->grossPrice(),
                     $this->payment->invoice->currency->symbol
                 )
             );
+        }
+
+        if ($this->payment->coupon_id) {
+            // load coupons even if they are deleted
+            $this->payment->load([
+                'coupon' => function ($query) {
+                    return $query->withTrashed();
+                }
+            ]);
+
+            $mail->line(sprintf('Potwierdzamy realizację kodu rabatowego: <strong>%s</strong>', $this->payment->coupon->code));
+        }
 
         if ($this->pdf !== null) {
             $mail->line('W załączniku znajdziesz fakturę VAT.');
