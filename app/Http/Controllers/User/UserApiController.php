@@ -4,10 +4,11 @@ namespace Coyote\Http\Controllers\User;
 
 class UserApiController extends BaseController
 {
-    public function get(UserRepository $user, $user)
+    public function get($user)
     {
         return response()->json([
-            'nae' => user['name'],
+            'id' => $user['id'],
+            'name' => $user['name'],
         ]);
     }
 }

@@ -12,6 +12,13 @@ class SessionTokenController extends Controller
     {
         $secret = config('app.key');
         $userId = $this->userId;
+
+        if ($userId == 0) {
+            return response()->json([
+                'error' => 'No user logged in',
+            ], 401);
+        }
+
         $expirationDate = strtotime("+ 1 day");
         $token = $userId . '|' . $expirationDate;
         $signedToken = $token . '|' . hash_hmac('sha256', $token, $secret);
@@ -24,9 +31,9 @@ class SessionTokenController extends Controller
     public function verify_token()
     {
         $secret = config('app.key');
-        $data = Input::all();
-        $fragments = explode($data['token']);
-        $token = $fragments[0] + '|' + $fragments[1];
+        $data = $this->request->all();
+        $fragments = explode('|', $data['token']);
+        $token = $fragments[0] . '|' . $fragments[1];
         $signature = $fragments[2];
         $signatureCheck = hash_hmac('sha256', $token, $secret);
 

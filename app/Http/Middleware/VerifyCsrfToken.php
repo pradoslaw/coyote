@@ -14,6 +14,19 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         '/User/Settings/Ajax',
         '/Microblog/Comment/Show/*',
-        '/Forum/Comment/*'
+        '/Forum/Comment/*',
     ];
+
+    public function handle($request, \Closure $next)
+    {
+        $exceptDomains = [
+            'api.' . ltrim(config('session.domain'))
+        ];
+        foreach ($exceptDomains as $domain) {
+            if ($domain === $request->getHost()) {
+                return $next($request);
+            }
+        }
+        return parent::handle($request, $next);
+    }
 }
