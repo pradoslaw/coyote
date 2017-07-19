@@ -8,7 +8,7 @@ class SessionTokenController extends Controller
     /**
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function generate_token()
+    public function generateToken()
     {
         $secret = config('app.key');
         $userId = $this->userId;
@@ -28,11 +28,14 @@ class SessionTokenController extends Controller
         ]);
     }
 
-    public function verify_token()
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function verifyToken()
     {
         $secret = config('app.key');
-        $data = $this->request->all();
-        $fragments = explode('|', $data['token']);
+        $input = $this->request->input('token');
+        $fragments = explode('|', $input);
         $token = $fragments[0] . '|' . $fragments[1];
         $signature = $fragments[2];
         $signatureCheck = hash_hmac('sha256', $token, $secret);

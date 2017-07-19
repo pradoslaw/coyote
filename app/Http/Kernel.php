@@ -33,8 +33,9 @@ class Kernel extends HttpKernel
             \Coyote\Http\Middleware\FirewallBlacklist::class
         ],
         'api' => [
-            'throttle:60,1',
-            'bindings'
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            Middleware\DefaultBindings::class,
         ],
     ];
 
