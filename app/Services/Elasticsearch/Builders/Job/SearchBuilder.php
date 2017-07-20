@@ -151,7 +151,10 @@ class SearchBuilder extends QueryBuilder
     {
         if ($this->request->has('q')) {
             $this->must(
-                new MultiMatch($this->request->get('q'), ['title^3', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
+                new MultiMatch(
+                    $this->request->get('q'),
+                    ['title^3', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name']
+                )
             );
         } else {
             // no keywords were provided -- let's calculate score based on score functions
