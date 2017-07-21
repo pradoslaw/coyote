@@ -126,7 +126,7 @@
                                 {% set sort = input_get('sort', '_score') %}
 
                                 <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: '_score', order: 'desc'})), 'Trafność', {class: 'sort' ~ (sort == '_score' ? ' desc')}) }}</li>
-                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'id', order: 'desc'})), 'Data dodania', {class: 'sort' ~ (sort == 'id' ? ' desc')}) }}</li>
+                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'boost_at', order: 'desc'})), 'Data dodania', {class: 'sort' ~ (sort == 'boost_at' ? ' desc')}) }}</li>
                                 <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'salary', order: 'desc'})), 'Wynagrodzenie', {class: 'sort' ~ (sort == 'salary' ? ' desc')}) }}</li>
                             </ul>
 

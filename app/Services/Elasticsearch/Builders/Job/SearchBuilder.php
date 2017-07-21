@@ -221,7 +221,7 @@ class SearchBuilder extends QueryBuilder
     {
         $sort = $this->request->get('sort', '_score');
 
-        return in_array($sort, ['id', '_score', 'salary']) ? $sort : self::DEFAULT_SORT;
+        return in_array($sort, ['boost_at', '_score', 'salary']) ? $sort : self::DEFAULT_SORT;
     }
 
     /**
