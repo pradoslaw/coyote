@@ -12,14 +12,13 @@
 @import "job/application";
 
 .benefits,
-.features {
+.features,
+.about-items {
   .list-group-item {
     border: none;
     font-size: 14px;
 
     i {
-      font-size: 120%;
-
       &.fa-remove {
         color: #ddd;
       }
@@ -29,6 +28,26 @@
       i.fa-check {
         color: $brand-primary;
       }
+    }
+  }
+}
+
+.about-items {
+  .list-group-item {
+    font-size: $font-size-base;
+
+    label {
+      font-weight: normal;
+      //width: 40%;
+      color: $gray-light;
+    }
+
+    strong {
+      color: $text-color;
+    }
+
+    a {
+      color: inherit;
     }
   }
 }
