@@ -49,29 +49,7 @@ class HomeController extends BaseController
     public function index()
     {
         $this->preferences = new Preferences($this->getSetting('job.preferences'));
-
-        $this->tab = $this->request->get('tab', $this->getSetting('job.tab', self::TAB_FILTERED));
-        $validator = $this->getValidationFactory()->make(
-            $this->request->all(),
-            ['tab' => 'sometimes|in:' . self::TAB_ALL . ',' . self::TAB_FILTERED]
-        );
-
-        if ($validator->fails()) {
-            $this->tab = self::TAB_FILTERED;
-        }
-
-        if ($this->request->has('tab')) {
-            $this->setSetting('job.tab', $this->tab);
-        }
-
-        // if user want to filter job offers, we MUST select "all" tab
-        if (!empty(array_intersect(['q', 'city', 'remote', 'tag'], array_keys($this->request->input())))) {
-            $this->tab = self::TAB_ALL;
-        }
-
-        if ($this->tab == self::TAB_FILTERED) {
-            $this->builder->setPreferences($this->preferences);
-        }
+        $this->builder->setPreferences($this->preferences);
 
         // get only tags belong to specific category
         $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
@@ -171,14 +149,11 @@ class HomeController extends BaseController
             $subscribes = $this->job->subscribes($this->userId);
         }
 
-        $selected = [];
-        if ($this->tab !== self::TAB_FILTERED) {
-            $selected = [
-                'tags'          => $this->builder->tag->getTags(),
-                'cities'        => array_map('mb_strtolower', $this->builder->city->getCities()),
-                'remote'        => $this->request->has('remote') || $this->request->route()->getName() === 'job.remote'
-            ];
-        }
+        $selected = [
+            'tags'          => $this->builder->tag->getTags(),
+            'cities'        => array_map('mb_strtolower', $this->builder->city->getCities()),
+            'remote'        => $this->request->has('remote') || $this->request->route()->getName() === 'job.remote'
+        ];
 
         return $this->view('job.home', array_merge($data, [
             'rates_list'        => Job::getRatesList(),

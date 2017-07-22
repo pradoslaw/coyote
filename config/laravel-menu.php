@@ -17,9 +17,6 @@ return [
         '_forum' => [
             'auto_activate'    => false,
             'restful'          => true
-        ],
-        'job_tabs' => [
-            'auto_activate'    => false
         ]
     ],
     '__master_menu___' => [
@@ -54,9 +51,5 @@ return [
         'Obserwowane' => ['route' => 'forum.subscribes', 'data' => ['role' => true]],
         'Moje' => ['route' => 'forum.mine', 'data' => ['role' => true], 'title' => 'Wątki w których brałem udział'],
         'Moje tagi' => ['route' => 'forum.interesting', 'title' => 'Wątki zawierające moje tagi']
-    ],
-    '_jobs' => [
-        'Wszystkie' => ['route' => ['job.home', 'tab' => 'all'], 'nickname' => 'all'],
-        'Wybrane dla mnie' => ['route' => ['job.home', 'tab' => 'filtered'], 'nickname' => 'filtered']
     ]
 ];
