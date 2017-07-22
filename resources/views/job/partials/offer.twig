@@ -40,74 +40,90 @@
                 </ul>
             </section>
 
-            {% if tags|length > 0 %}
-                <section>
-                    <div class="tags">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <h5 class="must-have">Wymagane</h5>
-                            </div>
+            <ul class="about-items list-group row">
+                <li class="list-group-item col-sm-6">
+                    <i class="fa fa-fw fa-handshake-o"></i>
 
-                            {% if tags[0] %}
-                                <div class="col-sm-6">
-                                    <h5 class="nice-to-have">Mile widziane</h5>
-                                </div>
+                    <p>
+                        <strong>{{ employment_list[job.employment_id] }}</strong>
+                        <small>Umowa</small>
+                    </p>
+                </li>
+
+                {% if job.seniority_id %}
+                    <li class="list-group-item col-sm-6">
+                        <i class="fa fa-fw fa-area-chart"></i>
+
+                        <p>
+                            <strong>{{ seniority_list[job.seniority_id] }}</strong>
+                            <small>Poziom doświadczenia</small>
+                        </p>
+                    </li>
+                {% endif %}
+
+                {% if job.firm.employees %}
+                    <li class="list-group-item col-sm-6">
+                        <i class="fa fa-fw fa-users fa-fw"></i>
+
+                        <p>
+                            <strong>{{ employees_list[job.firm.employees] }} pracowników</strong>
+                            <small>Rozmiar firmy</small>
+                        </p>
+                    </li>
+                {% endif %}
+
+                {% if job.firm.founded %}
+                    <li class="list-group-item col-sm-6">
+                        <i class="fa fa-calendar-o fa-fw"></i>
+
+                        <p>
+                            <strong>{{ job.firm.founded }}</strong>
+                            <small>Rok założenia firmy</small>
+                        </p>
+                    </li>
+                {% endif %}
+
+                {% if job.firm.website %}
+                    <li class="list-group-item col-sm-6">
+                        <i class="fa fa-link fa-fw"></i>
+
+                        <p>
+                            <strong><a href="{{ job.firm.website }}">{{ job.firm.website }}</a></strong>
+                            <small>WWW</small>
+                        </p>
+                    </li>
+                {% endif %}
+            </ul>
+
+            {% if tags|length > 0 %}
+                <div class="tags">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h5 class="must-have">Wymagane</h5>
+                        </div>
+
+                        {% if tags[0] %}
+                            <div class="col-sm-6">
+                                <h5 class="nice-to-have">Mile widziane</h5>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {% if tags[1] %}
+                                {{ _self.display_tags(tags[1]) }}
+                            {% else %}
+                                --
                             {% endif %}
                         </div>
 
-                        <div class="row">
-                            <div class="col-sm-6">
-                                {% if tags[1] %}
-                                    {{ _self.display_tags(tags[1]) }}
-                                {% else %}
-                                    --
-                                {% endif %}
-                            </div>
-
-                            <div class="col-sm-6">
-                                {{ _self.display_tags(tags[0]) }}
-                            </div>
+                        <div class="col-sm-6">
+                            {{ _self.display_tags(tags[0]) }}
                         </div>
                     </div>
-                </section>
+                </div>
             {% endif %}
-
-            <section>
-                <ul class="about-items list-group row">
-                    <li class="list-group-item col-sm-6">
-                        <label><i class="fa fa-fw fa-file-o"></i> {{ employment_list[job.employment_id] }}</label>
-                        <strong>Umowa</strong>
-                    </li>
-
-                    {% if job.seniority_id %}
-                        <li class="list-group-item col-sm-6">
-                            <label><i class="fa fa-fw fa-area-chart"></i> Poziom doświadczenia:</label>
-                            <strong>{{ seniority_list[job.seniority_id] }}</strong>
-                        </li>
-                    {% endif %}
-
-                    {% if job.firm.employees %}
-                        <li class="list-group-item col-sm-6">
-                            <label><i class="fa fa-fw fa-users fa-fw"></i> Rozmiar firmy:</label>
-                            <strong>{{ employees_list[job.firm.employees] }} pracowników</strong>
-                        </li>
-                    {% endif %}
-
-                    {% if job.firm.founded %}
-                        <li class="list-group-item col-sm-6">
-                            <label><i class="fa fa-calendar-o fa-fw"></i> Rok założenia:</label>
-                            <strong>{{ job.firm.founded }}</strong>
-                        </li>
-                    {% endif %}
-
-                    {% if job.firm.website %}
-                        <li class="list-group-item col-sm-6">
-                            <label><i class="fa fa-link fa-fw"></i> WWW:</label>
-                            <strong><a href="{{ job.firm.website }}">{{ job.firm.website }}</a></strong>
-                        </li>
-                    {% endif %}
-                </ul>
-            </section>
 
             {% if job.description %}
                 <section>
@@ -168,13 +184,11 @@
             {% endif %}
 
             {% if not job.is_expired and not job.enable_apply %}
-                <section>
-                    <h3>Informacje o rekrutacji</h3>
+                <h3>Informacje o rekrutacji</h3>
 
-                    <div class="text">
-                        {{ job.recruitment|raw }}
-                    </div>
-                </section>
+                <div class="text">
+                    {{ job.recruitment|raw }}
+                </div>
             {% else %}
                 <div id="apply" class="margin-lg-top">
                     <a class="btn btn-primary" href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
