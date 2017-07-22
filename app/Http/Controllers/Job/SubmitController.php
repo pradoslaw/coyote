@@ -211,7 +211,7 @@ class SubmitController extends Controller
 
         return $this->view('job.submit.preview', [
             'job'               => $job,
-            'firm'              => $job->firm->toJson(),
+            'firm'              => $job->firm ? $job->firm->toJson() : '{}',
             'tags'              => $tags,
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),

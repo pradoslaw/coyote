@@ -89,7 +89,7 @@ class JobPostingCest
         $I->seeCurrentRouteIs('job.offer');
         $I->see($title, '.media-heading');
         $I->see($firm, '.employer');
-        $I->see($website, '#box-job-firm');
+        $I->see($website);
         $I->see($headline, 'blockquote');
 
         $I->canSeeRecord('firms', ['name' => $firm, 'country_id' => 14, 'city' => 'Wrocław']);
@@ -154,7 +154,7 @@ class JobPostingCest
 
         $I->see($title, '.media-heading');
         $I->see('New firm', '.employer');
-        $I->see($website, '#box-job-firm');
+        $I->see($website);
         $I->see($headline, 'blockquote');
     }
 
