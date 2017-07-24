@@ -6,6 +6,8 @@ use Coyote\Services\Elasticsearch\Aggs;
 use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
 use Coyote\Services\Elasticsearch\Functions\Random;
+use Coyote\Services\Elasticsearch\Functions\ScriptScore;
+use Coyote\Services\Elasticsearch\MatchAll;
 use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Filters;
@@ -82,19 +84,20 @@ class SearchBuilder extends QueryBuilder
     public function setPreferences($preferences)
     {
         if (!empty($preferences->locations)) {
-            $this->location->setLocations($preferences->locations);
+            $this->should(new Filters\Job\Location($preferences->locations));
         }
 
         if (!empty($preferences->tags)) {
-            $this->tag->setTags($preferences->tags);
+            $this->should(new Filters\Job\Tag($preferences->tags));
         }
 
         if (!empty($preferences->is_remote)) {
-            $this->addRemoteFilter();
+            $this->should(new Filters\Job\Remote());
         }
 
         if (!empty($preferences->salary)) {
-            $this->addSalaryFilter($preferences->salary, $preferences->currency_id);
+            $this->should(new Filters\Range('salary', ['gte' => $preferences->salary]));
+            $this->should(new Filters\Job\Currency($preferences->currency_id));
         }
     }
 
@@ -151,11 +154,15 @@ class SearchBuilder extends QueryBuilder
     {
         if ($this->request->has('q')) {
             $this->must(
-                new MultiMatch($this->request->get('q'), ['title^3', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name'])
+                new MultiMatch(
+                    $this->request->get('q'),
+                    ['title^3', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name']
+                )
             );
         } else {
             // no keywords were provided -- let's calculate score based on score functions
             $this->setupScoreFunctions();
+            $this->must(new MatchAll());
         }
 
         if ($this->request->has('city')) {
@@ -175,6 +182,7 @@ class SearchBuilder extends QueryBuilder
         }
 
         $this->score(new Random($this->sessionId, 2));
+        $this->score(new ScriptScore('_score'));
         $this->sort(new Sort($this->getSort(), $this->getOrder()));
 
         $this->setupFilters();
@@ -218,7 +226,7 @@ class SearchBuilder extends QueryBuilder
     {
         $sort = $this->request->get('sort', '_score');
 
-        return in_array($sort, ['id', '_score', 'salary']) ? $sort : self::DEFAULT_SORT;
+        return in_array($sort, ['boost_at', '_score', 'salary']) ? $sort : self::DEFAULT_SORT;
     }
 
     /**

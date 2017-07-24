@@ -17,6 +17,8 @@ use Ramsey\Uuid;
  * @property Job $job
  * @property Plan $plan
  * @property Invoice $invoice
+ * @property int $coupon_id
+ * @property Coupon $coupon
  */
 class Payment extends Model
 {
@@ -88,6 +90,14 @@ class Payment extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 
     /**

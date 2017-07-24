@@ -12,14 +12,13 @@
 @import "job/application";
 
 .benefits,
-.features {
+.features,
+.about-items {
   .list-group-item {
     border: none;
     font-size: 14px;
 
     i {
-      font-size: 120%;
-
       &.fa-remove {
         color: #ddd;
       }
@@ -29,6 +28,45 @@
       i.fa-check {
         color: $brand-primary;
       }
+    }
+  }
+}
+
+.about-items {
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+  .list-group-item {
+    font-size: $font-size-base;
+    padding-top: 7px;
+    padding-bottom: 7px;
+
+    > p {
+      padding-left: 10px;
+      display: inline-block;
+      vertical-align: top;
+      overflow: hidden;
+
+      .fa {
+        color: $text-muted;
+        vertical-align: middle;
+        font-size: 16px;
+      }
+
+      small {
+        font-size: 11px;
+        display: block;
+        text-transform: uppercase;
+        color: $text-muted;
+      }
+
+      strong {
+        color: $gray-light;
+      }
+    }
+
+    a {
+      color: inherit;
     }
   }
 }

@@ -26,8 +26,6 @@ function toInt(data) {
     return data;
 }
 
-Vue.component('changer', require('../../components/changer.vue'));
-
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],

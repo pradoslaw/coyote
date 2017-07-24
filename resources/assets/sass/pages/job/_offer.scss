@@ -8,6 +8,24 @@
     @media screen and (max-width: $screen-sm) {
       padding: 0 5px;
     }
+
+    section {
+      padding: 20px 0;
+      border-bottom: 1px solid $border-color;
+      clear: both;
+
+      &:first-child {
+        padding: 0 0 10px 0;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      > .list-group {
+        margin-bottom: 0;
+      }
+    }
   }
 
   h1 {
@@ -21,15 +39,6 @@
 
   h3 {
     color: $brand-primary;
-
-    &:after {
-      height: 1px;
-      width: 10%;
-      content: '';
-      display: block;
-      background-color: #e4e6e8;
-      margin-top: 10px;
-    }
   }
 
   .employer {
@@ -63,8 +72,6 @@
   }
 
   .tags {
-    margin-top: 10px;
-
     .must-have {
       text-indent: -9999px;
       background: url('/img/hand-writing-must-have.png') no-repeat;

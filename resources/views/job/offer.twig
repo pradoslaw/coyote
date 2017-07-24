@@ -56,42 +56,38 @@
         <aside class="col-md-3">
             {% include 'job.partials.sidemenu' %}
 
-            {% if job.firm_id and (job.firm.street or job.firm.website or job.firm.employees or job.firm.founded or job.firm.latitude) %}
+            {#{% if job.firm_id and (job.firm.street or job.firm.website or job.firm.employees or job.firm.founded or job.firm.latitude) %}#}
+            {% if can('job-update') %}
                 <section id="box-job-firm" class="box">
-                    <h4><i class="fa fa-info-circle fa-fw"></i> O firmie</h4>
+                    <h4><i class="fa fa-info-circle fa-fw"></i> Informacje o ofercie</h4>
 
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <ul class="list-unstyled">
-                                {% if job.firm.street %}
-                                    <li>
-                                        <i class="fa fa-home fa-fw"></i>
-                                        {{ job.firm.street }} {{ job.firm.house }} {{ job.firm.postcode }} {{ job.firm.city }}
+                                <li title="Data opublikowania">
+                                    <i class="fa fa-calendar"></i>
+                                    {{ job.boost_at|format_date }}
+                                </li>
+
+                                <li class="counter" title="Liczba odsłon">
+                                    <i class="fa fa-eye"></i>
+                                    {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+                                </li>
+
+                                {% if job.enable_apply %}
+                                    <li class="applications" title="Liczba osób, które aplikowały na tę ofertę. Informacja widoczna jedynie dla Ciebie.">
+                                        <i class="fa fa-files-o"></i>
+                                        {{ declination(job.applications.count(), ['aplikacja', 'aplikacje', 'aplikacji']) }}
                                     </li>
                                 {% endif %}
-                                {% if job.firm.website %}
-                                    <li>
-                                        <i class="fa fa-link fa-fw"></i>
-                                        <a href="{{ job.firm.website }}">{{ job.firm.website }}</a>
-                                    </li>
-                                {% endif %}
-                                {% if job.firm.employees %}
-                                    <li>
-                                        <i class="fa fa-users fa-fw"></i>
-                                        {{ employees_list[job.firm.employees] }} pracowników
-                                    </li>
-                                {% endif %}
-                                {% if job.firm.founded %}
-                                    <li>
-                                        <i class="fa fa-calendar-o fa-fw"></i>
-                                        Rok założenia: {{ job.firm.founded }}
+
+                                {% if not job.is_expired %}
+                                    <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
+                                        <i class="fa fa-clock-o"></i>
+                                        {{ job.deadline }} dni do końca
                                     </li>
                                 {% endif %}
                             </ul>
-
-                            {% if job.firm.longitude and job.firm.latitude %}
-                                <div id="map" style="height: 300px"></div>
-                            {% endif %}
                         </div>
                     </div>
                 </section>

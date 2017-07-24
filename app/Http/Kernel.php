@@ -53,6 +53,7 @@ class Kernel extends HttpKernel
         'bindings.default'  => Middleware\DefaultBindings::class,
         'can'           => \Illuminate\Auth\Middleware\Authorize::class,
         'guest'         => Middleware\RedirectIfAuthenticated::class,
+        'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'adm'           => Middleware\AdmAccess::class,
         'forum.access'  => Middleware\ForumAccess::class,
         'forum.write'   => Middleware\ForumWrite::class,

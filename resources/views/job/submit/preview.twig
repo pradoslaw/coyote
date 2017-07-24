@@ -37,11 +37,14 @@
     {{ parent() }}
 
     <script>
-        var data = {};
+        var data = {
+            firm: {{ firm|raw }}
+        };
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 
     {% include 'job.submit.partials.navigation' %}

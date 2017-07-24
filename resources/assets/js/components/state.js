@@ -2,7 +2,7 @@ $(function() {
     'use strict';
 
     $.fn.disable = function() {
-        if (this.attr('disabled') == 'disabled') {
+        if (this.attr('disabled') === 'disabled') {
             return;
         }
 
@@ -21,10 +21,12 @@ $(function() {
     };
 
     $(document).on('submit', 'form', function() {
-        let submit = $(this).find(':submit');
+        $(':submit', this).each(function () {
+            let submit = $(this);
 
-        if (typeof submit.data('submit-state') !== 'undefined') {
-            submit.disable();
-        }
+            if (typeof submit.data('submit-state') !== 'undefined') {
+                submit.disable();
+            }
+        });
     });
 });
