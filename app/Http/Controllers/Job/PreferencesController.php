@@ -28,7 +28,7 @@ class PreferencesController extends Controller
 
         $this->setSetting('job.preferences', Preferences::make($request->except('_token')));
 
-        return response(route('job.home', ['tab' => HomeController::TAB_FILTERED]));
+        return response(route('job.home'));
     }
 
     /**
