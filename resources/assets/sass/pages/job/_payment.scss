@@ -60,3 +60,126 @@ select[name=country_id] {
     }
   }
 }
+
+.bank-logo {
+  background-image: url(/img/p24.png);
+  display: block;
+  cursor: pointer;
+  margin: auto;
+  height: 42px;
+
+  &.mtransfer {
+    background-position: -275px -215px;
+    width: 111px;
+  }
+
+  &.ipko {
+    width: 129px;
+    background-position: 0 -183px;
+  }
+
+  &.wbk {
+    background-position: -125px -355px;
+    width: 106px;
+    height: 35px;
+  }
+
+  &.ing {
+    background-position: -275px -172px;
+    width: 114px;
+  }
+
+  &.pekao {
+    background-position: -130px -97px;
+    width: 129px;
+  }
+
+  &.millenium {
+    background-position: -245px -269px;
+    width: 124px;
+    height: 35px;
+  }
+
+  &.alior {
+    background-position: -405px -251px;
+    width: 76px;
+  }
+
+  &.inteligo {
+    background-position: -130px -183px;
+    width: 129px;
+    height: 42px;
+  }
+
+  &.credit-agricole {
+    width: 129px;
+    background-position: 0 -140px;
+  }
+
+  &.t-mobile {
+    background-position: -405px -43px;
+    width: 86px;
+  }
+
+  &.deutsche-bank {
+    background-position: -275px 0;
+    width: 129px;
+  }
+
+  &.eurobank {
+    background-position: -130px -54px;
+    width: 129px;
+  }
+
+  &.citi {
+    background-position: -405px -86px;
+    width: 82px;
+  }
+
+  &.getin {
+    background-position: -131px 0;
+    width: 143px;
+  }
+
+  &.bgz {
+    background-position: 0 -355px;
+    width: 124px;
+    height: 35px;
+  }
+
+  &.bos {
+    background-position: -392px -129px;
+    width: 129px;
+  }
+
+  &.r-przelew {
+    background-position: -275px -43px;
+    width: 128px;
+  }
+
+  &.pocztowy-24 {
+    background-position: -105px -312px;
+    width: 104px;
+  }
+
+  &.bps {
+    background-position: -405px 0;
+    width: 100px;
+  }
+
+  &.volkswagen-bank {
+    background-position: 0 -96px;
+    width: 129px;
+  }
+
+  &.noble {
+    background-position: -275px -129px;
+    width: 120px;
+  }
+
+  &.plus {
+    background-position: -405px -129px;
+    width: 96px;
+    height: 35px;
+  }
+}

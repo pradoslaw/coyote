@@ -81,10 +81,17 @@
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
-                                <div id="transfer" v-show="tab === 'transfer'" class="panel-body"></div>
+
+                                <div id="transfer" v-show="tab === 'transfer'" class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-center margin-sm-bottom" v-for="bank in banks">
+                                            <label class="bank-logo" :class="bank._class" :for="bank._class"></label>
+
+                                            <input type="radio" name="bank" :value="bank.id" :id="bank._class">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
@@ -260,7 +267,31 @@
                 expiration_year: '{{ form.exp_year.value }}',
                 expiration_month: '{{ form.exp_month.value }}',
                 cvc: '{{ form.cvc.value }}'
-            }
+            },
+            banks: [
+                {id: 25, _class: 'mtransfer'},
+                {id: 31, _class: 'ipko'},
+                {id: 20, _class: 'wbk'},
+                {id: 112, _class: 'ing'},
+                {id: 65, _class: 'pekao'},
+                {id: 85, _class: 'millenium'},
+                {id: 88, _class: 'alior'},
+                {id: 26, _class: 'inteligo'},
+                {id: 45, _class: 'credit-agricole'},
+                {id: 121, _class: 't-mobile'},
+                {id: 110, _class: 'deutsche-bank'},
+                {id: 94, _class: 'eurobank'},
+                {id: 119, _class: 'citi'},
+                {id: 153, _class: 'getin'},
+                {id: 223, _class: 'bgz'},
+                {id: 48, _class: 'bos'},
+                {id: 102, _class: 'r-przelew'},
+                {id: 141, _class: 'pocztowy-24'},
+                {id: 143, _class: 'bps'},
+                {id: 69, _class: 'volkswagen-bank'},
+                {id: 158, _class: 'noble'},
+                {id: 131, _class: 'plus'}
+            ]
         };
     </script>
 
