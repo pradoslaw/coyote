@@ -21,21 +21,6 @@ class PaymentRepository extends Repository implements PaymentRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function hasRecentlyPaid(int $userId, int $days = 7)
-    {
-        return $this
-            ->model
-            ->join('jobs', function (JoinClause $join) use ($userId) {
-                return $join->on('jobs.id', '=', 'job_id')->on('user_id', $this->raw($userId));
-            })
-            ->where('payments.created_at', '>', Carbon::now()->subDay($days))
-            ->where('status_id', Payment::PAID)
-            ->exists();
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function ongoingPaymentsWithBoostBenefit()
     {
         return $this

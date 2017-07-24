@@ -21,6 +21,8 @@ class CreateCouponsTable extends Migration
             $table->softDeletes();
             $table->smallInteger('percentage')->nullable();
             $table->smallInteger('amount')->nullable();
+
+            $table->unique('code');
         });
     }
 

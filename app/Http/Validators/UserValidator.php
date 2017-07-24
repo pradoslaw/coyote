@@ -69,8 +69,7 @@ class UserValidator
     protected function validateBy($column, $value, $userId = null)
     {
         // @see https://github.com/adam-boduch/coyote/issues/354
-        // @todo usunac trim() po upgrade do laravel 5.4 i uzyciu middleware - TrimStrings
-        $user = $this->user->{'findBy' . ucfirst($column)}(mb_strtolower(trim($value)));
+        $user = $this->user->{'findBy' . ucfirst($column)}(mb_strtolower($value));
 
         if ($user !== null && $userId !== $user->id) {
             return false;

@@ -8,35 +8,13 @@ $header-footer-border: #c7c7c7;
 #job-header-container {
   background-color: $header-footer-color;
   border-bottom: 1px solid $header-footer-border;
-
-  .nav-tabs {
-    margin-bottom: -1px;
-    border-bottom: none;
-
-    #btn-editor {
-      margin-left: 5px;
-      padding: 2px 4px;
-      border: 1px solid transparent;
-
-      &:hover {
-        color: $gray;
-        border-color: $border-color;
-      }
-    }
-
-    // Do not wrap line in tooltip. We show tooltip over the "settings preferences" button
-    // ---------------------------------
-    .tooltip {
-      white-space: nowrap;
-    }
-  }
 }
 
 // Formularz wyszukiwania oferty
 // -------------------------------------------
 
 #box-search {
-  margin: 25px auto 24px auto;
+  margin: 43px auto 43px auto;
 }
 
 // Post offer button (for employers)

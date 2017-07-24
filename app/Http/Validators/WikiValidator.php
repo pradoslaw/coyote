@@ -76,7 +76,8 @@ class WikiValidator
         foreach ($this->router->getRoutes()->getRoutes() as $route) {
             $compiled = $route->getCompiled();
 
-            if ($compiled) {
+            // ugly hack. skip route with "path" variable because this rule catch all pages.
+            if ($compiled && !in_array('path', $compiled->getVariables())) {
                 $regexs[] = $compiled->getRegex();
             } else {
                 $regexs[] = $this->buildRegex($route->uri());
