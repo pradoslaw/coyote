@@ -34,8 +34,9 @@ class Kernel extends HttpKernel
         ],
         'api' => [
             \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            Middleware\DefaultBindings::class,
+            'throttle:60,1',
+            'bindings',
+            'bindings.default'
         ],
     ];
 
@@ -48,7 +49,8 @@ class Kernel extends HttpKernel
         'auth'          => Middleware\Authenticate::class,
         'auth.basic'    => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings'      => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-//        'bindings.default'  => Middleware\DefaultBindings::class,
+        'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'bindings.default'  => Middleware\DefaultBindings::class,
         'can'           => \Illuminate\Auth\Middleware\Authorize::class,
         'guest'         => Middleware\RedirectIfAuthenticated::class,
         'adm'           => Middleware\AdmAccess::class,
