@@ -9,7 +9,8 @@ class UserApiController extends BaseController
     }
 
     /**
-    * @param \Coyote\User $user
+     * @param \Coyote\User $user
+     * @return \Illuminate\Http\JsonResponse
     */
     public function get($user)
     {

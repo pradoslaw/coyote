@@ -1,4 +1,6 @@
-<?php namespace Coyote\Http;
+<?php
+
+namespace Coyote\Http;
 
 use Coyote\Http\Middleware\TrimStrings;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -33,7 +35,6 @@ class Kernel extends HttpKernel
             \Coyote\Http\Middleware\FirewallBlacklist::class
         ],
         'api' => [
-            \Illuminate\Session\Middleware\StartSession::class,
             'throttle:60,1',
             'bindings',
             'bindings.default'
@@ -53,7 +54,6 @@ class Kernel extends HttpKernel
         'bindings.default'  => Middleware\DefaultBindings::class,
         'can'           => \Illuminate\Auth\Middleware\Authorize::class,
         'guest'         => Middleware\RedirectIfAuthenticated::class,
-        'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'adm'           => Middleware\AdmAccess::class,
         'forum.access'  => Middleware\ForumAccess::class,
         'forum.write'   => Middleware\ForumWrite::class,
