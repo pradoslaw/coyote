@@ -55,8 +55,13 @@ class HomeController extends BaseController
         $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
 
         $this->builder->setLanguages($this->tag->pluck('name'));
+        $this->builder->setSort($this->request->input('sort', $this->getSetting('job.sort', $this->builder::DEFAULT_SORT)));
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
         $this->request->session()->put('current_url', $this->request->fullUrl());
+
+        if ($this->request->has('sort')) {
+            $this->setSetting('job.sort', $this->request->input('sort'));
+        }
 
         return $this->load();
     }
@@ -165,7 +170,8 @@ class HomeController extends BaseController
             'aggregations'      => $aggregations,
             'pagination'        => $pagination,
             'subscribes'        => $subscribes,
-            'selected'          => $selected
+            'selected'          => $selected,
+            'sort'              => $this->builder->getSort()
         ]));
     }
 }

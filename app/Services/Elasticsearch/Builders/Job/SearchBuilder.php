@@ -21,11 +21,6 @@ class SearchBuilder extends QueryBuilder
     const DEFAULT_SORT = '_score';
 
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
      * @var Filters\Job\City
      */
     public $city;
@@ -49,6 +44,16 @@ class SearchBuilder extends QueryBuilder
      * @var array
      */
     protected $languages = [];
+
+    /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * @var string
+     */
+    protected $sort;
 
     /**
      * @param Request $request
@@ -99,6 +104,22 @@ class SearchBuilder extends QueryBuilder
             $this->should(new Filters\Range('salary', ['gte' => $preferences->salary]));
             $this->should(new Filters\Job\Currency($preferences->currency_id));
         }
+    }
+
+    /**
+     * @param string $sort
+     */
+    public function setSort($sort)
+    {
+        $this->sort = in_array($sort, ['boost_at', '_score', 'salary']) ? $sort : self::DEFAULT_SORT;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSort()
+    {
+        return $this->sort;
     }
 
     /**
@@ -183,7 +204,7 @@ class SearchBuilder extends QueryBuilder
 
         $this->score(new Random($this->sessionId, 2));
         $this->score(new ScriptScore('_score'));
-        $this->sort(new Sort($this->getSort(), $this->getOrder()));
+        $this->sort(new Sort($this->sort, 'desc'));
 
         $this->setupFilters();
 
@@ -217,25 +238,5 @@ class SearchBuilder extends QueryBuilder
         $this->aggs(new Aggs\Job\Remote());
         $this->aggs(new Aggs\Job\Tag($this->languages));
         $this->aggs(new Aggs\Job\TopSpot());
-    }
-
-    /**
-     * @return string
-     */
-    private function getSort()
-    {
-        $sort = $this->request->get('sort', '_score');
-
-        return in_array($sort, ['boost_at', '_score', 'salary']) ? $sort : self::DEFAULT_SORT;
-    }
-
-    /**
-     * @return string
-     */
-    private function getOrder()
-    {
-        $order = $this->request->get('order', 'desc');
-
-        return in_array($order, ['asc', 'desc']) ? $order : 'desc';
     }
 }

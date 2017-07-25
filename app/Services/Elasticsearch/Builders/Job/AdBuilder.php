@@ -44,9 +44,4 @@ class AdBuilder extends SearchBuilder
 
         return QueryBuilder::build();
     }
-
-    public function setSort($sort)
-    {
-        $this->sort($sort);
-    }
 }

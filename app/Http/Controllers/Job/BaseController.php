@@ -37,16 +37,4 @@ abstract class BaseController extends Controller
         // we need to display actual number of active offers so don't remove line below!
         $this->job->pushCriteria(new PriorDeadline());
     }
-
-    /**
-     * @param string|null $view
-     * @param array $data
-     * @return \Illuminate\View\View
-     */
-    public function view($view = null, $data = [])
-    {
-        return parent::view($view, array_merge($data, [
-            'count'         => $this->job->count()
-        ]));
-    }
 }

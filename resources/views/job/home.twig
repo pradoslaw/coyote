@@ -123,8 +123,6 @@
                     <section class="panel panel-wrapper">
                         <div id="box-jobs" class="panel-body">
                             <ul id="sort" class="hidden-xs">
-                                {% set sort = input_get('sort', '_score') %}
-
                                 <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: '_score', order: 'desc'})), 'Trafność', {class: 'sort' ~ (sort == '_score' ? ' desc')}) }}</li>
                                 <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'boost_at', order: 'desc'})), 'Data dodania', {class: 'sort' ~ (sort == 'boost_at' ? ' desc')}) }}</li>
                                 <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'salary', order: 'desc'})), 'Wynagrodzenie', {class: 'sort' ~ (sort == 'salary' ? ' desc')}) }}</li>
