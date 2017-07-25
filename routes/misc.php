@@ -22,3 +22,5 @@ $this->get('Flag/Delete/{id}', ['uses' => 'FlagController@modal', 'middleware' =
 $this->get('sitemap/{sitemap?}', ['uses' => 'SitemapController@index', 'as' => 'sitemap']);
 
 $this->get('Search', ['uses' => 'SearchController@index', 'as' => 'search']);
+
+$this->get('token', ['uses' => 'User\SessionTokenController@generateToken']);

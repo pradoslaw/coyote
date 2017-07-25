@@ -33,8 +33,10 @@ class Kernel extends HttpKernel
             \Coyote\Http\Middleware\FirewallBlacklist::class
         ],
         'api' => [
+            \Illuminate\Session\Middleware\StartSession::class,
             'throttle:60,1',
-            'bindings'
+            'bindings',
+            'bindings.default'
         ],
     ];
 
@@ -47,6 +49,7 @@ class Kernel extends HttpKernel
         'auth'          => Middleware\Authenticate::class,
         'auth.basic'    => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings'      => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'bindings.default'  => Middleware\DefaultBindings::class,
         'can'           => \Illuminate\Auth\Middleware\Authorize::class,
         'guest'         => Middleware\RedirectIfAuthenticated::class,

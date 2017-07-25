@@ -100,8 +100,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapWebRoutes();
         $this->mapApiRoutes();
+        $this->mapWebRoutes();
     }
 
     /**
@@ -125,7 +125,6 @@ class RouteServiceProvider extends ServiceProvider
             require base_path('routes/profile.php');
             require base_path('routes/pastebin.php');
             require base_path('routes/adm.php');
-            require base_path('routes/api.php');
             require base_path('routes/wiki.php'); // must be at the end
         });
     }
@@ -139,6 +138,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        //
+        $this->router->group([
+            'namespace' => $this->namespace, 'middleware' => 'api',
+        ], function () {
+            require base_path('routes/api.php');
+        });
     }
 }
