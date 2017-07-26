@@ -156,6 +156,13 @@ class FirmForm extends Form
                     'v-model' => 'firm.logo'
                 ]
             ])
+            ->add('industries', 'choice', [
+                'label' => 'Branża',
+                'help' => 'Możesz wybrać jedną lub kilka branż w których działa firma.',
+                'multiple' => true,
+                'expanded' => false,
+                'choices' => ['Gry', 'Rozrywka']
+            ])
             ->add('description', 'textarea', [
                 'label' => 'Opis firmy',
                 'rules' => 'string',

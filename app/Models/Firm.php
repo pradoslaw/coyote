@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $description
  * @property string $vat_id
  * @property \Coyote\Firm\Benefit[] $benefits
+ * @property \Coyote\Firm\Industry[] $industries
  * @property Logo $logo
  */
 class Firm extends Model
@@ -129,6 +130,11 @@ class Firm extends Model
         $instance = new Firm\Benefit();
 
         return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $this->getForeignKey(), $this->getKeyName());
+    }
+
+    public function industries()
+    {
+        return $this->belongsToMany(Industry::class, 'firm_industries');
     }
 
     /**

@@ -87,7 +87,7 @@ class Choice extends Collection
 
         foreach ($this->children as $checkbox) {
             /** @var \Coyote\Services\FormBuilder\Fields\Checkbox $checkbox */
-            if ($checkbox->isChecked()) {
+            if (method_exists($checkbox, 'isChecked') && $checkbox->isChecked()) {
                 $values[] = $checkbox->getValue();
             }
         }
@@ -95,7 +95,6 @@ class Choice extends Collection
         return $values;
     }
 
-    /** @todo ability of creating multiple select */
     public function createChildren()
     {
         if ($this->expanded && $this->multiple) {
@@ -104,6 +103,10 @@ class Choice extends Collection
 
         if ($this->expanded && !$this->multiple) {
             $this->buildCheckableChildren('radio');
+        }
+
+        if (!$this->expanded && $this->multiple) {
+            $this->buildSelect();
         }
     }
 
@@ -129,19 +132,30 @@ class Choice extends Collection
         foreach ($this->choices as $key => $label) {
             $id = str_replace('.', '_', $this->name) . '_' . $key;
 
-            $this->children[] = $this->makeField($name, $type, $this->parent, [
-                'is_child' => true,
-                'label' => $label,
-                'checked_value' => $key,
-                'checked' => in_array($key, $checkedValues),
-                'attr' => [
-                    'id' => $id
-                ],
-                'label_attr' => [
-                    'for' => $id
-                ]
-            ])
-            ->mergeOptions($this->childAttr);
+            $this->children[] = $this
+                ->makeField($name, $type, $this->parent, [
+                    'is_child' => true,
+                    'label' => $label,
+                    'checked_value' => $key,
+                    'checked' => in_array($key, $checkedValues),
+                    'attr' => [
+                        'id' => $id
+                    ],
+                    'label_attr' => [
+                        'for' => $id
+                    ]
+                ])
+                ->mergeOptions($this->childAttr);
         }
+    }
+
+    private function buildSelect()
+    {
+        $this->children[] = $this->makeField($this->name, 'select', $this->parent, [
+            'choices' => $this->choices,
+            'attr' => [
+                'multiple' => true
+            ]
+        ]);
     }
 }

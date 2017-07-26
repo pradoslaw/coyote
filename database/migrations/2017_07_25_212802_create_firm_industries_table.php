@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateJobIndustriesTable extends Migration
+class CreateFirmIndustriesTable extends Migration
 {
     use SchemaBuilder;
 
@@ -14,14 +14,15 @@ class CreateJobIndustriesTable extends Migration
      */
     public function up()
     {
-        $this->schema->create('job_industries', function (Blueprint $table) {
+        $this->schema->create('firm_industries', function (Blueprint $table) {
+            $table->increments('id');
             $table->smallInteger('industry_id');
-            $table->integer('job_id');
+            $table->integer('firm_id');
 
-            $table->index('job_id');
+            $table->index('firm_id');
 
             $table->foreign('industry_id')->references('id')->on('industries')->onDelete('cascade');
-            $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
+            $table->foreign('firm_id')->references('id')->on('firms')->onDelete('cascade');
         });
     }
 
@@ -32,6 +33,6 @@ class CreateJobIndustriesTable extends Migration
      */
     public function down()
     {
-        $this->schema->drop('job_industries');
+        $this->schema->drop('firm_industries');
     }
 }

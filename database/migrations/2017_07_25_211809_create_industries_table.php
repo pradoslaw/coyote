@@ -15,10 +15,8 @@ class CreateIndustriesTable extends Migration
     public function up()
     {
         $this->schema->create('industries', function (Blueprint $table) {
-            $table->smallInteger('id');
+            $table->increments('id');
             $table->string('name');
-
-            $table->primary('id');
         });
     }
 
