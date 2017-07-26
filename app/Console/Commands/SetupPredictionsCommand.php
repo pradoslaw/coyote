@@ -51,6 +51,7 @@ class SetupPredictionsCommand extends Command
                 ->select(['user_id', 'tags', 'page_visits.visits'])
                 ->orderBy('page_visits.id')
                 ->whereNotNull('pages.tags')
+                ->offset(480000)
                 ->chunk(10000, function ($result) use ($bar) {
                     foreach ($result as $row) {
                         $bar->advance();
