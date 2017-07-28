@@ -6,6 +6,11 @@ use Coyote\Http\Controllers\Controller;
 
 class SessionTokenController extends Controller
 {
+    public function __construct()
+    {
+        // tymczasowe rozwiazanie - nadpisujemy kontruktor z klasy bazowej
+    }
+
     /**
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
@@ -13,14 +18,14 @@ class SessionTokenController extends Controller
     {
         $secret = config('app.key');
 
-        if (!$this->userId) {
+        if (auth()->guest()) {
             return response()->json([
                 'error' => 'No user logged in',
             ], 401);
         }
 
         $expirationDate = strtotime("+ 1 day");
-        $token = $this->userId . '|' . $expirationDate;
+        $token = auth()->user()->id . '|' . $expirationDate;
         $signedToken = $token . '|' . hash_hmac('sha256', $token, $secret);
 
         return response()->json([
