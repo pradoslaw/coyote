@@ -146,6 +146,13 @@ class PaymentController extends Controller
 
             // associate invoice with payment
             $payment->invoice()->associate($invoice);
+
+            if ($payment->job->firm_id) {
+                // update firm's VAT ID
+                $payment->job->firm->vat_id = $form->getRequest()->input('invoice.vat_id');
+                $payment->job->firm->save();
+            }
+
             $payment->save();
 
             // boost job offer, send invoice and reindex

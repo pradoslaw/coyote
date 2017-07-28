@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $postcode
  * @property string $website
  * @property string $description
+ * @property string $vat_id
  * @property \Coyote\Firm\Benefit[] $benefits
  * @property Logo $logo
  */
