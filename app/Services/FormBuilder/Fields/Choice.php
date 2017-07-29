@@ -151,7 +151,7 @@ class Choice extends Collection
 
     private function buildSelect()
     {
-        $this->children[] = $this->makeField($this->name, 'select', $this->parent, [
+        $this->children[] = $this->makeField($this->name . '[]', 'select', $this->parent, [
             'choices' => $this->choices,
             'attr' => [
                 'multiple' => true

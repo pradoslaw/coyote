@@ -4,6 +4,8 @@ namespace Coyote\Http\Forms\Job;
 
 use Coyote\Country;
 use Coyote\Firm;
+use Coyote\Industry;
+use Coyote\Repositories\Contracts\IndustryRepositoryInterface as IndustryRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\Media\Factory as MediaFactory;
@@ -23,6 +25,11 @@ class FirmForm extends Form
     protected $data;
 
     /**
+     * @var IndustryRepository
+     */
+    protected $industry;
+
+    /**
      * It's public so we can use use attr from twig
      *
      * @var array
@@ -31,9 +38,14 @@ class FirmForm extends Form
         'method' => self::POST
     ];
 
-    public function __construct()
+    /**
+     * @param IndustryRepository $industry
+     */
+    public function __construct(IndustryRepository $industry)
     {
         parent::__construct();
+
+        $this->industry = $industry;
 
         $this->addEventListener(FormEvents::POST_SUBMIT, function (FirmForm $form) {
             if ($form->get('country')->getValue()) {
@@ -67,6 +79,13 @@ class FirmForm extends Form
 
             // call macro and replace collection items
             $this->data->benefits->replace($models);
+
+            $models = [];
+
+            foreach ($data['industries'] as $industry) {
+                $models[] = new Industry(['id' => $industry]);
+            }
+            $this->data->industries->replace($models);
             $this->data->fill($data);
 
             // new firm has empty ID.
@@ -161,7 +180,7 @@ class FirmForm extends Form
                 'help' => 'Możesz wybrać jedną lub kilka branż w których działa firma.',
                 'multiple' => true,
                 'expanded' => false,
-                'choices' => ['Gry', 'Rozrywka']
+                'choices' => $this->industry->pluck('name', 'id')
             ])
             ->add('description', 'textarea', [
                 'label' => 'Opis firmy',

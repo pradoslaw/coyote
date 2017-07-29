@@ -268,6 +268,8 @@ class SubmitController extends Controller
                 $job->firm()->associate($job->firm);
                 // remove old benefits and save new ones.
                 $job->firm->benefits()->push($job->firm->benefits);
+                // sync industries
+                $job->firm->industries()->sync($job->firm->industries);
             }
 
             $job->save();
