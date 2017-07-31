@@ -57,9 +57,6 @@ elixir(function (mix) {
         .sass('pages/pastebin.scss')
         .sass('pages/search.scss');
 
-    mix.copy('node_modules/chosen-js/chosen-sprite.png', 'public/img/chosen-sprite.png')
-        .copy('node_modules/chosen-js/chosen-sprite@2x.png', 'public/img/chosen-sprite@2x.png');
-
     // versioning only on production server
     if (elixir.config.production) {
         mix.version([
