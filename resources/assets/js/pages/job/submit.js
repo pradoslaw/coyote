@@ -82,7 +82,10 @@ new Vue({
         });
 
         $('[v-loader]').remove();
-        $('#industries').chosen();
+
+        $('#industries').chosen({
+            placeholder_text_multiple: 'Wybierz z listy'
+        });
     },
     methods: {
         /**
