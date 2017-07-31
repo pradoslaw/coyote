@@ -12,7 +12,7 @@ class EditButton extends RowAction
         return (string) $this->tag(
             'a',
             (string) $this->tag('i', '', ['class' => 'fa fa-edit']),
-            ['href' => $this->buildActionUrl($this->data), 'class' => 'btn btn-default btn-xs', 'title' => 'Edytuj ten rekord']
+            ['href' => $this->buildActionUrl($this->data), 'class' => 'btn btn-default btn-xs', 'title' => __('Edit')]
         );
     }
 }

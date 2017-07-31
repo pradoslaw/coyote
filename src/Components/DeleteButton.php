@@ -15,7 +15,7 @@ class DeleteButton extends RowAction
             [
                 'href' => $this->buildActionUrl($this->data),
                 'class' => 'btn btn-danger btn-xs',
-                'title' => 'Usuń ten rekord',
+                'title' => __('Delete'),
                 'data-toggle' => 'modal'
             ]
         );
