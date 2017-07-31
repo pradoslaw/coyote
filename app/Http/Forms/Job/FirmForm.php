@@ -180,7 +180,13 @@ class FirmForm extends Form
                 'help' => 'Możesz wybrać jedną lub kilka branż w których działa firma.',
                 'multiple' => true,
                 'expanded' => false,
-                'choices' => $this->industry->pluck('name', 'id')
+                'choices' => $this->industry->pluck('name', 'id'),
+                'child_attr' => [
+                    'attr' => [
+                        'id' => 'industries',
+//                        'v-model' => 'firm.industries'
+                    ]
+                ]
             ])
             ->add('description', 'textarea', [
                 'label' => 'Opis firmy',

@@ -33,5 +33,8 @@
   "main": "index.js",
   "repository": "https://github.com/adam-boduch/coyote.git",
   "author": "adam-boduch <adam@boduch.net>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "chosen-js": "^1.7.0"
+  }
 }

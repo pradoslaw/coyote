@@ -929,6 +929,10 @@ chokidar@^1.0.0, chokidar@^1.4.3:
   optionalDependencies:
     fsevents "^1.0.0"
 
+chosen-js@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/chosen-js/-/chosen-js-1.7.0.tgz#8ceb2e929e2a072886edd384d78989dfbffa58c3"
+
 cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/cipher-base/-/cipher-base-1.0.4.tgz#8760e4ecc272f4c363532f926d874aae2c1397de"

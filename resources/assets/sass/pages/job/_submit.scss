@@ -1,6 +1,7 @@
 @charset "UTF-8";
 @import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
 @import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
+@import "../../vendor/chosen";
 @import "../../components/affix";
 
 $font-size-control-label: 15px;

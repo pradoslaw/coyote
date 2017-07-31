@@ -14,4 +14,16 @@ class IndustryRepository extends Repository implements IndustryRepositoryInterfa
     {
         return Industry::class;
     }
+
+    /**
+     * @param  string $value
+     * @param  string $key
+     * @return array
+     */
+    public function pluck($value, $key = null)
+    {
+        $this->model->orderBy('name');
+
+        return parent::pluck($value, $key);
+    }
 }

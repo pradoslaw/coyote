@@ -3,6 +3,7 @@ import initTinymce from '../../libs/tinymce';
 import Tags from '../../libs/tags';
 import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';
+import 'chosen-js';
 
 /**
  * Cast data from bool to int to properly display radio buttons (0 and 1 instade of true and false).
@@ -81,6 +82,7 @@ new Vue({
         });
 
         $('[v-loader]').remove();
+        $('#industries').chosen();
     },
     methods: {
         /**
@@ -165,6 +167,7 @@ new Vue({
 
             // text can not be NULL
             tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
+            $('#industries').trigger('chosen:updated');
         },
         changeFirm: function () {
             if (!this.firm.name) {
@@ -212,6 +215,8 @@ new Vue({
 
             this.benefits = [];
             tinymce.get('description').setContent(''); // new firm - empty description
+
+            $('#industries').trigger('chosen:updated');
         },
         changeAddress: function (e) {
             let val = e.target.value.trim();
