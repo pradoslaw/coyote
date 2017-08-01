@@ -78,6 +78,10 @@
         .padding-sm {
             padding: 2px 10px 2px 0;
         }
+
+        .padding-lg-top {
+            padding: 20px 0 0 0;
+        }
     </style>
 </head>
 
@@ -126,6 +130,8 @@
                 {{ invoice.address }}<br>
                 {{ invoice.postal_code }} {{ invoice.city }}<br>
 
+                {% set reverse_charge = invoice.vat_id and invoice.country.code != 'PL' %}
+
                 {% if invoice.vat_id %}
                     NIP: {{ invoice.country.code ?: '' }}{{ invoice.vat_id }}
                 {% endif %}
@@ -141,7 +147,11 @@
                         <th class="right">Cena netto</th>
                         <th class="right">Wartość netto</th>
                         <th class="right">VAT%</th>
-                        <th class="right">Wartość VAT</th>
+
+                        {% if not reverse_chanrge %}
+                            <th class="right">Wartość VAT</th>
+                        {% endif %}
+
                         <th class="right">Wartość brutto</th>
                     </tr>
 
@@ -152,8 +162,12 @@
                             <td class="right">1</td>
                             <td class="right">{{ item.price }} {{ currency }}</td>
                             <td class="right">{{ item.price }} {{ currency }}</td>
-                            <td class="right">{{ (item.vat_rate * 100) - 100 }}</td>
-                            <td class="right">{{ item.gross_price - item.price }} {{ currency }}</td>
+                            <td class="right">{{ reverse_charge ? 'np' : ((item.vat_rate * 100) - 100) }}</td>
+
+                            {% if not reverse_charge %}
+                                <td class="right">{{ item.gross_price - item.price }} {{ currency }}</td>
+                            {% endif %}
+
                             <td class="right">{{ item.gross_price }} {{ currency }}</td>
                         </tr>
                     {% endfor %}
@@ -182,8 +196,12 @@
                         <td class="padding-sm" style="font-size: 14px"><strong>Do zapłaty:</strong></td>
                         <td class="padding-sm" style="font-size: 14px">0 {{ currency }}</td>
                     </tr>
+                    {% if reverse_charge %}
+                        <tr>
+                            <td class="padding-lg-top" style="font-size: 14px; font-style: italic;" colspan="2">Do rozliczenia podatku VAT zobowiązany jest nabywca usługi (odwrotne obciążenie)</td>
+                        </tr>
+                    {% endif %}
                 </table>
-
             </td>
         </tr>
     </table>

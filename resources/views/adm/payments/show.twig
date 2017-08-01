@@ -79,7 +79,7 @@
             <label class="col-sm-2 control-label">NIP</label>
 
             <div class="col-sm-10">
-                <p class="form-control-static">{{ payment.invoice.vat_id|default('--') }}</p>
+                <p class="form-control-static">{{ payment.invoice.country.code ~ payment.invoice.vat_id|default('--') }}</p>
             </div>
         </div>
 
