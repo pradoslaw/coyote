@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Events\JobWasSaved;
+use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Forms\Job\FirmForm;
 use Coyote\Http\Forms\Job\JobForm;
@@ -140,7 +141,7 @@ class SubmitController extends Controller
         $job = clone $request->session()->get(Job::class);
 
         // get all firms assigned to user...
-        $this->firm->pushCriteria(new EagerLoading('benefits'));
+        $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries']));
         $firms = fractal($this->firm->findAllBy('user_id', $job->user_id), new FirmWithBenefits())->toJson();
 
         $this->breadcrumb($job);
@@ -214,8 +215,9 @@ class SubmitController extends Controller
             'firm'              => $job->firm ? $job->firm->toJson() : '{}',
             'tags'              => $tags,
             'rates_list'        => Job::getRatesList(),
+            'seniority_list'    => Job::getSeniorityList(),
             'employment_list'   => Job::getEmploymentList(),
-            'seniority_list'    => Job::getSeniorityList()
+            'employees_list'    => Firm::getEmployeesList(),
         ]);
     }
 

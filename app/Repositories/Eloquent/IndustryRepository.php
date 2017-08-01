@@ -16,14 +16,10 @@ class IndustryRepository extends Repository implements IndustryRepositoryInterfa
     }
 
     /**
-     * @param  string $value
-     * @param  string $key
      * @return array
      */
-    public function pluck($value, $key = null)
+    public function getAlphabeticalList(): array
     {
-        $this->model->orderBy('name');
-
-        return parent::pluck($value, $key);
+        return $this->model->select('id', 'name')->orderBy('name')->pluck('name', 'id')->toArray();
     }
 }

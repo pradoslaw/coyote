@@ -178,7 +178,7 @@ class FirmForm extends Form
             ->add('industries', 'select', [
                 'label' => 'Branża',
                 'help' => 'Możesz wybrać jedną lub kilka branż w których działa firma.',
-                'choices' => $this->industry->pluck('name', 'id'),
+                'choices' => $this->industry->getAlphabeticalList(),
                 'attr' => [
                     'id' => 'industries',
                     'multiple' => 'multiple'

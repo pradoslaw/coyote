@@ -56,7 +56,6 @@
         <aside class="col-md-3">
             {% include 'job.partials.sidemenu' %}
 
-            {#{% if job.firm_id and (job.firm.street or job.firm.website or job.firm.employees or job.firm.founded or job.firm.latitude) %}#}
             {% if can('job-update') %}
                 <section id="box-job-firm" class="box">
                     <h4><i class="fa fa-info-circle fa-fw"></i> Informacje o ofercie</h4>
