@@ -30,6 +30,7 @@ class IndustriesTableSeeder extends Seeder
         \Coyote\Industry::forceCreate(['name' => 'eLearning']);
         \Coyote\Industry::forceCreate(['name' => 'Marketing']);
         \Coyote\Industry::forceCreate(['name' => 'Rozrywka']);
+        \Coyote\Industry::forceCreate(['name' => 'Software house']);
         \Coyote\Industry::forceCreate(['name' => 'Sport']);
         \Coyote\Industry::forceCreate(['name' => 'Moda']);
         \Coyote\Industry::forceCreate(['name' => 'Hazard']);
@@ -59,5 +60,6 @@ class IndustriesTableSeeder extends Seeder
         \Coyote\Industry::forceCreate(['name' => 'VoIP']);
         \Coyote\Industry::forceCreate(['name' => 'Efekty specjalne']);
         \Coyote\Industry::forceCreate(['name' => 'Streaming wideo']);
+        \Coyote\Industry::forceCreate(['name' => 'Sektor publiczny']);
     }
 }
