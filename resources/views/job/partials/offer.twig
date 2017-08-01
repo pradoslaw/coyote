@@ -72,7 +72,7 @@
                     </li>
                 {% endif %}
 
-                {% if job.firm.industries %}
+                {% if job.firm.industries|length > 0 %}
                     <li class="list-group-item col-sm-6">
                         <i class="fa fa-industry fa-fw"></i>
 

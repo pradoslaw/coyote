@@ -82,7 +82,7 @@ class FirmForm extends Form
 
             $models = [];
 
-            foreach ($data['industries'] as $industry) {
+            foreach ((array) $data['industries'] as $industry) {
                 $models[] = new Industry(['id' => $industry]);
             }
             $this->data->industries->replace($models);
