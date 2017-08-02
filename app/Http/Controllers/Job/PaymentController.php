@@ -8,8 +8,7 @@ use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
-use Coyote\Repositories\Contracts\PaymentRepositoryInterface;
-use Coyote\Services\Invoice\Calculator;
+use Coyote\Repositories\Contracts\PaymentRepositoryInterface as PaymentRepository;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
@@ -154,23 +153,30 @@ class PaymentController extends Controller
 
             $payment->save();
 
-            $this->makeCardTransaction($payment, $calculator);
+            if (!$calculator->grossPrice()) {
+                return $this->successfulTransaction($payment);
+            }
 
-            // boost job offer, send invoice and reindex
-            event(new PaymentPaid($payment));
-
-            return redirect()
-                ->to(UrlBuilder::job($payment->job))
-                ->with('success', trans('payment.success'));
+            return $this->{'make' . ucfirst($form->get('payment_method')->getValue()) . 'Transaction'}($payment);
         });
+    }
+
+    /**
+     * @param Payment $payment
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function success(Payment $payment)
+    {
+        return $this->successfulTransaction($payment);
     }
 
     /**
      * @param Request $request
      * @param HttpClient $client
+     * @param PaymentRepository $payment
      * @throws \Exception
      */
-    public function paymentStatus(Request $request, HttpClient $client, PaymentRepositoryInterface $payment)
+    public function paymentStatus(Request $request, HttpClient $client, PaymentRepository $payment)
     {
         /** @var \Coyote\Payment $payment */
         $payment = $payment->findBy('session_id', $request->get('p24_session_id'));
@@ -195,7 +201,7 @@ class PaymentController extends Controller
 
             $response = $client->post(config('services.payment.verify_url'), [
                 'form_params' => $request->except(['p24_method', 'p24_statement', 'p24_amount'])
-                    + ['p24_amount' => round($payment->amount * 100)]
+                    + ['p24_amount' => round($payment->invoice->grossPrice() * 100)]
             ]);
 
             $body = \GuzzleHttp\Psr7\parse_query($response->getBody());
@@ -206,16 +212,26 @@ class PaymentController extends Controller
                 );
             }
 
-//            $payment->status = Payment::PAID;
-//            $payment->save();
-
-            // setup tracker, extend subscription etc.
             event(new PaymentPaid($payment));
         } catch (\Exception $e) {
             logger()->debug($request->all());
 
             throw $e;
         }
+    }
+
+    /**
+     * @param Payment $payment
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function successfulTransaction(Payment $payment)
+    {
+        // boost job offer, send invoice and reindex
+        event(new PaymentPaid($payment));
+
+        return redirect()
+            ->to(UrlBuilder::job($payment->job))
+            ->with('success', trans('payment.success'));
     }
 
     /**
@@ -229,18 +245,14 @@ class PaymentController extends Controller
 
     /**
      * @param Payment $payment
-     * @param Calculator $calculator
      * @throws Exception\ValidationsFailed
+     * @return \Illuminate\Http\RedirectResponse
      */
-    private function makeCardTransaction(Payment $payment, Calculator $calculator)
+    private function makeCardTransaction(Payment $payment)
     {
-        if (!$calculator->grossPrice()) {
-            return;
-        }
-
         /** @var mixed $result */
         $result = Transaction::sale([
-            'amount'                => number_format($calculator->grossPrice(), 2, '.', ''),
+            'amount'                => number_format($payment->invoice->grossPrice(), 2, '.', ''),
             'orderId'               => $payment->id,
             'paymentMethodNonce'    => $this->request->input("payment_method_nonce"),
             'options' => [
@@ -262,6 +274,21 @@ class PaymentController extends Controller
         }
 
         logger()->debug('Successfully payment', ['result' => $result]);
+        return $this->successfulTransaction($payment);
+    }
+
+    /**
+     * @param Payment $payment
+     * @return \Illuminate\View\View
+     */
+    private function makeTransferTransaction(Payment $payment)
+    {
+        $payment->session_id = str_random(90);
+        $payment->save();
+
+        return $this->view('job.payment_gateway', [
+            'payment' => $payment
+        ]);
     }
 
     /**

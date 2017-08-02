@@ -62,12 +62,16 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'middleware' => 'auth'
     ]);
 
+    $this->get('Payment/{payment}/Success', [
+        'uses' => 'PaymentController@success',
+        'as' => 'payment.success'
+    ]);
+
     $this->post('Payment/{payment}', ['uses' => 'PaymentController@process', 'middleware' => 'auth']);
 
-    $this->post('Payment/{payment}/Callback', [
-        'uses' => 'PaymentController@callback',
-        'as' => 'payment.callback',
-        'middleware' => 'auth'
+    $this->post('Payment/{payment}/Status', [
+        'uses' => 'PaymentController@paymentStatus',
+        'as' => 'payment.status'
     ]);
 
     $this->get('Coupon/Validate', ['uses' => 'CouponController@validateCode', 'as' => 'coupon']);

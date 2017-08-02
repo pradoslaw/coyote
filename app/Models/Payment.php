@@ -19,6 +19,7 @@ use Ramsey\Uuid;
  * @property Invoice $invoice
  * @property int $coupon_id
  * @property Coupon $coupon
+ * @property string $session_id
  */
 class Payment extends Model
 {
@@ -146,5 +147,21 @@ class Payment extends Model
     public function getVatAttribute()
     {
         return $this->vat();
+    }
+
+    /**
+     * @return string
+     */
+    public function sign()
+    {
+        $crc = [
+            $this->session_id,
+            config('services.payment.client_id'),
+            (int) round($this->invoice->grossPrice() * 100),
+            'PLN',
+            config('services.payment.salt')
+        ];
+
+        return md5(join('|', $crc));
     }
 }

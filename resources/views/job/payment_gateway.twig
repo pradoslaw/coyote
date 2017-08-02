@@ -1,0 +1,36 @@
+{% extends 'layout' %}
+
+{% block breadcrumb %}{% endblock %}
+
+{% block container %}
+    <div class="loading">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+
+    {% block wrapper %}
+        {{ form_open({id: 'payment-form', url: config('services.payment.payment_url')}) }}
+        {{ form_hidden('p24_merchant_id', config('services.payment.client_id')) }}
+        {{ form_hidden('p24_pos_id', config('services.payment.client_id')) }}
+        {{ form_hidden('p24_session_id', payment.session_id) }}
+        {{ form_hidden('p24_amount', (payment.invoice.gross_price * 100)|round) }}
+        {{ form_hidden('p24_currency', 'PLN') }}
+        {{ form_hidden('p24_country', 'PL') }}
+        {{ form_hidden('p24_description', '') }}
+        {{ form_hidden('p24_url_return', route('job.payment.success', [payment])) }}
+        {{ form_hidden('p24_url_status', route('job.payment.status')) }}
+        {{ form_hidden('p24_api_version', '3.2') }}
+        {{ form_hidden('p24_sign', payment.sign()) }}
+        {{ form_close() }}
+    {% endblock %}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+
+    <script>
+        $(function() {
+            $('#payment-form').submit();
+        });
+    </script>
+{% endblock %}
