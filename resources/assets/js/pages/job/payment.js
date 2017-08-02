@@ -44,8 +44,8 @@ let vm = new Vue({
                 }
             });
         },
-        switchTab: function(tab) {
-            this.tab = tab;
+        setPaymentMethod: function(payment_method) {
+            this.form.payment_method = payment_method;
         }
     },
     computed: {

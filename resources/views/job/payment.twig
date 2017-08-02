@@ -10,6 +10,7 @@
 
     <div id="payment" class="row">
         {{ form_start(form) }}
+        {{ form_widget(form.payment_method) }}
 
         <main class="col-md-9">
             <div class="panel panel-default">
@@ -20,8 +21,8 @@
                     <div class="row">
                         <div class="col-lg-4" style="z-index: 1">
                             <ul class="nav nav-left nav-stacked">
-                                <li role="presentation" :class="{'active': tab == 'card'}">
-                                    <a @click="switchTab('card')" href="javascript:">
+                                <li role="presentation" :class="{'active': form.payment_method == 'card'}">
+                                    <a @click="setPaymentMethod('card')" href="javascript:">
                                         <strong>Karta kredytowa/debetowa</strong>
 
                                         <img src="{{ cdn('img/mastercard.png') }}">
@@ -31,8 +32,8 @@
                                     </a>
                                 </li>
 
-                                <li role="presentation" :class="{'active': tab == 'transfer'}">
-                                    <a @click="switchTab('transfer')" href="javascript:">
+                                <li role="presentation" :class="{'active': form.payment_method == 'transfer'}">
+                                    <a @click="setPaymentMethod('transfer')" href="javascript:">
                                         <strong>Przelew bankowy</strong>
                                     </a>
                                 </li>
@@ -41,7 +42,7 @@
 
                         <div class="col-lg-8 col-md-12">
                             <div class="panel panel-default">
-                                <div id="card" v-show="tab === 'card'" class="panel-body">
+                                <div id="card" v-show="form.payment_method === 'card'" class="panel-body">
                                     {{ form_widget(form.price) }}
                                     {{ form_row(form.name) }}
 
@@ -83,7 +84,7 @@
                                     </div>
                                 </div>
 
-                                <div id="transfer" v-show="tab === 'transfer'" class="panel-body">
+                                <div id="transfer" v-show="form.payment_method === 'transfer'" class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-3 text-center margin-sm-bottom" v-for="bank in banks">
                                             <label class="bank-logo" :class="bank._class" :for="bank._class"></label>
@@ -259,14 +260,14 @@
             client_token: '{{ client_token }}',
             show_coupon: false,
             coupon: {{ coupon|json_encode|raw }},
-            tab: 'card',
             form: {
                 payment_method_nonce: '',
                 number: '{{ form.number.value }}',
                 name: '{{ form.name.value }}',
                 expiration_year: '{{ form.exp_year.value }}',
                 expiration_month: '{{ form.exp_month.value }}',
-                cvc: '{{ form.cvc.value }}'
+                cvc: '{{ form.cvc.value }}',
+                payment_method: '{{ form.payment_method.value }}'
             },
             banks: [
                 {id: 25, _class: 'mtransfer'},
