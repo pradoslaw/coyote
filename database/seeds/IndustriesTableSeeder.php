@@ -51,7 +51,6 @@ class IndustriesTableSeeder extends Seeder
         \Coyote\Industry::forceCreate(['name' => 'Gastronomia']);
         \Coyote\Industry::forceCreate(['name' => 'SaaS']);
         \Coyote\Industry::forceCreate(['name' => 'Nauka']);
-        \Coyote\Industry::forceCreate(['name' => 'Bezpieczeństow']);
         \Coyote\Industry::forceCreate(['name' => 'Media społecznościowe']);
         \Coyote\Industry::forceCreate(['name' => 'Rozpoznawanie mowy']);
         \Coyote\Industry::forceCreate(['name' => 'Telemetryka']);
