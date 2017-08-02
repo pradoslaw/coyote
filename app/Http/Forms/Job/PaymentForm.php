@@ -111,7 +111,9 @@ class PaymentForm extends Form
         return [
             'name' => 'nazwa',
             'number' => 'numer karty kredytowej',
-            'cvc' => 'CVC'
+            'cvc' => 'CVC',
+            'payment_method' => 'forma płatności',
+            'card' => 'karta kredytowa'
         ];
     }
 

@@ -8,6 +8,7 @@ use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
+use Coyote\Repositories\Contracts\PaymentRepositoryInterface;
 use Coyote\Services\Invoice\Calculator;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
@@ -18,6 +19,7 @@ use Braintree\Configuration;
 use Braintree\ClientToken;
 use Braintree\Transaction;
 use Braintree\Exception;
+use GuzzleHttp\Client as HttpClient;
 
 class PaymentController extends Controller
 {
@@ -127,9 +129,8 @@ class PaymentController extends Controller
         $coupon = $this->coupon->findBy('code', $form->get('coupon')->getValue());
         $calculator->setCoupon($coupon);
 
+        // begin db transaction
         return $this->handlePayment(function () use ($payment, $form, $calculator, $coupon) {
-            $this->makeTransaction($payment, $calculator);
-
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
             /** @var \Coyote\Invoice $invoice */
             $invoice = $this->invoice->create(
@@ -140,8 +141,6 @@ class PaymentController extends Controller
 
             if ($coupon) {
                 $payment->coupon_id = $coupon->id;
-
-                $coupon->delete();
             }
 
             // associate invoice with payment
@@ -155,13 +154,68 @@ class PaymentController extends Controller
 
             $payment->save();
 
+            $this->makeCardTransaction($payment, $calculator);
+
             // boost job offer, send invoice and reindex
-            event(new PaymentPaid($payment, $this->auth));
+            event(new PaymentPaid($payment));
 
             return redirect()
                 ->to(UrlBuilder::job($payment->job))
                 ->with('success', trans('payment.success'));
         });
+    }
+
+    /**
+     * @param Request $request
+     * @param HttpClient $client
+     * @throws \Exception
+     */
+    public function paymentStatus(Request $request, HttpClient $client, PaymentRepositoryInterface $payment)
+    {
+        /** @var \Coyote\Payment $payment */
+        $payment = $payment->findBy('session_id', $request->get('p24_session_id'));
+        abort_if($payment === null, 404);
+
+        $crc = md5(
+            join(
+                '|',
+                array_merge(
+                    $request->only(['p24_session_id', 'p24_order_id', 'p24_amount', 'p24_currency']),
+                    [config('services.payment.salt')]
+                )
+            )
+        );
+
+        try {
+            if ($request->get('p24_sign') !== $crc) {
+                throw new \InvalidArgumentException(
+                    sprintf('Crc does not match in payment: %s. Input data: %s', $payment->session_id)
+                );
+            }
+
+            $response = $client->post(config('services.payment.verify_url'), [
+                'form_params' => $request->except(['p24_method', 'p24_statement', 'p24_amount'])
+                    + ['p24_amount' => round($payment->amount * 100)]
+            ]);
+
+            $body = \GuzzleHttp\Psr7\parse_query($response->getBody());
+
+            if (!isset($body['error']) || $body['error'] != 0) {
+                throw new \InvalidArgumentException(
+                    sprintf('[%s]: %s', $payment->session_id, $response->getBody())
+                );
+            }
+
+//            $payment->status = Payment::PAID;
+//            $payment->save();
+
+            // setup tracker, extend subscription etc.
+            event(new PaymentPaid($payment));
+        } catch (\Exception $e) {
+            logger()->debug($request->all());
+
+            throw $e;
+        }
     }
 
     /**
@@ -178,7 +232,7 @@ class PaymentController extends Controller
      * @param Calculator $calculator
      * @throws Exception\ValidationsFailed
      */
-    private function makeTransaction(Payment $payment, Calculator $calculator)
+    private function makeCardTransaction(Payment $payment, Calculator $calculator)
     {
         if (!$calculator->grossPrice()) {
             return;
