@@ -37,7 +37,7 @@ class PaymentForm extends Form
             ->add('name', 'text', [
                 'label' => 'Nazwa (jaka widnieje na karcie kredytowej)',
                 'help' => 'Np. imię i nazwisko. Maksymalnie 32 znaki.',
-                'rules' => 'bail|required_if:payment_method,card|string|max:32',
+                'rules' => 'bail|string|max:32',
                 'attr' => [
                     'v-model' => 'form.name'
                 ]
@@ -45,7 +45,7 @@ class PaymentForm extends Form
             ->add('number', 'text', [
                 'label' => 'Numer karty kredytowej lub debetowej',
                 'help' => 'Nie martw się. Numer karty nie będzie przechowywany na naszym serwerze.',
-                'rules' => 'bail|required_if:payment_method,card|string|cc_number',
+                'rules' => 'bail|string|cc_number',
                 'attr' => [
                     'id' => 'credit-card',
                     'v-model' => 'form.number'
@@ -53,7 +53,7 @@ class PaymentForm extends Form
             ])
             ->add('exp_year', 'select', [
                 'choices' => $this->getYearList(),
-                'rules' => 'bail|required_if:payment_method,card|int',
+                'rules' => 'bail|int',
                 'value' => date('Y'),
                 'attr' => [
                     'class' => 'input-inline',
@@ -62,7 +62,7 @@ class PaymentForm extends Form
             ])
             ->add('exp_month', 'select', [
                 'choices' => $this->getMonthList(),
-                'rules' => 'bail|required_if:payment_method,card|int|cc_date:exp_month,exp_year',
+                'rules' => 'bail|int|cc_date:exp_month,exp_year',
                 'value' => date('n'),
                 'attr' => [
                     'class' => 'input-inline',
@@ -72,7 +72,7 @@ class PaymentForm extends Form
             ->add('cvc', 'text', [
                 'label' => 'Kod zabezpieczeń (CVC)',
                 'help' => '3 ostatnie cyfry na odwrocie karty.',
-                'rules' => 'bail|required_if:payment_method,card|cc_cvc:number',
+                'rules' => 'bail|cc_cvc:number',
                 'attr' => [
                     'id' => 'cvc',
                     'v-model' => 'form.cvc'
@@ -98,7 +98,7 @@ class PaymentForm extends Form
                 ]
             ])
             ->add('transfer_method', 'hidden', [
-                'rules' => 'bail|required_if:payment_method,transfer|int'
+                'rules' => 'bail|int'
             ])
             ->add('invoice', 'child_form', [
                 'class' => InvoiceForm::class,
@@ -126,12 +126,7 @@ class PaymentForm extends Form
     public function messages()
     {
         return [
-            'transfer_method.required_if' => 'Przy tej formy płatności należy wybrać bank.',
-            'name.required_if' => 'To pole jest wymagane.',
-            'number.required_if' => 'To pole jest wymagane.',
-            'exp_year.required_if' => 'To pole jest wymagane.',
-            'exp_month.required_if' => 'To pole jest wymagane.',
-            'cvc.required_if' => 'To pole jest wymagane.'
+            'transfer_method.required' => 'Przy tej formy płatności należy wybrać bank.',
         ];
     }
 
@@ -142,9 +137,13 @@ class PaymentForm extends Form
     {
         $validator = parent::getValidatorInstance();
 
-        $validator->sometimes(['name', 'number', 'cvc'], 'required', function (Fluent $input) {
-            return $input->price > 0 && $input->payment_method == 'card';
-        });
+        $validator
+            ->sometimes(['name', 'number', 'cvc', 'exp_month'], 'required', function (Fluent $input) {
+                return $input->price > 0 && $input->payment_method == 'card';
+            })
+            ->sometimes('transfer_method', 'required', function (Fluent $input) {
+                return $input->price > 0 && $input->payment_method == 'transfer';
+            });
 
         return $validator;
     }
