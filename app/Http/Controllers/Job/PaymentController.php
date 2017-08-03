@@ -167,7 +167,9 @@ class PaymentController extends Controller
      */
     public function success(Payment $payment)
     {
-        return $this->successfulTransaction($payment);
+        return redirect()
+            ->to(UrlBuilder::job($payment->job))
+            ->with('success', trans('payment.pending'));
     }
 
     /**
@@ -187,7 +189,7 @@ class PaymentController extends Controller
                 '|',
                 array_merge(
                     $request->only(['p24_session_id', 'p24_order_id', 'p24_amount', 'p24_currency']),
-                    [config('services.payment.salt')]
+                    [config('services.p24.salt')]
                 )
             )
         );
@@ -199,7 +201,7 @@ class PaymentController extends Controller
                 );
             }
 
-            $response = $client->post(config('services.payment.verify_url'), [
+            $response = $client->post(config('services.p24.verify_url'), [
                 'form_params' => $request->except(['p24_method', 'p24_statement', 'p24_amount'])
                     + ['p24_amount' => round($payment->invoice->grossPrice() * 100)]
             ]);

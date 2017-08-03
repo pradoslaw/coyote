@@ -156,10 +156,10 @@ class Payment extends Model
     {
         $crc = [
             $this->session_id,
-            config('services.payment.client_id'),
+            config('services.p24.client_id'),
             (int) round($this->invoice->grossPrice() * 100),
             'PLN',
-            config('services.payment.salt')
+            config('services.p24.salt')
         ];
 
         return md5(join('|', $crc));

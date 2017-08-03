@@ -8,7 +8,7 @@
         </div>
     </div>
 
-    <div id="payment" class="row">
+    <div id="payment" class="row" v-cloak>
         {{ form_start(form) }}
         {{ form_widget(form.payment_method) }}
 
@@ -86,10 +86,12 @@
 
                                 <div id="transfer" v-show="form.payment_method === 'transfer'" class="panel-body">
                                     <div class="row">
+                                        <p class="has-error text-center">{{ form_error(form.transfer_method) }}</p>
+
                                         <div class="col-sm-3 text-center margin-sm-bottom" v-for="bank in banks">
                                             <label class="bank-logo" :class="bank._class" :for="bank._class"></label>
 
-                                            <input type="radio" name="bank" :value="bank.id" :id="bank._class">
+                                            <input type="radio" name="transfer_method" :value="bank.id" :id="bank._class">
                                         </div>
                                     </div>
                                 </div>
@@ -297,5 +299,5 @@
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    {#<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>#}
 {% endblock %}

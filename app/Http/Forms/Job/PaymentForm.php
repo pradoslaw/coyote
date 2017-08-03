@@ -97,6 +97,9 @@ class PaymentForm extends Form
                     'v-show' => 'coupon.code || show_coupon === true'
                 ]
             ])
+            ->add('transfer_method', 'hidden', [
+                'rules' => 'bail|required_if:payment_method,transfer|int'
+            ])
             ->add('invoice', 'child_form', [
                 'class' => InvoiceForm::class,
                 'value' => $this->data->job->firm
@@ -114,6 +117,21 @@ class PaymentForm extends Form
             'cvc' => 'CVC',
             'payment_method' => 'forma płatności',
             'card' => 'karta kredytowa'
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'transfer_method.required_if' => 'Przy tej formy płatności należy wybrać bank.',
+            'name.required_if' => 'To pole jest wymagane.',
+            'number.required_if' => 'To pole jest wymagane.',
+            'exp_year.required_if' => 'To pole jest wymagane.',
+            'exp_month.required_if' => 'To pole jest wymagane.',
+            'cvc.required_if' => 'To pole jest wymagane.'
         ];
     }
 
