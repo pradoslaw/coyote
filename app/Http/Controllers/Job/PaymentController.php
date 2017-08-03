@@ -288,7 +288,7 @@ class PaymentController extends Controller
         $payment->session_id = str_random(90);
         $payment->save();
 
-        return $this->view('job.payment_gateway', [
+        return $this->view('job.gateway', [
             'payment' => $payment
         ]);
     }
