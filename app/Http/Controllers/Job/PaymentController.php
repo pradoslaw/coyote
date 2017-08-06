@@ -86,7 +86,7 @@ class PaymentController extends Controller
     public function index($payment)
     {
         $this->breadcrumb->push($payment->job->title, UrlBuilder::job($payment->job));
-        $this->breadcrumb->push('Promowanie ogłoszenia');
+        $this->breadcrumb->push('Płatność');
 
         /** @var PaymentForm $form */
         $form = $this->getForm($payment);
