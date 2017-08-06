@@ -62,14 +62,14 @@ class PaymentController extends Controller
         $this->country = $country;
         $this->coupon = $coupon;
 
-        $this->middleware(function (Request $request, $next) {
-            /** @var \Coyote\Payment $payment */
-            $payment = $request->route('payment');
-
-            abort_if($payment->status_id == Payment::PAID, 404);
-
-            return $next($request);
-        });
+//        $this->middleware(function (Request $request, $next) {
+//            /** @var \Coyote\Payment $payment */
+//            $payment = $request->route('payment');
+//
+//            abort_if($payment->status_id == Payment::PAID, 404);
+//
+//            return $next($request);
+//        });
 
         $this->breadcrumb->push('Praca', route('job.home'));
         $this->vatRates = $this->country->vatRatesList();
@@ -180,6 +180,8 @@ class PaymentController extends Controller
      */
     public function paymentStatus(Request $request, HttpClient $client, PaymentRepository $payment)
     {
+        logger()->debug($_POST);
+
         /** @var \Coyote\Payment $payment */
         $payment = $payment->findBy('session_id', $request->get('p24_session_id'));
         abort_if($payment === null, 404);
@@ -197,7 +199,7 @@ class PaymentController extends Controller
         try {
             if ($request->get('p24_sign') !== $crc) {
                 throw new \InvalidArgumentException(
-                    sprintf('Crc does not match in payment: %s. Input data: %s', $payment->session_id)
+                    sprintf('Crc does not match in payment: %s.', $payment->session_id)
                 );
             }
 
