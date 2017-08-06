@@ -21,7 +21,7 @@
         {{ form_hidden('p24_email', payment.job.user.email) }}
         {{ form_hidden('p24_method', input_get('transfer_method')) }}
         {{ form_hidden('p24_url_return', route('job.payment.success', [payment])) }}
-        {{ form_hidden('p24_url_status', route('job.payment.status', [payment])) }}
+        {{ form_hidden('p24_url_status', route('job.payment.status')) }}
         {{ form_hidden('p24_api_version', '3.2') }}
         {{ form_hidden('p24_sign', payment.sign()) }}
         {{ form_close() }}
@@ -29,6 +29,7 @@
 {% endblock %}
 
 {% block body %}
+    {# nie usuwac odwolania do vue #}
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
 
     {{ parent() }}

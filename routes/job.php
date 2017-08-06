@@ -69,7 +69,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'as' => 'payment.success'
     ]);
 
-    $this->post('Payment/{payment}/Status', [
+    $this->post('Payment/Status', [
         'uses' => 'PaymentController@paymentStatus',
         'as' => 'payment.status'
     ]);
