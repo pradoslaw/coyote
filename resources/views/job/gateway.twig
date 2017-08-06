@@ -17,7 +17,7 @@
         {{ form_hidden('p24_amount', (payment.invoice.gross_price * 100)|round) }}
         {{ form_hidden('p24_currency', 'PLN') }}
         {{ form_hidden('p24_country', 'PL') }}
-        {{ form_hidden('p24_description', '') }}
+        {{ form_hidden('p24_description', payment.job_id) }}
         {{ form_hidden('p24_email', payment.job.user.email) }}
         {{ form_hidden('p24_method', input_get('transfer_method')) }}
         {{ form_hidden('p24_url_return', route('job.payment.success', [payment])) }}
