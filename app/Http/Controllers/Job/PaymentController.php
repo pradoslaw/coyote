@@ -180,8 +180,6 @@ class PaymentController extends Controller
      */
     public function paymentStatus(Request $request, HttpClient $client, PaymentRepository $payment)
     {
-        logger()->debug($_POST);
-
         /** @var \Coyote\Payment $payment */
         $payment = $payment->findBy('session_id', $request->get('p24_session_id'));
         abort_if($payment === null, 404);

@@ -56,6 +56,11 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     // Payment routes
     // -----------------------------
+    $this->any('Payment/Status', [
+        'uses' => 'PaymentController@paymentStatus',
+        'as' => 'payment.status'
+    ]);
+
     $this->get('Payment/{payment}', [
         'uses' => 'PaymentController@index',
         'as' => 'payment',
@@ -67,11 +72,6 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->get('Payment/{payment}/Success', [
         'uses' => 'PaymentController@success',
         'as' => 'payment.success'
-    ]);
-
-    $this->any('Payment/Status', [
-        'uses' => 'PaymentController@paymentStatus',
-        'as' => 'payment.status'
     ]);
 
     $this->get('Coupon/Validate', ['uses' => 'CouponController@validateCode', 'as' => 'coupon']);
