@@ -43,6 +43,9 @@ let vm = new Vue({
                     this.coupon = {code: null, amount: 0};
                 }
             });
+        },
+        setPaymentMethod: function(payment_method) {
+            this.form.payment_method = payment_method;
         }
     },
     computed: {

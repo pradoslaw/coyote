@@ -38,7 +38,7 @@
 
     <div class="row">
         <div class="col-md-9">
-            {% if payment %}
+            {% if payment and not session_has('success') %}
                 <div class="alert alert-warning">
                     <h4><i class="fa fa-credit-card fa-fw"></i> Oczekiwanie na płatność...</h4>
 

@@ -59,6 +59,10 @@ class BoostJobOffer implements ShouldQueue
             $event->payment->starts_at = Carbon::now();
             $event->payment->ends_at = Carbon::now()->addDays($event->payment->days);
 
+            if ($event->payment->coupon_id) {
+                $event->payment->coupon->delete();
+            }
+
             $event->payment->save();
 
             foreach ($event->payment->plan->benefits as $benefit) {
@@ -76,7 +80,7 @@ class BoostJobOffer implements ShouldQueue
             $event->payment->job->putToIndex();
 
             // send email with invoice
-            $event->user->notify(
+            $event->payment->job->user->notify(
                 new SuccessfulPaymentNotification($event->payment, $pdf)
             );
         });

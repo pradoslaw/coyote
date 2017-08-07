@@ -90,6 +90,13 @@ return [
         'private_key'   => env('BRAINTREE_PRIVATE_KEY')
     ],
 
+    'p24' => [
+        'client_id'     => env('P24_CLIENT_ID'),
+        'payment_url'   => env('P24_PAYMENT_URL', 'https://sandbox.przelewy24.pl/trnDirect'),
+        'verify_url'    => env('P24_VERIFY_URL', 'https://sandbox.przelewy24.pl/trnVerify'),
+        'salt'          => env('P24_SALT')
+    ],
+
     'recaptcha' => [
         'key'           => env('RECAPTCHA_KEY'),
         'secret'        => env('RECAPTCHA_SECRET')

@@ -317,7 +317,7 @@ class JobPostingCest
         $I->click('Zapłać i zapisz');
 
         $I->seeCurrentRouteIs('job.offer');
-        $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
+        $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę dostaniesz potwierdzenie na adres e-mail.');
 
         $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'is_publish' => 1]);
 
@@ -378,7 +378,7 @@ class JobPostingCest
         $I->click('Zapłać i zapisz');
 
         $I->seeCurrentRouteIs('job.offer');
-        $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
+        $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę dostaniesz potwierdzenie na adres e-mail.');
 
         /** @var \Coyote\Job $job */
         $job = $I->grabRecord(\Coyote\Job::class, ['title' => $title, 'is_publish' => 1, 'is_ads' => 1]);
@@ -532,6 +532,6 @@ class JobPostingCest
         $I->click('Zapłać i zapisz');
 
         $I->seeCurrentRouteIs('job.offer');
-        $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę zaczniemy promowanie ogłoszenia.');
+        $I->see('Dziękujemy! Płatność została zaksięgowana. Za chwilę dostaniesz potwierdzenie na adres e-mail.');
     }
 }
