@@ -87,7 +87,7 @@ class PaymentsController extends BaseController
 
         $this->transaction(function () use ($payment) {
             // boost job offer, send invoice and reindex
-            event(new PaymentPaid($payment, $payment->job->user));
+            event(new PaymentPaid($payment));
         });
 
         return redirect()
