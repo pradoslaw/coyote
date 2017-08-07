@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class SessionTokenController extends Controller
 {
@@ -34,12 +35,13 @@ class SessionTokenController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function verifyToken()
+    public function verifyToken(Request $request)
     {
         $secret = config('app.key');
-        $input = $this->request->input('token');
+        $input = $request->input('token');
         $fragments = explode('|', $input);
         $token = $fragments[0] . '|' . $fragments[1];
         $signature = $fragments[2];
