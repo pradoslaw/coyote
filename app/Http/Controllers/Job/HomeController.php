@@ -48,20 +48,6 @@ class HomeController extends BaseController
      */
     public function index()
     {
-        $this->preferences = new Preferences($this->getSetting('job.preferences'));
-        $this->builder->setPreferences($this->preferences);
-
-        // get only tags belong to specific category
-        $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
-        $this->builder->setLanguages($this->tag->pluck('name'));
-
-        $this->builder->boostLocation($this->request->attributes->get('geocode'));
-        $this->request->session()->put('current_url', $this->request->fullUrl());
-
-        if ($this->request->has('sort')) {
-            $this->setSetting('job.sort', $this->request->input('sort'));
-        }
-
         return $this->load();
     }
 
@@ -124,7 +110,22 @@ class HomeController extends BaseController
      */
     private function load(array $data = [])
     {
+        $this->preferences = new Preferences($this->getSetting('job.preferences'));
+        $this->builder->setPreferences($this->preferences);
+
+        // get only tags belong to specific category
+        $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
+        $this->builder->setLanguages($this->tag->pluck('name'));
+
+        $this->builder->boostLocation($this->request->attributes->get('geocode'));
+        $this->request->session()->put('current_url', $this->request->fullUrl());
+
+        if ($this->request->has('sort')) {
+            $this->setSetting('job.sort', $this->request->input('sort'));
+        }
+
         $this->builder->setSort($this->request->input('sort', $this->getSetting('job.sort', $this->builder::DEFAULT_SORT)));
+
         $result = $this->job->search($this->builder);
 
         // keep in mind that we return data by calling getSource(). This is important because
