@@ -24,7 +24,7 @@ function initTinymce() {
         indentation : '16px',
         content_style: "body, * {font-size: 14px !important; font-family: Arial, sans-serif !important;}",
 
-        paste_word_valid_elements: 'b,strong,i,em,h2,h3,h4,h5,h6,a,img,code'
+        paste_as_text: true
     });
 }
 
