@@ -62,14 +62,16 @@ class PaymentController extends Controller
         $this->country = $country;
         $this->coupon = $coupon;
 
-//        $this->middleware(function (Request $request, $next) {
-//            /** @var \Coyote\Payment $payment */
-//            $payment = $request->route('payment');
-//
-//            abort_if($payment->status_id == Payment::PAID, 404);
-//
-//            return $next($request);
-//        });
+        $this->middleware(function (Request $request, $next) {
+            /** @var \Coyote\Payment $payment */
+            $payment = $request->route('payment');
+
+            if ($payment !== null && $payment instanceof Payment) {
+                abort_if($payment->status_id == Payment::PAID, 404);
+            }
+
+            return $next($request);
+        });
 
         $this->breadcrumb->push('Praca', route('job.home'));
         $this->vatRates = $this->country->vatRatesList();
