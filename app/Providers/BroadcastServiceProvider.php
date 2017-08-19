@@ -18,7 +18,5 @@ class BroadcastServiceProvider extends ServiceProvider
         $broadcast = $this->app[Factory::class];
 
         $broadcast->routes();
-
-//        require base_path('routes/channels.php');
     }
 }
