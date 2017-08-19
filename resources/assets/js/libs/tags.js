@@ -193,7 +193,12 @@ class Tags {
             .replace(/"/g, "&#34;")
             .toLowerCase()
             .replace(/\//g, '')
-            .replace(/ /g, '-');
+            .replace(/ /g, '-')
+            .replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '');
+
+        if (value.startsWith('#')) {
+            value = value.substr(1);
+        }
 
         this.setup.onSelect(value);
 
