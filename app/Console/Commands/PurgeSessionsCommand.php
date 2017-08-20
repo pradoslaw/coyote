@@ -74,7 +74,6 @@ class PurgeSessionsCommand extends Command
         $lifetime = config('session.lifetime') * 60;
 
         $this->db->transaction(function () use ($result, $lifetime) {
-            $this->db->unprepared('TRUNCATE sessions');
             $values = [];
 
             foreach ($result as $session) {
@@ -91,6 +90,8 @@ class PurgeSessionsCommand extends Command
                     );
                 }
             }
+
+            $this->db->unprepared('TRUNCATE sessions');
 
             // make a copy of sessions in postgres for faster calculations (number of visitors for give page etc.)
             $this->db->table('sessions')->insert($values);
