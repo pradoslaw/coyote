@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Item[] $items
  * @property Currency $currency
  * @property Country $country
+ * @property int $seq
  */
 class Invoice extends Model
 {

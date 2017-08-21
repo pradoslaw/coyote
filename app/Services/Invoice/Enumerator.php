@@ -4,7 +4,6 @@ namespace Coyote\Services\Invoice;
 
 use Carbon\Carbon;
 use Coyote\Invoice;
-use Coyote\Repositories\Criteria\Invoice\ForMonth;
 use Coyote\Repositories\Contracts\InvoiceRepositoryInterface as InvoiceRepository;
 
 class Enumerator
@@ -30,28 +29,23 @@ class Enumerator
      */
     public function enumerate(Invoice $invoice): Invoice
     {
-        $invoice->number = $this->getNumber();
+        $date = Carbon::now();
+        $seq = $this->repository->getNextSeq($date);
+
+        $invoice->number = $this->formatNumber($seq, $date);
+        $invoice->seq = $seq;
         $invoice->save();
 
         return $invoice;
     }
 
     /**
+     * @param int $seq
+     * @param Carbon $date
      * @return string
      */
-    private function getNumber(): string
+    private function formatNumber(int $seq, Carbon $date): string
     {
-        $date = Carbon::now();
-
-        $this->repository->pushCriteria(new ForMonth($date));
-        $last = $this->repository->last();
-
-        $count = 0;
-
-        if ($last) {
-            $count = explode('/', $last->number)[1];
-        }
-
-        return sprintf('%s/%d/%d/%02d', '4P', $count + 1, $date->month, $date->year);
+        return sprintf('%s/%d/%d/%02d', '4P', $seq, $date->month, $date->year);
     }
 }
