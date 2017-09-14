@@ -14,10 +14,14 @@ class SpamValidator
      */
     protected $auth;
 
+    /**
+     * @var Request
+     */
     protected $request;
 
     /**
      * @param Guard $auth
+     * @param Request $request
      */
     public function __construct(Guard $auth, Request $request)
     {
@@ -93,6 +97,6 @@ class SpamValidator
      */
     private function isContainChinese(string $text): bool
     {
-        return (bool) preg_match("/\p{Hangul}+/u", $text);
+        return ((bool) preg_match("/\p{Hangul}+/u", $text)) || ((bool) preg_match("/\p{Han}+/u", $text));
     }
 }
