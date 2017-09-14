@@ -5,6 +5,7 @@ php:
 
 services:
   - postgresql
+  - mongodb
   - redis-server
 
 addons:
