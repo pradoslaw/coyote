@@ -11,6 +11,7 @@ use Coyote\Console\Commands\Elasticsearch\CreateMappingCommand;
 use Coyote\Console\Commands\Elasticsearch\IndexCommand;
 use Coyote\Console\Commands\FlushCacheCommand;
 use Coyote\Console\Commands\PurgeFirewallCommand;
+use Coyote\Console\Commands\PurgeGuestsCommand;
 use Coyote\Console\Commands\PurgeJobsCommand;
 use Coyote\Console\Commands\PurgePastebinCommand;
 use Coyote\Console\Commands\PurgeSessionsCommand;
@@ -42,7 +43,8 @@ class Kernel extends ConsoleKernel
         IndexCommand::class,
         SetupPredictionsCommand::class,
         SetupFirmSlugCommand::class,
-        CreateCouponCommand::class
+        CreateCouponCommand::class,
+        PurgeGuestsCommand::class
     ];
 
     /**
@@ -61,5 +63,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('firewall:purge')->hourly();
         $schedule->command('sitemap:create')->dailyAt('03:00:00');
         $schedule->command('currency:exchange')->dailyAt('20:00:00');
+        $schedule->command('guest:purge')->dailyAt('04:00:00');
     }
 }
