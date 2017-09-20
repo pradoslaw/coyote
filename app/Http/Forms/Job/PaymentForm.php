@@ -102,7 +102,7 @@ class PaymentForm extends Form
             ])
             ->add('invoice', 'child_form', [
                 'class' => InvoiceForm::class,
-                'value' => $this->data->job->firm
+                'value' => $this->prepareInvoiceData()
             ]);
     }
 
@@ -176,5 +176,22 @@ class PaymentForm extends Form
         }
 
         return $monthList;
+    }
+
+    /**
+     * @return \Coyote\Invoice|\Coyote\Firm
+     */
+    private function prepareInvoiceData()
+    {
+        if ($this->data->job->user->invoices()->exists()) {
+            // get the last user's invoice
+            $invoice = $this->data->job->user->invoices()->orderBy('id', 'DESC')->first();
+
+            if ($this->data->job->firm_id && $this->data->job->firm->name === $invoice->name) {
+                return $invoice;
+            }
+        }
+
+        return $this->data->job->firm;
     }
 }

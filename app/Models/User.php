@@ -223,6 +223,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invoices()
+    {
+        return $this->hasMany('Coyote\Invoice');
+    }
+
+    /**
      * @param int $typeId
      * @return array
      */
