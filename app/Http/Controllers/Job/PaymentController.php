@@ -62,16 +62,19 @@ class PaymentController extends Controller
         $this->country = $country;
         $this->coupon = $coupon;
 
-        $this->middleware(function (Request $request, $next) {
-            /** @var \Coyote\Payment $payment */
-            $payment = $request->route('payment');
+        $this->middleware(
+            function (Request $request, $next) {
+                /** @var \Coyote\Payment $payment */
+                $payment = $request->route('payment');
 
-            if ($payment !== null && $payment instanceof Payment) {
-                abort_if($payment->status_id == Payment::PAID, 404);
-            }
+                if ($payment !== null && $payment instanceof Payment) {
+                    abort_if($payment->status_id == Payment::PAID, 404);
+                }
 
-            return $next($request);
-        });
+                return $next($request);
+            },
+            ['except' => 'success']
+        );
 
         $this->breadcrumb->push('Praca', route('job.home'));
         $this->vatRates = $this->country->vatRatesList();
@@ -164,6 +167,8 @@ class PaymentController extends Controller
     }
 
     /**
+     * Successful bank transfer transaction. Redirect to the offer.
+     *
      * @param Payment $payment
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -225,6 +230,8 @@ class PaymentController extends Controller
     }
 
     /**
+     * Card transaction was successful. Reindex and return to the offer
+     *
      * @param Payment $payment
      * @return \Illuminate\Http\RedirectResponse
      */
