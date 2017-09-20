@@ -187,7 +187,8 @@ class PaymentForm extends Form
             // get the last user's invoice
             $invoice = $this->data->job->user->invoices()->orderBy('id', 'DESC')->first();
 
-            if ($this->data->job->firm_id && $this->data->job->firm->name === $invoice->name) {
+            if (empty($this->data->job->firm_id)
+                || $this->data->job->firm_id && $this->data->job->firm->name === $invoice->name) {
                 return $invoice;
             }
         }
