@@ -35,7 +35,11 @@
 
                                 <li role="presentation" :class="{'active': form.payment_method == 'transfer'}">
                                     <a @click="setPaymentMethod('transfer')" href="javascript:">
-                                        <strong>Przelew bankowy</strong>
+                                        <strong class="margin-sm-bottom">Przelew bankowy</strong>
+
+                                        <img src="{{ cdn('img/ipko.png') }}" class="margin-xs-right">
+                                        <img src="{{ cdn('img/mbank.png') }}" class="margin-xs-right">
+                                        <img src="{{ cdn('img/pekao.png') }}" class="margin-xs-right">
                                     </a>
                                 </li>
                             </ul>
