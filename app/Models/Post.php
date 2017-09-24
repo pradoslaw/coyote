@@ -245,7 +245,7 @@ class Post extends Model
         $body = $this->parentGetIndexBody();
 
         // additionally index few fields from topics table...
-        $topic = $this->topic()->first(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
+        $topic = $this->topic()->withTrashed()->first(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
         // we need to index every field from posts except:
         $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id']);
 
