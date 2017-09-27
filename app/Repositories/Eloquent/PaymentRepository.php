@@ -46,8 +46,12 @@ class PaymentRepository extends Repository implements PaymentRepositoryInterface
                 'payments.created_at',
                 'status_id',
                 'job_id',
-                'invoice_id'
+                'invoice_id',
+                'users.name AS user_name'
             ])
+            ->join('jobs', 'jobs.id', '=', 'job_id')
+            ->join('users', 'users.id', '=', 'jobs.user_id')
+            ->leftJoin('invoices', 'invoices.id', '=', 'invoice_id')
             ->with(['job', 'invoice']);
     }
 }

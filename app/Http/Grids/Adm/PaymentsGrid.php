@@ -3,6 +3,8 @@
 namespace Coyote\Http\Grids\Adm;
 
 use Boduch\Grid\Components\ShowButton;
+use Boduch\Grid\Filters\FilterOperator;
+use Boduch\Grid\Filters\Text;
 use Boduch\Grid\Order;
 use Coyote\Payment;
 use Coyote\Services\Grid\Grid;
@@ -24,6 +26,10 @@ class PaymentsGrid extends Grid
                     return link_to_route('job.offer', $payment->job->title, [$payment->job->id, $payment->job->slug]);
                 }
             ])
+            ->addColumn('user_name', [
+                'title' => 'Nazwa użytkownika',
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'users.name'])
+            ])
             ->addColumn('status_id', [
                 'title' => 'Status',
                 'render' => function (Payment $payment) {
@@ -38,7 +44,8 @@ class PaymentsGrid extends Grid
                     }
 
                     return link_to_route('adm.payments.invoice', $payment->invoice->number, [$payment->id]);
-                }
+                },
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'invoices.number'])
             ])
             ->addColumn('price', [
                 'title' => 'Kwota brutto',
