@@ -275,7 +275,7 @@ $(function () {
         })
         .on('click', '.read-more', function()
         {
-            $(this).prev().css('max-height', '9999px').children('.microblog-gradient').remove();
+            $(this).prev().removeAttr('style').children('.microblog-gradient').remove();
             $(this).remove();
         });
 
@@ -376,7 +376,9 @@ $(function () {
     $(window).load(function() {
         $('.microblog-text').each(function() {
             if ($(this).height() > 305) {
-                $(this).css('max-height', '305px').append('<div class="microblog-gradient"></div>');
+                // aby zadzialal max-height, nalezy ustawic display: block. domyslnie natomiast microblog-text
+                // posiada selektor: display: table, aby zadzialalo zawieranie dlugich linii tekstu
+                $(this).css({'max-height': '300px', display: 'block'}).append('<div class="microblog-gradient"></div>');
                 $('<a class="read-more" href="javascript:">Zobacz całość</a>').insertAfter(this);
             }
         });
