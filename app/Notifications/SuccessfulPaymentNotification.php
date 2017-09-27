@@ -41,13 +41,12 @@ class SuccessfulPaymentNotification extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  \Coyote\User  $user
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($user)
+    public function toMail()
     {
         $mail = (new MailMessage)
-            ->subject(sprintf('Potwierdzenie płatności za promowanie oferty: %s', $this->payment->job->title));
+            ->subject($this->getSubject());
 
         if ($this->payment->invoice->grossPrice() > 0) {
             $mail->line(
@@ -97,5 +96,18 @@ class SuccessfulPaymentNotification extends Notification
     private function getFilename(): string
     {
         return str_replace('/', '_', $this->payment->invoice->number) . '.pdf';
+    }
+
+    /**
+     * @return string
+     */
+    private function getSubject(): string
+    {
+        return sprintf(
+            $this->pdf !== null
+                ? 'Faktura VAT: %s'
+                    : 'Potwierdzenie płatności za promowanie oferty: %s',
+            $this->payment->job->title
+        );
     }
 }
