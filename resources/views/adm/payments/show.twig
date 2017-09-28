@@ -55,7 +55,7 @@
             <label class="col-sm-2 control-label">Data wystawienia faktury</label>
 
             <div class="col-sm-10">
-                <p class="form-control-static">{{ payment.invoice.number ? payment.invoice.created_at|format_date : '--' }}</p>
+                <p class="form-control-static"><u>{{ payment.invoice.number ? payment.invoice.created_at|format_date : '--' }}</u></p>
             </div>
         </div>
 
