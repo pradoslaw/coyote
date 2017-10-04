@@ -24,6 +24,7 @@
                     <div id="plan-table" class="clearfix margin-lg-top margin-lg-bottom">
                         <ul class="plan-benefits">
                             <li><div>Publikacja ogłoszenia na okres <strong>30 dni</strong></div></li>
+                            <li><div><label class="label label-new">Promocja!</label> Dodatkowe <strong>30 dni</strong> publikacji <strong>gratis!</strong></div></li>
                             <li>
                                 <div>
                                     <strong>Reklama</strong> oferty na forum i stronie głównej
@@ -43,12 +44,16 @@
 
                         <div class="plan" v-for="plan in plans" :class="{'selected': job.plan_id == plan.id}">
                             <div class="plan-header" @click="changePlan(plan.id)">
+                                <h4 class="plan-name">Ogłoszenie<br><strong>${ plan.name }</strong></h4>
+
                                 <div class="plan-price"><strong>${ plan.price * (plan.discount > 0 ? plan.discount : 1) } zł</strong> <small>netto</small></div>
                                 <div class="plan-price-old" v-if="plan.discount > 0"><strong>${ plan.price } zł</strong> <small>netto</small></div>
                             </div>
 
                             <div class="plan-body">
                                 <ul class="plan-features">
+                                    <li><i class="fa fa-fw fa-check-circle text-primary"></i></li>
+
                                     <li v-for="n in 5"><i class="fa fa-fw" :class="{'fa-check-circle': plan.benefits.length >= n, 'text-primary': plan.benefits.length >= n, 'fa-remove': plan.benefits.length < n, 'text-muted': plan.benefits.length < n}"></i></li>
 
                                     <li class="feature-button">

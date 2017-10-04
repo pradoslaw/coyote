@@ -16,6 +16,8 @@ use Illuminate\Validation\Rule;
 
 class JobForm extends Form
 {
+    const DURATION = 60; // 60 days
+
     /**
      * @var string
      */
@@ -90,7 +92,7 @@ class JobForm extends Form
 
             $this->data->country()->associate((new Country())->find($form->get('country_id')->getValue()));
             // set default deadline_at date time. we're gonna use that in job's preview
-            $this->data->deadline_at = Carbon::now()->addDays(30);
+            $this->data->deadline_at = Carbon::now()->addDays(self::DURATION);
         });
 
         $this->addEventListener(FormEvents::PRE_RENDER, function (JobForm $form) {

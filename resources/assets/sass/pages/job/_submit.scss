@@ -343,7 +343,7 @@ select[name=is_gross] {
   }
 
   .plan-benefits {
-    margin-top: 44px;
+    margin-top: 100px;
     padding: 0;
     width: 30%;
     float: left;
@@ -407,6 +407,25 @@ select[name=is_gross] {
         margin-top: -10px;
         text-decoration: line-through;
         opacity: .8;
+      }
+
+      > .plan-name {
+        font-size: 15px;
+        color: inherit;
+
+        > strong {
+          font-size: 17px;
+        }
+
+        &:after {
+          content: '';
+          height: 2px;
+          width: 50px;
+          position: absolute;
+          left: calc(50% - 25px);
+          background-color: #e4e4e4;
+          bottom: -8px;
+        }
       }
     }
 
