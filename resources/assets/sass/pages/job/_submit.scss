@@ -412,6 +412,7 @@ select[name=is_gross] {
       > .plan-name {
         font-size: 15px;
         color: inherit;
+        position: relative;
 
         > strong {
           font-size: 17px;
