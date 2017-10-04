@@ -87,7 +87,7 @@
 
 <body>
 <div class="container">
-    <table style="margin-left: auto; margin-right: auto" width="100%">
+    <table style="margin-left: auto; margin-right: auto" width="700">
         <tr>
             <td class="row-1">
                 <br><br><h3>Faktura nr: {{ invoice.number }}</h3><br>
@@ -148,7 +148,7 @@
                         <th class="right">Wartość netto</th>
 
                         {% if not reverse_charge %}
-                            <th class="right">VAT%</th>
+                            <th class="right">Stawka VAT</th>
                             <th class="right">Wartość VAT</th>
                         {% endif %}
 
@@ -164,7 +164,7 @@
                             <td class="right">{{ item.price }} {{ currency }}</td>
 
                             {% if not reverse_charge %}
-                                <td class="right">{{ (item.vat_rate * 100) - 100 }}</td>
+                                <td class="right">{{ (item.vat_rate * 100) - 100 }}%</td>
                                 <td class="right">{{ item.gross_price - item.price }} {{ currency }}</td>
                             {% endif %}
 
