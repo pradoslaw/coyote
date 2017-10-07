@@ -52,9 +52,7 @@
 
                             <div class="plan-body">
                                 <ul class="plan-features">
-                                    <li><i class="fa fa-fw fa-check-circle text-primary"></i></li>
-
-                                    <li v-for="n in 5"><i class="fa fa-fw" :class="{'fa-check-circle': plan.benefits.length >= n, 'text-primary': plan.benefits.length >= n, 'fa-remove': plan.benefits.length < n, 'text-muted': plan.benefits.length < n}"></i></li>
+                                    <li v-for="n in 6"><i class="fa fa-fw" :class="{'fa-check-circle': plan.benefits.length >= n, 'text-primary': plan.benefits.length >= n, 'fa-remove': plan.benefits.length < n, 'text-muted': plan.benefits.length < n}"></i></li>
 
                                     <li class="feature-button">
                                         <button class="btn btn-default" v-if="job.plan_id != plan.id" @click.prevent="changePlan(plan.id)">Wybierz</button>

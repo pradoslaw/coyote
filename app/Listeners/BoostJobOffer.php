@@ -66,7 +66,9 @@ class BoostJobOffer implements ShouldQueue
             $event->payment->save();
 
             foreach ($event->payment->plan->benefits as $benefit) {
-                $event->payment->job->{$benefit} = true;
+                if ($benefit !== 'is_extended_publish') {
+                    $event->payment->job->{$benefit} = true;
+                }
             }
 
             $event->payment->job->boost_at = Carbon::now();

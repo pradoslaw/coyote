@@ -12,7 +12,7 @@ class PlansTableSeeder extends Seeder
     public function run()
     {
         \Coyote\Plan::forceCreate([
-            'name' => 'Podstawowe',
+            'name' => 'Standard',
             'price' => 30,
             'vat_rate' => 1.23,
             'discount' => 0,
@@ -21,12 +21,12 @@ class PlansTableSeeder extends Seeder
         ]);
 
         \Coyote\Plan::forceCreate([
-            'name' => 'Standard',
+            'name' => 'Plus',
             'price' => 126,
             'vat_rate' => 1.23,
             'discount' => 0.45,
             'length' => 60,
-            'benefits' => ['is_publish', 'is_ads'],
+            'benefits' => ['is_publish', 'is_extended_publish', 'is_ads'],
             'is_default' => 1
         ]);
 
@@ -36,7 +36,7 @@ class PlansTableSeeder extends Seeder
             'vat_rate' => 1.23,
             'discount' => 0.5,
             'length' => 60,
-            'benefits' => ['is_publish', 'is_ads', 'is_highlight', 'is_on_top', 'is_boost']
+            'benefits' => ['is_publish', 'is_extended_publish', 'is_ads', 'is_highlight', 'is_on_top', 'is_boost']
         ]);
     }
 }
