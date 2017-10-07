@@ -326,7 +326,7 @@ class JobPostingCest
 
         $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
         $I->assertNotEmpty($payment->invoice);
-        $I->assertEquals(60, $payment->days);
+        $I->assertEquals(30, $payment->days);
         $I->assertTrue($job->is_publish);
 
         $I->assertEquals(null, $invoice->country_id);

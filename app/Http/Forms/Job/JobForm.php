@@ -89,9 +89,13 @@ class JobForm extends Form
             }
 
             $this->data->country()->associate((new Country())->find($form->get('country_id')->getValue()));
-            // set default deadline_at date time.
-            $this->data->deadline_at = Carbon::now()->addDays($this->data->plan->length);
-//            dd($this->data->deadline_at);
+
+            // set default deadline_at date time, only if offer was not publish yet.
+            if (!$this->data->is_publish) {
+                $this->data->plan_id = $form->get('plan_id')->getValue();
+
+                $this->data->deadline_at = Carbon::now()->addDays($this->data->plan->length);
+            }
         });
 
         $this->addEventListener(FormEvents::PRE_RENDER, function (JobForm $form) {

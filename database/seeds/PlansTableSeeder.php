@@ -16,7 +16,7 @@ class PlansTableSeeder extends Seeder
             'price' => 30,
             'vat_rate' => 1.23,
             'discount' => 0,
-            'length' => 60,
+            'length' => 30,
             'benefits' => ['is_publish']
         ]);
 
