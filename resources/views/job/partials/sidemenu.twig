@@ -5,10 +5,6 @@
         <span class="outline">
             <a class="btn btn-primary" href="{{ route('job.application', [job.id]) }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
         </span>
-
-        {% if job.applications.count() == 0 %}
-            <img class="margin-md-top" src="{{ cdn('img/be-first-handwriting.png') }}">
-        {% endif %}
     </div>
 {% endif %}
 
