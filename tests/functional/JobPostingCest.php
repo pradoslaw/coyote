@@ -286,7 +286,7 @@ class JobPostingCest
         $I->wantTo('Create premium offer without invoice');
         $fake = Factory::create();
 
-        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Mini']);
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Standard']);
 
         $I->amOnRoute('job.submit');
 
@@ -326,7 +326,7 @@ class JobPostingCest
 
         $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
         $I->assertNotEmpty($payment->invoice);
-        $I->assertEquals(30, $payment->days);
+        $I->assertEquals(60, $payment->days);
         $I->assertTrue($job->is_publish);
 
         $I->assertEquals(null, $invoice->country_id);
@@ -341,7 +341,7 @@ class JobPostingCest
         $I->wantTo('Create premium offer with invoice');
         $fake = Factory::create();
 
-        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Standard']);
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Plus']);
 
         $I->amOnRoute('job.submit');
 
@@ -389,7 +389,7 @@ class JobPostingCest
 
         $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
         $I->assertNotEmpty($payment->invoice);
-        $I->assertEquals(30, $payment->days);
+        $I->assertEquals(60, $payment->days);
 
         /** @var \Coyote\Invoice\Item $item */
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
@@ -402,7 +402,7 @@ class JobPostingCest
         $I->wantTo('Create offer with discount coupon');
         $fake = Factory::create();
 
-        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Standard']);
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Plus']);
         $coupon = $I->haveRecord(\Coyote\Coupon::class, ['code' => $fake->randomAscii, 'amount' => 30]);
 
         $I->amOnRoute('job.submit');
@@ -449,7 +449,7 @@ class JobPostingCest
         $I->wantTo('Create offer with full discount coupon');
         $fake = Factory::create();
 
-        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Max']);
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Premium']);
         $coupon = $I->haveRecord(\Coyote\Coupon::class, ['code' => $fake->randomAscii, 'amount' => 200]);
 
         $I->amOnRoute('job.submit');
@@ -488,7 +488,7 @@ class JobPostingCest
         $I->wantTo('Validate payment form');
         $fake = Factory::create();
 
-        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Pakiet Standard']);
+        $plan = $I->grabRecord(\Coyote\Plan::class, ['name' => 'Plus']);
 
         \Coyote\Job::unguard();
 
