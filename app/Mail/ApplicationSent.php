@@ -2,14 +2,13 @@
 
 namespace Coyote\Mail;
 
-use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
 use Illuminate\Mail\Mailable;
 
 class ApplicationSent extends Mailable
 {
     /**
-     * @var ApplicationForm
+     * @var Job\Application
      */
     private $application;
 
