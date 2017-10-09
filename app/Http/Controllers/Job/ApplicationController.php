@@ -77,17 +77,17 @@ class ApplicationController extends Controller
         $this->transaction(function () use ($job, $form, $data) {
             $target = (new Stream_Job)->map($job);
 
-            $job->applications()->create($data);
+            $application = $job->applications()->create($data);
 
             $mailer = $this->getMailFactory();
             // send mail to offer's owner
             // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
-            $mailer->to($job->email)->send(new ApplicationSent($form, $job));
+            $mailer->to($job->email)->send(new ApplicationSent($application, $job));
 
             if ($form->get('cc')->isChecked()) {
                 // send to application author
                 // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
-                $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($form, $job));
+                $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($application, $job));
             }
 
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);

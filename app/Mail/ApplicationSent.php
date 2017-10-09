@@ -11,7 +11,7 @@ class ApplicationSent extends Mailable
     /**
      * @var ApplicationForm
      */
-    private $form;
+    private $application;
 
     /**
      * @var Job
@@ -19,12 +19,13 @@ class ApplicationSent extends Mailable
     private $job;
 
     /**
-     * @param ApplicationForm $form
+     * ApplicationSent constructor.
+     * @param Job\Application $application
      * @param Job $job
      */
-    public function __construct(ApplicationForm $form, Job $job)
+    public function __construct(Job\Application $application, Job $job)
     {
-        $this->form = $form;
+        $this->application = $application;
         $this->job = $job;
     }
 
@@ -35,14 +36,14 @@ class ApplicationSent extends Mailable
      */
     public function build()
     {
-        if ($this->form->get('cv')->getValue()) {
-            $name = explode('_', $this->form->get('cv')->getValue(), 2)[1];
-            $this->attach(storage_path('app/cv/' . $this->form->get('cv')->getValue()), ['as' => $name]);
+        if ($this->application->cv) {
+            $name = explode('_', $this->application->cv, 2)[1];
+            $this->attach(storage_path('app/cv/' . $this->application->cv), ['as' => $name]);
         }
 
         return $this
-            ->view('emails.job.application', $this->form->all())
-            ->replyTo($this->form->get('email')->getValue(), $this->form->get('name')->getValue())
-            ->subject(sprintf('[%s] %s', $this->form->get('name')->getValue(), $this->job->title));
+            ->view('emails.job.application', $this->application->toArray())
+            ->replyTo($this->application->email, $this->application->name)
+            ->subject(sprintf('[%s] %s', $this->application->name, $this->job->title));
     }
 }

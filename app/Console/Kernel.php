@@ -16,6 +16,7 @@ use Coyote\Console\Commands\PurgeJobsCommand;
 use Coyote\Console\Commands\PurgePastebinCommand;
 use Coyote\Console\Commands\PurgeSessionsCommand;
 use Coyote\Console\Commands\PurgeViewsCommand;
+use Coyote\Console\Commands\ResendApplicationCommand;
 use Coyote\Console\Commands\SetupFirmSlugCommand;
 use Coyote\Console\Commands\SetupPredictionsCommand;
 use Illuminate\Console\Scheduling\Schedule;
@@ -44,7 +45,8 @@ class Kernel extends ConsoleKernel
         SetupPredictionsCommand::class,
         SetupFirmSlugCommand::class,
         CreateCouponCommand::class,
-        PurgeGuestsCommand::class
+        PurgeGuestsCommand::class,
+        ResendApplicationCommand::class
     ];
 
     /**
