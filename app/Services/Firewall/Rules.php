@@ -3,9 +3,11 @@
 
 namespace Coyote\Services\Firewall;
 
+use Coyote\Fingerprint; // <-- nie usuwac tej linii
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Illuminate\Cache\Repository as Cache;
 use Coyote\Firewall;
+use Illuminate\Http\Request;
 
 class Rules
 {
@@ -22,6 +24,11 @@ class Rules
     private $repository;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * @param Cache $cache
      * @param FirewallRepositoryInterface $repository
      */
@@ -34,14 +41,17 @@ class Rules
     /**
      * Find firewall rule based on user id and/or IP.
      *
-     * @param $userId
-     * @param $ip
+     * @param Request $request
      * @return \Coyote\Firewall|null
      */
-    public function find($userId, $ip)
+    public function find(Request $request)
     {
+        $this->request = $request;
+
         foreach ($this->getRules() as $rule) {
-            if ($this->checkIpRule($rule['ip'], $ip) || $this->checkUserRule($rule['user_id'], $userId)) {
+            if ($this->checkIpRule($rule['ip'])
+                || $this->checkUserRule($rule['user_id'])
+                    || $this->checkFingerprintRule($rule['fingerprint'] ?? null)) {
                 return $this->make($rule);
             }
         }
@@ -50,27 +60,60 @@ class Rules
     }
 
     /**
-     * @param $ruleIp
-     * @param $clientIp
+     * @param string|null $ip
      * @return bool
      */
-    private function checkIpRule($ruleIp, $clientIp): bool
+    private function checkIpRule($ip): bool
     {
-        if (empty($ruleIp)) {
+        if (empty($ip)) {
             return false;
         }
 
-        return preg_match('/^' . str_replace('\*', '\d+', preg_quote($ruleIp)) . '$/', $clientIp);
+        return preg_match('/^' . str_replace('\*', '\d+', preg_quote($ip)) . '$/', $this->request->ip());
     }
 
     /**
-     * @param $ruleUserId
-     * @param $clientUserId
+     * @param int|null $userId
      * @return bool
      */
-    private function checkUserRule($ruleUserId, $clientUserId): bool
+    private function checkUserRule($userId): bool
     {
-        return !empty($ruleUserId) && $clientUserId == $ruleUserId;
+        if (empty($userId) || empty($this->request->user())) {
+            return false;
+        }
+
+        return $this->request->user()->id == $userId;
+    }
+
+    /**
+     * @param $fingerprint
+     * @return bool
+     */
+    private function checkFingerprintRule($fingerprint)
+    {
+        if (empty($fingerprint)) {
+            return false;
+        }
+
+        return $fingerprint === $this->getClientFingerprint();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getClientFingerprint()
+    {
+        static $fingerprint;
+
+        if (!empty($fingerprint)) {
+            return $fingerprint;
+        }
+
+        if (class_exists(Fingerprint::class)) {
+            $fingerprint = Fingerprint::get();
+        }
+
+        return $fingerprint;
     }
 
     /**

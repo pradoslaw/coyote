@@ -65,6 +65,10 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
                 'rules' => 'sometimes|string|min:2|max:100',
                 'help' => 'IP może zawierać znak *'
             ])
+            ->add('fingerprint', 'text', [
+                'label' => 'Fingerprint',
+                'rules' => 'sometimes|string|max:255'
+            ])
             ->add('reason', 'textarea', [
                 'label' => 'Powód',
                 'rules' => 'max:1000'

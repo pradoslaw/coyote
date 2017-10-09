@@ -55,7 +55,7 @@ class FirewallBlacklist
      */
     protected function handleFirewallRules(Request $request)
     {
-        $firewall = $this->rules->find($this->auth->id(), $request->ip());
+        $firewall = $this->rules->find($request);
 
         if ($firewall !== null) {
             throw new ForbiddenException($firewall);

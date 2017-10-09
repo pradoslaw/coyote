@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property string $ip
+ * @property string $fingerprint
  */
 class Firewall extends Model
 {
@@ -28,7 +29,7 @@ class Firewall extends Model
      *
      * @var array
      */
-    protected $fillable = ['expire_at', 'user_id', 'ip', 'reason', 'moderator_id'];
+    protected $fillable = ['expire_at', 'user_id', 'ip', 'reason', 'moderator_id', 'fingerprint'];
 
     /**
      * The attributes that should be mutated to dates.
