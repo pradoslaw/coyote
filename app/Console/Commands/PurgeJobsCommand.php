@@ -98,8 +98,6 @@ class PurgeJobsCommand extends Command
                 $this->sendEmail($user, $job);
                 $this->info(sprintf('Sending e-mail about ending offer: %s.', $job->title));
             }
-
-            break;
         }
     }
 
