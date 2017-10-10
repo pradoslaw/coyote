@@ -4,13 +4,13 @@ namespace Coyote\Console\Commands;
 
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Job;
+use Coyote\Mail\JobExpired;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Elasticsearch\ResultSet;
 use Coyote\User;
 use Elasticsearch\Client;
 use Illuminate\Console\Command;
-use Illuminate\Mail\Message;
 
 class PurgeJobsCommand extends Command
 {
@@ -98,6 +98,8 @@ class PurgeJobsCommand extends Command
                 $this->sendEmail($user, $job);
                 $this->info(sprintf('Sending e-mail about ending offer: %s.', $job->title));
             }
+
+            break;
         }
     }
 
@@ -107,10 +109,6 @@ class PurgeJobsCommand extends Command
      */
     private function sendEmail(User $user, Job $job)
     {
-        // od laravel 5.4 nie moze byc queue(). musimy uzyc send()
-        $this->getMailFactory()->send('emails.job.expired', $job->toArray(), function (Message $message) use ($job, $user) {
-            $message->subject('Twoje ogłoszenie "' . $job->title . '" wygasło.');
-            $message->to($user->email);
-        });
+        $this->getMailFactory()->to($user->email)->send(new JobExpired($job));
     }
 }
