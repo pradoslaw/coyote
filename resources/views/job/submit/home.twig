@@ -62,6 +62,20 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="custom-plan clearfix text-center margin-lg-bottom">
+
+                        <h3>Potrzebujesz kilku ogłoszeń?</h3>
+
+                        <div class="custom-plan-container">
+                            <i class="fa fa-info-circle fa-2x pull-left"></i>
+
+                            <div class="pull-left margin-xs-left custom-plan-info">
+                                Napisz do nas na adres:<br>
+                                <a href="mailto:{{ config('mail.from.address') }}?subject=Chciałbym zakupić pakiet ogłoszeń">{{ config('mail.from.address') }}</a>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
 
                 {{ form_widget(form.id) }}

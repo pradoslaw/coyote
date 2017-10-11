@@ -453,3 +453,15 @@ select[name=is_gross] {
     }
   }
 }
+
+.custom-plan {
+  .custom-plan-container {
+    width: 250px;
+    text-align: left;
+    margin: auto;
+  }
+
+  .custom-plan-info {
+    font-size: 15px;
+  }
+}
