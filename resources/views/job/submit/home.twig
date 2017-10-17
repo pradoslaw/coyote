@@ -141,13 +141,14 @@
                             </div>
                         </div>
 
-                        <div class="form-group has-feedback">
+                        <div class="form-group has-feedback" :class="{'has-error': errors.tags != null}">
                             <label class="control-label">Kluczowe technologie (wymagane lub mile widziane)</label>
 
                             {{ form_text('tag', '', {'id': 'tag', 'class': 'form-control', 'placeholder': 'Np. Java, MS-SQL', 'autocomplete': 'off', 'data-post-url': route('job.submit.tag'), 'data-suggestions-url': route('job.tag.suggestions')}) }}
 
-                            <span class="help-block" v-if="suggestions.length == 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
-                            <span class="help-block" v-if="suggestions.length > 0">
+                            <span class="help-block" v-if="errors.tags != null">${ errors.tags[0] }</span>
+                            <span class="help-block" v-else-if="suggestions.length == 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
+                            <span class="help-block" v-else-if="suggestions.length > 0">
                                 Podpowiedź:
 
                                 <template v-for="(suggestion, index) in suggestions">

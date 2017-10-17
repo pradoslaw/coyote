@@ -12,6 +12,7 @@ use Coyote\Services\FormBuilder\FormEvents;
 use Coyote\Services\Geocoder\GeocoderInterface;
 use Coyote\Services\Parser\Helpers\City;
 use Coyote\Tag;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
 
 class JobForm extends Form
@@ -295,6 +296,18 @@ class JobForm extends Form
             $this->get('country_id')->setValue(array_search('Polska', $this->get('country_id')->getChoices()));
             $this->get('remote_range')->setValue(100);
         }
+    }
+
+    /**
+     * @param Validator $validator
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        if ($validator->getMessageBag()->has('tags.*')) {
+            $validator->getMessageBag()->add('tags', $validator->getMessageBag()->first('tags.*'));
+        }
+
+        parent::failedValidation($validator);
     }
 
     protected function setupPlanFields()
