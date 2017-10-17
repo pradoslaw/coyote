@@ -73,7 +73,7 @@ class SubmitController extends Controller
 
             // load default firm regardless of offer is private or not
             if (!$job->firm_id) {
-                $firm = $this->loadDefaultFirm();
+                $firm = $this->firm->loadDefaultFirm($this->userId);
                 $firm->is_private = $job->exists && !$job->firm_id;
 
                 $job->firm()->associate($firm);
@@ -325,23 +325,5 @@ class SubmitController extends Controller
         }
 
         return $next;
-    }
-
-    /**
-     * Load user's default firm
-     *
-     * @return \Coyote\Firm
-     */
-    private function loadDefaultFirm()
-    {
-        $firm = $this->firm->findBy('user_id', $this->userId);
-
-        if (!$firm) {
-            /** @var \Coyote\Firm $firm */
-            $firm = $this->firm->newInstance();
-            $firm->setDefaultUserId($this->userId);
-        }
-
-        return $firm;
     }
 }
