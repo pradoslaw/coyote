@@ -91,7 +91,7 @@ class PurgeSessionsCommand extends Command
                 }
             }
 
-            $this->db->unprepared('TRUNCATE sessions');
+            $this->db->unprepared('DELETE FROM sessions');
 
             // make a copy of sessions in postgres for faster calculations (number of visitors for give page etc.)
             $this->db->table('sessions')->insert($values);
