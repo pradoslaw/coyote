@@ -75,6 +75,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     ]);
 
     $this->get('Coupon/Validate', ['uses' => 'CouponController@validateCode', 'as' => 'coupon']);
+    $this->get('Renew/{job}', ['uses' => 'RenewController@index', 'as' => 'renew']);
 
     // Job's ads
     // --------------------------------------------------------------
