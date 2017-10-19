@@ -14,6 +14,7 @@ use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
+use Coyote\Services\Job\Loader;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
@@ -58,10 +59,11 @@ class SubmitController extends Controller
 
     /**
      * @param Request $request
+     * @param Loader $loader
      * @param int $id
      * @return \Illuminate\View\View
      */
-    public function getIndex(Request $request, $id = null)
+    public function getIndex(Request $request, Loader $loader, $id = null)
     {
         /** @var \Coyote\Job $job */
         if ($id === null && $request->session()->has(Job::class)) {
@@ -71,20 +73,7 @@ class SubmitController extends Controller
             $job = $this->job->findOrNew($id);
             abort_if($job->is_expired, 404);
 
-            // load default firm regardless of offer is private or not
-            if (!$job->firm_id) {
-                $firm = $this->firm->loadDefaultFirm($this->userId);
-                $firm->is_private = $job->exists && !$job->firm_id;
-
-                $job->firm()->associate($firm);
-            }
-
-            $job->load(['tags', 'features', 'locations', 'country']);
-            $job->firm->load('benefits');
-
-            $job->setDefaultUserId($this->userId);
-            $job->setDefaultFeatures($this->job->getDefaultFeatures($this->userId));
-            $job->setDefaultPlanId($this->plan->getDefaultId());
+            $job = $loader->init($job);
         }
 
         $this->authorize('update', $job);
