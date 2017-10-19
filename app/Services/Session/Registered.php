@@ -23,7 +23,7 @@ class Registered
     }
 
     /**
-     * @param Session[] $collection
+     * @param Collection $collection
      * @return Collection
      */
     public function setup(Collection $collection)
