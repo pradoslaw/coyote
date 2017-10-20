@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Interests;
+namespace Coyote\Services\Skills;
 
 class Calculator
 {

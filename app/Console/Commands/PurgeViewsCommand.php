@@ -5,7 +5,7 @@ namespace Coyote\Console\Commands;
 use Carbon\Carbon;
 use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
-use Coyote\Services\Interests\Calculator;
+use Coyote\Services\Skills\Calculator;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection as Db;
 

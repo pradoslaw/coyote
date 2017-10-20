@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property array interests
+ * @property mixed interests
  */
 class Guest extends Model
 {

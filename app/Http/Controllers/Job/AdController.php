@@ -3,11 +3,9 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
-use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
+use Coyote\Services\Skills\Predictions;
 
 class AdController extends Controller
 {
@@ -17,54 +15,32 @@ class AdController extends Controller
     private $job;
 
     /**
-     * @var PageRepository
-     */
-    private $page;
-
-    /**
      * @param JobRepository $job
-     * @param PageRepository $page
      */
-    public function __construct(JobRepository $job, PageRepository $page)
+    public function __construct(JobRepository $job)
     {
         debugbar()->disable();
         parent::__construct();
 
         $this->job = $job;
-        $this->page = $page;
 
         $this->middleware('geocode');
     }
 
     /**
+     * @param Predictions $predictions
      * @return string
      */
-    public function index()
+    public function index(Predictions $predictions)
     {
         $builder = new AdBuilder($this->request);
         $builder->boostLocation($this->request->attributes->get('geocode'));
 
         $data = [];
-        $tags = $this->getRefererTags();
+        $tags = $predictions->getTags();
 
         if (!empty($tags)) {
             $builder->boostTags($tags);
-        } else {
-            $preferences = new Preferences($this->getSetting('job.preferences'));
-            $builder->setPreferences($preferences);
-
-            if ($preferences->isEmpty()) {
-                $location = $this->request->attributes->get('geocode');
-
-                if ($location->isValid()) {
-                    $this->job->pushCriteria(new PriorDeadline());
-
-                    $data = [
-                        'location' => $location,
-                        'offers_count' => $this->job->countCityOffers($location->city)
-                    ];
-                }
-            }
         }
 
         $result = $this->job->search($builder);
@@ -73,30 +49,6 @@ class AdController extends Controller
         }
 
         // search jobs that might be interesting for user
-        return (string) view('job.ad', $data, ['jobs' => $result->getSource()]);
-    }
-
-    /**
-     * @return array
-     */
-    private function getRefererTags()
-    {
-        $referer = filter_var($this->request->headers->get('referer'), FILTER_SANITIZE_URL);
-        if (!$referer) {
-            return [];
-        }
-
-        $path = parse_url($referer, PHP_URL_PATH);
-        if (!$path) {
-            return [];
-        }
-
-        $page = $this->page->findByPath($path);
-
-        if (!$page) {
-            return [];
-        }
-
-        return $page->tags;
+        return (string) view('job.ad', $data, ['jobs' => $result->getSource(), 'tags' => $tags]);
     }
 }

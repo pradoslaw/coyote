@@ -16,11 +16,15 @@
       font-size: 12px;
       display: inline-block;
       padding: 4px 7px;
-      text-shadow: 1px 1px 1px white;
       background: $tag-bg;
       margin: 1px 1px 1px 0;
       border-radius: 5px;
       transition: all .25s linear;
+
+      &.inverse {
+        background-color: $tag-color;
+        color: #fff;
+      }
     }
 
     // Tag counter

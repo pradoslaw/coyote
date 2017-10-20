@@ -3,7 +3,7 @@
 namespace Coyote\Console\Commands;
 
 use Coyote\Guest;
-use Coyote\Services\Interests\Calculator;
+use Coyote\Services\Skills\Calculator;
 use Illuminate\Console\Command;
 
 class SetupPredictionsCommand extends Command
