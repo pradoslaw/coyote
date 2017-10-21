@@ -10,13 +10,7 @@
             {% include 'components.jobs' %}
 
             <div class="media">
-                {% set city = location.city and location.city != '-' ? location.city %}
-
-                {% if offers_count > 0 %}
-                    <a href="{{ route('job.city', [city]) }}" class="text-align">Więcej ofert w pobliżu {{ city }}</a>
-                {% else %}
-                    <a href="{{ route('job.home') }}" class="text-align">Więcej ofert pracy</a>
-                {% endif %}
+                <a href="{{ route('job.home') }}" class="text-align">Więcej ofert pracy</a>
             </div>
         </div>
     </div>
