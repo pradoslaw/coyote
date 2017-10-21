@@ -4,6 +4,15 @@
 - Upgrade do Laravel 5.4
 - "Przyklejony" breadcrumb nie znika na ekranie po pewnym czasie nieaktywności
 
+**Praca**
+
+- W e-mailu informującym o zakończeniu publikacji ogłoszenia, dodanie opcji ponownego wystawienia oferty
+- Zmiana algorytmu wyświetlającego reklamy ofert pracy (teraz bazuje na historii danego usera)
+
+**Panel administracjyjny**
+
+- Możliwość edycji drugiego (długiego) tytułu dla kategorii forum
+
 ## 2.1
 
 **Ogólne**

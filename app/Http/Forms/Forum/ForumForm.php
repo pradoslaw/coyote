@@ -37,6 +37,10 @@ class ForumForm extends Form
                 'label' => 'Nazwa',
                 'rules' => 'required|string|max:50'
             ])
+            ->add('title', 'text', [
+                'label' => 'Rozszerzony tytuł',
+                'rules' => 'string|max:200'
+            ])
             ->add('slug', 'text', [
                 'label' => 'Ścieżka',
                 'rules' => 'required|string|max:50'

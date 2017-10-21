@@ -42,6 +42,7 @@ class Forum extends Model
     protected $fillable = [
         'parent_id',
         'name',
+        'title',
         'slug',
         'description',
         'section',
