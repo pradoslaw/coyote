@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
+use Coyote\Services\Elasticsearch\Raw;
 use Coyote\Services\Skills\Predictions;
 
 class AdController extends Controller
@@ -57,7 +58,7 @@ class AdController extends Controller
         $result = [];
 
         foreach ($assoc as $tag => $ratio) {
-            $result[] = sprintf('%s^%.1F', $tag, 1 + $ratio);
+            $result[] = sprintf('%s^%.1F', Raw::escape($tag), 1 + $ratio);
         }
 
         return $result;
