@@ -50,7 +50,7 @@ class Predictions
     /**
      * @return array
      */
-    private function getRefererTags()
+    private function getRefererTags(): array
     {
         $referer = filter_var($this->request->headers->get('referer'), FILTER_SANITIZE_URL);
         if (!$referer) {
@@ -68,7 +68,7 @@ class Predictions
             return [];
         }
 
-        return $page->tags;
+        return array_combine($page->tags, array_fill(0, count($page->tags), 1));
     }
 
     /**
@@ -87,9 +87,9 @@ class Predictions
             return [];
         }
 
-        $tags = $guest->interests['tags'];
-        arsort($tags);
+        $ratio = $guest->interests['ratio'];
+        arsort($ratio);
 
-        return array_keys(array_slice($tags, 0, 2));
+        return array_slice($ratio, 0, 4);
     }
 }

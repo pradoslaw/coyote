@@ -39,19 +39,10 @@ class QueryString implements DslInterface
     {
         return [
             'query_string' => [
-                'query'     => $this->escape($this->query),
+                'query'     => $this->query,
                 'fields'    => $this->fields,
                 'boost'     => $this->boost
             ]
         ];
-    }
-
-    /**
-     * @param $query
-     * @return mixed
-     */
-    protected function escape($query)
-    {
-        return str_replace(['/', '\:'], ['\/', ':'], preg_quote($query, '+-!{}[]^~*?\\'));
     }
 }

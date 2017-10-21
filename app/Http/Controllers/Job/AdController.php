@@ -40,7 +40,7 @@ class AdController extends Controller
         $tags = $predictions->getTags();
 
         if (!empty($tags)) {
-            $builder->boostTags($tags);
+            $builder->boostTags($this->boost($tags));
         }
 
         $result = $this->job->search($builder);
@@ -49,6 +49,17 @@ class AdController extends Controller
         }
 
         // search jobs that might be interesting for user
-        return (string) view('job.ad', $data, ['jobs' => $result->getSource(), 'tags' => $tags]);
+        return (string) view('job.ad', $data, ['jobs' => $result->getSource(), 'tags' => array_keys($tags)]);
+    }
+
+    private function boost($assoc)
+    {
+        $result = [];
+
+        foreach ($assoc as $tag => $ratio) {
+            $result[] = sprintf('%s^%.1F', $tag, 1 + $ratio);
+        }
+
+        return $result;
     }
 }
