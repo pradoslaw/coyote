@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Lavary\Menu\Menu;
+
 trait SettingsTrait
 {
     public function getSideMenu()
@@ -45,7 +47,7 @@ trait SettingsTrait
             ]
         ];
 
-        return app('menu')->make('user.settings', function ($menu) use ($collection) {
+        return app(Menu::class)->make('user.settings', function ($menu) use ($collection) {
             foreach ($collection as $row) {
                 $menu->add($row['label'], ['route' => $row['route'], 'id' => $row['id']])
                         ->prepend('<i class="fa fa-fw ' . $row['icon'] . '"></i>');
