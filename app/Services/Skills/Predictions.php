@@ -64,7 +64,7 @@ class Predictions
 
         $page = $this->page->findByPath($path);
 
-        if (!$page) {
+        if (!$page || !$page->tags) {
             return [];
         }
 
