@@ -19,20 +19,8 @@ let vm = new Vue({
             this.form.cvc = $('#cvc').val();
             this.form.number = $('#credit-card').val();
 
-            let client = new braintree.api.Client({clientToken: this.client_token});
-
-            client.tokenizeCard({
-                number: this.form.number,
-                cardholderName: this.form.name,
-                expirationMonth: this.form.expiration_month,
-                expirationYear: this.form.expiration_year,
-                cvv: this.form.cvc,
-            }, (err, nonce) => {
-                this.form.payment_method_nonce = nonce;
-
-                this.$nextTick(() => {
-                    HTMLFormElement.prototype.submit.call(e.target);
-                });
+            this.$nextTick(() => {
+                HTMLFormElement.prototype.submit.call(e.target);
             });
         },
         validateCoupon: function(e) {

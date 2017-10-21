@@ -14,8 +14,6 @@ use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Illuminate\Database\Connection as Db;
 use Illuminate\Http\Request;
-use Braintree\Configuration;
-use Braintree\ClientToken;
 use Braintree\Transaction;
 use Braintree\Exception;
 use GuzzleHttp\Client as HttpClient;
@@ -78,11 +76,6 @@ class PaymentController extends Controller
 
         $this->breadcrumb->push('Praca', route('job.home'));
         $this->vatRates = $this->country->vatRatesList();
-
-        Configuration::environment(config('services.braintree.env'));
-        Configuration::merchantId(config('services.braintree.merchant_id'));
-        Configuration::publicKey(config('services.braintree.public_key'));
-        Configuration::privateKey(config('services.braintree.private_key'));
     }
 
     /**
@@ -111,7 +104,6 @@ class PaymentController extends Controller
             'vat_rates'         => $this->vatRates,
             'calculator'        => $calculator->toArray(),
             'default_vat_rate'  => $payment->plan->vat_rate,
-            'client_token'      => ClientToken::generate(),
             'coupon'            => $coupon->toArray()
         ]);
     }
@@ -162,6 +154,7 @@ class PaymentController extends Controller
                 return $this->successfulTransaction($payment);
             }
 
+            // make a payment
             return $this->{'make' . ucfirst($form->get('payment_method')->getValue()) . 'Transaction'}($payment);
         });
     }
@@ -261,27 +254,39 @@ class PaymentController extends Controller
      */
     private function makeCardTransaction(Payment $payment)
     {
-        /** @var mixed $result */
-        $result = Transaction::sale([
-            'amount'                => number_format($payment->invoice->grossPrice(), 2, '.', ''),
-            'orderId'               => $payment->id,
-            'paymentMethodNonce'    => $this->request->input("payment_method_nonce"),
-            'options' => [
-                'submitForSettlement' => true
+        $client = new \PayLaneRestClient(config('services.paylane.username'), config('services.paylane.password'));
+
+        /** @var array $result */
+        $result = $client->cardSale([
+            'sale' => [
+                'amount'            => number_format($payment->invoice->grossPrice(), 2, '.', ''),
+                'currency'          => 'PLN',
+                'description'       => $payment->id
+            ],
+            'customer' => [
+                'name'              => $this->request->input('name'),
+                'email'             => $this->auth->email,
+                'ip'                => $this->request->ip()
+            ],
+            'card' => [
+                'card_number'       => str_replace('-', '', $this->request->input('number')),
+                'name_on_card'      => $this->request->input('name'),
+                'expiration_month'  => $this->request->input('exp_month'),
+                'expiration_year'   => $this->request->input('exp_year'),
+                'card_code'         => $this->request->input('cvc'),
             ]
         ]);
 
-        /** @var $result \Braintree\Result\Error */
-        if (!$result->success || is_null($result->transaction)) {
+        if (!$result['success']) {
             /** @var \Braintree\Error\Validation $error */
-            $error = array_first($result->errors->deepAll());
+            $error = $result['error'];
             logger()->error(var_export($result, true));
 
             if (is_null($error)) {
                 throw new Exception\ValidationsFailed();
             }
 
-            throw new Exception\ValidationsFailed($error->message, $error->code);
+            throw new Exception\ValidationsFailed($error['error_description'], $error['error_number']);
         }
 
         logger()->debug('Successfully payment', ['result' => $result]);
