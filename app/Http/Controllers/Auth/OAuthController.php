@@ -49,6 +49,10 @@ class OAuthController extends Controller
      */
     public function callback($provider)
     {
+        if (!$this->request->has('code') || $this->request->has('denied')) {
+            return redirect()->route('login');
+        }
+
         $oauth = $this->getSocialiteFactory()->driver($provider)->stateless()->user();
         $user = $this->user->findWhere(['provider' => $provider, 'provider_id' => $oauth->getId()])->first();
 
