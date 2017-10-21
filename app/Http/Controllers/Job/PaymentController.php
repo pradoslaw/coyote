@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Events\PaymentPaid;
+use Coyote\Exceptions\PaymentFailedException;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
@@ -14,8 +15,6 @@ use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Illuminate\Database\Connection as Db;
 use Illuminate\Http\Request;
-use Braintree\Transaction;
-use Braintree\Exception;
 use GuzzleHttp\Client as HttpClient;
 
 class PaymentController extends Controller
@@ -249,7 +248,7 @@ class PaymentController extends Controller
 
     /**
      * @param Payment $payment
-     * @throws Exception\ValidationsFailed
+     * @throws PaymentFailedException
      * @return \Illuminate\Http\RedirectResponse
      */
     private function makeCardTransaction(Payment $payment)
@@ -282,11 +281,7 @@ class PaymentController extends Controller
             $error = $result['error'];
             logger()->error(var_export($result, true));
 
-            if (is_null($error)) {
-                throw new Exception\ValidationsFailed();
-            }
-
-            throw new Exception\ValidationsFailed($error['error_description'], $error['error_number']);
+            throw new PaymentFailedException($error['error_description'], $error['error_number']);
         }
 
         logger()->debug('Successfully payment', ['result' => $result]);
@@ -308,6 +303,28 @@ class PaymentController extends Controller
     }
 
     /**
+     * @param \Closure $callback
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
+    private function handlePayment(\Closure $callback)
+    {
+        $this->db->beginTransaction();
+
+        try {
+            $result = $callback();
+            $this->db->commit();
+
+            return $result;
+        } catch (PaymentFailedException $e) {
+            return $this->handlePaymentException($e, trans('payment.validation', ['message' => $e->getMessage()]));
+        } catch (\Exception $e) {
+            return $this->handlePaymentException($e, trans('payment.unhandled'));
+        }
+    }
+
+    /**
+     * Handle payment exception. Remove sensitive data before saving to logs and sending to sentry.
+     *
      * @param \Exception $exception
      * @param string $message
      * @return \Illuminate\Http\RedirectResponse
@@ -329,33 +346,5 @@ class PaymentController extends Controller
         }
 
         return $back;
-    }
-
-    /**
-     * @param \Closure $callback
-     * @return \Illuminate\Http\RedirectResponse|mixed
-     */
-    private function handlePayment(\Closure $callback)
-    {
-        $this->db->beginTransaction();
-
-        try {
-            $result = $callback();
-            $this->db->commit();
-
-            return $result;
-        } catch (Exception\Authentication $e) {
-            return $this->handlePaymentException($e, trans('payment.forbidden'));
-        } catch (Exception\Authorization $e) {
-            return $this->handlePaymentException($e, trans('payment.unauthorized'));
-        } catch (Exception\Timeout $e) {
-            return $this->handlePaymentException($e, trans('payment.timeout'));
-        } catch (Exception\ServerError $e) {
-            return $this->handlePaymentException($e, trans('payment.unauthorized'));
-        } catch (Exception\ValidationsFailed $e) {
-            return $this->handlePaymentException($e, $e->getMessage() ?: trans('payment.validation'));
-        } catch (\Exception $e) {
-            return $this->handlePaymentException($e, trans('payment.unhandled'));
-        }
     }
 }
