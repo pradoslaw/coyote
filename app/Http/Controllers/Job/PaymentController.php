@@ -260,7 +260,7 @@ class PaymentController extends Controller
             'sale' => [
                 'amount'            => number_format($payment->invoice->grossPrice(), 2, '.', ''),
                 'currency'          => 'PLN',
-                'description'       => $payment->id
+                'description'       => sprintf('%s - %s', $payment->plan->name, $payment->id)
             ],
             'customer' => [
                 'name'              => $this->request->input('name'),
