@@ -90,6 +90,11 @@ return [
         'private_key'   => env('BRAINTREE_PRIVATE_KEY')
     ],
 
+    'paylane' => [
+        'username'           => env('PAYLANE_USERNAME'),
+        'password'   => env('PAYLANE_PASSWORD')
+    ],
+
     'p24' => [
         'client_id'     => env('P24_CLIENT_ID'),
         'payment_url'   => env('P24_PAYMENT_URL', 'https://sandbox.przelewy24.pl/trnDirect'),
