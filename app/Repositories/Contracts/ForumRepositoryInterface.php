@@ -10,12 +10,11 @@ interface ForumRepositoryInterface extends RepositoryInterface
     /**
      * Gets categories grouped by sections. You need to pass either $userId or $sessionId (for anonymous users)
      *
-     * @param int $userId
      * @param string $guestId
      * @param null|int $parentId
      * @return mixed
      */
-    public function categories($userId, $guestId, $parentId = null);
+    public function categories($guestId, $parentId = null);
 
     /**
      * @param int $userId
@@ -52,8 +51,7 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * Mark forum as read
      *
      * @param $forumId
-     * @param $userId
-     * @param $sessionId
+     * @param $guestId
      */
-    public function markAsRead($forumId, $userId, $sessionId);
+    public function markAsRead($forumId, $guestId);
 }

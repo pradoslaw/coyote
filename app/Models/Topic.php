@@ -246,25 +246,23 @@ class Topic extends Model
     }
 
     /**
-     * @param integer $userId
-     * @param string $sessionId
+     * @param string $guestId
      * @return mixed
      */
-    public function markTime($userId, $sessionId)
+    public function markTime($guestId)
     {
-        return $this->tracks()->select('marked_at')->where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)->value('marked_at');
+        return $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
     }
 
     /**
      * Mark topic as read
      *
-     * @param integer $userId
-     * @param string $sessionId
+     * @param string $guestId
      */
-    public function markAsRead($userId, $sessionId)
+    public function markAsRead($guestId)
     {
         // builds data to update
-        $attributes = ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
+        $attributes = ['guest_id' => $guestId];
         // execute a query...
 
         try {

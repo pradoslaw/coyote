@@ -195,21 +195,12 @@ class Forum extends Model
     }
 
     /**
-     * @param $userId
-     * @param $sessionId
+     * @param string $guestId
      * @return mixed
      */
-    public function markTime($userId, $sessionId)
+    public function markTime($guestId)
     {
-        $sql = $this->tracks()->select('marked_at');
-
-        if ($userId) {
-            $sql->where('user_id', $userId);
-        } else {
-            $sql->where('session_id', $sessionId);
-        }
-
-        return $sql->value('marked_at');
+        return $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
     }
 
     /**
