@@ -213,7 +213,8 @@ new Vue({
                 'is_private': +false,
                 'is_agency': +false,
                 'employees': null,
-                'founded': null
+                'founded': null,
+                'vat_id': null
             };
 
             this.benefits = [];

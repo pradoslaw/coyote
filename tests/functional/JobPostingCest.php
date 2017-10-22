@@ -306,7 +306,7 @@ class JobPostingCest
 
         $I->seeCurrentRouteIs('job.payment');
         $I->see('Płatność poprzez bezpieczne połączenie');
-        $I->seeOptionIsSelected('invoice[country_id]', '--');
+        $I->seeOptionIsSelected('invoice[country_id]', 'PL');
         $I->uncheckOption('enable_invoice');
 
         $I->fillField('name', 'Jan Kowalski');
@@ -419,7 +419,7 @@ class JobPostingCest
 
         $I->seeCurrentRouteIs('job.payment');
 
-        $I->seeOptionIsSelected('invoice[country_id]', '--');
+        $I->seeOptionIsSelected('invoice[country_id]', 'PL');
         $I->uncheckOption('enable_invoice');
 
         $I->fillField('name', 'Jan Kowalski');

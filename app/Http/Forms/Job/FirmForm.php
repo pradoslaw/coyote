@@ -2,9 +2,9 @@
 
 namespace Coyote\Http\Forms\Job;
 
-use Coyote\Country;
 use Coyote\Firm;
 use Coyote\Industry;
+use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Repositories\Contracts\IndustryRepositoryInterface as IndustryRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
@@ -30,6 +30,11 @@ class FirmForm extends Form
     protected $industry;
 
     /**
+     * @var CountryRepository
+     */
+    protected $country;
+
+    /**
      * It's public so we can use use attr from twig
      *
      * @var array
@@ -40,16 +45,18 @@ class FirmForm extends Form
 
     /**
      * @param IndustryRepository $industry
+     * @param CountryRepository $country
      */
-    public function __construct(IndustryRepository $industry)
+    public function __construct(IndustryRepository $industry, CountryRepository $country)
     {
         parent::__construct();
 
         $this->industry = $industry;
+        $this->country = $country;
 
         $this->addEventListener(FormEvents::POST_SUBMIT, function (FirmForm $form) {
             if ($form->get('country')->getValue()) {
-                $assoc = array_flip(Country::getCountriesList());
+                $assoc = array_flip($this->country->pluck('name', 'id'));
 
                 if (isset($assoc[$form->get('country')->getValue()])) {
                     // transform country name to country id

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Country;
 use Coyote\Currency;
 use Coyote\Job;
+use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Repositories\Contracts\FeatureRepositoryInterface as FeatureRepository;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
@@ -47,15 +48,22 @@ class JobForm extends Form
     private $feature;
 
     /**
+     * @var CountryRepository
+     */
+    private $country;
+
+    /**
      * @param GeocoderInterface $geocoder
      * @param FeatureRepository $feature
+     * @param CountryRepository $country
      */
-    public function __construct(GeocoderInterface $geocoder, FeatureRepository $feature)
+    public function __construct(GeocoderInterface $geocoder, FeatureRepository $feature, CountryRepository $country)
     {
         parent::__construct();
 
         $this->geocoder = $geocoder;
         $this->feature = $feature;
+        $this->country = $country;
 
         $this->addEventListener(FormEvents::POST_SUBMIT, function (JobForm $form) {
             // call macro and flush collection items
@@ -175,7 +183,7 @@ class JobForm extends Form
             ])
             ->add('country_id', 'select', [
                 'rules' => 'required|integer',
-                'choices' => Country::getCountriesList()
+                'choices' => $this->country->pluck('name', 'id')
             ])
             ->add('city', 'text', [
                 'rules' => 'string|city',

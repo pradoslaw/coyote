@@ -2,16 +2,33 @@
 
 namespace Coyote\Http\Forms\Job;
 
-use Coyote\Country;
 use Coyote\Firm;
+use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Services\FormBuilder\Form;
 
 class InvoiceForm extends Form
 {
+    const DEFAULT_COUNTRY = 'PL';
+
     /**
      * @var string
      */
     protected $theme = self::THEME_INLINE;
+
+    /**
+     * @var CountryRepository
+     */
+    protected $country;
+
+    /**
+     * @param CountryRepository $country
+     */
+    public function __construct(CountryRepository $country)
+    {
+        parent::__construct();
+
+        $this->country = $country;
+    }
 
     public function buildForm()
     {
@@ -40,16 +57,18 @@ class InvoiceForm extends Form
             ])
             ->add('country_id', 'select', [
                 'choices' => $codeList,
-                'empty_value' => '--',
                 'attr' => [
                     'class' => 'input-inline',
                     '@change' => 'calculate'
                 ]
             ]);
 
-        if ($this->data instanceof Firm && !$this->isSubmitted()) {
-            $this->get('address')->setValue($this->data->street . ' ' . $this->data->house);
-            $this->get('country_id')->setValue(empty($this->data->country_id) ? array_flip($codeList)['PL'] : $this->data->country_id);
+        if (!$this->isSubmitted()) {
+            if ($this->data instanceof Firm) {
+                $this->get('address')->setValue($this->data->street . ' ' . $this->data->house);
+            }
+
+            $this->get('country_id')->setValue($this->data->country_id ?? $this->getDefaultCode($codeList));
         }
     }
 
@@ -59,8 +78,8 @@ class InvoiceForm extends Form
     public function attributes()
     {
         return [
-            'name' => 'nazwa',
-            'vat_id' => 'NIP'
+            'name'      => 'nazwa',
+            'vat_id'    => 'NIP'
         ];
     }
 
@@ -69,6 +88,24 @@ class InvoiceForm extends Form
      */
     private function getCountriesCode()
     {
-        return Country::pluck('code', 'id')->toArray();
+        return $this->country->pluck('code', 'id');
+    }
+
+    /**
+     * @param array $codeList
+     * @return string
+     */
+    private function getDefaultCode($codeList)
+    {
+        $geoIp = $this->container->make('geo-ip');
+        $result = $geoIp->ip($this->request->ip());
+
+        $codeList = array_flip($codeList);
+
+        if (!isset($result->country_code)) {
+            return $codeList[self::DEFAULT_COUNTRY];
+        }
+
+        return $codeList[$result->country_code] ?? self::DEFAULT_COUNTRY;
     }
 }
