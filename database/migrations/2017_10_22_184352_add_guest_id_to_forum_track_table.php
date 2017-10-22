@@ -18,6 +18,9 @@ class AddGuestIdToForumTrackTable extends Migration
             $table->addColumn('uuid', 'guest_id')->nullable();
 
             $table->index(['forum_id', 'guest_id']);
+
+            $table->dropIndex('forum_track_forum_id_session_id_index');
+            $table->dropIndex('forum_track_forum_id_user_id_index');
         });
 
         $this->db->update('UPDATE forum_track SET guest_id = session_id::UUID WHERE session_id IS NOT NULL');
@@ -33,6 +36,9 @@ class AddGuestIdToForumTrackTable extends Migration
     {
         $this->schema->table('forum_track', function (Blueprint $table) {
             $table->dropColumn('guest_id');
+
+            $table->index(['forum_id', 'user_id']);
+            $table->index(['forum_id', 'session_id']);
         });
     }
 }
