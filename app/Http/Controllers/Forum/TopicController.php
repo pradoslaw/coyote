@@ -105,7 +105,7 @@ class TopicController extends BaseController
 
         if ($markTime[Topic::class] < $dateTimeString && $markTime[Forum::class] < $dateTimeString) {
             // mark topic as read
-            $topic->markAsRead($dateTimeString, $this->userId, $this->guestId);
+            $topic->markAsRead($this->userId, $this->guestId);
             $isUnread = true;
 
             if ($markTime[Forum::class] < $dateTimeString) {
@@ -274,7 +274,7 @@ class TopicController extends BaseController
         $forumMarkTime = $topic->forum->markTime($this->userId, $this->guestId);
 
         // mark topic as read
-        $topic->markAsRead($topic->last_post_created_at, $this->userId, $this->guestId);
+        $topic->markAsRead($this->userId, $this->guestId);
         $isUnread = $this->topic->isUnread($topic->forum_id, $forumMarkTime, $this->userId, $this->guestId);
 
         if (!$isUnread) {
