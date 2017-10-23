@@ -245,13 +245,12 @@ class Topic extends Model
     }
 
     /**
-     * @param integer $userId
-     * @param string $sessionId
+     * @param string $guestId
      * @return mixed
      */
-    public function markTime($userId, $sessionId)
+    public function markTime($guestId)
     {
-        return $this->tracks()->select('marked_at')->where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)->value('marked_at');
+        return $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
     }
 
     /**
