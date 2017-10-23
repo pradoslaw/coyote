@@ -11,7 +11,7 @@ class Track extends Model
      *
      * @var array
      */
-    protected $fillable = ['forum_id', 'user_id', 'session_id', 'marked_at'];
+    protected $fillable = ['forum_id', 'guest_id', 'marked_at'];
 
     /**
      * The database table used by the model.

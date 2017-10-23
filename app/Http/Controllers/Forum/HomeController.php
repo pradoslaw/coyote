@@ -131,7 +131,7 @@ class HomeController extends BaseController
     {
         $this->pushForumCriteria();
         // execute query: get all categories that user can has access
-        $sections = $this->forum->categories($this->userId, $this->guestId);
+        $sections = $this->forum->categories($this->guestId);
         // establish forum's marked date
         $sections = $this->personalizer->markUnreadCategories($sections);
 
@@ -251,7 +251,7 @@ class HomeController extends BaseController
         $forums = $this->forum->all(['id']);
 
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, $this->userId, $this->guestId);
+            $this->forum->markAsRead($forum->id, $this->guestId);
         }
     }
 

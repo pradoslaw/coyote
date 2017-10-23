@@ -10,25 +10,24 @@ namespace Coyote\Repositories\Contracts;
 interface TopicRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param $userId
-     * @param $sessionId
+     * @param int|null $userId
+     * @param string $guestId
      * @param string $order
      * @param string $direction
      * @param int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function paginate($userId, $sessionId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20);
+    public function paginate($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20);
 
     /**
      * Is there any unread topic in this category?
      *
-     * @param $forumId
-     * @param $markTime
-     * @param $userId
-     * @param $sessionId
+     * @param int $forumId
+     * @param string $markTime
+     * @param string $guestId
      * @return mixed
      */
-    public function isUnread($forumId, $markTime, $userId, $sessionId);
+    public function isUnread($forumId, $markTime, $guestId);
 
     /**
      * @param int $limit

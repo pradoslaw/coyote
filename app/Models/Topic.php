@@ -257,14 +257,13 @@ class Topic extends Model
     /**
      * Mark topic as read
      *
-     * @param $markTime
-     * @param integer $userId
-     * @param string $sessionId
+     * @param string $markTime
+     * @param string $guestId
      */
-    public function markAsRead($markTime, $userId, $sessionId)
+    public function markAsRead($markTime, $guestId)
     {
         // builds data to update
-        $attributes = ($userId ? ['user_id' => $userId] : ['session_id' => $sessionId]);
+        $attributes = ['guest_id' => $guestId];
         // execute a query...
 
         try {

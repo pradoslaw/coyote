@@ -27,7 +27,7 @@ class CategoryController extends BaseController
         $forumList = $treeBuilder->listBySlug($this->forum->list());
 
         // execute query: get all subcategories that user can has access to
-        $sections = $this->forum->categories($this->userId, $this->guestId, $forum->id);
+        $sections = $this->forum->categories($this->guestId, $forum->id);
         // mark unread categories
         $sections = $personalizer->markUnreadCategories($sections);
 
@@ -69,11 +69,11 @@ class CategoryController extends BaseController
      */
     public function mark($forum)
     {
-        $this->forum->markAsRead($forum->id, $this->userId, $this->guestId);
+        $this->forum->markAsRead($forum->id, $this->guestId);
         $forums = $this->forum->where('parent_id', $forum->id)->get();
 
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, $this->userId, $this->guestId);
+            $this->forum->markAsRead($forum->id, $this->guestId);
         }
     }
 
