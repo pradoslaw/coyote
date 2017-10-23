@@ -270,14 +270,14 @@ class TopicController extends BaseController
     public function mark($topic)
     {
         // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
-        $forumMarkTime = $topic->forum->markTime($this->userId, $this->guestId);
+        $forumMarkTime = $topic->forum->markTime($this->guestId);
 
         // mark topic as read
         $topic->markAsRead($this->userId, $this->guestId);
-        $isUnread = $this->topic->isUnread($topic->forum_id, $forumMarkTime, $this->userId, $this->guestId);
+        $isUnread = $this->topic->isUnread($topic->forum_id, $forumMarkTime, $this->guestId);
 
         if (!$isUnread) {
-            $this->forum->markAsRead($topic->forum_id, $this->userId, $this->guestId);
+            $this->forum->markAsRead($topic->forum_id, $this->guestId);
         }
     }
 
