@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "69f0f256ede11526d7838a23e20b7c27",
+    "content-hash": "25042d670969e52d13be37540910a840",
     "packages": [
         {
             "name": "adam-boduch/geshi",
@@ -2828,6 +2828,52 @@
                 "random"
             ],
             "time": "2017-09-27T21:40:39+00:00"
+        },
+        {
+            "name": "paylane/client",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mlebkowski/paylane_php.git",
+                "reference": "21e789c472ba6bd2efda69c161da88d1ba4adbd0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mlebkowski/paylane_php/zipball/21e789c472ba6bd2efda69c161da88d1ba4adbd0",
+                "reference": "21e789c472ba6bd2efda69c161da88d1ba4adbd0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "paylane/PayLaneRestClient.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Maciej Łebkowski",
+                    "email": "m.lebkowski@gmail.com"
+                },
+                {
+                    "name": "Marcel Tyszkiewicz",
+                    "email": "marcel.tyszkiewicz@paylane.com"
+                },
+                {
+                    "name": "Wojciech Petriczek",
+                    "email": "wojciech.petriczek@paylane.com"
+                }
+            ],
+            "description": "PayLane REST Client for PHP",
+            "time": "2016-08-24T09:27:26+00:00"
         },
         {
             "name": "pda/pheanstalk",
