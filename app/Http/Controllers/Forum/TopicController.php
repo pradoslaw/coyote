@@ -104,7 +104,7 @@ class TopicController extends BaseController
         $dateTimeString = $posts->last()->created_at->toDateTimeString();
 
         if ($markTime[Topic::class] < $dateTimeString && $markTime[Forum::class] < $dateTimeString) {
-            // mark topic as read
+            // mark topic as read. the date MUST be data of last post on this page
             $topic->markAsRead($dateTimeString, $this->userId, $this->guestId);
             $isUnread = true;
 
