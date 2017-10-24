@@ -273,7 +273,7 @@ class TopicController extends BaseController
         $forumMarkTime = $topic->forum->markTime($this->guestId);
 
         // mark topic as read
-        $topic->markAsRead($this->userId, $this->guestId);
+        $topic->markAsRead($topic->last_post_created_at, $this->guestId);
         $isUnread = $this->topic->isUnread($topic->forum_id, $forumMarkTime, $this->guestId);
 
         if (!$isUnread) {
