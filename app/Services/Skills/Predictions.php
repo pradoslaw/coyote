@@ -79,17 +79,17 @@ class Predictions
         /** @var \Coyote\Guest $guest */
         $guest = $this->guest->find($this->request->session()->get('guest_id'));
 
-        if (!$guest) {
-            return [];
-        }
-
-        if (empty($guest->interests)) {
+        if (empty($guest) || empty($guest->interests)) {
             return [];
         }
 
         $ratio = $guest->interests['ratio'];
         arsort($ratio);
 
-        return array_slice($ratio, 0, 4);
+        $ratio = array_slice($ratio, 0, 4);
+        $rand = array_rand($ratio);
+
+        // only one tag please...
+        return [$rand => $ratio[$rand]];
     }
 }
