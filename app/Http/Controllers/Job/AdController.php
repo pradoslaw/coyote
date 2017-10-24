@@ -58,7 +58,9 @@ class AdController extends Controller
         $result = [];
 
         foreach ($assoc as $tag => $ratio) {
-            $result[] = sprintf('%s^%.1F', Raw::escape($tag), 1 + $ratio);
+            if (!empty($tag)) {
+                $result[] = sprintf('%s^%.1F', Raw::escape($tag), 1 + $ratio);
+            }
         }
 
         return $result;
