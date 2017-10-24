@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/adam-boduch/coyote.svg?branch=master)](https://travis-ci.org/adam-boduch/coyote)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/adam-boduch/coyote/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/adam-boduch/coyote/?branch=master)
 
-Coyote to nazwa systemu obslugujacego serwis 4programmers.net.
+Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 
 ## Wymagania
 
@@ -120,10 +120,10 @@ Po instalacji Elasticsearch, konieczne jest utworzenie indeksu oraz typów. Wyko
 1. `php artisan es:create`
 2. `php artisan es:mapping`
 
-## Jak mozesz pomoc?
+## Jak możesz pomóc?
 
-Zachecamy do aktywnego udzialu w rozwoju projektu. Zajrzyj na zakladke *Issues* i zobacz jakie zadanie mozesz zrealizowac. Realizujemy tylko te zadanie ktore jest zaakceptowane i przypisane do wersji 2.0..
+Zachęcamy do aktywnego udziału w rozwoju projektu. Zajrzyj na zakładkę *Issues* i zobacz jakie zadanie możesz zrealizować. Realizujemy tylko te zadania, które są zaakceptowane i przypisane do wersji 2.0.
 
-1. Utworz fork repozytorium
-2. Wprowadz zmiany
+1. Utwórz fork repozytorium
+2. Wprowadź zmiany
 3. Dodaj pull request
