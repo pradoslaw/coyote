@@ -17,7 +17,7 @@ class AddGuestIdToTopicTrackTable extends Migration
         $this->schema->table('topic_track', function (Blueprint $table) {
             $table->addColumn('uuid', 'guest_id')->nullable();
 
-            $table->unique(['topic_id', 'guest_id']);
+            $table->index(['topic_id', 'guest_id']);
 
             $table->dropIndex('topic_track_session_id_index');
             $table->dropUnique('topic_track_topic_id_session_id_unique');
