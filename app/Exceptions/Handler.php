@@ -32,7 +32,8 @@ class Handler extends ExceptionHandler
         ValidationException::class,
         ForbiddenException::class,
         TokenMismatchException::class,
-        CommandNotFoundException::class
+        CommandNotFoundException::class,
+        PaymentFailedException::class
     ];
 
     /**
