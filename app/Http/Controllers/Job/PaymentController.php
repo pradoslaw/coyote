@@ -277,7 +277,6 @@ class PaymentController extends Controller
         ]);
 
         if (!$result['success']) {
-            /** @var \Braintree\Error\Validation $error */
             $error = $result['error'];
             logger()->error(var_export($result, true));
 

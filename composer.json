@@ -53,7 +53,6 @@
         "mpdf/mpdf": "dev-development",
         "guzzlehttp/oauth-subscriber": "^0.3.0",
         "inacho/php-credit-card-validator": "^1.0",
-        "braintree/braintree_php": "^3.23",
         "paylane/client": "^1.1"
     },
     "require-dev": {
