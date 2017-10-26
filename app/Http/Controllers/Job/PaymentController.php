@@ -270,7 +270,7 @@ class PaymentController extends Controller
             'card' => [
                 'card_number'       => str_replace('-', '', $this->request->input('number')),
                 'name_on_card'      => $this->request->input('name'),
-                'expiration_month'  => $this->request->input('exp_month'),
+                'expiration_month'  => sprintf('%02d', $this->request->input('exp_month')),
                 'expiration_year'   => $this->request->input('exp_year'),
                 'card_code'         => $this->request->input('cvc'),
             ]
