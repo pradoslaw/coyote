@@ -312,7 +312,6 @@ class JobPostingCest
         $I->fillField('name', 'Jan Kowalski');
         $I->fillField('number', '5555555555554444');
         $I->fillField('cvc', '123');
-        $I->fillField('payment_method_nonce', 'fake-valid-nonce');
 
         $I->click('Zapłać i zapisz');
 
@@ -364,7 +363,6 @@ class JobPostingCest
         $I->fillField('name', 'Jan Kowalski');
         $I->fillField('number', '5555555555554444');
         $I->fillField('cvc', '123');
-        $I->fillField('payment_method_nonce', 'fake-valid-nonce');
 
         $country = $I->grabRecord(\Coyote\Country::class, ['code' => 'GB']);
 
@@ -425,7 +423,6 @@ class JobPostingCest
         $I->fillField('name', 'Jan Kowalski');
         $I->fillField('number', '5555555555554444');
         $I->fillField('cvc', '123');
-        $I->fillField('payment_method_nonce', 'fake-valid-nonce');
         $I->fillField('coupon', $coupon->code);
         $I->fillField('price', 26.7);
 
@@ -528,7 +525,6 @@ class JobPostingCest
         $I->seeFormErrorMessage('cvc', 'Wprowadzony kod CVC jest nieprawidłowy.');
 
         $I->fillField('number', '4111111111111111');
-        $I->fillField('payment_method_nonce', 'fake-valid-nonce');
         $I->click('Zapłać i zapisz');
 
         $I->seeCurrentRouteIs('job.offer');

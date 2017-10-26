@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Events\PaymentPaid;
+use Coyote\Exceptions\PaymentFailedException;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Payment;
@@ -14,10 +15,6 @@ use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Illuminate\Database\Connection as Db;
 use Illuminate\Http\Request;
-use Braintree\Configuration;
-use Braintree\ClientToken;
-use Braintree\Transaction;
-use Braintree\Exception;
 use GuzzleHttp\Client as HttpClient;
 
 class PaymentController extends Controller
@@ -78,11 +75,6 @@ class PaymentController extends Controller
 
         $this->breadcrumb->push('Praca', route('job.home'));
         $this->vatRates = $this->country->vatRatesList();
-
-        Configuration::environment(config('services.braintree.env'));
-        Configuration::merchantId(config('services.braintree.merchant_id'));
-        Configuration::publicKey(config('services.braintree.public_key'));
-        Configuration::privateKey(config('services.braintree.private_key'));
     }
 
     /**
@@ -111,7 +103,6 @@ class PaymentController extends Controller
             'vat_rates'         => $this->vatRates,
             'calculator'        => $calculator->toArray(),
             'default_vat_rate'  => $payment->plan->vat_rate,
-            'client_token'      => ClientToken::generate(),
             'coupon'            => $coupon->toArray()
         ]);
     }
@@ -162,6 +153,7 @@ class PaymentController extends Controller
                 return $this->successfulTransaction($payment);
             }
 
+            // make a payment
             return $this->{'make' . ucfirst($form->get('payment_method')->getValue()) . 'Transaction'}($payment);
         });
     }
@@ -256,32 +248,40 @@ class PaymentController extends Controller
 
     /**
      * @param Payment $payment
-     * @throws Exception\ValidationsFailed
+     * @throws PaymentFailedException
      * @return \Illuminate\Http\RedirectResponse
      */
     private function makeCardTransaction(Payment $payment)
     {
-        /** @var mixed $result */
-        $result = Transaction::sale([
-            'amount'                => number_format($payment->invoice->grossPrice(), 2, '.', ''),
-            'orderId'               => $payment->id,
-            'paymentMethodNonce'    => $this->request->input("payment_method_nonce"),
-            'options' => [
-                'submitForSettlement' => true
+        $client = new \PayLaneRestClient(config('services.paylane.username'), config('services.paylane.password'));
+
+        /** @var array $result */
+        $result = $client->cardSale([
+            'sale' => [
+                'amount'            => number_format($payment->invoice->grossPrice(), 2, '.', ''),
+                'currency'          => 'PLN',
+                'description'       => sprintf('%s - %s', $payment->plan->name, $payment->id)
+            ],
+            'customer' => [
+                'name'              => $this->request->input('name'),
+                'email'             => $this->auth->email,
+                'ip'                => $this->request->ip()
+            ],
+            'card' => [
+                'card_number'       => str_replace('-', '', $this->request->input('number')),
+                'name_on_card'      => $this->request->input('name'),
+                'expiration_month'  => sprintf('%02d', $this->request->input('exp_month')),
+                'expiration_year'   => $this->request->input('exp_year'),
+                'card_code'         => $this->request->input('cvc'),
             ]
         ]);
 
-        /** @var $result \Braintree\Result\Error */
-        if (!$result->success || is_null($result->transaction)) {
+        if (!$result['success']) {
             /** @var \Braintree\Error\Validation $error */
-            $error = array_first($result->errors->deepAll());
+            $error = $result['error'];
             logger()->error(var_export($result, true));
 
-            if (is_null($error)) {
-                throw new Exception\ValidationsFailed();
-            }
-
-            throw new Exception\ValidationsFailed($error->message, $error->code);
+            throw new PaymentFailedException($error['error_description'], $error['error_number']);
         }
 
         logger()->debug('Successfully payment', ['result' => $result]);
@@ -303,6 +303,28 @@ class PaymentController extends Controller
     }
 
     /**
+     * @param \Closure $callback
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
+    private function handlePayment(\Closure $callback)
+    {
+        $this->db->beginTransaction();
+
+        try {
+            $result = $callback();
+            $this->db->commit();
+
+            return $result;
+        } catch (PaymentFailedException $e) {
+            return $this->handlePaymentException($e, trans('payment.validation', ['message' => $e->getMessage()]));
+        } catch (\Exception $e) {
+            return $this->handlePaymentException($e, trans('payment.unhandled'));
+        }
+    }
+
+    /**
+     * Handle payment exception. Remove sensitive data before saving to logs and sending to sentry.
+     *
      * @param \Exception $exception
      * @param string $message
      * @return \Illuminate\Http\RedirectResponse
@@ -324,33 +346,5 @@ class PaymentController extends Controller
         }
 
         return $back;
-    }
-
-    /**
-     * @param \Closure $callback
-     * @return \Illuminate\Http\RedirectResponse|mixed
-     */
-    private function handlePayment(\Closure $callback)
-    {
-        $this->db->beginTransaction();
-
-        try {
-            $result = $callback();
-            $this->db->commit();
-
-            return $result;
-        } catch (Exception\Authentication $e) {
-            return $this->handlePaymentException($e, trans('payment.forbidden'));
-        } catch (Exception\Authorization $e) {
-            return $this->handlePaymentException($e, trans('payment.unauthorized'));
-        } catch (Exception\Timeout $e) {
-            return $this->handlePaymentException($e, trans('payment.timeout'));
-        } catch (Exception\ServerError $e) {
-            return $this->handlePaymentException($e, trans('payment.unauthorized'));
-        } catch (Exception\ValidationsFailed $e) {
-            return $this->handlePaymentException($e, $e->getMessage() ?: trans('payment.validation'));
-        } catch (\Exception $e) {
-            return $this->handlePaymentException($e, trans('payment.unhandled'));
-        }
     }
 }
