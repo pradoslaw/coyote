@@ -115,7 +115,9 @@ class HomeController extends BaseController
 
         // get only tags belong to specific category
         $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
-        $this->builder->setLanguages($this->tag->pluck('name'));
+        $tags = $this->tag->all();
+
+        $this->builder->setLanguages($tags->pluck('name')->toArray());
 
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
         $this->request->session()->put('current_url', $this->request->fullUrl());
@@ -172,7 +174,8 @@ class HomeController extends BaseController
             'pagination'        => $pagination,
             'subscribes'        => $subscribes,
             'selected'          => $selected,
-            'sort'              => $this->builder->getSort()
+            'sort'              => $this->builder->getSort(),
+            'tags'              => $tags->keyBy('name')
         ]));
     }
 }

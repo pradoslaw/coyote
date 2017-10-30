@@ -72,6 +72,50 @@ $header-footer-border: #c7c7c7;
   }
 }
 
+.list-group-language {
+  img {
+    width: 20px;
+  }
+
+  &.filtered {
+    img {
+      @include grayscale;
+    }
+
+    input[type="checkbox"]:checked + a {
+      img {
+        filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
+        -webkit-filter: grayscale(0%);
+      }
+    }
+  }
+}
+
+.list-group-city {
+  a {
+    padding-left: 19px;
+
+    i {
+      font-size: $font-size-large;
+      vertical-align: middle;
+    }
+
+    &:before {
+      @include font-awesome($fa-var-square-o);
+
+      left: 5px;
+      top: 1px;
+      font-size: 19px;
+    }
+  }
+
+  input[type="checkbox"]:checked + a {
+    &:before {
+      content: $fa-var-check-square-o;
+    }
+  }
+}
+
 #box-filter {
   h5 {
     color: $box-header-color;
@@ -79,7 +123,7 @@ $header-footer-border: #c7c7c7;
   }
 
   .list-group-item {
-    padding: 5px 5px;
+    padding: 5px;
     margin-top: 4px;
 
     input[type=checkbox] {
@@ -87,15 +131,9 @@ $header-footer-border: #c7c7c7;
     }
 
     a {
-      color: $gray;
       display: block;
-      font-size: $font-size-small;
-      padding-left: 19px;
-
-      i {
-        font-size: $font-size-large;
-        vertical-align: middle;
-      }
+      color: $text-color;
+      //font-size: $font-size-small;
 
       span {
         padding-left: 3px;
@@ -105,13 +143,6 @@ $header-footer-border: #c7c7c7;
       small {
         color: $gray-light;
         font-size: 9px;
-      }
-
-      &:before {
-        @include font-awesome($fa-var-square-o);
-        left: 5px;
-        top: 1px;
-        font-size: 19px;
       }
 
       &:hover,
@@ -139,12 +170,6 @@ $header-footer-border: #c7c7c7;
 
   .form-search {
     margin-top: 30px;
-  }
-
-  input[type="checkbox"]:checked + a {
-    &:before {
-      content: $fa-var-check-square-o;
-    }
   }
 }
 
@@ -299,9 +324,7 @@ $header-footer-border: #c7c7c7;
   padding: 20px 0 25px 0;
 
   .img-responsive {
-    filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale"); /* Firefox 10+, Firefox on Android */
-    filter: gray; /* IE6-9 */
-    -webkit-filter: grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
+    @include grayscale;
 
     &:hover {
       filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");

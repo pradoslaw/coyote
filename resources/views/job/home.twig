@@ -38,14 +38,17 @@
             <h5><i class="fa fa-cog fa-fw"></i> Języki programowania</h5>
 
             {% if aggregations.tags|length > 0 %}
-                <ul class="list-group">
+                <ul class="list-group list-group-language {{ selected.tags ? 'filtered' }}">
                     {% for tag, count in aggregations.tags %}
                         <li class="list-group-item">
                             {{ form_checkbox('tag[]', tag, tag in selected.tags) }}
 
                             <a href="{{ route('job.tag', [tag|url_encode]) }}">
-                                <span>{{ tag }}</span>
-                                <small>({{ declination(count, declinationOffers) }})</small>
+                                {% if tags[tag] is defined %}
+                                    <img src="{{ logo(tags[tag].logo) }}">
+                                {% endif %}
+
+                                <span>{{ tags[tag].real_name|default(tag) }}</span>
                             </a>
                         </li>
                     {% endfor %}
@@ -57,7 +60,7 @@
             <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
 
             {% if aggregations.remote[100] is not null %}
-                <ul class="list-group">
+                <ul class="list-group list-group-city">
                     <li class="list-group-item">
                         {{ form_checkbox('remote', 1, selected.remote) }}
 
@@ -72,7 +75,7 @@
             {% endif %}
 
             {% if aggregations.cities|length > 0 %}
-                <ul class="list-group">
+                <ul class="list-group list-group-city">
                     {% for city, count in aggregations.cities %}
                         <li class="list-group-item">
                             {{ form_checkbox('city[]', city, city in selected.cities) }}
