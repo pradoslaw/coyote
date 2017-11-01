@@ -41,7 +41,7 @@ class Tag implements DslInterface
         $body['aggs'][$this->name] = [
             'terms' => [
                 'field'     => 'tags.original',
-                'size'      => 15,
+                'size'      => 10,
                 'include'   => $this->include
             ]
         ];
