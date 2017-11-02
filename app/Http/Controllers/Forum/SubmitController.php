@@ -65,7 +65,7 @@ class SubmitController extends BaseController
         if (is_null($post)) {
             $post = $this->post->makeModel();
         } else {
-            $this->authorize('update', [$post, $forum]);
+            $this->authorize('update', [$post]);
         }
 
         $form = $this->getForm($forum, $topic, $post);
@@ -174,7 +174,7 @@ class SubmitController extends BaseController
      */
     public function edit($forum, $topic, $post)
     {
-        $this->authorize('update', [$post, $forum]);
+        $this->authorize('update', [$post]);
         $form = $this->getForm($forum, $topic, $post);
 
         return view('forum.partials.edit')->with('form', $form);
