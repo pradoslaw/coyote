@@ -26,6 +26,8 @@ class RenewController extends Controller
 
         // reset all plan values
         $job->is_boost = $job->is_publish = $job->is_ads = $job->is_on_top = $job->is_highlight = false;
+        // reset views counter
+        $job->views = 1;
 
         $this->authorize('update', $job);
         $this->authorize('update', $job->firm);
