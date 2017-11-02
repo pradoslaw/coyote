@@ -46,7 +46,6 @@ class ScrollToPost
         /* @var \Coyote\Topic $topic */
         $topic = $request->route('topic');
 
-        $userId = $request->user() ? $request->user()->id : null;
         $guestId = $request->session()->get('guest_id');
 
         $markTime = [
