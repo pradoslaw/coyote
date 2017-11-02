@@ -85,6 +85,7 @@ class TopicController extends BaseController
         start_measure('Parsing...');
         $parser = $this->getParsers();
 
+        /** @var \Coyote\Post $post */
         foreach ($posts as &$post) {
             // parse post or get it from cache
             $post->text = $parser['post']->parse($post->text);
@@ -96,6 +97,9 @@ class TopicController extends BaseController
             foreach ($post->comments as &$comment) {
                 $comment->text = $parser['comment']->setUserId($comment->user_id)->parse($comment->text);
             }
+
+            $post->setRelation('topic', $topic);
+            $post->setRelation('forum', $forum);
         }
 
         stop_measure('Parsing...');

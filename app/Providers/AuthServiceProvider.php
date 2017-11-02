@@ -85,6 +85,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+        /** @var Gate $gate */
         $gate = $this->app[Gate::class];
 
         foreach ($this->abilities as $ability) {

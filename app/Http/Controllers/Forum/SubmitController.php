@@ -43,7 +43,7 @@ class SubmitController extends BaseController
 
         if (!empty($post)) {
             // make sure user can edit this post
-            $this->authorize('update', [$post, $forum]);
+            $this->authorize('update', [$post]);
         }
 
         $form = $this->getForm($forum, $topic, $post);

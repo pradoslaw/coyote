@@ -3,7 +3,6 @@
 namespace Coyote\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Coyote\Forum;
 use Coyote\User;
 use Coyote\Post;
 
@@ -12,36 +11,55 @@ class PostPolicy
     use HandlesAuthorization;
 
     /**
+     * @param User $user
+     * @param Post $post
+     * @return bool
+     */
+    public function update(User $user, Post $post): bool
+    {
+        return $this->check('forum-update', $user, $post);
+    }
+
+    /**
+     * @param User $user
+     * @param Post $post
+     * @return bool
+     */
+    public function delete(User $user, Post $post): bool
+    {
+        return $this->check('forum-delete', $user, $post);
+    }
+
+    /**
      * @param string $ability
      * @param User $user
      * @param Post $post
-     * @param Forum $forum
      * @return bool
      */
-    private function check($ability, User $user, Post $post, Forum $forum)
+    private function check($ability, User $user, Post $post): bool
     {
-        return $user->id === $post->user_id || $forum->ability($ability, $user->id) || $user->can($ability);
+        return ($this->isAuthor($user, $post) && $this->hasEnoughReputation($user, $post))
+            || $post->forum->ability($ability, $user->id)
+                || $user->can($ability);
     }
 
     /**
      * @param User $user
      * @param Post $post
-     * @param Forum $forum
      * @return bool
      */
-    public function update(User $user, Post $post, Forum $forum)
+    private function isAuthor(User $user, Post $post): bool
     {
-        return $this->check('forum-update', $user, $post, $forum);
+        return $user->id === $post->user_id;
     }
 
     /**
      * @param User $user
      * @param Post $post
-     * @param Forum $forum
      * @return bool
      */
-    public function delete(User $user, Post $post, Forum $forum)
+    private function hasEnoughReputation(User $user, Post $post): bool
     {
-        return $this->check('forum-delete', $user, $post, $forum);
+        return $post->id == $post->topic->last_post_id ? true : ($user->reputation >= 100);
     }
 }

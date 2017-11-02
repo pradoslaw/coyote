@@ -35,6 +35,7 @@ use Ramsey\Uuid\Uuid;
  * @property int $allow_sig
  * @property int $allow_sticky_header
  * @property int $birthyear
+ * @property int $reputation
  * @property string $name
  * @property string $email
  * @property string $password

@@ -222,7 +222,7 @@
                         </a>
                     {% endif %}
 
-                    {% if (post.id == topic.last_post_id and can('delete', post, forum)) or can('delete', forum) %}
+                    {% if can('delete', post) or can('delete', forum) %}
                         {% if post.deleted_at %}
                             <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.restore', [post.id]) }}" class="btn btn-xs btn-res">
                                 <i class="fa fa-undo"></i>
@@ -236,7 +236,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if can('update', post, forum) and not post.deleted_at %}
+                    {% if can('update', post) and not post.deleted_at %}
                         <a href="{{ route('forum.post.submit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
                             <i class="fa fa-pencil"></i>
                             <span class="hidden-xs">Edytuj</span>
