@@ -6,7 +6,7 @@ class PostController extends BaseController
 {
     /**
      * @param \Coyote\Post $post
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
     public function subscribe($post)
     {
