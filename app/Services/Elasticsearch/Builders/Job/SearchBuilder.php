@@ -135,10 +135,14 @@ class SearchBuilder extends QueryBuilder
      */
     public function addRemoteFilter()
     {
-        $this->must(new Filters\Job\Remote());
+        // @see https://github.com/adam-boduch/coyote/issues/374
+        // jezeli szukamy ofert pracy zdalnej ORAZ z danego miasta, stosujemy operator OR zamiast AND
+        $method = count($this->city->getCities()) ? 'should' : 'must';
+
+        $this->$method(new Filters\Job\Remote());
 
         if ($this->request->has('remote_range')) {
-            $this->must(new Filters\Job\RemoteRange());
+            $this->$method(new Filters\Job\RemoteRange());
         }
     }
 
