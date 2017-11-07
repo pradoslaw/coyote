@@ -38,6 +38,7 @@ class Notification extends Model
     const MICROBLOG_VOTE = 19;
     const MICROBLOG_SUBSCRIBER = 20;
     const FLAG = 21;
+    const JOB_CREATE = 22;
 
     /**
      * The attributes that are mass assignable.

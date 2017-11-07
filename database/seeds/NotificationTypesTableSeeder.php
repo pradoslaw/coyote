@@ -147,5 +147,12 @@ class NotificationTypesTableSeeder extends Seeder
             'email' => true,
             'is_public' => false
         ]);
+        Type::forceCreate(['id' => Notification::JOB_CREATE,
+            'name' => '...o dodanej ofercie pracy',
+            'headline' => 'Dodano nową ofertę pracy',
+            'profile' => true,
+            'email' => true,
+            'is_public' => false
+        ]);
     }
 }

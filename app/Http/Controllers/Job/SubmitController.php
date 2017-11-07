@@ -10,6 +10,7 @@ use Coyote\Http\Forms\Job\JobForm;
 use Coyote\Http\Transformers\FirmWithBenefits;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Notifications\JobCreatedNotification;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
@@ -271,6 +272,8 @@ class SubmitController extends Controller
 
             if ($job->wasRecentlyCreated || !$job->is_publish) {
                 $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
+
+                $job->user->notify(new JobCreatedNotification($job));
             }
 
             stream($activity, (new Stream_Job)->map($job));

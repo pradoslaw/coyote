@@ -3,6 +3,7 @@
 namespace Coyote\Notifications;
 
 use Coyote\Payment;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
@@ -51,7 +52,7 @@ class SuccessfulPaymentNotification extends Notification
         if ($this->payment->invoice->grossPrice() > 0) {
             $mail->line(
                 sprintf(
-                    'Otrzymaliśmy płatność w kwocie <strong>%s %s</strong>.',
+                    'Otrzymaliśmy płatność w kwocie <strong>%s %s</strong> brutto.',
                     $this->payment->invoice->grossPrice(),
                     $this->payment->invoice->currency->symbol
                 )
@@ -80,7 +81,7 @@ class SuccessfulPaymentNotification extends Notification
                     $this->payment->job->title
                 )
             )
-            ->action('Zobacz ogłoszenie', route('job.offer', [$this->payment->job->id, $this->payment->job->slug]))
+            ->action('Zobacz ogłoszenie', UrlBuilder::job($this->payment->job))
             ->line('Dziekujemy za skorzystanie z naszych usług.');
 
         if ($this->pdf !== null) {
