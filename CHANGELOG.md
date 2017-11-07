@@ -14,6 +14,10 @@
 
 - Możliwość edycji drugiego (długiego) tytułu dla kategorii forum
 
+**Forum**
+
+- Blokada edycji oraz usuwania postów (jeżeli nie jest ostatnim w danym wątku) jeżeli użytkownik ma mniej niż 100 punktów reputacji.
+
 ## 2.1
 
 **Ogólne**
