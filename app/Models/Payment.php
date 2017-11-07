@@ -102,54 +102,6 @@ class Payment extends Model
     }
 
     /**
-     * @return float
-     */
-    public function netPrice()
-    {
-        return $this->plan->price * $this->days;
-    }
-
-    /**
-     * @return float
-     */
-    public function grossPrice()
-    {
-        return $this->netPrice() * $this->plan->vat_rate;
-    }
-
-    /**
-     * @return float
-     */
-    public function vat()
-    {
-        return $this->grossPrice() - $this->netPrice();
-    }
-
-    /**
-     * @return float
-     */
-    public function getNetPriceAttribute()
-    {
-        return $this->netPrice();
-    }
-
-    /**
-     * @return float
-     */
-    public function getGrossPriceAttribute()
-    {
-        return $this->grossPrice();
-    }
-
-    /**
-     * @return float
-     */
-    public function getVatAttribute()
-    {
-        return $this->vat();
-    }
-
-    /**
      * @return string
      */
     public function sign()
