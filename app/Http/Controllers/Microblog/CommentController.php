@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Notifications\MicroblogCommentNotification;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
@@ -14,6 +15,8 @@ use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\User;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -47,7 +50,7 @@ class CommentController extends Controller
      * @param \Coyote\Microblog $microblog
      * @return \Illuminate\Http\JsonResponse
      */
-    public function save(Request $request, $microblog)
+    public function save(Request $request, Dispatcher $dispatcher, $microblog)
     {
         $this->validate($request, [
             'parent_id'     => 'sometimes|integer|exists:microblogs,id',
@@ -67,49 +70,38 @@ class CommentController extends Controller
         $microblog->fill($data);
         $isSubscribed = false;
 
-        $this->transaction(function () use ($microblog, $user, &$isSubscribed) {
+        $this->transaction(function () use ($microblog, $user, $dispatcher, &$isSubscribed) {
             $microblog->save();
 
             // we need to get parent entry only for notification
             $parent = $microblog->parent;
 
             if ($microblog->wasRecentlyCreated) {
-                $subscribers = $parent->subscribers()->pluck('user_id')->toArray();
-                $container = new Container();
+                $subscribers = $parent
+                    ->subscribers()
+                    ->with('user')
+                    ->get()
+                    ->pluck('user')
+                    ->filter(function (User $user) {
+                        return $user->id !== $this->userId;
+                    });
 
-                // we need to send alerts AFTER saving comment to database because we need ID of comment
-                $notificationData = [
-                    'microblog_id'=> $microblog->parent_id, // <-- parent_id NOT id (to generate current alert's object_id)
-                    'content'     => $microblog->html,
-                    'excerpt'     => excerpt($microblog->html),
-                    'text'        => $microblog->html,
-                    'sender_id'   => $user->id,
-                    'sender_name' => $user->name,
-                    'subject'     => excerpt($parent->html), // original exerpt of parent entry
-                    'url'         => UrlBuilder::microblogComment($parent, $microblog->id)
-                ];
+                $dispatcher->send($subscribers, new MicroblogCommentNotification($microblog));
 
-                if ($subscribers) {
-                    // new comment. should we send a notification?
-                    $container->attach(
-                        app('notification.microblog.subscriber')->with($notificationData)->setUsersId($subscribers)
-                    );
-                }
-
-                $helper = new LoginHelper();
-                // get id of users that were mentioned in the text
-                $usersId = $helper->grab($microblog->html);
-
-                if (!empty($usersId)) {
-                    $container->attach(app('notification.microblog.login')->with($notificationData)->setUsersId($usersId));
-                }
-
-                // send a notify
-                $container->notify();
+//                $helper = new LoginHelper();
+//                // get id of users that were mentioned in the text
+//                $usersId = $helper->grab($microblog->html);
+//
+//                if (!empty($usersId)) {
+//                    $container->attach(app('notification.microblog.login')->with($notificationData)->setUsersId($usersId));
+//                }
+//
+//                // send a notify
+//                $container->notify();
 
                 // now we can add user to subscribers list (if he's not in there yet)
                 // after that he will receive notification about other users comments
-                if (!in_array($user->id, $subscribers)) {
+                if (!$parent->subscribers()->forUser($user->id)->exists()) {
                     $count = $this->microblog->where('parent_id', $parent->id)->where('user_id', $user->id)->count();
 
                     if ($count == 1) {

@@ -232,25 +232,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * @param int $typeId
-     * @return array
+     * @param string $objectId
+     * @return Model|null|static
      */
-    public function notificationChannels($typeId)
-    {
-        $channels = [];
-        $settings = $this->hasOne(Setting::class)->where('type_id', $typeId)->first();
-
-        if ($settings->profile) {
-            $channels[] = DatabaseChannel::class;
-        }
-
-        if ($this->email && $this->is_active && $this->is_confirm && !$this->is_blocked && $settings->email) {
-            $channels[] = 'mail';
-        }
-
-        return $channels;
-    }
-
     public function getUnreadNotification($objectId)
     {
         return $this->hasOne(Notification::class)->where('object_id', '=', $objectId)->whereNull('read_at')->first();
