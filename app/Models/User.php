@@ -3,7 +3,6 @@
 namespace Coyote;
 
 use Coyote\Notifications\ResetPasswordNotification;
-use Coyote\Services\Notification\DatabaseChannel;
 use Coyote\Services\Media\Photo;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Illuminate\Auth\Authenticatable;
@@ -13,7 +12,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\RoutesNotifications;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -60,7 +59,7 @@ use Ramsey\Uuid\Uuid;
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword, Notifiable;
+    use Authenticatable, Authorizable, CanResetPassword, RoutesNotifications;
 
     /**
      * The database table used by the model.
@@ -238,6 +237,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getUnreadNotification($objectId)
     {
         return $this->hasOne(Notification::class)->where('object_id', '=', $objectId)->whereNull('read_at')->first();
+    }
+
+    /**
+     * @return $this
+     */
+    public function notificationSettings()
+    {
+        return $this->hasMany(Notification\Setting::class)->join('notification_types', 'notification_types.id', '=', 'notification_settings.type_id');
     }
 
     /**

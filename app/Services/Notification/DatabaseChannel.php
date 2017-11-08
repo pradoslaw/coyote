@@ -3,38 +3,37 @@
 namespace Coyote\Services\Notification;
 
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
-use Illuminate\Notifications\Notification;
 
 class DatabaseChannel
 {
     /**
      * @var NotificationRepository
      */
-    private $notification;
+    private $repository;
 
     /**
-     * @param NotificationRepository $notification
+     * @param NotificationRepository $repository
      */
-    public function __construct(NotificationRepository $notification)
+    public function __construct(NotificationRepository $repository)
     {
-        $this->notification = $notification;
+        $this->repository = $repository;
     }
 
     /**
      * Send the given notification.
      *
      * @param  \Coyote\User  $user
-     * @param  \Illuminate\Notifications\Notification  $notification
+     * @param  UserNotificationInterface  $notification
      * @return void
      */
-    public function send($user, Notification $notification)
+    public function send($user, UserNotificationInterface $notification)
     {
         $data = $notification->toDatabase($user);
 
         $alert = $user->getUnreadNotification($notification->objectId());
 
         if (empty($alert->id)) {
-            $alert = $this->notification->create($data);
+            $alert = $this->repository->create($data);
         }
         $alert->senders()->create($notification->sender());
     }
