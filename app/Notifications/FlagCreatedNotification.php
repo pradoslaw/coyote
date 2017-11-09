@@ -4,12 +4,12 @@ namespace Coyote\Notifications;
 
 use Coyote\Flag;
 use Coyote\Services\Notification\DatabaseChannel;
+use Coyote\Services\Notification\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Channels\BroadcastChannel;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Notification;
 
 class FlagCreatedNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
@@ -125,13 +125,5 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
     protected function channels()
     {
         return [DatabaseChannel::class, BroadcastChannel::class];
-    }
-
-    /**
-     * @return string
-     */
-    protected function notificationUrl()
-    {
-        return route('user.notifications.url', [$this->id]);
     }
 }
