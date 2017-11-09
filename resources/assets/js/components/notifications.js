@@ -241,7 +241,7 @@ $(function () {
         }
     });
 
-    ws.on('notification', data => {
+    ws.on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
         notifications.set(notifications.get() + 1);
         notifications.clear();
 
