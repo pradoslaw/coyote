@@ -3,10 +3,28 @@
 namespace Coyote\Services\Notification;
 
 use Coyote\User;
-use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Notification as BaseNotification;
 
-abstract class UserNotification extends Notification
+abstract class Notification extends BaseNotification
 {
+    /**
+     * @param \Coyote\User $user
+     * @return array
+     */
+    abstract public function toDatabase($user);
+
+    /**
+     * @return array
+     */
+    abstract public function sender();
+
+    /**
+     * Generowanie unikalnego ciagu znakow dla wpisu na mikro
+     *
+     * @return string
+     */
+    abstract public function objectId();
+
     /**
      * Get the notification's delivery channels.
      *
@@ -37,5 +55,13 @@ abstract class UserNotification extends Notification
         }
 
         return $channels;
+    }
+
+    /**
+     * @return string
+     */
+    protected function notificationUrl()
+    {
+        return route('user.notifications.url', [$this->id]);
     }
 }

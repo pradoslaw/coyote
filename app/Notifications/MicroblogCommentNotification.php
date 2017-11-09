@@ -3,15 +3,17 @@
 namespace Coyote\Notifications;
 
 use Coyote\Microblog;
-use Coyote\Services\Notification\UserNotification;
+use Coyote\Services\Notification\Notification;
 use Coyote\Services\Notification\UserNotificationInterface;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class MicroblogCommentNotification extends UserNotification implements UserNotificationInterface, ShouldQueue
+class MicroblogCommentNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
     use Queueable;
 
@@ -103,5 +105,18 @@ class MicroblogCommentNotification extends UserNotification implements UserNotif
             )
             ->action('Zobacz komentarz', url($this->url))
             ->line('Dostajesz to powiadomienie, ponieważ obserwujesz ten wpis.');
+    }
+
+    /**
+     * @param \Coyote\User $user
+     * @return BroadcastMessage
+     */
+    public function toBroadcast($user)
+    {
+        return new BroadcastMessage([
+            'headline'  => $user->name . ' dodał komentarz do wpisu na mikroblogu',
+            'subject'   => excerpt($this->microblog->html),
+            'url'       => $this->notificationUrl()
+        ]);
     }
 }

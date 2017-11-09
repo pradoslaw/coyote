@@ -23,10 +23,10 @@ class DatabaseChannel
      * Send the given notification.
      *
      * @param  \Coyote\User  $user
-     * @param  UserNotificationInterface  $notification
+     * @param  Notification  $notification
      * @return void
      */
-    public function send($user, UserNotificationInterface $notification)
+    public function send($user, Notification $notification)
     {
         $data = $notification->toDatabase($user);
 
