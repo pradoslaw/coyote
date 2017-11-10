@@ -25,8 +25,8 @@ class PlansTableSeeder extends Seeder
             'price' => 126,
             'vat_rate' => 1.23,
             'discount' => 0.45,
-            'length' => 60,
-            'benefits' => ['is_publish', 'is_extended_publish', 'is_ads'],
+            'length' => 30,
+            'benefits' => ['is_publish', 'is_ads'],
             'is_default' => 1
         ]);
 
@@ -35,8 +35,8 @@ class PlansTableSeeder extends Seeder
             'price' => 270,
             'vat_rate' => 1.23,
             'discount' => 0.5,
-            'length' => 60,
-            'benefits' => ['is_publish', 'is_extended_publish', 'is_ads', 'is_highlight', 'is_on_top', 'is_boost']
+            'length' => 30,
+            'benefits' => ['is_publish', 'is_ads', 'is_highlight', 'is_on_top', 'is_boost']
         ]);
     }
 }
