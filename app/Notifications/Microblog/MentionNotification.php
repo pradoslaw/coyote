@@ -2,32 +2,31 @@
 
 namespace Coyote\Notifications\Microblog;
 
-use Coyote\Microblog;
-use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
-use Coyote\User;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SubscriberNotification extends MicroblogNotification implements ShouldQueue, ShouldBroadcast
+class MentionNotification extends MicroblogNotification implements ShouldQueue, ShouldBroadcast
 {
-    const ID = \Coyote\Notification::MICROBLOG;
+    const ID = \Coyote\Notification::MICROBLOG_LOGIN;
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  User  $user
+     * @param  \Coyote\User  $user
      * @return array
      */
     public function via($user)
     {
-        $this->url = UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id);
+        $this->url = $this->microblog->parent_id
+            ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id)
+                : UrlBuilder::microblog($this->microblog);
 
         return parent::getChannels($user);
     }
+
 
     /**
      * @param \Coyote\User $user
@@ -39,7 +38,7 @@ class SubscriberNotification extends MicroblogNotification implements ShouldQueu
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
-            'subject'       => excerpt($this->microblog->parent->html),  // original excerpt of parent entry
+            'subject'       => excerpt($this->microblog->parent_id ? $this->microblog->parent->html : $this->microblog->html),  // original excerpt of parent entry
             'excerpt'       => excerpt($this->microblog->html),
             'url'           => $this->url,
             'guid'          => $this->id
@@ -53,7 +52,7 @@ class SubscriberNotification extends MicroblogNotification implements ShouldQueu
      */
     public function objectId()
     {
-        return substr(md5(class_basename($this) . $this->microblog->parent_id), 16);
+        return substr(md5(class_basename($this) . $this->microblog->parent_id ?: $this->microblog->id), 16);
     }
 
     /**
@@ -64,17 +63,17 @@ class SubscriberNotification extends MicroblogNotification implements ShouldQueu
      */
     public function toMail($user)
     {
-        return (new MailMessage)
-            ->subject($user->name . ' dodał komentarz do wpisu na mikroblogu')
+        return (new MailMessage())
+            ->subject($user->name . ' wspomniał o Tobie na mikroblogu')
             ->line(
                 sprintf(
-                    '<strong>%s</strong> dodał nowy komentarz we wpisie na mikroblogu: <strong>%s</strong>',
+                    '<strong>%s</strong> użył Twojego loginu w treści wpisu mikrobloga: <strong>%s</strong>',
                     $user->name,
-                    excerpt($this->microblog->parent->html)
+                    excerpt($this->microblog->html)
                 )
             )
-            ->action('Zobacz komentarz', url($this->url))
-            ->line('Dostajesz to powiadomienie, ponieważ obserwujesz ten wpis.');
+            ->action('Zobacz', url($this->url))
+            ->line('Dostajesz to powiadomienie, ponieważ wynika to z ustawień Twojego konta.');
     }
 
     /**
@@ -84,7 +83,7 @@ class SubscriberNotification extends MicroblogNotification implements ShouldQueu
     public function toBroadcast($user)
     {
         return new BroadcastMessage([
-            'headline'  => $user->name . ' dodał komentarz do wpisu na mikroblogu',
+            'headline'  => $user->name . ' wspomniał o Tobie na mikroblogu',
             'subject'   => excerpt($this->microblog->html),
             'url'       => $this->notificationUrl()
         ]);

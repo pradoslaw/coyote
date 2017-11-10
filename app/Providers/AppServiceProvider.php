@@ -7,6 +7,7 @@ use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 use Coyote\Services\Invoice;
+use Coyote\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
@@ -125,6 +126,16 @@ class AppServiceProvider extends ServiceProvider
 
         Collection::macro('replace', function ($items) {
             $this->items = $items;
+        });
+
+        Collection::macro('exceptUser', function (User $auth = null) {
+            if ($auth === null) {
+                return $this;
+            }
+
+            return $this->filter(function (User $user) use ($auth) {
+                return $user->id !== $auth->id;
+            });
         });
 
         Collection::macro('groupCategory', function () {

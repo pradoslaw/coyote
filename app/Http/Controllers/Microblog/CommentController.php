@@ -3,19 +3,17 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Notifications\Microblog\MentionNotification;
 use Coyote\Notifications\Microblog\SubscriberNotification;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Services\Notification\Container;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
-use Coyote\Services\UrlBuilder\UrlBuilder;
-use Coyote\User;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 
@@ -47,6 +45,7 @@ class CommentController extends Controller
      * Publikowanie komentarza na mikroblogu
      *
      * @param Request $request
+     * @param Dispatcher $dispatcher
      * @param \Coyote\Microblog $microblog
      * @return \Illuminate\Http\JsonResponse
      */
@@ -82,22 +81,20 @@ class CommentController extends Controller
                     ->with('user')
                     ->get()
                     ->pluck('user')
-                    ->filter(function (User $user) {
-                        return $user->id !== $this->userId;
-                    });
+                    ->exceptUser($this->auth);
 
                 $dispatcher->send($subscribers, new SubscriberNotification($microblog));
 
-//                $helper = new LoginHelper();
-//                // get id of users that were mentioned in the text
-//                $usersId = $helper->grab($microblog->html);
-//
-//                if (!empty($usersId)) {
-//                    $container->attach(app('notification.microblog.login')->with($notificationData)->setUsersId($usersId));
-//                }
-//
-//                // send a notify
-//                $container->notify();
+                $helper = new LoginHelper();
+                // get id of users that were mentioned in the text
+                $usersId = $helper->grab($microblog->html);
+
+                if (!empty($usersId)) {
+                    $dispatcher->send(
+                        $this->user->findMany($usersId)->exceptUser($this->auth),
+                        new MentionNotification($microblog)
+                    );
+                }
 
                 // now we can add user to subscribers list (if he's not in there yet)
                 // after that he will receive notification about other users comments
