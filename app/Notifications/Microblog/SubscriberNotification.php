@@ -1,10 +1,9 @@
 <?php
 
-namespace Coyote\Notifications;
+namespace Coyote\Notifications\Microblog;
 
 use Coyote\Microblog;
 use Coyote\Services\Notification\Notification;
-use Coyote\Services\Notification\UserNotificationInterface;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
 use Illuminate\Bus\Queueable;
@@ -13,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class MicroblogCommentNotification extends Notification implements ShouldQueue, ShouldBroadcast
+class SubscriberNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
     use Queueable;
 
@@ -91,15 +90,17 @@ class MicroblogCommentNotification extends Notification implements ShouldQueue, 
     /**
      * Get the mail representation of the notification.
      *
+     * @param \Coyote\User $user
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail()
+    public function toMail($user)
     {
         return (new MailMessage)
+            ->subject($user->name . ' dodał komentarz do wpisu na mikroblogu')
             ->line(
                 sprintf(
                     '<strong>%s</strong> dodał nowy komentarz we wpisie na mikroblogu: <strong>%s</strong>',
-                    $this->microblog->user->name,
+                    $user->name,
                     excerpt($this->microblog->parent->html)
                 )
             )
