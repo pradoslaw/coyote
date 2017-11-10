@@ -8,6 +8,9 @@ use Illuminate\Notifications\Notification as BaseNotification;
 
 abstract class Notification extends BaseNotification
 {
+    /**
+     * @var array
+     */
     protected $broadcast = [];
 
     /**
@@ -62,13 +65,15 @@ abstract class Notification extends BaseNotification
             $channels[] = DatabaseChannel::class;
         }
 
-        if ($user->email && $user->is_active && $user->is_confirm && !$user->is_blocked && $settings->email) {
-            $channels[] = 'mail';
-        }
+        if (empty($user->getUnreadNotification($this->objectId()))) {
+            if ($user->email && $user->is_active && $user->is_confirm && !$user->is_blocked && $settings->email) {
+                $channels[] = 'mail';
+            }
 
-        if ($this instanceof ShouldBroadcast) {
-            $channels[] = 'broadcast';
-            $this->broadcast[] = $user->receivesBroadcastNotificationsOn();
+            if ($this instanceof ShouldBroadcast) {
+                $channels[] = 'broadcast';
+                $this->broadcast[] = $user->receivesBroadcastNotificationsOn();
+            }
         }
 
         return $channels;

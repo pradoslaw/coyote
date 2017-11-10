@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Notifications\MicroblogCommentNotification;
+use Coyote\Notifications\Microblog\SubscriberNotification;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
@@ -86,7 +86,7 @@ class CommentController extends Controller
                         return $user->id !== $this->userId;
                     });
 
-                $dispatcher->send($subscribers, new MicroblogCommentNotification($microblog));
+                $dispatcher->send($subscribers, new SubscriberNotification($microblog));
 
 //                $helper = new LoginHelper();
 //                // get id of users that were mentioned in the text
