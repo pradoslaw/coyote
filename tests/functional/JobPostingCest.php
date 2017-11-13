@@ -387,7 +387,7 @@ class JobPostingCest
 
         $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
         $I->assertNotEmpty($payment->invoice);
-        $I->assertEquals(60, $payment->days);
+        $I->assertEquals(30, $payment->days);
 
         /** @var \Coyote\Invoice\Item $item */
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
