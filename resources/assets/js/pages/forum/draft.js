@@ -72,7 +72,7 @@
                         'Wielki',
                         'Mały',
                         'Złoty',
-                        'Wybitny',
+                        'Mistrzowski',
                         'Krzywy',
                         'Zakręcony',
                         'Trzeźwy',
