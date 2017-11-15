@@ -2,10 +2,10 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
+use Coyote\Http\Forms\MailingForm;
 use Coyote\Mail\Mailing;
 use Coyote\Repositories\Contracts\MailingRepositoryInterface as MailingRepository;
 use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Http\Request;
 
 class MailingController extends BaseController
 {
@@ -16,22 +16,23 @@ class MailingController extends BaseController
     {
         $this->breadcrumb->push('Mailing', route('adm.mailing'));
 
-        return $this->view('adm.mailing');
+        return $this->view('adm.mailing')->with('form', $this->createForm(MailingForm::class));
     }
 
     /**
      * @param MailingRepository $mailing
-     * @param Request $request
+     * @param MailingForm $form
      * @param Mailer $mailer
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function submit(MailingRepository $mailing, Request $request, Mailer $mailer)
+    public function submit(MailingRepository $mailing, MailingForm $form, Mailer $mailer)
     {
-        /** @var \Coyote\Mailing $result */
-        foreach ($mailing->all() as $result) {
+        $recipients = $form->get('is_demo')->isChecked() ? [$this->auth] : $mailing->all();
+
+        foreach ($recipients as $recipient) {
             $mailer
-                ->to($result->email)
-                ->send(new Mailing($result->id, $request->input('subject'), $request->input('text')));
+                ->to($recipient->email)
+                ->send(new Mailing($recipient->id, $form->get('subject')->getValue(), $form->get('text')->getValue()));
         }
 
         return back()->with('success', 'Mailing został wysłany.');

@@ -45,6 +45,6 @@ class Mailing extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('email.mailing');
+        return $this->view('emails.mailing');
     }
 }

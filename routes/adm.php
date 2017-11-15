@@ -143,5 +143,6 @@ $this->group(
         $this->post('Tags/Save/{tag?}', 'TagsController@save');
 
         $this->get('Mailing', ['uses' => 'MailingController@index', 'middleware' => 'can:adm-payment'])->name('mailing');
+        $this->post('Mailing', ['uses' => 'MailingController@submit', 'middleware' => 'can:adm-payment']);
     }
 );
