@@ -4,3 +4,9 @@
 {% block panel %}
     {{ form(form) }}
 {% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+{% endblock %}

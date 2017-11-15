@@ -22,7 +22,10 @@ class MailingForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Wyślij testowego e-maila'
             ])
             ->add('submit', 'submit', [
-                'label' => 'Wyślij'
+                'label' => 'Wyślij',
+                'attr' => [
+                    'data-submit-state' => 'Wysyłanie...'
+                ]
             ]);
     }
 }

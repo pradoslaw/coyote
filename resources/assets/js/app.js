@@ -72,6 +72,9 @@ $(function () {
                 locale: Polish
             });
         });
+    })
+    .on('/Adm/Mailing', () => {
+        require('./libs/tinymce').default();
     });
 
     r.resolve();
