@@ -17,12 +17,12 @@ class VerifyJobSession
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->session()->has(Job::class)) {
-            return redirect()
-                ->route('job.submit')
-                ->with('error', 'Przepraszamy, ale Twoja sesja wygasła po conajmniej 15 minutach nieaktywności.');
+        if ($request->session()->has(Job::class . '.title')) {
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect()
+            ->route('job.submit')
+            ->with('error', 'Przepraszamy, ale Twoja sesja wygasła po conajmniej 15 minutach nieaktywności.');
     }
 }
