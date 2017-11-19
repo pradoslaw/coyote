@@ -51,7 +51,8 @@ class Firm extends Model
         'postcode',
         'latitude',
         'longitude',
-        'is_private'
+        'is_private',
+        'youtube_url'
     ];
 
     /**
@@ -80,7 +81,7 @@ class Firm extends Model
         parent::boot();
 
         static::saving(function ($model) {
-            foreach (['latitude', 'longitude', 'founded', 'employees', 'headline', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode'] as $column) {
+            foreach (['latitude', 'longitude', 'founded', 'employees', 'headline', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode', 'youtube_url'] as $column) {
                 if (empty($model->{$column})) {
                     $model->{$column} = null;
                 }

@@ -68,6 +68,7 @@ class FirmForm extends Form
         $this->addEventListener(FormEvents::POST_SUBMIT, function (FirmForm $form) {
             $data = $form->all();
             $data['benefits'] = array_filter(array_unique(array_map('trim', $data['benefits'])));
+            $data['youtube_url'] = $this->getEmbedUrl($form->get('youtube_url')->getValue());
 
             // if agency - set null value. we don't to show them with agencies offers
             if ($form->get('is_agency')->getValue()) {
@@ -241,6 +242,11 @@ class FirmForm extends Form
                     'v-show' => 'firm.is_agency == 0'
                 ]
             ])
+            ->add('youtube_url', 'text', [
+                'rules' => 'string|max:255|url',
+                'label' => 'Nagranie wideo w Youtube',
+                'help' => 'Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.'
+            ])
             ->add('latitude', 'hidden', [
                 'rules' => 'numeric',
                 'attr' => [
@@ -340,5 +346,17 @@ class FirmForm extends Form
         if ($this->data instanceof Firm && !$this->isSubmitted()) {
             $this->get('benefits')->setValue($this->data->benefits->all());
         }
+    }
+
+    private function getEmbedUrl($url)
+    {
+        if (empty($url)) {
+            return '';
+        }
+
+        $components = parse_url($url);
+        parse_str($components['query'], $query);
+
+        return 'https://www.youtube.com/embed/' . $query['v'];
     }
 }
