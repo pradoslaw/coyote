@@ -26,7 +26,7 @@ class FbBuilder extends QueryBuilder
      */
     public function build()
     {
-        $this->must(new MultiMatch($this->language, ['title^3', 'tags^2']));
+        $this->must(new MultiMatch($this->language, ['title^3', 'tags.original^2']));
         $this->sort(new Sort('score', 'desc'));
         $this->size(0, 100);
 
