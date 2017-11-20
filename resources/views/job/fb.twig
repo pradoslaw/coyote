@@ -1,0 +1,23 @@
+<p>Na początek tego tygodnia, przygotowaliśmy dla Was listę ofert pracy w językach takich jak: {{ hash_tags|join(', ') }}</p>
+
+{% for language, jobs in result %}
+    <strong>{{ language }}</strong><br><br>
+
+    {% for job in jobs %}
+        - {{ job.title }}
+
+            {% include 'job.partials.location' with {
+                locations: job.locations.pluck('city'),
+                separator: job.firm is not null
+            } %}
+
+            {% if job.salary_from or job.salary_to %}
+                &mdash; {% include 'job.partials.salary' %}
+            {% endif %}
+
+            &mdash; {{ route('job.offer', [job.id, job.slug]) }}
+        <br>
+    {% endfor %}
+
+    <br>
+{% endfor %}

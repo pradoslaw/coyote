@@ -80,6 +80,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     // Job's ads
     // --------------------------------------------------------------
     $this->get('recommendations', ['uses' => 'AdController@index', 'as' => 'ad']);
+    $this->get('fb', ['uses' => 'FbController@index']);
 });
 
 $this->group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {
