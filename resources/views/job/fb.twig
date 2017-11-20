@@ -4,7 +4,7 @@
     <strong>{{ language }}</strong><br><br>
 
     {% for job in jobs %}
-        - {{ job.title }}
+        — {{ job.title }}
 
             {% include 'job.partials.location' with {
                 locations: job.locations.pluck('city'),
@@ -15,8 +15,8 @@
                 &mdash; {% include 'job.partials.salary' %}
             {% endif %}
 
-            &mdash; {{ route('job.offer', [job.id, job.slug]) }}
-        <br>
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷ {{ route('job.offer', [job.id, job.slug]) }}
+        <br><br>
     {% endfor %}
 
     <br>
