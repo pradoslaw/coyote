@@ -49,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app['validator']->extend('cc_number', 'Coyote\Http\Validators\CreditCardValidator@validateNumber');
         $this->app['validator']->extend('cc_cvc', 'Coyote\Http\Validators\CreditCardValidator@validateCvc');
         $this->app['validator']->extend('cc_date', 'Coyote\Http\Validators\CreditCardValidator@validateDate');
+        $this->app['validator']->extend('host', 'Coyote\Http\Validators\HostValidator@validateHost');
 
         $this->app['validator']->replacer('reputation', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);
@@ -64,6 +65,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app['validator']->replacer('tag_creation', function ($message, $attribute, $rule, $parameters) {
             return str_replace(':point', $parameters[0], $message);
+        });
+
+        $this->app['validator']->replacer('host', function ($message, $attribute, $rule, $parameters) {
+            return str_replace(':host', implode(', ', $parameters), $message);
         });
 
         if (strpos(php_sapi_name(), 'cli') === false) {

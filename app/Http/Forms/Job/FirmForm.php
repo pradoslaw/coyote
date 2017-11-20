@@ -243,7 +243,7 @@ class FirmForm extends Form
                 ]
             ])
             ->add('youtube_url', 'text', [
-                'rules' => 'string|max:255|url',
+                'rules' => 'string|max:255|url|host:youtube.com,youtu.be',
                 'label' => 'Nagranie wideo w Youtube',
                 'help' => 'Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.'
             ])
@@ -348,6 +348,10 @@ class FirmForm extends Form
         }
     }
 
+    /**
+     * @param string $url
+     * @return string
+     */
     private function getEmbedUrl($url)
     {
         if (empty($url)) {
@@ -355,6 +359,11 @@ class FirmForm extends Form
         }
 
         $components = parse_url($url);
+
+        if (empty($components['query'])) {
+            return $url;
+        }
+
         parse_str($components['query'], $query);
 
         return 'https://www.youtube.com/embed/' . $query['v'];

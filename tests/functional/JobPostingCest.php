@@ -80,8 +80,10 @@ class JobPostingCest
         $I->selectOption('select[name=employees]', 2);
         $I->fillField('country', 'Polska');
         $I->fillField('city', 'Wrocław');
+        $I->fillField('youtube_url', 'https://www.youtube.com/watch?v=fz2OUoJpR7k');
 
         $I->click('Podgląd');
+        $I->seeInSource('https://www.youtube.com/embed/fz2OUoJpR7k');
         $I->click('Opublikuj');
 
         $I->click('Powrót do ogłoszenia');
