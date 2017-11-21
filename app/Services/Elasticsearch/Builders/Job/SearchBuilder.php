@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 class SearchBuilder extends QueryBuilder
 {
     const PER_PAGE = 15;
-    const DEFAULT_SORT = '_score';
+    const DEFAULT_SORT = 'boost_at';
 
     /**
      * @var Filters\Job\City
