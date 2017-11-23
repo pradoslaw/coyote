@@ -40,6 +40,6 @@ class MailingController extends BaseController
                 );
         }
 
-        return back()->with('success', 'Mailing został wysłany.');
+        return back()->with('success', 'Mailing został wysłany.')->withInput();
     }
 }
