@@ -9,8 +9,8 @@
 {% block footnote %}
     <tr>
         <td class="footnote">
-            Otrzymałeś tego e-maila ponieważ jesteście Państwo klientem {{ config('app.name') }}<br>
-            <a href="{{ route('mailing.unsubscribe', [id]) }}">Kliknij tutaj</a> jeżeli nie chcesz więcej otrzymywać tego typu powiadomień.
+            Otrzymałeś tego e-maila ponieważ dodawałeś wcześniej ogłoszenie o pracę w serwisie {{ config('app.name') }}<br>
+            <a href="{{ route('mailing.unsubscribe', [id]) }}">Kliknij tutaj</a> jeżeli nie chcesz więcej otrzymywać tego typu wiadomości.
         </td>
     </tr>
 {% endblock %}
