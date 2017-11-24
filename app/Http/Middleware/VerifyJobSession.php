@@ -17,7 +17,7 @@ class VerifyJobSession
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->session()->has(Job::class . '.title')) {
+        if ($request->session()->get(Job::class . '.title')) {
             return $next($request);
         }
 
