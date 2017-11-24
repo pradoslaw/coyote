@@ -90,6 +90,11 @@ class LoginController extends Controller
      */
     public function signout(Request $request)
     {
+        // user already logged out?
+        if (!$this->auth) {
+            return back();
+        }
+
         $this->auth->ip = $request->ip();
         // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $this->auth->browser = $request->browser();
