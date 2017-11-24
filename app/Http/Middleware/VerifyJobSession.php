@@ -17,8 +17,12 @@ class VerifyJobSession
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->session()->get(Job::class . '.title')) {
-            return $next($request);
+        if ($request->session()->has(Job::class)) {
+            $model = $request->session()->get(Job::class);
+
+            if ($model instanceof Job && $model->title) {
+                return $next($request);
+            }
         }
 
         return redirect()
