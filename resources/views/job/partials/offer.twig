@@ -201,7 +201,7 @@
             {% endif %}
 
             {% if not job.is_expired and not job.enable_apply %}
-                <h3>Informacje o rekrutacji</h3>
+                <h3 id="apply">Informacje o rekrutacji</h3>
 
                 <div class="text">
                     {{ job.recruitment|raw }}
