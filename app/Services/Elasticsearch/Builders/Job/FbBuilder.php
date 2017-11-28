@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
+use Coyote\Services\Elasticsearch\Filters\Range;
 use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Sort;
@@ -27,6 +28,7 @@ class FbBuilder extends QueryBuilder
     public function build()
     {
         $this->must(new MultiMatch($this->language, ['title^3', 'tags.original^2']));
+        $this->must(new Range('boost_at', ['gt' => 'now-7d']));
         $this->sort(new Sort('score', 'desc'));
         $this->size(0, 100);
 
