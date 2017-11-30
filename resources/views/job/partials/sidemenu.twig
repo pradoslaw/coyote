@@ -5,8 +5,8 @@
         <span class="outline">
             {% if job.enable_apply %}
                 <a class="btn btn-primary" href="{{ route('job.application', [job.id]) }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
-            {% elseif is_url(job.recruitment|striptags) %}
-                <a class="btn btn-primary" href="{{ job.recruitment|striptags }}" target="_blank">Aplikuj na to stanowisko</a>
+            {% elseif is_url(job.getOriginal('recruitment')) %}
+                <a class="btn btn-primary" href="{{ job.getOriginal('recruitment') }}" target="_blank">Aplikuj na to stanowisko</a>
             {% else %}
                 <a class="btn btn-primary" href="#apply">Aplikuj na to stanowisko</a>
             {% endif %}
