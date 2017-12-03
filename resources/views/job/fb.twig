@@ -4,7 +4,7 @@
     <strong>{{ language }}</strong><br><br>
 
     {% for job in jobs %}
-        — {{ job.title }}
+        👉 {{ job.title }}
 
             {% include 'job.partials.location' with {
                 locations: job.locations.pluck('city'),
