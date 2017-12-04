@@ -1,5 +1,5 @@
 <div class="form-inline">
-    {{ Form::date($name . '[]', $input[0], ['class' => 'form-control input-sm']) }}
+    {{ Form::date($name . '[from]', $input['from'], ['class' => 'form-control input-sm']) }}
     {{ $separator }}
-    {{ Form::date($name . '[]', $input[1], ['class' => 'form-control input-sm']) }}
+    {{ Form::date($name . '[to]', $input['to'], ['class' => 'form-control input-sm']) }}
 </div>
