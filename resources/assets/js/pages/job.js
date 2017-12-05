@@ -76,4 +76,14 @@ $(() => {
     $('input[type=search]').on('search', function () {
         $(this).closest('form').submit();
     });
+
+    $('a[data-toggle="lightbox"]').click(function() {
+        require.ensure([], (require) => {
+            require('ekko-lightbox/dist/ekko-lightbox');
+
+            $(this).ekkoLightbox();
+        });
+
+        return false;
+    });
 });

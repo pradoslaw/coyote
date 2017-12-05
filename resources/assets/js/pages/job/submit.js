@@ -3,6 +3,7 @@ import initTinymce from '../../libs/tinymce';
 import Tags from '../../libs/tags';
 import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';
+import VueThumbnail from '../../components/thumbnail.vue';
 import 'chosen-js';
 
 /**
@@ -27,10 +28,12 @@ function toInt(data) {
     return data;
 }
 
+Vue.component('vue-thumbnail', VueThumbnail);
+
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
-    data: toInt(data),
+    data: toInt(window.data),
     mounted: function () {
         initTinymce();
 
@@ -246,6 +249,16 @@ new Vue({
         },
         changePlan: function (planId) {
             this.job.plan_id = planId;
+        },
+        onThumbnailUploaded: function (file) {
+            this.firm.gallery.splice(this.firm.gallery.length - 1, 0, file);
+        },
+        onThumbnailDeleted: function (file) {
+            let index = this.firm.gallery.findIndex(photo => photo.file === file);
+
+            if (index > -1) {
+                this.firm.gallery.splice(index, 1);
+            }
         }
     },
     computed: {

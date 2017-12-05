@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Firm\Gallery;
 use Coyote\Services\Eloquent\HasMany;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\Logo;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $vat_id
  * @property \Coyote\Firm\Benefit[] $benefits
  * @property \Coyote\Firm\Industry[] $industries
+ * @property \Coyote\Firm\Gallery[] $gallery
  * @property Logo $logo
  */
 class Firm extends Model
@@ -133,6 +135,27 @@ class Firm extends Model
         return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $this->getForeignKey(), $this->getKeyName());
     }
 
+    /**
+     * @return HasMany
+     */
+    public function gallery()
+    {
+        $instance = new Firm\Gallery();
+
+        return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $this->getForeignKey(), $this->getKeyName());
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function photos()
+    {
+        return $this->hasMany(Gallery::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function industries()
     {
         return $this->belongsToMany(Industry::class, 'firm_industries');

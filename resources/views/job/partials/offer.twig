@@ -176,6 +176,26 @@
                 </section>
             {% endif %}
 
+            {% if job.firm.name and (job.firm.gallery|length > 0 or job.firm.youtube_url) %}
+                <section>
+                    <h3>Praca w {{ job.firm.name }}</h3>
+
+                    {% if job.firm.gallery %}
+                        <div id="gallery">
+                            {% for gallery in job.firm.gallery %}
+                                <a href="{{ gallery.photo.url() }}" data-toggle="lightbox"><img src="{{ gallery.photo.url() }}"></a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if job.firm.youtube_url %}
+                        <div class="embed-responsive embed-responsive-16by9 margin-md-top">
+                            <iframe class="embed-responsive-item" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    {% endif %}
+                </section>
+            {% endif %}
+
             {% if job.firm.name and (job.firm.headline or job.firm.description or job.firm.youtube_url) %}
                 <section>
                     <h3>O {{ job.firm.name }}</h3>
@@ -183,12 +203,6 @@
                     <div class="text">
                         {% if job.firm.headline %}
                             <blockquote>{{ job.firm.headline }}</blockquote>
-                        {% endif %}
-
-                        {% if job.firm.youtube_url %}
-                            <div class="embed-responsive embed-responsive-16by9 margin-md-bottom">
-                                <iframe class="embed-responsive-item" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
-                            </div>
                         {% endif %}
 
                         {{ job.firm.description|raw }}

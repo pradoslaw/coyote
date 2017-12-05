@@ -1,0 +1,50 @@
+.editable-thumbnail {
+  position: relative;
+
+  img {
+    height: 100px; // fixed height
+  }
+
+  .flush,
+  .spinner,
+  .upload {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    vertical-align: middle;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .flush {
+    display: none;
+    background-color: #000;
+    opacity: .5;
+    color: #fff;
+  }
+
+  .spinner, .upload {
+    color: $gray;
+    display: flex;
+  }
+
+  &:hover {
+    .flush {
+      display: flex;
+    }
+  }
+
+  input {
+    visibility: hidden;
+    height: 1px;
+  }
+
+  // all links have pointer
+  a {
+    cursor: pointer;
+    text-decoration: none;
+  }
+}

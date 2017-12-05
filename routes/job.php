@@ -85,4 +85,5 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
 $this->group(['namespace' => 'Firm', 'prefix' => 'Firma', 'as' => 'firm.'], function () {
     $this->post('Logo', ['uses' => 'SubmitController@logo', 'as' => 'logo']);
+    $this->post('Gallery', ['uses' => 'GalleryController@upload', 'as' => 'gallery']);
 });

@@ -4,10 +4,6 @@ namespace Coyote\Services\Eloquent;
 
 use Illuminate\Database\Eloquent\Relations\HasMany as EloquentHasMany;
 
-/**
- * @method count
- * @method delete
- */
 class HasMany extends EloquentHasMany
 {
     /**

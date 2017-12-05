@@ -19,7 +19,21 @@ class FirmWithBenefits extends TransformerAbstract
             'thumbnail'     => $firm->logo->getFilename() ? (string) $firm->logo->url() : cdn('img/logo-gray.png'),
             'logo'          => $firm->getOriginal('logo'),
             'benefits'      => $firm->benefits->pluck('name')->toArray(),
-            'industries'    => $firm->industries->pluck('id')->toArray()
+            'industries'    => $firm->industries->pluck('id')->toArray(),
+            'gallery'       => $this->gallery($firm)
         ]);
+    }
+
+    private function gallery($firm)
+    {
+        $result = [];
+
+        foreach ($firm->gallery as $gallery) {
+            $result[] = ['file' => $gallery->file, 'url' => (string) $gallery->photo->url()];
+        }
+
+        $result[] = ['file' => '']; // append empty element (always) so user can click on "+" icon to add next one
+
+        return $result;
     }
 }

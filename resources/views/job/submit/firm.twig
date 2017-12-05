@@ -101,6 +101,19 @@
                     {{ form_row(form.website) }}
                     {{ form_row(form.industries) }}
                     {{ form_row(form.description) }}
+
+                    <div class="form-group form-group-border" v-show="firm.is_agency == 0">
+                        {{ form_label(form.gallery) }}
+
+                        <div class="row">
+                            <div class="col-sm-2" v-for="photo in firm.gallery">
+                                <input type="hidden" name="gallery[]" :value="photo.file">
+
+                                <vue-thumbnail :url="photo.url" :file="photo.file" upload-url="{{ route('firm.gallery') }}" @upload="onThumbnailUploaded" @delete="onThumbnailDeleted"></vue-thumbnail>
+                            </div>
+                        </div>
+                    </div>
+
                     {{ form_row(form.youtube_url) }}
                     {{ form_row(form.employees) }}
                     {{ form_row(form.founded) }}

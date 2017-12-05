@@ -90,6 +90,17 @@ class FirmForm extends Form
 
             $models = [];
 
+            foreach ($data['gallery'] as $photo) {
+                if (!empty($photo)) {
+                    $models[] = new Firm\Gallery(['file' => $photo]);
+                }
+            }
+
+            // call macro and replace collection items
+            $this->data->gallery->replace($models);
+
+            $models = [];
+
             foreach ((array) $data['industries'] as $industry) {
                 $models[] = new Industry(['id' => $industry]);
             }
@@ -242,6 +253,13 @@ class FirmForm extends Form
                     'v-show' => 'firm.is_agency == 0'
                 ]
             ])
+            ->add('gallery', 'collection', [
+                'label' => 'Zdjęcia',
+                'child_attr' => [
+                    'type' => 'child_form',
+                    'class' => GalleryForm::class
+                ]
+            ])
             ->add('youtube_url', 'text', [
                 'rules' => 'string|max:255|url|host:youtube.com,youtu.be',
                 'label' => 'Nagranie wideo w Youtube',
@@ -337,6 +355,14 @@ class FirmForm extends Form
             $json['thumbnail'] = (string) $this->get('logo')->getValue()->url();
             $json['logo'] = $this->get('logo')->getValue()->getFilename();
         }
+
+        $json['gallery'] = [];
+
+        foreach ($this->get('gallery')->getChildrenValues() as $gallery) {
+            $json['gallery'][] = ['file' => $gallery->file, 'url' => (string) $gallery->photo->url()];
+        }
+
+        $json['gallery'][] = ['file' => ''];
 
         return json_encode($json);
     }

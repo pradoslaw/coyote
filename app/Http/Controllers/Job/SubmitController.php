@@ -131,7 +131,7 @@ class SubmitController extends Controller
         $job = clone $request->session()->get(Job::class);
 
         // get all firms assigned to user...
-        $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries']));
+        $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries', 'gallery']));
         $firms = fractal($this->firm->findAllBy('user_id', $job->user_id), new FirmWithBenefits())->toJson();
 
         $this->breadcrumb($job);
@@ -262,6 +262,7 @@ class SubmitController extends Controller
                 $job->firm->benefits()->push($job->firm->benefits);
                 // sync industries
                 $job->firm->industries()->sync($job->firm->industries);
+                $job->firm->gallery()->push($job->firm->gallery);
             }
 
             $job->save();
