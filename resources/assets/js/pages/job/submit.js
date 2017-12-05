@@ -217,7 +217,9 @@ new Vue({
                 'is_agency': +false,
                 'employees': null,
                 'founded': null,
-                'vat_id': null
+                'vat_id': null,
+                'youtube_url': null,
+                'gallery': [{file: ''}]
             };
 
             this.benefits = [];

@@ -263,7 +263,10 @@ class FirmForm extends Form
             ->add('youtube_url', 'text', [
                 'rules' => 'string|max:255|url|host:youtube.com,youtu.be',
                 'label' => 'Nagranie wideo w Youtube',
-                'help' => 'Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.'
+                'help' => 'Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.',
+                'attr' => [
+                    'v-model' => 'firm.youtube_url'
+                ]
             ])
             ->add('latitude', 'hidden', [
                 'rules' => 'numeric',
@@ -359,7 +362,9 @@ class FirmForm extends Form
         $json['gallery'] = [];
 
         foreach ($this->get('gallery')->getChildrenValues() as $gallery) {
-            $json['gallery'][] = ['file' => $gallery->file, 'url' => (string) $gallery->photo->url()];
+            if (!empty($gallery)) {
+                $json['gallery'][] = ['file' => $gallery->file, 'url' => (string) $gallery->photo->url()];
+            }
         }
 
         $json['gallery'][] = ['file' => ''];
