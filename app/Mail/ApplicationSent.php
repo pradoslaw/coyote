@@ -36,8 +36,11 @@ class ApplicationSent extends Mailable
     public function build()
     {
         if ($this->application->cv) {
-            $name = explode('_', $this->application->cv, 2)[1];
-            $this->attach(storage_path('app/cv/' . $this->application->cv), ['as' => $name]);
+            $path = realpath(storage_path('app/cv/' . $this->application->cv));
+            $filename = basename($path);
+
+            $name = explode('_', $filename, 2)[1];
+            $this->attach($path, ['as' => $name]);
         }
 
         return $this
