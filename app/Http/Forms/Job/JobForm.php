@@ -286,8 +286,17 @@ class JobForm extends Form
                 'style' => 'height: 40px'
             ])
             ->add('email', 'email', [
+                'label' => 'Email',
                 'rules' => 'sometimes|required|email',
-                'help' => 'Podaj adres e-mail na jaki wyślemy Ci informacje o kandydatach. Adres e-mail nie będzie widoczny dla osób postronnych.'
+                'help' => 'Adres e-mail nie będzie widoczny dla osób postronnych.'
+            ])
+            ->add('phone', 'text', [
+                'rules' => 'sometimes|string',
+                'label' => 'Numer telefonu',
+                'help' => 'Wpisz swój numer telefonu, a wyślemy Ci powiadomienie o nadesłanej aplikacji.',
+                'attr' => [
+                    'placeholder' => 'Numer telefonu'
+                ]
             ]);
 
         $this->setupPlanFields();

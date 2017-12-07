@@ -233,8 +233,17 @@
                         <div class="form-group" :class="{'has-error': isInvalid(['email'])}">
                             {{ form_row(form.enable_apply.child(0), {attr: {'v-model': 'job.enable_apply'}}) }}
 
-                            {{ form_widget(form.email, {attr: {':disabled': 'job.enable_apply == 0'}}) }}
-                            {{ form_error(form.email) }}
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    {{ form_widget(form.email, {attr: {':disabled': 'job.enable_apply == 0'}}) }}
+                                    {{ form_error(form.email) }}
+                                </div>
+
+                                <div class="col-sm-6">
+                                    {{ form_widget(form.phone, {attr: {':disabled': 'job.enable_apply == 0'}}) }}
+                                    {{ form_error(form.phone) }}
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group" :class="{'has-error': isInvalid(['recruitment'])}">

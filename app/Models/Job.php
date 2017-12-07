@@ -40,6 +40,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $recruitment
  * @property string $requirements
  * @property string $email
+ * @property string $phone
  * @property User $user
  * @property Firm $firm
  * @property Tag[] $tags
@@ -105,6 +106,7 @@ class Job extends Model
         'employment_id',
         'deadline_at',
         'email',
+        'phone',
         'enable_apply',
         'seniority_id',
         'plan_id'
