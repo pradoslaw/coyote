@@ -9,6 +9,7 @@
 - W e-mailu informującym o zakończeniu publikacji ogłoszenia, dodanie opcji ponownego wystawienia oferty
 - Zmiana algorytmu wyświetlającego reklamy ofert pracy (teraz bazuje na historii danego usera)
 - Wyświetlanie logo danego języka przy filtrach
+- Możliwość dodawania zdjęć (oraz filmu) do ogłoszeń pracy
 
 **Panel administracjyjny**
 
