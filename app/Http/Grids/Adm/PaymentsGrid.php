@@ -22,6 +22,7 @@ class PaymentsGrid extends Grid
             ])
             ->addColumn('job.title', [
                 'title' => 'Ogłoszenie',
+                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE, 'name' => 'jobs.title']),
                 'clickable' => function (Payment $payment) {
                     return link_to_route('job.offer', $payment->job->title, [$payment->job->id, $payment->job->slug]);
                 }
