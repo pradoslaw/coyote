@@ -12,14 +12,19 @@ class FbBuilder extends QueryBuilder
     /**
      * @var string
      */
-    protected $language;
+    protected $query;
 
     /**
-     * @param string $language
+     * @param string $query
      */
-    public function setLanguage($language)
+    public function setLanguage($query)
     {
-        $this->language = strtolower($language);
+        $this->query = strtolower($query);
+    }
+
+    public function onlyFromLastWeek()
+    {
+        $this->must(new Range('boost_at', ['gt' => 'now-7d']));
     }
 
     /**
@@ -27,8 +32,7 @@ class FbBuilder extends QueryBuilder
      */
     public function build()
     {
-        $this->must(new MultiMatch($this->language, ['title^3', 'tags.original^2']));
-        $this->must(new Range('boost_at', ['gt' => 'now-7d']));
+        $this->must(new MultiMatch($this->query, ['title^3', 'tags.original^2']));
         $this->sort(new Sort('score', 'desc'));
         $this->size(0, 100);
 

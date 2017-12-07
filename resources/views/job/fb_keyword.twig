@@ -1,0 +1,16 @@
+{% for city, jobs in result %}
+    <strong>[{{ city }}]</strong><br><br>
+
+    {% for job in jobs %}
+        👉 {{ job.title }}
+
+        {% if job.salary_from or job.salary_to %}
+            &mdash; {% include 'job.partials.salary' %}
+        {% endif %}
+
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⤷ {{ route('job.offer', [job.id, job.slug]) }}
+        <br><br>
+    {% endfor %}
+
+    <br>
+{% endfor %}
