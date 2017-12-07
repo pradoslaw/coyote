@@ -254,7 +254,7 @@ class FirmForm extends Form
                 ]
             ])
             ->add('gallery', 'collection', [
-                'label' => 'Zdjęcia',
+                'label' => 'Dodaj zdjęcia',
                 'child_attr' => [
                     'type' => 'child_form',
                     'class' => GalleryForm::class
