@@ -5,6 +5,7 @@ import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';
 import VueThumbnail from '../../components/thumbnail.vue';
 import 'chosen-js';
+import 'intl-tel-input';
 
 /**
  * Cast data from bool to int to properly display radio buttons (0 and 1 instade of true and false).
@@ -320,4 +321,27 @@ $(() => {
     });
 
     $('i[data-toggle="tooltip"]').tooltip();
+
+    require.ensure([], require => {
+        require('intl-tel-input/build/js/utils');
+
+        $('input[type="tel"]').intlTelInput({
+            preferredCountries: ['pl'],
+            separateDialCode: true,
+            nationalMode: true,
+            initialCountry: 'auto',
+            geoIpLookup: function (callback) {
+                $.getJSON('//geo-ip.io/1.0/ip/?callback=?', {}, function (json) {
+                    callback(json.country_code.toLowerCase());
+                });
+            },
+        });
+
+        $('.submit-form').submit(function () {
+            let input = $('input[type="tel"]');
+            let number = input.intlTelInput('getNumber');
+
+            input.val(number.length > 3 ? number : null);
+        });
+    });
 });

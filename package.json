@@ -35,6 +35,7 @@
   "author": "adam-boduch <adam@boduch.net>",
   "license": "MIT",
   "dependencies": {
-    "chosen-js": "^1.7.0"
+    "chosen-js": "^1.7.0",
+    "intl-tel-input": "^12.1.5"
   }
 }
