@@ -11,11 +11,12 @@ return [
     | sending of e-mail. You may specify which one you're using throughout
     | your application here. By default, Laravel is setup for SMTP mail.
     |
-    | Supported: "smtp", "mail", "sendmail", "mailgun", "mandrill", "log"
+    | Supported: "smtp", "sendmail", "mailgun", "mandrill", "ses",
+    |            "sparkpost", "log", "array"
     |
     */
 
-    'driver'     => env('MAIL_DRIVER', 'mail'),
+    'driver'     => env('MAIL_DRIVER', 'smtp'),
     /*
     |--------------------------------------------------------------------------
     | SMTP Host Address
@@ -27,7 +28,7 @@ return [
     |
     */
 
-    'host'       => 'smtp.mailgun.org',
+    'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
     /*
     |--------------------------------------------------------------------------
     | SMTP Host Port
@@ -39,7 +40,7 @@ return [
     |
     */
 
-    'port'       => 587,
+    'port'       => env('MAIL_PORT', 587),
     /*
     |--------------------------------------------------------------------------
     | Global "From" Address
@@ -63,7 +64,7 @@ return [
     |
     */
 
-    'encryption' => 'tls',
+    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
     /*
     |--------------------------------------------------------------------------
     | SMTP Server Username
@@ -75,7 +76,7 @@ return [
     |
     */
 
-    'username'   => null,
+    'username'   => env('MAIL_USERNAME'),
     /*
     |--------------------------------------------------------------------------
     | SMTP Server Password
@@ -87,7 +88,7 @@ return [
     |
     */
 
-    'password'   => null,
+    'password'   => env('MAIL_PASSWORD'),
     /*
     |--------------------------------------------------------------------------
     | Sendmail System Path
@@ -99,18 +100,6 @@ return [
     |
     */
 
-    'sendmail'   => '/usr/sbin/sendmail -bs',
-    /*
-    |--------------------------------------------------------------------------
-    | Mail "Pretend"
-    |--------------------------------------------------------------------------
-    |
-    | When this option is enabled, e-mail will not actually be sent over the
-    | web and will instead be written to your application's logs files so
-    | you may inspect the message. This is great for local development.
-    |
-    */
-
-    'pretend'    => false,
+    'sendmail'   => '/usr/sbin/sendmail -bs'
 
 ];

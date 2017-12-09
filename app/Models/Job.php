@@ -9,6 +9,7 @@ use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Coyote\Services\Eloquent\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\RoutesNotifications;
 
 /**
  * @property int $id
@@ -57,7 +58,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Job extends Model
 {
-    use SoftDeletes, ForUser;
+    use SoftDeletes, ForUser, RoutesNotifications;
     use Searchable {
         getIndexBody as parentGetIndexBody;
     }
@@ -614,6 +615,14 @@ class Job extends Model
         }
 
         return $this->applications()->where('session_id', $sessionId)->exists();
+    }
+
+    /**
+     * @return string
+     */
+    public function routeNotificationForTwilio()
+    {
+        return $this->phone;
     }
 
     /**

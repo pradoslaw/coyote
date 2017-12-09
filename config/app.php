@@ -229,7 +229,9 @@ return [
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         // Fractal
         Spatie\Fractal\FractalServiceProvider::class,
-        Swap\Laravel\SwapServiceProvider::class
+        Swap\Laravel\SwapServiceProvider::class,
+        // Wyslanie SMS po wyslanej aplikacji na dana oferte pracy
+        NotificationChannels\Twilio\TwilioProvider::class
     ],
     /*
     |--------------------------------------------------------------------------

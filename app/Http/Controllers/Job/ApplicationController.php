@@ -7,6 +7,7 @@ use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
 use Coyote\Mail\ApplicationSent;
+use Coyote\Notifications\ApplicationSentNotification;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
@@ -90,6 +91,8 @@ class ApplicationController extends Controller
                 // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
                 $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($application, $job));
             }
+
+            $job->notify(new ApplicationSentNotification($application));
 
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
         });

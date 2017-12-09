@@ -6,16 +6,16 @@ return [
     // ------------------------------------------------------
 
     'ws'        => [
-        'host'   => env('WS_HOST'),
-        'port'   => env('WS_PORT')
+        'host'          => env('WS_HOST'),
+        'port'          => env('WS_PORT')
     ],
 
     // Elasticsearch host and port. In most cases default values will be suitable.
     // ---------------------------------------------------------------------------
 
     'elasticsearch' => [
-        'host'   => env('ELASTICSEARCH_HOST', 'localhost'),
-        'port'   => env('ELASTICSEARCH_PORT', 9200)
+        'host'          => env('ELASTICSEARCH_HOST', 'localhost'),
+        'port'          => env('ELASTICSEARCH_PORT', 9200)
     ],
 
     // OAuth clients.
@@ -69,5 +69,11 @@ return [
     'recaptcha' => [
         'key'           => env('RECAPTCHA_KEY'),
         'secret'        => env('RECAPTCHA_SECRET')
-    ]
+    ],
+
+    'twilio' => [
+        'account_sid'   => env('TWILIO_ACCOUNT_SID'),
+        'auth_token'    => env('TWILIO_AUTH_TOKEN'),
+        'from'          => env('TWILIO_FROM'), // optional
+    ],
 ];

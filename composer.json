@@ -53,7 +53,8 @@
         "mpdf/mpdf": "dev-development",
         "guzzlehttp/oauth-subscriber": "^0.3.0",
         "inacho/php-credit-card-validator": "^1.0",
-        "paylane/client": "^1.1"
+        "paylane/client": "^1.1",
+        "laravel-notification-channels/twilio": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
