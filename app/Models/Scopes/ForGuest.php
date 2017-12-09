@@ -13,7 +13,7 @@ trait ForGuest
      * @param int $guestId
      * @return Builder
      */
-    public function scopeForUser(Builder $builder, $guestId)
+    public function scopeForGuest(Builder $builder, $guestId)
     {
         return $builder->where('guest_id', $guestId);
     }
