@@ -137,7 +137,33 @@
 
 .side-menu {
   li a {
-    padding-left: 2px;
+    padding-left: 0;
+  }
+}
+
+#box-action-bar {
+  border: 1px solid $border-color;
+  border-radius: $border-radius-base;
+
+  .col-lg-6 {
+    padding: 20px 10px;
+
+    &:first-child {
+      border-right: 1px solid $border-color;
+    }
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .btn-refer {
+    border: 1px solid $brand-primary;
+    color: $brand-primary;
+
+    &:hover {
+      background-color: lighten($brand-primary, 50%);
+    }
   }
 }
 

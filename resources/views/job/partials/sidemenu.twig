@@ -1,16 +1,25 @@
 {% import 'components.modals' as modals %}
 
 {% if not job.is_expired %}
-    <div class="box-apply hidden-sm hidden-xs margin-md-bottom">
-        <span class="outline">
+    <div id="box-action-bar" class="row margin-md-bottom">
+        <div class="col-lg-6">
+            {% set attr = is_applied ? {title: 'Już aplikowałeś na tę ofertę pracy', disabled: 'disabled' } : {} %}
+
             {% if job.enable_apply %}
-                <a class="btn btn-primary" href="{{ route('job.application', [job.id]) }}" {{ applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
+                {% set url = route('job.application', [job.id]) %}
             {% elseif is_url(job.getOriginal('recruitment')) %}
-                <a class="btn btn-primary" href="{{ job.getOriginal('recruitment') }}" target="_blank">Aplikuj na to stanowisko</a>
+                {% set url = job.getOriginal('recruitment') %}
+                {% set attr = attr|merge({'target': '_blank'}) %}
             {% else %}
-                <a class="btn btn-primary" href="#apply">Aplikuj na to stanowisko</a>
+                {% set url = "#apply" %}
             {% endif %}
-        </span>
+
+            {{ link_to(url, 'Aplikuj na to stanowisko', attr|merge({class: 'btn btn-primary'})) }}
+        </div>
+
+        <div class="col-lg-6">
+            <a class="btn btn-refer"><i class="fa fa-retweet"></i> Poleć znajomemu</a>
+        </div>
     </div>
 {% endif %}
 
