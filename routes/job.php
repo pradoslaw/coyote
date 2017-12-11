@@ -50,6 +50,11 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->post('Application/{job}', ['uses' => 'ApplicationController@save', 'as' => 'application']);
     $this->post('Upload', ['uses' => 'ApplicationController@upload', 'as' => 'application.upload']);
 
+    // Refer friend
+    // ------------------------------------------------------------------------------
+    $this->get('Refer/{job}', ['uses' => 'ReferController@index', 'as' => 'refer']);
+    $this->post('Refer/{job}', ['uses' => 'ReferController@save']);
+
     // move job offer
     $this->get('Move/{job}', ['uses' => 'MoveController@index', 'as' => 'move', 'middleware' => 'can:job-delete']);
     $this->post('Move/{job}', ['uses' => 'MoveController@move', 'middleware' => 'can:job-delete']);

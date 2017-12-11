@@ -1,0 +1,23 @@
+{% extends 'job.base' %}
+{% block title %}
+    Poleć znajomego na stanowisko "{{ job.title }}" {{ parent() }}
+{% endblock %}
+
+{% block container %}
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
+
+                    {{ form(form) }}
+                </div>
+            </div>
+        </div>
+
+        <aside class="col-md-3">
+            {% include 'job.partials.sidemenu' %}
+            {{ render_block('job_ads') }}
+        </aside>
+    </div>
+{% endblock %}

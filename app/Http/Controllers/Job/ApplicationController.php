@@ -8,6 +8,7 @@ use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
 use Coyote\Mail\ApplicationSent;
 use Coyote\Notifications\ApplicationSentNotification;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
@@ -43,7 +44,7 @@ class ApplicationController extends Controller
 
         $this->breadcrumb->push([
             'Praca'                             => route('job.home'),
-            $job->title                         => route('job.offer', [$job->id, $job->slug]),
+            $job->title                         => UrlBuilder::job($job),
             'Aplikuj na to stanowisko pracy'    => null
         ]);
 
