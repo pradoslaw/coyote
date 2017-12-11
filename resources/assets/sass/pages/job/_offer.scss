@@ -144,12 +144,19 @@
 #box-action-bar {
   border: 1px solid $border-color;
   border-radius: $border-radius-base;
+  overflow: hidden;
 
   .col-lg-6 {
     padding: 20px 10px;
 
     &:first-child {
-      border-right: 1px solid $border-color;
+      @media screen and (min-width: $screen-lg) {
+        border-right: 1px solid $border-color;
+      }
+
+      @media screen and (max-width: $screen-lg) {
+        border-bottom: 1px solid $border-color;
+      }
     }
   }
 
