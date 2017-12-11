@@ -2,11 +2,14 @@
 
 namespace Coyote\Firm;
 
+use Coyote\Services\Media\SerializeClass;
 use Illuminate\Database\Eloquent\Model;
 use Coyote\Services\Media\Factory as MediaFactory;
 
 class Gallery extends Model
 {
+    use SerializeClass;
+
     /**
      * The database table used by the model.
      *
@@ -22,14 +25,18 @@ class Gallery extends Model
     protected $fillable = ['firm_id', 'file'];
 
     /**
-     * @var array
-     */
-    protected $appends = ['photo'];
-
-    /**
      * @var bool
      */
     public $timestamps = false;
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            unset($model->photo);
+        });
+    }
 
     /**
      * @param string $value
