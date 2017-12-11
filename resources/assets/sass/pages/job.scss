@@ -3,6 +3,7 @@
 @import "../helpers/variables";
 @import "../vendor/font-awesome/variables";
 @import "../vendor/bootstrap/variables";
+@import "../vendor/intl-tel-input";
 @import "../components/sidemenu";
 @import "../components/search";
 @import "../components/metadata";
@@ -10,7 +11,6 @@
 @import "job/submit";
 @import "job/payment";
 @import "job/application";
-@import "../../../../node_modules/intl-tel-input/src/css/intlTelInput";
 
 .benefits,
 .features,
