@@ -3,8 +3,8 @@
 namespace Coyote\Console\Commands;
 
 use Coyote\Http\Factories\MailFactory;
+use Coyote\Job\Application;
 use Coyote\Mail\ApplicationSent;
-use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Illuminate\Console\Command;
 
 class ResendApplicationCommand extends Command
@@ -26,33 +26,18 @@ class ResendApplicationCommand extends Command
     protected $description = 'Re-send job\'s offers application.';
 
     /**
-     * @var JobRepositoryInterface
-     */
-    protected $job;
-
-    /**
-     * @param JobRepositoryInterface $job
-     */
-    public function __construct(JobRepositoryInterface $job)
-    {
-        parent::__construct();
-
-        $this->job = $job;
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle()
     {
-        $job = $this->job->findOrFail($this->option('id'));
-        $mailer = $this->getMailFactory();
+        $application = Application::findOrFail($this->option('id'));
 
-        foreach ($job->applications as $application) {
-            // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
-            $mailer->to($this->option('email'))->send(new ApplicationSent($application, $job));
-            $this->line("Sending to: " . $this->option('email'));
-        }
+        $mailer = $this->getMailFactory();
+        $email = $this->option('email') ?: $application->job->email;
+
+        // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
+        $mailer->to($email)->send(new ApplicationSent($application, $application->job));
+        $this->line("Sending to: $email");
 
         $this->line('Done.');
     }
