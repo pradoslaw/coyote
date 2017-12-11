@@ -4,6 +4,7 @@ namespace Coyote;
 
 use Carbon\Carbon;
 use Coyote\Job\Location;
+use Coyote\Models\Job\Refer;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Coyote\Services\Eloquent\HasMany;
@@ -48,6 +49,7 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property Location[] $locations
  * @property Currency[] $currency
  * @property Feature[] $features
+ * @property Refer[] $refers
  * @property int $plan_id
  * @property bool $is_boost
  * @property bool $is_publish
@@ -443,6 +445,14 @@ class Job extends Model
     public function applications()
     {
         return $this->hasMany('Coyote\Job\Application');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function refers()
+    {
+        return $this->hasMany('Coyote\Job\Refer');
     }
 
     /**
