@@ -46,7 +46,7 @@ class ReferController extends BaseController
         $this->transaction(function () use ($job, $form) {
             $target = (new Stream_Job)->map($job);
 
-            $job->refers()->create($form->all());
+            $job->refers()->create($form->all() + ['guest_id' => $this->guestId]);
 
             $mail = (new OfferReferred($job))->with($form->all());
 

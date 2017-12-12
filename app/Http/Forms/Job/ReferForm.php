@@ -12,7 +12,7 @@ class ReferForm extends Form implements ValidatesWhenSubmitted
         $this
             ->add('friend_email', 'email', [
                 'rules' => 'required|string|max:200|email',
-                'label' => 'E-mail',
+                'label' => 'E-mail kandydata',
                 'help' => 'Nie wysyłamy spamu! Obiecujemy.',
                 'attr' => [
                     'placeholder' => 'Np. jan@kowalski.pl'
@@ -21,7 +21,7 @@ class ReferForm extends Form implements ValidatesWhenSubmitted
             ->add('friend_email_confirmation', 'honeypot')
             ->add('friend_name', 'text', [
                 'rules' => 'required|string|max:50',
-                'label' => 'Imię i nazwisko'
+                'label' => 'Imię i nazwisko kandydata'
             ])
             ->add('email', 'email', [
                 'rules' => 'nullable|string|max:200|email',
@@ -32,7 +32,7 @@ class ReferForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Twoje imie i nazwisko (opcjonalnie)'
             ])
             ->add('submit', 'submit', [
-                'label' => 'Poleć znajomego',
+                'label' => 'Poleć znajomemu',
                 'attr' => [
                     'data-submit-state' => 'Wysyłanie...'
                 ]

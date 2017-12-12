@@ -17,6 +17,7 @@ class CreateJobRefersTable extends Migration
         $this->schema->create('job_refers', function (Blueprint $table) {
             $table->increments('id');
             $table->smallInteger('job_id');
+            $table->uuid('guest_id');
             $table->timestampTz('created_at')->default($this->db->raw('CURRENT_TIMESTAMP(0)'));
             $table->string('name')->nullable();
             $table->string('email')->nullable();

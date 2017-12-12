@@ -18,7 +18,7 @@ class Refer extends Model
      *
      * @var array
      */
-    protected $fillable = ['job_id', 'email', 'name', 'phone', 'friend_name', 'friend_email'];
+    protected $fillable = ['guest_id', 'job_id', 'email', 'name', 'phone', 'friend_name', 'friend_email'];
 
     /**
      * @var bool

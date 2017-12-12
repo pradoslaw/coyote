@@ -4,7 +4,7 @@
     <div class="row margin-md-bottom">
         <div class="col-xs-12">
             <div id="box-action-bar">
-                <div class="col-lg-6">
+                <div class="col-xlg-6">
                     {% set attr = is_applied ? {title: 'Już aplikowałeś na tę ofertę pracy', disabled: 'disabled' } : {} %}
 
                     {% if job.enable_apply %}
@@ -19,7 +19,7 @@
                     {{ link_to(url, 'Aplikuj', attr|merge({class: 'btn btn-primary'})) }}
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-xlg-6">
                     <a class="btn btn-refer" href="{{ route('job.refer', [job]) }}"><i class="fa fa-retweet"></i> Poleć znajomemu</a>
                 </div>
             </div>

@@ -146,15 +146,15 @@
   border-radius: $border-radius-base;
   overflow: hidden;
 
-  .col-lg-6 {
-    padding: 20px 10px;
+  .col-xlg-6 {
+    padding: 15px 10px;
 
     &:first-child {
-      @media screen and (min-width: $screen-lg) {
+      @media screen and (min-width: $screen-xlg) {
         border-right: 1px solid $border-color;
       }
 
-      @media screen and (max-width: $screen-lg) {
+      @media screen and (max-width: $screen-xlg) {
         border-bottom: 1px solid $border-color;
       }
     }
