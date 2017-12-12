@@ -225,9 +225,18 @@
   column-count:         3;
   column-gap:           0;
 
-  img {
+  img, .yt {
     width: 100% !important;
     height: auto !important;
+  }
+
+  img {
+    &:hover {
+      background-color: #000;
+      opacity: 0.6;
+      -webkit-transition: .3s ease-in-out;
+      transition: .3s ease-in-out;
+    }
   }
 
   @media (max-width: 800px) {

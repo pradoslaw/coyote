@@ -180,19 +180,19 @@
                 <section>
                     <h3>Praca w {{ job.firm.name }}</h3>
 
-                    {% if job.firm.gallery %}
-                        <div id="gallery">
-                            {% for gallery in job.firm.gallery %}
-                                <a href="{{ gallery.photo.url() }}" data-toggle="lightbox"><img src="{{ gallery.photo.url() }}"></a>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                    <div id="gallery">
+                        {% for gallery in job.firm.gallery %}
+                            <a href="{{ gallery.photo.url() }}" data-toggle="lightbox"><img src="{{ gallery.photo.url() }}"></a>
+                        {% endfor %}
 
-                    {% if job.firm.youtube_url %}
-                        <div class="embed-responsive embed-responsive-16by9 margin-md-top">
-                            <iframe class="embed-responsive-item" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                    {% endif %}
+                        {% if job.firm.youtube_url %}
+                            <div class="yt">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe class="embed-responsive-item" src="{{ job.firm.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
                 </section>
             {% endif %}
 
