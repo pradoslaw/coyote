@@ -51,10 +51,16 @@
                         {% include 'job.partials.salary' %}
                     </p>
                 {% endif %}
+
+                {% if job.referral_bonus %}
+                    <p class="bonus">
+                        <span class="label label-bonus">{{ job.referral_bonus }} zł za polecenie</span>
+                    </p>
+                {% endif %}
             </td>
             <td class="col-time hidden-sm hidden-xs hidden-xxs">
                 {% if diff_in_days(job.boost_at) <= 2 %}
-                    <p><span class="label label-new">Nowe</span></p>
+                    <span class="label label-new">Nowe</span>
                 {% else %}
                     <small class="text-muted" title="{{ job.boost_at|format_date }}">{{ job.boost_at|diff_for_humans }}</small>
                 {% endif %}

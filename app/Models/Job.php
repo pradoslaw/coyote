@@ -235,6 +235,9 @@ class Job extends Model
         "salary" => [
             "type" => "float"
         ],
+        "referral_bonus" => [
+            "type" => "long"
+        ],
         "score" => [
             "type" => "long"
         ],
