@@ -93,6 +93,16 @@
                     <span>Możesz dodawać zdjęcia do Twoich ogłoszeń</span>
                 </li>
             </ul>
+
+            <h2 class="text-center margin-lg-top margin-lg-bottom">Gotowy?</h2>
+
+            <div class="text-center">
+                <span class="outline">
+                    <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-lg btn-primary">Dodaj ofertę pracy</a>
+                </span>
+
+                <p class="margin-md-top">Masz pytania? Skontaktuj się z nami pod adresem <a href="mailto:{{ config('mail.from.address') }}">{{ config('mail.from.address') }}</a>.</p>
+            </div>
         </div>
 
         <div class="col-md-3 hidden-sm hidden-xs">
