@@ -21,7 +21,7 @@
                 {% if not is_plan_ongoing %}
                     {{ form_widget(form.plan_id) }}
 
-                    <vue-pricing :plans="plans" :v-model.sync="job.plan_id"></vue-pricing>
+                    <vue-pricing :plans="plans" :v-model.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
                 {% endif %}
 
                 {{ form_widget(form.id) }}

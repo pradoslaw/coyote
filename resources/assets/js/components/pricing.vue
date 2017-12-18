@@ -49,7 +49,7 @@
 
                 <div class="pull-left margin-xs-left custom-plan-info">
                     Napisz do nas na adres:<br>
-                    <!--<a href="mailto:{{ config('mail.from.address') }}?subject=Interesuje mnie pakiet ogłoszeń. Proszę o przesłanie szczegółów">{{ config('mail.from.address') }}</a>-->
+                    <a :href="'mailto:' + email + '?subject=Interesuje mnie pakiet ogłoszeń. Proszę o przesłanie szczegółów'">{{ email }}</a>
                 </div>
             </div>
         </div>
@@ -64,11 +64,9 @@
             },
             vModel: {
                 type: Number
-            }
-        },
-        data: function() {
-            return {
-
+            },
+            email: {
+                type: String
             }
         },
         methods: {

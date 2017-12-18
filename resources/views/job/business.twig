@@ -2,7 +2,7 @@
 {% block title %}Nasza oferta :: Praca {{ parent() }}{% endblock %}
 
 {% block container %}
-    <div class="row">
+    <div id="business" class="row">
         <div class="col-md-9">
             <h1 class="text-center margin-lg-top margin-lg-bottom">Szukasz programistów do swojego zespołu? <strong>Rekrutuj najlepszych kandydatów z 4programmers.net!</strong></h1>
 
@@ -33,6 +33,8 @@
             </div>
 
             <h2 class="text-center margin-lg-top margin-lg-bottom">Dajemy Ci do dyspozycji 3 atrakcyjne plany taryfowe. <strong>Już od 30 zł netto!</strong></h2>
+
+            <vue-pricing :plans="plans" :v-model.sync="default_plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
 
             <h2 class="text-center margin-lg-top margin-lg-bottom">Co zyskujesz dodając ogłoszenie na 4programmers.net?</h2>
 
@@ -103,4 +105,17 @@
             </section>
         </div>
     </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script>
+        var data = {
+            plans: {{ plans|raw }},
+            default_plan: {{ default_plan|raw }}
+        };
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.11/vue.min.js"></script>
 {% endblock %}

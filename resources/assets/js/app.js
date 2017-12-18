@@ -62,6 +62,14 @@ $(function () {
             'payment'
         );
     })
+    .on('/Praca/Oferta', () => {
+        require.ensure([],
+            require => {
+                require('./pages/job/business');
+            },
+            'business'
+        );
+    })
     .on('/Adm/Firewall/*', () => {
         require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
             require('flatpickr');
