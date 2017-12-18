@@ -4,6 +4,7 @@ import Tags from '../../libs/tags';
 import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';
 import VueThumbnail from '../../components/thumbnail.vue';
+import VuePricing from '../../components/pricing.vue';
 import 'chosen-js';
 import 'intl-tel-input';
 
@@ -30,6 +31,7 @@ function toInt(data) {
 }
 
 Vue.component('vue-thumbnail', VueThumbnail);
+Vue.component('vue-pricing', VuePricing);
 
 new Vue({
     el: '.submit-form',
@@ -249,9 +251,6 @@ new Vue({
         _setupMarker: function () {
             this.map.removeMarker(this.marker);
             this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
-        },
-        changePlan: function (planId) {
-            this.job.plan_id = planId;
         },
         onThumbnailUploaded: function (file) {
             this.firm.gallery.splice(this.firm.gallery.length - 1, 0, file);
