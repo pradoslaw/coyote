@@ -34,7 +34,7 @@ class OfferReferred extends Mailable implements ShouldQueue
     {
         return $this
             ->subject("Rekomendacja kandydata na stanowisko {$this->job->title}")
-//            ->bcc(config('mail.from.address'))
+            ->bcc(config('mail.from.address'))
             ->view('emails.job.refer');
     }
 }

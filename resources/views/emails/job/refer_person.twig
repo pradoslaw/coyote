@@ -5,7 +5,7 @@
 
     <p>
         Jeżeli jesteś zainteresowany tą ofertą pracy, możesz skontaktować się bezpośrednio z rekruterem, klikając na przycisk <em>Odpowiedz</em> lub
-        bezpeśrednio pod adresem: {{ link_to(job.email ?: job.user.email) }}.
+        bezpeśrednio pod adresem: {{ link_to('mailto:' ~ job.email ?: job.user.email, job.email ?: job.user.email) }}.
     </p>
 
     <p>Z poważaniem,<br>{{ config('app.name') }}</p>
