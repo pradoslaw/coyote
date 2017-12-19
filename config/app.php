@@ -109,8 +109,18 @@ return [
     */
 
     'key'             => env('APP_KEY', 'base64:OQUTZfp+RR6GX5fYVUJyASDSAeZPSK3kbEifXRC5CMCY='),
-//    'cipher'          => MCRYPT_RIJNDAEL_128,
     'cipher'          => 'AES-256-CBC',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Disallowed hosts
+    |--------------------------------------------------------------------------
+    |
+    | Hosts used by validator. Users using that hosts can't publish posts without registration.
+    |
+    */
+    'blacklist_host' => ['a2mobile.pl', 'free.aero2.net.pl'],
+
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration

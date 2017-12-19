@@ -35,7 +35,7 @@ class SpamValidator
      * @param array $parameters
      * @return bool
      */
-    public function validateSpamLink($attribute, $value, $parameters)
+    public function validateSpamLink($attribute, $value, $parameters): bool
     {
         if ($this->isContainUrl($value) === false) {
             return true;
@@ -50,7 +50,7 @@ class SpamValidator
      * @param array $parameters
      * @return bool
      */
-    public function validateSpamForeignLink($attribute, $value, $parameters)
+    public function validateSpamForeignLink($attribute, $value, $parameters): bool
     {
         if (!$this->request->server('HTTP_CF_IPCOUNTRY') || 'PL' === $this->request->server('HTTP_CF_IPCOUNTRY')) {
             return true;
@@ -69,13 +69,31 @@ class SpamValidator
      * @param array $parameters
      * @return bool
      */
-    public function validateSpamChinese($attribute, $value, $parameters)
+    public function validateSpamChinese($attribute, $value, $parameters): bool
     {
         if (!$this->isContainChinese($value)) {
             return true;
         }
 
         return $this->auth->check() && $this->auth->user()->reputation >= $parameters[0];
+    }
+
+    /**
+     * @return bool
+     */
+    public function validateBlacklistHost(): bool
+    {
+        if ($this->auth->check()) {
+            return true;
+        }
+
+        foreach (config('app.blacklist_host') as $host) {
+            if (str_contains($this->request->getHost(), $host)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
