@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OfferReferred extends Mailable implements ShouldQueue
+class OfferReferredPerson extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -33,8 +33,8 @@ class OfferReferred extends Mailable implements ShouldQueue
     public function build()
     {
         return $this
-            ->subject("Rekomendacja kandydata na stanowisko {$this->job->title}")
-//            ->bcc(config('mail.from.address'))
-            ->view('emails.job.refer');
+            ->subject("Zostałeś polecony na stanowisko {$this->job->title}")
+            ->replyTo($this->job->email ?: $this->job->user->name, $this->job->user->name)
+            ->view('emails.job.refer_person');
     }
 }

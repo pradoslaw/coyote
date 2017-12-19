@@ -6,6 +6,7 @@ use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Job\ReferForm;
 use Coyote\Job;
 use Coyote\Mail\OfferReferred;
+use Coyote\Mail\OfferReferredPerson;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
@@ -31,6 +32,7 @@ class ReferController extends BaseController
 
         if ($this->userId) {
             $form->get('email')->setValue($this->auth->email);
+            $form->get('name')->setValue($this->auth->name);
         }
 
         return $this->view('job.refer')->with(['form' => $form, 'job' => $job]);
@@ -47,11 +49,10 @@ class ReferController extends BaseController
             $target = (new Stream_Job)->map($job);
 
             $job->refers()->create($form->all() + ['guest_id' => $this->guestId]);
-
-            $mail = (new OfferReferred($job))->with($form->all());
-
             $mailer = $this->getMailFactory();
-            $mailer->to($job->email ?: $job->user->email)->send($mail);
+
+            $mailer->to($job->email ?: $job->user->email)->send((new OfferReferred($job))->with($form->all()));
+            $mailer->to($form->get('friend_email')->getValue())->send((new OfferReferredPerson($job))->with($form->all()));
 
             stream(Stream_Create::class, new Stream_Refer(['displayName' => $form->get('friend_name')->getValue()]), $target);
         });

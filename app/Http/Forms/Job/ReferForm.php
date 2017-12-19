@@ -24,12 +24,12 @@ class ReferForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Imię i nazwisko kandydata'
             ])
             ->add('email', 'email', [
-                'rules' => 'nullable|string|max:200|email',
-                'label' => 'Twój e-mail (opcjonalnie)'
+                'rules' => 'required|string|max:200|email',
+                'label' => 'Twój e-mail'
             ])
             ->add('name', 'text', [
-                'rules' => 'nullable|string|max:50',
-                'label' => 'Twoje imie i nazwisko (opcjonalnie)'
+                'rules' => 'required|string|max:50',
+                'label' => 'Twoje imie i nazwisko'
             ])
             ->add('submit', 'submit', [
                 'label' => 'Poleć znajomemu',
