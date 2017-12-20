@@ -1,6 +1,8 @@
 {% extends 'job.base' %}
 {% block title %}Nasza oferta :: Praca {{ parent() }}{% endblock %}
 
+{% set submit_url = "'" ~ route('job.submit') ~ "?revalidate=1&default_plan=' + default_plan.id" %}
+
 {% block container %}
     <div id="business" class="row">
         <div class="col-md-9">
@@ -94,11 +96,15 @@
                 </li>
             </ul>
 
+            <h2 class="text-center margin-lg-top margin-lg-bottom">Roczna ilość aplikacji wysłanych przez nasz portal</h2>
+
+            <img class="img-responsive" src="{{ cdn('img/job-applications.png') }}" style="margin: auto">
+
             <h2 class="text-center margin-lg-top margin-lg-bottom">Gotowy?</h2>
 
             <div class="text-center">
                 <span class="outline">
-                    <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-lg btn-primary">Dodaj ofertę pracy</a>
+                    <a :href="{{ submit_url }}" class="btn btn-lg btn-primary">Dodaj ofertę pracy</a>
                 </span>
 
                 <p class="margin-md-top">Masz pytania? Skontaktuj się z nami pod adresem <a href="mailto:{{ config('mail.from.address') }}">{{ config('mail.from.address') }}</a>.</p>
@@ -110,7 +116,7 @@
                 <h4>Dla pracodawców</h4>
 
                 <span class="outline">
-                    <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary">Dodaj ofertę pracy</a>
+                    <a :href="{{ submit_url }}" class="btn btn-primary">Dodaj ofertę pracy</a>
                 </span>
             </section>
         </div>
