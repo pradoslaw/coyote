@@ -105,7 +105,7 @@ class LogController extends BaseController
             $log->user_id = $this->userId;
             $log->ip = $this->request->ip();
             $log->browser = $this->request->browser();
-            $log->host = gethostbyaddr($this->request->ip());
+            $log->host = $this->request->getClientHost();
 
             $log->save();
 

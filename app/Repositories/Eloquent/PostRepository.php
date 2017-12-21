@@ -161,7 +161,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
             $post->ip = $form->getRequest()->ip();
             $post->browser = str_limit($form->getRequest()->browser(), 250);
-            $post->host = str_limit(gethostbyaddr($form->getRequest()->ip()), 250);
+            $post->host = str_limit($form->getRequest()->getClientHost(), 250);
         }
 
         $log->fillWithPost($post)->fill(['subject' => $topic->subject, 'tags' => $tags]);
@@ -218,7 +218,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             'user_id'   => $userId,
             'ip'        => request()->ip(),
             'browser'   => request()->browser(),
-            'host'      => gethostbyaddr(request()->ip())
+            'host'      => request()->getClientHost()
         ];
 
         if ($previous->id == $post->topic->first_post_id) {

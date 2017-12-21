@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -125,6 +125,14 @@ class AppServiceProvider extends ServiceProvider
 
         Collection::macro('replace', function ($items) {
             $this->items = $items;
+        });
+
+        Request::macro('getClientHost', function () {
+            if (empty($this->clientHost)) {
+                $this->clientHost = gethostbyaddr($this->ip());
+            }
+
+            return $this->clientHost;
         });
     }
 }

@@ -180,7 +180,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
             $page->logs()->create($page->toArray() + [
                 'user_id'   => $request->user()->id,
                 'ip'        => $request->ip(),
-                'host'      => gethostbyaddr($request->ip()),
+                'host'      => $request->getClientHost(),
                 'browser'   => $request->browser(),
                 'length'    => $length,
                 'diff'      => $diff,

@@ -59,7 +59,7 @@ class SendLockoutEmail
     {
         $data = array_merge(
             $user->toArray(),
-            ['ip' => $this->request->ip(), 'host' => gethostbyaddr($this->request->ip())]
+            ['ip' => $this->request->ip(), 'host' => $this->request->getClientHost()]
         );
 
         $this->mailer->send('emails.auth.lockout', $data, function (Message $message) use ($user) {

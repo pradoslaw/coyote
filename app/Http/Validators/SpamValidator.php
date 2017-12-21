@@ -87,7 +87,7 @@ class SpamValidator
             return true;
         }
 
-        $clientHost = gethostbyaddr($this->request->ip());
+        $clientHost = $this->request->getClientHost();
 
         foreach (config('app.blacklist_host') as $host) {
             if (str_contains($clientHost, $host)) {

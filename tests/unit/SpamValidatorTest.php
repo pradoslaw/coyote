@@ -33,23 +33,23 @@ class SpamValidatorTest extends \Codeception\TestCase\Test
 
     public function testValidateBlacklistHost()
     {
-        $validator = $this->buildValidatorInstance('ip-37-109-33-137.a2mobile.pl');
+        $validator = $this->buildValidatorInstance('37.109.33.137');
         $this->assertFalse($validator->validateBlacklistHost()); // not allowed
 
-        $validator = $this->buildValidatorInstance('ip-5-172-255-186.free.aero2.net.pl');
+        $validator = $this->buildValidatorInstance('5.172.255.186');
         $this->assertFalse($validator->validateBlacklistHost()); // not allowed
 
-        $validator = $this->buildValidatorInstance('epp192.neoplus.adsl.tpnet.pl');
+        $validator = $this->buildValidatorInstance('79.123.67.56');
         $this->assertTrue($validator->validateBlacklistHost()); // allowed
 
-        $validator = $this->buildValidatorInstance('ip-37-109-33-137.a2mobile.pl', true);
+        $validator = $this->buildValidatorInstance('37.109.33.137', true);
         $this->assertTrue($validator->validateBlacklistHost()); // allowed
     }
 
-    private function buildValidatorInstance($userHost, $authorized = false)
+    private function buildValidatorInstance($ip, $authorized = false)
     {
         $request = Mockery::mock(\Illuminate\Http\Request::class);
-        $request->shouldReceive('getHost')->andReturn($userHost);
+        $request->shouldReceive('getClientHost')->andReturn(gethostbyaddr($ip));
 
         app()->instance(\Illuminate\Http\Request::class, $request);
 
