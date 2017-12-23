@@ -281,19 +281,9 @@ $header-footer-border: #c7c7c7;
         margin: 0;
       }
 
-      .bonus {
-        text-transform: uppercase;
-        font-size: 14px;
-        margin: 0;
-      }
-
+      // extra margin that separates two labels
       .salary + .bonus {
         margin-top: 3px;
-      }
-
-      .label-bonus {
-        border: 1px solid #FF7B33;
-        color: #FF7B33;
       }
     }
 
@@ -307,6 +297,17 @@ $header-footer-border: #c7c7c7;
 
     .col-fav {
       width: 40px;
+    }
+
+    .bonus {
+      text-transform: uppercase;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .label-bonus {
+      border: 1px solid #FF7B33;
+      color: #FF7B33;
     }
 
     .btn-subscribe {

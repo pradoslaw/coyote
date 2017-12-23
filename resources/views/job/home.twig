@@ -153,7 +153,7 @@
 
             <div class="clearfix"></div>
 
-            <section class="panel panel-wrapper margin-md-top">
+            <section class="panel panel-wrapper margin-sm-top">
                 <div id="box-jobs" class="panel-body">
                     <ul id="sort" class="hidden-xs">
                         <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: '_score', order: 'desc'})), 'Trafność', {class: 'sort' ~ (sort == '_score' ? ' desc')}) }}</li>

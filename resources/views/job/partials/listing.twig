@@ -32,8 +32,14 @@
                 </p>
 
                 {% if job.salary_from or job.salary_to %}
-                    <p class="salary visible-xs">
+                    <p class="salary visible-xs-inline">
                         {% include 'job.partials.salary' %}
+                    </p>
+                {% endif %}
+
+                {% if job.referral_bonus %}
+                    <p class="bonus visible-xs-inline">
+                        <a href="{{ route('job.refer', [job.id]) }}" class="label label-bonus">{{ job.referral_bonus }} zł za polecenie</a>
                     </p>
                 {% endif %}
 
@@ -54,7 +60,7 @@
 
                 {% if job.referral_bonus %}
                     <p class="bonus">
-                        <span class="label label-bonus">{{ job.referral_bonus }} zł za polecenie</span>
+                        <a href="{{ route('job.refer', [job.id]) }}" class="label label-bonus">{{ job.referral_bonus }} zł za polecenie</a>
                     </p>
                 {% endif %}
             </td>
