@@ -14,13 +14,13 @@ class BlocksTableSeeder extends Seeder
         $content = <<<EOF
 <div id="hire-me"></div> 
 <script>
-    var xhr= new XMLHttpRequest();
-    
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    var xhr = new XMLHttpRequest();
+
     xhr.open('GET', '/Praca/recommendations', true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     
     xhr.onreadystatechange= function() {
-        if (this.readyState !== 4 ) return;
+        if (this.readyState !== 4) return;
         if (this.status !== 200) return;
         
         document.getElementById('hire-me').innerHTML = this.responseText;
