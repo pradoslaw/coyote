@@ -64,11 +64,13 @@ $(() => {
         return false;
     });
 
-    $('#btn-editor').tooltip({html: true, trigger: 'hover', placement: 'right'}).click(() => {
+    $('#btn-editor').click(() => {
         $('#editor').modal('show');
 
         return false;
     });
+
+    $('a[data-toggle="tooltip"]').tooltip({trigger: 'hover'});
 
     /**
      * Reload form after click on "x" button

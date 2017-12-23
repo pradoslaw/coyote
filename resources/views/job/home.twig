@@ -117,87 +117,71 @@
         </aside>
 
         <main class="col-lg-10 col-md-12">
-            <nav>
+            <nav class="pull-left">
                 {{ pagination|raw }}
             </nav>
 
-            <div class="row">
-                <div class="col-md-9">
-                    <section class="panel panel-wrapper">
-                        <div id="box-jobs" class="panel-body">
-                            <ul id="sort" class="hidden-xs">
-                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: '_score', order: 'desc'})), 'Trafność', {class: 'sort' ~ (sort == '_score' ? ' desc')}) }}</li>
-                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'boost_at', order: 'desc'})), 'Data dodania', {class: 'sort' ~ (sort == 'boost_at' ? ' desc')}) }}</li>
-                                <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'salary', order: 'desc'})), 'Wynagrodzenie', {class: 'sort' ~ (sort == 'salary' ? ' desc')}) }}</li>
-                            </ul>
+            <div class="pull-right">
+                <a id="btn-editor" class="btn btn-sm btn-default btn-outline" data-toggle="tooltip" data-placement="top" title="Ustawienie preferencji"><i class="fa fa-fw fa-cog"></i></a>
 
-                            <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary btn-sm pull-right visible-xs visible-sm" style="margin-top: 6px; margin-bottom: 10px" title="Dodaj ofertę pracy zupełnie za darmo!">Dodaj ofertę pracy</a>
+                {% if subscribes|length %}
+                    <div class="dropdown" style="display: inline">
+                        <button class="btn btn-sm btn-default btn-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="fa fa-star fa-fw"></i>
+                        </button>
 
-                            <div class="clearfix"></div>
+                        <ul class="dropdown-menu">
+                            {% for subscribe in subscribes %}
+                                <li>{{ link_to_route('job.offer', subscribe.title, [subscribe.id, subscribe.slug]) }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
 
-                            {% if premium_listing|length > 0 %}
-                                {% include 'job.partials.listing' with {
-                                    listing: premium_listing,
-                                    show_label: true
-                                } %}
-                            {% endif %}
+                {% if user('id') %}
+                    {% if request().route().getName() == 'job.my' %}
+                        {% set route = route('job.home') %}
+                        {% set title = 'Pokaż wszystkie oferty' %}
+                    {% else %}
+                        {% set route = route('job.my') %}
+                        {% set title = 'Pokaż tylko moje oferty' %}
+                    {% endif %}
 
-                            {% include 'job.partials.listing' with {
-                                listing: listing,
-                                show_highlight: true
-                            } %}
-                        </div>
-                    </section>
+                    <a href="{{ route }}" class="btn btn-sm btn-primary btn-outline" data-toggle="tooltip" data-placement="top" title="{{ title }}"><i class="fa fa-fw fa-user"></i></a>
+                {% endif %}
+            </div>
 
-                    <nav>
-                        {{ pagination|raw }}
-                    </nav>
-                </div>
+            <div class="clearfix"></div>
 
-                <aside class="col-md-3">
-                    <ul class="side-menu">
-                        <li><a id="btn-editor"><i class="fa fa-fw fa-cog"></i> Preferencje wyszukiwania</a></li>
-
-                        {% if user('id') %}
-                            {% if request().route().getName() == 'job.my' %}
-                                <li><a href="{{ route('job.home') }}"><i class="fa fa-fw fa-user"></i> Pokaż wszystkie oferty</a></li>
-                            {% else %}
-                                <li><a href="{{ route('job.my') }}"><i class="fa fa-fw fa-user"></i> Pokaż tylko moje oferty</a></li>
-                            {% endif %}
-                        {% endif %}
+            <section class="panel panel-wrapper margin-md-top">
+                <div id="box-jobs" class="panel-body">
+                    <ul id="sort" class="hidden-xs">
+                        <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: '_score', order: 'desc'})), 'Trafność', {class: 'sort' ~ (sort == '_score' ? ' desc')}) }}</li>
+                        <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'boost_at', order: 'desc'})), 'Data dodania', {class: 'sort' ~ (sort == 'boost_at' ? ' desc')}) }}</li>
+                        <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'salary', order: 'desc'})), 'Wynagrodzenie', {class: 'sort' ~ (sort == 'salary' ? ' desc')}) }}</li>
                     </ul>
 
-                    {% if subscribes|length %}
-                        <section class="box sidebar-job-offers">
-                            <h4><i class="fa fa-star fa-fw"></i> Obserwowane oferty pracy</h4>
+                    <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary btn-sm pull-right visible-xs visible-sm" style="margin-top: 6px; margin-bottom: 10px" title="Dodaj ofertę pracy">Dodaj ofertę pracy</a>
 
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    {% include 'components.jobs' with {jobs: subscribes} %}
-                                </div>
-                            </div>
-                        </section>
+                    <div class="clearfix"></div>
+
+                    {% if premium_listing|length > 0 %}
+                        {% include 'job.partials.listing' with {
+                            listing: premium_listing,
+                            show_label: true
+                        } %}
                     {% endif %}
 
-                    {% if auth_check() and not user('location') and not preferenecs.city and request().get('geocode').city %}
-                        <section class="box">
-                            <h4><i class="fa fa-map-marker fa-fw"></i> Ustaw lokalizację</h4>
+                    {% include 'job.partials.listing' with {
+                        listing: listing,
+                        show_highlight: true
+                    } %}
+                </div>
+            </section>
 
-                            <div class="panel panel-warning alert-warning">
-                                <div class="panel-body text-center">
-                                    <p class="lead">Czy pochodzisz z: <strong>{{ request().get('geocode').city }}</strong>?</p>
-
-                                    <p class="margin-md-bottom text-justify">Ustaw swoją lokalizację w panelu użytkownika, abyśmy mogli wyświetlać oferty pracy dopasowane do Twojego regionu.</p>
-
-                                    <a href="{{ route('user.settings') }}" class="btn btn-warning">Ustaw lokalizację</a>
-                                </div>
-                            </div>
-                        </section>
-                    {% endif %}
-
-                    {{ render_block('job_ads') }}
-                </aside>
-            </div>
+            <nav>
+                {{ pagination|raw }}
+            </nav>
         </main>
     </div>
 
@@ -228,7 +212,6 @@
                         <div class="form-group" data-column="tags">
                             <label>Interesują mnie technologie</label>
 
-                            {#{{ form_text('tags', preferences.tags|join(', '), {class: 'form-control', placeholder: 'Np. .net, c#', id: 'tags'}) }}#}
                             <input type="text" name="tags" class="form-control" placeholder="Np. .net, c#" id="tags" value="{{ preferences.tags|join(', ') }}">
 
                             <span class="help-block"></span>
@@ -298,9 +281,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
-
 {% endblock %}

@@ -21,3 +21,18 @@
 .btn-warning {
   @include gradient-vertical(lighten($brand-warning, 5%), $brand-warning);
 }
+
+.btn-outline {
+  background: none;
+
+  @each $selector, $color in (btn-primary, $brand-primary), (btn-default, #444), (btn-warning, $brand-warning) {
+    &.#{$selector} {
+      color: #{$color};
+
+      &:hover {
+        color: #fff;
+        background: $color;
+      }
+    }
+  }
+}

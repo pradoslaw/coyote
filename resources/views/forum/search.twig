@@ -15,7 +15,7 @@
     <main id="mainbar">
         <div class="row">
             <div id="box-search" class="col-md-7 col-sm-12 col-xs-12">
-                {{ form_open({'method': 'GET', 'role': 'form', 'url': route('forum.search'), 'class': 'form-inline outline', 'id': 'box-search'}) }}
+                {{ form_open({'method': 'GET', 'role': 'form', 'url': route('forum.search'), 'class': 'form-inline edge', 'id': 'box-search'}) }}
                     <div class="form-group input-keywords col-sm-5 col-xs-5">
                         <div class="col-content">
                             {{ form_input('search', 'q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}

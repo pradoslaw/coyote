@@ -34,8 +34,6 @@ class HomeController extends BaseController
         parent::__construct($job);
         $this->tag = $tag;
 
-        $this->middleware('geocode');
-
         $this->middleware(function (Request $request, $next) {
             $this->builder = new SearchBuilder($request);
 
