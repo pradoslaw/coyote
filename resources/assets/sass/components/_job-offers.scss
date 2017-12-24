@@ -8,29 +8,41 @@
 }
 
 #hire-me {
-  > .green {
-    > .panel-default {
-      border: 2px solid lighten($brand-primary, 5%);
-    }
+  // Default border color
+  // -----------------------
+  .panel-default {
+    border: 2px solid $brand-primary;
   }
 
-  > .green-dashed {
-    > .panel-default {
-      border: 2px dashed lighten($brand-primary, 5%);
-    }
-  }
-
-  // Headline image
+  // Default headline background
   // -----------------
+  .panel-heading {
+    text-align: center;
+    background-color: $brand-primary;
+    background-image: url('/img/escheresque.png');
 
-  h4 {
-    a {
-      background: url("/img/search-headline.png") no-repeat;
-      text-indent: -9999px;
-      height: 25px;
-      display: block;
-      background-size: contain;
+    h4 {
+      margin: 0;
+      color: #fff;
     }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    // tag logo
+    img {
+      max-width: 30px;
+      border-radius: 50%;
+      margin-left: 5px;
+      padding: 2px;
+      background-color: #fff;
+    }
+  }
+
+  .panel-body {
+    padding: 10px;
   }
 
   .media {
@@ -43,6 +55,19 @@
         color: darken($brand-primary, 10%);
         font-weight: bold;
         font-size: $font-size-small;
+      }
+    }
+  }
+
+  // custom language styles
+  @each $name, $color in (java, #5484a4), (javascript, #E0C536) {
+    > .#{$name} {
+      > .panel-default {
+        border: 2px solid $color;
+
+        .panel-heading {
+          background-color: $color;
+        }
       }
     }
   }
@@ -79,10 +104,8 @@
     padding-bottom: 7px;
     padding-top: 7px;
 
-    &:hover {
-      h5 {
-        color: $link-color-darker;
-      }
+    h5 {
+      color: $link-color-darker;
     }
   }
 

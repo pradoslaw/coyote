@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
 use Coyote\Services\Elasticsearch\Raw;
 use Coyote\Services\Skills\Predictions;
@@ -16,14 +17,21 @@ class AdController extends Controller
     private $job;
 
     /**
-     * @param JobRepository $job
+     * @var TagRepository
      */
-    public function __construct(JobRepository $job)
+    private $tag;
+
+    /**
+     * @param JobRepository $job
+     * @param TagRepository $tag
+     */
+    public function __construct(JobRepository $job, TagRepository $tag)
     {
         debugbar()->disable();
         parent::__construct();
 
         $this->job = $job;
+        $this->tag = $tag;
 
         $this->middleware('geocode');
     }
@@ -49,10 +57,20 @@ class AdController extends Controller
             return '';
         }
 
+        $tags = array_keys($tags);
+
         // search jobs that might be interesting for user
-        return (string) view('job.ad', $data, ['jobs' => $result->getSource(), 'tags' => array_keys($tags)]);
+        return (string) view(
+            'job.ad',
+            $data,
+            ['jobs' => $result->getSource(), 'inverse_tags' => $tags, 'major_tag' => $this->getMajorTag($tags)]
+        );
     }
 
+    /**
+     * @param array $assoc
+     * @return array
+     */
     private function boost($assoc)
     {
         $result = [];
@@ -64,5 +82,18 @@ class AdController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $tags
+     * @return array|\Coyote\Tag
+     */
+    private function getMajorTag($tags)
+    {
+        if (empty($tags)) {
+            return [];
+        }
+
+        return $this->tag->findBy('name', $tags[0]);
     }
 }

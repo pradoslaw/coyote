@@ -1,11 +1,8 @@
-{% set variant = random(['null', 'green', 'green-dashed']) %}
-
-<script>var __job_variant = '{{ variant }}';</script>
-
-<section class="box sidebar-job-offers {{ variant }}">
-    <h4><a href="{{ route('job.home') }}" title="Szukaj pracy jako programista">Oferty pracy</a></h4>
-
+<section class="box sidebar-job-offers {{ major_tag ? major_tag.name }}">
     <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4><a href="{{ route('job.home') }}" title="Szukaj pracy jako programista">Szukaj pracy {{ (major_tag ? (' w ' ~ (major_tag.getOriginal('logo') ? ('<img src="' ~ logo(major_tag.logo) ~ '">') : major_tag.real_name|default(major_tag.name))))|raw }}</a></h4>
+        </div>
         <div class="panel-body">
             {% include 'components.jobs' %}
 
