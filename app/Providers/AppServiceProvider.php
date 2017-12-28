@@ -128,16 +128,15 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Request::macro('getClientHost', function () {
-            return '';
-//            if (app()->runningUnitTests()) {
-//                return '';
-//            }
-//
-//            if (empty($this->clientHost)) {
-//                $this->clientHost = gethostbyaddr($this->ip());
-//            }
-//
-//            return $this->clientHost;
+            if (app()->environment() !== 'production') {
+                return '';
+            }
+
+            if (empty($this->clientHost)) {
+                $this->clientHost = gethostbyaddr($this->ip());
+            }
+
+            return $this->clientHost;
         });
     }
 }
