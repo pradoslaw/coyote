@@ -11,27 +11,27 @@ class BlocksTableSeeder extends Seeder
      */
     public function run()
     {
-//        $content = <<<EOF
-//<div id="hire-me"></div>
-//<script>
-//    var xhr = new XMLHttpRequest();
-//
-//    xhr.open('GET', '/Praca/recommendations', true);
-//    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-//
-//    xhr.onreadystatechange= function() {
-//        if (this.readyState !== 4) return;
-//        if (this.status !== 200) return;
-//
-//        document.getElementById('hire-me').innerHTML = this.responseText;
-//    };
-//    xhr.send();
-//</script>
-//EOF;
-//        \Coyote\Block::create([
-//            'name' => 'job_ads',
-//            'content' => sprintf($content, route('job.home', [], false))
-//        ]);
+        $content = <<<EOF
+<div id="hire-me"></div> 
+<script>
+    var xhr= new XMLHttpRequest();
+    
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.open('GET', '/Praca/recommendations', true);
+    
+    xhr.onreadystatechange= function() {
+        if (this.readyState !== 4 ) return;
+        if (this.status !== 200) return;
+        
+        document.getElementById('hire-me').innerHTML = this.responseText;
+    };
+    xhr.send();
+</script>
+EOF;
+        \Coyote\Block::create([
+            'name' => 'job_ads',
+            'content' => sprintf($content, route('job.home', [], false))
+        ]);
 
         $content = <<<EOF
 <div class="row max-width">
