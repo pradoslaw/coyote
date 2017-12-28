@@ -128,8 +128,12 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Request::macro('getClientHost', function () {
-            if (empty($this->clientHost) && app()->environment() !== 'testing') {
-//                $this->clientHost = gethostbyaddr($this->ip());
+            if (app()->runningUnitTests()) {
+                return '';
+            }
+
+            if (empty($this->clientHost)) {
+                $this->clientHost = gethostbyaddr($this->ip());
             }
 
             return $this->clientHost;

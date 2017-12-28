@@ -18,8 +18,7 @@ class MicroblogCest
 
         $I->amOnPage('/Mikroblogi');
         $I->submitForm('.microblog-submit', ['text' => '']);
-        $I->wait(1);
-        $I->canSee('Proszę wpisać treść');
+        $I->waitForText('Proszę wpisać treść');
     }
 
     // tests
