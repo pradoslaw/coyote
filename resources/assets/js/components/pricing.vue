@@ -2,7 +2,7 @@
     <div>
         <div id="plan-table" class="clearfix margin-lg-top margin-lg-bottom">
             <ul class="plan-benefits">
-                <li><div>Publikacja ogłoszenia na okres <strong>30 dni</strong></div></li>
+                <li><div>Publikacja ogłoszenia na okres <strong>40 dni</strong></div></li>
                 <li>
                     <div>
                         <strong>Reklama</strong> oferty na forum i stronie głównej

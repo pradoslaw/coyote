@@ -327,13 +327,13 @@ class JobPostingCest
 
         $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
         $I->assertNotEmpty($payment->invoice);
-        $I->assertEquals(30, $payment->days);
+        $I->assertEquals(40, $payment->days);
         $I->assertTrue($job->is_publish);
 
         $I->assertEquals(null, $invoice->country_id);
 
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
-        $I->assertEquals(30, $item->price);
+        $I->assertEquals(40, $item->price);
         $I->assertEquals(1.23, $item->vat_rate);
     }
 
@@ -389,7 +389,7 @@ class JobPostingCest
 
         $I->assertEquals(\Coyote\Payment::PAID, $payment->status_id);
         $I->assertNotEmpty($payment->invoice);
-        $I->assertEquals(30, $payment->days);
+        $I->assertEquals(40, $payment->days);
 
         /** @var \Coyote\Invoice\Item $item */
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
@@ -500,7 +500,7 @@ class JobPostingCest
 
         $payment = $I->haveRecord(
             \Coyote\Payment::class,
-            ['job_id' => $job->id, 'plan_id' => $plan->id, 'status_id' => \Coyote\Payment::NEW, 'days' => 30]
+            ['job_id' => $job->id, 'plan_id' => $plan->id, 'status_id' => \Coyote\Payment::NEW, 'days' => 40]
         );
 
         $I->amOnRoute('job.payment', [$payment->id]);
