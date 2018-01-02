@@ -333,7 +333,7 @@ class JobPostingCest
         $I->assertEquals(null, $invoice->country_id);
 
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
-        $I->assertEquals(40, $item->price);
+        $I->assertEquals(30, $item->price);
         $I->assertEquals(1.23, $item->vat_rate);
     }
 
