@@ -84,6 +84,20 @@
   }
 }
 
+.tag-clouds-skills {
+  > li {
+    margin-right: 10px;
+
+    > a {
+      font-size: 11px;
+    }
+
+    .fa {
+      font-size: 8px;
+    }
+  }
+}
+
 .tag-dropdown {
   border: 2px solid #DDD;
   list-style-type: none;

@@ -71,30 +71,17 @@
     }
   }
 
-  .tags {
-    .must-have {
-      text-indent: -9999px;
-      background: url('/img/hand-writing-must-have.png') no-repeat;
-      height: 30px;
-
-      @media screen and (max-width: $screen-sm) {
-        display: none;
-      }
+  .requirements {
+    .col-sm-6 {
+      margin-bottom: 10px;
     }
 
-    .nice-to-have {
-      text-indent: -9999px;
-      background: url('/img/hand-writing-nice-to-have.png') no-repeat;
-      height: 45px;
-      position: absolute;
-      z-index: 0; // 0 so tags can be clickable
-      width: 200px;
-      left: -27px;
-      top: 11px;
-
-      @media screen and (max-width: $screen-sm) {
-        display: none;
-      }
+    strong {
+      color: $gray-light;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid $border-color;
+      display: block;
     }
   }
 

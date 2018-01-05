@@ -45,8 +45,6 @@ class OfferController extends Controller
             }
         }
 
-        $tags = $job->tags()->get()->groupBy('pivot.priority');
-
         if ($job->firm_id) {
             $job->firm->description = $parser->parse((string) $job->firm->description);
         }
@@ -68,9 +66,11 @@ class OfferController extends Controller
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
             'is_applied'        => $job->applications()->forGuest($this->guestId)->exists(),
             'previous_url'      => $this->request->session()->get('current_url'),
-            'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null
+            'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
+            // tags along with grouped category
+            'tags'              => $job->tags()->with('category')->get()->groupBy('category.name')
         ])->with(
-            compact('job', 'tags', 'flag', 'mlt')
+            compact('job', 'requirements', 'flag', 'mlt')
         );
     }
 }

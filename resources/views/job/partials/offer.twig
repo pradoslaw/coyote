@@ -1,13 +1,5 @@
 {% set preview = preview|default(false) %}
 
-{% macro display_tags(tags) %}
-    <ul class="tag-clouds">
-        {% for tag in tags %}
-            <li><a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.name }}">{{ tag.name }}</a></li>
-        {% endfor %}
-    </ul>
-{% endmacro %}
-
 <div id="job-offer" class="panel-body">
     <div class="media">
         {% if job.firm.logo %}
@@ -107,33 +99,33 @@
             </ul>
 
             {% if tags|length > 0 %}
-                <div class="tags">
+                <section class="requirements">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <h5 class="must-have">Wymagane</h5>
-                        </div>
+                        {% set index = tags|length >= 3 ? 3 : 6 %}
 
-                        {% if tags[0] %}
-                            <div class="col-sm-6">
-                                <h5 class="nice-to-have">Mile widziane</h5>
+                        {% for category, tags in tags %}
+                            <div class="col-sm-{{ index }}">
+                                <strong>{{ category }}</strong>
+
+                                <ul class="tag-clouds tag-clouds-skills">
+                                    {% for tag in tags %}
+                                        <li>
+                                            <a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.real_name|default(tag.name) }}">{{ tag.real_name|default(tag.name) }}</a>
+
+                                            {% for i in 0..tag.pivot.priority %}
+                                                <i class="fa fa-circle text-primary"></i>
+                                            {% endfor %}
+
+                                            {% for i in 0..1 - tag.pivot.priority %}
+                                                <i class="fa fa-circle text-muted"></i>
+                                            {% endfor %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </div>
-                        {% endif %}
+                        {% endfor %}
                     </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            {% if tags[1] %}
-                                {{ _self.display_tags(tags[1]) }}
-                            {% else %}
-                                --
-                            {% endif %}
-                        </div>
-
-                        <div class="col-sm-6">
-                            {{ _self.display_tags(tags[0]) }}
-                        </div>
-                    </div>
-                </div>
+                </section>
             {% endif %}
 
             {% if job.description %}
