@@ -28,6 +28,14 @@
     }
   }
 
+  .media-object {
+    width: 70px;
+
+    @media screen and (max-width: $screen-sm) {
+      display: none;
+    }
+  }
+
   h1 {
     font-size: 22px;
     margin-bottom: 10px;
@@ -72,24 +80,12 @@
   }
 
   .requirements {
-    .col-sm-6 {
-      margin-bottom: 10px;
-    }
-
     strong {
       color: $gray-light;
       padding-bottom: 5px;
       margin-bottom: 10px;
       border-bottom: 1px solid $border-color;
       display: block;
-    }
-  }
-
-  .media-object {
-    width: 70px;
-
-    @media screen and (max-width: $screen-sm) {
-      display: none;
     }
   }
 
