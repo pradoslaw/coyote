@@ -53,7 +53,16 @@ class Predictions
         }
 
         // filter only tags present in job offers
-        return $this->tag->whereIn('name', array_keys($tags))->join('job_tags', 'tag_id', '=', 'tags.id')->pluck('name')->toArray();
+        return $this->filter($tags);
+    }
+
+    /**
+     * @param array $tags
+     * @return array
+     */
+    private function filter(array $tags): array
+    {
+        return $this->tag->whereIn('name', $tags)->join('job_tags', 'tag_id', '=', 'tags.id')->pluck('name')->toArray();
     }
 
     /**
@@ -77,7 +86,7 @@ class Predictions
             return [];
         }
 
-        return array_combine($page->tags, array_fill(0, count($page->tags), 1));
+        return $page->tags;
     }
 
     /**
@@ -97,9 +106,8 @@ class Predictions
 
         // get only five top tags
         $ratio = array_slice($ratio, 0, 4);
-        $rand = array_rand($ratio);
 
         // only one tag please...
-        return [$rand => $ratio[$rand]];
+        return [array_rand($ratio)];
     }
 }

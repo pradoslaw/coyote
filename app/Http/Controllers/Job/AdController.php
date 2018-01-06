@@ -57,8 +57,6 @@ class AdController extends Controller
             return '';
         }
 
-        $tags = array_keys($tags);
-
         // search jobs that might be interesting for user
         return (string) view(
             'job.ad',
@@ -75,9 +73,9 @@ class AdController extends Controller
     {
         $result = [];
 
-        foreach ($assoc as $tag => $ratio) {
+        foreach ($assoc as $tag) {
             if (!empty($tag)) {
-                $result[] = sprintf('%s^%.1F', Raw::escape($tag), 1 + $ratio);
+                $result[] = sprintf('%s^%.1F', Raw::escape($tag), 1);
             }
         }
 
