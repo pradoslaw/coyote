@@ -3,6 +3,7 @@
 namespace Coyote\Services\Skills;
 
 use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
+use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 
@@ -24,15 +25,22 @@ class Predictions
     protected $guest;
 
     /**
+     * @var TagRepository
+     */
+    protected $tag;
+
+    /**
      * @param Request $request
      * @param PageRepository $page
      * @param GuestRepository $guest
+     * @param TagRepository $tag
      */
-    public function __construct(Request $request, PageRepository $page, GuestRepository $guest)
+    public function __construct(Request $request, PageRepository $page, GuestRepository $guest, TagRepository $tag)
     {
         $this->request = $request;
         $this->page = $page;
         $this->guest = $guest;
+        $this->tag = $tag;
     }
 
     /**
@@ -44,7 +52,8 @@ class Predictions
             $tags = $this->getUserPopularTags();
         }
 
-        return $tags;
+        // filter only tags present in job offers
+        return $this->tag->whereIn('name', array_keys($tags))->join('job_tags', 'tag_id', '=', 'tags.id')->pluck('name')->toArray();
     }
 
     /**
@@ -86,6 +95,7 @@ class Predictions
         $ratio = $guest->interests['ratio'];
         arsort($ratio);
 
+        // get only five top tags
         $ratio = array_slice($ratio, 0, 4);
         $rand = array_rand($ratio);
 
