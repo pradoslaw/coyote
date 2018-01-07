@@ -1,11 +1,11 @@
 import '../../plugins/uploader';
 import initTinymce from '../../libs/tinymce';
-// import Tags from '../../libs/tags';
 import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';
 import VueThumbnail from '../../components/thumbnail.vue';
 import VuePricing from '../../components/pricing.vue';
 import VueTagsDropdown from '../../components/tags-dropdown.vue';
+import VueTagsContainer from '../../components/tags-container.vue';
 import 'chosen-js';
 import 'intl-tel-input';
 
@@ -34,6 +34,7 @@ function toInt(data) {
 Vue.component('vue-thumbnail', VueThumbnail);
 Vue.component('vue-pricing', VuePricing);
 Vue.component('vue-tags-dropdown', VueTagsDropdown);
+Vue.component('vue-tags-container', VueTagsContainer);
 
 new Vue({
     el: '.submit-form',
@@ -57,16 +58,6 @@ new Vue({
             });
         }
 
-        // this.tagComponent = new Tags({
-        //     onSelect: (value) => {
-
-        //     }
-        // });
-
-        // $('#tags-container').each(function () {
-        //     $(this).sortable();
-        // });
-
         // ugly hack to initialize jquery fn after dom is loaded
         $(() => {
             $.uploader({
@@ -83,6 +74,7 @@ new Vue({
         });
 
         $('[v-loader]').remove();
+        this._initTooltip();
 
         $('#industries').chosen({
             placeholder_text_multiple: 'Wybierz z listy'
@@ -103,6 +95,8 @@ new Vue({
             $.get(this.suggestionUrl, {t: pluck}, result => {
                 this.suggestions = result;
             });
+
+            this._initTooltip();
         },
         removeTag: function (index) {
             this.tags.splice(index, 1);
@@ -266,6 +260,9 @@ new Vue({
             if (index > -1) {
                 this.firm.gallery.splice(index, 1);
             }
+        },
+        _initTooltip: function () {
+            $('i[data-toggle="tooltip"]').tooltip();
         }
     },
     computed: {
@@ -323,8 +320,6 @@ $(() => {
     $('.btn-save').on('click', () => {
         $('input[name="done"]').val(1);
     });
-
-    $('i[data-toggle="tooltip"]').tooltip();
 
     require.ensure([], require => {
         require('intl-tel-input/build/js/utils');

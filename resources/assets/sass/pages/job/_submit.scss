@@ -101,26 +101,12 @@ $font-size-control-label: 15px;
 // -----------------------------------------------
 
 #tags-container {
-  > .row {
-    cursor: move;
-  }
-
-  .tag-clouds {
-    display: inline;
-
-    a {
-      margin-top: 0;
-      cursor: move;
+  .tag-clouds-skills {
+    > li .fa {
+      font-size: 10px;
+      margin-right: 4px;
+      cursor: pointer;
     }
-  }
-
-  .radio {
-    font-size: 12px;
-    color: $gray;
-  }
-
-  input[type=radio]:focus {
-    outline: 0;
   }
 }
 

@@ -107,7 +107,7 @@
                             <div class="col-sm-{{ index }}">
                                 <strong>{{ category }}</strong>
 
-                                <ul class="tag-clouds tag-clouds-skills">
+                                <ul class="tag-clouds tag-clouds-md tag-clouds-skills">
                                     {% for tag in tags %}
                                         <li>
                                             <a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.real_name|default(tag.name) }}">{{ tag.real_name|default(tag.name) }}</a>

@@ -93,7 +93,7 @@
                             <vue-tags-dropdown id="tag" :tags="popular_tags" @change="onTagChange"></vue-tags-dropdown>
 
                             <span class="help-block" v-if="errors.tags != null">${ errors.tags[0] }</span>
-                            <span class="help-block" v-else-if="suggestions.length == 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
+                            <span class="help-block" v-else-if="suggestions.length === 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
                             <span class="help-block" v-else-if="suggestions.length > 0">
                                 Podpowiedź:
 
@@ -103,35 +103,7 @@
                             </span>
 
                             <div id="tags-container" class="margin-md-top">
-                                <div v-for="(tag, index) in tags" class="row tag-item margin-sm-bottom">
-                                    <div class="col-xs-5">
-                                        <ol class="tag-clouds">
-                                            <li><a href="javascript:" title="Chwyć, aby przenieść na dół lub na górę">${ tag.name }</a></li>
-                                        </ol>
-                                    </div>
-
-                                    <input type="hidden" :name="'tags[' + index + '][name]'" :value="tag.name" class="tag-name">
-
-                                    <div class="col-xs-6">
-                                        <div class="radio radio-primary radio-inline">
-                                            <input type="radio" :name="'tags[' + index + '][priority]'" v-model="tag.pivot.priority" value="1" :id="tag.name + '-must-have'">
-
-                                            <label :for="tag.name + '-must-have'"> Wymagane </label>
-                                        </div>
-                                        <div class="radio radio-inline">
-                                            <input type="radio" :name="'tags[' + index + '][priority]'" v-model="tag.pivot.priority" value="0" :id="tag.name + '-nice-to-have'">
-
-                                            <label :for="tag.name + '-nice-to-have'"> Mile widziane </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xs-1">
-                                        <a class="btn-xs btn-remove pull-right" href="javascript:" title="Kliknij, aby usunąć tag" @click="removeTag(index)">
-                                            <i class="fa fa-remove text-danger"></i>
-                                        </a>
-                                    </div>
-                                </div>
-
+                                <vue-tags-container :tags="tags" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']"></vue-tags-container>
                             </div>
                         </div>
                     </div>

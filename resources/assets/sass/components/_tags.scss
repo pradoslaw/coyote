@@ -66,20 +66,22 @@
   }
 }
 
-.tag-clouds-sm {
-  > li {
-    > a,
-    > span {
-      padding: 1px 6px;
+@each $name, $paddingX, $paddingY in (tag-clouds-xs, 1px, 4px), (tag-clouds-sm, 1px, 6px) {
+  .#{$name} {
+    > li {
+      > a,
+      > span {
+        padding: $paddingX $paddingY;
+      }
     }
   }
 }
 
-.tag-clouds-xs {
+.tag-clouds-md {
   > li {
     > a,
     > span {
-      padding: 1px 4px;
+      font-size: 11px;
     }
   }
 }
@@ -87,10 +89,6 @@
 .tag-clouds-skills {
   > li {
     margin-right: 10px;
-
-    > a {
-      font-size: 11px;
-    }
 
     .fa {
       font-size: 8px;

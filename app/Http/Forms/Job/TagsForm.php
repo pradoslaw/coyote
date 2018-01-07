@@ -13,7 +13,7 @@ class TagsForm extends Form
                 'rules' => 'max:50|tag'
             ])
             ->add('priority', 'text', [
-                'rules' => 'required|int|min:0|max:1'
+                'rules' => 'required|int|min:0|max:2'
             ]);
     }
 }
