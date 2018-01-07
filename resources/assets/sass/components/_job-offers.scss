@@ -60,7 +60,7 @@
   }
 
   // custom language styles
-  @each $name, $color in (java, #5484a4), (javascript, #E0C536), (csharp, #873B89), (php, #AABDD6), (python, #447C9C) {
+  @each $name, $color in (java, #5484a4), (javascript, #E0C536), (csharp, #873B89), (php, #AABDD6), (python, #447C9C), (cpp, #649CD3), (c, #ACBCCC) {
     > .#{$name} {
       > .panel-default {
         border: 2px solid $color;
