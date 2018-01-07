@@ -62,7 +62,7 @@ class Predictions
      */
     private function filter(array $tags): array
     {
-        return $this->tag->whereIn('name', $tags)->join('job_tags', 'tag_id', '=', 'tags.id')->pluck('name')->toArray();
+        return $this->tag->select('name')->whereIn('name', $tags)->join('job_tags', 'tag_id', '=', 'tags.id')->groupBy('name')->pluck('name')->toArray();
     }
 
     /**
