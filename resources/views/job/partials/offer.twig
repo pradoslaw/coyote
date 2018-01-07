@@ -101,10 +101,10 @@
             {% if tags|length > 0 %}
                 <section class="requirements">
                     <div class="row">
-                        {% set index = tags|length >= 3 ? 3 : 6 %}
+                        {% set cols = tags|length >= 3 ? 3 : 6 %}
 
                         {% for category, tags in tags %}
-                            <div class="col-sm-{{ index }}">
+                            <div class="col-sm-{{ cols }}">
                                 <strong>{{ category }}</strong>
 
                                 <ul class="tag-clouds tag-clouds-md tag-clouds-skills">
@@ -116,9 +116,11 @@
                                                 <i class="fa fa-circle text-primary"></i>
                                             {% endfor %}
 
-                                            {% for i in 0..1 - tag.pivot.priority %}
-                                                <i class="fa fa-circle text-muted"></i>
-                                            {% endfor %}
+                                            {% if tag.pivot.priority < 2 %}
+                                                {% for i in 0..max(0, 1 - tag.pivot.priority) %}
+                                                    <i class="fa fa-circle text-muted"></i>
+                                                {% endfor %}
+                                            {% endif %}
                                         </li>
                                     {% endfor %}
                                 </ul>
