@@ -246,7 +246,7 @@ class SubmitController extends Controller
 
             if ($job->firm->is_private) {
                 $job->firm()->dissociate();
-                // firm name is required to save firm
+            // firm name is required to save firm
             } elseif ($job->firm->name) {
                 // user might click on "add new firm" button in form. make sure user_id is set up.
                 $job->firm->setDefaultUserId($this->userId);
