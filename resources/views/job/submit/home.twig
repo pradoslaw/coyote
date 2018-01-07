@@ -90,7 +90,7 @@
                         <div class="form-group has-feedback" :class="{'has-error': errors.tags != null}">
                             <label class="control-label">Kluczowe technologie (wymagane lub mile widziane)</label>
 
-                            {{ form_text('tag', '', {'id': 'tag', 'class': 'form-control', 'placeholder': 'Np. Java, MS-SQL', 'autocomplete': 'off', 'data-post-url': route('job.submit.tag'), 'data-suggestions-url': route('job.tag.suggestions')}) }}
+                            <vue-tags-dropdown id="tag" :tags="popular_tags" @change="onTagChange"></vue-tags-dropdown>
 
                             <span class="help-block" v-if="errors.tags != null">${ errors.tags[0] }</span>
                             <span class="help-block" v-else-if="suggestions.length == 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
@@ -101,12 +101,6 @@
                                     <a href="javascript:" class="tag-suggestion" @click="addTag(suggestion)">${ suggestion }</a>${ index < suggestions.length - 1 ? ', ' : '' }
                                 </template>
                             </span>
-
-                            <span class="fa fa-tag form-control-feedback" aria-hidden="true"></span>
-
-                            <ol class="tag-dropdown">
-                                {% include 'components.tags' with {'tags': popular_tags} only %}
-                            </ol>
 
                             <div id="tags-container" class="margin-md-top">
                                 <div v-for="(tag, index) in tags" class="row tag-item margin-sm-bottom">
@@ -275,7 +269,9 @@
             features: {{ form.features.value|raw }},
             errors: {{ form_errors|raw }},
             plans: {{ plans|raw }},
-            suggestions: []
+            popular_tags: {{ popular_tags|json_encode|raw }},
+            suggestions: [],
+            suggestionUrl: '{{ route('job.tag.suggestions') }}'
         };
     </script>
 

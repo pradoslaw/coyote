@@ -1,10 +1,11 @@
 import '../../plugins/uploader';
 import initTinymce from '../../libs/tinymce';
-import Tags from '../../libs/tags';
+// import Tags from '../../libs/tags';
 import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';
 import VueThumbnail from '../../components/thumbnail.vue';
 import VuePricing from '../../components/pricing.vue';
+import VueTagsDropdown from '../../components/tags-dropdown.vue';
 import 'chosen-js';
 import 'intl-tel-input';
 
@@ -32,6 +33,7 @@ function toInt(data) {
 
 Vue.component('vue-thumbnail', VueThumbnail);
 Vue.component('vue-pricing', VuePricing);
+Vue.component('vue-tags-dropdown', VueTagsDropdown);
 
 new Vue({
     el: '.submit-form',
@@ -55,22 +57,15 @@ new Vue({
             });
         }
 
-        this.tagComponent = new Tags({
-            onSelect: (value) => {
-                this.tags.push({name: value, pivot: {priority: 1}});
-                // fetch only tag name
-                let pluck = this.tags.map(item => item.name);
+        // this.tagComponent = new Tags({
+        //     onSelect: (value) => {
 
-                // request suggestions
-                $.get($('#tag').data('suggestions-url'), {t: pluck}, result => {
-                    this.suggestions = result;
-                });
-            }
-        });
+        //     }
+        // });
 
-        $('#tags-container').each(function () {
-            $(this).sortable();
-        });
+        // $('#tags-container').each(function () {
+        //     $(this).sortable();
+        // });
 
         // ugly hack to initialize jquery fn after dom is loaded
         $(() => {
@@ -97,13 +92,23 @@ new Vue({
         /**
          * Add tag after clicking on suggestion tag.
          *
-         * @param {String} value
+         * @param {String} name
          */
-        addTag: function (value) {
-            this.tagComponent.addTag(value);
+        addTag: function (name) {
+            this.tags.push({name: name, pivot: {priority: 1}});
+            // fetch only tag name
+            let pluck = this.tags.map(item => item.name);
+
+            // request suggestions
+            $.get(this.suggestionUrl, {t: pluck}, result => {
+                this.suggestions = result;
+            });
         },
         removeTag: function (index) {
             this.tags.splice(index, 1);
+        },
+        onTagChange: function (name) {
+            this.addTag(name);
         },
         isInvalid: function (fields) {
             return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
