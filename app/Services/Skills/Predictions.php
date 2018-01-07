@@ -75,7 +75,7 @@ class Predictions
             return [];
         }
 
-        $path = parse_url($referer, PHP_URL_PATH);
+        $path = parse_url(urldecode($referer), PHP_URL_PATH);
         if (!$path) {
             return [];
         }
