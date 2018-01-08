@@ -103,7 +103,7 @@
                             </span>
 
                             <div id="tags-container" class="margin-md-top">
-                                <vue-tags-container :tags="tags" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']"></vue-tags-container>
+                                <vue-tags-container :tags="tags" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="onTagDelete"></vue-tags-container>
                             </div>
                         </div>
                     </div>

@@ -98,11 +98,15 @@ new Vue({
 
             this._initTooltip();
         },
-        removeTag: function (index) {
-            this.tags.splice(index, 1);
-        },
         onTagChange: function (name) {
             this.addTag(name);
+        },
+        onTagDelete: function (name) {
+            let index = this.tags.findIndex(el => {
+                return el.name === name;
+            });
+
+            this.tags.splice(index, 1);
         },
         isInvalid: function (fields) {
             return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
