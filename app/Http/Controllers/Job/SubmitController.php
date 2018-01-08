@@ -85,11 +85,8 @@ class SubmitController extends Controller
 
         $this->breadcrumb($job);
 
-        $popularTags = $this->job->getPopularTags();
-        $this->request->attributes->set('popular_tags', $popularTags);
-
         return $this->view('job.submit.home', [
-            'popular_tags'      => $popularTags,
+            'popular_tags'      => $this->job->getPopularTags(),
             'form'              => $form,
             'form_errors'       => $form->errors() ? $form->errors()->toJson() : '[]',
             'job'               => $form->toJson(),

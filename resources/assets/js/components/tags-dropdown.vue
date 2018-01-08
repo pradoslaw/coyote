@@ -46,6 +46,13 @@
                 vModel: ''
             }
         },
+        mounted: function () {
+            document.body.addEventListener('click', event => {
+                if (!(this.$el === event.target || this.$el.contains(event.target))) {
+                    this.isDropdownShown = false;
+                }
+            });
+        },
         methods: {
             onFocus: function () {
                 this.isDropdownShown = true;
