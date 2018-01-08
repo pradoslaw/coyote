@@ -91,7 +91,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->limit($limit)
             ->get()
-            ->pluck('count', 'name');
+            ->pluck('name');
     }
 
     /**

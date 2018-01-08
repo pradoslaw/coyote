@@ -12,14 +12,14 @@
                 @keyup.up="onUp"
                 @keyup.down="onDown"
                 @keyup.esc="onEsc"
-                @keyup.enter.prevent="onEnter"
+                @keyup="onKeyUp"
+                @keydown.enter.prevent="onEnter"
         >
         <span class="fa fa-tag form-control-feedback" aria-hidden="true"></span>
 
         <ol class="tag-dropdown" v-show="isDropdownShown">
-            <li v-for="(count, name, index) in tags" v-show="vModel === '' || name.startsWith(vModel)" :class="{'hover': index === hoverIndex}" @click="onClick(name)" @mouseover="onMouseOver(index)">
+            <li v-for="(name, index) in tags" v-show="vModel === '' || name.startsWith(vModel)" :class="{'hover': index === hoverIndex}" @click="onClick(name)" @mouseover="onMouseOver(index)">
                 <span>{{ name }}</span>
-                <small>×{{ count }}</small>
             </li>
 
             <li v-show="vModel !== ''" @click="onClick(vModel)">
@@ -58,20 +58,36 @@
                 this.isDropdownShown = true;
             },
             onDown: function () {
+                this.isDropdownShown = true;
                 this.hoverIndex += 1;
             },
             onUp: function () {
                 this.hoverIndex -= 1;
             },
             onEsc: function () {
-                this.isDropdownShown = false;
-                this.vModel = '';
+                this._hide();
             },
             onEnter: function () {
-                this.onClick(this.vModel);
+                if (this.hoverIndex === -1) {
+                    this._addTag(this.vModel);
+                }
+                else {
+                    this._addTag(this.tags[this.hoverIndex]);
+                }
+            },
+            onKeyUp: function (e) {
+                if (e.key !== 'Enter') {
+                    this.isDropdownShown = true; // show dropdown while typing ...
+                }
             },
             onClick: function (name) {
-                this.onEsc();
+                this._addTag(name);
+            },
+            onMouseOver: function (index) {
+                this.hoverIndex = index;
+            },
+            _addTag: function (name) {
+                this._hide();
 
                 name = name
                     .trim()
@@ -90,8 +106,10 @@
 
                 this.$emit('change', name);
             },
-            onMouseOver: function (index) {
-                this.hoverIndex = index;
+            _hide: function () {
+                this.isDropdownShown = false;
+                this.vModel = '';
+                this.hoverIndex = -1;
             }
         },
         computed: {
