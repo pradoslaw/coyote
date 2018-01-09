@@ -1,6 +1,6 @@
 <template>
     <li>
-        <a href="javascript:" @click="onDelete(tag.name)">{{ tag.name }}</a>
+        <a href="javascript:" @click="onDelete(tag.name)" class="remove">{{ tag.name }}</a>
 
         <div style="display: inline" @mouseenter="editable = true" @mouseleave="finishEditing">
             <i v-for="i in [0, 1, 2]" class="fa fa-circle" :title="tooltips[i]" :class="{'text-primary': getHighlight(tag.pivot.priority) >= i, 'text-muted': getHighlight(tag.pivot.priority) < i}" @mouseover="highlight = i" @click="setPriority(i)" data-toggle="tooltip"></i>
