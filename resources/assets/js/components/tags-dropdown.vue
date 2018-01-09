@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="position: relative">
         <input
                 type="text"
                 class="form-control"
@@ -128,6 +128,8 @@
         },
         computed: {
             filtered: function () {
+                this.hoverIndex = -1;
+
                 return this.tags.filter(tag => {
                     return this.vModel === '' || tag.startsWith(this.vModel);
                 });
