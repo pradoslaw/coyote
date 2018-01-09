@@ -6,7 +6,7 @@
             var $this = $(this);
             var name = $this.attr('name') + '[]';
 
-            var dropdown = $('<ol class="tag-dropdown"></ol>');
+            var dropdown = $('<ol class="tag-dropdown"></ol>').hide();
             var index = -1;
             var timeId;
 
