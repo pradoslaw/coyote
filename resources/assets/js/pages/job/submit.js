@@ -5,7 +5,7 @@ import Map from '../../libs/map';
 import VueThumbnail from '../../components/thumbnail.vue';
 import VuePricing from '../../components/pricing.vue';
 import VueTagsDropdown from '../../components/tags-dropdown.vue';
-import VueTagsContainer from '../../components/tags-container.vue';
+import VueTagsSkill from '../../components/tag-skill.vue';
 import 'chosen-js';
 import 'intl-tel-input';
 
@@ -34,7 +34,7 @@ function toInt(data) {
 Vue.component('vue-thumbnail', VueThumbnail);
 Vue.component('vue-pricing', VuePricing);
 Vue.component('vue-tags-dropdown', VueTagsDropdown);
-Vue.component('vue-tags-container', VueTagsContainer);
+Vue.component('vue-tag-skill', VueTagsSkill);
 
 new Vue({
     el: '.submit-form',

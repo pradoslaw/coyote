@@ -103,7 +103,14 @@
                             </span>
 
                             <div id="tags-container" class="margin-md-top">
-                                <vue-tags-container :tags="tags" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="onTagDelete"></vue-tags-container>
+                                <ul class="tag-clouds tag-clouds-skills">
+                                    <template v-for="(tag, index) in tags">
+                                        <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="onTagDelete"></vue-tag-skill>
+
+                                        <input type="hidden" :name="'tags[' + index + '][name]'" :value="tag.name">
+                                        <input type="hidden" :name="'tags[' + index + '][priority]'" v-model="tag.pivot.priority">
+                                    </template>
+                                </ul>
                             </div>
                         </div>
                     </div>
