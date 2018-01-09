@@ -266,7 +266,9 @@ new Vue({
             }
         },
         _initTooltip: function () {
-            $('i[data-toggle="tooltip"]').tooltip();
+            this.$nextTick(function () {
+                $('i[data-toggle="tooltip"]').tooltip();
+            });
         }
     },
     computed: {

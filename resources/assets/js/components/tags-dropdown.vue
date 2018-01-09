@@ -87,7 +87,7 @@
                     this._addTag(this.vModel);
                 }
                 else {
-                    this._addTag(this.tags[this.hoverIndex]);
+                    this._addTag(this.filtered[this.hoverIndex]);
                 }
             },
             onKeyUp: function (e) {
@@ -102,8 +102,6 @@
                 this.hoverIndex = index;
             },
             _addTag: function (name) {
-                this._hide();
-
                 name = name
                     .trim()
                     .replace(/</g, "&lt;")
@@ -120,6 +118,7 @@
                 }
 
                 this.$emit('change', name);
+                this._hide();
             },
             _hide: function () {
                 this.isDropdownShown = false;
