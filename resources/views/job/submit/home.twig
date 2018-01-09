@@ -87,7 +87,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group has-feedback" :class="{'has-error': errors.tags != null}">
+                        <div class="form-group" :class="{'has-error': errors.tags != null}">
                             <label class="control-label">Kluczowe technologie (wymagane lub mile widziane)</label>
 
                             <vue-tags-dropdown id="tag" :tags="popular_tags" @change="onTagChange"></vue-tags-dropdown>

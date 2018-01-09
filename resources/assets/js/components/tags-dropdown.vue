@@ -9,16 +9,15 @@
                 v-model="vModel"
                 @click="onFocus"
                 @focus="onFocus"
-                @keyup.up="onUp"
-                @keyup.down="onDown"
+                @keyup.up.prevent="onUp"
+                @keyup.down.prevent="onDown"
                 @keyup.esc="onEsc"
                 @keyup="onKeyUp"
                 @keydown.enter.prevent="onEnter"
         >
-        <span class="fa fa-tag form-control-feedback" aria-hidden="true"></span>
 
-        <ol class="tag-dropdown" v-show="isDropdownShown">
-            <li v-for="(name, index) in tags" v-show="vModel === '' || name.startsWith(vModel)" :class="{'hover': index === hoverIndex}" @click="onClick(name)" @mouseover="onMouseOver(index)">
+        <ol ref="dropdown" class="tag-dropdown" v-show="isDropdownShown">
+            <li v-for="(name, index) in filtered" :key="index" :class="{'hover': index === hoverIndex}" @click="onClick(name)" @mouseover="onMouseOver(index)">
                 <span>{{ name }}</span>
             </li>
 
@@ -59,10 +58,26 @@
             },
             onDown: function () {
                 this.isDropdownShown = true;
-                this.hoverIndex += 1;
+
+                if (this.hoverIndex < this.filtered.length - 1) {
+                    this.hoverIndex += 1;
+                }
+
+                this._changePosition();
             },
             onUp: function () {
-                this.hoverIndex -= 1;
+                if (this.hoverIndex > 0) {
+                    this.hoverIndex -= 1;
+                }
+
+                this._changePosition();
+            },
+            _changePosition: function () {
+                let dropdown = this.$refs['dropdown'];
+
+                if (dropdown.children.length) {
+                    dropdown.scrollTop = this.hoverIndex * dropdown.children[0].offsetHeight;
+                }
             },
             onEsc: function () {
                 this._hide();
@@ -113,6 +128,11 @@
             }
         },
         computed: {
+            filtered: function () {
+                return this.tags.filter(tag => {
+                    return this.vModel === '' || tag.startsWith(this.vModel);
+                });
+            }
         }
     }
 
