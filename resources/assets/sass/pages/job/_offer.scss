@@ -80,6 +80,9 @@
   }
 
   .requirements {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+
     strong {
       color: $gray-light;
       padding-bottom: 5px;
