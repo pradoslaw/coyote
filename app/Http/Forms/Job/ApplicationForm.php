@@ -99,7 +99,7 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
             ])
             ->add('cv', 'hidden', [
                 'label' => 'CV/Resume',
-                'help' => 'CV/résumé z rozszerzeniem *.pdf, *.doc, *.docx lub *.rtf.',
+                'help' => 'CV/résumé z rozszerzeniem *.pdf, *.doc, *.docx lub *.rtf. Maksymalnie 5 MB.',
                 'attr' => [
                     'placeholder' => 'Kliknij, aby dodać załącznik',
                     'id' => 'uploader',

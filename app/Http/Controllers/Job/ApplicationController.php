@@ -112,7 +112,8 @@ class ApplicationController extends Controller
     public function upload(Request $request)
     {
         $this->validate($request, [
-            'cv'             => 'max:' . (config('filesystems.upload_max_size') * 1024) . '|mimes:pdf,doc,docx,rtf'
+            // only 5 MB file size limit. otherwise postfix may not handle it properly.
+            'cv'             => 'max:' . (5 * 1024) . '|mimes:pdf,doc,docx,rtf'
         ]);
 
         $filename = uniqid() . '_' . $request->file('cv')->getClientOriginalName();

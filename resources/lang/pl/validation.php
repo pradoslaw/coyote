@@ -44,7 +44,7 @@ return [
     'json'                 => 'The :attribute must be a valid JSON string.',
     'max'                  => [
         'numeric' => 'The :attribute may not be greater than :max.',
-        'file'    => 'The :attribute may not be greater than :max kilobytes.',
+        'file'    => 'Plik nie może być większy niż :max kilobajtów.',
         'string'  => 'Maksymalna długość tego pola to :max znaków.',
         'array'   => 'The :attribute may not have more than :max items.',
     ],
