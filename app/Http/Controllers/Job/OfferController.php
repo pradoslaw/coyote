@@ -68,9 +68,9 @@ class OfferController extends Controller
             'previous_url'      => $this->request->session()->get('current_url'),
             'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
             // tags along with grouped category
-            'tags'              => $job->tags()->with('category')->get()->groupBy('category.name')
+            'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupBy('category.name')
         ])->with(
-            compact('job', 'requirements', 'flag', 'mlt')
+            compact('job', 'flag', 'mlt')
         );
     }
 }

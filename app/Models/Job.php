@@ -423,7 +423,7 @@ class Job extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany('Coyote\Tag', 'job_tags')->orderBy('order')->withPivot(['priority', 'order']);
+        return $this->belongsToMany('Coyote\Tag', 'job_tags')->withPivot(['priority', 'order']);
     }
 
     /**
