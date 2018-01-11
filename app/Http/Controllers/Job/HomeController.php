@@ -113,7 +113,11 @@ class HomeController extends BaseController
 
         // get only tags belong to specific category
         $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
-        $tags = $this->tag->all();
+
+        // only tags with logo
+        $tags = $this->tag->all()->filter(function (Tag $tag) {
+            return $tag->logo->getFilename() !== null;
+        });
 
         $this->builder->setLanguages($tags->pluck('name')->toArray());
 
