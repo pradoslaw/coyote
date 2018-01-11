@@ -2,6 +2,7 @@
 
 namespace Coyote\Policies;
 
+use Carbon\Carbon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Coyote\User;
 use Coyote\Post;
@@ -38,7 +39,7 @@ class PostPolicy
      */
     private function check($ability, User $user, Post $post): bool
     {
-        return ($this->isAuthor($user, $post) && $this->hasEnoughReputation($user, $post))
+        return ($this->isAuthor($user, $post) && ($this->isNotOld($post) || $this->hasEnoughReputation($user, $post)))
             || $post->forum->ability($ability, $user->id)
                 || $user->can($ability);
     }
@@ -61,5 +62,14 @@ class PostPolicy
     private function hasEnoughReputation(User $user, Post $post): bool
     {
         return $post->id == $post->topic->last_post_id ? true : ($user->reputation >= 100);
+    }
+
+    /**
+     * @param Post $post
+     * @return bool
+     */
+    private function isNotOld(Post $post): bool
+    {
+        return $post->created_at->diffInHours(Carbon::now()) < 24;
     }
 }

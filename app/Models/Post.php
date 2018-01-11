@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $score
  * @property int $edit_count
  * @property int $editor_id
- * @property string $created_at
- * @property string $deleted_at
- * @property string $updated_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $deleted_at
+ * @property \Carbon\Carbon $updated_at
  * @property string $user_name
  * @property string $text
  * @property string $html
