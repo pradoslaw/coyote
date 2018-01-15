@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Forum;
 
+use Coyote\Events\PostSubmitting;
 use Coyote\Http\Forms\AttachmentForm;
 use Coyote\Poll;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface;
@@ -86,6 +87,10 @@ class PostForm extends Form
                     );
                 }
             }
+        });
+
+        $this->addEventListener(FormEvents::PRE_SUBMIT, function (Form $form) {
+            PostSubmitting::dispatch($form);
         });
     }
 
