@@ -78,9 +78,6 @@ $this->group(
         $this->post('Firewall/Delete/{firewall}', 'FirewallController@delete')->name('firewall.delete');
 
         $this->get('Stream', 'StreamController@index')->name('stream');
-        $this->get('Cache', 'CacheController@index')->name('cache');
-
-        $this->get('Stream', 'StreamController@index')->name('stream');
 
         $this->get('Flag', 'FlagController@index')->name('flag');
         $this->get('Log', 'LogController@index')->name('log');

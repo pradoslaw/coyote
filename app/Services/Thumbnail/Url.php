@@ -17,6 +17,6 @@ class Url extends Proxy
             throw new \Exception('$object must implement ObjectInterface');
         }
 
-        return $this->imageManager->url($path, $this->object->getWidth(), $this->object->getHeight());
+        return route('imagecache', ['template' => 'small', 'filename' => basename($path)]);
     }
 }

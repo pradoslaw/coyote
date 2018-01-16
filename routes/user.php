@@ -13,9 +13,6 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Settings', ['uses' => 'SettingsController@index', 'as' => 'settings']);
     $this->post('Settings', 'SettingsController@save');
 
-    $this->get('Visits', ['uses' => 'VisitsController@index', 'as' => 'visits']);
-    $this->post('Visits', 'VisitsController@save');
-
     $this->get('Notifications', ['uses' => 'NotificationsController@index', 'as' => 'notifications']);
     $this->get('Notifications/Settings', ['uses' => 'NotificationsController@settings', 'as' => 'notifications.settings']);
     $this->post('Notifications/Settings', 'NotificationsController@save');
@@ -39,9 +36,6 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Favorites/Microblog', ['uses' => 'FavoritesController@microblog', 'as' => 'favorites.microblog']);
     $this->get('Favorites/Wiki', ['uses' => 'FavoritesController@wiki', 'as' => 'favorites.wiki']);
     $this->post('Favorites', 'FavoritesController@save');
-
-    $this->get('Profiles', ['uses' => 'ProfilesController@index', 'as' => 'profiles']);
-    $this->post('Profiles', 'ProfilesController@save');
 
     $this->get('Rates', ['uses' => 'RatesController@index', 'as' => 'rates']);
     $this->post('Rates', 'RatesController@save');
