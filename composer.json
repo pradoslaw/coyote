@@ -34,7 +34,6 @@
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.0",
         "jenssegers/mongodb": "^3.1",
-        "folklore/image": "0.3.*",
         "ezyang/htmlpurifier": "^4.7",
         "lavary/laravel-menu": "1.7.1",
         "elasticsearch/elasticsearch": "~2.0",
@@ -54,7 +53,8 @@
         "guzzlehttp/oauth-subscriber": "^0.3.0",
         "inacho/php-credit-card-validator": "^1.0",
         "paylane/client": "^1.1",
-        "laravel-notification-channels/twilio": "^2.0"
+        "laravel-notification-channels/twilio": "^2.0",
+        "intervention/image": "^2.4"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",

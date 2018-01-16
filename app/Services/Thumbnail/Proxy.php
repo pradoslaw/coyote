@@ -3,7 +3,7 @@
 namespace Coyote\Services\Thumbnail;
 
 use Coyote\Services\Thumbnail\Objects\ObjectInterface;
-use Folklore\Image\ImageManager;
+use Intervention\Image\ImageManager;
 
 abstract class Proxy implements ThumbnailInterface
 {

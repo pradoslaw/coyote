@@ -183,7 +183,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         // Mozliwosc tworzenia miniaturek zdjec. ten provider umieszczony jest tak wysoko poniewaz
         // jego regula routingu musi byc nadrzedna nad regulami coyote
-        Folklore\Image\ImageServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...

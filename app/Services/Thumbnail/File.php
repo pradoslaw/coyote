@@ -3,6 +3,7 @@
 namespace Coyote\Services\Thumbnail;
 
 use Coyote\Services\Thumbnail\Objects\ObjectInterface;
+use Intervention\Image\Constraint;
 
 class File extends Proxy
 {
@@ -16,12 +17,15 @@ class File extends Proxy
         if (!$this->object instanceof ObjectInterface) {
             throw new \Exception('$object must implement ObjectInterface');
         }
-        
-        $thumbnail = $this->imageManager->open($path)->thumbnail(
-            $this->object->getBox(),
-            $this->object->getInterface()
-        );
 
-        return $thumbnail->save($path);
+        $image = $this->imageManager->make($path);
+
+        $image
+            ->resize($this->object->getWidth(), $this->object->getHeight(), function (Constraint $constraint) {
+                $constraint->aspectRatio();
+            })
+            ->resizeCanvas($this->object->getWidth(), $this->object->getHeight(), 'center', false);
+
+        return $image->save($path);
     }
 }
