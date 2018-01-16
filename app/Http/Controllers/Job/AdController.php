@@ -92,6 +92,6 @@ class AdController extends Controller
             return [];
         }
 
-        return $this->tag->findBy('name', $tags[0]);
+        return $this->tag->findBy('name', $tags[array_rand($tags)]);
     }
 }
