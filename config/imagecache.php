@@ -51,10 +51,9 @@ return array(
     */
 
     'templates' => array(
-        'logo' => \Coyote\Services\Media\Filters\Logo::class
-//        'small' => Intervention\Image\Templates\Small::class,
-//        'medium' => 'Intervention\Image\Templates\Medium',
-//        'large' => 'Intervention\Image\Templates\Large',
+        'logo' => \Coyote\Services\Media\Filters\Logo::class,
+        'microblog' => \Coyote\Services\Media\Filters\Microblog::class,
+        'photo' => \Coyote\Services\Media\Filters\Photo::class
     ),
 
     /*

@@ -27,7 +27,7 @@ class Url
      */
     public function __construct(ImageManager $imageManager, File $file)
     {
-        $this->image = $imageManager;
+        $this->imageManager = $imageManager;
         $this->file = $file;
     }
 
@@ -54,7 +54,17 @@ class Url
             return null;
         }
 
-        return '';
+        $thumbnailPath = $this->thumbnailPath($template);
+
+        if (!file_exists($this->file->path($thumbnailPath))) {
+            $class = config("imagecache.templates.$template");
+            $filter = new $class;
+
+            $image = $this->imageManager->make($this->file->path());
+            $image->filter($filter)->save($this->file->path($thumbnailPath));
+        }
+
+        return cdn($this->publicPath() . '/' . $thumbnailPath);
     }
 
     /**
@@ -83,5 +93,15 @@ class Url
         }
 
         return cdn($this->publicPath() . '/' . $this->file->relative(), $this->secure);
+    }
+
+    /**
+     * @param $template
+     * @return string
+     */
+    protected function thumbnailPath($template)
+    {
+        $pathinfo = pathinfo($this->file->relative());
+        return $pathinfo['dirname'] . '/' . $pathinfo['filename'] . '-' . $template . '.' . $pathinfo['extension'];
     }
 }
