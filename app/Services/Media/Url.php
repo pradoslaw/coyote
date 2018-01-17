@@ -2,15 +2,14 @@
 
 namespace Coyote\Services\Media;
 
-use Coyote\Services\Thumbnail\Factory as Thumbnail;
-use Coyote\Services\Thumbnail\Objects\ObjectInterface;
+use Intervention\Image\ImageManager;
 
 class Url
 {
     /**
-     * @var Thumbnail
+     * @var ImageManager
      */
-    protected $thumbnail;
+    protected $imageManager;
 
     /**
      * @var File
@@ -23,12 +22,12 @@ class Url
     protected $secure;
 
     /**
-     * @param Thumbnail $thumbnail
+     * @param ImageManager $imageManager
      * @param File $file
      */
-    public function __construct(Thumbnail $thumbnail, File $file)
+    public function __construct(ImageManager $imageManager, File $file)
     {
-        $this->thumbnail = $thumbnail;
+        $this->image = $imageManager;
         $this->file = $file;
     }
 
@@ -46,7 +45,7 @@ class Url
     /**
      * Make thumbnail and return full url.
      *
-     * @param ObjectInterface $template
+     * @param string $template
      * @return string|null
      */
     public function thumbnail($template)
@@ -55,7 +54,7 @@ class Url
             return null;
         }
 
-        return $this->thumbnail->url($template)->make((string) $this);
+        return '';
     }
 
     /**

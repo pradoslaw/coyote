@@ -3,7 +3,6 @@
 namespace Coyote\Services\Media;
 
 use Illuminate\Contracts\Container\Container as App;
-use Coyote\Services\Thumbnail\Factory as ThumbnailFactory;
 
 class Factory
 {
@@ -34,7 +33,7 @@ class Factory
         }
 
         return $this->setDefaultOptions(
-            new $class($this->app['filesystem']->disk('public'), new ThumbnailFactory($this->app['image'])),
+            new $class($this->app['filesystem']->disk('public'), $this->app['image']),
             $options
         );
     }

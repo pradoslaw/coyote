@@ -3,6 +3,7 @@
 namespace Coyote\Services\Media;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Coyote\Services\Media\Filters\Logo as Filter;
 
 class Photo extends File
 {
@@ -13,7 +14,8 @@ class Photo extends File
     public function upload(UploadedFile $uploadedFile)
     {
         parent::upload($uploadedFile);
-        $this->resize();
+
+        $this->applyFilter(new Filter());
 
         return $this;
     }
@@ -25,13 +27,9 @@ class Photo extends File
     public function put($content)
     {
         parent::put($content);
-        $this->resize();
+
+        $this->applyFilter(new Filter());
 
         return $this;
-    }
-
-    private function resize()
-    {
-        $this->thumbnail->file(new \Coyote\Services\Thumbnail\Objects\Photo())->make($this->path());
     }
 }

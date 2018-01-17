@@ -4,7 +4,6 @@ namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Services\Media\MediaInterface;
-use Coyote\Services\Thumbnail\Objects\Microblog;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -46,6 +45,7 @@ class Media extends Twig_Extension
     /**
      * @param string $filename
      * @param bool|null $secure
+     * @throws \Exception
      * @return string
      */
     public function logo($filename, $secure = null)
@@ -61,7 +61,7 @@ class Media extends Twig_Extension
      */
     public function thumbnail(MediaInterface $media)
     {
-        return $media->url()->thumbnail(new Microblog());
+        return $media->url()->thumbnail('microblog');
     }
 
     /**

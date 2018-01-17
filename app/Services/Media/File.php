@@ -3,8 +3,9 @@
 namespace Coyote\Services\Media;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Coyote\Services\Thumbnail\Factory as Thumbnail;
+use Intervention\Image\Filters\FilterInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Intervention\Image\ImageManager;
 
 abstract class File implements MediaInterface
 {
@@ -14,9 +15,9 @@ abstract class File implements MediaInterface
     protected $filesystem;
 
     /**
-     * @var Thumbnail
+     * @var ImageManager
      */
-    protected $thumbnail;
+    protected $imageManager;
 
     /**
      * @var string
@@ -40,12 +41,12 @@ abstract class File implements MediaInterface
 
     /**
      * @param Filesystem $filesystem
-     * @param Thumbnail $thumbnail
+     * @param ImageManager $imageManager
      */
-    public function __construct(Filesystem $filesystem, Thumbnail $thumbnail)
+    public function __construct(Filesystem $filesystem, ImageManager $imageManager)
     {
         $this->filesystem = $filesystem;
-        $this->thumbnail = $thumbnail;
+        $this->imageManager = $imageManager;
 
         if (empty($this->directory)) {
             $this->directory = strtolower(class_basename($this));
@@ -109,7 +110,7 @@ abstract class File implements MediaInterface
      */
     public function url($secure = null)
     {
-        return (new Url($this->thumbnail, $this))->secure($secure);
+        return (new Url($this->imageManager, $this))->secure($secure);
     }
 
     /**
@@ -230,6 +231,18 @@ abstract class File implements MediaInterface
         }
 
         return $this->{camel_case($name)}();
+    }
+
+    /**
+     * @param FilterInterface $filter
+     * @return \Intervention\Image\Image
+     */
+    protected function applyFilter(FilterInterface $filter)
+    {
+        $image = $this->imageManager->make($this->path());
+        $image->filter($filter);
+
+        return $image->save($this->path());
     }
 
     /**
