@@ -3,6 +3,7 @@
 **Ogólne**
 - Upgrade do Laravel 5.4
 - "Przyklejony" breadcrumb nie znika na ekranie po pewnym czasie nieaktywności
+- Użycie intervention/image do tworzenia miniatur obrazów
 
 **Praca**
 
