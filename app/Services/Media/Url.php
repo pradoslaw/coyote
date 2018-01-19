@@ -96,7 +96,7 @@ class Url
     }
 
     /**
-     * @param $template
+     * @param string $template
      * @return string
      */
     protected function thumbnailPath($template)

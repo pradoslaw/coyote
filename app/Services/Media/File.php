@@ -125,7 +125,7 @@ abstract class File implements MediaInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function get()
     {
