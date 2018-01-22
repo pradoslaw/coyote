@@ -21,6 +21,7 @@
 **Forum**
 
 - Blokada edycji oraz usuwania postów (jeżeli nie jest ostatnim w danym wątku) jeżeli użytkownik ma mniej niż 100 punktów reputacji.
+- Użytkownik ma możliwość dalszej edycji swojego postu mimo tego, że napisane zostały dalsze odpowiedzi (pod warunkiem, że nie upłynęło 24h)
 
 ## 2.1
 
