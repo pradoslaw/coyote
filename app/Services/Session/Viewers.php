@@ -128,7 +128,7 @@ class Viewers
             ->db
             ->table('sessions')
             ->when($path !== null, function (Builder $builder) use ($path) {
-                return $builder->where('path', 'LIKE', mb_strtolower($path) . '%');
+                return $builder->where('path', 'LIKE', mb_strtolower(strtok($path, '?')) . '%');
             })
             ->groupBy(['user_id', 'robot'])
             ->get(['user_id', 'robot', new Expression('COUNT(*)')]);
