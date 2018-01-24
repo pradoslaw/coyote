@@ -81,7 +81,7 @@ class SuccessfulPaymentNotification extends Notification
                     $this->payment->job->title
                 )
             )
-            ->action('Zobacz ogłoszenie', UrlBuilder::job($this->payment->job))
+            ->action('Zobacz ogłoszenie', UrlBuilder::job($this->payment->job, true))
             ->line('Dziekujemy za skorzystanie z naszych usług.');
 
         if ($this->pdf !== null) {

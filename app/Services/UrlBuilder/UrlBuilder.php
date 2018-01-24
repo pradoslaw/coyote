@@ -49,11 +49,12 @@ class UrlBuilder
 
     /**
      * @param Job $job
+     * @param bool $absolute
      * @return string
      */
-    public static function job(Job $job)
+    public static function job(Job $job, $absolute = false)
     {
-        return route('job.offer', [$job->id, $job->slug], false);
+        return route('job.offer', [$job->id, $job->slug], $absolute);
     }
 
     /**
