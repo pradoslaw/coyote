@@ -127,6 +127,22 @@ class AppServiceProvider extends ServiceProvider
             $this->items = $items;
         });
 
+        Collection::macro('groupCategory', function () {
+            /** @var \Illuminate\Support\Collection $this */
+            $collection = $this
+                ->sortBy('category.id')
+                ->groupBy(function ($item) {
+                    return $item->category ? $item->category->name : 'Inne';
+                });
+
+            if (isset($collection['Inne'])) {
+                // move category at the end
+                $collection->put('Inne', $collection->splice(0, 1)['Inne']);
+            }
+
+            return $collection;
+        });
+
         Request::macro('getClientHost', function () {
             if (app()->environment() !== 'production') {
                 return '';

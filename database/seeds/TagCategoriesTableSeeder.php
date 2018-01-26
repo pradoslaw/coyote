@@ -14,5 +14,7 @@ class TagCategoriesTableSeeder extends Seeder
         \Coyote\Tag\Category::forceCreate(['id' => \Coyote\Tag\Category::LANGUAGE, 'name' => 'Język programowania']);
         \Coyote\Tag\Category::forceCreate(['id' => \Coyote\Tag\Category::DATABASE, 'name' => 'Baza danych']);
         \Coyote\Tag\Category::forceCreate(['id' => \Coyote\Tag\Category::FRAMEWORK, 'name' => 'Framework']);
+        \Coyote\Tag\Category::forceCreate(['id' => \Coyote\Tag\Category::TOOL, 'name' => 'Narzędzia']);
+        \Coyote\Tag\Category::forceCreate(['id' => \Coyote\Tag\Category::DEVOPS, 'name' => 'Dev/ops']);
     }
 }

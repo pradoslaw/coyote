@@ -13,6 +13,8 @@ class Category extends Model
     const LANGUAGE = 1;
     const DATABASE = 2;
     const FRAMEWORK = 3;
+    const TOOL = 4;
+    const DEVOPS = 5;
 
     /**
      * @var string

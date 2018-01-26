@@ -105,7 +105,7 @@
 
                         {% for category, tags in tags %}
                             <div class="col-sm-{{ cols }}">
-                                <strong>{{ category|default('Inne') }}</strong>
+                                <strong>{{ category }}</strong>
 
                                 <ul class="tag-clouds tag-clouds-md tag-clouds-skills">
                                     {% for tag in tags %}

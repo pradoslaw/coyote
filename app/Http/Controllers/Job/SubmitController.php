@@ -179,7 +179,7 @@ class SubmitController extends Controller
 
         $this->breadcrumb($job);
 
-        $tags = $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupBy('category.name');
+        $tags = $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory();
 
         $parser = app('parser.job');
 

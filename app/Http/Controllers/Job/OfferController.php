@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Firm;
 use Coyote\Job;
 use Coyote\Services\Elasticsearch\Builders\Job\MoreLikeThisBuilder;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 
 class OfferController extends Controller
 {
@@ -35,7 +36,7 @@ class OfferController extends Controller
     public function index($job)
     {
         $this->breadcrumb->push('Praca', route('job.home'));
-        $this->breadcrumb->push($job->title, route('job.offer', [$job->id, $job->slug]));
+        $this->breadcrumb->push($job->title, UrlBuilder::job($job, true));
 
         $parser = app('parser.job');
 
@@ -68,7 +69,7 @@ class OfferController extends Controller
             'previous_url'      => $this->request->session()->get('current_url'),
             'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
             // tags along with grouped category
-            'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupBy('category.name')
+            'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory()
         ])->with(
             compact('job', 'flag', 'mlt')
         );
