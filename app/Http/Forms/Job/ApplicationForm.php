@@ -135,6 +135,9 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Wyślij kopię e-maila również do mnie',
                 'value' => 1
             ])
+            ->add('remember', 'checkbox', [
+                'label' => 'Zapamiętaj dane podane w formularzu'
+            ])
             ->add('submit', 'submit', [
                 'label' => 'Zapisz',
                 'attr' => [

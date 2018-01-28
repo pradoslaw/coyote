@@ -5,13 +5,15 @@ $(function() {
     initTinymce();
 
     let form = $('<form />', {method: 'post', 'action': $('#uploader').data('upload-url')});
-    let input = $('<input />', {type: 'file', name: 'cv', id: 'input-file', style: 'visibility: hidden; height: 0'}).appendTo(form);
+    $('<input />', {type: 'file', name: 'cv', id: 'input-file', style: 'visibility: hidden; height: 0'}).appendTo(form);
 
     form.appendTo('body');
 
-    $('#uploader').click(function() {
-        $('#input-file').click();
-    });
+    $('#uploader')
+        .click(function() {
+            $('#input-file').click();
+        })
+        .text($(':hidden[name="cv"]').val().split('_', 2)[1]);
 
     $('#input-file').change(function() {
         if (!$(this).val()) {

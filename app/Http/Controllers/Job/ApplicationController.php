@@ -61,6 +61,10 @@ class ApplicationController extends Controller
         // set default message
         $form->get('text')->setValue(view('job.partials.application', compact('job')));
 
+        if ($this->getSetting('job.application')) {
+            $form->setData(json_decode($this->getSetting('job.application')));
+        }
+
         return $this->view('job.application', compact('job', 'form'))->with(
             'subscribed',
             $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
@@ -92,6 +96,8 @@ class ApplicationController extends Controller
                 // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
                 $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($application, $job));
             }
+
+            $this->setSetting('job.application', $form->get('remember')->isChecked() ? $form->toJson() : '');
 
             $job->notify(new ApplicationSentNotification($application));
 

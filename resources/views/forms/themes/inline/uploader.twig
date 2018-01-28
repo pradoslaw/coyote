@@ -2,7 +2,7 @@
 {% import 'components.forms' as forms %}
 
 {% block widget %}
-    {{ form_hidden(name) }}
+    {{ form_hidden(name, value) }}
 
     <div {{ forms.attr(attr) }}>
         {{ attr.placeholder }}
