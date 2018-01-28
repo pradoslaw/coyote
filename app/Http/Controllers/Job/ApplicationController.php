@@ -86,16 +86,16 @@ class ApplicationController extends Controller
             /** @var \Coyote\Job\Application $application */
             $application = $job->applications()->create($data);
 
-            $mailer = $this->getMailFactory();
-            // send mail to offer's owner
-            // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
-            $mailer->to($job->email)->send(new ApplicationSent($application, $job));
-
-            if ($form->get('cc')->isChecked()) {
-                // send to application author
-                // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
-                $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($application, $job));
-            }
+//            $mailer = $this->getMailFactory();
+//            // send mail to offer's owner
+//            // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
+//            $mailer->to($job->email)->send(new ApplicationSent($application, $job));
+//
+//            if ($form->get('cc')->isChecked()) {
+//                // send to application author
+//                // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
+//                $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($application, $job));
+//            }
 
             $this->setSetting('job.application', $form->get('remember')->isChecked() ? $form->toJson() : '');
 

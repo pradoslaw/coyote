@@ -1,22 +1,76 @@
-{{ text|raw }}
+{% extends 'emails.layout' %}
 
-<br><br>
-<hr>
-Imię i nazwisko: <b>{{ name }}</b><br>
-E-mail: <b>{{ link_to('mailto:' ~ email, email) }}</b><br>
+{% block container %}
+    <h1 class="greeting">Dzień dobry</h1>
 
-{% if phone %}
-Numer telefonu: <b>{{ phone }}</b><br>
-{% endif %}
+    <p class="paragraph">Informujemy o nowej kandydaturze na stanowisko <b>{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</b>.</p>
 
-{% if salary %}
-Minimalne oczekiwane wynagrodzenie: <b>{{ salary }}</b><br>
-{% endif %}
+    <hr>
+        {{ text|raw }}
+    <hr>
 
-{% if dismissal_period %}
-Obecny okres wypowiedzenia: <b>{{ dismissal_period }}</b><br>
-{% endif %}
+    <table  align="center" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding: 5px 0">
+                Imię i nazwisko:
+            </td>
 
-{% if github %}
-Link do konta Github: <b>{{ link_to(github) }}</b>
-{% endif %}
+            <td style="padding: 5px 0">
+                <b>{{ name }}</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 5px 0">
+                E-mail:
+            </td>
+
+            <td style="padding: 5px 0">
+                <b>{{ link_to('mailto:' ~ email, email) }}</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 5px 0">
+                Numer telefonu:
+            </td>
+
+            <td style="padding: 5px 0">
+                <b>{{ phone|default('--') }}</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 5px 0">
+                Minimalne oczekiwane wynagrodzenie:
+            </td>
+
+            <td style="padding: 5px 0">
+                <b>{{ salary|default('--') }}</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 5px 0">
+                Obecny okres wypowiedzenia:
+            </td>
+
+            <td style="padding: 5px 0">
+                <b>{{ dismissal_period|default('--') }}</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 5px 0">
+                Link do konta Github:
+            </td>
+
+            <td style="padding: 5px 0">
+                <b>{{ github ? link_to(github) : '--' }}</b>
+            </td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block footnote %}
+{% endblock %}
