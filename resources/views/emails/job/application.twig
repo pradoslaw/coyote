@@ -5,18 +5,14 @@
 
     <p class="paragraph">Informujemy o nowej kandydaturze na stanowisko <b>{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</b>.</p>
 
-    <hr>
-        {{ text|raw }}
-    <hr>
-
     <table  align="center" width="100%" cellpadding="0" cellspacing="0">
         <tr>
-            <td style="padding: 5px 0">
+            <td style="padding: 5px 0; width: 50%">
                 Imię i nazwisko:
             </td>
 
-            <td style="padding: 5px 0">
-                <b>{{ name }}</b>
+            <td style="padding: 5px 0; width: 50%">
+                <b>{{ application.name }}</b>
             </td>
         </tr>
 
@@ -26,7 +22,7 @@
             </td>
 
             <td style="padding: 5px 0">
-                <b>{{ link_to('mailto:' ~ email, email) }}</b>
+                <b>{{ link_to('mailto:' ~ application.email, application.email) }}</b>
             </td>
         </tr>
 
@@ -36,7 +32,7 @@
             </td>
 
             <td style="padding: 5px 0">
-                <b>{{ phone|default('--') }}</b>
+                <b>{{ application.phone|default('--') }}</b>
             </td>
         </tr>
 
@@ -46,7 +42,7 @@
             </td>
 
             <td style="padding: 5px 0">
-                <b>{{ salary|default('--') }}</b>
+                <b>{{ application.salary|default('--') }}</b>
             </td>
         </tr>
 
@@ -56,7 +52,7 @@
             </td>
 
             <td style="padding: 5px 0">
-                <b>{{ dismissal_period|default('--') }}</b>
+                <b>{{ application.dismissal_period|default('--') }}</b>
             </td>
         </tr>
 
@@ -66,10 +62,20 @@
             </td>
 
             <td style="padding: 5px 0">
-                <b>{{ github ? link_to(github) : '--' }}</b>
+                <b>{{ application.github ? link_to(application.github) : '--' }}</b>
             </td>
         </tr>
     </table>
+
+    <p class="paragraph">Wiadomość od użytkownika:</p>
+
+    <hr>
+    {{ application.text|raw }}
+    <hr>
+{% endblock %}
+
+{% block footer %}
+    <p>Z poważaniem,<br>{{ config('app.name') }}</p>
 {% endblock %}
 
 {% block footnote %}

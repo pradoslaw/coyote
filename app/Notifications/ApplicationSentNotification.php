@@ -59,12 +59,19 @@ class ApplicationSentNotification extends Notification implements ShouldQueue
             );
     }
 
+    /**
+     * @param Job $job
+     * @return MailMessage
+     */
     public function toMail(Job $job)
     {
         $message = (new MailMessage())
             ->subject(sprintf('[%s] %s', $this->application->name, $job->title))
             ->replyTo($this->application->email, $this->application->name)
-            ->view('emails.job.application', $this->application->toArray());
+            ->view('emails.job.application', [
+                'application' => $this->application->toArray(),
+                'job' => $job
+            ]);
 
         if ($this->application->cv) {
             $path = realpath(storage_path('app/cv/' . $this->application->cv));
