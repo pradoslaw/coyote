@@ -131,10 +131,6 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Wiadomość dla pracodawcy/zleceniodawcy',
                 'help' => 'Taką wiadomość otrzyma osoba, która wystawiła ogłoszenie'
             ])
-            ->add('cc', 'checkbox', [
-                'label' => 'Wyślij kopię e-maila również do mnie',
-                'value' => 1
-            ])
             ->add('remember', 'checkbox', [
                 'label' => 'Zapamiętaj dane podane w formularzu'
             ])
