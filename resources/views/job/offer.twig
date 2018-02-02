@@ -1,18 +1,10 @@
 {% extends 'job.base' %}
-{% block title %}
-    {% spaceless %}
-        {{ job.title }}
 
-        {% if job.firm_id and not job.firm.is_agency %}
-            @ {{ job.firm.name }}
-        {% endif %}
+{% set page_title = job.title ~ ' ' ~ (job.firm.id and not job.firm.is_agency ? '@ ' ~ job.firm.name) %}
 
-        :: praca dla programistów
+{% block title %}{{ page_title }} :: praca dla programistów {{ parent() }}{% endblock %}
 
-        {{ parent() }}
-    {% endspaceless %}
-{% endblock %}
-
+{% block ogtitle %}{{ page_title }}{% endblock %}
 {% block description %}{{ excerpt(job.description) }}{% endblock %}
 {% block keywords %}{{ keywords(job.description)|join(',') }}{% endblock %}
 {% block logo %}{{ job.firm.logo ? logo(job.firm.logo, true) : secure_asset('img/apple-touch.png') }}{% endblock %}
