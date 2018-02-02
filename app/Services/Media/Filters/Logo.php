@@ -7,10 +7,10 @@ class Logo extends Thumbnail
     /**
      * @var int
      */
-    protected $width = 140;
+    protected $width = 600;
 
     /**
      * @var int
      */
-    protected $height = 140;
+    protected $height = 600;
 }
