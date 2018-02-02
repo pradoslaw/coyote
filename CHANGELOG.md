@@ -13,6 +13,8 @@
 - Możliwość dodawania zdjęć (oraz filmu) do ogłoszeń pracy
 - Grupowanie wymagań w ofertach pracy (tagi) w kategorie
 - Dodanie limitu 5 MB w załączniku w aplikacjach ofert pracy
+- Możliwość zapamiętywania danych wprowadzonych w formularzu
+- Zwiększenie rozmiarów loga firm
 
 **Panel administracjyjny**
 
