@@ -2,11 +2,14 @@
 
 namespace Coyote\Job;
 
+use Coyote\Job;
 use Coyote\Models\Scopes\ForGuest;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @property int $job_id
+ * @property Job $job
  * @property string $guest_id
  * @property string $email
  * @property string $name
@@ -19,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Application extends Model
 {
-    use ForGuest;
+    use ForGuest, Notifiable;
 
     /**
      * The database table used by the model.

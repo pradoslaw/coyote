@@ -6,7 +6,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
-use Coyote\Mail\ApplicationSent;
+use Coyote\Notifications\ApplicationConfirmationNotification;
 use Coyote\Notifications\ApplicationSentNotification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
@@ -86,20 +86,10 @@ class ApplicationController extends Controller
             /** @var \Coyote\Job\Application $application */
             $application = $job->applications()->create($data);
 
-//            $mailer = $this->getMailFactory();
-//            // send mail to offer's owner
-//            // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
-//            $mailer->to($job->email)->send(new ApplicationSent($application, $job));
-//
-//            if ($form->get('cc')->isChecked()) {
-//                // send to application author
-//                // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
-//                $mailer->to($form->get('email')->getValue())->send(new ApplicationSent($application, $job));
-//            }
-
             $this->setSetting('job.application', $form->get('remember')->isChecked() ? $form->toJson() : '');
 
             $job->notify(new ApplicationSentNotification($application));
+            $application->notify(new ApplicationConfirmationNotification());
 
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
         });
