@@ -15,6 +15,7 @@
 - Dodanie limitu 5 MB w załączniku w aplikacjach ofert pracy
 - Możliwość zapamiętywania danych wprowadzonych w formularzu
 - Zwiększenie rozmiarów loga firm
+- Graficzna zmiana maila informującego o nowej aplikacji na dane stanowisko
 
 **Panel administracjyjny**
 
