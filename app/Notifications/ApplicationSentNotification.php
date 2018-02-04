@@ -4,6 +4,7 @@ namespace Coyote\Notifications;
 
 use Coyote\Job;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NotificationChannels\Twilio\TwilioChannel;
@@ -32,11 +33,13 @@ class ApplicationSentNotification extends Notification implements ShouldQueue
      */
     public function via(Job $job)
     {
-        if (empty($job->phone)) {
-            return [];
+        $channels = ['mail'];
+
+        if (!empty($job->phone)) {
+            $channels[] = TwilioChannel::class;
         }
 
-        return [TwilioChannel::class];
+        return $channels;
     }
 
     /**
@@ -54,5 +57,30 @@ class ApplicationSentNotification extends Notification implements ShouldQueue
                     config('app.name')
                 )
             );
+    }
+
+    /**
+     * @param Job $job
+     * @return MailMessage
+     */
+    public function toMail(Job $job)
+    {
+        $message = (new MailMessage())
+            ->subject(sprintf('[%s] %s', $this->application->name, $job->title))
+            ->replyTo($this->application->email, $this->application->name)
+            ->view('emails.job.application', [
+                'application' => $this->application->toArray(),
+                'job' => $job
+            ]);
+
+        if ($this->application->cv) {
+            $path = realpath(storage_path('app/cv/' . $this->application->cv));
+            $filename = basename($path);
+
+            $name = explode('_', $filename, 2)[1];
+            $message->attach($path, ['as' => $name]);
+        }
+
+        return $message;
     }
 }
