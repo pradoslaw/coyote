@@ -3,6 +3,7 @@
 namespace Boduch\Grid\Filters;
 
 use Boduch\Grid\Column;
+use Illuminate\Foundation\Application;
 
 abstract class Filter implements FilterInterface
 {
@@ -146,7 +147,9 @@ abstract class Filter implements FilterInterface
      */
     protected function hasInput()
     {
-        return $this->getRequest()->has($this->normalizeName($this->getName()));
+        $method = version_compare(Application::VERSION, '5.5') === -1 ? 'has' : 'filled';
+
+        return $this->getRequest()->$method($this->normalizeName($this->getName()));
     }
 
     /**
