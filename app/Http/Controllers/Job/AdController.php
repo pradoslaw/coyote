@@ -61,21 +61,21 @@ class AdController extends Controller
         return (string) view(
             'job.ad',
             $data,
-            ['jobs' => $result->getSource(), 'inverse_tags' => $tags, 'major_tag' => $this->getMajorTag($tags)]
+            ['jobs' => $result->getSource(), 'inverse_tags' => $this->getTagsNames($tags), 'major_tag' => $this->getMajorTag($tags)]
         );
     }
 
     /**
-     * @param array $assoc
+     * @param \Coyote\Tag[] $tags
      * @return array
      */
-    private function boost($assoc)
+    private function boost($tags)
     {
         $result = [];
 
-        foreach ($assoc as $tag) {
+        foreach ($tags as $tag) {
             if (!empty($tag)) {
-                $result[] = sprintf('%s^%.1F', Raw::escape($tag), 1);
+                $result[] = sprintf('%s^%.1F', Raw::escape($tag->name), 1);
             }
         }
 
@@ -83,7 +83,7 @@ class AdController extends Controller
     }
 
     /**
-     * @param array $tags
+     * @param \Coyote\Tag[] $tags
      * @return array|\Coyote\Tag
      */
     private function getMajorTag($tags)
@@ -92,6 +92,19 @@ class AdController extends Controller
             return [];
         }
 
-        return $this->tag->findBy('name', $tags[array_rand($tags)]);
+        return $tags->first();
+    }
+
+    /**
+     * @param \Coyote\Tag[] $tags
+     * @return array
+     */
+    private function getTagsNames($tags)
+    {
+        if (empty($tags)) {
+            return [];
+        }
+
+        return $tags->pluck('name')->toArray();
     }
 }

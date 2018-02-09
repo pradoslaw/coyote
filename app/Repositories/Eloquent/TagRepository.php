@@ -42,4 +42,20 @@ class TagRepository extends Repository implements TagRepositoryInterface
 
         return $ids;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCategorizedTags(array $tags)
+    {
+        return $this
+            ->model
+            ->selectRaw('name, logo, COUNT(*) AS weight')
+                ->join('job_tags', 'tag_id', '=', 'tags.id')
+            ->whereIn('name', $tags)
+            ->whereNotNull('category_id')
+            ->groupBy('name')
+            ->groupBy('logo')
+            ->get();
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Tag;
+
 interface TagRepositoryInterface extends RepositoryInterface
 {
     /**
@@ -15,4 +17,10 @@ interface TagRepositoryInterface extends RepositoryInterface
      * @return int[] Ids of tags
      */
     public function multiInsert(array $tags);
+
+    /**
+     * @param array $tags
+     * @return Tag[]
+     */
+    public function getCategorizedTags(array $tags);
 }

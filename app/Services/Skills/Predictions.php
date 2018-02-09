@@ -46,68 +46,62 @@ class Predictions
     /**
      * @return array
      */
-    public function getTags(): array
+    public function getTags()
     {
         if (!($tags = $this->getRefererTags())) {
             $tags = $this->getUserPopularTags();
         }
 
-        // filter only tags present in job offers
-        return $this->filter($tags);
+        return $tags;
     }
 
     /**
-     * @param array $tags
-     * @return array
+     * @return \Coyote\Tag[]|null
      */
-    private function filter(array $tags): array
-    {
-        return $this->tag->select('name')->whereIn('name', $tags)->join('job_tags', 'tag_id', '=', 'tags.id')->groupBy('name')->pluck('name')->toArray();
-    }
-
-    /**
-     * @return array
-     */
-    private function getRefererTags(): array
+    private function getRefererTags()
     {
         $referer = filter_var($this->request->headers->get('referer'), FILTER_SANITIZE_URL);
         if (!$referer) {
-            return [];
+            return null;
         }
 
         $path = parse_url(urldecode($referer), PHP_URL_PATH);
         if (!$path) {
-            return [];
+            return null;
         }
 
         $page = $this->page->findByPath($path);
 
         if (!$page || !$page->tags) {
-            return [];
+            return null;
         }
 
-        return $page->tags;
+        return $this->tag->getCategorizedTags($page->tags) ?? null;
     }
 
     /**
-     * @return array
+     * @return \Coyote\Tag[]|null
      */
-    private function getUserPopularTags(): array
+    private function getUserPopularTags()
     {
         /** @var \Coyote\Guest $guest */
         $guest = $this->guest->find($this->request->session()->get('guest_id'));
 
         if (empty($guest) || empty($guest->interests)) {
-            return [];
+            return null;
         }
 
         $ratio = $guest->interests['ratio'];
         arsort($ratio);
 
         // get only five top tags
-        $ratio = array_slice($ratio, 0, 4);
+        $result = $this->tag->getCategorizedTags(array_slice(array_keys($ratio), 0, 4));
+
+        if (!$result) {
+            return null;
+        }
 
         // only one tag please...
-        return [array_rand($ratio)];
+        return collect()->push($result->random());
     }
 }
