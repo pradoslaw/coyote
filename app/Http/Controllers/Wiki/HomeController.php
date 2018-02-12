@@ -22,10 +22,10 @@ class HomeController extends BaseController
 
         $cache = $this->getCacheFactory();
 
-        if (!$cache->has('wiki:log') || $request->getQueryString() !== null) {
+        if ($cache->has('wiki:log') === false || $request->getQueryString() !== null) {
             $grid = $this->grid();
 
-            if ($request->getQueryString() !== null) {
+            if (!$request->getQueryString()) {
                 $cache->put('wiki:log', $grid, 30);
             }
         } else {
