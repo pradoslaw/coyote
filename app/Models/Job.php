@@ -337,6 +337,7 @@ class Job extends Model
     {
         $score = 0;
 
+        // 70 points maximum...
         foreach (self::SCORE_CONFIG['job'] as $column => $point) {
             if (!empty($this->{$column})) {
                 $score += $point;
@@ -345,17 +346,20 @@ class Job extends Model
 
         // 30 points maximum...
         $score += min(30, (count($this->tags()->get()) * 10));
+        // 50 points maximum
         $score += min(50, count($this->features()->wherePivot('checked', true)->get()) * 5);
 
         if ($this->firm_id) {
             $firm = $this->firm;
 
+            // 26 points maximum ...
             foreach (self::SCORE_CONFIG['firm'] as $column => $point) {
                 if (!empty($firm->{$column})) {
                     $score += $point;
                 }
             }
 
+            // 25 points maximum...
             $score += min(25, $firm->benefits()->count() * 5);
             $score -= ($firm->is_agency * 15);
         } else {
