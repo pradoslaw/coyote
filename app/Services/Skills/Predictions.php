@@ -76,7 +76,9 @@ class Predictions
             return null;
         }
 
-        return $this->tag->getCategorizedTags($page->tags) ?? null;
+        $result = $this->tag->getCategorizedTags($page->tags);
+
+        return count($result) ? $result : null;
     }
 
     /**
