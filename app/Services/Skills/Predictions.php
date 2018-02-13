@@ -97,7 +97,7 @@ class Predictions
         // get only five top tags
         $result = $this->tag->getCategorizedTags(array_slice(array_keys($ratio), 0, 4));
 
-        if (!$result) {
+        if (!count($result)) {
             return null;
         }
 
