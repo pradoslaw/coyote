@@ -56,6 +56,9 @@ header.navbar-default {
     font-size: 9px;
     border: 1px solid #fff;
     border-radius: 5px;
+    overflow: inherit;
+    text-overflow: inherit;
+    max-width: 100%;
   }
 
   .badge.new {
