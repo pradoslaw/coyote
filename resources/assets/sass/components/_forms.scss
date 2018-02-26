@@ -3,9 +3,3 @@
     font-size: $font-size-small;
   }
 }
-
-@media screen and (max-width: $screen-xs) {
-  .help-block {
-    display: none;
-  }
-}
