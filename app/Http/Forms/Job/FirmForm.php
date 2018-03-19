@@ -362,7 +362,7 @@ class FirmForm extends Form
         $json['gallery'] = [];
 
         foreach ($this->get('gallery')->getChildrenValues() as $gallery) {
-            if (!empty($gallery)) {
+            if (!empty($gallery) && $gallery instanceof Firm\Gallery) {
                 $json['gallery'][] = ['file' => $gallery->file, 'url' => (string) $gallery->photo->url()];
             }
         }
