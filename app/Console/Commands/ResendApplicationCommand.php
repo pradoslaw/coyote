@@ -4,7 +4,7 @@ namespace Coyote\Console\Commands;
 
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Job\Application;
-use Coyote\Mail\ApplicationSent;
+use Coyote\Notifications\ApplicationSentNotification;
 use Illuminate\Console\Command;
 
 class ResendApplicationCommand extends Command
@@ -16,7 +16,7 @@ class ResendApplicationCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'job:resend  {--id=} {--email=}';
+    protected $signature = 'job:resend  {--id=}';
 
     /**
      * The console command description.
@@ -32,11 +32,9 @@ class ResendApplicationCommand extends Command
     {
         $application = Application::findOrFail($this->option('id'));
 
-        $mailer = $this->getMailFactory();
-        $email = $this->option('email') ?: $application->job->email;
+        $email = $application->job->email;
+        $application->job->notify(new ApplicationSentNotification($application));
 
-        // we don't queue mail because it has attachment and unfortunately we can't serialize binary data
-        $mailer->to($email)->send(new ApplicationSent($application, $application->job));
         $this->line("Sending to: $email");
 
         $this->line('Done.');
