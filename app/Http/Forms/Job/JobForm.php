@@ -291,7 +291,7 @@ class JobForm extends Form
                 'help' => 'Adres e-mail nie będzie widoczny dla osób postronnych.'
             ])
             ->add('phone', 'tel', [
-                'rules' => 'sometimes|string',
+                'rules' => 'sometimes|string|max:50',
                 'label' => 'Numer telefonu',
                 'help' => 'Wpisz swój numer telefonu, a wyślemy Ci powiadomienie o nadesłanej aplikacji.',
                 'attr' => [

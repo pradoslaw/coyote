@@ -159,7 +159,7 @@
                                     {{ form_error(form.email) }}
                                 </div>
 
-                                <div class="col-sm-6">
+                                <div class="col-sm-6" :class="{'has-error': errors.phone != null}">
                                     {{ form_widget(form.phone, {attr: {':disabled': 'job.enable_apply == 0'}}) }}
                                     {{ form_error(form.phone) }}
                                 </div>
