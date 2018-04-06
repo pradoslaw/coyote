@@ -89,6 +89,10 @@ class SpamValidator
 
         $clientHost = $this->request->getClientHost();
 
+        if (empty($clientHost)) {
+            return true;
+        }
+
         foreach (config('app.blacklist_host') as $host) {
             if (str_contains($clientHost, $host)) {
                 return false;
