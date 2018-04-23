@@ -1,0 +1,30 @@
+google.com, pub-1274416353693598, RESELLER
+valueclickmedia.com, 37762, RESELLER
+openx.com, 537136242, RESELLER
+rubiconproject.com, 11438, RESELLER
+rubiconproject.com, 16728, RESELLER
+pubmatic.com, 73726, RESELLER
+aol.com, 5000000419, RESELLER
+adform.com, 716, RESELLER
+appnexus.com, 4003, RESELLER
+sekindo.com, 19360, RESELLER
+contextweb.com, 558609, RESELLER
+indexexchange.com, 185039, RESELLER
+smartadserver.com, 2416, RESELLER
+criteo.com, 15826, RESELLER
+contextweb.com, 560762, RESELLER
+contextweb.com, 560905, RESELLER
+contextweb.com, 561365, RESELLER
+EMXDGT.com, 63, RESELLER
+Appnexus.com, 1356, RESELLER
+Google.com, pub-5995202563537249, RESELLER
+Appnexus.com, 1940, RESELLER
+adtech.com, 4538, RESELLER
+
+advertising.com, 18807, RESELLER
+
+appnexus.com, 1371, DIRECT
+
+# programmatic advertising: contact@yieldlove.com
+
+google.com, pub-7079014052474517, DIRECT, f08c47fec0942fa0
