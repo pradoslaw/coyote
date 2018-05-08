@@ -1,52 +1,58 @@
-# Vagrant file specific for version 2
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+MACHINE_IP = "175.0.0.10"
+PROJECT_LOCATION = "/gc"
+
+module OS
+    def OS.windows?
+        (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+    end
+end
+
+if !OS.windows?
+    raise "Only for windows. (Docker-toolbox setup)"
+end
+
 Vagrant.configure("2") do |config|
+    config.vm.box = "ubuntu/xenial64"
+    config.vm.network "private_network", ip: MACHINE_IP
+    config.ssh.forward_agent = true
 
-	config.vm.box = "bento/ubuntu-16.10"
-	config.vm.hostname = "coyote.dev"
-	config.vm.network :private_network, ip: "192.168.10.10"
-	#nginx
-	config.vm.network :forwarded_port, guest: 80, host: 8080
-	#postgresql
-	config.vm.network :forwarded_port, guest: 5432, host: 5433
-	config.ssh.forward_agent = true
+    if OS.windows?
+        config.vm.synced_folder "./", PROJECT_LOCATION, type: "nfs"
+    else
+        config.vm.synced_folder "./", PROJECT_LOCATION,
+            mount_options: ["noatime,intr,nordirplus,nolock,async,noacl,fsc,tcp"],
+            type: "nfs"
+    end
 
-	# Specify folder which you would like to have available in your box
-	#config.vm.synced_folder ".", "/vagrant"
+    config.vm.boot_timeout = 9000
 
-	# In case speed is lacking, try the NFS option
-	config.vm.synced_folder ".", "/vagrant", :nfs => true
+    config.vm.provider "virtualbox" do |vb|
+        # Use VBoxManage to customize the VM. For example to change memory:
+        vb.customize ["modifyvm", :id, "--memory", "2048"]
+        vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+        vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
+    end
 
-	# Specific configuration options for Virtualbox
-	config.vm.provider "virtualbox" do |v|
+    config.vm.provision "shell", env: {"PROJECT_LOCATION" => PROJECT_LOCATION}, inline: <<-SHELL
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        sudo apt-get update
+        sudo apt-get -y upgrade
+        sudo apt-get install -y docker-ce
 
-		# Show gui instead of default, which is headless
-		v.gui = false
+        sudo curl -sL https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
 
-		# Use modern chipset
-		v.customize ["modifyvm", :id, "--chipset", "ich9"]
+        curl -sL https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine
+        chmod +x /tmp/docker-machine
+        sudo cp /tmp/docker-machine /usr/local/bin/docker-machine
 
-		# Increase default memory size
-		v.customize ["modifyvm", :id, "--memory", 1024]
-
-		# Dual core
-		v.customize ["modifyvm", :id, "--cpus", 2]
-
-		#prevent npm issues
-		v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate//vagrant", "1"]
-	end
-
-	# Install puppet
-	config.vm.provision "shell", path: "puppet/env/dev/manifests/install-puppet.sh"
-
-	# Start puppet
-	config.vm.provision :puppet do |puppet|
-		puppet.environment = "dev"
-		puppet.environment_path = "puppet/env"
-		puppet.manifests_path = 'puppet/env/dev/manifests'
-		puppet.manifest_file = 'init.pp'
-		puppet.module_path = 'puppet/env/dev/modules'
-	end
-
-	# Install Coyote
-	config.vm.provision "shell", path: "puppet/env/dev/manifests/after-puppet.sh"
+        echo "PS1='\${debian_chroot:+(\$debian_chroot)}\\[\\033[01;32m\\]\\u@\\h\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ '" >> /home/ubuntu/.bashrc
+        echo "cd ${PROJECT_LOCATION}" >> /home/ubuntu/.bashrc
+        cd ${PROJECT_LOCATION}
+    SHELL
 end

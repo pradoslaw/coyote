@@ -1,0 +1,6 @@
+2018/04/20 17:17:05 [emerg] 1#1: host not found in upstream "app" in /etc/nginx/conf.d/default.conf:12
+2018/04/20 17:20:58 [emerg] 1#1: host not found in upstream "app" in /etc/nginx/conf.d/default.conf:12
+2018/04/20 17:44:02 [emerg] 1#1: host not found in upstream "app" in /etc/nginx/conf.d/default.conf:12
+2018/04/20 17:51:08 [emerg] 1#1: host not found in upstream "app" in /etc/nginx/conf.d/default.conf:12
+2018/04/20 17:53:43 [emerg] 1#1: host not found in upstream "app" in /etc/nginx/conf.d/default.conf:12
+2018/05/08 21:31:37 [warn] 5#5: *19 an upstream response is buffered to a temporary file /var/cache/nginx/fastcgi_temp/1/00/0000000001 while reading upstream, client: 175.0.0.1, server: , request: "GET /Forum/Newbie/1-test?p=1 HTTP/1.1", upstream: "fastcgi://172.18.0.3:9000", host: "175.0.0.10:8880", referrer: "http://175.0.0.10:8880/Forum/Newbie/Submit"

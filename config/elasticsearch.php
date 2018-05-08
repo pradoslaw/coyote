@@ -11,7 +11,7 @@ return [
     |
     | http://www.elasticsearch.org/guide/en/elasticsearch/client/php-api/current/_configuration.html
     */
-    'hosts' => ['localhost:9200'],
+    'hosts' => [ env('ELASTICSEARCH_HOST', 'localhost:9200')],
 
     /*
     |--------------------------------------------------------------------------
