@@ -216,16 +216,18 @@
                 <div id="map" style="height: 250px"></div>
             {% endif %}
 
-            {% if not job.is_expired and not job.enable_apply %}
-                <h3 id="apply">Informacje o rekrutacji</h3>
+            {% if not job.is_expired %}
+                {% if not job.enable_apply %}
+                    <h3 id="apply">Informacje o rekrutacji</h3>
 
-                <div class="text">
-                    {{ job.recruitment|raw }}
-                </div>
-            {% else %}
-                <div id="apply" class="margin-lg-top">
-                    <a class="btn btn-primary" href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}" {{ is_applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
-                </div>
+                    <div class="text">
+                        {{ job.recruitment|raw }}
+                    </div>
+                {% else %}
+                    <div id="apply" class="margin-lg-top">
+                        <a class="btn btn-primary" href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}" {{ is_applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj na to stanowisko</a>
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
     </div>
