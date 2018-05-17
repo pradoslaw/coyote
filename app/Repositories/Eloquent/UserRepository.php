@@ -31,22 +31,16 @@ class UserRepository extends Repository implements UserRepositoryInterface
             ->leftJoin('groups', 'groups.id', '=', 'group_id');
 
         if (!empty($userIds)) {
-            $values = [];
-
-            foreach ($userIds as $index => $userId) {
-                $values[] = "($userId,$index)";
-            }
-
             $sql->leftJoin(
-                $this->raw('(VALUES ' . implode(',', $values) . ') AS x (user_id, ordering)'),
-                'users.id',
+                $this->raw('(VALUES (' . implode(',', $userIds) . ')) AS x (user_id)'),
+                'x.user_id',
                 '=',
-                'x.user_id'
+                'users.id'
             )
-            ->orderBy($this->raw('CASE WHEN x.ordering IS NULL THEN 0 ELSE x.ordering END'), 'DESC');
+            ->orderBy($this->raw('CASE WHEN x.user_id IS NULL THEN 0 ELSE 1 END'), 'DESC');
         }
 
-        return $sql->orderByRaw('visited_at DESC NULLS LAST')->limit(5)->get();
+        return $sql->orderBy('reputation', 'DESC')->orderByRaw('visited_at DESC NULLS LAST')->limit(5)->get();
     }
 
     /**

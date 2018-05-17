@@ -248,22 +248,15 @@ class TopicController extends BaseController
     public function prompt($id, User $user, Request $request)
     {
         $this->validate($request, ['q' => 'username']);
-        $usersId = [];
 
         $posts = $this->post->findAllBy('topic_id', $id, ['id', 'user_id']);
         $posts->load('comments'); // load comments assigned to posts
 
-        foreach ($posts as $post) {
-            if ($post->user_id) {
-                $usersId[] = $post->user_id;
-            }
+        $usersId = $posts->pluck('user_id')->toArray();
 
-            foreach ($post->comments as $comment) {
-                if ($comment->user_id) {
-                    $usersId[] = $comment->user_id;
-                }
-            }
-        }
+        $posts->pluck('comments')[0]->each(function ($comment) use (&$usersId) {
+            $usersId[] = $comment->user_id;
+        });
 
         return view('components.prompt')->with('users', $user->lookupName($request['q'], array_unique($usersId)));
     }
