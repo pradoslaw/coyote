@@ -34,7 +34,7 @@ services:
         image: nginx:latest
         volumes:
             - "./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro"
-            - "./var/logs/nginx:/var/log/nginx:z"
+            - "./data/logs/nginx:/var/log/nginx:z"
         working_dir: /var/www
         volumes_from:
             - php
@@ -71,3 +71,8 @@ services:
         mem_limit: 1g
         environment:
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+
+    smtp:
+        image: namshi/smtp
+        environment:
+          - PORT=${MAIL_PORT}
