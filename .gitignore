@@ -65,3 +65,4 @@ app/Plugins/*
 
 .vagrant
 .data
+Vagrantfile
