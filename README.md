@@ -65,19 +65,21 @@ Działanie projektu wymaga zainstalowania serwera HTTP takiego jak Apache czy Ng
 ### Instalacja Docker
 
 W folderze projektu wykonujemy następujące polecenia:
-`cp .env.docker .env`
-`cp Vagrantfile.docker Vagrantfile`
+1. `cp .env.docker .env`
+2. `cp Vagrantfile.docker Vagrantfile`
 
-`vagrant up`
-`vagrant ssh`
-`cd /vagrant`
+3. `vagrant up`
+4. `vagrant ssh`
+5. `cd /vagrant`
 
-`sudo docker-compose build`
-`sudo docker-compose up -d`
-`sudo docker-compose exec php make install-dev`
-`sudo docker-compose exec php php artisan key:generate`
-`sudo docker-compose exec php php artisan es:create`
-`sudo docker-compose exec php php artisan es:mapping`
+6. `sudo docker-compose build`
+7. `sudo docker-compose up -d`
+8. `sudo docker-compose exec php make install-dev`
+9. `sudo docker-compose exec php php artisan key:generate`
+10. `sudo docker-compose exec php php artisan es:create`
+11. `sudo docker-compose exec php php artisan es:mapping`
+
+Strona jest dostępna w przeglądarce pod adresem: `175.0.0.10:8880`
 
 ### Instalacja Puppet
 
