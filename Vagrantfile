@@ -10,9 +10,7 @@ module OS
     end
 end
 
-if !OS.windows?
-    raise "Only for windows. (Docker-toolbox setup)"
-end
+raise "Only for windows. (Docker-toolbox setup)" unless OS.windows?
 
 Vagrant.configure("2") do |config|
     config.vm.box = "ubuntu/xenial64"
