@@ -258,7 +258,7 @@ class TopicController extends BaseController
             $usersId[] = $comment->user_id;
         });
 
-        return view('components.prompt')->with('users', $user->lookupName($request['q'], array_unique($usersId)));
+        return view('components.prompt')->with('users', $user->lookupName($request['q'], array_filter(array_unique($usersId))));
     }
 
     /**
