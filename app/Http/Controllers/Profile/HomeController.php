@@ -65,6 +65,8 @@ class HomeController extends Controller
      */
     public function index($user, $tab = 'reputation')
     {
+        abort_if($user->is_active === false, 404);
+
         $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
         $this->request->attributes->set('reputation_url', route('profile.history', [$user->id]));
 
