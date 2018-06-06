@@ -32,7 +32,6 @@ class Notification extends Model
     const POST_ACCEPT = 12;
     const POST_COMMENT_LOGIN = 13;
     const POST_LOGIN = 14;
-    const MICROBLOG = 15;
     const MICROBLOG_LOGIN = 16;
     const POST_VOTE = 18;
     const MICROBLOG_VOTE = 19;

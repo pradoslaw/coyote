@@ -105,13 +105,6 @@ class NotificationTypesTableSeeder extends Seeder
             'email' => false,
             'category' => 'Forum'
         ]);
-        Type::create(['id' => Notification::MICROBLOG,
-            'name' => '...odpowiedzi na wpis na mikroblogu',
-            'headline' => '{sender} odpisał na Twój wpis na mikroblogu',
-            'profile' => true,
-            'email' => true,
-            'category' => 'Mikroblogi'
-        ]);
         Type::create(['id' => Notification::MICROBLOG_LOGIN,
             'name' => '...wystąpieniu Twojego loginu w wiadomościach na mikroblogu',
             'headline' => '{sender} wspomniał o Tobie we wpisie mikroblogu',

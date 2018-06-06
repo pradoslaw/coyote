@@ -26,7 +26,7 @@ class NotificationTest extends \Codeception\TestCase\Test
         $objectId = rand(100, 9999);
 
         $notification = Notification::create([
-            'type_id' => Notification::MICROBLOG,
+            'type_id' => Notification::MICROBLOG_LOGIN,
             'user_id' => $this->user->id,
             'subject' => 'Lorem ipsum',
             'excerpt' => 'excerpt',
