@@ -67,7 +67,7 @@ class VoteController extends BaseController
                 // add or subtract reputation points
                 app('reputation.post.vote')
                     ->setUserId($post->user_id)
-                    ->setPositive(!count($vote))
+                    ->setPositive($vote === null)
                     ->setUrl($url)
                     ->setPostId($post->id)
                     ->setExcerpt($excerpt)
