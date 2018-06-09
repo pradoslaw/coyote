@@ -62,12 +62,31 @@ Działanie projektu wymaga zainstalowania serwera HTTP takiego jak Apache czy Ng
 
 ## Vagrant
 
+### Instalacja Docker
+
+W folderze projektu wykonujemy następujące polecenia:
+1. `cp .env.docker .env`
+2. `cp Vagrantfile.docker Vagrantfile`
+
+3. `vagrant up`
+4. `vagrant ssh`
+5. `cd /vagrant`
+
+6. `sudo docker-compose build`
+7. `sudo docker-compose up -d`
+8. `sudo docker-compose exec php make install-dev`
+9. `sudo docker-compose exec php php artisan key:generate`
+10. `sudo docker-compose exec php php artisan es:create`
+11. `sudo docker-compose exec php php artisan es:mapping`
+
+Strona jest dostępna w przeglądarce pod adresem: `175.0.0.10:8880`
+
+### Instalacja Puppet
+
 Aby nie instalować wszystkich pakietów lokalnie, można skorzystać z Vagranta. Obecna wersja nie umożliwia jeszcze całkowitej instalacji z wnętrza Vagranta (jeśli wiesz, jak sprawić, by `npm install` i `gulp` działało na Vagrancie pod systemem Windows, daj znać), więc wymagane są następujące narzędzia zainstalowane lokalnie:
 * Vagrant
 * npm
 * gulp (instalowane przez `npm install -g gulp`)
-
-### Instalacja
 
 1. vagrant up
 2. npm install

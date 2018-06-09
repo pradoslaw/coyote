@@ -62,3 +62,7 @@ tests/_output/*
 tests/acceptance.suite.yml
 
 app/Plugins/*
+
+.vagrant
+.data
+Vagrantfile
