@@ -1,5 +1,9 @@
 <section id="microblog" class="box">
     {% if microblogs is not empty %}
+        <div class="text-center">
+            {{ pagination|raw }}
+        </div>
+
         {% for microblog in microblogs %}
             {% include "microblog.partials.microblog" %}
         {% endfor %}
