@@ -34,6 +34,7 @@ class InterestsCalculatorTest extends \Codeception\TestCase\Test
         $calculator = new \Coyote\Services\Skills\Calculator($json);
         $result = $calculator->toJson();
 
-        $this->assertEquals($result, '{"tags":{"php":1034,"python":506,"c++":333,"mysql":144},"ratio":{"php":1,"python":0.48936170212766,"c++":0.3220502901354,"mysql":0.13926499032882}}');
+        $this->assertJson($result);
+        $this->assertJsonStringEqualsJsonString($result, '{"tags":{"php":1034,"python":506,"c++":333,"mysql":144},"ratio":{"php":1,"python":0.48936170212766,"c++":0.3220502901354,"mysql":0.13926499032882}}');
     }
 }

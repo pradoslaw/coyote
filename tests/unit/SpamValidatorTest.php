@@ -33,9 +33,6 @@ class SpamValidatorTest extends \Codeception\TestCase\Test
 
     public function testValidateBlacklistHost()
     {
-        $validator = $this->buildValidatorInstance('37.109.33.137');
-        $this->assertFalse($validator->validateBlacklistHost()); // not allowed
-
         $validator = $this->buildValidatorInstance('5.172.255.186');
         $this->assertFalse($validator->validateBlacklistHost()); // not allowed
 
