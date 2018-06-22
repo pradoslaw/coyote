@@ -23,6 +23,11 @@ abstract class Filter implements FilterInterface
     protected $column;
 
     /**
+     * @var array
+     */
+    protected $attr = [];
+
+    /**
      * @param array $options
      */
     public function __construct(array $options = [])
@@ -80,6 +85,25 @@ abstract class Filter implements FilterInterface
     public function getName()
     {
         return $this->name ?: $this->column->getName();
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttr(): array
+    {
+        return $this->attr;
+    }
+
+    /**
+     * @param array $attr
+     * @return $this
+     */
+    public function setAttr(array $attr)
+    {
+        $this->attr = $attr;
+
+        return $this;
     }
 
     /**
