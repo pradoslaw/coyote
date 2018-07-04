@@ -30,7 +30,7 @@
                     <a href="{{ route('microblog.view', [microblog.id]) }}#entry-{{ microblog.id }}" title="{{ microblog.created_at|format_date(false) }}" class="timestamp" data-timestamp="{{ microblog.created_at|timestamp }}">{{ microblog.created_at|format_date }}</a>
 
                     {% if microblog.is_sponsored %}
-                        &bull; <small class="text-muted">Sponsorowane</small>
+                        &bull; <small class="text-muted" style="font-size: 11px">Sponsorowane</small>
                     {% endif %}
 
                     <div class="microblog-text">
