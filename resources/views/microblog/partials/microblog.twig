@@ -29,6 +29,10 @@
                     <h5 class="media-heading">{{ link_to_profile(microblog.user_id, microblog.name, microblog.is_active, microblog.is_blocked) }}</h5>
                     <a href="{{ route('microblog.view', [microblog.id]) }}#entry-{{ microblog.id }}" title="{{ microblog.created_at|format_date(false) }}" class="timestamp" data-timestamp="{{ microblog.created_at|timestamp }}">{{ microblog.created_at|format_date }}</a>
 
+                    {% if microblog.is_sponsored %}
+                        &bull; <small class="text-muted">Sponsorowane</small>
+                    {% endif %}
+
                     <div class="microblog-text">
                         {% include 'microblog.partials.text' %}
                     </div>
