@@ -3,19 +3,15 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 
 class ViewController extends Controller
 {
     /**
-     * @param $id
-     * @param MicroblogRepository $repository
+     * @param \Coyote\Microblog $microblog
      * @return \Illuminate\View\View
      */
-    public function index($id, MicroblogRepository $repository)
+    public function index($microblog)
     {
-        /** @var \Coyote\Microblog $microblog */
-        $microblog = $repository->findOrFail($id);
         abort_if(!is_null($microblog->parent_id), 404);
 
         $excerpt = excerpt($microblog->html);
