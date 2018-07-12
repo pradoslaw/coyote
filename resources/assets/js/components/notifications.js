@@ -26,7 +26,7 @@ class Notifications
      * @param counter
      */
     set(counter) {
-        this._counter = parseInt(counter);
+        this._counter = Math.max(0, parseInt(counter));
 
         if (this._counter > 0) {
             this._setTitle('(' + (this._counter) + ') ' + this._pageTitle);
