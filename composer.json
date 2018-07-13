@@ -42,7 +42,7 @@
         "jenssegers/agent": "^2.3",
         "adam-boduch/laravel-grid": "dev-master",
         "chrisboulton/php-diff": "dev-master",
-        "sentry/sentry-laravel": "^0.6",
+        "sentry/sentry-laravel": "^0.9",
         "erusev/parsedown": "^1.6",
         "spatie/laravel-fractal": "^3.2",
         "doctrine/dbal": "^2.5",
