@@ -54,6 +54,6 @@ class PostFactory extends AbstractFactory
         }
         stop_measure('parsing');
 
-        return $text;
+        return (string) $text;
     }
 }
