@@ -64,7 +64,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('pastebin:purge')->hourly();
         $schedule->command('firewall:purge')->hourly();
         $schedule->command('sitemap:create')->dailyAt('03:00:00');
-        $schedule->command('currency:exchange')->dailyAt('20:00:00');
         $schedule->command('guest:purge')->dailyAt('04:00:00');
     }
 }
