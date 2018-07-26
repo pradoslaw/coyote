@@ -423,3 +423,17 @@ header.navbar-default {
   position: absolute;
   display: block;
 }
+
+/* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
+@media (min-aspect-ratio: 18/3) {
+
+  /* zostawiamy navbar na gorze strony */
+  .navbar-fixed-top {
+    position: absolute;
+  }
+  
+  /* ukrywamy przyklejona sciezke podstrony, na ktorej sie znajdujemy */  
+  body .breadcrumb[id] {
+	display: none;
+  }
+}
