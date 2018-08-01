@@ -10,6 +10,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class MicroblogListener implements ShouldQueue
 {
     /**
+     * Postpone this job to make sure that record was saved in transaction.
+     *
+     * @var int
+     */
+    public $delay = 10;
+
+    /**
      * @var MicroblogRepository
      */
     protected $microblog;

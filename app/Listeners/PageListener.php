@@ -26,6 +26,13 @@ use Illuminate\Contracts\Console\Kernel;
 class PageListener implements ShouldQueue
 {
     /**
+     * Postpone this job to make sure that record was saved in transaction.
+     *
+     * @var int
+     */
+    public $delay = 10;
+
+    /**
      * @var PageRepository
      */
     protected $page;
