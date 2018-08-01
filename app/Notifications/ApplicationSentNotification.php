@@ -15,6 +15,13 @@ class ApplicationSentNotification extends Notification implements ShouldQueue
     use Queueable;
 
     /**
+     * Postpone this job to make sure that record was saved in transaction.
+     *
+     * @var int
+     */
+    public $delay = 10;
+
+    /**
      * @var Job\Application
      */
     private $application;
