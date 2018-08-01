@@ -18,13 +18,6 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
     const ID = \Coyote\Notification::FLAG;
 
     /**
-     * Postpone this job to make sure that record was saved in transaction.
-     *
-     * @var int
-     */
-    public $delay = 10;
-
-    /**
      * @var Flag
      */
     private $flag;
