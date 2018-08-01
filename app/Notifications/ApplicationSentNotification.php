@@ -3,6 +3,7 @@
 namespace Coyote\Notifications;
 
 use Coyote\Job;
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,12 +12,7 @@ use NotificationChannels\Twilio\TwilioSmsMessage;
 
 class ApplicationSentNotification extends Notification implements ShouldQueue
 {
-    /**
-     * Postpone this job to make sure that record was saved in transaction.
-     *
-     * @var int
-     */
-    public $delay = 10;
+    use Queueable;
 
     /**
      * @var Job\Application

@@ -88,7 +88,7 @@ class ApplicationController extends Controller
 
             $this->setSetting('job.application', $form->get('remember')->isChecked() ? $form->toJson() : '');
 
-            $job->notify(new ApplicationSentNotification($application));
+            $job->notify((new ApplicationSentNotification($application))->delay(10));
             $application->notify(new ApplicationConfirmationNotification());
 
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
