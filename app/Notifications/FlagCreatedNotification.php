@@ -4,6 +4,7 @@ namespace Coyote\Notifications;
 
 use Coyote\Flag;
 use Coyote\Services\Notification\DatabaseChannel;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Channels\BroadcastChannel;
@@ -12,6 +13,8 @@ use Illuminate\Notifications\Notification;
 
 class FlagCreatedNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
+    use Queueable;
+
     const ID = \Coyote\Notification::FLAG;
 
     /**
