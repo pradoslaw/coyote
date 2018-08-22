@@ -10,6 +10,7 @@ use Coyote\Payment;
 use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Repositories\Contracts\PaymentRepositoryInterface as PaymentRepository;
+use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
@@ -77,6 +78,13 @@ class PaymentController extends Controller
         $this->vatRates = $this->country->vatRatesList();
     }
 
+    private function establishVatRate(FormInterface $form)
+    {
+        $invoice = $form->get('invoice')->getValue();
+
+        return $this->vatRates[$invoice['country_id']] && $invoice['vat_id'] ? $this->vatRates[$invoice['country_id']] : config('vendor.default_vat_rate');
+    }
+
     /**
      * @param \Coyote\Payment $payment
      * @return \Illuminate\View\View
@@ -91,7 +99,7 @@ class PaymentController extends Controller
 
         // calculate price based on payment details
         $calculator = CalculatorFactory::payment($payment);
-        $calculator->vatRate = $this->vatRates[$form->get('invoice')->get('country_id')->getValue()] ?? $calculator->vatRate;
+        $calculator->vatRate = $this->establishVatRate($form);
 
         $coupon = $this->coupon->firstOrNew(['code' => $form->get('coupon')->getValue()]);
 
@@ -119,8 +127,7 @@ class PaymentController extends Controller
         $form->validate();
 
         $calculator = CalculatorFactory::payment($payment);
-        $calculator->vatRate = $this->vatRates[$form->get('invoice')->getValue()['country_id']]
-            && $form->get('invoice')->get('vat_id')->getValue() ?? $calculator->vatRate;
+        $calculator->vatRate = $this->establishVatRate($form);
 
         $coupon = $this->coupon->findBy('code', $form->get('coupon')->getValue());
         $calculator->setCoupon($coupon);
