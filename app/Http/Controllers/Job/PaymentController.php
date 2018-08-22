@@ -82,7 +82,7 @@ class PaymentController extends Controller
     {
         $invoice = $form->get('invoice')->getValue();
 
-        return $this->vatRates[$invoice['country_id']] && $invoice['vat_id'] ? $this->vatRates[$invoice['country_id']] : config('vendor.default_vat_rate');
+        return isset($this->vatRates[$invoice['country_id']]) && $invoice['vat_id'] ? $this->vatRates[$invoice['country_id']] : config('vendor.default_vat_rate');
     }
 
     /**
