@@ -75,11 +75,6 @@ class SimpleMarkdown extends Markdown implements ParserInterface
         return null;
     }
 
-    protected function inlineStrikethrough($excerpt)
-    {
-        return null;
-    }
-
     /**
      * @param string $text
      * @return mixed|string

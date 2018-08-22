@@ -23,7 +23,7 @@ class CommentFactory extends AbstractFactory
     /**
      * @var array
      */
-    protected $htmlTags = ['b', 'strong', 'i', 'em', 'a[href|title|data-user-id|class]', 'code'];
+    protected $htmlTags = ['b', 'strong', 'i', 'em', 'del', 'a[href|title|data-user-id|class]', 'code'];
 
     /**
      * @var bool
