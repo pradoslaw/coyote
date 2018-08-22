@@ -119,7 +119,8 @@ class PaymentController extends Controller
         $form->validate();
 
         $calculator = CalculatorFactory::payment($payment);
-        $calculator->vatRate = $this->vatRates[$form->get('invoice')->getValue()['country_id']] ?? $calculator->vatRate;
+        $calculator->vatRate = $this->vatRates[$form->get('invoice')->getValue()['country_id']]
+            && $form->get('invoice')->get('vat_id')->getValue() ?? $calculator->vatRate;
 
         $coupon = $this->coupon->findBy('code', $form->get('coupon')->getValue());
         $calculator->setCoupon($coupon);

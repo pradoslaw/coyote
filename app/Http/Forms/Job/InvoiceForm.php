@@ -41,7 +41,11 @@ class InvoiceForm extends Form
             ])
             ->add('vat_id', 'text', [
                 'label' => 'NIP (opcjonalnie)',
-                'rules' => 'string|max:20'
+                'rules' => 'string|max:20',
+                'attr' => [
+                    '@keydown' => 'calculate',
+                    'v-model' => 'form.invoice.vat_id'
+                ]
             ])
             ->add('address', 'text', [
                 'rules' => 'string|required_with:enable_invoice|max:200',
@@ -59,7 +63,8 @@ class InvoiceForm extends Form
                 'choices' => $codeList,
                 'attr' => [
                     'class' => 'input-inline',
-                    '@change' => 'calculate'
+                    '@change' => 'calculate',
+                    'v-model' => 'form.invoice.country_id'
                 ]
             ]);
 

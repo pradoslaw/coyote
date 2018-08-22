@@ -12,8 +12,13 @@ let vm = new Vue({
         money: function(value) {
             return parseFloat(value).toFixed(2);
         },
-        calculate: function(select) {
-            this.calculator.vat_rate = select.target.value ? this.vat_rates[select.target.value] : this.default_vat_rate;
+        calculate: function() {
+            // if VAT ID is empty we must add VAT
+            if (this.form.invoice.vat_id === undefined || this.form.invoice.vat_id === null || this.form.invoice.vat_id.length === 0) {
+                this.calculator.vat_rate = this.default_vat_rate;
+            } else {
+                this.calculator.vat_rate = this.form.invoice.country_id ? this.vat_rates[this.form.invoice.country_id] : this.default_vat_rate;
+            }
         },
         submit: function(e) {
             this.form.cvc = $('#cvc').val();

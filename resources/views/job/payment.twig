@@ -270,7 +270,11 @@
                 expiration_year: '{{ form.exp_year.value }}',
                 expiration_month: '{{ form.exp_month.value }}',
                 cvc: '{{ form.cvc.value }}',
-                payment_method: '{{ form.payment_method.value }}'
+                payment_method: '{{ form.payment_method.value }}',
+                invoice: {
+                    vat_id: '{{ form.invoice.get('vat_id').value }}',
+                    country_id: '{{ form.invoice.get('country_id').value }}',
+                }
             },
             banks: [
                 {id: 25, _class: 'mtransfer'},
