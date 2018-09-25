@@ -81,6 +81,10 @@ class SimpleMarkdown extends Markdown implements ParserInterface
      */
     public function parse($text)
     {
+        // oryginalny mechanizm parsowania markdown zawiera bugi. nie parsuje np.
+        // nawiasu na koncu linku
+        $this->setUrlsLinked(false);
+
         return $this->line($text);
     }
 }
