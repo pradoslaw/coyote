@@ -188,6 +188,9 @@ class LinkTest extends \Codeception\TestCase\Test
 
         $input = 'asp.net/foobar';
         $this->tester->assertEquals('<a href="http://asp.net/foobar">asp.net/foobar</a>', $parser->parse($input));
+
+        $link = 'http://pl.wikipedia.org/wiki/normalna_(bazy_danych)';
+        $this->tester->assertEquals("<a href=\"$link\">$link</a>", $parser->parse($link));
     }
 
     public function testAutolinkLongUrl()
