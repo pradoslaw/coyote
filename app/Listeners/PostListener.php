@@ -14,7 +14,7 @@ class PostListener implements ShouldQueue
      *
      * @var int
      */
-    public $delay = 10;
+    public $delay = 30;
 
     /**
      * @var PostRepository
