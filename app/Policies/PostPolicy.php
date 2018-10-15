@@ -70,6 +70,6 @@ class PostPolicy
      */
     private function isNotOld(Post $post): bool
     {
-        return $post->created_at->diffInHours(Carbon::now()) < 24;
+        return $post->created_at->diffInMinutes(Carbon::now()) < 30;
     }
 }
