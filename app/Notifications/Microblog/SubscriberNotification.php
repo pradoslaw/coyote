@@ -2,11 +2,8 @@
 
 namespace Coyote\Notifications\Microblog;
 
-use Coyote\Microblog;
-use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
@@ -14,7 +11,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class SubscriberNotification extends MicroblogNotification implements ShouldQueue, ShouldBroadcast
 {
-    const ID = \Coyote\Notification::MICROBLOG;
+    const ID = \Coyote\Notification::MICROBLOG_SUBSCRIBER;
 
     /**
      * Get the notification's delivery channels.

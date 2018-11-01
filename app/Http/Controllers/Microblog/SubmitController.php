@@ -6,6 +6,7 @@ use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MediaFactory;
+use Coyote\Notifications\Microblog\MentionNotification;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -13,7 +14,7 @@ use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 
 /**
@@ -43,10 +44,11 @@ class SubmitController extends Controller
      * Publikowanie wpisu na mikroblogu
      *
      * @param Request $request
+     * @param Dispatcher $dispatcher
      * @param \Coyote\Microblog $microblog
      * @return \Illuminate\View\View
      */
-    public function save(Request $request, $microblog)
+    public function save(Request $request, Dispatcher $dispatcher, $microblog)
     {
         $this->validate($request, [
             'text'          => 'required|string|max:10000|throttle:' . $microblog->id
@@ -76,7 +78,7 @@ class SubmitController extends Controller
 
         $microblog->fill($data);
 
-        $this->transaction(function () use (&$microblog, $user) {
+        $this->transaction(function () use (&$microblog, $user, $dispatcher) {
             $microblog->save();
             $object = (new Stream_Microblog())->map($microblog);
 
@@ -92,14 +94,10 @@ class SubmitController extends Controller
                 $usersId = $helper->grab($microblog->html);
 
                 if (!empty($usersId)) {
-                    app('notification.microblog.login')->with([
-                        'users_id'    => $usersId,
-                        'sender_id'   => $user->id,
-                        'sender_name' => $user->name,
-                        'subject'     => excerpt($microblog->html),
-                        'text'        => $microblog->html,
-                        'url'         => UrlBuilder::microblog($microblog)
-                    ])->notify();
+                    $dispatcher->send(
+                        $this->user->findMany($usersId)->exceptUser($this->auth),
+                        new MentionNotification($microblog)
+                    );
                 }
 
                 if ($this->auth->allow_subscribe) {

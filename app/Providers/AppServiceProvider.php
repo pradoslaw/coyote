@@ -138,6 +138,18 @@ class AppServiceProvider extends ServiceProvider
             });
         });
 
+        Collection::macro('exceptUsers', function ($others = []) {
+            if (!($others instanceof Collection)) {
+                $others = collect($others);
+            }
+
+            return $this->filter(function (User $user) use ($others) {
+                return null !== $others->first(function ($value) use ($user) {
+                    return $value->id != $user->id;
+                });
+            });
+        });
+
         Collection::macro('groupCategory', function () {
             /** @var \Illuminate\Support\Collection $this */
             $collection = $this
