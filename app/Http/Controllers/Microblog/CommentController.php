@@ -91,7 +91,7 @@ class CommentController extends Controller
 
                 if (!empty($usersId)) {
                     $dispatcher->send(
-                        $this->user->findMany($usersId)->exceptUser($this->auth),
+                        $this->user->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
                         new MentionNotification($microblog)
                     );
                 }
