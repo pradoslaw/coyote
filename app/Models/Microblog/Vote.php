@@ -4,6 +4,7 @@ namespace Coyote\Microblog;
 
 use Coyote\Microblog;
 use Coyote\Models\Scopes\ForUser;
+use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -42,5 +43,13 @@ class Vote extends Model
     public function microblog()
     {
         return $this->belongsTo(Microblog::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
