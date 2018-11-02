@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmWasSent;
 use Coyote\Http\Factories\MediaFactory;
+use Coyote\Notifications\PmCreatedNotification;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -176,20 +177,22 @@ class PmController extends BaseController
 
             $pm = $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
 
-            $excerpt = excerpt($text = $this->getParser()->parse($request->get('text')));
+//            $excerpt = excerpt($text = $this->getParser()->parse($request->get('text')));
 
             // we need to send notification to recipient
-            app('notification.pm')->with([
-                'user_id'     => $pm->author_id,
-                'sender_id'   => $this->auth->id,
-                'sender_name' => $this->auth->name,
-                'subject'     => $excerpt,
-                'text'        => $text,
-                'url'         => route('user.pm.show', [$pm->id - 1], false)
-            ])->notify();
+//            app('notification.pm')->with([
+//                'user_id'     => $pm->author_id,
+//                'sender_id'   => $this->auth->id,
+//                'sender_name' => $this->auth->name,
+//                'subject'     => $excerpt,
+//                'text'        => $text,
+//                'url'         => route('user.pm.show', [$pm->id - 1], false)
+//            ])->notify();
+
+            $recipient->notify(new PmCreatedNotification($pm));
 
             // broadcast event: we can use it to show message in real time
-            event(new PmWasSent($pm->author_id, $this->auth->id, $this->auth->name, $excerpt));
+//            event(new PmWasSent($pm->author_id, $this->auth->id, $this->auth->name, $excerpt));
 
             // redirect to sent message...
             return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
