@@ -45,7 +45,7 @@ class VoteController extends Controller
 
                 $microblog->votes--;
             } else {
-                $microblog->voters()->create(['user_id' => $this->userId, 'ip' => $request->ip()]);
+                $vote = $microblog->voters()->create(['user_id' => $this->userId, 'ip' => $request->ip()]);
                 $microblog->votes++;
             }
 
@@ -59,8 +59,6 @@ class VoteController extends Controller
 
                 app('reputation.microblog.vote')->map($microblog)->setUrl($url)->setPositive(!$vote)->save();
             } else {
-                $url = UrlBuilder::microblogComment($microblog->parent, $microblog->id);
-
                 $object = (new Stream_Comment())->map($microblog);
                 $target = (new Stream_Microblog())->map($microblog->parent);
             }
@@ -70,7 +68,7 @@ class VoteController extends Controller
             // put this to activity stream
             stream(Stream_Vote::class, $object, $target);
 
-            if (!$vote) {
+            if ($vote->wasRecentlyCreated) {
                 $microblog->user->notify(new VoteNotification($vote));
             }
         });
