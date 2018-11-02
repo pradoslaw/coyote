@@ -244,7 +244,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function notificationSettings()
     {
-        return $this->hasMany(Notification\Setting::class)->join('notification_types', 'notification_types.id', '=', 'notification_settings.type_id');
+        return $this->hasMany(Notification\Setting::class);
     }
 
     /**
