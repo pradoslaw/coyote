@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Forum\Access;
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
 use Illuminate\Database\Eloquent\Builder;
@@ -80,7 +81,15 @@ class Forum extends Model
      */
     public function access()
     {
-        return $this->hasMany('Coyote\Forum\Access');
+        return $this->hasMany(Access::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function groups()
+    {
+        return $this->hasManyThrough(Group::class, Access::class, 'forum_id', 'id', 'id');
     }
 
     /**
@@ -88,7 +97,7 @@ class Forum extends Model
      */
     public function permissions()
     {
-        return $this->hasMany('Coyote\Forum\Permission');
+        return $this->hasMany(\Coyote\Forum\Permission::class);
     }
 
     /**

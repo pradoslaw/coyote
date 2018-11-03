@@ -2,19 +2,22 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Notifications\Post\AcceptedNotification;
 use Coyote\Services\Stream\Activities\Accept as Stream_Accept;
 use Coyote\Services\Stream\Activities\Reject as Stream_Reject;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Contracts\Notifications\Dispatcher;
 
 class AcceptController extends BaseController
 {
     /**
+     * @param Dispatcher $dispatcher
      * @param \Coyote\Post $post
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index($post)
+    public function index(Dispatcher $dispatcher, $post)
     {
         if (auth()->guest()) {
             return response()->json(['error' => 'Musisz być zalogowany, aby zaakceptować ten post.'], 500);
@@ -36,7 +39,7 @@ class AcceptController extends BaseController
             return response()->json(['error' => 'Możesz zaakceptować post tylko we własnym wątku.'], 500);
         }
 
-        $this->transaction(function () use ($topic, $post, $forum) {
+        $this->transaction(function () use ($topic, $post, $forum, $dispatcher) {
             // currently accepted post (if any)
             $accepted = $topic->accept;
 
@@ -91,16 +94,7 @@ class AcceptController extends BaseController
                         $reputation->setPositive(true)->setPostId($post->id)->setUserId($post->user_id)->save();
                     }
 
-                    // send notification to the user
-                    app('notification.post.accept')
-                        ->setPostId($post->id)
-                        ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
-                        ->setSubject(str_limit($topic->subject, 84))
-                        ->setExcerpt($excerpt)
-                        ->setSenderId($this->userId)
-                        ->setSenderName(auth()->user()->name)
-                        ->setUrl($url)
-                        ->notify();
+                    $post->user->notify(new AcceptedNotification($this->auth, $post));
                 }
 
                 $topic->accept()->create([
