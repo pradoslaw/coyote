@@ -90,4 +90,26 @@ class ForumPolicy
     {
         return $this->check('forum-delete', $user, $forum);
     }
+
+    /**
+     * @param User $user
+     * @param Forum $forum
+     * @return bool
+     */
+    public function access(User $user, Forum $forum): bool
+    {
+        $groups = $forum->groups()->get()->pluck('id')->toArray();
+
+        if (empty($groups)) {
+            return true;
+        }
+
+        foreach ($user->groups as $group) {
+            if (in_array($group->id, $groups)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

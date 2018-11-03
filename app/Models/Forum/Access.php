@@ -2,6 +2,7 @@
 
 namespace Coyote\Forum;
 
+use Coyote\Group;
 use Illuminate\Database\Eloquent\Model;
 
 class Access extends Model
@@ -30,7 +31,7 @@ class Access extends Model
      *
      * @var string
      */
-    protected $primaryKey = null;
+    protected $primaryKey = 'group_id';
 
     /**
      * @var bool

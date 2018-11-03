@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Coyote\Post\Attachment[] $attachments
  * @property \Coyote\Post\Vote[] $votes
  * @property \Coyote\Post\Comment[] $comments
+ * @property \Coyote\User $user
+ * @property \Coyote\Post\Accept $accept
  */
 class Post extends Model
 {
