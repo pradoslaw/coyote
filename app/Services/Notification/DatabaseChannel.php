@@ -35,6 +35,7 @@ class DatabaseChannel
         if (empty($alert->id)) {
             $alert = $this->repository->create($data);
         }
+
         $alert->senders()->create($notification->sender());
     }
 }

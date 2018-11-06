@@ -3,8 +3,8 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Notifications\Microblog\MentionNotification;
-use Coyote\Notifications\Microblog\SubscriberNotification;
+use Coyote\Notifications\Microblog\UserMentionedNotification;
+use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
@@ -83,7 +83,7 @@ class CommentController extends Controller
                     ->pluck('user')
                     ->exceptUser($this->auth);
 
-                $dispatcher->send($subscribers, new SubscriberNotification($microblog));
+                $dispatcher->send($subscribers, new SubmittedNotification($microblog));
 
                 $helper = new LoginHelper();
                 // get id of users that were mentioned in the text
@@ -92,7 +92,7 @@ class CommentController extends Controller
                 if (!empty($usersId)) {
                     $dispatcher->send(
                         $this->user->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                        new MentionNotification($microblog)
+                        new UserMentionedNotification($microblog)
                     );
                 }
 

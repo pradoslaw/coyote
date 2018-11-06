@@ -143,6 +143,10 @@ class AppServiceProvider extends ServiceProvider
                 $others = collect($others);
             }
 
+            if (!count($others)) {
+                return $this;
+            }
+
             return $this->filter(function (User $user) use ($others) {
                 return null !== $others->first(function ($value) use ($user) {
                     return $value->id != $user->id;

@@ -6,7 +6,7 @@ use Coyote\Microblog;
 use Coyote\Services\Notification\Notification;
 use Illuminate\Bus\Queueable;
 
-abstract class MicroblogNotification extends Notification
+abstract class AbstractNotification extends Notification
 {
     use Queueable;
 

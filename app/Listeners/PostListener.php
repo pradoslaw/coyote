@@ -34,8 +34,8 @@ class PostListener implements ShouldQueue
      */
     public function onPostSave(PostWasSaved $event)
     {
-        $event->post->putToIndex();
-        $event->post->topic->putToIndex();
+//        $event->post->putToIndex();
+//        $event->post->topic->putToIndex();
     }
 
     /**
