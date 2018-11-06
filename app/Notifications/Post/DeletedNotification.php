@@ -3,6 +3,7 @@
 namespace Coyote\Notifications\Post;
 
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\User;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class DeletedNotification extends AbstractNotification
@@ -29,10 +30,13 @@ class DeletedNotification extends AbstractNotification
 
     /**
      * @param string $reasonName
+     * @return $this
      */
     public function setReasonName($reasonName)
     {
         $this->reasonName = $reasonName;
+
+        return $this;
     }
 
     /**
@@ -45,10 +49,30 @@ class DeletedNotification extends AbstractNotification
 
     /**
      * @param string $reasonText
+     * @return $this
      */
     public function setReasonText($reasonText)
     {
         $this->reasonText = $reasonText;
+
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     * @return array
+     */
+    public function toDatabase(User $user)
+    {
+        return [
+            'object_id'     => $this->objectId(),
+            'user_id'       => $user->id,
+            'type_id'       => static::ID,
+            'subject'       => $this->post->topic->subject,
+            'excerpt'       => $this->reasonName,
+            'url'           => UrlBuilder::post($this->post),
+            'guid'          => $this->id
+        ];
     }
 
     /**
