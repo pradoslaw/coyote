@@ -14,10 +14,10 @@ abstract class Notification extends BaseNotification
     protected $broadcast = [];
 
     /**
-     * @param \Coyote\User $user
+     * @param User $user
      * @return array
      */
-    abstract public function toDatabase($user);
+    abstract public function toDatabase(User $user);
 
     /**
      * @return array
@@ -37,7 +37,7 @@ abstract class Notification extends BaseNotification
      * @param  User  $user
      * @return array
      */
-    public function via($user)
+    public function via(User $user)
     {
         return $this->getChannels($user);
     }

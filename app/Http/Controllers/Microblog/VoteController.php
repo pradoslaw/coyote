@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Notifications\Microblog\VoteNotification;
+use Coyote\Notifications\Microblog\VotedNotification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
@@ -69,7 +69,7 @@ class VoteController extends Controller
             stream(Stream_Vote::class, $object, $target);
 
             if ($vote->wasRecentlyCreated) {
-                $microblog->user->notify(new VoteNotification($vote));
+                $microblog->user->notify(new VotedNotification($vote));
             }
         });
 

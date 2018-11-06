@@ -2,7 +2,6 @@
 
 namespace Coyote\Notifications\Microblog;
 
-use Coyote\Microblog\Vote;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -10,34 +9,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class VoteNotification extends MicroblogNotification implements ShouldQueue, ShouldBroadcast
+class SubmittedNotification extends AbstractNotification implements ShouldQueue, ShouldBroadcast
 {
-    const ID = \Coyote\Notification::MICROBLOG_VOTE;
-
-    /**
-     * @var Vote
-     */
-    private $vote;
-
-    /**
-     * @param Vote $vote
-     */
-    public function __construct(Vote $vote)
-    {
-        $this->vote = $vote;
-        $this->microblog = $vote->microblog;
-    }
-
-    /**
-     * @return array
-     */
-    public function sender()
-    {
-        return [
-            'user_id'       => $this->vote->user_id,
-            'name'          => $this->vote->user->name
-        ];
-    }
+    const ID = \Coyote\Notification::MICROBLOG_SUBSCRIBER;
 
     /**
      * Get the notification's delivery channels.
@@ -47,9 +21,7 @@ class VoteNotification extends MicroblogNotification implements ShouldQueue, Sho
      */
     public function via($user)
     {
-        $this->url = $this->microblog->parent_id
-            ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id)
-                : UrlBuilder::microblog($this->microblog);
+        $this->url = UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id);
 
         return parent::getChannels($user);
     }
@@ -64,7 +36,7 @@ class VoteNotification extends MicroblogNotification implements ShouldQueue, Sho
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
-            'subject'       => excerpt($this->microblog->parent_id ? $this->microblog->parent->html : $this->microblog->html),  // original excerpt of parent entry
+            'subject'       => excerpt($this->microblog->parent->html),  // original excerpt of parent entry
             'excerpt'       => excerpt($this->microblog->html),
             'url'           => $this->url,
             'guid'          => $this->id
@@ -84,29 +56,32 @@ class VoteNotification extends MicroblogNotification implements ShouldQueue, Sho
     /**
      * Get the mail representation of the notification.
      *
+     * @param \Coyote\User $user
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail()
+    public function toMail($user)
     {
         return (new MailMessage)
-            ->subject($this->vote->user->name . ' docenił Twój wpis na mikroblogu')
+            ->subject($user->name . ' dodał komentarz do wpisu na mikroblogu')
             ->line(
                 sprintf(
-                    'Informujemy, ze <strong>%s</strong> docenił Twój wpis na mikroblogu.',
-                    $this->vote->user->name
+                    '<strong>%s</strong> dodał nowy komentarz we wpisie na mikroblogu: <strong>%s</strong>',
+                    $user->name,
+                    excerpt($this->microblog->parent->html)
                 )
             )
-            ->action('Zobacz wpis', url($this->notificationUrl()))
+            ->action('Zobacz komentarz', url($this->url))
             ->line('Dostajesz to powiadomienie, ponieważ obserwujesz ten wpis.');
     }
 
     /**
+     * @param \Coyote\User $user
      * @return BroadcastMessage
      */
-    public function toBroadcast()
+    public function toBroadcast($user)
     {
         return new BroadcastMessage([
-            'headline'  => $this->vote->user->name . ' docenił Twój wpis na mikroblogu',
+            'headline'  => $user->name . ' dodał komentarz do wpisu na mikroblogu',
             'subject'   => excerpt($this->microblog->html),
             'url'       => $this->notificationUrl()
         ]);

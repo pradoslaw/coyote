@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Notifications\Post\VotedNotification;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
@@ -51,15 +52,7 @@ class VoteController extends BaseController
                 $post->score++;
 
                 // send notification to the user
-                app('notification.post.vote')
-                    ->setPostId($post->id)
-                    ->setUsersId($forum->onlyUsersWithAccess([$post->user_id]))
-                    ->setSubject(str_limit($topic->subject, 84))
-                    ->setExcerpt($excerpt)
-                    ->setSenderId($this->userId)
-                    ->setSenderName($this->auth->name)
-                    ->setUrl($url)
-                    ->notify();
+                $post->user->notify(new VotedNotification($this->auth, $post));
             }
 
             // increase/decrease reputation points according to the forum settings

@@ -2,23 +2,50 @@
 
 namespace Coyote\Notifications\Microblog;
 
+use Coyote\Microblog\Vote;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\User;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class MentionNotification extends MicroblogNotification implements ShouldQueue, ShouldBroadcast
+class VotedNotification extends AbstractNotification implements ShouldQueue, ShouldBroadcast
 {
-    const ID = \Coyote\Notification::MICROBLOG_LOGIN;
+    const ID = \Coyote\Notification::MICROBLOG_VOTE;
+
+    /**
+     * @var Vote
+     */
+    private $vote;
+
+    /**
+     * @param Vote $vote
+     */
+    public function __construct(Vote $vote)
+    {
+        $this->vote = $vote;
+        $this->microblog = $vote->microblog;
+    }
+
+    /**
+     * @return array
+     */
+    public function sender()
+    {
+        return [
+            'user_id'       => $this->vote->user_id,
+            'name'          => $this->vote->user->name
+        ];
+    }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  \Coyote\User  $user
+     * @param  User  $user
      * @return array
      */
-    public function via($user)
+    public function via(User $user)
     {
         $this->url = $this->microblog->parent_id
             ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id)
@@ -27,12 +54,11 @@ class MentionNotification extends MicroblogNotification implements ShouldQueue, 
         return parent::getChannels($user);
     }
 
-
     /**
-     * @param \Coyote\User $user
+     * @param User $user
      * @return array
      */
-    public function toDatabase($user)
+    public function toDatabase(User $user)
     {
         return [
             'object_id'     => $this->objectId(),
@@ -52,38 +78,35 @@ class MentionNotification extends MicroblogNotification implements ShouldQueue, 
      */
     public function objectId()
     {
-        return substr(md5(class_basename($this) . $this->microblog->parent_id ?: $this->microblog->id), 16);
+        return substr(md5(class_basename($this) . $this->microblog->parent_id), 16);
     }
 
     /**
      * Get the mail representation of the notification.
      *
-     * @param \Coyote\User $user
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($user)
+    public function toMail()
     {
-        return (new MailMessage())
-            ->subject($user->name . ' wspomniał o Tobie na mikroblogu')
+        return (new MailMessage)
+            ->subject($this->vote->user->name . ' docenił Twój wpis na mikroblogu')
             ->line(
                 sprintf(
-                    '<strong>%s</strong> użył Twojego loginu w treści wpisu mikrobloga: <strong>%s</strong>',
-                    $user->name,
-                    excerpt($this->microblog->html)
+                    'Informujemy, ze <strong>%s</strong> docenił Twój wpis na mikroblogu.',
+                    $this->vote->user->name
                 )
             )
-            ->action('Zobacz', url($this->url))
-            ->line('Dostajesz to powiadomienie, ponieważ wynika to z ustawień Twojego konta.');
+            ->action('Zobacz wpis', url($this->notificationUrl()))
+            ->line('Dostajesz to powiadomienie, ponieważ obserwujesz ten wpis.');
     }
 
     /**
-     * @param \Coyote\User $user
      * @return BroadcastMessage
      */
-    public function toBroadcast($user)
+    public function toBroadcast()
     {
         return new BroadcastMessage([
-            'headline'  => $user->name . ' wspomniał o Tobie na mikroblogu',
+            'headline'  => $this->vote->user->name . ' docenił Twój wpis na mikroblogu',
             'subject'   => excerpt($this->microblog->html),
             'url'       => $this->notificationUrl()
         ]);

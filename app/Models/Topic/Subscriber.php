@@ -27,4 +27,9 @@ class Subscriber extends Model
      * @var array
      */
     public $timestamps = false;
+
+    public function user()
+    {
+        return $this->belongsTo(\Coyote\User::class);
+    }
 }

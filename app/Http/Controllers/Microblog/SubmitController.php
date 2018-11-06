@@ -6,7 +6,7 @@ use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Notifications\Microblog\MentionNotification;
+use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -96,7 +96,7 @@ class SubmitController extends Controller
                 if (!empty($usersId)) {
                     $dispatcher->send(
                         $this->user->findMany($usersId)->exceptUser($this->auth),
-                        new MentionNotification($microblog)
+                        new UserMentionedNotification($microblog)
                     );
                 }
 

@@ -4,8 +4,12 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
+use Coyote\Notifications\Post\SubmittedNotification;
+use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -16,7 +20,6 @@ use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
-use Coyote\Services\Notification\Container;
 use Coyote\Post\Log;
 
 class SubmitController extends BaseController
@@ -60,7 +63,7 @@ class SubmitController extends BaseController
      * @param \Coyote\Post|null $post
      * @return mixed
      */
-    public function save($forum, $topic, $post = null)
+    public function save(Dispatcher $dispatcher, $forum, $topic, $post = null)
     {
         if (is_null($post)) {
             $post = $this->post->makeModel();
@@ -71,7 +74,7 @@ class SubmitController extends BaseController
         $form = $this->getForm($forum, $topic, $post);
         $form->validate();
 
-        return $this->transaction(function () use ($form, $forum, $topic, $post) {
+        return $this->transaction(function () use ($form, $forum, $topic, $post, $dispatcher) {
             $request = $form->getRequest();
 
             $actor = new Stream_Actor($this->auth);
@@ -89,33 +92,23 @@ class SubmitController extends BaseController
             $url = UrlBuilder::post($post);
 
             if ($post->wasRecentlyCreated) {
-                $container = new Container();
-                $notification = [
-                    'sender_id' => $this->userId,
-                    'sender_name' => $request->get('user_name', $this->userId ? $this->auth->name : ''),
-                    'subject' => str_limit($topic->subject, 84),
-                    'excerpt' => excerpt($post->html),
-                    'url' => $url,
-                    'text' => $post->html,
-                    'topic_id' => $topic->id, // used to create unique notification object id
-                    'post_id' => $post->id // used to create unique notification object id
-                ];
+                $subscribers = $topic->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
 
-                // $subscribersId can be int or array. we need to cast to array type
-                $subscribersId = $forum->onlyUsersWithAccess($topic->subscribers()->pluck('user_id')->toArray());
-                if ($subscribersId) {
-                    $container->attach(
-                        app('notification.topic.subscriber')->with($notification)->setUsersId($subscribersId)
+                $dispatcher->send(
+                    $subscribers,
+                    new SubmittedNotification($this->auth, $post)
+                );
+
+                $helper = new LoginHelper();
+                // get id of users that were mentioned in the text
+                $usersId = $helper->grab($post->html);
+
+                if (!empty($usersId)) {
+                    $dispatcher->send(
+                        app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
+                        new UserMentionedNotification($this->auth, $post)
                     );
                 }
-
-                // get id of users that were mentioned in the text
-                $subscribersId = $forum->onlyUsersWithAccess((new LoginHelper())->grab($post->html));
-                if ($subscribersId) {
-                    $container->attach(app('notification.post.login')->with($notification)->setUsersId($subscribersId));
-                }
-
-                $container->notify();
             }
 
             if ($topic->wasRecentlyCreated || $post->id === $topic->first_post_id) {

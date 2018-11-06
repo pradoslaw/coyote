@@ -4,9 +4,9 @@ namespace Coyote\Notifications\Post;
 
 use Illuminate\Notifications\Messages\MailMessage;
 
-class AcceptedNotification extends AbstractNotification
+class VotedNotification extends AbstractNotification
 {
-    const ID = \Coyote\Notification::POST_ACCEPT;
+    const ID = \Coyote\Notification::POST_VOTE;
 
     /**
      * Get the mail representation of the notification.
@@ -17,7 +17,7 @@ class AcceptedNotification extends AbstractNotification
     {
         return (new MailMessage)
             ->subject($this->getMailSubject())
-            ->line(sprintf('%s zaakceptował Twój post w wątku <b>%s</b>', $this->notifier->name, $this->post->topic->subject))
+            ->line(sprintf('%s docenił Twój post w wątku <b>%s</b>', $this->notifier->name, $this->post->topic->subject))
             ->action('Zobacz post', url($this->notificationUrl()));
     }
 
@@ -26,6 +26,6 @@ class AcceptedNotification extends AbstractNotification
      */
     protected function getMailSubject(): string
     {
-        return $this->notifier->name . ' zaakceptował(a) Twój post';
+        return $this->notifier->name . ' docenił(a) Twój post';
     }
 }
