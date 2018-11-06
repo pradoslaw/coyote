@@ -6,11 +6,13 @@ use Coyote\Forum\Reason;
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Http\Factories\FlagFactory;
+use Coyote\Notifications\Post\DeletedNotification;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 
 class DeleteController extends BaseController
@@ -22,9 +24,10 @@ class DeleteController extends BaseController
      *
      * @param \Coyote\Post $post
      * @param Request $request
+     * @param Dispatcher $dispatcher
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function index($post, Request $request)
+    public function index($post, Request $request, Dispatcher $dispatcher)
     {
         // it must be like that. only if reason has been chosen, we need to validate it.
         if ($request->get('reason')) {
@@ -48,25 +51,13 @@ class DeleteController extends BaseController
             }
         }
 
-        $url = $this->transaction(function () use ($post, $topic, $forum, $request) {
+        $url = $this->transaction(function () use ($post, $topic, $forum, $request, $dispatcher) {
             $url = UrlBuilder::topic($topic);
 
-            $notification = [
-                'sender_id'   => $this->userId,
-                'sender_name' => $this->auth->name,
-                'subject'     => str_limit($topic->subject, 84)
-            ];
-
-            $reason = null;
+            $reason = new Reason();
 
             if ($request->get('reason')) {
                 $reason = Reason::find($request->get('reason'));
-
-                $notification = array_merge($notification, [
-                    'excerpt'       => $reason->name,
-                    'reasonName'    => $reason->name,
-                    'reasonText'    => $reason->description
-                ]);
             }
 
             // if this is the first post in topic... we must delete whole thread
@@ -95,23 +86,20 @@ class DeleteController extends BaseController
                 $object = (new Stream_Topic())->map($topic);
                 $target = (new Stream_Forum())->map($forum);
             } else {
-                $subscribersId = $post->subscribers()->pluck('user_id');
+                $subscribers = $post->subscribers()->with('user')->get()->pluck('user');
 
                 if ($post->user_id !== null) {
-                    $subscribersId[] = $post->user_id;
+                    $subscribers = $subscribers->push($post->user)->unique('id');
                 }
 
                 $post->delete();
                 // delete post's flags
                 $this->getFlagFactory()->deleteBy('post_id', $post->id, $this->userId);
 
-                if ($subscribersId) {
-                    app('notification.post.delete')
-                        ->with($notification)
-                        ->setUrl($url)
-                        ->setUsersId($subscribersId->toArray())
-                        ->notify();
-                }
+                $dispatcher->send(
+                    $subscribers,
+                    (new DeletedNotification($this->auth, $post))->setReasonName($reason->name)->setReasonText($reason->description)
+                );
 
                 $url .= '?p=' . $post->id . '#id' . $post->id;
 

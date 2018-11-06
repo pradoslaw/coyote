@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Coyote\Post\Attachment;
+use Coyote\Post\Subscriber;
 use Coyote\Services\Elasticsearch\CharFilters\PostFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -123,7 +124,7 @@ class Post extends Model
      */
     public function subscribers()
     {
-        return $this->hasMany('Coyote\Post\Subscriber');
+        return $this->hasMany(Subscriber::class);
     }
 
     /**
