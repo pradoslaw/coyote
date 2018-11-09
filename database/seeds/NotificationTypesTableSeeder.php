@@ -49,7 +49,7 @@ class NotificationTypesTableSeeder extends Seeder
             'email' => true,
             'category' => 'Forum'
         ]);
-        Type::create(['id' => Notification::POST_SUBSCRIBER,
+        Type::create(['id' => Notification::POST_COMMENT,
             'name' => '...nowym komentarzu w Twoim poście',
             'headline' => '{sender} dodał komentarz do postu',
             'profile' => true,

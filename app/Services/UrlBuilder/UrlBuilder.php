@@ -39,6 +39,16 @@ class UrlBuilder
     }
 
     /**
+     * @param Post\Comment $comment
+     * @return string
+     */
+    public static function postComment(Post\Comment $comment): string
+    {
+        return route('forum.topic', [$comment->post->forum->slug, $comment->post->topic->id, $comment->post->topic->slug], false)
+            . '?p=' . $comment->post->id . '#comment-' . $comment->id;
+    }
+
+    /**
      * @param Wiki $wiki
      * @return string
      */

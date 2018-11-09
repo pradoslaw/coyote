@@ -24,7 +24,7 @@ class Notification extends Model
     const TOPIC_MOVE = 3;
     const TOPIC_DELETE = 4;
     const POST_DELETE = 5;
-    const POST_SUBSCRIBER = 6;
+    const POST_COMMENT = 6;
     const WIKI_SUBSCRIBER = 7;
     const WIKI_COMMENT = 8;
     const POST_EDIT = 10;

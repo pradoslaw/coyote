@@ -2,6 +2,7 @@
 
 namespace Coyote\Post;
 
+use Coyote\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $post_id
  * @property int $user_id
  * @property int $id
+ * @property Post $post
  */
 class Comment extends Model
 {
@@ -39,6 +41,14 @@ class Comment extends Model
      * @var null|string
      */
     private $html = null;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 
     /**
      * @return null|string

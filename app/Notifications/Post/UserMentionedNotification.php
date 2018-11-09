@@ -2,7 +2,7 @@
 
 namespace Coyote\Notifications\Post;
 
-class UserMentionedNotification extends SubmittedNotification
+class UserMentionedNotification extends CommentedNotification
 {
     const ID = \Coyote\Notification::POST_LOGIN;
 
