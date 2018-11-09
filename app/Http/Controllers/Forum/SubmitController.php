@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
-use Coyote\Notifications\Post\SubmittedNotification;
+use Coyote\Notifications\Post\CommentedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
@@ -96,7 +96,7 @@ class SubmitController extends BaseController
 
                 $dispatcher->send(
                     $subscribers,
-                    new SubmittedNotification($this->auth, $post)
+                    new CommentedNotification($this->auth, $post)
                 );
 
                 $helper = new LoginHelper();

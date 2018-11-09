@@ -1,7 +1,8 @@
 <?php
 
-namespace Coyote\Notifications\Post;
+namespace Coyote\Notifications\Topic;
 
+use Coyote\Notifications\Post\AbstractNotification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Notifications\Messages\MailMessage;
 

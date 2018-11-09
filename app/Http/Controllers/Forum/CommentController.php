@@ -2,14 +2,16 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Notifications\Post\Comment\UserMentionedNotification;
+use Coyote\Notifications\Post\CommentedNotification;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Coyote\Services\Notification\Container;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 
@@ -51,10 +53,11 @@ class CommentController extends Controller
 
     /**
      * @param Request $request
+     * @param Dispatcher $dispatcher
      * @param null $id
      * @return $this
      */
-    public function save(Request $request, $id = null)
+    public function save(Request $request, Dispatcher $dispatcher, $id = null)
     {
         $this->validate(request(), [
             'text'          => 'required|string|max:580',
@@ -82,7 +85,7 @@ class CommentController extends Controller
 
         $this->comment->fill($data);
 
-        $this->transaction(function () use ($id, $activity, $target) {
+        $this->transaction(function () use ($id, $activity, $target, $dispatcher) {
             $this->comment->save();
 
             // it is IMPORTANT to parse text first, and then put information to activity stream.
@@ -90,39 +93,22 @@ class CommentController extends Controller
             $object = (new Stream_Comment())->map($this->post, $this->comment, $this->topic);
             stream($activity, $object, $target);
 
-            if (!$id) {
-                $container = new Container();
-                $notification = [
-                    'sender_id'   => $this->userId,
-                    'sender_name' => $this->auth->name,
-                    'subject'     => str_limit($this->topic->subject, 84),
-                    'excerpt'     => excerpt($this->comment->html),
-                    'text'        => $this->comment->html,
-                    'url'         => $object->url,
-                    'post_id'     => $this->post->id // used to build unique notification object id
-                ];
+            if ($this->comment->wasRecentlyCreated) {
+                $subscribers = $this->post->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
 
-                $subscribersId = $this->forum->onlyUsersWithAccess(
-                    $this->post->subscribers()->pluck('user_id')->toArray()
+                $dispatcher->send(
+                    $subscribers,
+                    new CommentedNotification($this->comment)
                 );
 
-                if ($subscribersId) {
-                    $container->attach(
-                        // $subscribersId can be int or array. we need to cast to array type
-                        app('notification.post.subscriber')->with($notification)->setUsersId($subscribersId)
+                $usersId = (new LoginHelper())->grab($this->comment->html);
+
+                if (!empty($usersId)) {
+                    $dispatcher->send(
+                        app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
+                        new UserMentionedNotification($this->comment)
                     );
                 }
-
-                // get id of users that were mentioned in the text
-                $subscribersId = $this->forum->onlyUsersWithAccess((new LoginHelper())->grab($this->comment->html));
-
-                if ($subscribersId) {
-                    $container->attach(
-                        app('notification.post.comment.login')->with($notification)->setUsersId($subscribersId)
-                    );
-                }
-
-                $container->notify();
 
                 // subscribe post. notify about all future comments to this post
                 $this->post->subscribe($this->userId, true);
