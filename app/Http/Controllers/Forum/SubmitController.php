@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
 use Coyote\Notifications\Post\CommentedNotification;
+use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
@@ -96,17 +97,16 @@ class SubmitController extends BaseController
 
                 $dispatcher->send(
                     $subscribers,
-                    new CommentedNotification($this->auth, $post)
+                    (new SubmittedNotification($this->auth, $post))->setSender($request->get('user_name'))
                 );
 
-                $helper = new LoginHelper();
                 // get id of users that were mentioned in the text
-                $usersId = $helper->grab($post->html);
+                $usersId = (new LoginHelper())->grab($post->html);
 
                 if (!empty($usersId)) {
                     $dispatcher->send(
                         app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                        new UserMentionedNotification($this->auth, $post)
+                        (new UserMentionedNotification($this->auth, $post))->setSender($request->get('user_name'))
                     );
                 }
             }
