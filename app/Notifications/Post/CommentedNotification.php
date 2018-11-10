@@ -21,7 +21,7 @@ class CommentedNotification extends AbstractNotification
      */
     public function __construct(Comment $comment)
     {
-        parent::__construct($comment->post->user, $comment->post);
+        parent::__construct($comment->user, $comment->post);
 
         $this->comment = $comment;
     }

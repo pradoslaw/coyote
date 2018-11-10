@@ -2,7 +2,7 @@
 
 namespace Coyote\Notifications\Post;
 
-class UserMentionedNotification extends CommentedNotification
+class UserMentionedNotification extends SubmittedNotification
 {
     const ID = \Coyote\Notification::POST_LOGIN;
 
@@ -11,7 +11,7 @@ class UserMentionedNotification extends CommentedNotification
      */
     protected function getMailSubject(): string
     {
-        return $this->notifier->name . ' wspomniał o Tobie w poście na forum';
+        return $this->getSender(). ' wspomniał o Tobie w poście na forum';
     }
 
     /**
