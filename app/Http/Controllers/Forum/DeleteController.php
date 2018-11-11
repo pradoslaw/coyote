@@ -6,7 +6,8 @@ use Coyote\Forum\Reason;
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Http\Factories\FlagFactory;
-use Coyote\Notifications\Post\DeletedNotification;
+use Coyote\Notifications\Topic\DeletedNotification as TopicDeletedNotification;
+use Coyote\Notifications\Post\DeletedNotification as PostDeletedNotification;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
@@ -64,21 +65,22 @@ class DeleteController extends BaseController
             if ($post->id === $topic->first_post_id) {
                 $redirect = redirect()->route('forum.category', [$forum->slug]);
 
-                $subscribersId = $topic->subscribers()->pluck('user_id');
+                $subscribers = $topic->subscribers()->with('user')->get()->pluck('user');
+
                 if ($post->user_id !== null) {
-                    $subscribersId[] = $post->user_id;
+                   $subscribers = $subscribers->push($post->user)->unique('id'); // add post's author to notification subscribers
                 }
 
                 $topic->delete();
                 // delete topic's flag
                 $this->getFlagFactory()->deleteBy('topic_id', $topic->id, $this->userId);
 
-                if ($subscribersId) {
-                    app('notification.topic.delete')
-                        ->with($notification)
-                        ->setUsersId($subscribersId->toArray())
-                        ->notify();
-                }
+                $dispatcher->send(
+                    $subscribers,
+                    (new TopicDeletedNotification($this->auth, $topic))
+                        ->setReasonText($reason->description)
+                        ->setReasonName($reason->name)
+                );
 
                 // fire the event. it can be used to delete row from "pages" table or from search index
                 event(new TopicWasDeleted($topic));
@@ -98,7 +100,9 @@ class DeleteController extends BaseController
 
                 $dispatcher->send(
                     $subscribers,
-                    (new DeletedNotification($this->auth, $post))->setReasonName($reason->name)->setReasonText($reason->description)
+                    (new PostDeletedNotification($this->auth, $post))
+                        ->setReasonName($reason->name)
+                        ->setReasonText($reason->description)
                 );
 
                 $url .= '?p=' . $post->id . '#id' . $post->id;
