@@ -49,10 +49,10 @@ abstract class AbstractNotification extends Notification
     }
 
     /**
-     * @param string $reasonName
+     * @param string|null $reasonName
      * @return $this
      */
-    public function setReasonName(string $reasonName)
+    public function setReasonName(?string $reasonName)
     {
         $this->reasonName = $reasonName;
 
@@ -68,10 +68,10 @@ abstract class AbstractNotification extends Notification
     }
 
     /**
-     * @param string $reasonText
+     * @param string|null $reasonText
      * @return $this
      */
-    public function setReasonText(string $reasonText)
+    public function setReasonText(?string $reasonText)
     {
         $this->reasonText = $reasonText;
 
@@ -117,7 +117,7 @@ abstract class AbstractNotification extends Notification
             'user_id'       => $user->id,
             'type_id'       => static::ID,
             'subject'       => $this->topic->subject,
-//            'excerpt'       => excerpt($this->post->html),
+            'excerpt'       => $this->getReasonName(),
             'url'           => UrlBuilder::topic($this->topic),
             'guid'          => $this->id
         ];

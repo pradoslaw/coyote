@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Notifications\Topic\MovedNotification;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Activities\Move as Stream_Move;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
@@ -37,24 +38,10 @@ class MoveController extends BaseController
         }
 
         $this->transaction(function () use ($topic, $forum, $request) {
-            $reason = null;
-
-            $notification = [
-                'sender_id'   => $this->userId,
-                'sender_name' => $this->auth->name,
-                'subject'     => str_limit($topic->subject, 84),
-                'forum'       => $forum->name,
-                'topic_id'    => $topic->id
-            ];
+            $reason = new Reason();
 
             if ($request->get('reason')) {
                 $reason = Reason::find($request->get('reason'));
-
-                $notification = array_merge($notification, [
-                    'excerpt'       => $reason->name,
-                    'reasonName'    => $reason->name,
-                    'reasonText'    => $reason->description
-                ]);
             }
 
             // first, create object. we will save it in mongodb.
@@ -69,15 +56,15 @@ class MoveController extends BaseController
                 $object->reasonName = $reason->name;
             }
 
+            /** @var \Coyote\Post $post */
             $post = $this->post->find($topic->first_post_id, ['user_id']);
-            $recipientsId = $forum->onlyUsersWithAccess([$post->user_id]);
 
-            if ($recipientsId) {
-                app('notification.topic.move')
-                    ->with($notification)
-                    ->setUrl(UrlBuilder::topic($topic))
-                    ->setUsersId($recipientsId)
-                    ->notify();
+            if ($post->user_id !== null) {
+                $post->user->notify(
+                    (new MovedNotification($this->auth, $topic))
+                        ->setReasonText($reason->description)
+                        ->setReasonName($reason->name)
+                );
             }
 
             // we need to reindex this topic

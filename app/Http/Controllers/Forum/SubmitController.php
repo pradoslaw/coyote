@@ -4,9 +4,9 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
-use Coyote\Notifications\Post\CommentedNotification;
 use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
+use Coyote\Notifications\Topic\SubjectChangedNotification;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\UrlBuilder\UrlBuilder;
@@ -213,16 +213,11 @@ class SubmitController extends BaseController
                 ])
                 ->save();
 
-                if ($post->user_id) {
-                    app('notification.topic.subject')->with([
-                        'users_id'    => $forum->onlyUsersWithAccess([$post->user_id]),
-                        'sender_id'   => $this->userId,
-                        'sender_name' => $this->auth->name,
-                        'subject'     => str_limit($original['subject'], 84),
-                        'excerpt'     => str_limit($topic->subject, 84),
-                        'url'         => $url,
-                        'topic_id'    => $topic->id
-                    ])->notify();
+                if ($post->user_id !== null) {
+                    $post->user->notify(
+                        (new SubjectChangedNotification($this->auth, $topic))
+                            ->setOriginalSubject(str_limit($original['subject'], 84))
+                    );
                 }
 
                 // fire the event. it can be used to index a content and/or add page path to "pages" table

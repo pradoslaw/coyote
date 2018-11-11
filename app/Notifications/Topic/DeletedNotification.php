@@ -28,23 +28,6 @@ class DeletedNotification extends AbstractNotification
             ]);
     }
 
-    /**
-     * @param User $user
-     * @return array
-     */
-    public function toDatabase(User $user)
-    {
-        return [
-            'object_id'     => $this->objectId(),
-            'user_id'       => $user->id,
-            'type_id'       => static::ID,
-            'subject'       => $this->topic->subject,
-            'excerpt'       => $this->reasonName,
-            'url'           => UrlBuilder::topic($this->topic),
-            'guid'          => $this->id
-        ];
-    }
-
     protected function getMailSubject(): string
     {
         return "Wątek został usunięty przez {$this->notifier->name}";

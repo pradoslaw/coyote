@@ -29,10 +29,10 @@ class DeletedNotification extends AbstractNotification
     }
 
     /**
-     * @param string $reasonName
+     * @param string|null $reasonName
      * @return $this
      */
-    public function setReasonName($reasonName)
+    public function setReasonName(?string $reasonName)
     {
         $this->reasonName = $reasonName;
 
@@ -48,10 +48,10 @@ class DeletedNotification extends AbstractNotification
     }
 
     /**
-     * @param string $reasonText
+     * @param string|null $reasonText
      * @return $this
      */
-    public function setReasonText($reasonText)
+    public function setReasonText(?string $reasonText)
     {
         $this->reasonText = $reasonText;
 
@@ -69,7 +69,7 @@ class DeletedNotification extends AbstractNotification
             'user_id'       => $user->id,
             'type_id'       => static::ID,
             'subject'       => $this->post->topic->subject,
-            'excerpt'       => $this->reasonName,
+            'excerpt'       => $this->getReasonName(),
             'url'           => UrlBuilder::post($this->post),
             'guid'          => $this->id
         ];
@@ -87,8 +87,8 @@ class DeletedNotification extends AbstractNotification
             ->view('emails.notifications.post.delete', [
                 'sender'        => $this->notifier->name,
                 'subject'       => link_to(UrlBuilder::post($this->post), $this->post->topic->subject),
-                'reason_name'   => $this->reasonName,
-                'reason_text'   => $this->reasonText
+                'reason_name'   => $this->getReasonName(),
+                'reason_text'   => $this->getReasonText()
             ]);
     }
 
