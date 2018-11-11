@@ -4,6 +4,7 @@ namespace Coyote;
 
 use Coyote\Services\Elasticsearch\CharFilters\WikiFilter;
 use Coyote\Wiki\Page as Wiki_Page;
+use Coyote\Wiki\Subscriber;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -126,7 +127,7 @@ class Wiki extends Model
      */
     public function subscribers()
     {
-        return $this->hasMany('Coyote\Wiki\Subscriber', 'wiki_id', 'wiki_id');
+        return $this->hasMany(Subscriber::class, 'wiki_id', 'wiki_id');
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace Coyote\Wiki;
 
 use Coyote\Models\Scopes\ForUser;
+use Coyote\User;
+use Coyote\Wiki;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $text
  * @property string $ip
  * @property string $html
+ * @property Wiki $wiki
+ * @property User $user
  */
 class Comment extends Model
 {
@@ -47,7 +51,15 @@ class Comment extends Model
      */
     public function user()
     {
-        return $this->belongsTo('Coyote\User');
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function wiki()
+    {
+        return $this->belongsTo(Wiki::class);
     }
 
     /**

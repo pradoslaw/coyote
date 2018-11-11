@@ -4,22 +4,23 @@ namespace Coyote\Http\Controllers\Wiki;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Wiki\CommentForm;
-use Coyote\Services\Notification\Container;
+use Coyote\Notifications\Wiki\CommentedNotification;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Contracts\Notifications\Dispatcher;
 
 class CommentController extends Controller
 {
     /**
+     * @param Dispatcher $dispatcher
      * @param \Coyote\Wiki $wiki
      * @param int|null $id
      * @return \Illuminate\View\View
      */
-    public function save($wiki, $id = null)
+    public function save(Dispatcher $dispatcher, $wiki, $id = null)
     {
         /** @var \Coyote\Wiki\Comment $comment */
         $comment = $wiki->comments()->findOrNew($id);
@@ -34,33 +35,23 @@ class CommentController extends Controller
             $comment->ip = $form->getRequest()->ip();
         }
 
-        $this->transaction(function () use ($wiki, $comment) {
+        $this->transaction(function () use ($wiki, $dispatcher, $comment) {
             // before creating new record we decide whether to add user to subscribers list or not.
             $subscribe = $this->auth->allow_subscribe
                 && !$comment->exists && !$comment->wasUserInvolved($wiki->id, $this->userId);
             $comment->save();
 
             if ($comment->wasRecentlyCreated) {
-                $subscribersId = $wiki->subscribers()->pluck('user_id')->toArray();
-                $container = new Container();
+                $subscribers = $wiki->subscribers()->with('user')->get()->pluck('user');
 
-                $container->attach(
-                    app('notification.wiki.comment')
-                        ->with([
-                            'subject' => $wiki->title,
-                            'users_id' => $subscribersId,
-                            'url' => UrlBuilder::wikiComment($wiki, $comment->id),
-                            'sender_id' => $this->userId,
-                            'sender_name' => $this->auth->name,
-                            'excerpt' => excerpt($comment->html)
-                        ])
+                $dispatcher->send(
+                    $subscribers->exceptUser($this->auth),
+                    new CommentedNotification($comment)
                 );
-
-                $container->notify();
 
                 // we DO NOT want to add another row into the table. we MUST check whether user is already
                 // on subscribers list or not.
-                if ($subscribe && !in_array($this->userId, $subscribersId)) {
+                if ($subscribe && !$subscribers->contains('id', $this->userId)) {
                     $wiki->subscribers()->create(['user_id' => $this->userId]);
                 }
             }
