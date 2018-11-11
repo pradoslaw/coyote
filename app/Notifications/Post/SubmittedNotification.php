@@ -2,7 +2,6 @@
 
 namespace Coyote\Notifications\Post;
 
-use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class SubmittedNotification extends AbstractNotification
@@ -25,16 +24,16 @@ class SubmittedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view($this->getMailView(), [
                 'sender'    => $this->getSender(),
-                'subject'   => link_to(UrlBuilder::post($this->post), $this->post->topic->subject),
+                'subject'   => $this->post->topic->subject,
                 'text'      => $this->post->html
             ]);
     }
 
     /**
-     * @param string $sender
+     * @param string|null $sender
      * @return $this
      */
-    public function setSender(string $sender)
+    public function setSender(?string $sender)
     {
         $this->sender = $sender;
 
