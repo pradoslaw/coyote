@@ -2,6 +2,7 @@
 
 namespace Coyote\Notifications;
 
+use Coyote\User;
 use Coyote\Pm;
 use Coyote\Services\Notification\Notification;
 use Illuminate\Bus\Queueable;
@@ -36,15 +37,6 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     }
 
     /**
-     * @param \Coyote\User $user
-     * @return array
-     */
-    public function via($user)
-    {
-        return parent::getChannels($user);
-    }
-
-    /**
      * Get the mail representation of the notification.
      *
      * @return \Illuminate\Notifications\Messages\MailMessage
@@ -61,10 +53,10 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     }
 
     /**
-     * @param \Coyote\User $user
+     * @param User $user
      * @return array
      */
-    public function toDatabase($user)
+    public function toDatabase(User $user)
     {
         return [
             'object_id'     => $this->objectId(),

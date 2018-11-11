@@ -4,10 +4,11 @@ namespace Coyote\Http\Controllers\Wiki;
 
 use Coyote\Events\WikiWasSaved;
 use Coyote\Http\Forms\Wiki\SubmitForm;
+use Coyote\Notifications\Wiki\ContentChangedNotification;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 
 class SubmitController extends BaseController
@@ -52,36 +53,31 @@ class SubmitController extends BaseController
     }
 
     /**
+     * @param Dispatcher $dispatcher
      * @param \Coyote\Wiki $wiki
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save($wiki)
+    public function save(Dispatcher $dispatcher, $wiki)
     {
         $form = $this->getForm($wiki);
         $form->validate();
 
         $request = $form->getRequest();
 
-        $path = $this->transaction(function () use ($wiki, $request) {
+        $path = $this->transaction(function () use ($wiki, $request, $dispatcher) {
             $subscribe = auth()->user()->allow_subscribe && !$wiki->wasUserInvolved($this->userId);
             $this->wiki->save($wiki, $request);
 
-            $subscribersId = $wiki->subscribers()->pluck('user_id')->toArray();
+            $subscribers = $wiki->subscribers()->with('user')->get()->pluck('user');
 
-            app('notification.wiki.subscriber')
-                ->with([
-                    'subject' => $wiki->title,
-                    'users_id' => $subscribersId,
-                    'url' => UrlBuilder::wiki($wiki),
-                    'sender_id' => $this->userId,
-                    'sender_name' => auth()->user()->name,
-                    'excerpt' => excerpt($wiki->excerpt)
-                ])
-                ->notify();
+            $dispatcher->send(
+                $subscribers->exceptUser($this->auth),
+                new ContentChangedNotification($wiki)
+            );
 
             // we DO NOT want to add another row into the table. we MUST check whether user is already
             // on subscribers list or not.
-            if ($subscribe && !in_array($this->userId, $subscribersId)) {
+            if ($subscribe && !$subscribers->contains('id', $this->userId)) {
                 $wiki->subscribers()->create(['user_id' => $this->userId]);
             }
 

@@ -3,6 +3,7 @@
 namespace Coyote\Wiki;
 
 use Coyote\Models\Scopes\ForUser;
+use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,11 +22,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $browser
  * @property string $host
  * @property \Carbon\Carbon $created_at
+ * @property User $user
  */
 class Log extends Model
 {
     use ForUser;
-    
+
     /**
      * @var string
      */
@@ -53,6 +55,6 @@ class Log extends Model
      */
     public function user()
     {
-        return $this->hasOne('Coyote\User', 'id', 'user_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }
