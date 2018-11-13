@@ -68,7 +68,7 @@ class DeleteController extends BaseController
                 $subscribers = $topic->subscribers()->with('user')->get()->pluck('user');
 
                 if ($post->user_id !== null) {
-                   $subscribers = $subscribers->push($post->user)->unique('id'); // add post's author to notification subscribers
+                    $subscribers = $subscribers->push($post->user)->unique('id'); // add post's author to notification subscribers
                 }
 
                 $topic->delete();
