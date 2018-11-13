@@ -52,10 +52,10 @@
         "guzzlehttp/oauth-subscriber": "^0.3.0",
         "inacho/php-credit-card-validator": "^1.0",
         "paylane/client": "^1.1",
-        "laravel-notification-channels/twilio": "^2.0",
         "intervention/image": "^2.4",
         "intervention/imagecache": "^2.3",
-        "erusev/parsedown": "^1.7"
+        "erusev/parsedown": "^1.7",
+        "laravel-notification-channels/twilio": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",

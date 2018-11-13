@@ -4,12 +4,10 @@ namespace Coyote\Notifications\Microblog;
 
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class UserMentionedNotification extends AbstractNotification implements ShouldQueue, ShouldBroadcast
+class UserMentionedNotification extends AbstractNotification
 {
     const ID = \Coyote\Notification::MICROBLOG_LOGIN;
 
@@ -44,16 +42,6 @@ class UserMentionedNotification extends AbstractNotification implements ShouldQu
             'url'           => $this->url,
             'guid'          => $this->id
         ];
-    }
-
-    /**
-     * Generowanie unikalnego ciagu znakow dla wpisu na mikro
-     *
-     * @return string
-     */
-    public function objectId()
-    {
-        return substr(md5(class_basename($this) . $this->microblog->parent_id ?: $this->microblog->id), 16);
     }
 
     /**

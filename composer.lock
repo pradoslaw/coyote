@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e24716ba15a97c272da5f161096665f3",
+    "content-hash": "cbe733ffad46f8c67ce73c05e5facfdc",
     "packages": [
         {
             "name": "adam-boduch/geshi",
