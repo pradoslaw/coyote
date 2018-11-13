@@ -54,7 +54,7 @@ class CommentController extends Controller
     /**
      * @param Request $request
      * @param Dispatcher $dispatcher
-     * @param null $id
+     * @param null|int $id
      * @return $this
      */
     public function save(Request $request, Dispatcher $dispatcher, $id = null)
@@ -85,7 +85,7 @@ class CommentController extends Controller
 
         $this->comment->fill($data);
 
-        $this->transaction(function () use ($id, $activity, $target, $dispatcher) {
+        $this->transaction(function () use ($activity, $target, $dispatcher) {
             $this->comment->save();
 
             // it is IMPORTANT to parse text first, and then put information to activity stream.

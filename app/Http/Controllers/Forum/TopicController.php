@@ -66,14 +66,9 @@ class TopicController extends BaseController
             $this->forum->pushCriteria(new OnlyThoseWithAccess());
 
             $builder = new MoreLikeThisBuilder($topic, $this->forum->pluck('id'));
-            $mlt = [];
 
-            try {
-                // search related topics
-                $mlt = $this->topic->search($builder);
-            } catch (\Exception $e) {
-                logger()->error($e->getMessage());
-            }
+            // search related topics
+            $mlt = $this->topic->search($builder);
 
             // it's important to reset criteria for the further queries
             $this->forum->resetCriteria();

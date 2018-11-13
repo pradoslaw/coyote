@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
-use Illuminate\Contracts\Notifications\Dispatcher;
 
 /**
  * Ocena glosow na dany wpis na mikro (lub wyswietlanie loginow ktorzy oddali ow glos)
@@ -22,11 +21,10 @@ class VoteController extends Controller
     /**
      * @param \Coyote\Microblog $microblog
      * @param Request $request
-     * @param Dispatcher $dispatcher
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function post($microblog, Request $request, Dispatcher $dispatcher)
+    public function post($microblog, Request $request)
     {
         if (auth()->guest()) {
             return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
@@ -39,7 +37,7 @@ class VoteController extends Controller
             return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
         }
 
-        $this->transaction(function () use ($vote, $microblog, $request, $dispatcher) {
+        $this->transaction(function () use ($vote, $microblog, $request) {
             if ($vote) {
                 $vote->delete();
 
