@@ -4,9 +4,11 @@ namespace Coyote\Notifications\Microblog;
 
 use Coyote\Microblog;
 use Coyote\Services\Notification\Notification;
+use Coyote\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 abstract class AbstractNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
@@ -16,6 +18,11 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
      * @var Microblog
      */
     protected $microblog;
+
+    /**
+     * @var User
+     */
+    protected $notifier;
 
     /**
      * @var string
@@ -28,6 +35,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
     public function __construct(Microblog $microblog)
     {
         $this->microblog = $microblog;
+        $this->notifier = $this->microblog->user;
     }
 
     /**
@@ -36,8 +44,8 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
     public function sender()
     {
         return [
-            'user_id'       => $this->microblog->user_id,
-            'name'          => $this->microblog->user->name
+            'user_id'       => $this->notifier->id,
+            'name'          => $this->notifier->name
         ];
     }
 
@@ -50,4 +58,21 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
     {
         return substr(md5(class_basename($this) . $this->microblog->parent_id ?: $this->microblog->id), 16);
     }
+
+    /**
+     * @return BroadcastMessage
+     */
+    public function toBroadcast()
+    {
+        return new BroadcastMessage([
+            'headline'  => $this->getMailSubject(),
+            'subject'   => excerpt($this->microblog->html),
+            'url'       => $this->notificationUrl()
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    abstract protected function getMailSubject(): string;
 }

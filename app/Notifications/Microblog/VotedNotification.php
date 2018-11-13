@@ -5,7 +5,6 @@ namespace Coyote\Notifications\Microblog;
 use Coyote\Microblog\Vote;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class VotedNotification extends AbstractNotification
@@ -23,7 +22,8 @@ class VotedNotification extends AbstractNotification
     public function __construct(Vote $vote)
     {
         $this->vote = $vote;
-        $this->microblog = $vote->microblog;
+
+        parent::__construct($vote->microblog);
     }
 
     /**
@@ -38,33 +38,22 @@ class VotedNotification extends AbstractNotification
     }
 
     /**
-     * Get the notification's delivery channels.
-     *
-     * @param  User  $user
-     * @return array
-     */
-    public function via(User $user)
-    {
-        $this->url = $this->microblog->parent_id
-            ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id)
-                : UrlBuilder::microblog($this->microblog);
-
-        return parent::getChannels($user);
-    }
-
-    /**
      * @param User $user
      * @return array
      */
     public function toDatabase(User $user)
     {
+        $url = $this->microblog->parent_id
+            ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id)
+                : UrlBuilder::microblog($this->microblog);;
+
         return [
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
             'subject'       => excerpt($this->microblog->parent_id ? $this->microblog->parent->html : $this->microblog->html),  // original excerpt of parent entry
             'excerpt'       => excerpt($this->microblog->html),
-            'url'           => $this->url,
+            'url'           => $url,
             'guid'          => $this->id
         ];
     }
@@ -77,7 +66,7 @@ class VotedNotification extends AbstractNotification
     public function toMail()
     {
         return (new MailMessage)
-            ->subject($this->vote->user->name . ' docenił Twój wpis na mikroblogu')
+            ->subject($this->getMailSubject())
             ->line(
                 sprintf(
                     'Informujemy, ze <strong>%s</strong> docenił Twój wpis na mikroblogu.',
@@ -89,14 +78,10 @@ class VotedNotification extends AbstractNotification
     }
 
     /**
-     * @return BroadcastMessage
+     * @return string
      */
-    public function toBroadcast()
+    public function getMailSubject(): string
     {
-        return new BroadcastMessage([
-            'headline'  => $this->vote->user->name . ' docenił Twój wpis na mikroblogu',
-            'subject'   => excerpt($this->microblog->html),
-            'url'       => $this->notificationUrl()
-        ]);
+        return $this->vote->user->name . ' docenił Twój wpis na mikroblogu';
     }
 }

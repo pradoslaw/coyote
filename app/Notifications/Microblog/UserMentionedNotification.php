@@ -4,7 +4,6 @@ namespace Coyote\Notifications\Microblog;
 
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class UserMentionedNotification extends AbstractNotification
@@ -12,34 +11,20 @@ class UserMentionedNotification extends AbstractNotification
     const ID = \Coyote\Notification::MICROBLOG_LOGIN;
 
     /**
-     * Get the notification's delivery channels.
-     *
-     * @param  User  $user
-     * @return array
-     */
-    public function via(User $user)
-    {
-        $this->url = $this->microblog->parent_id
-            ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id)
-                : UrlBuilder::microblog($this->microblog);
-
-        return parent::getChannels($user);
-    }
-
-
-    /**
      * @param User $user
      * @return array
      */
     public function toDatabase(User $user)
     {
+        $url = $this->microblog->parent_id ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id) : UrlBuilder::microblog($this->microblog);
+
         return [
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
             'subject'       => excerpt($this->microblog->parent_id ? $this->microblog->parent->html : $this->microblog->html),  // original excerpt of parent entry
             'excerpt'       => excerpt($this->microblog->html),
-            'url'           => $this->url,
+            'url'           => $url,
             'guid'          => $this->id
         ];
     }
@@ -47,34 +32,25 @@ class UserMentionedNotification extends AbstractNotification
     /**
      * Get the mail representation of the notification.
      *
-     * @param \Coyote\User $user
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($user)
+    public function toMail()
     {
         return (new MailMessage())
-            ->subject($user->name . ' wspomniał o Tobie na mikroblogu')
+            ->subject($this->getMailSubject())
             ->line(
                 sprintf(
                     '<strong>%s</strong> użył Twojego loginu w treści wpisu mikrobloga: <strong>%s</strong>',
-                    $user->name,
+                    $this->notifier->name,
                     excerpt($this->microblog->html)
                 )
             )
-            ->action('Zobacz', url($this->url))
+            ->action('Zobacz', url($this->notificationUrl()))
             ->line('Dostajesz to powiadomienie, ponieważ wynika to z ustawień Twojego konta.');
     }
 
-    /**
-     * @param \Coyote\User $user
-     * @return BroadcastMessage
-     */
-    public function toBroadcast($user)
+    protected function getMailSubject(): string
     {
-        return new BroadcastMessage([
-            'headline'  => $user->name . ' wspomniał o Tobie na mikroblogu',
-            'subject'   => excerpt($this->microblog->html),
-            'url'       => $this->notificationUrl()
-        ]);
+        return $this->notifier->name . ' wspomniał o Tobie na mikroblogu';
     }
 }
