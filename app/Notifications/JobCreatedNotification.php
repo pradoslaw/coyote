@@ -4,9 +4,10 @@ namespace Coyote\Notifications;
 
 use Coyote\Job;
 use Coyote\Services\Invoice\CalculatorFactory;
+use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Coyote\Services\Notification\DatabaseChannel;
 
@@ -30,11 +31,10 @@ class JobCreatedNotification extends Notification
     }
 
     /**
-     * Get the notification's delivery channels.
-     *
+     * @param User $user
      * @return array
      */
-    public function via()
+    public function via(User $user)
     {
         return ['mail', DatabaseChannel::class];
     }
