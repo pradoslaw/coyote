@@ -12,35 +12,76 @@ class NotificationTest extends \Codeception\TestCase\Test
     protected $user;
     protected $author;
 
+    protected $sender;
+
+    /**
+     * @var User
+     */
+    protected $recipient;
+
     protected function _before()
     {
         $this->user = User::where('name', 'admin')->first();
+
+        $this->sender = $this->tester->createUser();
+        $this->recipient = $this->tester->createUser();
     }
 
     protected function _after()
     {
     }
 
-    private function create()
+    public function testNotifyUserMentionedInMicroblog()
     {
-        $objectId = rand(100, 9999);
+        $text = "Hello @{$this->recipient->name}";
+        /** @var Coyote\Microblog $microblog */
+        $microblog = $this->tester->haveRecord(Coyote\Microblog::class, ['user_id' => $this->sender->id, 'text' => $text]);
 
-        $notification = Notification::create([
-            'type_id' => Notification::MICROBLOG_LOGIN,
-            'user_id' => $this->user->id,
-            'subject' => 'Lorem ipsum',
-            'excerpt' => 'excerpt',
-            'url' => '/',
-            'object_id' => $objectId
-        ]);
-        Notification\Sender::create(['notification_id' => $notification->id, 'user_id' => $this->user->id, 'name' => $this->user->name]);
+        $notification = new \Coyote\Notifications\Microblog\UserMentionedNotification($microblog);
+        $this->recipient->notify($notification);
 
-        return $notification;
+        $this->tester->seeRecord('notifications', ['user_id' => $this->recipient->id, 'subject' => $text, 'object_id' => $this->getObjectId($notification, $microblog)]);
+
+        // hit again...
+        $text = "Hello again @{$this->recipient->name}";
+        /** @var Coyote\Microblog $microblog */
+        $microblog = $this->tester->haveRecord(Coyote\Microblog::class, ['user_id' => $this->sender->id, 'text' => $text]);
+
+        $notification = new \Coyote\Notifications\Microblog\UserMentionedNotification($microblog);
+        $this->recipient->notify($notification);
+
+        $this->tester->seeRecord('notifications', ['user_id' => $this->recipient->id, 'subject' => $text, 'object_id' => $this->getObjectId($notification, $microblog)]);
     }
 
-    private function getUser($id)
+    public function testMergeMicroblogNotifications()
     {
-        return $this->tester->grabRecord('Coyote\User', ['id' => $id]);
+        /** @var Coyote\Microblog $parent */
+        $parent = $this->tester->haveRecord(Coyote\Microblog::class, ['user_id' => $this->sender->id, 'text' => Faker\Factory::create()->text]);
+
+        $text1 = "Hello";
+        /** @var Coyote\Microblog $microblog */
+        $microblog = $this->tester->haveRecord(Coyote\Microblog::class, ['user_id' => $this->sender->id, 'text' => $text1, 'parent_id' => $parent->id]);
+
+        $notification = new \Coyote\Notifications\Microblog\SubmittedNotification($microblog);
+        $this->recipient->notify($notification);
+
+        $this->tester->seeRecord('notifications', ['user_id' => $this->recipient->id, 'excerpt' => $text1]);
+
+        // hit again
+        $text2 = "Hello v2";
+        /** @var Coyote\Microblog $microblog */
+        $microblog = $this->tester->haveRecord(Coyote\Microblog::class, ['user_id' => $this->sender->id, 'text' => $text2, 'parent_id' => $parent->id]);
+
+        $notification = new \Coyote\Notifications\Microblog\SubmittedNotification($microblog);
+        $this->recipient->notify($notification);
+
+
+        $this->tester->dontSeeRecord('notifications', ['user_id' => $this->recipient->id, 'excerpt' => $text2]);
+    }
+
+    private function getObjectId($notification, $model)
+    {
+        return substr(md5(class_basename($notification) . $model->id), 16);
     }
 
     // tests
@@ -83,5 +124,27 @@ class NotificationTest extends \Codeception\TestCase\Test
         $this->assertEquals($before->notifications_unread, $after->notifications_unread);
 
         $this->tester->dontSeeRecord('notifications', ['object_id' => $notification->object_id]);
+    }
+
+    private function create()
+    {
+        $objectId = rand(100, 9999);
+
+        $notification = Notification::create([
+            'type_id' => Notification::MICROBLOG_LOGIN,
+            'user_id' => $this->user->id,
+            'subject' => 'Lorem ipsum',
+            'excerpt' => 'excerpt',
+            'url' => '/',
+            'object_id' => $objectId
+        ]);
+        Notification\Sender::create(['notification_id' => $notification->id, 'user_id' => $this->user->id, 'name' => $this->user->name]);
+
+        return $notification;
+    }
+
+    private function getUser($id)
+    {
+        return $this->tester->grabRecord('Coyote\User', ['id' => $id]);
     }
 }

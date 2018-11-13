@@ -56,7 +56,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
      */
     public function objectId()
     {
-        return substr(md5(class_basename($this) . $this->microblog->parent_id ?: $this->microblog->id), 16);
+        return substr(md5(class_basename($this) . ($this->microblog->parent_id ?: $this->microblog->id)), 16);
     }
 
     /**
