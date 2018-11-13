@@ -6,10 +6,15 @@ use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
 use Coyote\User;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-abstract class AbstractNotification extends Notification
+abstract class AbstractNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
+    use Queueable;
+
     /**
      * @var Topic
      */

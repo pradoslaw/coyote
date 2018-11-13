@@ -6,11 +6,16 @@ use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
 use Coyote\Wiki;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ContentChangedNotification extends Notification
+class ContentChangedNotification extends Notification implements ShouldBroadcast, ShouldQueue
 {
+    use Queueable;
+
     const ID = \Coyote\Notification::WIKI_SUBSCRIBER;
 
     /**

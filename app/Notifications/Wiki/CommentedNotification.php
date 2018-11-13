@@ -6,11 +6,16 @@ use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
 use Coyote\Wiki\Comment;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class CommentedNotification extends Notification
+class CommentedNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
+    use Queueable;
+
     const ID = \Coyote\Notification::WIKI_COMMENT;
 
     /**
