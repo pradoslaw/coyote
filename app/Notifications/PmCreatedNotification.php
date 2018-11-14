@@ -58,12 +58,14 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
      */
     public function toDatabase(User $user)
     {
+        $excerpt = excerpt($this->text);
+
         return [
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
-            'subject'       => excerpt($this->text),
-            'excerpt'       => $this->text,
+            'subject'       => $excerpt,
+            'excerpt'       => $excerpt,
             'url'           => route('user.pm.show', [$this->pm->id - 1], false),
             'guid'          => $this->id
         ];
