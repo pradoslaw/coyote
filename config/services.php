@@ -39,6 +39,11 @@ return [
         'redirect'      => env('FACEBOOK_REDIRECT'),
     ],
 
+    'mailgun' => [
+        'domain'        => env('MAILGUN_DOMAIN'),
+        'secret'        => env('MAILGUN_SECRET'),
+    ],
+
     // Google maps key to show jobs locations.
     // -----------------------------------------------------------
 
