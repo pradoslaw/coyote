@@ -54,7 +54,7 @@ class CommentedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view($this->getMailView(), [
                 'sender'    => $this->notifier->name,
-                'subject'   => link_to(UrlBuilder::postComment($this->comment), $this->post->topic->subject),
+                'subject'   => link_to($this->notificationUrl(), $this->post->topic->subject),
                 'text'      => $this->comment->html
             ]);
     }

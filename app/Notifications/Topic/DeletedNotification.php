@@ -4,7 +4,6 @@ namespace Coyote\Notifications\Topic;
 
 use Coyote\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
-use Coyote\User;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class DeletedNotification extends AbstractNotification
@@ -22,7 +21,7 @@ class DeletedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view('emails.notifications.topic.delete', [
                 'sender'        => $this->notifier->name,
-                'subject'       => link_to(UrlBuilder::topic($this->topic), $this->topic->subject),
+                'subject'       => link_to($this->notificationUrl(), $this->topic->subject),
                 'reason_name'   => $this->reasonName,
                 'reason_text'   => $this->reasonText
             ]);
