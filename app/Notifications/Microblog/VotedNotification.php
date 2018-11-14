@@ -45,7 +45,7 @@ class VotedNotification extends AbstractNotification
     {
         $url = $this->microblog->parent_id
             ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id)
-                : UrlBuilder::microblog($this->microblog);;
+                : UrlBuilder::microblog($this->microblog);
 
         return [
             'object_id'     => $this->objectId(),
