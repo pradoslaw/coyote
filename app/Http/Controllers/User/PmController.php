@@ -170,17 +170,16 @@ class PmController extends BaseController
         });
 
         $this->validateWith($validator);
+        $recipient = $this->user->findByName($request->get('recipient'));
 
-        return $this->transaction(function () use ($request) {
-            $recipient = $this->user->findByName($request->get('recipient'));
-
-            $pm = $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
-
-            $recipient->notify(new PmCreatedNotification($pm));
-
-            // redirect to sent message...
-            return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
+        $pm = $this->transaction(function () use ($request, $recipient) {
+            return $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
         });
+
+        $recipient->notify(new PmCreatedNotification($pm));
+
+        // redirect to sent message...
+        return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
     }
 
     /**
