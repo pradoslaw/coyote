@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $folder
  * @property Text $text
  * @property User $author
+ * @property User $user
  */
 class Pm extends Model
 {
@@ -49,6 +50,14 @@ class Pm extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function author()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

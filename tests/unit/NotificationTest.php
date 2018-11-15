@@ -53,6 +53,28 @@ class NotificationTest extends \Codeception\TestCase\Test
         $this->tester->seeRecord('notifications', ['user_id' => $this->recipient->id, 'subject' => $text, 'object_id' => $this->getObjectId($notification, $microblog)]);
     }
 
+    public function testPmNotification()
+    {
+        $text = Faker\Factory::create()->text(20);
+
+        $setting = $this->recipient->notificationSettings()->where('type_id', Notification::PM)->first();
+        $setting->profile = true; // enable notification
+        $setting->save();
+
+        $repository = app(\Coyote\Repositories\Contracts\PmRepositoryInterface::class);
+        $pm = $repository->submit($this->sender, ['author_id' => $this->recipient->id, 'text' => $text]);
+
+        $notification = new \Coyote\Notifications\PmCreatedNotification($pm);
+        $message = $notification->toBroadcast();
+
+        $this->tester->assertEquals($this->sender->name . ' przesyła Ci nową wiadomość', $message->data['headline']);
+        $this->tester->assertEquals($this->sender->id, $notification->sender()['user_id']);
+
+        $this->recipient->notify($notification);
+
+        $this->tester->seeRecord('notifications', ['type_id' => Notification::PM, 'user_id' => $this->recipient->id, 'subject' => $text]);
+    }
+
     public function testMergeMicroblogNotifications()
     {
         /** @var Coyote\Microblog $parent */

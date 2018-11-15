@@ -44,10 +44,10 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     public function toMail()
     {
         return (new MailMessage)
-            ->subject(sprintf('Masz nową wiadomość od: %s', $this->pm->author->name))
+            ->subject(sprintf('Masz nową wiadomość od: %s', $this->pm->user->name))
             ->view('emails.notifications.pm', [
                 'text' => $this->text,
-                'sender' => $this->pm->author->name
+                'sender' => $this->pm->user->name
             ]
         );
     }
@@ -77,7 +77,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     public function toBroadcast()
     {
         return new BroadcastMessage([
-            'headline'  => $this->pm->author->name . ' przesyła Ci nową wiadomość',
+            'headline'  => $this->pm->user->name . ' przesyła Ci nową wiadomość',
             'subject'   => excerpt($this->text),
             'url'       => $this->notificationUrl()
         ]);
@@ -90,7 +90,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
      */
     public function objectId()
     {
-        return substr(md5(class_basename($this) . $this->pm->author_id), 16);
+        return substr(md5(class_basename($this) . $this->pm->user_id), 16);
     }
 
     /**
@@ -99,8 +99,8 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     public function sender()
     {
         return [
-            'user_id'       => $this->pm->author_id,
-            'name'          => $this->pm->author->name
+            'user_id'       => $this->pm->user_id,
+            'name'          => $this->pm->user->name
         ];
     }
 }
