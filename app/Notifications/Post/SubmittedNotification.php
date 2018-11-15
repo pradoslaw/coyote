@@ -24,7 +24,7 @@ class SubmittedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view($this->getMailView(), [
                 'sender'    => $this->getSender(),
-                'subject'   => $this->post->topic->subject,
+                'subject'   => link_to($this->notificationUrl(), $this->post->topic->subject),
                 'text'      => $this->post->html
             ]);
     }
