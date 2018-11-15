@@ -76,7 +76,7 @@ class DeleteController extends BaseController
                 $this->getFlagFactory()->deleteBy('topic_id', $topic->id, $this->userId);
 
                 $dispatcher->send(
-                    $subscribers,
+                    $subscribers->exceptUser($this->auth),
                     (new TopicDeletedNotification($this->auth, $topic))
                         ->setReasonText($reason->description)
                         ->setReasonName($reason->name)
@@ -99,7 +99,7 @@ class DeleteController extends BaseController
                 $this->getFlagFactory()->deleteBy('post_id', $post->id, $this->userId);
 
                 $dispatcher->send(
-                    $subscribers,
+                    $subscribers->exceptUser($this->auth),
                     (new PostDeletedNotification($this->auth, $post))
                         ->setReasonName($reason->name)
                         ->setReasonText($reason->description)
