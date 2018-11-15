@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Events\PmWasSent;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Notifications\PmCreatedNotification;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
@@ -178,9 +177,6 @@ class PmController extends BaseController
             $pm = $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
 
             $recipient->notify(new PmCreatedNotification($pm));
-
-            // broadcast event: we can use it to show message in real time
-//            event(new PmWasSent($pm->author_id, $this->auth->id, $this->auth->name, $excerpt));
 
             // redirect to sent message...
             return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
