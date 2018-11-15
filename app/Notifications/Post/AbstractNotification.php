@@ -7,11 +7,10 @@ use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-abstract class AbstractNotification extends Notification implements ShouldQueue, ShouldBroadcast
+abstract class AbstractNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
