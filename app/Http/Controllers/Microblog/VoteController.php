@@ -37,7 +37,7 @@ class VoteController extends Controller
             return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
         }
 
-        $this->transaction(function () use ($vote, $microblog, $request) {
+        $vote = $this->transaction(function () use ($vote, $microblog, $request) {
             if ($vote) {
                 $vote->delete();
 
@@ -55,7 +55,7 @@ class VoteController extends Controller
                 $url = UrlBuilder::microblog($microblog);
                 $object = (new Stream_Microblog())->map($microblog);
 
-                app('reputation.microblog.vote')->map($microblog)->setUrl($url)->setPositive(!$vote)->save();
+                app('reputation.microblog.vote')->map($microblog)->setUrl($url)->setPositive($vote->wasRecentlyCreated)->save();
             } else {
                 $object = (new Stream_Comment())->map($microblog);
                 $target = (new Stream_Microblog())->map($microblog->parent);
@@ -66,10 +66,12 @@ class VoteController extends Controller
             // put this to activity stream
             stream(Stream_Vote::class, $object, $target);
 
-            if ($vote->wasRecentlyCreated) {
-                $microblog->user->notify(new VotedNotification($vote));
-            }
+            return $vote;
         });
+
+        if ($vote->wasRecentlyCreated) {
+            $microblog->user->notify(new VotedNotification($vote));
+        }
 
         return response()->json(['count' => $microblog->voters()->count()]);
     }
