@@ -61,6 +61,10 @@ abstract class Notification extends BaseNotification
         $channels = [];
         $settings = $user->notificationSettings()->where('type_id', static::ID)->first();
 
+        if (empty($settings)) {
+            return $channels;
+        }
+
         if ($settings->profile) {
             $channels[] = DatabaseChannel::class;
         }
