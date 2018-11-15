@@ -71,10 +71,6 @@
                                 </a>
                             {% endif %}
 
-                            {% if topic.prev_forum_name %}
-                                <span class="label-move" title="Wątek przeniesiony z {{ topic.prev_forum_name }}">[» {{ topic.prev_forum_name }}]</span>
-                            {% endif %}
-
                             <h5>
                                 <a title="{{ topic.subject }}" href="{{ url ~ (user_id is defined ? ('?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id)) }}">{{ topic.subject }}</a>
 

@@ -73,12 +73,10 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                 'poster.photo AS poster_photo',
                 'forums.slug AS forum_slug',
                 'forums.name AS forum_name',
-                'prev.name AS prev_forum_name',
                 'pa.post_id AS post_accept_id'
             ])
             ->from($this->raw("($from) AS topics"))
             ->join('forums', 'forums.id', '=', 'topics.forum_id')
-            ->leftJoin('forums AS prev', 'prev.id', '=', 'prev_forum_id')
             ->join('posts AS first', 'first.id', '=', 'topics.first_post_id')
             ->join('posts AS last', 'last.id', '=', 'topics.last_post_id')
             ->leftJoin('users AS author', 'author.id', '=', 'first.user_id')
