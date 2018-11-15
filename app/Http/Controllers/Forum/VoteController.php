@@ -51,8 +51,10 @@ class VoteController extends BaseController
                 ]);
                 $post->score++;
 
-                // send notification to the user
-                $post->user->notify(new VotedNotification($this->auth, $post));
+                if ($post->user_id !== null) {
+                    // send notification to the user
+                    $post->user->notify(new VotedNotification($this->auth, $post));
+                }
             }
 
             // increase/decrease reputation points according to the forum settings
