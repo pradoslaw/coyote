@@ -23,11 +23,6 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
     private $flag;
 
     /**
-     * @var array
-     */
-    private $broadcast = [];
-
-    /**
      * @param Flag $flag
      */
     public function __construct(Flag $flag)
@@ -84,26 +79,6 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
     public function objectId()
     {
         return substr(md5(static::ID . $this->flag->url), 16);
-    }
-
-    /**
-     * Get the channels the event should be broadcast on.
-     *
-     * @return array
-     */
-    public function broadcastOn()
-    {
-        return $this->broadcast;
-    }
-
-    /**
-     * Get the broadcast event name.
-     *
-     * @return string
-     */
-    public function broadcastAs()
-    {
-        return 'notification';
     }
 
     /**
