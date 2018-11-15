@@ -85,10 +85,10 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
      * @param \Coyote\User $user
      * @return BroadcastMessage
      */
-    public function toBroadcast($user)
+    public function toBroadcast()
     {
         return new BroadcastMessage([
-            'headline'  => $user->name . ' dodał nowy raport',
+            'headline'  => $this->flag->user->name . ' dodał nowy raport',
             'subject'   => $this->flag->type->name,
             'url'       => $this->notificationUrl()
         ]);
