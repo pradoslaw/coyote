@@ -94,26 +94,28 @@ class CommentController extends Controller
             stream($activity, $object, $target);
 
             if ($this->comment->wasRecentlyCreated) {
-                $subscribers = $this->post->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
-
-                $dispatcher->send(
-                    $subscribers,
-                    new CommentedNotification($this->comment)
-                );
-
-                $usersId = (new LoginHelper())->grab($this->comment->html);
-
-                if (!empty($usersId)) {
-                    $dispatcher->send(
-                        app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                        new UserMentionedNotification($this->comment)
-                    );
-                }
-
                 // subscribe post. notify about all future comments to this post
                 $this->post->subscribe($this->userId, true);
             }
         });
+
+        if ($this->comment->wasRecentlyCreated) {
+            $subscribers = $this->post->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
+
+            $dispatcher->send(
+                $subscribers,
+                (new CommentedNotification($this->comment))
+            );
+
+            $usersId = (new LoginHelper())->grab($this->comment->html);
+
+            if (!empty($usersId)) {
+                $dispatcher->send(
+                    app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
+                    new UserMentionedNotification($this->comment)
+                );
+            }
+        }
 
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
             $this->comment->{$key} = $user->{$key};

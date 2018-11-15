@@ -75,9 +75,9 @@ class SubmitController extends BaseController
         $form = $this->getForm($forum, $topic, $post);
         $form->validate();
 
-        return $this->transaction(function () use ($form, $forum, $topic, $post, $dispatcher) {
-            $request = $form->getRequest();
+        $request = $form->getRequest();
 
+        $post = $this->transaction(function () use ($form, $forum, $topic, $post, $request) {
             $actor = new Stream_Actor($this->auth);
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
@@ -92,25 +92,6 @@ class SubmitController extends BaseController
             // url to the post
             $url = UrlBuilder::post($post);
 
-            if ($post->wasRecentlyCreated) {
-                $subscribers = $topic->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
-
-                $dispatcher->send(
-                    $subscribers,
-                    (new SubmittedNotification($this->auth, $post))->setSender($request->get('user_name'))
-                );
-
-                // get id of users that were mentioned in the text
-                $usersId = (new LoginHelper())->grab($post->html);
-
-                if (!empty($usersId)) {
-                    $dispatcher->send(
-                        app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                        (new UserMentionedNotification($this->auth, $post))->setSender($request->get('user_name'))
-                    );
-                }
-            }
-
             if ($topic->wasRecentlyCreated || $post->id === $topic->first_post_id) {
                 $object = (new Stream_Topic)->map($topic, $post->html);
                 $target = (new Stream_Forum)->map($forum);
@@ -121,14 +102,36 @@ class SubmitController extends BaseController
 
             stream($activity, $object, $target);
 
-            // fire the event. it can be used to index a content and/or add page path to "pages" table
-            event(new TopicWasSaved($topic));
-            // add post to elasticsearch
-            event(new PostWasSaved($post));
-
             $request->attributes->set('url', $url);
+
             return $post;
         });
+
+        if ($post->wasRecentlyCreated) {
+            $subscribers = $topic->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
+
+            $dispatcher->send(
+                $subscribers,
+                (new SubmittedNotification($this->auth, $post))->setSender($request->get('user_name'))
+            );
+
+            // get id of users that were mentioned in the text
+            $usersId = (new LoginHelper())->grab($post->html);
+
+            if (!empty($usersId)) {
+                $dispatcher->send(
+                    app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
+                    (new UserMentionedNotification($this->auth, $post))->setSender($request->get('user_name'))
+                );
+            }
+        }
+
+        // fire the event. it can be used to index a content and/or add page path to "pages" table
+        event(new TopicWasSaved($topic));
+        // add post to elasticsearch
+        event(new PostWasSaved($post));
+
+        return $post;
     }
 
     /**
