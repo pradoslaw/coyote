@@ -60,6 +60,16 @@ class SubmittedNotification extends AbstractNotification
     }
 
     /**
+     * Unikalne ID okreslajace dano powiadomienie. To ID posluzy do grupowania powiadomien tego samego typu
+     *
+     * @return string
+     */
+    public function objectId()
+    {
+        return substr(md5(class_basename($this) . $this->post->topic->id), 16);
+    }
+
+    /**
      * @return string
      */
     protected function getMailSubject(): string
