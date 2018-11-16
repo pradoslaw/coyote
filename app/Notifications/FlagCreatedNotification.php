@@ -38,7 +38,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
      */
     public function via($user)
     {
-        $this->broadcast[] = 'user:' . $user->id;
+        $this->broadcastChannel = 'user:' . $user->id;
 
         return $this->channels();
     }

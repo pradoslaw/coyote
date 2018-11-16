@@ -9,9 +9,9 @@ use Illuminate\Notifications\Notification as BaseNotification;
 abstract class Notification extends BaseNotification
 {
     /**
-     * @var array
+     * @var string|null
      */
-    protected $broadcast = [];
+    protected $broadcastChannel;
 
     /**
      * @param User $user
@@ -49,7 +49,7 @@ abstract class Notification extends BaseNotification
      */
     public function broadcastOn()
     {
-        return $this->broadcast;
+        return [$this->broadcastChannel];
     }
 
     /**
@@ -59,6 +59,8 @@ abstract class Notification extends BaseNotification
     protected function getChannels(User $user)
     {
         $channels = [];
+        $this->broadcastChannel = null;
+
         $settings = $user->notificationSettings()->where('type_id', static::ID)->first();
 
         if (empty($settings)) {
@@ -76,7 +78,7 @@ abstract class Notification extends BaseNotification
 
             if ($this instanceof ShouldBroadcast) {
                 $channels[] = 'broadcast';
-                $this->broadcast[] = $user->receivesBroadcastNotificationsOn();
+                $this->broadcastChannel = $user->receivesBroadcastNotificationsOn();
             }
         }
 
