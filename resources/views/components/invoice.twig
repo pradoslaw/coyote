@@ -90,20 +90,16 @@
     <table style="margin-left: auto; margin-right: auto" width="700">
         <tr>
             <td class="row-1">
-                <br><br><h3>Faktura nr: {{ invoice.number }}</h3><br>
+                <br><br><h3>Invoice / Faktura: {{ invoice.number }}</h3><br>
 
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td class="padding-sm">Data wystawienia:</td>
+                        <td class="padding-sm">Invoice issue date / Data wystawienia:</td>
                         <td class="padding-sm">{{ invoice.created_at|date('Y-m-d') }}</td>
                     </tr>
                     <tr>
-                        <td class="padding-sm">Data sprzedaży</td>
+                        <td class="padding-sm">Purchase date / Data sprzedaży</td>
                         <td class="padding-sm">{{ invoice.created_at|date('Y-m-d') }}</td>
-                    </tr>
-                    <tr>
-                        <td class="padding-sm">Sposób zapłaty:</td>
-                        <td class="padding-sm">Karta</td>
                     </tr>
                 </table>
             </td>
@@ -114,26 +110,23 @@
         </tr>
         <tr>
             <td class="left row-2">
-                <h3>Sprzedawca</h3><br>
+                <h3>Seller / Sprzedawca</h3><br>
 
                 <strong>{{ vendor.name }}</strong><br>
                 {{ vendor.address }}<br>
                 {{ vendor.postal_code }} {{ vendor.city }}<br>
-                NIP: {{ vendor.vat_id }}
             </td>
 
             <!-- Organization Name / Image -->
             <td class="left row-2">
-                <h3>Nabywca</h3><br>
+                <h3>Buyer / Nabywca</h3><br>
 
                 <strong>{{ invoice.name }}</strong><br>
                 {{ invoice.address }}<br>
                 {{ invoice.postal_code }} {{ invoice.city }}<br>
 
-                {% set reverse_charge = invoice.vat_id and invoice.country.code != 'PL' %}
-
                 {% if invoice.vat_id %}
-                    NIP: {{ reverse_charge ? invoice.country.code : '' }}{{ invoice.vat_id }}
+                    VAT ID / NIP: {{ invoice.country.code }}{{ invoice.vat_id }}
                 {% endif %}
             </td>
         </tr>
@@ -142,17 +135,10 @@
                 <!-- Invoice Table -->
                 <table width="100%" class="table" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <th class="left">Opis</th>
-                        <th class="right">Ilość</th>
-                        <th class="right">Cena jedn. netto</th>
-                        <th class="right">Wartość netto</th>
-
-                        {% if not reverse_charge %}
-                            <th class="right">Stawka VAT</th>
-                            <th class="right">Wartość VAT</th>
-                        {% endif %}
-
-                        <th class="right">Wartość brutto</th>
+                        <th class="left">Description / Opis</th>
+                        <th class="right">Quantity / Ilość</th>
+                        <th class="right">Unit price / Cena jedn.</th>
+                        <th class="right">Amount / Wartość</th>
                     </tr>
 
                     <!-- Display The Invoice Items -->
@@ -161,13 +147,6 @@
                             <td class="left">{{ item.description }}</td>
                             <td class="right">1</td>
                             <td class="right">{{ item.price }} {{ currency }}</td>
-                            <td class="right">{{ item.price }} {{ currency }}</td>
-
-                            {% if not reverse_charge %}
-                                <td class="right">{{ (item.vat_rate * 100) - 100 }}%</td>
-                                <td class="right">{{ item.gross_price - item.price }} {{ currency }}</td>
-                            {% endif %}
-
                             <td class="right">{{ item.gross_price }} {{ currency }}</td>
                         </tr>
                     {% endfor %}
@@ -176,33 +155,21 @@
                     <tr style="border-top:2px solid #000;">
                         <td class="empty-cell">&nbsp;</td>
                         <td class="empty-cell">&nbsp;</td>
-                        <td class="right"><strong>Razem</strong></td>
-                        <td class="right">&nbsp;{{ invoice.net_price }} {{ currency }}</td>
-                        {% if not reverse_charge %}
-                            <td class="right">&nbsp;</td>
-                            <td class="right">{{ invoice.gross_price - invoice.net_price }} {{ currency }}</td>
-                        {% endif %}
+                        <td class="right"><strong>Total / Razem</strong></td>
                         <td class="right"><strong>{{ invoice.gross_price }} {{ currency }}</strong></td>
                     </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="padding-top: 30px;">
-                <table>
-                    <tr>
-                        <td class="padding-sm" style="font-size: 14px"><strong>Zapłacono:</strong></td>
-                        <td class="padding-sm" style="font-size: 14px">{{ invoice.gross_price }} {{ currency }}</td>
+                    <tr style="border-top:2px solid #000;">
+                        <td class="empty-cell">&nbsp;</td>
+                        <td class="empty-cell">&nbsp;</td>
+                        <td class="right"><strong>Paid amount / Zapłacono</strong></td>
+                        <td class="right"><strong>{{ invoice.gross_price }} {{ currency }}</strong></td>
                     </tr>
-                    <tr>
-                        <td class="padding-sm" style="font-size: 14px"><strong>Do zapłaty:</strong></td>
-                        <td class="padding-sm" style="font-size: 14px">0 {{ currency }}</td>
+                    <tr style="border-top:2px solid #000;">
+                        <td class="empty-cell">&nbsp;</td>
+                        <td class="empty-cell">&nbsp;</td>
+                        <td class="right"><strong>Balance Due / Do zapłaty</strong></td>
+                        <td class="right"><strong>0 {{ currency }}</strong></td>
                     </tr>
-                    {% if reverse_charge %}
-                        <tr>
-                            <td class="padding-lg-top" style="font-size: 14px; font-style: italic;" colspan="2">Do rozliczenia podatku VAT zobowiązany jest nabywca usługi (odwrotne obciążenie)</td>
-                        </tr>
-                    {% endif %}
                 </table>
             </td>
         </tr>

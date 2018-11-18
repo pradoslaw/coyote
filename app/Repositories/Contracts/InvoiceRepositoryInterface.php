@@ -12,5 +12,9 @@ interface InvoiceRepositoryInterface extends RepositoryInterface
      */
     public function getNextSeq(Carbon $date): int;
 
+    /**
+     * @param Carbon $date
+     * @return int
+     */
     public function countInvoices(Carbon $date): int;
 }
