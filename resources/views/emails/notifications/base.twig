@@ -3,7 +3,7 @@
 {% block footer %}
     {% if url %}
         <br>
-        Kliknij, aby zobaczyć: {{ guid ? link_to_route('user.notifications.url', url(url), [guid]) : link_to(url) }}
+        Kliknij, aby zobaczyć: {{ link_to(url) }}
     {% endif %}
 
     <br><br>
