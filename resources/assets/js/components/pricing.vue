@@ -23,8 +23,8 @@
                 <div class="plan-header" @click="changePlan(plan.id)">
                     <h4 class="plan-name">Ogłoszenie<br><strong>{{ plan.name }}</strong></h4>
 
-                    <div class="plan-price"><strong>{{ plan.price * (plan.discount > 0 ? plan.discount : 1) }} zł</strong> <small>netto</small></div>
-                    <div class="plan-price-old" v-if="plan.discount > 0"><strong>{{ plan.price }} zł</strong> <small>netto</small></div>
+                    <div class="plan-price"><strong>{{ plan.price * (plan.discount > 0 ? plan.discount : 1) }} zł</strong></div>
+                    <div class="plan-price-old" v-if="plan.discount > 0"><strong>{{ plan.price }} zł</strong></div>
                 </div>
 
                 <div class="plan-body">

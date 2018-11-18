@@ -92,7 +92,7 @@ class JobCreatedNotification extends Notification
             ->line(sprintf('Dziękujemy za dodanie ogłoszenia w serwisie <strong>%s</strong>.', config('app.name')))
             ->line(
                 sprintf(
-                    'Ogłoszenie %s zostało dodane i czeka dokonanie opłaty w kwocie %s zł netto.',
+                    'Ogłoszenie %s zostało dodane i czeka dokonanie opłaty w kwocie %s zł.',
                     link_to(UrlBuilder::job($this->job), $this->job->title),
                     $calculator->netPrice()
                 )

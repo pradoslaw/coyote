@@ -52,7 +52,7 @@ class SuccessfulPaymentNotification extends Notification
         if ($this->payment->invoice_id && $this->payment->invoice->grossPrice() > 0) {
             $mail->line(
                 sprintf(
-                    'Otrzymaliśmy płatność w kwocie <strong>%s %s</strong> brutto.',
+                    'Otrzymaliśmy płatność w kwocie <strong>%s %s</strong>.',
                     $this->payment->invoice->grossPrice(),
                     $this->payment->invoice->currency->symbol
                 )
