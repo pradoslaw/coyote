@@ -31,4 +31,18 @@ class InvoiceRepository extends Repository implements InvoiceRepositoryInterface
             return !$seq ? 1 : ($seq + 1);
         });
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function countInvoices(Carbon $date): int
+    {
+        return (int) $this->applyCriteria(function () use ($date) {
+            return $this->model
+                ->whereNotNull('number')
+                ->whereRaw("extract(YEAR from created_at) = ?", [$date->year])
+                ->whereRaw("extract(MONTH from created_at) = ?", [$date->month])
+                ->count();
+        });
+    }
 }

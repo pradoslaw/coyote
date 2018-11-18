@@ -30,10 +30,9 @@ class Enumerator
     public function enumerate(Invoice $invoice): Invoice
     {
         $date = Carbon::now();
-        $seq = $this->repository->getNextSeq($date);
+        $seq = $this->repository->countInvoices($date) + 1;
 
         $invoice->number = $this->formatNumber($seq, $date);
-        $invoice->seq = $seq;
         $invoice->save();
 
         return $invoice;
@@ -46,6 +45,6 @@ class Enumerator
      */
     private function formatNumber(int $seq, Carbon $date): string
     {
-        return sprintf('%s/%d/%d/%02d', '4P', $seq, $date->month, $date->year);
+        return sprintf('%02d%d%d-%d', $date->year, $date->month, $date->day, $seq);
     }
 }
