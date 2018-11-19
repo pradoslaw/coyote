@@ -126,4 +126,22 @@ class PermissionTest extends \Codeception\TestCase\Test
         $user->reputation = 100;
         $this->assertTrue($user->can('delete', $post));
     }
+
+    public function testCanUserAccessForum()
+    {
+        $user = $this->tester->createUser();
+        $forum = $this->tester->createForum();
+
+        $this->assertTrue($user->can('access', $forum));
+
+        $admins = $this->tester->haveRecord(\Coyote\Group::class, ['name' => 'Admins']);
+        $this->tester->haveRecord(\Coyote\Forum\Access::class, ['forum_id' => $forum->id, 'group_id' => $admins->id]);
+
+        $this->assertFalse($user->can('access', $forum));
+
+        $this->tester->haveRecord(\Coyote\Group\User::class, ['user_id' => $user->id, 'group_id' => $admins->id]);
+
+        $this->assertTrue($user->can('access', $forum));
+
+    }
 }

@@ -104,7 +104,7 @@ class ForumPolicy
             return true;
         }
 
-        foreach ($user->groups as $group) {
+        foreach ($user->groups()->get() as $group) {
             if (in_array($group->id, $groups)) {
                 return true;
             }

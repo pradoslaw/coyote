@@ -42,7 +42,8 @@ class DeleteController extends BaseController
         $this->authorize('delete', [$post]);
 
         // Step 3. Maybe user does not have an access to this category?
-        $forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
+        $this->authorize('access', [$forum]);
+
         $topic = &$post->topic;
 
         // Step 4. Only moderators can delete this post if topic (or forum) was locked
