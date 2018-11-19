@@ -42,6 +42,7 @@ class InvoiceRepository extends Repository implements InvoiceRepositoryInterface
                 ->whereNotNull('number')
                 ->whereRaw("extract(YEAR from created_at) = ?", [$date->year])
                 ->whereRaw("extract(MONTH from created_at) = ?", [$date->month])
+                ->whereRaw("extract(DAY from created_at) = ?", [$date->day])
                 ->count();
         });
     }
