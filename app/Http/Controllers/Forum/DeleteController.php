@@ -39,7 +39,7 @@ class DeleteController extends BaseController
         $forum = &$post->forum;
 
         // Step 2. Does user really have permission to delete this post?
-        $this->authorize('delete', [$post, $forum]);
+        $this->authorize('delete', [$post]);
 
         // Step 3. Maybe user does not have an access to this category?
         $forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
@@ -47,7 +47,7 @@ class DeleteController extends BaseController
 
         // Step 4. Only moderators can delete this post if topic (or forum) was locked
         if ($this->getGateFactory()->denies('delete', $forum)) {
-            if ($topic->is_locked || $forum->is_locked || $post->id < $topic->last_post_id || $post->deleted_at) {
+            if ($topic->is_locked || $forum->is_locked || $post->deleted_at) {
                 abort(401, 'Unauthorized');
             }
         }
