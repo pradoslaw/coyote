@@ -334,7 +334,7 @@ class JobPostingCest
 
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
         $I->assertEquals(30, $item->price);
-        $I->assertEquals(1.23, $item->vat_rate);
+        $I->assertEquals(1, $item->vat_rate);
     }
 
     public function createPremiumOfferWithInvoice(FunctionalTester $I)
