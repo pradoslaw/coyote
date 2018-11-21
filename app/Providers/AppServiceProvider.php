@@ -148,9 +148,7 @@ class AppServiceProvider extends ServiceProvider
             }
 
             return $this->filter(function (User $user) use ($others) {
-                return null !== $others->first(function ($value) use ($user) {
-                    return $value->id != $user->id;
-                });
+                return ! $others->contains('id', $user->id);
             });
         });
 
