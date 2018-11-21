@@ -173,19 +173,4 @@ class NotificationRepository extends Repository implements NotificationRepositor
                 ->whereNull('read_at')
                 ->first();
     }
-
-    /**
-     * One notification can have multiple senders (users). Few users can post comment to your post.
-     * In that case notification can be grouped
-     *
-     * @param $notificationId
-     * @param $userId
-     * @param $senderName
-     */
-    public function addSender($notificationId, $userId, $senderName)
-    {
-        $this->app->make(Sender::class)->create(
-            ['notification_id' => $notificationId, 'user_id' => $userId, 'name' => $senderName]
-        );
-    }
 }

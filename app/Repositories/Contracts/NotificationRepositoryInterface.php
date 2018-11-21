@@ -68,14 +68,4 @@ interface NotificationRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function findByObjectId($userId, $objectId, $columns = ['*']);
-
-    /**
-     * One notification can have multiple senders (users). Few users can post comment to your post.
-     * In that case notification can be grouped
-     *
-     * @param $notificationId
-     * @param $userId
-     * @param $senderName
-     */
-    public function addSender($notificationId, $userId, $senderName);
 }
