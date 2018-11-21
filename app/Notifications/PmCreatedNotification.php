@@ -48,7 +48,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
             ->view('emails.notifications.pm', [
                 'text' => $this->text,
                 'sender' => $this->pm->user->name,
-                'url' => $this->notificationUrl()
+                'url' => route('user.pm.show', [$this->pm->id - 1], false)
             ]
         );
     }
