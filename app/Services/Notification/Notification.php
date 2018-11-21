@@ -25,7 +25,7 @@ abstract class Notification extends BaseNotification
     abstract public function sender();
 
     /**
-     * Generowanie unikalnego ciagu znakow dla wpisu na mikro
+     * Unique ID for this type of notification. This can be useful for grouping notifications of the same type.
      *
      * @return string
      */
