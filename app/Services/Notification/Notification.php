@@ -72,11 +72,11 @@ abstract class Notification extends BaseNotification
         }
 
         if (empty($user->getUnreadNotification($this->objectId()))) {
-            if ($user->email && $user->is_active && $user->is_confirm && !$user->is_blocked && $settings->email) {
+            if ($settings->email && $user->canReceiveEmail()) {
                 $channels[] = 'mail';
             }
 
-            if ($this instanceof ShouldBroadcast) {
+            if ($settings->profile && $this instanceof ShouldBroadcast) {
                 $channels[] = 'broadcast';
                 $this->broadcastChannel = $user->receivesBroadcastNotificationsOn();
             }

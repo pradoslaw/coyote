@@ -20,7 +20,7 @@ class OnlyThoseWithAccess extends Criteria
     public function __construct($user = null)
     {
         if ($user instanceof User) {
-            $this->groupsId = $user->getGroupsId();
+            $this->groupsId = $user->groups()->pluck('id')->toArray();
         }
     }
 

@@ -270,11 +270,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * @return int[]
+     * @return bool
      */
-    public function getGroupsId()
+    public function canReceiveEmail(): bool
     {
-        return $this->groups()->pluck('id')->toArray();
+        return $this->email && $this->is_active && $this->is_confirm && !$this->is_blocked;
     }
 
     /**
