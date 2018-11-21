@@ -38,14 +38,6 @@ interface NotificationRepositoryInterface extends RepositoryInterface
     public function markAsReadByUrl($userId, $url);
 
     /**
-     * Gets notification headline for given type. This template is used for Db_Email() class for emails subject
-     *
-     * @param $typeId
-     * @return mixed
-     */
-    public function headlinePattern($typeId);
-
-    /**
      * Gets notification settings for given user
      *
      * @param int|int[] $userId
@@ -58,14 +50,4 @@ interface NotificationRepositoryInterface extends RepositoryInterface
      * @param array $data
      */
     public function setUserSettings($userId, array $data);
-
-    /**
-     * Gets first unread notification for given user and notification id (object_id)
-     *
-     * @param int $userId
-     * @param string $objectId
-     * @param array $columns
-     * @return mixed
-     */
-    public function findByObjectId($userId, $objectId, $columns = ['*']);
 }

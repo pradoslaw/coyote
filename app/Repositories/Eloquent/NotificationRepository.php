@@ -100,17 +100,6 @@ class NotificationRepository extends Repository implements NotificationRepositor
     }
 
     /**
-     * Gets notification headline for given type. This template is used for Db_Email() class for emails subject
-     *
-     * @param $typeId
-     * @return mixed
-     */
-    public function headlinePattern($typeId)
-    {
-        return $this->app->make(Type::class)->find($typeId, ['headline'])['headline'];
-    }
-
-    /**
      * Gets notification settings for given user
      *
      * @param int|int[] $userId
@@ -153,24 +142,5 @@ class NotificationRepository extends Repository implements NotificationRepositor
         foreach ($data as $id => $row) {
             $model->where('user_id', $userId)->where('id', $id)->update($row);
         }
-    }
-
-    /**
-     * Gets first unread notification for given user and notification id (object_id)
-     *
-     * @param int $userId
-     * @param string $objectId
-     * @param array $columns
-     * @return mixed
-     */
-    public function findByObjectId($userId, $objectId, $columns = ['*'])
-    {
-        return $this
-                ->model
-                ->select($columns)
-                ->where('user_id', '=', $userId)
-                ->where('object_id', '=', $objectId)
-                ->whereNull('read_at')
-                ->first();
     }
 }
