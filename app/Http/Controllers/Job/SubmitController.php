@@ -270,15 +270,19 @@ class SubmitController extends Controller
 
             if ($job->wasRecentlyCreated || !$job->is_publish) {
                 $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
-
-                $job->user->notify(new JobCreatedNotification($job));
             }
 
             stream($activity, (new Stream_Job)->map($job));
             $request->session()->forget(Job::class);
 
-            event(new JobWasSaved($job));
+            event(new JobWasSaved($job)); // we don't queue listeners for this event
+
+            return $job;
         });
+
+        if ($job->wasRecentlyCreated) {
+            $job->user->notify(new JobCreatedNotification($job));
+        }
 
         $paymentUuid = $job->getPaymentUuid();
         if ($paymentUuid !== null) {
