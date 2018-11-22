@@ -30,23 +30,22 @@ class RedirectIfMoved extends AbstractMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // url is invalid if category was changed or slug was changed
-        if ($this->isInvalidUrl($request)) {
-            /** @var \Coyote\Topic $topic */
-            $topic = $request->route('topic');
-
-            // get current topic's category
-            $forum = $this->forum->find($topic->forum_id);
-
-            $request->route()->setParameter('forum', $forum);
-            $request->route()->setParameter('slug', $topic->slug);
-
-            if ($request->isMethod('get')) {
-                return $this->redirect($request);
-            }
+        // check if url is invalid if category was changed or slug was changed
+        // only if it is HTTP GET request
+        if ($request->isMethod('get') === false || !$this->isInvalidUrl($request)) {
+            return $next($request);
         }
 
-        return $next($request);
+        /** @var \Coyote\Topic $topic */
+        $topic = $request->route('topic');
+
+        // get current topic's category
+        $forum = $this->forum->find($topic->forum_id);
+
+        $request->route()->setParameter('forum', $forum);
+        $request->route()->setParameter('slug', $topic->slug);
+
+        return $this->redirect($request);
     }
 
     /**
@@ -58,11 +57,8 @@ class RedirectIfMoved extends AbstractMiddleware
         $forum = $request->route('forum');
         $topic = $request->route('topic');
 
-        if ($forum->id !== $topic->forum_id
-            || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug)) {
-            return true;
-        }
-
-        return false;
+        return (is_null($forum)
+            || $forum->id !== $topic->forum_id
+                || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug));
     }
 }
