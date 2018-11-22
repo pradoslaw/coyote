@@ -78,7 +78,7 @@ class SubmitController extends Controller
 
         $microblog->fill($data);
 
-        $this->transaction(function () use (&$microblog, $user, $dispatcher) {
+        $this->transaction(function () use (&$microblog, $user) {
             $microblog->save();
             $object = (new Stream_Microblog())->map($microblog);
 
