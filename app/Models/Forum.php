@@ -184,26 +184,6 @@ class Forum extends Model
     }
 
     /**
-     * Filter users. Return only ids of users who have access to this forum.
-     *
-     * @param array $usersId
-     * @return array|bool
-     */
-    public function onlyUsersWithAccess(array $usersId)
-    {
-        if (empty($usersId)) {
-            return false;
-        }
-
-        $allowed = $this->getUsersWithAccess();
-        if (empty($allowed)) {
-            return $usersId;
-        }
-
-        return array_intersect($usersId, $allowed);
-    }
-
-    /**
      * @param string $guestId
      * @return mixed
      */
