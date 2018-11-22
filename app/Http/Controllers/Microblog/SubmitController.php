@@ -89,17 +89,6 @@ class SubmitController extends Controller
                 // put this to activity stream
                 stream(Stream_Create::class, $object);
 
-                $helper = new LoginHelper();
-                // get id of users that were mentioned in the text
-                $usersId = $helper->grab($microblog->html);
-
-                if (!empty($usersId)) {
-                    $dispatcher->send(
-                        $this->user->findMany($usersId)->exceptUser($this->auth),
-                        new UserMentionedNotification($microblog)
-                    );
-                }
-
                 if ($this->auth->allow_subscribe) {
                     // enable subscribe button
                     $microblog->subscribe_on = true;
@@ -111,9 +100,22 @@ class SubmitController extends Controller
 
             $helper = new HashHelper();
             $microblog->setTags($helper->grab($microblog->html));
-
-            event(new MicroblogWasSaved($microblog));
         });
+
+        if ($microblog->wasRecentlyCreated) {
+            $helper = new LoginHelper();
+            // get id of users that were mentioned in the text
+            $usersId = $helper->grab($microblog->html);
+
+            if (!empty($usersId)) {
+                $dispatcher->send(
+                    $this->user->findMany($usersId)->exceptUser($this->auth),
+                    new UserMentionedNotification($microblog)
+                );
+            }
+        }
+
+        event(new MicroblogWasSaved($microblog));
 
         // do przekazania do widoku...
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {

@@ -75,27 +75,14 @@ class CommentController extends Controller
             // we need to get parent entry only for notification
             $parent = $microblog->parent;
 
+            $helper = new HashHelper();
+            $microblog->setTags($helper->grab($microblog->text));
+
+            // map microblog object into stream activity object
+            $object = (new Stream_Comment())->map($microblog);
+            $target = (new Stream_Microblog())->map($parent);
+
             if ($microblog->wasRecentlyCreated) {
-                $subscribers = $parent
-                    ->subscribers()
-                    ->with('user')
-                    ->get()
-                    ->pluck('user')
-                    ->exceptUser($this->auth);
-
-                $dispatcher->send($subscribers, new SubmittedNotification($microblog));
-
-                $helper = new LoginHelper();
-                // get id of users that were mentioned in the text
-                $usersId = $helper->grab($microblog->html);
-
-                if (!empty($usersId)) {
-                    $dispatcher->send(
-                        $this->user->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                        new UserMentionedNotification($microblog)
-                    );
-                }
-
                 // now we can add user to subscribers list (if he's not in there yet)
                 // after that he will receive notification about other users comments
                 if (!$parent->subscribers()->forUser($user->id)->exists()) {
@@ -108,22 +95,33 @@ class CommentController extends Controller
                 } else {
                     $isSubscribed = true;
                 }
-
-                $activity = Stream_Create::class;
-            } else {
-                $activity = Stream_Update::class;
             }
 
-            $helper = new HashHelper();
-            $microblog->setTags($helper->grab($microblog->text));
-
-            // map microblog object into stream activity object
-            $object = (new Stream_Comment())->map($microblog);
-            $target = (new Stream_Microblog())->map($parent);
-
             // put item into stream activity
-            stream($activity, $object, $target);
+            stream($microblog->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class, $object, $target);
         });
+
+        if ($microblog->wasRecentlyCreated) {
+            $subscribers = $microblog->parent
+                ->subscribers()
+                ->with('user')
+                ->get()
+                ->pluck('user')
+                ->exceptUser($this->auth);
+
+            $dispatcher->send($subscribers, new SubmittedNotification($microblog));
+
+            $helper = new LoginHelper();
+            // get id of users that were mentioned in the text
+            $usersId = $helper->grab($microblog->html);
+
+            if (!empty($usersId)) {
+                $dispatcher->send(
+                    $this->user->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
+                    new UserMentionedNotification($microblog)
+                );
+            }
+        }
 
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
             $microblog->{$key} = $user->{$key};
