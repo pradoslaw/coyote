@@ -83,31 +83,33 @@ class FlagController extends Controller
 
         $this->validateWith($validator);
 
-        $this->transaction(function () use ($request) {
+        $flag = $this->transaction(function () use ($request) {
             $data = $request->all() + ['user_id' => $this->userId];
             $data['metadata'] = $this->decrypt($data['metadata']);
 
             $flag = $this->flag->create($data);
 
-            $this->user->pushCriteria(new HasPermission($this->getPermissionName($flag)));
-
-            $users = $this
-                ->user
-                ->all()
-                ->sortByDesc(function ($user) {
-                    /** @var \Coyote\User $user */
-                    return $user->id == $this->userId ? -1
-                        : ($user->is_online ? Carbon::now()->timestamp : $user->visited_at->timestamp);
-                })
-                ->splice(0, 5);
-
-            /** @var \Coyote\User $user */
-            foreach ($users as $user) {
-                $user->notify(new FlagCreatedNotification($flag));
-            }
-
             stream(Stream_Create::class, (new Stream_Flag())->map($flag));
+
+            return $flag;
         });
+
+        $this->user->pushCriteria(new HasPermission($this->getPermissionName($flag)));
+
+        $users = $this
+            ->user
+            ->all()
+            ->sortByDesc(function ($user) {
+                /** @var \Coyote\User $user */
+                return $user->id == $this->userId ? -1
+                    : ($user->is_online ? Carbon::now()->timestamp : $user->visited_at->timestamp);
+            })
+            ->splice(0, 5);
+
+        /** @var \Coyote\User $user */
+        foreach ($users as $user) {
+            $user->notify(new FlagCreatedNotification($flag));
+        }
     }
 
     /**
