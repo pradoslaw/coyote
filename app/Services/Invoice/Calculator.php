@@ -95,6 +95,6 @@ class Calculator implements Arrayable
      */
     private function calculateDiscount($price)
     {
-        return max(0, ($this->discount > 0 ? $price * $this->discount : $price) - ($this->coupon !== null ? $this->coupon->amount : 0));
+        return max(0, ($this->discount > 0 ? ($price - ($price * $this->discount)) : $price) - ($this->coupon !== null ? $this->coupon->amount : 0));
     }
 }
