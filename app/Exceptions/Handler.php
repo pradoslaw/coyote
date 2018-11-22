@@ -85,10 +85,7 @@ class Handler extends ExceptionHandler
             }
 
             if ($e instanceof TokenMismatchException) {
-                return response()->json(
-                    ['error' => 'Twoja sesja wygasła. Proszę odświeżyć stronę i spróbować ponownie.'],
-                    $statusCode
-                );
+                return $this->renderTokenMismatchException($request, $e);
             }
 
             $response = [
@@ -109,9 +106,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof TokenMismatchException) {
-            return redirect($request->fullUrl())
-                ->withInput($request->except('_token'))
-                ->with('error', 'Wygląda na to, że nie wysłałeś tego formularza przez dłuższy czas. Spróbuj ponownie!');
+            return $this->renderTokenMismatchException($request, $e);
         }
 
         if (($e instanceof HttpException && $e->getStatusCode() === 404) || $e instanceof ModelNotFoundException) {
@@ -119,6 +114,25 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $e);
+    }
+
+    /**
+     * @param Request $request
+     * @param $e
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    protected function renderTokenMismatchException(Request $request, $e)
+    {
+        if ($request->isXmlHttpRequest()) {
+            return response()->json(
+                ['error' => 'Twoja sesja wygasła. Proszę odświeżyć stronę i spróbować ponownie.'],
+                $this->isHttpException($e) ? $e->getStatusCode() : 500
+            );
+        }
+
+        return redirect($request->fullUrl())
+            ->withInput($request->except('_token'))
+            ->with('error', 'Wygląda na to, że nie wysłałeś tego formularza przez dłuższy czas. Spróbuj ponownie!');
     }
 
     /**
@@ -137,15 +151,30 @@ class Handler extends ExceptionHandler
      */
     protected function renderHttpErrorException(Request $request, $e)
     {
+        // Case insensitive path lookup.
+        // Redirect to correct version if exists
+        $path = $this->findCamelCasePath($request);
+
+        if ($path === null) {
+            return parent::render($request, $e);
+        }
+
+        return redirect($path, 301);
+    }
+
+    /**
+     * Case insensitive path lookup.
+     *
+     * @param Request $request
+     * @return null|string
+     */
+    protected function findCamelCasePath(Request $request): ?string
+    {
         // try to find correct path for given page
         $path = rawurldecode(rtrim($request->getPathInfo(), '/'));
         $page = $this->container[PageRepositoryInterface::class]->findByPath($path);
 
-        if (!$page) {
-            return parent::render($request, $e);
-        }
-
-        return redirect($page->path, 301);
+        return $page !== null && $page->path !== $path ? $page->path : null;
     }
 
     /**
