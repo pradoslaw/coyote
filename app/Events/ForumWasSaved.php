@@ -15,12 +15,17 @@ class ForumWasSaved extends Event
     public $forum;
 
     /**
-     * Create a new event instance.
-     *
-     * @param Forum $forum
+     * @var Forum|null
      */
-    public function __construct(Forum $forum)
+    public $original;
+
+    /**
+     * @param Forum $forum
+     * @param Forum|null $original
+     */
+    public function __construct(Forum $forum, ?Forum $original)
     {
         $this->forum = $forum;
+        $this->original = $original;
     }
 }
