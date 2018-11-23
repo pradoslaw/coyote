@@ -15,15 +15,16 @@ class ForumWasSaved extends Event
     public $forum;
 
     /**
-     * @var Forum|null
+     * @var array
      */
     public $original;
 
     /**
+     * ForumWasSaved constructor.
      * @param Forum $forum
-     * @param Forum|null $original
+     * @param array $original
      */
-    public function __construct(Forum $forum, ?Forum $original)
+    public function __construct(Forum $forum, array $original = [])
     {
         $this->forum = $forum;
         $this->original = $original;

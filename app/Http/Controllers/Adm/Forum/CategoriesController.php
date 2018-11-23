@@ -70,11 +70,10 @@ class CategoriesController extends BaseController
         $form = $this->getForm($forum);
         $form->validate();
 
+        $original = $forum->getOriginal();
         $forum->fill($form->all());
 
         $this->transaction(function () use ($form, $forum) {
-            $original = clone $forum;
-
             $forum->save();
             $forum->access()->delete();
 
@@ -83,9 +82,9 @@ class CategoriesController extends BaseController
             }
 
             $this->flushCache();
-
-            event(new ForumWasSaved($forum, $original));
         });
+
+        event(new ForumWasSaved($forum, $original));
 
         return redirect()->route('adm.forum.categories')->with('success', 'Zmiany zostały zapisane.');
     }

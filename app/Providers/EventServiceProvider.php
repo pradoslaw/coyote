@@ -4,14 +4,13 @@ namespace Coyote\Providers;
 
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
-use Coyote\Events\PaymentPaid;
+use Coyote\Events\ForumWasSaved;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Events\UserWasSaved;
-use Coyote\Listeners\BoostJobOffer;
 use Coyote\Listeners\ChangeImageUrl;
-use Coyote\Listeners\ChangePaymentStatus;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
+use Coyote\Listeners\IndexCategory;
 use Coyote\Listeners\LogSentMessage;
 use Coyote\Listeners\MicroblogListener;
 use Coyote\Listeners\SaveLocationsInJobPreferences;
@@ -43,7 +42,8 @@ class EventServiceProvider extends ServiceProvider
         FirewallWasDeleted::class => [FlushFirewallCache::class],
         SuccessfulLogin::class => [SendSuccessfulLoginEmail::class],
         Login::class => [SetupLoginDate::class],
-        MessageSending::class => [ChangeImageUrl::class, LogSentMessage::class]
+        MessageSending::class => [ChangeImageUrl::class, LogSentMessage::class],
+        ForumWasSaved::class => [IndexCategory::class]
     ];
 
     /**
