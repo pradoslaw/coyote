@@ -11,10 +11,10 @@ class CommentForm extends Form
     public function buildForm()
     {
         $this->setAttr(['class' => 'comment-form']);
-        
+
         $this
             ->add('text', 'textarea', [
-                'rules' => 'required|string',
+                'rules' => 'required|string|spam_foreign:1',
                 'attr' => [
                     'placeholder' => 'Kliknij, aby dodać nowy komentarz',
                     'cols' => 5,
