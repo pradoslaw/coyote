@@ -163,6 +163,23 @@
         <div class="row">
             <div class="col-sm-2 hidden-xs col-bottom" style="height: 32px"></div>
             <div class="col-sm-10 col-xs-12 col-bottom">
+                {% if (can('merge', forum) or can('adm-access')) %}
+                    <div class="dropdown pull-right">
+                        <button class="btn btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Więcej...">
+                            <i class="fa fa-fw fa-ellipsis-h"></i>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            {% if not post.deleted_at and can('merge', forum) and post.id != topic.first_post_id %}
+                                <li><a href="{{ route('forum.post.merge', [post.id]) }}" class="btn-merge"><i class="fa fa-compress fa-fw"></i> Połącz z poprzednim</a></li>
+                            {% endif %}
+
+                            {% if can('adm-access') %}
+                                <li><a href="{{ route('adm.firewall.save') }}?user={{ post.user_id }}&ip={{ post.ip }}"><i class="fa fa-ban fa-fw"></i> Zablokuj użytkownika</a> </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
 
                 {% if not post.deleted_at %}
                     {% if auth_check() %}
@@ -185,30 +202,13 @@
                             </a>
                         {% endif %}
 
-                        {% if not post.deleted_at and (can('merge', forum) or can('adm-access')) %}
-                            <div class="dropdown pull-right">
-                                <button class="btn btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Więcej...">
-                                    <i class="fa fa-fw fa-ellipsis-h"></i>
-                                </button>
-
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    {% if can('merge', forum) and post.id != topic.first_post_id %}
-                                        <li><a href="{{ route('forum.post.merge', [post.id]) }}" class="btn-merge"><i class="fa fa-compress fa-fw"></i> Połącz z poprzednim</a></li>
-                                    {% endif %}
-
-                                    {% if can('adm-access') %}
-                                        <li><a href="{{ route('adm.firewall.save') }}?user={{ post.user_id }}&ip={{ post.ip }}"><i class="fa fa-ban fa-fw"></i> Zablokuj użytkownika</a> </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        {% endif %}
-
                         <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" class="btn btn-xs btn-report" href="{{ route('flag') }}" data-url="{{ url }}" data-metadata="{{ {'post_id': post.id, 'topic_id': topic.id, 'forum_id': topic.forum_id, 'permission': 'delete'}|encrypt }}">
                             <i class="fa fa-flag"></i>
                             <span class="hidden-xs">Raportuj</span>
                         </a>
                     {% endif %}
                 {% endif %}
+
 
                 {% if is_writeable %}
                     {% if not post.deleted_at %}
