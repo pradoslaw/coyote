@@ -15,16 +15,16 @@ class PlansTableSeeder extends Seeder
             'name' => 'Standard',
             'price' => 30,
             'vat_rate' => 1,
-            'discount' => 0.4,
+            'discount' => 0,
             'length' => 40,
             'benefits' => ['is_publish']
         ]);
 
         \Coyote\Plan::forceCreate([
             'name' => 'Plus',
-            'price' => 56.7,
+            'price' => 57,
             'vat_rate' => 1,
-            'discount' => 0.4,
+            'discount' => 0,
             'length' => 40,
             'benefits' => ['is_publish', 'is_ads'],
             'is_default' => 1
@@ -34,7 +34,7 @@ class PlansTableSeeder extends Seeder
             'name' => 'Premium',
             'price' => 135,
             'vat_rate' => 1,
-            'discount' => 0.4,
+            'discount' => 0,
             'length' => 40,
             'benefits' => ['is_publish', 'is_ads', 'is_highlight', 'is_on_top', 'is_boost']
         ]);

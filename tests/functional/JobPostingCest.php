@@ -333,7 +333,7 @@ class JobPostingCest
         $I->assertEquals(null, $invoice->country_id);
 
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
-        $I->assertEquals(18, $item->price);
+        $I->assertEquals(30, $item->price);
         $I->assertEquals(1, $item->vat_rate);
     }
 
@@ -393,7 +393,7 @@ class JobPostingCest
 
         /** @var \Coyote\Invoice\Item $item */
         $item = $I->grabRecord(\Coyote\Invoice\Item::class, ['invoice_id' => $invoice->id]);
-        $I->assertEquals(34.02, $item->price);
+        $I->assertEquals(57, $item->price);
         $I->assertEquals(1, $item->vat_rate);
     }
 
@@ -437,7 +437,7 @@ class JobPostingCest
         /** @var \Coyote\Payment $payment */
         $payment = $I->grabRecord(\Coyote\Payment::class, ['job_id' => $job->id]);
 
-        $I->assertEquals(4.02, $payment->invoice->netPrice());
+        $I->assertEquals(27, $payment->invoice->netPrice());
         $I->assertEquals($coupon->id, $payment->coupon_id);
 
         $I->assertNotNull($I->grabRecord('coupons', ['code' => $coupon->code])['deleted_at']);
