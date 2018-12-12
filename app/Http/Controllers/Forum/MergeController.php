@@ -20,6 +20,7 @@ class MergeController extends BaseController
     {
         $this->authorize('merge', $post->forum);
 
+        /** @var \Coyote\Post $previous */
         $previous = $this->transaction(function () use ($post) {
             return $this->post->merge($this->userId, $post);
         });
