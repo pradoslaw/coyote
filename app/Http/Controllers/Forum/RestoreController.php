@@ -13,7 +13,7 @@ use Coyote\Services\UrlBuilder\UrlBuilder;
 class RestoreController extends BaseController
 {
     /**
-     * Restore post or whole thread
+     * Restore post or whole topic
      *
      * @param int $id post id
      * @return \Illuminate\Http\RedirectResponse
@@ -27,30 +27,28 @@ class RestoreController extends BaseController
         $this->authorize('delete', [$post, $post->forum]);
         $post->forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
 
-        return $this->transaction(function () use ($post) {
-            $url = UrlBuilder::topic($post->topic);
+        $url = UrlBuilder::topic($post->topic);
 
-            if ($post->id === $post->topic->first_post_id) {
-                $post->topic->restore();
+        if ($post->id === $post->topic->first_post_id) {
+            $post->topic->restore();
 
-                event(new TopicWasSaved($post->topic));
+            event(new TopicWasSaved($post->topic));
 
-                $object = (new Stream_Topic())->map($post->topic, $post->forum);
-                $target = (new Stream_Forum())->map($post->forum);
-            } else {
-                $url .= '?p=' . $post->id . '#id' . $post->id;
-                $post->restore();
+            $object = (new Stream_Topic())->map($post->topic, $post->forum);
+            $target = (new Stream_Forum())->map($post->forum);
+        } else {
+            $url .= '?p=' . $post->id . '#id' . $post->id;
+            $post->restore();
 
-                // fire the event. add post to search engine
-                event(new PostWasSaved($post));
+            // fire the event. add post to search engine
+            event(new PostWasSaved($post));
 
-                $object = (new Stream_Post(['url' => $url]))->map($post);
-                $target = (new Stream_Topic())->map($post->topic);
-            }
+            $object = (new Stream_Post(['url' => $url]))->map($post);
+            $target = (new Stream_Topic())->map($post->topic);
+        }
 
-            stream(Stream_Restore::class, $object, $target);
+        stream(Stream_Restore::class, $object, $target);
 
-            return redirect()->to($url)->with('success', 'Post został przywrócony.');
-        });
+        return redirect()->to($url)->with('success', 'Post został przywrócony.');
     }
 }

@@ -131,13 +131,13 @@ class MoveController extends Controller
 
             $job->delete();
 
-            // fire the event. it can be used to index a content and/or add page path to "pages" table
-            event(new TopicWasSaved($topic));
-            // add post to elasticsearch
-            event(new PostWasSaved($post));
-
             stream(Stream_Move::class, (new Stream_Job())->map($job), (new Stream_Forum())->map($forum));
         });
+
+        // fire the event. it can be used to index a content and/or add page path to "pages" table
+        event(new TopicWasSaved($topic));
+        // add post to elasticsearch
+        event(new PostWasSaved($post));
 
         return redirect()
             ->to(UrlBuilder::post($post))

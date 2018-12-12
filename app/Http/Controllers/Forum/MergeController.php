@@ -20,24 +20,24 @@ class MergeController extends BaseController
     {
         $this->authorize('merge', $post->forum);
 
-        $url = $this->transaction(function () use ($post) {
-            $previous = $this->post->merge($this->userId, $post);
-
-            $url = UrlBuilder::topic($post->topic);
-
-            // add post to elasticsearch
-            event(new PostWasSaved($previous));
-            // remove from elasticsearch
-            event(new PostWasDeleted($post));
-
-            $object = (new Stream_Post(['url' => $url]))->map($post);
-            $target = (new Stream_Topic())->map($post->topic);
-
-            stream(Stream_Merge::class, $object, $target);
-            stream(Stream_Delete::class, $object, $target);
-
-            return $url . '?p=' . $previous->id . '#id' . $previous->id;
+        $previous = $this->transaction(function () use ($post) {
+            return $this->post->merge($this->userId, $post);
         });
+
+        // add post to elasticsearch
+        event(new PostWasSaved($previous));
+        // remove from elasticsearch
+        event(new PostWasDeleted($post));
+
+        $url = UrlBuilder::topic($post->topic);
+
+        $object = (new Stream_Post(['url' => $url]))->map($post);
+        $target = (new Stream_Topic())->map($post->topic);
+
+        stream(Stream_Merge::class, $object, $target);
+        stream(Stream_Delete::class, $object, $target);
+
+        $url .= '?p=' . $previous->id . '#id' . $previous->id;
 
         return redirect()->to($url)->with('success', 'Posty zostały połączone.');
     }
