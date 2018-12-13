@@ -39,8 +39,7 @@ return [
                 '(X)HTML' => ['url' => '(X)HTML'],
                 'CSS' => ['url' => 'CSS']
             ]
-        ],
-        'Czat' => ['url' => 'http://chat.4programmers.net/']
+        ]
     ],
     // _ na poczatku gdyz ten plugin korzysta z metody share() klasy View, a nazwa "forum" moze
     // wchodzic w konflikt z innymi zmiennymi przekazywanymi do twiga

@@ -109,9 +109,6 @@ class ViewServiceProvider extends ServiceProvider
 
                 $item->checkActivationStatus();
             }
-
-            $builder->get('czat')->isActive = false;
-            $builder->get('czat')->attr('class', '');
         }
 
         return $builder;
