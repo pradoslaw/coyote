@@ -11,13 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class TopicListener implements ShouldQueue
 {
     /**
-     * Postpone this job to make sure that record was saved in transaction.
-     *
-     * @var int
-     */
-    public $delay = 10;
-
-    /**
      * @var TopicRepository
      */
     protected $topic;

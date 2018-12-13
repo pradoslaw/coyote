@@ -10,13 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class PostListener implements ShouldQueue
 {
     /**
-     * Postpone this job to make sure that record was saved in transaction.
-     *
-     * @var int
-     */
-    public $delay = 30;
-
-    /**
      * @var PostRepository
      */
     protected $post;
