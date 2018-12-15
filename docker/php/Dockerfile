@@ -1,27 +1,29 @@
-FROM php:7.0.8-fpm
+FROM php:7.2-fpm
 
 LABEL maintainer="4programmers.net <support@4programmers.net>"
 
-RUN apt-get update && \
-    apt-get install -y libmcrypt-dev=2.5.8-3.3 libpq-dev=9.4.15-0+deb8u1 \
-    mysql-client=5.5.60-0+deb8u1 libmagickwand-dev=8:6.8.9.9-5+deb8u12 --no-install-recommends \
-    && apt-get remove --purge --auto-remove -y \
-    && pecl install imagick \
-    && docker-php-ext-enable imagick \
-    && docker-php-ext-install mcrypt
+RUN usermod -u 1000 www-data
 
-RUN pecl install mongodb \
+RUN apt-get update -yqq && apt-get install -y libmcrypt-dev libpq-dev locales zlib1g-dev libfreetype6-dev libpng-dev libjpeg62-turbo-dev gnupg \
+    && apt-get -y install libxml2-dev \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) pgsql \
+    && docker-php-ext-install gd soap pdo_pgsql mbstring zip \
+    && pecl install mongodb \
     && docker-php-ext-enable mongodb
 
-RUN docker-php-ext-install pdo pdo_pgsql pdo_mysql gd mbstring mcrypt zip
+RUN locale-gen en_US.utf8 pl_PL.utf8 de_DE.utf8
+RUN curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
+
+RUN echo Europe/Warsaw >/etc/timezone && \
+    ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 
 RUN curl -sS http://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
+#
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get update \
-    && apt-get install -qq -y --no-install-recommends nodejs=6.14.2-1nodesource1 yarn=1.6.0-1 \
+    && apt-get install -qq -y nodejs yarn \
     && apt-get remove --purge --auto-remove -y
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer --version

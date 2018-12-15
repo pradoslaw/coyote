@@ -37,7 +37,7 @@ install-gulp:
 assets-production:
 	yarn run gulp -- --production
 
-assets_dev:
+assets-dev:
 	yarn run gulp
 
 dump-autoload:
