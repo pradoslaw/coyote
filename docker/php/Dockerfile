@@ -4,9 +4,9 @@ LABEL maintainer="4programmers.net <support@4programmers.net>"
 
 RUN usermod -u 1000 www-data
 
-RUN apt-get update -yqq && apt-get install -y libmcrypt-dev libpq-dev locales zlib1g-dev libfreetype6-dev libpng-dev libjpeg62-turbo-dev gnupg \
+RUN apt-get update -yqq && apt-get install -y libmcrypt-dev libpq-dev locales zlib1g-dev libfreetype6-dev libpng-dev gnupg \
     && apt-get -y install libxml2-dev \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) pgsql \
     && docker-php-ext-install gd soap pdo_pgsql mbstring zip \
     && pecl install mongodb \

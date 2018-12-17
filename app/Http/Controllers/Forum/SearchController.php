@@ -34,7 +34,12 @@ class SearchController extends BaseController
         if ($request->has('q')) {
             $forumsId = array_keys($forumList);
             // we have to make sure user is not trying to search in category without access
-            $this->validate($request, ['f' => 'sometimes|int|in:' . implode(',', $forumsId)]);
+            $this->validate($request, [
+                'f' => 'sometimes|int|in:' . implode(',', $forumsId),
+                'page' => 'sometimes|int',
+                'sort' => 'sometimes|in:_score,id',
+                'order' => 'sometimes|in:asc,desc'
+            ]);
 
             // we need to limit results to given categories...
             $builder = (new SearchBuilder($request, $request->has('f') ? $request->get('f') : $forumsId));
