@@ -4,10 +4,24 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Coyote\Job;
+use Coyote\Services\Job\Draft;
 use Illuminate\Http\Request;
 
 class VerifyJobSession
 {
+    /**
+     * @var Draft
+     */
+    private $draft;
+
+    /**
+     * @param Draft $draft
+     */
+    public function __construct(Draft $draft)
+    {
+        $this->draft = $draft;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -18,16 +32,8 @@ class VerifyJobSession
     public function handle(Request $request, Closure $next)
     {
         // everything is ok if there is a model in session...
-        if ($request->session()->has(Job::class)) {
-            $model = $request->session()->get(Job::class);
-
-            // ...to be sure we have to check if it's really a model...
-            if ($model instanceof Job) {
-                // title MOST NOT be empty (except postIndex() method)
-                if ($request->route()->getActionMethod() === 'postIndex' || $model->title) {
-                    return $next($request);
-                }
-            }
+        if ($this->draft->has(Job::class)) {
+            return $next($request);
         }
 
         return redirect()

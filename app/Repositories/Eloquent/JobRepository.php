@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Feature;
+use Coyote\Models\Job\Draft;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
@@ -197,6 +198,32 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->limit(5)
             ->pluck('name')
             ->toArray();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setDraft(int $userId, string $key, string $value): void
+    {
+        $this->app[Draft::class]->updateOrCreate(['user_id' => $userId, 'key' => $key], ['value' => $value]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDraft(int $userId, string $key): ?string
+    {
+        $result = $this->app[Draft::class]->where('user_id', $userId)->where('key', $key)->first();
+
+        return $result !== null ? $result->pluck('value') : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function forgetDraft(int $userId): void
+    {
+        $this->app[Draft::class]->where('user_id', $userId)->delete();
     }
 
     /**
