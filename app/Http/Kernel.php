@@ -60,7 +60,7 @@ class Kernel extends HttpKernel
         'forum.url'     => Middleware\RedirectIfUrl::class,
         'topic.access'  => Middleware\RedirectIfMoved::class,
         'job.session'   => Middleware\VerifyJobSession::class,
-        'job.revalidate'=> Middleware\RevalidateJobSession::class,
+        'job.forget'    => Middleware\ForgetJobDraft::class,
         'job.redirect'  => Middleware\PermanentRedirect::class,
         'topic.scroll'  => Middleware\ScrollToPost::class,
         'post.response' => Middleware\PostSubmitResponse::class,

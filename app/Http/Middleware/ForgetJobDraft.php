@@ -3,11 +3,24 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
-use Coyote\Job;
+use Coyote\Services\Job\Draft;
 use Illuminate\Http\Request;
 
-class RevalidateJobSession
+class ForgetJobDraft
 {
+    /**
+     * @var Draft
+     */
+    private $draft;
+
+    /**
+     * @param Draft $draft
+     */
+    public function __construct(Draft $draft)
+    {
+        $this->draft = $draft;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -18,17 +31,9 @@ class RevalidateJobSession
     public function handle(Request $request, Closure $next)
     {
         if ($request->has('revalidate')) {
-            $this->removeSession($request);
+            $this->draft->forget();
         }
 
         return $next($request);
-    }
-
-    /**
-     * @param Request  $request
-     */
-    private function removeSession(Request $request)
-    {
-        $request->session()->remove(Job::class);
     }
 }
