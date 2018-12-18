@@ -12,7 +12,7 @@ services:
             POSTGRES_DB: ${DB_DATABASE}
             PGDATA: /tmp
         ports:
-            - 33061:3306
+            - 5432:5432
 
     adminer:
         image: adminer

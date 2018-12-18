@@ -15,6 +15,7 @@ use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
+use Coyote\Services\Job\Draft;
 use Coyote\Services\Job\Loader;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
@@ -59,17 +60,17 @@ class SubmitController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Draft $draft
      * @param Loader $loader
      * @param int $id
      * @return \Illuminate\View\View
      */
-    public function getIndex(Request $request, Loader $loader, $id = null)
+    public function getIndex(Draft $draft, Loader $loader, $id = null)
     {
         /** @var \Coyote\Job $job */
-        if ($id === null && $request->session()->has(Job::class)) {
+        if ($id === null && $draft->has(Job::class)) {
             // get form content from session
-            $job = $request->session()->get(Job::class);
+            $job = $draft->get(Job::class);
         } else {
             $job = $this->job->findOrNew($id);
             abort_if($job->exists && $job->is_expired, 404);
@@ -81,7 +82,7 @@ class SubmitController extends Controller
         $this->authorize('update', $job->firm);
 
         $form = $this->createForm(JobForm::class, $job);
-        $request->session()->put(Job::class, $job);
+        $draft->put(Job::class, $job);
 
         $this->breadcrumb($job);
 
@@ -100,12 +101,13 @@ class SubmitController extends Controller
 
     /**
      * @param Request $request
+     * @param Draft $draft
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postIndex(Request $request)
+    public function postIndex(Request $request, Draft $draft)
     {
         /** @var \Coyote\Job $job */
-        $job = clone $request->session()->get(Job::class);
+        $job = clone $draft->get(Job::class);
 
         $form = $this->createForm(JobForm::class, $job);
         $form->validate();
@@ -113,19 +115,19 @@ class SubmitController extends Controller
         // only fillable columns! we don't want to set fields like "city" or "tags" because they don't really exists in db.
         $job->fill($form->all());
 
-        $request->session()->put(Job::class, $job);
+        $draft->put(Job::class, $job);
 
-        return $this->next($request, redirect()->route('job.submit.firm'));
+        return $this->next($request, $draft, redirect()->route('job.submit.firm'));
     }
 
     /**
-     * @param Request $request
+     * @param Draft $draft
      * @return \Illuminate\View\View
      */
-    public function getFirm(Request $request)
+    public function getFirm(Draft $draft)
     {
         /** @var \Coyote\Job $job */
-        $job = clone $request->session()->get(Job::class);
+        $job = clone $draft->get(Job::class);
 
         // get all firms assigned to user...
         $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries', 'gallery']));
@@ -148,12 +150,13 @@ class SubmitController extends Controller
 
     /**
      * @param Request $request
+     * @param Draft $draft
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postFirm(Request $request)
+    public function postFirm(Request $request, Draft $draft)
     {
         /** @var \Coyote\Job $job */
-        $job = $request->session()->get(Job::class);
+        $job = $draft->get(Job::class);
 
         $form = $this->createForm(FirmForm::class, $job->firm);
         $form->validate();
@@ -163,19 +166,19 @@ class SubmitController extends Controller
             $job->firm->syncOriginalAttribute('id');
         }
 
-        $request->session()->put(Job::class, $job);
+        $draft->put(Job::class, $job);
 
-        return $this->next($request, redirect()->route('job.submit.preview'));
+        return $this->next($request, $draft, redirect()->route('job.submit.preview'));
     }
 
     /**
-     * @param Request $request
+     * @param Draft $draft
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getPreview(Request $request)
+    public function getPreview(Draft $draft)
     {
         /** @var \Coyote\Job $job */
-        $job = clone $request->session()->get(Job::class);
+        $job = clone $draft->get(Job::class);
 
         $this->breadcrumb($job);
 
@@ -209,13 +212,14 @@ class SubmitController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Draft $draft
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(Request $request)
+    public function save(Draft $draft)
     {
         /** @var \Coyote\Job $job */
-        $job = clone $request->session()->get(Job::class);
+        $job = clone $draft->get(Job::class);
 
         $this->authorize('update', $job);
 
@@ -238,7 +242,7 @@ class SubmitController extends Controller
             $features[$feature->id] = $feature->pivot->toArray();
         }
 
-        $this->transaction(function () use (&$job, $request, $tags, $features) {
+        $this->transaction(function () use (&$job, $draft, $tags, $features) {
             $activity = $job->id ? Stream_Update::class : Stream_Create::class;
 
             if ($job->firm->is_private) {
@@ -273,7 +277,7 @@ class SubmitController extends Controller
             }
 
             stream($activity, (new Stream_Job)->map($job));
-            $request->session()->forget(Job::class);
+            $draft->forget();
 
             event(new JobWasSaved($job)); // we don't queue listeners for this event
 
@@ -309,13 +313,14 @@ class SubmitController extends Controller
 
     /**
      * @param Request $request
+     * @param Draft $draft
      * @param \Illuminate\Http\RedirectResponse $next
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function next(Request $request, $next)
+    private function next(Request $request, Draft $draft, $next)
     {
         if ($request->get('done')) {
-            return $this->save($request);
+            return $this->save($draft);
         }
 
         return $next;
