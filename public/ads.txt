@@ -28,3 +28,47 @@ appnexus.com, 1371, DIRECT
 # programmatic advertising: contact@yieldlove.com
 
 google.com, pub-7079014052474517, DIRECT, f08c47fec0942fa0
+
+adform.com, 2078, RESELLER
+advertising.com, 24410, RESELLER
+advertising.com, 7372, RESELLER
+appnexus.com, 1314, RESELLER
+appnexus.com, 1360, RESELLER, f5ab79cb980f11d1
+appnexus.com, 1908, RESELLER, f5ab79cb980f11d1
+appnexus.com, 7944, RESELLER
+districtm.io, 101161, DIRECT
+districtm.io, 101359, RESELLER
+freewheel.tv, 19129, RESELLER
+freewheel.tv, 19133, RESELLER
+google.com, pub-1320774679920841, RESELLER, f08c47fec0942fa0
+google.com, pub-8813347375005258, DIRECT
+gumgum.com, 11645, RESELLER, ffdef49475d318a9
+improvedigital.com, 1065, RESELLER
+indexexchange.com, 187595, RESELLER
+lijit.com, 249279, DIRECT, fafdf38b16bf6b2b
+lkqd.com, 244, RESELLER, 59c49fa9598a0117
+lkqd.net, 244, RESELLER, 59c49fa9598a0117
+lkqd.net, 504, RESELLER, 59c49fa9598a0117
+loopme.com, 10520, RESELLER, 6c8d5f95897a5a3b
+openx.com, 538959099, RESELLER, 6a698e2ec38604c6
+openx.com, 539924617, RESELLER, 6a698e2ec38604c6
+openx.com, 540258065, RESELLER, 6a698e2ec38604c6
+openx.com, 540364076, RESELLER, 6a698e2ec38604c6
+pubmatic.com, 137711, RESELLER, 5d62403b186f2ace
+pubmatic.com, 156212, RESELLER, 5d62403b186f2ace
+pubmatic.com, 156595, RESELLER, 5d62403b186f2ace
+pubmatic.com, 156700, RESELLER, 5d62403b186f2ace
+pubmatic.com, 157248, RESELLER
+rubiconproject.com, 17960, RESELLER, 0bfd66d529a55807
+rubiconproject.com, 18470, RESELLER, 0bfd66d529a55807
+smartclip.net, 7649, RESELLER
+sovrn.com, 249279, DIRECT, fafdf38b16bf6b2b
+spotx.tv, 220321, RESELLER, 7842df1d2fe2db34
+spotx.tv, 228454, RESELLER, 7842df1d2fe2db34
+spotx.tv, 84294, RESELLER, 7842df1d2fe2db34
+spotxchange.com, 220321, RESELLER, 7842df1d2fe2db34
+spotxchange.com, 228454, RESELLER, 7842df1d2fe2db34
+spotxchange.com, 84294, RESELLER, 7842df1d2fe2db34
+stroeer.com, 17227, DIRECT
+tremorhub.com, mb9eo-oqsbf, RESELLER, 1a4e959a1b50034a
+triplelift.com, 6006, DIRECT
