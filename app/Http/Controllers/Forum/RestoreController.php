@@ -25,7 +25,7 @@ class RestoreController extends BaseController
         $post = $this->post->withTrashed()->findOrFail($id);
 
         $this->authorize('delete', [$post, $post->forum]);
-        $post->forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
+        $this->authorize('access', [$post->forum]);
 
         $url = UrlBuilder::topic($post->topic);
 
