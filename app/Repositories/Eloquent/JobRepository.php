@@ -213,9 +213,7 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
      */
     public function getDraft(int $userId, string $key): ?string
     {
-        $result = $this->app[Draft::class]->where('user_id', $userId)->where('key', $key)->first();
-
-        return $result !== null ? $result->pluck('value') : null;
+        return $this->app[Draft::class]->where('user_id', $userId)->where('key', $key)->value('value');
     }
 
     /**
