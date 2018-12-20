@@ -35,7 +35,7 @@ class ContentChangedNotification extends Notification implements ShouldBroadcast
     public function __construct(Wiki $wiki)
     {
         $this->wiki = $wiki;
-        $this->log = $wiki->logs()->orderBy('id')->limit(1)->first();
+        $this->log = $wiki->logs()->orderBy('id', 'DESC')->limit(1)->get()->first();
     }
 
     /**
