@@ -33,9 +33,9 @@ class MoveController extends BaseController
         $this->authorize('move', $old);
         $forum = $this->forum->findBy('slug', $request->get('slug'));
 
-        if (!$forum->userCanAccess($this->userId)) {
-            abort(401);
-        }
+        $this->authorize('access', $forum);
+
+        abort_if($old->id === $forum->id, 404);
 
         $this->transaction(function () use ($topic, $forum, $request) {
             $reason = new Reason();
