@@ -111,7 +111,7 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
         'as' => 'show',
         'uses' => 'ShowController@index',
         'middleware' => [
-            'wiki.access:wiki-admin', 'page.hit'
+            'wiki.access:wiki-admin', 'page.hit', 'wiki.legacy'
         ]
     ]);
 });

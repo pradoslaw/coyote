@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'comment.access' => Middleware\CommentAccess::class,
         'wiki.access'   => Middleware\WikiAccess::class,
         'wiki.lock'     => Middleware\WikiLock::class,
+        'wiki.legacy'   => Middleware\WikiLegacy::class,
         'page.hit'      => Middleware\PageHit::class,
         'geocode'       => Middleware\GeocodeIp::class
     ];
