@@ -39,5 +39,4 @@ class WikiLegacy extends AbstractMiddleware
 
         return trim(substr($plain, 9));
     }
-
 }
