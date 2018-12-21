@@ -35,6 +35,8 @@ class Block extends Model
 
     public static function boot()
     {
+        parent::boot();
+
         static::saving(function (Block $model) {
             if (!$model->max_reputation) {
                 $model->max_reputation = null;
