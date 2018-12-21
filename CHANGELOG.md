@@ -1,3 +1,8 @@
+##2.3
+
+**Ogólne**
+- Upgrade do Laravel 5.7
+
 ## 2.2
 
 **Ogólne**

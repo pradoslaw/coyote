@@ -66,4 +66,14 @@ class Kernel extends ConsoleKernel
         $schedule->command('sitemap:create')->dailyAt('03:00:00');
         $schedule->command('guest:purge')->dailyAt('04:00:00');
     }
+
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        $this->load(__DIR__.'/Commands');
+    }
 }

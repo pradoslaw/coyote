@@ -14,7 +14,8 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        TrimStrings::class
+        TrimStrings::class,
+        Middleware\TrustProxies::class
     ];
 
     /**
