@@ -40,7 +40,7 @@ class AttachmentController extends BaseAttachmentController
             abort(404);
         }
 
-        $attachment->post->forum->userCanAccess($this->userId) || abort(401, 'Unauthorized');
+        $this->authorize('access', $attachment->post->forum);
 
         set_time_limit(0);
 

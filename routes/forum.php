@@ -35,7 +35,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'as' => 'post.submit',
         'middleware' => [
             // topic.access must be first
-            'topic.access', 'forum.access', 'forum.write'
+            'topic.access', 'can:access,forum', 'forum.write'
         ]
     ]);
 
@@ -43,7 +43,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'SubmitController@save',
         'middleware' => [
             // topic.access must be first
-            'topic.access', 'forum.access', 'forum.write', 'post.response'
+            'topic.access', 'can:access,forum', 'forum.write', 'post.response'
         ]
     ]);
 
@@ -53,14 +53,14 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'SubmitController@index',
         'as' => 'topic.submit',
         'middleware' => [
-            'forum.access', 'forum.write', 'forum.url'
+            'can:access,forum', 'forum.write', 'forum.url'
         ]
     ]);
 
     $this->post('{forum}/Submit/{topic?}', [
         'uses' => 'SubmitController@save',
         'middleware' => [
-            'forum.access', 'forum.write', 'forum.url', 'post.response'
+            'can:access,forum', 'forum.write', 'forum.url', 'post.response'
         ]
     ]);
 
@@ -70,7 +70,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'SubmitController@edit',
         'as' => 'post.edit',
         'middleware' => [
-            'auth', 'topic.access', 'forum.access', 'forum.write'
+            'auth', 'topic.access', 'can:access,forum', 'forum.write'
         ]
     ]);
 
@@ -85,7 +85,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->post('{forum}/Mark', [
         'uses' => 'CategoryController@mark',
         'as' => 'category.mark',
-        'middleware' => 'forum.access'
+        'middleware' => 'can:access,forum'
     ]);
 
     $this->post('{forum}/Section', ['uses' => 'CategoryController@section', 'as' => 'section']);
@@ -113,7 +113,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->get('{forum}', [
         'uses' => 'CategoryController@index',
         'as' => 'category',
-        'middleware' => ['forum.access', 'forum.url']
+        'middleware' => ['can:access,forum', 'forum.url']
     ]);
 
     // Show topic
@@ -122,7 +122,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'TopicController@index',
         'as' => 'topic',
         'middleware' => [
-            'topic.access', 'forum.access', 'topic.scroll', 'page.hit'
+            'topic.access', 'can:access,forum', 'topic.scroll', 'page.hit'
         ]
     ]);
 
@@ -179,7 +179,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'PollController@vote',
         'as' => 'poll.vote',
         'middleware' => [
-            'auth', 'forum.access'
+            'auth', 'can:access,forum'
         ]
     ]);
 

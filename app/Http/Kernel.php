@@ -59,7 +59,6 @@ class Kernel extends HttpKernel
         'can'           => \Illuminate\Auth\Middleware\Authorize::class,
         'guest'         => Middleware\RedirectIfAuthenticated::class,
         'adm'           => Middleware\AdmAccess::class,
-        'forum.access'  => Middleware\ForumAccess::class,
         'forum.write'   => Middleware\ForumWrite::class,
         'forum.url'     => Middleware\RedirectIfUrl::class,
         'topic.access'  => Middleware\RedirectIfMoved::class,

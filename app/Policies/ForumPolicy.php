@@ -96,12 +96,18 @@ class ForumPolicy
      * @param Forum $forum
      * @return bool
      */
-    public function access(User $user, Forum $forum): bool
+    public function access(?User $user, Forum $forum): bool
     {
         $groups = $forum->groups()->get()->pluck('id')->toArray();
 
         if (empty($groups)) {
             return true;
+        }
+
+        // if access to this category is restricted to some groups, it's logical that guest user
+        // does not belong to any group.
+        if ($user === null) {
+            return false;
         }
 
         foreach ($user->groups()->get() as $group) {
