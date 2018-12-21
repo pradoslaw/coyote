@@ -82,13 +82,10 @@ class Handler extends ExceptionHandler
 
             if ($e instanceof HttpResponseException) {
                 return parent::render($request, $e);
-            }
-
-            if ($e instanceof ValidationException && $e->getResponse()) {
+            } elseif ($e instanceof ValidationException) {
+//            if ($e instanceof ValidationException && $e->getResponse()) {
                 return response()->json($e->validator->errors(), $statusCode);
-            }
-
-            if ($e instanceof TokenMismatchException) {
+            } elseif ($e instanceof TokenMismatchException) {
                 return $this->renderTokenMismatchException($request, $e);
             }
 
