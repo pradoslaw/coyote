@@ -16,6 +16,11 @@ class WikiLegacy extends AbstractMiddleware
     {
         /** @var \Illuminate\Http\Response $response */
         $response = $next($request);
+
+        if ($response->original === null) {
+            return $response;
+        }
+
         $url = $this->getRedirectedUrl($response->original->getData()['wiki']->text);
 
         if ($url !== null) {
