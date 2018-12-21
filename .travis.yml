@@ -24,6 +24,7 @@ env:
   - NODE_RELEASE=6.x
 
 before_install:
+  - cp .env.testing .env
   - echo "extension=mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - sudo rm -rf ~/.nvm
   - curl -sL "https://deb.nodesource.com/setup_${NODE_RELEASE}" | sudo -E bash -
@@ -46,9 +47,8 @@ before_script:
   - sudo yarn global add gulp
   - sudo yarn install
   - psql -c 'create database coyote_test;' -U postgres
-  - cp .env.testing .env
   - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
-  - php artisan migrate --seed
+  - php artisan migrate --seed --quiet
   - php vendor/bin/codecept build
   - make file-permission
   - make assets-production
