@@ -16,7 +16,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         TrimStrings::class,
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        // before using this middleware, we need to change validation rules that requires string instead of null
+//        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         Middleware\TrustProxies::class
     ];
 
