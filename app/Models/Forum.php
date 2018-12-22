@@ -165,25 +165,6 @@ class Forum extends Model
     }
 
     /**
-     * Determines if user can access to forum
-     *
-     * @param int $userId
-     * @return bool
-     */
-    public function userCanAccess($userId)
-    {
-        $usersId = $this->getUsersWithAccess();
-
-        if (empty($usersId)) {
-            return true;
-        } elseif (!$userId && count($usersId)) {
-            return false;
-        } else {
-            return in_array($userId, $usersId);
-        }
-    }
-
-    /**
      * @param string $guestId
      * @return mixed
      */
