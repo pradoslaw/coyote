@@ -133,11 +133,13 @@ class PermissionTest extends \Codeception\TestCase\Test
         $forum = $this->tester->createForum();
 
         $this->assertTrue($user->can('access', $forum));
+        $this->assertTrue(\Illuminate\Support\Facades\Gate::allows('access', $forum));
 
         $admins = $this->tester->haveRecord(\Coyote\Group::class, ['name' => 'Admins']);
         $this->tester->haveRecord(\Coyote\Forum\Access::class, ['forum_id' => $forum->id, 'group_id' => $admins->id]);
 
         $this->assertFalse($user->can('access', $forum));
+        $this->assertFalse(\Illuminate\Support\Facades\Gate::allows('access', $forum));
 
         $this->tester->haveRecord(\Coyote\Group\User::class, ['user_id' => $user->id, 'group_id' => $admins->id]);
 
