@@ -42,7 +42,7 @@ class ForumWrite extends AbstractMiddleware
 
         $topic = $request->route('topic');
         if (!empty($topic)) {
-            if ($topic->is_locked && !$this->gate->allows('update', $forum)) {
+            if ($this->gate->denies('write', $topic)) {
                 return $this->unauthorized($request);
             }
         }

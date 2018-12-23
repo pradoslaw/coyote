@@ -144,6 +144,37 @@ class PermissionTest extends \Codeception\TestCase\Test
         $this->tester->haveRecord(\Coyote\Group\User::class, ['user_id' => $user->id, 'group_id' => $admins->id]);
 
         $this->assertTrue($user->can('access', $forum));
+    }
 
+    public function testCanUserWriteInTopic()
+    {
+        $user = $this->tester->createUser();
+        $forum = $this->tester->createForum();
+        $topic = $this->tester->createTopic(['forum_id' => $forum->id]);
+
+        $this->assertTrue(\Illuminate\Support\Facades\Gate::allows('write', $topic));
+        $this->assertTrue($user->can('write', $topic));
+
+        $topic->is_locked = true;
+        $topic->save();
+
+        $this->assertFalse(\Illuminate\Support\Facades\Gate::allows('write', $topic));
+        $this->assertFalse($user->can('write', $topic));
+
+        //////////////////////////////////////////////////////////////
+
+        $user = $this->tester->createUser();
+        $topic = $this->tester->createTopic(['forum_id' => $forum->id, 'is_locked' => true]);
+
+        $admins = $this->tester->haveRecord(\Coyote\Group::class, ['name' => 'Admins']);
+        $this->tester->haveRecord(\Coyote\Group\User::class, ['user_id' => $user->id, 'group_id' => $admins->id]);
+
+        $permission = $this->tester->grabRecord(\Coyote\Permission::class, ['name' => 'forum-update']);
+        $this->assertIsNumeric($permission->id);
+        $this->tester->haveRecord('group_permissions', ['group_id' => $admins->id, 'permission_id' => $permission->id, 'value' => 1]);
+
+        $this->assertTrue($user->can('forum-update'));
+        $this->assertTrue($user->can('write', $topic));
+        $this->assertFalse(\Illuminate\Support\Facades\Gate::allows('write', $topic));
     }
 }

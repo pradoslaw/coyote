@@ -44,7 +44,6 @@ class CommentAccess
     protected $request;
 
     /**
-     * @param Guard $auth
      * @param Gate $gate
      * @param ForumRepository $forum
      * @param TopicRepository $topic

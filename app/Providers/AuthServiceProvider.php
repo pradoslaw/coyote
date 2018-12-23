@@ -14,9 +14,11 @@ use Coyote\Policies\PostPolicy;
 use Coyote\Policies\JobPolicy;
 use Coyote\Policies\FirmPolicy;
 use Coyote\Policies\PostCommentPolicy;
+use Coyote\Policies\TopicPolicy;
 use Coyote\Policies\WikiCommentPolicy;
 use Coyote\Post;
 use Coyote\User;
+use Coyote\Topic;
 use Coyote\Wiki;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -35,6 +37,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Microblog::class        => MicroblogPolicy::class,
         Forum::class            => ForumPolicy::class,
+        Topic::class            => TopicPolicy::class,
         Post::class             => PostPolicy::class,
         Post\Comment::class     => PostCommentPolicy::class,
         Job::class              => JobPolicy::class,
