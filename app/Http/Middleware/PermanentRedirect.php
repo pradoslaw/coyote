@@ -16,7 +16,7 @@ class PermanentRedirect
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->has('skills') || $request->has('cities') || is_array($request->get('salary'))) {
+        if ($request->filled('skills') || $request->filled('cities') || is_array($request->get('salary'))) {
             return $this->makeRedirection($request);
         }
 

@@ -45,7 +45,7 @@ class LogController extends BaseController
      */
     private function diff($wiki, Request $request)
     {
-        if (!$request->has('r1') || !$request->has('r2')) {
+        if (!$request->filled('r1') || !$request->filled('r2')) {
             return [];
         }
 

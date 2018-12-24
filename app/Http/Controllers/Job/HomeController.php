@@ -124,7 +124,7 @@ class HomeController extends BaseController
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
         $this->request->session()->put('current_url', $this->request->fullUrl());
 
-        if ($this->request->has('sort')) {
+        if ($this->request->filled('sort')) {
             $this->setSetting('job.sort', $this->request->input('sort'));
         }
 
@@ -136,7 +136,7 @@ class HomeController extends BaseController
         // we want to pass collection to the twig (not raw php array)
         $listing = $result->getSource();
 
-        $context = !$this->request->has('q') ? 'global.' : '';
+        $context = !$this->request->filled('q') ? 'global.' : '';
         $aggregations = [
             'cities'        => $result->getAggregationCount("${context}locations.locations_city_original"),
             'tags'          => $result->getAggregationCount("${context}tags"),
@@ -162,7 +162,7 @@ class HomeController extends BaseController
         $selected = [
             'tags'          => $this->builder->tag->getTags(),
             'cities'        => array_map('mb_strtolower', $this->builder->city->getCities()),
-            'remote'        => $this->request->has('remote') || $this->request->route()->getName() === 'job.remote'
+            'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote'
         ];
 
         return $this->view('job.home', array_merge($data, [

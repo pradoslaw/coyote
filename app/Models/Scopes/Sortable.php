@@ -18,7 +18,7 @@ trait Sortable
      */
     public function scopeSortable(Builder $builder, $sort, $order, array $accept = null, array $alias = [])
     {
-        if (request()->has('sort') && request()->has('order')) {
+        if (request()->anyFilled(['sort', 'order'])) {
             $order = request('order') == 'asc' ? 'ASC' : 'DESC';
             $sort = request('sort');
 

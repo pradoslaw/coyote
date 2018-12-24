@@ -49,7 +49,7 @@ class OAuthController extends Controller
      */
     public function callback($provider)
     {
-        if (!$this->request->has('code') || $this->request->has('denied')) {
+        if (!$this->request->filled('code') || $this->request->filled('denied')) {
             return redirect()->route('login');
         }
 

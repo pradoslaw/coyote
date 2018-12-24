@@ -49,7 +49,7 @@ class SearchController extends Controller
 
         $types = 'topics,microblogs,wiki,jobs';
 
-        if ($this->request->has('type')) {
+        if ($this->request->filled('type')) {
             $validator = $this->getValidationFactory()->make(
                 $this->request->toArray(),
                 ['type' => 'sometimes|in:' . $types]

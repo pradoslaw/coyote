@@ -31,7 +31,7 @@ class SearchController extends BaseController
         $users = [];
         $response = $highlights = null;
 
-        if ($request->has('q')) {
+        if ($request->filled('q')) {
             $forumsId = array_keys($forumList);
             // we have to make sure user is not trying to search in category without access
             $this->validate($request, [
@@ -42,7 +42,7 @@ class SearchController extends BaseController
             ]);
 
             // we need to limit results to given categories...
-            $builder = (new SearchBuilder($request, $request->has('f') ? $request->get('f') : $forumsId));
+            $builder = (new SearchBuilder($request, $request->filled('f') ? $request->get('f') : $forumsId));
             $response = $this->post->search($builder);
 
             $highlights = $response->getHighlights();

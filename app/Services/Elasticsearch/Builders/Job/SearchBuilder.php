@@ -141,7 +141,7 @@ class SearchBuilder extends QueryBuilder
 
         $this->$method(new Filters\Job\Remote());
 
-        if ($this->request->has('remote_range')) {
+        if ($this->request->filled('remote_range')) {
             $this->$method(new Filters\Job\RemoteRange());
         }
     }
@@ -177,7 +177,7 @@ class SearchBuilder extends QueryBuilder
      */
     public function build()
     {
-        if ($this->request->has('q')) {
+        if ($this->request->filled('q')) {
             $this->must(
                 new MultiMatch(
                     $this->request->get('q'),
@@ -190,19 +190,19 @@ class SearchBuilder extends QueryBuilder
             $this->must(new MatchAll());
         }
 
-        if ($this->request->has('city')) {
+        if ($this->request->filled('city')) {
             $this->city->addCity($this->request->get('city'));
         }
 
-        if ($this->request->has('tag')) {
+        if ($this->request->filled('tag')) {
             $this->tag->addTag($this->request->get('tag'));
         }
 
-        if ($this->request->has('salary')) {
+        if ($this->request->filled('salary')) {
             $this->addSalaryFilter($this->request->get('salary'), $this->request->get('currency'));
         }
 
-        if ($this->request->has('remote')) {
+        if ($this->request->filled('remote')) {
             $this->addRemoteFilter();
         }
 

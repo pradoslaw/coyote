@@ -166,7 +166,7 @@ abstract class BaseController extends Controller
      */
     protected function perPage(Request $request, $setting, $default)
     {
-        if ($request->has('perPage')) {
+        if ($request->filled('perPage')) {
             $perPage = max(10, min($request->get('perPage'), 50));
             $this->setSetting($setting, $perPage);
         } else {
