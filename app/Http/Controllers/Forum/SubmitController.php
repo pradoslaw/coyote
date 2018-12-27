@@ -271,7 +271,7 @@ class SubmitController extends BaseController
         }
 
         if ($request->input('quote')) {
-            $postsId[] = $request->input('quote');
+            $postsId[] = intval($request->input('quote'));
         }
 
         if (!empty($postsId)) {
