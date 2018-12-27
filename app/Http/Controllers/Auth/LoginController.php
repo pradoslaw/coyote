@@ -48,7 +48,9 @@ class LoginController extends Controller
      * Logowanie uzytkownika
      *
      * @param LoginForm $form
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function signin(LoginForm $form)
     {
