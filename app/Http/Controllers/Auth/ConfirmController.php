@@ -68,7 +68,7 @@ class ConfirmController extends Controller
 
             $userId = $this->userId;
         } else {
-            $result = $this->user->findWhere($request->intersect(['name', 'email']) + ['is_confirm' => 0]);
+            $result = $this->user->findWhere($request->only(['name', 'email']) + ['is_confirm' => 0]);
 
             // taka sytuacja nie bedzie miala miejsce w 99% przypadkow
             // warunek zostanie spelniony tylko wowczas gdy np. 2 lub wiecej uzytkownikow zostalo
