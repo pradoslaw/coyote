@@ -57,31 +57,6 @@ class SessionRepository implements SessionRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getByPath($path = null)
-    {
-        if ($path === null) {
-            return $this->all();
-        }
-
-        $collection = $this->unserialize($this->redis->hvals(self::REDIS_KEY));
-
-        return $collection
-            ->filter(function ($item) use ($path) {
-                if (empty($item['url'])) {
-                    return false;
-                }
-                $sessionPath = parse_url($item['url'], PHP_URL_PATH);
-
-                return starts_with($sessionPath, $path);
-            })
-            ->map(function ($item) {
-                return $this->makeModel($item);
-            });
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function all()
     {
         $result = $this->unserialize($this->redis->hvals(self::REDIS_KEY));

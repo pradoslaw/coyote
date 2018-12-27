@@ -30,12 +30,6 @@ interface SessionRepositoryInterface
     public function all();
 
     /**
-     * @param string|null $path
-     * @return \Coyote\Session[]
-     */
-    public function getByPath($path = null);
-
-    /**
      * @param int $lifetime
      * @return bool
      */
