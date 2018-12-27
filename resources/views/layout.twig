@@ -13,8 +13,7 @@
             <meta name="keywords" content="{% block keywords %}{% endblock %}">
             <meta name="theme-color" content="#80a41a" />
 
-            {# Facebook sharing meta-data #}
-            <meta property="og:url" content="{{ app.request.url }}">
+            <meta property="og:url" content="{{ current_url() }}">
             <meta property="og:type" content="website">
             <meta property="og:title" content="{{ block('ogtitle') ?: block('title') }}">
             <meta property="og:description" content="{{ block('description') }}">
