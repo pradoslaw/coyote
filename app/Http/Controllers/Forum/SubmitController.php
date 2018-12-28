@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
+use Coyote\Notifications\Post\ChangedNotification;
 use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Notifications\Topic\SubjectChangedNotification;
@@ -59,6 +60,7 @@ class SubmitController extends BaseController
     /**
      * Show new post/edit form
      *
+     * @param Dispatcher $dispatcher
      * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
      * @param \Coyote\Post|null $post
@@ -124,6 +126,13 @@ class SubmitController extends BaseController
                     (new UserMentionedNotification($this->auth, $post))->setSender($request->get('user_name'))
                 );
             }
+        } else {
+            $subscribers = $post->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
+
+            $dispatcher->send(
+                $subscribers,
+                new ChangedNotification($this->auth, $post)
+            );
         }
 
         // fire the event. it can be used to index a content and/or add page path to "pages" table
