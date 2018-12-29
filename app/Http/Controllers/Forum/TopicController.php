@@ -287,7 +287,7 @@ class TopicController extends BaseController
     protected function findByObject($object, $id, $verb)
     {
         return app(StreamRepository::class)->findWhere(
-            ['object.objectType' => $object, 'object.id' => $id, 'verb' => $verb]
+            ['object->objectType' => $object, 'object->id' => $id, 'verb' => $verb]
         );
     }
 }
