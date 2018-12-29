@@ -196,7 +196,7 @@ class TopicController extends BaseController
         $collection = $this->findByObject('post', $postsId, 'delete');
 
         foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
-            $activities[$row->first()['object.id']] = $row->first();
+            $activities[array_get($row->first(), 'object.id')] = $row->first();
         }
 
         return $activities;
