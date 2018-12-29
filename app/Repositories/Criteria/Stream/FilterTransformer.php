@@ -21,7 +21,7 @@ class FilterTransformer extends Criteria
     {
         $this->form = array_only(
             $form->all(),
-            ['ip', 'browser', 'fingerprint', 'actor_id', 'object_objectType', 'object_objectId']
+            ['ip', 'browser', 'fingerprint', 'actor_id', 'object_objectType', 'object_id']
         );
     }
 
@@ -35,11 +35,11 @@ class FilterTransformer extends Criteria
         $builder = $model->orderBy('id', 'DESC');
 
         foreach ($this->form as $key => $value) {
-            $key = str_replace('_', '.', $key);
+            $key = str_replace('_', '->', $key);
 
             if (!empty($value)) {
-                if ('fingerprint' == $key || is_array($value)) {
-                    $builder->whereIn($key, (array) $value);
+                if (is_array($value)) {
+                    $builder->whereIn($key, $value);
                 } elseif (is_string($value)) {
                     $builder->where($key, 'like', str_replace('*', '%', $value));
                 } else {

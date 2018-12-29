@@ -23,11 +23,11 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
     {
         return $this
             ->model
-            ->whereJsonContains('object.objectType', ['topic', 'post', 'comment'])
+            ->whereIn('object->objectType', ['topic', 'post', 'comment'])
             ->where('verb', 'create')
-            ->whereJsonContains('target.objectType', ['forum', 'post', 'topic'])
-            ->whereJsonContains('object.forum.id', $forumIds)
-            ->whereJsonContains('target.forum.id', $forumIds)
+            ->whereIn('target->objectType', ['forum', 'post', 'topic'])
+            ->whereIn('object->forum.id', $forumIds)
+            ->whereNotIn('target->forum.id', $forumIds)
             ->orderBy('id', 'DESC')
             ->limit(20)
             ->get();
