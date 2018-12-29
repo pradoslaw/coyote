@@ -27,11 +27,14 @@ class Renderer
         $result = [];
 
         foreach ($this->collection as $index => $row) {
-            if (empty($row['object.objectType'])) {
-                $row['object.objectType'] = 'unknown';
+            if (empty(array_get($row, 'object.objectType'))) {
+                $object = $row['object'];
+                $object['objectType'] = 'unknown';
+
+                $row['object'] = $object;
             }
 
-            $class = __NAMESPACE__ . '\\Render\\' . ucfirst(camel_case($row['object.objectType']));
+            $class = __NAMESPACE__ . '\\Render\\' . ucfirst(camel_case(array_get($row, 'object.objectType')));
             $decorator = new $class($row);
 
             /** @var \Coyote\Services\Stream\Render\Render $decorator */

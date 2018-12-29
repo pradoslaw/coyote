@@ -2,12 +2,17 @@
 
 namespace Coyote;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
-class Stream extends Eloquent
+class Stream extends Model
 {
-    const UPDATED_AT = null;
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
 
-    protected $connection = 'mongodb';
-    protected $guarded = ['_id'];
+    /**
+     * @var array
+     */
+    protected $casts = ['actor' => 'array', 'object' => 'array', 'target' => 'array'];
 }

@@ -32,7 +32,7 @@ class FilterTransformer extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        $builder = $model->orderBy('_id', 'DESC');
+        $builder = $model->orderBy('id', 'DESC');
 
         foreach ($this->form as $key => $value) {
             $key = str_replace('_', '.', $key);
