@@ -57,6 +57,39 @@ class ConfirmCest
         $I->seeFormErrorMessage('email', 'Ten adres e-mail jest już zweryfikowany.');
     }
 
+    public function changeUserEmailBeforeConfirm(FunctionalTester $I)
+    {
+        $user = $I->createUser();
+        $I->amLoggedAs($user);
+
+        $I->amOnPage('Confirm');
+        $faker = Faker\Factory::create();
+
+        $newEmail = $faker->email;
+        $I->fillField('email', $newEmail);
+        $I->click('Wyślij e-mail z linkiem aktywacyjnym');
+
+        $I->seeRecord('users', ['email' => $newEmail]);
+    }
+
+    public function generateConfirmEmailBeingLoggedOut(FunctionalTester $I)
+    {
+        $user = $I->createUser();
+        $I->amOnPage('Confirm');
+
+        $faker = Faker\Factory::create();
+
+        $newEmail = $faker->email;
+        $I->fillField('email', $newEmail);
+        $I->click('Wyślij e-mail z linkiem aktywacyjnym');
+        $I->seeFormErrorMessage('email', 'Podany adres e-mail nie istnieje.');
+
+        $I->fillField('email', $user->email);
+        $I->click('Wyślij e-mail z linkiem aktywacyjnym');
+
+        $I->see('Na podany adres e-mail został wysłany link aktywacyjny.');
+    }
+
     public function changeUserEmailWhenCurrentEmailIsConfirmed(FunctionalTester $I)
     {
         $user = $I->createUser(['is_confirm' => 1, 'allow_smilies' => 1]);
@@ -65,7 +98,9 @@ class ConfirmCest
         $I->seeAuthentication();
         $I->amOnRoute('user.settings');
 
-        $newEmail = 'fooooo@baaaaar.com';
+        $faker = Faker\Factory::create();
+
+        $newEmail = $faker->email;
         $I->fillField('email', $newEmail);
         $I->click('Zapisz');
 

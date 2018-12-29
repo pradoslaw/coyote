@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Actkey;
 use Coyote\Http\Factories\MailFactory;
+use Coyote\Http\Requests\ConfirmRequest;
 use Coyote\Mail\EmailConfirmation;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Http\Controllers\Controller;
@@ -47,23 +48,17 @@ class ConfirmController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ConfirmRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function generateLink(Request $request)
+    public function generateLink(ConfirmRequest $request)
     {
-        $this->validate($request, [
-            // case sensitive
-            'email' => 'required|email|max:255|exists:users|unique:users,email,NULL,id,is_confirm,1',
-            'name'  => 'sometimes|username|exists:users'
-        ], [
-            'email.unique' => 'Ten adres e-mail jest już zweryfikowany.'
-        ]);
+        $request->validated();
 
         if ($this->userId) {
             // perhaps user decided to change his email, so we need to save new one in database
-            if ($request->email !== $request->user()->email) {
-                $request->user()->fill(['email' => $request->email])->save();
+            if ($request->input('email') !== $this->auth->email) {
+                $this->auth->forceFill(['email' => $request->input('email')])->save();
             }
 
             $userId = $this->userId;
@@ -84,7 +79,7 @@ class ConfirmController extends Controller
         }
 
         $url = Actkey::createLink($userId);
-        $this->getMailFactory()->to($request->email)->queue(new EmailConfirmation($url));
+        $this->getMailFactory()->to($request->input('email'))->queue(new EmailConfirmation($url));
 
         return back()->with('success', 'Na podany adres e-mail został wysłany link aktywacyjny.');
     }
