@@ -23,7 +23,6 @@ class ConfirmRequest extends FormRequest
             ],
             'name'  => 'sometimes|username|exists:users'
         ];
-
     }
 
     public function messages()
