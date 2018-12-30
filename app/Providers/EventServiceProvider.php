@@ -7,6 +7,7 @@ use Coyote\Events\FirewallWasSaved;
 use Coyote\Events\ForumWasSaved;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Events\UserWasSaved;
+use Coyote\Listeners\ActivitySubscriber;
 use Coyote\Listeners\ChangeImageUrl;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
@@ -58,7 +59,8 @@ class EventServiceProvider extends ServiceProvider
         JobListener::class,
         MicroblogListener::class,
         WikiListener::class,
-        SetupWikiLinks::class
+        SetupWikiLinks::class,
+        ActivitySubscriber::class
     ];
 
     /**
