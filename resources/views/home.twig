@@ -79,11 +79,11 @@
                                     <div class="overview">
                                         {% for activity in activities %}
                                             <div class="media">
-                                                <span class="{{ activity.object.objectType }} hidden-xs" title="{{ activity.headline|striptags|unescape }}"></span>
+                                                <span class="{{ activity.object }} hidden-xs" title="{{ activity.headline|striptags|unescape }}"></span>
 
                                                 <div class="media-left hidden-xs">
-                                                    <a href="{{ activity.actor.url }}">
-                                                        <img class="media-object" src="{{ user_photo(activity.actor.image) }}" style="width: 38px; height: 38px;" alt="">
+                                                    <a href="{{ route('profile', [activity.user_id]) }}">
+                                                        <img class="media-object" src="{{ user_photo(activity.user.photo) }}" style="width: 38px; height: 38px;" alt="">
                                                     </a>
                                                 </div>
                                                 <div class="media-body">

@@ -16,25 +16,6 @@ class StreamRepository extends Repository implements StreamRepositoryInterface
     }
 
     /**
-     * @param int[] $forumIds
-     * @return mixed
-     */
-    public function forumFeeds(array $forumIds)
-    {
-        return $this
-            ->model
-            ->whereIn('object->objectType', ['topic', 'post', 'comment'])
-            ->where('verb', 'create')
-            ->whereIn('target->objectType', ['forum', 'post', 'topic'])
-            ->when($forumIds, function ($query) use ($forumIds) {
-                return $query->whereNotIn('object->forum->id', $forumIds)->whereNotIn('target->forum->id', $forumIds);
-            })
-            ->orderBy('id', 'DESC')
-            ->limit(20)
-            ->get();
-    }
-
-    /**
      * @param int $topicId
      * @return mixed
      */
