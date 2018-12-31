@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Criteria\Forum;
 
+use Coyote\Forum;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Criteria\Criteria;
 use Coyote\User;
@@ -31,7 +32,10 @@ class OnlyThoseWithAccess extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $this->applyNested($model, $repository, 'forums.id');
+        // criteria can be used in multiple models
+        $column = $model instanceof Forum ? 'forums.id' : $model->getModel()->getTable() . '.forum_id';
+
+        return $this->applyNested($model, $repository, $column);
     }
 
     /**
