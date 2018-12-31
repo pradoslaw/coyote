@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property Post $post
  * @property User $user
+ * @property \Carbon\Carbon $created_at
  */
 class Comment extends Model
 {

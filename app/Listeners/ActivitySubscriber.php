@@ -34,9 +34,11 @@ class ActivitySubscriber
             'content_type'  => Post::class,
             'content_id'    => $event->post->id,
         ], [
+            'created_at'    => $event->post->created_at,
             'user_id'       => $event->post->user_id,
             'forum_id'      => $event->post->forum_id,
-            'excerpt'       => excerpt($event->post->text)
+            'topic_id'      => $event->post->topic_id,
+            'excerpt'       => excerpt($event->post->html)
         ]);
     }
 
@@ -57,9 +59,11 @@ class ActivitySubscriber
             'content_id'    => $event->comment->id,
             'content_type'  => Post\Comment::class,
         ], [
+            'created_at'    => $event->comment->created_at,
             'user_id'       => $event->comment->user_id,
             'forum_id'      => $event->comment->post->forum_id,
-            'excerpt'       => excerpt($event->comment->post->text)
+            'topic_id'      => $event->comment->post->topic_id,
+            'excerpt'       => excerpt($event->comment->html)
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
 use Coyote\Notifications\Post\Comment\UserMentionedNotification;
 use Coyote\Notifications\Post\CommentedNotification;
@@ -165,5 +166,7 @@ class CommentController extends Controller
 
             stream(Stream_Delete::class, $object, $target);
         });
+
+        event(new CommentDeleted($this->comment));
     }
 }

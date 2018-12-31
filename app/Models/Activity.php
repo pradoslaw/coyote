@@ -45,6 +45,6 @@ class Activity extends Model
      */
     public function content()
     {
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 }
