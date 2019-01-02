@@ -9,7 +9,7 @@ use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRep
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
-use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
+use Coyote\Repositories\Criteria\Forum\SkipHiddenCategories;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
 use Coyote\Services\Session\Viewers;
@@ -162,7 +162,7 @@ class HomeController extends Controller
     private function getActivities()
     {
         $this->activity->pushCriteria(new OnlyThoseForumsWithAccess($this->auth));
-//        $this->activity->pushCriteria(new AccordingToUserOrder($this->userId));
+        $this->activity->pushCriteria(new SkipHiddenCategories($this->userId));
 
         $this->activity->pushCriteria(new EagerLoading(['user', 'topic', 'content', 'forum']));
 
