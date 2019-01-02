@@ -15,12 +15,12 @@
                 {% for forum in forums %}
                     <tr id="forum-{{ forum.id }}">
                         <td class="col-icon hidden-xxs">
-                            {% if forum.forum_unread %}
+                            {% if forum.is_locked %}
+                                <span class="ico lock" title="Forum zablokowane"></span>
+                            {% elseif forum.forum_unread %}
                                 <a href="{{ route('forum.category.mark', [forum.slug]) }}"
                                    class="ico {{ forum.is_locked ? 'lock' }} {{ forum.forum_unread ? 'new' }}"
                                    title="{{ forum.is_locked ? 'Forum zablokowane' : 'Kliknij, aby oznaczyć jako przeczytane' }}"></a>
-                            {% elseif forum.is_locked %}
-                                <span class="ico lock" title="Forum zablokowane"></span>
                             {% else %}
                                 <span class="ico normal" title="Brak nowych postów"></span>
                             {% endif %}
