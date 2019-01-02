@@ -25,6 +25,7 @@ class CreateStreamsTable extends Migration
             $table->jsonb('object')->nullable();
             $table->jsonb('target')->nullable();
             $table->string('login')->nullable();
+            $table->string('email')->nullable();
         });
     }
 
