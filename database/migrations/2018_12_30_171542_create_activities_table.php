@@ -19,7 +19,7 @@ class CreateActivitiesTable extends Migration
             $table->timestampTz('created_at')->useCurrent();
             $table->smallInteger('forum_id');
             $table->integer('topic_id');
-            $table->integer('user_id');
+            $table->integer('user_id')->nullable();
             $table->string('user_name')->nullable();
             $table->morphs('content');
             $table->string('excerpt')->nullable();

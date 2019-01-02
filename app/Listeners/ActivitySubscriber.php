@@ -38,7 +38,8 @@ class ActivitySubscriber
             'user_id'       => $event->post->user_id,
             'forum_id'      => $event->post->forum_id,
             'topic_id'      => $event->post->topic_id,
-            'excerpt'       => excerpt($event->post->html)
+            'excerpt'       => excerpt($event->post->html),
+            'user_name'     => $event->post->user_name
         ]);
     }
 
