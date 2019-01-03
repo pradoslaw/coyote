@@ -21,6 +21,11 @@ class Stream extends Model
     /**
      * @var array
      */
+    protected $dates = ['created_at'];
+
+    /**
+     * @var array
+     */
     protected $fillable = [
         'verb',
         'actor',
@@ -30,5 +35,39 @@ class Stream extends Model
         'browser',
         'fingerprint',
         'login'
+    ];
+
+    /**
+     * Elasticsearch type mapping
+     *
+     * @var array
+     */
+    protected $mapping = [
+        "actor" => [
+            "type" => "object",
+            "properties" => [
+                "name" => [
+                    "type" => "string",
+                    // ability to search case insensitive
+                    "analyzer" => "keyword_analyzer"
+                ]
+            ]
+        ],
+        "ip" => [
+            "type" => "string",
+            "index" => "not_analyzed"
+        ],
+        "browser" => [
+            "type" => "text",
+            "index" => "not_analyzed"
+        ],
+        "fingerprint" => [
+            "type" => "string",
+            "index" => "not_analyzed"
+        ],
+        "created_at" => [
+            "type" => "date",
+            "format" => "yyyy-MM-dd HH:mm:ss"
+        ]
     ];
 }
