@@ -42,12 +42,17 @@ class MigrateStreamsCommand extends Command
         $bar = $this->output->createProgressBar($db->connection('mongodb')->collection('streams')->count());
         $bar->start();
 
-        $db->connection('mongodb')->collection('streams')->orderBy('_id')->chunk(10000, function ($results) use ($db, $bar) {
+        $db->connection('mongodb')->collection('streams')->orderBy('_id')->chunk(20000, function ($results) use ($db, $bar) {
             foreach ($results as $row) {
+
                 unset($row['_id']);
 
                 if ($row['created_at'] instanceof \MongoDB\BSON\UTCDateTime) {
                     $row['created_at'] = $row['created_at']->toDateTime();
+                }
+
+                if (isset($row['fingerprint']) && is_array($row['fingerprint'])) {
+                    $row['fingerprint'] = array_first($row['fingerprint']);
                 }
                 $row = $this->toJson($row);
 
