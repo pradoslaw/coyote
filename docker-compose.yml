@@ -3,7 +3,6 @@ version: '2'
 services:
   db:
     image: postgres
-    restart: always
     volumes:
       - ./.data/pgsql:/var/lib/postgresql/data:z
     environment:
@@ -16,7 +15,6 @@ services:
 
   adminer:
     image: adminer
-    restart: always
     ports:
       - 8080:8080
 
