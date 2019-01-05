@@ -16,5 +16,7 @@ class UsersTableSeeder extends Seeder
             'email'                 => 'admin@4programmers.net',
             'password'              => bcrypt('123')
         ]);
+
+        factory(\Coyote\User::class, 50)->create();
     }
 }
