@@ -54,7 +54,7 @@ class Stream extends Model
             ]
         ],
         "ip" => [
-            "type" => "text",
+            "type" => "string",
             "index" => "not_analyzed"
         ],
         "browser" => [
@@ -62,7 +62,7 @@ class Stream extends Model
             "index" => "not_analyzed"
         ],
         "fingerprint" => [
-            "type" => "text",
+            "type" => "string",
             "index" => "not_analyzed"
         ],
         "created_at" => [
