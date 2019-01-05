@@ -9,7 +9,6 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
-      PGDATA: /tmp
     ports:
       - 5432:5432
 
