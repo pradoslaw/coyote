@@ -181,26 +181,6 @@ class TopicController extends BaseController
 
     /**
      * @param \Coyote\Topic $topic
-     * @return array
-     */
-    private function getWarnings($topic)
-    {
-        $warnings = [];
-
-        // if topic is locked we need to fetch information when and by whom
-        if ($topic->is_locked) {
-            $warnings['lock'] = $this->findByObject('topic', $topic->id, 'lock')->last();
-        }
-
-        if ($topic->prev_forum_id) {
-            $warnings['move'] = $this->findByObject('topic', $topic->id, 'move')->last();
-        }
-
-        return $warnings;
-    }
-
-    /**
-     * @param \Coyote\Topic $topic
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function subscribe($topic)
@@ -253,18 +233,5 @@ class TopicController extends BaseController
         if (!$isUnread) {
             $this->forum->markAsRead($topic->forum_id, $this->guestId);
         }
-    }
-
-    /**
-     * @param string $object
-     * @param $id
-     * @param string $verb
-     * @return mixed
-     */
-    protected function findByObject($object, $id, $verb)
-    {
-        return app(StreamRepository::class)->findWhere(
-            ['object->objectType' => $object, 'object->id' => $id, 'verb' => $verb]
-        );
     }
 }
