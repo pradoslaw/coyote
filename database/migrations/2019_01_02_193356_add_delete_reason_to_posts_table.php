@@ -15,10 +15,10 @@ class AddDeleteReasonToPostsTable extends Migration
     public function up()
     {
         $this->schema->table('posts', function (Blueprint $table) {
-            $table->integer('deleter_id')->nullable();
+            $table->integer('remover_id')->nullable();
             $table->string('delete_reason')->nullable();
 
-            $table->foreign('deleter_id')->references('id')->on('users')->onDelete('no action');
+            $table->foreign('remover_id')->references('id')->on('users')->onDelete('no action');
         });
     }
 
@@ -30,7 +30,7 @@ class AddDeleteReasonToPostsTable extends Migration
     public function down()
     {
         $this->schema->table('posts', function (Blueprint $table) {
-            $table->dropColumn(['deleter_id', 'delete_reason']);
+            $table->dropColumn(['remover_id', 'delete_reason']);
         });
     }
 }
