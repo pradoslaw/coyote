@@ -16,15 +16,15 @@
 
         <div class="panel panel-default tab-content">
             <div id="stream" role="tabpanel" class="panel-body tab-pane active">
-                <nav class="text-center">{{ activities.render()|raw }}</nav>
+                <nav class="text-center">{{ paginator.render()|raw }}</nav>
 
                 <div class="stream">
-                    {% for activity in decorate %}
+                    {% for activity in paginator %}
                         {% include 'components.stream' %}
                     {% endfor %}
                 </div>
 
-                <nav class="text-center">{{ activities.render()|raw }}</nav>
+                <nav class="text-center">{{ paginator.render()|raw }}</nav>
             </div>
 
             <div id="visits" role="tabpanel" class="panel-body tab-pane">

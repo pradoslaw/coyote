@@ -1,13 +1,13 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Builders;
+namespace Coyote\Services\Elasticsearch\Builders\Stream;
 
 use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Sort;
 use Illuminate\Http\Request;
 
-class StreamBuilder extends QueryBuilder
+class AdmBuilder extends QueryBuilder
 {
     const PER_PAGE = 20;
 
@@ -29,8 +29,8 @@ class StreamBuilder extends QueryBuilder
      */
     public function build()
     {
-        $this->sort(new Sort('created_at', 'desc'));
-        $this->size(self::PER_PAGE * (max(0, (int) $this->request->get('page', 1) - 1)), self::PER_PAGE + 1);
+        $this->buildSort();
+        $this->buildSize();
 
         foreach (['ip', 'browser', 'fingerprint'] as $inputKey) {
             if ($this->request->filled($inputKey)) {
@@ -43,5 +43,15 @@ class StreamBuilder extends QueryBuilder
         }
 
         return parent::build();
+    }
+
+    protected function buildSort()
+    {
+        $this->sort(new Sort('created_at', 'desc'));
+    }
+
+    protected function buildSize()
+    {
+        $this->size(self::PER_PAGE * (max(0, (int) $this->request->get('page', 1) - 1)), self::PER_PAGE + 1);
     }
 }

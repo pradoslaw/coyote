@@ -4,9 +4,11 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
+use Coyote\Services\Elasticsearch\Builders\Stream\TopicBuilder;
 use Coyote\Services\Stream\Renderer;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
+use Illuminate\Pagination\Paginator;
 
 class StreamController extends BaseController
 {
@@ -21,27 +23,26 @@ class StreamController extends BaseController
     {
         $this->authorize('update', $topic->forum);
 
-        $activities = $stream->takeForTopic($topic->id);
-        $collection = $activities->items();
+        $builder = (new TopicBuilder($this->request))->setTopicId($topic->id);
+        $result = $stream->search($builder);
 
-        // nie wiem czemu przy zastosowaniu pagination() musze tutaj rzutowac te elementy na array
-        // natomiast przy get() nie :/ jakis wtf, ale nie mam czasu tego analizowac
-        foreach ($collection as &$item) {
-            $item['object'] = (array) $item['object'];
-            $item['target'] = (array) $item['target'];
-            $item['actor'] = (array) $item['actor'];
-        }
+        $paginator = new Paginator(
+            $result->getSource(),
+            TopicBuilder::PER_PAGE,
+            $this->request->get('page'),
+            ['path' => Paginator::resolveCurrentPath()]
+        );
 
-        $decorate = (new Renderer($collection))->render();
+        (new Renderer($paginator->items()))->render();
 
         $visits = $page->visits($topic->page()->getResults()->id);
 
         $this->breadcrumb($topic->forum);
         $this->breadcrumb->push([
-            $topic->subject => UrlBuilder::topic($topic),
-            'Dziennik zdarzeń' => route('forum.stream', [$topic->id])
+            $topic->subject     => UrlBuilder::topic($topic),
+            'Dziennik zdarzeń'  => route('forum.stream', [$topic->id])
         ]);
 
-        return $this->view('forum.stream')->with(compact('topic', 'activities', 'decorate', 'visits'));
+        return $this->view('forum.stream')->with(compact('topic', 'paginator', 'visits'));
     }
 }
