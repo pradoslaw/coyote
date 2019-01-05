@@ -60,8 +60,6 @@ class CreateActivitiesTable extends Migration
 
             $this->db->table('activities')->insert($data);
         }
-
-
     }
 
     /**

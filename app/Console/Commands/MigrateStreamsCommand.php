@@ -55,7 +55,6 @@ class MigrateStreamsCommand extends Command
 
         $db->connection('mongodb')->collection('streams')->orderBy('_id')->chunk(20000, function ($results) use ($db, $bar) {
             foreach ($results as $row) {
-
                 unset($row['_id']);
 
                 if ($row['created_at'] instanceof \MongoDB\BSON\UTCDateTime) {
@@ -90,7 +89,6 @@ class MigrateStreamsCommand extends Command
                 $post->delete_reason = array_get($result, 'object.reasonName');
                 $post->save();
             }
-
         }
     }
 
@@ -109,7 +107,6 @@ class MigrateStreamsCommand extends Command
                 $topic->moved_at = array_get($result, 'created_at');
                 $topic->save();
             }
-
         }
     }
 
