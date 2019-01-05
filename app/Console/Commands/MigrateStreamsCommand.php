@@ -2,6 +2,9 @@
 
 namespace Coyote\Console\Commands;
 
+use Coyote\Post;
+use Coyote\Repositories\Contracts\StreamRepositoryInterface;
+use Coyote\Topic;
 use Illuminate\Console\Command;
 
 class MigrateStreamsCommand extends Command
@@ -37,6 +40,14 @@ class MigrateStreamsCommand extends Command
      */
     public function handle()
     {
+        $this->mongoToPostgres();
+        $this->migratePostReason();
+        $this->migrateMovedTopic();
+        $this->migrateLockedTopic();
+    }
+
+    private function mongoToPostgres()
+    {
         $db = app('db');
 
         $bar = $this->output->createProgressBar($db->connection('mongodb')->collection('streams')->count());
@@ -62,6 +73,62 @@ class MigrateStreamsCommand extends Command
         });
 
         $bar->finish();
+    }
+
+    private function migratePostReason()
+    {
+        $posts = Post::withTrashed()->whereNotNull('deleted_at')->get();
+        $stream = app(StreamRepositoryInterface::class);
+
+        foreach ($posts as $post) {
+            $result = $stream->findWhere(['object->objectType' => 'post', 'object->id' => $post->id, 'verb' => 'delete']);
+
+            if ($result) {
+                $result = $result->sortByDesc('created_at')->first();
+
+                $post->remover_id = array_get($result, 'actor.id');
+                $post->delete_reason = array_get($result, 'object.reasonName');
+                $post->save();
+            }
+
+        }
+    }
+
+    private function migrateMovedTopic()
+    {
+        $topics = Topic::whereNotNull('prev_forum_id')->get();
+        $stream = app(StreamRepositoryInterface::class);
+
+        foreach ($topics as $topic) {
+            $result = $stream->findWhere(['object->objectType' => 'topic', 'object->id' => $topic->id, 'verb' => 'move']);
+
+            if ($result) {
+                $result = $result->sortByDesc('created_at')->first();
+
+                $topic->moved_by = array_get($result, 'actor.id');
+                $topic->moved_at = array_get($result, 'created_at');
+                $topic->save();
+            }
+
+        }
+    }
+
+    private function migrateLockedTopic()
+    {
+        $topics = Topic::where('is_locked', 1)->get();
+        $stream = app(StreamRepositoryInterface::class);
+
+        foreach ($topics as $topic) {
+            $result = $stream->findWhere(['object->objectType' => 'topic', 'object->id' => $topic->id, 'verb' => 'lock']);
+
+            if ($result) {
+                $result = $result->sortByDesc('created_at')->first();
+
+                $topic->locked_by = array_get($result, 'actor.id');
+                $topic->locked_at = array_get($result, 'created_at');
+                $topic->save();
+            }
+        }
     }
 
     private function toJson($data)

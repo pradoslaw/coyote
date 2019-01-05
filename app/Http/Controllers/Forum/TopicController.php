@@ -146,14 +146,11 @@ class TopicController extends BaseController
             $adminForumList = $treeBuilder->listBySlug($this->forum->list());
         }
 
-        // informacje o powodzie zablokowania watku, przeniesienia itp
-        $warnings = $this->getWarnings($topic);
-
         $form = $this->getForm($forum, $topic);
 
         return $this->view(
             'forum.topic',
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags', 'warnings')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags')
         )->with([
             'markTime'      => $markTime[Topic::class] ? $markTime[Topic::class] : $markTime[Forum::class],
             'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : [],
