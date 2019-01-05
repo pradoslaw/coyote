@@ -64,7 +64,7 @@ class SubmitController extends BaseController
 
         $request = $form->getRequest();
 
-        $path = $this->transaction(function () use ($wiki, $request, $dispatcher) {
+        $this->transaction(function () use ($wiki, $request, $dispatcher) {
             $subscribe = auth()->user()->allow_subscribe && !$wiki->wasUserInvolved($this->userId);
             $this->wiki->save($wiki, $request);
 
@@ -87,13 +87,12 @@ class SubmitController extends BaseController
                 $wiki->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
                 (new Stream_Wiki())->map($wiki)
             );
-            // add to elasticsearch index and pages table...
-            event(new WikiWasSaved($wiki));
-
-            return $wiki->path;
         });
 
-        return redirect()->to($path)->with('success', 'Zmiany zostały zapisane.');
+        // add to elasticsearch index and pages table...
+        event(new WikiWasSaved($wiki));
+
+        return redirect()->to($wiki->path)->with('success', 'Zmiany zostały zapisane.');
     }
 
     /**
