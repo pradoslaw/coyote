@@ -8,8 +8,9 @@ use Coyote\Events\PostWasDeleted;
 use Coyote\Events\PostWasSaved;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ActivitySubscriber
+class ActivitySubscriber implements ShouldQueue
 {
     /**
      * @var ActivityRepository
