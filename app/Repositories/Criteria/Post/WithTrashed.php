@@ -14,6 +14,9 @@ class WithTrashed extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->withTrashed();
+        return $model
+            ->withTrashed()
+            ->addSelect('remover.name AS remover_name')
+            ->leftJoin('users AS remover', 'remover.id', '=', 'remover_id');
     }
 }

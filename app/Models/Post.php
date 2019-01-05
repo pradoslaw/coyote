@@ -2,7 +2,6 @@
 
 namespace Coyote;
 
-use Coyote\Post\Attachment;
 use Coyote\Post\Subscriber;
 use Coyote\Services\Elasticsearch\CharFilters\PostFilter;
 use Illuminate\Database\Eloquent\Model;
@@ -112,6 +111,16 @@ class Post extends Model
      * @var null|string
      */
     private $html = null;
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::restoring(function (Post $post) {
+            $post->remover_id = null;
+            $post->delete_reason = null;
+        });
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -238,6 +247,19 @@ class Post extends Model
             ->where('id', '<', $this->id)
             ->orderBy('id', 'DESC')
             ->first();
+    }
+
+    /**
+     * @param int $userId
+     * @param string|null $reason
+     */
+    public function deleteWithReason(int $userId, ?string $reason)
+    {
+        $this->remover_id = $userId;
+        $this->delete_reason = $reason;
+        $this->{$this->getDeletedAtColumn()} = $this->freshTimestamp();
+
+        $this->save();
     }
 
     /**

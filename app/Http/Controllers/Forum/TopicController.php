@@ -48,16 +48,16 @@ class TopicController extends BaseController
         // number of posts per one page
         $perPage = $this->postsPerPage($request);
 
+        // user wants to show certain post. we need to calculate page number based on post id.
+        if ($request->filled('p')) {
+            $page = $this->post->getPage(min(2147483647, (int) $request->get('p')), $topic->id, $perPage);
+        }
+
         // user with forum-update ability WILL see every post
         if ($this->gate->allows('delete', $forum)) {
             $this->post->pushCriteria(new WithTrashed());
             // user is able to see real number of posts in this topic
             $replies = $topic->replies_real;
-        }
-
-        // user wants to show certain post. we need to calculate page number based on post id.
-        if ($request->filled('p')) {
-            $page = $this->post->getPage(min(2147483647, (int) $request->get('p')), $topic->id, $perPage);
         }
 
         // build "more like this" block. it's important to send elasticsearch query before
@@ -140,7 +140,6 @@ class TopicController extends BaseController
 
             if ($this->gate->allows('delete', $forum)) {
                 $flags = $this->getFlags($postsId);
-                $activities = $this->getActivities($postsId);
             }
 
             $this->forum->skipCriteria(true);
@@ -154,7 +153,7 @@ class TopicController extends BaseController
 
         return $this->view(
             'forum.topic',
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags', 'warnings', 'activities')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags', 'warnings')
         )->with([
             'markTime'      => $markTime[Topic::class] ? $markTime[Topic::class] : $markTime[Forum::class],
             'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : [],
@@ -181,25 +180,6 @@ class TopicController extends BaseController
     private function getFlags($postsId)
     {
         return $this->getFlagFactory()->takeForPosts($postsId);
-    }
-
-    /**
-     * @param int[] $postsId
-     * @return array
-     */
-    private function getActivities($postsId)
-    {
-        $activities = [];
-
-        // here we go. if user has delete ability, for sure he/she would like to know
-        // why posts were deleted and by whom
-        $collection = $this->findByObject('post', $postsId, 'delete');
-
-        foreach ($collection->sortByDesc('created_at')->groupBy('object.id') as $row) {
-            $activities[array_get($row->first(), 'object.id')] = $row->first();
-        }
-
-        return $activities;
     }
 
     /**

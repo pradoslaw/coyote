@@ -95,7 +95,8 @@ class DeleteController extends BaseController
                     $subscribers = $subscribers->push($post->user)->unique('id');
                 }
 
-                $post->delete();
+                $post->deleteWithReason($this->userId, $reason->name);
+
                 // delete post's flags
                 $this->getFlagFactory()->deleteBy('post_id', $post->id, $this->userId);
 
