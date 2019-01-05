@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 
 class ActivityTableSeeder extends Seeder
 {
+    use SchemaBuilder;
+
     /**
      * Run the database seeds.
      *
@@ -28,7 +30,9 @@ class ActivityTableSeeder extends Seeder
                     'content_type' => \Coyote\Post::class,
                     'user_name' => $item->user_name
                 ];
-            } else {
+
+                $this->db->table('activities')->insert($data);
+            } elseif (!empty($item->post->topic_id)) {
                 $data += [
                     'topic_id' => $item->post->topic_id,
                     'forum_id' => $item->post->topic->forum_id,
@@ -36,9 +40,9 @@ class ActivityTableSeeder extends Seeder
                     'content_id' => $item->id,
                     'content_type' => \Coyote\Post\Comment::class
                 ];
-            }
 
-            $this->db->table('activities')->insert($data);
+                $this->db->table('activities')->insert($data);
+            }
         }
     }
 }
