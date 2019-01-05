@@ -46,7 +46,7 @@ class CreateActivitiesTable extends Migration
                     'excerpt' => excerpt($item->text),
                     'content_id' => $item->id,
                     'content_type' => \Coyote\Post::class,
-                    'user_name' => $item->post->user_name
+                    'user_name' => $item->user_name
                 ];
             } else {
                 $data += [
