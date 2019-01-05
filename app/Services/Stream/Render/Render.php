@@ -11,14 +11,14 @@ use Jenssegers\Agent\Agent;
 abstract class Render
 {
     /**
-     * @var Model
+     * @var Model|array
      */
     protected $stream;
 
     /**
-     * @param Model $stream
+     * @param Model|array $stream
      */
-    public function __construct(Model $stream)
+    public function __construct($stream)
     {
         $this->stream = $stream;
     }

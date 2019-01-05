@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stream extends Model
 {
-    use WithoutUpdatedAt;
+    use WithoutUpdatedAt, Searchable;
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class Stream extends Model
         "actor" => [
             "type" => "object",
             "properties" => [
-                "name" => [
+                "displayName" => [
                     "type" => "string",
                     // ability to search case insensitive
                     "analyzer" => "keyword_analyzer"
@@ -54,7 +54,7 @@ class Stream extends Model
             ]
         ],
         "ip" => [
-            "type" => "string",
+            "type" => "text",
             "index" => "not_analyzed"
         ],
         "browser" => [
@@ -62,7 +62,7 @@ class Stream extends Model
             "index" => "not_analyzed"
         ],
         "fingerprint" => [
-            "type" => "string",
+            "type" => "text",
             "index" => "not_analyzed"
         ],
         "created_at" => [

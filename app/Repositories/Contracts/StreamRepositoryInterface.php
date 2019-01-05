@@ -2,14 +2,11 @@
 
 namespace Coyote\Repositories\Contracts;
 
+/**
+ * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
+ */
 interface StreamRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * @param int $topicId
-     * @return mixed
-     */
-    public function takeForTopic($topicId);
-
     /**
      * @param int $userId
      * @param string $ip

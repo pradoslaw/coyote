@@ -4,8 +4,9 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Forms\StreamFilterForm;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
-use Coyote\Repositories\Criteria\Stream\FilterTransformer;
+use Coyote\Services\Elasticsearch\Builders\StreamBuilder;
 use Coyote\Services\Stream\Renderer;
+use Illuminate\Pagination\Paginator;
 
 class StreamController extends BaseController
 {
@@ -31,11 +32,17 @@ class StreamController extends BaseController
      */
     public function index(StreamFilterForm $form)
     {
-        $this->stream->pushCriteria(new FilterTransformer($form));
+        $builder = new StreamBuilder($this->request);
+        $result = $this->stream->search($builder);
 
-        $paginator = $this->stream->simplePaginate();
+        $paginator = new Paginator(
+            $result->getSource(),
+            StreamBuilder::PER_PAGE,
+            $this->request->get('page'),
+            ['path' => Paginator::resolveCurrentPath()]
+        );
+
         (new Renderer($paginator->items()))->render();
-
         $paginator->appends($form->getRequest()->except('page'));
 
         return $this->view('adm.stream', [

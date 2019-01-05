@@ -6,16 +6,18 @@ use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Coyote\Services\Stream\Renderer;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Topic;
 
 class StreamController extends BaseController
 {
     /**
-     * @param \Coyote\Topic $topic
+     * @param Topic $topic
      * @param StreamRepository $stream
      * @param PageRepository $page
-     * @return mixed
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index($topic, StreamRepository $stream, PageRepository $page)
+    public function index(Topic $topic, StreamRepository $stream, PageRepository $page)
     {
         $this->authorize('update', $topic->forum);
 

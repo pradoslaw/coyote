@@ -2,8 +2,6 @@
 
 namespace Coyote\Services\Stream\Render;
 
-use Coyote\Services\Stream;
-
 class Comment extends Render
 {
     /**

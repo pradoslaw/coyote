@@ -9,6 +9,10 @@
             </div>
 
             <div class="panel-body">
+                {{ form_open() }}
+
+                {{ form_close() }}
+
                 <div class="text-center">{{ paginator.render()|raw }}</div>
 
                 <div class="stream">
