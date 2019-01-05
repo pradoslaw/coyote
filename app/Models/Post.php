@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $score
  * @property int $edit_count
  * @property int $editor_id
- * @property int $remover_id
+ * @property int $deleter_id
  * @property string $delete_reason
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $deleted_at
@@ -117,7 +117,7 @@ class Post extends Model
         parent::boot();
 
         static::restoring(function (Post $post) {
-            $post->remover_id = null;
+            $post->deleter_id = null;
             $post->delete_reason = null;
         });
     }
@@ -255,7 +255,7 @@ class Post extends Model
      */
     public function deleteWithReason(int $userId, ?string $reason)
     {
-        $this->remover_id = $userId;
+        $this->deleter_id = $userId;
         $this->delete_reason = $reason;
         $this->{$this->getDeletedAtColumn()} = $this->freshTimestamp();
 
@@ -275,7 +275,7 @@ class Post extends Model
         // additionally index few fields from topics table...
         $topic = $this->topic()->withTrashed()->first(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
         // we need to index every field from posts except:
-        $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id', 'delete_reason', 'remover_id']);
+        $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id', 'delete_reason', 'deleter_id']);
 
         if ($topic->first_post_id == $body['id']) {
             $body['tags'] = $topic->tags()->pluck('name');

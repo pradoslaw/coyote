@@ -16,7 +16,7 @@ class WithTrashed extends Criteria
     {
         return $model
             ->withTrashed()
-            ->addSelect('remover.name AS remover_name')
-            ->leftJoin('users AS remover', 'remover.id', '=', 'remover_id');
+            ->addSelect('deleter.name AS deleter_name')
+            ->leftJoin('users AS deleter', 'deleter.id', '=', 'deleter_id');
     }
 }

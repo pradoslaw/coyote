@@ -85,7 +85,7 @@ class MigrateStreamsCommand extends Command
             if ($result) {
                 $result = $result->sortByDesc('created_at')->first();
 
-                $post->remover_id = array_get($result, 'actor.id');
+                $post->deleter_id = array_get($result, 'actor.id');
                 $post->delete_reason = array_get($result, 'object.reasonName');
                 $post->save();
             }
