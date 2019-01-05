@@ -103,7 +103,7 @@ class MigrateStreamsCommand extends Command
             if ($result) {
                 $result = $result->sortByDesc('created_at')->first();
 
-                $topic->moved_by = array_get($result, 'actor.id');
+                $topic->mover_id = array_get($result, 'actor.id');
                 $topic->moved_at = array_get($result, 'created_at');
                 $topic->save();
             }
@@ -121,7 +121,7 @@ class MigrateStreamsCommand extends Command
             if ($result) {
                 $result = $result->sortByDesc('created_at')->first();
 
-                $topic->locked_by = array_get($result, 'actor.id');
+                $topic->locker_id = array_get($result, 'actor.id');
                 $topic->locked_at = array_get($result, 'created_at');
                 $topic->save();
             }
