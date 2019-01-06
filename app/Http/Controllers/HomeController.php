@@ -13,6 +13,7 @@ use Coyote\Repositories\Criteria\Forum\SkipHiddenCategories;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
 use Coyote\Services\Session\Viewers;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HomeController extends Controller
 {
@@ -165,6 +166,9 @@ class HomeController extends Controller
         $this->activity->pushCriteria(new SkipHiddenCategories($this->userId));
 
         $this->activity->pushCriteria(new EagerLoading(['user', 'topic', 'content', 'forum']));
+        $this->activity->pushCriteria(new EagerLoading(['topic' => function (BelongsTo $query) {
+            $query->withTrashed();
+        }]));
 
         $result = $this->activity->latest(20);
 
