@@ -463,7 +463,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
             ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
             ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
-            ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id');
+            ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')
+            ->orderBy('posts.id'); // <-- make sure that posts are in the right order!
 
         $this->resetModel();
 
@@ -480,6 +481,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $sql = clone $this->model;
 
         foreach ($this->getCriteria() as $criteria) {
+            // include only this criteria to fetch deleted posts (only for users with special access)
             if ($criteria instanceof WithTrashed) {
                 $sql = $criteria->apply($sql, $this);
             }

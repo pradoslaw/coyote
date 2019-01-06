@@ -9,7 +9,7 @@ class Group extends Render
      */
     public function name()
     {
-        return $this->stream['object.displayName'];
+        return array_get($this->stream, 'object.displayName');
     }
 
     /**

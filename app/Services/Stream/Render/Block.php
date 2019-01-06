@@ -9,7 +9,7 @@ class Block extends Render
      */
     protected function excerpt()
     {
-        return $this->stream['object.content'];
+        return array_get($this->stream, 'object.content');
     }
 
     /**
@@ -17,6 +17,6 @@ class Block extends Render
      */
     protected function object()
     {
-        return parent::object() . ': ' . $this->stream['object.displayName'];
+        return parent::object() . ': ' . array_get($this->stream, 'object.displayName');
     }
 }

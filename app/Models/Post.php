@@ -2,7 +2,6 @@
 
 namespace Coyote;
 
-use Coyote\Post\Attachment;
 use Coyote\Post\Subscriber;
 use Coyote\Services\Elasticsearch\CharFilters\PostFilter;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $score
  * @property int $edit_count
  * @property int $editor_id
+ * @property int $deleter_id
+ * @property string $delete_reason
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $updated_at
@@ -110,6 +111,16 @@ class Post extends Model
      * @var null|string
      */
     private $html = null;
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::restoring(function (Post $post) {
+            $post->deleter_id = null;
+            $post->delete_reason = null;
+        });
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -239,6 +250,19 @@ class Post extends Model
     }
 
     /**
+     * @param int $userId
+     * @param string|null $reason
+     */
+    public function deleteWithReason(int $userId, ?string $reason)
+    {
+        $this->deleter_id = $userId;
+        $this->delete_reason = $reason;
+        $this->{$this->getDeletedAtColumn()} = $this->freshTimestamp();
+
+        $this->save();
+    }
+
+    /**
      * Return data to index in elasticsearch
      *
      * @return array
@@ -251,7 +275,7 @@ class Post extends Model
         // additionally index few fields from topics table...
         $topic = $this->topic()->withTrashed()->first(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
         // we need to index every field from posts except:
-        $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id']);
+        $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id', 'delete_reason', 'deleter_id']);
 
         if ($topic->first_post_id == $body['id']) {
             $body['tags'] = $topic->tags()->pluck('name');

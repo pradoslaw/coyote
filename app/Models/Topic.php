@@ -35,6 +35,10 @@ use Illuminate\Database\QueryException;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property Tag[] $tags
+ * @property int $mover_id
+ * @property int $locker_id
+ * @property \Carbon\Carbon $moved_at
+ * @property \Carbon\Carbon $locked_at
  */
 class Topic extends Model
 {
@@ -91,7 +95,7 @@ class Topic extends Model
         ],
     ];
 
-    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at', 'moved_at', 'locked_at'];
 
     public static function boot()
     {
@@ -231,6 +235,30 @@ class Topic extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function prevForum()
+    {
+        return $this->belongsTo(Forum::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function mover()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function locker()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Subscribe/unsubscribe to topic
      *
      * @param int $userId
@@ -279,11 +307,15 @@ class Topic extends Model
     }
 
     /**
+     * @param int $userId
      * Lock/unlock topic
      */
-    public function lock()
+    public function lock(int $userId)
     {
         $this->is_locked = !$this->is_locked;
+        $this->locked_at = $this->is_locked ? $this->freshTimestamp() : null;
+        $this->locker_id = $this->is_locked ? $userId : null;
+
         $this->save();
     }
 
@@ -325,7 +357,11 @@ class Topic extends Model
         $body = $this->parentGetIndexBody();
 
         // we need to index every field from topics except:
-        $body = array_except($body, ['deleted_at', 'first_post_id', 'last_post_id', 'is_sticky', 'is_announcement', 'poll_id', 'prev_forum_id']);
+        $body = array_except(
+            $body,
+            ['deleted_at', 'first_post_id', 'last_post_id', 'is_sticky', 'is_announcement', 'poll_id', 'prev_forum_id', 'moved_at', 'locked_at', 'moved_by', 'locked_by']
+        );
+
         $posts = [];
 
         foreach ($this->posts()->get(['text']) as $post) {

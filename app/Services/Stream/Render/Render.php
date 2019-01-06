@@ -11,14 +11,14 @@ use Jenssegers\Agent\Agent;
 abstract class Render
 {
     /**
-     * @var Model
+     * @var Model|array
      */
     protected $stream;
 
     /**
-     * @param Model $stream
+     * @param Model|array $stream
      */
-    public function __construct(Model $stream)
+    public function __construct($stream)
     {
         $this->stream = $stream;
     }
@@ -32,7 +32,7 @@ abstract class Render
         $agent->setUserAgent($this->stream['browser']);
 
         $translator = trans();
-        $id = 'stream.headline.' . $this->stream['object.objectType'];
+        $id = 'stream.headline.' . array_get($this->stream, 'object.objectType');
 
         if ($translator->has($id . ':' . $this->stream['verb'])) {
             $id .= ':' . $this->stream['verb'];
@@ -80,9 +80,9 @@ abstract class Render
     protected function actor()
     {
         return link_to(
-            $this->stream['actor.url'],
-            $this->stream['actor.displayName'],
-            ['data-user-id' => $this->stream['actor.id']]
+            array_get($this->stream, 'actor.url'),
+            array_get($this->stream, 'actor.displayName'),
+            ['data-user-id' => array_get($this->stream, 'actor.id')]
         );
     }
 
@@ -91,7 +91,7 @@ abstract class Render
      */
     protected function excerpt()
     {
-        return $this->stream['object.displayName'];
+        return array_get($this->stream, 'object.displayName');
     }
 
     /**
@@ -108,8 +108,8 @@ abstract class Render
     protected function object()
     {
         return link_to(
-            $this->stream['object.url'],
-            (string) trans('stream.nouns.' . $this->stream['object.objectType'])
+            array_get($this->stream, 'object.url'),
+            (string) trans('stream.nouns.' . array_get($this->stream, 'object.objectType'))
         );
     }
 
@@ -119,9 +119,9 @@ abstract class Render
     protected function target()
     {
         return link_to(
-            $this->stream['target.url'],
-            str_limit($this->stream['target.displayName'], 64),
-            ['title' => $this->stream['target.displayName']]
+            array_get($this->stream, 'target.url'),
+            str_limit(array_get($this->stream, 'target.displayName'), 64),
+            ['title' => array_get($this->stream, 'target.displayName')]
         );
     }
 
@@ -131,9 +131,9 @@ abstract class Render
     protected function objectName()
     {
         return link_to(
-            $this->stream['object.url'],
-            $this->stream['object.displayName'],
-            ['title' => $this->stream['object.displayName']]
+            array_get($this->stream, 'object.url'),
+            array_get($this->stream, 'object.displayName'),
+            ['title' => array_get($this->stream, 'object.displayName')]
         );
     }
 }

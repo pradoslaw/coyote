@@ -3,20 +3,17 @@ version: '2'
 services:
   db:
     image: postgres
-    restart: always
     volumes:
       - ./.data/pgsql:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
-      PGDATA: /tmp
     ports:
       - 5432:5432
 
   adminer:
     image: adminer
-    restart: always
     ports:
       - 8080:8080
 

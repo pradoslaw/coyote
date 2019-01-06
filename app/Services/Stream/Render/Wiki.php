@@ -9,7 +9,7 @@ class Wiki extends Render
      */
     public function object()
     {
-        return (string) trans('stream.nouns.' . $this->stream['object.objectType']);
+        return (string) trans('stream.nouns.' . array_get($this->stream, 'object.objectType'));
     }
 
     /**
@@ -25,6 +25,6 @@ class Wiki extends Render
      */
     protected function excerpt()
     {
-        return $this->stream['object.excerpt'] ?? null;
+        return array_get($this->stream, 'object.excerpt') ?? null;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Stream;
 
+use Coyote\Events\StreamSaved;
 use Coyote\Events\StreamSaving;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Coyote\Services\Stream\Activities\Activity;
@@ -55,9 +56,13 @@ class Manager
             $activity->setTarget($target);
         }
 
-        $this->events->fire(new StreamSaving($activity));
+        $this->events->dispatch(new StreamSaving($activity));
 
-        return $this->stream->create($activity->toArray());
+        $result =  $this->stream->create($activity->toArray());
+
+        $this->events->dispatch(new StreamSaved($result));
+
+        return $result;
     }
 
     /**

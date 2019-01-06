@@ -10,8 +10,8 @@ class Post extends Render
     protected function actor()
     {
         // author can be an anonymous user...
-        if (!$this->stream['actor.id']) {
-            return $this->stream['actor.displayName'];
+        if (!array_has($this->stream, 'actor.id')) {
+            return array_get($this->stream, 'actor.displayName');
         }
 
         return parent::actor();
@@ -23,9 +23,9 @@ class Post extends Render
     protected function target()
     {
         return link_to(
-            $this->stream['object.url'],
-            str_limit($this->stream['target.displayName'], 64),
-            ['title' => $this->stream['target.displayName']]
+            array_get($this->stream, 'object.url'),
+            str_limit(array_get($this->stream, 'target.displayName'), 64),
+            ['title' => array_get($this->stream, 'target.displayName')]
         );
     }
 
@@ -34,6 +34,6 @@ class Post extends Render
      */
     protected function excerpt()
     {
-        return $this->stream['object.reasonName'] ?: $this->stream['object.displayName'];
+        return array_get($this->stream, 'object.reasonName') ?: array_get($this->stream, 'object.displayName');
     }
 }

@@ -2,15 +2,17 @@
 
 namespace Coyote\Http\Controllers;
 
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Http\Resources\Activity as ActivityResource;
+use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
-use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
+use Coyote\Repositories\Criteria\EagerLoading;
+use Coyote\Repositories\Criteria\Forum\SkipHiddenCategories;
+use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
+use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
 use Coyote\Services\Session\Viewers;
-use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
-use Coyote\Services\Stream\Renderer;
 
 class HomeController extends Controller
 {
@@ -25,9 +27,9 @@ class HomeController extends Controller
     protected $reputation;
 
     /**
-     * @var StreamRepository
+     * @var ActivityRepository
      */
-    protected $stream;
+    protected $activity;
 
     /**
      * @var TopicRepository
@@ -40,34 +42,26 @@ class HomeController extends Controller
     protected $wiki;
 
     /**
-     * @var ForumRepository
-     */
-    protected $forum;
-
-    /**
      * @param MicroblogRepository $microblog
      * @param ReputationRepository $reputation
-     * @param StreamRepository $stream
+     * @param ActivityRepository $activity
      * @param TopicRepository $topic
      * @param WikiRepository $wiki
-     * @param ForumRepository $forum
      */
     public function __construct(
         MicroblogRepository $microblog,
         ReputationRepository $reputation,
-        StreamRepository $stream,
+        ActivityRepository $activity,
         TopicRepository $topic,
-        WikiRepository $wiki,
-        ForumRepository $forum
+        WikiRepository $wiki
     ) {
         parent::__construct();
 
         $this->microblog = $microblog;
         $this->reputation = $reputation;
-        $this->stream = $stream;
+        $this->activity = $activity;
         $this->topic = $topic;
         $this->wiki = $wiki;
-        $this->forum = $forum;
     }
 
     /**
@@ -80,7 +74,7 @@ class HomeController extends Controller
 
         $cache = $this->getCacheFactory();
 
-        $this->topic->pushCriteria(new OnlyThoseWithAccess());
+        $this->topic->pushCriteria(new OnlyThoseTopicsWithAccess());
 
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PRIVATE) as $method) {
             $method = $method->name;
@@ -167,8 +161,14 @@ class HomeController extends Controller
      */
     private function getActivities()
     {
-        // take last stream activity for forum
-        return (new Renderer($this->stream->forumFeeds($this->forum->getRestricted())))->render();
+        $this->activity->pushCriteria(new OnlyThoseForumsWithAccess($this->auth));
+        $this->activity->pushCriteria(new SkipHiddenCategories($this->userId));
+
+        $this->activity->pushCriteria(new EagerLoading(['user', 'topic', 'content', 'forum']));
+
+        $result = $this->activity->latest(20);
+
+        return ActivityResource::collection($result)->toArray($this->request);
     }
 
     /**

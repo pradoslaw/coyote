@@ -10,19 +10,15 @@
 {% set too_old = diff_in_months(topic.last_post_created_at) >= 6 %}
 
 {% block content %}
-    {% if warnings.lock %}
+    {% if topic.locked_at %}
         <p class="alert alert-warning">
-            Wątek zablokowany {{ warnings.lock.created_at|format_date }} przez <a class="alert-warning" href="{{ url(warnings.lock.actor.url) }}">{{ warnings.lock.actor.displayName }}</a>.
+            Wątek zablokowany {{ topic.locked_at|format_date }} przez <a class="alert-warning" href="{{ route('profile', [topic.locker.id]) }}">{{ topic.locker.name }}</a>.
         </p>
     {% endif %}
 
-    {% if warnings.move %}
+    {% if topic.moved_at %}
         <p class="alert alert-warning">
-            Wątek przeniesiony {{ warnings.move.created_at|format_date }} z <a class="alert-link" href="{{ route('forum.category', [warnings.move.object.forum.slug]) }}">{{ warnings.move.object.forum.name }}</a> przez <a class="alert-link" href="{{ url(warnings.move.actor.url) }}">{{ warnings.move.actor.displayName }}</a>.
-
-            {% if warnings.move.object.reasonName %}
-                Powód: <strong>{{ warnings.move.object.reasonName }}</strong>
-            {% endif %}
+            Wątek przeniesiony {{ topic.moved_at|format_date }} z <a class="alert-link" href="{{ route('forum.category', [topic.prevForum.slug]) }}">{{ topic.prevForum.name }}</a> przez <a class="alert-link" href="{{ route('profile', [topic.mover.id]) }}">{{ topic.mover.name }}</a>.
         </p>
     {% endif %}
 

@@ -2,8 +2,6 @@
 
 namespace Coyote\Services\Stream\Render;
 
-use Coyote\Services\Stream;
-
 class Comment extends Render
 {
     /**
@@ -12,9 +10,9 @@ class Comment extends Render
     public function target()
     {
         return link_to(
-            $this->stream['object.url'],
-            str_limit($this->stream['target.displayName'], 64),
-            ['title' => $this->stream['target.displayName']]
+            array_get($this->stream, 'object.url'),
+            str_limit(array_get($this->stream, 'target.displayName'), 64),
+            ['title' => array_get($this->stream, 'target.displayName')]
         );
     }
 }

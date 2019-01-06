@@ -17,10 +17,10 @@
             <a href="#post-{{ post.id }}" data-toggle="collapse">
                 <i class="fa fa-warning"></i>
 
-                Post usunięty przez {{ activities[post.id].actor.displayName }} dnia {{ activities[post.id].created_at|format_date }}.
+                Post usunięty przez {{ post.remover_name }} dnia {{ post.deleted_at|format_date }}.
 
-                {% if activities[post.id].object.reasonName %}
-                    Powód: <strong>{{ activities[post.id].object.reasonName }}</strong>
+                {% if post.delete_reason %}
+                    Powód: <strong>{{ post.delete_reason }}</strong>
                 {% endif %}
             </a>
         </div>

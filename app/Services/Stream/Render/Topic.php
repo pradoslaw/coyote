@@ -10,8 +10,8 @@ class Topic extends Render
     protected function actor()
     {
         // author can be an anonymous user...
-        if (!$this->stream['actor.id']) {
-            return $this->stream['actor.displayName'];
+        if (!array_has($this->stream, 'actor.id')) {
+            return array_get($this->stream, 'actor.displayName');
         }
 
         return parent::actor();
@@ -30,7 +30,7 @@ class Topic extends Render
      */
     protected function source()
     {
-        return $this->stream['object.forum.name'];
+        return array_get($this->stream, 'object.forum.name');
     }
 
     /**
@@ -38,6 +38,6 @@ class Topic extends Render
      */
     protected function excerpt()
     {
-        return $this->stream['object.reasonName'] ?: $this->stream['object.excerpt'];
+        return array_get($this->stream, 'object.reasonName') ?: array_get($this->stream, 'object.excerpt');
     }
 }

@@ -9,16 +9,19 @@ use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Forum\Reason;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Topic;
 use Illuminate\Http\Request;
 
 class MoveController extends BaseController
 {
     /**
-     * @param \Coyote\Topic $topic
+     * @param Topic $topic
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function index($topic, Request $request)
+    public function index(Topic $topic, Request $request)
     {
         $rules = ['slug' => 'required|exists:forums'];
 
@@ -49,6 +52,9 @@ class MoveController extends BaseController
 
             // then, set a new forum id
             $topic->forum_id = $forum->id;
+            $topic->mover_id = $this->userId;
+            $topic->moved_at = $topic->freshTimestamp();
+
             // magic happens here. database trigger will do the work
             $topic->save();
 

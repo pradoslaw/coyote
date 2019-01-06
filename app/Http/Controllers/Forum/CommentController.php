@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Events\CommentDeleted;
+use Coyote\Events\CommentSaved;
 use Coyote\Notifications\Post\Comment\UserMentionedNotification;
 use Coyote\Notifications\Post\CommentedNotification;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
@@ -117,6 +119,8 @@ class CommentController extends Controller
             }
         }
 
+        event(new CommentSaved($this->comment));
+
         foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
             $this->comment->{$key} = $user->{$key};
         }
@@ -162,5 +166,7 @@ class CommentController extends Controller
 
             stream(Stream_Delete::class, $object, $target);
         });
+
+        event(new CommentDeleted($this->comment));
     }
 }
