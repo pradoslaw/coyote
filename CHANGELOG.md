@@ -2,6 +2,12 @@
 
 **Ogólne**
 - Upgrade do Laravel 5.7
+- Rezygnacja z MongoDB na rzecz PostgreSQL + Elasticsearch
+
+**Forum**
+- Zapisywanie informacji o powodzie usunięcia postów, w tabeli posts
+- Zapisywanie informacji o dacie przeniesienia/zablokowania wątku, w tabeli topics
+- Na stronie głównej, ostatnia aktywność na forum prezentuje tylko wątki z kategorii, które nie są przez danego użytkownika niewidoczne
 
 ## 2.2
 
