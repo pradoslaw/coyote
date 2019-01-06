@@ -307,11 +307,15 @@ class Topic extends Model
     }
 
     /**
+     * @param int $userId
      * Lock/unlock topic
      */
-    public function lock()
+    public function lock(int $userId)
     {
         $this->is_locked = !$this->is_locked;
+        $this->locked_at = $this->is_locked ? $this->freshTimestamp() : null;
+        $this->locker_id = $this->is_locked ? $userId : null;
+
         $this->save();
     }
 
