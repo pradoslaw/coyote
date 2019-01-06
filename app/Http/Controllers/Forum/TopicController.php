@@ -6,11 +6,11 @@ use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
-use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Coyote\Repositories\Criteria\Post\ObtainSubscribers;
+use Coyote\Repositories\Criteria\Post\WithSubscribers;
 use Coyote\Repositories\Criteria\Post\WithTrashed;
+use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Forum\TreeBuilder;
 use Coyote\Services\Parser\Parsers\ParserInterface;
@@ -56,6 +56,8 @@ class TopicController extends BaseController
         // user with forum-update ability WILL see every post
         if ($this->gate->allows('delete', $forum)) {
             $this->post->pushCriteria(new WithTrashed());
+            $this->post->pushCriteria(new WithTrashedInfo());
+
             // user is able to see real number of posts in this topic
             $replies = $topic->replies_real;
         }
@@ -75,7 +77,7 @@ class TopicController extends BaseController
             return $mlt;
         });
 
-        $this->post->pushCriteria(new ObtainSubscribers($this->userId));
+        $this->post->pushCriteria(new WithSubscribers($this->userId));
 
         // magic happens here. get posts for given topic (including first post for every page)
         /* @var \Illuminate\Support\Collection $posts */

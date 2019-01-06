@@ -5,7 +5,7 @@ namespace Coyote\Repositories\Criteria\Post;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Criteria\Criteria;
 
-class ObtainSubscribers extends Criteria
+class WithSubscribers extends Criteria
 {
     /**
      * @var int
