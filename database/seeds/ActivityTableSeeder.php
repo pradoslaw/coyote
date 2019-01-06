@@ -21,7 +21,7 @@ class ActivityTableSeeder extends Seeder
         foreach ($items as $item) {
             $data = ['created_at' => $item->created_at->toDateTimeString(), 'user_id' => $item->user_id];
 
-            if (isset($item['topic_id'])) {
+            if ($item instanceof \Coyote\Post) {
                 $data += [
                     'topic_id' => $item->topic_id,
                     'forum_id' => $item->forum_id,
@@ -30,9 +30,7 @@ class ActivityTableSeeder extends Seeder
                     'content_type' => \Coyote\Post::class,
                     'user_name' => $item->user_name
                 ];
-
-                $this->db->table('activities')->insert($data);
-            } elseif (!empty($item->post->topic_id)) {
+            } else {
                 $data += [
                     'topic_id' => $item->post->topic_id,
                     'forum_id' => $item->post->topic->forum_id,
@@ -40,9 +38,9 @@ class ActivityTableSeeder extends Seeder
                     'content_id' => $item->id,
                     'content_type' => \Coyote\Post\Comment::class
                 ];
-
-                $this->db->table('activities')->insert($data);
             }
+
+            $this->db->table('activities')->insert($data);
         }
     }
 }
