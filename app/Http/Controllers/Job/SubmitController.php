@@ -7,7 +7,7 @@ use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Forms\Job\FirmForm;
 use Coyote\Http\Forms\Job\JobForm;
-use Coyote\Http\Transformers\FirmWithBenefits;
+use Coyote\Http\Resources\Firm as FirmResource;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Notifications\JobCreatedNotification;
@@ -131,7 +131,8 @@ class SubmitController extends Controller
 
         // get all firms assigned to user...
         $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries', 'gallery']));
-        $firms = fractal($this->firm->findAllBy('user_id', $job->user_id), new FirmWithBenefits())->toJson();
+
+        $firms = json_encode(FirmResource::collection($this->firm->findAllBy('user_id', $job->user_id))->toArray($this->request));
 
         $this->breadcrumb($job);
 

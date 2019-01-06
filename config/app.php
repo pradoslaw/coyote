@@ -249,8 +249,6 @@ return [
         Boduch\Grid\GridServiceProvider::class,
         // sentry, raportowanie bugow
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
-        // Fractal
-        Spatie\Fractal\FractalServiceProvider::class,
         Swap\Laravel\SwapServiceProvider::class,
         // Wyslanie SMS po wyslanej aplikacji na dana oferte pracy
         NotificationChannels\Twilio\TwilioProvider::class
