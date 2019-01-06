@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\User;
 use Coyote\Notification;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Transformers\NotificationTransformer;
+use Coyote\Http\Resources\Notification as NotificationResource;
 use Illuminate\Http\Request;
 use Carbon;
 
@@ -53,7 +54,9 @@ class NotificationsController extends BaseController
         // mark as read
         $this->mark($pagination);
 
-        $pagination->setCollection(collect(fractal($pagination->getCollection(), new NotificationTransformer())->toArray()));
+        $pagination->setCollection(
+            collect(NotificationResource::collection($pagination->getCollection())->toArray($this->request))
+        );
 
         return $this->view('user.notifications.home', [
             'pagination'          => $pagination,
@@ -95,7 +98,7 @@ class NotificationsController extends BaseController
         $unread -= $this->mark($notifications);
 
         // format notification's headline
-        $notifications = collect(fractal($notifications, new NotificationTransformer())->toArray());
+        $notifications = NotificationResource::collection($notifications)->toArray($this->request);
 
         $view = view('user.notifications.ajax', [
             'notifications'        => $notifications,
