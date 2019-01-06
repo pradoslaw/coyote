@@ -13,8 +13,8 @@ class ActivityTableSeeder extends Seeder
      */
     public function run()
     {
-        $posts = \Coyote\Post::limit(10)->get();
-        $comments = \Coyote\Post\Comment::limit(10)->get();
+        $posts = \Coyote\Post::orderBy('id', 'DESC')->limit(10)->get();
+        $comments = \Coyote\Post\Comment::orderBy('id', 'DESC')->limit(10)->get();
 
         $items = collect($posts)->merge($comments)->sortBy('created_at');
 
