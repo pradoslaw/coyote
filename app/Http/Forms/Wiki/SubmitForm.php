@@ -157,7 +157,7 @@ class SubmitForm extends Form
      */
     protected function getTemplateList()
     {
-        $templates = ['show', 'category', 'blog.home', 'blog.show', 'help.home', 'help.show'];
+        $templates = ['show', 'category', 'blog.home', 'help.home', 'help.show'];
         return array_combine($templates, $templates);
     }
 }
