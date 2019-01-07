@@ -6,6 +6,7 @@ use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Events\PostWasSaved;
+use Coyote\Events\TopicWasDeleted;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -49,7 +50,12 @@ class ActivitySubscriber implements ShouldQueue
      */
     public function onPostDeleted(PostWasDeleted $event)
     {
-        $this->activity->firstOrNew(['content_id' => $event->post['id'], 'content_type' => Post::class])->delete();
+        $this->activity->where('content_id', $event->post['id'])->where('content_type', Post::class)->delete();
+    }
+
+    public function onTopicDeleted(TopicWasDeleted $event)
+    {
+        $this->activity->where('topic_id', $event->topic['id'])->delete();
     }
 
     /**
@@ -74,7 +80,7 @@ class ActivitySubscriber implements ShouldQueue
      */
     public function onCommentDeleted(CommentDeleted $event)
     {
-        $this->activity->firstOrNew(['content_id' => $event->comment['id'], 'content_type' => Post\Comment::class])->delete();
+        $this->activity->where('content_id', $event->comment['id'])->where('content_type', Post\Comment::class)->delete();
     }
 
     /**
@@ -92,6 +98,11 @@ class ActivitySubscriber implements ShouldQueue
         $events->listen(
             PostWasDeleted::class,
             'Coyote\Listeners\ActivitySubscriber@onPostDeleted'
+        );
+
+        $events->listen(
+            TopicWasDeleted::class,
+            'Coyote\Listeners\ActivitySubscriber@onTopicDeleted'
         );
 
         $events->listen(

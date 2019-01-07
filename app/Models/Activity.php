@@ -14,7 +14,7 @@ class Activity extends Model
     /**
      * @var array
      */
-    protected $fillable = ['forum_id', 'user_id', 'topic_id', 'content_type', 'content_id', 'excerpt', 'user_name'];
+    protected $fillable = ['created_at', 'forum_id', 'user_id', 'topic_id', 'content_type', 'content_id', 'excerpt', 'user_name'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
