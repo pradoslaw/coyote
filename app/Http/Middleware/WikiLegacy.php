@@ -17,7 +17,7 @@ class WikiLegacy extends AbstractMiddleware
         /** @var \Illuminate\Http\Response $response */
         $response = $next($request);
 
-        if ($response->original === null) {
+        if ($response->original === null || is_string($response->original)) {
             return $response;
         }
 
