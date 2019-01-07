@@ -116,6 +116,7 @@ class SubmitForm extends Form
             $this->addAfter('text', 'template', 'select', [
                 'label' => 'Szablon',
                 'choices' => $this->getTemplateList(),
+                'rules' => 'in:' . implode(',', array_keys($this->getTemplateList())),
                 'help' => 'Ten widok Twig zostanie użyty do wyświetlenia tej strony.'
             ]);
         }
