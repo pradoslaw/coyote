@@ -27,12 +27,13 @@ class PageRepository extends Repository implements PageRepositoryInterface
      * @param $content
      * @return mixed
      */
-    public function findByContent($id, $content)
+    public function deleteByContent($id, $content)
     {
-        // we use firstOrNew() because we don't want to return NULL
         return $this
             ->model
-            ->firstOrNew(['content_id' => $id, 'content_type' => $content]);
+            ->where('content_id', $id)
+            ->where('content_type', $content)
+            ->delete();
     }
 
     /**

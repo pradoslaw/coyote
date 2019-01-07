@@ -91,7 +91,7 @@ class PageListener implements ShouldQueue
      */
     public function onTopicDelete(TopicWasDeleted $event)
     {
-        $this->page->findByContent($event->topic['id'], Topic::class)->delete();
+        $this->page->deleteByContent($event->topic['id'], Topic::class);
     }
 
     /**
@@ -113,7 +113,7 @@ class PageListener implements ShouldQueue
      */
     public function onForumDelete(ForumWasDeleted $event)
     {
-        $this->page->findByContent($event->forum['id'], Forum::class)->delete();
+        $this->page->deleteByContent($event->forum['id'], Forum::class);
     }
 
     /**
@@ -136,7 +136,7 @@ class PageListener implements ShouldQueue
      */
     public function onMicroblogDelete(MicroblogWasDeleted $event)
     {
-        $this->page->findByContent($event->microblog['id'], Microblog::class)->delete();
+        $this->page->deleteByContent($event->microblog['id'], Microblog::class);
     }
 
     /**
@@ -161,7 +161,7 @@ class PageListener implements ShouldQueue
      */
     public function onJobDelete(JobDeleted $event)
     {
-        $this->page->findByContent($event->job['id'], Job::class)->delete();
+        $this->page->deleteByContent($event->job['id'], Job::class);
     }
 
     /**
@@ -185,7 +185,7 @@ class PageListener implements ShouldQueue
      */
     public function onWikiDelete(WikiWasDeleted $event)
     {
-        $this->page->findByContent($event->wiki['id'], Wiki::class)->delete();
+        $this->page->deleteByContent($event->wiki['id'], Wiki::class);
     }
 
     /**

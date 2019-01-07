@@ -15,7 +15,7 @@ interface PageRepositoryInterface extends RepositoryInterface
      * @param $content
      * @return mixed
      */
-    public function findByContent($id, $content);
+    public function deleteByContent($id, $content);
 
     /**
      * Build query for sitemap.
