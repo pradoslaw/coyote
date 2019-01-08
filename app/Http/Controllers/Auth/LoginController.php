@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\LoginForm;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Logout as Stream_Logout;
@@ -15,27 +15,27 @@ use Coyote\Services\Stream\Actor;
 
 class LoginController extends Controller
 {
-    use ThrottlesLogins;
+    use AuthenticatesUsers{
+        logout as traitLogout;
+        sendFailedLoginResponse as traitSendFailedLoginResponse;
+    }
+
+    protected $redirectTo = '/';
 
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('guest', ['except' => 'signout']);
+        $this->middleware('guest', ['except' => 'logout']);
     }
 
     /**
      * Widok formularza logowania
      *
-     * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
         $this->breadcrumb->push('Logowanie', route('login'));
-
-        if (!$request->session()->has('url.intended')) {
-            $request->session()->put('url.intended', url()->previous());
-        }
 
         $form = $this->createForm(LoginForm::class, null, [
             'url' => route('login')
@@ -45,58 +45,71 @@ class LoginController extends Controller
     }
 
     /**
-     * Logowanie uzytkownika
+     * The user has been authenticated.
      *
-     * @param LoginForm $form
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        // put information into the activity stream...
+        stream(Stream_Login::class);
+
+        // send notification about new signin
+        event(new SuccessfulLogin($user, $request->ip(), substr((string) $request->header('User-Agent'), 0, 900)));
+    }
+
+    /**
+     * Get the failed login response instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function signin(LoginForm $form)
+    protected function sendFailedLoginResponse(Request $request)
     {
-        $user = $form->getUser();
+        // put failed action to activity stream
+        stream((new Stream_Throttle(new Actor()))->setLogin($request->input($this->username())));
 
-        if (auth()->attempt(['name' => $user->name, 'password' => $form->password->getValue()], true)) {
-            // put information into the activity stream...
-            stream(Stream_Login::class);
-            // send notification about new signin
-            $this->fireSuccessfulLoginEvent($form->getRequest());
+        $this->traitSendFailedLoginResponse($request);
+    }
 
-            return redirect()->intended(route('home'));
-        }
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        $form = $this->createForm(LoginForm::class, $request->all());
+        $form->validate();
+    }
 
-        $lockedOut = $this->hasTooManyLoginAttempts($form->getRequest());
-
-        if ($lockedOut) {
-            $this->fireLockoutEvent($form->getRequest());
-
-            return $this->sendLockoutResponse($form->getRequest());
-        } else {
-            // If the login attempt was unsuccessful we will increment the number of attempts
-            // to login and redirect the user back to the login form. Of course, when this
-            // user surpasses their maximum number of attempts they will get locked out.
-            $this->incrementLoginAttempts($form->getRequest());
-
-            // put failed action to activity stream
-            stream((new Stream_Throttle(new Actor()))->setLogin($user->name));
-        }
-
-        return back()->withInput()->withErrors(['password' => 'Podane hasło jest nieprawidłowe.']);
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        return $this->guard()->attempt(
+            $this->credentials($request), true
+        );
     }
 
     /**
      * Wylogowanie uzytkownika
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
-    public function signout(Request $request)
+    public function logout(Request $request)
     {
-        // user already logged out?
-        if (!$this->auth) {
-            return back();
-        }
-
         $this->auth->ip = $request->ip();
         // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $this->auth->browser = $request->browser();
@@ -108,7 +121,17 @@ class LoginController extends Controller
 
         stream(Stream_Logout::class);
 
-        auth()->logout();
+        return $this->traitLogout($request);
+    }
+
+    /**
+     * The user has logged out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
+     */
+    protected function loggedOut()
+    {
         return back();
     }
 
@@ -130,19 +153,5 @@ class LoginController extends Controller
     protected function maxLoginAttempts()
     {
         return 3;
-    }
-
-    /**
-     * @param Request $request
-     */
-    private function fireSuccessfulLoginEvent(Request $request)
-    {
-        event(
-            new SuccessfulLogin(
-                auth()->user(),
-                $request->ip(),
-                substr((string) $request->header('User-Agent'), 0, 900)
-            )
-        );
     }
 }

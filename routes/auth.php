@@ -2,8 +2,8 @@
 
 /** @var $this \Illuminate\Routing\Router */
 $this->get('Login', ['uses' => 'Auth\LoginController@index', 'as' => 'login']);
-$this->post('Login', 'Auth\LoginController@signin');
-$this->post('Logout', ['uses' => 'Auth\LoginController@signout', 'as' => 'logout']);
+$this->post('Login', 'Auth\LoginController@login');
+$this->post('Logout', ['uses' => 'Auth\LoginController@logout', 'as' => 'logout']);
 
 // rejestracja uzytkownika
 $this->get('Register', ['uses' => 'Auth\RegisterController@index', 'as' => 'register']);

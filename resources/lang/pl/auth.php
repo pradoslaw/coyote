@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
+    'failed' => 'Podane hasło nie jest prawidłowe.',
     'throttle' => 'Zbyt dużo nieudanych prób logowania. Spróbuj ponownie za :seconds sekund.',
 
 ];

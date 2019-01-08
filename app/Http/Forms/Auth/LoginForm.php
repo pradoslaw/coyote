@@ -4,10 +4,9 @@ namespace Coyote\Http\Forms\Auth;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\FormBuilder\Form;
-use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
-class LoginForm extends Form implements ValidatesWhenSubmitted
+class LoginForm extends Form
 {
     /**
      * @var string
