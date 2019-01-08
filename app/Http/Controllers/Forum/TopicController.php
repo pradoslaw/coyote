@@ -48,18 +48,19 @@ class TopicController extends BaseController
         // number of posts per one page
         $perPage = $this->postsPerPage($request);
 
-        // user wants to show certain post. we need to calculate page number based on post id.
-        if ($request->filled('p')) {
-            $page = $this->post->getPage(min(2147483647, (int) $request->get('p')), $topic->id, $perPage);
-        }
-
         // user with forum-update ability WILL see every post
+        // NOTE: criteria MUST BE pushed before calling getPage() method!
         if ($this->gate->allows('delete', $forum)) {
             $this->post->pushCriteria(new WithTrashed());
             $this->post->pushCriteria(new WithTrashedInfo());
 
             // user is able to see real number of posts in this topic
             $replies = $topic->replies_real;
+        }
+
+        // user wants to show certain post. we need to calculate page number based on post id.
+        if ($request->filled('p')) {
+            $page = $this->post->getPage(min(2147483647, (int) $request->get('p')), $topic->id, $perPage);
         }
 
         // build "more like this" block. it's important to send elasticsearch query before

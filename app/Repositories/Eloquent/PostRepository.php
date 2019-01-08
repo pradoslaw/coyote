@@ -85,7 +85,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
     public function getPage($postId, $topicId, $perPage = 10)
     {
         $count = $this->applyCriteria(function () use ($topicId, $postId) {
-            return $this->model->where('topic_id', $topicId)->where('id', '<', $postId)->count();
+            return $this->model->where('topic_id', $topicId)->where('posts.id', '<', $postId)->count();
         });
 
         return max(0, floor(($count - 1) / $perPage)) + 1;
