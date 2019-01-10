@@ -11,7 +11,7 @@ class Comment extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'job_id', 'user_name', 'parent_id', 'text'];
+    protected $fillable = ['user_id', 'job_id', 'email', 'parent_id', 'text'];
 
     /**
      * The database table used by the model.
