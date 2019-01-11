@@ -10,15 +10,12 @@ Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 
 * PHP 7
     * php-gd
-    * php-mongodb
     * php-mcrypt
     * php-curl
     * php-mbstring
     * php-pgsql
-    * php-mongodb
     * php-xml
 * PostgreSQL >= 9.4
-* MongoDB >= 2.7
 * composer
 * node.js
 * npm
@@ -32,10 +29,10 @@ Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 
 ## Instalacja
 
-1. `sudo apt-get -y install php-gd php-mbstring php-mcrypt php-pear php-curl php-mongodb php-pgsql php-xml`
+1. `sudo apt-get -y install php-gd php-mbstring php-mcrypt php-pear php-curl php-pgsql php-xml`
 2. `git clone https://github.com/adam-boduch/coyote.git .`
 3. `psql -c 'create database coyote;' -U postgres`
-4. `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL oraz MongoDB)
+4. `cp .env.default .env` (plik .env zawiera konfiguracje bazy danych PostgreSQL)
 5. `make install` (na produkcji) lub `make install-dev` (bez minifikacji JS oraz CSS)
 6. `php artisan key:generate` (generowanie unikalnego klucza, który posłuży do szyfrowania danych)
 

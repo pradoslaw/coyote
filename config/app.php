@@ -239,8 +239,6 @@ return [
         // Mozliwosc logowania przez github, fb, google...
         Laravel\Socialite\SocialiteServiceProvider::class,
 
-        // Obsluga MongoDB w Laravel
-        Jenssegers\Mongodb\MongodbServiceProvider::class,
         // Pakiet do budowania menu
         Lavary\Menu\ServiceProvider::class,
         // Parsowanie user agent

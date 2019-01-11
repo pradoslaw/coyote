@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa6e1d428aa4979845bb58acc64304ab",
+    "content-hash": "57a6b7f5f66c5e5d4784138fa1778d88",
     "packages": [
         {
             "name": "adam-boduch/geshi",
@@ -1894,75 +1894,6 @@
             "time": "2017-11-10T10:35:35+00:00"
         },
         {
-            "name": "jenssegers/mongodb",
-            "version": "v3.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jenssegers/laravel-mongodb.git",
-                "reference": "9df6d1ef542463aef676013b60152e812e805f77"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jenssegers/laravel-mongodb/zipball/9df6d1ef542463aef676013b60152e812e805f77",
-                "reference": "9df6d1ef542463aef676013b60152e812e805f77",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/container": "^5.6",
-                "illuminate/database": "^5.6",
-                "illuminate/events": "^5.6",
-                "illuminate/support": "^5.6",
-                "mongodb/mongodb": "^1.0.0"
-            },
-            "require-dev": {
-                "doctrine/dbal": "^2.5",
-                "mockery/mockery": "^1.0",
-                "orchestra/testbench": "^3.1",
-                "phpunit/phpunit": "^6.0|^7.0",
-                "satooshi/php-coveralls": "^2.0"
-            },
-            "suggest": {
-                "jenssegers/mongodb-sentry": "Add Sentry support to Laravel-MongoDB",
-                "jenssegers/mongodb-session": "Add MongoDB session support to Laravel-MongoDB"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Jenssegers\\Mongodb\\MongodbServiceProvider",
-                        "Jenssegers\\Mongodb\\MongodbQueueServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Jenssegers\\Mongodb": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jens Segers",
-                    "homepage": "https://jenssegers.com"
-                }
-            ],
-            "description": "A MongoDB based Eloquent model and Query builder for Laravel (Moloquent)",
-            "homepage": "https://github.com/jenssegers/laravel-mongodb",
-            "keywords": [
-                "database",
-                "eloquent",
-                "laravel",
-                "model",
-                "moloquent",
-                "mongo",
-                "mongodb"
-            ],
-            "time": "2018-11-29T12:08:20+00:00"
-        },
-        {
             "name": "jeremeamia/SuperClosure",
             "version": "2.4.0",
             "source": {
@@ -2825,71 +2756,6 @@
                 "php mobile detect"
             ],
             "time": "2018-09-01T15:05:15+00:00"
-        },
-        {
-            "name": "mongodb/mongodb",
-            "version": "1.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mongodb/mongo-php-library.git",
-                "reference": "bd148eab0493e38354e45e2cd7db59b90fdcad79"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mongodb/mongo-php-library/zipball/bd148eab0493e38354e45e2cd7db59b90fdcad79",
-                "reference": "bd148eab0493e38354e45e2cd7db59b90fdcad79",
-                "shasum": ""
-            },
-            "require": {
-                "ext-hash": "*",
-                "ext-json": "*",
-                "ext-mongodb": "^1.5.0",
-                "php": ">=5.5"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.36 || ^6.4"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.4.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "MongoDB\\": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Jeremy Mikola",
-                    "email": "jmikola@gmail.com"
-                },
-                {
-                    "name": "Derick Rethans",
-                    "email": "github@derickrethans.nl"
-                },
-                {
-                    "name": "Katherine Walker",
-                    "email": "katherine.walker@mongodb.com"
-                }
-            ],
-            "description": "MongoDB driver library",
-            "homepage": "https://jira.mongodb.org/browse/PHPLIB",
-            "keywords": [
-                "database",
-                "driver",
-                "mongodb",
-                "persistence"
-            ],
-            "time": "2018-07-18T14:33:41+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -8310,8 +8176,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.2.0",
-        "ext-gd": "*",
-        "ext-mongodb": "*"
+        "ext-gd": "*"
     },
     "platform-dev": []
 }

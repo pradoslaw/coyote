@@ -47,7 +47,7 @@ class MoveController extends BaseController
                 $reason = Reason::find($request->get('reason'));
             }
 
-            // first, create object. we will save it in mongodb.
+            // first, create object. we will save it in db.
             $object = (new Stream_Topic())->map($topic);
 
             // then, set a new forum id

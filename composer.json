@@ -24,7 +24,6 @@
     "require": {
         "php": ">=7.2.0",
         "ext-gd": "*",
-        "ext-mongodb": "*",
         "laravel/framework": "5.7.*",
         "rcrowe/twigbridge": "0.9.*",
         "laravelcollective/html": "5.7.*",
@@ -33,7 +32,6 @@
         "laravel/socialite": "^3.0",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.0",
-        "jenssegers/mongodb": "^3.1",
         "ezyang/htmlpurifier": "^4.7",
         "lavary/laravel-menu": "1.7.1",
         "elasticsearch/elasticsearch": "~5.0",

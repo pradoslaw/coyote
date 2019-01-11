@@ -74,11 +74,6 @@ class AppServiceProvider extends ServiceProvider
             return str_replace(':host', implode(', ', $parameters), $message);
         });
 
-        if (strpos(php_sapi_name(), 'cli') === false) {
-            // show mongodb queries in laravel debugbar
-            $this->app['db']->connection('mongodb')->enableQueryLog();
-        }
-
         $this->registerMacros();
         Paginator::useBootstrapThree();
     }
