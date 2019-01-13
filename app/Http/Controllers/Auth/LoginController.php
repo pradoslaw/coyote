@@ -22,6 +22,16 @@ class LoginController extends Controller
 
     protected $redirectTo = '/';
 
+    /**
+     * @var int
+     */
+    protected $maxAttempts = 3;
+
+    /**
+     * @var int
+     */
+    protected $decayMinutes = 5;
+
     public function __construct()
     {
         parent::__construct();
@@ -143,15 +153,5 @@ class LoginController extends Controller
     public function username()
     {
         return 'name';
-    }
-
-    /**
-     * Get the maximum number of login attempts for delaying further attempts.
-     *
-     * @return int
-     */
-    protected function maxLoginAttempts()
-    {
-        return 3;
     }
 }
