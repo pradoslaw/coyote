@@ -46,7 +46,6 @@ class SendSuccessfulLoginEmail implements ShouldQueue
      */
     public function handle(SuccessfulLogin $event)
     {
-        /** @var \Coyote\User $event->user */
         if (!$event->user->alert_login || !$event->user->visits || !$event->user->is_confirm) {
             return;
         }
