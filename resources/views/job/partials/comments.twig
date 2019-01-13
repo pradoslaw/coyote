@@ -1,0 +1,24 @@
+<div id="app">
+    <h4>Pytania i odpowiedzi</h4>
+
+    <div class="row">
+        <div class="col-sm-1">
+            <a href="{{ route('profile', [user('id')]) }}">
+                <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
+            </a>
+        </div>
+
+        <div class="col-sm-11">
+            {{ form_open({url: route('job.comment', {job: job.id}), method: 'post'}) }}
+
+                <textarea name="text" class="form-control" placeholder="Kliknij, aby dodać komentarz"></textarea>
+
+            {{ form_close() }}
+        </div>
+    </div>
+
+    <vue-comment v-for="comment in comments" :comment="comment"></vue-comment>
+</div>
+
+
+

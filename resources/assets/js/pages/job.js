@@ -2,6 +2,15 @@ import '../components/subscribe';
 import '../plugins/tags';
 import Config from '../libs/config';
 
+new Vue({
+    el: '#app',
+    delimiters: ['${', '}'],
+    components: {
+        'vue-comment': require('../components/comment.vue')
+    },
+    data: window.data
+});
+
 class Filter {
     constructor(form) {
         this.form = $(form);

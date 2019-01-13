@@ -84,6 +84,9 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     $this->get('Oferta', ['uses' => 'BusinessController@show', 'as' => 'business']);
 
+    $this->get('Comment/{job}/{id?}', ['uses' => 'CommentController@edit', 'as' => 'comment']);
+    $this->post('Comment/{job}/{id?}', ['uses' => 'CommentController@save']);
+
     // Job's ads
     // --------------------------------------------------------------
     $this->get('recommendations', ['uses' => 'AdController@index', 'as' => 'ad']);

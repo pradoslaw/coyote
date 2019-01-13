@@ -126,3 +126,42 @@ function capitalize($string)
 {
     return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
 }
+
+/**
+ * @param string|\Carbon\Carbon $dateTime
+ * @param bool $diffForHumans
+ * @return string
+ */
+function format_date($dateTime, $diffForHumans = true) {
+    $format = auth()->check() ? auth()->user()->date_format : '%Y-%m-%d %H:%M';
+
+    $dateTime = carbon($dateTime);
+    $now = \Carbon\Carbon::now();
+
+    if (!$diffForHumans) {
+        return $dateTime->formatLocalized($format);
+    } elseif ($dateTime->diffInHours($now) < 1) {
+        return $dateTime->diffForHumans(null, true) . ' temu';
+    } elseif ($dateTime->isToday()) {
+        return 'dziś, ' . $dateTime->format('H:i');
+    } elseif ($dateTime->isYesterday()) {
+        return 'wczoraj, ' . $dateTime->format('H:i');
+    } else {
+        return $dateTime->formatLocalized($format);
+    }
+}
+
+/**
+ * @param $dateTime
+ * @return \Carbon\Carbon
+ */
+function carbon($dateTime)
+{
+    if (is_null($dateTime)) {
+        $dateTime = new \Carbon\Carbon();
+    } elseif (!$dateTime instanceof \Carbon\Carbon) {
+        $dateTime = new \Carbon\Carbon($dateTime);
+    }
+
+    return $dateTime;
+}

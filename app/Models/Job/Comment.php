@@ -1,9 +1,18 @@
 <?php
 
-namespace Coyote\Models\Job;
+namespace Coyote\Job;
 
+use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property User $user
+ * @property int $user_id
+ * @property int $job_id
+ * @property int $parent_id
+ * @property string $email
+ * @property string $text
+ */
 class Comment extends Model
 {
     /**
@@ -20,4 +29,11 @@ class Comment extends Model
      */
     protected $table = 'job_comments';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

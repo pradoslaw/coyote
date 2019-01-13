@@ -42,9 +42,9 @@ class DateTime extends Twig_Extension
      */
     public function diffInMonths($dateTime, $now = null)
     {
-        $dateTime = $this->toCarbon($dateTime);
+        $dateTime = carbon($dateTime);
 
-        return $this->toCarbon($now)->diffInMonths($dateTime);
+        return carbon($now)->diffInMonths($dateTime);
     }
 
     /**
@@ -54,9 +54,9 @@ class DateTime extends Twig_Extension
      */
     public function diffInDays($dateTime, $now = null)
     {
-        $dateTime = $this->toCarbon($dateTime);
+        $dateTime = carbon($dateTime);
 
-        return $this->toCarbon($now)->diffInDays($dateTime);
+        return carbon($now)->diffInDays($dateTime);
     }
 
     /**
@@ -68,54 +68,24 @@ class DateTime extends Twig_Extension
     {
         return [
             new Twig_SimpleFilter('format_date', function ($dateTime, $diffForHumans = true) {
-                $format = auth()->check() ? auth()->user()->date_format : '%Y-%m-%d %H:%M';
-
-                $dateTime = $this->toCarbon($dateTime);
-                $now = Carbon::now();
-
-                if (!$diffForHumans) {
-                    return $dateTime->formatLocalized($format);
-                } elseif ($dateTime->diffInHours($now) < 1) {
-                    return $dateTime->diffForHumans(null, true) . ' temu';
-                } elseif ($dateTime->isToday()) {
-                    return 'dziś, ' . $dateTime->format('H:i');
-                } elseif ($dateTime->isYesterday()) {
-                    return 'wczoraj, ' . $dateTime->format('H:i');
-                } else {
-                    return $dateTime->formatLocalized($format);
-                }
+                return format_date($dateTime, $diffForHumans);
             }),
 
             new Twig_SimpleFilter('timestamp', function ($dateTime) {
-                return $this->toCarbon($dateTime)->getTimestamp();
+                return carbon($dateTime)->getTimestamp();
             }),
 
             new Twig_SimpleFilter('iso_8601', function ($dateTime) {
-                return $this->toCarbon($dateTime)->format(Carbon::ISO8601);
+                return carbon($dateTime)->format(Carbon::ISO8601);
             }),
 
             new Twig_SimpleFilter('diff_for_humans', function ($dateTime) {
-                return $this->toCarbon($dateTime)->diffForHumans();
+                return carbon($dateTime)->diffForHumans();
             }),
 
             new Twig_SimpleFilter('date_localized', function ($dateTime, $format) {
-                return $this->toCarbon($dateTime)->formatLocalized($format);
+                return carbon($dateTime)->formatLocalized($format);
             })
         ];
-    }
-
-    /**
-     * @param $dateTime
-     * @return Carbon
-     */
-    private function toCarbon($dateTime)
-    {
-        if (is_null($dateTime)) {
-            $dateTime = new Carbon();
-        } elseif (!$dateTime instanceof Carbon) {
-            $dateTime = new Carbon($dateTime);
-        }
-
-        return $dateTime;
     }
 }

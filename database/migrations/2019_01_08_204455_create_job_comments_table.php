@@ -20,8 +20,8 @@ class CreateJobCommentsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->integer('job_id');
-            $table->integer('user_id');
-            $table->string('email');
+            $table->integer('user_id')->nullable();
+            $table->string('email')->nullable();
             $table->text('text');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
