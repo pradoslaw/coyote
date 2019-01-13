@@ -11,8 +11,8 @@
                 </button>
 
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
-                    <li><a href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
+                    <li><a @click="edit" href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
+                    <li><a v-on:click="remove" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
                 </ul>
             </div>
 
@@ -24,6 +24,10 @@
 
             <div class="comment-content margin-sm-top">
                 {{ comment.html }}
+
+                <form method="post" v-on:submit.prevent="submitForm">
+                    <textarea name="text">{{ comment.text}}</textarea>
+                </form>
             </div>
 
             <ul class="list-unstyled">

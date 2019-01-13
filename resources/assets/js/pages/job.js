@@ -1,6 +1,9 @@
 import '../components/subscribe';
 import '../plugins/tags';
 import Config from '../libs/config';
+import VueResource from "vue-resource";
+
+Vue.use(VueResource);
 
 new Vue({
     el: '#comments',
@@ -8,7 +11,24 @@ new Vue({
     components: {
         'vue-comment': require('../components/comment.vue')
     },
-    data: window.data
+    data: window.data,
+    methods: {
+        submitForm: function (e) {
+            this.$http.post(e.target.action, new FormData(e.target)).then(response => {
+                this.comments.unshift(response.data);
+            }, error => {
+                // error callback
+            });
+        },
+
+        edit: function () {
+
+        },
+
+        remove: function () {
+
+        }
+    }
 });
 
 class Filter {
