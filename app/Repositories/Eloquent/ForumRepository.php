@@ -104,16 +104,6 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * Get restricted access forums.
-     *
-     * @return int[]
-     */
-    public function getRestricted()
-    {
-        return (new Forum\Access)->groupBy('forum_id')->get(['forum_id'])->pluck('forum_id')->toArray();
-    }
-
-    /**
      * @inheritdoc
      */
     public function list()

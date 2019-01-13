@@ -1,23 +1,32 @@
-<div id="app">
+<div id="comments">
     <h4>Pytania i odpowiedzi</h4>
 
-    <div class="row">
-        <div class="col-sm-1">
-            <a href="{{ route('profile', [user('id')]) }}">
-                <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
-            </a>
-        </div>
+    <div class="panel panel-default">
 
-        <div class="col-sm-11">
-            {{ form_open({url: route('job.comment', {job: job.id}), method: 'post'}) }}
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-left">
+                    <a href="{{ route('profile', [user('id')]) }}">
+                        <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail media-object">
+                    </a>
+                </div>
 
-                <textarea name="text" class="form-control" placeholder="Kliknij, aby dodać komentarz"></textarea>
+                <div class="media-body">
+                    {{ form_open({url: route('job.comment', {job: job.id}), method: 'post'}) }}
 
-            {{ form_close() }}
+                    <textarea name="text" class="form-control" placeholder="Kliknij, aby dodać komentarz"></textarea>
+
+                    {{ form_close() }}
+                </div>
+            </div>
         </div>
     </div>
 
-    <vue-comment v-for="comment in comments" :comment="comment"></vue-comment>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <vue-comment v-for="comment in comments" :comment="comment"></vue-comment>
+        </div>
+    </div>
 </div>
 
 

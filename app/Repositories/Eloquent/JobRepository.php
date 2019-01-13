@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Str;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Query\JoinClause;
 
 /**
@@ -198,6 +199,26 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->limit(5)
             ->pluck('name')
             ->toArray();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getComments(int $jobId)
+    {
+        $sql = "WITH RECURSIVE tree AS (
+                  (SELECT * FROM job_comments WHERE job_id = ? and parent_id IS NULL ORDER BY job_comments.id DESC)
+                
+                  UNION ALL
+                
+                  SELECT job_comments.* FROM job_comments, tree WHERE job_comments.parent_id = tree.id
+                )
+                SELECT * FROM tree";
+
+        $db = $this->app->make(Connection::class);
+        $result = $db->select($sql, [$jobId]);
+
+        return Job\Comment::hydrate($result)->load('user');
     }
 
     /**

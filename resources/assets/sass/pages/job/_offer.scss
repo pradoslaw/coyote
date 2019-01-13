@@ -237,3 +237,31 @@
     column-count:         1;
   }
 }
+
+#comments {
+  .indent {
+    margin-left: 50px;
+  }
+
+  .media-object {
+    width: 40px;
+  }
+
+  .media-body {
+    border-bottom: 1px solid $border-color;
+  }
+
+  .list-unstyled {
+    margin-top: 10px;
+    font-size: 11px;
+  }
+
+  h5 {
+    margin: 1px 0 0 0;
+    font-size: 14px;
+  }
+
+  h6 {
+    margin: 6px 0 0 0;
+  }
+}

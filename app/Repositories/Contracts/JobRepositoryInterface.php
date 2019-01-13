@@ -2,6 +2,8 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Job\Comment;
+
 /**
  * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
  * @method $this withTrashed()
@@ -70,6 +72,12 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return array
      */
     public function getTagSuggestions(array $tags): array;
+
+    /**
+     * @param int $jobId
+     * @return Comment[]
+     */
+    public function getComments(int $jobId);
 
     /**
      * @param int $userId

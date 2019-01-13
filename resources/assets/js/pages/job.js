@@ -3,7 +3,7 @@ import '../plugins/tags';
 import Config from '../libs/config';
 
 new Vue({
-    el: '#app',
+    el: '#comments',
     delimiters: ['${', '}'],
     components: {
         'vue-comment': require('../components/comment.vue')

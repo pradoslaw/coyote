@@ -1,37 +1,34 @@
 <template>
-    <div class="row">
-        <div class="col-sm-1 hidden-xs">
-
+    <div :id="'comment-' + comment.id" class="media" :class="comment.parent_id ? 'indent' : ''">
+        <div class="media-left">
+            <img :src="comment.user.photo" class="img-thumbnail media-object">
         </div>
 
-        <div class="col-sm-11">
-            <div class="panel panel-transparent">
-                <div class="panel-body comment">
-                    <div class="dropdown pull-right">
-                        <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                        </button>
+        <div class="media-body">
+            <div class="dropdown pull-right">
+                <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
 
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
-                            <li><a href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
-                        </ul>
-                    </div>
-
-                    <ul class="list-inline">
-                        <li>
-                            <a :href="comment.user.profile" :data-user-id="comment.user.id">{{ comment.user.name }}</a>
-                        </li>
-                        <li>
-                            <a href="javascript:" class="timestamp" :data-timestamp="comment.timestamp">{{ comment.created_at }}</a>
-                        </li>
-                    </ul>
-
-                    <div class="comment-content">
-                        {{ comment.html }}
-                    </div>
-                </div>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
+                    <li><a href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
+                </ul>
             </div>
+
+            <div class="media-heading">
+                <h5><a :href="comment.user.profile" :data-user-id="comment.user.id">{{ comment.user.name }}</a></h5>
+
+                <h6><a :href="'#comment-' + comment.id" class="text-muted timestamp" :data-timestamp="comment.timestamp">{{ comment.created_at }}</a></h6>
+            </div>
+
+            <div class="comment-content margin-sm-top">
+                {{ comment.html }}
+            </div>
+
+            <ul class="list-unstyled">
+                <li><a href="#" class="text-muted">Odpowiedz</a></li>
+            </ul>
         </div>
     </div>
 </template>
