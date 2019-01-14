@@ -3,6 +3,7 @@
 namespace Coyote\Services\Elasticsearch\Builders\Stream;
 
 use Coyote\Services\Elasticsearch\Filters\Term;
+use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Sort;
 use Illuminate\Http\Request;
@@ -32,6 +33,10 @@ class AdmBuilder extends QueryBuilder
     {
         $this->buildSort();
         $this->buildSize();
+
+        if ($this->request->filled('text')) {
+            $this->must(new MultiMatch($this->request->input('text'), ['_all', ]));
+        }
 
         foreach (['ip', 'browser', 'fingerprint'] as $inputKey) {
             if ($this->request->filled($inputKey)) {

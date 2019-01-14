@@ -4,14 +4,27 @@
 {% block container %}
     {% if paginator.items() > 0 %}
         <div class="panel panel-default margin-md-top">
-            <div class="panel-heading">
-                {{ form(form) }}
-            </div>
-
             <div class="panel-body">
-                {{ form_open() }}
+                {{ form_start(form) }}
+                    {{ form_row(form.text) }}
 
-                {{ form_close() }}
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-4">
+                            <a class="text-primary" role="button" data-toggle="collapse" href="#advance" aria-expanded="false" aria-controls="collapseExample">
+                                Szukanie zaawansowane
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="collapse" id="advance">
+                        {{ form_row(form.ip) }}
+                        {{ form_row(form.browser) }}
+                        {{ form_row(form.fingerprint) }}
+                        {{ form_row(form.actor_displayName) }}
+                    </div>
+
+                    {{ form_row(form.submit) }}
+                {{ form_end() }}
 
                 <div class="text-center">{{ paginator.render()|raw }}</div>
 

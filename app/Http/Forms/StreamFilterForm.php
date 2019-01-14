@@ -14,29 +14,26 @@ class StreamFilterForm extends Form implements ValidatesWhenSubmitted
         'method' => self::GET
     ];
 
-    /**
-     * @var string
-     */
-    protected $theme = 'forms.themes.filter';
-
     public function buildForm()
     {
         $this
             ->setAttr(['id' => 'stream-filter-form'])
-            ->add('ip', 'text', [
+            ->add('text', 'search', [
+                'label' => 'Szukana fraza'
+            ])
+            ->add('ip', 'search', [
                 'label' => 'Adres IP'
             ])
-            ->add('browser', 'text', [
-                'label' => 'Przeglądarka',
-                'help' => 'Użyj znaku * aby wyszukiwać po fragmencie tekstu.'
+            ->add('browser', 'search', [
+                'label' => 'Przeglądarka'
             ])
-            ->add('actor_displayName', 'text', [
+            ->add('actor_displayName', 'search', [
                 'label' => 'Użytkownik',
                 'attr' => [
                     'autocomplete' => 'off'
                 ]
             ])
-            ->add('fingerprint', 'text', [
+            ->add('fingerprint', 'search', [
                 'label' => 'Fingerprint'
             ])
             ->add('submit', 'submit', [

@@ -91,7 +91,7 @@ trait RenderTrait
                 sprintf('Can\'t find field view %s to render %s element.', $view, class_basename($this))
             );
         }
-        
+
         return view($view, $data);
     }
 }
