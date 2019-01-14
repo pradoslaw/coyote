@@ -56,6 +56,7 @@ use Ramsey\Uuid\Uuid;
  * @property string $access_ip
  * @property \Coyote\Services\Media\MediaInterface $photo
  * @property bool $is_online
+ * @property bool $alert_login
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {

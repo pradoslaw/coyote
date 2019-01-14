@@ -10,3 +10,4 @@ modules:
         - Laravel5:
             environment_file: .env
             part: ORM
+        - Mockery

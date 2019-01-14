@@ -46,10 +46,6 @@ class SendSuccessfulLoginEmail implements ShouldQueue
      */
     public function handle(SuccessfulLogin $event)
     {
-        if (!$event->user->alert_login || !$event->user->visits || !$event->user->is_confirm) {
-            return;
-        }
-
         if ($this->shouldSendEmail($event)) {
             $this->sendSuccessfulLoginEmail($event);
         }
@@ -63,7 +59,10 @@ class SendSuccessfulLoginEmail implements ShouldQueue
     {
         // first, check if IP is setup. if not, this means that user logged in for the first time.
         // second: if current ip is same as previous, skip it.
-        if (empty($event->user->ip) || $event->ip == $event->user->ip) {
+        if (empty($event->user->ip)
+            || $event->ip == $event->user->ip
+                || !$event->user->is_confirm
+                    || !$event->user->alert_login) {
             return false;
         }
 
