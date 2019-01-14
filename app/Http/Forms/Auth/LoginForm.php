@@ -19,11 +19,6 @@ class LoginForm extends Form
     protected $userRepository;
 
     /**
-     * @var \Coyote\User
-     */
-    protected $user;
-
-    /**
      * @param UserRepository $userRepository
      */
     public function __construct(UserRepository $userRepository)
@@ -56,14 +51,6 @@ class LoginForm extends Form
     }
 
     /**
-     * @return \Coyote\User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
      * @param ValidationFactory $factory
      * @return \Illuminate\Contracts\Validation\Validator
      */
@@ -72,18 +59,24 @@ class LoginForm extends Form
         $validator = $this->makeValidatorInstance($factory);
 
         $validator->after(function ($validator) {
-            $this->user = $this->userRepository->findByName(mb_strtolower($this->request->get('name')));
+            /** @var \Coyote\User $result */
+            $result = $this->userRepository->findByName($this->request->get('name'));
 
-            if (!$this->user) {
+            if (!$result) {
                 $validator->errors()->add('name', trans('validation.user_exist'));
             } else {
-                if (!$this->user->is_active || $this->user->is_blocked) {
+                if (!$result->is_active || $result->is_blocked) {
                     $validator->errors()->add('name', trans('validation.user_active'));
                 }
 
-                if (!$this->user->hasAccessByIp($this->request->ip())) {
+                if (!$result->hasAccessByIp($this->request->ip())) {
                     $validator->errors()->add('name', trans('validation.user_access'));
                 }
+            }
+
+            // case insensitive login
+            if ($result->name !== $this->request->input('name')) {
+                $this->request->merge(['name' => $result->name]);
             }
         });
 
