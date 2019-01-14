@@ -34,7 +34,8 @@ class Stream extends Model
         'ip',
         'browser',
         'fingerprint',
-        'login'
+        'login',
+        'email'
     ];
 
     /**
