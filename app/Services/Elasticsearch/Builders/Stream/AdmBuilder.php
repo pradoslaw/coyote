@@ -6,6 +6,7 @@ use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Sort;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AdmBuilder extends QueryBuilder
 {
@@ -39,7 +40,7 @@ class AdmBuilder extends QueryBuilder
         }
 
         if ($this->request->filled('actor_displayName')) {
-            $this->must(new Term('actor.displayName', $this->request->input('actor_displayName')));
+            $this->must(new Term('actor.displayName', Str::lower($this->request->input('actor_displayName'))));
         }
 
         return parent::build();
