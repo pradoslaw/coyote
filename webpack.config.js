@@ -1,8 +1,13 @@
 var webpack = require('webpack');
 var path = require('path');
 var env = require('node-env-file');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const WebpackMd5Hash = require("webpack-md5-hash");
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 env(__dirname + '/.env');
 
@@ -11,8 +16,9 @@ function cdn(path) {
 }
 
 module.exports = {
+    mode: "development",
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'
@@ -20,35 +26,21 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['env']
+                use: {
+
+                    loader: 'babel-loader',
                 }
             },
             {
                 test: /\.(sass|scss|css)$/,
-                loader: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
-            },
-            // {
-            //     test: /\.(jpe?g|png|gif|svg)$/i,
-            //     loader: 'file-loader',
-            //     options: {
-            //         context: '/',
-            //         name: '[name].[ext]'
-            //     },
-            // }
+                use: [
+                    "style-loader",
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "sass-loader"
+                ]
+            }
         ],
-        // rules: [
-        //     {
-        //         test: /\.(png|jpg|gif)$/,
-        //         use: [
-        //             {
-        //                 loader: 'file-loader',
-        //                 options: {},
-        //             },
-        //         ],
-        //     },
-        // ],
     },
     output: {
         path: path.join(__dirname, 'public'),
@@ -59,6 +51,27 @@ module.exports = {
     externals: {
         jquery: "jQuery"
     },
+    optimization: {
+        runtimeChunk: "single", // enable "runtime" chunk
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                        name: "vendor",
+                        chunks: "all"
+                }
+            }
+        },
+        minimizer: [
+            new UglifyJsPlugin({
+                sourceMap: process.env.NODE_ENV !== 'production',
+                uglifyOptions: {
+
+                }
+            }),
+            new OptimizeCSSAssetsPlugin({})
+        ]
+    },
     context: path.join(__dirname, 'resources/assets'),
     entry: {
         app: './js/app.js',
@@ -66,7 +79,7 @@ module.exports = {
         microblog: ['./js/pages/microblog.js', './sass/pages/microblog.scss'],
         forum: ['./js/pages/forum.js', './sass/pages/forum.scss'],
         wiki: ['./js/pages/wiki.js', './sass/pages/wiki.scss'],
-        // job: ['./js/pages/job.js', './sass/pages/job.scss'],
+        job: ['./js/pages/job.js', './sass/pages/job.scss'],
         homepage: ['./js/pages/homepage.js', './sass/pages/homepage.scss'],
         pm: './js/pages/pm.js',
         profile: ['./js/pages/profile.js', './sass/pages/profile.scss'],
@@ -75,38 +88,27 @@ module.exports = {
         main: './sass/main.scss',
         auth: './sass/pages/auth.scss',
         help: './sass/pages/help.scss',
-        user: './sass/pages/user.scss',
+        // // user: './sass/pages/user.scss',
         errors: './sass/pages/errors.scss',
         pastebin: './sass/pages/pastebin.scss',
         adm: './sass/pages/adm.scss',
         search: './sass/pages/search.scss'
     },
     plugins: [
-        new webpack.HashedModuleIdsPlugin(),
-        new webpack.optimize.CommonsChunkPlugin({name: "app", minChunks: 2, chunks: ['microblog', 'pm', 'forum', 'wiki', 'job', 'homepage', 'job-submit']}),
 
-        // Extract all 3rd party modules into a separate 'vendor' chunk
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: ({ resource }) => /node_modules/.test(resource),
+        new CleanWebpackPlugin(['public/js/*.*', 'public/css/*.*'], {} ),
+        new MiniCssExtractPlugin({
+            filename: "css/[name]-[contenthash].css"
         }),
 
-        // make sure that hashes won't be changed in every compilation
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'runtime'
-        }),
-
-        // extract CSS to separate file
-        // @todo hash powoduje, ze po kazdej zmianie odwiezane sa hashe WSZYSTKICH plikow CSS
-        // natomiast uzycie chunkhahs powoduje, ze nie jest odswiezany hash na produkcji
-        new ExtractTextPlugin({
-            filename: 'css/[name]-[hash].css'
-        }),
+        new WebpackMd5Hash(),
 
         // build JSON manifest with assets filenames so it can be read in laravel app
         new ManifestPlugin({
             fileName: 'manifest.json'
-        })
+        }),
+
+        // new BundleAnalyzerPlugin(),
     ]
 };
 
@@ -115,11 +117,6 @@ if (process.env.NODE_ENV === 'production') {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: '"production"'
-            }
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
             }
         })
     ]);
