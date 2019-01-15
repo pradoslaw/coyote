@@ -87,7 +87,7 @@ function cdn($path, $secure = null)
         $path = '//' . config('app.cdn') . $path;
     }
 
-    return $path;
+    return asset($path);
 }
 
 /**

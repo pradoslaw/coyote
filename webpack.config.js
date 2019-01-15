@@ -5,7 +5,6 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackMd5Hash = require("webpack-md5-hash");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
@@ -54,11 +53,21 @@ module.exports = {
     optimization: {
         runtimeChunk: "single", // enable "runtime" chunk
         splitChunks: {
+            // chunks: "all",
+            // minSize: 0,
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                        name: "vendor",
-                        chunks: "all"
+                    name: "vendor",
+                    chunks: "all",
+                    priority: 1
+                },
+                utilities: {
+                    test: /\.s?js$/,
+                    minSize: 0,
+                    name: "app",
+                    chunks: "all",
+                    priority: 0
                 }
             }
         },
@@ -107,8 +116,6 @@ module.exports = {
         new ManifestPlugin({
             fileName: 'manifest.json'
         }),
-
-        // new BundleAnalyzerPlugin(),
     ]
 };
 
