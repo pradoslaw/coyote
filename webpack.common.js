@@ -6,8 +6,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackMd5Hash = require("webpack-md5-hash");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-
-
 env(__dirname + '/.env');
 
 function cdn(path) {
@@ -67,16 +65,7 @@ module.exports = {
                     priority: 0
                 }
             }
-        },
-        // minimizer: [
-        //     // new UglifyJsPlugin({
-        //     //     sourceMap: process.env.NODE_ENV !== 'production',
-        //     //     uglifyOptions: {
-        //     //
-        //     //     }
-        //     // }),
-        //     new OptimizeCSSAssetsPlugin({})
-        // ]
+        }
     },
     context: path.join(__dirname, 'resources/assets'),
     entry: {
@@ -115,17 +104,3 @@ module.exports = {
         }),
     ]
 };
-
-if (process.env.NODE_ENV === 'production') {
-    module.exports.plugins = module.exports.plugins.concat([
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: '"production"'
-            }
-        })
-    ]);
-
-    module.exports.devtool = '#hidden-source-map';
-} else {
-    module.exports.devtool = '#source-map';
-}
