@@ -83,7 +83,7 @@ module.exports = {
         main: './sass/main.scss',
         auth: './sass/pages/auth.scss',
         help: './sass/pages/help.scss',
-        // // user: './sass/pages/user.scss',
+        'user-panel': './sass/pages/user.scss',
         errors: './sass/pages/errors.scss',
         pastebin: './sass/pages/pastebin.scss',
         adm: './sass/pages/adm.scss',
