@@ -1,8 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "prod": "gulp --production",
-    "dev": "gulp watch"
+    "prod": "yarn webpack --config webpack.prod.js",
+    "dev": "yarn webpack --config webpack.dev.js",
+    "watch": "yarn webpack --watch --config webpack.prod.js"
   },
   "dependencies": {
     "awesome-bootstrap-checkbox": "0.3.7",
@@ -41,7 +42,8 @@
     "webpack": "4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-manifest-plugin": "^2.0.4",
-    "webpack-md5-hash": "^0.0.6"
+    "webpack-md5-hash": "^0.0.6",
+    "webpack-merge": "^4.2.1"
   },
   "name": "coyote",
   "version": "2.2",

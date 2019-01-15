@@ -5,8 +5,8 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackMd5Hash = require("webpack-md5-hash");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+
+
 
 env(__dirname + '/.env');
 
@@ -15,7 +15,6 @@ function cdn(path) {
 }
 
 module.exports = {
-    mode: "development",
     module: {
         rules: [
             {
@@ -53,8 +52,6 @@ module.exports = {
     optimization: {
         runtimeChunk: "single", // enable "runtime" chunk
         splitChunks: {
-            // chunks: "all",
-            // minSize: 0,
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
@@ -71,15 +68,15 @@ module.exports = {
                 }
             }
         },
-        minimizer: [
-            new UglifyJsPlugin({
-                sourceMap: process.env.NODE_ENV !== 'production',
-                uglifyOptions: {
-
-                }
-            }),
-            new OptimizeCSSAssetsPlugin({})
-        ]
+        // minimizer: [
+        //     // new UglifyJsPlugin({
+        //     //     sourceMap: process.env.NODE_ENV !== 'production',
+        //     //     uglifyOptions: {
+        //     //
+        //     //     }
+        //     // }),
+        //     new OptimizeCSSAssetsPlugin({})
+        // ]
     },
     context: path.join(__dirname, 'resources/assets'),
     entry: {
