@@ -72,11 +72,11 @@ class LoginForm extends Form
                 if (!$result->hasAccessByIp($this->request->ip())) {
                     $validator->errors()->add('name', trans('validation.user_access'));
                 }
-            }
 
-            // case insensitive login
-            if ($result->name !== $this->request->input('name')) {
-                $this->request->merge(['name' => $result->name]);
+                // case insensitive login
+                if ($result->name !== $this->request->input('name')) {
+                    $this->request->merge(['name' => $result->name]);
+                }
             }
         });
 
