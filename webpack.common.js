@@ -4,6 +4,9 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackMd5Hash = require("webpack-md5-hash");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ConcatPlugin = require('webpack-concat-plugin');
+
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 env(__dirname + '/.env');
 
@@ -40,7 +43,8 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'public'),
         filename: 'js/[name]-[chunkhash].js',
-        chunkFilename: 'js/[name]-[chunkhash].js',
+        chunkFilename: 'js/[name].js',
+        // chunkFilename: 'js/[name]-[chunkhash].js',
         publicPath: cdn('/')
     },
     externals: {
@@ -50,19 +54,31 @@ module.exports = {
         runtimeChunk: "single",
         splitChunks: {
             cacheGroups: {
+                // split async vendor modules to async chunks
+                async: {
+                    test: /[\\/]node_modules[\\/]/,
+                    chunks: "async",
+                    minChunks: 1,
+                    minSize: 20000,
+                    priority: 2
+                },
+                // all vendors (except async) goes to vendor.js
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
                     name: "vendor",
                     chunks: "all",
                     priority: 1
                 },
-                utilities: {
+                // all common code across entry points
+                common: {
                     test: /\.s?js$/,
                     minChunks: 2,
-                    name: "utilities",
+                    name: "common",
                     chunks: "all",
-                    priority: 0
-                }
+                    priority: 0,
+                    enforce: true
+                },
+                default: false // overwrite default settings
             }
         }
     },
@@ -100,6 +116,33 @@ module.exports = {
         new ManifestPlugin({
             fileName: 'manifest.json'
         }),
+
+        new ConcatPlugin({
+            uglify: true,
+            sourceMap: false,
+            name: 'jquery-ui.js',
+            fileName: 'js/jquery-ui.js',
+            filesToConcat: [
+                '../../node_modules/jquery-ui.1.11.1/ui/core.js',
+                '../../node_modules/jquery-ui.1.11.1/ui/widget.js',
+                '../../node_modules/jquery-ui.1.11.1/ui/mouse.js',
+                '../../node_modules/jquery-ui.1.11.1/ui/resizable.js',
+                '../../node_modules/jquery-ui.1.11.1/ui/sortable.js',
+            ],
+        }),
+        //
+        // new BundleAnalyzerPlugin()
+        //
+        // new ConcatPlugin({
+        //     // uglify: true,
+        //     sourceMap: false,
+        //     name: 'merged.js',
+        //     fileName: 'js/merged.js',
+        //     filesToConcat: [
+        //         '../../public/js/app',
+        //         '../../public/js/common',
+        //     ],
+        // }),
     ]
 };
 

@@ -40,7 +40,9 @@
     "vue-loader": "14.2.3",
     "vue-template-compiler": "^2.5",
     "webpack": "4.28.4",
+    "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.2.1",
+    "webpack-concat-plugin": "^3.0.0",
     "webpack-manifest-plugin": "^2.0.4",
     "webpack-md5-hash": "^0.0.6",
     "webpack-merge": "^4.2.1"

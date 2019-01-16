@@ -17,6 +17,8 @@ import './components/date.js';
 import './components/vcard.js';
 import './components/popover.js';
 import './components/flag.js';
+import './plugins/geo-ip';
+import './plugins/auto-complete';
 import './bootstrap';
 
 import Config from './libs/config';
