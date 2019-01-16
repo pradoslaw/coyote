@@ -1,5 +1,4 @@
 var path = require('path');
-var env = require('node-env-file');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpackMd5Hash = require("webpack-md5-hash");
@@ -7,12 +6,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ConcatPlugin = require('webpack-concat-plugin');
 
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-env(__dirname + '/.env');
-
-function cdn(path) {
-    return (typeof process.env.CDN != 'undefined' ? ('//' + process.env.CDN) : '') + path;
-}
 
 module.exports = {
     module: {
@@ -45,7 +38,7 @@ module.exports = {
         filename: 'js/[name]-[chunkhash].js',
         // chunkFilename: 'js/[name].js',
         chunkFilename: 'js/[name]-[chunkhash].js',
-        publicPath: cdn('/')
+        publicPath: '/'
     },
     externals: {
         jquery: "jQuery"

@@ -83,11 +83,7 @@ function cdn($path, $secure = null)
         $path = manifest(trim($pathinfo['basename'], '/'));
     }
 
-    if (config('app.cdn')) {
-        $path = '//' . config('app.cdn') . $path;
-    }
-
-    return asset($path);
+    return asset($path, $secure);
 }
 
 /**
