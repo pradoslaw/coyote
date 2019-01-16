@@ -1,4 +1,3 @@
-var webpack = require('webpack');
 var path = require('path');
 var env = require('node-env-file');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -48,7 +47,7 @@ module.exports = {
         jquery: "jQuery"
     },
     optimization: {
-        runtimeChunk: "single", // enable "runtime" chunk
+        runtimeChunk: "single",
         splitChunks: {
             cacheGroups: {
                 vendor: {
@@ -59,8 +58,8 @@ module.exports = {
                 },
                 utilities: {
                     test: /\.s?js$/,
-                    minSize: 0,
-                    name: "app",
+                    minChunks: 2,
+                    name: "utilities",
                     chunks: "all",
                     priority: 0
                 }
@@ -90,17 +89,18 @@ module.exports = {
         search: './sass/pages/search.scss'
     },
     plugins: [
-
         new CleanWebpackPlugin(['public/js/*.*', 'public/css/*.*'], {} ),
+
         new MiniCssExtractPlugin({
             filename: "css/[name]-[contenthash].css"
         }),
 
         new WebpackMd5Hash(),
 
-        // build JSON manifest with assets filenames so it can be read in laravel app
         new ManifestPlugin({
             fileName: 'manifest.json'
         }),
     ]
 };
+
+
