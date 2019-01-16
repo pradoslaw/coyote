@@ -43,8 +43,8 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'public'),
         filename: 'js/[name]-[chunkhash].js',
-        chunkFilename: 'js/[name].js',
-        // chunkFilename: 'js/[name]-[chunkhash].js',
+        // chunkFilename: 'js/[name].js',
+        chunkFilename: 'js/[name]-[chunkhash].js',
         publicPath: cdn('/')
     },
     externals: {
@@ -132,17 +132,6 @@ module.exports = {
         }),
         //
         // new BundleAnalyzerPlugin()
-        //
-        // new ConcatPlugin({
-        //     // uglify: true,
-        //     sourceMap: false,
-        //     name: 'merged.js',
-        //     fileName: 'js/merged.js',
-        //     filesToConcat: [
-        //         '../../public/js/app',
-        //         '../../public/js/common',
-        //     ],
-        // }),
     ]
 };
 
