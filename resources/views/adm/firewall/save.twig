@@ -8,8 +8,6 @@
 {% block body %}
     {{ parent() }}
 
-    <script type="text/javascript" src="{{ cdn('js/auto-complete.js') }}"></script>
-
     <script type="text/javascript">
         $(function() {
             $(':checkbox[name="lifetime"]').change(function() {

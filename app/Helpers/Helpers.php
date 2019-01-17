@@ -72,19 +72,48 @@ function stream($activity, $object = null, $target = null)
  * @param string $path
  * @param null|bool $secure
  * @return string
+ * @throws \Exception
  */
 function cdn($path, $secure = null)
 {
-    if (!config('app.cdn')) {
-        return asset($path, $secure);
-    }
-
     $path = trim($path, '/');
-    if (in_array(pathinfo($path, PATHINFO_EXTENSION), ['css', 'js'])) {
-        $path = elixir($path);
+    $pathinfo = pathinfo($path);
+
+    if (in_array($pathinfo['extension'], ['css', 'js'])) {
+        $path = manifest(trim($pathinfo['basename'], '/'));
     }
 
-    return ($secure ? 'https:' : '') . '//' . config('app.cdn') . ($path[0] !== '/' ? ('/' . $path) : $path);
+    return asset($path, $secure);
+}
+
+/**
+ * Get the path to a versioned Mix file.
+ *
+ * @param  string  $path
+ * @return string
+ *
+ * @throws \Exception
+ */
+function manifest($path)
+{
+    static $manifest;
+
+    if (!$manifest) {
+        if (!file_exists($manifestPath = public_path('manifest.json'))) {
+            throw new Exception('The webpack manifest does not exist.');
+        }
+
+        $manifest = json_decode(file_get_contents($manifestPath), true);
+    }
+
+    if (!array_key_exists($path, $manifest)) {
+        throw new Exception(
+            "Unable to locate webpack mix file: {$path}. Please check your ".
+            'webpack.mix.js output paths and try again.'
+        );
+    }
+
+    return $manifest[$path];
 }
 
 /**
