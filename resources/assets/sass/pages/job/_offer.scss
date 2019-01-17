@@ -243,13 +243,20 @@
     margin-left: 50px;
   }
 
-  .media-object {
-    width: 40px;
+  .media {
+    .media-object {
+      width: 40px;
+    }
+
+    .media-body {
+      border-bottom: 1px solid $border-color;
+    }
+
+    &:last-child > .media-body {
+      border-bottom: none;
+    }
   }
 
-  .media-body {
-    border-bottom: 1px solid $border-color;
-  }
 
   .list-unstyled {
     margin-top: 10px;

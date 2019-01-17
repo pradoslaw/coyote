@@ -1,5 +1,6 @@
 <template>
     <div :id="'comment-' + comment.id" class="media" :class="comment.parent_id ? 'indent' : ''">
+
         <div class="media-left">
             <img :src="comment.user.photo" class="img-thumbnail media-object">
         </div>
@@ -25,9 +26,9 @@
             <div class="comment-content margin-sm-top">
                 {{ comment.html }}
 
-                <form method="post" v-on:submit.prevent="submitForm">
-                    <textarea name="text">{{ comment.text}}</textarea>
-                </form>
+                <!--<form method="post" v-on:submit.prevent="submitForm">-->
+                    <!--<textarea name="text">{{ comment.text}}</textarea>-->
+                <!--</form>-->
             </div>
 
             <ul class="list-unstyled">
@@ -41,7 +42,13 @@
     export default {
         props: ['comment'],
         methods: {
+            edit: function () {
 
+            },
+
+            remove: function () {
+
+            }
         },
         computed: {
 

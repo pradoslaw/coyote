@@ -13,9 +13,13 @@
 
                 <div class="media-body">
                     {{ form_open({'v-on:submit.prevent': 'submitForm', url: route('job.comment', {job: job.id}), method: 'post'}) }}
+                        <div class="form-group">
+                            <textarea name="text" class="form-control" placeholder="Kliknij, aby dodać komentarz"></textarea>
+                        </div>
 
-                        <textarea name="text" class="form-control" placeholder="Kliknij, aby dodać komentarz"></textarea>
-                        <input type="submit" class="btn btn-primary">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary pull-right">
+                        </div>
 
                     {{ form_close() }}
                 </div>

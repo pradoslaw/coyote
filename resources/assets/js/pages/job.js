@@ -1,7 +1,9 @@
 import '../components/subscribe';
 import '../plugins/tags';
 import Config from '../libs/config';
+import Vue from 'vue';
 import VueResource from "vue-resource";
+import VueComment from '../components/comment.vue';
 
 Vue.use(VueResource);
 
@@ -9,9 +11,11 @@ new Vue({
     el: '#comments',
     delimiters: ['${', '}'],
     components: {
-        'vue-comment': require('../components/comment.vue')
+        'vue-comment': VueComment
     },
     data: window.data,
+    mounted: function () {
+    },
     methods: {
         submitForm: function (e) {
             this.$http.post(e.target.action, new FormData(e.target)).then(response => {
@@ -19,14 +23,6 @@ new Vue({
             }, error => {
                 // error callback
             });
-        },
-
-        edit: function () {
-
-        },
-
-        remove: function () {
-
         }
     }
 });
