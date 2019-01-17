@@ -1,7 +1,7 @@
 .PHONY: all update-repo dependency-install file-permission migration seed assets-dev assets-production
 
-install: dependency-install dump-autoload file-permission migration seed install-gulp assets-production cache-config
-install-dev: dependency-install dump-autoload file-permission migration seed install-gulp assets-dev
+install: dependency-install dump-autoload file-permission migration seed install-assets assets-production cache-config
+install-dev: dependency-install dump-autoload file-permission migration seed install-assets assets-dev
 install-vagrant: dependency-install dump-autoload file-permission migration seed
 update: update-repo dependency-install dump-autoload migration assets-production cache-config
 update-dev: update-repo dependency-install dump-autoload migration assets-dev
@@ -30,15 +30,14 @@ migration:
 seed:
 	php artisan db:seed
 
-install-gulp:
-	yarn global add gulp
+install-assets:
 	yarn install
 
 assets-production:
-	yarn run gulp -- --production
+	yarn run prod
 
 assets-dev:
-	yarn run gulp
+	yarn run dev
 
 dump-autoload:
 	php artisan clear-compiled

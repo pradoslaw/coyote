@@ -15,36 +15,30 @@ services:
   - redis-server
 
 addons:
-  postgresql: "9.4"
+  postgresql: "9.6"
   apt:
     packages:
       - oracle-java9-set-default
 
 env:
-  - NODE_RELEASE=6.x
+  - NODE_RELEASE=8.x
 
 before_install:
   - cp .env.testing .env
-  - echo "extension=mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - sudo rm -rf ~/.nvm
   - curl -sL "https://deb.nodesource.com/setup_${NODE_RELEASE}" | sudo -E bash -
   - sudo apt-get install -y nodejs
   - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.2.deb && sudo dpkg -i --force-confnew elasticsearch-5.1.2.deb && sudo service elasticsearch restart
   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-  - echo "deb http://repo.mongodb.org/apt/ubuntu precise/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
   - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   - sudo apt-get update
   - sudo apt-get install -y yarn
-  - sleep 15
-  - mongo --version
 
 install:
   - composer install
-  - sudo npm -g install npm@next
 
 before_script:
-  - sudo yarn global add gulp
   - sudo yarn install
   - psql -c 'create database coyote_test;' -U postgres
   - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
