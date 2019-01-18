@@ -33,6 +33,7 @@
 
             <ul class="list-unstyled">
                 <li><a href="#" class="text-muted">Odpowiedz</a></li>
+                <li><a href="#" class="text-muted">Zgłoś</a></li>
             </ul>
         </div>
     </div>
