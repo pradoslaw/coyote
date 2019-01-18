@@ -20,6 +20,7 @@ new Vue({
         submitForm: function (e) {
             this.$http.post(e.target.action, new FormData(e.target)).then(response => {
                 this.comments.unshift(response.data);
+                this.default_text = '';
             }, error => {
                 // error callback
             });
