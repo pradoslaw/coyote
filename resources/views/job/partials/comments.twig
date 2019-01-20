@@ -14,7 +14,7 @@
                 <div class="media-body">
                     {{ form_open({'v-on:submit.prevent': 'submitForm', url: route('job.comment', {job: job.id}), method: 'post'}) }}
                         <div class="form-group">
-                            <textarea name="text" class="form-control" placeholder="Kliknij, aby dodać komentarz" v-model="default_text"></textarea>
+                            <textarea name="text" class="form-control" placeholder="Kliknij, aby dodać komentarz" v-model="defaultText"></textarea>
                         </div>
 
                         <div class="form-group">
@@ -28,7 +28,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <vue-comment v-for="comment in comments" :comment="comment" :key="comment.id"></vue-comment>
+            <vue-comment v-for="comment in comments" :comment="comment" :key="comment.id" v-if="!comment.deleted_at"></vue-comment>
         </div>
     </div>
 </div>

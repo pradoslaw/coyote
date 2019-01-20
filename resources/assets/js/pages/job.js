@@ -2,10 +2,8 @@ import '../components/subscribe';
 import '../plugins/tags';
 import Config from '../libs/config';
 import Vue from 'vue';
-import VueResource from "vue-resource";
 import VueComment from '../components/comment.vue';
-
-Vue.use(VueResource);
+import axios from 'axios';
 
 new Vue({
     el: '#comments',
@@ -15,15 +13,19 @@ new Vue({
     },
     data: window.data,
     mounted: function () {
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
     },
     methods: {
         submitForm: function (e) {
-            this.$http.post(e.target.action, new FormData(e.target)).then(response => {
-                this.comments.unshift(response.data);
-                this.default_text = '';
-            }, error => {
-                // error callback
-            });
+            axios.post(e.target.action, new FormData(e.target))
+                .then(response => {
+                    this.comments.unshift(response.data);
+                    this.defaultText = '';
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
         }
     }
 });

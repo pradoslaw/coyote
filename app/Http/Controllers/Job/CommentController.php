@@ -33,4 +33,15 @@ class CommentController extends Controller
 
         return new CommentResource($comment->load('user'));
     }
+
+    /**
+     * @param Job $job
+     * @param int $id
+     * @throws \Exception
+     */
+    public function delete(Job $job, int $id)
+    {
+        $comment = $job->comments()->findOrNew($id);
+        $comment->delete();
+    }
 }

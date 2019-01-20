@@ -7,6 +7,8 @@ use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
+ * @property int $id
+ * @property int $job_id
  * @property Carbon $created_at
  * @property User $user
  * @property int $user_id
@@ -31,6 +33,11 @@ class CommentResource extends JsonResource
                     'name'      => $this->user->name,
                     'profile'   => (string) route('profile', [$this->user_id]),
                     'photo'     => (string) $this->user->photo->url()
+                ],
+                'editable'      => $request->user() ? $this->user_id == $request->user()->id || $request->user()->can('job_edit') : false,
+                'route'         => [
+                    'edit'      => route('job.comment', [$this->job_id, $this->id]),
+                    'delete'    => route('job.comment.delete', [$this->job_id, $this->id])
                 ]
             ]
         );
