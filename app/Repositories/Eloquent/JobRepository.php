@@ -207,13 +207,13 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     public function getComments(int $jobId)
     {
         $sql = "WITH RECURSIVE tree AS (
-                  (SELECT * FROM job_comments WHERE job_id = ? and parent_id IS NULL ORDER BY job_comments.id DESC)
+                  (SELECT job_comments.*, ARRAY[job_comments.id]::INTEGER[] AS path FROM job_comments WHERE job_id = ? and parent_id IS NULL)
                 
                   UNION ALL
                 
-                  SELECT job_comments.* FROM job_comments, tree WHERE job_comments.parent_id = tree.id
+                  SELECT job_comments.*, tree.path || job_comments.parent_id FROM job_comments, tree WHERE job_comments.parent_id = tree.id
                 )
-                SELECT * FROM tree";
+                SELECT * FROM tree ORDER BY path";
 
         $db = $this->app->make(Connection::class);
         $result = $db->select($sql, [$jobId]);
