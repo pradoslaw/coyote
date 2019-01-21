@@ -26,8 +26,7 @@ class TopicAcceptanceCest
 
         $I->click('Zapisz');
 
-        $I->wait(1);
-        $I->see('Temat musi posiadać minimum 3 znaki długości.');
+        $I->waitForText('Temat musi posiadać minimum 3 znaki długości.');
         $I->see('Proszę wpisać treść.');
         $I->see('Proszę wpisać nazwę użytkownika.');
     }

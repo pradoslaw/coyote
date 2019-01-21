@@ -60,36 +60,9 @@ services:
     environment:
       - PORT=${MAIL_PORT}
 
-#  phantomjs:
-#    image: wernight/phantomjs:1.9.7
-#    tty: true
-#    ports:
-#      - 4444:4444
-
-  selenium-hub:
-    image: selenium/hub:3.141.59-europium
-    container_name: selenium-hub
+  selenium:
+    image: selenium/standalone-chrome-debug
+    volumes:
+      - /dev/shm:/dev/shm
     ports:
-      - "4444:4444"
-
-  chrome:
-    image: selenium/node-chrome:3.141.59-europium
-    volumes:
-      - /dev/shm:/dev/shm
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_HOST=selenium-hub
-      - HUB_PORT=4444
-      - START_XVFB=false
-
-  firefox:
-    image: selenium/node-firefox:3.141.59-europium
-    volumes:
-      - /dev/shm:/dev/shm
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_HOST=selenium-hub
-      - HUB_PORT=4444
-      - START_XVFB=false
+      - 4444:4444
