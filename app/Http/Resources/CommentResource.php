@@ -37,7 +37,8 @@ class CommentResource extends JsonResource
                 'editable'      => $request->user() ? $this->user_id == $request->user()->id || $request->user()->can('job_edit') : false,
                 'route'         => [
                     'edit'      => route('job.comment', [$this->job_id, $this->id]),
-                    'delete'    => route('job.comment.delete', [$this->job_id, $this->id])
+                    'delete'    => route('job.comment.delete', [$this->job_id, $this->id]),
+                    'reply'     => route('job.comment', [$this->job_id])
                 ]
             ]
         );
