@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Adam
- * Date: 2016-12-30
- * Time: 22:07
- */
 
 namespace Coyote\Services\Stream\Render;
 
@@ -16,8 +10,8 @@ class Application extends Render
     protected function actor()
     {
         // author can be an anonymous user...
-        if (!$this->stream['actor.id']) {
-            return $this->stream['object.displayName'];
+        if (!array_get($this->stream, 'actor.id')) {
+            return array_get($this->stream, 'object.displayName');
         }
 
         return parent::actor();
@@ -28,6 +22,6 @@ class Application extends Render
      */
     public function object()
     {
-        return (string) trans('stream.nouns.' . $this->stream['object.objectType']);
+        return (string) trans('stream.nouns.' . array_get($this->stream, 'object.objectType'));
     }
 }
