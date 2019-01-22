@@ -79,7 +79,7 @@ function cdn($path, $secure = null)
     $path = trim($path, '/');
     $pathinfo = pathinfo($path);
 
-    if (in_array($pathinfo['extension'], ['css', 'js'])) {
+    if (!empty($pathinfo['extension']) && in_array($pathinfo['extension'], ['css', 'js'])) {
         $path = manifest(trim($pathinfo['basename'], '/'));
     }
 
