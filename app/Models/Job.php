@@ -505,6 +505,14 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function commentsWithChildren()
+    {
+        return $this->comments()->orderBy('id', 'DESC')->with('children.user:id,name,photo', 'user:id,name,photo');
+    }
+
+    /**
      * @param string $title
      */
     public function setTitleAttribute($title)

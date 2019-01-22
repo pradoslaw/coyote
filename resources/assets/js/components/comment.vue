@@ -1,5 +1,5 @@
 <template>
-    <div class="comment">
+    <div :id="'comment-' + comment.id" class="comment">
         <div class="media">
             <div class="media-left">
                 <img :src="comment.user.photo" class="img-thumbnail media-object">
@@ -48,10 +48,10 @@
 
         <div class="media" v-if="isReplying">
             <form method="post" :action="comment.route.reply" v-on:submit.prevent="replyForm">
-                <input type="hidden" name="parent_id" :value="comment.parent_id ? comment.parent_id : comment.id">
+                <input type="hidden" name="parent_id" :value="parentId">
 
                 <div class="form-group">
-                    <textarea name="text" class="form-control"></textarea>
+                    <textarea name="text" class="form-control" ref="text"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -60,7 +60,14 @@
             </form>
         </div>
 
-        <vue-comment v-for="child in comment.children" :comment="child" :key="child.id"></vue-comment>
+        <vue-comment
+            v-for="child in comment.children"
+            v-if="!comment.deleted_at"
+            :comment="child"
+            :key="child.id"
+            :nested="true"
+            @reply="onReply"
+        ></vue-comment>
     </div>
 </template>
 
@@ -68,8 +75,8 @@
     import axios from 'axios';
 
     export default {
-        name: 'vue-comment',
-        props: ['comment'],
+        name: 'vue-comment', // required with recursive component
+        props: ['comment', 'nested'],
         data: () => {
             return {
                 isEditing: false,
@@ -83,6 +90,12 @@
 
             reply: function () {
                 this.isReplying = !this.isReplying;
+
+                if (this.isReplying) {
+                    this.$nextTick(function() {
+                        this.$refs.text.focus();
+                    });
+                }
             },
 
             remove: function () {
@@ -105,17 +118,33 @@
             replyForm: function (e) {
                 axios.post(e.target.action, new FormData(e.target))
                     .then(response => {
-                        this.$emit('onReply', response.data);
+                        if (!this.nested) {
+                            this.onReply(response.data);
+                        }
+
+                        this.$emit('reply', response.data);
                         this.isReplying = false;
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+
+            onReply: function (data) {
+                this.comment.children.push(data);
+
+                this.$nextTick(function() {
+                    let el = document.getElementById(`comment-${data.id}`);
+                    el.scrollIntoView();
+                });
+
             }
 
         },
         computed: {
-
+            parentId () {
+                return this.comment.parent_id ? this.comment.parent_id : this.comment.id;
+            }
         }
     }
 
