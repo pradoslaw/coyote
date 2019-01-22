@@ -64,7 +64,7 @@ class CommentedNotification extends AbstractNotification
      */
     protected function getMailSubject(): string
     {
-        return $this->notifier->name . ' dodał(a) komentarz';
+        return $this->notifier->name . ' dodał(a) komentarz w wątku: ' . $this->post->topic->subject;
     }
 
     /**
