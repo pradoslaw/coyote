@@ -239,14 +239,14 @@
 }
 
 #comments {
-  .indent {
-    margin-left: 50px;
-  }
-
   .comment {
-    margin-bottom: 15px;
+    > .comment {
+      margin-left: 50px;
+    }
 
     .media {
+      margin-bottom: 15px;
+
       .media-object {
         width: 40px;
       }

@@ -74,12 +74,6 @@ interface JobRepositoryInterface extends RepositoryInterface
     public function getTagSuggestions(array $tags): array;
 
     /**
-     * @param int $jobId
-     * @return Comment[]
-     */
-    public function getComments(int $jobId);
-
-    /**
      * @param int $userId
      * @param string $key
      * @param string $value

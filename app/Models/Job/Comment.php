@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $parent_id
  * @property string $email
  * @property string $text
+ * @property Comment[] $children
  */
 class Comment extends Model
 {
@@ -35,5 +36,13 @@ class Comment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function children()
+    {
+        return $this->hasMany(Comment::class, 'parent_id', 'id');
     }
 }

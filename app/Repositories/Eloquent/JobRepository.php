@@ -204,26 +204,6 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     /**
      * @inheritdoc
      */
-    public function getComments(int $jobId)
-    {
-        $sql = "WITH RECURSIVE tree AS (
-                  (SELECT job_comments.*, ARRAY[job_comments.id]::INTEGER[] AS path FROM job_comments WHERE job_id = ? and parent_id IS NULL)
-                
-                  UNION ALL
-                
-                  SELECT job_comments.*, tree.path || job_comments.parent_id FROM job_comments, tree WHERE job_comments.parent_id = tree.id
-                )
-                SELECT * FROM tree ORDER BY path";
-
-        $db = $this->app->make(Connection::class);
-        $result = $db->select($sql, [$jobId]);
-
-        return Job\Comment::hydrate($result)->load('user');
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function setDraft(int $userId, string $key, string $value): void
     {
         $this->app[Draft::class]->updateOrCreate(['user_id' => $userId, 'key' => $key], ['value' => $value]);

@@ -1,6 +1,6 @@
 <template>
     <div class="comment">
-        <div class="media" :class="comment.parent_id ? 'indent' : ''">
+        <div class="media">
             <div class="media-left">
                 <img :src="comment.user.photo" class="img-thumbnail media-object">
             </div>
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <div class="media indent" v-if="isReplying">
+        <div class="media" v-if="isReplying">
             <form method="post" :action="comment.route.reply" v-on:submit.prevent="replyForm">
                 <input type="hidden" name="parent_id" :value="comment.parent_id ? comment.parent_id : comment.id">
 
@@ -59,6 +59,8 @@
                 </div>
             </form>
         </div>
+
+        <vue-comment v-for="child in comment.children" :comment="child" :key="child.id"></vue-comment>
     </div>
 </template>
 
@@ -66,6 +68,7 @@
     import axios from 'axios';
 
     export default {
+        name: 'vue-comment',
         props: ['comment'],
         data: () => {
             return {
