@@ -28,9 +28,9 @@
                 </div>
 
                 <div class="margin-sm-top" v-if="isEditing">
-                    <form method="post" :action="comment.route.edit" v-on:submit.prevent="submitForm">
+                    <form method="post" :action="comment.route.edit" ref="submitForm" @submit.prevent="submitForm">
                         <div class="form-group">
-                            <textarea name="text" class="form-control">{{ comment.text}}</textarea>
+                            <textarea name="text" class="form-control" ref="submitText" @keydown.ctrlKey.enter="submitForm">{{ comment.text}}</textarea>
                         </div>
 
                         <div class="form-group">
@@ -47,11 +47,11 @@
         </div>
 
         <div class="media" v-if="isReplying">
-            <form method="post" :action="comment.route.reply" v-on:submit.prevent="replyForm">
+            <form method="post" :action="comment.route.reply" @submit.prevent="replyForm" ref="replyForm">
                 <input type="hidden" name="parent_id" :value="parentId">
 
                 <div class="form-group">
-                    <textarea name="text" class="form-control" ref="text"></textarea>
+                    <textarea name="text" class="form-control" ref="replyText" @keydown.ctrlKey.enter="replyForm"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -86,6 +86,12 @@
         methods: {
             edit: function () {
                 this.isEditing = !this.isEditing;
+
+                if (this.isEditing) {
+                    this.$nextTick(function () {
+                        this.$refs.submitText.focus();
+                    })
+                }
             },
 
             reply: function () {
@@ -93,7 +99,7 @@
 
                 if (this.isReplying) {
                     this.$nextTick(function() {
-                        this.$refs.text.focus();
+                        this.$refs.replyText.focus();
                     });
                 }
             },
@@ -104,8 +110,8 @@
                 });
             },
 
-            submitForm: function (e) {
-                axios.post(e.target.action, new FormData(e.target))
+            submitForm: function () {
+                axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
                     .then(response => {
                         this.comment = response.data;
                         this.isEditing = false;
@@ -115,8 +121,8 @@
                     });
             },
 
-            replyForm: function (e) {
-                axios.post(e.target.action, new FormData(e.target))
+            replyForm: function () {
+                axios.post(this.$refs.replyForm.action, new FormData(this.$refs.replyForm))
                     .then(response => {
                         if (!this.nested) {
                             this.onReply(response.data);
@@ -136,6 +142,8 @@
                 this.$nextTick(function() {
                     let el = document.getElementById(`comment-${data.id}`);
                     el.scrollIntoView();
+
+
                 });
 
             }
