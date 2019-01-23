@@ -41,7 +41,16 @@ class CommentController extends Controller
      */
     public function delete(Job $job, int $id)
     {
+        /** @var Job\Comment $comment */
         $comment = $job->comments()->findOrNew($id);
-        $comment->delete();
+
+        $this->transaction(function () use ($comment) {
+            $comment->children->each(function ($child) {
+                $child->delete();
+            });
+
+            $comment->delete();
+        });
+
     }
 }

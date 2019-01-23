@@ -501,7 +501,7 @@ class Job extends Model
      */
     public function comments()
     {
-        return $this->hasMany(Comment::class)->whereNull('parent_id');
+        return $this->hasMany(Comment::class);
     }
 
     /**
@@ -509,7 +509,7 @@ class Job extends Model
      */
     public function commentsWithChildren()
     {
-        return $this->comments()->orderBy('id', 'DESC')->with('children.user:id,name,photo', 'user:id,name,photo');
+        return $this->comments()->whereNull('parent_id')->orderBy('id', 'DESC')->with('children.user:id,name,photo', 'user:id,name,photo');
     }
 
     /**

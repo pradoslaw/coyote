@@ -62,7 +62,7 @@
 
         <vue-comment
             v-for="child in comment.children"
-            v-if="!comment.deleted_at"
+            v-if="!child.deleted_at"
             :comment="child"
             :key="child.id"
             :nested="true"
