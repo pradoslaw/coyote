@@ -4,23 +4,25 @@
     <div class="panel panel-default">
 
         <div class="panel-body">
-            <div class="media">
-                <div class="media-left">
-                    <a href="{{ route('profile', [user('id')]) }}">
-                        <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail media-object">
-                    </a>
-                </div>
+            <div class="comment">
+                <div class="media">
+                    <div class="media-left">
+                        <a href="{{ route('profile', [user('id')]) }}">
+                            <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail media-object">
+                        </a>
+                    </div>
 
-                <div class="media-body">
-                    {{ form_open({'v-on:submit.prevent': 'submitForm', url: route('job.comment', {job: job.id}), method: 'post'}) }}
-                        <div class="form-group">
-                            <textarea name="text" class="form-control" placeholder="Kliknij, aby dodać komentarz" v-model="defaultText"></textarea>
-                        </div>
+                    <div class="media-body">
+                        {{ form_open({'v-on:submit.prevent': 'submitForm', url: route('job.comment', {job: job.id}), method: 'post'}) }}
+                            <div class="form-group">
+                                <textarea name="text" class="form-control" placeholder="Kliknij, aby dodać komentarz" v-model="defaultText"></textarea>
+                            </div>
 
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-primary pull-right">
-                        </div>
-                    {{ form_close() }}
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary pull-right">
+                            </div>
+                        {{ form_close() }}
+                    </div>
                 </div>
             </div>
         </div>
