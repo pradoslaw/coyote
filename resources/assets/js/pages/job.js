@@ -3,6 +3,7 @@ import '../plugins/tags';
 import Config from '../libs/config';
 import Vue from 'vue';
 import VueComment from '../components/comment.vue';
+import VueModal from '../components/modal.vue';
 import axios from 'axios';
 import store from '../store';
 
@@ -10,9 +11,13 @@ new Vue({
     el: '#comments',
     delimiters: ['${', '}'],
     components: {
-        'vue-comment': VueComment
+        'vue-comment': VueComment,
+        'vue-modal': VueModal
     },
-    data: {defaultText: ''},
+    data: {
+        defaultText: '',
+        error: ''
+    },
     store,
     created: function () {
         // fill vuex with data passed from controller to view
@@ -28,8 +33,11 @@ new Vue({
                     store.commit('comments/add', response.data);
                     this.defaultText = '';
                 })
-                .catch(function (error) {
-                    console.log(error);
+                .catch(error => {
+                    let errors = error.response.data.errors;
+
+                    this.error = errors[Object.keys(errors)[0]][0];
+                    this.$refs.error.open();
                 });
         }
     },
