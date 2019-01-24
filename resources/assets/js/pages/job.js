@@ -4,6 +4,7 @@ import Config from '../libs/config';
 import Vue from 'vue';
 import VueComment from '../components/comment.vue';
 import axios from 'axios';
+import store from '../store';
 
 new Vue({
     el: '#comments',
@@ -11,7 +12,12 @@ new Vue({
     components: {
         'vue-comment': VueComment
     },
-    data: window.data,
+    data: {defaultText: ''},
+    store,
+    created: function () {
+        // fill vuex with data passed from controller to view
+        store.commit('comments/init', window.data.comments);
+    },
     mounted: function () {
         axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
     },
@@ -19,13 +25,17 @@ new Vue({
         submitForm: function (e) {
             axios.post(e.target.action, new FormData(e.target))
                 .then(response => {
-                    this.comments.unshift(response.data);
+                    store.commit('comments/add', response.data);
                     this.defaultText = '';
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
-
+        }
+    },
+    computed: {
+        comments () {
+            return store.state.comments.comments;
         }
     }
 });

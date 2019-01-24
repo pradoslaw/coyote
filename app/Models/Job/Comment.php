@@ -31,6 +31,11 @@ class Comment extends Model
     protected $table = 'job_comments';
 
     /**
+     * @var array
+     */
+    protected $casts = ['parent_id' => 'int', 'job_id' => 'int'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()

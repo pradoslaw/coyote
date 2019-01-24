@@ -28,9 +28,9 @@
                 </div>
 
                 <div class="margin-sm-top" v-if="isEditing">
-                    <form method="post" :action="comment.route.edit" ref="submitForm" @submit.prevent="submitForm">
+                    <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
                         <div class="form-group">
-                            <textarea name="text" class="form-control" ref="submitText" @keydown.ctrlKey.enter="submitForm">{{ comment.text}}</textarea>
+                            <textarea name="text" class="form-control" ref="submitText" @keydown.ctrlKey.enter="updateForm">{{ comment.text}}</textarea>
                         </div>
 
                         <div class="form-group">
@@ -62,11 +62,9 @@
 
         <vue-comment
             v-for="child in comment.children"
-            v-if="!child.deleted_at"
             :comment="child"
             :key="child.id"
             :nested="true"
-            @reply="onReply"
         ></vue-comment>
     </div>
 </template>
@@ -77,7 +75,7 @@
     export default {
         name: 'vue-comment', // required with recursive component
         props: ['comment', 'nested'],
-        data: () => {
+        data: function () {
             return {
                 isEditing: false,
                 isReplying: false
@@ -106,14 +104,14 @@
 
             remove: function () {
                 axios.delete(this.comment.route.delete).then(() => {
-                    this.comment.deleted_at = new Date();
+                    this.$store.commit('comments/remove', this.comment);
                 });
             },
 
-            submitForm: function () {
-                axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
+            updateForm: function () {
+                axios.post(this.$refs.updateForm.action, new FormData(this.$refs.updateForm))
                     .then(response => {
-                        this.comment = response.data;
+                        this.$store.commit('comments/update', response.data);
                         this.isEditing = false;
                     })
                     .catch(function (error) {
@@ -124,30 +122,22 @@
             replyForm: function () {
                 axios.post(this.$refs.replyForm.action, new FormData(this.$refs.replyForm))
                     .then(response => {
-                        if (!this.nested) {
-                            this.onReply(response.data);
-                        }
-
-                        this.$emit('reply', response.data);
+                        this.$store.commit('comments/reply', response.data);
                         this.isReplying = false;
+
+                        this.scrollIntoView(response.data);
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             },
 
-            onReply: function (data) {
-                this.comment.children.push(data);
-
+            scrollIntoView: function (data) {
                 this.$nextTick(function() {
                     let el = document.getElementById(`comment-${data.id}`);
                     el.scrollIntoView();
-
-
                 });
-
             }
-
         },
         computed: {
             parentId () {
