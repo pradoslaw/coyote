@@ -18,6 +18,8 @@ class DeleteController extends Controller
      */
     public function index(Job $job)
     {
+        $this->authorize('delete', $job);
+
         $this->transaction(function () use ($job) {
             event(new JobDeleting($job));
             $job->delete();
