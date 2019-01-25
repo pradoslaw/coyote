@@ -51,11 +51,20 @@
                 <input type="hidden" name="parent_id" :value="parentId">
 
                 <div class="form-group">
-                    <textarea name="text" class="form-control" ref="replyText" @keydown.ctrlKey.enter="replyForm"></textarea>
+                    <textarea-autosize
+                        name="text"
+                        class="form-control"
+                        ref="replyText"
+                        :min-height="40"
+                        :max-height="350"
+                        @keydown.native.ctrl.enter="replyForm"
+                        rows="1"
+                        tabindex="1"
+                    ></textarea-autosize>
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" class="btn btn-primary btn-sm pull-right">
+                    <input type="submit" class="btn btn-primary btn-sm pull-right" title="Ctrl+Enter aby opublikować">
                 </div>
             </form>
         </div>
@@ -66,19 +75,28 @@
             :key="child.id"
             :nested="true"
         ></vue-comment>
+
+        <vue-modal ref="error">
+            {{ error }}
+        </vue-modal>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
+    import VueModal from './modal.vue';
 
     export default {
         name: 'vue-comment', // required with recursive component
         props: ['comment', 'nested'],
+        components: {
+            'vue-modal': VueModal
+        },
         data: function () {
             return {
                 isEditing: false,
-                isReplying: false
+                isReplying: false,
+                error: ''
             }
         },
         methods: {
@@ -97,7 +115,7 @@
 
                 if (this.isReplying) {
                     this.$nextTick(function() {
-                        this.$refs.replyText.focus();
+                        this.$refs.replyText.$el.focus();
                     });
                 }
             },
@@ -115,7 +133,7 @@
                         this.isEditing = false;
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        this._showError(error);
                     });
             },
 
@@ -127,8 +145,8 @@
 
                         this.scrollIntoView(response.data);
                     })
-                    .catch(function (error) {
-                        console.log(error);
+                    .catch(error => {
+                        this._showError(error);
                     });
             },
 
@@ -137,6 +155,13 @@
                     let el = document.getElementById(`comment-${data.id}`);
                     el.scrollIntoView();
                 });
+            },
+
+            _showError: function (error) {
+                let errors = error.response.data.errors;
+
+                this.error = errors[Object.keys(errors)[0]][0];
+                this.$refs.error.open();
             }
         },
         computed: {

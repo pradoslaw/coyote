@@ -4,8 +4,11 @@ import Config from '../libs/config';
 import Vue from 'vue';
 import VueComment from '../components/comment.vue';
 import VueModal from '../components/modal.vue';
+import VueTextareaAutosize from 'vue-textarea-autosize';
 import axios from 'axios';
 import store from '../store';
+
+Vue.use(VueTextareaAutosize);
 
 new Vue({
     el: '#comments',
@@ -16,7 +19,8 @@ new Vue({
     },
     data: {
         defaultText: '',
-        error: ''
+        error: '',
+        textFocused: false
     },
     store,
     created: function () {
@@ -27,8 +31,9 @@ new Vue({
         axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
     },
     methods: {
-        submitForm: function (e) {
-            axios.post(e.target.action, new FormData(e.target))
+        submitForm: function () {
+            console.log('keydown');
+            axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
                 .then(response => {
                     store.commit('comments/add', response.data);
                     this.defaultText = '';
