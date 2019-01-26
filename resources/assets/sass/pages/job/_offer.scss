@@ -254,6 +254,11 @@
       .media-body {
         border-bottom: 1px solid $border-color;
       }
+
+      &.author {
+        border-left: 2px solid $brand-primary;
+        padding-left: 10px;
+      }
     }
 
     &:last-child .media-body {

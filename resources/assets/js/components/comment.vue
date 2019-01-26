@@ -1,66 +1,66 @@
 <template>
     <div :id="'comment-' + comment.id" class="comment">
-        <div class="media">
-            <div class="media-left">
-                <img :src="comment.user.photo" class="img-thumbnail media-object">
-            </div>
+        <div class="media" :class="{author: comment.is_author}">
+                <div class="media-left">
+                    <img :src="comment.user.photo" class="img-thumbnail media-object">
+                </div>
 
-            <div class="media-body">
-                <div class="dropdown pull-right" v-if="comment.editable">
-                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                    </button>
+                <div class="media-body">
+                    <div class="dropdown pull-right" v-if="comment.editable">
+                        <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
 
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a @click="edit" href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
-                        <li><a @click="remove" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a @click="edit" href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
+                            <li><a @click="remove" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="media-heading">
+                        <h5>
+                            <a v-if="comment.user_id" :href="comment.user.profile" :data-user-id="comment.user.id">{{ comment.user.name }}</a>
+                            <span v-else>{{ comment.user.name }}</span>
+                        </h5>
+
+                        <h6><a :href="'#comment-' + comment.id" class="text-muted timestamp" :data-timestamp="comment.timestamp">{{ comment.created_at }}</a></h6>
+                    </div>
+
+                    <div class="margin-sm-top margin-sm-bottom" v-if="!isEditing">
+                        {{ comment.html }}
+                    </div>
+
+                    <div class="margin-sm-top" v-if="isEditing">
+                        <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
+                            <div class="form-group">
+                                <textarea-autosize
+                                    name="text"
+                                    class="form-control"
+                                    ref="submitText"
+                                    v-model="comment.text"
+                                    :min-height="40"
+                                    :max-height="350"
+                                    @keydown.native.ctrl.enter="updateForm"
+                                    rows="1"
+                                    tabindex="1"
+                                ></textarea-autosize>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger btn-sm pull-right margin-xs-left" @click="isEditing = false">Anuluj</button>
+                                <button type="submit" class="btn btn-primary btn-sm pull-right">Zapisz</button>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+
+                    <ul class="list-inline">
+                        <li><a @click="reply" href="javascript:" class="text-muted">Odpowiedz</a></li>
+                        <li><a href="#" class="text-muted">Zgłoś</a></li>
                     </ul>
                 </div>
-
-                <div class="media-heading">
-                    <h5>
-                        <a v-if="comment.user_id" :href="comment.user.profile" :data-user-id="comment.user.id">{{ comment.user.name }}</a>
-                        <span v-else>{{ comment.user.name }}</span>
-                    </h5>
-
-                    <h6><a :href="'#comment-' + comment.id" class="text-muted timestamp" :data-timestamp="comment.timestamp">{{ comment.created_at }}</a></h6>
-                </div>
-
-                <div class="margin-sm-top margin-sm-bottom" v-if="!isEditing">
-                    {{ comment.html }}
-                </div>
-
-                <div class="margin-sm-top" v-if="isEditing">
-                    <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
-                        <div class="form-group">
-                            <textarea-autosize
-                                name="text"
-                                class="form-control"
-                                ref="submitText"
-                                v-model="comment.text"
-                                :min-height="40"
-                                :max-height="350"
-                                @keydown.native.ctrl.enter="updateForm"
-                                rows="1"
-                                tabindex="1"
-                            ></textarea-autosize>
-                        </div>
-
-                        <div class="form-group">
-                            <button type="button" class="btn btn-danger btn-sm pull-right margin-xs-left" @click="isEditing = false">Anuluj</button>
-                            <button type="submit" class="btn btn-primary btn-sm pull-right">Zapisz</button>
-                        </div>
-
-                        <div class="clearfix"></div>
-                    </form>
-                </div>
-
-                <ul class="list-inline">
-                    <li><a @click="reply" href="javascript:" class="text-muted">Odpowiedz</a></li>
-                    <li><a href="#" class="text-muted">Zgłoś</a></li>
-                </ul>
             </div>
-        </div>
 
         <div class="comment">
             <div class="media" v-if="isReplying">
@@ -178,7 +178,9 @@
             scrollIntoView: function (data) {
                 this.$nextTick(function() {
                     let el = document.getElementById(`comment-${data.id}`);
-                    el.scrollIntoView();
+                    el.scrollIntoView(true);
+
+                    window.scrollBy(0, -100);
                 });
             },
 

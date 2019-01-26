@@ -60,6 +60,7 @@ class OfferController extends Controller
         // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
+        CommentResource::$job = $job;
         $comments = CommentResource::collection($job->commentsWithChildren()->get());
 
         return $this->view('job.offer', [

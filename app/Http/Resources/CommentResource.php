@@ -3,6 +3,7 @@
 namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
+use Coyote\Job;
 use Coyote\Job\Comment;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -19,6 +20,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class CommentResource extends JsonResource
 {
+    /**
+     * @var Job
+     */
+    public static $job;
+
     /**
      * Transform the resource into an array.
      *
@@ -39,7 +45,8 @@ class CommentResource extends JsonResource
                     'delete'    => route('job.comment.delete', [$this->job_id, $this->id]),
                     'reply'     => route('job.comment', [$this->job_id])
                 ],
-                'children'      => CommentResource::collection($this->children)
+                'children'      => CommentResource::collection($this->children),
+                'is_author'     => $request->user() ? $this->user_id == CommentResource::$job->user_id : false
             ]
         );
     }
@@ -54,7 +61,7 @@ class CommentResource extends JsonResource
             return [
                 'name' => $this->user->name,
                 'profile' => (string) route('profile', [$this->user_id]),
-                'photo' => (string )$this->user->photo->url()
+                'photo' => (string) $this->user->photo->url()
             ];
         }
 

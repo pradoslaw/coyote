@@ -30,6 +30,7 @@ class CommentController extends Controller
         });
 
         CommentResource::withoutWrapping();
+        CommentResource::$job = $job;
 
         return new CommentResource($comment->load('user'));
     }
