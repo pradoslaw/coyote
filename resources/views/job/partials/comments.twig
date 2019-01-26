@@ -32,7 +32,9 @@
 
                             <div class="row" v-show="textFocused">
                                 <div class="form-group col-sm-6">
-                                    <input type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+                                    {% if user('id') == null %}
+                                        <input type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+                                    {% endif %}
                                 </div>
 
                                 <div class="form-group col-sm-6">

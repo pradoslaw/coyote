@@ -3,6 +3,7 @@
 namespace Coyote\Http\Requests\Job;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CommentRequest extends FormRequest
 {
@@ -25,9 +26,21 @@ class CommentRequest extends FormRequest
     {
         return [
             'text' => 'required|string',
-            'email' => 'sometimes|email',
-            'job_id' => 'int|exists:jobs,id',
-            'parent_id' => 'sometimes|int|exists:job_comments,id'
+            'email' => [
+                Rule::requiredIf(function () {
+                    return $this->user() === null;
+                }),
+                'email'
+            ],
+            'job_id' => [
+                'int',
+                Rule::exists('jobs', 'id')
+            ],
+            'parent_id' => [
+                'sometimes',
+                'int',
+                Rule::exists('job_comments', 'id')->whereNull('parent_id')
+            ]
         ];
     }
 }

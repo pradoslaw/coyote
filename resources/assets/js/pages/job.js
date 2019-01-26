@@ -26,6 +26,7 @@ new Vue({
     created: function () {
         // fill vuex with data passed from controller to view
         store.commit('comments/init', window.data.comments);
+        store.state.authId = window.data.authId;
     },
     mounted: function () {
         axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();

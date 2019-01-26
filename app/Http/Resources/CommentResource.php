@@ -15,6 +15,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property int $user_id
  * @property string $text
  * @property Comment[] $children
+ * @property string $email
  */
 class CommentResource extends JsonResource
 {
@@ -31,12 +32,8 @@ class CommentResource extends JsonResource
                 'timestamp'     => $this->created_at->timestamp,
                 'created_at'    => format_date($this->created_at),
                 'html'          => $this->text,
-                'user' => [
-                    'name'      => $this->user->name,
-                    'profile'   => (string) route('profile', [$this->user_id]),
-                    'photo'     => (string) $this->user->photo->url()
-                ],
-                'editable'      => $request->user() ? $this->user_id == $request->user()->id || $request->user()->can('job_edit') : false,
+                'user'          => $this->user(),
+                'editable'      => $request->user() ? $this->user_id == $request->user()->id || $request->user()->can('job-update') : false,
                 'route'         => [
                     'edit'      => route('job.comment', [$this->job_id, $this->id]),
                     'delete'    => route('job.comment.delete', [$this->job_id, $this->id]),
@@ -45,5 +42,38 @@ class CommentResource extends JsonResource
                 'children'      => CommentResource::collection($this->children)
             ]
         );
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    private function user(): array
+    {
+        if ($this->user_id) {
+            return [
+                'name' => $this->user->name,
+                'profile' => (string) route('profile', [$this->user_id]),
+                'photo' => (string )$this->user->photo->url()
+            ];
+        }
+
+        return [
+            'name' => $this->hideEmail($this->email),
+            'photo' => cdn('img/avatar.png')
+        ];
+    }
+
+    /**
+     * @param string $email
+     * @return string
+     */
+    private function hideEmail(string $email): string
+    {
+        list($name, $domain) = explode('@', $email);
+
+        $domain = explode('.', $domain);
+
+        return substr($name, 0, 1) . '...@' . substr($domain[0], 0, 1) . '...' . last($domain);
     }
 }

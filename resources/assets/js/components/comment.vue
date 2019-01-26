@@ -6,19 +6,22 @@
             </div>
 
             <div class="media-body">
-                <div class="dropdown pull-right">
+                <div class="dropdown pull-right" v-if="comment.editable">
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-right" v-if="comment.editable">
+                    <ul class="dropdown-menu dropdown-menu-right">
                         <li><a @click="edit" href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
-                        <li><a v-on:click="remove" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
+                        <li><a @click="remove" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
                     </ul>
                 </div>
 
                 <div class="media-heading">
-                    <h5><a :href="comment.user.profile" :data-user-id="comment.user.id">{{ comment.user.name }}</a></h5>
+                    <h5>
+                        <a v-if="comment.user_id" :href="comment.user.profile" :data-user-id="comment.user.id">{{ comment.user.name }}</a>
+                        <span v-else>{{ comment.user.name }}</span>
+                    </h5>
 
                     <h6><a :href="'#comment-' + comment.id" class="text-muted timestamp" :data-timestamp="comment.timestamp">{{ comment.created_at }}</a></h6>
                 </div>
@@ -30,8 +33,6 @@
                 <div class="margin-sm-top" v-if="isEditing">
                     <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
                         <div class="form-group">
-                            <!--<textarea name="text" class="form-control" ref="submitText" @keydown.ctrlKey.enter="updateForm">{{ comment.text}}</textarea>-->
-
                             <textarea-autosize
                                 name="text"
                                 class="form-control"
@@ -61,28 +62,36 @@
             </div>
         </div>
 
-        <div class="media" v-if="isReplying">
-            <form method="post" :action="comment.route.reply" @submit.prevent="replyForm" ref="replyForm">
-                <input type="hidden" name="parent_id" :value="parentId">
+        <div class="comment">
+            <div class="media" v-if="isReplying">
+                <form method="post" :action="comment.route.reply" @submit.prevent="replyForm" ref="replyForm">
+                    <input type="hidden" name="parent_id" :value="parentId">
 
-                <div class="form-group">
-                    <textarea-autosize
-                        name="text"
-                        class="form-control"
-                        ref="replyText"
-                        :min-height="40"
-                        :max-height="350"
-                        @keydown.native.ctrl.enter="replyForm"
-                        rows="1"
-                        tabindex="1"
-                    ></textarea-autosize>
-                </div>
+                    <div class="form-group">
+                        <textarea-autosize
+                            name="text"
+                            class="form-control"
+                            ref="replyText"
+                            :min-height="40"
+                            :max-height="350"
+                            @keydown.native.ctrl.enter="replyForm"
+                            rows="1"
+                            tabindex="1"
+                        ></textarea-autosize>
+                    </div>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-sm pull-right margin-xs-left" title="Ctrl+Enter aby opublikować">Zapisz</button>
-                    <button type="button" class="btn btn-danger btn-sm pull-right" @click="isReplying = false">Anuluj</button>
-                </div>
-            </form>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <input v-if="this.$store.authId === null" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <button type="submit" class="btn btn-primary btn-sm pull-right margin-xs-left" title="Ctrl+Enter aby opublikować">Zapisz</button>
+                            <button type="button" class="btn btn-danger btn-sm pull-right" @click="isReplying = false">Anuluj</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <vue-comment

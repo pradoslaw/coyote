@@ -107,7 +107,7 @@
 
     <script>
         var data = {
-            defaultText: '',
+            authId: {{ user('id') ?: null }},
             comments: {{ comments|json_encode|raw }}
         };
     </script>

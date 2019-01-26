@@ -1,5 +1,6 @@
 const state = {
-    comments: []
+    comments: [],
+    authId: null
 };
 
 function _findIndex(state, id) {
