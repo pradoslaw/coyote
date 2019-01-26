@@ -1,13 +1,13 @@
 <?php
 
-namespace Coyote\Notifications;
+namespace Coyote\Notifications\Job;
 
 use Coyote\Job;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class JobExpiredNotification extends Notification
+class ExpiredNotification extends Notification
 {
     use Queueable;
 

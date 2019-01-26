@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Notifications;
+namespace Coyote\Notifications\Job;
 
 use Coyote\Job;
 use Illuminate\Bus\Queueable;

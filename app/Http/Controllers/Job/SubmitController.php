@@ -10,7 +10,7 @@ use Coyote\Http\Forms\Job\JobForm;
 use Coyote\Http\Resources\Firm as FirmResource;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Notifications\JobCreatedNotification;
+use Coyote\Notifications\Job\CreatedNotification;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
@@ -286,7 +286,7 @@ class SubmitController extends Controller
         });
 
         if ($job->wasRecentlyCreated) {
-            $job->user->notify(new JobCreatedNotification($job));
+            $job->user->notify(new CreatedNotification($job));
         }
 
         $paymentUuid = $job->getPaymentUuid();

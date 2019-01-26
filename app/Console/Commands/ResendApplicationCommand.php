@@ -4,7 +4,7 @@ namespace Coyote\Console\Commands;
 
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Job\Application;
-use Coyote\Notifications\ApplicationSentNotification;
+use Coyote\Notifications\Job\ApplicationSentNotification;
 use Illuminate\Console\Command;
 
 class ResendApplicationCommand extends Command
