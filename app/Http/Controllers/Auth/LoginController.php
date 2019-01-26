@@ -47,6 +47,10 @@ class LoginController extends Controller
     {
         $this->breadcrumb->push('Logowanie', route('login'));
 
+        if (!$this->request->session()->has('url.intended')) {
+            $this->request->session()->put('url.intended', url()->previous());
+        }
+
         $form = $this->createForm(LoginForm::class, null, [
             'url' => route('login')
         ]);
