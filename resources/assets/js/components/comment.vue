@@ -30,12 +30,27 @@
                 <div class="margin-sm-top" v-if="isEditing">
                     <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
                         <div class="form-group">
-                            <textarea name="text" class="form-control" ref="submitText" @keydown.ctrlKey.enter="updateForm">{{ comment.text}}</textarea>
+                            <!--<textarea name="text" class="form-control" ref="submitText" @keydown.ctrlKey.enter="updateForm">{{ comment.text}}</textarea>-->
+
+                            <textarea-autosize
+                                name="text"
+                                class="form-control"
+                                ref="submitText"
+                                v-model="comment.text"
+                                :min-height="40"
+                                :max-height="350"
+                                @keydown.native.ctrl.enter="updateForm"
+                                rows="1"
+                                tabindex="1"
+                            ></textarea-autosize>
                         </div>
 
                         <div class="form-group">
-                            <input type="submit" class="btn btn-primary btn-sm pull-right">
+                            <button type="button" class="btn btn-danger btn-sm pull-right margin-xs-left" @click="isEditing = false">Anuluj</button>
+                            <button type="submit" class="btn btn-primary btn-sm pull-right">Zapisz</button>
                         </div>
+
+                        <div class="clearfix"></div>
                     </form>
                 </div>
 
@@ -64,7 +79,8 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" class="btn btn-primary btn-sm pull-right" title="Ctrl+Enter aby opublikować">
+                    <button type="submit" class="btn btn-primary btn-sm pull-right margin-xs-left" title="Ctrl+Enter aby opublikować">Zapisz</button>
+                    <button type="button" class="btn btn-danger btn-sm pull-right" @click="isReplying = false">Anuluj</button>
                 </div>
             </form>
         </div>
@@ -105,7 +121,7 @@
 
                 if (this.isEditing) {
                     this.$nextTick(function () {
-                        this.$refs.submitText.focus();
+                        this.$refs.submitText.$el.focus();
                     })
                 }
             },

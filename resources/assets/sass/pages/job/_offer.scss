@@ -261,9 +261,23 @@
     }
   }
 
-  .list-unstyled {
-    margin-top: 10px;
-    font-size: 11px;
+  .list-inline {
+    margin-left: 0;
+    color: $text-muted;
+
+    li {
+      padding-left: 0;
+      padding-right: 5px;
+
+      &:after {
+        content: "●";
+        margin-left: 8px;
+      }
+
+      &:last-child:after {
+        content: '';
+      }
+    }
   }
 
   h5 {
