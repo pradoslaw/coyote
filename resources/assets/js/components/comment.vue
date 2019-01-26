@@ -26,7 +26,7 @@
                         <h6><a :href="'#comment-' + comment.id" class="text-muted timestamp" :data-timestamp="comment.timestamp">{{ comment.created_at }}</a></h6>
                     </div>
 
-                    <div class="margin-sm-top margin-sm-bottom" v-if="!isEditing">
+                    <div class="margin-sm-top margin-sm-bottom" v-if="!isEditing" v-html="comment.html">
                         {{ comment.html }}
                     </div>
 

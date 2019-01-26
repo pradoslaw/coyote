@@ -43,6 +43,16 @@ class Comment extends Model
     protected $casts = ['parent_id' => 'int', 'job_id' => 'int'];
 
     /**
+     * @var array
+     */
+    protected $appends = ['html'];
+
+    /**
+     * @var null|string
+     */
+    private $html = null;
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
@@ -79,7 +89,11 @@ class Comment extends Model
      */
     public function getHtmlAttribute()
     {
-        return $this->text;
+        if ($this->html !== null) {
+            return $this->html;
+        }
+
+        return $this->html = app('parser.job.comment')->parse($this->text);
     }
 
     /**

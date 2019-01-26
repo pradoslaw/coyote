@@ -37,7 +37,6 @@ class CommentResource extends JsonResource
             parent::toArray($request), [
                 'timestamp'     => $this->created_at->timestamp,
                 'created_at'    => format_date($this->created_at),
-                'html'          => $this->text,
                 'user'          => $this->user(),
                 'editable'      => $request->user() ? $this->user_id == $request->user()->id || $request->user()->can('job-update') : false,
                 'route'         => [

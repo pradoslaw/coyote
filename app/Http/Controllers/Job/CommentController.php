@@ -40,12 +40,14 @@ class CommentController extends Controller
         $this->transaction(function () use ($comment, $job) {
             $comment->save();
 
-            if ($comment->user_id !== $job->user_id) {
-                $job->user->notify(new CommentedNotification($comment));
-            }
+            if ($comment->wasRecentlyCreated) {
+                if ($comment->user_id !== $job->user_id) {
+                    $job->user->notify(new CommentedNotification($comment));
+                }
 
-            if ($comment->parent_id) {
-                $comment->parent->notify(new RepliedNotification($comment));
+                if ($comment->parent_id) {
+                    $comment->parent->notify(new RepliedNotification($comment));
+                }
             }
 
             stream(
@@ -73,19 +75,24 @@ class CommentController extends Controller
         /** @var Job\Comment $comment */
         $comment = $job->comments()->findOrNew($id);
 
-        $this->transaction(function () use ($comment) {
+        $this->transaction(function () use ($comment, $job) {
             $comment->children->each(function ($child) {
                 $child->delete();
             });
 
             $comment->delete();
-        });
 
+            stream(
+                Stream_Delete::class,
+                (new Stream_Comment())->map($job, $comment),
+                (new Stream_Job())->map($job)
+            );
+        });
     }
 
     private function checkAbility()
     {
         // todo: przeniesc ten kod do policies
-        abort_if($this->userId == $this->request->user()->id || $this->request->user()->can('job-update'), 403);
+        abort_unless($this->userId == $this->request->user()->id || $this->request->user()->can('job-update'), 403);
     }
 }
