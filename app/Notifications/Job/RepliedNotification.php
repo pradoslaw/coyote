@@ -46,6 +46,6 @@ class RepliedNotification extends Notification
                     link_to(UrlBuilder::job($this->comment->job), $this->comment->job->title)
                 )
             )
-            ->action('Kliknij, aby ją zobaczyć', UrlBuilder::job($this->comment->job) . '#comment-' . $this->comment->id);
+            ->action('Kliknij, aby ją zobaczyć', UrlBuilder::jobComment($this->comment->job, $this->comment->id));
     }
 }

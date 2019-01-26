@@ -49,7 +49,7 @@ class CommentedNotification extends Notification implements ShouldQueue
             )
             ->action(
                 'Kliknij, aby go zobaczyć i odpowiedzieć',
-                UrlBuilder::job($this->comment->job) . '#comment-' . $this->comment->id
+                UrlBuilder::jobComment($this->comment->job, $this->comment->id)
             );
     }
 }
