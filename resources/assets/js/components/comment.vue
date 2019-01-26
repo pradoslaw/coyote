@@ -13,7 +13,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li><a @click="edit" href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
-                            <li><a @click="remove" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
+                            <li><a @click="removeConfirm" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
                         </ul>
                     </div>
 
@@ -104,6 +104,15 @@
         <vue-modal ref="error">
             {{ error }}
         </vue-modal>
+
+        <vue-modal ref="confirm">
+            Czy na pewno chcesz usunąć ten komentarz?
+
+            <template slot="buttons">
+                <button @click="$refs.confirm.close()" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                <button @click="remove" type="submit" class="btn btn-danger danger">Tak, usuń</button>
+            </template>
+        </vue-modal>
     </div>
 </template>
 
@@ -145,7 +154,13 @@
                 }
             },
 
+            removeConfirm: function () {
+                this.$refs.confirm.open();
+            },
+
             remove: function () {
+                this.$refs.confirm.close();
+
                 axios.delete(this.comment.route.delete).then(() => {
                     this.$store.commit('comments/remove', this.comment);
                 });
