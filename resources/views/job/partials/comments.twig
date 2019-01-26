@@ -1,5 +1,5 @@
 <div id="comments" v-cloak>
-    <h4>Pytania i odpowiedzi</h4>
+    <h3><i class="fa fa-question-circle-o"></i> Pytania i odpowiedzi</h3>
 
     <div class="panel panel-default">
 
@@ -33,7 +33,7 @@
                             <div class="row" v-show="textFocused">
                                 <div class="form-group col-sm-6">
                                     {% if user('id') == null %}
-                                        <input type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+                                        <input v-model="defaultEmail" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
                                     {% endif %}
                                 </div>
 
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div v-if="comments.length > 0" class="panel panel-default">
         <div class="panel-body">
             <vue-comment
                 v-for="comment in comments"

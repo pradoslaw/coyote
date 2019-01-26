@@ -5,6 +5,7 @@ namespace Coyote\Http\Resources;
 use Carbon\Carbon;
 use Coyote\Job;
 use Coyote\Job\Comment;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -42,10 +43,15 @@ class CommentResource extends JsonResource
                 'route'         => [
                     'edit'      => route('job.comment', [$this->job_id, $this->id]),
                     'delete'    => route('job.comment.delete', [$this->job_id, $this->id]),
-                    'reply'     => route('job.comment', [$this->job_id])
+                    'reply'     => route('job.comment', [$this->job_id]),
+                    'flag'      => route('flag')
                 ],
                 'children'      => CommentResource::collection($this->children),
-                'is_author'     => $request->user() ? $this->user_id == CommentResource::$job->user_id : false
+                'is_author'     => $request->user() ? $this->user_id == CommentResource::$job->user_id : false,
+                'flag'          => [
+                    'url'       => UrlBuilder::jobComment(static::$job, $this->id),
+                    'metadata'  => encrypt(['job_id' => $this->id, 'permission' => 'job-delete'])
+                ]
             ]
         );
     }

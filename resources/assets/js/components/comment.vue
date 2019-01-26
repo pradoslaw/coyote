@@ -57,7 +57,7 @@
 
                     <ul class="list-inline">
                         <li><a @click="reply" href="javascript:" class="text-muted">Odpowiedz</a></li>
-                        <li><a href="#" class="text-muted">Zgłoś</a></li>
+                        <li><a :href="comment.route.flag" :data-url="comment.flag.url" :data-metadata="comment.flag.metadata" class="btn-report text-muted">Zgłoś</a></li>
                     </ul>
                 </div>
             </div>
