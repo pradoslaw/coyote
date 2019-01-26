@@ -2,10 +2,13 @@
 
 namespace Coyote\Job;
 
+use Coyote\Job;
 use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 /**
+ * @property int $id
  * @property User $user
  * @property int $user_id
  * @property int $job_id
@@ -13,9 +16,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $email
  * @property string $text
  * @property Comment[] $children
+ * @property Job $job
+ * @property Comment $parent
  */
 class Comment extends Model
 {
+    use Notifiable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -49,5 +56,37 @@ class Comment extends Model
     public function children()
     {
         return $this->hasMany(Comment::class, 'parent_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function parent()
+    {
+        return $this->hasOne(Comment::class, 'id', 'parent_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function job()
+    {
+        return $this->belongsTo(Job::class);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlAttribute()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @return string
+     */
+    public function routeNotificationForMail()
+    {
+        return $this->email ?: $this->user->email;
     }
 }

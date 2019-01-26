@@ -68,6 +68,16 @@ class UrlBuilder
     }
 
     /**
+     * @param Job $job
+     * @param int $commentId
+     * @return string
+     */
+    public static function jobComment(Job $job, int $commentId): string
+    {
+        return route('job.offer', [$job->id, $job->slug]) . '#comment-' . $commentId;
+    }
+
+    /**
      * @param Wiki $wiki
      * @param int $commentId
      * @return string

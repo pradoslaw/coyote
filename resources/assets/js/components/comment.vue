@@ -82,7 +82,7 @@
 
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <input v-if="this.$store.authId === null" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+                            <input v-if="$store.state.authId === null" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
                         </div>
 
                         <div class="form-group col-sm-6">
