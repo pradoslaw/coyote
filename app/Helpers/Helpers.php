@@ -132,7 +132,8 @@ function capitalize($string)
  * @param bool $diffForHumans
  * @return string
  */
-function format_date($dateTime, $diffForHumans = true) {
+function format_date($dateTime, $diffForHumans = true)
+{
     $format = auth()->check() ? auth()->user()->date_format : '%Y-%m-%d %H:%M';
 
     $dateTime = carbon($dateTime);
