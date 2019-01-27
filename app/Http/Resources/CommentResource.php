@@ -62,17 +62,19 @@ class CommentResource extends JsonResource
      */
     private function user(): array
     {
+        $avatar = cdn('img/avatar.png');
+
         if ($this->user_id) {
             return [
                 'name' => $this->user->name,
                 'profile' => (string) route('profile', [$this->user_id]),
-                'photo' => (string) $this->user->photo->url()
+                'photo' => $this->user->photo->getName() ? (string) $this->user->photo->url() : $avatar
             ];
         }
 
         return [
             'name' => $this->hideEmail($this->email),
-            'photo' => cdn('img/avatar.png')
+            'photo' => $avatar
         ];
     }
 

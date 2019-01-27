@@ -47,8 +47,8 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="button" class="btn btn-danger btn-sm pull-right margin-xs-left" @click="isEditing = false">Anuluj</button>
                                 <button type="submit" class="btn btn-primary btn-sm pull-right">Zapisz</button>
+                                <button type="button" class="btn btn-danger btn-sm pull-right margin-xs-left" @click="isEditing = false">Anuluj</button>
                             </div>
 
                             <div class="clearfix"></div>
