@@ -4,7 +4,7 @@ $(function() {
     /**
      * Show "flag to report" page
      */
-    $('.btn-report').click(function() {
+    $('#container-fluid').on('click', '.btn-report', function() {
         $.get($(this).attr('href'), {url: $(this).data('url'), metadata: $(this).data('metadata')}, function(html) {
             $(html).appendTo('body');
 

@@ -24,6 +24,7 @@
     "require": {
         "php": ">=7.2.0",
         "ext-gd": "*",
+        "ext-json": "*",
         "laravel/framework": "5.7.*",
         "rcrowe/twigbridge": "0.9.*",
         "laravelcollective/html": "5.7.*",
