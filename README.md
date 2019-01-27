@@ -83,13 +83,11 @@ Strona jest dostępna w przeglądarce pod adresem: `175.0.0.10:8880`
 Aby nie instalować wszystkich pakietów lokalnie, można skorzystać z Vagranta. Obecna wersja nie umożliwia jeszcze całkowitej instalacji z wnętrza Vagranta (jeśli wiesz, jak sprawić, by `npm install` i `gulp` działało na Vagrancie pod systemem Windows, daj znać), więc wymagane są następujące narzędzia zainstalowane lokalnie:
 * Vagrant
 * npm
-* gulp (instalowane przez `npm install -g gulp`)
 
 1. vagrant up
 2. npm install
-3. gulp
-4. w `etc/hosts` dodajemy wpis `192.168.10.10  coyote.dev`
-5. w przeglądarce pod adresem `coyote.dev` powinniśmy zobaczyć działającą wersję Coyote
+3. w `etc/hosts` dodajemy wpis `192.168.10.10  coyote.dev`
+4. w przeglądarce pod adresem `coyote.dev` powinniśmy zobaczyć działającą wersję Coyote
 
 ## Testowanie
 

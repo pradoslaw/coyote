@@ -24,9 +24,6 @@ sudo sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=postgres/g' .env
 sudo sed -i 's/^MONGO_USERNAME=.*/MONGO_USERNAME=/g' .env
 sudo sed -i 's/^MONGO_PASSWORD=.*/MONGO_PASSWORD=/g' .env
 
-#musimy mieć gulpa globalnie
-sudo npm install -g gulp
-
 make install-vagrant
 php artisan key:generate
 #php artisan config:clear

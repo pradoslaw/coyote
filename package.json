@@ -22,7 +22,6 @@
     "ekko-lightbox": "^4.0.0",
     "file-loader": "^3.0.1",
     "flatpickr": "^2.6.3",
-    "gulp": "^3.9.1",
     "intl-tel-input": "^12.1.5",
     "jquery-color-animation": "^1.5.1",
     "jquery-prettytextdiff": "^1.0.4",
