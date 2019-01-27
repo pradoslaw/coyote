@@ -15,9 +15,10 @@ use Illuminate\Notifications\Notifiable;
  * @property int $parent_id
  * @property string $email
  * @property string $text
- * @property Comment[] $children
+ * @property Comment[]|\Illuminate\Support\Collection $children
  * @property Job $job
  * @property Comment $parent
+ * @property string $html
  */
 class Comment extends Model
 {

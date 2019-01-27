@@ -147,5 +147,13 @@ class NotificationTypesTableSeeder extends Seeder
             'email' => true,
             'is_public' => false
         ]);
+        Type::forceCreate(['id' => Notification::JOB_COMMENT,
+            'name' => '...o komenarzu w obserwowanej ofercie pracy',
+            'headline' => 'Dodano komentarz do obserwowanej oferty pracy',
+            'category' => 'Praca',
+            'profile' => true,
+            'email' => true,
+            'is_public' => true
+        ]);
     }
 }

@@ -5,6 +5,7 @@ namespace Coyote;
 use Carbon\Carbon;
 use Coyote\Job\Comment;
 use Coyote\Job\Location;
+use Coyote\Job\Subscriber;
 use Coyote\Models\Job\Refer;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
@@ -446,7 +447,7 @@ class Job extends Model
      */
     public function subscribers()
     {
-        return $this->hasMany('Coyote\Job\Subscriber');
+        return $this->hasMany(Subscriber::class);
     }
 
     /**

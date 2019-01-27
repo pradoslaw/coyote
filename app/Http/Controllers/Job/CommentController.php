@@ -37,15 +37,21 @@ class CommentController extends Controller
             $model->user_id = $this->userId;
         });
 
-        $this->transaction(function () use ($comment, $job) {
+        $this->transaction(function () use ($comment, $job, $dispatcher) {
             $comment->save();
 
             if ($comment->wasRecentlyCreated) {
-                if ($comment->user_id !== $job->user_id) {
-                    $job->user->notify(new CommentedNotification($comment));
-                }
+                $subscribers = $job
+                    ->subscribers()
+                    ->with('user')
+                    ->get()
+                    ->pluck('user') // get all job's subscribers
+                    ->push($job->user) // push job's author
+                    ->exceptUser($this->auth); // exclude current logged user
 
-                if ($comment->parent_id) {
+                $dispatcher->send($subscribers, new CommentedNotification($comment));
+
+                if ($comment->parent_id && $comment->user_id !== $comment->parent->user_id) {
                     $comment->parent->notify(new RepliedNotification($comment));
                 }
             }
