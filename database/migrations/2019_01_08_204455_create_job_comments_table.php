@@ -25,7 +25,7 @@ class CreateJobCommentsTable extends Migration
             $table->text('text');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('job_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('job_comments')->onDelete('cascade');
 
             $table->index('job_id');
