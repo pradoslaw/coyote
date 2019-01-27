@@ -10,6 +10,11 @@
 - Zapisywanie informacji o dacie przeniesienia/zablokowania wątku, w tabeli topics
 - Na stronie głównej, ostatnia aktywność na forum prezentuje tylko wątki z kategorii, które nie są przez danego użytkownika niewidoczne
 
+**Praca**
+- Możliwość komentowania ofert pracy
+- Ustawienie sortowania nie jest zapamiętywane (domyślnie sortowanie zawsze po dacie)
+- W przypadku wyszukiwania, ustawienie sortowania na "Trafność" zamiast "Data dodania"
+
 ## 2.2
 
 **Ogólne**

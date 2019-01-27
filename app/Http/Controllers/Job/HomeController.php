@@ -124,11 +124,7 @@ class HomeController extends BaseController
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
         $this->request->session()->put('current_url', $this->request->fullUrl());
 
-        if ($this->request->filled('sort')) {
-            $this->setSetting('job.sort', $this->request->input('sort'));
-        }
-
-        $this->builder->setSort($this->request->input('sort', $this->getSetting('job.sort', $this->builder::DEFAULT_SORT)));
+        $this->builder->setSort($this->request->input('sort', $this->request->filled('q') ? '_score' : $this->builder::DEFAULT_SORT));
 
         $result = $this->job->search($this->builder);
 
