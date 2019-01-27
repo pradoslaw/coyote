@@ -1,19 +1,19 @@
 <template>
     <div style="position: relative">
         <input
-                type="text"
-                class="form-control"
-                :id="id"
-                placeholder="Np. Java, MS-SQL"
-                autocomplete="off"
-                v-model="vModel"
-                @click="onFocus"
-                @focus="onFocus"
-                @keyup.up.prevent="onUp"
-                @keyup.down.prevent="onDown"
-                @keyup.esc="onEsc"
-                @keyup="onKeyUp"
-                @keydown.enter.prevent="onEnter"
+            type="text"
+            class="form-control"
+            :id="id"
+            placeholder="Np. Java, MS-SQL"
+            autocomplete="off"
+            v-model="vModel"
+            @click="onFocus"
+            @focus="onFocus"
+            @keyup.up.prevent="onUp"
+            @keyup.down.prevent="onDown"
+            @keyup.esc="onEsc"
+            @keyup="onKeyUp"
+            @keydown.enter.prevent="onEnter"
         >
 
         <ol ref="dropdown" class="tag-dropdown" v-show="isDropdownShown">
@@ -32,7 +32,7 @@
     export default {
         props: {
             tags: {
-                type: Object
+                type: Array
             },
             id: {
                 type: String

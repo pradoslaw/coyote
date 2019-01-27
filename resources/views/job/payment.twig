@@ -1,4 +1,6 @@
 {% extends 'job.base' %}
+{% import 'components.widgets' as widgets %}
+
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
 {% block container %}
@@ -303,5 +305,5 @@
         };
     </script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+    {{ widgets.vue() }}
 {% endblock %}

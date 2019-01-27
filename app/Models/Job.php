@@ -140,7 +140,8 @@ class Job extends Model
         'is_publish'        => 'boolean',
         'is_ads'            => 'boolean',
         'is_highlight'      => 'boolean',
-        'is_on_top'         => 'boolean'
+        'is_on_top'         => 'boolean',
+        'plan_id'           => 'int'
     ];
 
     /**

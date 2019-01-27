@@ -60,7 +60,7 @@
     export default {
         props: {
             plans: {
-                type: Object
+                type: Array
             },
             vModel: {
                 type: Number

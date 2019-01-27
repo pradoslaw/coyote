@@ -15,7 +15,7 @@
                 type: Object
             },
             tooltips: {
-                type: Object
+                type: Array
             }
         },
         data: function() {
