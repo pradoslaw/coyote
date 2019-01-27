@@ -12,11 +12,6 @@ services:
     ports:
       - 5432:5432
 
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080
-
   php:
     build:
       context: ./
@@ -55,10 +50,10 @@ services:
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
 
-  smtp:
-    image: namshi/smtp
-    environment:
-      - PORT=${MAIL_PORT}
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
 
   selenium:
     image: selenium/standalone-chrome-debug

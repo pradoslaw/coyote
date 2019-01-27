@@ -43,6 +43,8 @@
             <div class="panel panel-default">
                 {% include 'job.partials.offer' %}
             </div>
+
+            {% include 'job.partials.comments' %}
         </div>
 
         <aside class="col-md-3">
@@ -101,6 +103,15 @@
 {% endblock %}
 
 {% block body %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.22/vue.js"></script>
+
+    <script>
+        var data = {
+            authId: {{ user('id') ?: 'null' }},
+            comments: {{ comments|json_encode|raw }}
+        };
+    </script>
+
     {{ parent() }}
 
     {% if user('id') == job.user_id %}
@@ -138,4 +149,6 @@
             $('.metadata li').tooltip({'container':'body'});
         });
     </script>
+
 {% endblock %}
+

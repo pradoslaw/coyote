@@ -83,6 +83,8 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->get('Renew/{job}', ['uses' => 'RenewController@index', 'as' => 'renew']);
 
     $this->get('Oferta', ['uses' => 'BusinessController@show', 'as' => 'business']);
+    $this->post('Comment/{job}/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment']);
+    $this->delete('Comment/{job}/{id}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete']);
 
     // Job's ads
     // --------------------------------------------------------------

@@ -23,13 +23,6 @@ interface ForumRepositoryInterface extends RepositoryInterface
     public function categoriesOrder($userId);
 
     /**
-     * Get restricted access forums.
-     *
-     * @return int[]
-     */
-    public function getRestricted();
-
-    /**
      * Sort a list of categories that can be shown in a <select>
      *
      * @return \Coyote\Forum[]

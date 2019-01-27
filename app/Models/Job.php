@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Carbon\Carbon;
+use Coyote\Job\Comment;
 use Coyote\Job\Location;
 use Coyote\Models\Job\Refer;
 use Coyote\Models\Scopes\ForUser;
@@ -57,6 +58,7 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property bool $is_highlight
  * @property bool $is_on_top
  * @property Plan $plan
+ * @property Comment[] $comments
  */
 class Job extends Model
 {
@@ -492,6 +494,22 @@ class Job extends Model
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function commentsWithChildren()
+    {
+        return $this->comments()->whereNull('parent_id')->orderBy('id', 'DESC')->with('children.user:id,name,photo', 'user:id,name,photo');
     }
 
     /**

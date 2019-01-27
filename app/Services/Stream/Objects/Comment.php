@@ -57,4 +57,15 @@ class Comment extends ObjectAbstract
         $this->displayName = excerpt($comment->html);
         $this->url = UrlBuilder::wikiComment($wiki, $comment->id);
     }
+
+    /**
+     * @param \Coyote\Job $job
+     * @param \Coyote\Job\Comment $comment
+     */
+    private function job($job, $comment)
+    {
+        $this->id = $comment->id;
+        $this->displayName = excerpt($comment->html);
+        $this->url = UrlBuilder::jobComment($job, $comment->id);
+    }
 }

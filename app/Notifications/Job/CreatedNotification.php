@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Notifications;
+namespace Coyote\Notifications\Job;
 
 use Coyote\Job;
 use Coyote\Services\Invoice\CalculatorFactory;
@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Coyote\Services\Notification\DatabaseChannel;
 
-class JobCreatedNotification extends Notification implements ShouldQueue
+class CreatedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

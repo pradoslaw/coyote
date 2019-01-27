@@ -72,6 +72,9 @@ $(function () {
             'business'
         );
     })
+    .on('/Praca/\\d+\\-*', () => {
+        require('./pages/job/offer');
+    })
     .on('/Adm/Firewall/*', () => {
         require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
             require('flatpickr');

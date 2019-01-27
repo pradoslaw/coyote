@@ -1,0 +1,98 @@
+<?php
+
+namespace Coyote\Http\Controllers\Job;
+
+use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Requests\Job\CommentRequest;
+use Coyote\Http\Resources\CommentResource;
+use Coyote\Job;
+use Coyote\Notifications\Job\CommentedNotification;
+use Coyote\Notifications\Job\RepliedNotification;
+use Illuminate\Contracts\Notifications\Dispatcher;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Objects\Job as Stream_Job;
+use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
+
+class CommentController extends Controller
+{
+    /**
+     * @param CommentRequest $request
+     * @param Dispatcher $dispatcher
+     * @param Job $job
+     * @param int|null $id
+     * @return CommentResource
+     */
+    public function save(CommentRequest $request, Dispatcher $dispatcher, Job $job, int $id = null)
+    {
+        /** @var Job\Comment $comment */
+        $comment = $job->comments()->findOrNew($id);
+
+        if ($comment->exists) {
+            $this->checkAbility();
+        }
+
+        $comment->fill($request->all())->creating(function ($model) {
+            $model->user_id = $this->userId;
+        });
+
+        $this->transaction(function () use ($comment, $job) {
+            $comment->save();
+
+            if ($comment->wasRecentlyCreated) {
+                if ($comment->user_id !== $job->user_id) {
+                    $job->user->notify(new CommentedNotification($comment));
+                }
+
+                if ($comment->parent_id) {
+                    $comment->parent->notify(new RepliedNotification($comment));
+                }
+            }
+
+            stream(
+                $comment->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
+                (new Stream_Comment())->map($job, $comment),
+                (new Stream_Job())->map($job)
+            );
+        });
+
+        CommentResource::withoutWrapping();
+        CommentResource::$job = $job;
+
+        return new CommentResource($comment->load('user'));
+    }
+
+    /**
+     * @param Job $job
+     * @param int $id
+     * @throws \Exception
+     */
+    public function delete(Job $job, int $id)
+    {
+        $this->checkAbility();
+
+        /** @var Job\Comment $comment */
+        $comment = $job->comments()->findOrNew($id);
+
+        $this->transaction(function () use ($comment, $job) {
+            $comment->children->each(function ($child) {
+                $child->delete();
+            });
+
+            $comment->delete();
+
+            stream(
+                Stream_Delete::class,
+                (new Stream_Comment())->map($job, $comment),
+                (new Stream_Job())->map($job)
+            );
+        });
+    }
+
+    private function checkAbility()
+    {
+        // todo: przeniesc ten kod do policies
+        abort_unless($this->userId == $this->request->user()->id || $this->request->user()->can('job-update'), 403);
+    }
+}

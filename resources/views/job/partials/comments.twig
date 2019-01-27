@@ -1,0 +1,66 @@
+<div id="comments" v-cloak>
+    <h3><i class="fa fa-question-circle-o"></i> Pytania i odpowiedzi</h3>
+
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+            <div class="comment">
+                <div class="media">
+                    <div class="media-left">
+                        <a href="{{ route('profile', [user('id')]) }}">
+                            <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail media-object">
+                        </a>
+                    </div>
+
+                    <div class="media-body">
+                        {{ form_open({'v-on:submit.prevent': 'submitForm', url: route('job.comment', {job: job.id}), method: 'post', ref: 'submitForm'}) }}
+                            <div class="form-group">
+                                <textarea-autosize
+                                    placeholder="Zadaj pytanie"
+                                    name="text"
+                                    class="form-control"
+                                    ref="textarea"
+                                    v-model="defaultText"
+                                    :min-height="40"
+                                    :max-height="350"
+                                    @focus.native.once="textFocused = true"
+                                    @keydown.native.ctrl.enter="submitForm"
+                                    rows="1"
+                                    tabindex="1"
+                                ></textarea-autosize>
+                            </div>
+
+                            <div class="row" v-show="textFocused">
+                                <div class="form-group col-sm-6">
+                                    {% if user('id') == null %}
+                                        <input v-model="defaultEmail" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm-6">
+                                    <button type="submit" class="btn btn-primary btn-sm pull-right" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</button>
+                                </div>
+                            </div>
+                        {{ form_close() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="comments.length > 0" class="panel panel-default">
+        <div class="panel-body">
+            <vue-comment
+                v-for="comment in comments"
+                :comment="comment"
+                :key="comment.id"
+            ></vue-comment>
+        </div>
+    </div>
+
+    <vue-modal ref="error">
+        ${ error }
+    </vue-modal>
+</div>
+
+

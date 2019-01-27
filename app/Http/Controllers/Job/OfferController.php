@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FlagFactory;
+use Coyote\Http\Resources\CommentResource;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Firm;
 use Coyote\Job;
@@ -59,6 +60,9 @@ class OfferController extends Controller
         // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
+        CommentResource::$job = $job;
+        $comments = CommentResource::collection($job->commentsWithChildren()->get());
+
         return $this->view('job.offer', [
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),
@@ -69,7 +73,8 @@ class OfferController extends Controller
             'previous_url'      => $this->request->session()->get('current_url'),
             'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
             // tags along with grouped category
-            'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory()
+            'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
+            'comments'          => $comments->toArray($this->request)
         ])->with(
             compact('job', 'flag', 'mlt')
         );

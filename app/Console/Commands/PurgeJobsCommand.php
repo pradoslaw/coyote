@@ -4,7 +4,7 @@ namespace Coyote\Console\Commands;
 
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Job;
-use Coyote\Notifications\JobExpiredNotification;
+use Coyote\Notifications\Job\ExpiredNotification;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Elasticsearch\ResultSet;
@@ -107,6 +107,6 @@ class PurgeJobsCommand extends Command
      */
     private function sendEmail(User $user, Job $job)
     {
-        $user->notify(new JobExpiredNotification($job));
+        $user->notify(new ExpiredNotification($job));
     }
 }

@@ -24,3 +24,6 @@ RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.
 
 RUN apt-get update && apt-get install -qq -y nodejs yarn && apt-get remove --purge --auto-remove -y
 
+RUN yarn global add gulp
+RUN yarn global add webpack@3.x
+

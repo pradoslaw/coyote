@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Str;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Query\JoinClause;
 
 /**
