@@ -15,6 +15,7 @@ class VerifyCsrfToken extends BaseVerifier
         '/User/Settings/Ajax',
         '/Microblog/Comment/Show/*',
         '/Forum/Comment/*',
-        '/Praca/Payment/Status'
+        '/Praca/Payment/Status',
+        '/mailgun/permanent-failure'
     ];
 }
