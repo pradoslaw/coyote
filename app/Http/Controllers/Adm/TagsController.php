@@ -65,6 +65,10 @@ class TagsController extends BaseController
 
         $tag->fill($form->all());
 
+        if (!$tag->category_id) {
+            $tag->category_id = null; // todo: do usuniecia po wlaczeniu middleware ConvertEmptyStringsToNull
+        }
+
         if ($form->getRequest()->hasFile('logo')) {
             $tag->logo->upload($form->getRequest()->file('logo'));
         }

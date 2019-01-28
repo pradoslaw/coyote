@@ -45,6 +45,10 @@ class TagForm extends Form
                 'label' => 'Kategoria',
                 'choices' => $categoriesList,
                 'empty_value' => '--',
+                'rules' => [
+                    'nullable',
+                    'int'
+                ]
 
             ])
             ->add('logo', 'file', [
