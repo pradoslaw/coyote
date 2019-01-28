@@ -68,7 +68,7 @@ class CommentResource extends JsonResource
             return [
                 'name' => $this->user->name,
                 'profile' => (string) route('profile', [$this->user_id]),
-                'photo' => $this->user->photo->getName() ? (string) $this->user->photo->url() : $avatar
+                'photo' => $this->user->photo->getFilename() ? (string) $this->user->photo->url() : $avatar
             ];
         }
 
