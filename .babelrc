@@ -1,5 +1,23 @@
 {
   "presets": [
     "env"
+  ],
+  "plugins": [
+    [
+      "prismjs",
+      {
+        "languages": [
+          "applescript",
+          "css",
+          "javascript",
+          "markup"
+        ],
+        "plugins": [
+          "line-numbers"
+        ],
+        "theme": "twilight",
+        "css": true
+      }
+    ]
   ]
 }

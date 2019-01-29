@@ -23,9 +23,11 @@ import './bootstrap';
 
 import Config from './libs/config';
 import Router from './libs/router';
+import Prism from 'prismjs';
 
 window.ws = RealtimeFactory();
-
+// Prism.highlightAll();
+//
 import './components/notifications.js';
 import './components/pm.js';
 
