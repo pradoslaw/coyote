@@ -18,9 +18,9 @@ use Ramsey\Uuid\Uuid;
 /**
  * @property int $id
  * @property string $guest_id
- * @property int $is_active
- * @property int $is_confirm
- * @property int $is_blocked
+ * @property bool $is_active
+ * @property bool $is_confirm
+ * @property bool $is_blocked
  * @property int $group_id
  * @property int $visits
  * @property int $notifications
