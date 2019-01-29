@@ -15,8 +15,7 @@
         "plugins": [
           "line-numbers"
         ],
-        "theme": "twilight",
-        "css": true
+        "css": false
       }
     ]
   ]
