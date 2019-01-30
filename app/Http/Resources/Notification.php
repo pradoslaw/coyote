@@ -20,7 +20,9 @@ class Notification extends JsonResource
         $this->resource->user = $senders->first();
         $count = $senders->count();
 
-        if ($count === 2) {
+        if ($count === 0) {
+            return []; // no senders? return empty notification
+        } elseif ($count === 2) {
             $sender = $this->resource->user->name . ' (oraz ' . $senders->last()->name . ')';
         } elseif ($count > 2) {
             $sender = $this->resource->user->name . ' (oraz ' . Declination::format($count, ['osoba', 'osoby', 'osób']) . ')';
