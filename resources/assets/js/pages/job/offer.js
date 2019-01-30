@@ -3,6 +3,7 @@ import Config from '../../libs/config';
 import VueComment from '../../components/comment.vue';
 import VueModal from '../../components/modal.vue';
 import VueTextareaAutosize from 'vue-textarea-autosize';
+import VuePrompt from '../../components/prompt.vue';
 import axios from 'axios';
 import store from '../../store';
 
@@ -13,7 +14,8 @@ new Vue({
     delimiters: ['${', '}'],
     components: {
         'vue-comment': VueComment,
-        'vue-modal': VueModal
+        'vue-modal': VueModal,
+        'vue-prompt': VuePrompt
     },
     data: {
         defaultText: '',
