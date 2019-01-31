@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Resources\PromptResource;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 
@@ -11,11 +12,19 @@ class PromptController extends Controller
     /**
      * @param Request $request
      * @param UserRepositoryInterface $user
-     * @return $this
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function index(Request $request, UserRepositoryInterface $user)
     {
         $this->validate($request, ['q' => 'username']);
-        return view('components.prompt')->with('users', $user->lookupName($request['q']));
+
+        $result = $user->lookupName($request['q']);
+
+        if ($request->has('json')) {
+            return PromptResource::collection($result)->toArray($request);
+        }
+
+        return view('components.prompt')->with('users', $result);
     }
 }

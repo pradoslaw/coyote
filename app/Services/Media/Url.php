@@ -88,6 +88,10 @@ class Url
      */
     private function makeUrl()
     {
+        if (!$this->file->getFilename()) {
+            return ''; // because __toString() requires string value
+        }
+
         if ($this->file->getDownloadUrl() && !$this->file->isImage()) {
             return $this->file->getDownloadUrl();
         }
