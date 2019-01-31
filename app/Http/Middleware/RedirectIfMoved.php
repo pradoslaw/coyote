@@ -31,8 +31,7 @@ class RedirectIfMoved extends AbstractMiddleware
     public function handle(Request $request, Closure $next)
     {
         // check if url is invalid if category was changed or slug was changed
-        // only if it is HTTP GET request
-        if ($request->isMethod('get') === false || !$this->isInvalidUrl($request)) {
+        if (!$this->isInvalidUrl($request)) {
             return $next($request);
         }
 
@@ -42,10 +41,31 @@ class RedirectIfMoved extends AbstractMiddleware
         // get current topic's category
         $forum = $this->forum->find($topic->forum_id);
 
-        $request->route()->setParameter('forum', $forum);
-        $request->route()->setParameter('slug', $topic->slug);
+        // replace original route parameters with new ones
+        $this->replaceParameter($request, 'forum', $forum);
+        $this->replaceParameter($request, 'topic', $topic);
+        $this->replaceParameter($request, 'slug', $topic->slug);
 
-        return $this->redirect($request);
+        // if this is GET request, simply redirect
+        if ($request->isMethod('get')) {
+            return $this->redirect($request);
+        }
+
+        return $next($request);
+    }
+
+    /**
+     * Replace parameter only if it exists in URL! Otherwise request will be broken
+     *
+     * @param Request $request
+     * @param string $name
+     * @param $value
+     */
+    private function replaceParameter(Request $request, string $name, $value)
+    {
+        if ($request->route()->hasParameter($name)) {
+            $request->route()->setParameter($name, $value);
+        }
     }
 
     /**
