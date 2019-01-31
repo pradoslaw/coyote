@@ -15,7 +15,7 @@
                     <div class="media-body">
                         {{ form_open({'v-on:submit.prevent': 'submitForm', url: route('job.comment', {job: job.id}), method: 'post', ref: 'submitForm'}) }}
                             <div class="form-group">
-                                <vue-prompt>
+                                <vue-prompt source="{{ route('user.prompt') }}">
                                     <textarea-autosize
                                         placeholder="Zadaj pytanie"
                                         name="text"
