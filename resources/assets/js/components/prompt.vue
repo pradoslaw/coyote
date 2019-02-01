@@ -3,7 +3,7 @@
         <slot></slot>
 
         <ul ref="list" class="auto-complete" v-show="isListShown">
-            <li v-for="(user, index) in result" :class="{hover: index === selectedIndex}">
+            <li v-for="(user, index) in result" :class="{hover: index === selectedIndex}" @click="onClick" @mouseover="onMouseOver(index)">
                 <img :src="user.photo" width="16" height="16">
                 <span>{{ user.name }}</span>
 
@@ -35,7 +35,22 @@
             this.input = this.$slots.default[0].elm;
 
             this.input.addEventListener('keyup', this.onKeyUp);
+            this.input.addEventListener('click', this.onKeyUp); // bind one listener to two events
             this.input.addEventListener('keydown', this.onKeyDown);
+
+            document.addEventListener("click", e => {
+                let target = e.target;
+
+                do {
+                    if (target === this.$refs.list) {
+                        return;
+                    }
+
+                    target = target.parentNode;
+                } while (target);
+
+                this.result = [];
+            });
         },
         computed: {
             isListShown: function () {
@@ -43,16 +58,23 @@
             }
         },
         methods: {
+            onClick: function () {
+                const caretPosition = this.getCaretPosition();
+                const startIndex = this.getUserNamePosition(caretPosition);
+
+                this.applySelected(startIndex, caretPosition);
+            },
+
+            onMouseOver: function (index) {
+                this.selectedIndex = index;
+            },
+
             onKeyUp: function (e) {
                 let userName = '';
 
                 const keyCode = e.keyCode;
                 const caretPosition = this.getCaretPosition();
                 const startIndex = this.getUserNamePosition(caretPosition);
-
-                if (startIndex > -1) {
-                    userName = this.input.value.substr(startIndex, caretPosition - startIndex);
-                }
 
                 if (keyCode === ESC) {
                     this.result = [];
@@ -67,11 +89,16 @@
 
                     return;
                 } else if (keyCode === ENTER) {
-                    this.applySelected(startIndex, caretPosition);
+                    if (this.isListShown) {
+                        this.applySelected(startIndex, caretPosition);
+                    }
 
                     return;
                 }
 
+                if (startIndex > -1) {
+                    userName = this.input.value.substr(startIndex, caretPosition - startIndex);
+                }
                 this.lookup(userName);
             },
 
