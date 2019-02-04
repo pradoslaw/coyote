@@ -4,7 +4,7 @@
 
         <ul ref="list" class="auto-complete" v-show="isListShown">
             <li v-for="(user, index) in result" :class="{hover: index === selectedIndex}" @click="onClick" @mouseover="onMouseOver(index)">
-                <img :src="user.photo" width="16" height="16">
+                <img :src="user.photo" class="avatar-placeholder">
                 <span>{{ user.name }}</span>
 
                 <small v-if="user.group" class="label label-default">{{ user.group }}</small>

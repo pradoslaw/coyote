@@ -15,13 +15,31 @@
     padding: 5px 0 5px 5px;
     cursor: pointer;
     color: gray;
+
     img {
       vertical-align: middle;
       margin-right: 5px;
+      width: 16px;
+      height: 16px;
+      position: relative;
+
+      &:after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        content: '';
+        background: url('/img/avatar.png');
+        background-size: 16px 16px;
+      }
     }
+
     b {
       color: $gray;
     }
+
     &.hover {
       background: #ddd;
     }
