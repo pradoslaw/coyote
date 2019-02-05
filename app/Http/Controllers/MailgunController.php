@@ -22,7 +22,7 @@ class MailgunController extends Controller
         /** @var \Coyote\User $result */
         $result = $user->findBy('email', $request->input('event-data.recipient'), ['id', 'name', 'email', 'is_confirm']);
 
-        if ($result->is_confirm) {
+        if ($result && $result->is_confirm) {
             $result->is_confirm = false;
             $result->save();
         }
