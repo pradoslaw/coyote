@@ -4,7 +4,7 @@ namespace Coyote\Services\Parser\Parsers;
 
 class Prism implements ParserInterface
 {
-    const ALIAS = ['c#' => 'csharp', 'delphi' => 'pascal'];
+    const ALIAS = ['c#' => 'csharp', 'delphi' => 'pascal', 'asm' => 'asm6502', 'bf' => 'brainfuck', 'jquery' => 'javascript', 'vb' => 'visual-basic'];
 
     /**
      * @param string $text
