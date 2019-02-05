@@ -7,7 +7,7 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Container;
 use Coyote\Services\Parser\Parsers\Censore;
-use Coyote\Services\Parser\Parsers\Geshi;
+use Coyote\Services\Parser\Parsers\Prism;
 use Coyote\Services\Parser\Parsers\Latex;
 use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;
@@ -41,7 +41,7 @@ class PostFactory extends AbstractFactory
                     $parser->attach(new Purifier());
                     $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost(), $this->app['html']));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
-//                    $parser->attach(new Geshi());
+                    $parser->attach(new Prism());
 
                     return $parser;
                 });

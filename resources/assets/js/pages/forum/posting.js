@@ -12,6 +12,8 @@ $(function () {
 
         $.post($(this).data('url'), {'text': $('#submit-form').find('textarea[name="text"]').val()}, function(html) {
             $('#preview').find('.post-content').html(html);
+
+            Prism.highlightAll();
         });
     });
 

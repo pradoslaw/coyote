@@ -7,10 +7,57 @@
       "prismjs",
       {
         "languages": [
-          "applescript",
+
+
+          "markup",
           "css",
+          "clike",
           "javascript",
-          "markup"
+
+          "ada",
+          "bash",
+          "basic",
+          "batch",
+          "brainfuck",
+          "c",
+          "clojure",
+          "diff",
+          "docker",
+          "elixir",
+          "erlang",
+          "go",
+          "graphql",
+          "groovy",
+          "haskell",
+          "ini",
+          "java",
+          "julia",
+          "kotlin",
+          "latex",
+          "less",
+          "lisp",
+          "lua",
+          "markdown",
+          "nginx",
+          "pascal",
+          "perl",
+          "php",
+          "python",
+          "r",
+          "ruby",
+          "rust",
+          "scala",
+          "sql",
+          "twig",
+          "vim",
+          "yaml"
+
+
+
+
+
+
+
         ],
         "plugins": [
           "line-numbers"

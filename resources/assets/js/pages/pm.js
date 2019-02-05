@@ -70,6 +70,8 @@ $(function() {
 
             $.post(Config.get('preview_url'), {'text': $('textarea[name="text"]').val()}, html => {
                 $('#preview').html(html);
+
+                Prism.highlightAll();
             });
         }
     });

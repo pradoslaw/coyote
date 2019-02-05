@@ -5,7 +5,7 @@ namespace Coyote\Services\Parser\Factories;
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Parser\Container;
-use Coyote\Services\Parser\Parsers\Geshi;
+use Coyote\Services\Parser\Parsers\Prism;
 use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\Services\Parser\Parsers\Purifier;
@@ -29,7 +29,7 @@ class PmFactory extends AbstractFactory
         $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));
         $parser->attach(new Purifier());
         $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
-        $parser->attach(new Geshi());
+        $parser->attach(new Prism());
 
         if ($this->isSmiliesAllowed()) {
             $parser->attach(new Smilies());

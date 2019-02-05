@@ -7,7 +7,7 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Services\Parser\Container;
 use Coyote\Services\Parser\Parsers\Context;
-use Coyote\Services\Parser\Parsers\Geshi;
+use Coyote\Services\Parser\Parsers\Prism;
 use Coyote\Services\Parser\Parsers\Latex;
 use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;
@@ -47,7 +47,7 @@ class WikiFactory extends AbstractFactory
                 $parser->attach((new Purifier())->set('HTML.Allowed', implode(',', $allowedTags)));
                 $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                 $parser->attach(new Context());
-                $parser->attach(new Geshi());
+                $parser->attach(new Prism());
 
                 return $parser;
             });
