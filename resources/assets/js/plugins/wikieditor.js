@@ -16,6 +16,7 @@ import Textarea from '../libs/textarea';
         'css': 'CSS',
         'delphi': 'Delphi',
         'diff': 'Diff',
+        'elixir': 'Elixir',
         'fsharp': 'F#',
         'fortan': 'Fortran',
         'groovy': 'Groovy',
@@ -26,6 +27,8 @@ import Textarea from '../libs/textarea';
         'ini': 'INI',
         'java': 'Java',
         'javascript': 'JavaScript',
+        'julia': 'Julia',
+        'kotlin': 'Kotlin',
         'latex': 'LaTeX',
         'lisp': 'Lisp',
         'lua': 'Lua',
@@ -37,12 +40,17 @@ import Textarea from '../libs/textarea';
         'powershell': 'PowerShell',
         'prolog': 'Prolog',
         'python': 'Python',
+        'r': 'R',
         'ruby': 'Ruby',
+        'rust': 'Rust',
         'scala': 'Scala',
         'smalltalk': 'Smalltalk',
         'sql': 'SQL',
+        'twig': 'Twig',
         'visual-basic': 'Visual Basic',
-        'xml': 'XML'
+        'xml': 'XML',
+        'vim': 'Vim',
+        'yaml': 'Yaml'
     };
 
     $.fn.wikiEditor = function () {

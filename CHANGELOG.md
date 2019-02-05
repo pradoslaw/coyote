@@ -4,6 +4,7 @@
 - Upgrade do Laravel 5.7
 - Rezygnacja z MongoDB na rzecz PostgreSQL + Elasticsearch
 - Upgrade do Webpack 4, rezygnacja z Gulp
+- Rezygnacja z Geshi na rzecz Prism
 
 **Forum**
 - Zapisywanie informacji o powodzie usunięcia postów, w tabeli posts
