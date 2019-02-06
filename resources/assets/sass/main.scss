@@ -3,6 +3,7 @@
 @import url("//fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext");
 @import "vendor/_bootstrap";
 @import "vendor/font-awesome";
+@import "vendor/prism";
 
 @import "helpers/variables";
 @import "helpers/utilities";
@@ -31,5 +32,5 @@
 @import "layout/footer";
 @import "layout/grid";
 
-@import "../../../node_modules/perfect-scrollbar/src/css/main";
-@import "../../../node_modules/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss";
+@import "~perfect-scrollbar/src/css/main";
+@import "~awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss";

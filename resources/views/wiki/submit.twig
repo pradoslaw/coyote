@@ -81,6 +81,8 @@
             $('.nav').find('a[href="#preview"]').click(function() {
                 $.post('{{ route('wiki.preview') }}', {text: $('textarea[name="text"]').val()}, function(html) {
                     $('#preview').html(html);
+
+                    Prism.highlightAll();
                 });
             });
         })
