@@ -37,7 +37,6 @@ import Textarea from '../libs/textarea';
         'perl': 'Perl',
         'php': 'PHP',
         'plsql': 'PL/SQL',
-        'powershell': 'PowerShell',
         'prolog': 'Prolog',
         'python': 'Python',
         'r': 'R',
@@ -49,7 +48,6 @@ import Textarea from '../libs/textarea';
         'twig': 'Twig',
         'visual-basic': 'Visual Basic',
         'xml': 'XML',
-        'vim': 'Vim',
         'yaml': 'Yaml'
     };
 
