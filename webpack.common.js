@@ -1,7 +1,7 @@
 var path = require('path');
+const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WebpackMd5Hash = require("webpack-md5-hash");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ConcatPlugin = require('webpack-concat-plugin');
 
@@ -35,9 +35,8 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, 'public'),
-        filename: 'js/[name]-[chunkhash].js',
-        // chunkFilename: 'js/[name].js',
-        chunkFilename: 'js/[name]-[chunkhash].js',
+        filename: 'js/[name]-[contenthash].js',
+        chunkFilename: 'js/[name]-[contenthash].js',
         publicPath: '/'
     },
     externals: {
@@ -100,12 +99,12 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(['public/js/*.*', 'public/css/*.*'], {} ),
+        // @see https://webpack.js.org/guides/caching/#module-identifiers
+        new webpack.HashedModuleIdsPlugin(),
 
         new MiniCssExtractPlugin({
             filename: "css/[name]-[contenthash].css"
         }),
-
-        new WebpackMd5Hash(),
 
         new ManifestPlugin({
             fileName: 'manifest.json'
