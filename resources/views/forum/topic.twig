@@ -6,7 +6,7 @@
 {% import 'components.forms' as forms %}
 {% import 'components.modals' as modals %}
 
-{% set is_writeable = forum.is_locked ? false : (can('update', forum) ? true : not topic.is_locked) %}
+{% set is_writeable = can('write', topic) and can('write', forum) %}
 {% set too_old = diff_in_months(topic.last_post_created_at) >= 6 %}
 
 {% block content %}

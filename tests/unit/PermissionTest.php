@@ -177,4 +177,38 @@ class PermissionTest extends \Codeception\TestCase\Test
         $this->assertTrue($user->can('write', $topic));
         $this->assertFalse(\Illuminate\Support\Facades\Gate::allows('write', $topic));
     }
+
+    public function testCanUserWriteInLockedForum()
+    {
+        $user = $this->tester->createUser();
+        $forum = $this->tester->createForum(['enable_anonymous' => true]);
+
+        // anonymous user can write in category unless it's locked or has restricted guest access
+        $this->assertTrue(\Illuminate\Support\Facades\Gate::allows('write', $forum));
+
+        $forum->enable_anonymous = false;
+        $forum->save();
+
+        $this->assertFalse(\Illuminate\Support\Facades\Gate::allows('write', $forum));
+        $this->assertTrue($user->can('write', $forum));
+
+        $forum->is_locked = true;
+        $forum->save();
+
+        // only moderators can update posts in category
+        $this->assertFalse($user->can('update', $forum));
+        $this->assertFalse($user->can('write', $forum));
+    }
+
+    public function testCanModeratorWriteInLockedForum()
+    {
+        $user = $this->tester->createUser();
+        $forum = $this->tester->createForum(['is_locked' => true]);
+
+        $this->tester->grantAdminAccess($user);
+
+        // only moderators can update posts in category
+        $this->assertTrue($user->can('update', $forum));
+        $this->assertTrue($user->can('write', $forum));
+    }
 }

@@ -11,14 +11,27 @@ class ForumPolicy
     use HandlesAuthorization;
 
     /**
-     * @param string $ability
+     * @param User|null $user
+     * @param Forum $forum
+     * @return bool
+     */
+    public function write(?User $user, Forum $forum): bool
+    {
+        if (!$forum->enable_anonymous && $user === null) {
+            return false;
+        }
+
+        return !$forum->is_locked ? true : ($user !== null ? $this->update($user, $forum) : false);
+    }
+
+    /**
      * @param User $user
      * @param Forum $forum
      * @return bool
      */
-    private function check($ability, User $user, Forum $forum)
+    public function update(User $user, Forum $forum)
     {
-        return $forum->ability($ability, $user->id) || $user->can($ability);
+        return $this->check('forum-update', $user, $forum);
     }
 
     /**
@@ -76,16 +89,6 @@ class ForumPolicy
      * @param Forum $forum
      * @return bool
      */
-    public function update(User $user, Forum $forum)
-    {
-        return $this->check('forum-update', $user, $forum);
-    }
-
-    /**
-     * @param User $user
-     * @param Forum $forum
-     * @return bool
-     */
     public function delete(User $user, Forum $forum)
     {
         return $this->check('forum-delete', $user, $forum);
@@ -117,5 +120,16 @@ class ForumPolicy
         }
 
         return false;
+    }
+
+    /**
+     * @param string $ability
+     * @param User $user
+     * @param Forum $forum
+     * @return bool
+     */
+    private function check($ability, User $user, Forum $forum)
+    {
+        return $forum->ability($ability, $user->id) || $user->can($ability);
     }
 }

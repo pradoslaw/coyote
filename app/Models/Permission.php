@@ -3,7 +3,7 @@
 namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class Permission extends Model
 {
