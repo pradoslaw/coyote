@@ -39,14 +39,14 @@ class PostPolicy
      */
     private function check($ability, User $user, Post $post): bool
     {
-        if (!$post->forum->is_locked
+        if (!$post->forum->is_locked // removing (updating etc) in locked category is forbidden
             && !$post->topic->is_locked
             && $this->isAuthor($user, $post)
             && ($this->isNotOld($post) || $this->hasEnoughReputation($user, $post))) {
             return true;
         }
 
-        return $user->can(substr($ability, 0, 6), $post->forum);
+        return $user->can(substr($ability, 6), $post->forum);
     }
 
     /**
