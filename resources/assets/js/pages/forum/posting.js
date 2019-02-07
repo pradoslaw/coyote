@@ -440,6 +440,8 @@ $(function () {
         } else {
             $post.html(posts[$this.data('post-id')]);
             $this.removeClass('active');
+
+            Prism.highlightAll();
         }
 
         return false;
