@@ -59,7 +59,8 @@ trait HelperTrait
             'ip' => $fake->ipv4,
             'browser' => $fake->userAgent,
             'host' => $fake->domainName,
-            'user_id' => null
+            'user_id' => null,
+            'created_at' => \Carbon\Carbon::now()
         ];
 
         return \Coyote\Post::forceCreate(array_merge($data, $attributes));

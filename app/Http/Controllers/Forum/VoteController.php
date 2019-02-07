@@ -17,21 +17,21 @@ class VoteController extends BaseController
     public function index($post)
     {
         if (auth()->guest()) {
-            return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
+            return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 401);
         }
 
         if (!config('app.debug') && auth()->user()->id === $post->user_id) {
-            return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
+            return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 401);
         }
 
         $topic = $post->topic;
-        if ($topic->is_locked) {
-            return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
+        if ($this->auth->cannot('write', $topic)) {
+            return response()->json(['error' => 'Wątek jest zablokowany.'], 403);
         }
 
         $forum = $topic->forum;
-        if ($forum->is_locked) {
-            return response()->json(['error' => 'Forum jest zablokowane.'], 500);
+        if ($this->auth->cannot('write', $forum)) {
+            return response()->json(['error' => 'Forum jest zablokowane.'], 403);
         }
 
         $this->transaction(function () use ($post, $topic, $forum) {

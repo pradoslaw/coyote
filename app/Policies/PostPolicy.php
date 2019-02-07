@@ -39,9 +39,14 @@ class PostPolicy
      */
     private function check($ability, User $user, Post $post): bool
     {
-        return ($this->isAuthor($user, $post) && ($this->isNotOld($post) || $this->hasEnoughReputation($user, $post)))
-            || $post->forum->ability($ability, $user->id)
-                || $user->can($ability);
+        if (!$post->forum->is_locked
+            && !$post->topic->is_locked
+            && $this->isAuthor($user, $post)
+            && ($this->isNotOld($post) || $this->hasEnoughReputation($user, $post))) {
+            return true;
+        }
+
+        return $user->can(substr($ability, 0, 6), $post->forum);
     }
 
     /**

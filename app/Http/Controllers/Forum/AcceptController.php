@@ -18,23 +18,23 @@ class AcceptController extends BaseController
     public function index($post)
     {
         if (auth()->guest()) {
-            return response()->json(['error' => 'Musisz być zalogowany, aby zaakceptować ten post.'], 500);
+            return response()->json(['error' => 'Musisz być zalogowany, aby zaakceptować ten post.'], 401);
         }
 
         // post belongs to this topic:
         $topic = $post->topic;
 
-        if ($topic->is_locked) {
-            return response()->json(['error' => 'Wątek jest zablokowany.'], 500);
+        if ($this->auth->cannot('write', $topic)) {
+            return response()->json(['error' => 'Wątek jest zablokowany.'], 403);
         }
 
         $forum = $topic->forum;
-        if ($forum->is_locked) {
-            return response()->json(['error' => 'Forum jest zablokowane.'], 500);
+        if ($this->auth->cannot('write', $forum)) {
+            return response()->json(['error' => 'Forum jest zablokowane.'], 403);
         }
 
-        if ($this->getGateFactory()->denies('update', $forum) && $topic->firstPost()->value('user_id') !== $this->userId) {
-            return response()->json(['error' => 'Możesz zaakceptować post tylko we własnym wątku.'], 500);
+        if ($this->auth->cannot('update', $forum) && $topic->firstPost()->value('user_id') !== $this->userId) {
+            return response()->json(['error' => 'Możesz zaakceptować post tylko we własnym wątku.'], 403);
         }
 
         $this->transaction(function () use ($topic, $post, $forum) {

@@ -7,6 +7,7 @@
 {% import 'components.modals' as modals %}
 
 {% set is_writeable = can('write', topic) and can('write', forum) %}
+{% set is_locked = topic.is_locked or forum.is_locked %}
 {% set too_old = diff_in_months(topic.last_post_created_at) >= 6 %}
 
 {% block content %}
@@ -44,7 +45,7 @@
             <div class="panel-body">
 
                 <div class="table-forum margin-xs-top">
-                    {% if is_writeable %}
+                    {% if not is_locked %}
                         <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
                         <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
                     {% endif %}
@@ -71,7 +72,7 @@
                         </div>
                     </div>
 
-                    {% if is_writeable %}
+                    {% if not is_locked %}
                         <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
 
                         {% if auth_check() and not too_old %}
@@ -82,7 +83,7 @@
             </div>
         </section>
 
-        {% if auth_check() and is_writeable and not too_old %}
+        {% if is_writeable and not too_old %}
             {{ form_start(form) }}
                 <section id="box-fast-form" class="row">
                     <div class="col-xs-12">

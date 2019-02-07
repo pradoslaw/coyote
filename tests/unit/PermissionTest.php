@@ -127,6 +127,29 @@ class PermissionTest extends \Codeception\TestCase\Test
         $this->assertTrue($user->can('delete', $post));
     }
 
+    public function testCanUserDeletePostInLockedForumOrTopic()
+    {
+        $user = $this->tester->createUser();
+        $forum = $this->tester->createForum(['is_locked' => true]);
+
+        $topic = $this->tester->createTopic(['forum_id' => $forum->id]);
+        $post = $this->tester->createPost(['topic_id' => $topic->id, 'forum_id' => $forum->id, 'user_id' => $user->id]);
+
+        $this->assertFalse($user->can('delete', $post));
+
+        $post->forum->is_locked = false;
+        $post->forum->save();
+
+        $this->assertTrue($user->can('delete', $post));
+
+        /////////////////////////////////
+
+        $post->topic->is_locked = true;
+        $post->topic->save();
+
+        $this->assertFalse($user->can('delete', $post));
+    }
+
     public function testCanUserAccessForum()
     {
         $user = $this->tester->createUser();
