@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
@@ -44,18 +45,13 @@ class CommentController extends Controller
     /**
      * Publikowanie komentarza na mikroblogu
      *
-     * @param Request $request
+     * @param MicroblogRequest $request
      * @param Dispatcher $dispatcher
      * @param \Coyote\Microblog $microblog
      * @return \Illuminate\Http\JsonResponse
      */
-    public function save(Request $request, Dispatcher $dispatcher, $microblog)
+    public function save(MicroblogRequest $request, Dispatcher $dispatcher, $microblog)
     {
-        $this->validate($request, [
-            'parent_id'     => 'sometimes|integer|exists:microblogs,id',
-            'text'          => 'required|string|max:5000|throttle:' . $microblog->id
-        ]);
-
         if (!$microblog->exists) {
             $user = $this->auth;
             $data = $request->only(['text', 'parent_id']) + ['user_id' => $user->id];

@@ -6,6 +6,7 @@ use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MediaFactory;
+use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
@@ -43,17 +44,13 @@ class SubmitController extends Controller
     /**
      * Publikowanie wpisu na mikroblogu
      *
-     * @param Request $request
+     * @param MicroblogRequest $request
      * @param Dispatcher $dispatcher
      * @param \Coyote\Microblog $microblog
      * @return \Illuminate\View\View
      */
-    public function save(Request $request, Dispatcher $dispatcher, $microblog)
+    public function save(MicroblogRequest $request, Dispatcher $dispatcher, $microblog)
     {
-        $this->validate($request, [
-            'text'          => 'required|string|max:10000|throttle:' . $microblog->id
-        ]);
-
         $data = $request->only(['text']);
 
         if (!$microblog->exists) {
