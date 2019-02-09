@@ -440,8 +440,6 @@ $(function () {
         } else {
             $post.html(posts[$this.data('post-id')]);
             $this.removeClass('active');
-
-            Prism.highlightAll();
         }
 
         return false;
@@ -457,6 +455,8 @@ $(function () {
         $.post($form.attr('action'), $form.serialize(), function(html) {
             $post.html(html);
             $('.btn-fast-edit[data-post-id="' + $post.data('post-id') + '"]').removeClass('active');
+
+            Prism.highlightAll();
         })
         .error(function(event) {
             $('button[type=submit]', $form).removeAttr('disabled').text('Zapisz');
