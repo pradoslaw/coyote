@@ -109,13 +109,6 @@ class ForumCest
         $I->canSeeResponseCodeIs(401);
     }
 
-    public function testTryToCreateNewTopicInLockedForumAndSeeErrorMessageAsAdmin(FunctionalTester $I)
-    {
-        $I->logInAsAdmin();
-
-        $this->testTryToCreateNewTopicInLockedForumAndSeeErrorMessage($I);
-    }
-
     public function testTryToCreateNewTopicAsAnonymousInCategoryOnlyForRegisteredUsersAndSeeerrorMessage(FunctionalTester $I)
     {
         $forum = $I->createForum(['enable_anonymous' => 0]);
