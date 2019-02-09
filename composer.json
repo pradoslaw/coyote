@@ -55,8 +55,7 @@
         "erusev/parsedown": "^1.7",
         "laravel-notification-channels/twilio": "^2.0",
         "filp/whoops": "^2.3",
-        "fideloper/proxy": "^4.0",
-        "codeception/mockery-module": "^0.2.3"
+        "fideloper/proxy": "^4.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
@@ -65,7 +64,8 @@
         "phpmd/phpmd" : "@stable",
         "symfony/css-selector": "4.2.*",
         "symfony/dom-crawler": "4.2.*",
-        "mockery/mockery": "^1.0"
+        "mockery/mockery": "^1.0",
+        "codeception/mockery-module": "^0.2.3"
     },
     "autoload": {
         "classmap": [
