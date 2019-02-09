@@ -106,11 +106,10 @@ class CommentAccess
             return response('Unauthorized.', 401);
         }
 
-        // Only moderators can delete this post if topic (or forum) was locked
-        if ($this->gate->denies('delete', $forum)) {
-            if ($topic->is_locked || $forum->is_locked || $post->deleted_at) {
-                return response('Unauthorized.', 401);
-            }
+        // Only moderators can post comment if topic (or forum) was locked
+        // todo: move this code to PostCommentPolicy
+        if ($this->gate->denies('write', $forum) || $this->gate->denies('write', $topic)) {
+            return response('Unauthorized.', 401);
         }
 
         $this->request->attributes->add([

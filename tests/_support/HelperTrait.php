@@ -2,6 +2,8 @@
 
 use Faker\Factory;
 use Coyote\User;
+use Coyote\Group;
+use Coyote\Permission;
 
 trait HelperTrait
 {
@@ -57,9 +59,26 @@ trait HelperTrait
             'ip' => $fake->ipv4,
             'browser' => $fake->userAgent,
             'host' => $fake->domainName,
-            'user_id' => null
+            'user_id' => null,
+            'created_at' => \Carbon\Carbon::now()
         ];
 
         return \Coyote\Post::forceCreate(array_merge($data, $attributes));
+    }
+
+    public function grantAdminAccess(User $user)
+    {
+        $fake = Factory::create();
+        /** @var Group $admin */
+        $admin = Group::forceCreate(['name' => $fake->name]);
+
+        // assign user to the group
+        $admin->users()->attach($user->id);
+
+        $permissions = Permission::all();
+
+        foreach ($permissions as $permission) {
+            $admin->permissions()->attach($permission->id, ['value' => 1]);
+        }
     }
 }

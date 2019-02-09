@@ -32,19 +32,18 @@ class ForumWrite extends AbstractMiddleware
     {
         $forum = $request->route('forum');
 
+        // redirect to login page instead of throwing exception
         if (!$forum->enable_anonymous && empty($request->user())) {
             return $this->login($request);
         }
 
-        if ($forum->is_locked) {
+        if ($this->gate->denies('write', $forum)) {
             return $this->unauthorized($request);
         }
 
         $topic = $request->route('topic');
-        if (!empty($topic)) {
-            if ($this->gate->denies('write', $topic)) {
-                return $this->unauthorized($request);
-            }
+        if (!empty($topic) && $this->gate->denies('write', $topic)) {
+            return $this->unauthorized($request);
         }
 
         return $next($request);

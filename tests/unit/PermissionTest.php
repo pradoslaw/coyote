@@ -127,6 +127,42 @@ class PermissionTest extends \Codeception\TestCase\Test
         $this->assertTrue($user->can('delete', $post));
     }
 
+    public function testCanUserDeletePostInLockedForumOrTopic()
+    {
+        $user = $this->tester->createUser();
+        $forum = $this->tester->createForum(['is_locked' => true]);
+
+        $topic = $this->tester->createTopic(['forum_id' => $forum->id]);
+        $post = $this->tester->createPost(['topic_id' => $topic->id, 'forum_id' => $forum->id, 'user_id' => $user->id]);
+
+        $this->assertFalse($user->can('delete', $post));
+
+        $post->forum->is_locked = false;
+        $post->forum->save();
+
+        $this->assertTrue($user->can('delete', $post));
+
+        /////////////////////////////////
+
+        $post->topic->is_locked = true;
+        $post->topic->save();
+
+        $this->assertFalse($user->can('delete', $post));
+    }
+
+    public function testCanAdminDeletePostInLockedForum()
+    {
+        $user = $this->tester->createUser();
+        $forum = $this->tester->createForum(['is_locked' => true]);
+
+        $topic = $this->tester->createTopic(['forum_id' => $forum->id]);
+        $post = $this->tester->createPost(['topic_id' => $topic->id, 'forum_id' => $forum->id, 'user_id' => $user->id]);
+
+        $admin = $this->tester->createUser();
+        $this->tester->grantAdminAccess($admin);
+        $this->assertTrue($admin->can('delete', $post));
+    }
+
     public function testCanUserAccessForum()
     {
         $user = $this->tester->createUser();
@@ -176,5 +212,39 @@ class PermissionTest extends \Codeception\TestCase\Test
         $this->assertTrue($user->can('forum-update'));
         $this->assertTrue($user->can('write', $topic));
         $this->assertFalse(\Illuminate\Support\Facades\Gate::allows('write', $topic));
+    }
+
+    public function testCanUserWriteInLockedForum()
+    {
+        $user = $this->tester->createUser();
+        $forum = $this->tester->createForum(['enable_anonymous' => true]);
+
+        // anonymous user can write in category unless it's locked or has restricted guest access
+        $this->assertTrue(\Illuminate\Support\Facades\Gate::allows('write', $forum));
+
+        $forum->enable_anonymous = false;
+        $forum->save();
+
+        $this->assertFalse(\Illuminate\Support\Facades\Gate::allows('write', $forum));
+        $this->assertTrue($user->can('write', $forum));
+
+        $forum->is_locked = true;
+        $forum->save();
+
+        // only moderators can update posts in category
+        $this->assertFalse($user->can('update', $forum));
+        $this->assertFalse($user->can('write', $forum));
+    }
+
+    public function testCanModeratorWriteInLockedForum()
+    {
+        $user = $this->tester->createUser();
+        $forum = $this->tester->createForum(['is_locked' => true]);
+
+        $this->tester->grantAdminAccess($user);
+
+        // only moderators can update posts in category
+        $this->assertTrue($user->can('update', $forum));
+        $this->assertTrue($user->can('write', $forum));
     }
 }
