@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import VueJob from '../../components/job.vue';
+import VuePagination from '../../components/pagination.vue';
 
 new Vue({
     el: '#page-job',
     delimiters: ['${', '}'],
     components: {
-        'vue-job': VueJob
+        'vue-job': VueJob,
+        'vue-pagination': VuePagination
     },
     data: window.data,
     created: function () {
@@ -24,6 +26,10 @@ new Vue({
             else {
                 this.input.tags.push(tag.name);
             }
+        },
+
+        changePage: function () {
+
         }
     },
     computed: {

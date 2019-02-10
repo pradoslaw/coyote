@@ -98,8 +98,9 @@
                 </div>
             </div>
 
-
             <vue-job v-for="job in jobs.data" :job="job" :key="job.id"></vue-job>
+
+            <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
         </div>
 
         <div class="col-md-3">
