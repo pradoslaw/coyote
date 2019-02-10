@@ -19,8 +19,13 @@ class JobResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only('id', 'title', 'firm', 'currency_symbol', 'is_remote', 'remote_range', 'score')->toArray();
-//dd($this->resource);
+        $only = $this->resource->only('id', 'title', 'firm', 'currency_symbol', 'is_remote', 'remote_range', 'score');
+
+        if (!is_array($only)) {
+            $only = $only->toArray();
+        }
+//dd($only);
+//        dd($this->resource);
         return array_merge($only, [
             'url'         => route('job.offer', [$this->resource['id'], $this->resource['slug']]),
             'boost_at'    => format_date($this->resource['boost_at']),
@@ -29,6 +34,7 @@ class JobResource extends JsonResource
             'salary_to'   => $this->money($this->resource['salary_to']),
             'rate_label'  => Job::getRatesList()[$this->resource['rate_id']] ?? null,
             'locations'   => $this->locations(),
+            'tags'        => $this->tags(),
             'is_medal'    => $this->resource['score'] >= 150,
             'remote'      => [
                 'range'         => $only['remote_range'],
@@ -42,6 +48,20 @@ class JobResource extends JsonResource
                 'url'           => route('job.firm', array_get($only, 'firm.slug'))
             ]
         ]);
+    }
+
+    private function tags(): array
+    {
+        $result = [];
+
+        foreach ($this->resource['tags'] as $tag) {
+            $result[] = [
+                'name'      => $tag,
+                'url'       => route('job.tag', [$tag])
+            ];
+        }
+
+        return $result;
     }
 
     /**

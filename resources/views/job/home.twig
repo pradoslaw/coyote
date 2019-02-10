@@ -82,7 +82,24 @@
                 </div>
             </div>
 
-            <vue-job v-for="job in jobs" :job="job" :key="job.id"></vue-job>
+            <div class="row margin-md-bottom">
+                <div class="col-xs-12">
+                    <div class="pull-right">
+                        Sortuj według
+
+                        <select v-model="sort" name="sort" class="form-control input-inline input-sm margin-sm-left" style="width: auto">
+                            <option value="boost_at">Data dodania</option>
+                            <option value="_score">Trafność</option>
+                            <option value="salary">Wynagrodzenie</option>
+                        </select>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+
+            <vue-job v-for="job in jobs.data" :job="job" :key="job.id"></vue-job>
         </div>
 
         <div class="col-md-3">
@@ -106,9 +123,10 @@
 
     <script type="text/javascript">
         var data = {
-            jobs: {{ jobs|json_encode|raw }},
+            jobs: {{ jobs|raw }},
             tags: {{ tags|json_encode|raw }},
-            input: {{ input|json_encode|raw }}
+            input: {{ input|json_encode|raw }},
+            sort: '{{ sort }}'
         }
     </script>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Http\Resources\JobCollection;
 use Coyote\Http\Resources\JobResource;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Job\Preferences;
@@ -126,7 +127,7 @@ class HomeController extends BaseController
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
         $this->request->session()->put('current_url', $this->request->fullUrl());
 
-        $this->builder->setSort($this->request->input('sort', $this->request->filled('q') ? '_score' : $this->builder::DEFAULT_SORT));
+        $this->builder->setSort($this->request->input('sort', $this->builder::DEFAULT_SORT));
 
         $result = $this->job->search($this->builder);
 
@@ -134,15 +135,13 @@ class HomeController extends BaseController
         // we want to pass collection to the twig (not raw php array)
         $listing = $result->getSource();
 
-        $jobs = JobResource::collection($listing);
 
-//        dd($jobs->toArray($this->request));
-        $context = !$this->request->filled('q') ? 'global.' : '';
-        $aggregations = [
-            'cities'        => $result->getAggregationCount("${context}locations.locations_city_original"),
-            'tags'          => $result->getAggregationCount("${context}tags"),
-            'remote'        => $result->getAggregationCount("${context}remote")
-        ];
+//        $context = !$this->request->filled('q') ? 'global.' : '';
+//        $aggregations = [
+//            'cities'        => $result->getAggregationCount("${context}locations.locations_city_original"),
+//            'tags'          => $result->getAggregationCount("${context}tags"),
+//            'remote'        => $result->getAggregationCount("${context}remote")
+//        ];
 
         $pagination = new LengthAwarePaginator(
             $listing,
@@ -157,7 +156,7 @@ class HomeController extends BaseController
         $subscribes = [];
 
         if ($this->userId) {
-            $subscribes = $this->job->subscribes($this->userId);
+//            $subscribes = JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request);
         }
 
         $input = [
@@ -171,16 +170,16 @@ class HomeController extends BaseController
             'employment_list'   => Job::getEmploymentList(),
             'currency_list'     => Currency::getCurrenciesList(),
             'preferences'       => $this->preferences,
-            'listing'           => $listing,
+//            'listing'           => $listing,
             'premium_listing'   => $result->getAggregationHits('premium_listing', true),
-            'aggregations'      => $aggregations,
-            'pagination'        => $pagination,
-            'subscribes'        => $subscribes,
-            'input'          => $input,
-            'sort'              => $this->builder->getSort(),
-            'tags'              => TagResource::collection($tags)->toArray($this->request),
+//            'aggregations'      => $aggregations,
 
-            'jobs'              => $jobs->toArray($this->request)
+            'subscribes'        => $subscribes,
+            'input'             => $input,
+            'sort'              => $this->builder->getSort(),
+
+            'tags'              => TagResource::collection($tags)->toArray($this->request),
+            'jobs'              => (new JobCollection($pagination))->response()->getContent()
         ]));
     }
 }

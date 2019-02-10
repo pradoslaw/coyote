@@ -31,15 +31,18 @@
                     <small v-else class="text-muted pull-right">{{ job.boost_at }}</small>
 
                     <ul class="tag-clouds tag-clouds-sm tag-clouds-skills margin-md-top">
-                        <li>
-                            <a href="https://4programmers.net/Praca/Technologia/ruby" title="Znajdź oferty zawierające Ruby">Ruby</a>
+                        <li v-for="tag in job.tags">
+                            <a :href="tag.url" :title="'Znajdź oferty zawierające ' + tag.name">{{ tag.name }}</a>
                         </li>
-                        <li>
-                            <a href="https://4programmers.net/Praca/Technologia/python" title="Znajdź oferty zawierające Python">
-                                <img src="https://4programmers.net/uploads/logo/59/59f9f8605fd1e.png">
-                                Python
-                            </a>
-                        </li>
+                        <!--<li>-->
+                            <!--<a href="https://4programmers.net/Praca/Technologia/ruby" title="Znajdź oferty zawierające Ruby">Ruby</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="https://4programmers.net/Praca/Technologia/python" title="Znajdź oferty zawierające Python">-->
+                                <!--<img src="https://4programmers.net/uploads/logo/59/59f9f8605fd1e.png">-->
+                                <!--Python-->
+                            <!--</a>-->
+                        <!--</li>-->
                     </ul>
 
                     <ul class="list-inline job-options margin-sm-top">
