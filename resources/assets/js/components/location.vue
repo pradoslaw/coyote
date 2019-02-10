@@ -1,5 +1,5 @@
 <template>
-    <div class="location">
+    <div v-if="remote.enabled || locations.length > 0" class="location">
         <i class="fa fa-map-marker"></i>
 
         <ul>
