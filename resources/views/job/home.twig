@@ -1,5 +1,29 @@
 {% extends 'job.base' %}
 
+{%- block title -%}
+    Praca
+
+    {% if firm %}
+        w firmie {{ firm }}
+    {% endif %}
+
+    {% if request('q') %}
+        {{ request('q') }}
+    {% endif %}
+
+    {% if input.tags %}
+        {{ input.tags|join(', ') }}
+    {% endif %}
+
+    {% if input.cities %}
+        {{ input.cities|join(', ') }}
+    {% endif %}
+
+    {{ parent() }}
+{%- endblock -%}
+{% block description %}Praca dla programistów. Pracodawco: umieść u nas swoją ofertę pracy - już od 0,75 zł za dzień. Znajdź u nas pracownika wśród 50 000 programistów.{% endblock %}
+{% block keywords %}programowanie, praca, C#, Java, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
+
 {% import 'components.widgets' as widgets %}
 
 {% block container %}
@@ -27,30 +51,33 @@
                             </button>
                         </div>
                     </div>
-
-
                 </div>
 
                 <div class="panel-footer">
                     <ul  class="nav nav-pills">
-                        <li role="presentation" class="active"><a href="#interesting" role="tab" data-toggle="tab">Technologia <i class="fa fa-angle-down"></i></a></li>
-                        <li role="presentation"><a href="#rated" role="tab" data-toggle="tab">Wynagrodzenie <i class="fa fa-angle-up"></i></a></li>
+                        <li role="presentation" class="active"><a href="#tech" role="tab" data-toggle="tab">Technologia</a></li>
+                        <li role="presentation"><a href="#compensation" role="tab" data-toggle="tab">Wynagrodzenie</a></li>
                     </ul>
 
-                    <div class="filters">
-                        <ul class="list-group list-group-tech">
-                            {% for tag, count in tags %}
-                                <li class="list-group-item">
-                                    {{ form_checkbox('tag[]', tag, tag in selected.tags) }}
+                    <div class="tab-content">
+                        <div id="tech" class="tab-pane active filters">
+                            <ul class="list-group list-group-tech">
+                                <li v-for="tag in tags" :key="tag.id" class="list-group-item">
+                                    <input type="hidden" name="tag[]" :value="tag.name" :checked="input.tags.indexOf(tag.name) > -1">
 
-                                    <a href="{{ route('job.tag', [tag|url_encode]) }}">
-                                        <img src="{{ logo(tags[tag].logo) }}">
+                                    <a @click.prevent="toggleTag(tag)" :href="tag.url">
+                                        <img :alt="tag.name" :src="tag.logo" :class="{'grayscale': input.tags.length && input.tags.indexOf(tag.name) === -1}">
 
-                                        <label>{{ tags[tag].real_name|default(tag) }}</label>
+                                        ${ tag.real_name ? tag.real_name : tag.name }
                                     </a>
                                 </li>
-                            {% endfor %}
-                        </ul>
+                            </ul>
+                        </div>
+
+                        <div id="compensation" class="tab-pane filters">
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -79,7 +106,9 @@
 
     <script type="text/javascript">
         var data = {
-            jobs: {{ jobs|json_encode|raw }}
+            jobs: {{ jobs|json_encode|raw }},
+            tags: {{ tags|json_encode|raw }},
+            input: {{ input|json_encode|raw }}
         }
     </script>
 {% endblock %}

@@ -19,7 +19,7 @@ class JobResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only('id', 'title', 'firm', 'currency_symbol', 'is_remote', 'remote_range')->toArray();
+        $only = $this->resource->only('id', 'title', 'firm', 'currency_symbol', 'is_remote', 'remote_range', 'score')->toArray();
 //dd($this->resource);
         return array_merge($only, [
             'url'         => route('job.offer', [$this->resource['id'], $this->resource['slug']]),
@@ -29,6 +29,7 @@ class JobResource extends JsonResource
             'salary_to'   => $this->money($this->resource['salary_to']),
             'rate_label'  => Job::getRatesList()[$this->resource['rate_id']] ?? null,
             'locations'   => $this->locations(),
+            'is_medal'    => $this->resource['score'] >= 150,
             'remote'      => [
                 'range'         => $only['remote_range'],
                 'enabled'       => $only['is_remote'],

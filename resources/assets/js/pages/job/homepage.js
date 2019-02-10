@@ -15,7 +15,16 @@ new Vue({
 
     },
     methods: {
+        toggleTag: function (tag) {
+            const index = this.input.tags.indexOf(tag.name);
 
+            if (index > -1) {
+                this.input.tags.splice(index, 1);
+            }
+            else {
+                this.input.tags.push(tag.name);
+            }
+        }
     },
     computed: {
 

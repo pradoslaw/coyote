@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Resources\JobResource;
+use Coyote\Http\Resources\TagResource;
 use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Criteria\Tag\ForCategory;
@@ -159,7 +160,7 @@ class HomeController extends BaseController
             $subscribes = $this->job->subscribes($this->userId);
         }
 
-        $selected = [
+        $input = [
             'tags'          => $this->builder->tag->getTags(),
             'cities'        => array_map('mb_strtolower', $this->builder->city->getCities()),
             'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote'
@@ -175,9 +176,9 @@ class HomeController extends BaseController
             'aggregations'      => $aggregations,
             'pagination'        => $pagination,
             'subscribes'        => $subscribes,
-            'selected'          => $selected,
+            'input'          => $input,
             'sort'              => $this->builder->getSort(),
-            'tags'              => $tags->keyBy('name'),
+            'tags'              => TagResource::collection($tags)->toArray($this->request),
 
             'jobs'              => $jobs->toArray($this->request)
         ]));
