@@ -74,6 +74,9 @@ $(function () {
             'business'
         );
     })
+    .on('/Praca', () => {
+        require('./pages/job/homepage');
+    })
     .on('/Praca/\\d+\\-*', () => {
         require('./pages/job/offer');
     })

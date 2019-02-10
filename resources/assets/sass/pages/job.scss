@@ -74,6 +74,34 @@
   }
 }
 
+.location {
+  display: inline;
+  font-size: 92%;
+
+  a {
+    color: $text-muted;
+  }
+
+  ul {
+    list-style: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline;
+
+      &:after {
+        content: ', ';
+      }
+
+      &:last-child:after {
+        content: '';
+      }
+    }
+  }
+}
+
 // Border around buttons
 // ---------------------------
 

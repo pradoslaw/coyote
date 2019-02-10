@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Http\Resources\JobResource;
 use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Criteria\Tag\ForCategory;
@@ -132,6 +133,9 @@ class HomeController extends BaseController
         // we want to pass collection to the twig (not raw php array)
         $listing = $result->getSource();
 
+        $jobs = JobResource::collection($listing);
+
+//        dd($jobs->toArray($this->request));
         $context = !$this->request->filled('q') ? 'global.' : '';
         $aggregations = [
             'cities'        => $result->getAggregationCount("${context}locations.locations_city_original"),
@@ -173,7 +177,9 @@ class HomeController extends BaseController
             'subscribes'        => $subscribes,
             'selected'          => $selected,
             'sort'              => $this->builder->getSort(),
-            'tags'              => $tags->keyBy('name')
+            'tags'              => $tags->keyBy('name'),
+
+            'jobs'              => $jobs->toArray($this->request)
         ]));
     }
 }
