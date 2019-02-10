@@ -1,21 +1,112 @@
-// Background color for job homepage (only in header of home page)
-$header-footer-color: darken($body-bg, 0.8%);
-$header-footer-border: #c7c7c7;
+.panel-job {
+  .media-object {
+    width: 100px;
+  }
 
-// Job homepage header. Contains search box and post offer button
-// ---------------------------------------------------------------
+  .location {
+    a {
+      color: $text-muted;
+    }
+  }
 
-#job-header-container {
-  background-color: $header-footer-color;
-  border-bottom: 1px solid $header-footer-border;
+  .job-options {
+    margin-bottom: 0;
+    color: $text-muted;
+    font-size: $font-size-small - 1;
+
+    a {
+      color: inherit;
+    }
+  }
 }
 
-// Formularz wyszukiwania oferty
-// -------------------------------------------
+.list-group-tech {
+  list-style: none;
+  margin: 0;
 
-#box-search {
-  margin: 43px auto 43px auto;
+  .list-group-item {
+    padding: 5px;
+    display: inline-block;
+    border-radius: $border-radius-large;
+    margin-right: 5px;
+    background: darken($tag-bg, 2%);
+    border: none;
+
+    a {
+      color: $gray-light;
+      font-size: $font-size-small;
+    }
+
+    img {
+      width: 20px;
+    }
+
+    input[type=checkbox] {
+      display: none;
+    }
+
+    label {
+      font-weight: normal;
+      margin: 0;
+    }
+  }
 }
+
+#page-job {
+  .filters {
+    padding: 15px 0 5px 0;
+  }
+
+  .nav-pills {
+    box-shadow: none;
+
+    > li.active > a {
+      border-bottom-width: 1px;
+    }
+
+    i {
+      font-size: 15px;
+      padding-left: 5px;
+    }
+  }
+
+  .search-form {
+    .panel-body {
+      padding: 10px;
+    }
+
+    .form-control {
+      border: none;
+      box-shadow: none;
+      padding-left: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+
+      &:first-child {
+        border-right: 1px solid $border-color;
+      }
+    }
+
+    .fa-fw {
+      position: absolute;
+      font-size: 16px;
+      top: 7px;
+      color: lighten($gray-light, 10%);
+    }
+
+    button[type=submit] {
+      font-size: $font-size-small;
+      width: 100%;
+
+      @include text-overflow;
+    }
+  }
+}
+
+
+
 
 // Post offer button (for employers)
 // -----------------------------------------------------------
@@ -53,285 +144,29 @@ $header-footer-border: #c7c7c7;
   100% { transform: rotate(0deg); }
 }
 
-// Main content begins here...
-// -----------------------------------------------------
+//
+//.list-group-language {
+//  img {
+//    width: 20px;
+//  }
+//
+//  &.filtered {
+//    img {
+//      @include grayscale;
+//    }
+//
+//    input[type="checkbox"]:checked + a {
+//      img {
+//        filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
+//        -webkit-filter: grayscale(0%);
+//      }
+//    }
+//  }
+//}
 
-#job-main-content {
-  padding-top: 15px;
 
-  .pagination {
-    margin: 0;
-  }
 
-  aside {
-    .box:first-child {
-      > h4 {
-        margin-top: 0;
-      }
-    }
-  }
-}
 
-.list-group-language {
-  img {
-    width: 20px;
-  }
-
-  &.filtered {
-    img {
-      @include grayscale;
-    }
-
-    input[type="checkbox"]:checked + a {
-      img {
-        filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
-        -webkit-filter: grayscale(0%);
-      }
-    }
-  }
-}
-
-.list-group-city {
-  a {
-    padding-left: 19px;
-
-    i {
-      font-size: $font-size-large;
-      vertical-align: middle;
-    }
-
-    &:before {
-      @include font-awesome($fa-var-square-o);
-
-      left: 5px;
-      top: 1px;
-      font-size: 19px;
-    }
-  }
-
-  input[type="checkbox"]:checked + a {
-    &:before {
-      content: $fa-var-check-square-o;
-    }
-  }
-}
-
-#box-filter {
-  h5 {
-    color: $box-header-color;
-    font-size: $font-family-base;
-  }
-
-  .list-group-item {
-    padding: 5px;
-    margin-top: 4px;
-
-    input[type=checkbox] {
-      display: none;
-    }
-
-    a {
-      display: block;
-      color: $text-color;
-
-      span {
-        padding-left: 3px;
-        color: $gray-light;
-      }
-
-      small {
-        color: $gray-light;
-        font-size: 9px;
-      }
-
-      &:hover,
-      &:focus,
-      &:active {
-        text-decoration: none;
-      }
-    }
-
-    &:hover {
-      border-color: $border-color;
-    }
-  }
-
-  .btn-reset {
-    color: $gray-light;
-    font-size: $font-size-small;
-    margin-top: 10px;
-
-    &:hover {
-      color: $gray;
-      text-decoration: none;
-    }
-  }
-
-  .form-search {
-    margin-top: 30px;
-  }
-}
-
-#box-jobs {
-  table {
-    border: 1px solid $border-color;
-    background: #fff;
-    border-radius: 3px;
-    margin: 0 1px 1px 1px;
-    width: 100%;
-    table-layout: fixed;
-
-    // extra margin for regular listing (to separate from premium ones).
-    & + table {
-      margin-top: 10px;
-    }
-  }
-
-  tr {
-    &:nth-child(even) {
-      background-color: #fafafa;
-    }
-
-    &.highlight {
-      > td {
-        background-color: $unread-bg;
-      }
-    }
-
-    td {
-      padding: 5px;
-      border-bottom: 1px solid $border-color;
-    }
-
-    // Extra padding for first premium offer
-    // -------------------------------------
-    &.top-spot {
-      > td {
-        padding-top: 24px;
-      }
-    }
-
-    // Offer logo
-    // ---------------------------------------------
-    .col-logo {
-      width: 70px;
-
-      img {
-        max-width: 100%;
-      }
-
-      @media screen and (max-width: $screen-sm) {
-        width: 35px;
-      }
-
-      @media screen and (max-width: $screen-xs) {
-        display: none;
-      }
-    }
-
-    // Offer content (tags, location, company name)
-    // -----------------------------------------------
-    .col-body {
-      padding: 7px 1% 7px 0;
-
-      h2 {
-        font-size: 15px;
-        margin: 0 0 5px 0;
-        float: left;
-
-        @media screen and (max-width: $screen-xs) {
-          font-size: 14px;
-        }
-      }
-
-      p {
-        font-size: 12px;
-        clear: both;
-        padding: 0;
-        line-height: 1.4;
-        margin: 0;
-      }
-
-      small.location {
-        color: $gray-light;
-
-        a {
-          font-size: 11px;
-          color: inherit;
-        }
-      }
-
-      // extra margin for tags
-      .tag-clouds {
-        margin-top: 4px;
-      }
-
-      @media screen and (max-width: $screen-xs) {
-        padding-left: 5px;
-      }
-    }
-
-    // Salary column (hidden on mobile devices)
-    // -----------------------------------------------
-    .col-salary {
-      width: 16%;
-
-      .salary {
-        font-size: $font-size-small;
-        margin: 0;
-      }
-
-      // extra margin that separates two labels
-      .salary + .bonus {
-        margin-top: 3px;
-      }
-    }
-
-    .col-time {
-      width: 15%;
-
-      > .text-muted {
-        font-size: 11px;
-      }
-    }
-
-    .col-fav {
-      width: 40px;
-    }
-
-    .bonus {
-      text-transform: uppercase;
-      font-size: 14px;
-      margin: 0;
-    }
-
-    .label-bonus {
-      border: 1px solid #FF7B33;
-      color: #FF7B33;
-    }
-
-    .btn-subscribe {
-      opacity: .3;
-      float: right;
-      width: 16px;
-      height: 16px;
-      font-size: 16px;
-      margin: 0 5px 0 0;
-      position: relative;
-      display: inline-block;
-    }
-
-    .btn-subscribe.on {
-      opacity: 1;
-    }
-
-    &:hover {
-      .btn-subscribe {
-        opacity: 1;
-      }
-    }
-  }
-}
 
 #clients {
   //background-color: $header-footer-color;
