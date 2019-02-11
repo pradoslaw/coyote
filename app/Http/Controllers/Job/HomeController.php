@@ -139,10 +139,11 @@ class HomeController extends BaseController
 
         ///////////////////////////////////////////////////////////////////
 
-        $this->job->pushCriteria(new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags']));
+        $this->job->pushCriteria(new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags', 'currency']));
         $this->job->pushCriteria(new IncludeSubscribers($this->userId));
 
-        $jobs = $this->job->findManyWithOrder($source->pluck('id')->toArray());
+        $ids = $result->getAggregationHits('premium_listing', true)->merge($source)->pluck('id')->toArray();
+        $jobs = $this->job->findManyWithOrder($ids);
 
 
 //        $context = !$this->request->filled('q') ? 'global.' : '';

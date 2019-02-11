@@ -13,7 +13,7 @@
                 do {{ salary_to }}
             </template>
 
-            <template v-if="salary_from && salary_to">
+            <template v-if="salary_from || salary_to">
                 {{ currency_symbol }}
             </template>
         </strong>

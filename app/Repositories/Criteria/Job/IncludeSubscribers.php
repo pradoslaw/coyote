@@ -29,9 +29,7 @@ class IncludeSubscribers extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-//        dd($model);
         return $model->when($this->userId, function (Builder $builder) use ($repository) {
-//            return $builder->select(['js.created_at AS subscribe_on'])
             return $builder->addSelect(['js.created_at AS subscribe_on'])
                 ->leftJoin('job_subscribers AS js', function (JoinClause $join) use ($repository) {
                     $join->on('js.job_id', '=', 'jobs.id')->on('js.user_id', '=', $repository->raw($this->userId));

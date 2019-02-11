@@ -710,7 +710,7 @@ class Job extends Model
      * @param float|null $salary
      * @return float|null
      */
-    private function monthlySalary($salary)
+    public function monthlySalary($salary)
     {
         if (empty($salary) || $this->rate_id === self::MONTH) {
             return $salary;

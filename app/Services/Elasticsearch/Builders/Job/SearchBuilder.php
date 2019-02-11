@@ -216,6 +216,7 @@ class SearchBuilder extends QueryBuilder
         $this->setupAggregations();
 
         $this->size(self::PER_PAGE * (max(0, (int) $this->request->get('page', 1) - 1)), self::PER_PAGE);
+        $this->source(['id']);
 
         return parent::build();
     }
