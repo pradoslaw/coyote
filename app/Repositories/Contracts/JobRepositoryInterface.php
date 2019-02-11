@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Job;
 use Coyote\Job\Comment;
 
 /**
@@ -14,6 +15,12 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @return int
      */
     public function count();
+
+    /**
+     * @param int[] $ids
+     * @return Job[]
+     */
+    public function findManyWithOrder(array $ids);
 
     /**
      * @param string $city

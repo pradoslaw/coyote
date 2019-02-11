@@ -38,6 +38,31 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     /**
      * @inheritdoc
      */
+    public function findManyWithOrder(array $ids)
+    {
+        $values = [];
+
+        foreach ($ids as $key => $id) {
+            $values[] = "($id,$key)";
+        }
+
+        $this->applyCriteria();
+
+        $result = $this
+            ->model
+            ->addSelect('jobs.*')
+            ->join($this->raw('(VALUES ' . implode(',', $values) . ') AS x (id, ordering)'), 'jobs.id', '=', 'x.id')
+            ->orderBy('x.ordering')
+            ->get();
+
+        $this->resetModel();
+
+        return $result;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function countCityOffers(string $city)
     {
         return $this->applyCriteria(function () use ($city) {

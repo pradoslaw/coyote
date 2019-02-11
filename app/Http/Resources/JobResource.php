@@ -5,8 +5,14 @@ namespace Coyote\Http\Resources;
 use Carbon\Carbon;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Job;
+use Coyote\Tag;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property Job\Location[] $locations
+ * @property Tag[] $tags
+ * @property \Coyote\Firm $firm
+ */
 class JobResource extends JsonResource
 {
     use MediaFactory;
@@ -19,11 +25,9 @@ class JobResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only('id', 'title', 'firm', 'currency_symbol', 'is_remote', 'remote_range', 'score');
+        $only = $this->resource->only('id', 'title', 'firm', 'currency_symbol', 'is_remote', 'remote_range', 'score', 'subscribe_on');
 
-        if (!is_array($only)) {
-            $only = $only->toArray();
-        }
+
 //dd($only);
 //        dd($this->resource);
         return array_merge($only, [
@@ -34,7 +38,7 @@ class JobResource extends JsonResource
             'salary_to'   => $this->money($this->resource['salary_to']),
             'rate_label'  => Job::getRatesList()[$this->resource['rate_id']] ?? null,
             'locations'   => $this->locations(),
-            'tags'        => $this->tags(),
+            'tags'        => TagResource::collection($this->tags),
             'is_medal'    => $this->resource['score'] >= 150,
             'remote'      => [
                 'range'         => $only['remote_range'],
@@ -42,26 +46,8 @@ class JobResource extends JsonResource
                 'url'           => route('job.remote')
             ],
 
-            'firm'        => [
-                'name'          => array_get($only, 'firm.name'),
-                'logo'          => (string) $this->getMediaFactory()->make('logo', ['file_name' => array_get($only, 'firm.logo')])->url(),
-                'url'           => route('job.firm', array_get($only, 'firm.slug'))
-            ]
+            'firm'        => $this->firm ? new FirmResource($this->firm) : []
         ]);
-    }
-
-    private function tags(): array
-    {
-        $result = [];
-
-        foreach ($this->resource['tags'] as $tag) {
-            $result[] = [
-                'name'      => $tag,
-                'url'       => route('job.tag', [$tag])
-            ];
-        }
-
-        return $result;
     }
 
     /**
@@ -71,10 +57,10 @@ class JobResource extends JsonResource
     {
         $result = [];
 
-        foreach ($this->resource['locations'] as $location) {
+        foreach ($this->locations as $location) {
             $result[] = [
-                'city'      => $location->get('city'),
-                'url'       => route('job.city', [$location->get('city')])
+                'city'      => $location->city,
+                'url'       => route('job.city', [$location->city])
             ];
         }
 

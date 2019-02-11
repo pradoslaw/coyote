@@ -7,6 +7,8 @@ use Coyote\Http\Resources\JobResource;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Repositories\Criteria\EagerLoading;
+use Coyote\Repositories\Criteria\Job\IncludeSubscribers;
 use Coyote\Repositories\Criteria\Tag\ForCategory;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
@@ -133,7 +135,14 @@ class HomeController extends BaseController
 
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)
-        $listing = $result->getSource();
+        $source = $result->getSource();
+
+        ///////////////////////////////////////////////////////////////////
+
+        $this->job->pushCriteria(new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags']));
+        $this->job->pushCriteria(new IncludeSubscribers($this->userId));
+
+        $jobs = $this->job->findManyWithOrder($source->pluck('id')->toArray());
 
 
 //        $context = !$this->request->filled('q') ? 'global.' : '';
@@ -144,7 +153,7 @@ class HomeController extends BaseController
 //        ];
 
         $pagination = new LengthAwarePaginator(
-            $listing,
+            $jobs,
             $result->total(),
             SearchBuilder::PER_PAGE,
             LengthAwarePaginator::resolveCurrentPage(),

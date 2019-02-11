@@ -32,21 +32,16 @@
 
                     <ul class="tag-clouds tag-clouds-sm tag-clouds-skills margin-md-top">
                         <li v-for="tag in job.tags">
-                            <a :href="tag.url" :title="'Znajdź oferty zawierające ' + tag.name">{{ tag.name }}</a>
+                            <a :href="tag.url" :title="'Znajdź oferty zawierające ' + tag.name">
+                                <img v-if="tag.logo" :alt="tag.name" :src="tag.logo">
+
+                                {{ tag.real_name ? tag.real_name : tag.name }}
+                            </a>
                         </li>
-                        <!--<li>-->
-                            <!--<a href="https://4programmers.net/Praca/Technologia/ruby" title="Znajdź oferty zawierające Ruby">Ruby</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="https://4programmers.net/Praca/Technologia/python" title="Znajdź oferty zawierające Python">-->
-                                <!--<img src="https://4programmers.net/uploads/logo/59/59f9f8605fd1e.png">-->
-                                <!--Python-->
-                            <!--</a>-->
-                        <!--</li>-->
                     </ul>
 
                     <ul class="list-inline job-options margin-sm-top">
-                        <li><a href="#"><i class="fa fa-fw fa-heart-o"></i> Ulubiona</a></li>
+                        <li><a href="#"><i :class="{'fa-heart on': job.subscribe_on, 'fa-heart-o': !job.subscribe_on}" class="fa fa-fw"></i> Ulubiona</a></li>
                         <li><a href="#"><i class="fa fa-fw fa-comments-o"></i> 0 komentarzy</a></li>
                         <li><a href="#"><i class="fa fa-fw fa-share"></i> Udostępnij</a></li>
                     </ul>

@@ -30,6 +30,10 @@
       color: inherit;
     }
   }
+
+  .on {
+    color: lighten($alt-link-hover-color, 5%);
+  }
 }
 
 .list-group-tech {
