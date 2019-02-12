@@ -31,7 +31,7 @@
                     <small v-else class="text-muted pull-right">{{ job.boost_at }}</small>
 
                     <ul class="tag-clouds tag-clouds-sm tag-clouds-skills margin-md-top">
-                        <li v-for="tag in job.tags">
+                        <li v-for="tag in limitedTags">
                             <a :href="tag.url" :title="'Znajdź oferty zawierające ' + tag.name">
                                 <img v-if="tag.logo" :alt="tag.name" :src="tag.logo">
 
@@ -42,7 +42,7 @@
 
                     <ul class="list-inline job-options margin-sm-top">
                         <li><a @click="subscribe()" href="javascript:"><i :class="{'fa-heart on': job.subscribe_on, 'fa-heart-o': !job.subscribe_on}" class="fa fa-fw"></i> Ulubiona</a></li>
-                        <li><a :href="job.url + '#comments'"><i class="fa fa-fw fa-comments-o"></i>{{ job.comments_count }} {{ commentsDeclination }}</a></li>
+                        <li><a :href="job.url + '#comments'"><i class="fa fa-fw fa-comments-o"></i> {{ job.comments_count }} {{ commentsDeclination }}</a></li>
                         <li><a href="#"><i class="fa fa-fw fa-share"></i> Udostępnij</a></li>
                     </ul>
 
@@ -71,6 +71,10 @@
         computed: {
             commentsDeclination: function () {
                 return declination(this.job.comments_count, ['komentarz', 'komentarze', 'komentarzy']);
+            },
+
+            limitedTags: function () {
+                return this.job.tags.splice(0, 5);
             }
         }
     }

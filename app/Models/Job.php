@@ -693,7 +693,7 @@ class Job extends Model
             'currency_symbol'   => $this->currency()->value('symbol'),
             // higher tag's priorities first
             'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')->toArray(),
-            // index null instead of 100 is job is not remote
+            //            // index null instead of 100 is job is not remote
             'remote_range'      => $this->is_remote ? $this->remote_range : null
         ]);
 

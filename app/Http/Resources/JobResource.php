@@ -47,7 +47,7 @@ class JobResource extends JsonResource
             'salary_to'   => $this->money($this->salary_to),
             'rate_label'  => Job::getRatesList()[$this->rate_id] ?? null,
             'locations'   => LocationResource::collection($this->locations),
-            'tags'        => TagResource::collection($this->tags),
+            'tags'        => TagResource::collection($this->tags->sortByDesc('pivot.priority')),
             'is_medal'    => $this->score >= 150,
             'currency_symbol' => $this->currency->symbol,
             'remote'      => [
