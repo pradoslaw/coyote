@@ -1,9 +1,9 @@
 <template>
-    <div class="panel panel-default panel-job margin-md-bottom">
+    <div :class="{'highlight': job.is_highlight}" class="panel panel-default panel-job margin-md-bottom">
         <div class="panel-body">
             <div class="media">
                 <div class="media-left">
-                    <a :href="job.url"><img :alt="job.firm.name" class="media-object margin-sm-right" :src="job.firm.logo"></a>
+                    <a :href="job.url"><img :alt="job.firm.logo ? job.firm.name : ''" class="media-object margin-sm-right" :src="job.firm.logo"></a>
                 </div>
 
                 <div class="media-body">
@@ -41,8 +41,8 @@
                     </ul>
 
                     <ul class="list-inline job-options margin-sm-top">
-                        <li><a href="#"><i :class="{'fa-heart on': job.subscribe_on, 'fa-heart-o': !job.subscribe_on}" class="fa fa-fw"></i> Ulubiona</a></li>
-                        <li><a href="#"><i class="fa fa-fw fa-comments-o"></i> 0 komentarzy</a></li>
+                        <li><a @click="subscribe()" href="javascript:"><i :class="{'fa-heart on': job.subscribe_on, 'fa-heart-o': !job.subscribe_on}" class="fa fa-fw"></i> Ulubiona</a></li>
+                        <li><a :href="job.url + '#comments'"><i class="fa fa-fw fa-comments-o"></i>{{ job.comments_count }} {{ commentsDeclination }}</a></li>
                         <li><a href="#"><i class="fa fa-fw fa-share"></i> Udostępnij</a></li>
                     </ul>
 
@@ -55,12 +55,23 @@
 <script>
     import VueSalary from './salary.vue';
     import VueLocation from './location.vue';
+    import declination from '../components/declination';
 
     export default {
         props: ['job'],
         components: {
             'vue-salary': VueSalary,
             'vue-location': VueLocation
+        },
+        methods: {
+            subscribe: function () {
+                this.job.subscribe_on = !this.job.subscribe_on;
+            }
+        },
+        computed: {
+            commentsDeclination: function () {
+                return declination(this.job.comments_count, ['komentarz', 'komentarze', 'komentarzy']);
+            }
         }
     }
 </script>

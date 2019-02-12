@@ -8,6 +8,7 @@ use Coyote\Http\Resources\TagResource;
 use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
+use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\Job\IncludeSubscribers;
 use Coyote\Repositories\Criteria\Tag\ForCategory;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
@@ -140,9 +141,11 @@ class HomeController extends BaseController
         ///////////////////////////////////////////////////////////////////
 
         $this->job->pushCriteria(new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags', 'currency']));
+        $this->job->pushCriteria(new EagerLoadingWithCount(['comments']));
         $this->job->pushCriteria(new IncludeSubscribers($this->userId));
 
-        $ids = $result->getAggregationHits('premium_listing', true)->merge($source)->pluck('id')->toArray();
+//        $ids = $result->getAggregationHits('premium_listing', true)->merge($source)->pluck('id')->toArray();
+        $ids = $source->pluck('id')->toArray();
         $jobs = $this->job->findManyWithOrder($ids);
 
 

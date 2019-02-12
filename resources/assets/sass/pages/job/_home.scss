@@ -12,7 +12,7 @@
       height: 100%;
       top: 0;
       left: 0;
-      background: #fff url('/img/logo-gray.png') no-repeat;
+      background: url('/img/logo-gray.png') no-repeat;
       background-size: 100px 100px;
     }
   }
@@ -33,6 +33,10 @@
 
   .on {
     color: lighten($alt-link-hover-color, 5%);
+  }
+
+  &.highlight {
+    background-color: $unread-bg;
   }
 }
 

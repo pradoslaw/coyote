@@ -20,6 +20,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property float $salary_to
  * @property Currency $currency
  * @property int $rate_id
+ * @property bool $is_highlight
+ * @property int $score
+ * @property bool $is_remote
+ * @property int $remote_range
  */
 class JobResource extends JsonResource
 {
@@ -33,7 +37,7 @@ class JobResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only('id', 'title', 'firm', 'is_remote', 'remote_range', 'score', 'subscribe_on');
+        $only = $this->resource->only('id', 'title', 'firm', 'is_remote', 'remote_range', 'score', 'subscribe_on', 'comments_count', 'is_highlight');
 
         return array_merge($only, [
             'url'         => route('job.offer', [$this->id, $this->slug]),
@@ -44,11 +48,11 @@ class JobResource extends JsonResource
             'rate_label'  => Job::getRatesList()[$this->rate_id] ?? null,
             'locations'   => LocationResource::collection($this->locations),
             'tags'        => TagResource::collection($this->tags),
-            'is_medal'    => $this->resource['score'] >= 150,
+            'is_medal'    => $this->score >= 150,
             'currency_symbol' => $this->currency->symbol,
             'remote'      => [
-                'range'         => $only['remote_range'],
-                'enabled'       => $only['is_remote'],
+                'range'         => $this->remote_range,
+                'enabled'       => $this->is_remote,
                 'url'           => route('job.remote')
             ],
 
