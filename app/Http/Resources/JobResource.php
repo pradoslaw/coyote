@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Currency;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Job;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Tag;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -40,7 +41,7 @@ class JobResource extends JsonResource
         $only = $this->resource->only('id', 'title', 'firm', 'is_remote', 'remote_range', 'score', 'subscribe_on', 'comments_count', 'is_highlight');
 
         return array_merge($only, [
-            'url'         => route('job.offer', [$this->id, $this->slug]),
+            'url'         => UrlBuilder::job($this->resource),
             'boost_at'    => format_date($this->boost_at),
             'is_new'      => carbon($this->boost_at)->diffInDays(Carbon::now()) <= 2,
             'salary_from' => $this->money($this->salary_from),

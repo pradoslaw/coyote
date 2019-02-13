@@ -50,7 +50,7 @@ class Router {
             path = '/' + path;
         }
 
-        return '^' + path.replace('*', '.*');
+        return '^' + path.replace('*', '.*') + '$';
     }
 }
 

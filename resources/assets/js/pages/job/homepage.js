@@ -1,6 +1,9 @@
 import Vue from 'vue';
+import Config from '../../libs/config';
 import VueJob from '../../components/job.vue';
 import VuePagination from '../../components/pagination.vue';
+import axios from 'axios';
+import store from "../../store";
 
 new Vue({
     el: '#page-job',
@@ -14,7 +17,7 @@ new Vue({
 
     },
     mounted: function () {
-
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
     },
     methods: {
         toggleTag: function (tag) {
@@ -26,10 +29,37 @@ new Vue({
             else {
                 this.input.tags.push(tag.name);
             }
+
+            this.search();
         },
 
         changePage: function () {
 
+        },
+
+        search: function () {
+            const input = {
+                q: this.input.q,
+                city: this.input.city,
+                tags: this.input.tags,
+                sort: this.input.sort,
+                page: this.input.page,
+                salary: this.input.salary,
+                currency: this.input.currency
+            };
+
+            axios.get(this.$refs.searchForm.action, {
+                    params: input
+                })
+                .then(response => {
+                    window.history.pushState(input, '', response.request.responseURL);
+                    this.jobs = response.data.jobs;
+
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     },
     computed: {

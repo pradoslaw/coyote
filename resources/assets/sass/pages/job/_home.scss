@@ -100,43 +100,7 @@
       font-size: 15px;
       padding-left: 5px;
     }
-  }
 
-  .search-form {
-    .panel-body {
-      padding: 10px;
-    }
-
-    .form-control {
-      border: none;
-      box-shadow: none;
-      padding-left: 30px;
-    }
-
-    .form-group {
-      margin-bottom: 0;
-
-      &:first-child {
-        border-right: 1px solid $border-color;
-      }
-    }
-
-    .fa-fw {
-      position: absolute;
-      font-size: 16px;
-      top: 7px;
-      color: lighten($gray-light, 10%);
-    }
-
-    button[type=submit] {
-      font-size: $font-size-small;
-      width: 100%;
-
-      @include text-overflow;
-    }
-  }
-
-  .nav-pills {
     li > a:after {
       @include font-awesome($fa-var-angle-up);
 
@@ -147,6 +111,40 @@
 
     li.active > a:after {
       content: $fa-var-angle-down;
+    }
+  }
+
+  .search-form {
+    .panel-body {
+      padding: 10px;
+
+      .form-control {
+        border: none;
+        box-shadow: none;
+        padding-left: 30px;
+      }
+
+      .fa-fw {
+        position: absolute;
+        font-size: 16px;
+        top: 7px;
+        color: lighten($gray-light, 10%);
+      }
+    }
+
+    .form-group {
+      margin-bottom: 0;
+
+      &:first-child {
+        border-right: 1px solid $border-color;
+      }
+    }
+
+    button[type=submit] {
+      font-size: $font-size-small;
+      width: 100%;
+
+      @include text-overflow;
     }
   }
 }

@@ -194,8 +194,8 @@ class SearchBuilder extends QueryBuilder
             $this->city->addCity($this->request->get('city'));
         }
 
-        if ($this->request->filled('tag')) {
-            $this->tag->addTag($this->request->get('tag'));
+        if ($this->request->filled('tags')) {
+            $this->tag->addTag($this->request->get('tags'));
         }
 
         if ($this->request->filled('salary')) {

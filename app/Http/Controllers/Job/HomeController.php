@@ -109,10 +109,9 @@ class HomeController extends BaseController
     }
 
     /**
-     * @param array $data
      * @return \Illuminate\View\View
      */
-    private function load(array $data = [])
+    private function load()
     {
         $this->preferences = new Preferences($this->getSetting('job.preferences'));
         $this->builder->setPreferences($this->preferences);
@@ -148,14 +147,6 @@ class HomeController extends BaseController
         $ids = $source->pluck('id')->toArray();
         $jobs = $this->job->findManyWithOrder($ids);
 
-
-//        $context = !$this->request->filled('q') ? 'global.' : '';
-//        $aggregations = [
-//            'cities'        => $result->getAggregationCount("${context}locations.locations_city_original"),
-//            'tags'          => $result->getAggregationCount("${context}tags"),
-//            'remote'        => $result->getAggregationCount("${context}remote")
-//        ];
-
         $pagination = new LengthAwarePaginator(
             $jobs,
             $result->total(),
@@ -175,24 +166,35 @@ class HomeController extends BaseController
         $input = [
             'tags'          => $this->builder->tag->getTags(),
             'cities'        => array_map('mb_strtolower', $this->builder->city->getCities()),
-            'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote'
+            'city'          => array_first($this->builder->city->getCities()),
+            'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote',
+            'q'             => $this->request->input('q'),
+            'sort'          => $this->builder->getSort(),
+            'salary'        => $this->request->input('salary'),
+            'currency'      => $this->request->input('currency', Currency::PLN)
         ];
 
-        return $this->view('job.home', array_merge($data, [
-            'rates_list'        => Job::getRatesList(),
-            'employment_list'   => Job::getEmploymentList(),
-            'currency_list'     => Currency::getCurrenciesList(),
-            'preferences'       => $this->preferences,
+        $data = [
+//            'rates_list'        => Job::getRatesList(),
+//            'employment_list'   => Job::getEmploymentList(),
+
+//            'preferences'       => $this->preferences,
 //            'listing'           => $listing,
-            'premium_listing'   => $result->getAggregationHits('premium_listing', true),
+//            'premium_listing'   => $result->getAggregationHits('premium_listing', true),
 //            'aggregations'      => $aggregations,
 
             'subscribes'        => $subscribes,
             'input'             => $input,
-            'sort'              => $this->builder->getSort(),
+
 
             'tags'              => TagResource::collection($tags)->toArray($this->request),
-            'jobs'              => (new JobCollection($pagination))->response()->getContent()
-        ]));
+            'jobs'              => json_decode((new JobCollection($pagination))->response()->getContent())
+        ];
+
+        if ($this->request->wantsJson()) {
+            return response()->json($data);
+        }
+
+        return $this->view('job.home', $data + ['currencies_list' => Currency::getCurrenciesList()]);
     }
 }
