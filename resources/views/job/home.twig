@@ -93,7 +93,11 @@
                                     </div>
 
                                     <div class="form-group">
-                                        {{ form_select('currency', currencies_list, null, {'v-model': 'input.currency', class: 'form-control input-sm'}) }}
+                                        <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
+                                            <option v-for="(currency, index) in currencies" :key="index" :value="index">
+                                                ${ currency }
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +111,7 @@
                         <div class="pull-right">
                             Sortuj według
 
-                            <select v-model="input.sort" @change="search" name="sort" class="form-control input-inline input-sm margin-sm-left" style="width: auto">
+                            <select v-model="defaultSort" @change="search" name="sort" class="form-control input-inline input-sm margin-sm-left" style="width: auto">
                                 <option value="boost_at">Data dodania</option>
                                 <option value="_score">Trafność</option>
                                 <option value="salary">Wynagrodzenie</option>
@@ -120,8 +124,14 @@
 
                 <vue-job v-for="job in jobs.data" :job="job" :key="job.id"></vue-job>
 
-                <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
+                <div v-cloak v-if="jobs.data.length === 0" class="empty-result padding-sm">
+                    <p>
+                        Nie znaleźliśmy ofert, które spełniają Twoje kryteria.<br>
+                        <a href="{{ route('job.home') }}">Zobacz wszystkie oferty</a>, a być może znajdziesz coś dla siebie!
+                    </p>
+                </div>
 
+                <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
             </div>
         </form>
 
@@ -149,7 +159,9 @@
             jobs: {{ jobs|json_encode|raw }},
             tags: {{ tags|json_encode|raw }},
             input: {{ input|json_encode|raw }},
-            sort: '{{ sort }}'
+            {#sort: '{{ sort }}',#}
+            default: {{ default|json_encode|raw }},
+            currencies: {{ currencies|json_encode|raw }}
         }
     </script>
 {% endblock %}

@@ -13,6 +13,7 @@ use Coyote\Repositories\Criteria\Job\IncludeSubscribers;
 use Coyote\Repositories\Criteria\Tag\ForCategory;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Services\FormBuilder\Fields\Search;
 use Coyote\Tag;
 use Illuminate\Http\Request;
 use Coyote\Job;
@@ -125,11 +126,8 @@ class HomeController extends BaseController
         });
 
         $this->builder->setLanguages($tags->pluck('name')->toArray());
-
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
-        $this->request->session()->put('current_url', $this->request->fullUrl());
-
-        $this->builder->setSort($this->request->input('sort', $this->builder::DEFAULT_SORT));
+        $this->builder->setSort($this->request->input('sort'));
 
         $result = $this->job->search($this->builder);
 
@@ -143,9 +141,14 @@ class HomeController extends BaseController
         $this->job->pushCriteria(new EagerLoadingWithCount(['comments']));
         $this->job->pushCriteria(new IncludeSubscribers($this->userId));
 
+        $jobs = [];
+
 //        $ids = $result->getAggregationHits('premium_listing', true)->merge($source)->pluck('id')->toArray();
-        $ids = $source->pluck('id')->toArray();
-        $jobs = $this->job->findManyWithOrder($ids);
+
+        if ($source) {
+            $ids = $source->pluck('id')->toArray();
+            $jobs = $this->job->findManyWithOrder($ids);
+        }
 
         $pagination = new LengthAwarePaginator(
             $jobs,
@@ -169,9 +172,9 @@ class HomeController extends BaseController
             'city'          => array_first($this->builder->city->getCities()),
             'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote',
             'q'             => $this->request->input('q'),
-            'sort'          => $this->builder->getSort(),
+            'sort'          => $this->request->input('sort'),
             'salary'        => $this->request->input('salary'),
-            'currency'      => $this->request->input('currency', Currency::PLN)
+            'currency'      => $this->request->input('currency')
         ];
 
         $data = [
@@ -186,15 +189,22 @@ class HomeController extends BaseController
             'subscribes'        => $subscribes,
             'input'             => $input,
 
+            'default'           => [
+                'sort'                  => SearchBuilder::DEFAULT_SORT,
+                'currency'              => Currency::PLN
+            ],
+
 
             'tags'              => TagResource::collection($tags)->toArray($this->request),
             'jobs'              => json_decode((new JobCollection($pagination))->response()->getContent())
         ];
 
+        $this->request->session()->put('current_url', $this->request->fullUrl());
+
         if ($this->request->wantsJson()) {
             return response()->json($data);
         }
 
-        return $this->view('job.home', $data + ['currencies_list' => Currency::getCurrenciesList()]);
+        return $this->view('job.home', $data + ['currencies' => (object) Currency::getCurrenciesList()]);
     }
 }

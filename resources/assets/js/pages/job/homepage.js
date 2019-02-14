@@ -38,6 +38,7 @@ new Vue({
         },
 
         search: function () {
+
             const input = {
                 q: this.input.q,
                 city: this.input.city,
@@ -48,9 +49,7 @@ new Vue({
                 currency: this.input.currency
             };
 
-            axios.get(this.$refs.searchForm.action, {
-                    params: input
-                })
+            axios.get(this.$refs.searchForm.action, {params: input})
                 .then(response => {
                     window.history.pushState(input, '', response.request.responseURL);
                     this.jobs = response.data.jobs;
@@ -63,6 +62,22 @@ new Vue({
         }
     },
     computed: {
+        defaultSort: {
+            get: function () {
+                return this.input.sort ? this.input.sort : this.default.sort;
+            },
+            set: function (value) {
+                this.input.sort = value;
+            }
+        },
 
+        defaultCurrency: {
+            get: function () {
+                return this.input.currency ? this.input.currency : this.default.currency;
+            },
+            set: function (value) {
+                this.input.currency = value;
+            }
+        }
     }
 });
