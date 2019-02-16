@@ -37,7 +37,7 @@
                             <a :href="tag.url" :title="'Znajdź oferty zawierające ' + tag.name">
                                 <img v-if="tag.logo" :alt="tag.name" :src="tag.logo">
 
-                                {{ tag.real_name ? tag.real_name : tag.name }}
+                                {{ tag.real_name || tag.name }}
                             </a>
                         </li>
                     </ul>
@@ -51,6 +51,10 @@
                 </div>
             </div>
         </div>
+
+        <vue-modal ref="error">
+            Musisz się zalogować, aby dodać tę ofertę do ulubionych.
+        </vue-modal>
     </div>
 </template>
 
@@ -58,6 +62,8 @@
     import VueSalary from './salary.vue';
     import VueLocation from './location.vue';
     import declination from '../components/declination';
+    import axios from 'axios';
+    import VueModal from './modal.vue';
 
     export default {
         props: {
@@ -71,11 +77,26 @@
         },
         components: {
             'vue-salary': VueSalary,
-            'vue-location': VueLocation
+            'vue-location': VueLocation,
+            'vue-modal': VueModal
+        },
+        data() {
+            return {
+                error: ''
+            }
         },
         methods: {
             subscribe: function () {
-                this.job.subscribe_on = !this.job.subscribe_on;
+                let toggle = () => {
+                    this.job.subscribe_on = !this.job.subscribe_on;
+                };
+
+                toggle();
+
+                axios.post(`/Praca/Subscribe/${this.job.id}`).catch(() => {
+                    toggle();
+                    this.$refs.error.open();
+                });
             }
         },
         computed: {
