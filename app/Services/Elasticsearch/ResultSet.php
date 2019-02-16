@@ -153,7 +153,7 @@ class ResultSet implements \Countable, \IteratorAggregate
 
         $data = array_get($this->aggregations, "$name.buckets");
 
-        return collect($data)->pluck('doc_count', 'key');
+        return collect($data)->pluck('key');
     }
 
     /**

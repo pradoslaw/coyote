@@ -24,8 +24,8 @@
             <script type="text/javascript">var _config = {{ __public|default('{}')|raw }};</script>
         {% endblock %}
 
-        <link rel="apple-touch-icon" href="{{ secure_asset('img/apple-touch.png') }}">
-        <link rel="shortcut icon" href="{{ secure_asset('img/favicon.png') }}" type="image/png">
+        <link rel="apple-touch-icon" href="{{ asset('img/apple-touch.png') }}">
+        <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" type="image/png">
 
         {{ render_region('head') }}
     </head>

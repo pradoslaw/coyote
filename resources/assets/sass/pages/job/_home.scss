@@ -19,6 +19,11 @@
 
   .padding-sm-bottom {
     border-bottom: 1px solid $border-color;
+    clear: left;
+  }
+
+  .salary {
+    clear: both;
   }
 
   .job-options {
@@ -214,7 +219,7 @@
 
 .medal {
   margin-left: 8px;
-  margin-top: -2px;
+  margin-top: 0;
   display: inline-block;
   background: url('/img/medal.png') no-repeat;
   width: 20px;
@@ -230,9 +235,10 @@
   color: $state-warning-text;
   font-size: 11px;
   font-weight: normal;
-  margin-left: -12px;
+  margin-left: -7px;
   border-radius: 0;
-  margin-top: -21px;
+  margin-top: 5px;
+  z-index: 1000;
   border-top-right-radius: $border-radius-small;
   border-bottom-right-radius: $border-radius-small;
 

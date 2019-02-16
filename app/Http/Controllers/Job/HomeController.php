@@ -3,9 +3,7 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Resources\JobCollection;
-use Coyote\Http\Resources\JobResource;
 use Coyote\Http\Resources\TagResource;
-use Coyote\Job\Preferences;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\EagerLoadingWithCount;
@@ -13,24 +11,23 @@ use Coyote\Repositories\Criteria\Job\IncludeSubscribers;
 use Coyote\Repositories\Criteria\Tag\ForCategory;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Services\FormBuilder\Fields\Search;
 use Coyote\Tag;
 use Illuminate\Http\Request;
-use Coyote\Job;
 use Coyote\Currency;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class HomeController extends BaseController
 {
     /**
-     * @var array|mixed
-     */
-    private $preferences = [];
-
-    /**
      * @var TagRepository
      */
     private $tag;
+
+    /**
+     * @var string
+     */
+    private $firmName;
 
     /**
      * @param JobRepository $job
@@ -85,8 +82,9 @@ class HomeController extends BaseController
     public function firm($slug)
     {
         $this->builder->addFirmFilter($slug);
+        $this->firmName = $slug;
 
-        return $this->load(['firm' => $slug]);
+        return $this->load();
     }
 
     /**
@@ -114,9 +112,6 @@ class HomeController extends BaseController
      */
     private function load()
     {
-        $this->preferences = new Preferences($this->getSetting('job.preferences'));
-        $this->builder->setPreferences($this->preferences);
-
         // get only tags belong to specific category
         $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
 
@@ -133,6 +128,7 @@ class HomeController extends BaseController
 
         // keep in mind that we return data by calling getSource(). This is important because
         // we want to pass collection to the twig (not raw php array)
+        /** @var Collection $source */
         $source = $result->getSource();
 
         ///////////////////////////////////////////////////////////////////
@@ -143,10 +139,15 @@ class HomeController extends BaseController
 
         $jobs = [];
 
-//        $ids = $result->getAggregationHits('premium_listing', true)->merge($source)->pluck('id')->toArray();
-
         if ($source) {
-            $ids = $source->pluck('id')->toArray();
+            $premium = $result->getAggregationHits('premium_listing', true);
+            $premium = array_first($premium); // only one premium at the top
+
+            if ($premium) {
+                $source->prepend($premium);
+            }
+
+            $ids = $source->pluck('id')->unique()->toArray();
             $jobs = $this->job->findManyWithOrder($ids);
         }
 
@@ -166,26 +167,14 @@ class HomeController extends BaseController
 //            $subscribes = JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request);
         }
 
-        $input = [
+        $input = array_merge($this->request->only('q', 'sort', 'salary', 'currency', 'remote_range'), [
             'tags'          => $this->builder->tag->getTags(),
-            'cities'        => array_map('mb_strtolower', $this->builder->city->getCities()),
+            'locations'     => array_map('mb_strtolower', $this->builder->city->getCities()),
             'city'          => array_first($this->builder->city->getCities()),
-            'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote',
-            'q'             => $this->request->input('q'),
-            'sort'          => $this->request->input('sort'),
-            'salary'        => $this->request->input('salary'),
-            'currency'      => $this->request->input('currency')
-        ];
+            'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote' ? true : null,
+        ]);
 
         $data = [
-//            'rates_list'        => Job::getRatesList(),
-//            'employment_list'   => Job::getEmploymentList(),
-
-//            'preferences'       => $this->preferences,
-//            'listing'           => $listing,
-//            'premium_listing'   => $result->getAggregationHits('premium_listing', true),
-//            'aggregations'      => $aggregations,
-
             'subscribes'        => $subscribes,
             'input'             => $input,
 
@@ -194,7 +183,7 @@ class HomeController extends BaseController
                 'currency'              => Currency::PLN
             ],
 
-
+            'locations'         => $result->getAggregationCount("global.locations.locations_city_original"),
             'tags'              => TagResource::collection($tags)->toArray($this->request),
             'jobs'              => json_decode((new JobCollection($pagination))->response()->getContent())
         ];
@@ -205,6 +194,10 @@ class HomeController extends BaseController
             return response()->json($data);
         }
 
-        return $this->view('job.home', $data + ['currencies' => (object) Currency::getCurrenciesList()]);
+        return $this->view('job.home', $data + [
+            'currencies'    => (object) Currency::getCurrenciesList(),
+            'form_url'      => $this->request->url(),
+            'firm'          => $this->firmName
+        ]);
     }
 }

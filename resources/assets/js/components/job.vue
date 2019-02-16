@@ -1,5 +1,7 @@
 <template>
     <div :class="{'highlight': job.is_highlight}" class="panel panel-default panel-job margin-md-bottom">
+        <span v-if="order === 0 && job.is_on_top" class="label top-spot-badge">Promowane</span>
+
         <div class="panel-body">
             <div class="media">
                 <div class="media-left">
@@ -7,7 +9,7 @@
                 </div>
 
                 <div class="media-body">
-                    <h4 class="media-heading"><a :href="job.url">{{ job.title }}</a></h4>
+                    <h4 class="media-heading pull-left"><a :href="job.url">{{ job.title }}</a></h4>
 
                     <a v-if="job.is_medal" :href="job.url" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
 
@@ -58,7 +60,15 @@
     import declination from '../components/declination';
 
     export default {
-        props: ['job'],
+        props: {
+            job: {
+                type: Object,
+                required: true
+            },
+            order: {
+                type: Number
+            }
+        },
         components: {
             'vue-salary': VueSalary,
             'vue-location': VueLocation

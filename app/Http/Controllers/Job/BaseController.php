@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Illuminate\Http\Request;
 
@@ -34,7 +33,5 @@ abstract class BaseController extends Controller
         });
 
         $this->job = $job;
-        // we need to display actual number of active offers so don't remove line below!
-        $this->job->pushCriteria(new PriorDeadline());
     }
 }

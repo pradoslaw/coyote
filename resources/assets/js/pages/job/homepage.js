@@ -21,13 +21,33 @@ new Vue({
     },
     methods: {
         toggleTag: function (tag) {
-            const index = this.input.tags.indexOf(tag.name);
+            this.toggle(this.input.tags, tag);
+        },
+
+        toggleLocation: function (location) {
+            this.toggle(this.input.locations, location);
+        },
+
+        toggle: function (input, item) {
+            const index = input.indexOf(item);
 
             if (index > -1) {
-                this.input.tags.splice(index, 1);
+                input.splice(index, 1);
             }
             else {
-                this.input.tags.push(tag.name);
+                input.push(item);
+            }
+
+            this.search();
+        },
+
+        toggleRemote: function () {
+            if (this.input.remote) {
+                this.input.remote = null;
+            }
+            else {
+                this.input.remote = 1;
+                this.input.remote_range = 100;
             }
 
             this.search();
@@ -38,7 +58,6 @@ new Vue({
         },
 
         search: function () {
-
             const input = {
                 q: this.input.q,
                 city: this.input.city,
@@ -46,7 +65,10 @@ new Vue({
                 sort: this.input.sort,
                 page: this.input.page,
                 salary: this.input.salary,
-                currency: this.input.currency
+                currency: this.input.currency,
+                remote: this.input.remote,
+                remote_range: this.input.remote_range,
+                locations: this.input.locations
             };
 
             axios.get(this.$refs.searchForm.action, {params: input})
@@ -59,6 +81,10 @@ new Vue({
                 .catch(error => {
                     console.log(error);
                 });
+        },
+
+        upperFirst: function (string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
         }
     },
     computed: {

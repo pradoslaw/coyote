@@ -38,7 +38,7 @@ class JobResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only('id', 'title', 'firm', 'is_remote', 'remote_range', 'score', 'subscribe_on', 'comments_count', 'is_highlight');
+        $only = $this->resource->only('id', 'title', 'firm', 'is_remote', 'remote_range', 'score', 'subscribe_on', 'comments_count', 'is_highlight', 'is_on_top');
 
         return array_merge($only, [
             'url'         => UrlBuilder::job($this->resource),
@@ -57,7 +57,7 @@ class JobResource extends JsonResource
                 'url'           => route('job.remote')
             ],
 
-            'firm'        => $this->firm ? new FirmResource($this->firm) : []
+            'firm'        => $this->firm ? new FirmResource($this->firm) : (object) ['logo' => '', 'name' => '']
         ]);
     }
 

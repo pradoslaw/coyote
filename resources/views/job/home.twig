@@ -15,8 +15,8 @@
         {{ input.tags|join(', ') }}
     {% endif %}
 
-    {% if input.cities %}
-        {{ input.cities|join(', ') }}
+    {% if input.locations %}
+        {{ input.locations|join(', ') }}
     {% endif %}
 
     {{ parent() }}
@@ -28,21 +28,21 @@
 
 {% block container %}
     <div id="page-job" class="row">
-        <form method="get" ref="searchForm" action="{{ route('job.home') }}" @submit.prevent="search">
+        <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search">
             <div class="col-md-9">
                 <div class="panel panel-default search-form margin-md-top">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="form-group col-sm-4">
+                            <div class="form-group col-sm-6">
                                 <i class="fa fa-fw fa-map-marker"></i>
 
-                                <input v-model="input.city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości">
+                                <input v-model="input.q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
                             </div>
 
-                            <div class="form-group col-sm-6">
+                            <div class="form-group col-sm-4">
                                 <i class="fa fa-fw fa-search"></i>
 
-                                <input v-model="input.q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
+                                <input v-model="input.city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości">
                             </div>
 
                             <div class="form-group col-sm-2 col-xs-1">
@@ -55,30 +55,43 @@
 
                     <div class="panel-footer">
                         <ul  class="nav nav-pills">
-                            <li role="presentation" class="active"><a href="#tech" role="tab" data-toggle="tab">Technologia</a></li>
+                            <li role="presentation" class="active"><a href="#location" role="tab" data-toggle="tab">Lokalizacja</a></li>
+                            <li role="presentation"><a href="#tech" role="tab" data-toggle="tab">Technologia</a></li>
                             <li role="presentation"><a href="#compensation" role="tab" data-toggle="tab">Wynagrodzenie</a></li>
                         </ul>
 
                         <div class="tab-content">
-                            <div id="tech" class="tab-pane active filters">
-                                <ul v-cloak class="list-group list-group-tech">
+                            <div id="location" class="tab-pane active filters">
+                                <ul class="list-group list-group-tech">
                                     <li class="list-group-item">
-                                        <input type="hidden" name="is_remote" :checked="input.is_remote">
+                                        <input type="hidden" name="is_remote" :checked="input.remote">
 
-                                        <a href="javascript:">
-                                            <i class="fa fa-fw fa-wifi"></i>
+                                        <a @click.prevent="toggleRemote" href="javascript:">
+                                            <i class="fa fa-fw fa-wifi" :class="{'grayscale': input.is_remote === null}"></i>
 
                                             Praca zdalna
                                         </a>
                                     </li>
 
+                                    <li v-for="(location, index) in locations" :key="index" class="list-group-item">
+                                        <input type="hidden" name="locations[]" :value="location" :checked="input.locations.indexOf(location) > -1">
+
+                                        <a @click.prevent="toggleLocation(location)" href="javascript:">
+                                            ${ upperFirst(location) }
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div id="tech" class="tab-pane filters">
+                                <ul class="list-group list-group-tech">
                                     <li v-for="tag in tags" :key="tag.id" class="list-group-item">
                                         <input type="hidden" name="tags[]" :value="tag.name" :checked="input.tags.indexOf(tag.name) > -1">
 
-                                        <a @click.prevent="toggleTag(tag)" :href="tag.url">
+                                        <a @click.prevent="toggleTag(tag.name)" :href="tag.url">
                                             <img :alt="tag.name" :src="tag.logo" :class="{'grayscale': input.tags.length && input.tags.indexOf(tag.name) === -1}">
 
-                                            ${ tag.real_name ? tag.real_name : tag.name }
+                                            ${ tag.real_name || tag.name }
                                         </a>
                                     </li>
                                 </ul>
@@ -122,7 +135,7 @@
                     </div>
                 </div>
 
-                <vue-job v-for="job in jobs.data" :job="job" :key="job.id"></vue-job>
+                <vue-job v-for="(job, index) in jobs.data" :job="job" :key="job.id" :order="index"></vue-job>
 
                 <div v-cloak v-if="jobs.data.length === 0" class="empty-result padding-sm">
                     <p>
@@ -158,8 +171,8 @@
         var data = {
             jobs: {{ jobs|json_encode|raw }},
             tags: {{ tags|json_encode|raw }},
+            locations: {{ locations|json_encode|raw }},
             input: {{ input|json_encode|raw }},
-            {#sort: '{{ sort }}',#}
             default: {{ default|json_encode|raw }},
             currencies: {{ currencies|json_encode|raw }}
         }
