@@ -3,7 +3,6 @@ import Config from '../../libs/config';
 import VueJob from '../../components/job.vue';
 import VuePagination from '../../components/pagination.vue';
 import axios from 'axios';
-import store from "../../store";
 
 new Vue({
     el: '#page-job',
@@ -53,8 +52,13 @@ new Vue({
             this.search();
         },
 
-        changePage: function () {
+        changePage: function (page) {
+            this.jobs.meta.current_page = page;
+            this.input.page = page;
 
+            this.search();
+
+            window.scrollTo(0,0);
         },
 
         search: function () {

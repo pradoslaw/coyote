@@ -167,7 +167,7 @@ class HomeController extends BaseController
 //            $subscribes = JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request);
         }
 
-        $input = array_merge($this->request->only('q', 'sort', 'salary', 'currency', 'remote_range'), [
+        $input = array_merge($this->request->only('q', 'sort', 'salary', 'currency', 'remote_range', 'page'), [
             'tags'          => $this->builder->tag->getTags(),
             'locations'     => array_map('mb_strtolower', $this->builder->city->getCities()),
             'city'          => array_first($this->builder->city->getCities()),

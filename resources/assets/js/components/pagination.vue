@@ -10,7 +10,8 @@
         </li>
 
         <li v-for="element in slider" :class="{'active': element === currentPage, 'disabled': element === '...'}">
-            <a v-if="element !== '...'" href="javascript:" @click.prevent="change(element)">{{ element }}</a>
+            <span v-if="element === currentPage">{{ element }}</span>
+            <a v-else-if="element !== '...'" href="javascript:" @click.prevent="change(element)">{{ element }}</a>
             <span v-else>...</span>
         </li>
 
@@ -73,7 +74,7 @@
         },
         methods: {
             change: function(page) {
-                this.currentPage = page;
+                // this.currentPage = page;
 
                 this.$emit('change', page);
             },
