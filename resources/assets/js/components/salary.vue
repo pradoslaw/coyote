@@ -25,6 +25,28 @@
 
 <script>
     export default {
-        props: ['salary_from', 'salary_to', 'currency_symbol', 'rate', 'is_gross', 'options']
+        props: {
+            salary_from: {
+                type: String
+            },
+            salary_to: {
+                type: String
+            },
+            currency_symbol: {
+                type: String
+            },
+            rate: {
+                type: String
+            },
+            is_gross: {
+                type: Boolean
+            },
+            options: {
+                type: Object,
+                default: () => {
+                    return {};
+                }
+            }
+        }
     }
 </script>

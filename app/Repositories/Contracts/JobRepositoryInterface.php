@@ -3,7 +3,6 @@
 namespace Coyote\Repositories\Contracts;
 
 use Coyote\Job;
-use Coyote\Job\Comment;
 
 /**
  * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
@@ -12,27 +11,10 @@ use Coyote\Job\Comment;
 interface JobRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @return int
-     */
-    public function count();
-
-    /**
      * @param int[] $ids
      * @return Job[]
      */
     public function findManyWithOrder(array $ids);
-
-    /**
-     * @param string $city
-     * @return int
-     */
-    public function countCityOffers(string $city);
-
-    /**
-     * @param int $userId
-     * @return int
-     */
-    public function counterUserOffers(int $userId);
 
     /**
      * Get subscribed job offers for given user id
@@ -72,7 +54,7 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @param int $userId
      * @return \Illuminate\Support\Collection
      */
-    public function getMyOffers($userId);
+    public function getPublished($userId);
 
     /**
      * @param array $tags

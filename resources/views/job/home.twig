@@ -27,113 +27,132 @@
 {% import 'components.widgets' as widgets %}
 
 {% block container %}
-    <div id="page-job" class="row">
-        <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search">
-            <div class="col-md-9">
-                <div class="panel panel-default search-form margin-md-top">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <i class="fa fa-fw fa-map-marker"></i>
+    <div id="page-job">
+        <div class="row">
+            <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search">
+                <div class="col-md-9">
+                    <div class="panel panel-default search-form margin-md-top">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <i class="fa fa-fw fa-map-marker"></i>
 
-                                <input v-model="input.q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
-                            </div>
+                                    <input v-model="input.q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
+                                </div>
 
-                            <div class="form-group col-sm-4">
-                                <i class="fa fa-fw fa-search"></i>
+                                <div class="form-group col-sm-4">
+                                    <i class="fa fa-fw fa-search"></i>
 
-                                <input v-model="input.city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości" autocomplete="off">
-                            </div>
+                                    <input v-model="input.city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości" autocomplete="off">
+                                </div>
 
-                            <div class="form-group col-sm-2 col-xs-1">
-                                <button class="btn btn-primary btn-search" type="submit">
-                                    <i class="fa fa-search"></i> <span class="hidden-xs">Szukaj</span>
-                                </button>
+                                <div class="form-group col-sm-2 col-xs-1">
+                                    <button class="btn btn-primary btn-search" type="submit">
+                                        <i class="fa fa-search"></i> <span class="hidden-xs">Szukaj</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="panel-footer">
-                        <ul  class="nav nav-pills">
-                            <li role="presentation" class="active"><a href="#location" role="tab" data-toggle="tab">Lokalizacja</a></li>
-                            <li role="presentation"><a href="#tech" role="tab" data-toggle="tab">Technologia</a></li>
-                            <li role="presentation"><a href="#compensation" role="tab" data-toggle="tab">Wynagrodzenie</a></li>
-                        </ul>
+                        <div class="panel-footer">
+                            <ul  class="nav nav-pills">
+                                <li role="presentation" class="active"><a href="#location" role="tab" data-toggle="tab">Lokalizacja</a></li>
+                                <li role="presentation"><a href="#tech" role="tab" data-toggle="tab">Technologia</a></li>
+                                <li role="presentation"><a href="#compensation" role="tab" data-toggle="tab">Wynagrodzenie</a></li>
+                            </ul>
 
-                        <div class="tab-content">
-                            <div id="location" class="tab-pane active filters">
-                                <ul v-cloak class="list-group list-group-tech">
-                                    <li class="list-group-item">
-                                        <input type="hidden" name="remote" :checked="input.remote">
+                            <div class="tab-content">
+                                <div id="location" class="tab-pane active filters">
+                                    <ul v-cloak class="list-group list-group-tech">
+                                        <li class="list-group-item">
+                                            <input type="hidden" name="remote" :checked="input.remote">
 
-                                        <a @click.prevent="toggleRemote" href="javascript:">
-                                            <i class="fa fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
+                                            <a @click.prevent="toggleRemote" href="javascript:">
+                                                <i class="fa fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
 
-                                            Praca zdalna
-                                        </a>
-                                    </li>
+                                                Praca zdalna
+                                            </a>
+                                        </li>
 
-                                    <li v-for="(location, index) in locations" :key="index" class="list-group-item">
-                                        <input type="hidden" name="locations[]" :value="location" :checked="input.locations.indexOf(location) > -1">
+                                        <li v-for="(location, index) in locations" :key="index" class="list-group-item">
+                                            <input type="hidden" name="locations[]" :value="location" :checked="input.locations.indexOf(location) > -1">
 
-                                        <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && input.locations.indexOf(location) === -1}">
-                                            ${ upperFirst(location) }
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                                            <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && input.locations.indexOf(location) === -1}">
+                                                ${ upperFirst(location) }
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
 
-                            <div id="tech" class="tab-pane filters">
-                                <ul class="list-group list-group-tech">
-                                    <li v-for="tag in tags" :key="tag.id" class="list-group-item">
-                                        <input type="hidden" name="tags[]" :value="tag.name" :checked="input.tags.indexOf(tag.name) > -1">
+                                <div id="tech" class="tab-pane filters">
+                                    <ul class="list-group list-group-tech">
+                                        <li v-for="tag in tags" :key="tag.id" class="list-group-item">
+                                            <input type="hidden" name="tags[]" :value="tag.name" :checked="input.tags.indexOf(tag.name) > -1">
 
-                                        <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && input.tags.indexOf(tag.name) === -1}">
-                                            <img :alt="tag.name" :src="tag.logo">
+                                            <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && input.tags.indexOf(tag.name) === -1}">
+                                                <img :alt="tag.name" :src="tag.logo">
 
-                                            ${ tag.real_name || tag.name }
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                                                ${ tag.real_name || tag.name }
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
 
-                            <div id="compensation" class="tab-pane filters">
-                                <div class="form-inline">
-                                    <div class="form-group">
-                                        <strong>od:</strong>
+                                <div id="compensation" class="tab-pane filters">
+                                    <div class="form-inline">
+                                        <div class="form-group">
+                                            <strong>od:</strong>
 
-                                        <input v-model="input.salary" type="text" class="form-control input-sm">
-                                    </div>
+                                            <input v-model="input.salary" type="text" class="form-control input-sm">
+                                        </div>
 
-                                    <div class="form-group">
-                                        <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
-                                            <option v-for="(currency, index) in currencies" :key="index" :value="index">
-                                                ${ currency }
-                                            </option>
-                                        </select>
+                                        <div class="form-group">
+                                            <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
+                                                <option v-for="(currency, index) in currencies" :key="index" :value="index">
+                                                    ${ currency }
+                                                </option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="row margin-md-bottom">
+                        <div class="col-xs-12">
+                            <div class="pull-right">
+                                Sortuj według
+
+                                <select v-model="defaultSort" @change="search" name="sort" class="form-control input-inline input-sm margin-sm-left" style="width: auto">
+                                    <option value="boost_at">Data dodania</option>
+                                    <option value="_score">Trafność</option>
+                                    <option value="salary">Wynagrodzenie</option>
+                                </select>
+                            </div>
+
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
+            </form>
 
-                <div class="row margin-md-bottom">
-                    <div class="col-xs-12">
-                        <div class="pull-right">
-                            Sortuj według
+            <div class="col-md-3">
+                <section id="post-offer">
+                    <h4>Dla pracodawców</h4>
 
-                            <select v-model="defaultSort" @change="search" name="sort" class="form-control input-inline input-sm margin-sm-left" style="width: auto">
-                                <option value="boost_at">Data dodania</option>
-                                <option value="_score">Trafność</option>
-                                <option value="salary">Wynagrodzenie</option>
-                            </select>
-                        </div>
+                    <span class="edge">
+                        <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary">Dodaj ofertę pracy</a>
+                    </span>
 
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
+                    <p><a href="{{ route('job.business') }}">Już od 30 zł / 40 dni!</a></p>
+                </section>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-9">
+
 
                 <vue-job v-for="(job, index) in jobs.data" :job="job" :key="job.id" :order="index"></vue-job>
 
@@ -146,18 +165,28 @@
 
                 <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
             </div>
-        </form>
 
-        <div class="col-md-3">
-            <section id="post-offer">
-                <h4>Dla pracodawców</h4>
+            <div class="col-md-3">
+                <section v-if="published.length" class="box sidebar-job-offers">
+                    <h4><i class="fa fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
 
-                <span class="edge">
-                    <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary">Dodaj ofertę pracy</a>
-                </span>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <vue-job-tiny v-for="job in published" :job="job" :key="job.id"></vue-job-tiny>
+                        </div>
+                    </div>
+                </section>
 
-                <p><a href="{{ route('job.business') }}">Już od 30 zł / 40 dni!</a></p>
-            </section>
+                <section v-if="subscribed.length" class="box sidebar-job-offers">
+                    <h4><i class="fa fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <vue-job-tiny v-for="job in subscribedStore" :job="job" :key="job.id"></vue-job-tiny>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -174,7 +203,9 @@
             locations: {{ locations|json_encode|raw }},
             input: {{ input|json_encode|raw }},
             default: {{ default|json_encode|raw }},
-            currencies: {{ currencies|json_encode|raw }}
+            currencies: {{ currencies|json_encode|raw }},
+            subscribed: {{ subscribed|json_encode|raw }},
+            published: {{ published|json_encode|raw }}
         }
     </script>
 {% endblock %}

@@ -3,10 +3,14 @@
         <i class="fa fa-map-marker"></i>
 
         <ul>
-            <li v-for="location in locations"><a :href="location.url" :title="'Znajdź oferty z miasta ' + location.city">{{ location.city }}</a></li>
+            <li v-for="location in locations">
+                <a v-if="clickable" :href="location.url" :title="'Znajdź oferty z miasta ' + location.city">{{ location.city }}</a>
+                <template v-else>{{ location.city }}</template>
+            </li>
         </ul>
 
-        <a v-if="remote.enabled" :href="remote.url">({{ remote.range ? `${remote.range}% pracy zdalnej` : 'praca zdalna' }})</a>
+        <a v-if="remote.enabled && clickable" :href="remote.url">({{ remoteLabel }})</a>
+        <template v-else-if="!clickable">({{ remoteLabel }})</template>
     </div>
 </template>
 
@@ -18,6 +22,15 @@
             },
             locations: {
                 type: Array
+            },
+            clickable: {
+                type: Boolean,
+                default: true
+            }
+        },
+        computed: {
+            remoteLabel() {
+                return this.remote.range ? `${this.remote.range}% pracy zdalnej` : 'praca zdalna';
             }
         }
     }

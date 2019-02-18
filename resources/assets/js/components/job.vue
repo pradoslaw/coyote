@@ -43,7 +43,7 @@
                     </ul>
 
                     <ul class="list-inline job-options margin-sm-top">
-                        <li><a @click="subscribe()" href="javascript:"><i :class="{'fa-heart on': job.subscribe_on, 'fa-heart-o': !job.subscribe_on}" class="fa fa-fw"></i> Ulubiona</a></li>
+                        <li><a @click="subscribe()" href="javascript:"><i :class="{'fa-heart on': isSubscribed, 'fa-heart-o': !isSubscribed}" class="fa fa-fw"></i> Ulubiona</a></li>
                         <li><a :href="job.url + '#comments'"><i class="fa fa-fw fa-comments-o"></i> {{ job.comments_count }} {{ commentsDeclination }}</a></li>
                         <li><a href="#"><i class="fa fa-fw fa-share"></i> Udostępnij</a></li>
                     </ul>
@@ -87,16 +87,23 @@
         },
         methods: {
             subscribe: function () {
-                let toggle = () => {
-                    this.job.subscribe_on = !this.job.subscribe_on;
-                };
+                // let toggle = () => {
+                //     this.job.subscribe_on = !this.job.subscribe_on;
+                // };
 
-                toggle();
 
-                axios.post(`/Praca/Subscribe/${this.job.id}`).catch(() => {
-                    toggle();
-                    this.$refs.error.open();
-                });
+                // toggle();
+
+                this.$store.commit('subscriptions/toggle', this.job);
+
+                // axios.post(`/Praca/Subscribe/${this.job.id}`)
+                //     .then(() => {
+                //         this.$emit('subscribe', this.job);
+                //     })
+                //     .catch(() => {
+                //         toggle();
+                //         this.$refs.error.open();
+                //     });
             }
         },
         computed: {
@@ -106,6 +113,10 @@
 
             limitedTags: function () {
                 return this.job.tags.splice(0, 5);
+            },
+
+            isSubscribed () {
+                return this.$store.getters['subscriptions/exists'](this.job) !== -1;
             }
         }
     }

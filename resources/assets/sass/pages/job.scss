@@ -77,9 +77,10 @@
 .location {
   display: inline;
   font-size: 92%;
+  color: $text-muted;
 
   a {
-    color: $text-muted;
+    color: inherit;
   }
 
   ul {

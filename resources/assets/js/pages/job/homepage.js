@@ -1,19 +1,23 @@
 import Vue from 'vue';
 import Config from '../../libs/config';
 import VueJob from '../../components/job.vue';
+import VueJobTiny from '../../components/job-tiny.vue';
 import VuePagination from '../../components/pagination.vue';
 import axios from 'axios';
+import store from '../../store';
 
 new Vue({
     el: '#page-job',
     delimiters: ['${', '}'],
     components: {
         'vue-job': VueJob,
-        'vue-pagination': VuePagination
+        'vue-pagination': VuePagination,
+        'vue-job-tiny': VueJobTiny
     },
     data: window.data,
+    store,
     created: function () {
-
+        store.state.subscriptions.subscribed = window.data.subscribed;
     },
     mounted: function () {
         axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
@@ -108,6 +112,10 @@ new Vue({
             set: function (value) {
                 this.input.currency = value;
             }
+        },
+
+        subscribedStore () {
+            return store.state.subscriptions.subscribed;
         }
     }
 });

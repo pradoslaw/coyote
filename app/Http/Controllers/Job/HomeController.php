@@ -3,11 +3,13 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Resources\JobCollection;
+use Coyote\Http\Resources\JobResource;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\Job\IncludeSubscribers;
+use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Repositories\Criteria\Tag\ForCategory;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
@@ -133,7 +135,9 @@ class HomeController extends BaseController
 
         ///////////////////////////////////////////////////////////////////
 
-        $this->job->pushCriteria(new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags', 'currency']));
+        $eagerCriteria = new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags', 'currency']);
+
+        $this->job->pushCriteria($eagerCriteria);
         $this->job->pushCriteria(new EagerLoadingWithCount(['comments']));
         $this->job->pushCriteria(new IncludeSubscribers($this->userId));
 
@@ -161,11 +165,10 @@ class HomeController extends BaseController
 
         $pagination->appends($this->request->except('page'));
 
-        $subscribes = [];
+        $this->job->resetCriteria();
 
-        if ($this->userId) {
-//            $subscribes = JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request);
-        }
+        $this->job->pushCriteria($eagerCriteria);
+        $this->job->pushCriteria(new PriorDeadline());
 
         $input = array_merge($this->request->only('q', 'sort', 'salary', 'currency', 'remote_range', 'page'), [
             'tags'          => $this->builder->tag->getTags(),
@@ -175,7 +178,6 @@ class HomeController extends BaseController
         ]);
 
         $data = [
-            'subscribes'        => $subscribes,
             'input'             => $input,
 
             'default'           => [
@@ -185,7 +187,9 @@ class HomeController extends BaseController
 
             'locations'         => $result->getAggregationCount("global.locations.locations_city_original"),
             'tags'              => TagResource::collection($tags)->toArray($this->request),
-            'jobs'              => json_decode((new JobCollection($pagination))->response()->getContent())
+            'jobs'              => json_decode((new JobCollection($pagination))->response()->getContent()),
+            'subscribed'        => $this->getSubscribed(),
+            'published'         => $this->getPublished()
         ];
 
         $this->request->session()->put('current_url', $this->request->fullUrl());
@@ -199,5 +203,29 @@ class HomeController extends BaseController
             'form_url'      => $this->request->url(),
             'firm'          => $this->firmName
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function getSubscribed(): array
+    {
+        if (!$this->userId) {
+            return [];
+        }
+
+        return JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request);
+    }
+
+    /**
+     * @return array
+     */
+    public function getPublished(): array
+    {
+        if (!$this->userId) {
+            return [];
+        }
+
+        return JobResource::collection($this->job->getPublished($this->userId))->toArray($this->request);
     }
 }
