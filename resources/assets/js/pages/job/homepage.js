@@ -24,6 +24,11 @@ new Vue({
 
         this.$refs.q.addEventListener('search', this.search);
         this.$refs.city.addEventListener('search', this.search);
+
+        window.onpopstate = e => {
+            this.jobs = e.state.jobs;
+            this.input = e.state.input;
+        };
     },
     methods: {
         toggleTag: function (tag) {
@@ -84,10 +89,9 @@ new Vue({
 
             axios.get(this.$refs.searchForm.action, {params: input})
                 .then(response => {
-                    window.history.pushState(input, '', response.request.responseURL);
                     this.jobs = response.data.jobs;
 
-                    console.log(response);
+                    window.history.pushState(response.data, '', response.request.responseURL);
                 })
                 .catch(error => {
                     console.log(error);
