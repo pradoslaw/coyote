@@ -37,13 +37,13 @@
                                 <div class="form-group col-sm-6">
                                     <i class="fa fa-fw fa-map-marker"></i>
 
-                                    <input v-model="input.q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
+                                    <input v-model="input.q" ref="q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
                                 </div>
 
                                 <div class="form-group col-sm-4">
                                     <i class="fa fa-fw fa-search"></i>
 
-                                    <input v-model="input.city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości" autocomplete="off">
+                                    <input v-model="input.city" ref="city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości" autocomplete="off">
                                 </div>
 
                                 <div class="form-group col-sm-2 col-xs-1">
@@ -152,8 +152,6 @@
 
         <div class="row">
             <div class="col-md-9">
-
-
                 <vue-job v-for="(job, index) in jobs.data" :job="job" :key="job.id" :order="index"></vue-job>
 
                 <div v-cloak v-if="jobs.data.length === 0" class="empty-result padding-sm">
@@ -167,7 +165,7 @@
             </div>
 
             <div class="col-md-3">
-                <section v-if="published.length" class="box sidebar-job-offers">
+                <section v-cloak v-if="published.length" class="box sidebar-job-offers">
                     <h4><i class="fa fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
 
                     <div class="panel panel-default">
@@ -177,7 +175,7 @@
                     </div>
                 </section>
 
-                <section v-if="subscribed.length" class="box sidebar-job-offers">
+                <section v-cloak v-if="subscribed.length" class="box sidebar-job-offers">
                     <h4><i class="fa fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
 
                     <div class="panel panel-default">

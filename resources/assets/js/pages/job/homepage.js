@@ -21,6 +21,9 @@ new Vue({
     },
     mounted: function () {
         axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
+
+        this.$refs.q.addEventListener('search', this.search);
+        this.$refs.city.addEventListener('search', this.search);
     },
     methods: {
         toggleTag: function (tag) {
