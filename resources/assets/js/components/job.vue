@@ -1,10 +1,10 @@
 <template>
     <div :class="{'highlight': job.is_highlight}" class="panel panel-default panel-job margin-md-bottom">
-        <span v-if="order === 0 && job.is_on_top" class="label top-spot-badge">Promowane</span>
+        <span v-if="order === 0 && job.is_on_top" class="label top-spot-badge hidden-xs">Promowane</span>
 
         <div class="panel-body">
             <div class="media">
-                <div class="media-left">
+                <div class="media-left hidden-xs">
                     <a :href="job.url"><img :alt="job.firm.logo ? job.firm.name : ''" class="media-object margin-sm-right" :src="job.firm.logo"></a>
                 </div>
 

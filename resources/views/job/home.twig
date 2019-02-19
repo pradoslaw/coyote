@@ -34,19 +34,19 @@
                     <div class="panel panel-default search-form margin-md-top">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="form-group col-sm-6">
-                                    <i class="fa fa-fw fa-map-marker"></i>
+                                <div class="form-group col-sm-6 col-xs-12">
+                                    <i class="fa fa-fw fa-search"></i>
 
                                     <input v-model="input.q" ref="q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
                                 </div>
 
-                                <div class="form-group col-sm-4">
-                                    <i class="fa fa-fw fa-search"></i>
+                                <div class="form-group col-sm-4 col-xs-12">
+                                    <i class="fa fa-fw fa-map-marker"></i>
 
                                     <input v-model="input.city" ref="city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości" autocomplete="off">
                                 </div>
 
-                                <div class="form-group col-sm-2 col-xs-1">
+                                <div class="form-group col-sm-2 col-xs-12">
                                     <button class="btn btn-primary btn-search" type="submit">
                                         <i class="fa fa-search"></i> <span class="hidden-xs">Szukaj</span>
                                     </button>
@@ -137,7 +137,7 @@
                 </div>
             </form>
 
-            <div class="col-md-3">
+            <div class="col-md-3 hidden-sm hidden-xs">
                 <section id="post-offer">
                     <h4>Dla pracodawców</h4>
 
