@@ -62,7 +62,7 @@
     import VueSalary from './salary.vue';
     import VueLocation from './location.vue';
     import declination from '../components/declination';
-    import axios from 'axios';
+
     import VueModal from './modal.vue';
 
     export default {
@@ -87,23 +87,12 @@
         },
         methods: {
             subscribe: function () {
-                // let toggle = () => {
-                //     this.job.subscribe_on = !this.job.subscribe_on;
-                // };
+                this.$store.dispatch('subscriptions/toggle', this.job).catch(() => {
+                    this.$refs.error.open();
 
-
-                // toggle();
-
-                this.$store.commit('subscriptions/toggle', this.job);
-
-                // axios.post(`/Praca/Subscribe/${this.job.id}`)
-                //     .then(() => {
-                //         this.$emit('subscribe', this.job);
-                //     })
-                //     .catch(() => {
-                //         toggle();
-                //         this.$refs.error.open();
-                //     });
+                    // change button status in case of any error
+                    this.$store.commit('subscriptions/pop', this.$store.getters['subscriptions/exists'](this.job));
+                });
             }
         },
         computed: {
