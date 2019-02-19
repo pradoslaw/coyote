@@ -19,6 +19,7 @@ class SearchBuilder extends QueryBuilder
 {
     const PER_PAGE = 15;
     const DEFAULT_SORT = 'boost_at';
+    const SCORE = '_score';
 
     /**
      * @var Filters\Job\City
@@ -192,6 +193,10 @@ class SearchBuilder extends QueryBuilder
 
         if ($this->request->filled('city')) {
             $this->city->addCity($this->request->get('city'));
+        }
+
+        if ($this->request->filled('locations')) {
+            $this->city->addCity($this->request->get('locations'));
         }
 
         if ($this->request->filled('tags')) {

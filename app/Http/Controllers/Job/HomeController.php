@@ -114,17 +114,11 @@ class HomeController extends BaseController
      */
     private function load()
     {
-        // get only tags belong to specific category
-        $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
+        // set sort by score if keyword was provided and no sort was specified
+        $defaultSort = $this->request->input('sort', $this->request->filled('q') ? SearchBuilder::SCORE : SearchBuilder::DEFAULT_SORT);
 
-        // only tags with logo
-        $tags = $this->tag->all()->filter(function (Tag $tag) {
-            return $tag->logo->getFilename() !== null;
-        });
-
-        $this->builder->setLanguages($tags->pluck('name')->toArray());
         $this->builder->boostLocation($this->request->attributes->get('geocode'));
-        $this->builder->setSort($this->request->input('sort'));
+        $this->builder->setSort($defaultSort);
 
         $result = $this->job->search($this->builder);
 
@@ -170,10 +164,17 @@ class HomeController extends BaseController
         $this->job->pushCriteria($eagerCriteria);
         $this->job->pushCriteria(new PriorDeadline());
 
-        $input = array_merge($this->request->only('q', 'sort', 'salary', 'currency', 'remote_range', 'page'), [
+        // get only tags belong to specific category
+        $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
+
+        // only tags with logo
+        $tags = $this->tag->all()->filter(function (Tag $tag) {
+            return $tag->logo->getFilename() !== null;
+        });
+
+        $input = array_merge($this->request->only('q', 'city', 'sort', 'salary', 'currency', 'remote_range', 'page'), [
             'tags'          => $this->builder->tag->getTags(),
-            'locations'     => array_map('mb_strtolower', $this->builder->city->getCities()),
-            'city'          => array_first($this->builder->city->getCities()),
+            'locations'     => $this->builder->city->getCities(),
             'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote' ? true : null,
         ]);
 
@@ -181,7 +182,7 @@ class HomeController extends BaseController
             'input'             => $input,
 
             'default'           => [
-                'sort'                  => SearchBuilder::DEFAULT_SORT,
+                'sort'                  => $defaultSort,
                 'currency'              => Currency::PLN
             ],
 

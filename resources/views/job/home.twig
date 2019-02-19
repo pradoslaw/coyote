@@ -75,9 +75,9 @@
                                         </li>
 
                                         <li v-for="(location, index) in locations" :key="index" class="list-group-item">
-                                            <input type="hidden" name="locations[]" :value="location" :checked="input.locations.indexOf(location) > -1">
+                                            <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
 
-                                            <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && input.locations.indexOf(location) === -1}">
+                                            <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && !includesLocation(location)}">
                                                 ${ upperFirst(location) }
                                             </a>
                                         </li>
@@ -87,9 +87,9 @@
                                 <div id="tech" class="tab-pane filters">
                                     <ul class="list-group list-group-tech">
                                         <li v-for="tag in tags" :key="tag.id" class="list-group-item">
-                                            <input type="hidden" name="tags[]" :value="tag.name" :checked="input.tags.indexOf(tag.name) > -1">
+                                            <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
 
-                                            <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && input.tags.indexOf(tag.name) === -1}">
+                                            <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && !includesTag(tag.name)}">
                                                 <img :alt="tag.name" :src="tag.logo">
 
                                                 ${ tag.real_name || tag.name }
