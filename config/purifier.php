@@ -23,7 +23,7 @@ return [
     // zakomentowalem te linie poniewaz przez nia usuwana byla zawartosc znacznika <blockquote>
 //    'HTML.Doctype'             => 'XHTML 1.0 Strict',
     'HTML.Allowed'             => 'b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp',
-    'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,text-align',
+    'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,background-image,text-align',
     'AutoFormat.AutoParagraph' => false,
     // nie usuwaj pustych atrybutow typu <a></a>
     'AutoFormat.RemoveEmpty'   => false,
