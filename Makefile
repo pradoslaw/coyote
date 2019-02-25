@@ -47,9 +47,9 @@ cache-config:
 	php artisan route:cache
 
 key-generate:
-    php artisan key:generate
+	php artisan key:generate
 
 install-es:
-    php artisan es:create
-    php artisan es:mapping
-    php artisan es:index
+	php artisan es:create
+	php artisan es:mapping
+	php artisan es:index
