@@ -72,9 +72,6 @@ W folderze projektu wykonujemy następujące polecenia:
 6. `sudo docker-compose build`
 7. `sudo docker-compose up -d`
 8. `sudo docker-compose exec php make install-dev`
-9. `sudo docker-compose exec php php artisan key:generate`
-10. `sudo docker-compose exec php php artisan es:create`
-11. `sudo docker-compose exec php php artisan es:mapping`
 
 Strona jest dostępna w przeglądarce pod adresem: `175.0.0.10:8880`
 
@@ -126,13 +123,6 @@ pewne czynności cykliczne.
 1. W konsoli wpisz `crontab -e`
 2. Dodaj linię: `* * * * * php /var/www/path-to-app/artisan schedule:run >> /dev/null 2>&1`
 
-
-### Konfiguracja Elasticsearch
-
-Po instalacji Elasticsearch, konieczne jest utworzenie indeksu oraz typów. Wykonaj poniższe polecenia:
-
-1. `php artisan es:create`
-2. `php artisan es:mapping`
 
 ## Jak możesz pomóc?
 
