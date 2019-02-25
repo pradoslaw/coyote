@@ -48,7 +48,7 @@
 
                                 <div class="form-group col-sm-2 col-xs-12">
                                     <button class="btn btn-primary btn-search" type="submit">
-                                        <i class="fa fa-search"></i> <span class="hidden-xs">Szukaj</span>
+                                        <i class="fa fa-search"></i> Szukaj
                                     </button>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                                             <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
 
                                             <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && !includesLocation(location)}">
-                                                ${ upperFirst(location) }
+                                                ${ location|capitalize }
                                             </a>
                                         </li>
                                     </ul>
@@ -164,11 +164,11 @@
                 <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3" style="margin-top: -35px">
                 <section v-cloak v-if="published.length" class="box sidebar-job-offers">
                     <h4><i class="fa fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
 
-                    <div class="panel panel-default">
+                    <div id="panel-published" class="panel panel-default">
                         <div class="panel-body">
                             <vue-job-tiny v-for="job in published" :job="job" :key="job.id"></vue-job-tiny>
                         </div>
@@ -178,7 +178,7 @@
                 <section v-cloak v-if="subscribed.length" class="box sidebar-job-offers">
                     <h4><i class="fa fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
 
-                    <div class="panel panel-default">
+                    <div id="panel-subscribed" class="panel panel-default">
                         <div class="panel-body">
                             <vue-job-tiny v-for="job in subscribedStore" :job="job" :key="job.id"></vue-job-tiny>
                         </div>
@@ -203,7 +203,8 @@
             default: {{ default|json_encode|raw }},
             currencies: {{ currencies|json_encode|raw }},
             subscribed: {{ subscribed|json_encode|raw }},
-            published: {{ published|json_encode|raw }}
+            published: {{ published|json_encode|raw }},
+            hiddenOnMobile: true
         }
     </script>
 {% endblock %}

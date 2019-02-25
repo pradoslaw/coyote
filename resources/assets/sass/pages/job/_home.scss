@@ -153,14 +153,18 @@
   }
 }
 
-
+#panel-subscribed,
+#panel-published {
+    position: relative;
+    max-height: 400px;
+}
 
 
 // Post offer button (for employers)
 // -----------------------------------------------------------
 
 #post-offer {
-  margin-top: 20px;
+  margin-top: 55px;
   margin-left: 17%;
 
   h4 {

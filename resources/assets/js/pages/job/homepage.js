@@ -5,6 +5,7 @@ import VueJobTiny from '../../components/job-tiny.vue';
 import VuePagination from '../../components/pagination.vue';
 import axios from 'axios';
 import store from '../../store';
+import * as Ps from 'perfect-scrollbar';
 
 new Vue({
     el: '#page-job',
@@ -29,6 +30,14 @@ new Vue({
             this.jobs = e.state.jobs;
             this.input = e.state.input;
         };
+
+        Ps.initialize(document.querySelector('#panel-published'));
+        Ps.initialize(document.querySelector('#panel-subscribed'));
+    },
+    filters: {
+        capitalize: function (value) {
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        }
     },
     methods: {
         toggleTag: function (tag) {
@@ -104,10 +113,6 @@ new Vue({
 
         includesTag (tag) {
             return this.input.tags.includes(tag);
-        },
-
-        upperFirst: function (string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
         }
     },
     computed: {

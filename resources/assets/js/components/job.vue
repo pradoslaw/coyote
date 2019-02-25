@@ -45,7 +45,7 @@
                     <ul class="list-inline job-options margin-sm-top">
                         <li><a @click="subscribe()" href="javascript:"><i :class="{'fa-heart on': isSubscribed, 'fa-heart-o': !isSubscribed}" class="fa fa-fw"></i> Ulubiona</a></li>
                         <li><a :href="job.url + '#comments'"><i class="fa fa-fw fa-comments-o"></i> {{ job.comments_count }} {{ commentsDeclination }}</a></li>
-                        <li><a href="#"><i class="fa fa-fw fa-share"></i> Udostępnij</a></li>
+                        <!--<li><a href="#"><i class="fa fa-fw fa-share"></i> Udostępnij</a></li>-->
                     </ul>
 
                 </div>
