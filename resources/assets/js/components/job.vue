@@ -101,7 +101,7 @@
             },
 
             limitedTags: function () {
-                return this.job.tags.splice(0, 5);
+                return this.job.tags.slice(0, 5);
             },
 
             isSubscribed () {

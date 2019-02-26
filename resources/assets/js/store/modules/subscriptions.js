@@ -9,10 +9,6 @@ const getters = {
 };
 
 const mutations = {
-    init (state, subscriptions) {
-        state.subscribed = subscriptions;
-    },
-
     push (state, payload) {
         state.subscribed.push(payload);
     },
