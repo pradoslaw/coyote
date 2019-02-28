@@ -245,8 +245,6 @@ class SearchBuilder extends QueryBuilder
     protected function setupAggregations()
     {
         $this->aggs(new Aggs\Job\Location());
-        $this->aggs(new Aggs\Job\Remote());
-        $this->aggs(new Aggs\Job\Tag($this->languages));
         $this->aggs(new Aggs\Job\TopSpot());
     }
 }
