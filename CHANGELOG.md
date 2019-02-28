@@ -15,6 +15,7 @@
 - Możliwość komentowania ofert pracy
 - Ustawienie sortowania nie jest zapamiętywane (domyślnie sortowanie zawsze po dacie)
 - W przypadku wyszukiwania, ustawienie sortowania na "Trafność" zamiast "Data dodania"
+- Nowy wygląd strony głównej
 
 ## 2.2
 
